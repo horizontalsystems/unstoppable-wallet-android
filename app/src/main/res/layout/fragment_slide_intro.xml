@@ -1,53 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <!--This layout mirrors activity_intro.xml -->
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/verticalCenter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.548" />
+    <View
+        android:id="@+id/spacer1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        />
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/Title3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/verticalCenter"
-        tools:text="@string/Intro_Independence_Title" />
+    <View
+        android:id="@+id/imageSwitcherSpace"
+        android:layout_width="match_parent"
+        android:layout_height="326dp"
+        />
 
-    <TextView
-        android:id="@+id/description"
-        style="@style/Body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
-        android:textAlignment="center"
-        android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@+id/navigationStartGuideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="0"
-        app:layout_goneMarginTop="32dp"
-        tools:text="@string/Intro_Independence_Description" />
+    <View
+        android:id="@+id/spacer2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/navigationStartGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.82" />
+    <View
+        android:id="@+id/circleIndicatorSpace"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:id="@+id/spacer3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <LinearLayout
+        android:id="@+id/textWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/Title3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:textAlignment="center"
+            tools:text="@string/Intro_Wallet_Screen2Title"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <TextView
+            android:id="@+id/description"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginEnd="48dp"
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            tools:text="@string/Intro_Wallet_Screen2Description"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/spacer4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        />
+
+    <View
+        android:id="@+id/buttonSpace"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="60dp"
+        />
+</LinearLayout>

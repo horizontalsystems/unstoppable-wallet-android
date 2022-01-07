@@ -7,15 +7,14 @@ import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.databinding.ActivityIntroBinding
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 
 class IntroActivity : BaseActivity() {
@@ -31,7 +30,6 @@ class IntroActivity : BaseActivity() {
         setContentView(view)
 
         val viewPagerAdapter = IntroViewPagerAdapter(supportFragmentManager)
-        val pagesCount = viewPagerAdapter.count
 
         binding.viewPager.adapter = viewPagerAdapter
 
@@ -44,7 +42,6 @@ class IntroActivity : BaseActivity() {
         }
 
         val images = arrayOf(
-            R.drawable.ic_onboarding_logo,
             R.drawable.ic_independence,
             R.drawable.ic_knowledge,
             R.drawable.ic_privacy
@@ -61,13 +58,6 @@ class IntroActivity : BaseActivity() {
 
             override fun onPageSelected(position: Int) {
                 binding.imageSwitcher.setImageResource(images[position])
-                if (position == 0) {
-                    binding.imageSwitcher.background = null
-                } else {
-                    binding.imageSwitcher.background =
-                        ContextCompat.getDrawable(this@IntroActivity, R.drawable.ic_ellipse)
-                }
-                setNextButton(pagesCount, position == pagesCount - 1)
             }
         })
 
@@ -76,44 +66,18 @@ class IntroActivity : BaseActivity() {
 
         binding.circleIndicator.setViewPager(binding.viewPager)
 
-        setNextButton(pagesCount)
-
-        viewModel.openMainLiveEvent.observe(this, {
-            MainModule.start(this)
-            finish()
-        })
-    }
-
-    private fun setNextButton(pagesCount: Int, lastSlide: Boolean = false) {
-        val title = getString(if (lastSlide) R.string.Button_Start else R.string.Button_Next)
         binding.buttonNextCompose.setContent {
             ComposeAppTheme {
-                if (lastSlide) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier.padding(start = 24.dp, end = 24.dp),
-                        title = title,
-                        onClick = {
-                            onButtonClick(pagesCount)
-                        }
-                    )
-                } else {
-                    ButtonPrimaryDefault(
-                        modifier = Modifier.padding(start = 24.dp, end = 24.dp),
-                        title = title,
-                        onClick = {
-                            onButtonClick(pagesCount)
-                        }
-                    )
-                }
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                    title = stringResource(R.string.Intro_Wallet_Screen1Description),
+                    onClick = {
+                        viewModel.onStartClicked()
+                        MainModule.start(this)
+                        finish()
+                    }
+                )
             }
-        }
-    }
-
-    private fun onButtonClick(pagesCount: Int) {
-        if (binding.viewPager.currentItem < pagesCount - 1) {
-            binding.viewPager.currentItem = binding.viewPager.currentItem + 1
-        } else {
-            viewModel.onClickStart()
         }
     }
 
