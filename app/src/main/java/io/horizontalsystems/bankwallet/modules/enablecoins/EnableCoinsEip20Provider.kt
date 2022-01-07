@@ -24,11 +24,27 @@ class EnableCoinsEip20Provider(
         }
     }
 
-    private fun coinTypes(transactions: List<Transaction>): List<CoinType> {
-        return transactions.map { coinType(it.contractAddress) }
+    private fun coinTypes(contractAddresses: List<String>): List<CoinType> {
+        return contractAddresses.map { coinType(it) }
     }
 
-    fun getCoinTypesAsync(address: String, startBlock: Long = 0): Single<List<CoinType>> {
+    fun getCoinTypesAsync(address: String): Single<List<CoinType>> {
+        val params = "api?module=account&action=tokentx&sort=asc&address=$address"
+        val gson = Gson()
+
+        return networkManager.getEvmInfo(url, params)
+                .map { jsonObject ->
+                    if (jsonObject.get("status").asString == "1" && jsonObject.has("result")) {
+                        val type = object : TypeToken<ArrayList<Transaction>>() {}.type
+                        val transactions = gson.fromJson<ArrayList<Transaction>>(jsonObject.get("result"), type).distinct()
+                        coinTypes(transactions.map { it.contractAddress }.distinct())
+                    } else {
+                        listOf()
+                    }
+                }
+    }
+
+    fun getCoinTypesAsync(address: String, startBlock: Long = 0): Single<Pair<List<CoinType>, Long?>> {
         val params = "api?module=account&action=tokentx&sort=asc&address=$address&startBlock=$startBlock"
         val gson = Gson()
 
@@ -37,9 +53,12 @@ class EnableCoinsEip20Provider(
                     if (jsonObject.get("status").asString == "1" && jsonObject.has("result")) {
                         val type = object : TypeToken<ArrayList<Transaction>>() {}.type
                         val transactions = gson.fromJson<ArrayList<Transaction>>(jsonObject.get("result"), type).distinct()
-                        coinTypes(transactions)
+                        val coinTypes = coinTypes(transactions.map { it.contractAddress }.distinct())
+                        val lastTxBlockNumber = transactions.lastOrNull()?.blockNumber
+
+                        Pair(coinTypes, lastTxBlockNumber)
                     } else {
-                        listOf()
+                        Pair(listOf(), null)
                     }
                 }
     }
@@ -49,6 +68,7 @@ class EnableCoinsEip20Provider(
     }
 
     data class Transaction(
+            val blockNumber: Long,
             val contractAddress: String,
             val tokenName: String,
             val tokenSymbol: String,
