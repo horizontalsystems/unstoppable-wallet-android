@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.storage.*
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsEip20Provider
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
@@ -218,7 +219,19 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         walletActivator = WalletActivator(walletManager, marketKit, walletStorage)
 
-        AutoEnableTokensService(ethereumKitManager, binanceSmartChainKitManager, walletActivator).start()
+        val enableCoinsErc20Provider = EnableCoinsEip20Provider(
+            networkManager,
+            EnableCoinsEip20Provider.EnableCoinMode.Erc20
+        )
+
+        val enableCoinsBep20Provider = EnableCoinsEip20Provider(
+            networkManager,
+            EnableCoinsEip20Provider.EnableCoinMode.Bep20
+        )
+
+        val evmAccountStateDao = appDatabase.evmAccountStateDao()
+        AutoEnableTokensService(ethereumKitManager, walletActivator, enableCoinsErc20Provider, evmAccountStateDao).start()
+        AutoEnableTokensService(binanceSmartChainKitManager, walletActivator, enableCoinsBep20Provider, evmAccountStateDao).start()
 
         setAppTheme()
 
