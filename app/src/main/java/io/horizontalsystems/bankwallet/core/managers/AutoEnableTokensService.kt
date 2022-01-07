@@ -36,14 +36,15 @@ class AutoEnableTokensService(
         val evmAccountState = evmAccountStateDao.get(account.id, chainId) ?: EvmAccountState(account.id, chainId, 0)
 
         enableCoinsEip20Provider.getCoinTypesAsync(address, evmAccountState.transactionsSyncedBlockNumber)
-            .subscribeIO { coinTypes ->
+            .subscribeIO { (coinTypes, lastTxBlockNumber) ->
                 val notEnabled = coinTypes.filter { !walletActivator.isEnabled(account, it) }
                 if (notEnabled.isNotEmpty()) {
                     walletActivator.activateWallets(account, notEnabled)
                 }
 
-                val lastBlockHeight = evmKit.lastBlockHeight ?: 0
-                evmAccountStateDao.insert(evmAccountState.copy(transactionsSyncedBlockNumber = lastBlockHeight))
+                lastTxBlockNumber?.let {
+                    evmAccountStateDao.insert(evmAccountState.copy(transactionsSyncedBlockNumber = it))
+                }
             }
             .let {
                 disposables.add(it)
