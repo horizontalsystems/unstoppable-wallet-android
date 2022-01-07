@@ -51,6 +51,7 @@
         <item name="SecondaryButtonStartGradient">#ffffffff</item>
         <item name="SecondaryButtonEndGradient">#00ffffff</item>
         <item name="MarketCircleGradient">@drawable/market_circle_light</item>
+        <item name="SplashScreenBackground">@drawable/ic_intro_background_light</item>
 
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white</item>
@@ -62,7 +63,4 @@
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="OnboardingTheme" parent="Theme.AppTheme.DayNight">
-        <item name="android:windowBackground">@color/darkest</item>
-    </style>
 </resources>
