@@ -58,9 +58,10 @@
         <item name="ColorWindowBackground">@color/light</item>
     </style>
 
-    <style name="LauncherTheme" parent="Theme.AppTheme">
-        <item name="android:windowBackground">@color/tyler</item>
-        <item name="android:windowLightStatusBar">false</item>
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/tyler</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/bitcoin_launcher</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        <item name="postSplashScreenTheme">@style/Theme.AppTheme</item>
     </style>
-
 </resources>
