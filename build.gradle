@@ -6,7 +6,7 @@ buildscript {
         min_sdk_version = 26
         lifecycle_version = '2.4.0'
 
-        kotlin_version = '1.6.10'
+        kotlin_version = '1.5.31'
         material_version = "1.4.0"
         appcompat_version = "1.4.0"
         //increasing constraint version breaks visibility of Receive,Send buttons in BalanceScreen
