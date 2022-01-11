@@ -1,72 +1,111 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.DialogInterface
-import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.activity_rooted_device.*
-import kotlinx.android.synthetic.main.fragment_bottom_selector.*
-import kotlinx.android.synthetic.main.view_holder_setting_with_checkmark_wrapper.*
+import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportant
 
 class BottomSheetSelectorDialog(
-        private val title: String,
-        private val subtitle: String,
-        @DrawableRes private val icon: Int,
-        private val items: List<BottomSheetSelectorViewItem>,
-        private val selected: Int,
-        private val onItemSelected: (Int) -> Unit,
-        private val onCancelled: (() -> Unit)?,
-        private val warning: String?,
-        private val notifyUnchanged: Boolean
-) : BaseBottomSheetDialogFragment() {
+    private val title: String,
+    private val subtitle: String,
+    @DrawableRes private val icon: Int,
+    private val items: List<BottomSheetSelectorViewItem>,
+    private val selectedIndex: Int,
+    private val onItemSelected: (Int) -> Unit,
+    private val onCancelled: (() -> Unit)?,
+    private val warning: String?,
+    private val notifyUnchanged: Boolean
+) : BaseComposableBottomSheetFragment() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    @Composable
+    override fun BottomContent() {
+        var selected by remember { mutableStateOf(selectedIndex) }
 
-        setContentView(R.layout.fragment_bottom_selector)
-
-        setTitle(title)
-        setSubtitle(subtitle)
-        setHeaderIcon(icon)
-
-        val itemsAdapter = SelectorItemsAdapter(items, selected)
-
-        textWarning.text = warning
-        textWarning.isVisible = warning != null
-        divider.isVisible = warning != null
-
-        rvItems.adapter = itemsAdapter
-
-        buttonDoneCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        buttonDoneCompose.setContent {
-            ComposeAppTheme {
-                ButtonPrimaryYellow(
-                    modifier = Modifier.padding(16.dp),
-                    title = getString(R.string.Button_Done),
-                    onClick = {
-                        if (notifyUnchanged || itemsAdapter.selected != selected) {
-                            onItemSelected(itemsAdapter.selected)
-                        }
-                        dismiss()
-                    }
+        BottomSheetHeader(
+            icon = icon,
+            title = title,
+            subtitle = subtitle
+        ) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10
+            )
+            warning?.let {
+                Box(
+                    modifier = Modifier.padding(horizontal = 21.dp, vertical = 12.dp)
+                ) {
+                    TextImportant(it)
+                }
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel10
                 )
             }
+            items.forEachIndexed { index, item ->
+                CellMultilineLawrence(
+                    borderBottom = true
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                selected = index
+                            }
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(
+                                text = item.title,
+                                style = ComposeAppTheme.typography.body,
+                                color = ComposeAppTheme.colors.leah
+                            )
+                            Text(
+                                text = item.subtitle,
+                                style = ComposeAppTheme.typography.subhead2,
+                                color = ComposeAppTheme.colors.grey
+                            )
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        if (index == selected) {
+                            Image(
+                                modifier = Modifier.padding(start = 5.dp),
+                                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                                contentDescription = ""
+                            )
+                        }
+                    }
+                }
+            }
+            ButtonPrimaryYellow(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                title = getString(R.string.Button_Done),
+                onClick = {
+                    if (notifyUnchanged || selectedIndex != selected) {
+                        onItemSelected(selected)
+                    }
+                    dismiss()
+                }
+            )
+
         }
     }
 
@@ -81,56 +120,32 @@ class BottomSheetSelectorDialog(
     }
 
     companion object {
-        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, @DrawableRes icon: Int, items: List<BottomSheetSelectorViewItem>, selected: Int, onItemSelected: (Int) -> Unit, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
-            BottomSheetSelectorDialog(title, subtitle, icon, items, selected, onItemSelected, onCancelled, warning, notifyUnchanged)
-                    .show(fragmentManager, "selector_dialog")
+        fun show(
+            fragmentManager: FragmentManager,
+            title: String,
+            subtitle: String,
+            @DrawableRes icon: Int,
+            items: List<BottomSheetSelectorViewItem>,
+            selected: Int,
+            onItemSelected: (Int) -> Unit,
+            onCancelled: (() -> Unit)? = null,
+            warning: String? = null,
+            notifyUnchanged: Boolean = false
+        ) {
+            BottomSheetSelectorDialog(
+                title,
+                subtitle,
+                icon,
+                items,
+                selected,
+                onItemSelected,
+                onCancelled,
+                warning,
+                notifyUnchanged
+            )
+                .show(fragmentManager, "selector_dialog")
         }
     }
 }
 
-class SelectorItemsAdapter(private val items: List<BottomSheetSelectorViewItem>, var selected: Int) : RecyclerView.Adapter<ItemViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ItemViewHolder(inflate(parent, R.layout.view_holder_setting_with_checkmark_wrapper, false)) { position ->
-            if (selected == position) return@ItemViewHolder
-
-            notifyItemChanged(selected, true)
-            notifyItemChanged(position, true)
-
-            selected = position
-        }
-    }
-
-    override fun getItemCount() = items.size
-
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) = Unit
-
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int, payloads: MutableList<Any>) {
-        if (payloads.isEmpty()) {
-            holder.bind(items[position].title, items[position].subtitle, position == selected)
-        } else {
-            holder.bindSelected(position == selected)
-        }
-    }
-
-}
-
-class ItemViewHolder(override val containerView: View, val onItemClick: (Int) -> Unit)
-    : RecyclerView.ViewHolder(containerView), LayoutContainer {
-
-    init {
-        containerView.setOnClickListener {
-            onItemClick(bindingAdapterPosition)
-        }
-    }
-
-    fun bind(title: String, subtitle: String, selected: Boolean) {
-        itemWithCheckmark.bind(title, subtitle, selected)
-    }
-
-    fun bindSelected(selected: Boolean) {
-        itemWithCheckmark.setChecked(selected)
-    }
-}
-
-data class BottomSheetSelectorViewItem (val title: String, val subtitle: String)
+data class BottomSheetSelectorViewItem(val title: String, val subtitle: String)
