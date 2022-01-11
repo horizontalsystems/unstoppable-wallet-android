@@ -1,18 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
-import android.os.Bundle
-import android.view.View
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
-import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import kotlinx.android.synthetic.main.fragment_market_global.*
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 
-class MetricChartVolumeFragment : BaseBottomSheetDialogFragment() {
+class MetricChartVolumeFragment : BaseComposableBottomSheetFragment() {
 
     private val coinUid by lazy {
         requireArguments().getString(coinUidKey) ?: ""
@@ -22,25 +19,24 @@ class MetricChartVolumeFragment : BaseBottomSheetDialogFragment() {
         requireArguments().getString(coinNameKey) ?: ""
     }
 
-    private val chartViewModel by viewModels<ChartViewModel> { MetricChartVolumeModule.Factory(coinUid) }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setContentView(R.layout.fragment_market_global)
-
-        setTitle(getString(R.string.CoinPage_TotalVolume))
-        setSubtitle(getString(R.string.MarketGlobalMetrics_Chart))
-        setHeaderIcon(R.drawable.ic_chart_24)
-
-        composeView.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+    private val chartViewModel by viewModels<ChartViewModel> {
+        MetricChartVolumeModule.Factory(
+            coinUid
         )
+    }
 
-        composeView.setContent {
+    @Composable
+    override fun BottomContent() {
+        BottomSheetHeader(
+            icon = R.drawable.ic_chart_24,
+            title = getString(R.string.CoinPage_TotalVolume),
+            subtitle = getString(R.string.MarketGlobalMetrics_Chart)
+        ) {
             MetricChartScreen(
                 chartViewModel = chartViewModel,
-                description = stringResource(R.string.MarketGlobalMetrics_VolumeDescriptionCoin, coinName),
+                description = stringResource(
+                    R.string.MarketGlobalMetrics_VolumeDescriptionCoin, coinName
+                ),
                 poweredBy = stringResource(R.string.Market_PoweredByApi)
             )
         }
