@@ -113,7 +113,7 @@
     <string name="Market_Field_HighestPrice">Highest Price</string>
     <string name="Market_Field_LowestPrice">Lowest Price</string>
     <string name="Market_Sort_PopupTitle">Sort by</string>
-    <string name="Market_TotalMarketCap">Total Market Cap</string>
+    <string name="Market_TotalMarketCap">Total Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
     <string name="Market_Volume24h">24h Volume</string>
     <string name="Market_TvlDeFi">TVL in DeFi</string>
@@ -179,7 +179,7 @@
 
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total Market Cap</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
     <string name="MarketGlobalMetrics_Volume">24h Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
@@ -513,8 +513,8 @@
     <string name="Transactions_Completed">Completed</string>
     <string name="Transactions_Processing">Processing</string>
     <string name="Transactions_Send">Send</string>
-    <string name="Transactions_Approve">Approve</string>
-    <string name="Transactions_Swap">Swap</string>
+    <string name="Transactions_Approve">Approvals</string>
+    <string name="Transactions_Swap">Swaps</string>
     <string name="Transactions_Failed">Failed</string>
     <string name="Transactions_ContractCall">Contract Call</string>
     <string name="Transactions_ContractCreation">Contract Creation</string>
@@ -911,9 +911,9 @@
 
     <!--Coin Page-->
 
-    <string name="Coin_Tab_Overview">Overview</string>
-    <string name="Coin_Tab_Market">Market</string>
-    <string name="Coin_Tab_Details">Details</string>
+    <string name="Coin_Tab_Overview">Price</string>
+    <string name="Coin_Tab_Market">Markets</string>
+    <string name="Coin_Tab_Details">Analytics</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
 
     <string name="CoinPage_TimeDuration_Today">TDY</string>
