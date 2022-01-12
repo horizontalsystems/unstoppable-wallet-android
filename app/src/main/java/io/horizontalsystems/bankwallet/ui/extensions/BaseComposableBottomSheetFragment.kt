@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -54,7 +55,7 @@ open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     @Composable
-    open fun BottomContent() {
+    open fun BottomSheetScreen() {
 
     }
 
@@ -73,7 +74,7 @@ open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    BottomContent()
+                    BottomSheetScreen()
                 }
             }
         }
@@ -81,7 +82,7 @@ open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
 
     @Composable
     protected fun BottomSheetHeader(
-        icon: Int,
+        iconPainter: Painter,
         title: String,
         subtitle: String? = null,
         content: @Composable() (ColumnScope.() -> Unit),
@@ -96,7 +97,7 @@ open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
             Row(Modifier.height(64.dp)) {
                 Image(
                     modifier = Modifier.padding(top = 12.dp, start = 12.dp).size(24.dp),
-                    painter = painterResource(icon),
+                    painter = iconPainter,
                     contentDescription = null
                 )
                 Column(modifier = Modifier.padding(start = 16.dp, top = 12.dp).weight(1f)) {

@@ -1,81 +1,126 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.DialogInterface
-import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
-import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_bottom_selector.*
-import kotlinx.android.synthetic.main.view_item_with_switch.*
+import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportant
 
 class BottomSheetSelectorMultipleDialog(
     private val title: String,
     private val subtitle: String,
     private val icon: ImageSource,
     private val items: List<BottomSheetSelectorViewItem>,
-    private val selected: List<Int>,
+    private val selectedIndexes: List<Int>,
     private val onItemsSelected: (List<Int>) -> Unit,
     private val onCancelled: (() -> Unit)?,
     private val warning: String?,
     private val notifyUnchanged: Boolean
-) : BaseBottomSheetDialogFragment() {
+) : BaseComposableBottomSheetFragment() {
 
-    private lateinit var itemsAdapter: MultipleSelectorItemsAdapter
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setContentView(R.layout.fragment_bottom_selector)
-
-        setTitle(title)
-        setSubtitle(subtitle)
-        setHeaderIcon(icon)
-
-        setButton(selected.isNotEmpty())
-
-        itemsAdapter = MultipleSelectorItemsAdapter(items, selected.toMutableList()) {
-            setButton(it.isNotEmpty())
-        }
-
-        textWarning.text = warning
-        textWarning.isVisible = warning != null
-        divider.isVisible = warning != null
-
-        rvItems.adapter = itemsAdapter
-
-        buttonDoneCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
+    private val viewModel by viewModels<BottomSheetSelectorMultipleViewModel> {
+        BottomSheetSelectorMultipleModule.Factory(selectedIndexes)
     }
 
-    private fun setButton(enabled: Boolean = false) {
-        buttonDoneCompose.setContent {
-            ComposeAppTheme {
-                ButtonPrimaryYellow(
-                    modifier = Modifier.padding(16.dp),
-                    title = getString(R.string.Button_Done),
-                    onClick = {
-                        if (notifyUnchanged || !equals(itemsAdapter.selected, selected)) {
-                            onItemsSelected(itemsAdapter.selected)
+    @Composable
+    override fun BottomSheetScreen() {
+        BottomSheetHeader(
+            iconPainter = icon.painter(),
+            title = title,
+            subtitle = subtitle
+        ) {
+            BottomSheetContent(viewModel.selectedItems)
+        }
+    }
+
+    @Composable
+    private fun BottomSheetContent(selected: List<Int>) {
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10
+        )
+        warning?.let {
+            Box(
+                modifier = Modifier.padding(horizontal = 21.dp, vertical = 12.dp)
+            ) {
+                TextImportant(it)
+            }
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10
+            )
+        }
+        items.forEachIndexed { index, item ->
+            CellMultilineLawrence(borderBottom = true) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable {
+                            if (selected.contains(index)) {
+                                viewModel.onUnchecked(index)
+                            } else {
+                                viewModel.onChecked(index)
+                            }
                         }
-                        dismiss()
-                    },
-                    enabled = enabled
-                )
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = item.title,
+                            style = ComposeAppTheme.typography.body,
+                            color = ComposeAppTheme.colors.leah
+                        )
+                        Text(
+                            text = item.subtitle,
+                            style = ComposeAppTheme.typography.subhead2,
+                            color = ComposeAppTheme.colors.grey
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    HsSwitch(
+                        modifier = Modifier.padding(start = 5.dp),
+                        checked = selected.contains(index),
+                        onCheckedChange = { checked ->
+                            if (checked) {
+                                viewModel.onChecked(index)
+                            } else {
+                                viewModel.onUnchecked(index)
+                            }
+                        },
+                    )
+                }
             }
         }
+        ButtonPrimaryYellow(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            title = getString(R.string.Button_Done),
+            onClick = {
+                if (notifyUnchanged || !equals(selectedIndexes, viewModel.selectedItems)) {
+                    onItemsSelected(viewModel.selectedItems)
+                }
+                dismiss()
+            },
+            enabled = selected.isNotEmpty()
+        )
     }
 
     private fun equals(list1: List<Int>, list2: List<Int>): Boolean {
@@ -130,52 +175,25 @@ class BottomSheetSelectorMultipleDialog(
     )
 }
 
-class MultipleSelectorItemsAdapter(
-    private val items: List<BottomSheetSelectorViewItem>,
-    val selected: MutableList<Int>,
-    val onSelectedItemsChanged: (List<Int>) -> Unit
-) : RecyclerView.Adapter<ItemViewHolderMultiple>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolderMultiple {
-        return ItemViewHolderMultiple(inflate(parent, R.layout.view_item_with_switch, false)) { isChecked, position ->
-            if (isChecked) {
-                if (position !in selected) {
-                    selected.add(position)
-                }
-            } else {
-                selected.remove(position)
-            }
-            onSelectedItemsChanged(selected.toList())
-        }
+class BottomSheetSelectorMultipleViewModel(selectedIndexes: List<Int>) : ViewModel() {
+    val selectedItems = mutableStateListOf<Int>().apply {
+        addAll(selectedIndexes)
     }
 
-    override fun getItemCount() = items.size
+    fun onChecked(index: Int) {
+        selectedItems.add(index)
+    }
 
-    override fun onBindViewHolder(holder: ItemViewHolderMultiple, position: Int) {
-        holder.bind(items[position].title, items[position].subtitle, selected.contains(position))
+    fun onUnchecked(index: Int) {
+        selectedItems.remove(index)
     }
 }
 
-class ItemViewHolderMultiple(
-    override val containerView: View,
-    val onSwitch: (isChecked: Boolean, position: Int) -> Unit
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-
-    init {
-        containerView.setOnClickListener {
-            toggleSwitch.isChecked = !toggleSwitch.isChecked
+object BottomSheetSelectorMultipleModule {
+    class Factory(private val selectedIndexes: List<Int>) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return BottomSheetSelectorMultipleViewModel(selectedIndexes) as T
         }
     }
-
-    fun bind(title: String, subtitle: String, selected: Boolean) {
-        itemTitle.text = title
-        itemSubtitle.text = subtitle
-
-        toggleSwitch.setOnCheckedChangeListener(null)
-        toggleSwitch.isChecked = selected
-        toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
-            onSwitch(isChecked, bindingAdapterPosition)
-        }
-    }
-
 }
