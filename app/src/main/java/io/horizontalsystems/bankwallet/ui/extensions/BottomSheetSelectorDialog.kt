@@ -33,11 +33,11 @@ class BottomSheetSelectorDialog(
 ) : BaseComposableBottomSheetFragment() {
 
     @Composable
-    override fun BottomContent() {
+    override fun BottomSheetScreen() {
         var selected by remember { mutableStateOf(selectedIndex) }
 
         BottomSheetHeader(
-            icon = icon,
+            iconPainter = painterResource(icon),
             title = title,
             subtitle = subtitle
         ) {

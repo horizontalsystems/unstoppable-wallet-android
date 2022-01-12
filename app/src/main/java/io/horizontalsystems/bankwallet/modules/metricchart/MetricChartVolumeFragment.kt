@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
@@ -26,9 +27,9 @@ class MetricChartVolumeFragment : BaseComposableBottomSheetFragment() {
     }
 
     @Composable
-    override fun BottomContent() {
+    override fun BottomSheetScreen() {
         BottomSheetHeader(
-            icon = R.drawable.ic_chart_24,
+            iconPainter = painterResource(R.drawable.ic_chart_24),
             title = getString(R.string.CoinPage_TotalVolume),
             subtitle = getString(R.string.MarketGlobalMetrics_Chart)
         ) {
