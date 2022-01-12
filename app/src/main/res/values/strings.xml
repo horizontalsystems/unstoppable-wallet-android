@@ -513,8 +513,8 @@
     <string name="Transactions_Completed">Completed</string>
     <string name="Transactions_Processing">Processing</string>
     <string name="Transactions_Send">Send</string>
-    <string name="Transactions_Approve">Approvals</string>
-    <string name="Transactions_Swap">Swaps</string>
+    <string name="Transactions_Approve">Approve</string>
+    <string name="Transactions_Swap">Swap</string>
     <string name="Transactions_Failed">Failed</string>
     <string name="Transactions_ContractCall">Contract Call</string>
     <string name="Transactions_ContractCreation">Contract Creation</string>
