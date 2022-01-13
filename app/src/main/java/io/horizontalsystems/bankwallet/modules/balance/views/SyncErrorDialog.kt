@@ -1,24 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.balance.views
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.compose.foundation.layout.*
+import android.view.ViewGroup
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import kotlinx.android.synthetic.main.fragment_bottom_sync_error.*
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 
 class SyncErrorDialog(
     private val listener: Listener,
     private val coinName: String,
     private val sourceChangeable: Boolean
-) : BaseBottomSheetDialogFragment() {
+) : BaseComposableBottomSheetFragment() {
 
     interface Listener {
         fun onClickRetry()
@@ -26,59 +37,77 @@ class SyncErrorDialog(
         fun onClickReport()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setContentView(R.layout.fragment_bottom_sync_error)
-
-        setTitle(activity?.getString(R.string.BalanceSyncError_Title))
-        setSubtitle(coinName)
-        setHeaderIcon(R.drawable.ic_attention_red_24)
-
-        buttonsCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        setButtons()
-    }
-
-    private fun setButtons() {
-        buttonsCompose.setContent {
-            ComposeAppTheme {
-                Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, top = 16.dp, end = 16.dp),
-                        title = getString(R.string.BalanceSyncError_ButtonRetry),
-                        onClick = {
-                            listener.onClickRetry()
-                            dismiss()
-                        }
-                    )
-                    if (sourceChangeable) {
-                        ButtonPrimaryDefault(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
-                            title = getString(R.string.BalanceSyncError_ButtonChangeSource),
-                            onClick = {
-                                listener.onClickChangeSource()
-                                dismiss()
-                            }
-                        )
-                    }
-                    ButtonPrimaryDefault(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, top = 16.dp, end = 16.dp),
-                        title = getString(R.string.BalanceSyncError_ButtonReport),
-                        onClick = {
-                            listener.onClickReport()
-                            dismiss()
-                        }
-                    )
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    BottomSheetScreen()
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun BottomSheetScreen() {
+        BottomSheetHeader(
+            iconPainter = painterResource(R.drawable.ic_attention_red_24),
+            title = stringResource(R.string.BalanceSyncError_Title),
+            subtitle = coinName,
+            onCloseClick = { close() }
+        ) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10
+            )
+            Text(
+                text = stringResource(R.string.BalanceSyncError_ReportButtonExplanation),
+                style = ComposeAppTheme.typography.subhead2,
+                color = ComposeAppTheme.colors.grey,
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+            )
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10
+            )
+            Spacer(Modifier.height(16.dp))
+            ButtonPrimaryYellow(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                title = getString(R.string.BalanceSyncError_ButtonRetry),
+                onClick = {
+                    listener.onClickRetry()
+                    dismiss()
+                }
+            )
+            if (sourceChangeable) {
+                Spacer(Modifier.height(16.dp))
+                ButtonPrimaryDefault(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    title = getString(R.string.BalanceSyncError_ButtonChangeSource),
+                    onClick = {
+                        listener.onClickChangeSource()
+                        dismiss()
+                    }
+                )
+            }
+            Spacer(Modifier.height(16.dp))
+            ButtonPrimaryDefault(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                title = getString(R.string.BalanceSyncError_ButtonReport),
+                onClick = {
+                    listener.onClickReport()
+                    dismiss()
+                }
+            )
+            Spacer(Modifier.height(16.dp))
         }
     }
 
