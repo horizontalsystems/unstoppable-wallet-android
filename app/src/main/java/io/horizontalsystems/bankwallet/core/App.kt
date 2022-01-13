@@ -221,12 +221,14 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         val enableCoinsErc20Provider = EnableCoinsEip20Provider(
             networkManager,
-            EnableCoinsEip20Provider.EnableCoinMode.Erc20
+            EnableCoinsEip20Provider.EnableCoinMode.Erc20,
+            appConfig.etherscanApiKey
         )
 
         val enableCoinsBep20Provider = EnableCoinsEip20Provider(
             networkManager,
-            EnableCoinsEip20Provider.EnableCoinMode.Bep20
+            EnableCoinsEip20Provider.EnableCoinMode.Bep20,
+            appConfig.bscscanApiKey
         )
 
         val evmAccountStateDao = appDatabase.evmAccountStateDao()
