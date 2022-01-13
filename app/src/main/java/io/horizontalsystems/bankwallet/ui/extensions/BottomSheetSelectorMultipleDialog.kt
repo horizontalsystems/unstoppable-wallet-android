@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.DialogInterface
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
@@ -9,11 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -34,23 +37,36 @@ class BottomSheetSelectorMultipleDialog(
     private val notifyUnchanged: Boolean
 ) : BaseComposableBottomSheetFragment() {
 
-    private val viewModel by viewModels<BottomSheetSelectorMultipleViewModel> {
-        BottomSheetSelectorMultipleModule.Factory(selectedIndexes)
+    val selected = mutableStateListOf<Int>().apply {
+        addAll(selectedIndexes)
     }
 
-    @Composable
-    override fun BottomSheetScreen() {
-        BottomSheetHeader(
-            iconPainter = icon.painter(),
-            title = title,
-            subtitle = subtitle
-        ) {
-            BottomSheetContent(viewModel.selectedItems)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    BottomSheetHeader(
+                        iconPainter = icon.painter(),
+                        title = title,
+                        subtitle = subtitle,
+                        onCloseClick = { close() }
+                    ) {
+                        BottomSheetContent()
+                    }
+                }
+            }
         }
     }
 
     @Composable
-    private fun BottomSheetContent(selected: List<Int>) {
+    private fun BottomSheetContent() {
         Divider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
@@ -75,9 +91,9 @@ class BottomSheetSelectorMultipleDialog(
                         .fillMaxSize()
                         .clickable {
                             if (selected.contains(index)) {
-                                viewModel.onUnchecked(index)
+                                selected.remove(index)
                             } else {
-                                viewModel.onChecked(index)
+                                selected.add(index)
                             }
                         }
                         .padding(horizontal = 16.dp),
@@ -101,9 +117,9 @@ class BottomSheetSelectorMultipleDialog(
                         checked = selected.contains(index),
                         onCheckedChange = { checked ->
                             if (checked) {
-                                viewModel.onChecked(index)
+                                selected.add(index)
                             } else {
-                                viewModel.onUnchecked(index)
+                                selected.remove(index)
                             }
                         },
                     )
@@ -114,8 +130,8 @@ class BottomSheetSelectorMultipleDialog(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             title = getString(R.string.Button_Done),
             onClick = {
-                if (notifyUnchanged || !equals(selectedIndexes, viewModel.selectedItems)) {
-                    onItemsSelected(viewModel.selectedItems)
+                if (notifyUnchanged || !equals(selectedIndexes, selected)) {
+                    onItemsSelected(selected)
                 }
                 dismiss()
             },
@@ -173,27 +189,4 @@ class BottomSheetSelectorMultipleDialog(
         val viewItems: List<BottomSheetSelectorViewItem>,
         val description: String
     )
-}
-
-class BottomSheetSelectorMultipleViewModel(selectedIndexes: List<Int>) : ViewModel() {
-    val selectedItems = mutableStateListOf<Int>().apply {
-        addAll(selectedIndexes)
-    }
-
-    fun onChecked(index: Int) {
-        selectedItems.add(index)
-    }
-
-    fun onUnchecked(index: Int) {
-        selectedItems.remove(index)
-    }
-}
-
-object BottomSheetSelectorMultipleModule {
-    class Factory(private val selectedIndexes: List<Int>) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return BottomSheetSelectorMultipleViewModel(selectedIndexes) as T
-        }
-    }
 }
