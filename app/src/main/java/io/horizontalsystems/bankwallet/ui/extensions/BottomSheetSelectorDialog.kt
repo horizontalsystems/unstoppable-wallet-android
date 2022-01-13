@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.DialogInterface
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,6 +15,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
@@ -32,14 +38,32 @@ class BottomSheetSelectorDialog(
     private val notifyUnchanged: Boolean
 ) : BaseComposableBottomSheetFragment() {
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    BottomSheetScreen()
+                }
+            }
+        }
+    }
+
     @Composable
-    override fun BottomSheetScreen() {
+    private fun BottomSheetScreen() {
         var selected by remember { mutableStateOf(selectedIndex) }
 
         BottomSheetHeader(
             iconPainter = painterResource(icon),
             title = title,
-            subtitle = subtitle
+            subtitle = subtitle,
+            onCloseClick = { close() }
         ) {
             Divider(
                 modifier = Modifier.fillMaxWidth(),
