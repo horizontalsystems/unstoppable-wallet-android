@@ -277,3 +277,41 @@ fun CellFooterPreview() {
         CellFooter(text = stringResource(id = R.string.Market_PoweredByApi))
     }
 }
+
+@Composable
+fun CellCheckboxLawrence(
+    borderTop: Boolean = false,
+    borderBottom: Boolean = false,
+    onClick: () -> Unit,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(ComposeAppTheme.colors.lawrence)
+            .clickable { onClick() }
+    ) {
+        if (borderTop) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
+
+        if (borderBottom) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            content = content
+        )
+    }
+
+}
