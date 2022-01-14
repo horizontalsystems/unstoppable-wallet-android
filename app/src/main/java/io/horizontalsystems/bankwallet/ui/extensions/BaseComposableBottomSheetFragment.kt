@@ -71,19 +71,26 @@ fun BottomSheetHeader(
                 painter = iconPainter,
                 contentDescription = null
             )
-            Column(modifier = Modifier.padding(start = 16.dp, top = 12.dp).weight(1f)) {
+            Column(
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 12.dp)
+                    .weight(1f)
+            ) {
                 Text(
                     text = title,
                     color = ComposeAppTheme.colors.leah,
                     style = ComposeAppTheme.typography.headline2,
                     maxLines = 1,
                 )
-                Text(
-                    text = subtitle ?: "",
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
+                subtitle?.let {
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = it,
+                        color = ComposeAppTheme.colors.grey,
+                        style = ComposeAppTheme.typography.subhead2,
+                        maxLines = 1,
+                    )
+                }
             }
             IconButton(onClick = onCloseClick) {
                 Icon(
