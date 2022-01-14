@@ -1,100 +1,140 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.dialogs
 
 import android.os.Bundle
-import android.os.Parcelable
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
-import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_bottom_confirm_unlink.*
-import kotlinx.android.synthetic.main.view_holder_confirmation.*
+import io.horizontalsystems.bankwallet.ui.compose.components.CellCheckboxLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 
-class UnlinkConfirmationDialog : BaseBottomSheetDialogFragment(), ConfirmationsAdapter.Listener {
+class UnlinkConfirmationDialog : BaseComposableBottomSheetFragment() {
 
     interface Listener {
         fun onUnlinkConfirm()
     }
 
+    private val checkboxItems by lazy {
+        requireArguments().getStringArrayList(CHECKBOX_ITEMS) ?: listOf()
+    }
+
+    private val accountName by lazy { requireArguments().getString(ACCOUNT_NAME) }
+
+    private val viewModel by viewModels<UnlinkConfirmationDialogViewModel> {
+        UnlinkConfirmationDialogModule.Factory(checkboxItems)
+    }
+
     private var listener: Listener? = null
-    private var checkboxItems = listOf<CheckBoxItem>()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setContentView(R.layout.fragment_bottom_confirm_unlink)
-
-        setTitle(getString(R.string.ManageKeys_Delete_Title))
-        setSubtitle(requireArguments().getString(ACCOUNT_NAME))
-        setHeaderIcon(R.drawable.ic_attention_red_24)
-
-        confirmButtonCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        setButton()
-
-        checkboxItems = requireArguments().getParcelableArrayList<CheckBoxItem>(CHECKBOX_ITEMS)?.toList()
-                ?: listOf()
-        val adapter = ConfirmationsAdapter(this, checkboxItems)
-
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
-
-        adapter.notifyDataSetChanged()
-    }
-
-    private fun setButton(enabled: Boolean = false) {
-        confirmButtonCompose.setContent {
-            ComposeAppTheme {
-                ButtonPrimaryRed(
-                    modifier = Modifier.padding(16.dp),
-                    title = getString(R.string.ManageKeys_Delete_FromPhone),
-                    onClick = {
-                        listener?.onUnlinkConfirm()
-                        dismiss()
-                    },
-                    enabled = enabled
-
-                )
-            }
-        }
-    }
 
     fun setListener(listener: Listener) {
         this.listener = listener
     }
 
-    override fun onItemCheckMarkClick(position: Int, checked: Boolean) {
-        checkboxItems[position].checked = checked
-        checkConfirmations()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    BottomSheetScreen()
+                }
+            }
+        }
     }
 
-    private fun checkConfirmations() {
-        val enabled = checkboxItems.all { it.checked }
-        setButton(enabled)
+    @Composable
+    private fun BottomSheetScreen() {
+        val items by viewModel.itemsLiveData.observeAsState(listOf())
+        val buttonEnabled by viewModel.buttonEnabledLiveData.observeAsState(false)
+
+        BottomSheetHeader(
+            iconPainter = painterResource(R.drawable.ic_attention_red_24),
+            title = stringResource(R.string.ManageKeys_Delete_Title),
+            subtitle = accountName,
+            onCloseClick = { close() }
+        ) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10
+            )
+
+            items.forEachIndexed { index, item ->
+                CellCheckboxLawrence(
+                    borderBottom = true,
+                    onClick = { viewModel.updateItem(index, item, !item.checked) }
+                ) {
+                    HsCheckbox(
+                        checked = item.checked,
+                        onCheckedChange = { checked ->
+                            viewModel.updateItem(index, item, checked)
+                        },
+                    )
+                    Spacer(Modifier.width(16.dp))
+                    Text(
+                        text = item.text,
+                        style = ComposeAppTheme.typography.subhead2,
+                        color = ComposeAppTheme.colors.leah
+                    )
+                }
+            }
+
+            ButtonPrimaryRed(
+                modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                title = getString(R.string.ManageKeys_Delete_FromPhone),
+                onClick = {
+                    listener?.onUnlinkConfirm()
+                    dismiss()
+                },
+                enabled = buttonEnabled
+            )
+
+        }
     }
 
     companion object {
         private const val ACCOUNT_NAME = "account_name"
         private const val CHECKBOX_ITEMS = "checkbox_items"
 
-        fun show(fragmentManager: FragmentManager, accountName: String, checkboxItems: List<String>) {
+        fun show(
+            fragmentManager: FragmentManager,
+            accountName: String,
+            checkboxItems: List<String>
+        ) {
             val fragment = UnlinkConfirmationDialog().apply {
                 arguments = bundleOf(
-                        ACCOUNT_NAME to accountName,
-                        CHECKBOX_ITEMS to checkboxItems.map { CheckBoxItem(it) }
+                    ACCOUNT_NAME to accountName,
+                    CHECKBOX_ITEMS to ArrayList(checkboxItems)
                 )
             }
 
@@ -106,38 +146,28 @@ class UnlinkConfirmationDialog : BaseBottomSheetDialogFragment(), ConfirmationsA
     }
 }
 
-class ConfirmationsAdapter(private var listener: Listener, private val confirmations: List<CheckBoxItem>)
-    : RecyclerView.Adapter<ViewHolderConfirmation>() {
-
-    interface Listener {
-        fun onItemCheckMarkClick(position: Int, checked: Boolean)
+class UnlinkConfirmationDialogViewModel(checkboxItems: List<String>) : ViewModel() {
+    val items = mutableListOf<CheckBoxItem>().apply {
+        addAll(checkboxItems.map { CheckBoxItem(it) })
     }
+    val itemsLiveData = MutableLiveData(items.toList())
+    val buttonEnabledLiveData = MutableLiveData(false)
 
-    override fun getItemCount() = confirmations.size
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderConfirmation {
-        return ViewHolderConfirmation(inflate(parent, R.layout.view_holder_confirmation), listener)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolderConfirmation, position: Int) {
-        holder.bind(confirmations[position].text)
+    fun updateItem(index: Int, item: CheckBoxItem, checked: Boolean) {
+        items.removeAt(index)
+        items.add(index, CheckBoxItem(item.text, checked))
+        itemsLiveData.postValue(items.toList())
+        buttonEnabledLiveData.postValue(items.all { it.checked })
     }
 }
 
-class ViewHolderConfirmation(
-        override val containerView: View, private val listener: ConfirmationsAdapter.Listener
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-
-    init {
-        confirmationCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            listener.onItemCheckMarkClick(bindingAdapterPosition, isChecked)
+object UnlinkConfirmationDialogModule {
+    class Factory(private val checkboxItems: List<String>) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return UnlinkConfirmationDialogViewModel(checkboxItems) as T
         }
     }
-
-    fun bind(text: String) {
-        confirmationCheckBox.text = text
-    }
 }
 
-@Parcelize
-class CheckBoxItem(val text: String, var checked: Boolean = false) : Parcelable
+data class CheckBoxItem(val text: String, val checked: Boolean = false)
