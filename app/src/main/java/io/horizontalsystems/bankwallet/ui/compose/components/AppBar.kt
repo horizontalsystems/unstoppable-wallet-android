@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,7 +18,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
 data class MenuItem(
     val title: TranslatableString,
-    @DrawableRes val icon: Int,
+    @DrawableRes val icon: Int? = null,
     val onClick: () -> Unit,
 )
 
@@ -28,10 +30,12 @@ fun AppBarMenuButton(
     tint: Color = ComposeAppTheme.colors.jacob,
 ) {
     IconButton(
+        modifier = Modifier.background(Color.Green),
         onClick = { onClick() },
         enabled = enabled
     ) {
         Icon(
+            modifier = Modifier.background(Color.Blue),
             painter = painterResource(id = icon),
             contentDescription = null,
             tint = tint
@@ -65,14 +69,30 @@ fun AppBar(
         },
         actions = {
             menuItems.forEach { menuItem ->
-                AppBarMenuButton(
-                    icon = menuItem.icon,
-                    onClick = menuItem.onClick
-                )
+                if (menuItem.icon != null) {
+                    AppBarMenuButton(
+                        icon = menuItem.icon,
+                        onClick = menuItem.onClick
+                    )
+                } else {
+                    Text(
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .clickable(
+                                enabled = true,
+                                onClick = menuItem.onClick
+                            ),
+                        text = menuItem.title.getString(),
+                        style = ComposeAppTheme.typography.headline2,
+                        color = ComposeAppTheme.colors.jacob
+                    )
+                }
             }
             if (showSpinner){
                 CircularProgressIndicator(
-                    modifier = Modifier.padding(start = 24.dp, end = 16.dp).size(24.dp),
+                    modifier = Modifier
+                        .padding(start = 24.dp, end = 16.dp)
+                        .size(24.dp),
                     color = ComposeAppTheme.colors.grey,
                     strokeWidth = 2.dp
                 )

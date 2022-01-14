@@ -457,6 +457,9 @@
         android:name="io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.RestoreMnemonicFragment"
         tools:layout="@layout/fragment_restore_mnemonic" />
     <fragment
+        android:id="@+id/watchAddressFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment" />
+    <fragment
         android:id="@+id/restoreSelectCoinsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment"
         tools:layout="@layout/fragment_manage_wallets" />
