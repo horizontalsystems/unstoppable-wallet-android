@@ -13,8 +13,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -56,6 +58,7 @@ fun BottomSheetHeader(
     title: String,
     subtitle: String? = null,
     onCloseClick: () -> Unit,
+    iconTint: ColorFilter? = null,
     content: @Composable() (ColumnScope.() -> Unit),
 ) {
     Column(
@@ -69,6 +72,7 @@ fun BottomSheetHeader(
             Image(
                 modifier = Modifier.padding(top = 12.dp, start = 12.dp).size(24.dp),
                 painter = iconPainter,
+                colorFilter = iconTint,
                 contentDescription = null
             )
             Column(
@@ -89,6 +93,7 @@ fun BottomSheetHeader(
                         color = ComposeAppTheme.colors.grey,
                         style = ComposeAppTheme.typography.subhead2,
                         maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
