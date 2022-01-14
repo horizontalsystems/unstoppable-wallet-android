@@ -17,9 +17,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ISwapProvider
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
-import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
-import io.horizontalsystems.bankwallet.ui.selector.SelectorItemWithIconViewHolderFactory
-import io.horizontalsystems.bankwallet.ui.selector.ViewItemWithIconWrapper
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSwapProviderSelectDialog
 import io.horizontalsystems.core.findNavController
 
 class SwapMainFragment : BaseFragment() {
@@ -108,15 +106,10 @@ class SwapMainFragment : BaseFragment() {
     }
 
     private fun showSwapProviderSelectorDialog() {
-        val dialog = SelectorBottomSheetDialog<ViewItemWithIconWrapper<ISwapProvider>>()
-        dialog.titleText = getString(R.string.Swap_SelectSwapProvider_Title)
-        dialog.subtitleText = getString(R.string.Swap_SelectSwapProvider_Subtitle)
-        dialog.headerIconResourceId = R.drawable.ic_swap_24
+        val dialog = BottomSheetSwapProviderSelectDialog()
         dialog.items = mainViewModel.providerItems
         dialog.selectedItem = mainViewModel.selectedProviderItem
-        dialog.onSelectListener =
-            { providerWrapper -> mainViewModel.setProvider(providerWrapper.item) }
-        dialog.itemViewHolderFactory = SelectorItemWithIconViewHolderFactory()
+        dialog.onSelectListener = { mainViewModel.setProvider(it) }
 
         dialog.show(childFragmentManager, "selector_dialog")
     }
