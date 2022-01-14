@@ -22,9 +22,7 @@ import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardi
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
-import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
-import io.horizontalsystems.bankwallet.ui.selector.SelectorRadioItemViewHolderFactory
-import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetWalletSelectDialog
 import io.horizontalsystems.core.findNavController
 
 class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
@@ -144,18 +142,14 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
     }
 
     private fun openWalletSwitchDialog(
-        items: List<ViewItemWrapper<Account>>,
-        selectedItem: ViewItemWrapper<Account>?,
+        items: List<Account>,
+        selectedItem: Account?,
         onSelectListener: (account: Account) -> Unit
     ) {
-        val dialog = SelectorBottomSheetDialog<ViewItemWrapper<Account>>()
-        dialog.titleText = getString(R.string.ManageAccount_SwitchWallet_Title)
-        dialog.subtitleText = getString(R.string.ManageAccount_SwitchWallet_Subtitle)
-        dialog.headerIconResourceId = R.drawable.ic_switch_wallet
+        val dialog = BottomSheetWalletSelectDialog()
         dialog.items = items
         dialog.selectedItem = selectedItem
-        dialog.onSelectListener = { onSelectListener(it.item) }
-        dialog.itemViewHolderFactory = SelectorRadioItemViewHolderFactory()
+        dialog.onSelectListener = { onSelectListener(it) }
 
         dialog.show(childFragmentManager, "selector_dialog")
     }
