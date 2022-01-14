@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.LaunchPage
-import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -36,7 +35,7 @@ class MainViewModel(
     val hideContentLiveData = MutableLiveData<Boolean>()
     val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
     val transactionTabEnabledLiveData = MutableLiveData<Boolean>()
-    val openWalletSwitcherLiveEvent = SingleLiveEvent<Pair<List<ViewItemWrapper<Account>>,ViewItemWrapper<Account>?>>()
+    val openWalletSwitcherLiveEvent = SingleLiveEvent<Pair<List<Account>, Account?>>()
 
     private val disposables = CompositeDisposable()
     private var contentHidden = pinComponent.isLocked
@@ -97,12 +96,7 @@ class MainViewModel(
     }
 
     fun onLongPressBalanceTab() {
-        val accounts = accountManager.accounts.map { account ->
-            ViewItemWrapper(account.name, account, subtitle = account.type.description)
-        }
-        val activeAccount = accounts.find { account -> account.item == accountManager.activeAccount }
-
-        openWalletSwitcherLiveEvent.postValue(Pair(accounts, activeAccount))
+        openWalletSwitcherLiveEvent.postValue(Pair(accountManager.accounts, accountManager.activeAccount))
     }
 
     fun onSelect(account: Account) {
