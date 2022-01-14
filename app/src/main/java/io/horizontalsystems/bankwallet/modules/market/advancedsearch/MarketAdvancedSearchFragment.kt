@@ -15,10 +15,8 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.databinding.FragmentMarketSearchFilterBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
-import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolder
-import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolderFactory
-import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
-import io.horizontalsystems.bankwallet.ui.selector.SelectorItemViewHolderFactory
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetMarketSearchFilterSelectDialog
+import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -66,11 +64,9 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         binding.filterCoinList.setOnSingleClickListener {
             showSelectorDialog(
                 title = R.string.Market_Filter_ChooseSet,
-                subtitleText = "---------",
                 headerIcon = R.drawable.ic_circle_coin_24,
                 items = marketAdvancedSearchViewModel.coinListsViewItemOptions,
                 selectedItem = marketAdvancedSearchViewModel.coinListViewItem,
-                itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
                 marketAdvancedSearchViewModel.coinListViewItem = it
             }
@@ -82,11 +78,9 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         binding.filterMarketCap.setOnSingleClickListener {
             showSelectorDialog(
                 title = R.string.Market_Filter_MarketCap,
-                subtitleText = "---------",
                 headerIcon = R.drawable.ic_usd_24,
                 items = marketAdvancedSearchViewModel.marketCapViewItemOptions,
                 selectedItem = marketAdvancedSearchViewModel.marketCapViewItem,
-                itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
                 marketAdvancedSearchViewModel.marketCapViewItem = it
             }
@@ -102,7 +96,6 @@ class MarketAdvancedSearchFragment : BaseFragment() {
                 headerIcon = R.drawable.ic_chart_24,
                 items = marketAdvancedSearchViewModel.volumeViewItemOptions,
                 selectedItem = marketAdvancedSearchViewModel.volumeViewItem,
-                itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
                 marketAdvancedSearchViewModel.volumeViewItem = it
             }
@@ -114,11 +107,9 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         binding.filterPeriod.setOnSingleClickListener {
             showSelectorDialog(
                 title = R.string.Market_Filter_PricePeriod,
-                subtitleText = "---------",
                 headerIcon = R.drawable.ic_circle_clock_24,
                 items = marketAdvancedSearchViewModel.periodViewItemOptions,
                 selectedItem = marketAdvancedSearchViewModel.periodViewItem,
-                itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
                 marketAdvancedSearchViewModel.periodViewItem = it
             }
@@ -130,11 +121,9 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         binding.filterPriceChange.setOnSingleClickListener {
             showSelectorDialog(
                 title = R.string.Market_Filter_PriceChange,
-                subtitleText = "---------",
                 headerIcon = R.drawable.ic_market_24,
                 items = marketAdvancedSearchViewModel.priceChangeViewItemOptions,
                 selectedItem = marketAdvancedSearchViewModel.priceChangeViewItem,
-                itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
                 marketAdvancedSearchViewModel.priceChangeViewItem = it
             }
@@ -226,24 +215,20 @@ class MarketAdvancedSearchFragment : BaseFragment() {
 
     private fun <ItemClass> showSelectorDialog(
         title: Int,
-        subtitleText: String,
+        subtitleText: String = "---------",
         headerIcon: Int,
-        items: List<ItemClass>,
-        selectedItem: ItemClass,
-        itemViewHolderFactory: ItemViewHolderFactory<ItemViewHolder<ItemClass>>,
-        onSelectListener: (ItemClass) -> Unit
+        items: List<ViewItemWrapper<ItemClass>>,
+        selectedItem: ViewItemWrapper<ItemClass>,
+        onSelectListener: (ViewItemWrapper<ItemClass>) -> Unit
     ) {
-        val dialog = SelectorBottomSheetDialog<ItemClass>()
+        val dialog = BottomSheetMarketSearchFilterSelectDialog<ItemClass>()
         dialog.titleText = getString(title)
         dialog.subtitleText = subtitleText
         dialog.headerIconResourceId = headerIcon
         dialog.items = items
         dialog.selectedItem = selectedItem
         dialog.onSelectListener = onSelectListener
-        dialog.itemViewHolderFactory = itemViewHolderFactory
 
         dialog.show(childFragmentManager, "selector_dialog")
     }
 }
-
-
