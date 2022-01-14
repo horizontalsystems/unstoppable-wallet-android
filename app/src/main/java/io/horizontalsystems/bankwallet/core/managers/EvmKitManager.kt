@@ -10,6 +10,7 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.signer.Signer
+import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.hdwalletkit.Mnemonic
@@ -100,7 +101,7 @@ class EvmKitManager(
     }
 
     @Synchronized
-    fun signer(account: Account): Signer{
+    fun signer(account: Account): Signer? {
         return evmKitWrapper(account).signer
     }
 
@@ -111,12 +112,17 @@ class EvmKitManager(
         }
 
         if (this.evmKitWrapper == null) {
-            if (account.type !is AccountType.Mnemonic)
-                throw UnsupportedAccountException()
-
+            val accountType = account.type
+            this.evmKitWrapper = when (accountType) {
+                is AccountType.Mnemonic -> {
+                    createKitInstance(accountType, account)
+                }
+                is AccountType.Address -> {
+                    createKitInstance(accountType, account)
+                }
+                else -> throw UnsupportedAccountException()
+            }
             useCount = 0
-
-            this.evmKitWrapper = createKitInstance(account.type, account)
             currentAccount = account
         }
 
@@ -154,6 +160,38 @@ class EvmKitManager(
         kit.start()
 
         val wrapper = EvmKitWrapper(kit, signer)
+
+        return wrapper
+    }
+
+    private fun createKitInstance(
+        accountType: AccountType.Address,
+        account: Account
+    ): EvmKitWrapper {
+        val evmNetwork = evmNetworkProvider.getEvmNetwork(account)
+        val address = accountType.address
+
+        val kit = EthereumKit.getInstance(
+            App.instance,
+            Address(address),
+            evmNetwork.networkType,
+            evmNetwork.syncSource,
+            etherscanApiKey,
+            account.id
+        )
+
+        Erc20Kit.addTransactionSyncer(kit)
+        Erc20Kit.addDecorator(kit)
+
+        UniswapKit.addDecorator(kit)
+        UniswapKit.addTransactionWatcher(kit)
+
+        OneInchKit.addDecorator(kit)
+        OneInchKit.addTransactionWatcher(kit)
+
+        kit.start()
+
+        val wrapper = EvmKitWrapper(kit, null)
 
         return wrapper
     }
@@ -196,7 +234,7 @@ val EthereumKit.SyncSource.urls: List<URL>
         is EthereumKit.SyncSource.Http -> urls
     }
 
-class EvmKitWrapper(val evmKit: EthereumKit, val signer: Signer) {
+class EvmKitWrapper(val evmKit: EthereumKit, val signer: Signer?) {
 
     fun sendSingle(
         transactionData: TransactionData,
@@ -204,11 +242,15 @@ class EvmKitWrapper(val evmKit: EthereumKit, val signer: Signer) {
         gasLimit: Long,
         nonce: Long? = null
     ): Single<FullTransaction> {
-        return evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
-            .flatMap { rawTransaction ->
-                val signature = signer.signature(rawTransaction)
-                evmKit.send(rawTransaction, signature)
-            }
+        return if (signer != null) {
+            evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
+                .flatMap { rawTransaction ->
+                    val signature = signer.signature(rawTransaction)
+                    evmKit.send(rawTransaction, signature)
+                }
+        } else {
+            Single.error(Exception())
+        }
     }
 
 }

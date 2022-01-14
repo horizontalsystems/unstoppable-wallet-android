@@ -30,6 +30,9 @@ class Account(
 @Parcelize
 open class AccountType : Parcelable {
     @Parcelize
+    data class Address(val address: String) : AccountType()
+
+    @Parcelize
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
         override fun equals(other: Any?): Boolean {
             return other is Mnemonic

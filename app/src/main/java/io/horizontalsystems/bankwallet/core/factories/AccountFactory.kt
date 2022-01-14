@@ -14,7 +14,7 @@ class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
 
         return Account(
                 id = id,
-                name = getNextWalletName(),
+                name = getNextWalletName(type),
                 type = type,
                 origin = origin,
                 isBackedUp = backedUp
@@ -22,7 +22,7 @@ class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
     }
 
 
-    private fun getNextWalletName(): String {
+    private fun getNextWalletName(type: AccountType): String {
         val count = accountManager.accounts.count()
 
         return "Wallet ${count + 1}"

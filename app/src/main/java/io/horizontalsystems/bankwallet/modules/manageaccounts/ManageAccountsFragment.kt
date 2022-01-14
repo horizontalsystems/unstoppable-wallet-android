@@ -77,6 +77,11 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
                     R.drawable.ic_download,
                     R.string.ManageAccounts_ImportWallet,
                     ::onClickRestoreWallet
+                ),
+                ActionViewItem(
+                    R.drawable.ic_eye_2_20,
+                    R.string.ManageAccounts_WatchAddress,
+                    ::onClickWatch
                 )
             )
         )
@@ -106,6 +111,14 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
     private fun onClickRestoreWallet() {
         findNavController().navigate(
             R.id.manageAccountsFragment_to_restoreMnemonicFragment,
+            null,
+            navOptions()
+        )
+    }
+
+    private fun onClickWatch() {
+        findNavController().navigate(
+            R.id.watchAddressFragment,
             null,
             navOptions()
         )
