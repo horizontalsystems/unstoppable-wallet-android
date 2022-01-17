@@ -14,7 +14,7 @@ android {
         applicationId "io.horizontalsystems.bankwallet"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 57
+        versionCode 59
         versionName "0.24.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -217,7 +217,7 @@ dependencies {
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:110018d'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:a51b080'
-    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:047596b'
+    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:b4ebb16'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:fe2a3be'
     implementation 'com.github.horizontalsystems:market-kit-android:1378882'
 

@@ -123,7 +123,7 @@ class BinanceSmartChainFeeRateProvider(
     )
 
     override val recommendedFeeRate: Single<BigInteger> =
-        feeRateProvider.ethereumGasPrice()
+        feeRateProvider.binanceSmartChainGasPrice()
             .map { getAdjustedGasPrice(maxOf(it.toLong(), customFeeRange.first), multiply) }
 
     companion object {
