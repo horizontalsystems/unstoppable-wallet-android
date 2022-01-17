@@ -7,22 +7,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.setRemoteImage
 import io.horizontalsystems.bankwallet.databinding.ViewHolderCoinManageItemBinding
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.views.ListPosition
 
 class CoinListAdapter(private val listener: Listener) :
     ListAdapter<CoinViewItem, CoinWithSwitchViewHolder>(diffCallback) {
 
     interface Listener {
-        fun enable(fullCoin: FullCoin)
-        fun disable(fullCoin: FullCoin)
-        fun edit(fullCoin: FullCoin) = Unit
+        fun enable(uid: String)
+        fun disable(uid: String)
+        fun edit(uid: String) = Unit
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinWithSwitchViewHolder {
@@ -32,11 +28,11 @@ class CoinListAdapter(private val listener: Listener) :
             ),
             { isChecked, index ->
                 val item = getItem(index)
-                onSwitchToggle(isChecked, item.fullCoin)
+                onSwitchToggle(isChecked, item.uid)
             }
         ) { index ->
             val item = getItem(index)
-            listener.edit(item.fullCoin)
+            listener.edit(item.uid)
         }
     }
 
@@ -44,17 +40,17 @@ class CoinListAdapter(private val listener: Listener) :
         holder.bind(getItem(position))
     }
 
-    private fun onSwitchToggle(isChecked: Boolean, fullCoin: FullCoin) {
+    private fun onSwitchToggle(isChecked: Boolean, uid: String) {
         if (isChecked) {
-            listener.enable(fullCoin)
+            listener.enable(uid)
         } else {
-            listener.disable(fullCoin)
+            listener.disable(uid)
         }
     }
 
-    fun disableCoin(coin: Coin): Boolean {
+    fun disableCoin(uid: String): Boolean {
         for (i in 0 until itemCount) {
-            if (getItem(i).fullCoin.coin == coin) {
+            if (getItem(i).uid == uid) {
                 notifyItemChanged(i)
                 return true
             }
@@ -65,11 +61,11 @@ class CoinListAdapter(private val listener: Listener) :
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<CoinViewItem>() {
             override fun areItemsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
-                return oldItem.fullCoin.coin == newItem.fullCoin.coin
+                return oldItem.uid == newItem.uid
             }
 
             override fun areContentsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
-                return oldItem.fullCoin.coin == newItem.fullCoin.coin && oldItem.state == newItem.state && oldItem.listPosition == newItem.listPosition
+                return oldItem.title == newItem.title && oldItem.subtitle == newItem.subtitle && oldItem.state == newItem.state && oldItem.listPosition == newItem.listPosition
             }
         }
     }
@@ -89,7 +85,7 @@ class CoinWithSwitchViewHolder(
     }
 
     fun bind(viewItem: CoinViewItem) {
-        set(viewItem.fullCoin, viewItem.listPosition)
+        set(viewItem, viewItem.listPosition)
 
         when (viewItem.state) {
             CoinViewItemState.ToggleHidden -> {
@@ -114,11 +110,11 @@ class CoinWithSwitchViewHolder(
         }
     }
 
-    private fun set(fullCoin: FullCoin, listPosition: ListPosition) {
+    private fun set(fullCoin: CoinViewItem, listPosition: ListPosition) {
         binding.backgroundView.setBackgroundResource(getBackground(listPosition))
-        binding.coinIcon.setRemoteImage(fullCoin.coin.iconUrl, fullCoin.iconPlaceholder)
-        binding.coinTitle.text = fullCoin.coin.name
-        binding.coinSubtitle.text = fullCoin.coin.code
+        binding.coinIcon.setRemoteImage(fullCoin.imageUrl, fullCoin.imagePlaceholder)
+        binding.coinTitle.text = fullCoin.title
+        binding.coinSubtitle.text = fullCoin.subtitle
         binding.dividerView.isVisible =
             listPosition == ListPosition.Last || listPosition == ListPosition.Single
     }
@@ -135,7 +131,11 @@ class CoinWithSwitchViewHolder(
 }
 
 data class CoinViewItem(
-    val fullCoin: FullCoin,
+    val uid: String,
+    val imageUrl: String,
+    val imagePlaceholder: Int,
+    val title: String,
+    val subtitle: String,
     val state: CoinViewItemState,
     val listPosition: ListPosition
 )

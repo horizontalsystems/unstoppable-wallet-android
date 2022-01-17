@@ -163,16 +163,18 @@ class ManageWalletsService(
         syncState()
     }
 
-    fun enable(fullCoin: FullCoin) {
+    fun enable(uid: String) {
+        val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid } ?: return
         enableCoinService.enable(fullCoin, account)
     }
 
-    fun disable(fullCoin: FullCoin) {
-        val walletsToDelete = wallets.filter { it.coin == fullCoin.coin }
+    fun disable(uid: String) {
+        val walletsToDelete = wallets.filter { it.coin.uid == uid }
         walletManager.delete(walletsToDelete)
     }
 
-    fun configure(fullCoin: FullCoin) {
+    fun configure(uid: String) {
+        val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid } ?: return
         val coinWallets = wallets.filter { it.coin == fullCoin.coin }
         enableCoinService.configure(fullCoin, coinWallets.map { it.configuredPlatformCoin })
     }
