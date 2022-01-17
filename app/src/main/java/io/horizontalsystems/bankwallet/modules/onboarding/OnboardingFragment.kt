@@ -4,13 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.databinding.FragmentNoWalletBinding
+import io.horizontalsystems.bankwallet.core.navOptions
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -18,61 +27,86 @@ import io.horizontalsystems.core.findNavController
 
 class OnboardingFragment : BaseFragment() {
 
-    private var _binding: FragmentNoWalletBinding? = null
-    private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNoWalletBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                OnboardingScreen(findNavController())
+            }
+        }
     }
+}
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+@Composable
+fun OnboardingScreen(navController: NavController) {
+    ComposeAppTheme {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Image(painter = painterResource(id = R.drawable.ic_wallet_in_circle), contentDescription = null)
+                Spacer(modifier = Modifier.height(26.dp))
+                Text(
+                    modifier = Modifier.padding(horizontal = 48.dp),
+                    text = stringResource(id = R.string.Balance_NoWalletAlert),
+                    style = ComposeAppTheme.typography.subhead2,
+                    color = ComposeAppTheme.colors.grey,
+                    textAlign = TextAlign.Center,
+                )
+            }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.buttonsCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        binding.buttonsCompose.setContent {
-            ComposeAppTheme {
-                Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
-                        title = getString(R.string.Button_Create),
-                        onClick = {
-                            findNavController().navigate(
-                                R.id.createAccountFragment,
-                                null,
-                                navOptions()
-                            )
-                        }
-                    )
-                    ButtonPrimaryDefault(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
-                        title = getString(R.string.Button_Restore),
-                        onClick = {
-                            findNavController().navigate(
-                                R.id.restoreMnemonicFragment,
-                                null,
-                                navOptions()
-                            )
-                        }
+            ButtonPrimaryYellow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                title = stringResource(R.string.Button_Create),
+                onClick = {
+                    navController.navigate(
+                        R.id.createAccountFragment,
+                        null,
+                        navOptions()
                     )
                 }
-            }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            ButtonPrimaryDefault(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                title = stringResource(R.string.Button_Restore),
+                onClick = {
+                    navController.navigate(
+                        R.id.restoreMnemonicFragment,
+                        null,
+                        navOptions()
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            ButtonPrimaryDefault(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                title = stringResource(R.string.Button_WatchAddress),
+                onClick = {
+                    navController.navigate(
+                        R.id.watchAddressFragment,
+                        null,
+                        navOptions()
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }

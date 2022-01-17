@@ -31,6 +31,7 @@
     <string name="Button_Start">Start</string>
     <string name="Button_Create">Create</string>
     <string name="Button_Restore">Restore</string>
+    <string name="Button_WatchAddress">Watch Address</string>
     <string name="Button_Reset">Reset</string>
     <string name="Button_Reconnect">Reconnect</string>
 
