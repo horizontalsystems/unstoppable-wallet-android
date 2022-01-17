@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.Restor
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.FullCoin
 
 class ManageWalletsFragment : CoinListBaseFragment() {
 
@@ -53,16 +52,16 @@ class ManageWalletsFragment : CoinListBaseFragment() {
 
     // ManageWalletItemsAdapter.Listener
 
-    override fun enable(fullCoin: FullCoin) {
-        viewModel.enable(fullCoin)
+    override fun enable(uid: String) {
+        viewModel.enable(uid)
     }
 
-    override fun disable(fullCoin: FullCoin) {
-        viewModel.disable(fullCoin)
+    override fun disable(uid: String) {
+        viewModel.disable(uid)
     }
 
-    override fun edit(fullCoin: FullCoin) {
-        viewModel.onClickSettings(fullCoin)
+    override fun edit(uid: String) {
+        viewModel.onClickSettings(uid)
     }
 
     // CoinListBaseFragment

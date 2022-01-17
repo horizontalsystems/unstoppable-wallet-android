@@ -11,8 +11,6 @@ import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.databinding.FragmentManageWalletsBinding
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.FullCoin
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.Listener {
@@ -54,9 +52,9 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
 
     // ManageWalletItemsAdapter.Listener
 
-    override fun enable(fullCoin: FullCoin) {}
+    override fun enable(uid: String) {}
 
-    override fun disable(fullCoin: FullCoin) {}
+    override fun disable(uid: String) {}
 
 
     // ManageWalletItemsAdapter.Listener
@@ -88,8 +86,8 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
         binding.noResultsText.isVisible = viewItems.isEmpty()
     }
 
-    protected fun disableCoin(coin: Coin) {
-        itemsAdapter.disableCoin(coin)
+    protected fun disableCoin(uid: String) {
+        itemsAdapter.disableCoin(uid)
     }
 
     protected fun showBottomSelectorDialog(

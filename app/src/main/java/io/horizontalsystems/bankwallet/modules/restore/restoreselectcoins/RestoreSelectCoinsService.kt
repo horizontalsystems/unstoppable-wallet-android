@@ -172,18 +172,20 @@ class RestoreSelectCoinsService(
         syncState()
     }
 
-    fun enable(fullCoin: FullCoin) {
+    fun enable(uid: String) {
+        val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid } ?: return
         enableCoinService.enable(fullCoin)
     }
 
-    fun disable(fullCoin: FullCoin) {
-        enabledCoins.removeIf { it.platformCoin.coin == fullCoin.coin }
+    fun disable(uid: String) {
+        enabledCoins.removeIf { it.platformCoin.coin.uid == uid }
 
         syncState()
         syncCanRestore()
     }
 
-    fun configure(fullCoin: FullCoin) {
+    fun configure(uid: String) {
+        val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid } ?: return
         enableCoinService.configure(fullCoin, enabledCoins.filter { it.platformCoin.coin == fullCoin.coin })
     }
 

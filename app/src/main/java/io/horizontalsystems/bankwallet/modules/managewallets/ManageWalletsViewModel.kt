@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItemState
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 
@@ -17,7 +17,7 @@ class ManageWalletsViewModel(
 ) : ViewModel() {
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem>>()
-    val disableCoinLiveData = MutableLiveData<Coin>()
+    val disableCoinLiveData = MutableLiveData<String>()
 
     private var disposables = CompositeDisposable()
 
@@ -27,7 +27,7 @@ class ManageWalletsViewModel(
             .let { disposables.add(it) }
 
         service.cancelEnableCoinObservable
-            .subscribeIO { disableCoinLiveData.postValue(it) }
+            .subscribeIO { disableCoinLiveData.postValue(it.uid) }
             .let { disposables.add(it) }
 
         sync(service.items)
@@ -43,27 +43,38 @@ class ManageWalletsViewModel(
         return when (item.state) {
             is ManageWalletsService.ItemState.Supported -> {
                 CoinViewItem(
-                    item.fullCoin,
+                    item.fullCoin.coin.uid,
+                    item.fullCoin.coin.iconUrl,
+                    item.fullCoin.iconPlaceholder,
+                    item.fullCoin.coin.name,
+                    item.fullCoin.coin.code,
                     CoinViewItemState.ToggleVisible(item.state.enabled, item.state.hasSettings),
                     listPosition
                 )
             }
             ManageWalletsService.ItemState.Unsupported -> {
-                CoinViewItem(item.fullCoin, CoinViewItemState.ToggleHidden, listPosition)
+                CoinViewItem(
+                    item.fullCoin.coin.uid,
+                    item.fullCoin.coin.iconUrl,
+                    item.fullCoin.iconPlaceholder,
+                    item.fullCoin.coin.name,
+                    item.fullCoin.coin.code,
+                    CoinViewItemState.ToggleHidden,
+                    listPosition)
             }
         }
     }
 
-    fun enable(fullCoin: FullCoin) {
-        service.enable(fullCoin)
+    fun enable(uid: String) {
+        service.enable(uid)
     }
 
-    fun disable(fullCoin: FullCoin) {
-        service.disable(fullCoin)
+    fun disable(uid: String) {
+        service.disable(uid)
     }
 
-    fun onClickSettings(fullCoin: FullCoin) {
-        service.configure(fullCoin)
+    fun onClickSettings(uid: String) {
+        service.configure(uid)
     }
 
     fun updateFilter(filter: String) {
