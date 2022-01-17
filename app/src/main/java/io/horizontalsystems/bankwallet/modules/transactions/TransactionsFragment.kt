@@ -303,7 +303,7 @@ private fun FilterTypeTabs(
     scrollToTopAfterUpdate: () -> Unit
 ) {
     val tabItems = filterTypes.map {
-        TabItem(it.item.name, it.selected, it.item)
+        TabItem(stringResource(it.item.title), it.selected, it.item)
     }
 
     ScrollableTabs(tabItems) { transactionType ->
