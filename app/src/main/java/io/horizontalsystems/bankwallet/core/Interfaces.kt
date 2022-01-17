@@ -130,6 +130,7 @@ interface IBackupManager {
 
 interface IAccountFactory {
     fun account(type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
+    fun watchAccount(address: String, domain: String?): Account
 }
 
 interface IWalletStorage {

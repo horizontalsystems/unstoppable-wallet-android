@@ -3,8 +3,6 @@ package io.horizontalsystems.bankwallet.modules.watchaddress
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
-import io.horizontalsystems.bankwallet.entities.AccountOrigin
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.CoinType
@@ -32,8 +30,7 @@ class WatchAddressService(
     fun createAccount() {
         try {
             AddressValidator.validate(address)
-
-            val account = accountFactory.account(AccountType.Address(address), AccountOrigin.Created, true)
+            val account = accountFactory.watchAccount(address, null)
 
             accountManager.save(account)
             walletActivator.activateWallets(account, listOf(CoinType.Ethereum, CoinType.BinanceSmartChain))
@@ -41,11 +38,10 @@ class WatchAddressService(
             accountCreatedMutableFlow.update {
                 DataState.Success(true)
             }
-        } catch (e: Exception) {
+        } catch (e: AddressValidator.AddressValidationException) {
             accountCreatedMutableFlow.update {
                 DataState.Error(e)
             }
-
         }
     }
 }
