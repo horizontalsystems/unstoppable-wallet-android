@@ -23,6 +23,7 @@ object BalanceModule {
                 App.localStorage,
                 App.connectivityManager,
                 BalanceSorter(),
+                App.accountManager
             )
 
             val rateAppService = RateAppService(App.rateAppManager)
