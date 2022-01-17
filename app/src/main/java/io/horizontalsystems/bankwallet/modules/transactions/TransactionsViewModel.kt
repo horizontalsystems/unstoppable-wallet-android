@@ -137,5 +137,14 @@ data class TransactionViewItem(
 }
 
 enum class FilterTransactionType {
-    All, Incoming, Outgoing, Swap, Approve
+    All, Incoming, Outgoing, Swap, Approve;
+
+    val title: Int
+        get() = when (this) {
+            All -> R.string.Transactions_All
+            Incoming -> R.string.Transactions_Incoming
+            Outgoing -> R.string.Transactions_Outgoing
+            Swap -> R.string.Transactions_Swaps
+            Approve -> R.string.Transactions_Approvals
+        }
 }
