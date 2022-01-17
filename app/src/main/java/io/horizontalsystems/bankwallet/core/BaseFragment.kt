@@ -87,3 +87,12 @@ abstract class BaseFragment(@LayoutRes layoutResId: Int = 0) : Fragment(layoutRe
                 }).show(parentFragmentManager, "custom_keyboard_alert")
     }
 }
+
+fun navOptions(): NavOptions {
+    return NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_from_right)
+        .setExitAnim(R.anim.slide_to_left)
+        .setPopEnterAnim(R.anim.slide_from_left)
+        .setPopExitAnim(R.anim.slide_to_right)
+        .build()
+}
