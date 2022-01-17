@@ -1,15 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.isCustom
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import java.math.BigDecimal
 import java.util.concurrent.CopyOnWriteArrayList
 
 class BalanceService2(
@@ -19,7 +18,8 @@ class BalanceService2(
     private val networkTypeChecker: NetworkTypeChecker,
     private val localStorage: ILocalStorage,
     private val connectivityManager: ConnectivityManager,
-    private val balanceSorter: BalanceSorter
+    private val balanceSorter: BalanceSorter,
+    private val accountManager: IAccountManager
 ) : Clearable {
 
     val networkAvailable by connectivityManager::isConnected
@@ -34,7 +34,15 @@ class BalanceService2(
             sortAndEmitItems()
         }
 
-    val balanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
+    private var hideZeroBalances = false
+
+    private val allBalanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
+    val balanceItems: List<BalanceModule.BalanceItem>
+        get() = if (hideZeroBalances) {
+            allBalanceItems.filter { it.balanceData.total > BigDecimal.ZERO }
+        } else {
+            allBalanceItems
+        }
 
     private val balanceItemsSubject = PublishSubject.create<Unit>()
     val balanceItemsObservable: Observable<Unit> get() = balanceItemsSubject
@@ -77,19 +85,19 @@ class BalanceService2(
     }
 
     private fun sortAndEmitItems() {
-        val sorted = balanceSorter.sort(balanceItems, sortType)
-        balanceItems.clear()
-        balanceItems.addAll(sorted)
+        val sorted = balanceSorter.sort(allBalanceItems, sortType)
+        allBalanceItems.clear()
+        allBalanceItems.addAll(sorted)
 
         balanceItemsSubject.onNext(Unit)
     }
 
     @Synchronized
     fun handleAdaptersReady() {
-        for (i in 0 until balanceItems.size) {
-            val balanceItem = balanceItems[i]
+        for (i in 0 until allBalanceItems.size) {
+            val balanceItem = allBalanceItems[i]
 
-            balanceItems[i] = balanceItem.copy(
+            allBalanceItems[i] = balanceItem.copy(
                 balanceData = adapterRepository.balanceData(balanceItem.wallet),
                 state = adapterRepository.state(balanceItem.wallet)
             )
@@ -100,11 +108,11 @@ class BalanceService2(
 
     @Synchronized
     private fun handleAdapterUpdate(wallet: Wallet) {
-        val indexOfFirst = balanceItems.indexOfFirst { it.wallet == wallet }
+        val indexOfFirst = allBalanceItems.indexOfFirst { it.wallet == wallet }
         if (indexOfFirst != -1) {
-            val itemToUpdate = balanceItems[indexOfFirst]
+            val itemToUpdate = allBalanceItems[indexOfFirst]
 
-            balanceItems[indexOfFirst] = itemToUpdate.copy(
+            allBalanceItems[indexOfFirst] = itemToUpdate.copy(
                 balanceData = adapterRepository.balanceData(wallet),
                 state = adapterRepository.state(wallet)
             )
@@ -115,11 +123,11 @@ class BalanceService2(
 
     @Synchronized
     private fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) {
-        for (i in 0 until balanceItems.size) {
-            val balanceItem = balanceItems[i]
+        for (i in 0 until allBalanceItems.size) {
+            val balanceItem = allBalanceItems[i]
 
             if (latestRates.containsKey(balanceItem.wallet.coin.uid)) {
-                balanceItems[i] = balanceItem.copy(coinPrice = latestRates[balanceItem.wallet.coin.uid])
+                allBalanceItems[i] = balanceItem.copy(coinPrice = latestRates[balanceItem.wallet.coin.uid])
             }
         }
 
@@ -128,6 +136,8 @@ class BalanceService2(
 
     @Synchronized
     private fun handleWalletsUpdate(wallets: List<Wallet>) {
+        hideZeroBalances = accountManager.activeAccount?.type is AccountType.Address
+
         adapterRepository.setWallet(wallets)
         xRateRepository.setCoinUids(wallets.mapNotNull { if (it.coin.isCustom) null else it.coin.uid })
         val latestRates = xRateRepository.getLatestRates()
@@ -142,8 +152,8 @@ class BalanceService2(
             )
         }
 
-        this.balanceItems.clear()
-        this.balanceItems.addAll(balanceItems)
+        this.allBalanceItems.clear()
+        this.allBalanceItems.addAll(balanceItems)
 
         sortAndEmitItems()
     }
