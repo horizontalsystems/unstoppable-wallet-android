@@ -5,15 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
-import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
+import io.horizontalsystems.bankwallet.core.ethereum.*
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings.LegacyGasPriceService
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.marketkit.models.CoinType
 
@@ -34,21 +33,35 @@ object SendEvmConfirmationModule {
                 NetworkType.BscMainNet -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)!!
             }
         }
-        private val transactionService by lazy {
+        private val gasPriceService: IEvmGasPriceService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(feeCoin.coinType) as ICustomRangedFeeProvider
-            EvmTransactionFeeService(evmKitWrapper.evmKit, feeRateProvider, 20)
+
+            when (evmKitWrapper.evmKit.networkType) {
+                NetworkType.EthMainNet,
+                NetworkType.EthRopsten,
+                NetworkType.EthKovan,
+                NetworkType.EthGoerli,
+                NetworkType.EthRinkeby -> LegacyGasPriceService(feeRateProvider) // TODO switch to EIP1559 GasPrice service
+                NetworkType.BscMainNet -> LegacyGasPriceService(feeRateProvider)
+            }
+        }
+        private val feeService by lazy {
+            EvmTransactionFeeServiceNew(evmKitWrapper.evmKit, gasPriceService, sendEvmData.transactionData, 20)
         }
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeCoin, App.marketKit, App.currencyManager) }
-        private val sendService by lazy { SendEvmTransactionService(sendEvmData, evmKitWrapper, transactionService, App.activateCoinManager) }
+        private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
+        private val sendService by lazy {
+            SendEvmTransactionService(sendEvmData, evmKitWrapper, feeService, App.activateCoinManager)
+        }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory) as T
                 }
-                EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService) as T
+                EvmFeeCellViewModel::class.java -> {
+                    EvmFeeCellViewModel(feeService, coinServiceFactory.baseCoinService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

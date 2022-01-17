@@ -28,7 +28,9 @@ fun TextImportantWarning(
         title = title,
         icon = icon,
         borderColor = ComposeAppTheme.colors.jacob,
-        backgroundColor = ComposeAppTheme.colors.yellow20
+        backgroundColor = ComposeAppTheme.colors.yellow20,
+        textColor = ComposeAppTheme.colors.jacob,
+        iconColor = ComposeAppTheme.colors.jacob
     )
 }
 
@@ -45,7 +47,9 @@ fun TextImportantError(
         title = title,
         icon = icon,
         borderColor = ComposeAppTheme.colors.lucian,
-        backgroundColor = ComposeAppTheme.colors.red20
+        backgroundColor = ComposeAppTheme.colors.red20,
+        textColor = ComposeAppTheme.colors.lucian,
+        iconColor = ComposeAppTheme.colors.lucian
     )
 }
 
@@ -56,7 +60,9 @@ fun TextImportant(
     title: String? = null,
     @DrawableRes icon: Int? = null,
     borderColor: Color,
-    backgroundColor: Color
+    backgroundColor: Color,
+    textColor: Color,
+    iconColor: Color
 ) {
     Column(
         modifier = modifier
@@ -75,13 +81,13 @@ fun TextImportant(
                     Icon(
                         painter = painterResource(id = icon),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.jacob
+                        tint = iconColor
                     )
                 }
                 title?.let {
                     Text(
                         text = it,
-                        color = ComposeAppTheme.colors.jacob,
+                        color = textColor,
                         style = ComposeAppTheme.typography.subhead1
                     )
                 }

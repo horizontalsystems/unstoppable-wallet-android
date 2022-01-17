@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.ethereum.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
@@ -64,13 +65,8 @@ object TransactionInfoOptionsModule {
             EvmTransactionFeeService(evmKitWrapper.evmKit, feeRateProvider)
         }
 
-        private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(
-                baseCoin,
-                App.marketKit,
-                App.currencyManager,
-            )
-        }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(baseCoin, App.marketKit, App.currencyManager) }
+        private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
 
         private val sendService by lazy {
             val transactionData = when (optionType) {
@@ -78,24 +74,38 @@ object TransactionInfoOptionsModule {
                     TransactionData(transaction.to!!, transaction.value, transaction.input, transaction.nonce)
                 }
                 TransactionInfoOption.Type.Cancel -> {
-                    TransactionData(evmKitWrapper.evmKit.receiveAddress, BigInteger.ZERO, byteArrayOf(), transaction.nonce)
+                    TransactionData(
+                        evmKitWrapper.evmKit.receiveAddress,
+                        BigInteger.ZERO,
+                        byteArrayOf(),
+                        transaction.nonce
+                    )
                 }
             }
 
-            SendEvmTransactionService(SendEvmData(transactionData), evmKitWrapper, transactionService, App.activateCoinManager)
+            SendEvmTransactionService(
+                SendEvmData(transactionData),
+                evmKitWrapper,
+                transactionService,
+                App.activateCoinManager
+            )
         }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory) as T
                 }
-                EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService) as T
+                EvmFeeCellViewModel::class.java -> {
+                    EvmFeeCellViewModel(transactionService, coinServiceFactory.baseCoinService) as T
                 }
                 TransactionSpeedUpCancelViewModel::class.java -> {
-                    TransactionSpeedUpCancelViewModel(baseCoin, optionType, fullTransaction.receiptWithLogs == null) as T
+                    TransactionSpeedUpCancelViewModel(
+                        baseCoin,
+                        optionType,
+                        fullTransaction.receiptWithLogs == null
+                    ) as T
                 }
                 else -> throw IllegalArgumentException()
             }

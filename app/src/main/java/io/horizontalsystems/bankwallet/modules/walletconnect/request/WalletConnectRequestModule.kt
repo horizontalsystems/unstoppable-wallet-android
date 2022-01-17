@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.ethereum.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
@@ -24,8 +25,8 @@ object WalletConnectRequestModule {
     const val TYPED_MESSAGE = "typed_message"
 
     class Factory(
-            private val request: WalletConnectSendEthereumTransactionRequest,
-            private val baseService: WalletConnectService
+        private val request: WalletConnectSendEthereumTransactionRequest,
+        private val baseService: WalletConnectService
     ) : ViewModelProvider.Factory {
         private val evmKitWrapper by lazy { baseService.evmKitWrapper!! }
         private val coin by lazy {
@@ -44,7 +45,16 @@ object WalletConnectRequestModule {
             val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
             EvmTransactionFeeService(evmKitWrapper.evmKit, feeRateProvider, 10)
         }
-        private val sendService by lazy { SendEvmTransactionService(SendEvmData(service.transactionData), evmKitWrapper, transactionService, App.activateCoinManager, service.gasPrice) }
+        private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
+        private val sendService by lazy {
+            SendEvmTransactionService(
+                SendEvmData(service.transactionData),
+                evmKitWrapper,
+                transactionService,
+                App.activateCoinManager,
+                service.gasPrice
+            )
+        }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -52,11 +62,11 @@ object WalletConnectRequestModule {
                 WalletConnectSendEthereumTransactionRequestViewModel::class.java -> {
                     WalletConnectSendEthereumTransactionRequestViewModel(service) as T
                 }
-                EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService) as T
+                EvmFeeCellViewModel::class.java -> {
+                    EvmFeeCellViewModel(transactionService, coinServiceFactory.baseCoinService) as T
                 }
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory) as T
                 }
                 else -> throw IllegalArgumentException()
             }
@@ -66,11 +76,11 @@ object WalletConnectRequestModule {
 }
 
 data class WalletConnectTransaction(
-        val from: Address,
-        val to: Address,
-        val nonce: Long?,
-        val gasPrice: Long?,
-        val gasLimit: Long?,
-        val value: BigInteger,
-        val data: ByteArray
+    val from: Address,
+    val to: Address,
+    val nonce: Long?,
+    val gasPrice: Long?,
+    val gasLimit: Long?,
+    val value: BigInteger,
+    val data: ByteArray
 )

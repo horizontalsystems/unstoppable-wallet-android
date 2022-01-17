@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
 
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.managers.ActivateCoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -44,20 +43,12 @@ class OneInchSendEvmTransactionService(
     override val stateObservable: Flowable<SendEvmTransactionService.State> =
         stateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val txDataStateSubject = PublishSubject.create<DataState<SendEvmTransactionService.TxDataState>>()
-    override var txDataState: DataState<SendEvmTransactionService.TxDataState> = DataState.Success(
-        SendEvmTransactionService.TxDataState(
-            null,
-            getAdditionalInfo(transactionFeeService.parameters),
-            buildDecorationFromParameters(transactionFeeService.parameters)
-        )
+    override var txDataState: SendEvmTransactionService.TxDataState = SendEvmTransactionService.TxDataState(
+        null,
+        getAdditionalInfo(transactionFeeService.parameters),
+        buildDecorationFromParameters(transactionFeeService.parameters)
     )
-        private set(value) {
-            field = value
-            txDataStateSubject.onNext(value)
-        }
-    override val txDataStateObservable: Flowable<DataState<SendEvmTransactionService.TxDataState>> =
-        txDataStateSubject.toFlowable(BackpressureStrategy.BUFFER)
+        private set
 
     private val sendStateSubject = PublishSubject.create<SendEvmTransactionService.SendState>()
     override var sendState: SendEvmTransactionService.SendState = SendEvmTransactionService.SendState.Idle
@@ -79,60 +70,59 @@ class OneInchSendEvmTransactionService(
             .subscribeIO { syncState() }
             .let { disposable.add(it) }
 
-        transactionFeeService.gasPriceType = EvmTransactionFeeService.GasPriceType.Recommended
-
+//        transactionFeeService.gasPriceType = EvmTransactionFeeService.GasPriceType.Recommended
     }
 
     private fun syncState() {
-        when (val status = transactionFeeService.transactionStatus) {
-            is DataState.Error -> {
-                state = SendEvmTransactionService.State.NotReady(listOf(status.error))
-            }
-            DataState.Loading -> {
-                state = SendEvmTransactionService.State.NotReady()
-            }
-            is DataState.Success -> {
-                val transaction = status.data
-                state = if (transaction.totalAmount > evmBalance) {
-                    SendEvmTransactionService.State.NotReady(
-                        listOf(
-                            SendEvmTransactionService.TransactionError.InsufficientBalance(
-                                transaction.totalAmount
-                            )
-                        )
-                    )
-                } else {
-                    SendEvmTransactionService.State.Ready
-                }
-            }
-        }
+//        when (val status = transactionFeeService.transactionStatus) {
+//            is DataState.Error -> {
+//                state = SendEvmTransactionService.State.NotReady(listOf(status.error))
+//            }
+//            DataState.Loading -> {
+//                state = SendEvmTransactionService.State.NotReady()
+//            }
+//            is DataState.Success -> {
+//                val transaction = status.data
+//                state = if (transaction.totalAmount > evmBalance) {
+//                    SendEvmTransactionService.State.NotReady(
+//                        listOf(
+//                            SendEvmTransactionService.TransactionError.InsufficientBalance(
+//                                transaction.totalAmount
+//                            )
+//                        )
+//                    )
+//                } else {
+//                    SendEvmTransactionService.State.Ready
+//                }
+//            }
+//        }
 
         syncTxDataState()
     }
 
     private fun syncTxDataState() {
-        txDataState = when (val status = transactionFeeService.transactionStatus) {
-            is DataState.Error -> {
-                DataState.Error(status.error)
-            }
-            DataState.Loading -> {
-                DataState.Loading
-            }
-            is DataState.Success -> {
-                val transactionData = status.data.transactionData
-
-                val decoration = evmKit.decorate(transactionData)
-                val additionalInfo = getAdditionalInfo(transactionFeeService.parameters)
-
-                DataState.Success(
-                    SendEvmTransactionService.TxDataState(
-                        transactionData,
-                        additionalInfo,
-                        decoration
-                    )
-                )
-            }
-        }
+//        txDataState = when (val status = transactionFeeService.transactionStatus) {
+//            is DataState.Error -> {
+//                DataState.Error(status.error)
+//            }
+//            DataState.Loading -> {
+//                DataState.Loading
+//            }
+//            is DataState.Success -> {
+//                val transactionData = status.data.transactionData
+//
+//                val decoration = evmKit.decorate(transactionData)
+//                val additionalInfo = getAdditionalInfo(transactionFeeService.parameters)
+//
+//                DataState.Success(
+//                    SendEvmTransactionService.TxDataState(
+//                        transactionData,
+//                        additionalInfo,
+//                        decoration
+//                    )
+//                )
+//            }
+//        }
     }
 
     private fun getAdditionalInfo(parameters: OneInchSwapParameters): SendEvmData.AdditionalInfo {
@@ -193,7 +183,7 @@ class OneInchSendEvmTransactionService(
 
 
     override fun send(logger: AppLogger) {
-        if (state != SendEvmTransactionService.State.Ready) {
+        if (state !is SendEvmTransactionService.State.Ready) {
             logger.info("state is not Ready: ${state.javaClass.simpleName}")
             return
         }
@@ -202,7 +192,11 @@ class OneInchSendEvmTransactionService(
         sendState = SendEvmTransactionService.SendState.Sending
         logger.info("sending tx")
 
-        evmKitWrapper.sendSingle(transaction.transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
+        evmKitWrapper.sendSingle(
+            transaction.transactionData,
+            transaction.gasData.gasPrice.value,
+            transaction.gasData.gasLimit
+        )
             .subscribeIO({ fullTransaction ->
                 activateSwapCoinOut()
                 sendState = SendEvmTransactionService.SendState.Sent(fullTransaction.transaction.hash)

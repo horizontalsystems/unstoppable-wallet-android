@@ -13,7 +13,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectRequestBinding
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -30,7 +30,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
     private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment)
     private lateinit var viewModel: WalletConnectSendEthereumTransactionRequestViewModel
     private lateinit var sendViewModel: SendEvmTransactionViewModel
-    private lateinit var feeViewModel: EthereumFeeViewModel
+    private lateinit var feeViewModel: EvmFeeCellViewModel
     private var approveEnabled = true
     private var rejectEnabled = true
 
@@ -65,7 +65,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         )
         sendViewModel =
             ViewModelProvider(this, vmFactory).get(SendEvmTransactionViewModel::class.java)
-        feeViewModel = ViewModelProvider(this, vmFactory).get(EthereumFeeViewModel::class.java)
+        feeViewModel = ViewModelProvider(this, vmFactory).get(EvmFeeCellViewModel::class.java)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.reject()

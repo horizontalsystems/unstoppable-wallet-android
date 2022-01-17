@@ -8,11 +8,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.convertedError
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.scaleUp
@@ -41,27 +42,26 @@ import java.math.BigInteger
 
 class SendEvmTransactionViewModel(
     private val service: ISendEvmTransactionService,
-    private val coinServiceFactory: EvmCoinServiceFactory
+    private val coinServiceFactory: EvmCoinServiceFactory,
+    private val cautionViewItemFactory: CautionViewItemFactory
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
     val sendEnabledLiveData = MutableLiveData(false)
-    val errorLiveData = MutableLiveData<String?>()
 
     val sendingLiveData = MutableLiveData<Unit>()
     val sendSuccessLiveData = MutableLiveData<ByteArray>()
     val sendFailedLiveData = MutableLiveData<String>()
+    val cautionsLiveData = MutableLiveData<List<CautionViewItem>>()
 
     val viewItemsLiveData = MutableLiveData<List<SectionViewItem>>()
     val transactionTitleLiveData = MutableLiveData<String>()
 
     init {
         service.stateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
-        service.txDataStateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
         service.sendStateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
 
         sync(service.state)
-        sync(service.txDataState)
         sync(service.sendState)
     }
 
@@ -69,33 +69,36 @@ class SendEvmTransactionViewModel(
         service.send(logger)
     }
 
-    private fun sync(state: SendEvmTransactionService.State) =
+    private fun sync(state: SendEvmTransactionService.State) {
         when (state) {
-            SendEvmTransactionService.State.Ready -> {
+            is SendEvmTransactionService.State.Ready -> {
                 sendEnabledLiveData.postValue(true)
-                errorLiveData.postValue(null)
+                cautionsLiveData.postValue(cautionViewItemFactory.cautionViewItems(state.warnings, errors = listOf()))
             }
             is SendEvmTransactionService.State.NotReady -> {
                 sendEnabledLiveData.postValue(false)
-                errorLiveData.postValue(state.errors.firstOrNull()?.let { convertError(it) })
+                cautionsLiveData.postValue(cautionViewItemFactory.cautionViewItems(state.warnings, state.errors))
             }
         }
 
-    private fun sync(txDataState: DataState<SendEvmTransactionService.TxDataState>) {
-        val decoration = txDataState.dataOrNull?.decoration
-        val transactionData = txDataState.dataOrNull?.transactionData
+        sync(service.txDataState)
+    }
+
+    private fun sync(txDataState: SendEvmTransactionService.TxDataState) {
+        val decoration = txDataState.decoration
+        val transactionData = txDataState.transactionData
 
         transactionTitleLiveData.postValue(getTransactionTitle(decoration, transactionData))
 
         var viewItems = when {
             decoration is SwapMethodDecoration || decoration is OneInchMethodDecoration -> {
-                getSwapViewItems(decoration, txDataState.dataOrNull?.additionalInfo)
+                getSwapViewItems(decoration, txDataState.additionalInfo)
             }
             decoration != null && transactionData != null -> {
-                getViewItems(decoration, transactionData, txDataState.dataOrNull?.additionalInfo)
+                getViewItems(decoration, transactionData, txDataState.additionalInfo)
             }
             decoration == null && transactionData != null -> {
-                getSendEvmCoinViewItems(transactionData, txDataState.dataOrNull?.additionalInfo)
+                getSendEvmCoinViewItems(transactionData, txDataState.additionalInfo)
             }
             else -> null
         }
@@ -505,20 +508,6 @@ class SendEvmTransactionViewModel(
         }
         if (otherViewItems.isNotEmpty()) {
             sections.add(SectionViewItem(otherViewItems))
-        }
-
-        if (info?.priceImpactWarning == true) {
-            sections.add(
-                SectionViewItem(
-                    listOf(
-                        ViewItem.Warning(
-                            Translator.getString(R.string.Swap_PriceImpact),
-                            Translator.getString(R.string.Swap_PriceImpactTooHigh),
-                            R.drawable.ic_attention_20
-                        )
-                    )
-                )
-            )
         }
 
         return sections

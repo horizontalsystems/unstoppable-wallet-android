@@ -5,17 +5,22 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.databinding.*
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings.Cautions
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings.EvmFeeCell
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -35,18 +40,57 @@ class SendEvmTransactionView @JvmOverloads constructor(
 
     fun init(
         transactionViewModel: SendEvmTransactionViewModel,
-        ethereumFeeViewModel: EthereumFeeViewModel,
+        feeCellViewModel: EvmFeeCellViewModel,
+        viewLifecycleOwner: LifecycleOwner,
+        onClickEditFee: () -> Unit
+    ) {
+        binding.feeViewCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        binding.feeViewCompose.setContent {
+            ComposeAppTheme {
+                val fee by feeCellViewModel.feeLiveData.observeAsState()
+                EvmFeeCell(title = stringResource(R.string.FeeSettings_MaxFee), fee, onClickEditFee)
+            }
+        }
+
+        val adapter = SendEvmTransactionAdapter()
+        binding.recyclerView.adapter = adapter
+
+        transactionViewModel.viewItemsLiveData.observe(viewLifecycleOwner) {
+            adapter.items = flattenSectionViewItems(it)
+            adapter.notifyDataSetChanged()
+        }
+
+        binding.cautionsViewCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        binding.cautionsViewCompose.setContent {
+            ComposeAppTheme {
+                val cautions by transactionViewModel.cautionsLiveData.observeAsState()
+                cautions?.let {
+                    Cautions(it)
+                }
+            }
+        }
+    }
+
+    fun init(
+        transactionViewModel: SendEvmTransactionViewModel,
+        ethereumFeeViewModel: EvmFeeCellViewModel,
         viewLifecycleOwner: LifecycleOwner,
         fragmentManager: FragmentManager,
         showSpeedInfoListener: () -> Unit
     ) {
-        binding.feeSelectorView.setFeeSelectorViewInteractions(
-            ethereumFeeViewModel,
-            ethereumFeeViewModel,
-            viewLifecycleOwner,
-            fragmentManager,
-            showSpeedInfoListener
-        )
+//        binding.feeSelectorView.setFeeSelectorViewInteractions(
+//            ethereumFeeViewModel,
+//            ethereumFeeViewModel,
+//            viewLifecycleOwner,
+//            fragmentManager,
+//            showSpeedInfoListener
+//        )
 
         val adapter = SendEvmTransactionAdapter()
         binding.recyclerView.adapter = adapter
@@ -56,9 +100,6 @@ class SendEvmTransactionView @JvmOverloads constructor(
             adapter.notifyDataSetChanged()
         })
 
-        transactionViewModel.errorLiveData.observe(viewLifecycleOwner, {
-            binding.error.text = it
-        })
     }
 
     private fun flattenSectionViewItems(sections: List<SectionViewItem>): List<ViewItemWithPosition> {
