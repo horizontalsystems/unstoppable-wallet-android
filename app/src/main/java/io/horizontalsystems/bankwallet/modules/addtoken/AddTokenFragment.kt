@@ -80,20 +80,21 @@ class AddTokenFragment : BaseFragment() {
         addressInputView.setEditable(false)
         addressInputView.setHint("ERC20 / BEP20 / BEP2")
 
+        val qrScannerResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
+                        addressInputView.setText(it)
+                    }
+                }
+            }
+
         addressInputView.setListener(object : AddressInputView.Listener {
             override fun onTextChange(text: String) {
                 viewModel.onTextChange(text)
             }
 
             override fun onQrButtonClick() {
-                val qrScannerResultLauncher =
-                    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                        if (result.resultCode == Activity.RESULT_OK) {
-                            result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                                addressInputView.setText(it)
-                            }
-                        }
-                    }
                 val intent = QRScannerActivity.getIntentForFragment(this@AddTokenFragment)
                 qrScannerResultLauncher.launch(intent)
             }
