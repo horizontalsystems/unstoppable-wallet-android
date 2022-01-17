@@ -92,6 +92,11 @@
             android:id="@+id/sendEvmConfirmationFragment_to_feeSpeedInfo"
             app:destination="@id/feeSpeedInfoFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/sendEvmFeeSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings.SendEvmFeeSettingsFragment" />
+
     <fragment
         android:id="@+id/transactionInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"

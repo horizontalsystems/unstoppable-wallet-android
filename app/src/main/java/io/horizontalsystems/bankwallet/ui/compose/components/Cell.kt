@@ -88,6 +88,13 @@ fun <T> CellSingleLineLawrenceSection(
 
 @Composable
 fun CellSingleLineLawrenceSection(
+    content: @Composable () -> Unit
+) {
+    CellSingleLineLawrenceSection(listOf(content))
+}
+
+@Composable
+fun CellSingleLineLawrenceSection(
     composableItems: List<@Composable () -> Unit>
 ) {
     Column(

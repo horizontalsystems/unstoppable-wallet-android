@@ -21,7 +21,7 @@ object FeeRateProviderFactory {
         }
     }
 
-    fun customRangedFeeProvider(coinType: CoinType, customLowerBound: Long?, customUpperBound: Long?, multiply: Double): ICustomRangedFeeProvider? {
+    fun customRangedFeeProvider(coinType: CoinType, customLowerBound: Long? = null, customUpperBound: Long? = null, multiply: Double? = null): ICustomRangedFeeProvider? {
         return when(coinType) {
             is CoinType.BinanceSmartChain, is CoinType.Bep20 -> BinanceSmartChainFeeRateProvider(feeRateProvider, customLowerBound, customUpperBound, multiply)
             is CoinType.Ethereum, is CoinType.Erc20 -> EthereumFeeRateProvider(feeRateProvider, customLowerBound, customUpperBound, multiply)

@@ -14,7 +14,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSwapBinding
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -30,7 +30,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
 
     protected abstract val logger: AppLogger
     protected abstract val sendViewModel: SendEvmTransactionViewModel
-    protected abstract val feeViewModel: EthereumFeeViewModel
+    protected abstract val feeViewModel: EvmFeeCellViewModel
     protected abstract fun navigateToFeeInfo()
 
     private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)

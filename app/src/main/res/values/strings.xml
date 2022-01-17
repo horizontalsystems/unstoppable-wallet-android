@@ -320,6 +320,22 @@
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %1$s (%2$s) paid in %3$s. You need %4$s.</string>
     <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
 
+    <!-- Fee Settings -->
+
+    <string name="FeeSettings_Title">Fee Settings</string>
+    <string name="FeeSettings_MaxFee">Max Fee</string>
+    <string name="FeeSettings_Fee">Fee</string>
+    <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasPrice">Gas Price</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Risk of getting stuck</string>
+    <string name="FeeSettings_RiskOfGettingStuck">The transaction may get stuck or fail.</string>
+    <string name="FeeSettings_Overpricing_Title">Overpricing</string>
+    <string name="FeeSettings_Overpricing">The gas price is higher than necessary for the transaction.</string>
+    <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
+    <string name="FeeSettings_BaseFeeIsHigh">At the moment the base fee for transacting is high. It may go down when the network becomes less congested.</string>
+    <string name="FeeSettings_BaseFeeIsLow_Title">Low Base Fee</string>
+    <string name="FeeSettings_BaseFeeIsLow">The Max Base Fee set up is too low for including the transaction.</string>
+
     <!--Fee Info -->
 
     <string name="FeeInfo_Title">Transaction Speed</string>
@@ -361,6 +377,9 @@
     <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
 
     <!--EthereumTransaction-->
+    <string name="EthereumTransaction_Warning_Title">Warning</string>
+    <string name="EthereumTransaction_Error_Title">Error</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">The transaction requires %s for sending</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">The current %s balance is below the amount required to process this transaction, including the transaction fee.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The selected fee value is too low and will be rejected!</string>

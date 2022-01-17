@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService.*
+import io.horizontalsystems.bankwallet.core.ethereum.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.core.ethereum.IEvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Address
@@ -41,9 +42,10 @@ class OneInchTransactionFeeService(
     private val feeRateProvider: ICustomRangedFeeProvider
 ) : IEvmTransactionFeeService {
 
-    private val gasLimitSurchargePercent: Int = 25
+    override val gasPriceService: IEvmGasPriceService
+        get() = TODO("Not yet implemented")
 
-    override val hasEstimatedFee: Boolean = gasLimitSurchargePercent != 0
+    private val gasLimitSurchargePercent: Int = 25
 
     override var transactionStatus: DataState<Transaction> = DataState.Error(GasDataError.NoTransactionData)
         private set(value) {
@@ -54,30 +56,17 @@ class OneInchTransactionFeeService(
     private val transactionStatusSubject = PublishSubject.create<DataState<Transaction>>()
     override val transactionStatusObservable: Observable<DataState<Transaction>> = transactionStatusSubject
 
-    override var gasPriceType: GasPriceType = GasPriceType.Recommended
-        set(value) {
-            field = value
-            gasPriceTypeSubject.onNext(value)
-            sync()
-        }
-
-    private val gasPriceTypeSubject = PublishSubject.create<GasPriceType>()
-    override val gasPriceTypeObservable: Observable<GasPriceType> = gasPriceTypeSubject
-
-    private var warningOfStuckSubject = PublishSubject.create<Boolean>()
-    override val warningOfStuckObservable: Flowable<Boolean> =
-        warningOfStuckSubject.toFlowable(BackpressureStrategy.BUFFER)
-
     var parameters: OneInchSwapParameters = parameters
         private set
-
-    override val customFeeRange: LongRange
-        get() = feeRateProvider.customFeeRange
 
     private var disposable: Disposable? = null
 
     private var retryDelayTimeInSeconds = 3L
     private var retryDisposable: Disposable? = null
+
+//    override fun setTransactionData(transactionData: TransactionData) {
+//        TODO("not implemented")
+//    }
 
     private fun sync() {
         disposable?.dispose()
@@ -85,36 +74,36 @@ class OneInchTransactionFeeService(
 
         transactionStatus = DataState.Loading
 
-        getGasPriceAsync(gasPriceType)
-            .flatMap { gasPrice ->
-                oneInchKitHelper.getSwapAsync(
-                    fromCoin = parameters.coinFrom,
-                    toCoin = parameters.coinTo,
-                    fromAmount = parameters.amountFrom,
-                    recipient = parameters.recipient?.hex,
-                    slippagePercentage = parameters.slippage.toFloat(),
-                    gasPrice = gasPrice.orElse(null)?.toLong()
-                )
-            }
-            .subscribeIO({ swap ->
-                sync(swap)
-
-            }, {
-                onError(it)
-            })
-            .let { disposable = it }
+//        getGasPriceAsync(gasPriceType)
+//            .flatMap { gasPrice ->
+//                oneInchKitHelper.getSwapAsync(
+//                    fromCoin = parameters.coinFrom,
+//                    toCoin = parameters.coinTo,
+//                    fromAmount = parameters.amountFrom,
+//                    recipient = parameters.recipient?.hex,
+//                    slippagePercentage = parameters.slippage.toFloat(),
+//                    gasPrice = gasPrice.orElse(null)?.toLong()
+//                )
+//            }
+//            .subscribeIO({ swap ->
+//                sync(swap)
+//
+//            }, {
+//                onError(it)
+//            })
+//            .let { disposable = it }
     }
 
     private fun sync(swap: Swap) {
         val swapTx = swap.transaction
         val gasData = GasData(
-            estimatedGasLimit = swapTx.gasLimit,
             gasLimit = getSurchargedGasLimit(swapTx.gasLimit),
-            gasPrice = swapTx.gasPrice
-        )
-        if (gasPriceType == GasPriceType.Recommended) {
-            recommendedGasPrice = swapTx.gasPrice.toBigInteger()
-        }
+            gasPrice = GasPrice.Legacy(swapTx.gasPrice),
+
+            )
+//        if (gasPriceType == GasPriceType.Recommended) {
+//            recommendedGasPrice = swapTx.gasPrice.toBigInteger()
+//        }
 
         parameters = parameters.copy(
             amountTo = swap.toTokenAmount.toBigDecimal().movePointLeft(swap.toToken.decimals).stripTrailingZeros()
@@ -148,7 +137,7 @@ class OneInchTransactionFeeService(
 
         return when (gasPriceType) {
             is GasPriceType.Recommended -> { // return null for 1inch API to use "fast gasPrice from network"
-                warningOfStuckSubject.onNext(false)
+//                warningOfStuckSubject.onNext(false)
                 Single.just(Optional.ofNullable(null))
             }
             is GasPriceType.Custom -> {
@@ -156,8 +145,8 @@ class OneInchTransactionFeeService(
                     recommendedGasPriceSingle = Single.just(it)
                 }
                 recommendedGasPriceSingle.map { recommended ->
-                    val customGasPrice = gasPriceType.gasPrice.toBigInteger()
-                    warningOfStuckSubject.onNext(customGasPrice < recommended)
+                    val customGasPrice = gasPriceType.gasPrice.value.toBigInteger()
+//                    warningOfStuckSubject.onNext(customGasPrice < recommended)
                     Optional.ofNullable(customGasPrice)
                 }
             }
