@@ -50,8 +50,8 @@ class ManageWalletsService(
             }
 
         enableCoinService.cancelEnableCoinObservable
-            .subscribeIO { coin ->
-                handleCancelEnable(coin)
+            .subscribeIO { fullCoin ->
+                handleCancelEnable(fullCoin)
             }.let { disposables.add(it) }
 
 
@@ -149,9 +149,9 @@ class ManageWalletsService(
         }
     }
 
-    private fun handleCancelEnable(coin: Coin) {
-        if (!isEnabled(coin)) {
-            cancelEnableCoinObservable.onNext(coin)
+    private fun handleCancelEnable(fullCoin: FullCoin) {
+        if (!isEnabled(fullCoin.coin)) {
+            cancelEnableCoinObservable.onNext(fullCoin.coin)
         }
     }
 

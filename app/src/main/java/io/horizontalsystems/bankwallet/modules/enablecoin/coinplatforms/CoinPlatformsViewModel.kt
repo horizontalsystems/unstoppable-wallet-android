@@ -57,7 +57,7 @@ class CoinPlatformsViewModel(
 
     fun onCancelSelect() {
         currentRequest?.let { currentRequest ->
-            service.cancel(currentRequest.fullCoin.coin)
+            service.cancel(currentRequest.fullCoin)
         }
     }
 

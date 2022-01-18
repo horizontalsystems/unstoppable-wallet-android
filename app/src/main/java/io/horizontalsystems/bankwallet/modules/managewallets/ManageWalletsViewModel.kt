@@ -6,6 +6,9 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Supported
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Unsupported
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItemState
 import io.horizontalsystems.views.ListPosition
@@ -35,34 +38,31 @@ class ManageWalletsViewModel(
 
     private fun sync(items: List<ManageWalletsService.Item>) {
         val itemsSize = items.size
-        val viewItems = items.mapIndexed { index, item -> viewItem(item, ListPosition.getListPosition(itemsSize, index)) }
+        val viewItems = items.mapIndexed { index, item ->
+            viewItem(item, ListPosition.getListPosition(itemsSize, index))
+        }
         viewItemsLiveData.postValue(viewItems)
     }
 
-    private fun viewItem(item: ManageWalletsService.Item, listPosition: ListPosition): CoinViewItem {
-        return when (item.state) {
-            is ManageWalletsService.ItemState.Supported -> {
-                CoinViewItem(
-                    item.fullCoin.coin.uid,
-                    item.fullCoin.coin.iconUrl,
-                    item.fullCoin.iconPlaceholder,
-                    item.fullCoin.coin.name,
-                    item.fullCoin.coin.code,
-                    CoinViewItemState.ToggleVisible(item.state.enabled, item.state.hasSettings),
-                    listPosition
-                )
-            }
-            ManageWalletsService.ItemState.Unsupported -> {
-                CoinViewItem(
-                    item.fullCoin.coin.uid,
-                    item.fullCoin.coin.iconUrl,
-                    item.fullCoin.iconPlaceholder,
-                    item.fullCoin.coin.name,
-                    item.fullCoin.coin.code,
-                    CoinViewItemState.ToggleHidden,
-                    listPosition)
-            }
+    private fun viewItem(
+        item: ManageWalletsService.Item,
+        listPosition: ListPosition
+    ): CoinViewItem {
+        val state = when (item.state) {
+            is Supported -> CoinViewItemState.ToggleVisible(
+                item.state.enabled,
+                item.state.hasSettings
+            )
+            is Unsupported -> CoinViewItemState.ToggleHidden
         }
+        return CoinViewItem(
+            item.fullCoin.coin.uid,
+            ImageSource.Remote(item.fullCoin.coin.iconUrl, item.fullCoin.iconPlaceholder),
+            item.fullCoin.coin.name,
+            item.fullCoin.coin.code,
+            state,
+            listPosition
+        )
     }
 
     fun enable(uid: String) {

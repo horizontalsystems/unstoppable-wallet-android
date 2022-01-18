@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsService.ItemState.Supported
+import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsService.ItemState.Unsupported
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItemState
 import io.horizontalsystems.core.SingleLiveEvent
@@ -21,10 +21,12 @@ class RestoreSelectCoinsViewModel(
 ) : ViewModel() {
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem>>()
-    val disableCoinLiveData = MutableLiveData<String>()
+    val disableBlockchainLiveData = MutableLiveData<String>()
     val successLiveEvent = SingleLiveEvent<Unit>()
     val restoreEnabledLiveData: LiveData<Boolean>
-        get() = LiveDataReactiveStreams.fromPublisher(service.canRestore.toFlowable(BackpressureStrategy.DROP))
+        get() = LiveDataReactiveStreams.fromPublisher(
+            service.canRestore.toFlowable(BackpressureStrategy.DROP)
+        )
 
     private var disposables = CompositeDisposable()
 
@@ -33,8 +35,8 @@ class RestoreSelectCoinsViewModel(
             .subscribeIO { sync(it) }
             .let { disposables.add(it) }
 
-        service.cancelEnableCoinObservable
-            .subscribeIO { disableCoinLiveData.postValue(it.uid) }
+        service.cancelEnableBlockchainObservable
+            .subscribeIO { disableBlockchainLiveData.postValue(it.name) }
             .let { disposables.add(it) }
 
         sync(service.items)
@@ -48,47 +50,41 @@ class RestoreSelectCoinsViewModel(
         viewItemsLiveData.postValue(viewItems)
     }
 
-    private fun viewItem(item: RestoreSelectCoinsService.Item, listPosition: ListPosition): CoinViewItem {
-        return when (item.state) {
-            is RestoreSelectCoinsService.ItemState.Supported -> {
-                CoinViewItem(
-                    item.fullCoin.coin.uid,
-                    item.fullCoin.coin.iconUrl,
-                    item.fullCoin.iconPlaceholder,
-                    item.fullCoin.coin.name,
-                    item.fullCoin.coin.code,
-                    CoinViewItemState.ToggleVisible(item.state.enabled, item.state.hasSettings),
-                    listPosition
-                )
-            }
-            RestoreSelectCoinsService.ItemState.Unsupported -> {
-                CoinViewItem(
-                    item.fullCoin.coin.uid,
-                    item.fullCoin.coin.iconUrl,
-                    item.fullCoin.iconPlaceholder,
-                    item.fullCoin.coin.name,
-                    item.fullCoin.coin.code,
-                    CoinViewItemState.ToggleHidden,
-                    listPosition
-                )
-            }
+    private fun viewItem(
+        item: RestoreSelectCoinsService.Item,
+        listPosition: ListPosition
+    ): CoinViewItem {
+        val state = when (item.state) {
+            is Supported -> CoinViewItemState.ToggleVisible(
+                item.state.enabled,
+                item.state.hasSettings
+            )
+            is Unsupported -> CoinViewItemState.ToggleHidden
         }
+
+        return CoinViewItem(
+            item.blockchain.name,
+            item.blockchain.icon,
+            item.blockchain.title,
+            item.blockchain.description,
+            state,
+            listPosition
+        )
     }
 
     fun enable(uid: String) {
-        service.enable(uid)
+        val blockchain = RestoreSelectCoinsModule.Blockchain.valueOf(uid)
+        service.enable(blockchain)
     }
 
     fun disable(uid: String) {
-        service.disable(uid)
+        val blockchain = RestoreSelectCoinsModule.Blockchain.valueOf(uid)
+        service.disable(blockchain)
     }
 
     fun onClickSettings(uid: String) {
-        service.configure(uid)
-    }
-
-    fun updateFilter(filter: String) {
-        service.setFilter(filter)
+        val blockchain = RestoreSelectCoinsModule.Blockchain.valueOf(uid)
+        service.configure(blockchain)
     }
 
     fun onRestore() {
