@@ -34,8 +34,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
@@ -122,6 +124,59 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         )
 
         setWallets()
+
+        setTopButtons()
+    }
+
+    private fun setTopButtons() {
+        binding.buttonsCompose.setContent {
+            ComposeAppTheme {
+                val sortType by viewModel.sortTypeUpdatedLiveData.observeAsState()
+                val account by viewModel.accountLiveData.observeAsState()
+
+                Row(
+                    modifier = Modifier
+                        .width(IntrinsicSize.Max)
+                        .padding(end = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    sortType?.let {
+                        ButtonSecondaryTransparent(
+                            title = getString(it.getTitleRes()),
+                            iconRight = R.drawable.ic_down_arrow_20,
+                            onClick = {
+                                onSortButtonClick(it)
+                            }
+                        )
+                    }
+
+                    account?.let { account ->
+                        val clipboardManager = LocalClipboardManager.current
+                        account.address?.let { address ->
+                            val short = address.take(6) + "..." + address.takeLast(6)
+                            ButtonSecondaryDefault(
+                                title = short,
+                                onClick = {
+                                    clipboardManager.setText(AnnotatedString(address))
+                                    HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
+                                }
+                            )
+                        }
+                        if (account.manageCoinsAllowed) {
+                            ButtonSecondaryCircle(
+                                icon = R.drawable.ic_manage_2,
+                                onClick = {
+                                    findNavController().navigate(
+                                        R.id.mainFragment_to_manageWalletsFragment, null, navOptions()
+                                    )
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onAttachFragment(childFragment: Fragment) {
@@ -565,10 +620,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
             setHeaderViewItem(it)
         }
 
-        viewModel.sortTypeUpdatedLiveData.observe(viewLifecycleOwner, { sortType ->
-            setTopButtons(sortType)
-        })
-
         viewModel.openPrivacySettingsLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(
                 R.id.mainFragment_to_privacySettingsFragment,
@@ -584,34 +635,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                 navOptions()
             )
         })
-    }
-
-    private fun setTopButtons(sortType: BalanceSortType) {
-        binding.buttonsCompose.setContent {
-            ComposeAppTheme {
-                Row(
-                    modifier = Modifier.width(IntrinsicSize.Max).padding(end = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    ButtonSecondaryTransparent(
-                        title = getString(sortType.getTitleRes()),
-                        iconRight = R.drawable.ic_down_arrow_20,
-                        onClick = {
-                            onSortButtonClick(sortType)
-                        }
-                    )
-                    ButtonSecondaryCircle(
-                        icon = R.drawable.ic_manage_2,
-                        onClick = {
-                            findNavController().navigate(
-                                R.id.mainFragment_to_manageWalletsFragment, null, navOptions()
-                            )
-                        }
-                    )
-                }
-            }
-        }
     }
 
     private fun onSortButtonClick(currentSortType: BalanceSortType) {
