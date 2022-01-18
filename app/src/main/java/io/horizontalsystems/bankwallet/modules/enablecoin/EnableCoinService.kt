@@ -18,7 +18,7 @@ class EnableCoinService(
     private val disposable = CompositeDisposable()
 
     val enableCoinObservable = PublishSubject.create<Pair<List<ConfiguredPlatformCoin>, RestoreSettings>>()
-    val cancelEnableCoinObservable = PublishSubject.create<Coin>()
+    val cancelEnableCoinObservable = PublishSubject.create<FullCoin>()
 
     init {
         coinPlatformsService.approvePlatformsObservable
@@ -51,8 +51,8 @@ class EnableCoinService(
         enableCoinObservable.onNext(Pair(configuredPlatformCoins, RestoreSettings()))
     }
 
-    private fun handleRejectApprovePlatformSettings(coin: Coin) {
-        cancelEnableCoinObservable.onNext(coin)
+    private fun handleRejectApprovePlatformSettings(fullCoin: FullCoin) {
+        cancelEnableCoinObservable.onNext(fullCoin)
     }
 
     private fun handleApproveRestoreSettings(
@@ -62,8 +62,8 @@ class EnableCoinService(
         enableCoinObservable.onNext(Pair(listOf(ConfiguredPlatformCoin(platformCoin)), settings))
     }
 
-    private fun handleRejectApproveRestoreSettings(coin: Coin) {
-        cancelEnableCoinObservable.onNext(coin)
+    private fun handleRejectApproveRestoreSettings(platformCoin: PlatformCoin) {
+        cancelEnableCoinObservable.onNext(platformCoin.fullCoin)
     }
 
     private fun handleApproveCoinSettings(platformCoin: PlatformCoin, settingsList: List<CoinSettings> = listOf()) {
@@ -71,8 +71,8 @@ class EnableCoinService(
         enableCoinObservable.onNext(Pair(configuredPlatformCoins, RestoreSettings()))
     }
 
-    private fun handleRejectApproveCoinSettings(coin: Coin) {
-        cancelEnableCoinObservable.onNext(coin)
+    private fun handleRejectApproveCoinSettings(platformCoin: PlatformCoin) {
+        cancelEnableCoinObservable.onNext(platformCoin.fullCoin)
     }
 
     fun enable(fullCoin: FullCoin, account: Account? = null) {

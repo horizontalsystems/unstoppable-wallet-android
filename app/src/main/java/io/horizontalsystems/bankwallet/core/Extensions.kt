@@ -94,6 +94,7 @@ val CoinType.blockchainLogo: Int
         CoinType.BinanceSmartChain -> R.drawable.logo_binancesmartchain_24
         is CoinType.Bep2 -> R.drawable.logo_bep2_24
         CoinType.Litecoin -> R.drawable.logo_litecoin_24
+        CoinType.Zcash -> R.drawable.logo_zcash_24
         else -> R.drawable.coin_placeholder
     }
 

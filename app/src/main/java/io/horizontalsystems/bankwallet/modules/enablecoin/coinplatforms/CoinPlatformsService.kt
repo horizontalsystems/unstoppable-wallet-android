@@ -7,7 +7,7 @@ import io.reactivex.subjects.PublishSubject
 
 class CoinPlatformsService {
     val approvePlatformsObservable = PublishSubject.create<CoinWithPlatforms>()
-    val rejectApprovePlatformsObservable = PublishSubject.create<Coin>()
+    val rejectApprovePlatformsObservable = PublishSubject.create<FullCoin>()
     val requestObservable = PublishSubject.create<Request>()
 
     fun approvePlatforms(fullCoin: FullCoin, currentPlatforms: List<Platform> = listOf()) {
@@ -22,8 +22,8 @@ class CoinPlatformsService {
         approvePlatformsObservable.onNext(CoinWithPlatforms(coin, platforms))
     }
 
-    fun cancel(coin: Coin) {
-        rejectApprovePlatformsObservable.onNext(coin)
+    fun cancel(fullCoin: FullCoin) {
+        rejectApprovePlatformsObservable.onNext(fullCoin)
     }
 
     data class CoinWithPlatforms(

@@ -49,7 +49,7 @@ class RestoreSettingsViewModel(
     fun onCancelEnterBirthdayHeight() {
         val request = currentRequest ?: return
 
-        service.cancel(request.platformCoin.coin)
+        service.cancel(request.platformCoin)
     }
 
     override fun onCleared() {

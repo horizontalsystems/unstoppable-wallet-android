@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setImage
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.core.setRemoteImage
 import io.horizontalsystems.bankwallet.databinding.ViewHolderCoinManageItemBinding
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.views.ListPosition
 
 class CoinListAdapter(private val listener: Listener) :
@@ -110,11 +111,11 @@ class CoinWithSwitchViewHolder(
         }
     }
 
-    private fun set(fullCoin: CoinViewItem, listPosition: ListPosition) {
+    private fun set(coinViewItem: CoinViewItem, listPosition: ListPosition) {
         binding.backgroundView.setBackgroundResource(getBackground(listPosition))
-        binding.coinIcon.setRemoteImage(fullCoin.imageUrl, fullCoin.imagePlaceholder)
-        binding.coinTitle.text = fullCoin.title
-        binding.coinSubtitle.text = fullCoin.subtitle
+        binding.coinIcon.setImage(coinViewItem.imageSource)
+        binding.coinTitle.text = coinViewItem.title
+        binding.coinSubtitle.text = coinViewItem.subtitle
         binding.dividerView.isVisible =
             listPosition == ListPosition.Last || listPosition == ListPosition.Single
     }
@@ -132,8 +133,7 @@ class CoinWithSwitchViewHolder(
 
 data class CoinViewItem(
     val uid: String,
-    val imageUrl: String,
-    val imagePlaceholder: Int,
+    val imageSource: ImageSource,
     val title: String,
     val subtitle: String,
     val state: CoinViewItemState,

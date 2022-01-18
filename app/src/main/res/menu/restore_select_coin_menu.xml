@@ -3,17 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/ic_search"
-        android:title="@string/ManageCoins_Search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always|collapseActionView" />
-
-    <item
-        android:id="@+id/menuDone"
+        android:id="@+id/menuRestore"
         android:enabled="false"
-        android:icon="@drawable/ic_checkmark_24"
-        android:title="@string/Button_Done"
+        android:title="@string/Button_Restore"
         app:showAsAction="always" />
 
 </menu>

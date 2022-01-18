@@ -2,13 +2,12 @@ package io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.subjects.PublishSubject
 
 class CoinSettingsService : Clearable {
     val approveSettingsObservable = PublishSubject.create<CoinWithSettings>()
-    val rejectApproveSettingsObservable = PublishSubject.create<Coin>()
+    val rejectApproveSettingsObservable = PublishSubject.create<PlatformCoin>()
     val requestObservable = PublishSubject.create<Request>()
 
     fun approveSettings(platformCoin: PlatformCoin, settings: List<CoinSettings>) {
@@ -55,8 +54,8 @@ class CoinSettingsService : Clearable {
         approveSettingsObservable.onNext(coinWithSettings)
     }
 
-    fun cancel(coin: Coin) {
-        rejectApproveSettingsObservable.onNext(coin)
+    fun cancel(platformCoin: PlatformCoin) {
+        rejectApproveSettingsObservable.onNext(platformCoin)
     }
 
     override fun clear() = Unit
