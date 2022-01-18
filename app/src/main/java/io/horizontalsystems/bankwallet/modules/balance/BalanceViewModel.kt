@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule.Blockchain
 import io.horizontalsystems.core.SingleLiveEvent
@@ -23,6 +24,7 @@ class BalanceViewModel(
 ) : ViewModel() {
 
     val titleLiveData = MutableLiveData<String>()
+    val accountLiveData = MutableLiveData<AccountViewItem>()
     val headerViewItemLiveData = MutableLiveData<BalanceHeaderViewItem>()
     val disabledWalletLiveData = SingleLiveEvent<Wallet>()
     val openPrivacySettingsLiveEvent = SingleLiveEvent<Unit>()
@@ -50,7 +52,7 @@ class BalanceViewModel(
 
         activeAccountService.activeAccountObservable
             .subscribeIO {
-                titleLiveData.postValue(it.name)
+                handleAccount(it)
             }
             .let {
                 disposables.add(it)
@@ -64,6 +66,16 @@ class BalanceViewModel(
             .let {
                 disposables.add(it)
             }
+    }
+
+    private fun handleAccount(account: Account) {
+        titleLiveData.postValue(account.name)
+
+        val address = when (account.type) {
+            is AccountType.Address -> account.type.address
+            else -> null
+        }
+        accountLiveData.postValue(AccountViewItem(address, account.type !is AccountType.Address))
     }
 
     private fun refreshViewItems() {
@@ -204,3 +216,5 @@ class BalanceViewModel(
     class BackupRequiredError(val account: Account) : Error("Backup Required")
 
 }
+
+data class AccountViewItem(val address: String?, val manageCoinsAllowed: Boolean)
