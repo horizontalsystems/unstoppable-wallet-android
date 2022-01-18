@@ -25,6 +25,7 @@
     <string name="Button_Start">Start</string>
     <string name="Button_Create">Create</string>
     <string name="Button_Restore">Restore</string>
+    <string name="Button_WatchAddress">Watch Address</string>
     <string name="Button_Reset">Reset</string>
     <string name="Button_Reconnect">Reconnect</string>
     <string name="Error">Error</string>
@@ -261,6 +262,7 @@
     <string name="Balance_Backup_Alert">You need to backup the %1$s Wallet before you may receive %2$s.</string>
     <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
     <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet</string>
+    <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
     <!--Send-->
     <string name="Send_Title">Send %s</string>
     <string name="Send_Hint_Address">Address or Domain</string>
@@ -655,7 +657,11 @@
     <string name="ManageAccounts_Title">Manage Wallets</string>
     <string name="ManageAccounts_CreateNewWallet">Create</string>
     <string name="ManageAccounts_ImportWallet">Restore</string>
+    <string name="ManageAccounts_WatchAddress">Watch Address</string>
     <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. This is handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
+    <string name="Watch_Address_Title">Address</string>
+    <string name="Watch_Address_Hint">Address or Domain</string>
+    <string name="Watch_Address_Watch">Watch</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
