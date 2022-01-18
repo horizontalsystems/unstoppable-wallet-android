@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,12 +29,10 @@ fun AppBarMenuButton(
     tint: Color = ComposeAppTheme.colors.jacob,
 ) {
     IconButton(
-        modifier = Modifier.background(Color.Green),
         onClick = { onClick() },
         enabled = enabled
     ) {
         Icon(
-            modifier = Modifier.background(Color.Blue),
             painter = painterResource(id = icon),
             contentDescription = null,
             tint = tint

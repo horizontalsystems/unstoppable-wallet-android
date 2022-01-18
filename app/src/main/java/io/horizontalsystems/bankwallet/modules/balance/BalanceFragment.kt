@@ -52,6 +52,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.shortenedAddress
 import io.horizontalsystems.bankwallet.databinding.FragmentBalanceBinding
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
@@ -158,9 +159,8 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                     account?.let { account ->
                         val clipboardManager = LocalClipboardManager.current
                         account.address?.let { address ->
-                            val short = address.take(6) + "..." + address.takeLast(6)
                             ButtonSecondaryDefault(
-                                title = short,
+                                title = address.shortenedAddress(),
                                 onClick = {
                                     clipboardManager.setText(AnnotatedString(address))
                                     HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
