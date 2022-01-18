@@ -1,18 +1,18 @@
-package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
+package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
-import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsModule.Blockchain
-import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsModule.InternalItem
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsModule.Blockchain
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsModule.InternalItem
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
-class RestoreSelectCoinsService(
+class RestoreBlockchainsService(
     private val accountType: AccountType,
     private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,

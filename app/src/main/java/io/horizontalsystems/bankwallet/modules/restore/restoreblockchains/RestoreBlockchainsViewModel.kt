@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
+package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsService.ItemState.Supported
-import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsService.ItemState.Unsupported
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsService.ItemState.Supported
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsService.ItemState.Unsupported
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItemState
 import io.horizontalsystems.core.SingleLiveEvent
@@ -15,8 +15,8 @@ import io.horizontalsystems.views.ListPosition
 import io.reactivex.BackpressureStrategy
 import io.reactivex.disposables.CompositeDisposable
 
-class RestoreSelectCoinsViewModel(
-    private val service: RestoreSelectCoinsService,
+class RestoreBlockchainsViewModel(
+    private val service: RestoreBlockchainsService,
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
@@ -42,7 +42,7 @@ class RestoreSelectCoinsViewModel(
         sync(service.items)
     }
 
-    private fun sync(items: List<RestoreSelectCoinsService.Item>) {
+    private fun sync(items: List<RestoreBlockchainsService.Item>) {
         val itemsSize = items.size
         val viewItems = items.mapIndexed { index, item ->
             viewItem(item, ListPosition.getListPosition(itemsSize, index))
@@ -51,7 +51,7 @@ class RestoreSelectCoinsViewModel(
     }
 
     private fun viewItem(
-        item: RestoreSelectCoinsService.Item,
+        item: RestoreBlockchainsService.Item,
         listPosition: ListPosition
     ): CoinViewItem {
         val state = when (item.state) {
@@ -73,17 +73,17 @@ class RestoreSelectCoinsViewModel(
     }
 
     fun enable(uid: String) {
-        val blockchain = RestoreSelectCoinsModule.Blockchain.valueOf(uid)
+        val blockchain = RestoreBlockchainsModule.Blockchain.valueOf(uid)
         service.enable(blockchain)
     }
 
     fun disable(uid: String) {
-        val blockchain = RestoreSelectCoinsModule.Blockchain.valueOf(uid)
+        val blockchain = RestoreBlockchainsModule.Blockchain.valueOf(uid)
         service.disable(blockchain)
     }
 
     fun onClickSettings(uid: String) {
-        val blockchain = RestoreSelectCoinsModule.Blockchain.valueOf(uid)
+        val blockchain = RestoreBlockchainsModule.Blockchain.valueOf(uid)
         service.configure(blockchain)
     }
 

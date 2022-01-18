@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
+package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -13,12 +13,12 @@ import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.core.findNavController
 
-class RestoreSelectCoinsFragment : CoinListBaseFragment() {
+class RestoreBlockchainsFragment : CoinListBaseFragment() {
 
     override val title
         get() = getString(R.string.Restore_Title)
 
-    private lateinit var viewModel: RestoreSelectCoinsViewModel
+    private lateinit var viewModel: RestoreBlockchainsViewModel
     private lateinit var coinSettingsViewModel: CoinSettingsViewModel
     private lateinit var restoreSettingsViewModel: RestoreSettingsViewModel
     private lateinit var coinPlatformsViewModel: CoinPlatformsViewModel
@@ -44,9 +44,9 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         val accountType = arguments?.getParcelable<AccountType>(ACCOUNT_TYPE_KEY)
             ?: throw Exception("Parameter missing")
 
-        val vmFactory by lazy { RestoreSelectCoinsModule.Factory(accountType) }
+        val vmFactory by lazy { RestoreBlockchainsModule.Factory(accountType) }
 
-        viewModel = ViewModelProvider(this, vmFactory).get(RestoreSelectCoinsViewModel::class.java)
+        viewModel = ViewModelProvider(this, vmFactory).get(RestoreBlockchainsViewModel::class.java)
         coinSettingsViewModel =
             ViewModelProvider(this, vmFactory).get(CoinSettingsViewModel::class.java)
         restoreSettingsViewModel =

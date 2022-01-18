@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
+package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 
-object RestoreSelectCoinsModule {
+object RestoreBlockchainsModule {
 
     class Factory(private val accountType: AccountType) : ViewModelProvider.Factory {
 
@@ -34,7 +34,7 @@ object RestoreSelectCoinsModule {
         }
 
         private val restoreSelectCoinsService by lazy {
-            RestoreSelectCoinsService(
+            RestoreBlockchainsService(
                 accountType,
                 App.accountFactory,
                 App.accountManager,
@@ -56,8 +56,8 @@ object RestoreSelectCoinsModule {
                 CoinSettingsViewModel::class.java -> {
                     CoinSettingsViewModel(coinSettingsService, listOf(coinSettingsService)) as T
                 }
-                RestoreSelectCoinsViewModel::class.java -> {
-                    RestoreSelectCoinsViewModel(
+                RestoreBlockchainsViewModel::class.java -> {
+                    RestoreBlockchainsViewModel(
                         restoreSelectCoinsService,
                         listOf(restoreSelectCoinsService)
                     ) as T
