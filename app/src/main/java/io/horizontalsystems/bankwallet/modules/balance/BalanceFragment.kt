@@ -21,9 +21,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,7 +39,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
@@ -204,26 +208,59 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     private fun setWallets() {
         binding.walletListCompose.setContent {
             ComposeAppTheme {
-                val balanceItems by viewModel.balanceViewItems.observeAsState()
+                val balanceItems by viewModel.balanceViewItems.observeAsState(listOf())
                 Wallets(balanceItems)
             }
         }
     }
 
     @Composable
-    fun Wallets(balanceViewItems: List<BalanceViewItem>?) {
+    fun Wallets(balanceViewItems: List<BalanceViewItem>) {
         val isRefreshing by viewModel.isRefreshing.observeAsState()
 
         val coroutineScope = rememberCoroutineScope()
         val listState = rememberLazyListState()
 
-        HSSwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing ?: false),
-            onRefresh = { viewModel.onRefresh() }
-        ) {
-            balanceViewItems?.let {
+        if (balanceViewItems.isEmpty()) {
+            val account by viewModel.accountLiveData.observeAsState()
+
+            if (account?.manageCoinsAllowed != true) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
+                            .background(ComposeAppTheme.colors.jeremy),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_emptywallet_48),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(32.dp))
+                    Text(
+                        modifier = Modifier.padding(horizontal = 48.dp),
+                        text = stringResource(id = R.string.Balance_WatchAccount_NoBalance),
+                        color = ComposeAppTheme.colors.grey,
+                        style = ComposeAppTheme.typography.subhead2,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
+        } else {
+            HSSwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing ?: false),
+                onRefresh = { viewModel.onRefresh() }
+            ) {
                 LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 18.dp)) {
-                    items(it) { item ->
+                    items(balanceViewItems) { item ->
                         WalletCard(
                             viewItem = item,
                         )
@@ -279,7 +316,9 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     @Composable
     private fun LeftIcon(viewItem: BalanceViewItem, ctx: Context) {
         Box(
-            modifier = Modifier.width(56.dp).fillMaxHeight(),
+            modifier = Modifier
+                .width(56.dp)
+                .fillMaxHeight(),
         ) {
             if (!viewItem.mainNet) {
                 Image(
@@ -307,7 +346,9 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
             }
             if (viewItem.failedIconVisible) {
                 Image(
-                    modifier = Modifier.align(Alignment.Center).size(24.dp)
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(24.dp)
                         .clickable { onSyncErrorClicked(viewItem) },
                     painter = painterResource(id = R.drawable.ic_attention_24),
                     contentDescription = "coin icon",
@@ -317,7 +358,9 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                 CoinImage(
                     iconUrl = viewItem.coinIconUrl,
                     placeholder = viewItem.coinIconPlaceholder,
-                    modifier = Modifier.align(Alignment.Center).size(24.dp)
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(24.dp)
                 )
             }
         }
@@ -337,7 +380,8 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
             )
             if (!viewItem.badge.isNullOrBlank()) {
                 Box(
-                    modifier = Modifier.padding(start = 8.dp, end = 16.dp)
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 16.dp)
                         .clip(RoundedCornerShape(4.dp))
                         .background(ComposeAppTheme.colors.jeremy)
                 ) {
@@ -457,7 +501,9 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                 color = ComposeAppTheme.colors.steel10
             )
             Row(
-                modifier = Modifier.height(36.dp).padding(start = 16.dp, end = 17.dp),
+                modifier = Modifier
+                    .height(36.dp)
+                    .padding(start = 16.dp, end = 17.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -485,7 +531,9 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     @Composable
     private fun ButtonsRow(viewItem: BalanceViewItem) {
         Row(
-            modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 2.dp).height(70.dp),
+            modifier = Modifier
+                .padding(start = 12.dp, end = 12.dp, bottom = 2.dp)
+                .height(70.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             ButtonPrimaryYellow(
