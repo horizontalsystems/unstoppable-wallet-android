@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
-import java.util.*
 
 class ManageAccountsViewModel(
         private val service: ManageAccountsService,
@@ -16,7 +15,7 @@ class ManageAccountsViewModel(
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
-    val viewItemsLiveData = MutableLiveData<List<AccountViewItem>>()
+    val viewItemsLiveData = MutableLiveData<Pair<List<AccountViewItem>, List<AccountViewItem>>>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
     val isCloseButtonVisible: Boolean = mode == ManageAccountsModule.Mode.Switcher
 
@@ -29,8 +28,11 @@ class ManageAccountsViewModel(
     }
 
     private fun sync(items: List<ManageAccountsService.Item>) {
-        val sortedItems = items.sortedBy { it.account.name.toLowerCase(Locale.ENGLISH) }
-        viewItemsLiveData.postValue(sortedItems.map { getViewItem(it) })
+        val sortedItems = items.sortedBy { it.account.name.lowercase() }
+        val (watchAccounts, regularAccounts) = sortedItems.partition {
+            it.account.isWatchAccount
+        }
+        viewItemsLiveData.postValue(Pair(regularAccounts.map { getViewItem(it) }, watchAccounts.map { getViewItem(it) }))
     }
 
     private fun getViewItem(item: ManageAccountsService.Item): AccountViewItem {

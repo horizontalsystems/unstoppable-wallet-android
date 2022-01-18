@@ -199,3 +199,7 @@ fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit): Disposable {
         .observeOn(Schedulers.io())
         .subscribe(onSuccess)
 }
+
+fun String.shortenedAddress(characters: Int = 6) : String {
+    return take(characters) + "..." + takeLast(characters)
+}

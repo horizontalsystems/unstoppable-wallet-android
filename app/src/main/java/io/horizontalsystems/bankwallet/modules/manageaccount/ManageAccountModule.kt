@@ -21,7 +21,9 @@ object ManageAccountModule {
     }
 
     fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, accountId: String) {
-        fragment.findNavController().navigate(navigateTo, bundleOf(ACCOUNT_ID_KEY to accountId), navOptions)
+        fragment.findNavController().navigate(navigateTo, prepareParams(accountId), navOptions)
     }
+
+    fun prepareParams(accountId: String) = bundleOf(ACCOUNT_ID_KEY to accountId)
 
 }

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.entities
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.shortenedAddress
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -13,6 +14,8 @@ class Account(
     val origin: AccountOrigin,
     var isBackedUp: Boolean = false
 ) : Parcelable {
+
+    val isWatchAccount = type is AccountType.Address
 
     override fun equals(other: Any?): Boolean {
         if (other is Account) {
@@ -80,6 +83,7 @@ open class AccountType : Parcelable {
                     Translator.getString(R.string.ManageAccount_NWords, count)
                 }
             }
+            is Address -> this.address.shortenedAddress()
             else -> ""
         }
 }
