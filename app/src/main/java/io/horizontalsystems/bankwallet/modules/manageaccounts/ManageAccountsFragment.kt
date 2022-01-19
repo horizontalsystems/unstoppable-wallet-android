@@ -166,8 +166,8 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 }
 
 @Composable
-private fun AccountsSection(regularAccounts: List<AccountViewItem>, viewModel: ManageAccountsViewModel, navController: NavController) {
-    CellMultilineLawrenceSection(items = regularAccounts) { accountViewItem ->
+private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAccountsViewModel, navController: NavController) {
+    CellMultilineLawrenceSection(items = accounts) { accountViewItem ->
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -208,6 +208,16 @@ private fun AccountsSection(regularAccounts: List<AccountViewItem>, viewModel: M
                     painter = painterResource(id = R.drawable.ic_attention_20),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.lucian
+                )
+            }
+            if (accountViewItem.alert && accountViewItem.isWatchAccount) {
+                Spacer(modifier = Modifier.width(12.dp))
+            }
+            if (accountViewItem.isWatchAccount) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_eye_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey
                 )
             }
             Icon(

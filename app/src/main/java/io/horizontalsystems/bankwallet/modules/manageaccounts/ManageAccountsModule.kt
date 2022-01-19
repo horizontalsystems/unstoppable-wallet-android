@@ -28,11 +28,12 @@ object ManageAccountsModule {
     }
 
     data class AccountViewItem(
-            val accountId: String,
-            val title: String,
-            val subtitle: String,
-            val selected: Boolean,
-            val alert: Boolean
+        val accountId: String,
+        val title: String,
+        val subtitle: String,
+        val selected: Boolean,
+        val alert: Boolean,
+        val isWatchAccount: Boolean
     )
 
     data class ActionViewItem(

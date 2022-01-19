@@ -37,7 +37,7 @@ class ManageAccountsViewModel(
 
     private fun getViewItem(item: ManageAccountsService.Item): AccountViewItem {
         val account = item.account
-        return AccountViewItem(account.id, account.name, account.type.description, item.isActive, !account.isBackedUp)
+        return AccountViewItem(account.id, account.name, account.type.description, item.isActive, !account.isBackedUp, account.isWatchAccount)
     }
 
     fun onSelect(accountViewItem: AccountViewItem) {
