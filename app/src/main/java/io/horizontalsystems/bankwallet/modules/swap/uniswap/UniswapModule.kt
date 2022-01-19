@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowan
 import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.uniswapkit.UniswapKit
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object UniswapModule {
 

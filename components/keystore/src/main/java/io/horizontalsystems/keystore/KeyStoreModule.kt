@@ -2,7 +2,7 @@ package io.horizontalsystems.keystore
 
 import android.os.Parcelable
 import io.horizontalsystems.core.CoreApp
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object KeyStoreModule {
 

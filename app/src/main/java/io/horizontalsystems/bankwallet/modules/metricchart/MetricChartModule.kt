@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class MetricsType : Parcelable {

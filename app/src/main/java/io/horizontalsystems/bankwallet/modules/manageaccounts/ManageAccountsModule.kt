@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object ManageAccountsModule {
     const val MODE = "mode"

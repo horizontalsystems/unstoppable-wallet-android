@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object EvmNetworkModule {
     fun args(blockchain: Blockchain, account: Account): Bundle {

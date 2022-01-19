@@ -4,7 +4,7 @@ import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shortenedAddress
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class Account(

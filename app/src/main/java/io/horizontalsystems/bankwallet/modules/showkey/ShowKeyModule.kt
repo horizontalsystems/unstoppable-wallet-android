@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object ShowKeyModule {
     const val ACCOUNT = "account"

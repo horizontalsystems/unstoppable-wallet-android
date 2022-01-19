@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object MainModule {
 
