@@ -19,8 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.unstoppabledomains.exceptions.ns.NamingServiceException
+import com.unstoppabledomains.resolution.Resolution
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.convertedError
@@ -33,7 +36,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.ethereumkit.core.AddressValidator
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class WatchAddressFragment : BaseFragment() {
 
@@ -92,10 +97,12 @@ fun WatchAddressScreen(navController: NavController) {
             HSAddressInput(
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .focusRequester(focusRequester)
-            ) {
-                viewModel.onEnterAddress(it)
-            }
+                    .focusRequester(focusRequester),
+                onValueChange = {
+                    viewModel.onEnterAddress(it)
+                },
+                coinCode = "ETH"
+            )
 
             SideEffect {
                 focusRequester.requestFocus()
@@ -105,13 +112,11 @@ fun WatchAddressScreen(navController: NavController) {
 }
 
 @Composable
-fun HSAddressInput(modifier: Modifier, onValueChange: (Address?) -> Unit) {
-
-    val viewModel = viewModel<AddressViewModel>()
+fun HSAddressInput(modifier: Modifier, onValueChange: (Address?) -> Unit, coinCode: String) {
+    val viewModel = viewModel<AddressViewModel>(factory = HSAddressInputModule.Factory(coinCode))
     val scope = rememberCoroutineScope()
 
-    var error by remember { mutableStateOf<String?>(null)}
-
+    var error by remember { mutableStateOf<String?>(null) }
 
     FormsInput(
         modifier = modifier,
@@ -127,18 +132,43 @@ fun HSAddressInput(modifier: Modifier, onValueChange: (Address?) -> Unit) {
     )
 }
 
-class AddressViewModel : ViewModel() {
-    suspend fun parseAddress(v: String) : DataState<Address?> {
-        if (v.length < 40 && !v.contains(".")) {
-            return DataState.Success(null)
-        }
-
-        return try {
-            AddressValidator.validate(v)
-            DataState.Success(Address(v, null))
-        } catch (e: AddressValidator.AddressValidationException) {
-            DataState.Error(e)
+object HSAddressInputModule {
+    class Factory(private val coinCode: String) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return AddressViewModel(Resolution(), coinCode) as T
         }
     }
+}
 
+class AddressViewModel(
+    private val resolution: Resolution,
+    private val coinCode: String
+) : ViewModel() {
+
+    suspend fun parseAddress(v1: String): DataState<Address?> = withContext(Dispatchers.IO) {
+        val v = v1.trim()
+        if (v.length < 40 && !v.contains(".")) {
+            DataState.Success(null)
+        } else {
+            try {
+                var addressString: String = v
+                var addressDomain: String? = null
+
+                if (v.contains(".")) {
+                    if (resolution.isSupported(v)) {
+                        addressString = resolution.getAddress(v, coinCode)
+                        addressDomain = v
+                    }
+                }
+
+                AddressValidator.validate(addressString)
+                DataState.Success(Address(addressString, addressDomain))
+            } catch (e: NamingServiceException) {
+                DataState.Error(e)
+            } catch (e: AddressValidator.AddressValidationException) {
+                DataState.Error(e)
+            }
+        }
+    }
 }
