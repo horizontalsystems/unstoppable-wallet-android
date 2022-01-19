@@ -217,14 +217,13 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     @Composable
     fun Wallets(balanceViewItems: List<BalanceViewItem>) {
         val isRefreshing by viewModel.isRefreshing.observeAsState()
+        val account by viewModel.accountLiveData.observeAsState()
 
         val coroutineScope = rememberCoroutineScope()
         val listState = rememberLazyListState()
 
         if (balanceViewItems.isEmpty()) {
-            val account by viewModel.accountLiveData.observeAsState()
-
-            if (account?.manageCoinsAllowed != true) {
+            if (account?.isWatchAccount == true) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -263,6 +262,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                     items(balanceViewItems) { item ->
                         WalletCard(
                             viewItem = item,
+                            account?.isWatchAccount == true
                         )
                     }
                     if (scrollToTopAfterUpdate) {
@@ -277,7 +277,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     }
 
     @Composable
-    fun WalletCard(viewItem: BalanceViewItem) {
+    fun WalletCard(viewItem: BalanceViewItem, isWatchAccount: Boolean) {
         val ctx = context ?: return
         val interactionSource = remember { MutableInteractionSource() }
 
@@ -290,10 +290,17 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
             backgroundColor = ComposeAppTheme.colors.lawrence,
         ) {
             Column(
-                modifier = Modifier.clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) { viewModel.onItem(viewItem) }
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) {
+                        if (isWatchAccount) {
+                            onChartClicked(viewItem)
+                        } else {
+                            viewModel.onItem(viewItem)
+                        }
+                    }
             ) {
                 Row(
                     modifier = Modifier
