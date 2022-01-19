@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.*
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ViewInputAddressBinding
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -35,13 +37,14 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import kotlinx.android.synthetic.main.view_input_address.view.*
 
 class AddressInputView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    private val binding = ViewInputAddressBinding.inflate(LayoutInflater.from(context), this)
 
     interface Listener {
         fun onTextChange(text: String)
@@ -50,13 +53,11 @@ class AddressInputView @JvmOverloads constructor(
     }
 
     init {
-        inflate(context, R.layout.view_input_address, this)
-
         val ta = context.obtainStyledAttributes(attrs, R.styleable.AddressInputView)
         try {
-            title.text = ta.getString(R.styleable.AddressInputView_title)
-            title.isVisible = title.text.isNotEmpty()
-            description.text = ta.getString(R.styleable.AddressInputView_description)
+            binding.title.text = ta.getString(R.styleable.AddressInputView_title)
+            binding.title.isVisible = binding.title.text.isNotEmpty()
+            binding.description.text = ta.getString(R.styleable.AddressInputView_description)
         } finally {
             ta.recycle()
         }
@@ -69,7 +70,7 @@ class AddressInputView @JvmOverloads constructor(
     }
 
     private fun drawView() {
-        actionsCompose.setContent {
+        binding.actionsCompose.setContent {
             ComposeAppTheme {
                 AddressInputViewComponent(viewModel, listener)
             }
@@ -103,20 +104,20 @@ class AddressInputView @JvmOverloads constructor(
     }
 
     fun setError(caution: Caution?) {
-        error.text = caution?.text
-        error.isVisible = caution != null
+        binding.error.text = caution?.text
+        binding.error.isVisible = caution != null
 
         when (caution?.type) {
             Caution.Type.Error -> {
-                inputBackground.hasError = true
-                error.setTextColor(context.getColor(R.color.red_d))
+                binding.inputBackground.hasError = true
+                binding.error.setTextColor(context.getColor(R.color.red_d))
             }
             Caution.Type.Warning -> {
-                inputBackground.hasWarning = true
-                error.setTextColor(context.getColor(R.color.yellow_d))
+                binding.inputBackground.hasWarning = true
+                binding.error.setTextColor(context.getColor(R.color.yellow_d))
             }
             else -> {
-                inputBackground.clearStates()
+                binding.inputBackground.clearStates()
             }
         }
     }
@@ -166,7 +167,7 @@ fun AddressInputViewComponent(
     viewModel: AddressInputViewModel,
     listener: AddressInputView.Listener
 ) {
-    val inputData by viewModel.inputLiveData.observeAsState(Pair(0,""))
+    val inputData by viewModel.inputLiveData.observeAsState(Pair(0, ""))
     var text by remember(inputData.first) { mutableStateOf(inputData.second) }
 
     val inputHint by viewModel.inputHintLiveData.observeAsState("")
@@ -294,7 +295,7 @@ class AddressInputViewModel : ViewModel() {
     private fun sync() {
         textUpdateKey++
         buttonsLiveData.postValue(getButtons())
-        inputLiveData.postValue(Pair(textUpdateKey,inputText))
+        inputLiveData.postValue(Pair(textUpdateKey, inputText))
     }
 
     fun setText(text: String) {
@@ -317,7 +318,7 @@ class AddressInputViewModel : ViewModel() {
     fun updateText(text: String) {
         inputText = text
         buttonsLiveData.postValue(getButtons())
-        inputLiveData.postValue(Pair(textUpdateKey,inputText))
+        inputLiveData.postValue(Pair(textUpdateKey, inputText))
     }
 
 }

@@ -2,22 +2,25 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ViewTvlrankListHeaderBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import kotlinx.android.synthetic.main.view_tvlrank_list_header.view.*
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 
 class TvlRankListHeaderView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+
+    private val binding = ViewTvlrankListHeaderBinding.inflate(LayoutInflater.from(context), this)
 
     interface Listener {
         fun onFilterClick()
@@ -29,8 +32,6 @@ class TvlRankListHeaderView @JvmOverloads constructor(
     private var sortDesc = false
 
     init {
-        inflate(context, R.layout.view_tvlrank_list_header, this)
-
         updateMenu()
     }
 
@@ -45,7 +46,7 @@ class TvlRankListHeaderView @JvmOverloads constructor(
     }
 
     private fun updateMenu() {
-        composeView.setContent {
+        binding.composeView.setContent {
             ComposeAppTheme {
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                     Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)

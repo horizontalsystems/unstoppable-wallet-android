@@ -4,11 +4,12 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.view_settings_item.view.*
 
 abstract class SettingsViewBase @JvmOverloads constructor(
     context: Context,
@@ -19,24 +20,32 @@ abstract class SettingsViewBase @JvmOverloads constructor(
     private val singleLineHeight = 48f
     private val doubleLineHeight = 60f
 
-    fun showSubtitle(text: String?) {
-        settingsSubtitle.text = text
-        settingsSubtitle.isVisible = text != null
-        layoutParams?.height = LayoutHelper.dp(if (text == null) singleLineHeight else doubleLineHeight, context)
+    fun showSubtitle(subtitle: String?) {
+        findViewById<TextView>(R.id.settingsSubtitle)?.apply {
+            text = subtitle
+            isVisible = subtitle != null
+        }
+
+        layoutParams?.height =
+            LayoutHelper.dp(if (subtitle == null) singleLineHeight else doubleLineHeight, context)
     }
 
     fun showTitle(text: String?) {
-        settingsTitle.text = text
+        findViewById<TextView>(R.id.settingsTitle)?.text = text
     }
 
     fun showIcon(drawable: Drawable?) {
-        settingsIcon.isVisible = drawable != null
-        settingsIcon.setImageDrawable(drawable)
+        findViewById<ImageView>(R.id.settingsIcon)?.apply {
+            isVisible = drawable != null
+            setImageDrawable(drawable)
+        }
     }
 
     fun showIcon(@DrawableRes resId: Int?) {
-        settingsIcon.isVisible = resId != null
-        resId?.let { settingsIcon.setImageResource(it) }
+        findViewById<ImageView>(R.id.settingsIcon)?.apply {
+            isVisible = resId != null
+            resId?.let { setImageResource(it) }
+        }
     }
 
     fun setListPosition(listPosition: ListPosition) {

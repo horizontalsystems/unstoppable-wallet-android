@@ -3,8 +3,9 @@ package io.horizontalsystems.views
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.CompoundButton
+import android.widget.ImageView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
-import kotlinx.android.synthetic.main.view_settings_item_switch.view.*
 
 class SettingsViewSwitch @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : SettingsViewBase(context, attrs, defStyleAttr), CompoundButton.OnCheckedChangeListener {
@@ -19,7 +20,7 @@ class SettingsViewSwitch @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     fun showAttention(show: Boolean) {
-        attentionIcon.isVisible = show
+        findViewById<ImageView>(R.id.attentionIcon)?.isVisible = show
     }
 
     fun setOnCheckedChangeListener(listener: (Boolean) -> Unit) {
@@ -37,21 +38,22 @@ class SettingsViewSwitch @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     fun setChecked(checked: Boolean) {
-        switchSettings.isVisible = true
-
-        notifyListener = false
-        switchSettings.isChecked = checked
-        notifyListener = true
+        findViewById<SwitchCompat>(R.id.switchSettings)?.apply {
+            isVisible = true
+            notifyListener = false
+            isChecked = checked
+            notifyListener = true
+        }
     }
 
     fun switchToggle() {
-        switchSettings.toggle()
+        findViewById<SwitchCompat>(R.id.switchSettings)?.toggle()
     }
 
     init {
         inflate(context, R.layout.view_settings_item_switch, this)
 
-        switchSettings.setOnCheckedChangeListener(this)
+        findViewById<SwitchCompat>(R.id.switchSettings)?.setOnCheckedChangeListener(this)
 
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.SettingsViewSwitch)
         try {

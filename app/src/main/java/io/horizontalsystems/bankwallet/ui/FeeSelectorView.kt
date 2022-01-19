@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.ui
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -13,26 +14,29 @@ import io.horizontalsystems.bankwallet.core.ethereum.ISendFeePriorityViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.ISendFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.SendFeeSliderViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.SendPriorityViewItem
+import io.horizontalsystems.bankwallet.databinding.ViewFeeSelectorBinding
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.seekbar.FeeSeekBar
-import kotlinx.android.synthetic.main.view_fee_selector.view.*
 
-class FeeSelectorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : ConstraintLayout(context, attrs, defStyleAttr) {
+class FeeSelectorView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    private val binding = ViewFeeSelectorBinding.inflate(LayoutInflater.from(context), this)
 
     var onTxSpeedClickListener: (view: View) -> Unit = { }
     var prioritySelectListener: (position: Int) -> Unit = { }
     var customFeeSeekBarListener: (value: Int) -> Unit = { }
 
     init {
-        inflate(context, R.layout.view_fee_selector, this)
-
-        txSpeedMenuClickArea.setOnClickListener {
+        binding.txSpeedMenuClickArea.setOnClickListener {
             onTxSpeedClickListener(it)
         }
 
-        customFeeSeekBar.setListener(object : FeeSeekBar.Listener {
+        binding.customFeeSeekBar.setListener(object : FeeSeekBar.Listener {
             override fun onSelect(value: Int) {
                 customFeeSeekBarListener(value)
             }
@@ -42,26 +46,26 @@ class FeeSelectorView @JvmOverloads constructor(context: Context, attrs: Attribu
     }
 
     fun setEstimatedFeeText(value: String) {
-        txEstimatedFeeValue.text = value
+        binding.txEstimatedFeeValue.text = value
     }
 
     fun setFeeText(value: String) {
-        txFeeValue.text = value
+        binding.txFeeValue.text = value
     }
 
     fun setPriorityText(value: String) {
-        txSpeedMenu.text = value
+        binding.txSpeedMenu.text = value
         invalidate()
     }
 
     fun setFeeSliderViewItem(viewItem: SendFeeSliderViewItem?) {
-        customFeeSeekBar.isVisible = viewItem != null
+        binding.customFeeSeekBar.isVisible = viewItem != null
 
         viewItem?.let {
-            customFeeSeekBar.min = it.range.first.toInt()
-            customFeeSeekBar.max = it.range.last.toInt()
-            customFeeSeekBar.progress = it.initialValue.toInt()
-            customFeeSeekBar.setBubbleHint(it.unit)
+            binding.customFeeSeekBar.min = it.range.first.toInt()
+            binding.customFeeSeekBar.max = it.range.last.toInt()
+            binding.customFeeSeekBar.progress = it.initialValue.toInt()
+            binding.customFeeSeekBar.setBubbleHint(it.unit)
         }
 
         invalidate()
@@ -73,21 +77,21 @@ class FeeSelectorView @JvmOverloads constructor(context: Context, attrs: Attribu
         }
 
         SelectorDialog
-                .newInstance(selectorItems, context.getString(R.string.Send_DialogSpeed)) { position ->
-                    prioritySelectListener(position)
-                }
-                .show(fragmentManager, "fee_rate_priority_selector")
+            .newInstance(selectorItems, context.getString(R.string.Send_DialogSpeed)) { position ->
+                prioritySelectListener(position)
+            }
+            .show(fragmentManager, "fee_rate_priority_selector")
     }
 
     fun setFeeSelectorViewInteractions(
-            sendFeeViewModel: ISendFeeViewModel,
-            sendFeePriorityViewModel: ISendFeePriorityViewModel,
-            viewLifecycleOwner: LifecycleOwner,
-            fragmentManager: FragmentManager,
-            showSpeedInfoListener:() -> Unit
+        sendFeeViewModel: ISendFeeViewModel,
+        sendFeePriorityViewModel: ISendFeePriorityViewModel,
+        viewLifecycleOwner: LifecycleOwner,
+        fragmentManager: FragmentManager,
+        showSpeedInfoListener: () -> Unit
     ) {
 
-        feeInfoImageClickArea.setOnClickListener {
+        binding.feeInfoImageClickArea.setOnClickListener {
             showSpeedInfoListener.invoke()
         }
 
@@ -97,9 +101,9 @@ class FeeSelectorView @JvmOverloads constructor(context: Context, attrs: Attribu
             })
         } else {
             // hideEstimatedFeeBlock
-            txEstimatedFeeTitle.isVisible = false
-            txEstimatedFeeValue.isVisible = false
-            txFeeTitle.text = context.getString(R.string.Swap_Fee)
+            binding.txEstimatedFeeTitle.isVisible = false
+            binding.txEstimatedFeeValue.isVisible = false
+            binding.txFeeTitle.text = context.getString(R.string.Swap_Fee)
         }
 
 
@@ -120,7 +124,7 @@ class FeeSelectorView @JvmOverloads constructor(context: Context, attrs: Attribu
         })
 
         sendFeeViewModel.warningOfStuckLiveData.observe(viewLifecycleOwner, {
-            warningOfStuck.isVisible = it
+            binding.warningOfStuck.isVisible = it
         })
 
         onTxSpeedClickListener = {

@@ -2,24 +2,27 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ViewMarketListHeaderBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
-import kotlinx.android.synthetic.main.view_market_list_header.view.*
 
 class MarketListHeaderView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    private val binding = ViewMarketListHeaderBinding.inflate(LayoutInflater.from(context), this)
 
     interface Listener {
         fun onSortingClick()
@@ -28,12 +31,8 @@ class MarketListHeaderView @JvmOverloads constructor(
 
     var listener: Listener? = null
 
-    init {
-        inflate(context, R.layout.view_market_list_header, this)
-    }
-
     fun setMenu(sortMenu: SortMenu, toggleButton: ToggleButton) {
-        composeView.setContent {
+        binding.composeView.setContent {
             ComposeAppTheme {
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                     Row(

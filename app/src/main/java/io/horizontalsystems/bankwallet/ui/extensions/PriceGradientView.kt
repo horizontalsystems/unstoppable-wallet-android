@@ -6,17 +6,23 @@ import android.graphics.Matrix
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.TransitionDrawable
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.graphics.values
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.view_price_gradient.view.*
+import io.horizontalsystems.bankwallet.databinding.ViewPriceGradientBinding
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-class PriceGradientView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : CardView(context, attrs, defStyleAttr) {
+class PriceGradientView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : CardView(context, attrs, defStyleAttr) {
+
+    private val binding = ViewPriceGradientBinding.inflate(LayoutInflater.from(context), this)
 
     private val matrixImage: MatrixImage
     private var diffPrev: Float? = null
@@ -28,8 +34,6 @@ class PriceGradientView @JvmOverloads constructor(context: Context, attrs: Attri
     private val translateDuration = 1000L
 
     init {
-        inflate(context, R.layout.view_price_gradient, this)
-
         val ta = context.obtainStyledAttributes(attrs, R.styleable.PriceGradientView)
         try {
             gradient = ta.getDrawable(R.styleable.PriceGradientView_gradient)
@@ -39,7 +43,7 @@ class PriceGradientView @JvmOverloads constructor(context: Context, attrs: Attri
             ta.recycle()
         }
 
-        matrixImage = MatrixImage(gradientImage)
+        matrixImage = MatrixImage(binding.gradientImage)
     }
 
     fun animateHorizontal(diff: Float?) {
@@ -66,7 +70,7 @@ class PriceGradientView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     fun setBackground(color: Int) {
-        gradientImage.setImageDrawable(null)
+        binding.gradientImage.setImageDrawable(null)
         setBackgroundColor(color)
         animateAlpha(1f)
     }
@@ -125,7 +129,7 @@ class PriceGradientView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun setGradient(drawable: Drawable?) {
-        gradientImage.setImageDrawable(drawable)
+        binding.gradientImage.setImageDrawable(drawable)
     }
 
     class MatrixImage(private val imageView: ImageView) {
