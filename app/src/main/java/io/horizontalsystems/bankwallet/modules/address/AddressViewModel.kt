@@ -14,19 +14,19 @@ class AddressViewModel(
     private val coinCode: String
 ) : ViewModel() {
 
-    suspend fun parseAddress(v1: String): DataState<Address?> = withContext(Dispatchers.IO) {
-        val v = v1.trim()
-        if (v.length < 40 && !v.contains(".")) {
+    suspend fun parseAddress(value: String): DataState<Address?> = withContext(Dispatchers.IO) {
+        val vTrimmed = value.trim()
+        if (vTrimmed.length < 40 && !vTrimmed.contains(".")) {
             DataState.Success(null)
         } else {
             try {
-                var addressString: String = v
+                var addressString: String = vTrimmed
                 var addressDomain: String? = null
 
-                if (v.contains(".")) {
-                    if (resolution.isSupported(v)) {
-                        addressString = resolution.getAddress(v, coinCode)
-                        addressDomain = v
+                if (vTrimmed.contains(".")) {
+                    if (resolution.isSupported(vTrimmed)) {
+                        addressString = resolution.getAddress(vTrimmed, coinCode)
+                        addressDomain = vTrimmed
                     }
                 }
 
