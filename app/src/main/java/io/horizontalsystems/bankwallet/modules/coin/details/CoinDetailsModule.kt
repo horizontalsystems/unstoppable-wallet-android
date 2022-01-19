@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.marketkit.models.FullCoin
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object CoinDetailsModule {
 

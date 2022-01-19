@@ -2,8 +2,7 @@ package io.horizontalsystems.pin
 
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.biometric.BiometricPrompt
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 object PinModule {

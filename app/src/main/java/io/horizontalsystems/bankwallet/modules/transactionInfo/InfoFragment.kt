@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.dismissOnBackPressed
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 class InfoFragment : BaseDialogFragment() {
 
