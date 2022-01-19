@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.qrscanner
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -18,6 +19,7 @@ import com.google.zxing.client.android.Intents
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
+import com.journeyapps.barcodescanner.ScanOptions
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
@@ -159,6 +161,16 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             intentIntegrator.setBeepEnabled(false)
             intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
             return intentIntegrator.createScanIntent()
+        }
+
+        fun getScanQrIntent(context: Context): Intent {
+            val options = ScanOptions()
+            options.setCaptureActivity(QRScannerActivity::class.java)
+            options.setOrientationLocked(true)
+            options.setPrompt("")
+            options.setBeepEnabled(false)
+            options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+            return options.createScanIntent(context)
         }
     }
 
