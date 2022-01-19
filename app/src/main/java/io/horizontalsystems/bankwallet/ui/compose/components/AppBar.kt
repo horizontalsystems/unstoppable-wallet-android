@@ -19,6 +19,7 @@ data class MenuItem(
     val title: TranslatableString,
     @DrawableRes val icon: Int? = null,
     val onClick: () -> Unit,
+    val enabled: Boolean = true
 )
 
 @Composable
@@ -69,19 +70,26 @@ fun AppBar(
                 if (menuItem.icon != null) {
                     AppBarMenuButton(
                         icon = menuItem.icon,
-                        onClick = menuItem.onClick
+                        onClick = menuItem.onClick,
+                        enabled = menuItem.enabled
                     )
                 } else {
+                    val color = if (menuItem.enabled) {
+                        ComposeAppTheme.colors.jacob
+                    } else {
+                        ComposeAppTheme.colors.yellow50
+                    }
+
                     Text(
                         modifier = Modifier
                             .padding(end = 16.dp)
                             .clickable(
-                                enabled = true,
+                                enabled = menuItem.enabled,
                                 onClick = menuItem.onClick
                             ),
                         text = menuItem.title.getString(),
                         style = ComposeAppTheme.typography.headline2,
-                        color = ComposeAppTheme.colors.jacob
+                        color = color
                     )
                 }
             }

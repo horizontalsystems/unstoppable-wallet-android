@@ -4,35 +4,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import io.horizontalsystems.bankwallet.entities.Address
 
 class WatchAddressViewModel(private val service: WatchAddressService) : ViewModel() {
 
     var accountCreated by mutableStateOf(false)
         private set
 
-    var error: Throwable? by mutableStateOf(null)
+    var submitEnabled by mutableStateOf(false)
         private set
 
-    init {
-        viewModelScope.launch {
-            service.accountCreatedFlow.collect {
-                error = it.errorOrNull
-
-                it.dataOrNull?.let {
-                    accountCreated = it
-                }
-            }
-        }
-    }
-
-    fun onEnterAddress(v: String) {
+    fun onEnterAddress(v: Address?) {
         service.address = v
+
+        submitEnabled = service.isCreatable
     }
 
     fun onClickWatch() {
-        service.createAccount()
+        try {
+            service.createAccount()
+            accountCreated = true
+        } catch (e: Exception) {
+
+        }
     }
 }
