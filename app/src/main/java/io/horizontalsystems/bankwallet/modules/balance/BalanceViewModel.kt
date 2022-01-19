@@ -75,7 +75,7 @@ class BalanceViewModel(
             is AccountType.Address -> account.type.address
             else -> null
         }
-        accountLiveData.postValue(AccountViewItem(address, account.type !is AccountType.Address))
+        accountLiveData.postValue(AccountViewItem(address, account.type !is AccountType.Address, account.type is AccountType.Address))
     }
 
     private fun refreshViewItems() {
@@ -217,4 +217,4 @@ class BalanceViewModel(
 
 }
 
-data class AccountViewItem(val address: String?, val manageCoinsAllowed: Boolean)
+data class AccountViewItem(val address: String?, val manageCoinsAllowed: Boolean, val isWatchAccount: Boolean)
