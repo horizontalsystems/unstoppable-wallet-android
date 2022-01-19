@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
@@ -15,6 +15,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.databinding.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -23,39 +24,32 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportant
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_amount.*
-import kotlinx.android.synthetic.main.view_holder_evm_confirmation_subhead.*
-import kotlinx.android.synthetic.main.view_holder_title_value_hex.*
-import kotlinx.android.synthetic.main.view_holder_title_value_hex.backgroundView
-import kotlinx.android.synthetic.main.view_holder_title_value_hex.titleTextView
-import kotlinx.android.synthetic.main.view_send_evm_transaction.view.*
 
-class SendEvmTransactionView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : ConstraintLayout(context, attrs, defStyleAttr) {
+class SendEvmTransactionView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    init {
-        inflate(context, R.layout.view_send_evm_transaction, this)
-    }
+    private val binding = ViewSendEvmTransactionBinding.inflate(LayoutInflater.from(context), this)
 
     fun init(
-            transactionViewModel: SendEvmTransactionViewModel,
-            ethereumFeeViewModel: EthereumFeeViewModel,
-            viewLifecycleOwner: LifecycleOwner,
-            fragmentManager: FragmentManager,
-            showSpeedInfoListener: () -> Unit
+        transactionViewModel: SendEvmTransactionViewModel,
+        ethereumFeeViewModel: EthereumFeeViewModel,
+        viewLifecycleOwner: LifecycleOwner,
+        fragmentManager: FragmentManager,
+        showSpeedInfoListener: () -> Unit
     ) {
-        feeSelectorView.setFeeSelectorViewInteractions(
-                ethereumFeeViewModel,
-                ethereumFeeViewModel,
-                viewLifecycleOwner,
-                fragmentManager,
-                showSpeedInfoListener
+        binding.feeSelectorView.setFeeSelectorViewInteractions(
+            ethereumFeeViewModel,
+            ethereumFeeViewModel,
+            viewLifecycleOwner,
+            fragmentManager,
+            showSpeedInfoListener
         )
 
         val adapter = SendEvmTransactionAdapter()
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
         transactionViewModel.viewItemsLiveData.observe(viewLifecycleOwner, {
             adapter.items = flattenSectionViewItems(it)
@@ -63,7 +57,7 @@ class SendEvmTransactionView @JvmOverloads constructor(context: Context, attrs: 
         })
 
         transactionViewModel.errorLiveData.observe(viewLifecycleOwner, {
-            error.text = it
+            binding.error.text = it
         })
     }
 
@@ -72,7 +66,12 @@ class SendEvmTransactionView @JvmOverloads constructor(context: Context, attrs: 
 
         sections.forEach { section ->
             section.viewItems.forEachIndexed { index, viewItem ->
-                viewItems.add(ViewItemWithPosition(viewItem, ListPosition.getListPosition(section.viewItems.size, index)))
+                viewItems.add(
+                    ViewItemWithPosition(
+                        viewItem,
+                        ListPosition.getListPosition(section.viewItems.size, index)
+                    )
+                )
             }
             viewItems.add(ViewItemWithPosition(null, ListPosition.First))
         }
@@ -83,8 +82,8 @@ class SendEvmTransactionView @JvmOverloads constructor(context: Context, attrs: 
 }
 
 data class ViewItemWithPosition(
-        val viewItem: ViewItem?,
-        val listPosition: ListPosition
+    val viewItem: ViewItem?,
+    val listPosition: ListPosition
 )
 
 class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -112,12 +111,40 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewTypes[viewType]) {
-            ViewType.Subhead -> SubheadViewHolder.create(parent)
-            ViewType.Space -> SpaceViewHolder.create(parent)
-            ViewType.Address -> TitleValueHexViewHolder.create(parent)
-            ViewType.Value -> TitleValueViewHolder.create(parent)
-            ViewType.Amount -> AmountViewHolder.create(parent)
-            ViewType.Input -> TitleValueHexViewHolder.create(parent)
+            ViewType.Subhead -> SubheadViewHolder(
+                ViewHolderEvmConfirmationSubheadBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+            ViewType.Space -> SpaceViewHolder(
+                ViewSendEvmSpaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            )
+            ViewType.Address -> TitleValueHexViewHolder(
+                ViewHolderTitleValueHexBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+            ViewType.Value -> TitleValueViewHolder(
+                ViewHolderTitleValueBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+            ViewType.Amount -> AmountViewHolder(
+                ViewHolderAmountBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            )
+            ViewType.Input -> TitleValueHexViewHolder(
+                ViewHolderTitleValueHexBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
             ViewType.Warning -> WarningViewHolder.create(parent)
         }
     }
@@ -132,30 +159,39 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
         val listPosition = items[position].listPosition
         when (val item = items[position].viewItem) {
             is ViewItem.Subhead -> (holder as? SubheadViewHolder)?.bind(item, listPosition)
-            is ViewItem.Address -> (holder as? TitleValueHexViewHolder)?.bind(item.title, item.valueTitle, item.value, listPosition)
+            is ViewItem.Address -> (holder as? TitleValueHexViewHolder)?.bind(
+                item.title,
+                item.valueTitle,
+                item.value,
+                listPosition
+            )
             is ViewItem.Value -> (holder as? TitleValueViewHolder)?.bind(item, listPosition)
-            is ViewItem.Amount -> (holder as? AmountViewHolder)?.bind(item.fiatAmount, item.coinAmount, listPosition)
-            is ViewItem.Input -> (holder as? TitleValueHexViewHolder)?.bind("Input", item.value, item.value, listPosition)
+            is ViewItem.Amount -> (holder as? AmountViewHolder)?.bind(
+                item.fiatAmount,
+                item.coinAmount,
+                listPosition
+            )
+            is ViewItem.Input -> (holder as? TitleValueHexViewHolder)?.bind(
+                "Input",
+                item.value,
+                item.value,
+                listPosition
+            )
             is ViewItem.Warning -> (holder as? WarningViewHolder)?.bind(item)
         }
     }
 
-    class SpaceViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-        companion object {
-            fun create(parent: ViewGroup) = SpaceViewHolder(inflate(parent, R.layout.view_send_evm_space, false))
-        }
+    class SpaceViewHolder(private val binding: ViewSendEvmSpaceBinding) :
+        RecyclerView.ViewHolder(binding.root) {
     }
 
-    class SubheadViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class SubheadViewHolder(private val binding: ViewHolderEvmConfirmationSubheadBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ViewItem.Subhead, position: ListPosition) {
-            titleTextView.text = item.title
-            valueTextView.text = item.value
+            binding.titleTextView.text = item.title
+            binding.valueTextView.text = item.value
 
-            backgroundView.setBackgroundResource(position.getBackground())
-        }
-
-        companion object {
-            fun create(parent: ViewGroup) = SubheadViewHolder(inflate(parent, R.layout.view_holder_evm_confirmation_subhead, false))
+            binding.backgroundView.setBackgroundResource(position.getBackground())
         }
     }
 
@@ -179,35 +215,34 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
         }
     }
 
-    class TitleValueHexViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class TitleValueHexViewHolder(private val binding: ViewHolderTitleValueHexBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(title: String, valueTitle: String, value: String, position: ListPosition) {
-            titleTextView.text = title
-            valueCompose.setContent {
+            binding.titleTextView.text = title
+            binding.valueCompose.setContent {
                 ComposeAppTheme {
                     ButtonSecondaryDefault(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         title = valueTitle,
                         onClick = {
                             TextHelper.copyText(value)
-                            HudHelper.showSuccessMessage(containerView, R.string.Hud_Text_Copied)
+                            HudHelper.showSuccessMessage(binding.wrapper, R.string.Hud_Text_Copied)
                         },
                         ellipsis = Ellipsis.Middle(10)
                     )
                 }
             }
 
-            backgroundView.setBackgroundResource(position.getBackground())
+            binding.backgroundView.setBackgroundResource(position.getBackground())
         }
 
-        companion object {
-            fun create(parent: ViewGroup) = TitleValueHexViewHolder(inflate(parent, R.layout.view_holder_title_value_hex, false))
-        }
     }
 
-    class TitleValueViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class TitleValueViewHolder(private val binding: ViewHolderTitleValueBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ViewItem.Value, position: ListPosition) {
-            titleTextView.text = item.title
-            valueTextView.text = item.value
+            binding.titleTextView.text = item.title
+            binding.valueTextView.text = item.value
 
             val textColor = when (item.type) {
                 ValueType.Regular -> item.color ?: R.color.bran
@@ -215,28 +250,22 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
                 ValueType.Outgoing -> R.color.jacob
                 ValueType.Incoming -> R.color.remus
             }
-            valueTextView.setTextColor(containerView.context.getColor(textColor))
+            binding.valueTextView.setTextColor(binding.wrapper.context.getColor(textColor))
 
-            backgroundView.setBackgroundResource(position.getBackground())
-        }
-
-        companion object {
-            fun create(parent: ViewGroup) = TitleValueViewHolder(inflate(parent, R.layout.view_holder_title_value, false))
+            binding.backgroundView.setBackgroundResource(position.getBackground())
         }
     }
 
-    class AmountViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class AmountViewHolder(private val binding: ViewHolderAmountBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(fiatAmount: String?, coinAmount: ColoredValue, position: ListPosition) {
-            fiatTextView.text = fiatAmount
-            coinTextView.text = coinAmount.value
+            binding.fiatTextView.text = fiatAmount
+            binding.coinTextView.text = coinAmount.value
 
-            coinTextView.setTextColor(containerView.context.getColor(coinAmount.color))
+            binding.coinTextView.setTextColor(binding.wrapper.context.getColor(coinAmount.color))
 
-            backgroundView.setBackgroundResource(position.getBackground())
+            binding.backgroundView.setBackgroundResource(position.getBackground())
         }
 
-        companion object {
-            fun create(parent: ViewGroup) = AmountViewHolder(inflate(parent, R.layout.view_holder_amount, false))
-        }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import androidx.compose.foundation.layout.Arrangement
@@ -16,19 +17,21 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ViewInputWithButtonsBinding
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.swap.settings.IVerifiedInputViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import kotlinx.android.synthetic.main.view_input_with_buttons.view.*
-import kotlinx.android.synthetic.main.view_input_with_buttons.view.title
 
 class InputWithButtonsView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    private val binding =
+        ViewInputWithButtonsBinding.inflate(LayoutInflater.from(context), this)
 
     private var onTextChangeCallback: ((old: String?, new: String?) -> Unit)? = null
     private var buttons: List<Button> = emptyList()
@@ -48,13 +51,11 @@ class InputWithButtonsView @JvmOverloads constructor(
     }
 
     init {
-        inflate(context, R.layout.view_input_with_buttons, this)
-
         val ta = context.obtainStyledAttributes(attrs, R.styleable.InputWithButtonsView)
         try {
-            title.text = ta.getString(R.styleable.InputWithButtonsView_title)
-            description.text = ta.getString(R.styleable.InputWithButtonsView_description)
-            input.inputType = ta.getInt(
+            binding.title.text = ta.getString(R.styleable.InputWithButtonsView_title)
+            binding.description.text = ta.getString(R.styleable.InputWithButtonsView_description)
+            binding.input.inputType = ta.getInt(
                 R.styleable.InputWithButtonsView_android_inputType,
                 EditorInfo.TYPE_TEXT_VARIATION_NORMAL
             )
@@ -62,17 +63,17 @@ class InputWithButtonsView @JvmOverloads constructor(
             ta.recycle()
         }
 
-        input.addTextChangedListener(textWatcher)
+        binding.input.addTextChangedListener(textWatcher)
     }
 
     private fun updateButtons() {
-        actionsCompose.setContent {
+        binding.actionsCompose.setContent {
             ComposeAppTheme {
                 Row(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (input.text.isEmpty()) {
+                    if (binding.input.text.isEmpty()) {
                         buttons.forEach { button ->
                             ButtonSecondaryDefault(
                                 modifier = Modifier.padding(end = 8.dp),
@@ -85,7 +86,7 @@ class InputWithButtonsView @JvmOverloads constructor(
                             modifier = Modifier.padding(end = 8.dp),
                             icon = R.drawable.ic_delete_20,
                             onClick = {
-                                input.text = null
+                                binding.input.text = null
                             }
                         )
                     }
@@ -95,7 +96,7 @@ class InputWithButtonsView @JvmOverloads constructor(
     }
 
     fun setText(text: String?, skipChangeEvent: Boolean = true, shakeAnimate: Boolean = false) {
-        input.apply {
+        binding.input.apply {
             if (skipChangeEvent) {
                 removeTextChangedListener(textWatcher)
             }
@@ -119,7 +120,7 @@ class InputWithButtonsView @JvmOverloads constructor(
     }
 
     fun setHint(text: String?) {
-        input.hint = text
+        binding.input.hint = text
     }
 
     fun bind(buttons: List<Button>) {
@@ -128,20 +129,20 @@ class InputWithButtonsView @JvmOverloads constructor(
     }
 
     private fun setCaution(caution: Caution?) {
-        error.text = caution?.text
-        error.isVisible = !caution?.text.isNullOrEmpty()
+        binding.error.text = caution?.text
+        binding.error.isVisible = !caution?.text.isNullOrEmpty()
 
         when (caution?.type) {
             Caution.Type.Error -> {
-                error.setTextColor(context.getColor(R.color.lucian))
-                inputBackground.hasError = true
+                binding.error.setTextColor(context.getColor(R.color.lucian))
+                binding.inputBackground.hasError = true
             }
             Caution.Type.Warning -> {
-                error.setTextColor(context.getColor(R.color.jacob))
-                inputBackground.hasWarning = true
+                binding.error.setTextColor(context.getColor(R.color.jacob))
+                binding.inputBackground.hasWarning = true
             }
             null -> {
-                inputBackground.clearStates()
+                binding.inputBackground.clearStates()
             }
         }
     }
@@ -151,9 +152,9 @@ class InputWithButtonsView @JvmOverloads constructor(
     }
 
     fun setViewModel(viewModel: IVerifiedInputViewModel, lifecycleOwner: LifecycleOwner) {
-        input.maxLines = viewModel.inputFieldMaximumNumberOfLines
+        binding.input.maxLines = viewModel.inputFieldMaximumNumberOfLines
         if (!viewModel.inputFieldCanEdit) {
-            input.keyListener = null
+            binding.input.keyListener = null
         }
         viewModel.setTextLiveData.observe(lifecycleOwner, {
             setText(it)
