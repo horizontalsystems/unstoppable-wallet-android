@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.Blockchain.*
 import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
 import io.horizontalsystems.bankwallet.modules.market.priceChangeValue
 import io.horizontalsystems.core.ICurrencyManager
@@ -67,7 +66,7 @@ class MarketAdvancedSearchService(
 
             refreshCounter()
         }
-    var filterBlockchains: List<MarketAdvancedSearchModule.Blockchain>? = null
+    var filterBlockchains: List<MarketAdvancedSearchModule.Blockchain> = listOf()
         set(value) {
             field = value
 
@@ -221,33 +220,11 @@ class MarketAdvancedSearchService(
     }
 
     private fun inBlockchain(coinTypes: List<CoinType>?): Boolean {
-        if (filterBlockchains?.isEmpty() == true) {
-            return true
-        }
+        if (filterBlockchains.isEmpty()) return true
 
         coinTypes?.forEach { coinType ->
-            filterBlockchains?.forEach { blockchain ->
-                when {
-                    blockchain == Ethereum && coinType == CoinType.Ethereum ||
-                            blockchain == Ethereum && coinType is CoinType.Erc20 ||
-                            blockchain == BinanceSmartChain && coinType is CoinType.BinanceSmartChain ||
-                            blockchain == BinanceSmartChain && coinType is CoinType.Bep20 ||
-                            blockchain == Binance && coinType is CoinType.Bep2 ||
-                            blockchain == Arbitrum && coinType is CoinType.ArbitrumOne ||
-                            blockchain == Avalanche && coinType is CoinType.Avalanche ||
-                            blockchain == Fantom && coinType is CoinType.Fantom ||
-                            blockchain == Harmony && coinType is CoinType.HarmonyShard0 ||
-                            blockchain == Huobi && coinType is CoinType.HuobiToken ||
-                            blockchain == Iotex && coinType is CoinType.Iotex ||
-                            blockchain == Moonriver && coinType is CoinType.Moonriver ||
-                            blockchain == Okex && coinType is CoinType.OkexChain ||
-                            blockchain == Polygon && coinType is CoinType.PolygonPos ||
-                            blockchain == Solana && coinType is CoinType.Solana ||
-                            blockchain == Sora && coinType is CoinType.Sora ||
-                            blockchain == Tomochain && coinType is CoinType.Tomochain ||
-                            blockchain == Xdai && coinType is CoinType.Xdai -> return true
-                    else -> {}
-                }
+            if (filterBlockchains.any { it.contains(coinType) }) {
+                return true
             }
         }
 
