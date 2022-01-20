@@ -50,10 +50,7 @@ import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.core.shortenedAddress
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.databinding.FragmentBalanceBinding
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
@@ -105,11 +102,9 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbarTitle.setOnSingleClickListener {
-            ManageAccountsModule.start(
-                this,
+            findNavController().slideFromBottom(
                 R.id.mainFragment_to_manageKeysFragment,
-                navOptionsFromBottom(),
-                ManageAccountsModule.Mode.Switcher
+                ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
             )
         }
 
@@ -587,10 +582,9 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         when (viewItem.wallet.coinType) {
             CoinType.Ethereum, is CoinType.Erc20,
             CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
-                findNavController().navigate(
+                findNavController().slideFromBottom(
                     R.id.mainFragment_to_sendEvmFragment,
-                    bundleOf(SendEvmModule.walletKey to viewItem.wallet),
-                    navOptionsFromBottom()
+                    bundleOf(SendEvmModule.walletKey to viewItem.wallet)
                 )
             }
             else -> {
@@ -601,10 +595,9 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     private fun onReceiveClicked(viewItem: BalanceViewItem) {
         try {
-            findNavController().navigate(
+            findNavController().slideFromBottom(
                 R.id.mainFragment_to_receiveFragment,
-                bundleOf(ReceiveFragment.WALLET_KEY to viewModel.getWalletForReceive(viewItem)),
-                navOptionsFromBottom()
+                bundleOf(ReceiveFragment.WALLET_KEY to viewModel.getWalletForReceive(viewItem))
             )
         } catch (e: BalanceViewModel.BackupRequiredError) {
             BackupRequiredDialog.show(childFragmentManager, e.account)
@@ -612,7 +605,10 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     }
 
     private fun onSwapClicked(viewItem: BalanceViewItem) {
-        SwapMainModule.start(this, navOptionsFromBottom(), viewItem.wallet.platformCoin)
+        findNavController().slideFromBottom(
+            R.id.mainFragment_to_swapFragment,
+            SwapMainModule.prepareParams(viewItem.wallet.platformCoin)
+        )
     }
 
     private fun onChartClicked(viewItem: BalanceViewItem) {

@@ -3,14 +3,11 @@ package io.horizontalsystems.bankwallet.modules.swap
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
 import androidx.savedstate.SavedStateRegistryOwner
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
@@ -25,7 +22,6 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFra
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapFragment
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
@@ -40,13 +36,7 @@ object SwapMainModule {
 
     private const val coinFromKey = "coinFromKey"
 
-    fun start(fragment: Fragment, navOptions: NavOptions, coinFrom: PlatformCoin) {
-        fragment.findNavController().navigate(
-            R.id.mainFragment_to_swapFragment,
-            bundleOf(coinFromKey to coinFrom),
-            navOptions
-        )
-    }
+    fun prepareParams(coinFrom: PlatformCoin) = bundleOf(coinFromKey to coinFrom)
 
     interface ISwapProvider : Parcelable {
         val id: String

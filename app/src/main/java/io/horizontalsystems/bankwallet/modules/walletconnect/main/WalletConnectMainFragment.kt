@@ -19,6 +19,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectMainBinding
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
@@ -197,19 +198,15 @@ class WalletConnectMainFragment : BaseFragment() {
                 is WalletConnectSendEthereumTransactionRequest -> {
                     baseViewModel.sharedSendEthereumTransactionRequest = it
 
-                    findNavController().navigate(
-                        R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment,
-                        null,
-                        navOptionsFromBottom()
+                    findNavController().slideFromBottom(
+                        R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment
                     )
                 }
                 is WalletConnectSignMessageRequest -> {
                     baseViewModel.sharedSignMessageRequest = it
 
-                    findNavController().navigate(
-                        R.id.walletConnectMainFragment_to_walletConnectSignMessageRequestFragment,
-                        null,
-                        navOptionsFromBottom()
+                    findNavController().slideFromBottom(
+                        R.id.walletConnectMainFragment_to_walletConnectSignMessageRequestFragment
                     )
                 }
             }

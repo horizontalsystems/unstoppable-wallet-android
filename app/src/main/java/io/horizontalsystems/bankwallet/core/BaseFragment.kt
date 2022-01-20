@@ -36,15 +36,6 @@ abstract class BaseFragment(@LayoutRes layoutResId: Int = 0) : Fragment(layoutRe
         }
     }
 
-    protected fun navOptionsFromBottom(): NavOptions {
-        return NavOptions.Builder()
-                .setEnterAnim(R.anim.slide_from_bottom)
-                .setExitAnim(R.anim.slide_to_top)
-                .setPopEnterAnim(R.anim.slide_from_top)
-                .setPopExitAnim(R.anim.slide_to_bottom)
-                .build()
-    }
-
     protected fun allowScreenshot() {
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
@@ -88,6 +79,17 @@ fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
         .setExitAnim(R.anim.slide_to_left)
         .setPopEnterAnim(R.anim.slide_from_left)
         .setPopExitAnim(R.anim.slide_to_right)
+        .build()
+
+    navigate(resId, args, navOptions)
+}
+
+fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
+    val navOptions = NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_from_bottom)
+        .setExitAnim(R.anim.slide_to_top)
+        .setPopEnterAnim(R.anim.slide_from_top)
+        .setPopExitAnim(R.anim.slide_to_bottom)
         .build()
 
     navigate(resId, args, navOptions)

@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.databinding.FragmentMainBinding
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingModule
@@ -107,10 +108,9 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
         })
 
         viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(
+            findNavController().slideFromBottom(
                 R.id.mainFragment_to_releaseNotesFragment,
-                bundleOf(ReleaseNotesFragment.showAsClosablePopupKey to true),
-                navOptionsFromBottom()
+                bundleOf(ReleaseNotesFragment.showAsClosablePopupKey to true)
             )
         })
 

@@ -4,12 +4,9 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
 object ManageAccountsModule {
@@ -23,9 +20,7 @@ object ManageAccountsModule {
         }
     }
 
-    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, mode: Mode) {
-        fragment.findNavController().navigate(navigateTo, bundleOf(MODE to mode), navOptions)
-    }
+    fun prepareParams(mode: Mode) = bundleOf(MODE to mode)
 
     data class AccountViewItem(
         val accountId: String,
