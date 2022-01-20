@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -109,7 +110,7 @@ fun MarketSearchScreen(
 ) {
 
     ComposeAppTheme {
-        Column {
+        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             SearchView(
                 onSearchTextChange = {
                     onSearchQueryChange.invoke(it)

@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.setRemoteImage
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.databinding.ViewCardSwapBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment
@@ -51,8 +52,8 @@ class SwapCoinCardView @JvmOverloads constructor(
         observe(viewModel, lifecycleOwner)
 
         binding.selectedToken.setOnSingleClickListener {
-            val params = SelectSwapCoinDialogFragment.params(uuid, viewModel.dex)
-            fragment.findNavController().navigate(R.id.selectSwapCoinDialog, params)
+            val params = SelectSwapCoinDialogFragment.prepareParams(uuid, viewModel.dex)
+            fragment.findNavController().slideFromBottom(R.id.selectSwapCoinDialog, params)
         }
 
         binding.amountInput.onTapSecondaryCallback = { viewModel.onSwitch() }

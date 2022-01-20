@@ -13,6 +13,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentTransactionInfoBinding
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoAdapter
@@ -128,7 +129,7 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
             )
             val infoParameters = InfoParameters(title, description)
 
-            findNavController().navigate(R.id.infoFragment, InfoFragment.arguments(infoParameters))
+            findNavController().slideFromBottom(R.id.infoFragment, InfoFragment.prepareParams(infoParameters))
         }
     }
 
@@ -139,10 +140,7 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
             val infoParameters =
                 InfoParameters(title, description, transactionHash, conflictingHash)
 
-            findNavController().navigate(
-                R.id.infoFragment,
-                InfoFragment.arguments(infoParameters)
-            )
+            findNavController().slideFromBottom(R.id.infoFragment, InfoFragment.prepareParams(infoParameters))
         }
     }
 
@@ -151,7 +149,7 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
     }
 
     override fun onClickStatusInfo() {
-        findNavController().navigate(R.id.statusInfoDialog)
+        findNavController().slideFromBottom(R.id.statusInfoDialog)
     }
 
     override fun onOptionButtonClick(optionType: TransactionInfoOption.Type) {

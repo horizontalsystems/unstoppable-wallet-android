@@ -56,11 +56,7 @@
             app:destination="@id/metricsPageFragment" />
         <action
             android:id="@+id/mainFragment_to_swapFragment"
-            app:destination="@id/swapFragment"
-            app:enterAnim="@anim/slide_from_bottom_long"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_to_bottom_long" />
+            app:destination="@id/swapFragment" />
         <action
             android:id="@+id/mainFragment_to_walletConnect"
             app:destination="@id/wallet_connect_graph" />
@@ -347,11 +343,7 @@
         tools:layout="@layout/fragment_swap">
         <action
             android:id="@+id/swapFragment_to_swapApproveFragment"
-            app:destination="@id/swapApproveFragment"
-            app:enterAnim="@anim/slide_from_bottom_long"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_to_bottom_long" />
+            app:destination="@id/swapApproveFragment" />
         <action
             android:id="@+id/swapFragment_to_uniswapConfirmationFragment"
             app:destination="@id/uniswapConfirmationFragment" />
@@ -360,11 +352,7 @@
             app:destination="@id/oneInchConfirmationFragment" />
         <action
             android:id="@+id/swapFragment_to_swapSettingsMainFragment"
-            app:destination="@id/swapSettingsMainFragment"
-            app:enterAnim="@anim/slide_from_bottom_long"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_to_bottom_long" />
+            app:destination="@id/swapSettingsMainFragment" />
     </fragment>
     <fragment
         android:id="@+id/swapApproveFragment"
@@ -407,11 +395,7 @@
     <fragment
         android:id="@+id/swapSettingsMainFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsMainFragment"
-        android:label="SwapTradeOptionsFragment"
-        app:enterAnim="@anim/slide_from_bottom"
-        app:exitAnim="@android:anim/fade_out"
-        app:popEnterAnim="@android:anim/fade_in"
-        app:popExitAnim="@anim/slide_to_bottom">
+        android:label="SwapTradeOptionsFragment">
         <action
             android:id="@+id/swapSettingsMainFragment_to_swapInfoFragment"
             app:destination="@id/swapInfoFragment" />

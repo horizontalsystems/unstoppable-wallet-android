@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseDialogFragment
@@ -83,9 +84,7 @@ class InfoFragment : BaseDialogFragment() {
     companion object {
         const val INFO_PARAMETERS_KEY = "info_parameters_key"
 
-        fun arguments(infoParameters: InfoParameters) = Bundle(1).apply {
-            putParcelable(INFO_PARAMETERS_KEY, infoParameters)
-        }
+        fun prepareParams(infoParameters: InfoParameters) = bundleOf(INFO_PARAMETERS_KEY to infoParameters)
     }
 }
 

@@ -20,8 +20,8 @@ fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
 fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
     val navOptions = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_bottom)
-        .setExitAnim(R.anim.slide_to_top)
-        .setPopEnterAnim(R.anim.slide_from_top)
+        .setExitAnim(android.R.anim.fade_out)
+        .setPopEnterAnim(android.R.anim.fade_in)
         .setPopExitAnim(R.anim.slide_to_bottom)
         .build()
 

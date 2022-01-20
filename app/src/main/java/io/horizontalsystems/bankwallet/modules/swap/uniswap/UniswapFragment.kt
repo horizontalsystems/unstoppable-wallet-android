@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentUniswapBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
@@ -149,10 +150,9 @@ class UniswapFragment : SwapBaseFragment() {
         })
 
         uniswapViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
-            SwapApproveModule.start(
-                this,
+            findNavController().slideFromBottom(
                 R.id.swapFragment_to_swapApproveFragment,
-                approveData
+                SwapApproveModule.prepareParams(approveData)
             )
         })
 
