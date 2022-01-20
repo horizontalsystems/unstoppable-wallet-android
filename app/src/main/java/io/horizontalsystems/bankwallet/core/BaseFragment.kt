@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.SpannableString
@@ -9,11 +8,8 @@ import android.text.style.ForegroundColorSpan
 import android.view.MenuItem
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.AlertDialogKeyboardFragment
 
@@ -71,26 +67,4 @@ abstract class BaseFragment(@LayoutRes layoutResId: Int = 0) : Fragment(layoutRe
                     }
                 }).show(parentFragmentManager, "custom_keyboard_alert")
     }
-}
-
-fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
-    val navOptions = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_from_right)
-        .setExitAnim(R.anim.slide_to_left)
-        .setPopEnterAnim(R.anim.slide_from_left)
-        .setPopExitAnim(R.anim.slide_to_right)
-        .build()
-
-    navigate(resId, args, navOptions)
-}
-
-fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
-    val navOptions = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_from_bottom)
-        .setExitAnim(R.anim.slide_to_top)
-        .setPopEnterAnim(R.anim.slide_from_top)
-        .setPopExitAnim(R.anim.slide_to_bottom)
-        .build()
-
-    navigate(resId, args, navOptions)
 }
