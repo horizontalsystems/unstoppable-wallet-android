@@ -108,6 +108,7 @@
     <string name="Market_Search">Search</string>
     <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
     <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
+    <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
@@ -207,6 +208,7 @@
     <string name="Market_Filter_Volume">Trading Volume</string>
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
+    <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">Outperformed BTC</string>
     <string name="Market_Filter_OutperformedEth">Outperformed ETH</string>
     <string name="Market_Filter_OutperformedBnb">Outperformed BNB</string>

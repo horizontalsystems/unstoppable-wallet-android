@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.databinding.FragmentMarketSearchFilterBin
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetMarketSearchFilterSelectDialog
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetMarketSearchFilterSelectMultipleDialog
 import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -118,6 +119,22 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         marketAdvancedSearchViewModel.priceChangeViewItemLiveData.observe(viewLifecycleOwner) {
             binding.filterPriceChange.setValueColored(it.title, it.color)
         }
+
+        binding.filterBlockchains.setOnSingleClickListener {
+            showMultipleSelectorDialog(
+                title = R.string.Market_Filter_Blockchains,
+                headerIcon = R.drawable.ic_blocks,
+                items = marketAdvancedSearchViewModel.blockchainOptions,
+                selectedIndexes = marketAdvancedSearchViewModel.selectedBlockchainIndexes,
+            ) { selectedIndexes ->
+                marketAdvancedSearchViewModel.selectedBlockchainIndexes = selectedIndexes
+            }
+        }
+
+        marketAdvancedSearchViewModel.blockchainsViewItemLiveData.observe(viewLifecycleOwner) {
+            binding.filterBlockchains.setValueColored(it.title, it.color)
+        }
+
         binding.filterPriceChange.setOnSingleClickListener {
             showSelectorDialog(
                 title = R.string.Market_Filter_PriceChange,
@@ -228,6 +245,26 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         dialog.items = items
         dialog.selectedItem = selectedItem
         dialog.onSelectListener = onSelectListener
+
+        dialog.show(childFragmentManager, "selector_dialog")
+    }
+
+    private fun <ItemClass> showMultipleSelectorDialog(
+        title: Int,
+        subtitleText: String = "---------",
+        headerIcon: Int,
+        items: List<ViewItemWrapper<ItemClass>>,
+        selectedIndexes: List<Int>,
+        onSelectListener: (List<Int>) -> Unit
+    ) {
+        val dialog = BottomSheetMarketSearchFilterSelectMultipleDialog(
+            titleText = getString(title),
+            subtitleText = subtitleText,
+            headerIcon = headerIcon,
+            items = items,
+            selectedIndexes = selectedIndexes,
+            onCloseListener = onSelectListener
+        )
 
         dialog.show(childFragmentManager, "selector_dialog")
     }
