@@ -74,19 +74,14 @@ class MarketSearchFragment : BaseFragment() {
                     onCategoryClick = { viewItemType ->
                         when (viewItemType) {
                             MarketSearchModule.DiscoveryItem.TopCoins -> {
-                                findNavController().navigate(
-                                    R.id.marketSearchFragment_to_marketTopCoinsFragment,
-                                    null,
-                                    navOptionsFromBottom()
+                                findNavController().slideFromBottom(
+                                    R.id.marketSearchFragment_to_marketTopCoinsFragment
                                 )
                             }
                             is MarketSearchModule.DiscoveryItem.Category -> {
-                                val args =
-                                    MarketCategoryFragment.prepareParams(viewItemType.coinCategory)
-                                findNavController().navigate(
+                                findNavController().slideFromBottom(
                                     R.id.marketCategoryFragment,
-                                    args,
-                                    navOptionsFromBottom()
+                                    MarketCategoryFragment.prepareParams(viewItemType.coinCategory)
                                 )
                             }
                         }

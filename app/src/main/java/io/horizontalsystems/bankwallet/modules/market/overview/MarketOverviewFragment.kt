@@ -25,6 +25,7 @@ import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
@@ -73,13 +74,11 @@ class MarketOverviewFragment : BaseFragment() {
 
     private fun openMetricsPage(metricsType: MetricsType) {
         if (metricsType == MetricsType.TvlInDefi) {
-            findNavController().navigate(R.id.tvlFragment, null, navOptionsFromBottom())
+            findNavController().slideFromBottom(R.id.tvlFragment)
         } else {
-            val arguments = MetricsPageFragment.prepareParams(metricsType)
-            findNavController().navigate(
+            findNavController().slideFromBottom(
                 R.id.mainFragment_to_metricPageFragment,
-                arguments,
-                navOptionsFromBottom()
+                MetricsPageFragment.prepareParams(metricsType)
             )
         }
     }
@@ -128,10 +127,9 @@ class MarketOverviewFragment : BaseFragment() {
                                     marketField
                                 )
 
-                                findNavController().navigate(
+                                findNavController().slideFromBottom(
                                     R.id.marketTopCoinsFragment,
-                                    args,
-                                    navOptionsFromBottom()
+                                    args
                                 )
                             },
                             onSelectTopMarket = { topMarket, listType ->

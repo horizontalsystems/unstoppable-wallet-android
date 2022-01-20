@@ -26,6 +26,7 @@ import androidx.navigation.navGraphViewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
@@ -88,7 +89,7 @@ class CoinDetailsFragment : BaseFragment() {
     }
 
     private fun openTvlInDefi() {
-        findNavController().navigate(R.id.tvlFragment, null, navOptionsFromBottom())
+        findNavController().slideFromBottom(R.id.tvlFragment)
     }
 
     private fun openCoinTreasuries() {
@@ -113,7 +114,7 @@ class CoinDetailsFragment : BaseFragment() {
 
     private fun openSecurityInfo(type: SecurityType) {
         val arguments = CoinSecurityInfoFragment.prepareParams(type.title, viewModel.securityInfoViewItems(type))
-        findNavController().navigate(R.id.coinSecurityInfoFragment, arguments, navOptionsFromBottom())
+        findNavController().slideFromBottom(R.id.coinSecurityInfoFragment, arguments)
     }
 
     @Composable
