@@ -85,6 +85,27 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="38dp"
                 android:layout_marginEnd="16dp"
+                android:text="@string/Market_FilterSection_NetworkParameters"
+                android:textColor="@color/grey" />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
+                android:id="@+id/filterBlockchains"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_single"
+                app:title="@string/Market_Filter_Blockchains"
+                app:value="@string/Any" />
+
+            <TextView
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="16dp"
                 android:text="@string/Market_FilterSection_PriceParameters"
                 android:textColor="@color/grey" />
 

@@ -17,6 +17,25 @@ object MarketAdvancedSearchModule {
         }
 
     }
+
+    enum class Blockchain(val value: String) {
+        Ethereum("Ethereum"),
+        BinanceSmartChain("Binance Smart Chain"),
+        Binance("Binance"),
+        Arbitrum("Arbitrum"),
+        Avalanche("Avalanche"),
+        Fantom("Fantom"),
+        Harmony("Harmony"),
+        Huobi("Huobi"),
+        Iotex("Iotex"),
+        Moonriver("Moonriver"),
+        Okex("Okex"),
+        Polygon("Polygon"),
+        Solana("Solana"),
+        Sora("Sora"),
+        Tomochain("Tomochain"),
+        Xdai("Xdai"),
+    }
 }
 
 enum class CoinList(val itemsCount: Int, @StringRes val titleResId: Int) {
