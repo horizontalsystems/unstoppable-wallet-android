@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.databinding.FragmentSendEvmBinding
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -135,11 +136,9 @@ class SendEvmFragment : BaseFragment() {
         })
 
         viewModel.proceedLiveEvent.observe(viewLifecycleOwner, { sendData ->
-            SendEvmConfirmationModule.start(
-                this,
+            findNavController().slideFromRight(
                 R.id.sendEvmFragment_to_sendEvmConfirmationFragment,
-                navOptions(),
-                sendData
+                SendEvmConfirmationModule.prepareParams(sendData)
             )
         })
 

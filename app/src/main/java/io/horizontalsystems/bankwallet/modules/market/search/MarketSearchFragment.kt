@@ -28,10 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.typeLabel
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
@@ -66,15 +63,13 @@ class MarketSearchFragment : BaseFragment() {
                     screenState = screenState,
                     onBackButtonClick = { findNavController().popBackStack() },
                     onFilterButtonClick = {
-                        findNavController().navigate(
-                            R.id.marketSearchFragment_to_marketAdvancedSearchFragment,
-                            null,
-                            navOptions()
+                        findNavController().slideFromRight(
+                            R.id.marketSearchFragment_to_marketAdvancedSearchFragment
                         )
                     },
                     onCoinClick = { coin ->
                         val arguments = CoinFragment.prepareParams(coin.uid)
-                        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+                        findNavController().slideFromRight(R.id.coinFragment, arguments)
                     },
                     onCategoryClick = { viewItemType ->
                         when (viewItemType) {

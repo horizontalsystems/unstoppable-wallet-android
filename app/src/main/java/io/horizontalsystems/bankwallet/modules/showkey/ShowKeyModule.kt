@@ -3,14 +3,11 @@ package io.horizontalsystems.bankwallet.modules.showkey
 import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
 object ShowKeyModule {
@@ -24,9 +21,7 @@ object ShowKeyModule {
         }
     }
 
-    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, account: Account) {
-        fragment.findNavController().navigate(navigateTo, bundleOf(ACCOUNT to account), navOptions)
-    }
+    fun prepareParams(account: Account) = bundleOf(ACCOUNT to account)
 
     enum class ShowKeyTab(@StringRes val title: Int) {
         MnemonicPhrase(R.string.ShowKey_TabMnemonicPhrase),

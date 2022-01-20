@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentSettingsSecurityBinding
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
@@ -98,34 +99,29 @@ class SecuritySettingsFragment : BaseFragment() {
         //  Router
 
         viewModel.openEditPinLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(
+            findNavController().slideFromRight(
                 R.id.securitySettingsFragment_to_pinFragment,
-                PinModule.forEditPin(),
-                navOptions()
+                PinModule.forEditPin()
             )
         })
 
         viewModel.openSetPinLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(
+            findNavController().slideFromRight(
                 R.id.securitySettingsFragment_to_pinFragment,
-                PinModule.forSetPin(),
-                navOptions()
+                PinModule.forSetPin()
             )
         })
 
         viewModel.openUnlockPinLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(
+            findNavController().slideFromRight(
                 R.id.securitySettingsFragment_to_pinFragment,
-                PinModule.forUnlock(),
-                navOptions()
+                PinModule.forUnlock()
             )
         })
 
         viewModel.openPrivacySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(
-                R.id.securitySettingsFragment_to_privacySettingsFragment,
-                null,
-                navOptions()
+            findNavController().slideFromRight(
+                R.id.securitySettingsFragment_to_privacySettingsFragment
             )
         })
 

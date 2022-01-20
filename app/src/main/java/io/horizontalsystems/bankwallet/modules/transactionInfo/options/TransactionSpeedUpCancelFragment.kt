@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentTransactionSpeedupCancelBinding
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
@@ -126,10 +127,8 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
             viewLifecycleOwner,
             parentFragmentManager,
             showSpeedInfoListener = {
-                findNavController().navigate(
-                    R.id.transactionSpeedUpCancelFragment_to_feeSpeedInfo,
-                    null,
-                    navOptions()
+                findNavController().slideFromRight(
+                    R.id.transactionSpeedUpCancelFragment_to_feeSpeedInfo
                 )
             }
         )

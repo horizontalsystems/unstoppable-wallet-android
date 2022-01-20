@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
@@ -68,7 +69,7 @@ class MetricsPageFragment : BaseFragment() {
     private fun onCoinClick(coinUid: String) {
         val arguments = CoinFragment.prepareParams(coinUid)
 
-        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinFragment, arguments)
     }
 
     @Composable

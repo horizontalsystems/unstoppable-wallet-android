@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentNoCoinsBinding
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -59,7 +60,7 @@ class BalanceNoCoinsFragment(private val accountName: String?) : BaseFragment() 
                     modifier = Modifier.padding(start = 24.dp, end = 24.dp),
                     title = getString(R.string.Balance_AddCoins),
                     onClick = {
-                        findNavController().navigate(R.id.manageWalletsFragment, null, navOptions())
+                        findNavController().slideFromRight(R.id.manageWalletsFragment)
                     }
                 )
             }

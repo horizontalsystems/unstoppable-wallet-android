@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentExperimentalFeaturesBinding
 import io.horizontalsystems.core.findNavController
 
@@ -43,10 +44,8 @@ class ExperimentalFeaturesFragment : BaseFragment() {
         val router = presenter.router as ExperimentalFeaturesRouter
 
         router.showBitcoinHodlingLiveEvent.observe(this, Observer {
-            findNavController().navigate(
-                R.id.experimentalFeaturesFragment_to_bitcoinHodlingFragment,
-                null,
-                navOptions()
+            findNavController().slideFromRight(
+                R.id.experimentalFeaturesFragment_to_bitcoinHodlingFragment
             )
         })
 

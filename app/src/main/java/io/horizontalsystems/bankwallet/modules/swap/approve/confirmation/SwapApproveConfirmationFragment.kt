@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationApproveSwapBinding
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
@@ -133,10 +134,8 @@ class SwapApproveConfirmationFragment : BaseFragment() {
             viewLifecycleOwner,
             parentFragmentManager,
             showSpeedInfoListener = {
-                findNavController().navigate(
-                    R.id.swapApproveConfirmationFragment_to_feeSpeedInfo,
-                    null,
-                    navOptions()
+                findNavController().slideFromRight(
+                    R.id.swapApproveConfirmationFragment_to_feeSpeedInfo
                 )
             }
         )

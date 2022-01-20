@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.blockchainLogo
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentSettingsPrivacyBinding
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
@@ -92,10 +93,8 @@ class PrivacySettingsFragment :
 
         // IView
         viewModel.showPrivacySettingsInfo.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(
-                R.id.privacySettingsFragment_to_privacySettingsInfoFragment,
-                null,
-                navOptions()
+            findNavController().slideFromRight(
+                R.id.privacySettingsFragment_to_privacySettingsInfoFragment
             )
         })
 

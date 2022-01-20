@@ -19,6 +19,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
@@ -76,7 +77,7 @@ class MarketCategoryFragment : BaseFragment() {
     private fun onCoinClick(coinUid: String) {
         val arguments = CoinFragment.prepareParams(coinUid)
 
-        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinFragment, arguments)
     }
 
     companion object {

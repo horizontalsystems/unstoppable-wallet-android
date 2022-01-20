@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentGuidesBinding
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategory
@@ -67,10 +68,9 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
             MarkdownFragment.markdownUrlKey to guide.fileUrl,
             MarkdownFragment.handleRelativeUrlKey to true
         )
-        findNavController().navigate(
+        findNavController().slideFromRight(
             R.id.academyFragment_to_markdownFragment,
-            arguments,
-            navOptions()
+            arguments
         )
     }
 

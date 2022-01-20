@@ -4,6 +4,7 @@ import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -33,7 +34,7 @@ class UniswapConfirmationFragment : BaseSwapConfirmationFragment() {
     override val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 
     override fun navigateToFeeInfo() {
-        findNavController().navigate(R.id.uniswapConfirmationFragment_to_feeSpeedInfo, null, navOptions())
+        findNavController().slideFromRight(R.id.uniswapConfirmationFragment_to_feeSpeedInfo)
     }
 
 }

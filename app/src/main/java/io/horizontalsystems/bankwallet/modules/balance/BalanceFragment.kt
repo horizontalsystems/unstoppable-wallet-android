@@ -53,6 +53,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.shortenedAddress
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentBalanceBinding
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
@@ -171,8 +172,8 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                             ButtonSecondaryCircle(
                                 icon = R.drawable.ic_manage_2,
                                 onClick = {
-                                    findNavController().navigate(
-                                        R.id.mainFragment_to_manageWalletsFragment, null, navOptions()
+                                    findNavController().slideFromRight(
+                                        R.id.mainFragment_to_manageWalletsFragment
                                     )
                                 }
                             )
@@ -202,7 +203,10 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     //  BackupRequiredDialog Listener
 
     override fun onClickBackup(account: Account) {
-        BackupKeyModule.start(this, R.id.mainFragment_to_backupKeyFragment, navOptions(), account)
+        findNavController().slideFromRight(
+            R.id.mainFragment_to_backupKeyFragment,
+            BackupKeyModule.prepareParams(account)
+        )
     }
 
     private fun setWallets() {
@@ -615,7 +619,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         val platformCoin = viewItem.wallet.platformCoin
         val arguments = CoinFragment.prepareParams(platformCoin.coin.uid)
 
-        findNavController().navigate(R.id.mainFragment_to_coinFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.mainFragment_to_coinFragment, arguments)
     }
 
     private fun onSyncErrorClicked(viewItem: BalanceViewItem) {
@@ -676,18 +680,15 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         }
 
         viewModel.openPrivacySettingsLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(
-                R.id.mainFragment_to_privacySettingsFragment,
-                null,
-                navOptions()
+            findNavController().slideFromRight(
+                R.id.mainFragment_to_privacySettingsFragment
             )
         })
 
         viewModel.openEvmNetworkSettingsLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(
+            findNavController().slideFromRight(
                 R.id.evmNetworkFragment,
-                EvmNetworkModule.args(it.first, it.second),
-                navOptions()
+                EvmNetworkModule.args(it.first, it.second)
             )
         })
     }

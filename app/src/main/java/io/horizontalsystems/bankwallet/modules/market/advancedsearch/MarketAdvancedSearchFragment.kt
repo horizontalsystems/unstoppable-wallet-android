@@ -12,6 +12,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentMarketSearchFilterBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
@@ -216,10 +217,8 @@ class MarketAdvancedSearchFragment : BaseFragment() {
                     modifier = Modifier.padding(start = 16.dp, bottom = 24.dp, end = 16.dp),
                     title = title,
                     onClick = {
-                        findNavController().navigate(
-                            R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults,
-                            null,
-                            navOptions()
+                        findNavController().slideFromRight(
+                            R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults
                         )
                     },
                     showSpinner = showSpinner,

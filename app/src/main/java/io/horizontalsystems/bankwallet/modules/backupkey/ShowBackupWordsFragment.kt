@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentShowBackupWordsBinding
 import io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -47,11 +48,9 @@ class ShowBackupWordsFragment : BaseFragment() {
         }
 
         viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner, { account ->
-            BackupConfirmKeyModule.start(
-                this,
+            findNavController().slideFromRight(
                 R.id.showBackupWordsFragment_to_backupConfirmationKeyFragment,
-                navOptions(),
-                account
+                BackupConfirmKeyModule.prepareParams(account)
             )
         })
 

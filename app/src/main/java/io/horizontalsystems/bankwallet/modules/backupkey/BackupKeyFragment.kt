@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentBackupKeyBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -52,18 +53,15 @@ class BackupKeyFragment : BaseFragment() {
         }
 
         viewModel.showKeyLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(
-                R.id.backupKeyFragment_to_showBackupWordsFragment,
-                null,
-                navOptions()
+            findNavController().slideFromRight(
+                R.id.backupKeyFragment_to_showBackupWordsFragment
             )
         })
 
         viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(
+            findNavController().slideFromRight(
                 R.id.backupKeyFragment_to_pinFragment,
-                PinModule.forUnlock(),
-                navOptions()
+                PinModule.forUnlock()
             )
         })
 

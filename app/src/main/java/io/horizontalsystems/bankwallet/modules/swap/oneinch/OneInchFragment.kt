@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.Fragment1inchBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -26,6 +27,7 @@ import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 
 class OneInchFragment : SwapBaseFragment() {
@@ -154,11 +156,9 @@ class OneInchFragment : SwapBaseFragment() {
 
         oneInchViewModel.openConfirmationLiveEvent()
             .observe(viewLifecycleOwner, { oneInchSwapParameters ->
-                OneInchConfirmationModule.start(
-                    this,
+                findNavController().slideFromRight(
                     R.id.swapFragment_to_oneInchConfirmationFragment,
-                    navOptions(),
-                    oneInchSwapParameters
+                    OneInchConfirmationModule.prepareParams(oneInchSwapParameters)
                 )
             })
 
