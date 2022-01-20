@@ -120,11 +120,9 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
                     binding.actionButton.showAttention(false)
                     binding.actionButton.showTitle(getString(R.string.ManageAccount_RecoveryPhraseShow))
                     binding.actionButton.setOnClickListener {
-                        ShowKeyModule.start(
-                            this,
+                        findNavController().slideFromRight(
                             R.id.manageAccountFragment_to_showKeyFragment,
-                            navOptions(),
-                            viewModel.account
+                            ShowKeyModule.prepareParams(viewModel.account)
                         )
                     }
                 }
@@ -156,19 +154,16 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
     }
 
     private fun openBackupModule(account: Account) {
-        BackupKeyModule.start(
-            this,
+        findNavController().slideFromRight(
             R.id.manageAccountFragment_to_backupKeyFragment,
-            navOptions(),
-            account
+            BackupKeyModule.prepareParams(account)
         )
     }
 
     private fun openNetworkSettings(account: Account) {
-        findNavController().navigate(
+        findNavController().slideFromRight(
             R.id.manageAccountFragment_to_networkSettingsFragment,
-            NetworkSettingsModule.args(account),
-            navOptions()
+            NetworkSettingsModule.prepareParams(account)
         )
     }
 

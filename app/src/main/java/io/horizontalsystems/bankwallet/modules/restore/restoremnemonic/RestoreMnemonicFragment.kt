@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.databinding.FragmentRestoreMnemonicBinding
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment.Companion.ACCOUNT_TYPE_KEY
@@ -86,10 +87,9 @@ class RestoreMnemonicFragment : BaseFragment() {
     private fun observeEvents() {
         viewModel.proceedLiveEvent.observe(viewLifecycleOwner, Observer { accountType ->
             hideKeyboard()
-            findNavController().navigate(
+            findNavController().slideFromRight(
                 R.id.restoreSelectCoinsFragment,
-                bundleOf(ACCOUNT_TYPE_KEY to accountType),
-                navOptions()
+                bundleOf(ACCOUNT_TYPE_KEY to accountType)
             )
         })
 

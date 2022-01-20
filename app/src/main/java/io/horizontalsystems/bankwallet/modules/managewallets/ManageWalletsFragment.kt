@@ -5,6 +5,7 @@ import android.view.View
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
@@ -31,10 +32,8 @@ class ManageWalletsFragment : CoinListBaseFragment() {
             when (item.itemId) {
                 R.id.menuAddToken -> {
                     hideKeyboard()
-                    findNavController().navigate(
-                        R.id.manageWalletsFragment_to_addToken,
-                        null,
-                        navOptions()
+                    findNavController().slideFromRight(
+                        R.id.manageWalletsFragment_to_addToken
                     )
                     true
                 }

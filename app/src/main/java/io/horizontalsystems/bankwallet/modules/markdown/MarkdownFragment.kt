@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentMarkdownBinding
 import io.horizontalsystems.core.findNavController
 
@@ -85,10 +86,9 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
     //  MarkdownContentAdapter listener
 
     override fun onClick(url: String) {
-        findNavController().navigate(
+        findNavController().slideFromRight(
             R.id.markdownFragment_markdownFragment,
-            bundleOf(markdownUrlKey to url),
-            navOptions()
+            bundleOf(markdownUrlKey to url)
         )
     }
 

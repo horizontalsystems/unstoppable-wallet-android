@@ -10,6 +10,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentMarketAdvancedSearchResultsBinding
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketItemsAdapter
@@ -115,6 +116,6 @@ class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView
     override fun onItemClick(marketViewItem: MarketViewItem) {
         val arguments = CoinFragment.prepareParams(marketViewItem.coinUid)
 
-        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinFragment, arguments)
     }
 }

@@ -20,6 +20,7 @@ import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
@@ -62,7 +63,7 @@ class TvlFragment : BaseFragment() {
     private fun onCoinClick(coinUid: String?) {
         if (coinUid != null) {
             val arguments = CoinFragment.prepareParams(coinUid)
-            findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+            findNavController().slideFromRight(R.id.coinFragment, arguments)
         } else {
             HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_CoinNotSupported)
         }

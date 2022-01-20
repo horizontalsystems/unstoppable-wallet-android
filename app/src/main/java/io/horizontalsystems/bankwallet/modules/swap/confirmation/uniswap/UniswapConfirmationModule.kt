@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap
 
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
@@ -16,7 +14,6 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.core.findNavController
 
 object UniswapConfirmationModule {
 
@@ -64,17 +61,9 @@ object UniswapConfirmationModule {
         }
     }
 
-    fun start(
-        fragment: Fragment,
-        navigateTo: Int,
-        navOptions: NavOptions,
-        sendEvmData: SendEvmData
-    ) {
-        val arguments = bundleOf(
-            SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
-            SendEvmModule.additionalInfoKey to sendEvmData.additionalInfo
-        )
-        fragment.findNavController().navigate(navigateTo, arguments, navOptions)
-    }
+    fun prepareParams(sendEvmData: SendEvmData) = bundleOf(
+        SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
+        SendEvmModule.additionalInfoKey to sendEvmData.additionalInfo
+    )
 
 }

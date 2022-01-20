@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectSignMessageRequestBinding
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectRequestModule.TYPED_MESSAGE
@@ -77,10 +78,9 @@ class WalletConnectSignMessageRequestFragment : BaseFragment() {
                         listPosition = ListPosition.Last
                     )
                     setOnClickListener {
-                        findNavController().navigate(
+                        findNavController().slideFromRight(
                             R.id.walletConnectSignMessageRequestFragment_to_walletConnectDisplayTypedMessageFragment,
-                            bundleOf(TYPED_MESSAGE to formatJson(message.data)),
-                            navOptions()
+                            bundleOf(TYPED_MESSAGE to formatJson(message.data))
                         )
                     }
                 }

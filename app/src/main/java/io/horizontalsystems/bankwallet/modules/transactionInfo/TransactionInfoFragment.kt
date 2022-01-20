@@ -13,6 +13,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentTransactionInfoBinding
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoAdapter
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
@@ -81,10 +82,9 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
 
         viewModel.openTransactionOptionsModule.observe(viewLifecycleOwner, { (optionType, txHash) ->
             val params = TransactionSpeedUpCancelFragment.prepareParams(optionType, txHash)
-            findNavController().navigate(
+            findNavController().slideFromRight(
                 R.id.transactionInfoFragment_to_transactionSpeedUpCancelFragment,
-                params,
-                navOptions()
+                params
             )
         })
 

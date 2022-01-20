@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentSwapSettingsBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoModule
@@ -39,7 +40,10 @@ class SwapSettingsMainFragment : BaseFragment() {
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuInfo -> {
-                    SwapInfoModule.start(this, navOptions(), mainViewModel.dex)
+                    findNavController().slideFromRight(
+                        R.id.swapSettingsMainFragment_to_swapInfoFragment,
+                        SwapInfoModule.prepareParams(mainViewModel.dex)
+                    )
                     true
                 }
                 R.id.menuCancel -> {

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentFaqListBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderFaqItemBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderFaqSectionBinding
@@ -76,7 +77,7 @@ class FaqListFragment : BaseFragment(), FaqListAdapter.Listener {
 
     override fun onItemClicked(faqItem: FaqItem) {
         val arguments = bundleOf(MarkdownFragment.markdownUrlKey to faqItem.faq.markdown)
-        findNavController().navigate(R.id.faqFragment_to_markdownFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.faqFragment_to_markdownFragment, arguments)
     }
 }
 

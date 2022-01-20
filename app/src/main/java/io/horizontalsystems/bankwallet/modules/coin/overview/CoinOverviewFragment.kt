@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
@@ -64,9 +65,10 @@ class CoinOverviewFragment : BaseFragment() {
                     MarkdownFragment.markdownUrlKey to absoluteUrl,
                     MarkdownFragment.handleRelativeUrlKey to true
                 )
-                findNavController().navigate(R.id.coinFragment_to_markdownFragment,
-                    arguments,
-                    navOptions())
+                findNavController().slideFromRight(
+                    R.id.coinFragment_to_markdownFragment,
+                    arguments
+                )
             }
             else -> LinkHelper.openLinkInAppBrowser(requireContext(), absoluteUrl)
         }

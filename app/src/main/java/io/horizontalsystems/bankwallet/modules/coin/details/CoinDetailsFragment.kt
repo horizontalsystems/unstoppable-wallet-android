@@ -26,6 +26,7 @@ import androidx.navigation.navGraphViewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
@@ -83,7 +84,7 @@ class CoinDetailsFragment : BaseFragment() {
 
     private fun openMajorHolders() {
         val arguments = CoinMajorHoldersFragment.prepareParams(viewModel.coin.uid)
-        findNavController().navigate(R.id.coinMajorHoldersFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinMajorHoldersFragment, arguments)
     }
 
     private fun openTvlInDefi() {
@@ -92,22 +93,22 @@ class CoinDetailsFragment : BaseFragment() {
 
     private fun openCoinTreasuries() {
         val arguments = CoinTreasuriesFragment.prepareParams(viewModel.coin)
-        findNavController().navigate(R.id.coinTreasuriesFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinTreasuriesFragment, arguments)
     }
 
     private fun openCoinInvestments() {
         val arguments = CoinInvestmentsFragment.prepareParams(viewModel.coin.uid)
-        findNavController().navigate(R.id.coinInvestmentsFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinInvestmentsFragment, arguments)
     }
 
     private fun openCoinReports() {
         val arguments = CoinReportsFragment.prepareParams(viewModel.coin.uid)
-        findNavController().navigate(R.id.coinReportsFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinReportsFragment, arguments)
     }
 
     private fun openCoinAudits(addresses: List<String>) {
         val arguments = CoinAuditsFragment.prepareParams(addresses)
-        findNavController().navigate(R.id.coinAuditsFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinAuditsFragment, arguments)
     }
 
     private fun openSecurityInfo(type: SecurityType) {

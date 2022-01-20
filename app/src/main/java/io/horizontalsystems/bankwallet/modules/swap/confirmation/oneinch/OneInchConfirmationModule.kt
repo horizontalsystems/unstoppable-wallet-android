@@ -2,10 +2,8 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
@@ -14,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
-import io.horizontalsystems.core.findNavController
 
 object OneInchConfirmationModule {
     private const val oneInchSwapParametersKey = "oneInchSwapParametersKey"
@@ -49,8 +46,6 @@ object OneInchConfirmationModule {
         }
     }
 
-    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, oneInchSwapParameters: OneInchSwapParameters) {
-        fragment.findNavController().navigate(navigateTo, bundleOf(oneInchSwapParametersKey to oneInchSwapParameters), navOptions)
-    }
+    fun prepareParams(oneInchSwapParameters: OneInchSwapParameters) = bundleOf(oneInchSwapParametersKey to oneInchSwapParameters)
 
 }

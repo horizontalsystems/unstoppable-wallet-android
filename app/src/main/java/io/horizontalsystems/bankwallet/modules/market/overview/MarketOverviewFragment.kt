@@ -25,6 +25,7 @@ import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
@@ -67,7 +68,7 @@ class MarketOverviewFragment : BaseFragment() {
     private fun onItemClick(marketViewItem: MarketViewItem) {
         val arguments = CoinFragment.prepareParams(marketViewItem.coinUid)
 
-        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinFragment, arguments)
     }
 
     private fun openMetricsPage(metricsType: MetricsType) {

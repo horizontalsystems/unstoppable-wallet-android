@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentUniswapBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -25,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.Uniswap
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 
 class UniswapFragment : SwapBaseFragment() {
@@ -155,11 +157,9 @@ class UniswapFragment : SwapBaseFragment() {
         })
 
         uniswapViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
-            UniswapConfirmationModule.start(
-                requireParentFragment(),
+            requireParentFragment().findNavController().slideFromRight(
                 R.id.swapFragment_to_uniswapConfirmationFragment,
-                navOptions(),
-                sendEvmData
+                UniswapConfirmationModule.prepareParams(sendEvmData)
             )
         })
 

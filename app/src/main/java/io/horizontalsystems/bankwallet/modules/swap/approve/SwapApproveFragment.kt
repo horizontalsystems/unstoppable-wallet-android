@@ -16,6 +16,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentSwapApproveBinding
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.dataKey
@@ -105,11 +106,9 @@ class SwapApproveFragment : BaseFragment() {
         })
 
         viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner, { sendEvmData ->
-            SwapApproveConfirmationModule.start(
-                this,
+            findNavController().slideFromRight(
                 R.id.swapApproveFragment_to_swapApproveConfirmationFragment,
-                navOptions(),
-                sendEvmData
+                SwapApproveConfirmationModule.prepareParams(sendEvmData)
             )
         })
 

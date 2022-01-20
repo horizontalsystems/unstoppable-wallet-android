@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentNetworkSettingsBinding
 import io.horizontalsystems.bankwallet.databinding.ViewSettingsItemArrowBinding
 import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule
@@ -54,10 +55,9 @@ class NetworkSettingsFragment : BaseFragment() {
         }
 
         viewModel.openEvmNetworkLiveEvent.observe(viewLifecycleOwner) {
-            findNavController().navigate(
+            findNavController().slideFromRight(
                 R.id.networkSettingsFragment_to_evmNetworkFragment,
-                EvmNetworkModule.args(it.first, it.second),
-                navOptions()
+                EvmNetworkModule.args(it.first, it.second)
             )
         }
     }

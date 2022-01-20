@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectRequestBinding
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
@@ -100,10 +101,8 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
             viewLifecycleOwner,
             parentFragmentManager,
             showSpeedInfoListener = {
-                findNavController().navigate(
-                    R.id.walletConnectRequestFragment_to_feeSpeedInfo,
-                    null,
-                    navOptions()
+                findNavController().slideFromRight(
+                    R.id.walletConnectRequestFragment_to_feeSpeedInfo
                 )
             }
         )

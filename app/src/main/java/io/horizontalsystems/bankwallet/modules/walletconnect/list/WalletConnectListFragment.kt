@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectListBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderWalletConnectAccountBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderWalletConnectSessionBinding
@@ -118,20 +119,16 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
     }
 
     private fun startNewConnection() {
-        WalletConnectMainModule.start(
-            this,
+        findNavController().slideFromRight(
             R.id.walletConnectListFragment_to_walletConnectMainFragment,
-            navOptions(),
-            viewModel.getSessionsCount()
+            WalletConnectMainModule.prepareParams(null, viewModel.getSessionsCount())
         )
     }
 
     override fun onSessionClick(session: WalletConnectViewItem.Session) {
-        WalletConnectMainModule.start(
-            this,
+        findNavController().slideFromRight(
             R.id.walletConnectListFragment_to_walletConnectMainFragment,
-            navOptions(),
-            remotePeerId = session.session.remotePeerId
+            WalletConnectMainModule.prepareParams(session.session.remotePeerId, 0)
         )
     }
 
