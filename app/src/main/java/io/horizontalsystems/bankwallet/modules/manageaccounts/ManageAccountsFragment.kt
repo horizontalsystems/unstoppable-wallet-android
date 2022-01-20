@@ -25,7 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.navOptions
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
@@ -110,25 +110,13 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 
                 val actions = listOf(
                     ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
-                        navController.navigate(
-                            R.id.manageAccountsFragment_to_createAccountFragment,
-                            null,
-                            navOptions()
-                        )
+                        navController.slideFromRight(R.id.manageAccountsFragment_to_createAccountFragment)
                     },
                     ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
-                        navController.navigate(
-                            R.id.manageAccountsFragment_to_restoreMnemonicFragment,
-                            null,
-                            navOptions()
-                        )
+                        navController.slideFromRight(R.id.manageAccountsFragment_to_restoreMnemonicFragment)
                     },
                     ActionViewItem(R.drawable.ic_eye_2_20, R.string.ManageAccounts_WatchAddress) {
-                        navController.navigate(
-                            R.id.watchAddressFragment,
-                            null,
-                            navOptions()
-                        )
+                        navController.slideFromRight(R.id.watchAddressFragment)
                     }
                 )
                 CellSingleLineLawrenceSection(actions) {
@@ -223,10 +211,9 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
             Icon(
                 modifier = Modifier
                     .clickable {
-                        navController.navigate(
+                        navController.slideFromRight(
                             R.id.manageAccountsFragment_to_manageAccount,
-                            ManageAccountModule.prepareParams(accountViewItem.accountId),
-                            navOptions()
+                            ManageAccountModule.prepareParams(accountViewItem.accountId)
                         )
                     }
                     .padding(12.dp),
