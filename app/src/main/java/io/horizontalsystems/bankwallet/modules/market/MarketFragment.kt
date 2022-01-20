@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentMarketBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
@@ -50,7 +51,7 @@ class MarketFragment : BaseWithSearchFragment() {
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.search -> {
-                    findNavController().navigate(R.id.mainFragment_to_marketSearchFragment)
+                    findNavController().slideFromRight(R.id.mainFragment_to_marketSearchFragment)
                     true
                 }
                 else -> false

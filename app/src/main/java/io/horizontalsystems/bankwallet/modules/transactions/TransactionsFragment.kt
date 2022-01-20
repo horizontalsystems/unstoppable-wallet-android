@@ -25,12 +25,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -127,16 +127,7 @@ private fun onTransactionClick(
 
     viewModel.tmpItemToShow = transactionItem
 
-    val navOptionsFromBottom = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_from_bottom)
-        .setExitAnim(R.anim.slide_to_top)
-        .setPopEnterAnim(R.anim.slide_from_top)
-        .setPopExitAnim(R.anim.slide_to_bottom)
-        .build()
-
-    navController.navigate(
-        R.id.mainFragment_to_transactionInfoFragment, null, navOptionsFromBottom
-    )
+    navController.slideFromBottom(R.id.mainFragment_to_transactionInfoFragment)
 }
 
 @OptIn(ExperimentalFoundationApi::class)

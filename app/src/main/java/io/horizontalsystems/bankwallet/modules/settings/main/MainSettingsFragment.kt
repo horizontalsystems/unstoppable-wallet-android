@@ -29,10 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -123,10 +123,9 @@ private fun SettingSections(
                 R.drawable.ic_wallet_20,
                 showAlert = showAlertManageWallet,
                 onClick = {
-                    openPage(
-                        navController,
+                    navController.slideFromRight(
                         R.id.mainFragment_to_manageKeysFragment,
-                        bundleOf(ManageAccountsModule.MODE to ManageAccountsModule.Mode.Manage),
+                        bundleOf(ManageAccountsModule.MODE to ManageAccountsModule.Mode.Manage)
                     )
                 }
             )
@@ -135,7 +134,9 @@ private fun SettingSections(
                 R.string.Settings_SecurityCenter,
                 R.drawable.ic_security,
                 showAlert = showAlertSecurityCenter,
-                onClick = { openPage(navController, R.id.mainFragment_to_securitySettingsFragment) }
+                onClick = {
+                    navController.slideFromRight(R.id.mainFragment_to_securitySettingsFragment)
+                }
             )
         })
     )
@@ -148,7 +149,9 @@ private fun SettingSections(
                 R.string.Settings_WalletConnect,
                 R.drawable.ic_wallet_connect_20,
                 value = if (walletConnectSessionCount > 0) walletConnectSessionCount.toString() else null,
-                onClick = { openPage(navController, R.id.mainFragment_to_walletConnect) }
+                onClick = {
+                    navController.slideFromRight(R.id.mainFragment_to_walletConnect)
+                }
             )
         }
     )
@@ -161,7 +164,9 @@ private fun SettingSections(
                 R.string.Settings_LaunchScreen,
                 R.drawable.ic_screen_20,
                 value = launchScreen?.titleRes?.let { Translator.getString(it) },
-                onClick = { openPage(navController, R.id.launchScreenSettingsFragment) }
+                onClick = {
+                    navController.slideFromRight(R.id.launchScreenSettingsFragment)
+                }
             )
         }, {
             HsSettingCell(
@@ -169,7 +174,7 @@ private fun SettingSections(
                 R.drawable.ic_currency,
                 value = baseCurrency?.code,
                 onClick = {
-                    openPage(navController, R.id.mainFragment_to_baseCurrencySettingsFragment)
+                    navController.slideFromRight(R.id.mainFragment_to_baseCurrencySettingsFragment)
                 }
             )
         }, {
@@ -177,21 +182,25 @@ private fun SettingSections(
                 R.string.Settings_Language,
                 R.drawable.ic_language,
                 value = language,
-                onClick = { openPage(navController, R.id.mainFragment_to_languageSettingsFragment) }
+                onClick = {
+                    navController.slideFromRight(R.id.mainFragment_to_languageSettingsFragment)
+                }
             )
         }, {
             HsSettingCell(
                 R.string.Settings_Theme,
                 R.drawable.ic_light_mode,
                 value = theme?.let { Translator.getString(it) },
-                onClick = { openPage(navController, R.id.mainFragment_to_themeSwitchFragment) }
+                onClick = {
+                    navController.slideFromRight(R.id.mainFragment_to_themeSwitchFragment)
+                }
             )
         }, {
             HsSettingCell(
                 R.string.Settings_ExperimentalFeatures,
                 R.drawable.ic_experimental,
                 onClick = {
-                    openPage(navController, R.id.mainFragment_to_experimentalFeaturesFragment)
+                    navController.slideFromRight(R.id.mainFragment_to_experimentalFeaturesFragment)
                 }
             )
         })
@@ -204,13 +213,17 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.Settings_Faq,
                 R.drawable.ic_faq_20,
-                onClick = { openPage(navController, R.id.mainFragment_to_faqListFragment) }
+                onClick = {
+                    navController.slideFromRight(R.id.mainFragment_to_faqListFragment)
+                }
             )
         }, {
             HsSettingCell(
                 R.string.Guides_Title,
                 R.drawable.ic_academy_20,
-                onClick = { openPage(navController, R.id.mainFragment_to_academyFragment) }
+                onClick = {
+                    navController.slideFromRight(R.id.mainFragment_to_academyFragment)
+                }
             )
         })
     )
@@ -223,7 +236,9 @@ private fun SettingSections(
                 R.string.SettingsAboutApp_Title,
                 R.drawable.ic_about_app_20,
                 showAlert = showAlertAboutApp,
-                onClick = { openPage(navController, R.id.mainFragment_to_aboutAppFragment) }
+                onClick = {
+                    navController.slideFromRight(R.id.mainFragment_to_aboutAppFragment)
+                }
             )
         }
     )
@@ -361,15 +376,4 @@ private fun previewSettingsScreen() {
             )
         }
     }
-}
-
-private fun openPage(navController: NavController, destination: Int, bundle: Bundle? = null) {
-    val navOptions: NavOptions = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_from_right)
-        .setExitAnim(R.anim.slide_to_left)
-        .setPopEnterAnim(R.anim.slide_from_left)
-        .setPopExitAnim(R.anim.slide_to_right)
-        .build()
-
-    navController.navigate(destination, bundle, navOptions)
 }

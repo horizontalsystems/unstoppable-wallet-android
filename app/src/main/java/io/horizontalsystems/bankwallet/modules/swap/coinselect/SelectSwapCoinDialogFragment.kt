@@ -90,9 +90,7 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
         const val requestIdKey = "requestIdKey"
         const val coinBalanceItemResultKey = "coinBalanceItemResultKey"
 
-        fun params(requestId: Long, dex: SwapMainModule.Dex): Bundle {
-            return bundleOf(requestIdKey to requestId, dexKey to dex)
-        }
+        fun prepareParams(requestId: Long, dex: SwapMainModule.Dex) = bundleOf(requestIdKey to requestId, dexKey to dex)
     }
 
 }

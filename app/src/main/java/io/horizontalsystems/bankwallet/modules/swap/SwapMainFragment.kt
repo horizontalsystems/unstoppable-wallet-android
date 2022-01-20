@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.databinding.FragmentSwapBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ISwapProvider
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -97,7 +98,7 @@ class SwapMainFragment : BaseFragment() {
                     ButtonSecondaryCircle(
                         icon = R.drawable.ic_manage_2,
                         onClick = {
-                            findNavController().navigate(R.id.swapFragment_to_swapSettingsMainFragment)
+                            findNavController().slideFromBottom(R.id.swapFragment_to_swapSettingsMainFragment)
                         }
                     )
                 }

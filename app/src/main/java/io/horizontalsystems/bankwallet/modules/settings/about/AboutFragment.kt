@@ -29,12 +29,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -108,7 +108,9 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
             HsSettingCell(
                 R.string.SettingsAboutApp_WhatsNew,
                 R.drawable.ic_info_20,
-                onClick = { openPage(navController, R.id.aboutAppFragment_to_releaseNotesFragment) }
+                onClick = {
+                    navController.slideFromRight(R.id.aboutAppFragment_to_releaseNotesFragment)
+                }
             )
         }
     )
@@ -120,14 +122,18 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
             HsSettingCell(
                 R.string.Settings_AppStatus,
                 R.drawable.ic_app_status,
-                onClick = { openPage(navController, R.id.aboutAppFragment_to_appStatusFragment) }
+                onClick = {
+                    navController.slideFromRight(R.id.aboutAppFragment_to_appStatusFragment)
+                }
             )
         }, {
             HsSettingCell(
                 R.string.Settings_Terms,
                 R.drawable.ic_terms_20,
                 showAlert = termsShowAlert,
-                onClick = { openPage(navController, R.id.aboutAppFragment_to_termsFragment) }
+                onClick = {
+                    navController.slideFromRight(R.id.aboutAppFragment_to_termsFragment)
+                }
             )
         })
     )
@@ -214,17 +220,6 @@ fun AboutHeader(appVersion: String) {
             )
         }
     }
-}
-
-private fun openPage(navController: NavController, destination: Int, bundle: Bundle? = null) {
-    val navOptions: NavOptions = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_from_right)
-        .setExitAnim(R.anim.slide_to_left)
-        .setPopEnterAnim(R.anim.slide_from_left)
-        .setPopExitAnim(R.anim.slide_to_right)
-        .build()
-
-    navController.navigate(destination, bundle, navOptions)
 }
 
 private fun shareAppLink(appLink: String, context: Context) {
