@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.navOptions
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -71,11 +71,7 @@ fun OnboardingScreen(navController: NavController) {
                     .padding(horizontal = 16.dp),
                 title = stringResource(R.string.Button_Create),
                 onClick = {
-                    navController.navigate(
-                        R.id.createAccountFragment,
-                        null,
-                        navOptions()
-                    )
+                    navController.slideFromRight(R.id.createAccountFragment)
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -85,11 +81,7 @@ fun OnboardingScreen(navController: NavController) {
                     .padding(horizontal = 16.dp),
                 title = stringResource(R.string.Button_Restore),
                 onClick = {
-                    navController.navigate(
-                        R.id.restoreMnemonicFragment,
-                        null,
-                        navOptions()
-                    )
+                    navController.slideFromRight(R.id.restoreMnemonicFragment)
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -99,11 +91,7 @@ fun OnboardingScreen(navController: NavController) {
                     .padding(horizontal = 16.dp),
                 title = stringResource(R.string.Button_WatchAddress),
                 onClick = {
-                    navController.navigate(
-                        R.id.watchAddressFragment,
-                        null,
-                        navOptions()
-                    )
+                    navController.slideFromRight(R.id.watchAddressFragment)
                 }
             )
             Spacer(modifier = Modifier.height(32.dp))

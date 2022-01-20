@@ -82,15 +82,6 @@ abstract class BaseFragment(@LayoutRes layoutResId: Int = 0) : Fragment(layoutRe
     }
 }
 
-fun navOptions(): NavOptions {
-    return NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_from_right)
-        .setExitAnim(R.anim.slide_to_left)
-        .setPopEnterAnim(R.anim.slide_from_left)
-        .setPopExitAnim(R.anim.slide_to_right)
-        .build()
-}
-
 fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
     val navOptions = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_right)
