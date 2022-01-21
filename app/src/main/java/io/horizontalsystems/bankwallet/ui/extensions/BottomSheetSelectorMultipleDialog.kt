@@ -76,7 +76,7 @@ class BottomSheetSelectorMultipleDialog(
             Box(
                 modifier = Modifier.padding(horizontal = 21.dp, vertical = 12.dp)
             ) {
-                TextImportant(it)
+                TextImportant(text = it)
             }
             Divider(
                 modifier = Modifier.fillMaxWidth(),

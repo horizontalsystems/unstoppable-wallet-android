@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.ILanguageManager
@@ -25,7 +26,8 @@ class MainSettingsService(
     private val currencyManager: ICurrencyManager,
     private val termsManager: ITermsManager,
     private val pinComponent: IPinComponent,
-    private val walletConnectSessionManager: WalletConnectSessionManager
+    private val walletConnectSessionManager: WalletConnectSessionManager,
+    private val walletConnectManager: WalletConnectManager
 ) {
 
     private val backedUpSubject = BehaviorSubject.create<Boolean>()
@@ -107,5 +109,9 @@ class MainSettingsService(
 
     fun setAppRelaunchingFromSettings() {
         localStorage.relaunchBySettingChange = true
+    }
+
+    fun getWalletConnectSupportState(): WalletConnectManager.SupportState {
+        return walletConnectManager.getWalletConnectSupportState()
     }
 }

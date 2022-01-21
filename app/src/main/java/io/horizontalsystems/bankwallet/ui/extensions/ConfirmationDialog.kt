@@ -82,7 +82,7 @@ class ConfirmationDialog(
                 Box(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                 ) {
-                    TextImportant(it)
+                    TextImportant(text = it)
                 }
                 Divider(
                     modifier = Modifier.fillMaxWidth(),
