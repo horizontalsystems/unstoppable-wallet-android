@@ -102,7 +102,7 @@ object RestoreBlockchainsModule {
                 Bitcoin -> CoinType.Bitcoin
                 Ethereum -> CoinType.Ethereum
                 BinanceSmartChain -> CoinType.BinanceSmartChain
-                BinanceChain -> CoinType.BitcoinCash
+                BinanceChain -> CoinType.BinanceSmartChain
                 BitcoinCash -> CoinType.BitcoinCash
                 Zcash -> CoinType.Zcash
                 Litecoin -> CoinType.Litecoin
