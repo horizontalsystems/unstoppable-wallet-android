@@ -73,11 +73,10 @@ class BottomSheetSelectorMultipleDialog(
             color = ComposeAppTheme.colors.steel10
         )
         warning?.let {
-            Box(
-                modifier = Modifier.padding(horizontal = 21.dp, vertical = 12.dp)
-            ) {
-                TextImportant(text = it)
-            }
+            TextImportant(
+                modifier = Modifier.padding(horizontal = 21.dp, vertical = 12.dp),
+                text = it
+            )
             Divider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 1.dp,
