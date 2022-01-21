@@ -106,7 +106,8 @@ class CoinFragment : BaseFragment() {
             when (coinState) {
                 null,
                 CoinState.Unsupported,
-                CoinState.NoActiveAccount -> {
+                CoinState.NoActiveAccount,
+                CoinState.WatchAccount -> {
                     menuAddToWallet = false
                     menuInWallet = false
                 }

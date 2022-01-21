@@ -41,8 +41,10 @@ class CoinService(
     }
 
     private fun emitCoinState() {
+        val activeAccount = accountManager.activeAccount
         _coinState.onNext(when {
-            accountManager.activeAccount == null -> CoinState.NoActiveAccount
+            activeAccount == null -> CoinState.NoActiveAccount
+            activeAccount.isWatchAccount -> CoinState.WatchAccount
             fullCoin.platforms.none { it.coinType.isSupported } -> CoinState.Unsupported
             walletManager.activeWallets.any { it.coin.uid == coinUid } -> {
                 if (initialCoinInWallet) {
