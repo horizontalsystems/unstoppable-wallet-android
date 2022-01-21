@@ -2,8 +2,10 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.convertedError
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.core.SingleLiveEvent
@@ -25,7 +27,7 @@ class SendEvmViewModel(
 
     init {
         service.stateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
-        service.amountErrorObservable.subscribeIO { sync(it.orElse(null)) }.let { disposable.add(it) }
+        service.amountCautionObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
 
         sync(service.state)
     }
@@ -40,11 +42,21 @@ class SendEvmViewModel(
         proceedEnabledLiveData.postValue(state is SendEvmService.State.Ready)
     }
 
-    private fun sync(amountError: Throwable?) {
-        val caution = amountError?.convertedError?.let {
-            val text = amountError.localizedMessage ?: amountError.javaClass.simpleName
-            Caution(text, Caution.Type.Error)
+    private fun sync(amountCaution: SendEvmService.AmountCaution) {
+        var caution: Caution? = null
+        if (amountCaution.error?.convertedError != null) {
+            val text =
+                amountCaution.error.localizedMessage ?: amountCaution.error.javaClass.simpleName
+            caution = Caution(text, Caution.Type.Error)
+        } else if (amountCaution.amountWarning == SendEvmService.AmountWarning.CoinNeededForFee) {
+            caution = Caution(
+                Translator.getString(
+                    R.string.EthereumTransaction_Warning_CoinNeededForFee, service.sendCoin.code
+                ),
+                Caution.Type.Warning
+            )
         }
+
         amountCautionLiveData.postValue(caution)
     }
 
