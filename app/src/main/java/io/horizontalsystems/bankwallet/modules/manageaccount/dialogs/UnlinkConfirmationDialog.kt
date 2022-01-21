@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.CellCheckboxLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportant
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 
@@ -41,6 +42,10 @@ class UnlinkConfirmationDialog : BaseComposableBottomSheetFragment() {
 
     private val checkboxItems by lazy {
         requireArguments().getStringArrayList(CHECKBOX_ITEMS) ?: listOf()
+    }
+
+    private val message by lazy {
+        requireArguments().getString(MESSAGE)
     }
 
     private val accountName by lazy { requireArguments().getString(ACCOUNT_NAME) }
@@ -109,6 +114,13 @@ class UnlinkConfirmationDialog : BaseComposableBottomSheetFragment() {
                 }
             }
 
+            message?.let {
+                TextImportant(
+                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp),
+                    text = it
+                )
+            }
+
             ButtonPrimaryRed(
                 modifier = Modifier.padding(16.dp).fillMaxWidth(),
                 title = getString(R.string.ManageKeys_Delete_FromPhone),
@@ -125,16 +137,19 @@ class UnlinkConfirmationDialog : BaseComposableBottomSheetFragment() {
     companion object {
         private const val ACCOUNT_NAME = "account_name"
         private const val CHECKBOX_ITEMS = "checkbox_items"
+        private const val MESSAGE = "message"
 
         fun show(
             fragmentManager: FragmentManager,
             accountName: String,
-            checkboxItems: List<String>
+            checkboxItems: List<String>,
+            message: String?
         ) {
             val fragment = UnlinkConfirmationDialog().apply {
                 arguments = bundleOf(
                     ACCOUNT_NAME to accountName,
-                    CHECKBOX_ITEMS to ArrayList(checkboxItems)
+                    CHECKBOX_ITEMS to ArrayList(checkboxItems),
+                    MESSAGE to message,
                 )
             }
 
@@ -151,7 +166,7 @@ class UnlinkConfirmationDialogViewModel(checkboxItems: List<String>) : ViewModel
         addAll(checkboxItems.map { CheckBoxItem(it) })
     }
     val itemsLiveData = MutableLiveData(items.toList())
-    val buttonEnabledLiveData = MutableLiveData(false)
+    val buttonEnabledLiveData = MutableLiveData(items.isEmpty())
 
     fun updateItem(index: Int, item: CheckBoxItem, checked: Boolean) {
         items.removeAt(index)
