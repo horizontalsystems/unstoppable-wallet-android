@@ -92,15 +92,25 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
         binding.name.addTextChangedListener(textWatcher)
 
         binding.unlinkButton.setOnSingleClickListener {
-            val confirmationList = listOf(
-                getString(R.string.ManageAccount_Delete_ConfirmationRemove),
-                getString(R.string.ManageAccount_Delete_ConfirmationDisable),
-                getString(R.string.ManageAccount_Delete_ConfirmationLose)
-            )
+            val confirmationList: List<String>
+            val message: String?
+
+            if (viewModel.account.isWatchAccount) {
+                confirmationList = listOf()
+                message = getString(R.string.ManageAccount_DeleteWarning)
+            } else {
+                confirmationList = listOf(
+                    getString(R.string.ManageAccount_Delete_ConfirmationRemove),
+                    getString(R.string.ManageAccount_Delete_ConfirmationDisable),
+                    getString(R.string.ManageAccount_Delete_ConfirmationLose)
+                )
+                message = null
+            }
             UnlinkConfirmationDialog.show(
                 childFragmentManager,
                 viewModel.account.name,
-                confirmationList
+                confirmationList,
+                message
             )
         }
 

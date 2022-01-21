@@ -818,6 +818,7 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
     <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
+    <string name="ManageAccount_DeleteWarning">Are you sure want to delete this wallet?</string>
 
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Network Settings</string>
