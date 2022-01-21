@@ -58,8 +58,8 @@
     <string name="EnterPassphrase">Passphrase</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases add an additional security layer to the wallets, enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase, but associated with different passwords. \n\nTo restore these wallets, a user will require a mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">Rate this App</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable Wallet? Please take a moment to rate this app</string>
+    <string name="RateApp_Title_Rate_This_App">GM!</string>
+    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable? Share feedback and ideas to take it further.</string>
     <string name="RateApp_Button_RateIt">Rate It</string>
     <string name="RateApp_Button_NotNow">Not now</string>
     <!--Restore-->
@@ -101,7 +101,7 @@
     <string name="Market_Tab_Overview">Overview</string>
     <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
-    <string name="Market_Tab_Watchlist_EmptyList">You don’t have any favorite assets.\nYou can add the favourites by click to star icon in the asset page.</string>
+    <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_Rated">Rated</string>
     <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
@@ -459,8 +459,8 @@
     <string name="Transactions_From">from %s</string>
     <string name="Transaction_Unlimited">unlimited %s</string>
     <string name="Transactions_All">All</string>
-    <string name="Transactions_Incoming">Incoming</string>
-    <string name="Transactions_Outgoing">Outgoing</string>
+    <string name="Transactions_Incoming">Received</string>
+    <string name="Transactions_Outgoing">Sent</string>
     <string name="Transactions_Swaps">Swaps</string>
     <string name="Transactions_Approvals">Approvals</string>
     <!--Transaction Info-->
@@ -499,7 +499,7 @@
     <string name="StatusInfo_Processing">Processing</string>
     <string name="StatusInfo_Confirmed">Completed</string>
     <string name="StatusInfo_Failed">Failed</string>
-    <string name="StatusInfo_PendingDescription">The transaction has not been confirmed on the blockchain yet. Transactions sent with a recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected entirely.</string>
+    <string name="StatusInfo_PendingDescription">The transaction has not been confirmed on the blockchain yet. Transactions sent with a recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected. Also keep in mind that status of an individual transaction shown in Unstoppable wallet interface typically updated with a short delay.</string>
     <string name="StatusInfo_ProcessingDescription">The transaction has been already included in the blockchain but has not reached permanent finality. At this point, it\'s safe to consider the transaction as completed for smaller payments. For larger payments, it\'s recommended to wait until the transaction status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
     <string name="StatusInfo_FailedDescription">The transaction did not get processed and no value transfer took place. Transactions with a fail status are still written to the blockchain and consume transaction fees. The Unstoppable app is unable to show the fail reason for such transactions, but users are able to look it up themselves on a public block explorer i.e. etherscan.io.</string>
@@ -686,6 +686,7 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
     <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
+    <string name="ManageAccount_DeleteWarning">Are you sure want to delete this wallet?</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Network Settings</string>
     <string name="NetworkSettings_SwithesAutomatically">switches automatically</string>
