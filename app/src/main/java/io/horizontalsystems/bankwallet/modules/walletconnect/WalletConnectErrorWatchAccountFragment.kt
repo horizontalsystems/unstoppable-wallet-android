@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -52,8 +53,9 @@ fun WalletConnectErrorWatchAccount(
 ) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.WalletConnect_Title),
-        subtitle = stringResource(R.string.WalletConnect_Requirement),
+        subtitle = stringResource(R.string.WalletConnect_Alert),
         onCloseClick = onClickClose
     ) {
         TextImportant(
