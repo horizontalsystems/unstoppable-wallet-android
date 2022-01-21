@@ -27,5 +27,5 @@ object CoinModule {
 }
 
 enum class CoinState {
-    InWallet, AddedToWallet, NotInWallet, NoActiveAccount, Unsupported
+    InWallet, AddedToWallet, NotInWallet, NoActiveAccount, WatchAccount, Unsupported
 }
