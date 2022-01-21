@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -79,11 +82,10 @@ class ConfirmationDialog(
                 color = ComposeAppTheme.colors.steel10
             )
             contentText?.let {
-                Box(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-                ) {
-                    TextImportant(text = it)
-                }
+                TextImportant(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    text = it
+                )
                 Divider(
                     modifier = Modifier.fillMaxWidth(),
                     thickness = 1.dp,

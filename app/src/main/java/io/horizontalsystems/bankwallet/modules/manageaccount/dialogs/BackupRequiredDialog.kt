@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
@@ -62,11 +61,10 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
                             thickness = 1.dp,
                             color = ComposeAppTheme.colors.steel10
                         )
-                        Box(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-                        ) {
-                            TextImportant(text = stringResource(R.string.ManageAccount_BackupRequired_Description))
-                        }
+                        TextImportant(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                            text = stringResource(R.string.ManageAccount_BackupRequired_Description)
+                        )
                         Divider(
                             modifier = Modifier.fillMaxWidth(),
                             thickness = 1.dp,
