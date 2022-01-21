@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -58,7 +59,8 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10
             )
-            items?.forEach { item ->
+            val comparator = compareBy<Account> { it.isWatchAccount }.thenBy { it.name.lowercase() }
+            items?.sortedWith(comparator)?.forEach { item ->
                 CellMultilineLawrence(
                     borderBottom = true
                 ) {
@@ -80,7 +82,7 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
                             }
                         )
                         Spacer(Modifier.width(16.dp))
-                        Column {
+                        Column(Modifier.weight(1f)) {
                             Text(
                                 text = item.name,
                                 style = ComposeAppTheme.typography.body,
@@ -90,6 +92,14 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
                                 text = item.type.description,
                                 style = ComposeAppTheme.typography.subhead2,
                                 color = ComposeAppTheme.colors.grey
+                            )
+                        }
+                        if (item.isWatchAccount) {
+                            Icon(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                painter = painterResource(id = R.drawable.ic_eye_20),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.grey
                             )
                         }
                     }
