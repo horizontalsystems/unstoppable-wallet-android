@@ -18,6 +18,8 @@ class SwapMainViewModel(
     val provider: ISwapProvider
         get() = service.dex.provider
 
+    val blockchainTitle by service::blockchainTitle
+
     val providerLiveData = MutableLiveData<ISwapProvider>()
 
     var providerState by service::providerState
