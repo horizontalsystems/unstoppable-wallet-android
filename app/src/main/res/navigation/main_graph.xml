@@ -485,4 +485,12 @@
         android:id="@+id/selectSwapCoinDialog"
         android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment"
         tools:layout="@layout/fragment_swap_select_token" />
+
+    <dialog
+        android:id="@+id/walletConnectErrorNoAccountFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorNoAccountFragment" />
+
+    <dialog
+        android:id="@+id/walletConnectErrorWatchAccountFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorWatchAccountFragment" />
 </navigation>

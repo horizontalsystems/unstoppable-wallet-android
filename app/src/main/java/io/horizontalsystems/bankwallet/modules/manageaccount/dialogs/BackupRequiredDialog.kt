@@ -65,7 +65,7 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
                         Box(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                         ) {
-                            TextImportant(stringResource(R.string.ManageAccount_BackupRequired_Description))
+                            TextImportant(text = stringResource(R.string.ManageAccount_BackupRequired_Description))
                         }
                         Divider(
                             modifier = Modifier.fillMaxWidth(),

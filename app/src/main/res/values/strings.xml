@@ -34,6 +34,9 @@
     <string name="Button_WatchAddress">Watch Address</string>
     <string name="Button_Reset">Reset</string>
     <string name="Button_Reconnect">Reconnect</string>
+    <string name="Button_Understand">I Understand</string>
+    <string name="Button_Switch">Switch</string>
+
 
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
@@ -401,6 +404,8 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
+    <string name="WalletConnect_Error_NoWallet">No suitable Wallet. You need to create or restore existing wallet</string>
+    <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">The transaction requires %s for sending</string>

@@ -32,9 +32,11 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -150,7 +152,17 @@ private fun SettingSections(
                 R.drawable.ic_wallet_connect_20,
                 value = if (walletConnectSessionCount > 0) walletConnectSessionCount.toString() else null,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_walletConnect)
+                    when (viewModel.getWalletConnectSupportState()) {
+                        WalletConnectManager.SupportState.Supported -> {
+                            navController.slideFromRight(R.id.mainFragment_to_walletConnect)
+                        }
+                        WalletConnectManager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                            navController.slideFromBottom(R.id.walletConnectErrorNoAccountFragment)
+                        }
+                        WalletConnectManager.SupportState.NotSupportedDueToWatchAccount -> {
+                            navController.slideFromBottom(R.id.walletConnectErrorWatchAccountFragment)
+                        }
+                    }
                 }
             )
         }

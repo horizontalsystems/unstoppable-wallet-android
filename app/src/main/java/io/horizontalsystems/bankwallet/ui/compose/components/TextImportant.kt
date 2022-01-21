@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun TextImportant(text: String, title: String? = null, @DrawableRes icon: Int? = null) {
+fun TextImportant(modifier: Modifier = Modifier, text: String, title: String? = null, @DrawableRes icon: Int? = null) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .border(1.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(8.dp))

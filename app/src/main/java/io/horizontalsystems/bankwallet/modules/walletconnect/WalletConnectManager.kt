@@ -10,6 +10,9 @@ class WalletConnectManager(
         private val ethereumKitManager: EvmKitManager,
         private val binanceSmartChainKitManager: EvmKitManager
 ) {
+    enum class SupportState {
+        Supported, NotSupportedDueToNoActiveAccount, NotSupportedDueToWatchAccount
+    }
 
     val activeAccount: Account?
         get() = accountManager.activeAccount
@@ -30,6 +33,18 @@ class WalletConnectManager(
         }
         
         return null
+    }
+
+    fun getWalletConnectSupportState(): SupportState {
+        val tmpAccount = accountManager.activeAccount
+
+        return if (tmpAccount == null) {
+            SupportState.NotSupportedDueToNoActiveAccount
+        } else if (tmpAccount.isWatchAccount) {
+            SupportState.NotSupportedDueToWatchAccount
+        } else {
+            SupportState.Supported
+        }
     }
 
 }
