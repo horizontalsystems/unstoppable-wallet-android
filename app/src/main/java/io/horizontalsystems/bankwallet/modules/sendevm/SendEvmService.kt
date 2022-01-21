@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData.AdditionalInfo
 import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -19,8 +20,8 @@ import java.util.*
 import io.horizontalsystems.ethereumkit.models.Address as EvmAddress
 
 class SendEvmService(
-        private val sendCoin: PlatformCoin,
-        val adapter: ISendEthereumAdapter
+    val sendCoin: PlatformCoin,
+    val adapter: ISendEthereumAdapter
 ) : IAvailableBalanceService, IAmountInputService, IRecipientAddressService, Clearable {
 
     private val stateSubject = PublishSubject.create<State>()
@@ -35,14 +36,14 @@ class SendEvmService(
     private var evmAmount: BigInteger? = null
     private var addressData: AddressData? = null
 
-    private val amountErrorSubject = PublishSubject.create<Optional<Throwable>>()
-    private var amountError: Throwable? = null
+    private val amountCautionSubject = PublishSubject.create<AmountCaution>()
+    private var amountCaution: AmountCaution = AmountCaution()
         set(value) {
             field = value
-            amountErrorSubject.onNext(Optional.ofNullable(value))
+            amountCautionSubject.onNext(value)
         }
-    val amountErrorObservable: Flowable<Optional<Throwable>>
-        get() = amountErrorSubject.toFlowable(BackpressureStrategy.BUFFER)
+    val amountCautionObservable: Flowable<AmountCaution>
+        get() = amountCautionSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     private val addressErrorSubject = PublishSubject.create<Optional<Throwable>>()
     private var addressError: Throwable? = null
@@ -52,7 +53,7 @@ class SendEvmService(
         }
 
     private fun syncState() {
-        val amountError = this.amountError
+        val amountError = this.amountCaution.error
         val addressError = this.addressError
         val evmAmount = this.evmAmount
         val addressData = this.addressData
@@ -102,16 +103,20 @@ class SendEvmService(
 
     override fun onChangeAmount(amount: BigDecimal) {
         if (amount > BigDecimal.ZERO) {
+            var amountWarning: AmountWarning? = null
             try {
+                if (amount == balance && (sendCoin.coinType is CoinType.Ethereum || sendCoin.coinType is CoinType.BinanceSmartChain)) {
+                    amountWarning = AmountWarning.CoinNeededForFee
+                }
                 evmAmount = validEvmAmount(amount)
-                amountError = null
+                amountCaution = AmountCaution(null, amountWarning)
             } catch (error: Throwable) {
                 evmAmount = null
-                amountError = error
+                amountCaution = AmountCaution(error, null)
             }
         } else {
             evmAmount = null
-            amountError = null
+            amountCaution = AmountCaution()
         }
 
         syncState()
@@ -165,6 +170,12 @@ class SendEvmService(
                 return Translator.getString(R.string.Swap_ErrorInsufficientBalance)
             }
         }
+    }
+
+    class AmountCaution(val error: Throwable? = null, val amountWarning: AmountWarning? = null)
+
+    enum class AmountWarning {
+        CoinNeededForFee
     }
 
     data class AddressData(val evmAddress: EvmAddress, val domain: String?)
