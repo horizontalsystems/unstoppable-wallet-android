@@ -26,6 +26,7 @@ data class MenuItem(
 fun AppBarMenuButton(
     @DrawableRes icon: Int,
     onClick: () -> Unit,
+    description: String? = null,
     enabled: Boolean = true,
     tint: Color = ComposeAppTheme.colors.jacob,
 ) {
@@ -35,7 +36,7 @@ fun AppBarMenuButton(
     ) {
         Icon(
             painter = painterResource(id = icon),
-            contentDescription = null,
+            contentDescription = description,
             tint = tint
         )
     }
