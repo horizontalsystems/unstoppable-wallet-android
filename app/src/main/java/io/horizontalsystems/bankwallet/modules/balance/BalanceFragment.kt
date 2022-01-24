@@ -169,19 +169,21 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                     ComposeAppTheme.colors.yellow50
                 }
 
-                Text(
+                TabBalance(
                     modifier = Modifier
-                        .padding(top = 10.dp, start = 16.dp, bottom = 7.dp)
                         .clickable {
                             viewModel.onBalanceClick()
                             HudHelper.vibrate(requireContext())
-                        },
-                    text = headerViewItem?.xBalanceText ?: "",
-                    style = ComposeAppTheme.typography.headline1,
-                    color = color,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                        }
+                ) {
+                    Text(
+                        text = headerViewItem?.xBalanceText ?: "",
+                        style = ComposeAppTheme.typography.headline1,
+                        color = color,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
 
                 Header(borderTop = true) {
                     sortType?.let {

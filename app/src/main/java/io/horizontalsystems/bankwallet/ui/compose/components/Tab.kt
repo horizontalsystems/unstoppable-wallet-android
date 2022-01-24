@@ -10,11 +10,12 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun TabBalance(
+    modifier: Modifier = Modifier,
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
     content: @Composable (RowScope.() -> Unit),
 ) {
-    BarSingleLine(Modifier.padding(horizontal = 16.dp), borderTop, borderBottom, content = content)
+    BarSingleLine(modifier.padding(horizontal = 16.dp), borderTop, borderBottom, content = content)
 }
 
 @Composable
