@@ -125,136 +125,139 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
             val sortType by viewModel.sortTypeUpdatedLiveData.observeAsState()
             val account by viewModel.accountLiveData.observeAsState()
-            val balanceItems by viewModel.balanceViewItems.observeAsState(listOf())
-            val title by viewModel.titleLiveData.observeAsState(getString(R.string.Balance_Title))
+            val balanceItems2 by viewModel.balanceViewItems.observeAsState()
+            val title by viewModel.titleLiveData.observeAsState()
             val headerViewItem by viewModel.headerViewItemLiveData.observeAsState()
 
-            Column {
-                TopAppBar(
-                    modifier = Modifier.height(56.dp),
-                    title = {
-                        Row(
+            balanceItems2?.let { balanceItems ->
+                Column {
+                    TopAppBar(
+                        modifier = Modifier.height(56.dp),
+                        title = {
+                            title?.let { title ->
+                                Row(
+                                    modifier = Modifier
+                                        .clickable {
+                                            findNavController().slideFromBottom(
+                                                R.id.mainFragment_to_manageKeysFragment,
+                                                ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
+                                            )
+                                        },
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = title,
+                                        style = ComposeAppTheme.typography.title3,
+                                        color = ComposeAppTheme.colors.oz,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_down_24),
+                                        contentDescription = null,
+                                        tint = ComposeAppTheme.colors.grey
+                                    )
+                                }
+                            }
+                        },
+                        backgroundColor = ComposeAppTheme.colors.tyler,
+                        elevation = 0.dp
+                    )
+
+                    if (balanceItems.isEmpty()) {
+                        if (account?.isWatchAccount == true) {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(100.dp)
+                                        .clip(CircleShape)
+                                        .background(ComposeAppTheme.colors.jeremy),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_emptywallet_48),
+                                        contentDescription = null,
+                                        tint = ComposeAppTheme.colors.grey
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(32.dp))
+                                Text(
+                                    modifier = Modifier.padding(horizontal = 48.dp),
+                                    text = stringResource(id = R.string.Balance_WatchAccount_NoBalance),
+                                    color = ComposeAppTheme.colors.grey,
+                                    style = ComposeAppTheme.typography.subhead2,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    } else {
+                        TabBalance(
                             modifier = Modifier
                                 .clickable {
-                                    findNavController().slideFromBottom(
-                                        R.id.mainFragment_to_manageKeysFragment,
-                                        ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
-                                    )
-                                },
-                            verticalAlignment = Alignment.CenterVertically
+                                    viewModel.onBalanceClick()
+                                    HudHelper.vibrate(requireContext())
+                                }
                         ) {
+                            val color = if (headerViewItem?.upToDate == true) {
+                                ComposeAppTheme.colors.jacob
+                            } else {
+                                ComposeAppTheme.colors.yellow50
+                            }
                             Text(
-                                text = title,
-                                style = ComposeAppTheme.typography.title3,
-                                color = ComposeAppTheme.colors.oz,
+                                text = headerViewItem?.xBalanceText ?: "",
+                                style = ComposeAppTheme.typography.headline1,
+                                color = color,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_down_24),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.grey
-                            )
                         }
 
-                    },
-                    backgroundColor = ComposeAppTheme.colors.tyler,
-                    elevation = 0.dp
-                )
-
-                if (balanceItems.isEmpty()) {
-                    if (account?.isWatchAccount == true) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .clip(CircleShape)
-                                    .background(ComposeAppTheme.colors.jeremy),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_emptywallet_48),
-                                    contentDescription = null,
-                                    tint = ComposeAppTheme.colors.grey
+                        Header(borderTop = true) {
+                            sortType?.let {
+                                ButtonSecondaryTransparent(
+                                    title = getString(it.getTitleRes()),
+                                    iconRight = R.drawable.ic_down_arrow_20,
+                                    onClick = {
+                                        onSortButtonClick(it)
+                                    }
                                 )
                             }
-                            Spacer(modifier = Modifier.height(32.dp))
-                            Text(
-                                modifier = Modifier.padding(horizontal = 48.dp),
-                                text = stringResource(id = R.string.Balance_WatchAccount_NoBalance),
-                                color = ComposeAppTheme.colors.grey,
-                                style = ComposeAppTheme.typography.subhead2,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                } else {
-                    TabBalance(
-                        modifier = Modifier
-                            .clickable {
-                                viewModel.onBalanceClick()
-                                HudHelper.vibrate(requireContext())
-                            }
-                    ) {
-                        val color = if (headerViewItem?.upToDate == true) {
-                            ComposeAppTheme.colors.jacob
-                        } else {
-                            ComposeAppTheme.colors.yellow50
-                        }
-                        Text(
-                            text = headerViewItem?.xBalanceText ?: "",
-                            style = ComposeAppTheme.typography.headline1,
-                            color = color,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
 
-                    Header(borderTop = true) {
-                        sortType?.let {
-                            ButtonSecondaryTransparent(
-                                title = getString(it.getTitleRes()),
-                                iconRight = R.drawable.ic_down_arrow_20,
-                                onClick = {
-                                    onSortButtonClick(it)
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            account?.let { account ->
+                                val clipboardManager = LocalClipboardManager.current
+                                account.address?.let { address ->
+                                    ButtonSecondaryDefault(
+                                        title = address.shortenedAddress(),
+                                        onClick = {
+                                            clipboardManager.setText(AnnotatedString(address))
+                                            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
+                                        }
+                                    )
                                 }
-                            )
+                                if (account.manageCoinsAllowed) {
+                                    ButtonSecondaryCircle(
+                                        icon = R.drawable.ic_manage_2,
+                                        onClick = {
+                                            findNavController().slideFromRight(
+                                                R.id.mainFragment_to_manageWalletsFragment
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.width(16.dp))
                         }
 
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        account?.let { account ->
-                            val clipboardManager = LocalClipboardManager.current
-                            account.address?.let { address ->
-                                ButtonSecondaryDefault(
-                                    title = address.shortenedAddress(),
-                                    onClick = {
-                                        clipboardManager.setText(AnnotatedString(address))
-                                        HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
-                                    }
-                                )
-                            }
-                            if (account.manageCoinsAllowed) {
-                                ButtonSecondaryCircle(
-                                    icon = R.drawable.ic_manage_2,
-                                    onClick = {
-                                        findNavController().slideFromRight(
-                                            R.id.mainFragment_to_manageWalletsFragment
-                                        )
-                                    }
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.width(16.dp))
+                        Wallets(balanceItems)
                     }
-
-                    Wallets(balanceItems)
                 }
             }
         }
