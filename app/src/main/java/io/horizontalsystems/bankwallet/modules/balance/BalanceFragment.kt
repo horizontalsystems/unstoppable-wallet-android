@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -23,10 +22,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -36,12 +32,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
@@ -50,8 +48,10 @@ import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.databinding.FragmentBalanceBinding
+import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.shortenedAddress
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
@@ -80,68 +80,110 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
     private var scrollToTopAfterUpdate = false
 
-    private var _binding: FragmentBalanceBinding? = null
-    private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBalanceBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.toolbarTitle.setOnSingleClickListener {
-            findNavController().slideFromBottom(
-                R.id.mainFragment_to_manageKeysFragment,
-                ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
+            setContent {
+                BalanceScreen()
+            }
         }
-
-        binding.balanceText.setOnClickListener {
-            viewModel.onBalanceClick()
-            HudHelper.vibrate(requireContext())
-        }
-
-        observeLiveData()
-        //setSwipeBackground()
-
-        binding.buttonsCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        binding.walletListCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        setWallets()
-
-        setTopButtons()
     }
 
-    private fun setTopButtons() {
-        binding.buttonsCompose.setContent {
-            ComposeAppTheme {
-                val sortType by viewModel.sortTypeUpdatedLiveData.observeAsState()
-                val account by viewModel.accountLiveData.observeAsState()
+    @Composable
+    private fun BalanceScreen() {
+        ComposeAppTheme {
+            viewModel.disabledWalletLiveData.observe(viewLifecycleOwner) { wallet ->
+                Snackbar.make(
+                    requireView(),
+                    getString(R.string.Balance_CoinDisabled, wallet.coin.name),
+                    Snackbar.LENGTH_LONG
+                )
+                    .setAction(R.string.Action_Undo) {
+                        viewModel.enable(wallet)
+                    }
+                    .show()
+            }
 
-                Row(
+            viewModel.openPrivacySettingsLiveEvent.observe(viewLifecycleOwner, {
+                findNavController().slideFromRight(
+                    R.id.mainFragment_to_privacySettingsFragment
+                )
+            })
+
+            viewModel.openEvmNetworkSettingsLiveEvent.observe(viewLifecycleOwner, {
+                findNavController().slideFromRight(
+                    R.id.evmNetworkFragment,
+                    EvmNetworkModule.args(it.first, it.second)
+                )
+            })
+
+            val sortType by viewModel.sortTypeUpdatedLiveData.observeAsState()
+            val account by viewModel.accountLiveData.observeAsState()
+            val balanceItems by viewModel.balanceViewItems.observeAsState(listOf())
+            val title by viewModel.titleLiveData.observeAsState(getString(R.string.Balance_Title))
+            val headerViewItem by viewModel.headerViewItemLiveData.observeAsState()
+
+            Column {
+                TopAppBar(
+                    modifier = Modifier.height(56.dp),
+                    title = {
+                        Row(
+                            modifier = Modifier
+                                .clickable {
+                                    findNavController().slideFromBottom(
+                                        R.id.mainFragment_to_manageKeysFragment,
+                                        ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
+                                    )
+                                },
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = title,
+                                style = ComposeAppTheme.typography.title3,
+                                color = ComposeAppTheme.colors.oz,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_down_24),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.grey
+                            )
+                        }
+
+                    },
+                    backgroundColor = ComposeAppTheme.colors.tyler,
+                    elevation = 0.dp
+                )
+
+                val color = if (headerViewItem?.upToDate == true) {
+                    ComposeAppTheme.colors.jacob
+                } else {
+                    ComposeAppTheme.colors.yellow50
+                }
+
+                Text(
                     modifier = Modifier
-                        .width(IntrinsicSize.Max)
-                        .padding(end = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                        .padding(top = 10.dp, start = 16.dp, bottom = 7.dp)
+                        .clickable {
+                            viewModel.onBalanceClick()
+                            HudHelper.vibrate(requireContext())
+                        },
+                    text = headerViewItem?.xBalanceText ?: "",
+                    style = ComposeAppTheme.typography.headline1,
+                    color = color,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Header(borderTop = true) {
                     sortType?.let {
                         ButtonSecondaryTransparent(
                             title = getString(it.getTitleRes()),
@@ -151,6 +193,8 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                             }
                         )
                     }
+
+                    Spacer(modifier = Modifier.weight(1f))
 
                     account?.let { account ->
                         val clipboardManager = LocalClipboardManager.current
@@ -174,7 +218,11 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                             )
                         }
                     }
+
+                    Spacer(modifier = Modifier.width(16.dp))
                 }
+
+                Wallets(balanceItems)
             }
         }
     }
@@ -202,15 +250,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
             R.id.mainFragment_to_backupKeyFragment,
             BackupKeyModule.prepareParams(account)
         )
-    }
-
-    private fun setWallets() {
-        binding.walletListCompose.setContent {
-            ComposeAppTheme {
-                val balanceItems by viewModel.balanceViewItems.observeAsState(listOf())
-                Wallets(balanceItems)
-            }
-        }
     }
 
     @Composable
@@ -277,7 +316,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     @Composable
     fun WalletCard(viewItem: BalanceViewItem, isWatchAccount: Boolean) {
-        val ctx = context ?: return
         val interactionSource = remember { MutableInteractionSource() }
 
         Card(
@@ -308,7 +346,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                         .padding(end = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    LeftIcon(viewItem, ctx)
+                    LeftIcon(viewItem)
                     Column {
                         FirstRow(viewItem)
                         SecondRow(viewItem)
@@ -320,7 +358,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     }
 
     @Composable
-    private fun LeftIcon(viewItem: BalanceViewItem, ctx: Context) {
+    private fun LeftIcon(viewItem: BalanceViewItem) {
         Box(
             modifier = Modifier
                 .width(56.dp)
@@ -652,42 +690,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         }
     }
 
-    // LiveData
-
-    private fun observeLiveData() {
-        viewModel.titleLiveData.observe(viewLifecycleOwner) {
-            binding.toolbarTitle.text = it ?: getString(R.string.Balance_Title)
-        }
-
-        viewModel.disabledWalletLiveData.observe(viewLifecycleOwner) { wallet ->
-            Snackbar.make(
-                requireView(),
-                getString(R.string.Balance_CoinDisabled, wallet.coin.name),
-                Snackbar.LENGTH_LONG
-            )
-                .setAction(R.string.Action_Undo) {
-                    viewModel.enable(wallet)
-                }
-                .show()
-        }
-
-        viewModel.headerViewItemLiveData.observe(viewLifecycleOwner) {
-            setHeaderViewItem(it)
-        }
-
-        viewModel.openPrivacySettingsLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().slideFromRight(
-                R.id.mainFragment_to_privacySettingsFragment
-            )
-        })
-
-        viewModel.openEvmNetworkSettingsLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().slideFromRight(
-                R.id.evmNetworkFragment,
-                EvmNetworkModule.args(it.first, it.second)
-            )
-        })
-    }
 
     private fun onSortButtonClick(currentSortType: BalanceSortType) {
         val sortTypes =
@@ -715,13 +717,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         } catch (e: ActivityNotFoundException) {
             TextHelper.copyText(email)
             HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_EmailAddressCopied)
-        }
-    }
-
-    private fun setHeaderViewItem(headerViewItem: BalanceHeaderViewItem) {
-        headerViewItem.apply {
-            binding.balanceText.text = xBalanceText
-            context?.let { context -> binding.balanceText.setTextColor(getBalanceTextColor(context)) }
         }
     }
 
