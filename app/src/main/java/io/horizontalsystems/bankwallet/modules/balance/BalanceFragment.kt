@@ -163,68 +163,99 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                     elevation = 0.dp
                 )
 
-                val color = if (headerViewItem?.upToDate == true) {
-                    ComposeAppTheme.colors.jacob
-                } else {
-                    ComposeAppTheme.colors.yellow50
-                }
-
-                TabBalance(
-                    modifier = Modifier
-                        .clickable {
-                            viewModel.onBalanceClick()
-                            HudHelper.vibrate(requireContext())
-                        }
-                ) {
-                    Text(
-                        text = headerViewItem?.xBalanceText ?: "",
-                        style = ComposeAppTheme.typography.headline1,
-                        color = color,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-
-                Header(borderTop = true) {
-                    sortType?.let {
-                        ButtonSecondaryTransparent(
-                            title = getString(it.getTitleRes()),
-                            iconRight = R.drawable.ic_down_arrow_20,
-                            onClick = {
-                                onSortButtonClick(it)
+                if (balanceItems.isEmpty()) {
+                    if (account?.isWatchAccount == true) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .clip(CircleShape)
+                                    .background(ComposeAppTheme.colors.jeremy),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_emptywallet_48),
+                                    contentDescription = null,
+                                    tint = ComposeAppTheme.colors.grey
+                                )
                             }
+                            Spacer(modifier = Modifier.height(32.dp))
+                            Text(
+                                modifier = Modifier.padding(horizontal = 48.dp),
+                                text = stringResource(id = R.string.Balance_WatchAccount_NoBalance),
+                                color = ComposeAppTheme.colors.grey,
+                                style = ComposeAppTheme.typography.subhead2,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else {
+                    TabBalance(
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.onBalanceClick()
+                                HudHelper.vibrate(requireContext())
+                            }
+                    ) {
+                        val color = if (headerViewItem?.upToDate == true) {
+                            ComposeAppTheme.colors.jacob
+                        } else {
+                            ComposeAppTheme.colors.yellow50
+                        }
+                        Text(
+                            text = headerViewItem?.xBalanceText ?: "",
+                            style = ComposeAppTheme.typography.headline1,
+                            color = color,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
 
-                    Spacer(modifier = Modifier.weight(1f))
+                    Header(borderTop = true) {
+                        sortType?.let {
+                            ButtonSecondaryTransparent(
+                                title = getString(it.getTitleRes()),
+                                iconRight = R.drawable.ic_down_arrow_20,
+                                onClick = {
+                                    onSortButtonClick(it)
+                                }
+                            )
+                        }
 
-                    account?.let { account ->
-                        val clipboardManager = LocalClipboardManager.current
-                        account.address?.let { address ->
-                            ButtonSecondaryDefault(
-                                title = address.shortenedAddress(),
-                                onClick = {
-                                    clipboardManager.setText(AnnotatedString(address))
-                                    HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
-                                }
-                            )
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        account?.let { account ->
+                            val clipboardManager = LocalClipboardManager.current
+                            account.address?.let { address ->
+                                ButtonSecondaryDefault(
+                                    title = address.shortenedAddress(),
+                                    onClick = {
+                                        clipboardManager.setText(AnnotatedString(address))
+                                        HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
+                                    }
+                                )
+                            }
+                            if (account.manageCoinsAllowed) {
+                                ButtonSecondaryCircle(
+                                    icon = R.drawable.ic_manage_2,
+                                    onClick = {
+                                        findNavController().slideFromRight(
+                                            R.id.mainFragment_to_manageWalletsFragment
+                                        )
+                                    }
+                                )
+                            }
                         }
-                        if (account.manageCoinsAllowed) {
-                            ButtonSecondaryCircle(
-                                icon = R.drawable.ic_manage_2,
-                                onClick = {
-                                    findNavController().slideFromRight(
-                                        R.id.mainFragment_to_manageWalletsFragment
-                                    )
-                                }
-                            )
-                        }
+
+                        Spacer(modifier = Modifier.width(16.dp))
                     }
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Wallets(balanceItems)
                 }
-
-                Wallets(balanceItems)
             }
         }
     }
@@ -262,54 +293,21 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         val coroutineScope = rememberCoroutineScope()
         val listState = rememberLazyListState()
 
-        if (balanceViewItems.isEmpty()) {
-            if (account?.isWatchAccount == true) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(100.dp)
-                            .clip(CircleShape)
-                            .background(ComposeAppTheme.colors.jeremy),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_emptywallet_48),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.grey
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(32.dp))
-                    Text(
-                        modifier = Modifier.padding(horizontal = 48.dp),
-                        text = stringResource(id = R.string.Balance_WatchAccount_NoBalance),
-                        color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.subhead2,
-                        textAlign = TextAlign.Center
+        HSSwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing ?: false),
+            onRefresh = { viewModel.onRefresh() }
+        ) {
+            LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 18.dp)) {
+                items(balanceViewItems) { item ->
+                    WalletCard(
+                        viewItem = item,
+                        account?.isWatchAccount == true
                     )
                 }
-            }
-
-        } else {
-            HSSwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing ?: false),
-                onRefresh = { viewModel.onRefresh() }
-            ) {
-                LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 18.dp)) {
-                    items(balanceViewItems) { item ->
-                        WalletCard(
-                            viewItem = item,
-                            account?.isWatchAccount == true
-                        )
-                    }
-                    if (scrollToTopAfterUpdate) {
-                        scrollToTopAfterUpdate = false
-                        coroutineScope.launch {
-                            listState.scrollToItem(0)
-                        }
+                if (scrollToTopAfterUpdate) {
+                    scrollToTopAfterUpdate = false
+                    coroutineScope.launch {
+                        listState.scrollToItem(0)
                     }
                 }
             }
