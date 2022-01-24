@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.databinding.FragmentManageWalletsBinding
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
@@ -73,8 +72,8 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
     // CoinListBaseFragment
 
     protected fun setViewItems(viewItems: List<CoinViewItem>) {
-        binding.toolbar.menu.findItem(R.id.menuAddToken)?.isVisible =
-            !searchExpanded.get() || searchExpanded.get() && viewItems.isEmpty()
+//        binding.toolbar.menu.findItem(R.id.menuAddToken)?.isVisible =
+//            !searchExpanded.get() || searchExpanded.get() && viewItems.isEmpty()
 
         itemsAdapter.submitList(viewItems) {
             if (scrollToTopAfterUpdate) {
