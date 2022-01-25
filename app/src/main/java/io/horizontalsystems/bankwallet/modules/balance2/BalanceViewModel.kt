@@ -62,4 +62,10 @@ class BalanceViewModel(
     override fun onCleared() {
         service.clear()
     }
+
+    fun onBalanceClick() {
+        service.balanceHidden = !service.balanceHidden
+
+        refreshViewItems()
+    }
 }

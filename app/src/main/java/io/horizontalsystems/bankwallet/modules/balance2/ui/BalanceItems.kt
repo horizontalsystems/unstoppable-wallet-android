@@ -36,7 +36,7 @@ fun BalanceItems(
     TabBalance(
         modifier = Modifier
             .clickable {
-//                viewModel.onBalanceClick()
+                viewModel.onBalanceClick()
                 HudHelper.vibrate(context)
             }
     ) {
