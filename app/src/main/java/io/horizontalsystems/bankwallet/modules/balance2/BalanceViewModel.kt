@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 
-class BalanceXxxViewModel(
+class BalanceViewModel(
     private val service: BalanceService2,
     private val balanceViewItemFactory: BalanceViewItemFactory
 ) : ViewModel() {

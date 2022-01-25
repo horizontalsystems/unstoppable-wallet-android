@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.balance.*
 
-object BalanceXxxModule {
+object BalanceModule {
     class AccountsFactory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -36,7 +36,7 @@ object BalanceXxxModule {
             )
 
 
-            return BalanceXxxViewModel(
+            return BalanceViewModel(
                 balanceService2,
                 BalanceViewItemFactory()
             ) as T
