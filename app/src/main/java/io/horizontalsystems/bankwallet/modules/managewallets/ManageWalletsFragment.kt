@@ -32,6 +32,8 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItem
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItemState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
@@ -40,8 +42,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
-import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
-import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItemState
 import io.horizontalsystems.core.findNavController
 
 class ManageWalletsFragment : BaseFragment() {
@@ -139,9 +139,11 @@ private fun ManageWalletsScreen(
 ) {
     val coinItems by viewModel.viewItemsLiveData.observeAsState()
 
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+    Column(
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    ) {
         SearchBar(
-            title = TranslatableString.ResString(R.string.ManageCoins_title),
+            title = stringResource(R.string.ManageCoins_title),
             searchHintText = stringResource(R.string.Market_Search_Hint),
             navController = findNavController,
             menuItems = listOf(
@@ -168,12 +170,15 @@ private fun ManageWalletsScreen(
             }
             coinItems?.let {
                 items(it) { viewItem ->
-                    CellMultilineClear(borderBottom = true, onClick = {
-                        onItemClick(viewItem, viewModel)
-                    }) {
+                    CellMultilineClear(
+                        borderBottom = true,
+                        onClick = { onItemClick(viewItem, viewModel) }
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp)
                         ) {
                             Image(
                                 painter = viewItem.imageSource.painter(),
@@ -199,28 +204,23 @@ private fun ManageWalletsScreen(
                                     modifier = Modifier.padding(top = 1.dp)
                                 )
                             }
-                            when (val state = viewItem.state) {
-                                is CoinViewItemState.ToggleVisible -> {
-                                    Spacer(Modifier.width(12.dp))
-                                    if (state.hasSettings) {
-                                        IconButton(onClick = {
-                                            viewModel.onClickSettings(
-                                                viewItem.uid
-                                            )
-                                        }) {
-                                            Icon(
-                                                painter = painterResource(R.drawable.ic_edit_20),
-                                                contentDescription = null,
-                                                tint = ComposeAppTheme.colors.grey
-                                            )
-                                        }
+                            if (viewItem.state is CoinViewItemState.ToggleVisible) {
+                                Spacer(Modifier.width(12.dp))
+                                if (viewItem.state.hasSettings) {
+                                    IconButton(
+                                        onClick = { viewModel.onClickSettings(viewItem.uid) }
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_edit_20),
+                                            contentDescription = null,
+                                            tint = ComposeAppTheme.colors.grey
+                                        )
                                     }
-                                    HsSwitch(
-                                        checked = state.enabled,
-                                        onCheckedChange = { onItemClick(viewItem, viewModel) },
-                                    )
                                 }
-                                else -> {}
+                                HsSwitch(
+                                    checked = viewItem.state.enabled,
+                                    onCheckedChange = { onItemClick(viewItem, viewModel) },
+                                )
                             }
                         }
                     }
@@ -231,14 +231,11 @@ private fun ManageWalletsScreen(
 }
 
 private fun onItemClick(viewItem: CoinViewItem, viewModel: ManageWalletsViewModel) {
-    when (val state = viewItem.state) {
-        is CoinViewItemState.ToggleVisible -> {
-            if (state.enabled) {
-                viewModel.disable(viewItem.uid)
-            } else {
-                viewModel.enable(viewItem.uid)
-            }
+    if (viewItem.state is CoinViewItemState.ToggleVisible) {
+        if (viewItem.state.enabled) {
+            viewModel.disable(viewItem.uid)
+        } else {
+            viewModel.enable(viewItem.uid)
         }
-        else -> {}
     }
 }

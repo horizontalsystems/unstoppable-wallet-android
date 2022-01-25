@@ -1,101 +1,85 @@
 package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
 
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.LayoutInflater
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
+import android.view.ViewGroup
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
+import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
-import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.core.findNavController
 
-class RestoreBlockchainsFragment : CoinListBaseFragment() {
+class RestoreBlockchainsFragment : BaseFragment() {
 
-    override val title
-        get() = getString(R.string.Restore_Title)
+    val vmFactory by lazy {
+        RestoreBlockchainsModule.Factory(arguments?.getParcelable(ACCOUNT_TYPE_KEY)!!)
+    }
 
-    private lateinit var viewModel: RestoreBlockchainsViewModel
-    private lateinit var coinSettingsViewModel: CoinSettingsViewModel
-    private lateinit var restoreSettingsViewModel: RestoreSettingsViewModel
-    private lateinit var coinPlatformsViewModel: CoinPlatformsViewModel
+    private val viewModel by viewModels<RestoreBlockchainsViewModel> { vmFactory }
+    private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
+    private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
+    private val coinPlatformsViewModel by viewModels<CoinPlatformsViewModel> { vmFactory }
 
-    private var doneMenuButton: MenuItem? = null
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.toolbar.inflateMenu(R.menu.restore_select_coin_menu)
-        binding.toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuRestore -> {
-                    hideKeyboard()
-                    viewModel.onRestore()
-                    true
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    ManageWalletsScreen(
+                        findNavController(),
+                        viewModel
+                    )
                 }
-                else -> false
             }
         }
-        doneMenuButton = binding.toolbar.menu.findItem(R.id.menuRestore)
+    }
 
-        val accountType = arguments?.getParcelable<AccountType>(ACCOUNT_TYPE_KEY)
-            ?: throw Exception("Parameter missing")
-
-        val vmFactory by lazy { RestoreBlockchainsModule.Factory(accountType) }
-
-        viewModel = ViewModelProvider(this, vmFactory).get(RestoreBlockchainsViewModel::class.java)
-        coinSettingsViewModel =
-            ViewModelProvider(this, vmFactory).get(CoinSettingsViewModel::class.java)
-        restoreSettingsViewModel =
-            ViewModelProvider(this, vmFactory).get(RestoreSettingsViewModel::class.java)
-        coinPlatformsViewModel =
-            ViewModelProvider(this, vmFactory).get(CoinPlatformsViewModel::class.java)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observe()
     }
 
-    // ManageWalletItemsAdapter.Listener
-
-    override fun enable(uid: String) {
-        viewModel.enable(uid)
-    }
-
-    override fun disable(uid: String) {
-        viewModel.disable(uid)
-    }
-
-    override fun edit(uid: String) {
-        viewModel.onClickSettings(uid)
-    }
-
-    // CoinListBaseFragment
-
-    override fun updateFilter(query: String) {}
-
     private fun observe() {
-        viewModel.viewItemsLiveData.observe(viewLifecycleOwner) { viewItems ->
-            setViewItems(viewItems)
-        }
-
-        viewModel.disableBlockchainLiveData.observe(viewLifecycleOwner) {
-            disableCoin(it)
-        }
-
         viewModel.successLiveEvent.observe(viewLifecycleOwner) {
             findNavController().popBackStack(R.id.restoreMnemonicFragment, true)
         }
 
-        viewModel.restoreEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
-            doneMenuButton?.let { menuItem ->
-                setMenuItemEnabled(menuItem, enabled)
-            }
-        }
-
         coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner) { config ->
-            hideKeyboard()
             showBottomSelectorDialog(
                 config,
                 onSelect = { indexes -> coinSettingsViewModel.onSelect(indexes) },
@@ -127,7 +111,135 @@ class RestoreBlockchainsFragment : CoinListBaseFragment() {
         }
     }
 
+    private fun showBottomSelectorDialog(
+        config: BottomSheetSelectorMultipleDialog.Config,
+        onSelect: (indexes: List<Int>) -> Unit,
+        onCancel: () -> Unit
+    ) {
+        BottomSheetSelectorMultipleDialog.show(
+            fragmentManager = childFragmentManager,
+            title = config.title,
+            subtitle = config.subtitle,
+            icon = config.icon,
+            items = config.viewItems,
+            selected = config.selectedIndexes,
+            notifyUnchanged = true,
+            onItemSelected = { onSelect(it) },
+            onCancelled = { onCancel() },
+            warning = config.description
+        )
+    }
+
     companion object {
         const val ACCOUNT_TYPE_KEY = "account_type_key"
+    }
+}
+
+@Composable
+private fun ManageWalletsScreen(
+    navController: NavController,
+    viewModel: RestoreBlockchainsViewModel
+) {
+    val coinItems by viewModel.viewItemsLiveData.observeAsState()
+    val doneButtonEnabled by viewModel.restoreEnabledLiveData.observeAsState(false)
+
+    Column(
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            title = TranslatableString.ResString(R.string.Restore_Title),
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back),
+                        contentDescription = "back",
+                        tint = ComposeAppTheme.colors.jacob
+                    )
+                }
+            },
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Button_Restore),
+                    onClick = { viewModel.onRestore() },
+                    enabled = doneButtonEnabled
+                )
+            ),
+        )
+
+        LazyColumn {
+            item {
+                Spacer(modifier = Modifier.height(12.dp))
+                Divider(
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel10,
+                )
+            }
+            coinItems?.let {
+                items(it) { viewItem ->
+                    CellMultilineClear(
+                        borderBottom = true,
+                        onClick = { onItemClick(viewItem, viewModel) }
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp)
+                        ) {
+                            Image(
+                                painter = viewItem.imageSource.painter(),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .padding(end = 16.dp)
+                                    .size(24.dp)
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = viewItem.title,
+                                    color = ComposeAppTheme.colors.leah,
+                                    style = ComposeAppTheme.typography.body,
+                                    maxLines = 1,
+                                )
+                                Text(
+                                    text = viewItem.subtitle,
+                                    color = ComposeAppTheme.colors.grey,
+                                    style = ComposeAppTheme.typography.subhead2,
+                                    maxLines = 1,
+                                    modifier = Modifier.padding(top = 1.dp)
+                                )
+                            }
+                            if (viewItem.state is CoinViewItemState.ToggleVisible) {
+                                Spacer(Modifier.width(12.dp))
+                                if (viewItem.state.hasSettings) {
+                                    IconButton(
+                                        onClick = { viewModel.onClickSettings(viewItem.uid) }
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_edit_20),
+                                            contentDescription = null,
+                                            tint = ComposeAppTheme.colors.grey
+                                        )
+                                    }
+                                }
+                                HsSwitch(
+                                    checked = viewItem.state.enabled,
+                                    onCheckedChange = { onItemClick(viewItem, viewModel) },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private fun onItemClick(viewItem: CoinViewItem, viewModel: RestoreBlockchainsViewModel) {
+    if (viewItem.state is CoinViewItemState.ToggleVisible) {
+        if (viewItem.state.enabled) {
+            viewModel.disable(viewItem.uid)
+        } else {
+            viewModel.enable(viewItem.uid)
+        }
     }
 }

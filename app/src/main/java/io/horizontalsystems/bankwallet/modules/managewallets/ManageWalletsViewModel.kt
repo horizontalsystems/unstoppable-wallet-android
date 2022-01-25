@@ -9,9 +9,8 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Supported
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Unsupported
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
-import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItemState
-import io.horizontalsystems.views.ListPosition
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItem
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItemState
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsViewModel(
@@ -37,16 +36,12 @@ class ManageWalletsViewModel(
     }
 
     private fun sync(items: List<ManageWalletsService.Item>) {
-        val itemsSize = items.size
-        val viewItems = items.mapIndexed { index, item ->
-            viewItem(item, ListPosition.getListPosition(itemsSize, index))
-        }
+        val viewItems = items.map { viewItem(it) }
         viewItemsLiveData.postValue(viewItems)
     }
 
     private fun viewItem(
         item: ManageWalletsService.Item,
-        listPosition: ListPosition
     ): CoinViewItem {
         val state = when (item.state) {
             is Supported -> CoinViewItemState.ToggleVisible(
@@ -61,7 +56,6 @@ class ManageWalletsViewModel(
             item.fullCoin.coin.name,
             item.fullCoin.coin.code,
             state,
-            listPosition
         )
     }
 

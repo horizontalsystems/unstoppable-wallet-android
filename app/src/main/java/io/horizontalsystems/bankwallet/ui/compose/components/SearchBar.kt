@@ -25,13 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
 @ExperimentalAnimationApi
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar(
-    title: TranslatableString,
+    title: String,
     searchHintText: String = "",
     navController: NavController,
     menuItems: List<MenuItem> = listOf(),
@@ -47,7 +46,7 @@ fun SearchBar(
         modifier = Modifier.height(56.dp),
         title = {
             Text(
-                text = if (searchMode) "" else title.getString(),
+                text = if (searchMode) "" else title,
                 style = ComposeAppTheme.typography.title3,
                 color = ComposeAppTheme.colors.oz,
                 maxLines = 1,
@@ -55,6 +54,7 @@ fun SearchBar(
             )
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
+        elevation = 0.dp,
         navigationIcon = {
             IconButton(onClick = {
                 if (searchMode) {
