@@ -107,13 +107,13 @@ fun BalanceItems(
         }
 
         Spacer(modifier = Modifier.height(8.dp))
-        Wallets(balanceViewItems, viewModel)
+        Wallets(balanceViewItems, viewModel, navController)
     }
 }
 
 
 @Composable
-fun Wallets(balanceViewItems: List<BalanceViewItem>, viewModel: BalanceViewModel) {
+fun Wallets(balanceViewItems: List<BalanceViewItem>, viewModel: BalanceViewModel, navController: NavController) {
 //    val isRefreshing by viewModel.isRefreshing.observeAsState()
     val isRefreshing = false
 //    val account by viewModel.accountLiveData.observeAsState()
@@ -133,7 +133,7 @@ fun Wallets(balanceViewItems: List<BalanceViewItem>, viewModel: BalanceViewModel
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(balanceViewItems) { item ->
-                BalanceCard(viewItem = item, viewModel)
+                BalanceCard(viewItem = item, viewModel, navController)
             }
 //            if (scrollToTopAfterUpdate) {
 //                scrollToTopAfterUpdate = false
