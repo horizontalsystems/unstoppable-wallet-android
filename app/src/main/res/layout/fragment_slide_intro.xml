@@ -14,10 +14,12 @@
         android:layout_weight="2"
         />
 
-    <View
-        android:id="@+id/imageSwitcherSpace"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="326dp"
         android:layout_height="326dp"
+        android:layout_gravity="center_horizontal"
+        tools:src="@drawable/ic_independence"
         />
 
     <View
@@ -40,43 +42,11 @@
         android:layout_weight="1"
         />
 
-    <LinearLayout
-        android:id="@+id/textWrapper"
+    <View
+        android:id="@+id/textSpace"
         android:layout_width="match_parent"
-        android:layout_height="82dp"
-        android:orientation="vertical"
-        >
-
-        <TextView
-            android:id="@+id/title"
-            style="@style/Title3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:textAlignment="center"
-            tools:text="@string/Intro_Wallet_Screen2Title"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            />
-
-        <TextView
-            android:id="@+id/description"
-            style="@style/Body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="48dp"
-            android:layout_marginEnd="48dp"
-            android:textAlignment="center"
-            android:textColor="@color/grey"
-            tools:text="@string/Intro_Wallet_Screen2Description"
-            />
-
-    </LinearLayout>
+        android:layout_height="120dp"
+        />
 
     <View
         android:id="@+id/spacer4"
