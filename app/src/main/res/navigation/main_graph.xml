@@ -493,4 +493,8 @@
     <dialog
         android:id="@+id/walletConnectErrorWatchAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorWatchAccountFragment" />
+
+    <dialog
+        android:id="@+id/backupRequiredDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />
 </navigation>

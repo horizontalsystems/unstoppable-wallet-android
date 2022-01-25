@@ -43,7 +43,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.android.material.snackbar.Snackbar
@@ -52,13 +51,10 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.shortenedAddress
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
@@ -75,7 +71,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.launch
 
-class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
+class BalanceFragment : BaseFragment() {
 
     private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
     private var scrollToTopAfterUpdate = false
@@ -263,12 +259,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         }
     }
 
-    override fun onAttachFragment(childFragment: Fragment) {
-        if (childFragment is BackupRequiredDialog) {
-            childFragment.setListener(this)
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
@@ -277,15 +267,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
-    }
-
-    //  BackupRequiredDialog Listener
-
-    override fun onClickBackup(account: Account) {
-        findNavController().slideFromRight(
-            R.id.mainFragment_to_backupKeyFragment,
-            BackupKeyModule.prepareParams(account)
-        )
     }
 
     @Composable
@@ -641,7 +622,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                 bundleOf(ReceiveFragment.WALLET_KEY to viewModel.getWalletForReceive(viewItem))
             )
         } catch (e: BalanceViewModel.BackupRequiredError) {
-            BackupRequiredDialog.show(childFragmentManager, e.account)
         }
     }
 

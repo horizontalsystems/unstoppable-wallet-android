@@ -7,10 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.balance.BalanceHeaderViewItem
-import io.horizontalsystems.bankwallet.modules.balance.BalanceService2
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
+import io.horizontalsystems.bankwallet.modules.balance.*
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 
@@ -76,5 +74,10 @@ class BalanceViewModel(
         }
 
         refreshViewItems()
+    }
+
+    fun getWalletForReceive(viewItem: BalanceViewItem) = when {
+        viewItem.wallet.account.isBackedUp -> viewItem.wallet
+        else -> throw BalanceViewModel.BackupRequiredError(viewItem.wallet.account)
     }
 }

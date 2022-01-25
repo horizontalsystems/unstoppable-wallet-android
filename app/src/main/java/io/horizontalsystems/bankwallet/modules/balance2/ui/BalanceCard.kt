@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance2.ui
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -19,20 +20,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.BalanceFragment
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance2.BalanceViewModel
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
+import io.horizontalsystems.bankwallet.modules.send.SendActivity
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
+import io.horizontalsystems.marketkit.models.CoinType
 
 @Composable
-fun BalanceCard(viewItem: BalanceViewItem, viewModel: BalanceViewModel) {
+fun BalanceCard(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -149,17 +162,17 @@ fun BalanceCard(viewItem: BalanceViewItem, viewModel: BalanceViewModel) {
                     }
                 }
 
-                Spacer(modifier = androidx.compose.ui.Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(16.dp))
             }
         }
 
-        ExpandableContent(viewItem)
+        ExpandableContent(viewItem, navController, viewModel)
     }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun ExpandableContent(viewItem: BalanceViewItem) {
+private fun ExpandableContent(viewItem: BalanceViewItem, navController: NavController, viewModel: BalanceViewModel) {
 
     val enterExpand = remember {
         expandVertically(animationSpec = tween(BalanceFragment.EXPAND_ANIMATION_DURATION))
@@ -181,41 +194,72 @@ private fun ExpandableContent(viewItem: BalanceViewItem) {
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10
             )
-            ButtonsRow(viewItem)
+            ButtonsRow(viewItem, navController, viewModel)
         }
     }
 }
 
 @Composable
-private fun ButtonsRow(viewItem: BalanceViewItem) {
+private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, viewModel: BalanceViewModel) {
+    val onClickReceive = {
+        try {
+            navController.slideFromBottom(
+                R.id.mainFragment_to_receiveFragment,
+                bundleOf(ReceiveFragment.WALLET_KEY to viewModel.getWalletForReceive(viewItem))
+            )
+        } catch (e: io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel.BackupRequiredError) {
+            navController.slideFromBottom(
+                R.id.backupRequiredDialog,
+                BackupRequiredDialog.prepareParams(e.account)
+            )
+        }
+    }
+
     Row(
         modifier = Modifier
             .padding(start = 12.dp, end = 12.dp, bottom = 2.dp)
             .height(70.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val context = LocalContext.current
+
         ButtonPrimaryYellow(
             modifier = Modifier.weight(1f),
             title = stringResource(R.string.Balance_Send),
             onClick = {
-//                onSendClicked(viewItem)
+                when (viewItem.wallet.coinType) {
+                    CoinType.Ethereum, is CoinType.Erc20,
+                    CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
+                        navController.slideFromBottom(
+                            R.id.mainFragment_to_sendEvmFragment,
+                            bundleOf(SendEvmModule.walletKey to viewItem.wallet)
+                        )
+                    }
+                    else -> {
+                        val intent = Intent(context, SendActivity::class.java)
+                        intent.putExtra(SendActivity.WALLET, viewItem.wallet)
+
+                        context.startActivity(intent)
+                    }
+                }
             },
             enabled = viewItem.sendEnabled
         )
-        Spacer(modifier = androidx.compose.ui.Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(8.dp))
         if (viewItem.swapVisible) {
             ButtonPrimaryCircle(
                 icon = R.drawable.ic_arrow_down_left_24,
-                onClick = {
-//                    onReceiveClicked(viewItem)
-                },
+                onClick = onClickReceive,
                 enabled = viewItem.receiveEnabled
             )
-            Spacer(modifier = androidx.compose.ui.Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             ButtonPrimaryCircle(
                 icon = R.drawable.ic_swap_24,
                 onClick = {
-//                    onSwapClicked(viewItem)
+                    navController.slideFromBottom(
+                        R.id.mainFragment_to_swapFragment,
+                        SwapMainModule.prepareParams(viewItem.wallet.platformCoin)
+                    )
                 },
                 enabled = viewItem.swapEnabled
             )
@@ -223,17 +267,18 @@ private fun ButtonsRow(viewItem: BalanceViewItem) {
             ButtonPrimaryDefault(
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.Balance_Receive),
-                onClick = {
-//                    onReceiveClicked(viewItem)
-                },
+                onClick = onClickReceive,
                 enabled = viewItem.receiveEnabled
             )
         }
-        Spacer(modifier = androidx.compose.ui.Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(8.dp))
         ButtonPrimaryCircle(
             icon = R.drawable.ic_chart_24,
             onClick = {
-//                onChartClicked(viewItem)
+                val coinUid = viewItem.wallet.coin.uid
+                val arguments = CoinFragment.prepareParams(coinUid)
+
+                navController.slideFromRight(R.id.mainFragment_to_coinFragment, arguments)
             },
             enabled = viewItem.exchangeValue.text != null
         )
