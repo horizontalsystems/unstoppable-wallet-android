@@ -114,20 +114,17 @@ fun BalanceItems(
 
 @Composable
 fun Wallets(balanceViewItems: List<BalanceViewItem>, viewModel: BalanceViewModel, navController: NavController) {
-//    val isRefreshing by viewModel.isRefreshing.observeAsState()
-    val isRefreshing = false
-//    val account by viewModel.accountLiveData.observeAsState()
-
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing ?: false),
+        state = rememberSwipeRefreshState(viewModel.isRefreshing),
         onRefresh = {
-//            viewModel.onRefresh()
+            viewModel.onRefresh()
         }
     ) {
         LazyColumn(
+            modifier = Modifier.fillMaxSize(),
             state = listState,
             contentPadding = PaddingValues(bottom = 18.dp, start = 16.dp, end = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)

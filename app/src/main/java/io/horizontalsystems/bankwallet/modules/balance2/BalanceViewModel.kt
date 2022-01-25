@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceService2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class BalanceViewModel(
@@ -21,6 +22,9 @@ class BalanceViewModel(
 ) : ViewModel() {
 
     var balanceViewItemsWrapper by mutableStateOf<Pair<BalanceHeaderViewItem, List<BalanceViewItem>>?>(null)
+        private set
+
+    var isRefreshing by mutableStateOf(false)
         private set
 
     var sortType by service::sortType
@@ -84,19 +88,19 @@ class BalanceViewModel(
         else -> throw BackupRequiredError(viewItem.wallet.account)
     }
 
-//    fun onRefresh() {
-//        if (_isRefreshing.value != null && _isRefreshing.value == true) {
-//            return
-//        }
-//
-//        viewModelScope.launch {
-//            service.refresh()
-//            // A fake 2 seconds 'refresh'
-//            _isRefreshing.postValue(true)
-//            delay(2300)
-//            _isRefreshing.postValue(false)
-//        }
-//    }
+    fun onRefresh() {
+        if (isRefreshing) {
+            return
+        }
+
+        viewModelScope.launch {
+            isRefreshing = true
+            service.refresh()
+            // A fake 2 seconds 'refresh'
+            delay(2300)
+            isRefreshing = false
+        }
+    }
 //
 //
 //
