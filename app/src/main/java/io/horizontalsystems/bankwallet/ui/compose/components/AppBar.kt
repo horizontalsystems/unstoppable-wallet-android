@@ -78,7 +78,7 @@ fun AppBar(
                     val color = if (menuItem.enabled) {
                         ComposeAppTheme.colors.jacob
                     } else {
-                        ComposeAppTheme.colors.yellow50
+                        ComposeAppTheme.colors.grey50
                     }
 
                     Text(

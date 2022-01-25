@@ -102,7 +102,7 @@ object RestoreBlockchainsModule {
                 Bitcoin -> CoinType.Bitcoin
                 Ethereum -> CoinType.Ethereum
                 BinanceSmartChain -> CoinType.BinanceSmartChain
-                BinanceChain -> CoinType.BinanceSmartChain
+                BinanceChain -> CoinType.Bep2("BNB")
                 BitcoinCash -> CoinType.BitcoinCash
                 Zcash -> CoinType.Zcash
                 Litecoin -> CoinType.Litecoin
@@ -116,3 +116,15 @@ object RestoreBlockchainsModule {
     class InternalItem(val blockchain: Blockchain, val platformCoin: PlatformCoin)
 }
 
+data class CoinViewItem(
+    val uid: String,
+    val imageSource: ImageSource,
+    val title: String,
+    val subtitle: String,
+    val state: CoinViewItemState,
+)
+
+sealed class CoinViewItemState {
+    data class ToggleVisible(val enabled: Boolean, val hasSettings: Boolean) : CoinViewItemState()
+    object ToggleHidden : CoinViewItemState()
+}

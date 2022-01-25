@@ -8,10 +8,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsService.ItemState.Supported
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsService.ItemState.Unsupported
-import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
-import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItemState
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.views.ListPosition
 import io.reactivex.BackpressureStrategy
 import io.reactivex.disposables.CompositeDisposable
 
@@ -43,16 +40,12 @@ class RestoreBlockchainsViewModel(
     }
 
     private fun sync(items: List<RestoreBlockchainsService.Item>) {
-        val itemsSize = items.size
-        val viewItems = items.mapIndexed { index, item ->
-            viewItem(item, ListPosition.getListPosition(itemsSize, index))
-        }
+        val viewItems = items.map { viewItem(it) }
         viewItemsLiveData.postValue(viewItems)
     }
 
     private fun viewItem(
         item: RestoreBlockchainsService.Item,
-        listPosition: ListPosition
     ): CoinViewItem {
         val state = when (item.state) {
             is Supported -> CoinViewItemState.ToggleVisible(
@@ -68,7 +61,6 @@ class RestoreBlockchainsViewModel(
             item.blockchain.title,
             item.blockchain.description,
             state,
-            listPosition
         )
     }
 
