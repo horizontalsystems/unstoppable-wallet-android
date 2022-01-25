@@ -18,8 +18,6 @@ import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.databinding.FragmentMainBinding
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingModule
-import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingViewModel
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
@@ -29,7 +27,6 @@ import io.horizontalsystems.core.findNavController
 class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
 
     private val viewModel by viewModels<MainViewModel> { MainModule.Factory() }
-    private val balanceOnboardingViewModel by viewModels<BalanceOnboardingViewModel> { BalanceOnboardingModule.Factory() }
     private var bottomBadgeView: View? = null
 
     private var _binding: FragmentMainBinding? = null
@@ -92,10 +89,6 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
                     viewModel.onSelect(it)
                 }
             })
-
-        balanceOnboardingViewModel.balanceViewTypeLiveData.observe(viewLifecycleOwner) {
-            mainViewPagerAdapter.balancePageType = it
-        }
 
         viewModel.showRootedDeviceWarningLiveEvent.observe(viewLifecycleOwner, {
             startActivity(Intent(activity, RootedDeviceActivity::class.java))

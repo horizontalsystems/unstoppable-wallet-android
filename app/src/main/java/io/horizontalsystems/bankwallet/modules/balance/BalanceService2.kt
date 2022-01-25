@@ -93,7 +93,7 @@ class BalanceService2(
     }
 
     @Synchronized
-    fun handleAdaptersReady() {
+    private fun handleAdaptersReady() {
         for (i in 0 until allBalanceItems.size) {
             val balanceItem = allBalanceItems[i]
 
