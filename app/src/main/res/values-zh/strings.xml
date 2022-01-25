@@ -216,10 +216,10 @@
     <string name="Market_Filter_Range_10B_100B">10B - 100B</string>
     <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
     <string name="Market_Filter_Range_500B_More">&gt; 500BN</string>
-    <string name="Market_Filter_TimePeriod_1D">1 Day</string>
-    <string name="Market_Filter_TimePeriod_1W">1 Week</string>
+    <string name="Market_Filter_TimePeriod_1D">1天</string>
+    <string name="Market_Filter_TimePeriod_1W">1周</string>
     <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
-    <string name="Market_Filter_TimePeriod_1M">1 Month</string>
+    <string name="Market_Filter_TimePeriod_1M">1月</string>
     <string name="Market_Filter_TimePeriod_6M">6 Months</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
     <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
@@ -305,7 +305,7 @@
     <string name="Send_DialogProceed">Next</string>
     <string name="Send_LockTime_Off">Off</string>
     <string name="Send_LockTime_Hour">1 hour</string>
-    <string name="Send_LockTime_Month">1 month</string>
+    <string name="Send_LockTime_Month">1月</string>
     <string name="Send_LockTime_HalfYear">6 months</string>
     <string name="Send_LockTime_Year">1 year</string>
     <string name="Send_Sending">Sending</string>
@@ -783,7 +783,7 @@
     <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>
-    <string name="CoinPage_TimeDuration_Month">1M</string>
+    <string name="CoinPage_TimeDuration_Month">1月</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
     <string name="CoinPage_TimeDuration_Month3">3M</string>
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
@@ -865,8 +865,8 @@
     <string name="CoinPage_InWallet">In Wallet</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
-    <string name="CoinPage_Performance_Week">1 Week</string>
-    <string name="CoinPage_Performance_Month">1 Month</string>
+    <string name="CoinPage_Performance_Week">1周</string>
+    <string name="CoinPage_Performance_Month">1月</string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
     <string name="CoinPage_LaunchDate">Inception Date</string>
