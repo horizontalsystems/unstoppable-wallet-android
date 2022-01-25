@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.reactivex.disposables.CompositeDisposable
 
 class BalanceAccountsViewModel(private val accountManager: IAccountManager) : ViewModel() {
@@ -59,3 +58,5 @@ class BalanceAccountsViewModel(private val accountManager: IAccountManager) : Vi
         disposables.clear()
     }
 }
+
+data class AccountViewItem(val address: String?, val manageCoinsAllowed: Boolean, val isWatchAccount: Boolean, val name: String = "")
