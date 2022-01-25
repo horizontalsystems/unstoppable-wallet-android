@@ -183,14 +183,21 @@ fun CellData2(content: @Composable () -> Unit) {
 fun CellMultilineClear(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
+    val clickableModifier = when (onClick) {
+        null -> Modifier
+        else -> Modifier.clickable {
+            onClick.invoke()
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
-            .clickable { onClick.invoke() }
+            .then(clickableModifier)
     ) {
         if (borderTop) {
             Divider(

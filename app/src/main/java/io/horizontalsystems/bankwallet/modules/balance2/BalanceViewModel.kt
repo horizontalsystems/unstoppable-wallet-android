@@ -68,4 +68,13 @@ class BalanceViewModel(
 
         refreshViewItems()
     }
+
+    fun onItem(viewItem: BalanceViewItem) {
+        expandedWallet = when {
+            viewItem.wallet == expandedWallet -> null
+            else -> viewItem.wallet
+        }
+
+        refreshViewItems()
+    }
 }
