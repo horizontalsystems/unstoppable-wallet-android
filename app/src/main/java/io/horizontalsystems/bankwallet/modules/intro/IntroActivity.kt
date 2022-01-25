@@ -9,7 +9,6 @@ import android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
@@ -51,11 +50,12 @@ class IntroActivity : BaseActivity() {
         } catch (e: Exception) {
         }
 
-        val images = arrayOf(
-            R.drawable.ic_independence,
-            R.drawable.ic_knowledge,
-            R.drawable.ic_privacy
+        val textes = listOf(
+            Pair(R.string.Intro_Wallet_Screen2Title, R.string.Intro_Wallet_Screen2Description),
+            Pair(R.string.Intro_Wallet_Screen3Title, R.string.Intro_Wallet_Screen3Description),
+            Pair(R.string.Intro_Wallet_Screen4Title, R.string.Intro_Wallet_Screen4Description),
         )
+
         binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) = Unit
 
@@ -67,12 +67,13 @@ class IntroActivity : BaseActivity() {
             }
 
             override fun onPageSelected(position: Int) {
-                binding.imageSwitcher.setImageResource(images[position])
+                binding.title.setText(getString(textes[position].first))
+                binding.description.setText(getString(textes[position].second))
             }
         })
 
-        binding.imageSwitcher.setFactory { ImageView(applicationContext) }
-        binding.imageSwitcher.setImageResource(images[0])
+        binding.title.setText(getString(textes[0].first))
+        binding.description.setText(getString(textes[0].second))
 
         binding.circleIndicator.setViewPager(binding.viewPager)
 
@@ -120,7 +121,7 @@ class IntroActivity : BaseActivity() {
                 // appropriate to your layout. You can also update the view padding
                 // if that's more appropriate.
 
-                view.layoutParams =  (view.layoutParams as FrameLayout.LayoutParams).apply {
+                view.layoutParams = (view.layoutParams as FrameLayout.LayoutParams).apply {
                     leftMargin = insets.left
                     bottomMargin = insets.bottom
                     rightMargin = insets.right

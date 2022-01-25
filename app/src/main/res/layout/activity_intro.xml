@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/introLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -27,14 +28,10 @@
             android:layout_weight="2"
             />
 
-        <ImageSwitcher
-            android:id="@+id/imageSwitcher"
-            android:layout_width="326dp"
+        <View
+            android:id="@+id/imageSwitcherSpace"
+            android:layout_width="match_parent"
             android:layout_height="326dp"
-            android:layout_gravity="center_horizontal"
-            android:inAnimation="@android:anim/fade_in"
-            android:outAnimation="@android:anim/fade_out"
-            android:transitionName="welcome_wallet_logo"
             />
 
         <View
@@ -63,11 +60,73 @@
             android:layout_weight="1"
             />
 
-        <View
-            android:id="@+id/textSpace"
+        <LinearLayout
+            android:id="@+id/textWrapper"
             android:layout_width="match_parent"
-            android:layout_height="82dp"
-            />
+            android:layout_height="120dp"
+            android:orientation="vertical"
+            >
+
+            <TextSwitcher
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inAnimation="@android:anim/fade_in"
+                android:outAnimation="@android:anim/fade_out"
+                >
+
+                <TextView
+                    style="@style/Title3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:textAlignment="center"
+                    tools:text="@string/Intro_Wallet_Screen2Title"
+                    />
+
+                <TextView
+                    style="@style/Title3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:textAlignment="center"
+                    />
+            </TextSwitcher>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                />
+
+            <TextSwitcher
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inAnimation="@anim/fade_in_anim"
+                android:outAnimation="@anim/fade_out_anim"
+                >
+
+                <TextView
+                    style="@style/Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="48dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey"
+                    tools:text="@string/Intro_Wallet_Screen2Description"
+                    />
+
+                <TextView
+                    style="@style/Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="48dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey"
+                    />
+            </TextSwitcher>
+
+        </LinearLayout>
 
         <View
             android:id="@+id/spacer4"
