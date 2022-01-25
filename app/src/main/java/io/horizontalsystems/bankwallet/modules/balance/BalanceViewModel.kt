@@ -217,4 +217,4 @@ class BalanceViewModel(
 
 }
 
-data class AccountViewItem(val address: String?, val manageCoinsAllowed: Boolean, val isWatchAccount: Boolean)
+data class AccountViewItem(val address: String?, val manageCoinsAllowed: Boolean, val isWatchAccount: Boolean, val name: String = "")
