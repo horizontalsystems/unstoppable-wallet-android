@@ -30,8 +30,8 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.balance.BalanceFragment
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
+import io.horizontalsystems.bankwallet.modules.balance2.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance2.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -61,7 +61,7 @@ fun BalanceCard(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navContr
     ) {
         CellMultilineClear {
             Row {
-                WalletIcon(viewItem)
+                WalletIcon(viewItem, viewModel)
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -175,11 +175,11 @@ fun BalanceCard(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navContr
 private fun ExpandableContent(viewItem: BalanceViewItem, navController: NavController, viewModel: BalanceViewModel) {
 
     val enterExpand = remember {
-        expandVertically(animationSpec = tween(BalanceFragment.EXPAND_ANIMATION_DURATION))
+        expandVertically(animationSpec = tween(250))
     }
 
     val exitCollapse = remember {
-        shrinkVertically(animationSpec = tween(BalanceFragment.COLLAPSE_ANIMATION_DURATION))
+        shrinkVertically(animationSpec = tween(250))
     }
 
     AnimatedVisibility(
@@ -207,7 +207,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 R.id.mainFragment_to_receiveFragment,
                 bundleOf(ReceiveFragment.WALLET_KEY to viewModel.getWalletForReceive(viewItem))
             )
-        } catch (e: io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel.BackupRequiredError) {
+        } catch (e: BackupRequiredError) {
             navController.slideFromBottom(
                 R.id.backupRequiredDialog,
                 BackupRequiredDialog.prepareParams(e.account)
@@ -322,7 +322,7 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
 }
 
 @Composable
-private fun WalletIcon(viewItem: BalanceViewItem) {
+private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel) {
     Box(
         modifier = androidx.compose.ui.Modifier
             .width(56.dp)
@@ -358,7 +358,7 @@ private fun WalletIcon(viewItem: BalanceViewItem) {
                     .align(Alignment.Center)
                     .size(24.dp)
                     .clickable {
-//                        onSyncErrorClicked(viewItem)
+                        onSyncErrorClicked(viewItem, viewModel)
                     },
                 painter = painterResource(id = R.drawable.ic_attention_24),
                 contentDescription = "coin icon",
@@ -375,3 +375,53 @@ private fun WalletIcon(viewItem: BalanceViewItem) {
         }
     }
 }
+
+private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: BalanceViewModel) {
+//    when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
+//        is io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel.SyncError.Dialog -> {
+//
+//            val wallet = syncErrorDetails.wallet
+//            val sourceChangeable = syncErrorDetails.sourceChangeable
+//            val errorMessage = syncErrorDetails.errorMessage
+//
+//            activity?.let { fragmentActivity ->
+//                SyncErrorDialog.show(
+//                    fragmentActivity,
+//                    wallet.coin.name,
+//                    sourceChangeable,
+//                    object : SyncErrorDialog.Listener {
+//                        override fun onClickRetry() {
+//                            viewModel.refreshByWallet(wallet)
+//                        }
+//
+//                        override fun onClickChangeSource() {
+//                            viewModel.onChangeSourceClick(wallet)
+//                        }
+//
+//                        override fun onClickReport() {
+//                            sendEmail(viewModel.reportEmail, errorMessage)
+//                        }
+//                    })
+//            }
+//        }
+//        is io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel.SyncError.NetworkNotAvailable -> {
+//            HudHelper.showErrorMessage(this.requireView(), R.string.Hud_Text_NoInternet)
+//        }
+//    }
+}
+
+
+//private fun sendEmail(email: String, report: String) {
+//    val intent = Intent(Intent.ACTION_SENDTO).apply {
+//        data = Uri.parse("mailto:")
+//        putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+//        putExtra(Intent.EXTRA_TEXT, report)
+//    }
+//
+//    try {
+//        startActivity(intent)
+//    } catch (e: ActivityNotFoundException) {
+//        TextHelper.copyText(email)
+//        HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_EmailAddressCopied)
+//    }
+//}
