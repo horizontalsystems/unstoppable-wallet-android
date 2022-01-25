@@ -166,7 +166,7 @@
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">%s 每日交易量的历史变化</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">去中心化金融板块代币累积市值的历史变化。</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">由去中心化协议管理的所有加密货币累积价值的历史变化。</string>
-    <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
+    <string name="MarketGlobalMetrics_ChainSelectorTitle">通过区块链过滤</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">所有</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
     <!--Market Search-->
@@ -191,7 +191,7 @@
     <string name="Market_Filter_Top_500">前500名</string>
     <string name="Market_Filter_Top_1000">前1000名</string>
     <string name="Market_Filter_Top_1500">前1500名</string>
-    <string name="Market_Filter_ShowResults">Show Results</string>
+    <string name="Market_Filter_ShowResults">显示结果</string>
     <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
     <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
@@ -249,7 +249,7 @@
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Send">Send</string>
     <string name="Balance_Receive">Receive</string>
-    <string name="Balance_RatePerCoin">%1$s per %2$s</string>
+    <string name="Balance_RatePerCoin">%s / %s</string>
     <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">Syncing…</string>
     <string name="Balance_SearchingTransactions">Searching transactions…</string>
@@ -544,7 +544,7 @@
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="SettingsAboutApp_Title">About App</string>
-    <string name="SettingsAboutApp_Site">官方网站</string>
+    <string name="SettingsAboutApp_Site">网站</string>
     <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
     <string name="SettingsPrivacy_Info">This app doesn\'t collect any data about you.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
@@ -555,19 +555,19 @@
     <string name="SettingsPrivacy_TransactionsDescription">Make your BTC, LTC, BCH transactions harder to trace by changing the way transactions are structured.</string>
     <string name="SettingsPrivacy_Info_Details">在下面，您可以找到应用程序中可用的隐私设置的详细说明。</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Title">区块链交易</string>
-    <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
-        \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
-        \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
-        \n\n1. Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
-        \n\n2. Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Description">此设置控制用户在比特币、比特币现金和莱特币区块链上交易的隐私级别。
+\n\n大多数比特币交易产生两个输出。一个输出是发送给接收方的金额，另一个输出是返回给发送方的更改输出。大多数钱包构建交易的方式使得监控比特币区块链的第三方能够轻松了解哪些输出流向接收方，哪些输出是返回给发送方的变更金额。然后，返回给发送方的输出可以用于未来的事务，并进一步向监控方透露详细信息。
+\n\n本钱包实施了一些措施，使确定哪种输出流向何处变得更加困难。本钱包有两种选择：
+\n\n1 洗牌：每个事务的事务输出顺序都是随机的。有时变化可能是第一个输出，有时可能是第二个输出。如果用户信任应用程序的开发人员，则不要认为这是推荐的选项。
+\n\n2 确定性：对于事务输出的排序有一个公认的标准（称为BIP69）。在开源钱包中，该标准确保钱包用户不需要信任应用程序的开发人员如何实现输出的排序。由于这是一个新标准，目前还没有多少钱包实施这一标准。因此，在区块链上可以看到交易是否从使用该标准的钱包发送。</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">区块链同步</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains when sending or receiving transactions.
         \n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.
         \n\nIn the case of Ethereum and Binance Smart Chain, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal Ethereum nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Title">区块链恢复</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and calculate user\'s balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
-        \n\n1. from API Server : There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
-        \n\n2. from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening...</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">此设置仅在还原现有钱包时相关。这是一个获取钱包交易历史的过程，以便钱包能够显示过去的交易并计算用户余额。当用户恢复以前创建的钱包时，这种情况只需发生一次。在这一点上，移动钱包有两种可能的实现方法：
+\n\n1 来自API服务器：有一个第三方预定义服务器，托管整个区块链，处理所有数据，并准备以快速方式提供数据。此方法速度快，但可能会跟踪IP地址和请求的数据。建议使用此选项，因为其获取数据的速度（5-10分钟）。风险很小。如果用户从自己的服务器恢复，那么就没有任何隐私风险。
+\n\n2 来自区块链：在这种情况下，应用程序尝试直接从区块链节点的p2p网络恢复。本钱包连接这些节点中并向它们请求数据。这些节点可能会跟踪用户的IP地址和请求，但在恢复过程中，应用程序可以在节点之间切换。在任何给定时间，网络上都有近10000个比特币节点。此选项速度较慢，可能需要2-3小时，需要在恢复过程中一直打开本钱包...</string>
     <!--Settings-->
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">隐私保护</string>
@@ -826,67 +826,67 @@
     <string name="CoinPage_SecurityParams_Issuance_Centralized">流通中的代币数量可以由一个中心化的实体随意增加或减少。</string>
     <string name="CoinPage_SecurityParams_Issuance_Decentralized">流通中的代币数量由算法控制，以确定的方式工作，不受中心化机构影响。</string>
     <string name="CoinPage_SecurityParams_ConfiscationResistance_Yes">代币存放在非保管钱包内时不得没收。</string>
-    <string name="CoinPage_SecurityParams_ConfiscationResistance_No">The tokens can be confiscated or tampered with by an issuing entity.</string>
-    <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">可以禁止代币持有者进行交易。</string>
-    <string name="CoinPage_SecurityParams_CensorshipResistance_No">The token holder can be censored from transacting.</string>
-    <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited from external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk free and not doesn\'t have any exploits risks.</string>
-    <string name="CoinPage_SecurityParams_Audited_No">There are no publicly announced audits for the code powering the project behind the token. Non audited projects are more likely to have security issues in the code.</string>
-    <string name="CoinPage_SecurityParams_Info">Info</string>
-    <string name="CoinPage_Range24">24h Range</string>
-    <string name="CoinPage_About">About</string>
-    <string name="CoinPage_Category">Category</string>
-    <string name="CoinPage_Categories">Categories</string>
-    <string name="CoinPage_Contracts">Contracts</string>
-    <string name="CoinPage_Links">Links</string>
-    <string name="CoinPage_Guide">Guide</string>
-    <string name="CoinPage_Website">Website</string>
-    <string name="CoinPage_Whitepaper">Whitepaper</string>
+    <string name="CoinPage_SecurityParams_ConfiscationResistance_No">代币可以被发行实体没收或篡改。</string>
+    <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">无法对代币持有人进行交易审查。</string>
+    <string name="CoinPage_SecurityParams_CensorshipResistance_No">可以禁止代币持有者进行交易。</string>
+    <string name="CoinPage_SecurityParams_Audited_Yes">该项目的代码由外部实体全部或部分审核。审计的存在并不意味着项目是无风险的，或不存在任何利用风险。</string>
+    <string name="CoinPage_SecurityParams_Audited_No">该项目的代码未经外部实体全部或部分审核。</string>
+    <string name="CoinPage_SecurityParams_Info">信息</string>
+    <string name="CoinPage_Range24">24h范围</string>
+    <string name="CoinPage_About">关于</string>
+    <string name="CoinPage_Category">分类</string>
+    <string name="CoinPage_Categories">分类</string>
+    <string name="CoinPage_Contracts">合约</string>
+    <string name="CoinPage_Links">链接</string>
+    <string name="CoinPage_Guide">指南</string>
+    <string name="CoinPage_Website">网站</string>
+    <string name="CoinPage_Whitepaper">白皮书</string>
     <string name="CoinPage_Reddit">Reddit</string>
     <string name="CoinPage_Twitter">Twitter</string>
-    <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
-    <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
-    <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
+    <string name="CoinPage_Twitter_NotAvailable">没有twitter</string>
+    <string name="CoinPage_Twitter_Quoted">引用 %s</string>
+    <string name="CoinPage_Twitter_Retweeted">转发 %s</string>
     <string name="CoinPage_Twitter_Replied">Replying to %s</string>
-    <string name="CoinPage_Twitter_SeeOnTwitter">See on Twitter</string>
+    <string name="CoinPage_Twitter_SeeOnTwitter">打开Twitter</string>
     <string name="CoinPage_Telegram">Telegram</string>
     <string name="CoinPage_Github">Github</string>
     <string name="CoinPage_MarketCap">市值</string>
-    <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
-    <string name="CoinPage_inCirculation">In Circulation</string>
-    <string name="CoinPage_TotalSupply">Total Supply</string>
+    <string name="CoinPage_DilutedMarketCap">稀释市值</string>
+    <string name="CoinPage_inCirculation">流通量</string>
+    <string name="CoinPage_TotalSupply">总供应</string>
     <string name="CoinPage_MarketCap_Thousand">k</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">成交量</string>
-    <string name="CoinPage_NoData">No Data</string>
+    <string name="CoinPage_NoData">无数据</string>
     <string name="CoinPage_NoDataAvailable">No data available</string>
-    <string name="CoinPage_AddToWallet">Add To Wallet</string>
-    <string name="CoinPage_InWallet">In Wallet</string>
-    <string name="CoinPage_Favorite">Favorite</string>
-    <string name="CoinPage_Unfavorite">Unfavorite</string>
+    <string name="CoinPage_AddToWallet">加入钱包</string>
+    <string name="CoinPage_InWallet">已在钱包</string>
+    <string name="CoinPage_Favorite">喜爱的</string>
+    <string name="CoinPage_Unfavorite">不喜欢</string>
     <string name="CoinPage_Performance_Week">1周</string>
     <string name="CoinPage_Performance_Month">1月</string>
-    <string name="CoinPage_ReadMore">Read More</string>
-    <string name="CoinPage_ReadLess">Read Less</string>
-    <string name="CoinPage_LaunchDate">Inception Date</string>
-    <string name="CoinPage_Tvl">Total Value Locked</string>
+    <string name="CoinPage_ReadMore">查看更多</string>
+    <string name="CoinPage_ReadLess">关闭</string>
+    <string name="CoinPage_LaunchDate">起始日期</string>
+    <string name="CoinPage_Tvl">总锁定</string>
     <string name="CoinPage_TvlRank">锁仓排名</string>
-    <string name="CoinPage_TvlMCapRatio">M.cap / TVL ratio</string>
-    <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
-    <string name="CoinPage_Contract">%s Contract</string>
-    <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
-    <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
+    <string name="CoinPage_TvlMCapRatio">稀释市值/锁定 比例</string>
+    <string name="CoinPage_TvlDescription">以贷款抵押品或流动性池的形式存入平台的资本。</string>
+    <string name="CoinPage_Contract">%s 合约</string>
+    <string name="CoinPage_Bep2Symbol">BEP2 符号</string>
+    <string name="CoinPage_MajorHolders_TopWallets">排名地址</string>
     <string name="CoinPage_MajorHolders_Description">The chart above shows the % of all tokens in circulation held by the top 10 wallets. The lower the % the more distributed the coin is.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">In top 10 Ethereum wallets</string>
-    <string name="CoinPage_CoinInvestments_Lead">Lead</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">前10名地址</string>
+    <string name="CoinPage_CoinInvestments_Lead">领投</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">Top Gainers</string>
-    <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_TopGainers">涨幅榜</string>
+    <string name="RateList_TopLosers">跌幅榜</string>
     <string name="RateList_Posts">发现</string>
-    <string name="Market_DaysAgo">%dd. ago</string>
-    <string name="Market_HoursAgo">%dh. ago</string>
-    <string name="Market_MinutesAgo">%dm. ago</string>
+    <string name="Market_DaysAgo">%d天前</string>
+    <string name="Market_HoursAgo">%d小时前</string>
+    <string name="Market_MinutesAgo">%d分钟前</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Sync Error</string>
     <string name="BalanceSyncError_ButtonRetry">Retry</string>
