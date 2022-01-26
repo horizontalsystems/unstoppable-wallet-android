@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
@@ -26,6 +27,8 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance2.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance2.BalanceViewModel
+import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
+import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -39,6 +42,14 @@ fun BalanceItems(
     accountViewItem: AccountViewItem,
     navController: NavController
 ) {
+    val rateAppViewModel = viewModel<RateAppViewModel>(factory = RateAppModule.Factory())
+    DisposableEffect(true) {
+        rateAppViewModel.onBalancePageActive()
+        onDispose {
+            rateAppViewModel.onBalancePageInactive()
+        }
+    }
+
     Column {
         val context = LocalContext.current
         TabBalance(

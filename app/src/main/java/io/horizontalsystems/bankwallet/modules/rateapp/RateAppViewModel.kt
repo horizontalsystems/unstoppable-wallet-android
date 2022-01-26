@@ -1,9 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.balance
+package io.horizontalsystems.bankwallet.modules.rateapp
 
-import io.horizontalsystems.bankwallet.core.Clearable
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IRateAppManager
 
-class RateAppService(private val rateAppManager: IRateAppManager) : Clearable {
+class RateAppViewModel(private val rateAppManager: IRateAppManager) : ViewModel() {
 
     fun onBalancePageActive() {
         rateAppManager.onBalancePageActive()
@@ -13,5 +13,4 @@ class RateAppService(private val rateAppManager: IRateAppManager) : Clearable {
         rateAppManager.onBalancePageInactive()
     }
 
-    override fun clear() = Unit
 }
