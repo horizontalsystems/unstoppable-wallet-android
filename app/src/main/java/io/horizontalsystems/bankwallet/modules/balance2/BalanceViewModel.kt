@@ -19,7 +19,7 @@ class BalanceViewModel(
 ) : ViewModel() {
 
     val sortTypes = listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
-    var balanceViewItemsWrapper by mutableStateOf<Triple<BalanceHeaderViewItem, List<BalanceViewItem>, Boolean>?>(null)
+    var balanceViewItemsWrapper by mutableStateOf<Pair<BalanceHeaderViewItem, List<BalanceViewItem>>?>(null)
         private set
 
     var isRefreshing by mutableStateOf(false)
@@ -32,15 +32,15 @@ class BalanceViewModel(
 
     init {
         service.balanceItemsObservable
-            .subscribeIO { sortTypeUpdated ->
-                refreshViewItems(sortTypeUpdated)
+            .subscribeIO {
+                refreshViewItems()
             }
             .let {
                 disposables.add(it)
             }
     }
 
-    private fun refreshViewItems(sortTypeUpdated: Boolean) {
+    private fun refreshViewItems() {
         val items = service.balanceItems.map { balanceItem ->
             balanceViewItemFactory.viewItem(
                 balanceItem,
@@ -57,7 +57,7 @@ class BalanceViewModel(
         )
 
         viewModelScope.launch {
-            balanceViewItemsWrapper = Triple(headerViewItem, items, sortTypeUpdated)
+            balanceViewItemsWrapper = Pair(headerViewItem, items)
         }
     }
 
@@ -69,7 +69,7 @@ class BalanceViewModel(
     fun onBalanceClick() {
         service.balanceHidden = !service.balanceHidden
 
-        refreshViewItems(false)
+        refreshViewItems()
     }
 
     fun onItem(viewItem: BalanceViewItem) {
@@ -78,7 +78,7 @@ class BalanceViewModel(
             else -> viewItem.wallet
         }
 
-        refreshViewItems(false)
+        refreshViewItems()
     }
 
     fun getWalletForReceive(viewItem: BalanceViewItem) = when {
