@@ -11,6 +11,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -89,13 +90,14 @@ fun BalanceItems(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            val clipboardManager = LocalClipboardManager.current
             accountViewItem.address?.let { address ->
+                val clipboardManager = LocalClipboardManager.current
+                val view = LocalView.current
                 ButtonSecondaryDefault(
                     title = address.shortenedAddress(),
                     onClick = {
                         clipboardManager.setText(AnnotatedString(address))
-//                    HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
+                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                     }
                 )
             }
