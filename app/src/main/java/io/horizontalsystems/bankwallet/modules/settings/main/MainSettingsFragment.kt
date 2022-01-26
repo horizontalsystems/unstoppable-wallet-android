@@ -36,6 +36,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeSwitchFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -76,6 +77,9 @@ class MainSettingsFragment : BaseFragment() {
         getNavigationResult(LanguageSettingsFragment.LANGUAGE_CHANGE)?.let {
             viewModel.onLanguageChange()
             activity?.let { MainModule.startAsNewTask(it) }
+        }
+        getNavigationResult(ThemeSwitchFragment.THEME_CHANGE)?.let {
+            viewModel.onThemeChange()
         }
     }
 
