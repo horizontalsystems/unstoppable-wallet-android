@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.launch
 
 @Composable
 fun BalanceItems(
@@ -34,7 +35,8 @@ fun BalanceItems(
     balanceViewItems: List<BalanceViewItem>,
     viewModel: BalanceViewModel,
     accountViewItem: AccountViewItem,
-    navController: NavController
+    navController: NavController,
+    scrollToTop: Boolean
 ) {
     Column {
         val context = LocalContext.current
@@ -113,13 +115,18 @@ fun BalanceItems(
         }
 
         Spacer(modifier = Modifier.height(8.dp))
-        Wallets(balanceViewItems, viewModel, navController)
+        Wallets(balanceViewItems, viewModel, navController, scrollToTop)
     }
 }
 
 
 @Composable
-fun Wallets(balanceViewItems: List<BalanceViewItem>, viewModel: BalanceViewModel, navController: NavController) {
+fun Wallets(
+    balanceViewItems: List<BalanceViewItem>,
+    viewModel: BalanceViewModel,
+    navController: NavController,
+    scrollToTop: Boolean
+) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
 
@@ -138,12 +145,11 @@ fun Wallets(balanceViewItems: List<BalanceViewItem>, viewModel: BalanceViewModel
             items(balanceViewItems) { item ->
                 BalanceCard(viewItem = item, viewModel, navController)
             }
-//            if (scrollToTopAfterUpdate) {
-//                scrollToTopAfterUpdate = false
-//                coroutineScope.launch {
-//                    listState.scrollToItem(0)
-//                }
-//            }
+            if (scrollToTop) {
+                coroutineScope.launch {
+                    listState.scrollToItem(0)
+                }
+            }
         }
     }
 }

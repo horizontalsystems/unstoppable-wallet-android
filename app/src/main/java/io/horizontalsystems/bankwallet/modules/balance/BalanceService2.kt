@@ -32,7 +32,7 @@ class BalanceService2(
         set(value) {
             localStorage.sortType = value
 
-            sortAndEmitItems()
+            sortAndEmitItems(true)
         }
 
     private var hideZeroBalances = false
@@ -45,8 +45,8 @@ class BalanceService2(
             allBalanceItems
         }
 
-    private val balanceItemsSubject = PublishSubject.create<Unit>()
-    val balanceItemsObservable: Observable<Unit> get() = balanceItemsSubject
+    private val balanceItemsSubject = PublishSubject.create<Boolean>()
+    val balanceItemsObservable: Observable<Boolean> get() = balanceItemsSubject
 
     private val disposables = CompositeDisposable()
 
@@ -85,12 +85,12 @@ class BalanceService2(
 
     }
 
-    private fun sortAndEmitItems() {
+    private fun sortAndEmitItems(sortTypeUpdated: Boolean = false) {
         val sorted = balanceSorter.sort(allBalanceItems, sortType)
         allBalanceItems.clear()
         allBalanceItems.addAll(sorted)
 
-        balanceItemsSubject.onNext(Unit)
+        balanceItemsSubject.onNext(sortTypeUpdated)
     }
 
     @Synchronized

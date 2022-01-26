@@ -58,14 +58,15 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
             elevation = 0.dp
         )
 
-        viewModel.balanceViewItemsWrapper?.let { (headerViewItem, balanceViewItems) ->
+        viewModel.balanceViewItemsWrapper?.let { (headerViewItem, balanceViewItems, scrollToTop) ->
             if (balanceViewItems.isNotEmpty()) {
                 BalanceItems(
                     headerViewItem,
                     balanceViewItems,
                     viewModel,
                     accountViewItem,
-                    navController
+                    navController,
+                    scrollToTop
                 )
             } else {
                 BalanceItemsEmpty(navController, accountViewItem)
