@@ -46,7 +46,7 @@ class BalanceAccountsViewModel(private val accountManager: IAccountManager) : Vi
                 else -> null
             }
 
-            AccountViewItem(address, account.type !is AccountType.Address, account.type is AccountType.Address, account.name)
+            AccountViewItem(address, account.type !is AccountType.Address, account.type is AccountType.Address, account.name, account.id)
         }
     }
 
@@ -59,4 +59,4 @@ class BalanceAccountsViewModel(private val accountManager: IAccountManager) : Vi
     }
 }
 
-data class AccountViewItem(val address: String?, val manageCoinsAllowed: Boolean, val isWatchAccount: Boolean, val name: String = "")
+data class AccountViewItem(val address: String?, val manageCoinsAllowed: Boolean, val isWatchAccount: Boolean, val name: String = "", val id: String)

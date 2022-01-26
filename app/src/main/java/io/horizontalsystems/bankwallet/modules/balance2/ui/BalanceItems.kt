@@ -3,10 +3,11 @@ package io.horizontalsystems.bankwallet.modules.balance2.ui
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -20,6 +21,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shortenedAddress
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.BalanceHeaderViewItem
+import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance2.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance2.BalanceViewModel
@@ -27,7 +29,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.coroutines.launch
 
 @Composable
 fun BalanceItems(
@@ -35,8 +36,7 @@ fun BalanceItems(
     balanceViewItems: List<BalanceViewItem>,
     viewModel: BalanceViewModel,
     accountViewItem: AccountViewItem,
-    navController: NavController,
-    scrollToTop: Boolean
+    navController: NavController
 ) {
     Column {
         val context = LocalContext.current
@@ -83,7 +83,6 @@ fun BalanceItems(
                     },
                     onSelectItem = {
                         viewModel.sortType = it
-//                        scrollToTopAfterUpdate = true
                     }
                 )
             }
@@ -115,7 +114,7 @@ fun BalanceItems(
         }
 
         Spacer(modifier = Modifier.height(8.dp))
-        Wallets(balanceViewItems, viewModel, navController, scrollToTop)
+        Wallets(balanceViewItems, viewModel, navController, accountViewItem.id, viewModel.sortType)
     }
 }
 
@@ -125,10 +124,16 @@ fun Wallets(
     balanceViewItems: List<BalanceViewItem>,
     viewModel: BalanceViewModel,
     navController: NavController,
-    scrollToTop: Boolean
+    accountId: String,
+    sortType: BalanceSortType
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val listState = rememberLazyListState()
+    val listState = rememberSaveable(
+        accountId,
+        sortType,
+        saver = LazyListState.Saver
+    ) {
+        LazyListState()
+    }
 
     HSSwipeRefresh(
         state = rememberSwipeRefreshState(viewModel.isRefreshing),
@@ -144,11 +149,6 @@ fun Wallets(
         ) {
             items(balanceViewItems) { item ->
                 BalanceCard(viewItem = item, viewModel, navController)
-            }
-            if (scrollToTop) {
-                coroutineScope.launch {
-                    listState.scrollToItem(0)
-                }
             }
         }
     }

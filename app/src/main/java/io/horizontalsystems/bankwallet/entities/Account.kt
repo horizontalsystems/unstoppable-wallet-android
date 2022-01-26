@@ -4,6 +4,7 @@ import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shortenedAddress
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -15,6 +16,7 @@ class Account(
     var isBackedUp: Boolean = false
 ) : Parcelable {
 
+    @IgnoredOnParcel
     val isWatchAccount = type is AccountType.Address
 
     override fun equals(other: Any?): Boolean {
