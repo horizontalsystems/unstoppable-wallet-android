@@ -6,8 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -61,24 +60,31 @@ fun BalanceItems(
         }
 
         Header(borderTop = true) {
+            var showSortTypeSelectorDialog by remember { mutableStateOf(false) }
+
             ButtonSecondaryTransparent(
                 title = stringResource(viewModel.sortType.getTitleRes()),
                 iconRight = R.drawable.ic_down_arrow_20,
                 onClick = {
-//                val sortTypes =
-//                    listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
-//                val selectorItems = sortTypes.map {
-//                    SelectorItem(getString(it.getTitleRes()), it == currentSortType)
-//                }
-//                SelectorDialog
-//                    .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle)) { position ->
-//                        viewModel.setSortType(sortTypes[position])
-//                        scrollToTopAfterUpdate = true
-//                    }
-//                    .show(parentFragmentManager, "balance_sort_type_selector")
-
+                    showSortTypeSelectorDialog = true
                 }
             )
+
+            if (showSortTypeSelectorDialog) {
+                SelectorDialogCompose(
+                    title = stringResource(R.string.Balance_Sort_PopupTitle),
+                    items = viewModel.sortTypes.map {
+                        TabItem(stringResource(it.getTitleRes()), it == viewModel.sortType, it)
+                    },
+                    onDismissRequest = {
+                        showSortTypeSelectorDialog = false
+                    },
+                    onSelectItem = {
+                        viewModel.sortType = it
+//                        scrollToTopAfterUpdate = true
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 
