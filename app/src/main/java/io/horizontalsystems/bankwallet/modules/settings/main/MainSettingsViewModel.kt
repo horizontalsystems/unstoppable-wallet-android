@@ -64,4 +64,8 @@ class MainSettingsViewModel(
         return service.getWalletConnectSupportState()
     }
 
+    fun onThemeChange() {
+        themeLiveData.postValue(service.themeName)
+    }
+
 }

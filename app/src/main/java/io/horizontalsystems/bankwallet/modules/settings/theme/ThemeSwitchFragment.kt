@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DiffUtil
@@ -15,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.databinding.FragmentThemeSwitcherBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderThemeSwitchItemBinding
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.setNavigationResult
 
 class ThemeSwitchFragment : BaseFragment() {
 
@@ -41,8 +44,12 @@ class ThemeSwitchFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            closeFragment()
+        }
+
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            closeFragment()
         }
 
         val adapter = ThemeSwitchAdapter(::onItemClick)
@@ -64,8 +71,17 @@ class ThemeSwitchFragment : BaseFragment() {
         })
     }
 
+    private fun closeFragment() {
+        setNavigationResult(THEME_CHANGE, bundleOf())
+        findNavController().popBackStack()
+    }
+
     fun onItemClick(item: ThemeViewItem) {
         viewModel.onThemeClick(item)
+    }
+
+    companion object{
+        const val THEME_CHANGE = "theme_change"
     }
 
 }
