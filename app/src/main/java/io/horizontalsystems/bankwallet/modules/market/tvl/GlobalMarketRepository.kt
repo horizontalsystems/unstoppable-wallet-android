@@ -119,12 +119,18 @@ class GlobalMarketRepository(
                 CurrencyValue(currency, defiMarketInfo.tvl * it.divide(BigDecimal(100)))
             }
 
+            val tvl: BigDecimal = if (chain == TvlModule.Chain.All) {
+                defiMarketInfo.tvl
+            } else {
+                defiMarketInfo.chainTvls[chain.name] ?: BigDecimal.ZERO
+            }
+
             TvlModule.MarketTvlItem(
                 defiMarketInfo.fullCoin,
                 defiMarketInfo.name,
                 defiMarketInfo.chains,
                 defiMarketInfo.logoUrl,
-                CurrencyValue(currency, defiMarketInfo.tvl),
+                CurrencyValue(currency, tvl),
                 diff,
                 diffPercent,
                 defiMarketInfo.tvlRank.toString()
