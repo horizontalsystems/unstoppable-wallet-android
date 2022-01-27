@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import io.horizontalsystems.bankwallet.modules.balance2.BalanceModule
 import java.math.BigDecimal
 
 class BalanceSorter {

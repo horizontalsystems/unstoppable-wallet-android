@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.balance2.BalanceModule
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -11,7 +10,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.concurrent.CopyOnWriteArrayList
 
-class BalanceService2(
+class BalanceService(
     private val activeWalletRepository: BalanceActiveWalletRepository,
     private val xRateRepository: BalanceXRateRepository,
     private val adapterRepository: BalanceAdapterRepository,

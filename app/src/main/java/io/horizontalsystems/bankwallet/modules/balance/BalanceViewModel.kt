@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.balance2
+package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,13 +8,12 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.balance.*
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class BalanceViewModel(
-    private val service: BalanceService2,
+    private val service: BalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory
 ) : ViewModel() {
 
@@ -110,7 +109,7 @@ class BalanceViewModel(
 //    }
 //
     fun getSyncErrorDetails(viewItem: BalanceViewItem): SyncError = when {
-        service.networkAvailable -> SyncError.Dialog(viewItem.wallet,viewItem.errorMessage)
+        service.networkAvailable -> SyncError.Dialog(viewItem.wallet, viewItem.errorMessage)
         else -> SyncError.NetworkNotAvailable()
     }
 

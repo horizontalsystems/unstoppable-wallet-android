@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.balance2.ui
+package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,11 +13,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 
 @Composable
-fun BalanceItemsEmptyWatchAccount() {
+fun BalanceItemsEmptyRegularAccount(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -31,19 +34,25 @@ fun BalanceItemsEmptyWatchAccount() {
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_emptywallet_48),
+                painter = painterResource(id = R.drawable.ic_add_to_wallet_2_48),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey
             )
         }
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(26.dp))
         Text(
             modifier = Modifier.padding(horizontal = 48.dp),
-            text = stringResource(id = R.string.Balance_WatchAccount_NoBalance),
+            text = stringResource(id = R.string.Balance_NoCoinsAlert),
             color = ComposeAppTheme.colors.grey,
             style = ComposeAppTheme.typography.subhead2,
             textAlign = TextAlign.Center
         )
+        Spacer(modifier = Modifier.height(38.dp))
+        ButtonSecondaryDefault(
+            title = stringResource(id = R.string.Balance_AddCoins),
+            onClick = {
+                navController.slideFromRight(R.id.manageWalletsFragment)
+            }
+        )
     }
-
 }

@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.balance2.ui
+package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.modules.balance2.AccountViewItem
+import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 
 @Composable
 fun BalanceItemsEmpty(navController: NavController, accountViewItem: AccountViewItem) {

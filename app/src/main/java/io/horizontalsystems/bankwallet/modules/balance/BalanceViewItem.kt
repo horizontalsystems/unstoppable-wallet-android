@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.content.Context
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
@@ -10,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.swappable
-import io.horizontalsystems.bankwallet.modules.balance2.BalanceModule
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.CoinPrice
@@ -46,14 +44,7 @@ data class BalanceViewItem(
     val isWatchAccount: Boolean
 )
 
-data class BalanceHeaderViewItem(val xBalanceText: String, val upToDate: Boolean) {
-
-    fun getBalanceTextColor(context: Context): Int {
-        val color = if (upToDate) R.color.jacob else R.color.yellow_50
-        return context.getColor(color)
-    }
-
-}
+data class BalanceHeaderViewItem(val xBalanceText: String, val upToDate: Boolean)
 
 data class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
 data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)

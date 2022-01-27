@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.balance2.ui
+package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import android.content.Intent
 import android.view.View
@@ -32,9 +32,9 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
-import io.horizontalsystems.bankwallet.modules.balance2.BackupRequiredError
-import io.horizontalsystems.bankwallet.modules.balance2.BalanceViewModel
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
