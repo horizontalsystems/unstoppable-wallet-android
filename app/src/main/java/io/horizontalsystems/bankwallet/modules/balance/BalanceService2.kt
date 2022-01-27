@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance2.BalanceModule2
 import io.horizontalsystems.marketkit.models.CoinPrice
@@ -35,11 +34,12 @@ class BalanceService2(
             sortAndEmitItems()
         }
 
-    private var hideZeroBalances = false
+    var isWatchAccount = false
+        private set
 
     private val allBalanceItems = CopyOnWriteArrayList<BalanceModule2.BalanceItem>()
     val balanceItems: List<BalanceModule2.BalanceItem>
-        get() = if (hideZeroBalances) {
+        get() = if (isWatchAccount) {
             allBalanceItems.filter { it.balanceData.total > BigDecimal.ZERO }
         } else {
             allBalanceItems
@@ -137,7 +137,7 @@ class BalanceService2(
 
     @Synchronized
     private fun handleWalletsUpdate(wallets: List<Wallet>) {
-        hideZeroBalances = accountManager.activeAccount?.type is AccountType.Address
+        isWatchAccount = accountManager.activeAccount?.isWatchAccount == true
 
         adapterRepository.setWallet(wallets)
         xRateRepository.setCoinUids(wallets.mapNotNull { if (it.coin.isCustom) null else it.coin.uid })
@@ -162,10 +162,6 @@ class BalanceService2(
     fun refresh() {
         xRateRepository.refresh()
         adapterRepository.refresh()
-    }
-
-    fun refreshByWallet(wallet: Wallet) {
-        adapterRepository.refreshByWallet(wallet)
     }
 
     override fun clear() {
