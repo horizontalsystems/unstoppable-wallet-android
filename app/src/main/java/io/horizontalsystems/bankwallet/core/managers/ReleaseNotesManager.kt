@@ -14,7 +14,8 @@ class ReleaseNotesManager(
         systemInfoManager.appVersion
     }
 
-    val releaseNotesUrl = "${appConfigProvider.releaseNotesUrl}$currentAppVersion"
+    val releaseNotesUrl =
+        "${appConfigProvider.releaseNotesUrl}${Version(currentAppVersion).versionForUrl}"
 
     fun shouldShowChangeLog(): Boolean {
         val shownForVersion = localStorage.changelogShownForAppVersion
@@ -25,18 +26,6 @@ class ReleaseNotesManager(
                 true
             } else {
                 false
-            }
-        }
-
-        //todo remove this check in version 22
-        if (Version(currentAppVersion).getMinorVersion() == 21) {
-            val storedAppVersions = localStorage.appVersions
-            storedAppVersions.reversed().forEach {
-                val minorVersion = Version(it.version).getMinorVersion()
-                if (minorVersion != null && minorVersion < 21) {
-                    updateShownAppVersion()
-                    return true
-                }
             }
         }
 
@@ -56,9 +45,16 @@ class Version(private val value: String) : Comparable<Version> {
 
     private val splitted by lazy { value.split(".").map { it.toIntOrNull() ?: 0 }.toMutableList() }
 
-    fun getMinorVersion(): Int? {
-        return value.split(".").getOrNull(1)?.toIntOrNull()
+    val versionForUrl by lazy {
+        //release notes available for version with 0 as patch number
+        //e.g. 0.23.0
+        if (splitted.size >= 3) {
+            "${splitted[0]}.${splitted[1]}.0"
+        } else {
+            value
+        }
     }
+
 
     //compare only first two numbers, which stands for Major and Minor versions
     override fun compareTo(other: Version): Int {
