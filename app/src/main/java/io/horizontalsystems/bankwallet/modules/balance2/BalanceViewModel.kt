@@ -46,7 +46,8 @@ class BalanceViewModel(
                 balanceItem,
                 service.baseCurrency,
                 balanceItem.wallet == expandedWallet,
-                service.balanceHidden
+                service.balanceHidden,
+                service.isWatchAccount
             )
         }
 

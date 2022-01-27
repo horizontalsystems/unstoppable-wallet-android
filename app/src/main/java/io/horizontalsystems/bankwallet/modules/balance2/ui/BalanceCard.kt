@@ -60,7 +60,13 @@ fun BalanceCard(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navContr
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) {
-                viewModel.onItem(viewItem)
+                if (viewItem.isWatchAccount) {
+                    val coinUid = viewItem.wallet.coin.uid
+                    val arguments = CoinFragment.prepareParams(coinUid)
+                    navController.slideFromRight(R.id.mainFragment_to_coinFragment, arguments)
+                } else {
+                    viewModel.onItem(viewItem)
+                }
             }
     ) {
         CellMultilineClear {

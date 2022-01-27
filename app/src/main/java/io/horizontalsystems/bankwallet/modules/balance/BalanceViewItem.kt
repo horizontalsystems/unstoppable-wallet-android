@@ -42,7 +42,8 @@ data class BalanceViewItem(
     val swapVisible: Boolean,
     val swapEnabled: Boolean = false,
     val mainNet: Boolean,
-    val errorMessage: String?
+    val errorMessage: String?,
+    val isWatchAccount: Boolean
 )
 
 data class BalanceHeaderViewItem(val xBalanceText: String, val upToDate: Boolean) {
@@ -178,7 +179,7 @@ class BalanceViewItemFactory {
         return DeemedValue(value, deemed, visible)
     }
 
-    fun viewItem(item: BalanceModule2.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean): BalanceViewItem {
+    fun viewItem(item: BalanceModule2.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean, watchAccount: Boolean): BalanceViewItem {
         val wallet = item.wallet
         val coin = wallet.coin
         val state = item.state
@@ -212,7 +213,8 @@ class BalanceViewItemFactory {
                 swapVisible = item.wallet.coinType.swappable,
                 swapEnabled = state is AdapterState.Synced,
                 mainNet = item.mainNet,
-                errorMessage = (state as? AdapterState.NotSynced)?.error?.message
+                errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
+                isWatchAccount = watchAccount
         )
     }
 
