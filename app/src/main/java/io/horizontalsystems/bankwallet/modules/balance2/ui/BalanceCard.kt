@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance2.ui
 
 import android.content.Intent
+import android.view.View
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -39,9 +41,11 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.CoinType
 
 @Composable
@@ -61,7 +65,7 @@ fun BalanceCard(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navContr
     ) {
         CellMultilineClear {
             Row {
-                WalletIcon(viewItem, viewModel)
+                WalletIcon(viewItem, viewModel, navController)
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -105,7 +109,7 @@ fun BalanceCard(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navContr
                         }
                     }
 
-                    Spacer(modifier = androidx.compose.ui.Modifier.height(1.dp))
+                    Spacer(modifier = Modifier.height(1.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -294,7 +298,7 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
             color = ComposeAppTheme.colors.steel10
         )
         Row(
-            modifier = androidx.compose.ui.Modifier
+            modifier = Modifier
                 .height(36.dp)
                 .padding(start = 16.dp, end = 17.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -322,9 +326,9 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
 }
 
 @Composable
-private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel) {
+private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navController: NavController) {
     Box(
-        modifier = androidx.compose.ui.Modifier
+        modifier = Modifier
             .width(56.dp)
             .fillMaxHeight(),
     ) {
@@ -353,12 +357,13 @@ private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel) {
             )
         }
         if (viewItem.failedIconVisible) {
+            val view = LocalView.current
             Image(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(24.dp)
                     .clickable {
-                        onSyncErrorClicked(viewItem, viewModel)
+                        onSyncErrorClicked(viewItem, viewModel, navController, view)
                     },
                 painter = painterResource(id = R.drawable.ic_attention_24),
                 contentDescription = "coin icon",
@@ -376,52 +381,19 @@ private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel) {
     }
 }
 
-private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: BalanceViewModel) {
-//    when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
-//        is io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel.SyncError.Dialog -> {
-//
-//            val wallet = syncErrorDetails.wallet
-//            val sourceChangeable = syncErrorDetails.sourceChangeable
-//            val errorMessage = syncErrorDetails.errorMessage
-//
-//            activity?.let { fragmentActivity ->
-//                SyncErrorDialog.show(
-//                    fragmentActivity,
-//                    wallet.coin.name,
-//                    sourceChangeable,
-//                    object : SyncErrorDialog.Listener {
-//                        override fun onClickRetry() {
-//                            viewModel.refreshByWallet(wallet)
-//                        }
-//
-//                        override fun onClickChangeSource() {
-//                            viewModel.onChangeSourceClick(wallet)
-//                        }
-//
-//                        override fun onClickReport() {
-//                            sendEmail(viewModel.reportEmail, errorMessage)
-//                        }
-//                    })
-//            }
-//        }
-//        is io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel.SyncError.NetworkNotAvailable -> {
-//            HudHelper.showErrorMessage(this.requireView(), R.string.Hud_Text_NoInternet)
-//        }
-//    }
+private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navController: NavController, view: View) {
+    when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
+        is BalanceViewModel.SyncError.Dialog -> {
+            val wallet = syncErrorDetails.wallet
+            val errorMessage = syncErrorDetails.errorMessage
+
+            navController.slideFromBottom(
+                R.id.syncErrorDialog,
+                SyncErrorDialog.prepareParams(wallet, errorMessage)
+            )
+        }
+        is BalanceViewModel.SyncError.NetworkNotAvailable -> {
+            HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)
+        }
+    }
 }
-
-
-//private fun sendEmail(email: String, report: String) {
-//    val intent = Intent(Intent.ACTION_SENDTO).apply {
-//        data = Uri.parse("mailto:")
-//        putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
-//        putExtra(Intent.EXTRA_TEXT, report)
-//    }
-//
-//    try {
-//        startActivity(intent)
-//    } catch (e: ActivityNotFoundException) {
-//        TextHelper.copyText(email)
-//        HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_EmailAddressCopied)
-//    }
-//}

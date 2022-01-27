@@ -99,29 +99,7 @@ class BalanceViewModel(
             isRefreshing = false
         }
     }
-//
-//
-//
-//    fun onResume() {
-//        rateAppService.onBalancePageActive()
-//    }
-//
-//    fun onPause() {
-//        rateAppService.onBalancePageInactive()
-//    }
-//
-//    fun setSortType(value: BalanceSortType) {
-//        service.sortType = value
-//        sortTypeUpdatedLiveData.postValue(value)
-//    }
-//
-//    override fun onCleared() {
-//        activeAccountService.clear()
-//        service.clear()
-//        rateAppService.clear()
-//    }
-//
-//
+
 //    fun disable(viewItem: BalanceViewItem) {
 //        service.disable(viewItem.wallet)
 //    }
@@ -130,63 +108,15 @@ class BalanceViewModel(
 //        service.enable(wallet)
 //    }
 //
-//    fun getSyncErrorDetails(viewItem: BalanceViewItem): SyncError = when {
-//        service.networkAvailable -> {
-//            SyncError.Dialog(
-//                viewItem.wallet,
-//                viewItem.errorMessage ?: "",
-//                sourceChangeable(viewItem.wallet.coinType)
-//            )
-//        }
-//        else -> {
-//            SyncError.NetworkNotAvailable()
-//        }
-//    }
-//
-//    private fun sourceChangeable(coinType: CoinType) = when (coinType) {
-//        is CoinType.Bitcoin,
-//        is CoinType.BitcoinCash,
-//        is CoinType.Dash,
-//        is CoinType.Litecoin,
-//        is CoinType.BinanceSmartChain,
-//        is CoinType.Bep20,
-//        is CoinType.Ethereum,
-//        is CoinType.Erc20 -> true
-//        else -> false
-//    }
-//
-//    fun refreshByWallet(wallet: Wallet) {
-//        service.refreshByWallet(wallet)
-//    }
-//
-//    fun getWalletForReceive(viewItem: BalanceViewItem) = when {
-//        viewItem.wallet.account.isBackedUp -> viewItem.wallet
-//        else -> throw BackupRequiredError(viewItem.wallet.account)
-//    }
-//
-//    fun onChangeSourceClick(wallet: Wallet) = when (wallet.coinType) {
-//        CoinType.Bitcoin,
-//        CoinType.BitcoinCash,
-//        CoinType.Dash,
-//        CoinType.Litecoin -> openPrivacySettingsLiveEvent.call()
-//        CoinType.Ethereum,
-//        is CoinType.Erc20 -> openEvmNetworkSettingsLiveEvent.postValue(
-//            Pair(Blockchain.Ethereum, wallet.account)
-//        )
-//        CoinType.BinanceSmartChain,
-//        is CoinType.Bep20 -> openEvmNetworkSettingsLiveEvent.postValue(
-//            Pair(Blockchain.BinanceSmartChain, wallet.account)
-//        )
-//        else -> {
-//        }
-//    }
-//
-//    sealed class SyncError {
-//        class NetworkNotAvailable : SyncError()
-//        class Dialog(val wallet: Wallet, val errorMessage: String, val sourceChangeable: Boolean) :
-//            SyncError()
-//    }
-}
+    fun getSyncErrorDetails(viewItem: BalanceViewItem): SyncError = when {
+        service.networkAvailable -> SyncError.Dialog(viewItem.wallet,viewItem.errorMessage)
+        else -> SyncError.NetworkNotAvailable()
+    }
 
+    sealed class SyncError {
+        class NetworkNotAvailable : SyncError()
+        class Dialog(val wallet: Wallet, val errorMessage: String?) : SyncError()
+    }
+}
 
 class BackupRequiredError(val account: Account) : Error("Backup Required")
