@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.balance2.ui
+package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,15 +15,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.balance2.AccountViewItem
-import io.horizontalsystems.bankwallet.modules.balance2.BalanceModule
-import io.horizontalsystems.bankwallet.modules.balance2.BalanceViewModel
+import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
+import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun BalanceForAccount(navController: NavController, accountViewItem: AccountViewItem) {
-    val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.BalanceXxxFactory())
+    val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
 
     Column {
         TopAppBar(

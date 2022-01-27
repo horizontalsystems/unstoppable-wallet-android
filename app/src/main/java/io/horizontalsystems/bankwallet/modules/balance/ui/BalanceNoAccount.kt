@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.balance2.ui
+package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
