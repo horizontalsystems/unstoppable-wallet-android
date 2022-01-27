@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.balance2.BalanceModule2
+import io.horizontalsystems.bankwallet.modules.balance2.BalanceModule
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -37,8 +37,8 @@ class BalanceService2(
     var isWatchAccount = false
         private set
 
-    private val allBalanceItems = CopyOnWriteArrayList<BalanceModule2.BalanceItem>()
-    val balanceItems: List<BalanceModule2.BalanceItem>
+    private val allBalanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
+    val balanceItems: List<BalanceModule.BalanceItem>
         get() = if (isWatchAccount) {
             allBalanceItems.filter { it.balanceData.total > BigDecimal.ZERO }
         } else {
@@ -144,7 +144,7 @@ class BalanceService2(
         val latestRates = xRateRepository.getLatestRates()
 
         val balanceItems = wallets.map { wallet ->
-            BalanceModule2.BalanceItem(
+            BalanceModule.BalanceItem(
                 wallet,
                 networkTypeChecker.isMainNet(wallet),
                 adapterRepository.balanceData(wallet),

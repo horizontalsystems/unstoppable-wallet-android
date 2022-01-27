@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.*
 import io.horizontalsystems.marketkit.models.CoinPrice
 
-object BalanceModule2 {
+object BalanceModule {
     class AccountsFactory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

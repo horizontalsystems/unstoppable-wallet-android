@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import io.horizontalsystems.bankwallet.modules.balance2.BalanceModule2
+import io.horizontalsystems.bankwallet.modules.balance2.BalanceModule
 import java.math.BigDecimal
 
 class BalanceSorter {
 
-    fun sort(items: Iterable<BalanceModule2.BalanceItem>, sortType: BalanceSortType): List<BalanceModule2.BalanceItem> {
+    fun sort(items: Iterable<BalanceModule.BalanceItem>, sortType: BalanceSortType): List<BalanceModule.BalanceItem> {
         return when (sortType) {
             BalanceSortType.Value -> sortByBalance(items)
             BalanceSortType.Name -> items.sortedBy { it.wallet.coin.code }
@@ -13,9 +13,9 @@ class BalanceSorter {
         }
     }
 
-    private fun sortByBalance(items: Iterable<BalanceModule2.BalanceItem>): List<BalanceModule2.BalanceItem> {
+    private fun sortByBalance(items: Iterable<BalanceModule.BalanceItem>): List<BalanceModule.BalanceItem> {
         val comparator =
-                compareByDescending<BalanceModule2.BalanceItem> {
+                compareByDescending<BalanceModule.BalanceItem> {
                     it.balanceData.available > BigDecimal.ZERO
                 }.thenByDescending {
                     it.fiatValue ?: BigDecimal.ZERO > BigDecimal.ZERO

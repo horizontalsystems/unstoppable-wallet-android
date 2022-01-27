@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.swappable
-import io.horizontalsystems.bankwallet.modules.balance2.BalanceModule2
+import io.horizontalsystems.bankwallet.modules.balance2.BalanceModule
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.CoinPrice
@@ -179,7 +179,7 @@ class BalanceViewItemFactory {
         return DeemedValue(value, deemed, visible)
     }
 
-    fun viewItem(item: BalanceModule2.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean, watchAccount: Boolean): BalanceViewItem {
+    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean, watchAccount: Boolean): BalanceViewItem {
         val wallet = item.wallet
         val coin = wallet.coin
         val state = item.state
@@ -218,7 +218,7 @@ class BalanceViewItemFactory {
         )
     }
 
-    fun headerViewItem(items: List<BalanceModule2.BalanceItem>, currency: Currency, balanceHidden: Boolean): BalanceHeaderViewItem = when {
+    fun headerViewItem(items: List<BalanceModule.BalanceItem>, currency: Currency, balanceHidden: Boolean): BalanceHeaderViewItem = when {
         balanceHidden -> BalanceHeaderViewItem("*****", true)
         else -> {
             val total = items.mapNotNull { item ->
