@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
+import io.horizontalsystems.bankwallet.modules.chart.ChartNumberFormatterShortened
 
 object MetricChartVolumeModule {
 
@@ -12,7 +13,8 @@ object MetricChartVolumeModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val chartService = CoinTradingVolumeChartService(App.currencyManager, App.marketKit, coinUid)
-            return ChartModule.createViewModel(chartService) as T
+            val chartNumberFormatter = ChartNumberFormatterShortened()
+            return ChartModule.createViewModel(chartService, chartNumberFormatter) as T
         }
     }
 }
