@@ -23,7 +23,10 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
-open class ChartViewModel(private val service: AbstractChartService) : ViewModel() {
+open class ChartViewModel(
+    private val service: AbstractChartService,
+    private val chartNumberFormatter: ChartModule.ChartNumberFormatter
+) : ViewModel() {
     val tabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
     val indicatorsLiveData = MutableLiveData<List<TabItem<ChartIndicator>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
@@ -97,7 +100,9 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
         if (chartItems.isEmpty()) return
 
         val lastItemValue = chartItems.last().value
-        val currentValue = getFormattedValue(CurrencyValue(service.currency, lastItemValue.toBigDecimal()))// App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, lastItemValue.toBigDecimal()))
+        val currentValue = chartNumberFormatter.formatValue(
+            CurrencyValue(service.currency, lastItemValue.toBigDecimal())
+        )
 
         val firstItemValue = chartItems.first().value
         val currentValueDiff = Value.Percent(((lastItemValue - firstItemValue) / firstItemValue * 100).toBigDecimal())
@@ -137,16 +142,6 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
 
     }
 
-    private fun getFormattedValue(currencyValue: CurrencyValue): String {
-        val significantDecimal = App.numberFormatter.getSignificantDecimalFiat(currencyValue.value)
-        return App.numberFormatter.formatFiat(
-            currencyValue.value,
-            currencyValue.currency.symbol,
-            2,
-            significantDecimal
-        )
-    }
-
     private fun getFormattedValue(value: Float, currency: Currency): String {
         return App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency,  value.toBigDecimal()))
     }
@@ -158,7 +153,9 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
 
     fun getSelectedPoint(item: ChartDataItemImmutable): SelectedPoint? {
         return item.values[Indicator.Candle]?.let { candle ->
-            val value = getFormattedValue(CurrencyValue(service.currency, candle.value.toBigDecimal()))
+            val value = chartNumberFormatter.formatValue(
+                CurrencyValue(service.currency, candle.value.toBigDecimal())
+            )
             val dayAndTime = DateHelper.getDayAndTime(Date(item.timestamp * 1000))
 
             val extraData = when (service.indicator) {
