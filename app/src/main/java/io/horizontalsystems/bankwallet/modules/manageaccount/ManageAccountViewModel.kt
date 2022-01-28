@@ -47,7 +47,12 @@ class ManageAccountViewModel(
     }
 
     private fun syncAccount(account: Account) {
-        keyActionStateLiveData.postValue(if (account.isBackedUp) KeyActionState.ShowRecoveryPhrase else KeyActionState.BackupRecoveryPhrase)
+        val keyActionState = when {
+            account.isWatchAccount -> KeyActionState.None
+            account.isBackedUp -> KeyActionState.ShowRecoveryPhrase
+            else -> KeyActionState.BackupRecoveryPhrase
+        }
+        keyActionStateLiveData.postValue(keyActionState)
     }
 
     private fun syncAccountSettings() {
@@ -72,7 +77,7 @@ class ManageAccountViewModel(
     }
 
     enum class KeyActionState {
-        ShowRecoveryPhrase, BackupRecoveryPhrase
+        None, ShowRecoveryPhrase, BackupRecoveryPhrase
     }
 
     data class AdditionalViewItem(
