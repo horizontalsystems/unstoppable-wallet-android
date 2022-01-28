@@ -119,6 +119,7 @@ class ManageWalletsFragment : BaseFragment() {
         onSelect: (indexes: List<Int>) -> Unit,
         onCancel: () -> Unit
     ) {
+        hideKeyboard()
         BottomSheetSelectorMultipleDialog.show(
             fragmentManager = childFragmentManager,
             title = config.title,
