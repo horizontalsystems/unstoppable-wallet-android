@@ -27,9 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
@@ -162,16 +160,12 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                 }
 
                 additionalViewItems.forEach { additionViewItem ->
-//                    val platformCoin = additionViewItem.platformCoin
-//                    setRemoteImage(
-//                        platformCoin.coin.iconUrl,
-//                        platformCoin.coinType.iconPlaceholder
-//                    )
-
+                    val platformCoin = additionViewItem.platformCoin
                     actionItems.add {
                         AccountActionItem(
                             title = additionViewItem.title,
-                            icon = painterResource(id = R.drawable.ic_blocks_20),
+                            coinIconUrl = platformCoin.coin.iconUrl,
+                            coinIconPlaceholder = platformCoin.coinType.iconPlaceholder,
                             badge = additionViewItem.value
                         )
                     }
@@ -217,7 +211,9 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
 @Composable
 private fun AccountActionItem(
     title: String,
-    icon: Painter,
+    icon: Painter? = null,
+    coinIconUrl: String? = null,
+    coinIconPlaceholder: Int? = null,
     attention: Boolean = false,
     badge: String? = null,
     onClick: (() -> Unit)? = null
@@ -232,12 +228,22 @@ private fun AccountActionItem(
         modifier = modifier.fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            painter = icon,
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
-        )
+        icon?.let {
+            Icon(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                painter = icon,
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey
+            )
+        }
+
+        if (coinIconUrl != null) {
+            CoinImage(
+                modifier = Modifier.padding(horizontal = 16.dp).size(20.dp),
+                iconUrl = coinIconUrl,
+                placeholder = coinIconPlaceholder
+            )
+        }
 
         Text(
             modifier = Modifier.weight(1f),
