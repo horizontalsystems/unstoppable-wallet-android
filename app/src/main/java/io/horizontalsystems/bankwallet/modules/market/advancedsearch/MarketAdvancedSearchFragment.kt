@@ -124,7 +124,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         binding.filterBlockchains.setOnSingleClickListener {
             showMultipleSelectorDialog(
                 title = R.string.Market_Filter_Blockchains,
-                headerIcon = R.drawable.ic_blocks,
+                headerIcon = R.drawable.ic_blocks_24,
                 items = marketAdvancedSearchViewModel.blockchainOptions,
                 selectedIndexes = marketAdvancedSearchViewModel.selectedBlockchainIndexes,
             ) { selectedIndexes ->
