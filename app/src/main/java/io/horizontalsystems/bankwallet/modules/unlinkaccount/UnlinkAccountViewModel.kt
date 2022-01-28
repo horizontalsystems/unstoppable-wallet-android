@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.unlinkaccount
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
@@ -11,42 +13,53 @@ class UnlinkAccountViewModel(
     private val account: Account,
     private val accountManager: IAccountManager
 ) : ViewModel() {
-    val accountName: String = account.name
-    val message: TranslatableString?
+    val accountName = account.name
 
-    private val confirmationList: List<TranslatableString>
+    var confirmations by mutableStateOf<List<ConfirmationItem>>(listOf())
+        private set
+    var unlinkEnabled by mutableStateOf(false)
+        private set
+    var showDeleteWarning by mutableStateOf(false)
+        private set
 
     init {
         if (account.isWatchAccount) {
-            confirmationList = listOf()
-            message = TranslatableString.ResString(R.string.ManageAccount_DeleteWarning)
+            showDeleteWarning = true
         } else {
-            confirmationList = listOf(
-                TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationRemove),
-                TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationDisable),
-                TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationLose)
+            confirmations = listOf(
+                ConfirmationItem(ConfirmationType.ConfirmationRemove),
+                ConfirmationItem(ConfirmationType.ConfirmationDisable),
+                ConfirmationItem(ConfirmationType.ConfirmationLos),
             )
-            message = null
+        }
+
+        updateUnlinkEnabledState()
+    }
+
+    fun toggleConfirm(item: ConfirmationItem) {
+        val index = confirmations.indexOf(item)
+        if (index != -1) {
+            confirmations = confirmations.toMutableList().apply {
+                this[index] = item.copy(confirmed = !item.confirmed)
+            }
+
+            updateUnlinkEnabledState()
         }
     }
 
-    val items = mutableListOf<CheckBoxItem>().apply {
-        addAll(confirmationList.map { CheckBoxItem(it) })
-    }
-    val itemsLiveData = MutableLiveData(items.toList())
-    val buttonEnabledLiveData = MutableLiveData(items.isEmpty())
-
-    fun updateItem(index: Int, item: CheckBoxItem, checked: Boolean) {
-        items.removeAt(index)
-        items.add(index, CheckBoxItem(item.text, checked))
-        itemsLiveData.postValue(items.toList())
-        buttonEnabledLiveData.postValue(items.all { it.checked })
-    }
-
-    fun onUnlinkConfirm() {
+    fun onUnlink() {
         accountManager.delete(account.id)
     }
 
+    private fun updateUnlinkEnabledState() {
+        unlinkEnabled = confirmations.none { !it.confirmed }
+    }
 }
 
-data class CheckBoxItem(val text: TranslatableString, val checked: Boolean = false)
+enum class ConfirmationType(val title: TranslatableString) {
+    ConfirmationRemove(TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationRemove)),
+    ConfirmationDisable(TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationDisable)),
+    ConfirmationLos(TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationLose))
+}
+
+data class ConfirmationItem(val confirmationType: ConfirmationType, val confirmed: Boolean = false)

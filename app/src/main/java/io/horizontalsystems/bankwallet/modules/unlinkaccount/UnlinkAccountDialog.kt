@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
@@ -66,10 +64,10 @@ class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
 private fun UnlinkAccountScreen(navController: NavController, account: Account) {
     val viewModel = viewModel<UnlinkAccountViewModel>(factory = UnlinkAccountModule.Factory(account))
 
-    val items by viewModel.itemsLiveData.observeAsState(listOf())
-    val buttonEnabled by viewModel.buttonEnabledLiveData.observeAsState(false)
+    val confirmations = viewModel.confirmations
+    val unlinkEnabled = viewModel.unlinkEnabled
     val accountName = viewModel.accountName
-    val message = viewModel.message
+    val showDeleteWarning = viewModel.showDeleteWarning
 
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_red_24),
@@ -85,30 +83,30 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
             color = ComposeAppTheme.colors.steel10
         )
 
-        items.forEachIndexed { index, item ->
+        confirmations.forEach { item ->
             CellCheckboxLawrence(
                 borderBottom = true,
-                onClick = { viewModel.updateItem(index, item, !item.checked) }
+                onClick = { viewModel.toggleConfirm(item) }
             ) {
                 HsCheckbox(
-                    checked = item.checked,
-                    onCheckedChange = { checked ->
-                        viewModel.updateItem(index, item, checked)
+                    checked = item.confirmed,
+                    onCheckedChange = {
+                        viewModel.toggleConfirm(item)
                     },
                 )
                 Spacer(Modifier.width(16.dp))
                 Text(
-                    text = item.text.getString(),
+                    text = item.confirmationType.title.getString(),
                     style = ComposeAppTheme.typography.subhead2,
                     color = ComposeAppTheme.colors.leah
                 )
             }
         }
 
-        message?.let {
+        if (showDeleteWarning) {
             TextImportant(
                 modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp),
-                text = it.getString()
+                text = stringResource(id = R.string.ManageAccount_DeleteWarning)
             )
         }
 
@@ -121,11 +119,11 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
                 .fillMaxWidth(),
             title = stringResource(R.string.ManageKeys_Delete_FromPhone),
             onClick = {
-                viewModel.onUnlinkConfirm()
+                viewModel.onUnlink()
                 HudHelper.showSuccessMessage(view, doneConfirmationMessage)
                 navController.popBackStack()
             },
-            enabled = buttonEnabled
+            enabled = unlinkEnabled
         )
     }
 }
