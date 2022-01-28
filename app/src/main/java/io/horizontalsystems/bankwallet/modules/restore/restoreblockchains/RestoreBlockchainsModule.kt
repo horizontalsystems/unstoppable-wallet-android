@@ -122,6 +122,7 @@ data class CoinViewItem(
     val title: String,
     val subtitle: String,
     val state: CoinViewItemState,
+    val label: String? = null,
 )
 
 sealed class CoinViewItemState {

@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -19,10 +20,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -32,6 +35,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItemState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -170,61 +174,96 @@ private fun ManageWalletsScreen(
             }
             coinItems?.let {
                 items(it) { viewItem ->
-                    CellMultilineClear(
-                        borderBottom = true,
-                        onClick = { onItemClick(viewItem, viewModel) }
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
+                    CoinCell(
+                        viewItem = viewItem,
+                        onItemClick = { onItemClick(viewItem, viewModel) },
+                        onSettingClick = { viewModel.onClickSettings(viewItem.uid) },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CoinCell(
+    viewItem: CoinViewItem,
+    onItemClick: () -> Unit,
+    onSettingClick: () -> Unit,
+) {
+    CellMultilineClear(
+        borderBottom = true,
+        onClick = onItemClick
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+        ) {
+            Image(
+                painter = viewItem.imageSource.painter(),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .size(24.dp)
+            )
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = viewItem.title,
+                        color = ComposeAppTheme.colors.leah,
+                        style = ComposeAppTheme.typography.body,
+                        maxLines = 1,
+                    )
+                    viewItem.label?.let { labelText ->
+                        Box(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 16.dp)
+                                .padding(start = 6.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(ComposeAppTheme.colors.jeremy)
                         ) {
-                            Image(
-                                painter = viewItem.imageSource.painter(),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .padding(end = 16.dp)
-                                    .size(24.dp)
+                            Text(
+                                modifier = Modifier.padding(
+                                    start = 4.dp,
+                                    end = 4.dp,
+                                    bottom = 1.dp
+                                ),
+                                text = labelText,
+                                color = ComposeAppTheme.colors.bran,
+                                style = ComposeAppTheme.typography.microSB,
+                                maxLines = 1,
                             )
-                            Column(
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                Text(
-                                    text = viewItem.title,
-                                    color = ComposeAppTheme.colors.leah,
-                                    style = ComposeAppTheme.typography.body,
-                                    maxLines = 1,
-                                )
-                                Text(
-                                    text = viewItem.subtitle,
-                                    color = ComposeAppTheme.colors.grey,
-                                    style = ComposeAppTheme.typography.subhead2,
-                                    maxLines = 1,
-                                    modifier = Modifier.padding(top = 1.dp)
-                                )
-                            }
-                            if (viewItem.state is CoinViewItemState.ToggleVisible) {
-                                Spacer(Modifier.width(12.dp))
-                                if (viewItem.state.hasSettings) {
-                                    IconButton(
-                                        onClick = { viewModel.onClickSettings(viewItem.uid) }
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.ic_edit_20),
-                                            contentDescription = null,
-                                            tint = ComposeAppTheme.colors.grey
-                                        )
-                                    }
-                                }
-                                HsSwitch(
-                                    checked = viewItem.state.enabled,
-                                    onCheckedChange = { onItemClick(viewItem, viewModel) },
-                                )
-                            }
                         }
                     }
                 }
+                Text(
+                    text = viewItem.subtitle,
+                    color = ComposeAppTheme.colors.grey,
+                    style = ComposeAppTheme.typography.subhead2,
+                    maxLines = 1,
+                    modifier = Modifier.padding(top = 1.dp)
+                )
+            }
+            if (viewItem.state is CoinViewItemState.ToggleVisible) {
+                Spacer(Modifier.width(12.dp))
+                if (viewItem.state.hasSettings) {
+                    IconButton(
+                        onClick = onSettingClick
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_edit_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                    }
+                }
+                HsSwitch(
+                    checked = viewItem.state.enabled,
+                    onCheckedChange = { onItemClick.invoke() },
+                )
             }
         }
     }
@@ -237,5 +276,25 @@ private fun onItemClick(viewItem: CoinViewItem, viewModel: ManageWalletsViewMode
         } else {
             viewModel.enable(viewItem.uid)
         }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewCoinCell() {
+    val viewItem = CoinViewItem(
+        "arbitrum",
+        ImageSource.Local(R.drawable.logo_arbitrum_24),
+        "Arbitrum",
+        "ARB",
+        CoinViewItemState.ToggleVisible(true, true),
+        "Arbitrum"
+    )
+    ComposeAppTheme {
+        CoinCell(
+            viewItem,
+            {},
+            {},
+        )
     }
 }
