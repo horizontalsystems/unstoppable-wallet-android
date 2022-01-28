@@ -152,7 +152,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                 actionItems.add {
                     AccountActionItem(
                         title = stringResource(id = R.string.ManageAccount_NetworkSettings),
-                        icon = painterResource(id = R.drawable.ic_blocks)
+                        icon = painterResource(id = R.drawable.ic_blocks_20)
                     ) {
                         navController.slideFromRight(
                             R.id.manageAccountFragment_to_networkSettingsFragment,
@@ -171,7 +171,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                     actionItems.add {
                         AccountActionItem(
                             title = additionViewItem.title,
-                            icon = painterResource(id = R.drawable.ic_blocks),
+                            icon = painterResource(id = R.drawable.ic_blocks_20),
                             badge = additionViewItem.value
                         )
                     }
