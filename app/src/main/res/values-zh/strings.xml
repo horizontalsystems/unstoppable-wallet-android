@@ -70,7 +70,7 @@
     <string name="Restore_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="Restore_InvalidChecksum">校验和无效</string>
     <string name="Restore_PassphraseDescription">输入您在创建此助记词时使用的密码.</string>
-    <string name="Restore_Title">Choose Blockchains</string>
+    <string name="Restore_Title">选择区块链</string>
     <string name="Select_Coins">选择货币</string>
     <string name="Restore_ZCash_BirthdayHeight">生日高度</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">如果您知道您Zcash钱包生成时的区块高度，请将其添加至下方以加速同步过程。</string>
@@ -450,7 +450,7 @@
     <string name="Transactions_Completed">已完成</string>
     <string name="Transactions_Processing">正在处理</string>
     <string name="Transactions_Send">发送​​</string>
-    <string name="Transactions_Approve">Approve</string>
+    <string name="Transactions_Approve">批准请求</string>
     <string name="Transactions_Swap">互兑交易</string>
     <string name="Transactions_Failed">失败</string>
     <string name="Transactions_ContractCall">合约调用</string>
