@@ -9,6 +9,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,12 +23,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -36,14 +40,14 @@ fun FormsInput(
     modifier: Modifier = Modifier,
     initial: String = "",
     hint: String,
-    error: String? = null,
+    state: DataState<Unit>? = null,
     qrScannerEnabled: Boolean = false,
     onValueChange: (String) -> Unit
 ) {
     val context = LocalContext.current
 
-    val borderColor = when {
-        error != null -> ComposeAppTheme.colors.red50
+    val borderColor = when (state) {
+        is DataState.Error -> ComposeAppTheme.colors.red50
         else -> ComposeAppTheme.colors.steel20
     }
 
@@ -86,6 +90,32 @@ fun FormsInput(
                     innerTextField()
                 }
             )
+
+            when (state) {
+                is DataState.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(28.dp).padding(top = 4.dp, end = 8.dp),
+                        color = ComposeAppTheme.colors.grey,
+                        strokeWidth = 2.dp
+                    )
+                }
+                is DataState.Error -> {
+                    Icon(
+                        modifier = Modifier.padding(end = 8.dp),
+                        painter = painterResource(id = R.drawable.ic_attention_20),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.lucian
+                    )
+                }
+                is DataState.Success -> {
+                    Icon(
+                        modifier = Modifier.padding(end = 8.dp),
+                        painter = painterResource(id = R.drawable.ic_check_20),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.remus
+                    )
+                }
+            }
 
             val clipboardManager = LocalClipboardManager.current
 
@@ -131,7 +161,7 @@ fun FormsInput(
             }
         }
 
-        error?.let {
+        state?.errorOrNull?.localizedMessage?.let {
             Text(
                 modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
                 text = it,
