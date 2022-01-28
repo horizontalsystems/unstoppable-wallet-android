@@ -34,8 +34,10 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 @Composable
 fun FormsInput(
     modifier: Modifier = Modifier,
+    initial: String = "",
     hint: String,
-    error: String?,
+    error: String? = null,
+    qrScannerEnabled: Boolean = false,
     onValueChange: (String) -> Unit
 ) {
     val context = LocalContext.current
@@ -56,7 +58,7 @@ fun FormsInput(
             verticalAlignment = Alignment.CenterVertically
         ) {
             var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                mutableStateOf(TextFieldValue())
+                mutableStateOf(TextFieldValue(initial))
             }
 
             BasicTextField(
@@ -87,15 +89,6 @@ fun FormsInput(
 
             val clipboardManager = LocalClipboardManager.current
 
-            val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
-
-                    textState = textState.copy(text = scannedText, selection = TextRange(scannedText.length))
-                    onValueChange.invoke(scannedText)
-                }
-            }
-
             if (textState.text.isNotEmpty()) {
                 ButtonSecondaryCircle(
                     modifier = Modifier.padding(end = 8.dp),
@@ -106,13 +99,24 @@ fun FormsInput(
                     }
                 )
             } else {
-                ButtonSecondaryCircle(
-                    modifier = Modifier.padding(end = 8.dp),
-                    icon = R.drawable.ic_qr_scan_20,
-                    onClick = {
-                        qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
+                if (qrScannerEnabled) {
+                    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                        if (result.resultCode == Activity.RESULT_OK) {
+                            val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+
+                            textState = textState.copy(text = scannedText, selection = TextRange(scannedText.length))
+                            onValueChange.invoke(scannedText)
+                        }
                     }
-                )
+
+                    ButtonSecondaryCircle(
+                        modifier = Modifier.padding(end = 8.dp),
+                        icon = R.drawable.ic_qr_scan_20,
+                        onClick = {
+                            qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
+                        }
+                    )
+                }
 
                 clipboardManager.getText()?.text?.let { textInClipboard ->
                     ButtonSecondaryDefault(
