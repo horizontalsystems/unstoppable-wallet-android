@@ -1,22 +1,36 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.databinding.FragmentManageAccountBinding
-import io.horizontalsystems.bankwallet.databinding.ViewHolderAccountSettingViewBinding
-import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
@@ -24,11 +38,10 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.UnlinkConfi
 import io.horizontalsystems.bankwallet.modules.networksettings.NetworkSettingsModule
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.ListPosition
 
 class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener {
     private val viewModel by viewModels<ManageAccountViewModel> {
@@ -36,200 +49,272 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
             arguments?.getString(ACCOUNT_ID_KEY)!!
         )
     }
-    private var saveMenuItem: MenuItem? = null
-
-    private var _binding: FragmentManageAccountBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentManageAccountBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        saveMenuItem = null
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        saveMenuItem = binding.toolbar.menu.findItem(R.id.menuSave)
-
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        binding.toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuSave -> {
-                    viewModel.onSave()
-                    true
-                }
-                else -> false
-            }
-        }
-
-        binding.toolbar.title = viewModel.account.name
-        binding.name.setText(viewModel.account.name)
-
-        val textWatcher = object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                if (s.isNotEmpty()) {
-                    viewModel.onChange(s.toString())
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        }
-        binding.name.addTextChangedListener(textWatcher)
-
-        binding.unlinkButton.setOnSingleClickListener {
-            val confirmationList: List<String>
-            val message: String?
-
-            if (viewModel.account.isWatchAccount) {
-                confirmationList = listOf()
-                message = getString(R.string.ManageAccount_DeleteWarning)
-            } else {
-                confirmationList = listOf(
-                    getString(R.string.ManageAccount_Delete_ConfirmationRemove),
-                    getString(R.string.ManageAccount_Delete_ConfirmationDisable),
-                    getString(R.string.ManageAccount_Delete_ConfirmationLose)
-                )
-                message = null
-            }
-            UnlinkConfirmationDialog.show(
-                childFragmentManager,
-                viewModel.account.name,
-                confirmationList,
-                message
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
+            setContent {
+                ManageAccountScreen(findNavController(), arguments?.getString(ACCOUNT_ID_KEY)!!)
+            }
         }
+    }
 
-        binding.networkSettings.setOnClickListener {
-            openNetworkSettings(viewModel.account)
-        }
-
+    private fun _onViewCreated(view: View, savedInstanceState: Bundle?) {
         childFragmentManager.addFragmentOnAttachListener { _, fragment ->
             when (fragment) {
                 is UnlinkConfirmationDialog -> fragment.setListener(this)
             }
         }
-
-        viewModel.keyActionStateLiveData.observe(viewLifecycleOwner, { keyActionState ->
-            when (keyActionState) {
-                KeyActionState.ShowRecoveryPhrase -> {
-                    binding.actionButton.showAttention(false)
-                    binding.actionButton.showTitle(getString(R.string.ManageAccount_RecoveryPhraseShow))
-                    binding.actionButton.setOnClickListener {
-                        findNavController().slideFromRight(
-                            R.id.manageAccountFragment_to_showKeyFragment,
-                            ShowKeyModule.prepareParams(viewModel.account)
-                        )
-                    }
-                }
-                KeyActionState.BackupRecoveryPhrase -> {
-                    binding.actionButton.showAttention(true)
-                    binding.actionButton.showTitle(getString(R.string.ManageAccount_RecoveryPhraseBackup))
-                    binding.actionButton.setOnClickListener {
-                        openBackupModule(viewModel.account)
-                    }
-                }
-            }
-        })
-
-        viewModel.additionalViewItemsLiveData.observe(viewLifecycleOwner, { additionalItems ->
-            if (additionalItems.isNotEmpty()) {
-                binding.additionalInfoItems.adapter = AdditionalInfoAdapter(additionalItems)
-            } else {
-                binding.networkSettings.setListPosition(ListPosition.Last)
-            }
-        })
-
-        viewModel.saveEnabledLiveData.observe(viewLifecycleOwner, {
-            saveMenuItem?.isEnabled = it
-        })
-
-        viewModel.finishLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().popBackStack()
-        })
     }
 
-    private fun openBackupModule(account: Account) {
-        findNavController().slideFromRight(
-            R.id.manageAccountFragment_to_backupKeyFragment,
-            BackupKeyModule.prepareParams(account)
-        )
-    }
-
-    private fun openNetworkSettings(account: Account) {
-        findNavController().slideFromRight(
-            R.id.manageAccountFragment_to_networkSettingsFragment,
-            NetworkSettingsModule.prepareParams(account)
-        )
-    }
 
     override fun onUnlinkConfirm() {
         viewModel.onUnlink()
         HudHelper.showSuccessMessage(requireView(), getString(R.string.Hud_Text_Done))
     }
-
 }
 
-class AdditionalInfoAdapter(
-    private val items: List<ManageAccountViewModel.AdditionalViewItem> = listOf()
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+@Composable
+fun ManageAccountScreen(navController: NavController, accountId: String) {
+    val viewModel = viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return AdditionalInfoViewHolder(
-            ViewHolderAccountSettingViewBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
+    val saveEnabled by viewModel.saveEnabledLiveData.observeAsState(false)
+    val keyActionState by viewModel.keyActionStateLiveData.observeAsState()
+    val additionalViewItems by viewModel.additionalViewItemsLiveData.observeAsState(listOf())
+    val finish by viewModel.finishLiveEvent.observeAsState()
+
+    if (finish != null) {
+        navController.popBackStack()
+    }
+
+    ComposeAppTheme {
+        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            AppBar(
+                title = TranslatableString.PlainString(viewModel.account.name),
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.jacob
+                        )
+                    }
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.ManageAccount_Save),
+                        onClick = {
+                            viewModel.onSave()
+                        },
+                        enabled = saveEnabled
+                    )
+                )
             )
-        )
-    }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val listPosition =
-            if (position == items.size - 1) ListPosition.Last else ListPosition.Middle
-        (holder as? AdditionalInfoViewHolder)?.bind(items[position], listPosition)
-    }
+            Column {
+                Header {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = stringResource(id = R.string.ManageAccount_Name),
+                        color = ComposeAppTheme.colors.grey,
+                        style = ComposeAppTheme.typography.subhead1
+                    )
+                }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
-}
-
-class AdditionalInfoViewHolder(val binding: ViewHolderAccountSettingViewBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-    fun bind(additionViewItem: ManageAccountViewModel.AdditionalViewItem, position: ListPosition) {
-        val platformCoin = additionViewItem.platformCoin
-        binding.icon.setRemoteImage(
-            platformCoin.coin.iconUrl,
-            platformCoin.coinType.iconPlaceholder
-        )
-        binding.title.text = additionViewItem.title
-        binding.wrapper.setBackgroundResource(position.getBackground())
-
-        binding.decoratedTextCompose.setContent {
-            ComposeAppTheme {
-                ButtonSecondaryDefault(
+                FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    title = additionViewItem.value,
-                    onClick = {
-                        TextHelper.copyText(additionViewItem.value)
-                        HudHelper.showSuccessMessage(binding.wrapper, R.string.Hud_Text_Copied)
+                    initial = viewModel.account.name,
+                    hint = "",
+                    onValueChange = {
+                        viewModel.onChange(it)
                     }
                 )
+
+                val actionItems = mutableListOf<@Composable () -> Unit>()
+
+                when (keyActionState) {
+                    KeyActionState.ShowRecoveryPhrase -> {
+                        actionItems.add {
+                            AccountActionItem(
+                                title = stringResource(id = R.string.ManageAccount_RecoveryPhraseShow),
+                                icon = painterResource(id = R.drawable.ic_key_20)
+                            ) {
+                                navController.slideFromRight(
+                                    R.id.manageAccountFragment_to_showKeyFragment,
+                                    ShowKeyModule.prepareParams(viewModel.account)
+                                )
+                            }
+                        }
+                    }
+                    KeyActionState.BackupRecoveryPhrase -> {
+                        actionItems.add {
+                            AccountActionItem(
+                                title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
+                                icon = painterResource(id = R.drawable.ic_key_20),
+                                attention = true
+                            ) {
+                                navController.slideFromRight(
+                                    R.id.manageAccountFragment_to_backupKeyFragment,
+                                    BackupKeyModule.prepareParams(viewModel.account)
+                                )
+
+                            }
+                        }
+                    }
+                }
+                actionItems.add {
+                    AccountActionItem(
+                        title = stringResource(id = R.string.ManageAccount_NetworkSettings),
+                        icon = painterResource(id = R.drawable.ic_blocks)
+                    ) {
+                        navController.slideFromRight(
+                            R.id.manageAccountFragment_to_networkSettingsFragment,
+                            NetworkSettingsModule.prepareParams(viewModel.account)
+                        )
+                    }
+                }
+
+                additionalViewItems.forEach { additionViewItem ->
+//                    val platformCoin = additionViewItem.platformCoin
+//                    setRemoteImage(
+//                        platformCoin.coin.iconUrl,
+//                        platformCoin.coinType.iconPlaceholder
+//                    )
+
+                    actionItems.add {
+                        AccountActionItem(
+                            title = additionViewItem.title,
+                            icon = painterResource(id = R.drawable.ic_blocks),
+                            badge = additionViewItem.value
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+                CellSingleLineLawrenceSection(actionItems)
+
+                val confirmationList: List<String>
+                val message: String?
+
+                if (viewModel.account.isWatchAccount) {
+                    confirmationList = listOf()
+                    message = stringResource(R.string.ManageAccount_DeleteWarning)
+                } else {
+                    confirmationList = listOf(
+                        stringResource(R.string.ManageAccount_Delete_ConfirmationRemove),
+                        stringResource(R.string.ManageAccount_Delete_ConfirmationDisable),
+                        stringResource(R.string.ManageAccount_Delete_ConfirmationLose)
+                    )
+                    message = null
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+                CellSingleLineLawrenceSection(listOf {
+                    CellSingleLineLawrence {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clickable {
+                                    navController.slideFromBottom(
+                                        R.id.unlinkConfirmationDialog,
+                                        UnlinkConfirmationDialog.prepareParams(
+                                            viewModel.account.name,
+                                            confirmationList,
+                                            message
+                                        )
+                                    )
+                                },
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                painter = painterResource(id = R.drawable.ic_delete_20),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.lucian
+                            )
+
+                            Text(
+                                text = stringResource(id = R.string.ManageAccount_Unlink),
+                                color = ComposeAppTheme.colors.lucian,
+                                style = ComposeAppTheme.typography.body
+                            )
+                        }
+                    }
+                })
             }
         }
     }
+}
 
+@Composable
+private fun AccountActionItem(
+    title: String,
+    icon: Painter,
+    attention: Boolean = false,
+    badge: String? = null,
+    onClick: (() -> Unit)? = null
+) {
+    val modifier = if (onClick != null) {
+        Modifier.clickable(onClick = onClick)
+    } else {
+        Modifier
+    }
+
+    Row(
+        modifier = modifier.fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            painter = icon,
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
+
+        Text(
+            modifier = Modifier.weight(1f),
+            text = title,
+            style = ComposeAppTheme.typography.body,
+            color = ComposeAppTheme.colors.leah
+        )
+
+        if (attention) {
+            Icon(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                painter = painterResource(id = R.drawable.ic_attention_20),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.lucian
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+        }
+
+        badge?.let {
+            val view = LocalView.current
+            val clipboardManager = LocalClipboardManager.current
+
+            ButtonSecondaryDefault(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = it,
+                onClick = {
+                    clipboardManager.setText(AnnotatedString(it))
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                }
+            )
+        }
+
+        onClick?.let {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_arrow_right),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+        }
+    }
 }

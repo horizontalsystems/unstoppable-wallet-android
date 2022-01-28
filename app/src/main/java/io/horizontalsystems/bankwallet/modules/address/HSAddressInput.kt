@@ -21,6 +21,7 @@ fun HSAddressInput(modifier: Modifier, coinCode: String, onValueChange: (Address
         modifier = modifier,
         hint = stringResource(id = R.string.Watch_Address_Hint),
         error = error,
+        qrScannerEnabled = true,
         onValueChange = {
             scope.launch {
                 val addressState = viewModel.parseAddress(it)

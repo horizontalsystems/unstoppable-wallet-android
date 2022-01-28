@@ -501,4 +501,8 @@
     <dialog
         android:id="@+id/syncErrorDialog"
         android:name="io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog" />
+
+    <dialog
+        android:id="@+id/unlinkConfirmationDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.UnlinkConfirmationDialog" />
 </navigation>

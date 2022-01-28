@@ -20,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -139,25 +138,12 @@ class UnlinkConfirmationDialog : BaseComposableBottomSheetFragment() {
         private const val CHECKBOX_ITEMS = "checkbox_items"
         private const val MESSAGE = "message"
 
-        fun show(
-            fragmentManager: FragmentManager,
-            accountName: String,
-            checkboxItems: List<String>,
-            message: String?
-        ) {
-            val fragment = UnlinkConfirmationDialog().apply {
-                arguments = bundleOf(
-                    ACCOUNT_NAME to accountName,
-                    CHECKBOX_ITEMS to ArrayList(checkboxItems),
-                    MESSAGE to message,
-                )
-            }
-
-            fragmentManager.beginTransaction().apply {
-                add(fragment, "unlink_confirmation_dialog")
-                commitAllowingStateLoss()
-            }
-        }
+        fun prepareParams(accountName: String, checkboxItems: List<String>, message: String?) =
+            bundleOf(
+                ACCOUNT_NAME to accountName,
+                CHECKBOX_ITEMS to ArrayList(checkboxItems),
+                MESSAGE to message,
+            )
     }
 }
 
