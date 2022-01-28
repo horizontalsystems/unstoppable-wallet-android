@@ -97,10 +97,6 @@ class ManageAccountService(
         disposable.clear()
     }
 
-    fun deleteAccount() {
-        accountManager.delete(account.id)
-    }
-
     enum class State {
         CanSave, CannotSave
     }
