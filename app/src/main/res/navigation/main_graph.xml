@@ -504,5 +504,5 @@
 
     <dialog
         android:id="@+id/unlinkConfirmationDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.UnlinkConfirmationDialog" />
+        android:name="io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog" />
 </navigation>
