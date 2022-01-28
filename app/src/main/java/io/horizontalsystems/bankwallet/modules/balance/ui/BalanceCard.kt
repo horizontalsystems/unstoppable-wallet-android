@@ -220,7 +220,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
         } catch (e: BackupRequiredError) {
             navController.slideFromBottom(
                 R.id.backupRequiredDialog,
-                BackupRequiredDialog.prepareParams(e.account)
+                BackupRequiredDialog.prepareParams(e.account, e.coinTitle)
             )
         }
     }

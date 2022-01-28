@@ -83,7 +83,7 @@ class BalanceViewModel(
 
     fun getWalletForReceive(viewItem: BalanceViewItem) = when {
         viewItem.wallet.account.isBackedUp -> viewItem.wallet
-        else -> throw BackupRequiredError(viewItem.wallet.account)
+        else -> throw BackupRequiredError(viewItem.wallet.account, viewItem.coinTitle)
     }
 
     fun onRefresh() {
@@ -119,4 +119,4 @@ class BalanceViewModel(
     }
 }
 
-class BackupRequiredError(val account: Account) : Error("Backup Required")
+class BackupRequiredError(val account: Account, val coinTitle: String) : Error("Backup Required")

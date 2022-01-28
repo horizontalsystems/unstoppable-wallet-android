@@ -33,6 +33,10 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
         requireArguments().getParcelable<Account>(ACCOUNT)
     }
 
+    private val coinTitle by lazy {
+        requireArguments().getString(COIN_TITLE) ?: ""
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,7 +48,7 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 account?.let {
-                    BackupRequiredScreen(findNavController(), it)
+                    BackupRequiredScreen(findNavController(), it, coinTitle)
                 }
             }
         }
@@ -52,13 +56,17 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
 
     companion object {
         private const val ACCOUNT = "account"
+        private const val COIN_TITLE = "coin_title"
 
-        fun prepareParams(account: Account) = bundleOf(ACCOUNT to account)
+        fun prepareParams(account: Account, coinTitle: String) = bundleOf(
+            ACCOUNT to account,
+            COIN_TITLE to coinTitle,
+        )
     }
 }
 
 @Composable
-fun BackupRequiredScreen(navController: NavController, account: Account) {
+fun BackupRequiredScreen(navController: NavController, account: Account, coinTitle: String) {
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_red_24),
@@ -75,7 +83,7 @@ fun BackupRequiredScreen(navController: NavController, account: Account) {
             )
             TextImportant(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                text = stringResource(R.string.ManageAccount_BackupRequired_Description)
+                text = stringResource(R.string.ManageAccount_BackupRequired_Description, account.name, coinTitle)
             )
             Divider(
                 modifier = Modifier.fillMaxWidth(),
