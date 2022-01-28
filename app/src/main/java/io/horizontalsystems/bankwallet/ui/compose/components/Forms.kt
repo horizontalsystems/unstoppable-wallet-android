@@ -148,16 +148,18 @@ fun FormsInput(
                     )
                 }
 
-                clipboardManager.getText()?.text?.let { textInClipboard ->
-                    ButtonSecondaryDefault(
-                        modifier = Modifier.padding(end = 8.dp),
-                        title = stringResource(id = R.string.Send_Button_Paste),
-                        onClick = {
+                val textInClipboard = clipboardManager.getText()?.text
+                ButtonSecondaryDefault(
+                    modifier = Modifier.padding(end = 8.dp),
+                    title = stringResource(id = R.string.Send_Button_Paste),
+                    onClick = {
+                        textInClipboard?.let {
                             textState = textState.copy(text = textInClipboard, selection = TextRange(textInClipboard.length))
                             onValueChange.invoke(textInClipboard)
                         }
-                    )
-                }
+                    },
+                    enabled = textInClipboard != null
+                )
             }
         }
 
