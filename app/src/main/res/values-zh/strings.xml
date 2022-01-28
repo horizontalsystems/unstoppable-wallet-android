@@ -680,7 +680,7 @@
     <string name="ManageAccount_NetworkSettings">网络设置</string>
     <string name="ManageAccount_Unlink">取消链接</string>
     <string name="ManageAccount_BackupRequired_Title">需要备份</string>
-    <string name="ManageAccount_BackupRequired_Description">您应该在将此钱包的私钥从该手机删除之前先对其进行备份。</string>
+    <string name="ManageAccount_BackupRequired_Description">You need to backup %1$s before you may receive %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">该操作将从此设备删除本钱包。</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">属于此钱包的所有加密货币将在余额选项卡上被禁用。</string>
     <string name="ManageAccount_Delete_ConfirmationLose">如果您尚未对此钱包备份私钥，您将失去您的资金。</string>
