@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.manageaccount.dialogs
+package io.horizontalsystems.bankwallet.modules.unlinkaccount
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
-class UnlinkConfirmationDialogViewModel(
+class UnlinkAccountViewModel(
     private val account: Account,
     private val accountManager: IAccountManager
 ) : ViewModel() {

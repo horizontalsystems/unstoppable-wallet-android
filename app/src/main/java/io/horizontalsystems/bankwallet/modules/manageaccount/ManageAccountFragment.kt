@@ -33,9 +33,9 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.UnlinkConfirmationDialog
 import io.horizontalsystems.bankwallet.modules.networksettings.NetworkSettingsModule
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
+import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -188,7 +188,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 .clickable {
                                     navController.slideFromBottom(
                                         R.id.unlinkConfirmationDialog,
-                                        UnlinkConfirmationDialog.prepareParams(viewModel.account)
+                                        UnlinkAccountDialog.prepareParams(viewModel.account)
                                     )
                                 },
                             verticalAlignment = Alignment.CenterVertically

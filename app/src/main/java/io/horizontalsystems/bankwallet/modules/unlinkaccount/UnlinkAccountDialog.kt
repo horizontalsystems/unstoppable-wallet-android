@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.manageaccount.dialogs
+package io.horizontalsystems.bankwallet.modules.unlinkaccount
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,8 +35,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class UnlinkConfirmationDialog : BaseComposableBottomSheetFragment() {
-
+class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
     private val account by lazy { requireArguments().getParcelable<Account>(ACCOUNT) }
 
     override fun onCreateView(
@@ -50,7 +49,7 @@ class UnlinkConfirmationDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    BottomSheetScreen(findNavController(), account!!)
+                    UnlinkAccountScreen(findNavController(), account!!)
                 }
             }
         }
@@ -64,8 +63,8 @@ class UnlinkConfirmationDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-private fun BottomSheetScreen(navController: NavController, account: Account) {
-    val viewModel = viewModel<UnlinkConfirmationDialogViewModel>(factory = UnlinkConfirmationDialogModule.Factory(account))
+private fun UnlinkAccountScreen(navController: NavController, account: Account) {
+    val viewModel = viewModel<UnlinkAccountViewModel>(factory = UnlinkAccountModule.Factory(account))
 
     val items by viewModel.itemsLiveData.observeAsState(listOf())
     val buttonEnabled by viewModel.buttonEnabledLiveData.observeAsState(false)
