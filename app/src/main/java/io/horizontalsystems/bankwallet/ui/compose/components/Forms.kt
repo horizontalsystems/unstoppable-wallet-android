@@ -93,6 +93,10 @@ fun FormsInput(
 
             when (state) {
                 is DataState.Loading -> {
+                    // Todo: Need to find better solution
+                    // CircularProgressIndicator doesn't allow to change its size.
+                    // Resized it using modifier size with padding.
+                    // The ordering of modifiers is important.
                     CircularProgressIndicator(
                         modifier = Modifier.size(28.dp).padding(top = 4.dp, end = 8.dp),
                         color = ComposeAppTheme.colors.grey,
