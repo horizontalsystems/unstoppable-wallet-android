@@ -66,10 +66,6 @@ class ManageAccountViewModel(
         finishLiveEvent.postValue(Unit)
     }
 
-    fun onUnlink() {
-        service.deleteAccount()
-    }
-
     override fun onCleared() {
         disposable.clear()
         clearables.forEach(Clearable::clear)

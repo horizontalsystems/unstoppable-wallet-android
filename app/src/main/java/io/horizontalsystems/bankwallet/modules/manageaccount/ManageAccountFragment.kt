@@ -24,7 +24,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -43,12 +42,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener {
-    private val viewModel by viewModels<ManageAccountViewModel> {
-        ManageAccountModule.Factory(
-            arguments?.getString(ACCOUNT_ID_KEY)!!
-        )
-    }
+class ManageAccountFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,20 +57,6 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
                 ManageAccountScreen(findNavController(), arguments?.getString(ACCOUNT_ID_KEY)!!)
             }
         }
-    }
-
-    private fun _onViewCreated(view: View, savedInstanceState: Bundle?) {
-        childFragmentManager.addFragmentOnAttachListener { _, fragment ->
-            when (fragment) {
-                is UnlinkConfirmationDialog -> fragment.setListener(this)
-            }
-        }
-    }
-
-
-    override fun onUnlinkConfirm() {
-        viewModel.onUnlink()
-        HudHelper.showSuccessMessage(requireView(), getString(R.string.Hud_Text_Done))
     }
 }
 
@@ -199,21 +179,6 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                 Spacer(modifier = Modifier.height(32.dp))
                 CellSingleLineLawrenceSection(actionItems)
 
-                val confirmationList: List<String>
-                val message: String?
-
-                if (viewModel.account.isWatchAccount) {
-                    confirmationList = listOf()
-                    message = stringResource(R.string.ManageAccount_DeleteWarning)
-                } else {
-                    confirmationList = listOf(
-                        stringResource(R.string.ManageAccount_Delete_ConfirmationRemove),
-                        stringResource(R.string.ManageAccount_Delete_ConfirmationDisable),
-                        stringResource(R.string.ManageAccount_Delete_ConfirmationLose)
-                    )
-                    message = null
-                }
-
                 Spacer(modifier = Modifier.height(32.dp))
                 CellSingleLineLawrenceSection(listOf {
                     CellSingleLineLawrence {
@@ -223,11 +188,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 .clickable {
                                     navController.slideFromBottom(
                                         R.id.unlinkConfirmationDialog,
-                                        UnlinkConfirmationDialog.prepareParams(
-                                            viewModel.account.name,
-                                            confirmationList,
-                                            message
-                                        )
+                                        UnlinkConfirmationDialog.prepareParams(viewModel.account)
                                     )
                                 },
                             verticalAlignment = Alignment.CenterVertically
