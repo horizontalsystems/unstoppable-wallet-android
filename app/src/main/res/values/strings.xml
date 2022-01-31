@@ -131,56 +131,6 @@
     <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
-    <string name="Market_Category_Rated">Rated</string>
-    <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
-    <string name="Market_Category_TopCoins">Top Coins</string>
-    <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
-    <string name="Market_Category_Blockchains">Blockchains</string>
-    <string name="Market_Category_Blockchains_Description">Native cryptocurrencies on major blockchains. </string>
-    <string name="Market_Category_Dexes">DEXes</string>
-    <string name="Market_Category_Dexes_Description">Decentralized cryptocurrency exchanges.</string>
-    <string name="Market_Category_Lending">Lending</string>
-    <string name="Market_Category_Lending_Description">Protocols for lending and borrowing.</string>
-    <string name="Market_Category_Privacy">Privacy</string>
-    <string name="Market_Category_Privacy_Description">Projects working on privacy solutions.</string>
-    <string name="Market_Category_Scaling">Scaling</string>
-    <string name="Market_Category_Scaling_Description">Solutions for faster blockchain transactions.</string>
-    <string name="Market_Category_Oracles">Oracles</string>
-    <string name="Market_Category_Oracles_Description">Connecting real world data to smart contracts.</string>
-    <string name="Market_Category_Prediction">Prediction</string>
-    <string name="Market_Category_Prediction_Description">Markets to bet on events in the future.</string>
-    <string name="Market_Category_YieldAggregators">Yield Aggregators</string>
-    <string name="Market_Category_YieldAggregators_Description">Solutions for earning from idle crypto assets.</string>
-    <string name="Market_Category_FiatStableCoins">Stablecoins</string>
-    <string name="Market_Category_FiatStableCoins_Description">Crypto tokens pegged 1–1 to fiat currency.</string>
-    <string name="Market_Category_TokenizedBitcoin">Tokenized Bitcoin</string>
-    <string name="Market_Category_TokenizedBitcoin_Description">Crypto tokens pegged 1–1 to Bitcoin price.</string>
-    <string name="Market_Category_ExchangeTokens">Exchange Tokens</string>
-    <string name="Market_Category_ExchangeTokens_Description">Tokens issued by centralized exchanges.</string>
-    <string name="Market_Category_RiskManagement">Risk Management</string>
-    <string name="Market_Category_RiskManagement_Description">Risk assessment, insurance and hedging.</string>
-    <string name="Market_Category_Wallets">Wallets</string>
-    <string name="Market_Category_Wallets_Description">Tokens issued by cryptocurrency wallets.</string>
-    <string name="Market_Category_Synthetics">Synthetics</string>
-    <string name="Market_Category_Synthetics_Description">Platforms for creating decentralized synthetic assets.</string>
-    <string name="Market_Category_IndexFunds">Index Funds</string>
-    <string name="Market_Category_IndexFunds_Description">Assets that pegged in price to a set of tokens.</string>
-    <string name="Market_Category_NFT">NFT</string>
-    <string name="Market_Category_NFT_Description">NFT projects.</string>
-    <string name="Market_Category_Fundraising">Fundraising</string>
-    <string name="Market_Category_Fundraising_Description">Fundraising and token sale platforms.</string>
-    <string name="Market_Category_Gaming">Gaming</string>
-    <string name="Market_Category_Gaming_Description">Crypto projects in gaming and VR sector.</string>
-    <string name="Market_Category_Infrastructure">Infrastructure</string>
-    <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
-    <string name="Market_Category_Analytics">Analytics</string>
-    <string name="Market_Category_Analytics_Description">Token-powered analytics and investment instruments.</string>
-    <string name="Market_Category_Storage">Storage</string>
-    <string name="Market_Category_Storage_Description">Decentralized data-storage.</string>
-    <string name="Market_Category_Identity">Identity</string>
-    <string name="Market_Category_Identity_Description">Decentralized identity.</string>
-    <string name="Market_Category_YieldTokens">Yield Tokens</string>
-    <string name="Market_Category_YieldTokens_Description">Interesting Bearing Tokens.</string>
     <string name="Market_SyncError">Sync Error</string>
 
     <!--Market Global Metrics-->
@@ -326,7 +276,7 @@
     <string name="Send_Confirmation_Amount">Amount</string>
     <string name="Send_Confirmation_To">To</string>
     <string name="Send_Confirmation_Method">Method</string>
-    <string name="Send_Confirmation_Nonce">Nonce</string>
+    <string name="Send_Confirmation_Nonce" translatable="false">Nonce</string>
     <string name="Send_Confirmation_Receiver">Receiver</string>
     <string name="Send_Confirmation_HintMemo" translatable="false">Memo</string>
     <string name="Send_Confirmation_EstimateTime">Duration</string>
@@ -380,13 +330,13 @@
     <string name="FeeInfo_FastDescription">For transactions where priority is important, we recommend using the high fee value. It\'s expected to be sufficient for a transaction to be completed within 10 minutes for Bitcoin and within 1-2 minutes for Ethereum.</string>
 
     <!--Wallet Connect-->
-    <string name="WalletConnect_Title">Wallet Connect</string>
+    <string name="WalletConnect_Title" translatable="false">Wallet Connect</string>
     <string name="WalletConnect_Request">Request</string>
     <string name="WalletConnect_SendRequest_Title">Send</string>
     <string name="WalletConnect_ApproveRequest_Title">Approve</string>
     <string name="WalletConnect_SwapRequest_Title">Swap</string>
     <string name="WalletConnect_UnknownRequest_Title">Contract Call</string>
-    <string name="WalletConnect_Url">URL</string>
+    <string name="WalletConnect_Url" translatable="false">URL</string>
     <string name="WalletConnect_Status">Status</string>
     <string name="WalletConnect_SignedTransactions">Signed Transactions</string>
     <string name="WalletConnect_Approve_Hint">By clicking connect, you allow this app to view your public address. This is important security step to protect your data from potential phishing risks.</string>
@@ -422,7 +372,7 @@
     <string name="Swap_FromAmountTitle">You Pay</string>
     <string name="Swap_ToAmountTitle">You Get</string>
     <string name="Swap_AmountHint" translatable="false">0</string>
-    <string name="Swap_Percent">%s%%</string>
+    <string name="Swap_Percent" translatable="false">%s%%</string>
     <string name="Swap_Estimated">ESTIMATED</string>
     <string name="Swap_TokenSelectorTitle">Select</string>
     <string name="Swap_Balance">Balance</string>
@@ -551,7 +501,7 @@
     <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
     <string name="TransactionInfo_To">To</string>
     <string name="TransactionInfo_From">From</string>
-    <string name="TransactionInfo_Memo">Memo</string>
+    <string name="TransactionInfo_Memo" translatable="false">Memo</string>
     <string name="TransactionInfo_LockedUntil">Locked until %s</string>
     <string name="TransactionInfo_UnlockedAt">Unlocked at %s</string>
     <string name="TransactionInfo_RecipientHash">Recipient</string>
@@ -594,7 +544,7 @@
 
     <!-- Info -->
 
-    <string name="Info_LockTime_Title">TimeLock</string>
+    <string name="Info_LockTime_Title" translatable="false">TimeLock</string>
     <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you can not spend them on the Bitcoin network.</string>
 
     <string name="Info_DoubleSpend_Title">Double Spend</string>
@@ -631,7 +581,7 @@
     <string name="Settings_InfoTitleWithVersion" translatable="false">Unstoppable %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
     <string name="Settings_CompanyName" translatable="false">horizontal systems</string>
-    <string name="Settings_Faq">FAQ</string>
+    <string name="Settings_Faq" translatable="false">FAQ</string>
     <string name="Settings_AppStatus">App Status</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Rate Us</string>
@@ -683,7 +633,7 @@
     <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
-    <string name="SettingsSecurity_SyncModeAPI">API</string>
+    <string name="SettingsSecurity_SyncModeAPI" translatable="false">API</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">Recommended</string>
     <string name="SettingsSecurity_SyncModeBlockchain">From Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">More Private</string>
@@ -786,7 +736,7 @@
 
     <!-- Bitcoin Hodling -->
 
-    <string name="BitcoinHodling_Title">TimeLock</string>
+    <string name="BitcoinHodling_Title" translatable="false">TimeLock</string>
     <string name="BitcoinHodling_LockTime" translatable="false">Activate</string>
     <string name="BitcoinHodling_Description">This enables you to send Bitcoins that cannot be spent until a specified date. \n\nThe receiver of such transactions should use the Unstoppable wallet app version 0.10 or newer, with the BIP44 address format for Bitcoin. \n\nOnly the Unstoppable wallet can correctly identify such transactions on the Bitcoin network, as well as enable the receiver to spend those Bitcoins after the lock period expires. \n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transactions to yourself. \n\nBeing an experimental feature, the maximum amount per transaction is limited to 0.5 BTC.</string>
 
@@ -908,14 +858,14 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title" translatable="false">Legacy</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommended)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Common before 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
 
     <!-- Tor -->
 
-    <string name="Tor_Title">Tor</string>
+    <string name="Tor_Title" translatable="false">Tor</string>
     <string name="Tor_Connection_Title">Connection</string>
     <string name="Tor_Status_Starting">Starting Tor...</string>
     <string name="Tor_Status_Error">Error starting Tor !</string>
@@ -927,7 +877,7 @@
 
     <!--Coin Option-->
 
-    <string name="CoinOption_bip44_Title">Legacy</string>
+    <string name="CoinOption_bip44_Title" translatable="false">Legacy</string>
     <string name="CoinOption_bip49_Title">Newer (recommended)</string>
     <string name="CoinOption_bip84_Title">Newest</string>
 
@@ -1000,15 +950,15 @@
     <string name="CoinPage_Guide">Guide</string>
     <string name="CoinPage_Website">Website</string>
     <string name="CoinPage_Whitepaper">Whitepaper</string>
-    <string name="CoinPage_Reddit">Reddit</string>
-    <string name="CoinPage_Twitter">Twitter</string>
+    <string name="CoinPage_Reddit" translatable="false">Reddit</string>
+    <string name="CoinPage_Twitter" translatable="false">Twitter</string>
     <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
     <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
     <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
     <string name="CoinPage_Twitter_Replied">Replying to %s</string>
     <string name="CoinPage_Twitter_SeeOnTwitter">See on Twitter</string>
-    <string name="CoinPage_Telegram">Telegram</string>
-    <string name="CoinPage_Github">Github</string>
+    <string name="CoinPage_Telegram" translatable="false">Telegram</string>
+    <string name="CoinPage_Github" translatable="false">Github</string>
     <string name="CoinPage_Youtube" translatable="false">Youtube</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
     <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
