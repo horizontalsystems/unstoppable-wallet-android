@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -42,6 +43,7 @@ fun FormsInput(
     hint: String,
     state: DataState<Unit>? = null,
     qrScannerEnabled: Boolean = false,
+    onChangeFocus: ((Boolean) -> Unit)? = null,
     onValueChange: (String) -> Unit
 ) {
     val context = LocalContext.current
@@ -67,6 +69,9 @@ fun FormsInput(
 
             BasicTextField(
                 modifier = Modifier
+                    .onFocusChanged {
+                        onChangeFocus?.invoke(it.isFocused)
+                    }
                     .padding(12.dp)
                     .weight(1f),
                 value = textState,
