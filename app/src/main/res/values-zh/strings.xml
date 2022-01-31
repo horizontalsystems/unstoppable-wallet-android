@@ -25,11 +25,11 @@
     <string name="Button_Start">开始</string>
     <string name="Button_Create">创建</string>
     <string name="Button_Restore">恢复</string>
-    <string name="Button_WatchAddress">Watch Address</string>
+    <string name="Button_WatchAddress">观察地址</string>
     <string name="Button_Reset">重置</string>
     <string name="Button_Reconnect">重新连接</string>
-    <string name="Button_Understand">I Understand</string>
-    <string name="Button_Switch">Switch</string>
+    <string name="Button_Understand">我理解</string>
+    <string name="Button_Switch">切换</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Any">任何</string>
@@ -58,8 +58,8 @@
     <string name="EnterPassphrase">密码</string>
     <string name="CreateWallet_PassphraseDescription">密码为钱包增加了一个额外的保护层，同一组助记词使用不同的密码，就可以让用户创建许多个独立的多币钱包。\n\n要恢复这些钱包，用户必须有一组助记词和不同密码。</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">GM!</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable? Share feedback and ideas to take it further.</string>
+    <string name="RateApp_Title_Rate_This_App">GM！</string>
+    <string name="RateApp_Description_Rate_This_App">喜欢Unstoppable？分享反馈和想法以使其更进一步。</string>
     <string name="RateApp_Button_RateIt">评价它</string>
     <string name="RateApp_Button_NotNow">暂不</string>
     <!--Restore-->
@@ -82,9 +82,9 @@
     <string name="Market_Field_PriceDiff">价格</string>
     <string name="Market_Title">市场</string>
     <string name="Market_Search">查询</string>
-    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
+    <string name="Market_FilterSection_MarketParameters">市场参数</string>
     <string name="Market_FilterSection_PriceParameters">价格参数</string>
-    <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
+    <string name="Market_FilterSection_NetworkParameters">网络参数</string>
     <string name="Market_Field_HighestCap">市值由高到低</string>
     <string name="Market_Field_LowestCap">市值由低到高</string>
     <string name="Market_Field_HighestVolume">成交量由高到低</string>
@@ -101,7 +101,7 @@
     <string name="Market_Tab_Overview">行情</string>
     <string name="Market_Tab_Posts">发现</string>
     <string name="Market_Tab_Watchlist">关注</string>
-    <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
+    <string name="Market_Tab_Watchlist_EmptyList">您的观察列表为空。</string>
     <string name="Market_Category_Rated">Rated</string>
     <string name="Market_Category_Rated_Description">币种基于项目安全性和市场流动性的评估</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
@@ -134,8 +134,8 @@
     <string name="Market_Category_Wallets_Description">由加密货币钱包发行的代币</string>
     <string name="Market_Category_Synthetics">Synthetics</string>
     <string name="Market_Category_Synthetics_Description">创建去中心化合成资产的平台</string>
-    <string name="Market_Category_IndexFunds">Index Funds</string>
-    <string name="Market_Category_IndexFunds_Description">Assets that pegged in price to a set of tokens.</string>
+    <string name="Market_Category_IndexFunds">指数基金</string>
+    <string name="Market_Category_IndexFunds_Description">绑定一组代币价格的资产。</string>
     <string name="Market_Category_NFT">NFT</string>
     <string name="Market_Category_NFT_Description">非同质化代币项目</string>
     <string name="Market_Category_Fundraising">Fundraising</string>
@@ -180,7 +180,7 @@
     <string name="Market_Filter_Volume">成交量</string>
     <string name="Market_Filter_PricePeriod">价格区间</string>
     <string name="Market_Filter_PriceChange">价格变化</string>
-    <string name="Market_Filter_Blockchains">Blockchains</string>
+    <string name="Market_Filter_Blockchains">区块链</string>
     <string name="Market_Filter_OutperformedBtc">跑赢BTC</string>
     <string name="Market_Filter_OutperformedEth">跑赢ETH</string>
     <string name="Market_Filter_OutperformedBnb">跑赢BNB</string>
@@ -192,7 +192,7 @@
     <string name="Market_Filter_Top_1000">前1000名</string>
     <string name="Market_Filter_Top_1500">前1500名</string>
     <string name="Market_Filter_ShowResults">显示结果</string>
-    <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
+    <string name="Market_Filter_ShowResults_Counter">显示结果：%d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
     <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
     <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
@@ -230,7 +230,7 @@
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
     <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
-    <string name="TimePeriod_24h">24h</string>
+    <string name="TimePeriod_24h">24小时</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s 市场</string>
     <!--TVL Rank-->
@@ -266,7 +266,7 @@
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <string name="Balance_NoWalletAlert">您还没有任何钱包。创建新钱包或恢复已有钱包 </string>
     <string name="Balance_NoCoinsAlert">您还没有添加任何代币到此钱包中。</string>
-    <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
+    <string name="Balance_WatchAccount_NoBalance">此钱包地址没有任何余额</string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址或域名</string>
@@ -309,7 +309,7 @@
     <string name="Send_LockTime_HalfYear">6月</string>
     <string name="Send_LockTime_Year">1年</string>
     <string name="Send_Sending">正在发送</string>
-    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %1$s (%2$s) paid in %3$s. You need %4$s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">%1$s（%2$s）的交易费用以%3$s支付。您需要%4$s。</string>
     <string name="Send_Warning_LowFee">警告！有被骗的风险</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">交易速度</string>
@@ -335,7 +335,7 @@
     <string name="WalletConnect_Reconnect_Hint">无法建立连接。请重新连接。</string>
     <string name="WalletConnect_Error_InvalidUrl">无效的URL地址</string>
     <string name="WalletConnect_Requirement">要求</string>
-    <string name="WalletConnect_Alert">Alert</string>
+    <string name="WalletConnect_Alert">警报</string>
     <string name="WalletConnect_Status_Offline">离线</string>
     <string name="WalletConnect_Status_Online">在线</string>
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
@@ -346,15 +346,15 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">待签名消息</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">请对消息签名以便进行验证</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">签名</string>
-    <string name="WalletConnect_Error_NoWallet">No suitable Wallet. You need to create or restore existing wallet</string>
-    <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
+    <string name="WalletConnect_Error_NoWallet">没有合适的钱包。您需要创建或恢复现有钱包</string>
+    <string name="WalletConnect_Error_WatchAccount">此功能不适用于观察中的钱包，您需要切换到恢复或创建的钱包 </string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">当前%s余额低于此交易所需金额，包括交易费用。</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">选定的费用太低，交易将被拒绝！</string>
     <string name="EthereumTransaction_Error_InsufficientLiquidity">流动性不足</string>
     <string name="EthereumTransaction_Error_CannotEstimate">错误！检查余额并确保有足够的%s来支付费用。或者尝试增加价格下跌金额并重试。将在3秒后重试...</string>
-    <string name="EthereumTransaction_Warning_CoinNeededForFee">Consider leaving some %s on balance to be able to pay for future transactions.</string>
+    <string name="EthereumTransaction_Warning_CoinNeededForFee">考虑留下%s作为余额以便能够支付未来的交易。</string>
     <!--Swap-->
     <string name="Swap">互兑交易</string>
     <string name="Swap_FromAmountTitle">您支付</string>
@@ -420,7 +420,7 @@
     <string name="Approve_YouApprove">您批准</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_Description">此兑换服务由基于%s区块链的去中心化代币兑换协议%s提供。\n\n%s不存在任何欺诈手段、以可靠方式推动代币兑换的智能合约来实现完全自动化管理。</string>
-    <string name="SwapInfo_DexRelated">%s Related</string>
+    <string name="SwapInfo_DexRelated">%s相关</string>
     <string name="SwapInfo_AllowanceTitle">补贴</string>
     <string name="SwapInfo_AllowanceDescription">执行代币互兑时，该服务可以代表您支出的某种货币的金额。执行互兑操作之前要求具备足够的批准限额。</string>
     <string name="SwapInfo_PriceImpactTitle">价格影响</string>
@@ -459,10 +459,10 @@
     <string name="Transactions_From">发送人%s</string>
     <string name="Transaction_Unlimited">无限%s</string>
     <string name="Transactions_All">所有</string>
-    <string name="Transactions_Incoming">Received</string>
-    <string name="Transactions_Outgoing">Sent</string>
-    <string name="Transactions_Swaps">Swaps</string>
-    <string name="Transactions_Approvals">Approvals</string>
+    <string name="Transactions_Incoming">已收到</string>
+    <string name="Transactions_Outgoing">已发送</string>
+    <string name="Transactions_Swaps">掉期交易</string>
+    <string name="Transactions_Approvals">批准</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">交易</string>
     <string name="TransactionInfo_Title">交易信息</string>
@@ -499,7 +499,7 @@
     <string name="StatusInfo_Processing">正在处理</string>
     <string name="StatusInfo_Confirmed">已完成</string>
     <string name="StatusInfo_Failed">失败</string>
-    <string name="StatusInfo_PendingDescription">The transaction has not been confirmed on the blockchain yet. Transactions sent with a recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected. Also keep in mind that status of an individual transaction shown in Unstoppable wallet interface typically updated with a short delay.</string>
+    <string name="StatusInfo_PendingDescription">交易尚未在区块链上得到确认。带有推荐或更高费用设置发送的交易通常会在10分钟内得到处理。以低费用发送的交易将在数小时甚至数天内仍将处于待处理状态，并且可能会被完全拒绝。同时请谨记，显示在Unstoppable钱包界面中的个别交易的状态通常将在较短延时内得到更新。</string>
     <string name="StatusInfo_ProcessingDescription">交易已包括在区块链中，但尚未达到永久终结状态。此时，可以安全地考虑以较小金额完成的交易。对于大额支付，建议等待直至交易状态变为已完成。</string>
     <string name="StatusInfo_ConfirmedDescription">交易已完成并被视为永久和不可逆。</string>
     <string name="StatusInfo_FailedDescription">交易未得到处理，也未发生价值转移。状态为失败的交易仍然被写入区块链，并耗费交易费用。Unstoppable应用无法显示此类交易失败的原因，但用户可以自己在公共区块资源管理器上查找，如etherscan.io。</string>
@@ -561,9 +561,9 @@
 \n\n1 洗牌：每个事务的事务输出顺序都是随机的。有时变化可能是第一个输出，有时可能是第二个输出。如果用户信任应用程序的开发人员，则不要认为这是推荐的选项。
 \n\n2 确定性：对于事务输出的排序有一个公认的标准（称为BIP69）。在开源钱包中，该标准确保钱包用户不需要信任应用程序的开发人员如何实现输出的排序。由于这是一个新标准，目前还没有多少钱包实施这一标准。因此，在区块链上可以看到交易是否从使用该标准的钱包发送。</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">区块链同步</string>
-    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains when sending or receiving transactions.
-        \n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.
-        \n\nIn the case of Ethereum and Binance Smart Chain, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal Ethereum nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">该设置控制该应用在发送或接收交易时如何与区块链交互。
+        \n\n在比特币、比特币现金、莱特币和Dash的情况中，与区块链网络节点的通信是完全对等的。Unstoppable可以ping多个节点，并与其中一个节点通信。每次应用将连接到不同的节点。
+        \n\n在以太坊和币安智能链的情况中，除了通过第三方RPC服务提供商（如Infura.io）或个人以太坊节点，移动钱包没有其他选择与各自的区块链进行交互。这本质上意味着您与区块链的通信不是去中心化的。这不会以任何方式影响您的资金，只会影响您连接区块链网络的能力。</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Title">区块链恢复</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Description">此设置仅在还原现有钱包时相关。这是一个获取钱包交易历史的过程，以便钱包能够显示过去的交易并计算用户余额。当用户恢复以前创建的钱包时，这种情况只需发生一次。在这一点上，移动钱包有两种可能的实现方法：
 \n\n1 来自API服务器：有一个第三方预定义服务器，托管整个区块链，处理所有数据，并准备以快速方式提供数据。此方法速度快，但可能会跟踪IP地址和请求的数据。建议使用此选项，因为其获取数据的速度（5-10分钟）。风险很小。如果用户从自己的服务器恢复，那么就没有任何隐私风险。
@@ -578,7 +578,7 @@
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动本钱包。</string>
     <string name="SettingsSecurity_TorConnectionDescription">使用此功能让您的网络完全匿名化。请注意，在某些情况下，DeFi的钱包链接功能可能非常慢或根本不起作用。</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for the Unstoppable Wallet app are disabled. You need to turn on Notifications and allow background app refresh in order to be able to receive price change alerts.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
     <string name="SettingsSecurity_SortingShuffle">随机排序</string>
     <string name="SettingsSecurity_SortingShuffleDescription">随机索引</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
@@ -667,11 +667,11 @@
     <string name="ManageAccounts_Title">管理钱包</string>
     <string name="ManageAccounts_CreateNewWallet">创建</string>
     <string name="ManageAccounts_ImportWallet">恢复自</string>
-    <string name="ManageAccounts_WatchAddress">Watch Address</string>
+    <string name="ManageAccounts_WatchAddress">观察地址</string>
     <string name="ManageAccounts_Hint">注意：使用一个新密码恢复现有的钱包将生成一个全新的钱包。如果您希望对多个钱包使用单个12-24个单词的助记词恢复码，这将非常方便。</string>
-    <string name="Watch_Address_Title">Address</string>
-    <string name="Watch_Address_Hint">Address or Domain</string>
-    <string name="Watch_Address_Watch">Watch</string>
+    <string name="Watch_Address_Title">地址</string>
+    <string name="Watch_Address_Hint">地址或域名</string>
+    <string name="Watch_Address_Watch">观察</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
     <string name="ManageAccount_Save">保存</string>
@@ -680,7 +680,7 @@
     <string name="ManageAccount_NetworkSettings">网络设置</string>
     <string name="ManageAccount_Unlink">取消链接</string>
     <string name="ManageAccount_BackupRequired_Title">需要备份</string>
-    <string name="ManageAccount_BackupRequired_Description">You need to backup %1$s before you may receive %2$s.</string>
+    <string name="ManageAccount_BackupRequired_Description">您必须备份%1$s才能收到%2$s。</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">该操作将从此设备删除本钱包。</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">属于此钱包的所有加密货币将在余额选项卡上被禁用。</string>
     <string name="ManageAccount_Delete_ConfirmationLose">如果您尚未对此钱包备份私钥，您将失去您的资金。</string>
@@ -689,11 +689,11 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s 个单词的密码</string>
     <string name="ManageAccount_SwitchWallet_Title">切换钱包</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">选择钱包以快速切换</string>
-    <string name="ManageAccount_DeleteWarning">Are you sure want to delete this wallet?</string>
+    <string name="ManageAccount_DeleteWarning">您确定要删除此钱包吗？</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">网络设置</string>
-    <string name="NetworkSettings_SwithesAutomatically">switches automatically</string>
-    <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP network uses the links listed below and switches automatically.</string>
+    <string name="NetworkSettings_SwithesAutomatically">自动切换</string>
+    <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP网络使用下面列出的链接并自动切换。</string>
     <string name="NetworkSettings_TestNetDisclaimer">除非您了解什么是Testnet选项以及其工作原理，否则请不要选择该选项。\n\nTestnet是一个使用自己的货币进行测试的并行区块链。如果有人向您的Testnet地址发送定期付款，付款将会丢失。</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">密钥</string>
@@ -781,8 +781,8 @@
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">行情</string>
     <string name="Coin_Tab_Market">市场</string>
-    <string name="Coin_Tab_Details">Analytics</string>
-    <string name="Coin_Tab_Tweets">Tweets</string>
+    <string name="Coin_Tab_Details">分析</string>
+    <string name="Coin_Tab_Tweets">推文</string>
     <string name="CoinPage_TimeDuration_Today">今天</string>
     <string name="CoinPage_TimeDuration_Day">24时</string>
     <string name="CoinPage_TimeDuration_Week">7天</string>
@@ -801,7 +801,7 @@
     <string name="CoinPage_Audits_Issues">发布: %d</string>
     <string name="CoinPage_InvestorData">投资数据</string>
     <string name="CoinPage_Treasuries">国库券</string>
-    <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
+    <string name="CoinPage_Treasuries_FilterTitle">筛选器</string>
     <string name="CoinPage_Treasuries_PoweredBy">由Bitcointreasuries.net提供</string>
     <string name="CoinPage_Reports">报告</string>
     <string name="CoinPage_FundsInvested">已投资金</string>
@@ -863,7 +863,7 @@
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">成交量</string>
     <string name="CoinPage_NoData">无数据</string>
-    <string name="CoinPage_NoDataAvailable">No data available</string>
+    <string name="CoinPage_NoDataAvailable">没有可用数据</string>
     <string name="CoinPage_AddToWallet">加入钱包</string>
     <string name="CoinPage_InWallet">已在钱包</string>
     <string name="CoinPage_Favorite">喜爱的</string>
@@ -880,7 +880,7 @@
     <string name="CoinPage_Contract">%s 合约</string>
     <string name="CoinPage_Bep2Symbol">BEP2 符号</string>
     <string name="CoinPage_MajorHolders_TopWallets">排名地址</string>
-    <string name="CoinPage_MajorHolders_Description">The chart above shows the % of all tokens in circulation held by the top 10 wallets. The lower the % the more distributed the coin is.</string>
+    <string name="CoinPage_MajorHolders_Description">上方图表显示了前10个钱包所持有的所有代币的百分比。 百分比越低，代币的分布越广。</string>
     <string name="CoinPage_MajorHolders_InTopWallets">前10名地址</string>
     <string name="CoinPage_CoinInvestments_Lead">领投</string>
     <!--Rate list-->
@@ -895,7 +895,7 @@
     <string name="BalanceSyncError_ButtonRetry">重试</string>
     <string name="BalanceSyncError_ButtonChangeSource">更改源</string>
     <string name="BalanceSyncError_ButtonReport">报告</string>
-    <string name="BalanceSyncError_ReportButtonExplanation">The error text will be copied to your clipboard should you decide to report it.</string>
+    <string name="BalanceSyncError_ReportButtonExplanation">如果您决定报告错误文本，将复制到剪贴板。</string>
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">关注我们</string>
 </resources>
