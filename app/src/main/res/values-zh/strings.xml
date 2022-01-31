@@ -102,56 +102,6 @@
     <string name="Market_Tab_Posts">发现</string>
     <string name="Market_Tab_Watchlist">关注</string>
     <string name="Market_Tab_Watchlist_EmptyList">您的观察列表为空。</string>
-    <string name="Market_Category_Rated">Rated</string>
-    <string name="Market_Category_Rated_Description">币种基于项目安全性和市场流动性的评估</string>
-    <string name="Market_Category_TopCoins">Top Coins</string>
-    <string name="Market_Category_TopCoins_Description">币种排名描述</string>
-    <string name="Market_Category_Blockchains">Blockchains</string>
-    <string name="Market_Category_Blockchains_Description">主要区块链中的原生加密货币</string>
-    <string name="Market_Category_Dexes">DEXes</string>
-    <string name="Market_Category_Dexes_Description">去中心化加密货币交易所</string>
-    <string name="Market_Category_Lending">Lending</string>
-    <string name="Market_Category_Lending_Description">借贷协议</string>
-    <string name="Market_Category_Privacy">Privacy</string>
-    <string name="Market_Category_Privacy_Description">用于解决隐私保护的项目</string>
-    <string name="Market_Category_Scaling">Scaling</string>
-    <string name="Market_Category_Scaling_Description">加快区块链交易速度的解决方案</string>
-    <string name="Market_Category_Oracles">Oracles</string>
-    <string name="Market_Category_Oracles_Description">连接智能合约和现实世界数据的方案</string>
-    <string name="Market_Category_Prediction">Prediction</string>
-    <string name="Market_Category_Prediction_Description">着眼于未来事件的赌约市场</string>
-    <string name="Market_Category_YieldAggregators">Yield Aggregators</string>
-    <string name="Market_Category_YieldAggregators_Description">用空闲加密资产来挣钱的解决方案</string>
-    <string name="Market_Category_FiatStableCoins">Stablecoins</string>
-    <string name="Market_Category_FiatStableCoins_Description">用于1:1锚定现有加密货币的伪货币</string>
-    <string name="Market_Category_TokenizedBitcoin">Tokenized Bitcoin</string>
-    <string name="Market_Category_TokenizedBitcoin_Description">用于1:1锚定比特币价格</string>
-    <string name="Market_Category_ExchangeTokens">Exchange Tokens</string>
-    <string name="Market_Category_ExchangeTokens_Description">由中心化交易所发行的代币</string>
-    <string name="Market_Category_RiskManagement">Risk Management</string>
-    <string name="Market_Category_RiskManagement_Description">风险资产，保险和对冲</string>
-    <string name="Market_Category_Wallets">Wallets</string>
-    <string name="Market_Category_Wallets_Description">由加密货币钱包发行的代币</string>
-    <string name="Market_Category_Synthetics">Synthetics</string>
-    <string name="Market_Category_Synthetics_Description">创建去中心化合成资产的平台</string>
-    <string name="Market_Category_IndexFunds">指数基金</string>
-    <string name="Market_Category_IndexFunds_Description">绑定一组代币价格的资产。</string>
-    <string name="Market_Category_NFT">NFT</string>
-    <string name="Market_Category_NFT_Description">非同质化代币项目</string>
-    <string name="Market_Category_Fundraising">Fundraising</string>
-    <string name="Market_Category_Fundraising_Description">众筹和加密货币销售平台</string>
-    <string name="Market_Category_Gaming">Gaming</string>
-    <string name="Market_Category_Gaming_Description">在游戏和VR板块的加密项目</string>
-    <string name="Market_Category_Infrastructure">Infrastructure</string>
-    <string name="Market_Category_Infrastructure_Description">用于建立区块链基础设施方案的项目</string>
-    <string name="Market_Category_Analytics">Analytics</string>
-    <string name="Market_Category_Analytics_Description">币种分析和投资指南</string>
-    <string name="Market_Category_Storage">Storage</string>
-    <string name="Market_Category_Storage_Description">去中心化数据存贮</string>
-    <string name="Market_Category_Identity">Identity</string>
-    <string name="Market_Category_Identity_Description">去中心化身份认证</string>
-    <string name="Market_Category_YieldTokens">Yield Tokens</string>
-    <string name="Market_Category_YieldTokens_Description">有趣的挖矿收益代币</string>
     <string name="Market_SyncError">同步出错</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">图表</string>
@@ -279,7 +229,6 @@
     <string name="Send_Confirmation_Amount">金额</string>
     <string name="Send_Confirmation_To">接收人</string>
     <string name="Send_Confirmation_Method">方法</string>
-    <string name="Send_Confirmation_Nonce">Nonce</string>
     <string name="Send_Confirmation_Receiver">接收人</string>
     <string name="Send_Confirmation_EstimateTime">预计时间：</string>
     <string name="Send_Confirmation_Send_Button">发送​​</string>
@@ -321,13 +270,11 @@
     <string name="FeeInfo_Fast">快</string>
     <string name="FeeInfo_FastDescription">对于优先级重要的交易，我们建议使用高收费值。预计这将足以在10分钟内完成比特币交易，1-2分钟以内完成Ethereum交易。</string>
     <!--Wallet Connect-->
-    <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">请求</string>
     <string name="WalletConnect_SendRequest_Title">发送​​</string>
     <string name="WalletConnect_ApproveRequest_Title">批准请求</string>
     <string name="WalletConnect_SwapRequest_Title">互兑交易请求</string>
     <string name="WalletConnect_UnknownRequest_Title">合约调用</string>
-    <string name="WalletConnect_Url">URL</string>
     <string name="WalletConnect_Status">状态</string>
     <string name="WalletConnect_SignedTransactions">已签名交易</string>
     <string name="WalletConnect_Approve_Hint">点击批准，表示您允许此应用查看您的公开地址。这是保护您的数据免受潜在钓鱼风险威胁的重要安全步骤。</string>
@@ -359,7 +306,6 @@
     <string name="Swap">互兑交易</string>
     <string name="Swap_FromAmountTitle">您支付</string>
     <string name="Swap_ToAmountTitle">您获得</string>
-    <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">估计</string>
     <string name="Swap_TokenSelectorTitle">选择</string>
     <string name="Swap_Balance">余额</string>
@@ -475,7 +421,6 @@
     <string name="TransactionInfo_RawTransaction">原始交易</string>
     <string name="TransactionInfo_To">接收人</string>
     <string name="TransactionInfo_From">发送人</string>
-    <string name="TransactionInfo_Memo">备忘录</string>
     <string name="TransactionInfo_LockedUntil">锁定至 %s</string>
     <string name="TransactionInfo_UnlockedAt">在 %s 解锁了</string>
     <string name="TransactionInfo_RecipientHash">收款人</string>
@@ -512,7 +457,6 @@
     <string name="TransactionInfoOptions_Cancel_Button">取消交易</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">交易已在区块中</string>
     <!-- Info -->
-    <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">汇款人通过将在%s失效的消费锁定汇出这些资金。\n\n无需担心，收到的加密货币已经属于您，但在锁定期限结束前，您无法在网络上消费它们。</string>
     <string name="Info_DoubleSpend_Title">双复支付</string>
     <string name="Info_DoubleSpend_Description">双重支付风险！区块链上还有另一笔交易试图支付这笔交易所使用的投入。 网络只接受一笔交易。</string>
@@ -538,7 +482,6 @@
     <string name="Settings_Theme">主题样式</string>
     <string name="Settings_Terms">使用条款</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
-    <string name="Settings_Faq">FAQ</string>
     <string name="Settings_AppStatus">应用状态</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">评价我们</string>
@@ -583,7 +526,6 @@
     <string name="SettingsSecurity_SortingShuffleDescription">随机索引</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">词典索引</string>
-    <string name="SettingsSecurity_SyncModeAPI">API</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">推荐</string>
     <string name="SettingsSecurity_SyncModeBlockchain">来自区块链</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">更私密</string>
@@ -661,7 +603,6 @@
     <string name="ExperimentalFeatures_Description">以下功能为实验性功能，应谨慎使用。虽然我们已使用自己的加密货币资金对这些功能进行了彻底测试，但是我们不保证它们在所有情况下都能如常工作。</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
-    <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">让您汇出在指定日期前无法消费的比特币。\n\n 此交易的收款人应使用本钱包。\n\n只有本钱包能够正确识别此类在比特币网络上的交易并让收款人在锁定期限结束后消费那些比特币。\n\n如果您是持有人，您可以使用此功能通过向自己发送此类交易的方式来强制自己持有比特币。\n\n作为实验性功能，每次交易的最大金额限制为0.5 BTC。</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">管理钱包</string>
@@ -760,12 +701,10 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">通信</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">资金地址（推荐）</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018年之前常用</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018年之后常用</string>
     <!-- Tor -->
-    <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">连接</string>
     <string name="Tor_Status_Starting">正在启动Tor...</string>
     <string name="Tor_Status_Error">启动Tor时出错！</string>
@@ -775,7 +714,6 @@
     <string name="TorPage_ConnectionClosed">已断开</string>
     <string name="Tor_PrerequisitesAlert_Content">如果激活了TOR，Ethereum区块链将重置为Infura</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Legacy</string>
     <string name="CoinOption_bip49_Title">较新（推荐)</string>
     <string name="CoinOption_bip84_Title">最新</string>
     <!--Coin Page-->
@@ -844,15 +782,11 @@
     <string name="CoinPage_Guide">指南</string>
     <string name="CoinPage_Website">网站</string>
     <string name="CoinPage_Whitepaper">白皮书</string>
-    <string name="CoinPage_Reddit">Reddit</string>
-    <string name="CoinPage_Twitter">Twitter</string>
     <string name="CoinPage_Twitter_NotAvailable">没有twitter</string>
     <string name="CoinPage_Twitter_Quoted">引用 %s</string>
     <string name="CoinPage_Twitter_Retweeted">转发 %s</string>
     <string name="CoinPage_Twitter_Replied">回复 %s</string>
     <string name="CoinPage_Twitter_SeeOnTwitter">打开Twitter</string>
-    <string name="CoinPage_Telegram">Telegram</string>
-    <string name="CoinPage_Github">Github</string>
     <string name="CoinPage_MarketCap">市值</string>
     <string name="CoinPage_DilutedMarketCap">稀释市值</string>
     <string name="CoinPage_inCirculation">流通量</string>
