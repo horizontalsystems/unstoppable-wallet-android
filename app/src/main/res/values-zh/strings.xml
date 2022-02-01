@@ -102,6 +102,8 @@
     <string name="Market_Tab_Posts">发现</string>
     <string name="Market_Tab_Watchlist">关注</string>
     <string name="Market_Tab_Watchlist_EmptyList">您的观察列表为空。</string>
+    <string name="Market_Category_TopCoins">Top Coins</string>
+    <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
     <string name="Market_SyncError">同步出错</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">图表</string>
