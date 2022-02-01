@@ -12,7 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
-fun HSAddressInput(modifier: Modifier, coinCode: String, onValueChange: (Address?) -> Unit) {
+fun HSAddressInput(modifier: Modifier = Modifier, coinCode: String, onValueChange: (Address?) -> Unit) {
     val viewModel = viewModel<AddressViewModel>(factory = AddressInputModule.Factory(coinCode))
 
     val scope = rememberCoroutineScope()

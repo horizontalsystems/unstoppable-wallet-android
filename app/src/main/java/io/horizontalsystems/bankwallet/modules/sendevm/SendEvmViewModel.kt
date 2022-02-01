@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -63,5 +64,9 @@ class SendEvmViewModel(
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
         disposable.clear()
+    }
+
+    fun onEnterAddress(address: Address?) {
+        service.setRecipientAddress(address)
     }
 }

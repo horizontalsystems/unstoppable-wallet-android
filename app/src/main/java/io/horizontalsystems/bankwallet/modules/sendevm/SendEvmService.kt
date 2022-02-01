@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData.AdditionalInfo
 import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
-import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
@@ -134,18 +133,8 @@ class SendEvmService(
         get() = addressErrorSubject.map { }
 
     override fun setRecipientAddress(address: Address?) {
-        if (address != null && address.hex.isNotEmpty()) {
-            try {
-                AddressValidator.validate(address.hex)
-                addressData = AddressData(evmAddress = EvmAddress(address.hex), domain = address.domain)
-                addressError = null
-            } catch (error: Throwable) {
-                addressData = null
-                addressError = error
-            }
-        } else {
-            addressData = null
-            addressError = null
+        addressData = address?.let {
+            AddressData(evmAddress = EvmAddress(it.hex), domain = it.domain)
         }
         syncState()
     }
