@@ -1,13 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.sendevm
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
@@ -19,13 +18,12 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.databinding.FragmentSendEvmBinding
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
+import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -42,20 +40,6 @@ class SendEvmFragment : BaseFragment() {
     private val viewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment) { vmFactory }
     private val availableBalanceViewModel by viewModels<SendAvailableBalanceViewModel> { vmFactory }
     private val amountViewModel by viewModels<AmountInputViewModel> { vmFactory }
-    private val recipientAddressViewModel by viewModels<RecipientAddressViewModel> { vmFactory }
-
-    private val qrScannerResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            when (result.resultCode) {
-                Activity.RESULT_OK -> {
-                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                        binding.recipientAddressInputView.setText(it)
-                    }
-                }
-                Activity.RESULT_CANCELED -> {
-                }
-            }
-        }
 
     private var _binding: FragmentSendEvmBinding? = null
     private val binding get() = _binding!!
@@ -123,18 +107,6 @@ class SendEvmFragment : BaseFragment() {
             setAmountInputCaution(caution)
         })
 
-        binding.recipientAddressInputView.setViewModel(
-            recipientAddressViewModel,
-            viewLifecycleOwner,
-            {
-                val intent = QRScannerActivity.getIntentForFragment(this)
-                qrScannerResultLauncher.launch(intent)
-            })
-
-        viewModel.proceedEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
-            setProceedButton(enabled)
-        })
-
         viewModel.proceedLiveEvent.observe(viewLifecycleOwner, { sendData ->
             findNavController().slideFromRight(
                 R.id.sendEvmFragment_to_sendEvmConfirmationFragment,
@@ -146,7 +118,7 @@ class SendEvmFragment : BaseFragment() {
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        setProceedButton()
+        setProceedButton(viewModel)
     }
 
     private fun setToolbar(fullCoin: FullCoin) {
@@ -198,20 +170,36 @@ class SendEvmFragment : BaseFragment() {
         }
     }
 
-    private fun setProceedButton(enabled: Boolean = false) {
+    private fun setProceedButton(viewModel: SendEvmViewModel) {
+        val coinCode = AddressResolutionService.getChainCoinCode(wallet.coinType) ?: wallet.coin.code
+
         binding.buttonProceedCompose.setContent {
             ComposeAppTheme {
-                ButtonPrimaryYellow(
-                    modifier = Modifier.padding(
-                        top = 24.dp,
-                        bottom = 24.dp
-                    ),
-                    title = getString(R.string.Send_DialogProceed),
-                    onClick = {
-                        viewModel.onClickProceed()
-                    },
-                    enabled = enabled
-                )
+                val proceedEnabled by viewModel.proceedEnabledLiveData.observeAsState(false)
+
+                Column {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    HSAddressInput(
+                        coinCode = coinCode,
+                        onValueChange = {
+                            viewModel.onEnterAddress(it)
+                        }
+                    )
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = 24.dp,
+                                bottom = 24.dp
+                            ),
+                        title = getString(R.string.Send_DialogProceed),
+                        onClick = {
+                            viewModel.onClickProceed()
+                        },
+                        enabled = proceedEnabled
+                    )
+                }
+
             }
         }
     }
