@@ -27,7 +27,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.CellCheckboxLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportant
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
@@ -104,7 +104,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
         }
 
         if (showDeleteWarning) {
-            TextImportant(
+            TextImportantWarning(
                 modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp),
                 text = stringResource(id = R.string.ManageAccount_DeleteWarning)
             )

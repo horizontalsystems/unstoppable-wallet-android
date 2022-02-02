@@ -23,7 +23,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportant
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 
 class BottomSheetSelectorMultipleDialog(
     private val title: String,
@@ -73,7 +73,7 @@ class BottomSheetSelectorMultipleDialog(
             color = ComposeAppTheme.colors.steel10
         )
         warning?.let {
-            TextImportant(
+            TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 21.dp, vertical = 12.dp),
                 text = it
             )
