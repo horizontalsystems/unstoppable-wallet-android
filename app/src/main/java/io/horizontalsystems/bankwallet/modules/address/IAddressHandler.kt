@@ -37,3 +37,10 @@ class AddressHandlerEvm : IAddressHandler {
     }
 
 }
+
+class AddressHandlerPure : IAddressHandler {
+    override fun isSupported(value: String) = true
+
+    override fun parseAddress(value: String) = Address(value)
+
+}
