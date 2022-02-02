@@ -15,6 +15,8 @@ class AddressViewModel : ViewModel() {
 
     @Throws(AddressValidationException::class)
     suspend fun parseAddress(value: String): Address = withContext(Dispatchers.IO) {
+        if (value.isBlank()) throw AddressValidationException.Blank()
+
         val vTrimmed = value.trim()
 
         val handler = addressHandlers.firstOrNull {

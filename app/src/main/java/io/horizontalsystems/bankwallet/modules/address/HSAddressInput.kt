@@ -44,6 +44,9 @@ fun HSAddressInput(modifier: Modifier = Modifier, coinCode: String, onValueChang
             try {
                 address = viewModel.parseAddress(it)
                 state = DataState.Success(Unit)
+            } catch (e: AddressValidationException.Blank) {
+                address = null
+                state = null
             } catch (e: AddressValidationException) {
                 address = null
                 state = DataState.Error(e)
