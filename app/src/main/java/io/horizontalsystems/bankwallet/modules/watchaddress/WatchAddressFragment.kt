@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.CoinType
 
 class WatchAddressFragment : BaseFragment() {
 
@@ -88,6 +89,7 @@ fun WatchAddressScreen(navController: NavController) {
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 12.dp)
                     .focusRequester(focusRequester),
+                coinType = CoinType.Ethereum,
                 coinCode = "ETH",
                 onValueChange = viewModel::onEnterAddress
             )

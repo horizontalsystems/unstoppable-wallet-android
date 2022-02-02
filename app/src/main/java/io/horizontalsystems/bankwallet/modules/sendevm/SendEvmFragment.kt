@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.databinding.FragmentSendEvmBinding
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationModule
-import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -171,8 +170,6 @@ class SendEvmFragment : BaseFragment() {
     }
 
     private fun setProceedButton(viewModel: SendEvmViewModel) {
-        val coinCode = AddressResolutionService.getChainCoinCode(wallet.coinType) ?: wallet.coin.code
-
         binding.buttonProceedCompose.setContent {
             ComposeAppTheme {
                 val proceedEnabled by viewModel.proceedEnabledLiveData.observeAsState(false)
@@ -180,11 +177,11 @@ class SendEvmFragment : BaseFragment() {
                 Column {
                     Spacer(modifier = Modifier.height(12.dp))
                     HSAddressInput(
-                        coinCode = coinCode,
-                        onValueChange = {
-                            viewModel.onEnterAddress(it)
-                        }
-                    )
+                        coinType = wallet.coinType,
+                        coinCode = wallet.coin.code
+                    ) {
+                        viewModel.onEnterAddress(it)
+                    }
                     ButtonPrimaryYellow(
                         modifier = Modifier
                             .fillMaxWidth()

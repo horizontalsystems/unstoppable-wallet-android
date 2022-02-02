@@ -8,13 +8,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
+import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
 @Composable
-fun HSAddressInput(modifier: Modifier = Modifier, coinCode: String, onValueChange: (Address?) -> Unit) {
-    val viewModel = viewModel<AddressViewModel>(factory = AddressInputModule.Factory(coinCode))
+fun HSAddressInput(modifier: Modifier = Modifier, coinType: CoinType, coinCode: String, onValueChange: (Address?) -> Unit) {
+    val viewModel = viewModel<AddressViewModel>(factory = AddressInputModule.Factory(coinType, coinCode))
 
     val scope = rememberCoroutineScope()
     var addressState by remember { mutableStateOf<DataState<Unit>?>(null) }
