@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
 @Composable
@@ -36,17 +37,20 @@ fun HSAddressInput(modifier: Modifier = Modifier, coinCode: String, onValueChang
     ) {
         parseAddressJob?.cancel()
         parseAddressJob = scope.launch {
-            var address: Address?
-
             addressState = DataState.Loading
+
+            var address: Address?
+            var state: DataState<Unit>?
             try {
                 address = viewModel.parseAddress(it)
-                addressState = DataState.Success(Unit)
+                state = DataState.Success(Unit)
             } catch (e: AddressValidationException) {
                 address = null
-                addressState = DataState.Error(e)
+                state = DataState.Error(e)
             }
 
+            ensureActive()
+            addressState = state
             onValueChange.invoke(address)
         }
     }
