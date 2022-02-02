@@ -1,14 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.main
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseActivity
-import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.send.SendActivity
 
 class MainActivity : BaseActivity() {
 
@@ -47,12 +44,6 @@ class MainActivity : BaseActivity() {
         }
 
         super.onTrimMemory(level)
-    }
-
-    fun openSend(wallet: Wallet) {
-        startActivity(Intent(this, SendActivity::class.java).apply {
-            putExtra(SendActivity.WALLET, wallet)
-        })
     }
 
 }
