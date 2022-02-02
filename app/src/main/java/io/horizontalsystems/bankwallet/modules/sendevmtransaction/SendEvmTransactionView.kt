@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportant
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
@@ -205,7 +205,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
         fun bind(item: ViewItem.Warning) {
             composeView.setContent {
                 ComposeAppTheme {
-                    TextImportant(text = item.description, title = item.title, icon = item.icon)
+                    TextImportantWarning(text = item.description, title = item.title, icon = item.icon)
                 }
             }
         }

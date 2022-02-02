@@ -18,7 +18,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportant
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
@@ -53,7 +53,7 @@ fun WalletConnectErrorNoAccount(navController: NavController) {
             navController.popBackStack()
         }
     ) {
-        TextImportant(
+        TextImportantWarning(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 22.dp),
             text = stringResource(id = R.string.WalletConnect_Error_NoWallet)
         )

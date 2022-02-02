@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportant
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 
 class ConfirmationDialog(
     private val listener: Listener,
@@ -82,7 +82,7 @@ class ConfirmationDialog(
                 color = ComposeAppTheme.colors.steel10
             )
             contentText?.let {
-                TextImportant(
+                TextImportantWarning(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                     text = it
                 )
