@@ -16,34 +16,21 @@ object AddressInputModule {
             addressViewModel.addAddressHandler(AddressHandlerUdn(coinCode))
 
             when (coinType) {
-                CoinType.Bitcoin -> {
+                CoinType.Bitcoin,
+                CoinType.BitcoinCash,
+                CoinType.Litecoin,
+                CoinType.Dash,
+                CoinType.Zcash,
+                is CoinType.Bep2 -> {
                     addressViewModel.addAddressHandler(AddressHandlerPure())
                 }
-                CoinType.BitcoinCash -> TODO()
-                CoinType.Litecoin -> TODO()
-                CoinType.Dash -> TODO()
-                CoinType.Zcash -> TODO()
-                CoinType.Ethereum -> {
+                CoinType.Ethereum,
+                CoinType.BinanceSmartChain,
+                is CoinType.Erc20,
+                is CoinType.Bep20 -> {
                     addressViewModel.addAddressHandler(AddressHandlerEvm())
                 }
-                CoinType.BinanceSmartChain -> TODO()
-                is CoinType.Erc20 -> TODO()
-                is CoinType.Bep20 -> TODO()
-                is CoinType.Bep2 -> TODO()
-                is CoinType.ArbitrumOne -> TODO()
-                is CoinType.Avalanche -> TODO()
-                is CoinType.Fantom -> TODO()
-                is CoinType.HarmonyShard0 -> TODO()
-                is CoinType.HuobiToken -> TODO()
-                is CoinType.Iotex -> TODO()
-                is CoinType.Moonriver -> TODO()
-                is CoinType.OkexChain -> TODO()
-                is CoinType.PolygonPos -> TODO()
-                is CoinType.Solana -> TODO()
-                is CoinType.Sora -> TODO()
-                is CoinType.Tomochain -> TODO()
-                is CoinType.Xdai -> TODO()
-                is CoinType.Unsupported -> TODO()
+                else -> Unit
             }
 
 
