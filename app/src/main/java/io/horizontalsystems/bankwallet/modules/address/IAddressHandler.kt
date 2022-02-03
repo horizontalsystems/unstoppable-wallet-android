@@ -12,7 +12,9 @@ interface IAddressHandler {
 class AddressHandlerUdn(val coinCode: String) : IAddressHandler {
     private val resolution = Resolution()
 
-    override fun isSupported(value: String) = resolution.isSupported(value)
+    override fun isSupported(value: String): Boolean {
+        return value.contains(".") && resolution.isSupported(value)
+    }
 
     override fun parseAddress(value: String): Address {
         val addressString = resolution.getAddress(value, coinCode)
