@@ -15,7 +15,6 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.*
-import io.horizontalsystems.ethereumkit.models.Address as EthAddress
 
 class UniswapSettingsService(
         tradeOptions: SwapTradeOptions
@@ -107,10 +106,7 @@ class UniswapSettingsService(
 
     //region IRecipientAddressService
     private var recipient: Address? = tradeOptions.recipient
-        set(value) {
-            field = value
-            sync()
-        }
+    private var recipientError: Throwable? = null
 
     override val initialAddress: Address?
         get() {
@@ -131,6 +127,13 @@ class UniswapSettingsService(
 
     override fun setRecipientAddress(address: Address?) {
         recipient = address
+        sync()
+    }
+
+    override fun setRecipientAddressWithError(address: Address?, error: Throwable?) {
+        recipientError = error
+        recipient = address
+        sync()
     }
 
     override fun setRecipientAmount(amount: BigDecimal) {
@@ -151,15 +154,9 @@ class UniswapSettingsService(
 
         val errs = mutableListOf<Exception>()
 
-        recipient?.let {
-            if (it.hex.isNotEmpty()) {
-                try {
-                    EthAddress(it.hex)
-                    tradeOptions.recipient = it
-                } catch (err: Exception) {
-                    errs.add(SwapSettingsError.InvalidAddress)
-                }
-            }
+        tradeOptions.recipient = recipient
+        recipientError?.let {
+            errs.add(SwapSettingsError.InvalidAddress)
         }
 
         when {
