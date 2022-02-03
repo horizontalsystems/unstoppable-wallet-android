@@ -39,9 +39,9 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 @Composable
 fun FormsInput(
     modifier: Modifier = Modifier,
-    initial: String = "",
+    initial: String? = null,
     hint: String,
-    state: DataState<Unit>? = null,
+    state: DataState<Any>? = null,
     qrScannerEnabled: Boolean = false,
     onChangeFocus: ((Boolean) -> Unit)? = null,
     onValueChange: (String) -> Unit
@@ -64,7 +64,7 @@ fun FormsInput(
             verticalAlignment = Alignment.CenterVertically
         ) {
             var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                mutableStateOf(TextFieldValue(initial))
+                mutableStateOf(TextFieldValue(initial ?: ""))
             }
 
             BasicTextField(

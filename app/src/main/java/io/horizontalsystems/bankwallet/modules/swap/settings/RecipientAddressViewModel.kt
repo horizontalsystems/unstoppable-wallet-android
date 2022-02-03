@@ -22,6 +22,7 @@ interface IRecipientAddressService {
     val recipientAddressErrorObservable: Observable<Unit>
 
     fun setRecipientAddress(address: Address?)
+    fun setRecipientAddressWithError(address: Address?, error: Throwable?) = Unit
     fun setRecipientAmount(amount: BigDecimal)
 }
 
@@ -38,6 +39,9 @@ class RecipientAddressViewModel(
     override val isLoadingLiveData = SingleLiveEvent<Boolean>()
     override val initialValue: String?
         get() = service.initialAddress?.title
+
+    val xxxInitialAddress: Address?
+        get() = service.initialAddress
 
     var xxxError by mutableStateOf<Throwable?>(null)
         private set
@@ -103,6 +107,10 @@ class RecipientAddressViewModel(
 
     fun xxxSetAddress(address: Address?) {
         service.setRecipientAddress(address)
+    }
+
+    fun xxxSetAddressWithError(address: Address?, error: Throwable?) {
+        service.setRecipientAddressWithError(address, error)
     }
 
     fun onChangeFocus(hasFocus: Boolean) {

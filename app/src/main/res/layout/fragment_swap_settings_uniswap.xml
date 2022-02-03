@@ -30,13 +30,13 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="16dp" />
 
-            <io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
-                android:id="@+id/recipientAddressInputView"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/recipientAddressCompose"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:description="@string/SwapSettings_RecipientAddressDescription"
-                app:layout_constraintEnd_toEndOf="@id/endBorder"
-                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:title="@string/SwapSettings_RecipientAddressTitle" />
 
@@ -44,12 +44,12 @@
                 android:id="@+id/slippageInputView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="42dp"
+                android:layout_marginTop="36dp"
                 android:inputType="numberDecimal"
                 app:description="@string/SwapSettings_SlippageDescription"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@id/recipientAddressInputView"
+                app:layout_constraintTop_toBottomOf="@id/recipientAddressCompose"
                 app:title="@string/SwapSettings_SlippageTitle" />
 
             <io.horizontalsystems.bankwallet.ui.extensions.InputWithButtonsView

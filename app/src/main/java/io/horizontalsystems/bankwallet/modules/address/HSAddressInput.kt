@@ -16,15 +16,17 @@ import kotlinx.coroutines.launch
 @Composable
 fun HSAddressInput(
     modifier: Modifier = Modifier,
+    initial: Address? = null,
     coinType: CoinType,
     coinCode: String,
     error: Throwable? = null,
-    onValueChange: (Address?) -> Unit
+    onStateChange: ((DataState<Address>?) -> Unit)? = null,
+    onValueChange: ((Address?) -> Unit)? = null
 ) {
     val viewModel = viewModel<AddressViewModel>(factory = AddressInputModule.Factory(coinType, coinCode))
 
     val scope = rememberCoroutineScope()
-    var addressState by remember { mutableStateOf<DataState<Unit>?>(null) }
+    var addressState by remember { mutableStateOf<DataState<Address>?>(initial?.let { DataState.Success(it) }) }
     var parseAddressJob by remember { mutableStateOf<Job?>(null)}
     var isFocused by remember { mutableStateOf(false)}
 
@@ -41,6 +43,7 @@ fun HSAddressInput(
 
     FormsInput(
         modifier = modifier,
+        initial = initial?.title,
         hint = stringResource(id = R.string.Watch_Address_Hint),
         state = inputState,
         qrScannerEnabled = true,
@@ -52,27 +55,23 @@ fun HSAddressInput(
         parseAddressJob = scope.launch {
             addressState = DataState.Loading
 
-            var address: Address?
-            var state: DataState<Unit>?
-            try {
-                address = viewModel.parseAddress(it)
-                state = DataState.Success(Unit)
+            val state = try {
+                DataState.Success(viewModel.parseAddress(it))
             } catch (e: AddressValidationException.Blank) {
-                address = null
-                state = null
+                null
             } catch (e: AddressValidationException) {
-                address = null
-                state = DataState.Error(e)
+                DataState.Error(e)
             }
 
             ensureActive()
             addressState = state
-            onValueChange.invoke(address)
+            onValueChange?.invoke(addressState?.dataOrNull)
+            onStateChange?.invoke(addressState)
         }
     }
 }
 
-private fun getFocusedState(state: DataState<Unit>?): DataState<Unit>? {
+private fun getFocusedState(state: DataState<Address>?): DataState<Address>? {
     return if (state is DataState.Error && state.error !is AddressValidationException.Invalid) {
         null
     } else {
