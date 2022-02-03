@@ -70,7 +70,7 @@
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
     <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase.</string>
-    <string name="Restore_Title">Choose Blockchains</string>
+    <string name="Restore_Title">Blockchain auswählen</string>
     <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing.</string>
@@ -406,9 +406,9 @@
     <string name="Transactions_To">to %s</string>
     <string name="Transactions_From">from %s</string>
     <string name="Transaction_Unlimited">unlimited %s</string>
-    <string name="Transactions_All">All</string>
-    <string name="Transactions_Incoming">Received</string>
-    <string name="Transactions_Outgoing">Sent</string>
+    <string name="Transactions_All">Alle</string>
+    <string name="Transactions_Incoming">Erhalten</string>
+    <string name="Transactions_Outgoing">Gesendet</string>
     <string name="Transactions_Swaps">Swaps</string>
     <string name="Transactions_Approvals">Approvals</string>
     <!--Transaction Info-->
@@ -500,19 +500,19 @@
     <string name="SettingsPrivacy_TransactionsDescription">Make your BTC, LTC, BCH transactions harder to trace by changing the way transactions are structured.</string>
     <string name="SettingsPrivacy_Info_Details">Below you will find a detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain Transactions</string>
-    <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
+    <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash, and Litecoin blockchains.
         \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
-        \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
-        \n\n1. Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
-        \n\n2. Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
+        \n\nUnstoppable wallet implements measures to make it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
+        \n\n1. Shuffle: The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
+        \n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains when sending or receiving transactions.
         \n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.
         \n\nIn the case of Ethereum and Binance Smart Chain, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal Ethereum nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and calculate user\'s balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
-        \n\n1. from API Server : There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
-        \n\n2. from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening...</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and calculate user\'s balance. This needs to happen only once when user restores the previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
+        \n\n1. from API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
+        \n\n2. from Blockchain: In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening...</string>
     <!--Settings-->
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Privacy</string>
@@ -609,8 +609,8 @@
     <string name="ManageAccounts_ImportWallet">Restore</string>
     <string name="ManageAccounts_WatchAddress">Watch Address</string>
     <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. This is handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
-    <string name="Watch_Address_Title">Address</string>
-    <string name="Watch_Address_Hint">Address or Domain</string>
+    <string name="Watch_Address_Title">Adresse</string>
+    <string name="Watch_Address_Hint">Adresse oder Domäne</string>
     <string name="Watch_Address_Watch">Watch</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
@@ -620,7 +620,7 @@
     <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Unlink</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
-    <string name="ManageAccount_BackupRequired_Description">You need to backup %1$s before you may receive %2$s.</string>
+    <string name="ManageAccount_BackupRequired_Description">Sie müssen %1$s sichern, bevor Sie %2$s empfangen können.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
@@ -828,7 +828,7 @@
     <string name="BalanceSyncError_ButtonRetry">Retry</string>
     <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
     <string name="BalanceSyncError_ButtonReport">Report</string>
-    <string name="BalanceSyncError_ReportButtonExplanation">The error text will be copied to your clipboard should you decide to report it.</string>
+    <string name="BalanceSyncError_ReportButtonExplanation">Der Fehlertext wird in die Zwischenablage kopiert, falls Sie den Fehler melden möchten.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">Follow Us</string>
 </resources>
