@@ -3,18 +3,14 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm
 import io.horizontalsystems.bankwallet.core.fiat.FiatServiceSendEvm
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
-import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -123,19 +119,6 @@ object SendEvmModule {
                 SendAvailableBalanceViewModel::class.java -> {
                     val coinService = EvmCoinService(wallet.platformCoin, App.currencyManager, App.marketKit)
                     SendAvailableBalanceViewModel(service, coinService, listOf(service, coinService)) as T
-                }
-                RecipientAddressViewModel::class.java -> {
-                    val addressParser = App.addressParserFactory.parser(wallet.coinType)
-                    val coinCode = AddressResolutionService.getChainCoinCode(wallet.coinType) ?: wallet.coin.code
-                    val resolutionService = AddressResolutionService(coinCode, true)
-                    val placeholder = Translator.getString(R.string.SwapSettings_RecipientPlaceholder)
-                    RecipientAddressViewModel(
-                        service,
-                        resolutionService,
-                        addressParser,
-                        placeholder,
-                        listOf(service, resolutionService)
-                    ) as T
                 }
                 else -> throw IllegalArgumentException()
             }
