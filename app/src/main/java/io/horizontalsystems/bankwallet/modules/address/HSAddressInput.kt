@@ -14,7 +14,13 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
 @Composable
-fun HSAddressInput(modifier: Modifier = Modifier, coinType: CoinType, coinCode: String, onValueChange: (Address?) -> Unit) {
+fun HSAddressInput(
+    modifier: Modifier = Modifier,
+    coinType: CoinType,
+    coinCode: String,
+    error: Throwable? = null,
+    onValueChange: (Address?) -> Unit
+) {
     val viewModel = viewModel<AddressViewModel>(factory = AddressInputModule.Factory(coinType, coinCode))
 
     val scope = rememberCoroutineScope()
@@ -22,9 +28,15 @@ fun HSAddressInput(modifier: Modifier = Modifier, coinType: CoinType, coinCode: 
     var parseAddressJob by remember { mutableStateOf<Job?>(null)}
     var isFocused by remember { mutableStateOf(false)}
 
+    val addressStateMergedWithError = if (addressState is DataState.Success && error != null) {
+        DataState.Error(error)
+    } else {
+        addressState
+    }
+
     val inputState = when {
-        isFocused -> getFocusedState(addressState)
-        else -> addressState
+        isFocused -> getFocusedState(addressStateMergedWithError)
+        else -> addressStateMergedWithError
     }
 
     FormsInput(
