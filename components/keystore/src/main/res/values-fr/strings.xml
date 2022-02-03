@@ -3,13 +3,13 @@
     <!--Common-->
     <string name="Alert_Ok">OK</string>
     <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
-    <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
-    <string name="Alert_TitleWarning">Warning</string>
-    <string name="Alert_CustomKeyboardIsUsed">It looks like your device uses a non-default keyboard. Unstoppable recommends selecting default keyboard on your device as third party keyboards can potentially collect and expose users\' input data. \n\nClick \'Skip\' button if you would like to keep using your preferred keyboard.</string>
-    <string name="Alert_DeviceIsRootedWarning">The Unstoppable team recommends running app only on non-rooted (not jailbroken) phones.\n\nPlease note when you use a rooted device the app can no longer guarantee the safety of your cryptocurrency from malicious software.</string>
+    <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
+    <string name="Alert_KeysInvalidatedDescription">Les données cryptées contenant votre porte-monnaie ont récemment été invalidées car votre écran de verrouillage Android a été modifié</string>
+    <string name="Alert_TitleWarning">Attention</string>
+    <string name="Alert_CustomKeyboardIsUsed">Il semble que votre appareil utilise un clavier autre que celui par défaut. Unstoppable recommande de sélectionner le clavier par défaut sur votre appareil car les claviers tiers peuvent potentiellement collecter et exposer les données de saisie des utilisateurs.\n\n\Cliquez sur le bouton \"Ignorer\" si vous souhaitez continuer à utiliser le clavier souhaité.</string>
+    <string name="Alert_DeviceIsRootedWarning">L\'équipe d\'Unstoppable vous recommande d\'utiliser l\'application uniquement sur des téléphones non rootés (non débridés).\n\nVeuillez noter que lorsque vous utilisez un appareil rooté, l\'application ne peut plus garantir la sécurité de votre cryptomonnaie contre les logiciels malveillants.</string>
     <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">Phone PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled.\n\n You may enable it in Android settings.\n\nPlease note that when you disabled the PIN on the OS level the security measures in safe storage of your phonе made the previously stored data invalid. You will need to Restore your wallet keys to get back to your wallet.</string>
-    <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
+    <string name="OSPin_Confirm_Title">PIN de téléphone</string>
+    <string name="OSPin_Confirm_Desciption">Cette application nécessite qu\'un code secret soit activé sur le téléphone (verrouillage de l\'écran). \n\nVous pouvez activer cette fonction dans les paramètres Android. \n\nVeuillez noter que lorsque vous avez désactivé le code PIN au niveau du système d\'exploitation, les mesures de sécurité stockées sur votre téléphone ont rendu invalide les données précédemment stockées. Vous devrez Restaurer vos clés de porte-monnaie pour revenir à votre porte-monnaie.</string>
+    <string name="OSPin_Prompt_Desciption">Cette application nécessite le code PIN de votre téléphone afin de conserver les données confidentielles de votre porte-monnaie dans le stockage sécurisé d\'Android et non dans l\'application elle-même.</string>
 </resources>
