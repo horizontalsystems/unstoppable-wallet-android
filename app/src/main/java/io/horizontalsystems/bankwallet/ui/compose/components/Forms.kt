@@ -124,6 +124,9 @@ fun FormsInput(
                         tint = ComposeAppTheme.colors.remus
                     )
                 }
+                else -> {
+                    Spacer(modifier = Modifier.width(28.dp))
+                }
             }
 
             val clipboardManager = LocalClipboardManager.current
