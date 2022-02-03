@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.address
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.marketkit.models.CoinType
 
 object AddressInputModule {
@@ -12,7 +11,7 @@ object AddressInputModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val addressViewModel = AddressViewModel()
 
-            val coinCode = AddressResolutionService.getChainCoinCode(coinType) ?: coinCode
+            val coinCode = getChainCoinCode(coinType) ?: coinCode
             addressViewModel.addAddressHandler(AddressHandlerUdn(coinCode))
 
             when (coinType) {
@@ -35,6 +34,13 @@ object AddressInputModule {
 
 
             return addressViewModel as T
+        }
+
+        private fun getChainCoinCode(coinType: CoinType): String? = when (coinType) {
+            CoinType.Ethereum -> "ETH"
+            is CoinType.Erc20 -> "ETH"
+            CoinType.Bitcoin -> "BTC"
+            else -> null
         }
     }
 

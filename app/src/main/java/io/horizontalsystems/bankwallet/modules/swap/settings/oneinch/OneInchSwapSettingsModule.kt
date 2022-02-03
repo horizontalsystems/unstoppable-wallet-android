@@ -2,13 +2,9 @@ package io.horizontalsystems.bankwallet.modules.swap.settings.oneinch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
-import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
 import java.math.BigDecimal
@@ -42,13 +38,7 @@ object OneInchSwapSettingsModule {
             return when (modelClass) {
                 OneInchSettingsViewModel::class.java -> OneInchSettingsViewModel(service, tradeService) as T
                 SwapSlippageViewModel::class.java -> SwapSlippageViewModel(service) as T
-                RecipientAddressViewModel::class.java -> {
-                    val addressParser = App.addressParserFactory.parser(evmCoin.coinType)
-                    val coinCode = AddressResolutionService.getChainCoinCode(evmCoin.coinType) ?: evmCoin.code
-                    val resolutionService = AddressResolutionService(coinCode, true)
-                    val placeholder = Translator.getString(R.string.SwapSettings_RecipientPlaceholder)
-                    RecipientAddressViewModel(service, resolutionService, addressParser, placeholder, listOf(service, resolutionService)) as T
-                }
+                RecipientAddressViewModel::class.java -> RecipientAddressViewModel(service) as T
                 else -> throw IllegalArgumentException()
             }
         }

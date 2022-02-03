@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.settings.oneinch
 
 import android.util.Range
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
 import io.horizontalsystems.bankwallet.modules.swap.settings.ISwapSlippageService
@@ -16,7 +15,7 @@ import java.math.BigDecimal
 
 class OneInchSettingsService(
         swapSettings: OneInchSwapSettings
-) : IRecipientAddressService, ISwapSlippageService, Clearable {
+) : IRecipientAddressService, ISwapSlippageService {
 
     var state: State = State.Valid(swapSettings)
         private set(value) {
@@ -147,7 +146,5 @@ class OneInchSettingsService(
             State.Invalid
         }
     }
-
-    override fun clear() = Unit
 
 }

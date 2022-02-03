@@ -2,10 +2,8 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.address
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
@@ -18,18 +16,11 @@ object SendAddressModule {
         fun setAddressInputAsEditable(editable: Boolean)
     }
 
-    interface IViewDelegate {
-        fun onViewDidLoad()
-        fun onAddressDeleteClicked()
-    }
-
     interface IInteractor {
         val addressFromClipboard: String?
 
         fun parseAddress(address: String): Pair<String, BigDecimal?>
     }
-
-    interface IInteractorDelegate
 
     interface IAddressModule {
         var currentAddress: Address?
@@ -52,22 +43,15 @@ object SendAddressModule {
     }
 
     class Factory(
-            private val coin: PlatformCoin,
-            private val sendHandler: SendModule.ISendHandler,
-            private val addressModuleDelete: IAddressModuleDelegate,
-            private val isResolutionEnabled: Boolean = true,
-            private val placeholder: String
+        private val coin: PlatformCoin,
+        private val sendHandler: SendModule.ISendHandler,
+        private val addressModuleDelete: IAddressModuleDelegate,
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-
-            val addressParser = App.addressParserFactory.parser(coin.coinType)
             val presenter = SendAddressPresenter(addressModuleDelete)
-
-            val coinCode = AddressResolutionService.getChainCoinCode(coin.coinType) ?: coin.code
-            val resolutionService = AddressResolutionService(coinCode, isResolutionEnabled)
-            val viewModel = RecipientAddressViewModel(presenter, resolutionService, addressParser, placeholder, listOf(resolutionService))
+            val viewModel = RecipientAddressViewModel(presenter)
 
             sendHandler.addressModule = presenter
 
