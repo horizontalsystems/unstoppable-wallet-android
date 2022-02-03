@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.swap.settings
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
@@ -36,6 +39,9 @@ class RecipientAddressViewModel(
     override val initialValue: String?
         get() = service.initialAddress?.title
 
+    var xxxError by mutableStateOf<Throwable?>(null)
+        private set
+
     private var isEditing = false
     private var forceShowError = false
 
@@ -47,6 +53,7 @@ class RecipientAddressViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     sync()
+                    xxxError = service.recipientAddressError
                 }.let {
                     disposables.add(it)
                 }
@@ -92,6 +99,10 @@ class RecipientAddressViewModel(
         addressData.amount?.let {
             service.setRecipientAmount(it)
         }
+    }
+
+    fun xxxSetAddress(address: Address?) {
+        service.setRecipientAddress(address)
     }
 
     fun onChangeFocus(hasFocus: Boolean) {
