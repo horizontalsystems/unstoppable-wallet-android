@@ -10,7 +10,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.activityViewModels
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
@@ -25,7 +24,7 @@ class SendAddressFragment(
 ) : SendSubmoduleFragment() {
 
     private val viewModel by activityViewModels<RecipientAddressViewModel> {
-        SendAddressModule.Factory(platformCoin, sendHandler, addressModuleDelegate, placeholder = getString(R.string.Send_Hint_Address))
+        SendAddressModule.Factory(platformCoin, sendHandler, addressModuleDelegate)
     }
 
     override fun onCreateView(

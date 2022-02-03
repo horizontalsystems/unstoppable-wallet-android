@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.settings.uniswap
 
 import android.util.Range
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
 import io.horizontalsystems.bankwallet.modules.swap.settings.ISwapDeadlineService
@@ -18,7 +17,7 @@ import java.util.*
 
 class UniswapSettingsService(
         tradeOptions: SwapTradeOptions
-) : IRecipientAddressService, ISwapSlippageService, ISwapDeadlineService, Clearable {
+) : IRecipientAddressService, ISwapSlippageService, ISwapDeadlineService {
 
     var state: State = State.Valid(tradeOptions)
         private set(value) {
@@ -188,7 +187,4 @@ class UniswapSettingsService(
             State.Invalid
         }
     }
-
-    override fun clear() = Unit
-
 }

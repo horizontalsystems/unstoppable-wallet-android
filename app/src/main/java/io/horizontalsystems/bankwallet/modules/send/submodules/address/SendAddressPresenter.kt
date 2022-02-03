@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.address
 
-import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -14,8 +13,8 @@ import java.math.BigDecimal
 import java.util.*
 
 class SendAddressPresenter(
-        private val moduleDelegate: SendAddressModule.IAddressModuleDelegate
-) : ViewModel(), IRecipientAddressService, SendAddressModule.IAddressModule, SendAddressModule.IInteractorDelegate, SendAddressModule.IViewDelegate {
+    private val moduleDelegate: SendAddressModule.IAddressModuleDelegate
+) : IRecipientAddressService, SendAddressModule.IAddressModule {
 
     private val errorsObservable = BehaviorSubject.createDefault<Optional<Throwable>>(Optional.empty())
 
@@ -95,14 +94,6 @@ class SendAddressPresenter(
     }
 
     // SendAddressModule.IViewDelegate
-
-    override fun onViewDidLoad() {
-    }
-
-    override fun onAddressDeleteClicked() {
-        enteredAddress = null
-        moduleDelegate.onUpdateAddress()
-    }
 
     private fun onAddressEnter(address: Address) {
         enteredAddress = address

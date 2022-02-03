@@ -31,7 +31,6 @@ import androidx.lifecycle.*
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.databinding.ViewInputAddressBinding
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -128,37 +127,6 @@ class AddressInputView @JvmOverloads constructor(
 
     fun setEditable(editable: Boolean) {
         viewModel.setInputEditable(editable)
-    }
-
-    fun setViewModel(
-        recipientViewModel: RecipientAddressViewModel,
-        otherLifecycleOwner: LifecycleOwner,
-        onClickQrScan: () -> Unit
-    ) {
-        setHint(recipientViewModel.inputFieldPlaceholder)
-        setText(recipientViewModel.initialValue)
-
-        recipientViewModel.isLoadingLiveData.observe(otherLifecycleOwner, Observer { visible ->
-            viewModel.setSpinner(visible)
-        })
-
-        recipientViewModel.cautionLiveData.observe(otherLifecycleOwner, Observer {
-            setError(it)
-        })
-
-        listener = object : Listener {
-            override fun onTextChange(text: String) {
-                recipientViewModel.onChangeText(text)
-            }
-
-            override fun onQrButtonClick() {
-                onClickQrScan.invoke()
-            }
-
-            override fun onFocusChange(hasFocus: Boolean) {
-                recipientViewModel.onChangeFocus(hasFocus)
-            }
-        }
     }
 }
 
