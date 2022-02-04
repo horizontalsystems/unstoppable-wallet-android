@@ -2,12 +2,12 @@ package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.modules.evmfee.IEvmFeeService
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.managers.ActivateCoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.evmfee.IEvmFeeService
 import io.horizontalsystems.bankwallet.modules.evmfee.Transaction
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -41,7 +41,7 @@ interface ISendEvmTransactionService {
 
 class SendEvmTransactionService(
     private val sendEvmData: SendEvmData,
-    evmKitWrapper: EvmKitWrapper,
+    private val evmKitWrapper: EvmKitWrapper,
     private val feeService: IEvmFeeService,
     private val activateCoinManager: ActivateCoinManager
 ) : Clearable, ISendEvmTransactionService {
@@ -112,24 +112,29 @@ class SendEvmTransactionService(
         sendState = SendState.Sending
         logger.info("sending tx")
 
-//        evmKitWrapper.sendSingle(transaction.transactionData, transaction.gasData.gasPrice.value, transaction.gasData.gasLimit, transaction.transactionData.nonce)
-//                .subscribeIO({ fullTransaction ->
-//                    handlePostSendActions()
-//                    sendState = SendState.Sent(fullTransaction.transaction.hash)
-//                    logger.info("success")
-//                }, { error ->
-//                    sendState = SendState.Failed(error)
-//                    logger.warning("failed", error)
-//                })
-//                .let { disposable.add(it) }
+        evmKitWrapper.sendSingle(
+            transaction.transactionData,
+            transaction.gasData.gasPrice.value,
+            transaction.gasData.gasLimit,
+            transaction.transactionData.nonce
+        )
+            .subscribeIO({ fullTransaction ->
+                handlePostSendActions()
+                sendState = SendState.Sent(fullTransaction.transaction.hash)
+                logger.info("success")
+            }, { error ->
+                sendState = SendState.Failed(error)
+                logger.warning("failed", error)
+            })
+            .let { disposable.add(it) }
     }
 
     override fun clear() {
         disposable.clear()
     }
 
-    private fun syncTxDataState(transactionDataState: Transaction? = null) {
-        val transactionData = transactionDataState?.transactionData ?: sendEvmData.transactionData
+    private fun syncTxDataState(transaction: Transaction? = null) {
+        val transactionData = transaction?.transactionData ?: sendEvmData.transactionData
         txDataState = TxDataState(transactionData, sendEvmData.additionalInfo, evmKit.decorate(transactionData))
     }
 

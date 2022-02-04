@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.evmnetwork
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
@@ -50,8 +49,6 @@ class EvmNetworkViewModel(private val service: EvmNetworkService) : ViewModel() 
             val formattedUrls = if (urls.size > 1) urls.joinToString(separator = "") { "  •  $it \n" } else null
             formattedUrls?.let { "${Translator.getString(R.string.NetworkSettings_SwithesAutomatically_Description)}\n\n$formattedUrls" }
         }
-
-        Log.e("AAA", "description: \n$description")
 
         if (viewItems.isEmpty()) return null
 
