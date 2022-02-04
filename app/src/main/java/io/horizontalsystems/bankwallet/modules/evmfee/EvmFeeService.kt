@@ -1,7 +1,6 @@
-package io.horizontalsystems.bankwallet.core.ethereum
+package io.horizontalsystems.bankwallet.modules.evmfee
 
 import android.util.Log
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService.*
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -13,12 +12,12 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigInteger
 
-class EvmTransactionFeeServiceNew(
+class EvmFeeService(
     private val evmKit: EthereumKit,
     override val gasPriceService: IEvmGasPriceService,
     private val transactionData: TransactionData,
-    private val gasLimitSurchargePercent: Int = 0,
-) : IEvmTransactionFeeService {
+    private val gasLimitSurchargePercent: Int = 0
+) : IEvmFeeService {
 
     override var transactionStatus: DataState<Transaction> = DataState.Error(GasDataError.NoTransactionData)
         private set(value) {

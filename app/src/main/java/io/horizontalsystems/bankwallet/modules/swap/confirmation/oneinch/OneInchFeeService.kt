@@ -2,20 +2,15 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.EvmError
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService.*
-import io.horizontalsystems.bankwallet.core.ethereum.IEvmGasPriceService
-import io.horizontalsystems.bankwallet.core.ethereum.IEvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.evmfee.*
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.oneinchkit.Swap
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
@@ -23,7 +18,6 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Parcelize
@@ -36,11 +30,11 @@ data class OneInchSwapParameters(
     val recipient: Address? = null
 ) : Parcelable
 
-class OneInchTransactionFeeService(
+class OneInchFeeService(
     private val oneInchKitHelper: OneInchKitHelper,
     parameters: OneInchSwapParameters,
     private val feeRateProvider: ICustomRangedFeeProvider
-) : IEvmTransactionFeeService {
+) : IEvmFeeService {
 
     override val gasPriceService: IEvmGasPriceService
         get() = TODO("Not yet implemented")
@@ -129,29 +123,29 @@ class OneInchTransactionFeeService(
 
     private var recommendedGasPrice: BigInteger? = null
 
-    private fun getGasPriceAsync(gasPriceType: GasPriceType): Single<Optional<BigInteger>> {
-        var recommendedGasPriceSingle = feeRateProvider.feeRate(FeeRatePriority.RECOMMENDED)
-            .doOnSuccess { gasPrice ->
-                recommendedGasPrice = gasPrice
-            }
-
-        return when (gasPriceType) {
-            is GasPriceType.Recommended -> { // return null for 1inch API to use "fast gasPrice from network"
-//                warningOfStuckSubject.onNext(false)
-                Single.just(Optional.ofNullable(null))
-            }
-            is GasPriceType.Custom -> {
-                recommendedGasPrice?.let {
-                    recommendedGasPriceSingle = Single.just(it)
-                }
-                recommendedGasPriceSingle.map { recommended ->
-                    val customGasPrice = gasPriceType.gasPrice.value.toBigInteger()
-//                    warningOfStuckSubject.onNext(customGasPrice < recommended)
-                    Optional.ofNullable(customGasPrice)
-                }
-            }
-        }
-    }
+//    private fun getGasPriceAsync(gasPriceType: GasPriceType): Single<Optional<BigInteger>> {
+//        var recommendedGasPriceSingle = feeRateProvider.feeRate(FeeRatePriority.RECOMMENDED)
+//            .doOnSuccess { gasPrice ->
+//                recommendedGasPrice = gasPrice
+//            }
+//
+//        return when (gasPriceType) {
+//            is GasPriceType.Recommended -> { // return null for 1inch API to use "fast gasPrice from network"
+////                warningOfStuckSubject.onNext(false)
+//                Single.just(Optional.ofNullable(null))
+//            }
+//            is GasPriceType.Custom -> {
+//                recommendedGasPrice?.let {
+//                    recommendedGasPriceSingle = Single.just(it)
+//                }
+//                recommendedGasPriceSingle.map { recommended ->
+//                    val customGasPrice = gasPriceType.gasPrice.value.toBigInteger()
+////                    warningOfStuckSubject.onNext(customGasPrice < recommended)
+//                    Optional.ofNullable(customGasPrice)
+//                }
+//            }
+//        }
+//    }
 
     private fun getSurchargedGasLimit(estimatedGasLimit: Long): Long {
         return (estimatedGasLimit + estimatedGasLimit / 100.0 * gasLimitSurchargePercent).toLong()

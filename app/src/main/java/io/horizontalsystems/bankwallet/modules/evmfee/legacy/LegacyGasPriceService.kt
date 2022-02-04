@@ -1,15 +1,15 @@
-package io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings
+package io.horizontalsystems.bankwallet.modules.evmfee.legacy
 
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService.GasPrice
-import io.horizontalsystems.bankwallet.core.ethereum.FeeSettingsWarning
-import io.horizontalsystems.bankwallet.core.ethereum.GasPriceInfo
-import io.horizontalsystems.bankwallet.core.ethereum.IEvmGasPriceService
-import io.horizontalsystems.bankwallet.core.ethereum.Warning
+import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsWarning
+import io.horizontalsystems.bankwallet.modules.evmfee.GasPrice
+import io.horizontalsystems.bankwallet.modules.evmfee.GasPriceInfo
+import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.CustomPriorityUnit
 import io.reactivex.Observable
 import io.reactivex.Single

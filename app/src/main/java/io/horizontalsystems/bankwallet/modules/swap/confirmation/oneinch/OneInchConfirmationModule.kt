@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
-import io.horizontalsystems.bankwallet.core.ethereum.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -28,7 +28,7 @@ object OneInchConfirmationModule {
         private val coin by lazy { blockchain.coin!! }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
-            OneInchTransactionFeeService(oneInchKitHelper, oneInchSwapParameters, feeRateProvider)
+            OneInchFeeService(oneInchKitHelper, oneInchSwapParameters, feeRateProvider)
         }
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager) }
         private val sendService by lazy { OneInchSendEvmTransactionService(evmKitWrapper, transactionService, App.activateCoinManager) }

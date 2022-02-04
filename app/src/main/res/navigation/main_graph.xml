@@ -92,7 +92,7 @@
 
     <fragment
         android:id="@+id/sendEvmFeeSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings.SendEvmFeeSettingsFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.evmfee.SendEvmFeeSettingsFragment" />
 
     <fragment
         android:id="@+id/transactionInfoFragment"
