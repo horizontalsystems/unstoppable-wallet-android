@@ -9,7 +9,10 @@ import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.google.zxing.MultiFormatReader
@@ -25,7 +28,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.databinding.ActivityQrScannerBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.Dark
+import io.horizontalsystems.bankwallet.ui.compose.SteelLight
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonDefaults
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimary
 import io.horizontalsystems.core.helpers.HudHelper
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
@@ -58,12 +64,20 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
 
         binding.buttonCancelCompose.setContent {
             ComposeAppTheme {
-                ButtonPrimaryDefault(
+                ButtonPrimary(
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp),
-                    title = getString(R.string.Button_Cancel),
-                    onClick = {
-                        onBackPressed()
-                    }
+                    content = {
+                        Text(
+                            text = stringResource(R.string.Button_Cancel),
+                            maxLines = 1,
+                            color = Dark,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    },
+                    colors = ButtonDefaults.textButtonColors(
+                        backgroundColor = SteelLight,
+                    ),
+                    onClick = { onBackPressed() }
                 )
             }
         }
