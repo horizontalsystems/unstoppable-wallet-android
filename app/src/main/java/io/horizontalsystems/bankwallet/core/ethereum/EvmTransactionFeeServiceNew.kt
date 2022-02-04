@@ -75,8 +75,12 @@ class EvmTransactionFeeServiceNew(
         gasPriceInfoDisposable?.dispose()
 
         getTransactionAsync(gasPriceInfo, transactionData)
-            .subscribeIO({
-                transactionStatus = DataState.Success(it)
+            .subscribeIO({ transaction ->
+                transactionStatus = if (transaction.totalAmount > evmBalance) {
+                    DataState.Success(transaction.copy(errors = transaction.errors + FeeSettingsError.InsufficientBalance))
+                } else {
+                    DataState.Success(transaction)
+                }
             }, {
                 transactionStatus = DataState.Error(it)
             })
@@ -92,11 +96,7 @@ class EvmTransactionFeeServiceNew(
                     .map { estimatedGasLimit ->
                         val gasLimit = getSurchargedGasLimit(estimatedGasLimit)
                         val gasData = GasData(gasLimit, gasPriceInfo.gasPrice)
-                        val errors = gasPriceInfo.errors.toMutableList()
-                        if (gasData.fee > evmBalance) {
-                            errors.add(FeeSettingsError.InsufficientBalance)
-                        }
-                        Transaction(adjustedTransactionData, gasData, gasPriceInfo.warnings, errors)
+                        Transaction(adjustedTransactionData, gasData, gasPriceInfo.warnings, gasPriceInfo.errors)
                     }
             }
     }

@@ -4,14 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
-import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
-import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
-import io.horizontalsystems.bankwallet.core.ethereum.EvmFeeCellViewModel
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
+import io.horizontalsystems.bankwallet.core.ethereum.*
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestService
@@ -40,19 +38,31 @@ object WalletConnectRequestModule {
             }
         }
         private val service by lazy { WalletConnectSendEthereumTransactionRequestService(request, baseService) }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager) }
-        private val transactionService by lazy {
+        private val gasPriceService: IEvmGasPriceService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
-            EvmTransactionFeeService(evmKitWrapper.evmKit, feeRateProvider, 10)
+            when (evmKitWrapper.evmKit.networkType) {
+                NetworkType.EthMainNet,
+                NetworkType.EthRopsten,
+                NetworkType.EthKovan,
+                NetworkType.EthGoerli,
+                NetworkType.EthRinkeby -> LegacyGasPriceService(
+                    feeRateProvider,
+                    service.gasPrice
+                ) // TODO switch to EIP1559 GasPrice service
+                NetworkType.BscMainNet -> LegacyGasPriceService(feeRateProvider, service.gasPrice)
+            }
+        }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager) }
+        private val feeService by lazy {
+            EvmTransactionFeeServiceNew(evmKitWrapper.evmKit, gasPriceService, service.transactionData, 10)
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(service.transactionData),
                 evmKitWrapper,
-                transactionService,
-                App.activateCoinManager,
-                service.gasPrice
+                feeService,
+                App.activateCoinManager
             )
         }
 
@@ -63,7 +73,7 @@ object WalletConnectRequestModule {
                     WalletConnectSendEthereumTransactionRequestViewModel(service) as T
                 }
                 EvmFeeCellViewModel::class.java -> {
-                    EvmFeeCellViewModel(transactionService, coinServiceFactory.baseCoinService) as T
+                    EvmFeeCellViewModel(feeService, coinServiceFactory.baseCoinService) as T
                 }
                 SendEvmTransactionViewModel::class.java -> {
                     SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory) as T
