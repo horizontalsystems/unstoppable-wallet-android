@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.evmfee.legacy
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Warning
-import io.horizontalsystems.bankwallet.core.ethereum.*
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -57,12 +58,10 @@ class LegacyFeeSettingsViewModel(
 
         when (transactionStatus) {
             DataState.Loading -> {
-                Log.e("AAA", "feeStatus: Loading")
                 val loading = Translator.getString(R.string.Alert_Loading)
                 feeStatusViewItem = FeeStatusViewItem(loading, loading)
             }
             is DataState.Error -> {
-                Log.e("AAA", "feeStatus: Error ${transactionStatus.error.javaClass.simpleName}")
                 val notAvailable = Translator.getString(R.string.NotAvailable)
                 feeStatusViewItem = FeeStatusViewItem(notAvailable, notAvailable)
 
@@ -71,7 +70,6 @@ class LegacyFeeSettingsViewModel(
             is DataState.Success -> {
                 val fee = coinService.amountData(transactionStatus.data.gasData.fee).getFormatted()
                 val gasLimit = App.numberFormatter.format(transactionStatus.data.gasData.gasLimit.toBigDecimal(), 0, 0)
-                Log.e("AAA", "feeStatus: Success fee= $fee, gasLimit= $gasLimit")
 
                 feeStatusViewItem = FeeStatusViewItem(fee, gasLimit)
 

@@ -1,15 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.evmfee
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -67,6 +67,10 @@ fun SendEvmFeeSettingsScreen(
     onClickNavigation: () -> Unit
 ) {
 
+    val viewModel = viewModel<ViewModel>(
+        factory = EvmFeeModule.Factory(feeViewModel.feeService, feeViewModel.coinService)
+    )
+
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
             title = TranslatableString.ResString(R.string.FeeSettings_Title),
@@ -81,80 +85,10 @@ fun SendEvmFeeSettingsScreen(
             }
         )
 
-        val viewModel = viewModel<ViewModel>(
-            factory = EvmFeeModule.Factory(
-                feeViewModel.feeService,
-                feeViewModel.coinService
-            )
-        )
-
-        Log.e("AAA", "SendEvmFeeSettingsScreen")
-
         if (viewModel is LegacyFeeSettingsViewModel) {
             LegacyFeeSettings(viewModel = viewModel, onSelectGasPrice = {
                 viewModel.onSelectGasPrice(it)
             })
         }
-
-//        Spacer(modifier = Modifier.height(16.dp))
-//        FeeCell(title = stringResource(R.string.FeeSettings_Fee), fee)
-//        Spacer(modifier = Modifier.height(8.dp))
-
-
-//        when (val viewItem = viewItem) {
-//            is FeeSettingsViewItem.Eip1559FeeSettingsViewItem -> {
-//                Eip1559FeeSettings(
-//                    viewItem = viewItem,
-//                    onSelectMaxFee = { maxFee ->
-//                        viewModel.onChangeMaxFee(maxFee)
-//                    },
-//                    onSelectMaxPriorityFee = { maxPriorityFee ->
-//                        viewModel.onChangeMaxPriorityFee(maxPriorityFee)
-//                    }
-//                )
-//            }
-//            is FeeSettingsViewItem.LegacyFeeSettingsViewItem -> {
-//                LegacyFeeSettings(viewItem) {
-//                    Log.e("AAA", "onSelectGasPrice: $it")
-//
-//                    viewModel.changeCustomPriority(it)
-//                }
-//            }
-//        }
-//
-//        viewModel.cautionsLiveData // TODO HANDLE
-
     }
 }
-
-sealed class FeeSettingsViewItem {
-
-    data class LegacyFeeSettingsViewItem(
-        val gasLimit: String,
-        val gasPrice: Long,
-        val gasPriceRange: LongRange,
-        val unit: String
-    ) : FeeSettingsViewItem()
-
-    data class Eip1559FeeSettingsViewItem(
-        val gasLimit: String,
-        val baseFee: Long,
-        val maxFee: Long,
-        val maxFeeRange: LongRange,
-        val maxPriorityFee: Long,
-        val maxPriorityFeeRange: LongRange,
-        val unit: String
-    ) : FeeSettingsViewItem()
-
-}
-
-@Composable
-fun Eip1559FeeSettings(
-    viewItem: FeeSettingsViewItem.Eip1559FeeSettingsViewItem,
-    onSelectMaxFee: (value: Long) -> Unit,
-    onSelectMaxPriorityFee: (value: Long) -> Unit
-) {
-
-}
-
-

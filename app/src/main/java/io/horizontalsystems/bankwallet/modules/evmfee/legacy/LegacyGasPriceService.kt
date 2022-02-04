@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.evmfee.legacy
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.Warning
@@ -37,13 +36,9 @@ class LegacyGasPriceService(
         get() = stateSubject
 
     private val recommendedGasPriceSingle
-        get() = recommendedGasPrice?.let {
-            Log.e("AAA", "cached recommendedGasPrice: $it")
-            Single.just(it)
-        } ?: feeRateProvider.feeRate(FeeRatePriority.RECOMMENDED)
+        get() = recommendedGasPrice?.let { Single.just(it) } ?: feeRateProvider.feeRate(FeeRatePriority.RECOMMENDED)
             .map { it.toLong() }
             .doOnSuccess { gasPrice ->
-                Log.e("AAA", "recommendedGasPrice: $gasPrice")
                 recommendedGasPrice = gasPrice.toLong()
             }
 
@@ -76,7 +71,6 @@ class LegacyGasPriceService(
     }
 
     fun setGasPrice(value: Long) {
-        Log.e("AAA", "setGasPrice: $value")
         state = DataState.Loading
         disposable?.dispose()
 

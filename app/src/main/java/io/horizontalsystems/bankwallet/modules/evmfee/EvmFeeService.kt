@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.evmfee
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -19,6 +18,12 @@ class EvmFeeService(
     private val gasLimitSurchargePercent: Int = 0
 ) : IEvmFeeService {
 
+    private val disposable = CompositeDisposable()
+    private var gasPriceInfoDisposable: Disposable? = null
+
+    private val evmBalance: BigInteger
+        get() = evmKit.accountState?.balance ?: BigInteger.ZERO
+
     override var transactionStatus: DataState<Transaction> = DataState.Error(GasDataError.NoTransactionData)
         private set(value) {
             field = value
@@ -27,28 +32,17 @@ class EvmFeeService(
     private val transactionStatusSubject = PublishSubject.create<DataState<Transaction>>()
     override val transactionStatusObservable: Observable<DataState<Transaction>> = transactionStatusSubject
 
-    private val disposable = CompositeDisposable()
-    private var gasPriceInfoDisposable: Disposable? = null
-
-    private val evmBalance: BigInteger
-        get() = evmKit.accountState?.balance ?: BigInteger.ZERO
-
     init {
-        Log.e("AAA", "EvmTransactionFeeServiceNew init")
-
         sync(gasPriceService.state)
         gasPriceService.stateObservable
-            .subscribeIO({
+            .subscribeIO {
                 sync(it)
-            }, {
-                it.printStackTrace()
-            })
-            .let { disposable.add(it) }
+            }.let { disposable.add(it) }
     }
 
     fun onCleared() {
-        Log.e("AAA", "EvmTransactionFeeServiceNew.onCleared()")
         disposable.clear()
+        gasPriceInfoDisposable?.dispose()
     }
 
     private fun sync(gasPriceServiceState: DataState<GasPriceInfo>) {
@@ -56,15 +50,12 @@ class EvmFeeService(
 
         when (gasPriceServiceState) {
             is DataState.Error -> {
-                Log.e("AAA", "sync gasPriceServiceState: Error ${gasPriceServiceState.error.javaClass.simpleName}")
                 transactionStatus = gasPriceServiceState
             }
             DataState.Loading -> {
-                Log.e("AAA", "sync gasPriceServiceState: Loading")
                 transactionStatus = DataState.Loading
             }
             is DataState.Success -> {
-                Log.e("AAA", "sync gasPriceServiceState: Success ${gasPriceServiceState.data.gasPrice.value}")
                 sync(gasPriceServiceState.data)
             }
         }

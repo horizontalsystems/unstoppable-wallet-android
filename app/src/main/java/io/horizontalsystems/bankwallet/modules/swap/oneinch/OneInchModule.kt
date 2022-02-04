@@ -1,14 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.swap.oneinch
 
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.marketkit.models.PlatformCoin
+import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 
 object OneInchModule {
 
@@ -63,3 +68,13 @@ object OneInchModule {
     }
 
 }
+
+@Parcelize
+data class OneInchSwapParameters(
+    val coinFrom: PlatformCoin,
+    val coinTo: PlatformCoin,
+    val amountFrom: BigDecimal,
+    val amountTo: BigDecimal,
+    val slippage: BigDecimal,
+    val recipient: Address? = null
+) : Parcelable
