@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="?android:windowBackground"
-    android:clickable="true"
-    >
+    android:clickable="true">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -39,38 +38,37 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="16dp" />
 
-            <io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
-                android:id="@+id/addressInputView"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/addressComposeView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:layout_constraintEnd_toStartOf="@id/guidelineRight"
-                app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView
                 android:id="@+id/coinTypeView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                app:layout_constraintTop_toBottomOf="@id/addressInputView" />
+                app:layout_constraintTop_toBottomOf="@id/addressComposeView" />
 
-            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView
                 android:id="@+id/coinNameView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
                 app:layout_constraintTop_toBottomOf="@id/coinTypeView" />
 
-            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView
                 android:id="@+id/coinSymbolView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
                 app:layout_constraintTop_toBottomOf="@id/coinNameView" />
 
-            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView
                 android:id="@+id/coinDecimalsView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -86,7 +84,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         tools:layout_height="50dp"
-        tools:layout_marginBottom="32dp"
-        />
+        tools:layout_marginBottom="32dp" />
 
 </FrameLayout>

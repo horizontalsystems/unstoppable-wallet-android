@@ -1,14 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
@@ -16,12 +19,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.databinding.FragmentAddTokenBinding
-import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
@@ -59,17 +62,17 @@ class AddTokenFragment : BaseFragment() {
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        setAddressInputView()
+        binding.addressComposeView.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        setAddressInputView(viewModel)
         setCoinDetails(null)
         observeViewModel(viewModel)
         setButton()
     }
 
     private fun observeViewModel(model: AddTokenViewModel) {
-        model.loadingLiveData.observe(viewLifecycleOwner, Observer { visible ->
-            binding.addressInputView.setSpinner(visible)
-        })
-
         model.showSuccess.observe(viewLifecycleOwner, Observer {
             HudHelper.showSuccessMessage(
                 requireView(),
@@ -85,40 +88,38 @@ class AddTokenFragment : BaseFragment() {
             setCoinDetails(it)
         })
 
-        model.cautionLiveData.observe(viewLifecycleOwner, Observer { caution ->
-            binding.addressInputView.setError(caution)
-        })
-
         model.buttonEnabledLiveData.observe(viewLifecycleOwner, Observer { enabled ->
             setButton(enabled)
         })
     }
 
-    private fun setAddressInputView() {
-        binding.addressInputView.setEditable(false)
-        binding.addressInputView.setHint("ERC20 / BEP20 / BEP2")
+    private fun setAddressInputView(viewModel: AddTokenViewModel) {
+        binding.addressComposeView.setContent {
+            val loading by viewModel.loadingLiveData.observeAsState(false)
+            val caution: Caution? by viewModel.cautionLiveData.observeAsState()
 
-        val qrScannerResultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                        binding.addressInputView.setText(it)
+            ComposeAppTheme {
+                Column {
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    FormsInput(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        enabled = false,
+                        hint = "ERC20 / BEP20 / BEP2",
+                        state = getState(caution, loading),
+                        qrScannerEnabled = true,
+                    ) {
+                        viewModel.onTextChange(it)
                     }
                 }
             }
+        }
+    }
 
-        binding.addressInputView.setListener(object : AddressInputView.Listener {
-            override fun onTextChange(text: String) {
-                viewModel.onTextChange(text)
-            }
-
-            override fun onQrButtonClick() {
-                val intent = QRScannerActivity.getIntentForFragment(this@AddTokenFragment)
-                qrScannerResultLauncher.launch(intent)
-            }
-
-            override fun onFocusChange(hasFocus: Boolean) {}
-        })
+    private fun getState(caution: Caution?, loading: Boolean) = when (caution?.type) {
+        Caution.Type.Error -> DataState.Error(Exception(caution.text))
+        Caution.Type.Warning -> DataState.Error(Exception(caution.text))
+        null -> if (loading) DataState.Loading else null
     }
 
     private fun setButton(enabled: Boolean = false) {
