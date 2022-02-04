@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalInfoKey
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings.SendEvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -45,8 +46,8 @@ class SwapApproveConfirmationFragment : BaseFragment() {
             mainViewModel.dex.blockchain
         )
     }
-    private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
-    private val feeViewModel by viewModels<EvmFeeCellViewModel> { vmFactory }
+    private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
+    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.swapApproveConfirmationFragment) { vmFactory }
     private val transactionData: TransactionData
         get() {
             val transactionDataParcelable =
@@ -96,19 +97,19 @@ class SwapApproveConfirmationFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
+        sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
             setButton(enabled)
-        })
+        }
 
-        sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner) {
             snackbarInProcess = HudHelper.showInProcessMessage(
                 requireView(),
                 R.string.Swap_Approving,
                 SnackbarDuration.INDEFINITE
             )
-        })
+        }
 
-        sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner) {
             HudHelper.showSuccessMessage(
                 requireActivity().findViewById(android.R.id.content),
                 R.string.Hud_Text_Done
@@ -120,22 +121,22 @@ class SwapApproveConfirmationFragment : BaseFragment() {
                 )
                 findNavController().popBackStack(R.id.swapApproveFragment, false)
             }, 1200)
-        })
+        }
 
-        sendViewModel.sendFailedLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner) {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
 
             findNavController().popBackStack()
-        })
+        }
 
         binding.sendEvmTransactionView.init(
-            sendViewModel,
+            sendEvmTransactionViewModel,
             feeViewModel,
             viewLifecycleOwner,
-            parentFragmentManager,
-            showSpeedInfoListener = {
+            onClickEditFee = {
                 findNavController().slideFromRight(
-                    R.id.swapApproveConfirmationFragment_to_feeSpeedInfo
+                    resId = R.id.sendEvmFeeSettingsFragment,
+                    args = SendEvmFeeSettingsFragment.prepareParams(R.id.swapApproveConfirmationFragment)
                 )
             }
         )
@@ -160,7 +161,7 @@ class SwapApproveConfirmationFragment : BaseFragment() {
                     title = getString(R.string.Swap_Approve),
                     onClick = {
                         logger.info("click approve button")
-                        sendViewModel.send(logger)
+                        sendEvmTransactionViewModel.send(logger)
                     },
                     enabled = enabled
                 )

@@ -88,9 +88,6 @@
         android:id="@+id/sendEvmConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationFragment"
         tools:layout="@layout/fragment_confirmation_send_evm">
-        <action
-            android:id="@+id/sendEvmConfirmationFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
     </fragment>
 
     <fragment
@@ -109,9 +106,6 @@
         android:id="@+id/transactionSpeedUpCancelFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"
         tools:layout="@layout/fragment_transaction_speedup_cancel">
-        <action
-            android:id="@+id/transactionSpeedUpCancelFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/manageWalletsFragment"
@@ -371,26 +365,17 @@
         android:id="@+id/uniswapConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment"
         tools:layout="@layout/fragment_confirmation_swap">
-        <action
-            android:id="@+id/uniswapConfirmationFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/oneInchConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment"
         tools:layout="@layout/fragment_confirmation_swap">
-        <action
-            android:id="@+id/oneInchConfirmationFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/swapApproveConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"
         tools:layout="@layout/fragment_confirmation_approve_swap">
-        <action
-            android:id="@+id/swapApproveConfirmationFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
     </fragment>
 
     <fragment
@@ -433,10 +418,6 @@
         android:id="@+id/marketAdvancedSearchResultsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchResultsFragment"
         tools:layout="@layout/fragment_market_advanced_search_results" />
-    <fragment
-        android:id="@+id/feeSpeedInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.ui.FeeInfoFragment"
-        tools:layout="@layout/fragment_fee_info" />
     <fragment
         android:id="@+id/createAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment"

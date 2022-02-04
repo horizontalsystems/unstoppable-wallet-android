@@ -15,8 +15,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSwapBinding
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings.SendEvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -29,9 +31,9 @@ import io.horizontalsystems.snackbar.SnackbarDuration
 abstract class BaseSwapConfirmationFragment : BaseFragment() {
 
     protected abstract val logger: AppLogger
-    protected abstract val sendViewModel: SendEvmTransactionViewModel
+    protected abstract val sendEvmTransactionViewModel: SendEvmTransactionViewModel
     protected abstract val feeViewModel: EvmFeeCellViewModel
-    protected abstract fun navigateToFeeInfo()
+    protected abstract val fragmentId: Int
 
     private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
     protected val dex: SwapMainModule.Dex
@@ -73,19 +75,19 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
+        sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
             setButton(enabled)
-        })
+        }
 
-        sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner) {
             snackbarInProcess = HudHelper.showInProcessMessage(
                 requireView(),
                 R.string.Swap_Swapping,
                 SnackbarDuration.INDEFINITE
             )
-        })
+        }
 
-        sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->
+        sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner) {
             HudHelper.showSuccessMessage(
                 requireActivity().findViewById(android.R.id.content),
                 R.string.Hud_Text_Done
@@ -93,21 +95,23 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack(R.id.swapFragment, true)
             }, 1200)
-        })
+        }
 
-        sendViewModel.sendFailedLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner) {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
 
             findNavController().popBackStack()
-        })
+        }
 
         binding.sendEvmTransactionView.init(
-            sendViewModel,
+            sendEvmTransactionViewModel,
             feeViewModel,
             viewLifecycleOwner,
-            parentFragmentManager,
-            showSpeedInfoListener = {
-                navigateToFeeInfo()
+            onClickEditFee = {
+                findNavController().slideFromRight(
+                    resId = R.id.sendEvmFeeSettingsFragment,
+                    args = SendEvmFeeSettingsFragment.prepareParams(fragmentId)
+                )
             }
         )
 
@@ -129,7 +133,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
                     title = getString(R.string.Swap),
                     onClick = {
                         logger.info("click swap button")
-                        sendViewModel.send(logger)
+                        sendEvmTransactionViewModel.send(logger)
                     },
                     enabled = enabled
                 )

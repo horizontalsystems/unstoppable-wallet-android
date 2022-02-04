@@ -8,7 +8,7 @@ import androidx.activity.addCallback
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectRequestBinding
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings.SendEvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectRequestModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -28,9 +29,14 @@ import io.horizontalsystems.core.helpers.HudHelper
 class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
     private val logger = AppLogger("wallet-connect")
     private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment)
-    private lateinit var viewModel: WalletConnectSendEthereumTransactionRequestViewModel
-    private lateinit var sendViewModel: SendEvmTransactionViewModel
-    private lateinit var feeViewModel: EvmFeeCellViewModel
+    val vmFactory by lazy {
+        WalletConnectRequestModule.Factory(
+            baseViewModel.sharedSendEthereumTransactionRequest!!, baseViewModel.service
+        )
+    }
+    private val viewModel by viewModels<WalletConnectSendEthereumTransactionRequestViewModel> { vmFactory }
+    private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
+    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.walletConnectSendEthereumTransactionRequestFragment) { vmFactory }
     private var approveEnabled = true
     private var rejectEnabled = true
 
@@ -55,61 +61,49 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val vmFactory = WalletConnectRequestModule.Factory(
-            baseViewModel.sharedSendEthereumTransactionRequest!!,
-            baseViewModel.service
-        )
-
-        viewModel = ViewModelProvider(this, vmFactory).get(
-            WalletConnectSendEthereumTransactionRequestViewModel::class.java
-        )
-        sendViewModel =
-            ViewModelProvider(this, vmFactory).get(SendEvmTransactionViewModel::class.java)
-        feeViewModel = ViewModelProvider(this, vmFactory).get(EvmFeeCellViewModel::class.java)
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.reject()
             close()
         }
 
-        sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
+        sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
             approveEnabled = enabled
             setButtons()
-        })
+        }
 
-        sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner) {
             rejectEnabled = false
             setButtons()
-        })
+        }
 
-        sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->
+        sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner) { transactionHash ->
             viewModel.approve(transactionHash)
             HudHelper.showSuccessMessage(
                 requireActivity().findViewById(android.R.id.content),
                 R.string.Hud_Text_Done
             )
             close()
-        })
+        }
 
-        sendViewModel.sendFailedLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner) {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
-        })
+        }
 
         binding.sendEvmTransactionView.init(
-            sendViewModel,
+            sendEvmTransactionViewModel,
             feeViewModel,
             viewLifecycleOwner,
-            parentFragmentManager,
-            showSpeedInfoListener = {
+            onClickEditFee = {
                 findNavController().slideFromRight(
-                    R.id.walletConnectRequestFragment_to_feeSpeedInfo
+                    resId = R.id.sendEvmFeeSettingsFragment,
+                    args = SendEvmFeeSettingsFragment.prepareParams(R.id.walletConnectSendEthereumTransactionRequestFragment)
                 )
             }
         )
 
-        sendViewModel.transactionTitleLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.transactionTitleLiveData.observe(viewLifecycleOwner) {
             binding.toolbar.title = it
-        })
+        }
 
         setButtons()
     }
@@ -125,7 +119,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
                         title = getString(R.string.Button_Confirm),
                         onClick = {
                             logger.info("click confirm button")
-                            sendViewModel.send(logger)
+                            sendEvmTransactionViewModel.send(logger)
                         },
                         enabled = approveEnabled
                     )

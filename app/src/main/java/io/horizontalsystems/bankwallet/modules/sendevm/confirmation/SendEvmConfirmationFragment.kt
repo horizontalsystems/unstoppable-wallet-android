@@ -129,17 +129,9 @@ class SendEvmConfirmationFragment : BaseFragment() {
             feeViewModel,
             viewLifecycleOwner,
             onClickEditFee = {
-                val arguments = SendEvmFeeSettingsFragment.prepareParams(R.id.sendEvmConfirmationFragment, sendEvmViewModel.coin.coinType)
+                val arguments = SendEvmFeeSettingsFragment.prepareParams(R.id.sendEvmConfirmationFragment)
                 findNavController().slideFromRight(R.id.sendEvmFeeSettingsFragment, arguments)
             }
-//            parentFragmentManager,
-//            showSpeedInfoListener = {
-//                findNavController().slideFromRight(
-//                    R.id.sendEvmConfirmationFragment_to_feeSpeedInfo,
-//                    null,
-//                    navOptions()
-//                )
-//            }
         )
 
         binding.buttonSendCompose.setViewCompositionStrategy(

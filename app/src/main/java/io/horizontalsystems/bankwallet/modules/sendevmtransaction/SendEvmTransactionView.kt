@@ -77,31 +77,6 @@ class SendEvmTransactionView @JvmOverloads constructor(
         }
     }
 
-    fun init(
-        transactionViewModel: SendEvmTransactionViewModel,
-        ethereumFeeViewModel: EvmFeeCellViewModel,
-        viewLifecycleOwner: LifecycleOwner,
-        fragmentManager: FragmentManager,
-        showSpeedInfoListener: () -> Unit
-    ) {
-//        binding.feeSelectorView.setFeeSelectorViewInteractions(
-//            ethereumFeeViewModel,
-//            ethereumFeeViewModel,
-//            viewLifecycleOwner,
-//            fragmentManager,
-//            showSpeedInfoListener
-//        )
-
-        val adapter = SendEvmTransactionAdapter()
-        binding.recyclerView.adapter = adapter
-
-        transactionViewModel.viewItemsLiveData.observe(viewLifecycleOwner, {
-            adapter.items = flattenSectionViewItems(it)
-            adapter.notifyDataSetChanged()
-        })
-
-    }
-
     private fun flattenSectionViewItems(sections: List<SectionViewItem>): List<ViewItemWithPosition> {
         val viewItems = mutableListOf<ViewItemWithPosition>()
 
@@ -119,7 +94,6 @@ class SendEvmTransactionView @JvmOverloads constructor(
 
         return viewItems
     }
-
 }
 
 data class ViewItemWithPosition(
