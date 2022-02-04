@@ -18,20 +18,18 @@ interface IRecipientAddressService {
     fun setRecipientAmount(amount: BigDecimal)
 }
 
-class RecipientAddressViewModel(
-    private val service: IRecipientAddressService
-) : ViewModel() {
+class RecipientAddressViewModel(private val service: IRecipientAddressService) : ViewModel() {
 
-    val xxxInitialAddress by service::initialAddress
+    val initialAddress by service::initialAddress
 
-    var xxxError by mutableStateOf<Throwable?>(null)
+    var error by mutableStateOf<Throwable?>(null)
         private set
 
-    fun xxxSetAddress(address: Address?) {
+    fun setAddress(address: Address?) {
         service.setRecipientAddress(address)
     }
 
-    fun xxxSetAddressWithError(address: Address?, error: Throwable?) {
+    fun setAddressWithError(address: Address?, error: Throwable?) {
         service.setRecipientAddressWithError(address, error)
     }
 }
