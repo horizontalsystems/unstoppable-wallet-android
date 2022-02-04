@@ -39,6 +39,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 @Composable
 fun FormsInput(
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     initial: String? = null,
     hint: String,
     state: DataState<Any>? = null,
@@ -74,6 +75,7 @@ fun FormsInput(
                     }
                     .padding(12.dp)
                     .weight(1f),
+                enabled = enabled,
                 value = textState,
                 onValueChange = {
                     textState = it
