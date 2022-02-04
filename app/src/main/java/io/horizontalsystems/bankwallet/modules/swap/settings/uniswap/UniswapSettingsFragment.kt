@@ -112,11 +112,11 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
 
                         HSAddressInput(
                             modifier = Modifier.padding(horizontal = 16.dp),
-                            initial = recipientAddressViewModel.xxxInitialAddress,
+                            initial = recipientAddressViewModel.initialAddress,
                             coinType = platformCoin.coinType,
                             coinCode = platformCoin.coin.code,
                             onStateChange = {
-                                recipientAddressViewModel.xxxSetAddressWithError(it?.dataOrNull, it?.errorOrNull)
+                                recipientAddressViewModel.setAddressWithError(it?.dataOrNull, it?.errorOrNull)
                             }
                         )
 

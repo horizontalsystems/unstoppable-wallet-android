@@ -42,9 +42,9 @@ class SendAddressFragment(
                         modifier = Modifier.padding(top = 12.dp),
                         coinType = platformCoin.coinType,
                         coinCode = platformCoin.code,
-                        error = viewModel.xxxError
+                        error = viewModel.error
                     ) {
-                        viewModel.xxxSetAddress(it)
+                        viewModel.setAddress(it)
                     }
                 }
             }
