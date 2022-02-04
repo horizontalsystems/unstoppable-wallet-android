@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentTransactionSpeedupCancelBinding
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings.SendEvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -50,7 +51,7 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
     }
     private val speedUpCancelViewModel by viewModels<TransactionSpeedUpCancelViewModel> { vmFactory }
     private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
-    private val feeViewModel by viewModels<EvmFeeCellViewModel> { vmFactory }
+    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.transactionSpeedUpCancelFragment) { vmFactory }
 
     private var snackbarInProcess: CustomSnackbar? = null
 
@@ -93,50 +94,50 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner) {
             snackbarInProcess = HudHelper.showInProcessMessage(
                 requireView(),
                 R.string.Send_Sending,
                 SnackbarDuration.INDEFINITE
             )
-        })
+        }
 
         sendEvmTransactionViewModel.sendSuccessLiveData.observe(
-            viewLifecycleOwner,
-            { transactionHash ->
-                HudHelper.showSuccessMessage(
-                    requireActivity().findViewById(android.R.id.content),
-                    R.string.Hud_Text_Done
-                )
-                Handler(Looper.getMainLooper()).postDelayed({
-                    findNavController().popBackStack(R.id.transactionInfoFragment, true)
-                }, 1200)
-            })
+            viewLifecycleOwner
+        ) {
+            HudHelper.showSuccessMessage(
+                requireActivity().findViewById(android.R.id.content),
+                R.string.Hud_Text_Done
+            )
+            Handler(Looper.getMainLooper()).postDelayed({
+                findNavController().popBackStack(R.id.transactionInfoFragment, true)
+            }, 1200)
+        }
 
-        sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner) {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
 
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack()
             }, 1200)
-        })
+        }
 
         binding.sendEvmTransactionView.init(
             sendEvmTransactionViewModel,
             feeViewModel,
             viewLifecycleOwner,
-            parentFragmentManager,
-            showSpeedInfoListener = {
+            onClickEditFee = {
                 findNavController().slideFromRight(
-                    R.id.transactionSpeedUpCancelFragment_to_feeSpeedInfo
+                    resId = R.id.sendEvmFeeSettingsFragment,
+                    args = SendEvmFeeSettingsFragment.prepareParams(R.id.transactionSpeedUpCancelFragment)
                 )
             }
         )
 
         if (speedUpCancelViewModel.isTransactionPending) {
-            sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
+            sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
                 setButton(enabled)
-            })
+            }
         } else {
             setButton(false)
             HudHelper.showErrorMessage(

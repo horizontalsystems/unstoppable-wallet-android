@@ -44,9 +44,6 @@
         android:id="@+id/walletConnectSendEthereumTransactionRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestFragment"
         tools:layout="@layout/fragment_wallet_connect_request">
-        <action
-            android:id="@+id/walletConnectRequestFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/walletConnectSignMessageRequestFragment"

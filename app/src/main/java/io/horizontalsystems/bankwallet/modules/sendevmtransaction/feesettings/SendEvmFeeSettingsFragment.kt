@@ -47,7 +47,6 @@ class SendEvmFeeSettingsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
-        val coinType by lazy { requireArguments().getParcelable<CoinType>(COIN_TYPE)!! }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -56,7 +55,6 @@ class SendEvmFeeSettingsFragment : BaseFragment() {
             setContent {
                 ComposeAppTheme {
                     SendEvmFeeSettingsScreen(
-                        coinType,
                         feeViewModel,
                         onClickNavigation = {
                             findNavController().popBackStack()
@@ -69,21 +67,18 @@ class SendEvmFeeSettingsFragment : BaseFragment() {
 
     companion object {
         private const val NAV_GRAPH_ID = "nav_graph_id"
-        private const val COIN_TYPE = "coin_type"
 
-        fun prepareParams(@IdRes navGraphId: Int, coinType: CoinType) =
-            bundleOf(NAV_GRAPH_ID to navGraphId, COIN_TYPE to coinType)
+        fun prepareParams(@IdRes navGraphId: Int) =
+            bundleOf(NAV_GRAPH_ID to navGraphId)
     }
 
 }
 
 @Composable
 fun SendEvmFeeSettingsScreen(
-    coinType: CoinType,
     feeViewModel: EvmFeeCellViewModel,
     onClickNavigation: () -> Unit
 ) {
-//    val feeSlider by viewModel.feeSliderLiveData.observeAsState()
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
