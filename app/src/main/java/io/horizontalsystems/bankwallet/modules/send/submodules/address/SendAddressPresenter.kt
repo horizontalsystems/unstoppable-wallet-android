@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.address.AddressValidationException
 import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
-import io.horizontalsystems.ethereumkit.core.AddressValidator
+import io.horizontalsystems.bitcoincore.exceptions.AddressFormatException
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
@@ -73,7 +73,7 @@ class SendAddressPresenter(
     private fun getError(error: Throwable): Throwable {
         val message = when (error) {
             is HodlerPlugin.UnsupportedAddressType -> Translator.getString(R.string.Send_Error_UnsupportedAddress)
-            is AddressValidator.AddressValidationException -> Translator.getString(R.string.Send_Error_IncorrectAddress)
+            is AddressFormatException -> Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
             is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> Translator.getString(R.string.Send_Error_TransparentAddress)
             is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> Translator.getString(R.string.Send_Error_SendToSelf)
             else -> error.message ?: error.javaClass.simpleName
