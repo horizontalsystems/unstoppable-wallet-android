@@ -24,7 +24,7 @@ class SendAddressFragment(
 ) : SendSubmoduleFragment() {
 
     private val viewModel by activityViewModels<RecipientAddressViewModel> {
-        SendAddressModule.Factory(platformCoin, sendHandler, addressModuleDelegate)
+        SendAddressModule.Factory(sendHandler, addressModuleDelegate)
     }
 
     override fun onCreateView(

@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.modules.address.AddressValidationException
 import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.hodler.HodlerPlugin
@@ -60,14 +61,14 @@ class SendAddressPresenter(
     override var currentAddress: Address? = null
 
     override fun validAddress(): Address {
-        return currentAddress ?: throw SendAddressModule.ValidationError.EmptyValue()
+        return currentAddress ?: throw AddressValidationException.Blank()
     }
 
     override fun validateAddress() {
         val address = enteredAddress
         if (address == null) {
             currentAddress = null
-            throw SendAddressModule.ValidationError.EmptyValue()
+            throw AddressValidationException.Blank()
         }
 
         try {
