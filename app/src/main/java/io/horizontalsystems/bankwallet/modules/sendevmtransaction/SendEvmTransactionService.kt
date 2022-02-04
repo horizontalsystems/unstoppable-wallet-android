@@ -2,13 +2,13 @@ package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
-import io.horizontalsystems.bankwallet.core.ethereum.IEvmTransactionFeeService
-import io.horizontalsystems.bankwallet.core.ethereum.Warning
+import io.horizontalsystems.bankwallet.modules.evmfee.IEvmFeeService
+import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.managers.ActivateCoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.evmfee.Transaction
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.decorations.ContractMethodDecoration
@@ -42,7 +42,7 @@ interface ISendEvmTransactionService {
 class SendEvmTransactionService(
     private val sendEvmData: SendEvmData,
     evmKitWrapper: EvmKitWrapper,
-    private val feeService: IEvmTransactionFeeService,
+    private val feeService: IEvmFeeService,
     private val activateCoinManager: ActivateCoinManager
 ) : Clearable, ISendEvmTransactionService {
     private val disposable = CompositeDisposable()
@@ -80,7 +80,7 @@ class SendEvmTransactionService(
             .let { disposable.add(it) }
     }
 
-    private fun sync(transactionStatus: DataState<EvmTransactionFeeService.Transaction>) {
+    private fun sync(transactionStatus: DataState<Transaction>) {
         when (transactionStatus) {
             is DataState.Error -> {
                 state = State.NotReady(errors = listOf(transactionStatus.error))
@@ -128,7 +128,7 @@ class SendEvmTransactionService(
         disposable.clear()
     }
 
-    private fun syncTxDataState(transactionDataState: EvmTransactionFeeService.Transaction? = null) {
+    private fun syncTxDataState(transactionDataState: Transaction? = null) {
         val transactionData = transactionDataState?.transactionData ?: sendEvmData.transactionData
         txDataState = TxDataState(transactionData, sendEvmData.additionalInfo, evmKit.decorate(transactionData))
     }

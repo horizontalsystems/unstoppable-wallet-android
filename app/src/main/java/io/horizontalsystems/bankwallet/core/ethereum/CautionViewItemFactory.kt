@@ -2,8 +2,11 @@ package io.horizontalsystems.bankwallet.core.ethereum
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.EvmError
+import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsError
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsWarning
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 

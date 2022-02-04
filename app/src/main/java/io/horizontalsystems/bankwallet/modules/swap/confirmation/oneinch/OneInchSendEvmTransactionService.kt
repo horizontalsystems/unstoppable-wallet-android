@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ActivateCoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ISendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
@@ -26,7 +25,7 @@ import java.math.BigInteger
 
 class OneInchSendEvmTransactionService(
     private val evmKitWrapper: EvmKitWrapper,
-    private val transactionFeeService: OneInchTransactionFeeService,
+    private val transactionFeeService: OneInchFeeService,
     private val activateCoinManager: ActivateCoinManager
 ) : ISendEvmTransactionService, Clearable {
 

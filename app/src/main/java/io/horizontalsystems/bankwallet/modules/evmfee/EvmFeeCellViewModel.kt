@@ -1,15 +1,15 @@
-package io.horizontalsystems.bankwallet.core.ethereum
+package io.horizontalsystems.bankwallet.modules.evmfee
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService.Transaction
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.reactivex.disposables.CompositeDisposable
 
 class EvmFeeCellViewModel(
-    val feeService: IEvmTransactionFeeService,
+    val feeService: IEvmFeeService,
     val coinService: EvmCoinService
 ) : ViewModel() {
 

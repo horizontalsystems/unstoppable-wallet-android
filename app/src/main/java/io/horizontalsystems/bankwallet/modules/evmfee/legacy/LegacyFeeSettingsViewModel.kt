@@ -1,19 +1,21 @@
-package io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings
+package io.horizontalsystems.bankwallet.modules.evmfee.legacy
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.ethereum.*
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.evmfee.*
 import io.reactivex.disposables.CompositeDisposable
 
 class LegacyFeeSettingsViewModel(
     private val gasPriceService: LegacyGasPriceService,
-    private val feeService: IEvmTransactionFeeService,
+    private val feeService: IEvmFeeService,
     private val coinService: EvmCoinService,
     private val cautionViewItemFactory: CautionViewItemFactory
 ) : ViewModel() {
@@ -48,7 +50,7 @@ class LegacyFeeSettingsViewModel(
         gasPriceService.setGasPrice(wei(gasPrice))
     }
 
-    private fun syncTransactionStatus(transactionStatus: DataState<EvmTransactionFeeService.Transaction>) {
+    private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {
         val feeStatusViewItem: FeeStatusViewItem
         val warnings = mutableListOf<Warning>()
         val errors = mutableListOf<Throwable>()
@@ -105,5 +107,4 @@ class LegacyFeeSettingsViewModel(
     private fun gwei(range: LongRange): LongRange {
         return LongRange(gwei(range.first), gwei(range.last))
     }
-
 }
