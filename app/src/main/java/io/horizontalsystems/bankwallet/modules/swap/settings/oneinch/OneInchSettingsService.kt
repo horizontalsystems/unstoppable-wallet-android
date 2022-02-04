@@ -2,13 +2,13 @@ package io.horizontalsystems.bankwallet.modules.swap.settings.oneinch
 
 import android.util.Range
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
 import io.horizontalsystems.bankwallet.modules.swap.settings.ISwapSlippageService
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.InvalidSlippageType
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettingsError
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.State
-import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
@@ -24,17 +24,21 @@ class OneInchSettingsService(
         }
 
     val stateObservable = BehaviorSubject.createDefault<State>(State.Invalid)
-    val errorsObservable = BehaviorSubject.createDefault<List<Throwable>>(listOf())
-
     var errors: List<Throwable> = listOf()
-        private set(value) {
-            field = value
-            errorsObservable.onNext(value)
-        }
 
     //region IRecipientAddressService
     private var recipient: Address? = swapSettings.recipient
     private var recipientError: Throwable? = null
+        set(value) {
+            field = value
+
+            val state = if (value == null) {
+                DataState.Success(Unit)
+            } else {
+                DataState.Error(value)
+            }
+            recipientAddressState.onNext(state)
+        }
 
     override val initialAddress: Address?
         get() {
@@ -46,12 +50,7 @@ class OneInchSettingsService(
             return null
         }
 
-    override val recipientAddressError: Throwable?
-        get() = getRecipientAddressError(errors)
-
-    override val recipientAddressErrorObservable: Observable<Unit> = errorsObservable.map { errors ->
-        getRecipientAddressError(errors)
-    }
+    override val recipientAddressState = BehaviorSubject.create<DataState<Unit>>()
 
     override fun setRecipientAddress(address: Address?) {
         recipient = address
@@ -67,9 +66,6 @@ class OneInchSettingsService(
     override fun setRecipientAmount(amount: BigDecimal) {
     }
 
-    private fun getRecipientAddressError(errors: List<Throwable>): Throwable? {
-        return errors.find { it is SwapSettingsError.InvalidAddress }
-    }
     //endregion
 
     // region ISwapSlippageService

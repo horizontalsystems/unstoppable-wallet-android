@@ -4,17 +4,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 interface IRecipientAddressService {
     val initialAddress: Address?
-    val recipientAddressError: Throwable?
-    val recipientAddressErrorObservable: Observable<Unit>
+    val recipientAddressState: Observable<DataState<Unit>>
 
     fun setRecipientAddress(address: Address?)
     fun setRecipientAddressWithError(address: Address?, error: Throwable?) = Unit
@@ -31,11 +32,11 @@ class RecipientAddressViewModel(private val service: IRecipientAddressService) :
     private val disposables = CompositeDisposable()
 
     init {
-        service.recipientAddressErrorObservable
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                error = service.recipientAddressError
+        service.recipientAddressState
+            .subscribeIO {
+                viewModelScope.launch {
+                    error = it.errorOrNull
+                }
             }.let {
                 disposables.add(it)
             }
