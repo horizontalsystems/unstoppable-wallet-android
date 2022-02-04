@@ -43,17 +43,13 @@ class SendEvmTransactionService(
     private val sendEvmData: SendEvmData,
     evmKitWrapper: EvmKitWrapper,
     private val feeService: IEvmTransactionFeeService,
-    private val activateCoinManager: ActivateCoinManager,
-    gasPrice: Long? = null
+    private val activateCoinManager: ActivateCoinManager
 ) : Clearable, ISendEvmTransactionService {
     private val disposable = CompositeDisposable()
 
     private val evmKit = evmKitWrapper.evmKit
-
-    private val evmBalance: BigInteger
-        get() = evmKit.accountState?.balance ?: BigInteger.ZERO
-
     private val stateSubject = PublishSubject.create<State>()
+
     override var state: State = State.NotReady()
         private set(value) {
             field = value
@@ -82,13 +78,6 @@ class SendEvmTransactionService(
         feeService.transactionStatusObservable
             .subscribeIO { sync(it) }
             .let { disposable.add(it) }
-
-//        feeService.transactionStatusObservable.subscribeIO { syncState() }.let { disposable.add(it) }
-
-
-//        gasPrice?.let { transactionFeeService.gasPriceType = GasPriceType.Custom(
-//            EvmTransactionFeeService.GasPrice.Legacy(it, transactionFeeService.customFeeRange)
-//        ) }
     }
 
     private fun sync(transactionStatus: DataState<EvmTransactionFeeService.Transaction>) {

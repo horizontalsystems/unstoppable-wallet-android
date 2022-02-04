@@ -20,8 +20,7 @@ interface IEvmTransactionFeeService {
     val transactionStatusObservable: Observable<DataState<EvmTransactionFeeService.Transaction>>
 }
 
-
-abstract class Warning : Throwable()
+abstract class Warning
 
 abstract class FeeSettingsWarning : Warning() {
     object HighBaseFeeWarning : FeeSettingsWarning()

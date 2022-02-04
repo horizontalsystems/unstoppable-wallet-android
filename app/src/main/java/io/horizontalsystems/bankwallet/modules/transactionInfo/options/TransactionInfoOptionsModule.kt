@@ -5,14 +5,12 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
-import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
-import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
-import io.horizontalsystems.bankwallet.core.ethereum.EvmFeeCellViewModel
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
+import io.horizontalsystems.bankwallet.core.ethereum.*
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -55,21 +53,25 @@ object TransactionInfoOptionsModule {
             fullTransaction.transaction
         }
 
-        private val transactionService by lazy {
+        private val gasPriceService: IEvmGasPriceService by lazy {
             val feeRateProvider = FeeRateProviderFactory.customRangedFeeProvider(
                 coinType = baseCoin.coinType,
                 customLowerBound = transaction.gasPrice,
-                customUpperBound = null,
                 multiply = 1.2
             ) as ICustomRangedFeeProvider
-            EvmTransactionFeeService(evmKitWrapper.evmKit, feeRateProvider)
+
+            when (evmKitWrapper.evmKit.networkType) {
+                EthereumKit.NetworkType.EthMainNet,
+                EthereumKit.NetworkType.EthRopsten,
+                EthereumKit.NetworkType.EthKovan,
+                EthereumKit.NetworkType.EthGoerli,
+                EthereumKit.NetworkType.EthRinkeby -> LegacyGasPriceService(feeRateProvider) // TODO switch to EIP1559 GasPrice service
+                EthereumKit.NetworkType.BscMainNet -> LegacyGasPriceService(feeRateProvider)
+            }
         }
 
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(baseCoin, App.marketKit, App.currencyManager) }
-        private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
-
-        private val sendService by lazy {
-            val transactionData = when (optionType) {
+        private val transactionData by lazy {
+            when (optionType) {
                 TransactionInfoOption.Type.SpeedUp -> {
                     TransactionData(transaction.to!!, transaction.value, transaction.input, transaction.nonce)
                 }
@@ -82,7 +84,15 @@ object TransactionInfoOptionsModule {
                     )
                 }
             }
+        }
+        private val transactionService by lazy {
+            EvmTransactionFeeServiceNew(evmKitWrapper.evmKit, gasPriceService, transactionData)
+        }
 
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(baseCoin, App.marketKit, App.currencyManager) }
+        private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
+
+        private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
                 evmKitWrapper,

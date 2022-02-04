@@ -3,8 +3,11 @@ package io.horizontalsystems.bankwallet.modules.sendevmtransaction.feesettings
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
-import io.horizontalsystems.bankwallet.core.ethereum.*
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService.GasPrice
+import io.horizontalsystems.bankwallet.core.ethereum.FeeSettingsWarning
+import io.horizontalsystems.bankwallet.core.ethereum.GasPriceInfo
+import io.horizontalsystems.bankwallet.core.ethereum.IEvmGasPriceService
+import io.horizontalsystems.bankwallet.core.ethereum.Warning
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.CustomPriorityUnit
@@ -37,13 +40,12 @@ class LegacyGasPriceService(
         get() = recommendedGasPrice?.let {
             Log.e("AAA", "cached recommendedGasPrice: $it")
             Single.just(it)
-        }
-            ?: feeRateProvider.feeRate(FeeRatePriority.RECOMMENDED)
-                .map { it.toLong() }
-                .doOnSuccess { gasPrice ->
-                    Log.e("AAA", "recommendedGasPrice: $gasPrice")
-                    recommendedGasPrice = gasPrice.toLong()
-                }
+        } ?: feeRateProvider.feeRate(FeeRatePriority.RECOMMENDED)
+            .map { it.toLong() }
+            .doOnSuccess { gasPrice ->
+                Log.e("AAA", "recommendedGasPrice: $gasPrice")
+                recommendedGasPrice = gasPrice.toLong()
+            }
 
     init {
         if (gasPrice != null) {

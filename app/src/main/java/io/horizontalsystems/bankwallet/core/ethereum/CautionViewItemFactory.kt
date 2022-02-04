@@ -14,25 +14,8 @@ class CautionViewItemFactory(
         return warnings.map { cautionViewItem(it) } + errors.map { cautionViewItem(it) }
     }
 
-    private fun cautionViewItem(throwable: Throwable): CautionViewItem {
-        return when (throwable) {
-            FeeSettingsError.InsufficientBalance -> {
-                CautionViewItem(
-                    Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
-                    Translator.getString(
-                        R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
-                        baseCoinService.platformCoin.coin.code
-                    ),
-                    CautionViewItem.Type.Error
-                )
-            }
-            FeeSettingsError.LowBaseFee -> {
-                CautionViewItem(
-                    Translator.getString(R.string.FeeSettings_BaseFeeIsLow_Title),
-                    Translator.getString(R.string.FeeSettings_BaseFeeIsLow),
-                    CautionViewItem.Type.Error
-                )
-            }
+    private fun cautionViewItem(warning: Warning): CautionViewItem {
+        return when (warning) {
             FeeSettingsWarning.RiskOfGettingStuck -> {
                 CautionViewItem(
                     Translator.getString(R.string.FeeSettings_RiskOfGettingStuck_Title),
@@ -62,24 +45,38 @@ class CautionViewItemFactory(
                 )
             }
             else -> {
-                defaultCautionViewItem(throwable)
+                CautionViewItem(
+                    Translator.getString(R.string.EthereumTransaction_Warning_Title),
+                    warning.javaClass.simpleName,
+                    CautionViewItem.Type.Warning
+                )
             }
         }
     }
 
-    private fun defaultCautionViewItem(throwable: Throwable): CautionViewItem {
-        return when (throwable) {
-            is Warning -> {
+    private fun cautionViewItem(error: Throwable): CautionViewItem {
+        return when (error) {
+            FeeSettingsError.InsufficientBalance -> {
                 CautionViewItem(
-                    Translator.getString(R.string.EthereumTransaction_Warning_Title),
-                    throwable.javaClass.simpleName,
-                    CautionViewItem.Type.Warning
+                    Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
+                    Translator.getString(
+                        R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
+                        baseCoinService.platformCoin.coin.code
+                    ),
+                    CautionViewItem.Type.Error
+                )
+            }
+            FeeSettingsError.LowBaseFee -> {
+                CautionViewItem(
+                    Translator.getString(R.string.FeeSettings_BaseFeeIsLow_Title),
+                    Translator.getString(R.string.FeeSettings_BaseFeeIsLow),
+                    CautionViewItem.Type.Error
                 )
             }
             else -> {
                 CautionViewItem(
                     Translator.getString(R.string.EthereumTransaction_Error_Title),
-                    convertError(throwable),
+                    convertError(error),
                     CautionViewItem.Type.Error
                 )
             }
