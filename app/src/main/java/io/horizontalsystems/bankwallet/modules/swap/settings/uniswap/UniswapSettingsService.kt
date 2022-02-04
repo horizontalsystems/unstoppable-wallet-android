@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.settings.uniswap
 
 import android.util.Range
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
 import io.horizontalsystems.bankwallet.modules.swap.settings.ISwapDeadlineService
 import io.horizontalsystems.bankwallet.modules.swap.settings.ISwapSlippageService
@@ -26,7 +27,7 @@ class UniswapSettingsService(
         }
 
     val stateObservable = BehaviorSubject.createDefault<State>(State.Invalid)
-    val errorsObservable = BehaviorSubject.createDefault<List<Throwable>>(listOf())
+    private val errorsObservable = BehaviorSubject.createDefault<List<Throwable>>(listOf())
 
     var errors: List<Throwable> = listOf()
         private set(value) {
@@ -106,6 +107,16 @@ class UniswapSettingsService(
     //region IRecipientAddressService
     private var recipient: Address? = tradeOptions.recipient
     private var recipientError: Throwable? = null
+        set(value) {
+            field = value
+
+            val state = if (value == null) {
+                DataState.Success(Unit)
+            } else {
+                DataState.Error(value)
+            }
+            recipientAddressState.onNext(state)
+        }
 
     override val initialAddress: Address?
         get() {
@@ -117,12 +128,7 @@ class UniswapSettingsService(
             return null
         }
 
-    override val recipientAddressError: Throwable?
-        get() = getRecipientAddressError(errors)
-
-    override val recipientAddressErrorObservable: Observable<Unit> = errorsObservable.map { errors ->
-        getRecipientAddressError(errors)
-    }
+    override val recipientAddressState = BehaviorSubject.create<DataState<Unit>>()
 
     override fun setRecipientAddress(address: Address?) {
         recipient = address
@@ -136,10 +142,6 @@ class UniswapSettingsService(
     }
 
     override fun setRecipientAmount(amount: BigDecimal) {
-    }
-
-    private fun getRecipientAddressError(errors: List<Throwable>): Throwable? {
-        return errors.find { it is SwapSettingsError.InvalidAddress }
     }
 
     //endregion
