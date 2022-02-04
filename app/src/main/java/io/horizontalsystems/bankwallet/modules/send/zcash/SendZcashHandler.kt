@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.zcash
 
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.bankwallet.modules.address.AddressValidationException
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -29,7 +30,7 @@ class SendZcashHandler(
             addressModule.validateAddress()
         } catch (e: Exception) {
             addressError = e
-            if (addressError is SendAddressModule.ValidationError.EmptyValue){
+            if (addressError is AddressValidationException.Blank){
                 memoModule.setHidden(true)
             }
         }
