@@ -14,7 +14,7 @@ Such approach enables the wallet to operate anywhere and remain censoship-resita
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get it on Google Play"
-     height="80">](https://play.google.com/store/apps/details?id=com.blockchain.btc.coinhub)
+     height="80">](https://bit.ly/3orSiko)
 
 ## Source Code
 
