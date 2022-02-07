@@ -262,6 +262,20 @@
     <string name="Send_Sending">正在发送</string>
     <string name="Send_Token_InsufficientFeeAlert">%1$s（%2$s）的交易费用以%3$s支付。您需要%4$s。</string>
     <string name="Send_Warning_LowFee">警告！有被骗的风险</string>
+    <!-- Fee Settings -->
+    <string name="FeeSettings_Title">Fee Settings</string>
+    <string name="FeeSettings_MaxFee">Max Fee</string>
+    <string name="FeeSettings_Fee">Fee</string>
+    <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasPrice">Gas Price</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Risk of getting stuck</string>
+    <string name="FeeSettings_RiskOfGettingStuck">The transaction may get stuck or fail.</string>
+    <string name="FeeSettings_Overpricing_Title">Overpricing</string>
+    <string name="FeeSettings_Overpricing">The gas price is higher than necessary for the transaction.</string>
+    <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
+    <string name="FeeSettings_BaseFeeIsHigh">At the moment the base fee for transacting is high. It may go down when the network becomes less congested.</string>
+    <string name="FeeSettings_BaseFeeIsLow_Title">Low Base Fee</string>
+    <string name="FeeSettings_BaseFeeIsLow">The Max Base Fee set up is too low for including the transaction.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">交易速度</string>
     <string name="FeeInfo_Description">比特币和Etherum区块链都要求用户在发送交易时支付网络费用。当区块链上发生大量交易时费用较高；而区块链空闲时费用较低。</string>
@@ -298,6 +312,9 @@
     <string name="WalletConnect_Error_NoWallet">没有合适的钱包。您需要创建或恢复现有钱包</string>
     <string name="WalletConnect_Error_WatchAccount">此功能不适用于观察中的钱包，您需要切换到恢复或创建的钱包 </string>
     <!--EthereumTransaction-->
+    <string name="EthereumTransaction_Warning_Title">Warning</string>
+    <string name="EthereumTransaction_Error_Title">Error</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">当前%s余额低于此交易所需金额，包括交易费用。</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">选定的费用太低，交易将被拒绝！</string>
