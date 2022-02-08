@@ -312,8 +312,8 @@
     <string name="WalletConnect_Error_NoWallet">No suitable Wallet. You need to create or restore existing wallet</string>
     <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
     <!--EthereumTransaction-->
-    <string name="EthereumTransaction_Warning_Title">Warning</string>
-    <string name="EthereumTransaction_Error_Title">Error</string>
+    <string name="EthereumTransaction_Warning_Title">Warnung</string>
+    <string name="EthereumTransaction_Error_Title">Fehler</string>
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">The transaction requires %s for sending</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">The current %s balance is below the amount required to process this transaction, including the transaction fee.</string>
@@ -415,7 +415,7 @@
     <string name="Transactions_Completed">Completed</string>
     <string name="Transactions_Processing">Processing</string>
     <string name="Transactions_Send">Send</string>
-    <string name="Transactions_Approve">Approve</string>
+    <string name="Transactions_Approve">Bestätigen</string>
     <string name="Transactions_Swap">Swap</string>
     <string name="Transactions_Failed">Failed</string>
     <string name="Transactions_ContractCall">Contract Call</string>
