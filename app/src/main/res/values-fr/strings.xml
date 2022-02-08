@@ -225,15 +225,15 @@
     <string name="Send_Fee">Fee</string>
     <string name="Send_Button_Paste">Paste</string>
     <string name="Send_Button_Max">Max</string>
-    <string name="Send_Confirmation_Title">Confirm</string>
-    <string name="Send_Confirmation_Domain">Domain</string>
-    <string name="Send_Confirmation_YouSend">You Send</string>
-    <string name="Send_Confirmation_Amount">Amount</string>
-    <string name="Send_Confirmation_To">To</string>
-    <string name="Send_Confirmation_Method">Method</string>
-    <string name="Send_Confirmation_Receiver">Receiver</string>
-    <string name="Send_Confirmation_EstimateTime">Duration</string>
-    <string name="Send_Confirmation_Send_Button">Send</string>
+    <string name="Send_Confirmation_Title">Confirmer</string>
+    <string name="Send_Confirmation_Domain">Domaine</string>
+    <string name="Send_Confirmation_YouSend">Vous envoyez</string>
+    <string name="Send_Confirmation_Amount">Montant</string>
+    <string name="Send_Confirmation_To">À</string>
+    <string name="Send_Confirmation_Method">Méthode</string>
+    <string name="Send_Confirmation_Receiver">Récepteur</string>
+    <string name="Send_Confirmation_EstimateTime">Durée</string>
+    <string name="Send_Confirmation_Send_Button">Envoyer</string>
     <string name="Send_Success">\u2713 Envoyé</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Veuillez autoriser l\'accès à l\'appareil photo</string>
     <string name="ScanQr_NoCameraPermission">Pas de permission caméra</string>
@@ -273,7 +273,7 @@
     <string name="FeeSettings_Overpricing_Title">Overpricing</string>
     <string name="FeeSettings_Overpricing">The gas price is higher than necessary for the transaction.</string>
     <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">At the moment the base fee for transacting is high. It may go down when the network becomes less congested.</string>
+    <string name="FeeSettings_BaseFeeIsHigh">Pour le moment, les frais de base pour effectuer des transactions sont élevés. Ils pourraient baisser lorsque le réseau sera moins encombré.</string>
     <string name="FeeSettings_BaseFeeIsLow_Title">Low Base Fee</string>
     <string name="FeeSettings_BaseFeeIsLow">The Max Base Fee set up is too low for including the transaction.</string>
     <!--Fee Info -->
@@ -313,8 +313,8 @@
     <string name="WalletConnect_Error_WatchAccount">Cette fonctionnalité ne peut être utilisée avec les portefeuilles de type watching only. Vous devez basculer vers un portefeuille restauré ou en créer un </string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>
-    <string name="EthereumTransaction_Error_Title">Error</string>
-    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
+    <string name="EthereumTransaction_Error_Title">Erreur</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Solde insuffisant</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">La transaction nécessite %s pour l\'envoi</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Le solde actuel des %s est inférieur au montant requis pour traiter cette transaction, frais de transaction compris.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">La valeur de frais sélectionnée est trop faible et sera rejetée !</string>
@@ -367,16 +367,16 @@
     <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Your transaction is likely to fail.</string>
-    <string name="SwapSettings_Error_SlippageTooHigh">Slippage Tolerance can’t be more than %s%%</string>
-    <string name="SwapSettings_Error_InvalidAddress">Invalid address</string>
-    <string name="SwapSettings_Error_InvalidSlippage">Invalid Slippage</string>
-    <string name="SwapSettings_Error_InvalidDeadline">Invalid Deadline</string>
-    <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">La tolérance de glissement ne peut pas être supérieure à %s%%</string>
+    <string name="SwapSettings_Error_InvalidAddress">Adresse invalide</string>
+    <string name="SwapSettings_Error_InvalidSlippage">Slippage Invalide</string>
+    <string name="SwapSettings_Error_InvalidDeadline">Date limite invalide</string>
+    <string name="SwapSettings_Warning_UnusualSlippage">Votre transaction peut être frontrun</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmation</string>
-    <string name="Swap_Confirmation_Guaranteed">Guaranteed</string>
+    <string name="Swap_Confirmation_Guaranteed">Garanti</string>
     <string name="Swap_Confirmation_Maximum">Maximum</string>
-    <string name="Swap_Confirmation_Estimated">Estimated</string>
+    <string name="Swap_Confirmation_Estimated">Estimé</string>
     <!--Approve-->
     <string name="Approve_Title">Swap Approve</string>
     <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
@@ -465,18 +465,18 @@
     <string name="StatusInfo_Failed">Failed</string>
     <string name="StatusInfo_PendingDescription">The transaction has not been confirmed on the blockchain yet. Transactions sent with a recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected. Also keep in mind that status of an individual transaction shown in Unstoppable wallet interface typically updated with a short delay.</string>
     <string name="StatusInfo_ProcessingDescription">The transaction has been already included in the blockchain but has not reached permanent finality. At this point, it\'s safe to consider the transaction as completed for smaller payments. For larger payments, it\'s recommended to wait until the transaction status changes to completed.</string>
-    <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">The transaction did not get processed and no value transfer took place. Transactions with a fail status are still written to the blockchain and consume transaction fees. The Unstoppable app is unable to show the fail reason for such transactions, but users are able to look it up themselves on a public block explorer i.e. etherscan.io.</string>
+    <string name="StatusInfo_ConfirmedDescription">La transaction est terminée et considérée comme permanente et irréversible.</string>
+    <string name="StatusInfo_FailedDescription">La transaction n\'a pas été traitée et aucun transfert de valeur n\'a eu lieu. Les transactions avec un statut d\'échec sont néanmoins inscrites sur la blockchain et génèrent des frais de transaction. L\'application Unstoppable n\'est pas en mesure d\'afficher la raison de l\'échec de ces transactions mais les utilisateurs peuvent la rechercher eux-mêmes sur un explorateur de bloc public, etherscan.io par exemple.</string>
     <!-- Transaction Info Options -->
-    <string name="TransactionInfoOptions_SpeedUp_Title">Speed Up</string>
-    <string name="TransactionInfoOptions_SpeedUp_Description">This action will attempt to invalidate previous transaction by resending it with a higher fee. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
-    <string name="TransactionInfoOptions_SpeedUp_Button">Resend</string>
-    <string name="TransactionInfoOptions_Cancel_Title">Cancel</string>
-    <string name="TransactionInfoOptions_Cancel_Description">This action will attempt to invalidate previous transaction by resending as a new 0 %s transaction to self. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
-    <string name="TransactionInfoOptions_Cancel_Button">Cancel Transaction</string>
-    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
+    <string name="TransactionInfoOptions_SpeedUp_Title">Accélérer</string>
+    <string name="TransactionInfoOptions_SpeedUp_Description">Cette action tentera d\'invalider la transaction précédente en la renvoyant avec des frais plus élevés. Si la transaction originale reste en attente lorsqu\'une nouvelle transaction est envoyée, il y a de fortes chances (non garanties) qu\'elle soit invalidée et remplacée. Seule une de ces deux transactions sera incluse dans la blockchain.</string>
+    <string name="TransactionInfoOptions_SpeedUp_Button">Réenvoyer</string>
+    <string name="TransactionInfoOptions_Cancel_Title">Annuler</string>
+    <string name="TransactionInfoOptions_Cancel_Description">Cette action va tenter d\'invalider la transaction précédente en renvoyant une nouvelle transaction de 0 %s à soi. Si la transaction originale reste en attente quand une nouvelle a été envoyée, il y a une grande chance (non garantie) qu\'elle soit invalidée et remplacée. Seule une de ces deux transactions sera incluse dans la blockchain.</string>
+    <string name="TransactionInfoOptions_Cancel_Button">Annuler la transaction</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction déjà dans le block</string>
     <!-- Info -->
-    <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you can not spend them on the Bitcoin network.</string>
+    <string name="Info_LockTime_Description">L\'expéditeur a envoyé ces fonds avec un verrouillage des dépenses qui expirera sur le %s.\n\n Pas d\'inquiétude, les Bitcoins reçus sont déjà à vous mais jusqu\'à l\'expiration de la période de verrouillage, vous ne pouvez pas les dépenser sur le réseau Bitcoin.</string>
     <string name="Info_DoubleSpend_Title">Double Spend</string>
     <string name="Info_DoubleSpend_Description">Risque de double dépense ! Il y a une autre transaction sur la blockchain qui essaie de dépenser les intrants utilisés dans cette transaction. Une seule transaction sera acceptée par le réseau</string>
     <string name="Info_DoubleSpend_ThisTx">Cette Tx</string>
@@ -823,7 +823,7 @@
     <string name="CoinPage_ReadMore">Plus d\'infos</string>
     <string name="CoinPage_ReadLess">Read Less</string>
     <string name="CoinPage_LaunchDate">Inception Date</string>
-    <string name="CoinPage_Tvl">Total Value Locked</string>
+    <string name="CoinPage_Tvl">Valeur totale verrouillée</string>
     <string name="CoinPage_TvlRank">TVL Rank</string>
     <string name="CoinPage_TvlMCapRatio">M.cap / TVL ratio</string>
     <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
