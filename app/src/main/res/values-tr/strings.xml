@@ -264,8 +264,8 @@
     <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Fee Settings</string>
-    <string name="FeeSettings_MaxFee">Max Fee</string>
-    <string name="FeeSettings_Fee">Fee</string>
+    <string name="FeeSettings_MaxFee">Maksimum Ücret</string>
+    <string name="FeeSettings_Fee">Ücret</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Risk of getting stuck</string>
@@ -312,9 +312,9 @@
     <string name="WalletConnect_Error_NoWallet">No suitable Wallet. You need to create or restore existing wallet</string>
     <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
     <!--EthereumTransaction-->
-    <string name="EthereumTransaction_Warning_Title">Warning</string>
-    <string name="EthereumTransaction_Error_Title">Error</string>
-    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
+    <string name="EthereumTransaction_Warning_Title">Uyarı</string>
+    <string name="EthereumTransaction_Error_Title">Hata</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Yetersiz Bakiye</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">The transaction requires %s for sending</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">The current %s balance is below the amount required to process this transaction, including the transaction fee.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The selected fee value is too low and will be rejected!</string>
@@ -350,7 +350,7 @@
     <string name="Swap_PoweredBy">Powered by</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Service</string>
     <string name="Swap_AmountEstimated">(est)</string>
-    <string name="Swap_AmountMin">(min)</string>
+    <string name="Swap_AmountMin">(dk)</string>
     <string name="Swap_AmountMax">(max)</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Advanced Settings</string>
@@ -424,9 +424,9 @@
     <string name="Transactions_From">from %s</string>
     <string name="Transaction_Unlimited">unlimited %s</string>
     <string name="Transactions_All">All</string>
-    <string name="Transactions_Incoming">Received</string>
-    <string name="Transactions_Outgoing">Sent</string>
-    <string name="Transactions_Swaps">Swaps</string>
+    <string name="Transactions_Incoming">Alındı</string>
+    <string name="Transactions_Outgoing">Gönderildi</string>
+    <string name="Transactions_Swaps">Swap</string>
     <string name="Transactions_Approvals">Approvals</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transaction</string>
@@ -626,8 +626,8 @@
     <string name="ManageAccounts_ImportWallet">Restore</string>
     <string name="ManageAccounts_WatchAddress">Watch Address</string>
     <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. This is handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
-    <string name="Watch_Address_Title">Address</string>
-    <string name="Watch_Address_Hint">Address or Domain</string>
+    <string name="Watch_Address_Title">Adres</string>
+    <string name="Watch_Address_Hint">Adres veya Domain</string>
     <string name="Watch_Address_Watch">Watch</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
@@ -637,7 +637,7 @@
     <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Unlink</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
-    <string name="ManageAccount_BackupRequired_Description">You need to backup %1$s before you may receive %2$s.</string>
+    <string name="ManageAccount_BackupRequired_Description">%1$s almadan önce %2$s anahtarlarınızı yedeklemeniz gerekiyor.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
