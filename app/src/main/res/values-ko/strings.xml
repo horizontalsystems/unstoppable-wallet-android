@@ -267,7 +267,7 @@
     <string name="FeeSettings_MaxFee">Max Fee</string>
     <string name="FeeSettings_Fee">Fee</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
-    <string name="FeeSettings_GasPrice">Gas Price</string>
+    <string name="FeeSettings_GasPrice">Gas Used</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Risk of getting stuck</string>
     <string name="FeeSettings_RiskOfGettingStuck">The transaction may get stuck or fail.</string>
     <string name="FeeSettings_Overpricing_Title">Overpricing</string>
