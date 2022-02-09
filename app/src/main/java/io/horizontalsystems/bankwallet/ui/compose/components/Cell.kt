@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -117,11 +118,44 @@ fun CellSingleLineLawrence(
     borderBottom: Boolean = false,
     content: @Composable () -> Unit,
 ) {
+    CellSingleLine(
+        borderTop = borderTop,
+        borderBottom = borderBottom,
+        color = ComposeAppTheme.colors.lawrence,
+        content = content
+    )
+}
+
+@Composable
+fun CellSingleLineTyler(
+    borderTop: Boolean = false,
+    borderBottom: Boolean = false,
+    content: @Composable () -> Unit,
+) {
+    CellSingleLine(
+        borderTop = borderTop,
+        borderBottom = borderBottom,
+        color = ComposeAppTheme.colors.tyler,
+        content = content
+    )
+}
+
+@Composable
+fun CellSingleLine(
+    borderTop: Boolean = false,
+    borderBottom: Boolean = false,
+    color: Color? = null,
+    content: @Composable () -> Unit,
+) {
+    val colorModifier = when {
+        color != null -> Modifier.background(color)
+        else -> Modifier
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .background(ComposeAppTheme.colors.lawrence)
+            .then(colorModifier)
     ) {
         if (borderTop) {
             Divider(
@@ -228,6 +262,7 @@ fun CellMultilineClear(
 
 @Composable
 fun CellSingleLineClear(
+    modifier: Modifier = Modifier,
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
     content: @Composable RowScope.() -> Unit,
@@ -254,7 +289,7 @@ fun CellSingleLineClear(
         }
 
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
