@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="Alert_Cancel">Cancel</string>
-    <string name="Alert_Copy">Copy</string>
+    <string name="Alert_Cancel">취소</string>
+    <string name="Alert_Copy">복사</string>
     <string name="Alert_Close">Close</string>
     <string name="Alert_Loading">Loading...</string>
     <string name="Alert_Restart">Restart</string>
