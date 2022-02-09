@@ -118,7 +118,7 @@ class WalletConnectMainFragment : BaseFragment() {
         } else {
             when (baseViewModel.initialScreen) {
                 WalletConnectViewModel.InitialScreen.ScanQrCode -> {
-                    val intent = QRScannerActivity.getIntentForFragment(this)
+                    val intent = QRScannerActivity.getIntentForFragment(this, true)
                     qrScannerResultLauncher.launch(intent)
                 }
                 WalletConnectViewModel.InitialScreen.Main -> {
