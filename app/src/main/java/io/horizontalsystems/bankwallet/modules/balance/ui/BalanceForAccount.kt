@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
@@ -30,27 +31,41 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
             modifier = Modifier.height(56.dp),
             title = {
                 Row(
-                    modifier = Modifier
-                        .clickable {
-                            navController.slideFromBottom(
-                                R.id.mainFragment_to_manageKeysFragment,
-                                ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
-                            )
-                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = accountViewItem.name,
-                        style = ComposeAppTheme.typography.title3,
-                        color = ComposeAppTheme.colors.oz,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Row(
+                        modifier = Modifier
+                            .clickable {
+                                navController.slideFromBottom(
+                                    R.id.mainFragment_to_manageKeysFragment,
+                                    ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
+                                )
+                            }
+                    ) {
+                        Text(
+                            text = accountViewItem.name,
+                            style = ComposeAppTheme.typography.title3,
+                            color = ComposeAppTheme.colors.oz,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_down_24),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_down_24),
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .clickable {
+                                navController.slideFromRight(R.id.nftsFragment)
+                            },
+                        painter = painterResource(id = R.drawable.ic_image_2_24),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 }
             },

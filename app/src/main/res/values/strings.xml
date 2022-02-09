@@ -1025,6 +1025,11 @@
     <string name="CoinPage_MajorHolders_InTopWallets">In top 10 Ethereum wallets</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
 
+    <string name="Nfts_Title">NFTs</string>
+    <string name="Nfts_PriceType_Days_7">7D Average</string>
+    <string name="Nfts_PriceType_Days_30">30D Average</string>
+    <string name="Nfts_PriceType_LastPrice">Last Price</string>
+    <string name="Nfts_Asset_OnSale">On Sale</string>
 
     <!--Rate list-->
 
