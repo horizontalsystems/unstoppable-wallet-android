@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.main
+package io.horizontalsystems.bankwallet.modules.walletconnect.session
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
 
-object WalletConnectMainModule {
+object WalletConnectSessionModule {
 
     class Factory(private val service: WalletConnectService) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")

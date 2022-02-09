@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.main
+package io.horizontalsystems.bankwallet.modules.walletconnect.session
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
