@@ -171,7 +171,7 @@ class OneInchSendEvmTransactionService(
 
         evmKitWrapper.sendSingle(
             transaction.transactionData,
-            transaction.gasData.gasPrice.value,
+            transaction.gasData.gasPrice,
             transaction.gasData.gasLimit
         )
             .subscribeIO({ fullTransaction ->

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.evmfee
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -100,7 +101,7 @@ class EvmFeeService(
             return getGasLimitAsync(gasPrice, stubTransactionData)
                 .flatMap { estimatedGasLimit ->
                     val gasLimit = getSurchargedGasLimit(estimatedGasLimit)
-                    val adjustedValue = transactionData.value - gasLimit.toBigInteger() * gasPrice.value.toBigInteger()
+                    val adjustedValue = transactionData.value - gasLimit.toBigInteger() * gasPrice.max.toBigInteger()
 
                     if (adjustedValue <= BigInteger.ZERO) {
                         Single.error(FeeSettingsError.InsufficientBalance)
@@ -115,7 +116,7 @@ class EvmFeeService(
     }
 
     private fun getGasLimitAsync(gasPrice: GasPrice, transactionData: TransactionData): Single<Long> {
-        return evmKit.estimateGas(transactionData, gasPrice.value) // TODO pass GasPrice object
+        return evmKit.estimateGas(transactionData, gasPrice)
     }
 
     private fun getSurchargedGasLimit(estimatedGasLimit: Long): Long {

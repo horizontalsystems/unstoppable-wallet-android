@@ -10,6 +10,7 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Flowable
@@ -23,10 +24,7 @@ class Eip20Adapter(
     contractAddress: String,
     baseCoin: PlatformCoin,
     coinManager: ICoinManager,
-    wallet: Wallet,
-    private val fee: BigDecimal = BigDecimal.ZERO,
-    override val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO,
-    override val minimumSendAmount: BigDecimal = BigDecimal.ZERO
+    wallet: Wallet
 ) : BaseEvmAdapter(evmKitWrapper, wallet.decimal, coinManager) {
 
     private val transactionConverter = EvmTransactionConverter(coinManager, evmKit, wallet.transactionSource, baseCoin)
@@ -66,33 +64,6 @@ class Eip20Adapter(
         get() = eip20Kit.balanceFlowable.map { Unit }
 
     // ISendEthereumAdapter
-
-    override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit> {
-        logger.info("call erc20Kit.buildTransferTransactionData")
-        val transactionData = eip20Kit.buildTransferTransactionData(address, amount)
-
-        return evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit)
-                .doOnSubscribe {
-                    logger.info("call ethereumKit.send")
-                }
-                .map {}
-    }
-
-    override fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long> {
-        if (toAddress == null) {
-            return Single.just(evmKit.defaultGasLimit)
-        }
-        val transactionData = eip20Kit.buildTransferTransactionData(toAddress, value)
-
-        return evmKit.estimateGas(transactionData, gasPrice)
-    }
-
-    override fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal {
-        return BigDecimal.ZERO.max(balanceData.available - fee)
-    }
-
-    override val ethereumBalance: BigDecimal
-        get() = balanceInBigDecimal(evmKit.accountState?.balance, EvmAdapter.decimal)
 
     override fun getTransactionData(amount: BigInteger, address: Address): TransactionData {
         return eip20Kit.buildTransferTransactionData(address, amount)

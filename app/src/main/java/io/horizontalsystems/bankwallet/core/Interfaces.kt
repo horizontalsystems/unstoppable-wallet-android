@@ -203,13 +203,22 @@ interface ITransactionsAdapter {
     val explorerTitle: String
     fun explorerUrl(transactionHash: String): String?
 
-    fun getTransactionsAsync(from: TransactionRecord?, coin: PlatformCoin?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>>
+    fun getTransactionsAsync(
+        from: TransactionRecord?,
+        coin: PlatformCoin?,
+        limit: Int,
+        transactionType: FilterTransactionType
+    ): Single<List<TransactionRecord>>
+
     fun getRawTransaction(transactionHash: String): String? = null
 
-    fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>>
+    fun getTransactionRecordsFlowable(
+        coin: PlatformCoin?,
+        transactionType: FilterTransactionType
+    ): Flowable<List<TransactionRecord>>
 }
 
-class UnsupportedFilterException: Exception()
+class UnsupportedFilterException : Exception()
 
 interface IBalanceAdapter {
     val balanceState: AdapterState
@@ -266,22 +275,7 @@ interface ISendDashAdapter {
 interface ISendEthereumAdapter {
     val evmKitWrapper: EvmKitWrapper
     val balanceData: BalanceData
-    val ethereumBalance: BigDecimal
-    val minimumRequiredBalance: BigDecimal
-    val minimumSendAmount: BigDecimal
 
-    fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal
-    fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
-    fun validate(address: String)
-    fun send(
-        amount: BigDecimal,
-        address: String,
-        gasPrice: Long,
-        gasLimit: Long,
-        logger: AppLogger
-    ): Single<Unit>
-
-    fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long>
     fun getTransactionData(amount: BigInteger, address: Address): TransactionData
 }
 
@@ -409,7 +403,7 @@ interface IFeeRateProvider {
     }
 }
 
-interface ICustomRangedFeeProvider: IFeeRateProvider {
+interface ICustomRangedFeeProvider : IFeeRateProvider {
     val customFeeRange: LongRange
 }
 
@@ -455,7 +449,7 @@ interface ICoinManager {
     fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin>
     fun featuredFullCoins(enabledPlatformCoins: List<PlatformCoin>): List<FullCoin>
     fun fullCoins(filter: String = "", limit: Int = 20): List<FullCoin>
-    fun getFullCoin(coinUid: String) : FullCoin?
+    fun getFullCoin(coinUid: String): FullCoin?
 }
 
 interface IAddTokenBlockchainService {

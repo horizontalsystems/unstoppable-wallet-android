@@ -86,7 +86,7 @@ class LegacyFeeSettingsViewModel(
         if (state is DataState.Success) {
             sliderViewItemLiveData.postValue(
                 SendFeeSliderViewItem(
-                    initialValue = gwei(state.data.gasPrice.value),
+                    initialValue = gwei(state.data.gasPrice.max),
                     range = gwei(gasPriceService.gasPriceRange),
                     unit = gasPriceUnit
                 )
