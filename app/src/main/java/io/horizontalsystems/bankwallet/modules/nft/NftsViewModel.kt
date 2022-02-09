@@ -5,14 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.models.Coin
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 class NftsViewModel(private val service: NftsService) : ViewModel() {
     var priceType by mutableStateOf(PriceType.Days7)
@@ -27,58 +23,49 @@ class NftsViewModel(private val service: NftsService) : ViewModel() {
         private set
 
     init {
-        loading = true
-
         viewModelScope.launch {
-            delay(1000)
-
-            val element = ViewItemNftCollection(
-                slug = "devs-for-revolution",
-                name = "CryptoPunks",
-                imageUrl = "https://lh3.googleusercontent.com/wqIhMLnsbecLMdVsAShB0omdqgk4eSmVyNA914SsWOKWPZuhmqUvYHMh5bUWg4y48FZ9Wskr055BCFgA8zJofWzqpWaP57jwlB3K=s120",
-                ownedAssetCount = 5,
-                expanded = false,
-                assets = listOf(
-                    ViewItemNftAsset(
-                        tokenId = "108510973921457929967077298367545831468135648058682555520544982493970263179265",
-                        name = "Crypto Punk 312",
-                        imageUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
-                        coinPrice = CoinValue(CoinValue.Kind.Coin(Coin("", "Ethereum", "ETH"), 8), BigDecimal("112.2979871")),
-                        currencyPrice = CurrencyValue(Currency("USD", "$", 2), BigDecimal("112.2979871")),
-                        onSale = true
-                    ),
-                    ViewItemNftAsset(
-                        tokenId = "108510973921457929967077298367545831468135648058682555520544982493970263179265",
-                        name = "Crypto Punk 312",
-                        imageUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
-                        coinPrice = CoinValue(CoinValue.Kind.Coin(Coin("", "Ethereum", "ETH"), 8), BigDecimal("112.2979871")),
-                        currencyPrice = CurrencyValue(Currency("USD", "$", 2), BigDecimal("112.2979871")),
-                        onSale = false
-                    ),
-                    ViewItemNftAsset(
-                        tokenId = "108510973921457929967077298367545831468135648058682555520544982493970263179265",
-                        name = "Crypto Punk 312",
-                        imageUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
-                        coinPrice = CoinValue(CoinValue.Kind.Coin(Coin("", "Ethereum", "ETH"), 8), BigDecimal("112.2979871")),
-                        currencyPrice = CurrencyValue(Currency("USD", "$", 2), BigDecimal("112.2979871")),
-                        onSale = true
-                    )
-                )
-            )
-            collections = listOf(
-                element,
-                element.copy(slug = "xxx")
-            )
-
-            viewState = ViewState.Success
-            loading = false
+            service.nftCollections
+                .collect {
+                    handleNftCollections(it)
+                }
         }
 
+        service.start()
     }
 
+    private fun handleNftCollections(nftCollectionsState: DataState<List<NftCollection>>) {
+        loading = nftCollectionsState.loading
+
+        nftCollectionsState.dataOrNull?.let {
+            viewState = ViewState.Success
+
+            syncItems(it)
+        }
+    }
+
+    private fun syncItems(collections: List<NftCollection>) {
+        this.collections = collections.map {
+            ViewItemNftCollection(
+                slug = it.slug,
+                name = it.name,
+                imageUrl = it.imageUrl,
+                ownedAssetCount = 1,
+                expanded = false,
+                listOf()
+            )
+        }
+    }
+
+    override fun onCleared() {
+        service.stop()
+    }
 
     fun refresh() {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            loading = true
+            service.refresh()
+            loading = false
+        }
     }
 
     fun changePriceType(priceType: PriceType) {
@@ -95,23 +82,4 @@ class NftsViewModel(private val service: NftsService) : ViewModel() {
         }
     }
 
-}
-
-data class ViewItemNftCollection(
-    val slug: String,
-    val name: String,
-    val imageUrl: String,
-    val ownedAssetCount: Long,
-    val expanded: Boolean,
-    val assets: List<ViewItemNftAsset>
-)
-
-data class ViewItemNftAsset(
-    val tokenId: String,
-    val name: String,
-    val imageUrl: String,
-    val coinPrice: CoinValue,
-    val currencyPrice: CurrencyValue,
-    val onSale: Boolean
-) {
 }

@@ -12,9 +12,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.storage.migrations.*
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.nft.NftCollection
+import io.horizontalsystems.bankwallet.modules.nft.NftDao
 import io.horizontalsystems.marketkit.models.CoinType
 
-@Database(version = 37, exportSchema = false, entities = [
+@Database(version = 38, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -27,6 +29,7 @@ import io.horizontalsystems.marketkit.models.CoinType
     AccountSettingRecord::class,
     CustomToken::class,
     EvmAccountState::class,
+    NftCollection::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -43,6 +46,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun accountSettingDao(): AccountSettingDao
     abstract fun customTokenDao(): CustomTokenDao
     abstract fun evmAccountStateDao(): EvmAccountStateDao
+    abstract fun nftCollectionDao(): NftDao
 
     companion object {
 

@@ -137,3 +137,5 @@ class AccountManager(
         }
     }
 }
+
+class NoActiveAccount : Exception()

@@ -14,7 +14,6 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.reactivex.Observable
@@ -136,7 +135,7 @@ class EvmKitManager(
         account: Account
     ): EvmKitWrapper {
         val evmNetwork = evmNetworkProvider.getEvmNetwork(account)
-        val seed = Mnemonic().toSeed(accountType.words, accountType.passphrase)
+        val seed = accountType.seed
         val address = Signer.address(seed, evmNetwork.networkType)
         val signer = Signer.getInstance(seed, evmNetwork.networkType)
 

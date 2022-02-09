@@ -4,6 +4,7 @@ import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shortenedAddress
+import io.horizontalsystems.hdwalletkit.Mnemonic
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
@@ -39,6 +40,9 @@ open class AccountType : Parcelable {
 
     @Parcelize
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
+        @IgnoredOnParcel
+        val seed by lazy { Mnemonic().toSeed(words, passphrase) }
+
         override fun equals(other: Any?): Boolean {
             return other is Mnemonic
                     && words.toTypedArray().contentEquals(other.words.toTypedArray())

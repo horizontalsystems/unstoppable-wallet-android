@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRe
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
-import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -65,7 +64,7 @@ class ZcashAdapter(
 
     init {
         val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
-        seed = Mnemonic().toSeed(accountType.words)
+        seed = accountType.seed
         receiveAddress = DerivationTool.deriveShieldedAddress(seed, network)
 
         val isRestored = wallet.account.origin == AccountOrigin.Restored
