@@ -8,7 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,6 +32,8 @@ import io.horizontalsystems.bankwallet.ui.compose.Dark
 import io.horizontalsystems.bankwallet.ui.compose.SteelLight
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimary
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
@@ -39,6 +41,7 @@ import pub.devrel.easypermissions.EasyPermissions
 class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var binding: ActivityQrScannerBinding
+    private var showPasteButton = false
 
     private val callback = BarcodeCallback {
         binding.barcodeView.pause()
@@ -62,23 +65,37 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         window.decorView.systemUiVisibility =
             oldFlags or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
-        binding.buttonCancelCompose.setContent {
+        binding.buttonsCompose.setContent {
             ComposeAppTheme {
-                ButtonPrimary(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp),
-                    content = {
-                        Text(
-                            text = stringResource(R.string.Button_Cancel),
-                            maxLines = 1,
-                            color = Dark,
-                            overflow = TextOverflow.Ellipsis
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                ) {
+                    Spacer(Modifier.height(24.dp))
+                    if (showPasteButton) {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier.fillMaxWidth(),
+                            title = stringResource(R.string.Send_Button_Paste),
+                            onClick = { onScan(TextHelper.getCopiedText()) }
                         )
-                    },
-                    colors = ButtonDefaults.textButtonColors(
-                        backgroundColor = SteelLight,
-                    ),
-                    onClick = { onBackPressed() }
-                )
+                        Spacer(Modifier.height(16.dp))
+                    }
+                    ButtonPrimary(
+                        modifier = Modifier.fillMaxWidth(),
+                        content = {
+                            Text(
+                                text = stringResource(R.string.Button_Cancel),
+                                maxLines = 1,
+                                color = Dark,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        },
+                        colors = ButtonDefaults.textButtonColors(
+                            backgroundColor = SteelLight,
+                        ),
+                        onClick = { onBackPressed() }
+                    )
+                    Spacer(Modifier.height(32.dp))
+                }
             }
         }
 
@@ -150,6 +167,8 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             }
         }
 
+        showPasteButton = intent.getBooleanExtra(SHOW_PASTE_BUTTON, false)
+
         // Check what type of scan. Default: normal scan
         val scanType = intent.getIntExtra(Intents.Scan.SCAN_TYPE, 0)
         val characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET)
@@ -166,25 +185,30 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
 
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 1
+        private const val SHOW_PASTE_BUTTON = "show_paste_button_key"
 
-        fun getIntentForFragment(fragment: Fragment): Intent {
+        fun getIntentForFragment(fragment: Fragment, showPasteButton: Boolean = false): Intent {
             val intentIntegrator = IntentIntegrator.forSupportFragment(fragment)
             intentIntegrator.captureActivity = QRScannerActivity::class.java
             intentIntegrator.setOrientationLocked(true)
             intentIntegrator.setPrompt("")
             intentIntegrator.setBeepEnabled(false)
             intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
-            return intentIntegrator.createScanIntent()
+            val intent = intentIntegrator.createScanIntent()
+            intent.putExtra(SHOW_PASTE_BUTTON, showPasteButton)
+            return intent
         }
 
-        fun getScanQrIntent(context: Context): Intent {
+        fun getScanQrIntent(context: Context, showPasteButton: Boolean = false): Intent {
             val options = ScanOptions()
             options.setCaptureActivity(QRScannerActivity::class.java)
             options.setOrientationLocked(true)
             options.setPrompt("")
             options.setBeepEnabled(false)
             options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
-            return options.createScanIntent(context)
+            val intent = options.createScanIntent(context)
+            intent.putExtra(SHOW_PASTE_BUTTON, showPasteButton)
+            return intent
         }
     }
 
