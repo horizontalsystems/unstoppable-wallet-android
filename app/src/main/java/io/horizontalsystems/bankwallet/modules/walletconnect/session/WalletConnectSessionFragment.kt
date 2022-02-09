@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.main
+package io.horizontalsystems.bankwallet.modules.walletconnect.session
 
 import android.app.Activity
 import android.os.Bundle
@@ -32,10 +32,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
 
-class WalletConnectMainFragment : BaseFragment() {
+class WalletConnectSessionFragment : BaseFragment() {
 
     private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment) {
-        WalletConnectModule.Factory(arguments?.getString(WalletConnectMainModule.REMOTE_PEER_ID_KEY))
+        WalletConnectModule.Factory(arguments?.getString(WalletConnectSessionModule.REMOTE_PEER_ID_KEY))
     }
     private val viewModelScan by viewModels<WalletConnectScanQrViewModel> {
         WalletConnectScanQrModule.Factory(
@@ -43,7 +43,7 @@ class WalletConnectMainFragment : BaseFragment() {
         )
     }
     private val viewModel by viewModels<WalletConnectMainViewModel> {
-        WalletConnectMainModule.Factory(
+        WalletConnectSessionModule.Factory(
             baseViewModel.service
         )
     }
@@ -60,7 +60,7 @@ class WalletConnectMainFragment : BaseFragment() {
                 }
                 Activity.RESULT_CANCELED -> {
                     val sessionsCount =
-                        arguments?.getInt(WalletConnectMainModule.SESSIONS_COUNT_KEY) ?: 0
+                        arguments?.getInt(WalletConnectSessionModule.SESSIONS_COUNT_KEY) ?: 0
                     if (sessionsCount == 0) {
                         findNavController().popBackStack(R.id.mainFragment, false)
                     } else {

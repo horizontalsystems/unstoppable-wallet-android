@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/walletConnectMainFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WalletConnectSessionFragment"
         tools:layout="@layout/fragment_wallet_connect_main">
         <action
             android:id="@+id/walletConnectMainFragment_to_walletConnectErrorFragment"

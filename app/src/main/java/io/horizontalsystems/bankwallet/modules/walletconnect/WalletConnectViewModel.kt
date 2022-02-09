@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.walletconnect
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainViewModel
 
 class WalletConnectViewModel(
         val service: WalletConnectService,

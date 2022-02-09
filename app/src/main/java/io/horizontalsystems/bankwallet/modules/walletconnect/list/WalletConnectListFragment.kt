@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectListBind
 import io.horizontalsystems.bankwallet.databinding.ViewHolderWalletConnectAccountBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderWalletConnectSessionBinding
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.WalletConnectViewItem
-import io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WalletConnectSessionModule
 import io.horizontalsystems.core.dp
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -121,14 +121,14 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
     private fun startNewConnection() {
         findNavController().slideFromRight(
             R.id.walletConnectListFragment_to_walletConnectMainFragment,
-            WalletConnectMainModule.prepareParams(null, viewModel.getSessionsCount())
+            WalletConnectSessionModule.prepareParams(null, viewModel.getSessionsCount())
         )
     }
 
     override fun onSessionClick(session: WalletConnectViewItem.Session) {
         findNavController().slideFromRight(
             R.id.walletConnectListFragment_to_walletConnectMainFragment,
-            WalletConnectMainModule.prepareParams(session.session.remotePeerId, 0)
+            WalletConnectSessionModule.prepareParams(session.session.remotePeerId, 0)
         )
     }
 
