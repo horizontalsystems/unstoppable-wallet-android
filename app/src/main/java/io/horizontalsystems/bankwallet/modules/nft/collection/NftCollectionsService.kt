@@ -1,9 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.nft
+package io.horizontalsystems.bankwallet.modules.nft.collection
 
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.nft.NftCollection
+import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,9 +13,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 
-class NftsService(
+class NftCollectionsService(
     private val nftManager: NftManager,
-    private val accountRepository: NftsAccountRepository
+    private val accountRepository: NftCollectionsAccountRepository
 ) {
     private val _nftCollections = MutableStateFlow<DataState<List<NftCollection>>>(DataState.Loading)
     val nftCollections = _nftCollections.asStateFlow()

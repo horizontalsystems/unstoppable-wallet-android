@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft
+package io.horizontalsystems.bankwallet.modules.nft.collection
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,10 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.nft.NftCollection
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class NftsViewModel(private val service: NftsService) : ViewModel() {
+class NftCollectionsViewModel(private val service: NftCollectionsService) : ViewModel() {
     var priceType by mutableStateOf(PriceType.Days7)
         private set
 

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft
+package io.horizontalsystems.bankwallet.modules.nft.collection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -6,19 +6,20 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 
-object NftsModule {
+object NftCollectionsModule {
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val accountRepository = NftsAccountRepository(App.accountManager)
+            val accountRepository = NftCollectionsAccountRepository(App.accountManager)
             val nftManager = NftManager(App.appDatabase.nftCollectionDao())
-            val service = NftsService(nftManager, accountRepository)
+            val service = NftCollectionsService(nftManager, accountRepository)
 
-            return NftsViewModel(service) as T
+            return NftCollectionsViewModel(service) as T
         }
     }
 }

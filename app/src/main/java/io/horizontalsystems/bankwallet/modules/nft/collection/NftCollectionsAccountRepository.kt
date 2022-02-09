@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft
+package io.horizontalsystems.bankwallet.modules.nft.collection
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.orNull
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class NftsAccountRepository(private val accountManager: IAccountManager) {
+class NftCollectionsAccountRepository(private val accountManager: IAccountManager) {
     private val _account = MutableStateFlow<Pair<Account, Address>?>(null)
     val account = _account.asStateFlow()
 

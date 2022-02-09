@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft
+package io.horizontalsystems.bankwallet.modules.nft.collection
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,7 +35,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.core.findNavController
 
-class NftsFragment : BaseFragment() {
+class NftCollectionsFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,15 +47,15 @@ class NftsFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                NftsScreen(findNavController())
+                NftCollectionsScreen(findNavController())
             }
         }
     }
 }
 
 @Composable
-fun NftsScreen(navController: NavController) {
-    val viewModel = viewModel<NftsViewModel>(factory = NftsModule.Factory())
+fun NftCollectionsScreen(navController: NavController) {
+    val viewModel = viewModel<NftCollectionsViewModel>(factory = NftCollectionsModule.Factory())
 
     val viewState = viewModel.viewState
     val collections = viewModel.collections
