@@ -1,27 +1,70 @@
 package io.horizontalsystems.bankwallet.modules.nft
 
-import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.managers.APIClient
-import retrofit2.http.GET
-import retrofit2.http.Query
+import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.update
 
-class NftsService(private val accountManager: IAccountManager) {
-    private val apiURL = "https://api.opensea.io/api/v1/"
+class NftsService(
+    private val nftManager: NftManager,
+    private val accountRepository: NftsAccountRepository
+) {
+    private val _nftCollections = MutableStateFlow<DataState<List<NftCollection>>>(DataState.Loading)
+    val nftCollections = _nftCollections.asStateFlow()
 
-    val xxx = APIClient
-        .retrofit(apiURL, 60)
-        .create(OpenSeaApiV1::class.java)
+    private val disposables = CompositeDisposable()
 
-    val account by accountManager::activeAccount
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private var handleActiveAccountJob: Job? = null
 
-}
+    fun start() {
+        coroutineScope.launch {
+            accountRepository.account.collect {
+                handleAccount(it?.first, it?.second)
+            }
+        }
 
-interface OpenSeaApiV1 {
+        accountRepository.start()
+    }
 
-    @GET("collections")
-    suspend fun collections(
-        @Query("asset_owner") asset_owner: String,
-        @Query("offset") offset: Int = 0,
-        @Query("limit") limit: Int = 300,
-    ) : List<Map<String, Any>>
+    private fun handleAccount(account: Account?, address: Address?) {
+        handleActiveAccountJob?.cancel()
+
+        if (account != null && address != null) {
+            handleActiveAccountJob = coroutineScope.launch {
+                nftManager.getCollections(account.id)
+                    .collect { collections ->
+                        _nftCollections.update {
+                            DataState.Success(collections)
+                        }
+                    }
+            }
+
+            coroutineScope.launch {
+                nftManager.refresh(account, address)
+            }
+        } else {
+            _nftCollections.update {
+                DataState.Error(NoActiveAccount())
+            }
+        }
+    }
+
+    suspend fun refresh() {
+        accountRepository.account.value?.let { (account, address) ->
+            nftManager.refresh(account, address)
+        }
+    }
+
+    fun stop() {
+        accountRepository.stop()
+        disposables.clear()
+        coroutineScope.cancel()
+    }
 }

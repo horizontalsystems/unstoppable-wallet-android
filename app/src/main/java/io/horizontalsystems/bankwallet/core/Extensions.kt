@@ -21,6 +21,12 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
+val <T> Optional<T>.orNull: T?
+    get() = when {
+        isPresent -> get()
+        else -> null
+    }
+
 val Coin.isCustom: Boolean get() = uid.startsWith(CustomToken.uidPrefix)
 
 val Coin.iconUrl: String
