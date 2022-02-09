@@ -12,6 +12,7 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.FullTransaction
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.oneinchkit.OneInchKit
@@ -238,7 +239,7 @@ class EvmKitWrapper(val evmKit: EthereumKit, val signer: Signer?) {
 
     fun sendSingle(
         transactionData: TransactionData,
-        gasPrice: Long,
+        gasPrice: GasPrice,
         gasLimit: Long,
         nonce: Long? = null
     ): Single<FullTransaction> {

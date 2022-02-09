@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Observable
 import java.math.BigInteger
@@ -68,25 +69,7 @@ data class GasData(
     val gasPrice: GasPrice
 ) {
     val fee: BigInteger
-        get() = gasLimit.toBigInteger() * gasPrice.value.toBigInteger()
-}
-
-sealed class GasPrice {
-    class Legacy(
-        val gasPrice: Long
-    ) : GasPrice()
-
-    class Eip1559(
-        val baseFee: Long,
-        val maxFeePerGas: Long,
-        val maxPriorityFeePerGas: Long,
-    ) : GasPrice()
-
-    val value: Long
-        get() = when (this) {
-            is Eip1559 -> maxFeePerGas + maxPriorityFeePerGas
-            is Legacy -> gasPrice
-        }
+        get() = gasLimit.toBigInteger() * gasPrice.max.toBigInteger()
 }
 
 data class Transaction(

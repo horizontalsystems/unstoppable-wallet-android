@@ -114,7 +114,7 @@ class SendEvmTransactionService(
 
         evmKitWrapper.sendSingle(
             transaction.transactionData,
-            transaction.gasData.gasPrice.value,
+            transaction.gasData.gasPrice,
             transaction.gasData.gasLimit,
             transaction.transactionData.nonce
         )

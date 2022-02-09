@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.*
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.oneinchkit.Swap
 import io.reactivex.Observable
@@ -82,7 +83,7 @@ class OneInchFeeService(
             fromAmount = parameters.amountFrom,
             recipient = parameters.recipient?.hex,
             slippagePercentage = parameters.slippage.toFloat(),
-            gasPrice = gasPriceInfo.gasPrice.value
+            gasPrice = gasPriceInfo.gasPrice.max
         )
             .subscribeIO({ swap ->
                 sync(swap, gasPriceInfo.warnings, gasPriceInfo.errors)

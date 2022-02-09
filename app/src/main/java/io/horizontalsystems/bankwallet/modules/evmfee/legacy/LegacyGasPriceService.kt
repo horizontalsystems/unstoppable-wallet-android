@@ -6,10 +6,10 @@ import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsWarning
-import io.horizontalsystems.bankwallet.modules.evmfee.GasPrice
 import io.horizontalsystems.bankwallet.modules.evmfee.GasPriceInfo
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.CustomPriorityUnit
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
