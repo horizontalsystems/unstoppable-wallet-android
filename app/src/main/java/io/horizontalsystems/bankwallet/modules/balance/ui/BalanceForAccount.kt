@@ -1,14 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -35,12 +39,16 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                 ) {
                     Row(
                         modifier = Modifier
-                            .clickable {
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ) {
                                 navController.slideFromBottom(
                                     R.id.mainFragment_to_manageKeysFragment,
                                     ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
                                 )
-                            }
+                            },
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = accountViewItem.name,
@@ -59,10 +67,15 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                     Spacer(modifier = Modifier.weight(1f))
                     Icon(
                         modifier = Modifier
-                            .padding(end = 16.dp)
-                            .clickable {
-                                navController.slideFromRight(R.id.nftsFragment)
-                            },
+                            .clickable(
+                                role = Role.Button,
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberRipple(bounded = false, radius = 24.dp),
+                                onClick = {
+                                    navController.slideFromRight(R.id.nftsFragment)
+                                }
+                            )
+                            .padding(16.dp),
                         painter = painterResource(id = R.drawable.ic_image_2_24),
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.jacob
