@@ -12,6 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.storage.migrations.*
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.nft.NftAsset
 import io.horizontalsystems.bankwallet.modules.nft.NftCollection
 import io.horizontalsystems.bankwallet.modules.nft.NftDao
 import io.horizontalsystems.marketkit.models.CoinType
@@ -30,6 +31,7 @@ import io.horizontalsystems.marketkit.models.CoinType
     CustomToken::class,
     EvmAccountState::class,
     NftCollection::class,
+    NftAsset::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)

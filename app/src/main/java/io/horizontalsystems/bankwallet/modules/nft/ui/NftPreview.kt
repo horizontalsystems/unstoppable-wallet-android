@@ -44,7 +44,7 @@ fun NftPreview(asset: ViewItemNftAsset) {
         ) {
             Image(
                 modifier = Modifier.matchParentSize(),
-                painter = rememberImagePainter(asset.imageUrl),
+                painter = rememberImagePainter(asset.imagePreviewUrl),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
@@ -85,7 +85,7 @@ fun NftPreview(asset: ViewItemNftAsset) {
 private val asset = ViewItemNftAsset(
     tokenId = "108510973921457929967077298367545831468135648058682555520544982493970263179265",
     name = "Crypto Punk 312",
-    imageUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
+    imagePreviewUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
     coinPrice = CoinValue(CoinValue.Kind.Coin(Coin("", "Ethereum", "ETH"), 8), BigDecimal("112.2979871")),
     currencyPrice = CurrencyValue(Currency("USD", "$", 2), BigDecimal("112.2979871")),
     onSale = false
