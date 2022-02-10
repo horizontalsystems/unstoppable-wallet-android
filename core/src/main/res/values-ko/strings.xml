@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Timestamp_Today">Тoday</string>
-    <string name="Timestamp_Yesterday">Yesterday</string>
-    <string name="Duration_instant">instant</string>
-    <string name="Duration_Within">within %s</string>
-    <string name="Duration_Hours">%d h.</string>
-    <string name="Duration_Minutes">%d min.</string>
-    <string name="Duration_Seconds">%d sec.</string>
+    <string name="Timestamp_Today">오늘</string>
+    <string name="Timestamp_Yesterday">어제</string>
+    <string name="Duration_instant">즉시</string>
+    <string name="Duration_Within">%s 안에</string>
+    <string name="Duration_Hours">%d 시</string>
+    <string name="Duration_Minutes">%d 분</string>
+    <string name="Duration_Seconds">%d 초</string>
 </resources>

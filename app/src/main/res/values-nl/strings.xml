@@ -677,7 +677,7 @@
     <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Unlink</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
-    <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
+    <string name="ManageAccount_BackupRequired_Description">You need to backup %1$s before you may receive %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
