@@ -5,11 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.nft.NftAsset
 import io.horizontalsystems.bankwallet.modules.nft.NftCollection
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class NftCollectionsViewModel(private val service: NftCollectionsService) : ViewModel() {
     var priceType by mutableStateOf(PriceType.Days7)
@@ -34,25 +40,37 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         service.start()
     }
 
-    private fun handleNftCollections(nftCollectionsState: DataState<List<NftCollection>>) {
+    private fun handleNftCollections(nftCollectionsState: DataState<Pair<List<NftCollection>, List<NftAsset>>>) {
         loading = nftCollectionsState.loading
 
-        nftCollectionsState.dataOrNull?.let {
+        nftCollectionsState.dataOrNull?.let { (collections, assets) ->
             viewState = ViewState.Success
 
-            syncItems(it)
+            syncItems(collections, assets)
         }
     }
 
-    private fun syncItems(collections: List<NftCollection>) {
-        this.collections = collections.map {
+    private fun syncItems(collections: List<NftCollection>, assets: List<NftAsset>) {
+        val assetsGrouped = assets.groupBy { it.collectionSlug }
+
+        this.collections = collections.map { collection ->
+            val collectionAssets = assetsGrouped[collection.slug] ?: listOf()
             ViewItemNftCollection(
-                slug = it.slug,
-                name = it.name,
-                imageUrl = it.imageUrl,
-                ownedAssetCount = 1,
+                slug = collection.slug,
+                name = collection.name,
+                imageUrl = collection.imageUrl,
+                ownedAssetCount = collectionAssets.size,
                 expanded = false,
-                listOf()
+                assets = collectionAssets.map { asset ->
+                    ViewItemNftAsset(
+                        tokenId = asset.tokenId,
+                        name = asset.name,
+                        imagePreviewUrl = asset.imagePreviewUrl,
+                        coinPrice = CoinValue(CoinValue.Kind.Coin(Coin("", "Ethereum", "ETH"), 8), BigDecimal(100.123)),
+                        currencyPrice = CurrencyValue(Currency("USD", "$", 2), BigDecimal("112.2979871")),
+                        onSale = true
+                    )
+                }
             )
         }
     }

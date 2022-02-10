@@ -4,20 +4,18 @@ import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.nft.NftAsset
 import io.horizontalsystems.bankwallet.modules.nft.NftCollection
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 
 class NftCollectionsService(
     private val nftManager: NftManager,
     private val accountRepository: NftCollectionsAccountRepository
 ) {
-    private val _nftCollections = MutableStateFlow<DataState<List<NftCollection>>>(DataState.Loading)
+    private val _nftCollections = MutableStateFlow<DataState<Pair<List<NftCollection>, List<NftAsset>>>>(DataState.Loading)
     val nftCollections = _nftCollections.asStateFlow()
 
     private val disposables = CompositeDisposable()
@@ -40,10 +38,15 @@ class NftCollectionsService(
 
         if (account != null && address != null) {
             handleActiveAccountJob = coroutineScope.launch {
-                nftManager.getCollections(account.id)
-                    .collect { collections ->
+                combine(
+                    flow = nftManager.getCollections(account.id),
+                    flow2 = nftManager.getAssets(account.id),
+                    transform = { collections, assets ->
+                        Pair(collections, assets)
+                    })
+                    .collect { (collections, assets) ->
                         _nftCollections.update {
-                            DataState.Success(collections)
+                            DataState.Success(Pair(collections, assets))
                         }
                     }
             }

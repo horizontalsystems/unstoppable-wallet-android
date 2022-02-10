@@ -34,7 +34,7 @@ data class ViewItemNftCollection(
     val slug: String,
     val name: String,
     val imageUrl: String,
-    val ownedAssetCount: Long,
+    val ownedAssetCount: Int,
     val expanded: Boolean,
     val assets: List<ViewItemNftAsset>
 )
@@ -42,7 +42,7 @@ data class ViewItemNftCollection(
 data class ViewItemNftAsset(
     val tokenId: String,
     val name: String,
-    val imageUrl: String,
+    val imagePreviewUrl: String,
     val coinPrice: CoinValue,
     val currencyPrice: CurrencyValue,
     val onSale: Boolean
