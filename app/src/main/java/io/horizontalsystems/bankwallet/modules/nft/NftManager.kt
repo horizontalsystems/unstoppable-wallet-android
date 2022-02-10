@@ -12,7 +12,7 @@ class NftManager(private val nftDao: NftDao) {
     suspend fun refresh(account: Account, address: Address) = withContext(Dispatchers.IO) {
         val collections = OpenSeaModule.apiServiceV1.collections(address.hex)
 
-        nftDao.insertCollections(collections.map { collectionRawData ->
+        nftDao.replaceCollections(account.id, collections.map { collectionRawData ->
             NftCollection(
                 accountId = account.id,
                 slug = collectionRawData["slug"].toString(),
