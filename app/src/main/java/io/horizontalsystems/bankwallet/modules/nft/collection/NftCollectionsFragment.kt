@@ -105,7 +105,10 @@ fun NftCollectionsScreen(navController: NavController) {
                             }
 
                             LazyColumn {
-                                items(collections) { collection ->
+                                items(
+                                    items = collections,
+                                    key = { it.slug }
+                                ) { collection ->
                                     NftsCollectionSection(collection, viewModel)
                                 }
                             }

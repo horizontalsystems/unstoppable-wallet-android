@@ -51,6 +51,10 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
     }
 
     private fun syncItems(collections: List<NftCollection>, assets: List<NftAsset>) {
+        val expandedStates = this.collections.map {
+            it.slug to it.expanded
+        }.toMap()
+
         val assetsGrouped = assets.groupBy { it.collectionSlug }
 
         this.collections = collections.map { collection ->
@@ -60,7 +64,7 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
                 name = collection.name,
                 imageUrl = collection.imageUrl,
                 ownedAssetCount = collectionAssets.size,
-                expanded = false,
+                expanded = expandedStates[collection.slug] ?: false,
                 assets = collectionAssets.map { asset ->
                     ViewItemNftAsset(
                         tokenId = asset.tokenId,
