@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.nft
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -14,5 +11,14 @@ interface NftDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCollections(collections: List<NftCollection>)
+
+    @Query("DELETE FROM NftCollection WHERE accountId = :accountId")
+    fun deleteCollectionsForAccount(accountId: String)
+
+    @Transaction
+    fun replaceCollections(accountId: String, collections: List<NftCollection>) {
+        deleteCollectionsForAccount(accountId)
+        insertCollections(collections)
+    }
 }
 
