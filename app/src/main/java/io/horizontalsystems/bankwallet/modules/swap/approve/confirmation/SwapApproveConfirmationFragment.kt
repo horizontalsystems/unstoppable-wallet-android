@@ -133,12 +133,8 @@ class SwapApproveConfirmationFragment : BaseFragment() {
             sendEvmTransactionViewModel,
             feeViewModel,
             viewLifecycleOwner,
-            onClickEditFee = {
-                findNavController().slideFromRight(
-                    resId = R.id.sendEvmFeeSettingsFragment,
-                    args = SendEvmFeeSettingsFragment.prepareParams(R.id.swapApproveConfirmationFragment)
-                )
-            }
+            findNavController(),
+            R.id.swapApproveConfirmationFragment
         )
 
         binding.buttonApproveCompose.setViewCompositionStrategy(

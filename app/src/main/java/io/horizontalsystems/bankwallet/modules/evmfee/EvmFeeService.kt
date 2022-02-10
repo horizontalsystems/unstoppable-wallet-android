@@ -14,7 +14,7 @@ import java.math.BigInteger
 
 class EvmFeeService(
     private val evmKit: EthereumKit,
-    override val gasPriceService: IEvmGasPriceService,
+    private val gasPriceService: IEvmGasPriceService,
     private val transactionData: TransactionData,
     private val gasLimitSurchargePercent: Int = 0
 ) : IEvmFeeService {

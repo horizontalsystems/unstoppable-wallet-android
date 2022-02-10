@@ -6,16 +6,23 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.reactivex.disposables.CompositeDisposable
 
 class EvmFeeCellViewModel(
     val feeService: IEvmFeeService,
+    val gasPriceService: IEvmGasPriceService,
     val coinService: EvmCoinService
 ) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
     val feeLiveData = MutableLiveData("")
+    val viewStateLiveData = MutableLiveData<ViewState>()
+    val loadingLiveData = MutableLiveData<Boolean>()
+
+    var highlightEditButton = false
+        private set
 
     init {
         syncTransactionStatus(feeService.transactionStatus)
@@ -29,19 +36,35 @@ class EvmFeeCellViewModel(
     }
 
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {
-        val feeStatus = when (transactionStatus) {
+        var hasError = false
+
+        when (transactionStatus) {
             DataState.Loading -> {
-                Translator.getString(R.string.Alert_Loading)
+                loadingLiveData.postValue(true)
             }
             is DataState.Error -> {
-                Translator.getString(R.string.NotAvailable)
+                hasError = true
+                loadingLiveData.postValue(false)
+                viewStateLiveData.postValue(ViewState.Error(transactionStatus.error))
+                feeLiveData.postValue(Translator.getString(R.string.NotAvailable))
             }
             is DataState.Success -> {
-                coinService.amountData(transactionStatus.data.gasData.fee).getFormatted()
+                val transaction = transactionStatus.data
+                loadingLiveData.postValue(false)
+
+                if (transaction.errors.isNotEmpty()) {
+                    hasError = true
+                    viewStateLiveData.postValue(ViewState.Error(transaction.errors.first()))
+                } else {
+                    viewStateLiveData.postValue(ViewState.Success)
+                }
+
+                val fee = coinService.amountData(transactionStatus.data.gasData.fee).getFormatted()
+                feeLiveData.postValue(fee)
             }
         }
 
-        feeLiveData.postValue(feeStatus)
+        highlightEditButton = hasError || !gasPriceService.isRecommendedGasPriceSelected
     }
 
 }

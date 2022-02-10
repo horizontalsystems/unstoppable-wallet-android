@@ -14,12 +14,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.databinding.*
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.modules.evmfee.SendEvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -41,7 +44,8 @@ class SendEvmTransactionView @JvmOverloads constructor(
         transactionViewModel: SendEvmTransactionViewModel,
         feeCellViewModel: EvmFeeCellViewModel,
         viewLifecycleOwner: LifecycleOwner,
-        onClickEditFee: () -> Unit
+        navController: NavController,
+        parentNavGraphId: Int
     ) {
         binding.feeViewCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -49,8 +53,22 @@ class SendEvmTransactionView @JvmOverloads constructor(
 
         binding.feeViewCompose.setContent {
             ComposeAppTheme {
-                val fee by feeCellViewModel.feeLiveData.observeAsState()
-                EvmFeeCell(title = stringResource(R.string.FeeSettings_MaxFee), fee, onClickEditFee)
+                val fee by feeCellViewModel.feeLiveData.observeAsState("")
+                val viewState by feeCellViewModel.viewStateLiveData.observeAsState()
+                val loading by feeCellViewModel.loadingLiveData.observeAsState(false)
+
+                EvmFeeCell(
+                    title = stringResource(R.string.FeeSettings_MaxFee),
+                    value = fee,
+                    loading = loading,
+                    highlightEditButton = feeCellViewModel.highlightEditButton,
+                    viewState = viewState
+                ) {
+                    navController.slideFromBottom(
+                        resId = R.id.sendEvmFeeSettingsFragment,
+                        args = SendEvmFeeSettingsFragment.prepareParams(parentNavGraphId)
+                    )
+                }
             }
         }
 

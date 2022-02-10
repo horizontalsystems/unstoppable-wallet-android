@@ -33,13 +33,6 @@ class CautionViewItemFactory(
                     CautionViewItem.Type.Warning
                 )
             }
-            FeeSettingsWarning.HighBaseFeeWarning -> {
-                CautionViewItem(
-                    Translator.getString(R.string.FeeSettings_BaseFeeIsHigh_Title),
-                    Translator.getString(R.string.FeeSettings_BaseFeeIsHigh),
-                    CautionViewItem.Type.Warning
-                )
-            }
             UniswapModule.UniswapWarnings.PriceImpactWarning -> {
                 CautionViewItem(
                     Translator.getString(R.string.Swap_PriceImpact),
@@ -59,6 +52,13 @@ class CautionViewItemFactory(
 
     private fun cautionViewItem(error: Throwable): CautionViewItem {
         return when (error) {
+            FeeSettingsError.LowMaxFee -> {
+                CautionViewItem(
+                    Translator.getString(R.string.EthereumTransaction_Error_LowerThanBaseGasLimit_Title),
+                    Translator.getString(R.string.EthereumTransaction_Error_LowerThanBaseGasLimit),
+                    CautionViewItem.Type.Error
+                )
+            }
             FeeSettingsError.InsufficientBalance -> {
                 CautionViewItem(
                     Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
@@ -69,47 +69,60 @@ class CautionViewItemFactory(
                     CautionViewItem.Type.Error
                 )
             }
-            FeeSettingsError.LowBaseFee -> {
-                CautionViewItem(
-                    Translator.getString(R.string.FeeSettings_BaseFeeIsLow_Title),
-                    Translator.getString(R.string.FeeSettings_BaseFeeIsLow),
-                    CautionViewItem.Type.Error
-                )
-            }
             else -> {
-                CautionViewItem(
-                    Translator.getString(R.string.EthereumTransaction_Error_Title),
-                    convertError(error),
-                    CautionViewItem.Type.Error
-                )
+                val (title, text) = convertError(error)
+                CautionViewItem(title, text, CautionViewItem.Type.Error)
             }
         }
     }
 
-    private fun convertError(error: Throwable): String =
+    private fun convertError(error: Throwable): Pair<String, String> =
         when (val convertedError = error.convertedError) {
             is SendEvmTransactionService.TransactionError.InsufficientBalance -> {
-                Translator.getString(
-                    R.string.EthereumTransaction_Error_InsufficientBalance,
-                    baseCoinService.coinValue(convertedError.requiredBalance)
-                        .getFormatted()
+                Pair(
+                    Translator.getString(R.string.EthereumTransaction_Error_Title),
+                    Translator.getString(
+                        R.string.EthereumTransaction_Error_InsufficientBalance,
+                        baseCoinService.coinValue(convertedError.requiredBalance).getFormatted()
+                    )
                 )
             }
             is EvmError.InsufficientBalanceWithFee,
             is EvmError.ExecutionReverted -> {
-                Translator.getString(
-                    R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
-                    baseCoinService.platformCoin.code
+                Pair(
+                    Translator.getString(R.string.EthereumTransaction_Error_Title),
+                    Translator.getString(
+                        R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
+                        baseCoinService.platformCoin.code
+                    )
                 )
             }
             is EvmError.CannotEstimateSwap -> {
-                Translator.getString(
-                    R.string.EthereumTransaction_Error_CannotEstimate,
-                    baseCoinService.platformCoin.code
+                Pair(
+                    Translator.getString(R.string.EthereumTransaction_Error_CannotEstimate_Title),
+                    Translator.getString(
+                        R.string.EthereumTransaction_Error_CannotEstimate,
+                        baseCoinService.platformCoin.code
+                    )
                 )
             }
-            is EvmError.LowerThanBaseGasLimit -> Translator.getString(R.string.EthereumTransaction_Error_LowerThanBaseGasLimit)
-            is EvmError.InsufficientLiquidity -> Translator.getString(R.string.EthereumTransaction_Error_InsufficientLiquidity)
-            else -> convertedError.message ?: convertedError.javaClass.simpleName
+            is EvmError.LowerThanBaseGasLimit -> {
+                Pair(
+                    Translator.getString(R.string.EthereumTransaction_Error_LowerThanBaseGasLimit_Title),
+                    Translator.getString(R.string.EthereumTransaction_Error_LowerThanBaseGasLimit)
+                )
+            }
+            is EvmError.InsufficientLiquidity -> {
+                Pair(
+                    Translator.getString(R.string.EthereumTransaction_Error_InsufficientLiquidity_Title),
+                    Translator.getString(R.string.EthereumTransaction_Error_InsufficientLiquidity)
+                )
+            }
+            else -> {
+                Pair(
+                    Translator.getString(R.string.EthereumTransaction_Error_Title),
+                    convertedError.message ?: convertedError.javaClass.simpleName
+                )
+            }
         }
 }

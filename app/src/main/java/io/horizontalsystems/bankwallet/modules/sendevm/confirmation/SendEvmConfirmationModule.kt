@@ -5,18 +5,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
-import io.horizontalsystems.bankwallet.core.ethereum.*
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
+import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
+import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
+import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
+import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.marketkit.models.CoinType
 
 object SendEvmConfirmationModule {
@@ -28,24 +32,25 @@ object SendEvmConfirmationModule {
 
         private val feeCoin by lazy {
             when (evmKitWrapper.evmKit.networkType) {
-                NetworkType.EthMainNet,
-                NetworkType.EthRopsten,
-                NetworkType.EthKovan,
-                NetworkType.EthGoerli,
-                NetworkType.EthRinkeby -> App.marketKit.platformCoin(CoinType.Ethereum)!!
+                NetworkType.EthRopsten, NetworkType.EthKovan,
+                NetworkType.EthGoerli, NetworkType.EthRinkeby,
+                NetworkType.EthMainNet -> App.marketKit.platformCoin(CoinType.Ethereum)!!
                 NetworkType.BscMainNet -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)!!
             }
         }
         private val gasPriceService: IEvmGasPriceService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(feeCoin.coinType) as ICustomRangedFeeProvider
-
-            when (evmKitWrapper.evmKit.networkType) {
-                NetworkType.EthMainNet,
-                NetworkType.EthRopsten,
-                NetworkType.EthKovan,
-                NetworkType.EthGoerli,
-                NetworkType.EthRinkeby -> LegacyGasPriceService(feeRateProvider) // TODO switch to EIP1559 GasPrice service
-                NetworkType.BscMainNet -> LegacyGasPriceService(feeRateProvider)
+            val evmKit = evmKitWrapper.evmKit
+            when (evmKit.networkType) {
+                NetworkType.EthRopsten, NetworkType.EthKovan,
+                NetworkType.EthGoerli, NetworkType.EthRinkeby,
+                NetworkType.EthMainNet -> {
+                    val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
+                    Eip1559GasPriceService(gasPriceProvider, evmKit)
+                }
+                NetworkType.BscMainNet -> {
+                    val gasPriceProvider = LegacyGasPriceProvider(evmKit)
+                    LegacyGasPriceService(gasPriceProvider)
+                }
             }
         }
         private val feeService by lazy {
@@ -64,7 +69,7 @@ object SendEvmConfirmationModule {
                     SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory) as T
                 }
                 EvmFeeCellViewModel::class.java -> {
-                    EvmFeeCellViewModel(feeService, coinServiceFactory.baseCoinService) as T
+                    EvmFeeCellViewModel(feeService, gasPriceService, coinServiceFactory.baseCoinService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

@@ -1,38 +1,167 @@
 package io.horizontalsystems.bankwallet.modules.evmfee
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
+import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.*
+
+@Composable
+fun Eip1559FeeSettings(
+    viewModel: Eip1559FeeSettingsViewModel,
+    navController: NavController
+) {
+    val feeViewItem by viewModel.feeViewItemLiveData.observeAsState()
+    val feeViewItemState by viewModel.feeViewItemStateLiveData.observeAsState()
+    val feeViewItemLoading by viewModel.feeViewItemLoadingLiveData.observeAsState(false)
+    val currentBaseFee by viewModel.currentBaseFeeLiveData.observeAsState()
+    val maxBaseFeeSlider by viewModel.baseFeeSliderViewItemLiveData.observeAsState()
+    val maxPriorityFeeSlider by viewModel.priorityFeeSliderViewItemLiveData.observeAsState()
+    val cautions by viewModel.cautionsLiveData.observeAsState(listOf())
+
+    val settingsViewItems = mutableListOf<@Composable () -> Unit>()
+    var maxBaseFee by remember { mutableStateOf(0L) }
+    var maxPriorityFee by remember { mutableStateOf(1L) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            title = TranslatableString.ResString(R.string.FeeSettings_Title),
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.FeeSettings_Reset),
+                    enabled = !viewModel.isRecommendedGasPriceSelected,
+                    onClick = { viewModel.onClickReset() }
+                )
+            )
+        )
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            EvmFeeCell(
+                title = stringResource(R.string.FeeSettings_MaxFee),
+                value = feeViewItem?.fee ?: "",
+                loading = feeViewItemLoading,
+                viewState = feeViewItemState
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            CellSingleLineLawrenceSection(
+                listOf(
+                    {
+                        FeeInfoCell(
+                            title = stringResource(R.string.FeeSettings_GasLimit),
+                            value = feeViewItem?.gasLimit
+                        ) {
+                            //Open Gas Limit info
+                        }
+                    },
+                    {
+                        FeeInfoCell(title = stringResource(R.string.FeeSettings_CurrentBaseFee), currentBaseFee)
+                    }
+                )
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            maxBaseFeeSlider?.let { slider ->
+                maxBaseFee = slider.initialValue
+
+                settingsViewItems.add {
+                    FeeInfoCell(
+                        title = stringResource(R.string.FeeSettings_MaxBaseFee),
+                        value = "$maxBaseFee ${slider.unit}"
+                    ) {
+                        //Open Gas Price info
+                    }
+                }
+
+                settingsViewItems.add {
+                    HsSlider(
+                        value = slider.initialValue,
+                        onValueChange = { maxBaseFee = it },
+                        valueRange = slider.range.first..slider.range.last,
+                        onValueChangeFinished = { viewModel.onSelectGasPrice(maxBaseFee, maxPriorityFee) }
+                    )
+                }
+            }
+
+            maxPriorityFeeSlider?.let { slider ->
+                maxPriorityFee = slider.initialValue
+
+                settingsViewItems.add {
+                    FeeInfoCell(
+                        title = stringResource(R.string.FeeSettings_MaxMinerTips),
+                        value = "$maxPriorityFee ${slider.unit}"
+                    ) {
+                        //Open Gas Price info
+                    }
+                }
+
+                settingsViewItems.add {
+                    HsSlider(
+                        value = slider.initialValue,
+                        onValueChange = { maxPriorityFee = it },
+                        valueRange = slider.range.first..slider.range.last,
+                        onValueChangeFinished = { viewModel.onSelectGasPrice(maxBaseFee, maxPriorityFee) }
+                    )
+                }
+            }
+
+            CellSingleLineLawrenceSection(settingsViewItems)
+
+            Cautions(cautions)
+        }
+
+        ButtonPrimaryYellow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 32.dp),
+            title = stringResource(R.string.Button_Done),
+            onClick = { navController.popBackStack() }
+        )
+    }
+}
 
 @Composable
 fun LegacyFeeSettings(
     viewModel: LegacyFeeSettingsViewModel,
-    onSelectGasPrice: (value: Long) -> Unit
+    navController: NavController
 ) {
-    val feeStatus by viewModel.feeStatusLiveData.observeAsState()
+    val feeViewItem by viewModel.feeViewItemLiveData.observeAsState()
+    val feeViewItemState by viewModel.feeViewItemStateLiveData.observeAsState()
+    val feeViewItemLoading by viewModel.feeViewItemLoadingLiveData.observeAsState(false)
     val sliderViewItem by viewModel.sliderViewItemLiveData.observeAsState()
-    val cautions by viewModel.cautionsLiveData.observeAsState()
+    val cautions by viewModel.cautionsLiveData.observeAsState(listOf())
 
     val settingsViewItems = mutableListOf<@Composable () -> Unit>()
     var selectedGasPrice by remember { mutableStateOf(1L) }
@@ -40,54 +169,84 @@ fun LegacyFeeSettings(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .background(color = ComposeAppTheme.colors.tyler)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        EvmFeeCell(title = stringResource(R.string.FeeSettings_Fee), feeStatus?.fee)
-        Spacer(modifier = Modifier.height(8.dp))
+        AppBar(
+            title = TranslatableString.ResString(R.string.FeeSettings_Title),
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.FeeSettings_Reset),
+                    enabled = !viewModel.isRecommendedGasPriceSelected,
+                    onClick = { viewModel.onClickReset() }
+                )
+            )
+        )
 
-        settingsViewItems.add {
-            FeeInfoCell(
-                title = stringResource(R.string.FeeSettings_GasLimit),
-                value = feeStatus?.gasLimit
-            ) {
-                //Open Gas Limit info
-            }
-        }
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
 
-        sliderViewItem?.let { slider ->
-            selectedGasPrice = slider.initialValue
+            EvmFeeCell(
+                title = stringResource(R.string.FeeSettings_Fee),
+                value = feeViewItem?.fee ?: "",
+                loading = feeViewItemLoading,
+                viewState = feeViewItemState
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             settingsViewItems.add {
                 FeeInfoCell(
-                    title = stringResource(R.string.FeeSettings_GasPrice),
-                    value = "$selectedGasPrice ${slider.unit}"
+                    title = stringResource(R.string.FeeSettings_GasLimit),
+                    value = feeViewItem?.gasLimit
                 ) {
-                    //Open Gas Price info
+                    //Open Gas Limit info
                 }
             }
 
-            settingsViewItems.add {
-                HsSlider(
-                    value = slider.initialValue,
-                    onValueChange = { selectedGasPrice = it },
-                    valueRange = slider.range.first..slider.range.last,
-                    onValueChangeFinished = { onSelectGasPrice(selectedGasPrice) }
-                )
+            sliderViewItem?.let { slider ->
+                selectedGasPrice = slider.initialValue
+
+                settingsViewItems.add {
+                    FeeInfoCell(
+                        title = stringResource(R.string.FeeSettings_GasPrice),
+                        value = "$selectedGasPrice ${slider.unit}"
+                    ) {
+                        //Open Gas Price info
+                    }
+                }
+
+                settingsViewItems.add {
+                    HsSlider(
+                        value = slider.initialValue,
+                        onValueChange = { selectedGasPrice = it },
+                        valueRange = slider.range.first..slider.range.last,
+                        onValueChangeFinished = { viewModel.onSelectGasPrice(selectedGasPrice) }
+                    )
+                }
             }
+
+            CellSingleLineLawrenceSection(settingsViewItems)
+
+            Cautions(cautions)
         }
 
-        CellSingleLineLawrenceSection(settingsViewItems)
-
-        cautions?.let {
-            Cautions(it)
-        }
+        ButtonPrimaryYellow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 32.dp),
+            title = stringResource(R.string.Button_Done),
+            onClick = { navController.popBackStack() }
+        )
     }
 }
 
 @Composable
 fun Cautions(cautions: List<CautionViewItem>) {
-    val modifier = Modifier.padding(horizontal = 21.dp, vertical = 12.dp)
+    val modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
 
     Column(
         modifier = Modifier
@@ -124,7 +283,7 @@ fun HsSlider(
     valueRange: ClosedRange<Long>,
     onValueChangeFinished: () -> Unit
 ) {
-    var selectedValue: Float by remember { mutableStateOf(value.toFloat()) }
+    var selectedValue: Float by rememberSaveable(value) { mutableStateOf(value.toFloat()) }
 
     Row(
         modifier = Modifier
@@ -180,24 +339,27 @@ fun HsSlider(
 }
 
 @Composable
-fun FeeInfoCell(title: String, value: String?, onClick: () -> Unit) {
+fun FeeInfoCell(title: String, value: String?, onClick: (() -> Unit)? = null) {
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .clickable(enabled = onClick != null, onClick = { onClick?.invoke() }),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(painter = painterResource(id = R.drawable.ic_info_20), contentDescription = "")
-        Spacer(modifier = Modifier.width(16.dp))
+        onClick?.let {
+            Image(
+                modifier = Modifier.padding(end = 16.dp),
+                painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
+            )
+        }
         Text(
             text = title,
             style = ComposeAppTheme.typography.subhead2,
             color = ComposeAppTheme.colors.grey
         )
         Text(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp),
+            modifier = Modifier.weight(1f),
             text = value ?: "",
             style = ComposeAppTheme.typography.subhead1,
             color = ComposeAppTheme.colors.leah,
@@ -209,7 +371,14 @@ fun FeeInfoCell(title: String, value: String?, onClick: () -> Unit) {
 }
 
 @Composable
-fun EvmFeeCell(title: String, value: String? = null, onClick: (() -> Unit)? = null) {
+fun EvmFeeCell(
+    title: String,
+    value: String,
+    loading: Boolean,
+    viewState: ViewState?,
+    highlightEditButton: Boolean = false,
+    onClick: (() -> Unit)? = null
+) {
     CellSingleLineLawrenceSection {
         Row(
             modifier = Modifier
@@ -224,20 +393,41 @@ fun EvmFeeCell(title: String, value: String? = null, onClick: (() -> Unit)? = nu
                 color = ComposeAppTheme.colors.grey
             )
 
-            Text(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp),
-                text = value ?: "",
-                style = ComposeAppTheme.typography.subhead1,
-                color = ComposeAppTheme.colors.leah, //leah or oz??
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        color = ComposeAppTheme.colors.grey,
+                        strokeWidth = 1.5.dp
+                    )
+                } else {
+                    Text(
+                        text = value,
+                        style = ComposeAppTheme.typography.subhead1,
+                        color = if (viewState is ViewState.Error) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
 
             onClick?.let {
-                Image(painter = painterResource(id = R.drawable.ic_edit_20), contentDescription = "")
+                Box(modifier = Modifier.padding(start = 8.dp)) {
+                    val tintColor = if (highlightEditButton)
+                        ComposeAppTheme.colors.jacob
+                    else
+                        ComposeAppTheme.colors.grey
+
+                    Image(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(id = R.drawable.ic_edit_20),
+                        colorFilter = ColorFilter.tint(tintColor),
+                        contentDescription = ""
+                    )
+                }
             }
         }
     }

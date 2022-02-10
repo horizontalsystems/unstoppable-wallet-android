@@ -128,10 +128,8 @@ class SendEvmConfirmationFragment : BaseFragment() {
             sendEvmTransactionViewModel,
             feeViewModel,
             viewLifecycleOwner,
-            onClickEditFee = {
-                val arguments = SendEvmFeeSettingsFragment.prepareParams(R.id.sendEvmConfirmationFragment)
-                findNavController().slideFromRight(R.id.sendEvmFeeSettingsFragment, arguments)
-            }
+            findNavController(),
+            R.id.sendEvmConfirmationFragment
         )
 
         binding.buttonSendCompose.setViewCompositionStrategy(

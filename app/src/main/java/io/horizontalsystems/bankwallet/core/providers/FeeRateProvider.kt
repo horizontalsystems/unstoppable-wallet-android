@@ -84,54 +84,6 @@ class BitcoinCashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRatePro
     override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.bitcoinCashFeeRate()
 }
 
-class EthereumFeeRateProvider(
-    feeRateProvider: FeeRateProvider,
-    feeLowerBound: Long? = null,
-    feeUpperBound: Long? = null,
-    multiply: Double? = null
-) : ICustomRangedFeeProvider {
-
-    override val customFeeRange = LongRange(feeLowerBound ?: defaultLowerBound, feeUpperBound ?: defaultUpperBound)
-
-    override val feeRatePriorityList: List<FeeRatePriority> = listOf(
-        FeeRatePriority.RECOMMENDED,
-        FeeRatePriority.Custom(1, customFeeRange)
-    )
-
-    override val recommendedFeeRate: Single<BigInteger> =
-        feeRateProvider.ethereumGasPrice()
-            .map { getAdjustedGasPrice(maxOf(it.toLong(), customFeeRange.first), multiply) }
-
-    companion object {
-        private const val defaultLowerBound: Long = 1_000_000_000
-        private const val defaultUpperBound: Long = 400_000_000_000
-    }
-}
-
-class BinanceSmartChainFeeRateProvider(
-    feeRateProvider: FeeRateProvider,
-    feeLowerBound: Long? = null,
-    feeUpperBound: Long? = null,
-    multiply: Double? = null
-) : ICustomRangedFeeProvider {
-
-    override val customFeeRange = LongRange(feeLowerBound ?: defaultLowerBound, feeUpperBound ?: defaultUpperBound)
-
-    override val feeRatePriorityList: List<FeeRatePriority> = listOf(
-        FeeRatePriority.RECOMMENDED,
-        FeeRatePriority.Custom(1, customFeeRange)
-    )
-
-    override val recommendedFeeRate: Single<BigInteger> =
-        feeRateProvider.binanceSmartChainGasPrice()
-            .map { getAdjustedGasPrice(maxOf(it.toLong(), customFeeRange.first), multiply) }
-
-    companion object {
-        private const val defaultLowerBound: Long = 1_000_000_000
-        private const val defaultUpperBound: Long = 50_000_000_000
-    }
-}
-
 class DashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
     override val feeRatePriorityList: List<FeeRatePriority> = listOf()
     override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.dashFeeRate()
