@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.evmfee.*
 import io.reactivex.disposables.CompositeDisposable
 
@@ -24,9 +25,13 @@ class LegacyFeeSettingsViewModel(
     private val disposable = CompositeDisposable()
 
     private val gasPriceUnit: String = "gwei"
-    val sliderViewItemLiveData = MutableLiveData<SendFeeSliderViewItem>()
-    val feeStatusLiveData = MutableLiveData<FeeStatusViewItem>()
+    val sliderViewItemLiveData = MutableLiveData<SliderViewItem>()
+    val feeViewItemLiveData = MutableLiveData<FeeViewItem>()
+    val feeViewItemStateLiveData = MutableLiveData<ViewState>()
+    val feeViewItemLoadingLiveData = MutableLiveData<Boolean>()
+
     val cautionsLiveData = MutableLiveData<List<CautionViewItem>>()
+    val isRecommendedGasPriceSelected by gasPriceService::isRecommendedGasPriceSelected
 
     init {
         sync(gasPriceService.state)
@@ -51,43 +56,61 @@ class LegacyFeeSettingsViewModel(
         gasPriceService.setGasPrice(wei(gasPrice))
     }
 
+    fun onClickReset() {
+        gasPriceService.setRecommended()
+    }
+
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {
-        val feeStatusViewItem: FeeStatusViewItem
+        syncFeeViewItems(transactionStatus)
+        syncCautions(transactionStatus)
+    }
+
+    private fun syncFeeViewItems(transactionStatus: DataState<Transaction>) {
+        when (transactionStatus) {
+            DataState.Loading -> {
+                feeViewItemLoadingLiveData.postValue(true)
+            }
+            is DataState.Error -> {
+                feeViewItemLoadingLiveData.postValue(false)
+                feeViewItemStateLiveData.postValue(ViewState.Error(transactionStatus.error))
+
+                val notAvailable = Translator.getString(R.string.NotAvailable)
+                feeViewItemLiveData.postValue(FeeViewItem(notAvailable, notAvailable))
+            }
+            is DataState.Success -> {
+                val transaction = transactionStatus.data
+                feeViewItemLoadingLiveData.postValue(false)
+
+                val viewState = transaction.errors.firstOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
+                feeViewItemStateLiveData.postValue(viewState)
+
+                val fee = coinService.amountData(transactionStatus.data.gasData.fee).getFormatted()
+                val gasLimit = App.numberFormatter.format(transactionStatus.data.gasData.gasLimit.toBigDecimal(), 0, 0)
+                feeViewItemLiveData.postValue(FeeViewItem(fee, gasLimit))
+            }
+        }
+    }
+
+    private fun syncCautions(transactionStatus: DataState<Transaction>) {
         val warnings = mutableListOf<Warning>()
         val errors = mutableListOf<Throwable>()
 
-        when (transactionStatus) {
-            DataState.Loading -> {
-                val loading = Translator.getString(R.string.Alert_Loading)
-                feeStatusViewItem = FeeStatusViewItem(loading, loading)
-            }
-            is DataState.Error -> {
-                val notAvailable = Translator.getString(R.string.NotAvailable)
-                feeStatusViewItem = FeeStatusViewItem(notAvailable, notAvailable)
-
-                errors.add(transactionStatus.error)
-            }
-            is DataState.Success -> {
-                val fee = coinService.amountData(transactionStatus.data.gasData.fee).getFormatted()
-                val gasLimit = App.numberFormatter.format(transactionStatus.data.gasData.gasLimit.toBigDecimal(), 0, 0)
-
-                feeStatusViewItem = FeeStatusViewItem(fee, gasLimit)
-
-                warnings.addAll(transactionStatus.data.warnings)
-                errors.addAll(transactionStatus.data.errors)
-            }
+        if (transactionStatus is DataState.Error) {
+            errors.add(transactionStatus.error)
+        } else if (transactionStatus is DataState.Success) {
+            warnings.addAll(transactionStatus.data.warnings)
+            errors.addAll(transactionStatus.data.errors)
         }
 
         cautionsLiveData.postValue(cautionViewItemFactory.cautionViewItems(warnings, errors))
-        feeStatusLiveData.postValue(feeStatusViewItem)
     }
 
     private fun sync(state: DataState<GasPriceInfo>) {
         if (state is DataState.Success) {
             sliderViewItemLiveData.postValue(
-                SendFeeSliderViewItem(
+                SliderViewItem(
                     initialValue = gwei(state.data.gasPrice.max),
-                    range = gwei(gasPriceService.gasPriceRange),
+                    range = gwei(gasPriceService.gasPriceRange ?: gasPriceService.defaultGasPriceRange),
                     unit = gasPriceUnit
                 )
             )

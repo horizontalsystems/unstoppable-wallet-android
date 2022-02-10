@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 class OneInchFeeService(
     private val oneInchKitHelper: OneInchKitHelper,
     private val evmKit: EthereumKit,
-    override val gasPriceService: IEvmGasPriceService,
+    private val gasPriceService: IEvmGasPriceService,
     parameters: OneInchSwapParameters,
 ) : IEvmFeeService {
     private val disposable = CompositeDisposable()
@@ -83,7 +83,7 @@ class OneInchFeeService(
             fromAmount = parameters.amountFrom,
             recipient = parameters.recipient?.hex,
             slippagePercentage = parameters.slippage.toFloat(),
-            gasPrice = gasPriceInfo.gasPrice.max
+            gasPrice = gasPriceInfo.gasPrice
         )
             .subscribeIO({ swap ->
                 sync(swap, gasPriceInfo.warnings, gasPriceInfo.errors)
@@ -95,9 +95,25 @@ class OneInchFeeService(
 
     private fun sync(swap: Swap, warnings: List<Warning>, errors: List<Throwable>) {
         val swapTx = swap.transaction
+
+        val gasPrice = if (swapTx.gasPrice != null) {
+            GasPrice.Legacy(swapTx.gasPrice!!)
+        } else if (swapTx.maxFeePerGas != null && swapTx.maxPriorityFeePerGas != null) {
+            GasPrice.Eip1559(swapTx.maxFeePerGas!!, swapTx.maxPriorityFeePerGas!!)
+        } else {
+            null
+        }
+
+        if (gasPrice == null) {
+            transactionStatus = DataState.Error(
+                FeeSettingsError.InvalidGasPriceType("No GasPrice returned from 1inch API")
+            )
+            return
+        }
+
         val gasData = GasData(
             gasLimit = getSurchargedGasLimit(swapTx.gasLimit),
-            gasPrice = GasPrice.Legacy(swapTx.gasPrice)
+            gasPrice = gasPrice
         )
 
         parameters = parameters.copy(

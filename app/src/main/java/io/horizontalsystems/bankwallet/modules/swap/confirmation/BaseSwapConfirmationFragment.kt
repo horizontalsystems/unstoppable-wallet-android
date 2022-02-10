@@ -14,11 +14,9 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSwapBinding
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.evmfee.SendEvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -33,7 +31,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
     protected abstract val logger: AppLogger
     protected abstract val sendEvmTransactionViewModel: SendEvmTransactionViewModel
     protected abstract val feeViewModel: EvmFeeCellViewModel
-    protected abstract val fragmentId: Int
+    protected abstract val navGraphId: Int
 
     private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
     protected val dex: SwapMainModule.Dex
@@ -107,12 +105,8 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
             sendEvmTransactionViewModel,
             feeViewModel,
             viewLifecycleOwner,
-            onClickEditFee = {
-                findNavController().slideFromRight(
-                    resId = R.id.sendEvmFeeSettingsFragment,
-                    args = SendEvmFeeSettingsFragment.prepareParams(fragmentId)
-                )
-            }
+            findNavController(),
+            navGraphId
         )
 
         binding.buttonSwapCompose.setViewCompositionStrategy(

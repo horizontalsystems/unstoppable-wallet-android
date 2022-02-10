@@ -13,7 +13,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 
 class UniswapConfirmationFragment(
-    override val fragmentId: Int = R.id.uniswapConfirmationFragment
+    override val navGraphId: Int = R.id.uniswapConfirmationFragment
 ) : BaseSwapConfirmationFragment() {
 
     override val logger = AppLogger("swap_uniswap")
@@ -39,6 +39,6 @@ class UniswapConfirmationFragment(
         )
     }
     override val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
-    override val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(fragmentId) { vmFactory }
+    override val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(navGraphId) { vmFactory }
 
 }

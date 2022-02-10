@@ -323,18 +323,18 @@
     <!-- Fee Settings -->
 
     <string name="FeeSettings_Title">Fee Settings</string>
+    <string name="FeeSettings_Reset">Reset</string>
     <string name="FeeSettings_MaxFee">Max Fee</string>
     <string name="FeeSettings_Fee">Fee</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Risk of getting stuck</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may get stuck or fail.</string>
-    <string name="FeeSettings_Overpricing_Title">Overpricing</string>
-    <string name="FeeSettings_Overpricing">The gas price is higher than necessary for the transaction.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">At the moment the base fee for transacting is high. It may go down when the network becomes less congested.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Low Base Fee</string>
-    <string name="FeeSettings_BaseFeeIsLow">The Max Base Fee set up is too low for including the transaction.</string>
+    <string name="FeeSettings_CurrentBaseFee">Current Base Fee</string>
+    <string name="FeeSettings_MaxBaseFee">Max Base Fee</string>
+    <string name="FeeSettings_MaxMinerTips">Max Miner Tips</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Risky</string>
+    <string name="FeeSettings_RiskOfGettingStuck">The transaction may fail or remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_Overpricing_Title">Fee Too High</string>
+    <string name="FeeSettings_Overpricing">The set transaction fee is higher than necessary for processing this transaction now.</string>
 
     <!--Fee Info -->
 
@@ -382,9 +382,12 @@
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">The transaction requires %s for sending</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">The current %s balance is below the amount required to process this transaction, including the transaction fee.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The selected fee value is too low and will be rejected!</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Insufficient Liquidity</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">Error! Check balance and ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will retry in 3 sec…</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Low Fee</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The set transaction fee amount is insufficient for processing this transaction now.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Insufficient Liquidity</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount."</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Estimation Error</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Check balance to ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will auto-retry in 3 sec…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Consider leaving some %s on balance to be able to pay for future transactions.</string>
 
     <!--Swap-->
