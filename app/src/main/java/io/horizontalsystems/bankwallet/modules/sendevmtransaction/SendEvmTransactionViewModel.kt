@@ -19,7 +19,6 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.scaleUp
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
-import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.erc20kit.decorations.ApproveMethodDecoration
@@ -627,29 +626,23 @@ class SendEvmTransactionViewModel(
     private fun getAmount(amountData: SendModule.AmountData, valueType: ValueType) =
         ViewItem.Amount(
             amountData.secondary?.getFormatted(),
-            ColoredValue(
-                amountData.primary.getFormatted(),
-                getAmountColor(valueType)
-            )
+            amountData.primary.getFormatted(),
+            valueType
         )
 
     private fun getGuaranteedAmount(amountData: SendModule.AmountData): ViewItem.Amount {
         return ViewItem.Amount(
             amountData.secondary?.getFormatted(),
-            ColoredValue(
-                "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMin)}",
-                getAmountColor(ValueType.Incoming)
-            )
+            "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMin)}",
+            ValueType.Incoming
         )
     }
 
     private fun getMaxAmount(amountData: SendModule.AmountData): ViewItem.Amount {
         return ViewItem.Amount(
             amountData.secondary?.getFormatted(),
-            ColoredValue(
-                "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMax)}",
-                getAmountColor(ValueType.Outgoing)
-            )
+            "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMax)}",
+            ValueType.Outgoing
         )
     }
 
@@ -680,14 +673,6 @@ class SendEvmTransactionViewModel(
             else -> convertedError.message ?: convertedError.javaClass.simpleName
         }
 
-    private fun getAmountColor(type: ValueType): Int {
-        return when (type) {
-            ValueType.Regular -> R.color.bran
-            ValueType.Disabled -> R.color.grey
-            ValueType.Outgoing -> R.color.jacob
-            ValueType.Incoming -> R.color.remus
-        }
-    }
 }
 
 data class SectionViewItem(
@@ -703,7 +688,7 @@ sealed class ViewItem {
         @ColorRes val color: Int? = null
     ) : ViewItem()
 
-    class Amount(val fiatAmount: String?, val coinAmount: ColoredValue) : ViewItem()
+    class Amount(val fiatAmount: String?, val coinAmount: String, val type: ValueType) : ViewItem()
     class Address(val title: String, val valueTitle: String, val value: String) : ViewItem()
     class Input(val value: String) : ViewItem()
     class Warning(val title: String, val description: String, @DrawableRes val icon: Int) :

@@ -206,6 +206,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             is ViewItem.Amount -> (holder as? AmountViewHolder)?.bind(
                 item.fiatAmount,
                 item.coinAmount,
+                item.type,
                 listPosition
             )
             is ViewItem.Input -> (holder as? TitleValueHexViewHolder)?.bind(
@@ -295,13 +296,20 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 
     class AmountViewHolder(private val binding: ViewHolderAmountBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(fiatAmount: String?, coinAmount: ColoredValue, position: ListPosition) {
+        fun bind(fiatAmount: String?, coinAmount: String, type: ValueType, position: ListPosition) {
             binding.fiatTextView.text = fiatAmount
-            binding.coinTextView.text = coinAmount.value
+            binding.coinTextView.text = coinAmount
 
-            binding.coinTextView.setTextColor(binding.wrapper.context.getColor(coinAmount.color))
+            binding.coinTextView.setTextColor(binding.wrapper.context.getColor(getColor(type)))
 
             binding.backgroundView.setBackgroundResource(position.getBackground())
+        }
+
+        private fun getColor(type: ValueType): Int = when (type) {
+            ValueType.Regular -> R.color.bran
+            ValueType.Disabled -> R.color.grey
+            ValueType.Outgoing -> R.color.jacob
+            ValueType.Incoming -> R.color.remus
         }
 
     }
