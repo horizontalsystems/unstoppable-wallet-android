@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
@@ -24,8 +27,13 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val openRequestLiveEvent = SingleLiveEvent<WalletConnectRequest>()
 
-    enum class Status {
-        OFFLINE, ONLINE, CONNECTING
+    var invalidUrlError by mutableStateOf(false)
+        private set
+
+    enum class Status(val value: Int) {
+        OFFLINE(R.string.WalletConnect_Status_Offline),
+        ONLINE(R.string.WalletConnect_Status_Online),
+        CONNECTING(R.string.WalletConnect_Status_Connecting)
     }
 
     enum class ButtonState(val visible: Boolean, val enabled: Boolean) {
@@ -93,6 +101,9 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     private fun sync(state: WalletConnectService.State, connectionState: WalletConnectInteractor.State) {
         if (state == WalletConnectService.State.Killed) {
             closeLiveEvent.postValue(Unit)
+            return
+        } else if (state is WalletConnectService.State.Invalid) {
+            invalidUrlError = true
             return
         }
 

@@ -17,12 +17,6 @@
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WalletConnectSessionFragment"
         tools:layout="@layout/fragment_wallet_connect_main">
         <action
-            android:id="@+id/walletConnectMainFragment_to_walletConnectErrorFragment"
-            app:destination="@id/walletConnectErrorFragment"
-            app:popExitAnim="@anim/slide_to_right"
-            app:popUpTo="@id/walletConnectMainFragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment"
             app:destination="@id/walletConnectSendEthereumTransactionRequestFragment" />
         <action
@@ -36,10 +30,6 @@
         <argument android:name="bridge" app:argType="string"/>
         <argument android:name="key" app:argType="string"/>
     </fragment>
-    <fragment
-        android:id="@+id/walletConnectErrorFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorFragment"
-        tools:layout="@layout/fragment_wallet_connect_error" />
     <fragment
         android:id="@+id/walletConnectSendEthereumTransactionRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestFragment"

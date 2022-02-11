@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionKillManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule.Section
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
@@ -17,7 +18,7 @@ class WalletConnectListViewModel(
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-    val viewItemsLiveData = MutableLiveData<List<WalletConnectViewItem>>()
+    val sectionsLiveData = MutableLiveData<List<Section>>()
     val startNewConnectionEvent = SingleLiveEvent<Unit>()
     val killingSessionInProcessLiveEvent = SingleLiveEvent<Unit>()
     val killingSessionCompletedLiveEvent = SingleLiveEvent<Unit>()
@@ -59,35 +60,30 @@ class WalletConnectListViewModel(
         }
     }
 
-    fun getSessionsCount(): Int = service.items.size
-
     fun onClickDelete(sessionViewItem: WalletConnectViewItem.Session) {
         service.kill(sessionViewItem.session)
     }
 
     private fun sync(items: List<WalletConnectListService.Item>) {
-        val viewItems = mutableListOf<WalletConnectViewItem>()
+        val sections = mutableListOf<Section>()
         items.forEach { item ->
-            val accountViewItem = WalletConnectViewItem.Account(
-                title = getTitle(item.chain),
-            )
-            viewItems.add(accountViewItem)
-
-            item.sessions.forEachIndexed { index, session ->
-                val sessionViewItem = WalletConnectViewItem.Session(
+            val sessions = item.sessions.map { session ->
+                WalletConnectListModule.Session(
                     session = session,
                     title = session.remotePeerMeta.name,
+                    subtitle = getSubtitle(item.chain),
                     url = session.remotePeerMeta.url,
                     imageUrl = getSuitableIcon(session.remotePeerMeta.icons),
-                    position = ListPosition.getListPosition(item.sessions.size, index)
                 )
-                viewItems.add(sessionViewItem)
             }
+            sections.add(
+                Section(WalletConnectListModule.Version.Version1, sessions)
+            )
         }
-        viewItemsLiveData.postValue(viewItems)
+        sectionsLiveData.postValue(sections)
     }
 
-    private fun getTitle(chain: WalletConnectListService.Chain) = when (chain) {
+    private fun getSubtitle(chain: WalletConnectListService.Chain) = when (chain) {
         WalletConnectListService.Chain.Ethereum,
         WalletConnectListService.Chain.Ropsten,
         WalletConnectListService.Chain.Rinkeby,

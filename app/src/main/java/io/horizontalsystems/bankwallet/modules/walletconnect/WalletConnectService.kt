@@ -16,11 +16,12 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class WalletConnectService(
-        remotePeerId: String?,
-        private val manager: WalletConnectManager,
-        private val sessionManager: WalletConnectSessionManager,
-        private val requestManager: WalletConnectRequestManager,
-        private val connectivityManager: ConnectivityManager
+    remotePeerId: String?,
+    connectionLink: String?,
+    private val manager: WalletConnectManager,
+    private val sessionManager: WalletConnectSessionManager,
+    private val requestManager: WalletConnectRequestManager,
+    private val connectivityManager: ConnectivityManager
 ) : WalletConnectInteractor.Delegate, Clearable {
 
     sealed class State {
@@ -83,6 +84,14 @@ class WalletConnectService(
             val session = sessionManager.sessions.firstOrNull { session -> session.remotePeerId == remotePeerId }
             if (session != null) {
                 restoreSession(session)
+            }
+        }
+
+        connectionLink?.let{
+            try {
+                connect(it)
+            } catch (t: Throwable) {
+                state = State.Invalid(t)
             }
         }
 
