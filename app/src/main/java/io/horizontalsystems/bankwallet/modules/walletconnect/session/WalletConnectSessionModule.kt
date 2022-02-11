@@ -14,12 +14,12 @@ object WalletConnectSessionModule {
         }
     }
 
-    fun prepareParams(remotePeerId: String?, sessionsCount: Int) = bundleOf(
+    fun prepareParams(remotePeerId: String?, connectionLink: String?) = bundleOf(
         REMOTE_PEER_ID_KEY to remotePeerId,
-        SESSIONS_COUNT_KEY to sessionsCount
+        CONNECTION_LINK_KEY to connectionLink
     )
 
     const val REMOTE_PEER_ID_KEY = "remote_peer_id"
-    const val SESSIONS_COUNT_KEY = "sessions_count"
+    const val CONNECTION_LINK_KEY = "connection_link"
 
 }

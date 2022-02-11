@@ -11,16 +11,6 @@ class WalletConnectViewModel(
     var sharedSendEthereumTransactionRequest: WalletConnectSendEthereumTransactionRequest? = null
     var sharedSignMessageRequest: WalletConnectSignMessageRequest? = null
 
-    val initialScreen: InitialScreen
-        get() = when (service.state) {
-            WalletConnectService.State.Idle -> {
-                InitialScreen.ScanQrCode
-            }
-            else -> {
-                InitialScreen.Main
-            }
-        }
-
     override fun onCleared() {
         clearables.forEach {
             it.clear()
@@ -28,7 +18,4 @@ class WalletConnectViewModel(
         super.onCleared()
     }
 
-    enum class InitialScreen {
-        ScanQrCode, Main
-    }
 }

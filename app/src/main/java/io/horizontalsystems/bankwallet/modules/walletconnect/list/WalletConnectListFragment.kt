@@ -1,216 +1,127 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.list
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectListBinding
-import io.horizontalsystems.bankwallet.databinding.ViewHolderWalletConnectAccountBinding
-import io.horizontalsystems.bankwallet.databinding.ViewHolderWalletConnectSessionBinding
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.WalletConnectViewItem
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionList
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionsEmpty
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WalletConnectSessionModule
-import io.horizontalsystems.core.dp
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.snackbar.CustomSnackbar
-import io.horizontalsystems.snackbar.SnackbarDuration
 
-class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
-    private val viewModel by viewModels<WalletConnectListViewModel> { WalletConnectListModule.Factory() }
-
-    private var snackbarInProcess: CustomSnackbar? = null
-
-    private var _binding: FragmentWalletConnectListBinding? = null
-    private val binding get() = _binding!!
+class WalletConnectListFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding =
-            FragmentWalletConnectListBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        binding.newConnect.setOnSingleClickListener {
-            startNewConnection()
-        }
-
-        val walletConnectListAdapter = WalletConnectListAdapter(this)
-        binding.sessionsRecyclerView.adapter = walletConnectListAdapter
-
-        val swipeHelper = SwipeHelper(binding.sessionsRecyclerView) { position ->
-            val sessionViewItem =
-                walletConnectListAdapter.items.getOrNull(position) as? WalletConnectViewItem.Session
-            if (sessionViewItem != null) {
-                listOf(
-                    SwipeHelper.UnderlayButton(
-                        requireContext(),
-                        R.drawable.ic_trash_24,
-                        16.dp,
-                        32.dp,
-                        17.dp
-                    ) {
-                        viewModel.onClickDelete(sessionViewItem)
-                    })
-            } else {
-                listOf()
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                WalletConnectSessionsScreen(findNavController())
             }
         }
-
-        val itemTouchHelper = ItemTouchHelper(swipeHelper)
-        itemTouchHelper.attachToRecyclerView(binding.sessionsRecyclerView)
-
-        viewModel.viewItemsLiveData.observe(viewLifecycleOwner, { viewItems ->
-            walletConnectListAdapter.items = viewItems
-            walletConnectListAdapter.notifyDataSetChanged()
-        })
-
-        viewModel.startNewConnectionEvent.observe(viewLifecycleOwner, {
-            startNewConnection()
-        })
-
-        viewModel.killingSessionInProcessLiveEvent.observe(viewLifecycleOwner, {
-            snackbarInProcess = HudHelper.showInProcessMessage(
-                requireView(),
-                R.string.WalletConnect_Disconnecting,
-                SnackbarDuration.INDEFINITE
-            )
-        })
-
-        viewModel.killingSessionFailedLiveEvent.observe(viewLifecycleOwner, {
-            snackbarInProcess?.dismiss()
-
-            HudHelper.showErrorMessage(
-                requireActivity().findViewById(android.R.id.content),
-                it
-            )
-        })
-
-        viewModel.killingSessionCompletedLiveEvent.observe(viewLifecycleOwner, {
-            snackbarInProcess?.dismiss()
-
-            HudHelper.showSuccessMessage(
-                requireActivity().findViewById(android.R.id.content),
-                R.string.Hud_Text_Done
-            )
-        })
     }
-
-    private fun startNewConnection() {
-        findNavController().slideFromRight(
-            R.id.walletConnectListFragment_to_walletConnectMainFragment,
-            WalletConnectSessionModule.prepareParams(null, viewModel.getSessionsCount())
-        )
-    }
-
-    override fun onSessionClick(session: WalletConnectViewItem.Session) {
-        findNavController().slideFromRight(
-            R.id.walletConnectListFragment_to_walletConnectMainFragment,
-            WalletConnectSessionModule.prepareParams(session.session.remotePeerId, 0)
-        )
-    }
-
 }
 
-class WalletConnectListAdapter(
-    private val listener: SessionViewHolder.Listener
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var items = listOf<WalletConnectViewItem>()
+@Composable
+private fun WalletConnectSessionsScreen(navController: NavController) {
+    val viewModel =
+        viewModel<WalletConnectListViewModel>(factory = WalletConnectListModule.Factory())
 
-    private val accountViewType = 1
-    private val sessionViewType = 2
-
-    override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
-            is WalletConnectViewItem.Account -> accountViewType
-            is WalletConnectViewItem.Session -> sessionViewType
-        }
-    }
-
-    override fun getItemId(position: Int): Long {
-        return items[position].hashCode().toLong()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            accountViewType -> {
-                AccountViewHolder(
-                    ViewHolderWalletConnectAccountBinding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
-                    )
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                navController.slideFromBottom(
+                    R.id.walletConnectMainFragment,
+                    WalletConnectSessionModule.prepareParams(null, scannedText)
                 )
             }
+        }
+
+    val sections by viewModel.sectionsLiveData.observeAsState(listOf())
+
+    ComposeAppTheme {
+        SessionsScreen(
+            navController,
+            qrScannerLauncher,
+            sections,
+        )
+    }
+}
+
+@Composable
+private fun SessionsScreen(
+    navController: NavController,
+    qrScannerLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
+    sections: List<WalletConnectListModule.Section>,
+) {
+    val context = LocalContext.current
+
+    Column(
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            TranslatableString.ResString(R.string.WalletConnect_Title),
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back),
+                        tint = ComposeAppTheme.colors.jacob,
+                        contentDescription = null,
+                    )
+                }
+            },
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
+                    icon = R.drawable.ic_qr_scan_24px,
+                    onClick = {
+                        qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
+                    }
+                )
+            )
+        )
+        when {
+            sections.isEmpty() -> {
+                WCSessionsEmpty(qrScannerLauncher)
+            }
             else -> {
-                SessionViewHolder(
-                    ViewHolderWalletConnectSessionBinding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
-                    ), listener)
+                sections.forEach { WCSessionList(it, navController) }
             }
         }
     }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (val item = items[position]) {
-            is WalletConnectViewItem.Account -> (holder as? AccountViewHolder)?.bind(item)
-            is WalletConnectViewItem.Session -> (holder as? SessionViewHolder)?.bind(item)
-        }
-    }
-
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
-}
-
-class AccountViewHolder(private val binding: ViewHolderWalletConnectAccountBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(account: WalletConnectViewItem.Account) {
-        binding.accountTextView.text = account.title
-    }
-
-}
-
-class SessionViewHolder(
-    private val binding: ViewHolderWalletConnectSessionBinding,
-    private val listener: Listener
-) : RecyclerView.ViewHolder(binding.root) {
-
-    interface Listener {
-        fun onSessionClick(session: WalletConnectViewItem.Session)
-    }
-
-    fun bind(session: WalletConnectViewItem.Session) {
-        binding.titleTextView.text = session.title
-        binding.subtitleTextView.text = session.url
-        binding.backgroundView.setBackgroundResource(session.position.getBackground())
-        binding.iconImageView.loadImage(session.imageUrl)
-
-        binding.wrapper.setOnSingleClickListener {
-            listener.onSessionClick(session)
-        }
-    }
-
 }
