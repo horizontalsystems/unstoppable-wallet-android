@@ -25,11 +25,11 @@
     <string name="Button_Start">Start</string>
     <string name="Button_Create">Create</string>
     <string name="Button_Restore">Restore</string>
-    <string name="Button_WatchAddress">Watch Address</string>
+    <string name="Button_WatchAddress">Watch-Adresse</string>
     <string name="Button_Reset">Reset</string>
     <string name="Button_Reconnect">Reconnect</string>
     <string name="Button_Understand">I Understand</string>
-    <string name="Button_Switch">Switch</string>
+    <string name="Button_Switch">Wechseln</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Any</string>
@@ -216,9 +216,9 @@
     <string name="Balance_Sort_24hPriceChange">Price Change</string>
     <string name="Balance_Hidden">hidden</string>
     <string name="Balance_Backup_Alert">You need to backup the %1$s Wallet before you may receive %2$s.</string>
-    <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
+    <string name="Balance_NoWalletAlert">Sie haben noch keine Wallets. Ein neues erstellen oder ein vorhandenes wiederherstellen </string>
     <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet</string>
-    <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
+    <string name="Balance_WatchAccount_NoBalance">Diese Wallet-Adresse hat keinen Kontostand</string>
     <!--Send-->
     <string name="Send_Title">Send %s</string>
     <string name="Send_Hint_Address">Address or Domain</string>
@@ -263,19 +263,19 @@
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %1$s (%2$s) paid in %3$s. You need %4$s.</string>
     <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_Title">Fee Settings</string>
-    <string name="FeeSettings_MaxFee">Max Fee</string>
-    <string name="FeeSettings_Fee">Fee</string>
+    <string name="FeeSettings_Title">Gebühreneinstellungen</string>
+    <string name="FeeSettings_MaxFee">Max Gebühr</string>
+    <string name="FeeSettings_Fee">Gebühr</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Risk of getting stuck</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may get stuck or fail.</string>
-    <string name="FeeSettings_Overpricing_Title">Overpricing</string>
-    <string name="FeeSettings_Overpricing">The gas price is higher than necessary for the transaction.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Gefahr des Festklemmens</string>
+    <string name="FeeSettings_RiskOfGettingStuck">Die Transaktion kann festklemmen oder fehlschlagen.</string>
+    <string name="FeeSettings_Overpricing_Title">Zu teuer</string>
+    <string name="FeeSettings_Overpricing">Der Benzinpreis ist höher als für die Transaktion erforderlich.</string>
     <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
     <string name="FeeSettings_BaseFeeIsHigh">At the moment the base fee for transacting is high. It may go down when the network becomes less congested.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Low Base Fee</string>
-    <string name="FeeSettings_BaseFeeIsLow">The Max Base Fee set up is too low for including the transaction.</string>
+    <string name="FeeSettings_BaseFeeIsLow_Title">Geringe Grundgebühr</string>
+    <string name="FeeSettings_BaseFeeIsLow">Die eingestellte Max. Grundgebühr ist zu niedrig, um die Transaktion zu berücksichtigen.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Transaction Speed</string>
     <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network and lower when the blockchain is less busy.</string>
@@ -298,7 +298,7 @@
     <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
     <string name="WalletConnect_Error_InvalidUrl">Invalid URL Address</string>
     <string name="WalletConnect_Requirement">Requirement</string>
-    <string name="WalletConnect_Alert">Alert</string>
+    <string name="WalletConnect_Alert">Alarm</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Connecting…</string>
@@ -309,8 +309,8 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
-    <string name="WalletConnect_Error_NoWallet">No suitable Wallet. You need to create or restore existing wallet</string>
-    <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
+    <string name="WalletConnect_Error_NoWallet">Kein passendes Wallet. Sie müssen ein neues Wallet erstellen oder ein bestehendes Wallet wiederherstellen</string>
+    <string name="WalletConnect_Error_WatchAccount">Diese Funktion funktioniert nicht mit den Watch Only Wallets, Sie müssen zu einem wiederhergestellten oder erstellten Wallet wechseln </string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warnung</string>
     <string name="EthereumTransaction_Error_Title">Fehler</string>
@@ -320,7 +320,7 @@
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The selected fee value is too low and will be rejected!</string>
     <string name="EthereumTransaction_Error_InsufficientLiquidity">Insufficient Liquidity</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Error! Check balance and ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will retry in 3 sec…</string>
-    <string name="EthereumTransaction_Warning_CoinNeededForFee">Consider leaving some %s on balance to be able to pay for future transactions.</string>
+    <string name="EthereumTransaction_Warning_CoinNeededForFee">Überlegen Sie, ob Sie einige %s auf dem Guthaben belassen wollen, um für zukünftige Transaktionen bezahlen zu können.</string>
     <!--Swap-->
     <string name="Swap">Swap</string>
     <string name="Swap_FromAmountTitle">You Pay</string>
@@ -348,7 +348,7 @@
     <string name="Swap_MaximumPaid">Maximum Amount</string>
     <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <string name="Swap_PoweredBy">Powered by</string>
-    <string name="Swap_SelectSwapProvider_Title">Swap Service</string>
+    <string name="Swap_SelectSwapProvider_Title">Dienst wechseln</string>
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
@@ -427,7 +427,7 @@
     <string name="Transactions_Incoming">Erhalten</string>
     <string name="Transactions_Outgoing">Gesendet</string>
     <string name="Transactions_Swaps">Swaps</string>
-    <string name="Transactions_Approvals">Approvals</string>
+    <string name="Transactions_Approvals">Genehmigungen</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transaction</string>
     <string name="TransactionInfo_Title">Transaction Info</string>
@@ -463,7 +463,7 @@
     <string name="StatusInfo_Processing">Processing</string>
     <string name="StatusInfo_Confirmed">Completed</string>
     <string name="StatusInfo_Failed">Failed</string>
-    <string name="StatusInfo_PendingDescription">The transaction has not been confirmed on the blockchain yet. Transactions sent with a recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected. Also keep in mind that status of an individual transaction shown in Unstoppable wallet interface typically updated with a short delay.</string>
+    <string name="StatusInfo_PendingDescription">Die Transaktion wurde noch nicht in der Blockchain bestätigt. Transaktionen, die mit einer empfohlenen oder höheren Gebühreneinstellung gesendet werden, werden in der Regel innerhalb von 10 Minuten bearbeitet. Transaktionen, die mit einer niedrigen Gebühr gesendet werden, können einige Stunden oder sogar Tage ausstehend bleiben und können sogar abgelehnt werden. Beachten Sie auch, dass der Status einer einzelnen Transaktion, der in der Oberfläche von Unstoppable Wallet angezeigt wird, normalerweise mit einer kurzen Verzögerung aktualisiert wird.</string>
     <string name="StatusInfo_ProcessingDescription">The transaction has been already included in the blockchain but has not reached permanent finality. At this point, it\'s safe to consider the transaction as completed for smaller payments. For larger payments, it\'s recommended to wait until the transaction status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
     <string name="StatusInfo_FailedDescription">The transaction did not get processed and no value transfer took place. Transactions with a fail status are still written to the blockchain and consume transaction fees. The Unstoppable app is unable to show the fail reason for such transactions, but users are able to look it up themselves on a public block explorer i.e. etherscan.io.</string>
@@ -624,7 +624,7 @@
     <string name="ManageAccounts_Title">Manage Wallets</string>
     <string name="ManageAccounts_CreateNewWallet">Create</string>
     <string name="ManageAccounts_ImportWallet">Restore</string>
-    <string name="ManageAccounts_WatchAddress">Watch Address</string>
+    <string name="ManageAccounts_WatchAddress">Watch-Adresse</string>
     <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. This is handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
     <string name="Watch_Address_Title">Adresse</string>
     <string name="Watch_Address_Hint">Adresse oder Domäne</string>
@@ -646,10 +646,10 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
     <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
-    <string name="ManageAccount_DeleteWarning">Are you sure want to delete this wallet?</string>
+    <string name="ManageAccount_DeleteWarning">Möchten Sie dieses Wallet wirklich löschen?</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Network Settings</string>
-    <string name="NetworkSettings_SwithesAutomatically">switches automatically</string>
+    <string name="NetworkSettings_SwithesAutomatically">wechselt automatisch</string>
     <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP network uses the links listed below and switches automatically.</string>
     <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
     <!-- Show Key -->
