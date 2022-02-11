@@ -216,7 +216,7 @@
     <string name="Balance_Sort_24hPriceChange">تغییر قیمت</string>
     <string name="Balance_Hidden">پنهان</string>
     <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
-    <string name="Balance_NoWalletAlert">هنوز کیف پول ندارید. کیف جدید ایجاد کنید یا کیف موجود را بازیابی کنید </string>
+    <string name="Balance_NoWalletAlert">No wallets yet</string>
     <string name="Balance_NoCoinsAlert">شما هیچ سکه ای به این کیف پول اضافه نکرده اید</string>
     <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
     <!--Send-->
