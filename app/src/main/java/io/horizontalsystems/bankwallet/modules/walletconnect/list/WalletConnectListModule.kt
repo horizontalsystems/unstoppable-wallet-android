@@ -11,7 +11,7 @@ object WalletConnectListModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = WalletConnectListService(App.walletConnectSessionManager)
+            val service = WalletConnectListService(App.wc1SessionManager)
 
             return WalletConnectListViewModel(service) as T
         }

@@ -24,9 +24,9 @@ import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectRequestManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1RequestManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionManager
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -80,10 +80,10 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
-        lateinit var walletConnectSessionStorage: WalletConnectSessionStorage
-        lateinit var walletConnectSessionManager: WalletConnectSessionManager
-        lateinit var walletConnectRequestManager: WalletConnectRequestManager
-        lateinit var walletConnectManager: WalletConnectManager
+        lateinit var wc1SessionStorage: WC1SessionStorage
+        lateinit var wc1SessionManager: WC1SessionManager
+        lateinit var wc1RequestManager: WC1RequestManager
+        lateinit var wc1Manager: WC1Manager
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKit
@@ -207,10 +207,11 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         }
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
-        walletConnectSessionStorage = WalletConnectSessionStorage(appDatabase)
-        walletConnectSessionManager = WalletConnectSessionManager(walletConnectSessionStorage, accountManager, accountSettingManager)
-        walletConnectRequestManager = WalletConnectRequestManager()
-        walletConnectManager = WalletConnectManager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
+
+        wc1SessionStorage = WC1SessionStorage(appDatabase)
+        wc1SessionManager = WC1SessionManager(wc1SessionStorage, accountManager, accountSettingManager)
+        wc1RequestManager = WC1RequestManager()
+        wc1Manager = WC1Manager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
 
         termsManager = TermsManager(localStorage)
 

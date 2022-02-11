@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 
-class WalletConnectSessionStorage(appDatabase: AppDatabase) {
+class WC1SessionStorage(appDatabase: AppDatabase) {
 
-    private val dao: WalletConnectSessionDao by lazy {
-        appDatabase.walletConnectSessionDao()
+    private val dao: WC1SessionDao by lazy {
+        appDatabase.wc1SessionDao()
     }
 
     fun getSessions(accountId: String, chainIds: List<Int>): List<WalletConnectSession> {

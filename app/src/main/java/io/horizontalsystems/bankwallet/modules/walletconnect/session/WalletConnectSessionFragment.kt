@@ -29,8 +29,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSignMessageRequest
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEthereumTransactionRequest
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SignMessageRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WalletConnectSessionModule.CONNECTION_LINK_KEY
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WalletConnectSessionModule.REMOTE_PEER_ID_KEY
@@ -84,14 +84,14 @@ class WalletConnectSessionFragment : BaseFragment() {
 
         viewModel.openRequestLiveEvent.observe(viewLifecycleOwner) {
             when (it) {
-                is WalletConnectSendEthereumTransactionRequest -> {
+                is WC1SendEthereumTransactionRequest -> {
                     baseViewModel.sharedSendEthereumTransactionRequest = it
 
                     findNavController().slideFromBottom(
                         R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment
                     )
                 }
-                is WalletConnectSignMessageRequest -> {
+                is WC1SignMessageRequest -> {
                     baseViewModel.sharedSignMessageRequest = it
 
                     findNavController().slideFromBottom(

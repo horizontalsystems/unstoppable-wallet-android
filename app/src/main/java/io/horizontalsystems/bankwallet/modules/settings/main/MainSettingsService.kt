@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.LaunchPage
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.core.IPinComponent
@@ -26,8 +26,8 @@ class MainSettingsService(
     private val currencyManager: ICurrencyManager,
     private val termsManager: ITermsManager,
     private val pinComponent: IPinComponent,
-    private val walletConnectSessionManager: WalletConnectSessionManager,
-    private val walletConnectManager: WalletConnectManager
+    private val wc1SessionManager: WC1SessionManager,
+    private val wc1Manager: WC1Manager
 ) {
 
     private val backedUpSubject = BehaviorSubject.create<Boolean>()
@@ -64,7 +64,7 @@ class MainSettingsService(
         get() = backupManager.allBackedUp
 
     val walletConnectSessionCount: Int
-        get() = walletConnectSessionManager.sessions.count()
+        get() = wc1SessionManager.sessions.count()
 
     val currentLanguageDisplayName: String
         get() = languageManager.currentLanguageName
@@ -86,7 +86,7 @@ class MainSettingsService(
             backedUpSubject.onNext(it)
         })
 
-        disposables.add(walletConnectSessionManager.sessionsObservable.subscribe {
+        disposables.add(wc1SessionManager.sessionsObservable.subscribe {
             walletConnectSessionCountSubject.onNext(it.size)
         })
 
@@ -111,7 +111,7 @@ class MainSettingsService(
         localStorage.relaunchBySettingChange = true
     }
 
-    fun getWalletConnectSupportState(): WalletConnectManager.SupportState {
-        return walletConnectManager.getWalletConnectSupportState()
+    fun getWalletConnectSupportState(): WC1Manager.SupportState {
+        return wc1Manager.getWalletConnectSupportState()
     }
 }

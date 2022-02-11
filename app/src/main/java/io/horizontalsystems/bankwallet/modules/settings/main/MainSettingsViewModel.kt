@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.reactivex.disposables.CompositeDisposable
 
 class MainSettingsViewModel(
@@ -60,7 +60,7 @@ class MainSettingsViewModel(
         disposables.clear()
     }
 
-    fun getWalletConnectSupportState() : WalletConnectManager.SupportState {
+    fun getWalletConnectSupportState() : WC1Manager.SupportState {
         return service.getWalletConnectSupportState()
     }
 

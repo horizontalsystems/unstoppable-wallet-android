@@ -12,8 +12,8 @@ import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceServi
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEthereumTransactionRequest
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestViewModel
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
@@ -26,8 +26,8 @@ object WalletConnectRequestModule {
     const val TYPED_MESSAGE = "typed_message"
 
     class Factory(
-        private val request: WalletConnectSendEthereumTransactionRequest,
-        private val baseService: WalletConnectService
+        private val request: WC1SendEthereumTransactionRequest,
+        private val baseService: WC1Service
     ) : ViewModelProvider.Factory {
         private val evmKitWrapper by lazy { baseService.evmKitWrapper!! }
         private val coin by lazy {

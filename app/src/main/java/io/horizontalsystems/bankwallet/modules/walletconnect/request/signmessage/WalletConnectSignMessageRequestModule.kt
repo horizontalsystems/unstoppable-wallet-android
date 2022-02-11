@@ -2,14 +2,14 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessag
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSignMessageRequest
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SignMessageRequest
 
 object WalletConnectSignMessageRequestModule {
 
     class Factory(
-        private val signMessageRequest: WalletConnectSignMessageRequest,
-        private val baseService: WalletConnectService
+        private val signMessageRequest: WC1SignMessageRequest,
+        private val baseService: WC1Service
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

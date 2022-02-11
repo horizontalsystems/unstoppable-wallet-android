@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect
+package io.horizontalsystems.bankwallet.modules.walletconnect.version1
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.AccountSettingManager
-import io.horizontalsystems.bankwallet.core.storage.WalletConnectSessionStorage
+import io.horizontalsystems.bankwallet.core.storage.WC1SessionStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
@@ -11,8 +11,8 @@ import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
-class WalletConnectSessionManager(
-    private val storage: WalletConnectSessionStorage,
+class WC1SessionManager(
+    private val storage: WC1SessionStorage,
     private val accountManager: IAccountManager,
     private val accountSettingManager: AccountSettingManager
 ) {

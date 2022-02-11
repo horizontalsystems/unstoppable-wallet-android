@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeSwitchFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -157,13 +157,13 @@ private fun SettingSections(
                 value = if (walletConnectSessionCount > 0) walletConnectSessionCount.toString() else null,
                 onClick = {
                     when (viewModel.getWalletConnectSupportState()) {
-                        WalletConnectManager.SupportState.Supported -> {
+                        WC1Manager.SupportState.Supported -> {
                             navController.slideFromRight(R.id.mainFragment_to_walletConnect)
                         }
-                        WalletConnectManager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                        WC1Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
                             navController.slideFromBottom(R.id.walletConnectErrorNoAccountFragment)
                         }
-                        WalletConnectManager.SupportState.NotSupportedDueToWatchAccount -> {
+                        WC1Manager.SupportState.NotSupportedDueToWatchAccount -> {
                             navController.slideFromBottom(R.id.walletConnectErrorWatchAccountFragment)
                         }
                     }
