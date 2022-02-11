@@ -216,7 +216,7 @@
     <string name="Balance_Sort_24hPriceChange">Variation de prix</string>
     <string name="Balance_Hidden">masqué</string>
     <string name="Balance_Backup_Alert">Vous devez sauvegarder le portefeuille %1$s avant de recevoir %2$s.</string>
-    <string name="Balance_NoWalletAlert">No wallets yet</string>
+    <string name="Balance_NoWalletAlert">Pas de portefeuille actuellement</string>
     <string name="Balance_NoCoinsAlert">Vous n\'avez ajouté aucune pièce à ce portefeuille</string>
     <string name="Balance_WatchAccount_NoBalance">Cette adresse de portefeuille n\'a pas de solde</string>
     <!--Send-->
