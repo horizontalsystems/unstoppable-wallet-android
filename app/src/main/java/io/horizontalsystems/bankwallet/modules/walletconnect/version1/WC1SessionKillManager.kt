@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect
+package io.horizontalsystems.bankwallet.modules.walletconnect.version1
 
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 import io.reactivex.subjects.PublishSubject
 
-class WalletConnectSessionKillManager(
+class WC1SessionKillManager(
     session: WalletConnectSession
 ) : WalletConnectInteractor.Delegate {
 

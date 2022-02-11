@@ -8,13 +8,13 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectRequest
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Request
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 
-class WalletConnectMainViewModel(private val service: WalletConnectService) : ViewModel() {
+class WalletConnectMainViewModel(private val service: WC1Service) : ViewModel() {
 
     val connectingLiveData = MutableLiveData<Boolean>()
     val peerMetaLiveData = MutableLiveData<PeerMetaViewItem?>()
@@ -25,7 +25,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     val errorLiveData = MutableLiveData<String?>()
     val statusLiveData = MutableLiveData<Status?>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
-    val openRequestLiveEvent = SingleLiveEvent<WalletConnectRequest>()
+    val openRequestLiveEvent = SingleLiveEvent<WC1Request>()
 
     var invalidUrlError by mutableStateOf(false)
         private set
@@ -79,7 +79,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     }
 
     fun cancel() {
-        if (service.connectionState == WalletConnectInteractor.State.Connected && service.state == WalletConnectService.State.WaitingForApproveSession) {
+        if (service.connectionState == WalletConnectInteractor.State.Connected && service.state == WC1Service.State.WaitingForApproveSession) {
             service.rejectSession()
         } else {
             closeLiveEvent.postValue(Unit)
@@ -98,11 +98,11 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         service.reconnect()
     }
 
-    private fun sync(state: WalletConnectService.State, connectionState: WalletConnectInteractor.State) {
-        if (state == WalletConnectService.State.Killed) {
+    private fun sync(state: WC1Service.State, connectionState: WalletConnectInteractor.State) {
+        if (state == WC1Service.State.Killed) {
             closeLiveEvent.postValue(Unit)
             return
-        } else if (state is WalletConnectService.State.Invalid) {
+        } else if (state is WC1Service.State.Invalid) {
             invalidUrlError = true
             return
         }
@@ -113,7 +113,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         peerMetaLiveData.postValue(peerMetaViewItem)
 
         connectingLiveData.postValue(connectionState == WalletConnectInteractor.State.Connecting)
-        closeVisibleLiveData.postValue(state == WalletConnectService.State.Ready)
+        closeVisibleLiveData.postValue(state == WC1Service.State.Ready)
 
         val cancelBtnState = getCancelButtonState(state)
         val connectBtnState = getConnectButtonState(state, connectionState)
@@ -128,8 +128,8 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         val hint = when {
             connectionState is WalletConnectInteractor.State.Disconnected -> R.string.WalletConnect_Reconnect_Hint
             connectionState != WalletConnectInteractor.State.Connected -> null
-            state == WalletConnectService.State.WaitingForApproveSession -> R.string.WalletConnect_Approve_Hint
-            state == WalletConnectService.State.Ready -> R.string.WalletConnect_Ready_Hint
+            state == WC1Service.State.WaitingForApproveSession -> R.string.WalletConnect_Approve_Hint
+            state == WC1Service.State.Ready -> R.string.WalletConnect_Ready_Hint
             else -> null
         }
 
@@ -159,25 +159,25 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         }
     }
 
-    private fun getCancelButtonState(state: WalletConnectService.State): ButtonState {
-        return if (state != WalletConnectService.State.Ready){
+    private fun getCancelButtonState(state: WC1Service.State): ButtonState {
+        return if (state != WC1Service.State.Ready){
             ButtonState.Enabled
         } else {
             ButtonState.Hidden
         }
     }
 
-    private fun getConnectButtonState(state: WalletConnectService.State, connectionState: WalletConnectInteractor.State): ButtonState {
+    private fun getConnectButtonState(state: WC1Service.State, connectionState: WalletConnectInteractor.State): ButtonState {
         return when {
-            state == WalletConnectService.State.WaitingForApproveSession &&
+            state == WC1Service.State.WaitingForApproveSession &&
                     connectionState == WalletConnectInteractor.State.Connected -> ButtonState.Enabled
             else -> ButtonState.Hidden
         }
     }
 
-    private fun getDisconnectButtonState(state: WalletConnectService.State, connectionState: WalletConnectInteractor.State): ButtonState {
+    private fun getDisconnectButtonState(state: WC1Service.State, connectionState: WalletConnectInteractor.State): ButtonState {
         return when {
-            state == WalletConnectService.State.Ready &&
+            state == WC1Service.State.Ready &&
                     connectionState == WalletConnectInteractor.State.Connected -> ButtonState.Enabled
             else -> ButtonState.Hidden
         }

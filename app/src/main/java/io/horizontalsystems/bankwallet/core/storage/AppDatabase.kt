@@ -44,7 +44,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun restoreSettingDao(): RestoreSettingDao
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
-    abstract fun walletConnectSessionDao(): WalletConnectSessionDao
+    abstract fun wc1SessionDao(): WC1SessionDao
     abstract fun accountSettingDao(): AccountSettingDao
     abstract fun customTokenDao(): CustomTokenDao
     abstract fun evmAccountStateDao(): EvmAccountStateDao

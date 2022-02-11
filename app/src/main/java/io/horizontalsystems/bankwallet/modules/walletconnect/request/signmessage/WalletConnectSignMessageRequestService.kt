@@ -3,15 +3,15 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessag
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage.WCSignType
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSignMessageRequest
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SignMessageRequest
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 
 class WalletConnectSignMessageRequestService(
-        private val request: WalletConnectSignMessageRequest,
-        private val baseService: WalletConnectService,
-        private val signer: Signer
+    private val request: WC1SignMessageRequest,
+    private val baseService: WC1Service,
+    private val signer: Signer
 ) {
 
     private val evmKitWrapper: EvmKitWrapper?

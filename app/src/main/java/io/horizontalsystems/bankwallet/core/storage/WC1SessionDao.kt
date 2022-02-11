@@ -7,7 +7,7 @@ import androidx.room.Query
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 
 @Dao
-interface WalletConnectSessionDao {
+interface WC1SessionDao {
 
     @Query("SELECT * FROM WalletConnectSession WHERE accountId = :accountId AND chainId IN(:chainIds)")
     fun getByAccountId(accountId: String, chainIds: List<Int>): List<WalletConnectSession>

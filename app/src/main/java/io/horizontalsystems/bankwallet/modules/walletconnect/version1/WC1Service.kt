@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect
+package io.horizontalsystems.bankwallet.modules.walletconnect.version1
 
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
@@ -15,12 +15,12 @@ import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
-class WalletConnectService(
+class WC1Service(
     remotePeerId: String?,
     connectionLink: String?,
-    private val manager: WalletConnectManager,
-    private val sessionManager: WalletConnectSessionManager,
-    private val requestManager: WalletConnectRequestManager,
+    private val manager: WC1Manager,
+    private val sessionManager: WC1SessionManager,
+    private val requestManager: WC1RequestManager,
     private val connectivityManager: ConnectivityManager
 ) : WalletConnectInteractor.Delegate, Clearable {
 
@@ -75,8 +75,8 @@ class WalletConnectService(
     val connectionState: WalletConnectInteractor.State
         get() = interactor?.state ?: WalletConnectInteractor.State.Idle
 
-    private val requestSubject = PublishSubject.create<WalletConnectRequest>()
-    val requestObservable: Flowable<WalletConnectRequest>
+    private val requestSubject = PublishSubject.create<WC1Request>()
+    val requestObservable: Flowable<WC1Request>
         get() = requestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     init {
@@ -236,17 +236,17 @@ class WalletConnectService(
 
     override fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction) {
         handleRequest(id) {
-            WalletConnectSendEthereumTransactionRequest(id, transaction)
+            WC1SendEthereumTransactionRequest(id, transaction)
         }
     }
 
     override fun didRequestSignMessage(id: Long, message: WCEthereumSignMessage) {
         handleRequest(id) {
-            WalletConnectSignMessageRequest(id, message)
+            WC1SignMessageRequest(id, message)
         }
     }
 
-    private fun handleRequest(id: Long, requestResolver: () -> WalletConnectRequest) {
+    private fun handleRequest(id: Long, requestResolver: () -> WC1Request) {
         try {
             peerId?.let { peerId ->
                 val request = requestResolver()

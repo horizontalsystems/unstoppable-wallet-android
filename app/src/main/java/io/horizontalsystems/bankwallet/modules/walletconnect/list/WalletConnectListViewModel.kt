@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionKillManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionKillManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule.Section
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.views.ListPosition
@@ -40,9 +40,9 @@ class WalletConnectListViewModel(
             .let { disposables.add(it) }
     }
 
-    private fun sync(state: WalletConnectSessionKillManager.State) {
+    private fun sync(state: WC1SessionKillManager.State) {
         when (state) {
-            is WalletConnectSessionKillManager.State.Failed -> {
+            is WC1SessionKillManager.State.Failed -> {
                 val errorMessage = if (state.error is UnknownHostException)
                     Translator.getString(R.string.Hud_Text_NoInternet)
                 else
@@ -50,11 +50,11 @@ class WalletConnectListViewModel(
 
                 killingSessionFailedLiveEvent.postValue(errorMessage)
             }
-            WalletConnectSessionKillManager.State.Killed -> {
+            WC1SessionKillManager.State.Killed -> {
                 killingSessionCompletedLiveEvent.postValue(Unit)
             }
-            WalletConnectSessionKillManager.State.NotConnected,
-            WalletConnectSessionKillManager.State.Processing -> {
+            WC1SessionKillManager.State.NotConnected,
+            WC1SessionKillManager.State.Processing -> {
                 killingSessionInProcessLiveEvent.postValue(Unit)
             }
         }

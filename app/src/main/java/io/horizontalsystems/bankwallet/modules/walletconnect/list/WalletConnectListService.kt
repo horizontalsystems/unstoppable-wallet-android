@@ -2,15 +2,15 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.list
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionKillManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionKillManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionManager
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
-class WalletConnectListService(private val sessionManager: WalletConnectSessionManager) {
+class WalletConnectListService(private val sessionManager: WC1SessionManager) {
 
-    private var sessionKillManager: WalletConnectSessionKillManager? = null
+    private var sessionKillManager: WC1SessionKillManager? = null
     private val sessionKillDisposable = CompositeDisposable()
 
     val items: List<Item>
@@ -21,12 +21,12 @@ class WalletConnectListService(private val sessionManager: WalletConnectSessionM
             getItems(sessions)
         }
 
-    val sessionKillingStateObservable = PublishSubject.create<WalletConnectSessionKillManager.State>()
+    val sessionKillingStateObservable = PublishSubject.create<WC1SessionKillManager.State>()
 
     fun kill(session: WalletConnectSession) {
-        sessionKillingStateObservable.onNext(WalletConnectSessionKillManager.State.Processing)
+        sessionKillingStateObservable.onNext(WC1SessionKillManager.State.Processing)
 
-        val sessionKillManager = WalletConnectSessionKillManager(session)
+        val sessionKillManager = WC1SessionKillManager(session)
 
         sessionKillManager.stateObservable
             .subscribeIO {
@@ -37,12 +37,12 @@ class WalletConnectListService(private val sessionManager: WalletConnectSessionM
         this.sessionKillManager = sessionKillManager
     }
 
-    private fun onUpdateSessionKillManager(state: WalletConnectSessionKillManager.State) {
+    private fun onUpdateSessionKillManager(state: WC1SessionKillManager.State) {
         when (state) {
-            is WalletConnectSessionKillManager.State.Failed -> {
+            is WC1SessionKillManager.State.Failed -> {
                 clearSessionKillManager()
             }
-            WalletConnectSessionKillManager.State.Killed -> {
+            WC1SessionKillManager.State.Killed -> {
                 sessionKillManager?.peerId?.let { sessionManager.deleteSession(it) }
 
                 clearSessionKillManager()

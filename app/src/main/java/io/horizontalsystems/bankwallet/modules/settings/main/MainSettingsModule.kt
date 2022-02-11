@@ -17,8 +17,8 @@ object MainSettingsModule {
                 App.currencyManager,
                 App.termsManager,
                 App.pinComponent,
-                App.walletConnectSessionManager,
-                App.walletConnectManager
+                App.wc1SessionManager,
+                App.wc1Manager
             )
             val viewModel = MainSettingsViewModel(
                 service,

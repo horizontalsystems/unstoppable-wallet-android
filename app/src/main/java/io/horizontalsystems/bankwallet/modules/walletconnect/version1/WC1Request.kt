@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect
+package io.horizontalsystems.bankwallet.modules.walletconnect.version1
 
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
@@ -10,16 +10,16 @@ import io.horizontalsystems.ethereumkit.spv.core.toBigInteger
 import io.horizontalsystems.ethereumkit.spv.core.toLong
 import java.math.BigInteger
 
-interface WalletConnectRequest {
+interface WC1Request {
     val id: Long
 
     fun convertResult(result: Any): String?
 }
 
-class WalletConnectSendEthereumTransactionRequest(
+class WC1SendEthereumTransactionRequest(
         override val id: Long,
         val transaction: WalletConnectTransaction
-) : WalletConnectRequest {
+) : WC1Request {
 
     constructor(id: Long, transaction: WCEthereumTransaction) : this(id, convertTx(transaction))
 
@@ -32,10 +32,10 @@ class WalletConnectSendEthereumTransactionRequest(
     }
 }
 
-class WalletConnectSignMessageRequest(
+class WC1SignMessageRequest(
         override val id: Long,
         val message: WCEthereumSignMessage
-) : WalletConnectRequest {
+) : WC1Request {
 
     override fun convertResult(result: Any): String? {
         return (result as? ByteArray)?.toHexString()
@@ -45,7 +45,7 @@ class WalletConnectSignMessageRequest(
 fun convertTx(transaction: WCEthereumTransaction): WalletConnectTransaction {
     val to = transaction.to
     checkNotNull(to) {
-        throw WalletConnectSendEthereumTransactionRequest.TransactionError.NoRecipient()
+        throw WC1SendEthereumTransactionRequest.TransactionError.NoRecipient()
     }
 
     return WalletConnectTransaction(

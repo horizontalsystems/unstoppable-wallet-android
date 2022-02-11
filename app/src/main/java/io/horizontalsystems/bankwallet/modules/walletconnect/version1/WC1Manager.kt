@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect
+package io.horizontalsystems.bankwallet.modules.walletconnect.version1
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.entities.Account
 
-class WalletConnectManager(
+class WC1Manager(
         private val accountManager: IAccountManager,
         private val ethereumKitManager: EvmKitManager,
         private val binanceSmartChainKitManager: EvmKitManager
