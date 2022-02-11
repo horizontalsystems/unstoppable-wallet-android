@@ -69,6 +69,15 @@ fun AppBar(
             }
         },
         actions = {
+            if (showSpinner){
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(start = 24.dp, end = 16.dp)
+                        .size(24.dp),
+                    color = ComposeAppTheme.colors.grey,
+                    strokeWidth = 2.dp
+                )
+            }
             menuItems.forEach { menuItem ->
                 if (menuItem.icon != null) {
                     AppBarMenuButton(
@@ -95,15 +104,6 @@ fun AppBar(
                         color = color
                     )
                 }
-            }
-            if (showSpinner){
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(start = 24.dp, end = 16.dp)
-                        .size(24.dp),
-                    color = ComposeAppTheme.colors.grey,
-                    strokeWidth = 2.dp
-                )
             }
         },
         elevation = 0.dp

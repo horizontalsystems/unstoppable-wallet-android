@@ -5,11 +5,9 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.WalletConnectSession
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionKillManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule.Section
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionKillManager
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 
@@ -19,7 +17,6 @@ class WalletConnectListViewModel(
 
     private val disposables = CompositeDisposable()
     val sectionsLiveData = MutableLiveData<List<Section>>()
-    val startNewConnectionEvent = SingleLiveEvent<Unit>()
     val killingSessionInProcessLiveEvent = SingleLiveEvent<Unit>()
     val killingSessionCompletedLiveEvent = SingleLiveEvent<Unit>()
     val killingSessionFailedLiveEvent = SingleLiveEvent<String>()
@@ -29,9 +26,7 @@ class WalletConnectListViewModel(
             .subscribeIO { sync(it) }
             .let { disposables.add(it) }
 
-        if (service.items.isEmpty()) {
-            startNewConnectionEvent.call()
-        } else {
+        if (service.items.isNotEmpty()) {
             sync(service.items)
         }
 
@@ -60,9 +55,9 @@ class WalletConnectListViewModel(
         }
     }
 
-    fun onClickDelete(sessionViewItem: WalletConnectViewItem.Session) {
-        service.kill(sessionViewItem.session)
-    }
+//    fun onClickDelete(sessionViewItem: WalletConnectViewItem.Session) {
+//        service.kill(sessionViewItem.session)
+//    }
 
     private fun sync(items: List<WalletConnectListService.Item>) {
         val sections = mutableListOf<Section>()
@@ -99,18 +94,6 @@ class WalletConnectListViewModel(
 
     override fun onCleared() {
         disposables.clear()
-    }
-
-    sealed class WalletConnectViewItem {
-        class Account(val title: String) : WalletConnectViewItem()
-
-        class Session(
-            val session: WalletConnectSession,
-            val title: String,
-            val url: String,
-            val imageUrl: String?,
-            val position: ListPosition
-        ) : WalletConnectViewItem()
     }
 
 }

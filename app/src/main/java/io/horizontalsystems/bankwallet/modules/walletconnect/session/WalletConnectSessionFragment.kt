@@ -29,19 +29,20 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEthereumTransactionRequest
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SignMessageRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WalletConnectSessionModule.CONNECTION_LINK_KEY
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WalletConnectSessionModule.REMOTE_PEER_ID_KEY
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.WCSessionError
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEthereumTransactionRequest
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SignMessageRequest
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 
 class WalletConnectSessionFragment : BaseFragment() {
 
@@ -100,6 +101,10 @@ class WalletConnectSessionFragment : BaseFragment() {
                 }
             }
         }
+
+        viewModel.errorLiveData.observe(viewLifecycleOwner) { error ->
+            error?.let { HudHelper.showErrorMessage(requireView(), it) }
+        }
     }
 
 }
@@ -109,18 +114,22 @@ fun WCSessionPage(
     navController: NavController,
     viewModel: WalletConnectMainViewModel,
 ) {
+    val closeEnabled by viewModel.closeEnabledLiveData.observeAsState(false)
+    val connecting by viewModel.connectingLiveData.observeAsState(false)
+
     ComposeAppTheme {
         Column(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
                 TranslatableString.ResString(R.string.WalletConnect_Title),
-
+                showSpinner = connecting,
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
+                        onClick = { navController.popBackStack() },
+                        enabled = closeEnabled
                     )
                 )
             )
