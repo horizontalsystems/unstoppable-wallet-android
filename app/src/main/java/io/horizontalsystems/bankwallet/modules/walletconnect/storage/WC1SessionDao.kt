@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.core.storage
+package io.horizontalsystems.bankwallet.modules.walletconnect.storage
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import io.horizontalsystems.bankwallet.entities.WalletConnectSession
+import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession
 
 @Dao
 interface WC1SessionDao {

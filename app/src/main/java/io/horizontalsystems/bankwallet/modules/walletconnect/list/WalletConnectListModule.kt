@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.WalletConnectSession
+import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession
 
 object WalletConnectListModule {
 

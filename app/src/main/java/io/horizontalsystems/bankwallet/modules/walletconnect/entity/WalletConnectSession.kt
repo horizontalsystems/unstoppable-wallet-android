@@ -1,7 +1,6 @@
-package io.horizontalsystems.bankwallet.entities
+package io.horizontalsystems.bankwallet.modules.walletconnect.entity
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.session.WCSession
 import java.util.*
