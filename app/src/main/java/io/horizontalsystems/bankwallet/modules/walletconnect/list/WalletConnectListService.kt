@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.list
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.WalletConnectSession
+import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionKillManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionManager
 import io.reactivex.Flowable
