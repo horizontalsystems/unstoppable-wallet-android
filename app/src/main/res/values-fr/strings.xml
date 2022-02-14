@@ -58,8 +58,8 @@
     <string name="EnterPassphrase">Phrase d\'authentification</string>
     <string name="CreateWallet_PassphraseDescription">Les phrases d\'authentification ajoutent une strate de sécurité supplémentaire aux portefeuilles. Les utilisateurs peuvent ainsi créer plusieurs portefeuilles indépendants à pièces multiples à l\'aide d\'une seule phrase de réinitialisation mnémonique, mais associée à des mots de passe différents. \n\nPour restaurer ces portefeuilles, l\'utilisateur doit disposer d\'une phrase de réinitialisation mnémonique et d\'un mot de passe pour chaque portefeuille à restaurer.</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">GM!</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable? Share feedback and ideas to take it further.</string>
+    <string name="RateApp_Title_Rate_This_App">Bonjour!</string>
+    <string name="RateApp_Description_Rate_This_App">Vous aimez Unstoppable? Partagez vos commentaires et vos idées pour aller plus loin.</string>
     <string name="RateApp_Button_RateIt">Evaluez-là</string>
     <string name="RateApp_Button_NotNow">Plus tard</string>
     <!--Restore-->
@@ -120,7 +120,7 @@
     <string name="MarketGlobalMetrics_TvlInDefiDescription">L\'évolution historique de la valeur cumulée de toutes les cryptomonnaies gérées par des protocoles décentralisés.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtrer par chaîne</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Tout</string>
-    <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
+    <string name="MarketGlobalMetrics_CoinNotSupported">Cette pièce n\'est pas encore prise en charge</string>
     <!--Market Search-->
     <string name="EmptyResults">Aucun résultat</string>
     <string name="Market_Filters">Filtres</string>
@@ -272,10 +272,10 @@
     <string name="FeeSettings_RiskOfGettingStuck">La transaction risque d\'être bloquée ou d\'échouer.</string>
     <string name="FeeSettings_Overpricing_Title">Surfacturation</string>
     <string name="FeeSettings_Overpricing">Le prix du gas est plus élevé que nécessaire pour la transaction.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
+    <string name="FeeSettings_BaseFeeIsHigh_Title">Les frais de base sont élevés!</string>
     <string name="FeeSettings_BaseFeeIsHigh">Pour le moment, les frais de base pour effectuer des transactions sont élevés. Ils pourraient baisser lorsque le réseau sera moins encombré.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Low Base Fee</string>
-    <string name="FeeSettings_BaseFeeIsLow">The Max Base Fee set up is too low for including the transaction.</string>
+    <string name="FeeSettings_BaseFeeIsLow_Title">Frais de base minimes</string>
+    <string name="FeeSettings_BaseFeeIsLow">Les frais de base maximums définis sont trop faible pour inclure la transaction.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Vitesse de transaction</string>
     <string name="FeeInfo_Description">Les blockchains Bitcoin et Ethereum exigent que les utilisateurs paient des frais de réseau lors de l\'envoi de transactions. Les frais sont plus élevés lorsque de nombreuses transactions sont effectuées sur le réseau et inférieurs lorsque la blockchain est moins occupée.</string>
@@ -342,13 +342,13 @@
     <string name="Swap_ErrorNoLiquidity">Impossible d\'échanger ces tokens</string>
     <string name="Swap_ErrorHighPriceImpact">Impact élevé sur les prix</string>
     <string name="Swap_Proceed">Suivant</string>
-    <string name="Swap_Approve">Approve</string>
-    <string name="Swap_Approving">Approving...</string>
+    <string name="Swap_Approve">Approuver</string>
+    <string name="Swap_Approving">En cours d\'approbation...</string>
     <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_MaximumPaid">Maximum Amount</string>
-    <string name="Swap_MinimumGot">Guaranteed Amount</string>
-    <string name="Swap_PoweredBy">Powered by</string>
-    <string name="Swap_SelectSwapProvider_Title">Swap Service</string>
+    <string name="Swap_MaximumPaid">Montant maximum payé</string>
+    <string name="Swap_MinimumGot">Montant garanti</string>
+    <string name="Swap_PoweredBy">Propulsé par</string>
+    <string name="Swap_SelectSwapProvider_Title">Service de Swap</string>
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
@@ -648,7 +648,7 @@
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Network Settings</string>
     <string name="NetworkSettings_SwithesAutomatically">switches automatically</string>
-    <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP network uses the links listed below and switches automatically.</string>
+    <string name="NetworkSettings_SwithesAutomatically_Description">Le réseau HTTP MainNet utilise les liens listés ci-dessous et bascule automatiquement.</string>
     <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Key</string>
@@ -807,7 +807,7 @@
     <string name="CoinPage_TotalSupply">Offre totale</string>
     <string name="CoinPage_MarketCap_Thousand">k</string>
     <string name="CoinPage_MarketCap_Million">M</string>
-    <string name="CoinPage_MarketCap_Billion">B</string>
+    <string name="CoinPage_MarketCap_Billion">G</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_NoData">Pas de données</string>
@@ -820,7 +820,7 @@
     <string name="CoinPage_Performance_Month">1 Mois</string>
     <string name="CoinPage_ReadMore">Plus d\'infos</string>
     <string name="CoinPage_ReadLess">Read Less</string>
-    <string name="CoinPage_LaunchDate">Inception Date</string>
+    <string name="CoinPage_LaunchDate">Date de création</string>
     <string name="CoinPage_Tvl">Valeur totale verrouillée</string>
     <string name="CoinPage_TvlRank">TVL Rank</string>
     <string name="CoinPage_TvlMCapRatio">M.cap / TVL ratio</string>
