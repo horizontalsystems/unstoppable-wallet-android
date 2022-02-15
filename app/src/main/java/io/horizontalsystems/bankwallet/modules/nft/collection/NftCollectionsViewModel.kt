@@ -18,7 +18,7 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
     var loading by mutableStateOf(false)
         private set
 
-    var collections by mutableStateOf<List<NftCollectionViewItem>>(listOf())
+    var collectionViewItems by mutableStateOf<List<NftCollectionViewItem>>(listOf())
         private set
 
     init {
@@ -43,16 +43,15 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
     }
 
     private fun syncItems(collectionItems: List<NftCollectionItem>) {
-        val expandedStates = this.collections.map {
+        val expandedStates = collectionViewItems.map {
             it.slug to it.expanded
         }.toMap()
 
-        this.collections = collectionItems.map { nftCollectionItem ->
+        collectionViewItems = collectionItems.map { nftCollectionItem ->
             NftCollectionViewItem(
                 slug = nftCollectionItem.slug,
                 name = nftCollectionItem.name,
                 imageUrl = nftCollectionItem.imageUrl,
-                ownedAssetCount = nftCollectionItem.ownedAssetCount,
                 assets = nftCollectionItem.assets,
                 expanded = expandedStates[nftCollectionItem.slug] ?: false
             )
@@ -72,10 +71,10 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
     }
 
     fun toggleCollection(collection: NftCollectionViewItem) {
-        val index = collections.indexOf(collection)
+        val index = collectionViewItems.indexOf(collection)
 
         if (index != -1) {
-            collections = collections.toMutableList().apply {
+            collectionViewItems = collectionViewItems.toMutableList().apply {
                 this[index] = collection.copy(expanded = !collection.expanded)
             }
         }
