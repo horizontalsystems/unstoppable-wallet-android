@@ -13,18 +13,15 @@ class NftItemFactory(private val coinManager: ICoinManager) {
 
     fun createNftCollectionItem(
         collection: NftCollection,
-        assets: List<NftAsset>,
-        priceType: PriceType
+        assetItems: List<NftAssetItem>
     ) = NftCollectionItem(
         slug = collection.slug,
         name = collection.name,
         imageUrl = collection.imageUrl,
-        assets = assets.map { asset ->
-            createNftAssetItem(asset, collection.stats, priceType)
-        }
+        assets = assetItems
     )
 
-    private fun createNftAssetItem(
+    fun createNftAssetItem(
         asset: NftAsset,
         collectionStats: NftCollectionStats?,
         priceType: PriceType

@@ -87,7 +87,9 @@ class NftCollectionsService(
     private fun handleUpdatedCollectionAssets(collectionAssets: Map<NftCollection, List<NftAsset>>) {
         _nftCollections.update {
             DataState.Success(collectionAssets.map { (collection, assets) ->
-                nftItemFactory.createNftCollectionItem(collection, assets, priceType)
+                nftItemFactory.createNftCollectionItem(collection, assets.map { asset ->
+                    nftItemFactory.createNftAssetItem(asset, collection.stats, priceType)
+                })
             })
         }
     }
