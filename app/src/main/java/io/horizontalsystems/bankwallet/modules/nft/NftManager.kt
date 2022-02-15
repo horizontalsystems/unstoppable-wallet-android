@@ -6,13 +6,25 @@ import io.horizontalsystems.bankwallet.modules.opensea.OpenSeaApiV1Response
 import io.horizontalsystems.bankwallet.modules.opensea.OpenSeaModule
 import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class NftManager(private val nftDao: NftDao) {
-    fun getCollectionAndAssets(accountId: String) = nftDao.getCollectionAndAssets(accountId)
-    fun getCollections(accountId: String) = nftDao.getCollections(accountId)
-    fun getAssets(accountId: String) = nftDao.getAssets(accountId)
+
+    fun getCollectionAndAssets(accountId: String): Flow<Map<NftCollection, List<NftAsset>>> =
+        combine(
+            nftDao.getCollections(accountId),
+            nftDao.getAssets(accountId)
+        ) { collections, assets ->
+            val assetsGroupByCollection = assets.groupBy { it.collectionSlug }
+
+            collections.map {
+                val collectionAssets = assetsGroupByCollection[it.slug] ?: listOf()
+                it to collectionAssets
+            }.toMap()
+        }
 
     suspend fun refresh(account: Account, address: Address) = withContext(Dispatchers.IO) {
         val collections = fetchCollections(address).map { collectionResponse ->
