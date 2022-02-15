@@ -327,14 +327,19 @@
     <string name="FeeSettings_MaxFee">Max Fee</string>
     <string name="FeeSettings_Fee">Fee</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">The fee for transacting on the network is measured in gas units. Gas Limit is the maximum amount of gas a user is willing to pay for confirming a transaction (min. 21,000). An insufficient gas limit is a common reason for a transaction to fail with an \'out of gas\' error.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
+    <string name="FeeSettings_GasPrice_Info">The fee for transacting on the network is measured in gas units. Gas Price is the amount a user is willing to spend per unit of gas. When the network is busy, gas prices are high, and low when it\'s idle. An insufficient gas price is often a reason for a transaction to remain pending for an extended period.</string>
     <string name="FeeSettings_CurrentBaseFee">Current Base Fee</string>
     <string name="FeeSettings_MaxBaseFee">Max Base Fee</string>
+    <string name="FeeSettings_MaxBaseFee_Info">A base fee is the algorithmically determined price users need to pay for a transaction on Ethereum blockchain. The base fee automatically set by Ethereum network and is not controlled by a specific entity.</string>
     <string name="FeeSettings_MaxMinerTips">Max Miner Tips</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Miner tips are defined as optional fees that users may include to incentivize network participants to prioritize user\'s transaction.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Risky</string>
     <string name="FeeSettings_RiskOfGettingStuck">The transaction may fail or remain pending for a while or fail entirely.</string>
     <string name="FeeSettings_Overpricing_Title">Fee Too High</string>
     <string name="FeeSettings_Overpricing">The set transaction fee is higher than necessary for processing this transaction now.</string>
+    <string name="FeeSettings_Info_IUnderstand">I Understand</string>
 
     <!--Fee Info -->
 
