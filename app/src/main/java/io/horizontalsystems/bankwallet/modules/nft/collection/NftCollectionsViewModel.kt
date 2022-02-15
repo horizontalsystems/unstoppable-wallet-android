@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class NftCollectionsViewModel(private val service: NftCollectionsService) : ViewModel() {
-    var priceType by service::priceType
+    val priceType by service::priceType
 
     var viewState by mutableStateOf<ViewState?>(null)
         private set
@@ -79,6 +79,10 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
                 this[index] = collection.copy(expanded = !collection.expanded)
             }
         }
+    }
+
+    fun updatePriceType(priceType: PriceType) {
+        service.updatePriceType(priceType)
     }
 
 }

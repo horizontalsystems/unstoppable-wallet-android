@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.nft.collection
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.nft.NftAsset
+import io.horizontalsystems.bankwallet.modules.nft.NftCollection
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionStats
 import io.horizontalsystems.marketkit.models.CoinType
 
@@ -10,7 +11,20 @@ class NftItemFactory(private val coinManager: ICoinManager) {
 
     private val platformCoinEth by lazy { coinManager.getPlatformCoin(CoinType.Ethereum) }
 
-    fun createNftAssetItem(
+    fun createNftCollectionItem(
+        collection: NftCollection,
+        assets: List<NftAsset>,
+        priceType: PriceType
+    ) = NftCollectionItem(
+        slug = collection.slug,
+        name = collection.name,
+        imageUrl = collection.imageUrl,
+        assets = assets.map { asset ->
+            createNftAssetItem(asset, collection.stats, priceType)
+        }
+    )
+
+    private fun createNftAssetItem(
         asset: NftAsset,
         collectionStats: NftCollectionStats?,
         priceType: PriceType
