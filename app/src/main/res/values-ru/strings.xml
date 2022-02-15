@@ -425,7 +425,7 @@
     <string name="Transaction_Unlimited">неограниченно %s</string>
     <string name="Transactions_All">Все</string>
     <string name="Transactions_Incoming">Received</string>
-    <string name="Transactions_Outgoing">Sent</string>
+    <string name="Transactions_Outgoing">Отправлено</string>
     <string name="Transactions_Swaps">Swaps</string>
     <string name="Transactions_Approvals">Approvals</string>
     <!--Transaction Info-->
