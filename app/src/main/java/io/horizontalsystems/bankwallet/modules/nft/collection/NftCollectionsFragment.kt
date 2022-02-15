@@ -101,7 +101,7 @@ fun NftCollectionsScreen(navController: NavController) {
                                 ButtonSecondaryToggle(
                                     select = Select(priceType, PriceType.values().toList()),
                                     onSelect = {
-                                        viewModel.priceType = it
+                                        viewModel.updatePriceType(it)
                                         priceType = it
                                     }
                                 )

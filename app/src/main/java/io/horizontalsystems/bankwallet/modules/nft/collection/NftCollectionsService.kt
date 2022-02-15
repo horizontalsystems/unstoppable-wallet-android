@@ -25,15 +25,12 @@ class NftCollectionsService(
     private val accountManager: IAccountManager,
     private val nftItemFactory: NftItemFactory
 ) {
-    private val _nftCollections = MutableStateFlow<DataState<List<NftCollectionItem>>>(DataState.Loading)
+    private val _nftCollections =
+        MutableStateFlow<DataState<List<NftCollectionItem>>>(DataState.Loading)
     val nftCollections = _nftCollections.asStateFlow()
 
     var priceType = PriceType.Days7
-        set(value) {
-            field = value
-
-            handleUpdatedPriceType()
-        }
+        private set
 
     private val disposables = CompositeDisposable()
 
@@ -50,6 +47,12 @@ class NftCollectionsService(
             }
 
         handleAccount(accountManager.activeAccount)
+    }
+
+    fun updatePriceType(priceType: PriceType) {
+        this.priceType = priceType
+
+        handleUpdatedPriceType()
     }
 
     suspend fun refresh() {
@@ -82,41 +85,29 @@ class NftCollectionsService(
     }
 
     private fun handleUpdatedCollectionAssets(collectionAssets: Map<NftCollection, List<NftAsset>>) {
-        val collectionItems = collectionAssets.map { (collection, assets) ->
-            NftCollectionItem(
-                slug = collection.slug,
-                name = collection.name,
-                imageUrl = collection.imageUrl,
-                ownedAssetCount = collectionAssets.size,
-                assets = assets.map { asset ->
-                    nftItemFactory.createNftAssetItem(asset, collection.stats, priceType)
-                }
-            )
-        }
-
         _nftCollections.update {
-            DataState.Success(collectionItems)
+            DataState.Success(collectionAssets.map { (collection, assets) ->
+                nftItemFactory.createNftCollectionItem(collection, assets, priceType)
+            })
         }
     }
 
     private fun handleUpdatedPriceType() {
-        _nftCollections.update {
-            when (it) {
-                is DataState.Success -> {
-                    val list = it.data.map { collectionItem ->
-                        val assets = collectionItem.assets.map { assetItem ->
-                            val coinPrice = when (priceType) {
-                                PriceType.Days7 -> assetItem.prices.average7d
-                                PriceType.Days30 -> assetItem.prices.average30d
-                                PriceType.LastPrice -> assetItem.prices.last
-                            }
-                            assetItem.copy(coinPrice = coinPrice)
-                        }
-                        collectionItem.copy(assets = assets)
+        _nftCollections.value.dataOrNull?.let { collections ->
+            val list = collections.map { collectionItem ->
+                val assets = collectionItem.assets.map { assetItem ->
+                    val coinPrice = when (priceType) {
+                        PriceType.Days7 -> assetItem.prices.average7d
+                        PriceType.Days30 -> assetItem.prices.average30d
+                        PriceType.LastPrice -> assetItem.prices.last
                     }
-                    DataState.Success(list)
+                    assetItem.copy(coinPrice = coinPrice)
                 }
-                else -> it
+                collectionItem.copy(assets = assets)
+            }
+
+            _nftCollections.update {
+                DataState.Success(list)
             }
         }
     }
