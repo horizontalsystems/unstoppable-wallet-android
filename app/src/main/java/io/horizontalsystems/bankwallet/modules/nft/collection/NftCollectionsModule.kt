@@ -36,18 +36,17 @@ data class NftCollectionItem(
     val name: String,
     val imageUrl: String,
     val assets: List<NftAssetItem>
-) {
-    val ownedAssetCount: Int = assets.size
-}
+)
 
 data class NftCollectionViewItem(
     val slug: String,
     val name: String,
     val imageUrl: String,
-    val ownedAssetCount: Int,
     val expanded: Boolean,
     val assets: List<NftAssetItem>
-)
+) {
+    val ownedAssetCount = assets.size
+}
 
 data class NftAssetItem(
     val tokenId: String,

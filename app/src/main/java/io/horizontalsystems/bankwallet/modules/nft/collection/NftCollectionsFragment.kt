@@ -58,7 +58,7 @@ fun NftCollectionsScreen(navController: NavController) {
     val viewModel = viewModel<NftCollectionsViewModel>(factory = NftCollectionsModule.Factory())
 
     val viewState = viewModel.viewState
-    val collections = viewModel.collections
+    val collections = viewModel.collectionViewItems
 
     val loading = viewModel.loading
 
