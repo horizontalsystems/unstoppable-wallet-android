@@ -18,7 +18,7 @@ import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.nft.collection.ViewItemNftAsset
+import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.core.entities.Currency
@@ -27,7 +27,7 @@ import java.math.BigDecimal
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun NftPreview(asset: ViewItemNftAsset) {
+fun NftPreview(asset: NftAssetItem) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -69,26 +69,33 @@ fun NftPreview(asset: ViewItemNftAsset) {
         ) {
             Text(
                 modifier = Modifier.padding(end = 4.dp),
-                text = asset.coinPrice.getFormatted(),
+                text = asset.coinPrice?.getFormatted() ?: "---",
                 style = ComposeAppTheme.typography.captionSB,
                 color = ComposeAppTheme.colors.leah
             )
-            Text(
-                text = asset.currencyPrice.getFormatted(),
-                style = ComposeAppTheme.typography.micro,
-                color = ComposeAppTheme.colors.grey
-            )
+            asset.currencyPrice?.let { currencyPrice ->
+                Text(
+                    text = currencyPrice.getFormatted(),
+                    style = ComposeAppTheme.typography.micro,
+                    color = ComposeAppTheme.colors.grey
+                )
+            }
         }
     }
 }
 
-private val asset = ViewItemNftAsset(
+private val asset = NftAssetItem(
     tokenId = "108510973921457929967077298367545831468135648058682555520544982493970263179265",
     name = "Crypto Punk 312",
     imagePreviewUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
     coinPrice = CoinValue(CoinValue.Kind.Coin(Coin("", "Ethereum", "ETH"), 8), BigDecimal("112.2979871")),
     currencyPrice = CurrencyValue(Currency("USD", "$", 2), BigDecimal("112.2979871")),
-    onSale = false
+    onSale = false,
+    prices = NftAssetItem.Prices(
+        average7d = null,
+        average30d = null,
+        last = null
+    )
 )
 
 @Preview

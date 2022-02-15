@@ -5,6 +5,12 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NftDao {
+    @Query(
+        "SELECT * FROM NftCollection " +
+            "JOIN NftAsset ON NftAsset.collectionSlug = NftCollection.slug AND NftAsset.accountId = NftCollection.accountId " +
+            "WHERE NftCollection.accountId = :accountId"
+    )
+    fun getCollectionAndAssets(accountId: String): Flow<Map<NftCollection, List<NftAsset>>>
 
     @Query("SELECT * FROM NftCollection WHERE accountId = :accountId")
     fun getCollections(accountId: String): Flow<List<NftCollection>>
