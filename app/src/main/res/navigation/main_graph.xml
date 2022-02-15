@@ -491,4 +491,8 @@
     <dialog
         android:id="@+id/unlinkConfirmationDialog"
         android:name="io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog" />
+
+    <dialog
+        android:id="@+id/feeSettingsInfoDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog" />
 </navigation>

@@ -3,8 +3,6 @@ package io.horizontalsystems.bankwallet.modules.evmfee
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Slider
-import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -20,10 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
+import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HsSlider
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 
@@ -82,7 +83,13 @@ fun Eip1559FeeSettings(
                             title = stringResource(R.string.FeeSettings_GasLimit),
                             value = feeViewItem?.gasLimit
                         ) {
-                            //Open Gas Limit info
+                            navController.slideFromBottom(
+                                R.id.feeSettingsInfoDialog,
+                                FeeSettingsInfoDialog.prepareParams(
+                                    Translator.getString(R.string.FeeSettings_GasLimit),
+                                    Translator.getString(R.string.FeeSettings_GasLimit_Info)
+                                )
+                            )
                         }
                     },
                     {
@@ -101,7 +108,13 @@ fun Eip1559FeeSettings(
                         title = stringResource(R.string.FeeSettings_MaxBaseFee),
                         value = "$maxBaseFee ${slider.unit}"
                     ) {
-                        //Open Gas Price info
+                        navController.slideFromBottom(
+                            R.id.feeSettingsInfoDialog,
+                            FeeSettingsInfoDialog.prepareParams(
+                                Translator.getString(R.string.FeeSettings_MaxBaseFee),
+                                Translator.getString(R.string.FeeSettings_MaxBaseFee_Info)
+                            )
+                        )
                     }
                 }
 
@@ -123,7 +136,13 @@ fun Eip1559FeeSettings(
                         title = stringResource(R.string.FeeSettings_MaxMinerTips),
                         value = "$maxPriorityFee ${slider.unit}"
                     ) {
-                        //Open Gas Price info
+                        navController.slideFromBottom(
+                            R.id.feeSettingsInfoDialog,
+                            FeeSettingsInfoDialog.prepareParams(
+                                Translator.getString(R.string.FeeSettings_MaxMinerTips),
+                                Translator.getString(R.string.FeeSettings_MaxMinerTips_Info)
+                            )
+                        )
                     }
                 }
 
@@ -203,7 +222,13 @@ fun LegacyFeeSettings(
                     title = stringResource(R.string.FeeSettings_GasLimit),
                     value = feeViewItem?.gasLimit
                 ) {
-                    //Open Gas Limit info
+                    navController.slideFromBottom(
+                        R.id.feeSettingsInfoDialog,
+                        FeeSettingsInfoDialog.prepareParams(
+                            Translator.getString(R.string.FeeSettings_GasLimit),
+                            Translator.getString(R.string.FeeSettings_GasLimit_Info)
+                        )
+                    )
                 }
             }
 
@@ -215,7 +240,13 @@ fun LegacyFeeSettings(
                         title = stringResource(R.string.FeeSettings_GasPrice),
                         value = "$selectedGasPrice ${slider.unit}"
                     ) {
-                        //Open Gas Price info
+                        navController.slideFromBottom(
+                            R.id.feeSettingsInfoDialog,
+                            FeeSettingsInfoDialog.prepareParams(
+                                Translator.getString(R.string.FeeSettings_GasPrice),
+                                Translator.getString(R.string.FeeSettings_GasPrice_Info)
+                            )
+                        )
                     }
                 }
 
@@ -277,74 +308,12 @@ fun Cautions(cautions: List<CautionViewItem>) {
 }
 
 @Composable
-fun HsSlider(
-    value: Long,
-    onValueChange: (Long) -> Unit,
-    valueRange: ClosedRange<Long>,
-    onValueChangeFinished: () -> Unit
-) {
-    var selectedValue: Float by rememberSaveable(value) { mutableStateOf(value.toFloat()) }
-
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            modifier = Modifier.clickable {
-                if (selectedValue > valueRange.start) {
-                    selectedValue--
-                    onValueChange(selectedValue.toLong())
-                    onValueChangeFinished()
-                }
-            },
-            painter = painterResource(id = R.drawable.ic_minus_20),
-            contentDescription = ""
-        )
-        Slider(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp),
-            value = selectedValue,
-            onValueChange = {
-                selectedValue = it
-                onValueChange(selectedValue.toLong())
-            },
-            valueRange = valueRange.start.toFloat()..valueRange.endInclusive.toFloat(),
-            onValueChangeFinished = onValueChangeFinished,
-            steps = (valueRange.endInclusive - valueRange.start).toInt(),
-            colors = SliderDefaults.colors(
-                thumbColor = ComposeAppTheme.colors.grey,
-                activeTickColor = ComposeAppTheme.colors.transparent,
-                inactiveTickColor = ComposeAppTheme.colors.transparent,
-                activeTrackColor = ComposeAppTheme.colors.steel20,
-                inactiveTrackColor = ComposeAppTheme.colors.steel20,
-                disabledActiveTickColor = ComposeAppTheme.colors.transparent,
-                disabledInactiveTrackColor = ComposeAppTheme.colors.steel20
-            )
-        )
-        Image(
-            modifier = Modifier.clickable {
-                if (selectedValue < valueRange.endInclusive) {
-                    selectedValue++
-                    onValueChange(selectedValue.toLong())
-                    onValueChangeFinished()
-                }
-            },
-            painter = painterResource(id = R.drawable.ic_plus_20),
-            contentDescription = ""
-        )
-    }
-}
-
-@Composable
 fun FeeInfoCell(title: String, value: String?, onClick: (() -> Unit)? = null) {
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .clickable(enabled = onClick != null, onClick = { onClick?.invoke() }),
+            .clickable(enabled = onClick != null, onClick = { onClick?.invoke() })
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         onClick?.let {
