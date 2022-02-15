@@ -15,11 +15,10 @@ object NftCollectionsModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val accountRepository = NftCollectionsAccountRepository(App.accountManager)
             val nftManager = NftManager(App.appDatabase.nftCollectionDao())
             val nftItemFactory = NftItemFactory(App.coinManager)
 
-            val service = NftCollectionsService(nftManager, accountRepository, nftItemFactory)
+            val service = NftCollectionsService(nftManager, App.accountManager, nftItemFactory)
 
             return NftCollectionsViewModel(service) as T
         }

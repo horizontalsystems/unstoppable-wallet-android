@@ -1,12 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection
 
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
+import io.horizontalsystems.bankwallet.core.orNull
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.nft.NftAsset
 import io.horizontalsystems.bankwallet.modules.nft.NftCollection
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +22,7 @@ import kotlinx.coroutines.flow.update
 
 class NftCollectionsService(
     private val nftManager: NftManager,
-    private val accountRepository: NftCollectionsAccountRepository,
+    private val accountManager: IAccountManager,
     private val nftItemFactory: NftItemFactory
 ) {
     private val _nftCollections = MutableStateFlow<DataState<List<NftCollectionItem>>>(DataState.Loading)
@@ -35,37 +41,38 @@ class NftCollectionsService(
     private var handleActiveAccountJob: Job? = null
 
     fun start() {
-        coroutineScope.launch {
-            accountRepository.account.collect {
-                handleAccount(it?.first, it?.second)
+        accountManager.activeAccountObservable
+            .subscribeIO {
+                handleAccount(it.orNull)
             }
-        }
+            .let {
+                disposables.add(it)
+            }
 
-        accountRepository.start()
+        handleAccount(accountManager.activeAccount)
     }
 
     suspend fun refresh() {
-        accountRepository.account.value?.let { (account, address) ->
-            nftManager.refresh(account, address)
+        accountManager.activeAccount?.let { account ->
+            nftManager.refresh(account, getAddress(account))
         }
     }
 
     fun stop() {
-        accountRepository.stop()
         disposables.clear()
         coroutineScope.cancel()
     }
 
-    private fun handleAccount(account: Account?, address: Address?) {
+    private fun handleAccount(account: Account?) {
         unsubscribeFromCollectionAssetUpdates()
 
-        if (account != null && address != null) {
+        if (account != null) {
             subscribeForCollectionAssetUpdates(account) {
                 handleUpdatedCollectionAssets(it)
             }
 
             coroutineScope.launch {
-                nftManager.refresh(account, address)
+                nftManager.refresh(account, getAddress(account))
             }
         } else {
             _nftCollections.update {
@@ -112,6 +119,16 @@ class NftCollectionsService(
                 else -> it
             }
         }
+    }
+
+    private fun getAddress(account: Account): Address {
+        val addressStr = when (val type = account.type) {
+            is AccountType.Address -> type.address
+            is AccountType.Mnemonic -> Signer.address(type.seed, EthereumKit.NetworkType.EthMainNet).hex
+            else -> throw Exception("Not Supported")
+        }
+
+        return Address(addressStr)
     }
 
     private fun unsubscribeFromCollectionAssetUpdates() {
