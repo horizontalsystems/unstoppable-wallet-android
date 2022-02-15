@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class NftManager(private val nftDao: NftDao) {
+    fun getCollectionAndAssets(accountId: String) = nftDao.getCollectionAndAssets(accountId)
     fun getCollections(accountId: String) = nftDao.getCollections(accountId)
     fun getAssets(accountId: String) = nftDao.getAssets(accountId)
 

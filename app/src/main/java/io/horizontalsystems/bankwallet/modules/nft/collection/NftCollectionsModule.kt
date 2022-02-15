@@ -17,7 +17,9 @@ object NftCollectionsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val accountRepository = NftCollectionsAccountRepository(App.accountManager)
             val nftManager = NftManager(App.appDatabase.nftCollectionDao())
-            val service = NftCollectionsService(nftManager, accountRepository)
+            val nftItemFactory = NftItemFactory(App.coinManager)
+
+            val service = NftCollectionsService(nftManager, accountRepository, nftItemFactory)
 
             return NftCollectionsViewModel(service) as T
         }
@@ -30,20 +32,35 @@ enum class PriceType(override val title: TranslatableString) : WithTranslatableT
     LastPrice(TranslatableString.ResString(R.string.Nfts_PriceType_LastPrice))
 }
 
-data class ViewItemNftCollection(
+data class NftCollectionItem(
+    val slug: String,
+    val name: String,
+    val imageUrl: String,
+    val ownedAssetCount: Int,
+    val assets: List<NftAssetItem>
+)
+
+data class NftCollectionViewItem(
     val slug: String,
     val name: String,
     val imageUrl: String,
     val ownedAssetCount: Int,
     val expanded: Boolean,
-    val assets: List<ViewItemNftAsset>
+    val assets: List<NftAssetItem>
 )
 
-data class ViewItemNftAsset(
+data class NftAssetItem(
     val tokenId: String,
     val name: String,
     val imagePreviewUrl: String,
-    val coinPrice: CoinValue,
-    val currencyPrice: CurrencyValue,
-    val onSale: Boolean
-)
+    val coinPrice: CoinValue?,
+    val currencyPrice: CurrencyValue?,
+    val onSale: Boolean,
+    val prices: Prices
+) {
+    data class Prices(
+        val average7d: CoinValue?,
+        val average30d: CoinValue?,
+        val last: CoinValue?,
+    )
+}

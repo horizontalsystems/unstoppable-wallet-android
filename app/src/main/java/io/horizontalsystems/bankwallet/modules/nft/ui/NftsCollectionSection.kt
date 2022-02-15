@@ -17,14 +17,14 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionViewItem
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionsViewModel
-import io.horizontalsystems.bankwallet.modules.nft.collection.ViewItemNftCollection
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 
 @OptIn(ExperimentalCoilApi::class, androidx.compose.animation.ExperimentalAnimationApi::class)
 @Composable
-fun NftsCollectionSection(collection: ViewItemNftCollection, viewModel: NftCollectionsViewModel) {
+fun NftsCollectionSection(collection: NftCollectionViewItem, viewModel: NftCollectionsViewModel) {
     Column {
         CellSingleLineClear(
             modifier = Modifier

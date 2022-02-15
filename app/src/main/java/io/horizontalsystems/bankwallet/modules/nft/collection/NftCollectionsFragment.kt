@@ -12,7 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -96,10 +96,13 @@ fun NftCollectionsScreen(navController: NavController) {
                                     color = ComposeAppTheme.colors.jacob,
                                 )
                                 Spacer(modifier = Modifier.weight(1f))
+                                var priceType by remember { mutableStateOf(viewModel.priceType) }
+
                                 ButtonSecondaryToggle(
-                                    select = Select(viewModel.priceType, PriceType.values().toList()),
+                                    select = Select(priceType, PriceType.values().toList()),
                                     onSelect = {
-                                        viewModel.changePriceType(it)
+                                        viewModel.priceType = it
+                                        priceType = it
                                     }
                                 )
                             }
