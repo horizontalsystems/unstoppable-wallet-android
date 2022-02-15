@@ -25,23 +25,23 @@
     <string name="Button_Start">شروع</string>
     <string name="Button_Create">به وجود آوردن</string>
     <string name="Button_Restore">بازگرداني</string>
-    <string name="Button_WatchAddress">Watch Address</string>
+    <string name="Button_WatchAddress">مشاهده آدرس</string>
     <string name="Button_Reset">تنظیم مجدد</string>
     <string name="Button_Reconnect">اتصال مجدد</string>
     <string name="Button_Understand">می فهمم</string>
-    <string name="Button_Switch">Switch</string>
+    <string name="Button_Switch">تغییر</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Any">هرکدام</string>
     <string name="PercentTitle">درصد</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
-    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
-    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
-    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
-    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
-    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
-    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
+    <string name="Intro_Wallet_Screen2Title">آزاد کردن دارایی ها</string>
+    <string name="Intro_Wallet_Screen2Description">خود را قفل نکنید و اجازه نده دیگران این کار را با شما بکنند.</string>
+    <string name="Intro_Wallet_Screen3Title">بدون مرز شوید</string>
+    <string name="Intro_Wallet_Screen3Description">موانع مشروط را دور بزنید و به بازارهای جهانی دسترسی پیدا کنید.</string>
+    <string name="Intro_Wallet_Screen4Title">محرمانه باقی بمانید</string>
+    <string name="Intro_Wallet_Screen4Description">اطلاعات خصوصی و مالی خود را در اختیار جهان قرار ندهید.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">می فهمم</string>
     <!--Welcome-->
@@ -53,27 +53,27 @@
     <string name="CreateWallet_N_Words">%s کلمه</string>
     <string name="CreateWallet_PassphraseConfirm">تاييد</string>
     <string name="CreateWallet_Error_EmptyPassphrase">رمز عبور نمی تواند خالی باشد</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
-    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">لطفا فقط از حروف و اعداد لاتین برای عبارت عبور استفاده کنید</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">تأیید عبارت عبور مطابقت ندارد</string>
     <string name="EnterPassphrase">عبارت عبور</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases add an additional security layer to the wallets, enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase, but associated with different passwords. \n\nTo restore these wallets, a user will require a mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="CreateWallet_PassphraseDescription">عبارت‌های عبور یک لایه امنیتی اضافی به کیف پول‌ها اضافه می‌کنند و به کاربران این امکان را می‌دهند تا با استفاده از یک عبارت بازیابی حافظه‌ای واحد، اما با رمزهای عبور متفاوت، کیف پول‌های چند سکه‌ای مستقل ایجاد کنند.\n\n برای بازیابی این کیف پول ها، کاربر به یک عبارت بازیابی حافظه و همچنین یک رمز عبور برای هر کیف پول بازیابی نیاز دارد.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable? Share feedback and ideas to take it further.</string>
+    <string name="RateApp_Description_Rate_This_App">آیا از کارکردن با توقف ناپذیر لذت می برید؟ نظرات و ایده های خود را برای پیشبرد بیشتر با ما به اشتراک بگذارید.</string>
     <string name="RateApp_Button_RateIt">امتیاز بدهید</string>
     <string name="RateApp_Button_NotNow">الان نه</string>
     <!--Restore-->
     <string name="Restore_Enter_Key_Title">کلید را وارد کنید</string>
-    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of between 12 and 24 words. The words need to be entered in the correct order and separated by spaces.</string>
+    <string name="Restore_Mnemonic_Description">یادداشت خود که از ۱۲ تا ۲۴ کلمه تشکیل شده است را وارد کنید. کلمات باید به ترتیب صحیح وارد شوند و با فاصله از هم جدا شوند.</string>
     <string name="Restore_ValidationFailed">کلید نادرست</string>
-    <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 and 24 words. You entered: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">تعداد کلمات اشتباه. باید بین ۱۲ تا ۱۴ کلمه باشد. شما وارد کردید: %d</string>
     <string name="Restore_Error_EmptyPassphrase">رمز عبور نمی تواند خالی باشد</string>
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
     <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
-    <string name="Restore_Title">Choose Blockchains</string>
+    <string name="Restore_Title">انتخاب زنجیره های بلوکی</string>
     <string name="Select_Coins">سکه ها را انتخاب کنید</string>
     <string name="Restore_ZCash_BirthdayHeight">قد تولد</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">اگر ارتفاع تولد کیف پول خود را می دانید برای همگام سازی سریع آن را وارد کنید.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
     <!--Market-->
@@ -216,9 +216,9 @@
     <string name="Balance_Sort_24hPriceChange">تغییر قیمت</string>
     <string name="Balance_Hidden">پنهان</string>
     <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
-    <string name="Balance_NoWalletAlert">هنوز کیف پول ندارید. کیف جدید ایجاد کنید یا کیف موجود را بازیابی کنید </string>
+    <string name="Balance_NoWalletAlert">هیچ کیف پولی وجود ندارد</string>
     <string name="Balance_NoCoinsAlert">شما هیچ سکه ای به این کیف پول اضافه نکرده اید</string>
-    <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
+    <string name="Balance_WatchAccount_NoBalance">این آدرس کیف پول موجودی ندارد</string>
     <!--Send-->
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">آدرس یا دامنه</string>
@@ -236,7 +236,7 @@
     <string name="Send_Confirmation_Send_Button">ارسال</string>
     <string name="Send_Success">\u2713 ارسال شد</string>
     <string name="ScanQr_PleaseGrantCameraPermission">لطفا مجوز دسترسی به دوربین را تایید کنید</string>
-    <string name="ScanQr_NoCameraPermission">No camera permission</string>
+    <string name="ScanQr_NoCameraPermission">اجازه دسترسی به دوربین وجود ندارد</string>
     <string name="Send_Error_IncorrectAddress">آدرس اشتباه</string>
     <string name="Send_Error_UnsupportedAddress">قفل کردن زمان فقط با آدرس های P2PKH کار می کند (شروع از ۱)</string>
     <string name="Send_Error_BalanceAmount">مانده حساب %s</string>
@@ -263,19 +263,19 @@
     <string name="Send_Token_InsufficientFeeAlert">هزینه تراکنش برای %s (%s) پرداخت شده در %s. شما نیاز دارید %s.</string>
     <string name="Send_Warning_LowFee">هشدار! خطر گیر افتادن</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_Title">Fee Settings</string>
+    <string name="FeeSettings_Title">تنظیمات قیمت</string>
     <string name="FeeSettings_MaxFee">حداکثر هزینه</string>
     <string name="FeeSettings_Fee">هزينه</string>
     <string name="FeeSettings_GasLimit">محدودیت گاز</string>
     <string name="FeeSettings_GasPrice">قیمت گاز</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Risk of getting stuck</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may get stuck or fail.</string>
-    <string name="FeeSettings_Overpricing_Title">Overpricing</string>
-    <string name="FeeSettings_Overpricing">The gas price is higher than necessary for the transaction.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">At the moment the base fee for transacting is high. It may go down when the network becomes less congested.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Low Base Fee</string>
-    <string name="FeeSettings_BaseFeeIsLow">The Max Base Fee set up is too low for including the transaction.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">خطر گیر افتادن</string>
+    <string name="FeeSettings_RiskOfGettingStuck">تراکنش ممکن است گیر کند یا موفقیت آمیز نباشد.</string>
+    <string name="FeeSettings_Overpricing_Title">قیمت گذاری بیش از حد</string>
+    <string name="FeeSettings_Overpricing">قیمت گاز بالاتر از حد لازم برای تراکنش است.</string>
+    <string name="FeeSettings_BaseFeeIsHigh_Title">قیمت پایه بالاست!</string>
+    <string name="FeeSettings_BaseFeeIsHigh">در حال حاضر کارمزد پایه برای تراکنش بالا است. ممکن است زمانی که شبکه کمتر شلوغ باشد، پایین بیاید.</string>
+    <string name="FeeSettings_BaseFeeIsLow_Title">قیمت پایه پایین</string>
+    <string name="FeeSettings_BaseFeeIsLow">تنظیم حداکثر قیمت پایه برای گنجاندن تراکنش بسیار کم است.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">سرعت تراکنش</string>
     <string name="FeeInfo_Description">هر دو بلاک چین بیت کوین و اتریوم کاربران را ملزم به پرداخت هزینه های شبکه هنگام ارسال تراکنش ها می کنند. زمانی که تراکنش‌های زیادی در شبکه انجام می‌شود، کارمزدها بیشتر و زمانی که بلاک چین شلوغ‌تر است، کمتر است.</string>
@@ -290,7 +290,7 @@
     <string name="WalletConnect_SendRequest_Title">ارسال</string>
     <string name="WalletConnect_ApproveRequest_Title">تایید</string>
     <string name="WalletConnect_SwapRequest_Title">جابجایی</string>
-    <string name="WalletConnect_UnknownRequest_Title">Contract Call</string>
+    <string name="WalletConnect_UnknownRequest_Title">تماس قرارداد</string>
     <string name="WalletConnect_Status">وضعیت</string>
     <string name="WalletConnect_SignedTransactions">تراکنش های امضا شده</string>
     <string name="WalletConnect_Approve_Hint">با کلیک کردن بر روی اتصال، به این برنامه اجازه می دهید آدرس عمومی شما را مشاهده کند. این مرحله امنیتی مهمی برای محافظت از داده های شما در برابر خطرات احتمالی کلاهبرداری است.</string>
@@ -298,7 +298,7 @@
     <string name="WalletConnect_Reconnect_Hint">برقراری ارتباط ناموفق بود. دوباره سعی کنید وصل شوید.</string>
     <string name="WalletConnect_Error_InvalidUrl">آدرس URL نامعتبر است</string>
     <string name="WalletConnect_Requirement">پیش نیاز</string>
-    <string name="WalletConnect_Alert">Alert</string>
+    <string name="WalletConnect_Alert">هشدار</string>
     <string name="WalletConnect_Status_Offline">آفلاین</string>
     <string name="WalletConnect_Status_Online">آنلاین</string>
     <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
@@ -309,8 +309,8 @@
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">پیام برای امضا</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">لطفا برای احراز هویت پیامی را امضا کنید</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">نشانه</string>
-    <string name="WalletConnect_Error_NoWallet">No suitable Wallet. You need to create or restore existing wallet</string>
-    <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
+    <string name="WalletConnect_Error_NoWallet">کیف پول مناسبی وجود ندارد. شما باید کیف پول موجود را ایجاد یا بازیابی کنید</string>
+    <string name="WalletConnect_Error_WatchAccount">این ویژگی با کیف‌پول‌های فقط مشاهده کار نمی‌کند، شما باید به یک کیف پول بازیابی یا ایجاد شده تغییر دهید </string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">هشدار</string>
     <string name="EthereumTransaction_Error_Title">خطا</string>
@@ -320,7 +320,7 @@
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">مقدار کارمزد انتخابی خیلی کم است و رد خواهد شد!</string>
     <string name="EthereumTransaction_Error_InsufficientLiquidity">نقدینگی ناکافی</string>
     <string name="EthereumTransaction_Error_CannotEstimate">خطا! موجودی را بررسی کنید و مطمئن شوید که %s کافی برای پوشش هزینه وجود دارد. یا سعی کنید مقدار لغزش قیمت را افزایش دهید و دوباره امتحان کنید. 3 ثانیه دیگر دوباره امتحان می‌شود…</string>
-    <string name="EthereumTransaction_Warning_CoinNeededForFee">Consider leaving some %s on balance to be able to pay for future transactions.</string>
+    <string name="EthereumTransaction_Warning_CoinNeededForFee">برخی از %s را در مانده حساب باقی بگذارید تا بتوانید برای تراکنش‌های آینده از آن استفاده کنید.</string>
     <!--Swap-->
     <string name="Swap">جایگزینی</string>
     <string name="Swap_FromAmountTitle">شما می پردازید</string>
@@ -333,7 +333,7 @@
     <string name="Swap_SellPrice">قیمت فروش</string>
     <string name="Swap_BuyPrice">خرید قیمت</string>
     <string name="Swap_PriceImpact">تأثیر قیمت</string>
-    <string name="Swap_PriceImpactTooHigh">The difference between the market price and expected settlement price is too high.</string>
+    <string name="Swap_PriceImpactTooHigh">تفاوت بین قیمت بازار و قیمت مانده حساب مورد انتظار بسیار زیاد است.</string>
     <string name="Swap_MinimumReceived">مقدار تضمین شده</string>
     <string name="Swap_EstimatedFee">هزینه تخمینی</string>
     <string name="Swap_MaxFee">حداکثر هزینه</string>
@@ -347,11 +347,11 @@
     <string name="Swap_Swapping">در حال جابجایی</string>
     <string name="Swap_MaximumPaid">بیشترین مقدار</string>
     <string name="Swap_MinimumGot">مقدار تضمین شده</string>
-    <string name="Swap_PoweredBy">Powered by</string>
-    <string name="Swap_SelectSwapProvider_Title">Swap Service</string>
-    <string name="Swap_AmountEstimated">(est)</string>
-    <string name="Swap_AmountMin">(min)</string>
-    <string name="Swap_AmountMax">(max)</string>
+    <string name="Swap_PoweredBy">قدرت گرفته از</string>
+    <string name="Swap_SelectSwapProvider_Title">سرویس تبادل</string>
+    <string name="Swap_AmountEstimated">(تخمینی)</string>
+    <string name="Swap_AmountMin">(دقیقه)</string>
+    <string name="Swap_AmountMax">(حداکثر)</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">تنظیمات پیشرفته</string>
     <string name="SwapSettings_Service">خدمات</string>
@@ -367,11 +367,11 @@
     <string name="SwapSettings_Error_DeadlineZero">مهلت صفر</string>
     <string name="SwapSettings_Error_SlippageZero">لغزش صفر</string>
     <string name="SwapSettings_Error_SlippageTooLow">تراکنش شما احتمالاً ناموفق است.</string>
-    <string name="SwapSettings_Error_SlippageTooHigh">Slippage Tolerance can’t be more than %s%%</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">تحمل لغزش نمی تواند بیشتر باشد از %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">آدرس نامعتبر</string>
     <string name="SwapSettings_Error_InvalidSlippage">لغزش نامعتبر</string>
     <string name="SwapSettings_Error_InvalidDeadline">مهلت نامعتبر</string>
-    <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
+    <string name="SwapSettings_Warning_UnusualSlippage">معامله شما می تواند پیشرو باشد</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">تایید</string>
     <string name="Swap_Confirmation_Guaranteed">تضمین شده</string>
@@ -384,7 +384,7 @@
     <string name="Approve_Spender">خرج کننده</string>
     <string name="Approve_YouApprove">شما تایید کردید</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on the %s blockchain. \n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
+    <string name="SwapInfo_Description">این سرویس مبادله تراکنش %s، یک پروتکل تبادل توکن غیرمتمرکز که بر روی بلاک چین %s ساخته شده است، پشتیبانی می‌شود. \n\n %s کاملاً خودکار است و توسط قراردادهای هوشمند مدیریت می‌شود که تبادل توکن را به روشی قابل اعتماد و بدون هیچ راهی برای تقلب تسهیل می‌کند.</string>
     <string name="SwapInfo_DexRelated">Uniswap مرتبط نیست</string>
     <string name="SwapInfo_AllowanceTitle">مستمری</string>
     <string name="SwapInfo_AllowanceDescription">مقدار کمی ارز که Uniswap می تواند هنگام اجرای مبادله های نشان از طرف شما خرج کند. قبل از اقدام به مبادله، مقدار مستمری کافی ضروری است.</string>
@@ -403,7 +403,7 @@
     <string name="SwapInfo_TransactionSpeedDescription">معاملات با کارمزد معامله بالاتر منجر به سرعت پردازش بیشتر می شود. عکس این نیز صادق است.</string>
     <string name="SwapInfo_Site">سایت%s</string>
     <!--Deposit-->
-    <string name="Deposit_Title">Receive %s</string>
+    <string name="Deposit_Title">دریافت %s</string>
     <string name="Deposit_Share">به اشتراك گذاشتن</string>
     <string name="Deposit_Your_Address">آدرس شما</string>
     <!--Transactions-->
@@ -418,19 +418,19 @@
     <string name="Transactions_Approve">تایید</string>
     <string name="Transactions_Swap">جابجایی</string>
     <string name="Transactions_Failed">ناموفق</string>
-    <string name="Transactions_ContractCall">Contract Call</string>
-    <string name="Transactions_ContractCreation">Contract Creation</string>
+    <string name="Transactions_ContractCall">تماس قرارداد</string>
+    <string name="Transactions_ContractCreation">ایجاد قرارداد</string>
     <string name="Transactions_To">به %s</string>
     <string name="Transactions_From">از %s</string>
-    <string name="Transaction_Unlimited">unlimited %s</string>
+    <string name="Transaction_Unlimited">نامحدود %s</string>
     <string name="Transactions_All">همه</string>
     <string name="Transactions_Incoming">دريافت شد</string>
     <string name="Transactions_Outgoing">ارسال شد</string>
     <string name="Transactions_Swaps">جابجایی</string>
-    <string name="Transactions_Approvals">Approvals</string>
+    <string name="Transactions_Approvals">تایید ها</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">معاملات</string>
-    <string name="TransactionInfo_Title">Transaction Info</string>
+    <string name="TransactionInfo_Title">اطلاعات تراکنش</string>
     <string name="TransactionInfo_Approval">تأیید مبادله</string>
     <string name="TransactionInfo_Status">وضعیت</string>
     <string name="TransactionInfo_Status_Confirmed">تاييد شد</string>
@@ -445,7 +445,7 @@
     <string name="TransactionInfo_RecipientHash">گیرنده</string>
     <string name="TransactionInfo_HistoricalRate">نرخ تاريخي</string>
     <string name="TransactionInfo_Fee">قیمت</string>
-    <string name="TransactionInfo_FeeEstimated">Fee (est.)</string>
+    <string name="TransactionInfo_FeeEstimated">قیمت (تخمینی)</string>
     <string name="TransactionInfo_SentToSelfNote">تراکنش ارسال شده به آدرس خود</string>
     <string name="TransactionInfo_DoubleSpendNote">خطر دو برابر هزینه کردن!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">مشاهده در %s</string>
@@ -463,18 +463,18 @@
     <string name="StatusInfo_Processing">پردازش</string>
     <string name="StatusInfo_Confirmed">انجام شد</string>
     <string name="StatusInfo_Failed">ناموفق</string>
-    <string name="StatusInfo_PendingDescription">The transaction has not been confirmed on the blockchain yet. Transactions sent with a recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected. Also keep in mind that status of an individual transaction shown in Unstoppable wallet interface typically updated with a short delay.</string>
-    <string name="StatusInfo_ProcessingDescription">The transaction has been already included in the blockchain but has not reached permanent finality. At this point, it\'s safe to consider the transaction as completed for smaller payments. For larger payments, it\'s recommended to wait until the transaction status changes to completed.</string>
-    <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">The transaction did not get processed and no value transfer took place. Transactions with a fail status are still written to the blockchain and consume transaction fees. The Unstoppable app is unable to show the fail reason for such transactions, but users are able to look it up themselves on a public block explorer i.e. etherscan.io.</string>
+    <string name="StatusInfo_PendingDescription">این تراکنش هنوز در بلاک چین تایید نشده است. تراکنش‌هایی که با تنظیم کارمزد توصیه‌شده یا بالاتر ارسال می‌شوند معمولاً ظرف ۱۰ دقیقه پردازش می‌شوند. تراکنش هایی که با کارمزد کم ارسال می شوند ممکن است برای چند ساعت یا حتی چند روز معلق بمانند و حتی رد شوند. همچنین به خاطر داشته باشید که وضعیت یک تراکنش فردی نشان داده شده در رابط کیف پول غیرقابل توقف معمولاً با تاخیر کوتاهی به روز رسانی می شود.</string>
+    <string name="StatusInfo_ProcessingDescription">این تراکنش قبلاً در بلاک چین گنجانده شده است اما نهایی نشده است. در این مرحله، برای پرداخت‌های کوچک‌تر می‌توان تراکنش را کامل‌تر در نظر گرفت. برای پرداخت‌های بزرگ‌تر، توصیه می‌شود منتظر بمانید تا وضعیت تراکنش تکمیل شود.</string>
+    <string name="StatusInfo_ConfirmedDescription">تراکنش تکمیل شده و دائمی و غیرقابل برگشت تلقی می شود.</string>
+    <string name="StatusInfo_FailedDescription">تراکنش پردازش نشد و هیچ انتقال با ارزشی صورت نگرفت. تراکنش‌های دارای وضعیت ناموفق همچنان در بلاک چین نوشته می‌شوند و هزینه‌های تراکنش را مصرف می‌کنند. برنامه توقف ناپذیر نمی تواند دلیل ناموفق بودن چنین تراکنش هایی را نشان دهد، اما کاربران می توانند خودشان آن را در یک کاوشگر بلوک عمومی یعنی etherscan.io جستجو کنند.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">افزایش سرعت</string>
-    <string name="TransactionInfoOptions_SpeedUp_Description">This action will attempt to invalidate previous transaction by resending it with a higher fee. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_SpeedUp_Description">این اقدام با ارسال مجدد تراکنش قبلی با کارمزد بالاتر، تلاش می‌کند تا تراکنش قبلی را باطل کند. اگر تراکنش اصلی هنگام ارسال تراکنش جدید معلق بماند، احتمال باطل شدن و جایگزینی آن زیاد است (تضمین نشده است). تنها یکی از این دو تراکنش در بلاک چین گنجانده خواهد شد.</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">ارسال مجدد</string>
     <string name="TransactionInfoOptions_Cancel_Title">انصراف</string>
-    <string name="TransactionInfoOptions_Cancel_Description">This action will attempt to invalidate previous transaction by resending as a new 0 %s transaction to self. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_Cancel_Description">این اقدام با ارسال مجدد به عنوان یک تراکنش %s جدید به خود، تراکنش قبلی را باطل می کند. اگر تراکنش اصلی هنگام ارسال تراکنش جدید معلق بماند، احتمال باطل شدن و جایگزینی آن زیاد است (تضمین نشده است). تنها یکی از این دو تراکنش در بلاک چین گنجانده خواهد شد.</string>
     <string name="TransactionInfoOptions_Cancel_Button">لغو تراکنش</string>
-    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">تراکنش در حال حاضر در بلاک است</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">فرستنده این مبالغ را با یک قفل هزینه ارسال می کند که در %sمنقضی می شود. \n\n نگران نباشید، بیت کوین دریافتی در حال حاضر متعلق به شماست اما تا پایان دوره قفل شما نمی توانید آن را در شبکه بیت کوین هزینه کنید.</string>
     <string name="Info_DoubleSpend_Title">دو برابر هزینه کردن</string>
@@ -487,7 +487,7 @@
     <string name="Markdown_Error_NotFound">صفحه پیدا نشد</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">ارز مرجع</string>
-    <string name="SettingsCurrency_Other">OTHER</string>
+    <string name="SettingsCurrency_Other">غیره</string>
     <string name="SettingsCurrency_DisclaimerTitle">سلب مسئولیت</string>
     <string name="SettingsCurrency_DisclaimerText">The exchange rate data provided by a third party service Coingecko.com\n\nUnstoppable wallet app doesn\'t guarantee these values are always correct and match market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
     <string name="SettingsCurrency_Understand">می فهمم</string>
@@ -504,11 +504,11 @@
     <string name="Settings_AppStatus">وضعیت برنامه</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">به ما امتیاز بدهید</string>
-    <string name="Settings_LaunchScreen">Launch Screen</string>
+    <string name="Settings_LaunchScreen">صفحه شروع</string>
     <string name="SettingsAboutApp_Title">درباره برنامه</string>
     <string name="SettingsAboutApp_Site">وب سایت پروژه</string>
     <string name="SettingsAboutApp_WhatsNew">تغییرات جدید</string>
-    <string name="SettingsPrivacy_Info">This app doesn\'t collect any data about you.</string>
+    <string name="SettingsPrivacy_Info">این برنامه هیچ اطلاعاتی در مورد شما جمع آوری نمی کند.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">اینترنت</string>
     <string name="SettingsPrivacy_WalletRestore">بازیابی زنجیره بلوکی</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">منبع داده را برای بازیابی کیف پول با تراکنش ها انتخاب کنید</string>
@@ -624,11 +624,11 @@
     <string name="ManageAccounts_Title">مدیریت کیف پول ها</string>
     <string name="ManageAccounts_CreateNewWallet">به وجود آوردن</string>
     <string name="ManageAccounts_ImportWallet">بازگرداني</string>
-    <string name="ManageAccounts_WatchAddress">Watch Address</string>
+    <string name="ManageAccounts_WatchAddress">مشاهده آدرس</string>
     <string name="ManageAccounts_Hint">نکته! بازیابی کیف پول موجود اما با عبارت عبور جدید، یک کیف پول کاملاً جدید تولید می کند. اگر می خواهید از یک عبارت بازیابی حافظه 12-24 کلمه ای برای کیف پول های متعدد استفاده کنید، این مفید است.</string>
     <string name="Watch_Address_Title">آدرس</string>
     <string name="Watch_Address_Hint">آدرس یا دامنه</string>
-    <string name="Watch_Address_Watch">Watch</string>
+    <string name="Watch_Address_Watch">مشاهده</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">نام</string>
     <string name="ManageAccount_Save">ذخیره</string>
@@ -646,11 +646,11 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s کلمه با عبارت عبور</string>
     <string name="ManageAccount_SwitchWallet_Title">کیف پول را تغییر دهید</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">کیف پول را برای تعویض سریع انتخاب کنید</string>
-    <string name="ManageAccount_DeleteWarning">Are you sure want to delete this wallet?</string>
+    <string name="ManageAccount_DeleteWarning">آیا مطمئن هستید که می خواهید این کیف پول را حذف کنید?</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">تنظیمات شبکه</string>
-    <string name="NetworkSettings_SwithesAutomatically">switches automatically</string>
-    <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP network uses the links listed below and switches automatically.</string>
+    <string name="NetworkSettings_SwithesAutomatically">سوئیچ به طور خودکار</string>
+    <string name="NetworkSettings_SwithesAutomatically_Description">شبکه MainNet HTTP از پیوندهای فهرست شده در زیر استفاده می کند و به طور خودکار سوئیچ می شود.</string>
     <string name="NetworkSettings_TestNetDisclaimer">لطفاً گزینه‌های Testnet را انتخاب نکنید، مگر اینکه متوجه شده باشید که چیست و چگونه کار می‌کند.\n\nTestnet یک بلاک چین موازی برای اهداف آزمایشی با واحد پول خود است. اگر شخصی یک پرداخت معمولی را به آدرس Testnet شما ارسال کند، از بین خواهد رفت.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">کلید</string>
@@ -701,25 +701,25 @@
     <string name="AddToken_Symbol">نماد</string>
     <string name="AddToken_Decimals">اعشارها</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">Coin Type(s)</string>
+    <string name="AddToken_CoinTypes">انواع سکه</string>
     <string name="AddToken_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
-    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
+    <string name="AddToken_InvalidAddressError">آدرس قرارداد یا نماد BEP2 نامعتبر است</string>
     <string name="AddToken_ApiLimitExceeded">از محدوده اپی فراتر رفت. بعدا دوباره تلاش کنید.</string>
     <string name="AddEvmToken_TokenNotFound">نشانه یافت نشد</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
-    <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
+    <string name="AddressFormatSettings_Description">قالب آدرس را برای سکه انتخاب کنید. اگر مطمئن نیستید گزینه پیشنهادی را ادامه دهید. هنگام بازیابی کیف پول موجود باید یک قالب صحیح انتخاب شود.</string>
     <!-- Coin Platforms -->
-    <string name="CoinPlatforms_Native">Native</string>
-    <string name="CoinPlatformsSelector_Title">Coin Type</string>
-    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains. Select version(s) you would like to use.</string>
+    <string name="CoinPlatforms_Native">بومی</string>
+    <string name="CoinPlatformsSelector_Title">نوع سکه</string>
+    <string name="CoinPlatformsSelector_Description">این توکن در چندین بلاک چین وجود دارد. نسخه(های) مورد نظر برای استفاده را انتخاب کنید.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %s مجدداً همزمان سازی کند.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">ارتباطات</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommended)</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Common before 2018</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">آدرس نقد (توصیه شده)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">رایج قبل از ۲۰۱۸</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">رایج بعد از ۲۰۱۸</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">ارتباط</string>
     <string name="Tor_Status_Starting">درحال راه اندازی Tor...</string>
@@ -730,7 +730,7 @@
     <string name="TorPage_ConnectionClosed">ارتباط قطع شد</string>
     <string name="Tor_PrerequisitesAlert_Content">با فعال کردن TOR، اتصال Ethereum زنجیره بلوکی به Infura بازمی گردد.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip49_Title">Newer (recommended)</string>
+    <string name="CoinOption_bip49_Title">جدیدتر (توصیه شده)</string>
     <string name="CoinOption_bip84_Title">جدیدترین</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">قیمت</string>
@@ -847,5 +847,5 @@
     <string name="BalanceSyncError_ButtonReport">گزارش</string>
     <string name="BalanceSyncError_ReportButtonExplanation">در صورت تصمیم به گزارش آن ، متن خطا در کلیپ بورد شما کپی خواهد شد.</string>
     <!--Release notes-->
-    <string name="ReleaseNotes_FollowUs">Follow Us</string>
+    <string name="ReleaseNotes_FollowUs">ما را دنبال کنید</string>
 </resources>

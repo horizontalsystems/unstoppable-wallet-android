@@ -216,7 +216,7 @@
     <string name="Balance_Sort_24hPriceChange">По Изменение Цены (%)</string>
     <string name="Balance_Hidden">скрытое</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
-    <string name="Balance_NoWalletAlert">У вас пока нет кошельков. Создайте новый или восстановите существующий </string>
+    <string name="Balance_NoWalletAlert">No wallets yet</string>
     <string name="Balance_NoCoinsAlert">Вы еще не добавили монеты в этот кошелек</string>
     <string name="Balance_WatchAccount_NoBalance">У кошелька с этим адресом нет баланса</string>
     <!--Send-->
@@ -425,7 +425,7 @@
     <string name="Transaction_Unlimited">неограниченно %s</string>
     <string name="Transactions_All">Все</string>
     <string name="Transactions_Incoming">Received</string>
-    <string name="Transactions_Outgoing">Sent</string>
+    <string name="Transactions_Outgoing">Отправлено</string>
     <string name="Transactions_Swaps">Swaps</string>
     <string name="Transactions_Approvals">Approvals</string>
     <!--Transaction Info-->

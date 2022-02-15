@@ -216,7 +216,7 @@
     <string name="Balance_Sort_24hPriceChange">价格变动</string>
     <string name="Balance_Hidden">隐藏</string>
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
-    <string name="Balance_NoWalletAlert">您还没有任何钱包。创建新钱包或恢复已有钱包 </string>
+    <string name="Balance_NoWalletAlert">尚无钱包</string>
     <string name="Balance_NoCoinsAlert">您还没有添加任何代币到此钱包中。</string>
     <string name="Balance_WatchAccount_NoBalance">此钱包地址没有任何余额</string>
     <!--Send-->
@@ -263,19 +263,19 @@
     <string name="Send_Token_InsufficientFeeAlert">%1$s（%2$s）的交易费用以%3$s支付。您需要%4$s。</string>
     <string name="Send_Warning_LowFee">警告！有被骗的风险</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_Title">Fee Settings</string>
-    <string name="FeeSettings_MaxFee">Max Fee</string>
-    <string name="FeeSettings_Fee">Fee</string>
-    <string name="FeeSettings_GasLimit">Gas Limit</string>
-    <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Risk of getting stuck</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may get stuck or fail.</string>
-    <string name="FeeSettings_Overpricing_Title">Overpricing</string>
-    <string name="FeeSettings_Overpricing">The gas price is higher than necessary for the transaction.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">At the moment the base fee for transacting is high. It may go down when the network becomes less congested.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Low Base Fee</string>
-    <string name="FeeSettings_BaseFeeIsLow">The Max Base Fee set up is too low for including the transaction.</string>
+    <string name="FeeSettings_Title">费用设置</string>
+    <string name="FeeSettings_MaxFee">最大手续费</string>
+    <string name="FeeSettings_Fee">费用</string>
+    <string name="FeeSettings_GasLimit">GAS限制</string>
+    <string name="FeeSettings_GasPrice">GAS的价格</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">有被卡的风险</string>
+    <string name="FeeSettings_RiskOfGettingStuck">交易可能被卡或失败。</string>
+    <string name="FeeSettings_Overpricing_Title">定价过高</string>
+    <string name="FeeSettings_Overpricing">天然气价格高于交易所需的价格。</string>
+    <string name="FeeSettings_BaseFeeIsHigh_Title">基础费用高！</string>
+    <string name="FeeSettings_BaseFeeIsHigh">此刻，交易的基本费用很高。当网络变得不那么拥挤时，费用可能会下降。</string>
+    <string name="FeeSettings_BaseFeeIsLow_Title">低基本费用</string>
+    <string name="FeeSettings_BaseFeeIsLow">设置的最大基本费用太低，不能包含交易。</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">交易速度</string>
     <string name="FeeInfo_Description">比特币和Etherum区块链都要求用户在发送交易时支付网络费用。当区块链上发生大量交易时费用较高；而区块链空闲时费用较低。</string>
@@ -312,9 +312,9 @@
     <string name="WalletConnect_Error_NoWallet">没有合适的钱包。您需要创建或恢复现有钱包</string>
     <string name="WalletConnect_Error_WatchAccount">此功能不适用于观察中的钱包，您需要切换到恢复或创建的钱包 </string>
     <!--EthereumTransaction-->
-    <string name="EthereumTransaction_Warning_Title">Warning</string>
-    <string name="EthereumTransaction_Error_Title">Error</string>
-    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
+    <string name="EthereumTransaction_Warning_Title">警告</string>
+    <string name="EthereumTransaction_Error_Title">出错</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">可用额度不足</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">当前%s余额低于此交易所需金额，包括交易费用。</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">选定的费用太低，交易将被拒绝！</string>
