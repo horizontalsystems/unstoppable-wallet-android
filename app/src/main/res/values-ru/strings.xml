@@ -264,18 +264,23 @@
     <string name="Send_Warning_LowFee">Внимание! Транзакция может застрять в сети</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Настройки Комиссии</string>
+    <string name="FeeSettings_Reset">Reset</string>
     <string name="FeeSettings_MaxFee">Макс. Комиссия</string>
     <string name="FeeSettings_Fee">Комиссия</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">The fee for transacting on the network is measured in gas units. Gas Limit is the maximum amount of gas a user is willing to pay for confirming a transaction (min. 21,000). An insufficient gas limit is a common reason for a transaction to fail with an \'out of gas\' error.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Risk of getting stuck</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may get stuck or fail.</string>
-    <string name="FeeSettings_Overpricing_Title">Overpricing</string>
-    <string name="FeeSettings_Overpricing">Стоимость газа превышает подходящую для транзакции цену.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">В настоящий момент базовая комиссия за транзакцию высокая. Она может уменьшиться при снижении сетевой нагрузки.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Low Base Fee</string>
-    <string name="FeeSettings_BaseFeeIsLow">The Max Base Fee set up is too low for including the transaction.</string>
+    <string name="FeeSettings_GasPrice_Info">The fee for transacting on the network is measured in gas units. Gas Price is the amount a user is willing to spend per unit of gas. When the network is busy, gas prices are high, and low when it\'s idle. An insufficient gas price is often a reason for a transaction to remain pending for an extended period.</string>
+    <string name="FeeSettings_CurrentBaseFee">Current Base Fee</string>
+    <string name="FeeSettings_MaxBaseFee">Max Base Fee</string>
+    <string name="FeeSettings_MaxBaseFee_Info">A base fee is the algorithmically determined price users need to pay for a transaction on Ethereum blockchain. The base fee automatically set by Ethereum network and is not controlled by a specific entity.</string>
+    <string name="FeeSettings_MaxMinerTips">Max Miner Tips</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Miner tips are defined as optional fees that users may include to incentivize network participants to prioritize user\'s transaction.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Risky</string>
+    <string name="FeeSettings_RiskOfGettingStuck">The transaction may fail or remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_Overpricing_Title">Fee Too High</string>
+    <string name="FeeSettings_Overpricing">The set transaction fee is higher than necessary for processing this transaction now.</string>
+    <string name="FeeSettings_Info_IUnderstand">I Understand</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Скорость Транзакции</string>
     <string name="FeeInfo_Description">Пользователи блокчейнов для Bitcoin и Ethereum должны оплачивать сетевые комиссии при отправке транзакций. Комиссии обычно выше при обработке большего количества транзакций в сети и ниже при меньшей занятости блокчейна.</string>
@@ -317,9 +322,12 @@
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">Для отправки транзакции требуется %s</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Текущий баланс %s ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Выбранное значение комиссии слишком низкое и будет отклонено!</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Недостаточно ликвидности</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">Ошибка! Проверьте баланс и убедитесь, что на нем достаточно %s для покрытия комиссии. Или попробуйте увеличить предел скольжения цены и повторите попытку снова. Следующая попытка через 3 секунды...</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Low Fee</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The set transaction fee amount is insufficient for processing this transaction now.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Insufficient Liquidity</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.\"</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Estimation Error</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Check balance to ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will auto-retry in 3 sec…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Consider leaving some %s on balance to be able to pay for future transactions.</string>
     <!--Swap-->
     <string name="Swap">Обменять</string>
