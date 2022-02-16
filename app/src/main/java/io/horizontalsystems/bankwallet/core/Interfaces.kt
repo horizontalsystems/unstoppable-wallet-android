@@ -125,7 +125,6 @@ interface IAccountManager {
 interface IBackupManager {
     val allBackedUp: Boolean
     val allBackedUpFlowable: Flowable<Boolean>
-    fun setIsBackedUp(id: String)
 }
 
 interface IAccountFactory {
