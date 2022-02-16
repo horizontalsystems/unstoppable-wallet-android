@@ -221,7 +221,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                         )
                     }
                     .padding(12.dp),
-                painter = painterResource(id = R.drawable.ic_more),
+                painter = painterResource(id = R.drawable.ic_more2_20),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey
             )

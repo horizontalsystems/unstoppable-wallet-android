@@ -14,7 +14,8 @@ data class NftAsset(
     val imagePreviewUrl: String,
 
     @Embedded
-    val lastSale: NftAssetLastSale?
+    val lastSale: NftAssetLastSale?,
+    val ownedCount: Int = 1
 )
 
 data class NftAssetLastSale(

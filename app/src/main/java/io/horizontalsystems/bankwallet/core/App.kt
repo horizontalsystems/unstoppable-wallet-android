@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsEip20Provi
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
+import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
@@ -90,6 +91,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmNetworkManager: EvmNetworkManager
         lateinit var accountSettingManager: AccountSettingManager
+        lateinit var nftManager: NftManager
     }
 
     override val testMode = BuildConfig.testMode
@@ -240,6 +242,8 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
 
         startTasks()
+
+        nftManager = NftManager(appDatabase.nftCollectionDao())
     }
 
     private fun setAppTheme() {

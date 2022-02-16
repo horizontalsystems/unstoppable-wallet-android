@@ -65,10 +65,63 @@ class NftItemFactory(private val coinManager: ICoinManager) {
         }
 
         return NftAssetItem(
+            accountId = asset.accountId,
             tokenId = asset.tokenId,
             name = asset.name,
+            imageUrl = asset.imageUrl,
             imagePreviewUrl = asset.imagePreviewUrl,
+            ownedCount = asset.ownedCount,
             coinPrice = coinPrice,
+            currencyPrice = null,
+            onSale = true,
+            prices = assetItemPrices
+        )
+    }
+
+    fun createNftAssetItem(
+        asset: NftAsset,
+        collectionStats: NftCollectionStats?
+    ): NftAssetItem {
+        var averagePrice7d: CoinValue? = null
+        var averagePrice30d: CoinValue? = null
+
+        collectionStats?.let { stats ->
+            platformCoinEth?.let {
+                averagePrice7d = CoinValue(
+                    CoinValue.Kind.PlatformCoin(it),
+                    stats.averagePrice7d
+                )
+                averagePrice30d = CoinValue(
+                    CoinValue.Kind.PlatformCoin(it),
+                    stats.averagePrice30d
+                )
+            }
+        }
+
+        val lastPrice: CoinValue? = asset.lastSale?.let { lastSale ->
+            coinManager.getPlatformCoin(CoinType.fromId(lastSale.coinTypeId))
+                ?.let { platformCoin ->
+                    CoinValue(
+                        CoinValue.Kind.PlatformCoin(platformCoin),
+                        lastSale.totalPrice
+                    )
+                }
+        }
+
+        val assetItemPrices = NftAssetItem.Prices(
+            average7d = averagePrice7d,
+            average30d = averagePrice30d,
+            last = lastPrice
+        )
+
+        return NftAssetItem(
+            accountId = asset.accountId,
+            tokenId = asset.tokenId,
+            name = asset.name,
+            imageUrl = asset.imageUrl,
+            imagePreviewUrl = asset.imagePreviewUrl,
+            ownedCount = asset.ownedCount,
+            coinPrice = null,
             currencyPrice = null,
             onSale = true,
             prices = assetItemPrices
