@@ -23,7 +23,7 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
 
     init {
         viewModelScope.launch {
-            service.nftCollections
+            service.collectionItems
                 .collect {
                     handleNftCollections(it)
                 }
