@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun <T> CellMultilineLawrenceSection(
-    items: List<T>,
+    items: Iterable<T>,
     itemContent: @Composable (T) -> Unit
 ) {
     Column(

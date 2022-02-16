@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.nft.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -27,12 +28,13 @@ import java.math.BigDecimal
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun NftPreview(asset: NftAssetItem) {
+fun NftPreview(asset: NftAssetItem, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence)
+            .clickable(onClick = onClick)
     ) {
         Box(
             modifier = Modifier
@@ -85,9 +87,12 @@ fun NftPreview(asset: NftAssetItem) {
 }
 
 private val asset = NftAssetItem(
+    accountId = "accountId",
     tokenId = "108510973921457929967077298367545831468135648058682555520544982493970263179265",
     name = "Crypto Punk 312",
+    imageUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
     imagePreviewUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
+    ownedCount = 2,
     coinPrice = CoinValue(CoinValue.Kind.Coin(Coin("", "Ethereum", "ETH"), 8), BigDecimal("112.2979871")),
     currencyPrice = CurrencyValue(Currency("USD", "$", 2), BigDecimal("112.2979871")),
     onSale = false,
@@ -102,6 +107,6 @@ private val asset = NftAssetItem(
 @Composable
 fun NftPreviewPreview() {
     ComposeAppTheme {
-        NftPreview(asset)
+        NftPreview(asset, {})
     }
 }

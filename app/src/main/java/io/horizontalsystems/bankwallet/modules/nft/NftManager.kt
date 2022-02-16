@@ -92,4 +92,12 @@ class NftManager(private val nftDao: NftDao) {
 
         return assets
     }
+
+    suspend fun getAsset(accountId: String, tokenId: String): NftAsset? {
+        return nftDao.getAsset(accountId, tokenId)
+    }
+
+    fun getCollection(accountId: String, collectionSlug: String): NftCollection? {
+        return nftDao.getCollection(accountId, collectionSlug)
+    }
 }

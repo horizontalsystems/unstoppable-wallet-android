@@ -1031,6 +1031,13 @@
     <string name="Nfts_PriceType_LastPrice">Last Price</string>
     <string name="Nfts_Asset_OnSale">On Sale</string>
 
+    <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_OwnedCount">Owned Count</string>
+    <string name="NftAsset_Properties">Properties</string>
+    <string name="NftAsset_Description">Description</string>
+    <string name="NftAsset_Details">Details</string>
+    <string name="NftAsset_Links">Links</string>
+    <string name="PoweredBy_OpenSeaAPI">Powered by OpenSea API</string>
     <!--Rate list-->
 
     <string name="RateList_TopGainers">Top Gainers</string>

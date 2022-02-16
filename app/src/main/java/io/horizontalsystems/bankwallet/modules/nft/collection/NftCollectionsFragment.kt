@@ -23,7 +23,9 @@ import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
 import io.horizontalsystems.bankwallet.modules.nft.ui.NftsCollectionSection
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -112,7 +114,9 @@ fun NftCollectionsScreen(navController: NavController) {
                                     items = collections,
                                     key = { it.slug }
                                 ) { collection ->
-                                    NftsCollectionSection(collection, viewModel)
+                                    NftsCollectionSection(collection, viewModel) {
+                                        navController.slideFromBottom(R.id.nftAssetFragment, NftAssetModule.prepareParams(it.accountId, it.tokenId))
+                                    }
                                 }
                             }
                         }

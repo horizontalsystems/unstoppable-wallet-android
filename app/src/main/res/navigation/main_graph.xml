@@ -452,6 +452,10 @@
         android:id="@+id/nftsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionsFragment" />
 
+    <fragment
+        android:id="@+id/nftAssetFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetFragment" />
+
     <!--  Dialogs/BottomSheets  -->
     <!--    <dialog-->
     <!--        android:id="@+id/transactionInfoDialog"-->

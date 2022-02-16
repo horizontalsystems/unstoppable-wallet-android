@@ -11,6 +11,9 @@ interface NftDao {
     @Query("SELECT * FROM NftAsset WHERE accountId = :accountId")
     fun getAssets(accountId: String): Flow<List<NftAsset>>
 
+    @Query("SELECT * FROM NftAsset WHERE accountId = :accountId AND tokenId = :tokenId")
+    suspend fun getAsset(accountId: String, tokenId: String): NftAsset?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCollections(collections: List<NftCollection>)
 
@@ -31,5 +34,8 @@ interface NftDao {
         insertCollections(collections)
         insertAssets(assets)
     }
+
+    @Query("SELECT * FROM NftCollection WHERE accountId = :accountId AND slug = :slug")
+    fun getCollection(accountId: String, slug: String): NftCollection?
 }
 
