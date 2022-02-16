@@ -25,9 +25,9 @@ class NftCollectionsService(
     private val accountManager: IAccountManager,
     private val nftItemFactory: NftItemFactory
 ) {
-    private val _nftCollections =
+    private val _collectionItems =
         MutableStateFlow<DataState<List<NftCollectionItem>>>(DataState.Loading)
-    val nftCollections = _nftCollections.asStateFlow()
+    val collectionItems = _collectionItems.asStateFlow()
 
     var priceType = PriceType.Days7
         private set
@@ -78,14 +78,14 @@ class NftCollectionsService(
                 nftManager.refresh(account, getAddress(account))
             }
         } else {
-            _nftCollections.update {
+            _collectionItems.update {
                 DataState.Error(NoActiveAccount())
             }
         }
     }
 
     private fun handleUpdatedCollectionAssets(collectionAssets: Map<NftCollection, List<NftAsset>>) {
-        _nftCollections.update {
+        _collectionItems.update {
             DataState.Success(collectionAssets.map { (collection, assets) ->
                 nftItemFactory.createNftCollectionItem(collection, assets.map { asset ->
                     nftItemFactory.createNftAssetItem(asset, collection.stats, priceType)
@@ -95,7 +95,7 @@ class NftCollectionsService(
     }
 
     private fun handleUpdatedPriceType() {
-        _nftCollections.value.dataOrNull?.let { collections ->
+        _collectionItems.value.dataOrNull?.let { collections ->
             val list = collections.map { collectionItem ->
                 val assets = collectionItem.assets.map { assetItem ->
                     val coinPrice = when (priceType) {
@@ -108,7 +108,7 @@ class NftCollectionsService(
                 collectionItem.copy(assets = assets)
             }
 
-            _nftCollections.update {
+            _collectionItems.update {
                 DataState.Success(list)
             }
         }
