@@ -264,18 +264,23 @@
     <string name="Send_Warning_LowFee">Attention ! Risque de blocage</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Paramètres des frais</string>
+    <string name="FeeSettings_Reset">Reset</string>
     <string name="FeeSettings_MaxFee">Frais Max</string>
     <string name="FeeSettings_Fee">Frais</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">The fee for transacting on the network is measured in gas units. Gas Limit is the maximum amount of gas a user is willing to pay for confirming a transaction (min. 21,000). An insufficient gas limit is a common reason for a transaction to fail with an \'out of gas\' error.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Risque de blocage</string>
-    <string name="FeeSettings_RiskOfGettingStuck">La transaction risque d\'être bloquée ou d\'échouer.</string>
-    <string name="FeeSettings_Overpricing_Title">Surfacturation</string>
-    <string name="FeeSettings_Overpricing">Le prix du gas est plus élevé que nécessaire pour la transaction.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Les frais de base sont élevés!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">Pour le moment, les frais de base pour effectuer des transactions sont élevés. Ils pourraient baisser lorsque le réseau sera moins encombré.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Frais de base minimes</string>
-    <string name="FeeSettings_BaseFeeIsLow">Les frais de base maximums définis sont trop faible pour inclure la transaction.</string>
+    <string name="FeeSettings_GasPrice_Info">The fee for transacting on the network is measured in gas units. Gas Price is the amount a user is willing to spend per unit of gas. When the network is busy, gas prices are high, and low when it\'s idle. An insufficient gas price is often a reason for a transaction to remain pending for an extended period.</string>
+    <string name="FeeSettings_CurrentBaseFee">Current Base Fee</string>
+    <string name="FeeSettings_MaxBaseFee">Max Base Fee</string>
+    <string name="FeeSettings_MaxBaseFee_Info">A base fee is the algorithmically determined price users need to pay for a transaction on Ethereum blockchain. The base fee automatically set by Ethereum network and is not controlled by a specific entity.</string>
+    <string name="FeeSettings_MaxMinerTips">Max Miner Tips</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Miner tips are defined as optional fees that users may include to incentivize network participants to prioritize user\'s transaction.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Risky</string>
+    <string name="FeeSettings_RiskOfGettingStuck">The transaction may fail or remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_Overpricing_Title">Fee Too High</string>
+    <string name="FeeSettings_Overpricing">The set transaction fee is higher than necessary for processing this transaction now.</string>
+    <string name="FeeSettings_Info_IUnderstand">I Understand</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Vitesse de transaction</string>
     <string name="FeeInfo_Description">Les blockchains Bitcoin et Ethereum exigent que les utilisateurs paient des frais de réseau lors de l\'envoi de transactions. Les frais sont plus élevés lorsque de nombreuses transactions sont effectuées sur le réseau et inférieurs lorsque la blockchain est moins occupée.</string>
@@ -317,9 +322,12 @@
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">Solde insuffisant</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">La transaction nécessite %s pour l\'envoi</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Le solde actuel des %s est inférieur au montant requis pour traiter cette transaction, frais de transaction compris.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">La valeur de frais sélectionnée est trop faible et sera rejetée !</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Liquidité insuffisante</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">Erreur ! Vérifiez le solde et assurez-vous qu\'il y a suffisamment de %s pour couvrir les frais. Ou essayez d\'augmenter le montant du glissement de prix et réessayez. Nouvelle tentative dans 3 secondes...</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Low Fee</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The set transaction fee amount is insufficient for processing this transaction now.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Insufficient Liquidity</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.\"</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Estimation Error</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Check balance to ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will auto-retry in 3 sec…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Pensez à laisser quelques %s sur le solde pour payer de futures transactions.</string>
     <!--Swap-->
     <string name="Swap">Echanger</string>
