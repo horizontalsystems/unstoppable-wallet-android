@@ -264,18 +264,23 @@
     <string name="Send_Warning_LowFee">경고! 갇힐 위험</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">수수료 설정</string>
+    <string name="FeeSettings_Reset">Reset</string>
     <string name="FeeSettings_MaxFee">최대 수수료</string>
     <string name="FeeSettings_Fee">수수료</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">The fee for transacting on the network is measured in gas units. Gas Limit is the maximum amount of gas a user is willing to pay for confirming a transaction (min. 21,000). An insufficient gas limit is a common reason for a transaction to fail with an \'out of gas\' error.</string>
     <string name="FeeSettings_GasPrice">Gas Used</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">갇힐 위험</string>
-    <string name="FeeSettings_RiskOfGettingStuck">트랜잭션이 중단되거나 실패할 수 있습니다.</string>
-    <string name="FeeSettings_Overpricing_Title">과대 가격 층정</string>
-    <string name="FeeSettings_Overpricing">가스 가격이 거래에 필요한 것보다 높습니다.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">기본 수수료가 높습니다!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">현재 거래에 대한 기본 수수료가 높습니다. 네트워크가 덜 혼잡해지면 다운될 수 있습니다.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">낮은 기본 수수료</string>
-    <string name="FeeSettings_BaseFeeIsLow">최대 기본 수수료 설정이 거래를 포함하기에는 너무 낮습니다.</string>
+    <string name="FeeSettings_GasPrice_Info">The fee for transacting on the network is measured in gas units. Gas Price is the amount a user is willing to spend per unit of gas. When the network is busy, gas prices are high, and low when it\'s idle. An insufficient gas price is often a reason for a transaction to remain pending for an extended period.</string>
+    <string name="FeeSettings_CurrentBaseFee">Current Base Fee</string>
+    <string name="FeeSettings_MaxBaseFee">Max Base Fee</string>
+    <string name="FeeSettings_MaxBaseFee_Info">A base fee is the algorithmically determined price users need to pay for a transaction on Ethereum blockchain. The base fee automatically set by Ethereum network and is not controlled by a specific entity.</string>
+    <string name="FeeSettings_MaxMinerTips">Max Miner Tips</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Miner tips are defined as optional fees that users may include to incentivize network participants to prioritize user\'s transaction.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Risky</string>
+    <string name="FeeSettings_RiskOfGettingStuck">The transaction may fail or remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_Overpricing_Title">Fee Too High</string>
+    <string name="FeeSettings_Overpricing">The set transaction fee is higher than necessary for processing this transaction now.</string>
+    <string name="FeeSettings_Info_IUnderstand">I Understand</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">거래 속도</string>
     <string name="FeeInfo_Description">비트코인과 이더리움 블록체인 모두 사용자가 거래를 보낼 때 네트워크 수수료를 지불해야 합니다. 수수료는 네트워크에서 많은 거래가 발생할 때 더 높고 블록체인이 적으면 더 낮습니다.</string>
@@ -317,9 +322,12 @@
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">잔액 부족</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">거래에서 전송하려면 %s가 필요합니다</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">현재 %s 잔액은 거래 수수료를 포함하여이 거래를 처리하는 데 필요한 금액보다 적습니다.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">선택한 수수료 값이 너무 낮아 거부됩니다!</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">유동성 부족</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">오류! 잔액을 확인하고 수수료를 충당하기에 충분한 %s이 있는지 확인하십시오. 또는 가격 슬리피지 양을 늘리고 다시 시도하십시오. 3초 후에 다시 시도합니다...</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Low Fee</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The set transaction fee amount is insufficient for processing this transaction now.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Insufficient Liquidity</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.\"</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Estimation Error</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Check balance to ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will auto-retry in 3 sec…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">향후 거래에 대해 지불할 수 있도록 일부 %s를 잔액으로 남겨두는 것이 좋습니다.</string>
     <!--Swap-->
     <string name="Swap">스왑</string>
