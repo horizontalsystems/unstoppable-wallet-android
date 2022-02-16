@@ -273,7 +273,7 @@
     <string name="FeeSettings_Overpricing_Title">Sobreprecio</string>
     <string name="FeeSettings_Overpricing">El precio del gas es más alto de lo necesario para la transacción.</string>
     <string name="FeeSettings_BaseFeeIsHigh_Title">¡La tarifa base es alta!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">At the moment the base fee for transacting is high. It may go down when the network becomes less congested.</string>
+    <string name="FeeSettings_BaseFeeIsHigh">Por el momento la tarifa base por transacción es alta. Puede descender cuando la red esté menos congestionada.</string>
     <string name="FeeSettings_BaseFeeIsLow_Title">Tarifa Base baja</string>
     <string name="FeeSettings_BaseFeeIsLow">La tarifa base máxima configurada es demasiado baja para incluir la transacción.</string>
     <!--Fee Info -->
@@ -314,7 +314,7 @@
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
-    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Saldo insuficiente</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">La transacción requiere %s para enviar</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">El saldo actual de %s es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">El valor de la comisión seleccionada es demasiado bajo y será rechazado!</string>
@@ -344,7 +344,7 @@
     <string name="Swap_Proceed">Siguiente</string>
     <string name="Swap_Approve">Aprobar</string>
     <string name="Swap_Approving">Aprobando...</string>
-    <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_Swapping">Intercambio</string>
     <string name="Swap_MaximumPaid">Máximo Pagado</string>
     <string name="Swap_MinimumGot">Cantidad Garantizada</string>
     <string name="Swap_PoweredBy">Desarrollado por</string>
@@ -610,7 +610,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Hud_Text_EmailAddressCopied">Dirección de correo electrónico copiada</string>
     <string name="Hud_Added_To_Watchlist">Añadido a tu Lista de Seguimiento</string>
     <string name="Hud_Added_To_Wallet">Agregar a Wallet</string>
-    <string name="Hud_Already_In_Wallet">Already added to wallet</string>
+    <string name="Hud_Already_In_Wallet">Ya se ha añadido al monedero</string>
     <string name="Hud_Removed_from_Watchlist">Eliminado de la Lista de Seguimiento</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
@@ -654,7 +654,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Configuración de Red</string>
     <string name="NetworkSettings_SwithesAutomatically">cambiar automáticamente</string>
-    <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP network uses the links listed below and switches automatically.</string>
+    <string name="NetworkSettings_SwithesAutomatically_Description">La red HTTP de MainNet utiliza los enlaces listados a continuación y cambia automáticamente.</string>
     <string name="NetworkSettings_TestNetDisclaimer">Por favor, no seleccione las opciones de la red de pruebas a menos que entienda qué es y cómo funciona.\n\nTestnet es un blockchain paralelo para pruebas con su propia moneda. Si alguien envía un pago regular a su dirección de Testnet, se perderá.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Clave</string>
@@ -739,7 +739,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">Precio</string>
     <string name="Coin_Tab_Market">Markets</string>
-    <string name="Coin_Tab_Details">Analytics</string>
+    <string name="Coin_Tab_Details">Estadísticas</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">Hoy</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
@@ -756,16 +756,16 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_Audits">Auditorias</string>
     <string name="CoinPage_Audits_Empty">No hay reportes de auditoría</string>
     <string name="CoinPage_Audits_PoweredBy">Con tecnología de Defiyield.app</string>
-    <string name="CoinPage_Audits_Issues">Issues: %d</string>
+    <string name="CoinPage_Audits_Issues">Problemas: %d</string>
     <string name="CoinPage_InvestorData">Información de Inversor</string>
     <string name="CoinPage_Treasuries">Treasuries</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filtros</string>
-    <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
+    <string name="CoinPage_Treasuries_PoweredBy">Desarrollado por Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Fondos invertidos</string>
     <string name="CoinPage_TokenDistribution">Token Distribution</string>
     <string name="CoinPage_TokenLiquidity">Token Liquidity</string>
-    <string name="CoinPage_TotalVolume">Total Volume</string>
+    <string name="CoinPage_TotalVolume">Volumen total</string>
     <string name="CoinPage_DetailsTvl">TVL</string>
     <string name="CoinPage_TokenTvl">Token TVL</string>
     <string name="CoinPage_SecurityParams">Parámetros de seguridad</string>
@@ -802,11 +802,11 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_Guide">Instructivos</string>
     <string name="CoinPage_Website">Sitio Web</string>
     <string name="CoinPage_Whitepaper">Documento informativo</string>
-    <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
-    <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
-    <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
-    <string name="CoinPage_Twitter_Replied">Replying to %s</string>
-    <string name="CoinPage_Twitter_SeeOnTwitter">See on Twitter</string>
+    <string name="CoinPage_Twitter_NotAvailable">Sin twitter disponible</string>
+    <string name="CoinPage_Twitter_Quoted">Cotizado %s</string>
+    <string name="CoinPage_Twitter_Retweeted">Retwitteado por %s</string>
+    <string name="CoinPage_Twitter_Replied">Respondiendo a: %s</string>
+    <string name="CoinPage_Twitter_SeeOnTwitter">Ver en Twitter</string>
     <string name="CoinPage_MarketCap">Cap. de Mercado</string>
     <string name="CoinPage_DilutedMarketCap">Cap. de Mercado Diluida</string>
     <string name="CoinPage_inCirculation">En circulación</string>
@@ -817,11 +817,11 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_NoData">No hay datos</string>
-    <string name="CoinPage_NoDataAvailable">No data available</string>
+    <string name="CoinPage_NoDataAvailable">No hay datos disponibles</string>
     <string name="CoinPage_AddToWallet">Agregar a Wallet</string>
     <string name="CoinPage_InWallet">En Wallet</string>
-    <string name="CoinPage_Favorite">Favorite</string>
-    <string name="CoinPage_Unfavorite">Unfavorite</string>
+    <string name="CoinPage_Favorite">Favorito</string>
+    <string name="CoinPage_Unfavorite">No favorito</string>
     <string name="CoinPage_Performance_Week">1 Semana</string>
     <string name="CoinPage_Performance_Month">1 Mes</string>
     <string name="CoinPage_ReadMore">Leer más</string>
@@ -835,7 +835,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_Bep2Symbol">Símbolo BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Mejores Monederos</string>
     <string name="CoinPage_MajorHolders_Description">El gráfico anterior muestra el % de todos los tokens en circulación retenidos por los 10 Monderos más importantes. Cuanto más bajo sea el %, más distribuída se encontrará la moneda.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">In top 10 Ethereum wallets</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">En el top 10 de monederos de Ethereum</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Máximos Ganadores</string>
