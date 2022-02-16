@@ -85,7 +85,7 @@ class ManageAccountService(
     }
 
     fun saveAccount() {
-        account.name = newName
+        account = account.copy(name = newName)
         accountManager.update(account)
     }
 

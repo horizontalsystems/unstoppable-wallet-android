@@ -8,12 +8,12 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class Account(
+data class Account(
     val id: String,
-    var name: String,
+    val name: String,
     val type: AccountType,
     val origin: AccountOrigin,
-    var isBackedUp: Boolean = false
+    val isBackedUp: Boolean = false
 ) : Parcelable {
 
     @IgnoredOnParcel

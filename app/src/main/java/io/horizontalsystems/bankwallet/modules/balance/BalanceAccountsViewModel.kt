@@ -13,8 +13,6 @@ import io.reactivex.disposables.CompositeDisposable
 class BalanceAccountsViewModel(private val accountManager: IAccountManager) : ViewModel() {
     private val disposables = CompositeDisposable()
 
-    var emptyAccounts by mutableStateOf<Boolean?>(null)
-        private set
     var accountViewItem by mutableStateOf<AccountViewItem?>(null)
         private set
 
@@ -23,15 +21,6 @@ class BalanceAccountsViewModel(private val accountManager: IAccountManager) : Vi
         accountManager.activeAccountObservable
             .subscribeIO {
                 handleAccount(it.orElse(null))
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        handleAccounts(accountManager.accounts)
-        accountManager.accountsFlowable
-            .subscribeIO {
-                handleAccounts(it)
             }
             .let {
                 disposables.add(it)
@@ -48,10 +37,6 @@ class BalanceAccountsViewModel(private val accountManager: IAccountManager) : Vi
 
             AccountViewItem(address, account.type !is AccountType.Address, account.type is AccountType.Address, account.name, account.id)
         }
-    }
-
-    private fun handleAccounts(accounts: List<Account>) {
-        emptyAccounts = accounts.isEmpty()
     }
 
     override fun onCleared() {
