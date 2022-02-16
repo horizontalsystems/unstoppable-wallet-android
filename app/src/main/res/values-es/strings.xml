@@ -58,8 +58,8 @@
     <string name="EnterPassphrase">Frase de contraseña</string>
     <string name="CreateWallet_PassphraseDescription">La frase de contraseña añade una capa de seguridad adicional a los monederos permitiendo a los usuarios crear múltiples monederos multi-monedas independientes usando una sola frase de recuperación mnemotécnica pero asociada con diferentes contraseñas.\n\nPara restaurar estos monederos un usuario necesitará una frase de recuperación mnemotécnica, así como una contraseña para cada monedero restaurado.</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">GM!</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable? Share feedback and ideas to take it further.</string>
+    <string name="RateApp_Title_Rate_This_App">¡GM!</string>
+    <string name="RateApp_Description_Rate_This_App">¿Disfrutas de Unstoppable? Comparte comentarios e ideas para mejorarlo.</string>
     <string name="RateApp_Button_RateIt">Valóralo</string>
     <string name="RateApp_Button_NotNow">No ahora</string>
     <!--Restore-->
@@ -101,24 +101,24 @@
     <string name="Market_Tab_Overview">Resumen</string>
     <string name="Market_Tab_Posts">Noticias</string>
     <string name="Market_Tab_Watchlist">Lista de Seguimiento</string>
-    <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
+    <string name="Market_Tab_Watchlist_EmptyList">Tu Watchlist está vacía.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
-    <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
+    <string name="Market_Category_TopCoins_Description">Mejores monedas por rango de límite de mercado</string>
     <string name="Market_SyncError">Error de sincronización</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Diagrama</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Capitalización Total</string>
     <string name="MarketGlobalMetrics_BtcDominance">Dominio Bitcoin</string>
     <string name="MarketGlobalMetrics_Volume">Volumen</string>
     <string name="MarketGlobalMetrics_DefiCap">Cap. DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total M.Cap description</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Descricipción de la Capitalización Total de mercado</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">El cambio histórico en la relación entre el límite de mercado de Bitcoin y el resto de los mercados de criptomonedas. \n\nPor lo general, cuando el dominio de Bitcoin tiende a ser más alto, el resto de las tendencias del mercado de criptomonedas disminuye y viceversa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">El cambio histórico en el volumen diario del mercado de operaciones agregadas para todas las criptomonedas.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">El cambio histórico en el volumen de operaciones diarias acumuladas por %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">El cambio histórico en el valor acumulado del mercado de los tokens en el sector de las finanzas descentralizadas.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">El cambio histórico en el valor acumulado de toda criptomoneda administrado por protocolos descentralizados.</string>
-    <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
+    <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtrar por cadena</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Todo</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">Esta moneda no es compatible todavía</string>
     <!--Market Search-->
@@ -272,7 +272,7 @@
     <string name="FeeSettings_RiskOfGettingStuck">La transacción puede quedarse atascada o fallar.</string>
     <string name="FeeSettings_Overpricing_Title">Sobreprecio</string>
     <string name="FeeSettings_Overpricing">El precio del gas es más alto de lo necesario para la transacción.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
+    <string name="FeeSettings_BaseFeeIsHigh_Title">¡La tarifa base es alta!</string>
     <string name="FeeSettings_BaseFeeIsHigh">At the moment the base fee for transacting is high. It may go down when the network becomes less congested.</string>
     <string name="FeeSettings_BaseFeeIsLow_Title">Tarifa Base baja</string>
     <string name="FeeSettings_BaseFeeIsLow">La tarifa base máxima configurada es demasiado baja para incluir la transacción.</string>
