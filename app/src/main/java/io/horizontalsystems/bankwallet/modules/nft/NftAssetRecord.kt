@@ -12,6 +12,7 @@ data class NftAssetRecord(
     val name: String,
     val imageUrl: String,
     val imagePreviewUrl: String,
+    val description: String,
 
     @Embedded
     val lastSale: NftAssetLastSale?,

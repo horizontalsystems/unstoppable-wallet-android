@@ -92,6 +92,7 @@ private val asset = NftAssetItem(
     name = "Crypto Punk 312",
     imageUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
     imagePreviewUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
+    description = "description",
     ownedCount = 2,
     coinPrice = CoinValue(CoinValue.Kind.Coin(Coin("", "Ethereum", "ETH"), 8), BigDecimal("112.2979871")),
     currencyPrice = CurrencyValue(Currency("USD", "$", 2), BigDecimal("112.2979871")),

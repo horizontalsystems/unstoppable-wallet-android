@@ -48,6 +48,7 @@ class NftManager(private val nftDao: NftDao) {
                 name = assetResponse.name,
                 imageUrl = assetResponse.image_url,
                 imagePreviewUrl = assetResponse.image_preview_url,
+                description = assetResponse.description ?: "",
                 lastSale = assetResponse.last_sale?.let { last_sale ->
                     NftAssetLastSale(
                         getCoinTypeId(last_sale.payment_token.address),
