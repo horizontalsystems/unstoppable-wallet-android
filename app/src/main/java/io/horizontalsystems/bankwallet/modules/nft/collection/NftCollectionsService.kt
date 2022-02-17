@@ -8,8 +8,8 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.nft.NftAsset
-import io.horizontalsystems.bankwallet.modules.nft.NftCollection
+import io.horizontalsystems.bankwallet.modules.nft.NftAssetRecord
+import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.signer.Signer
@@ -84,7 +84,7 @@ class NftCollectionsService(
         }
     }
 
-    private fun handleUpdatedCollectionAssets(collectionAssets: Map<NftCollection, List<NftAsset>>) {
+    private fun handleUpdatedCollectionAssets(collectionAssets: Map<NftCollectionRecord, List<NftAssetRecord>>) {
         _collectionItems.update {
             DataState.Success(collectionAssets.map { (collection, assets) ->
                 nftItemFactory.createNftCollectionItem(collection, assets.map { asset ->
@@ -130,7 +130,7 @@ class NftCollectionsService(
 
     private fun subscribeForCollectionAssetUpdates(
         account: Account,
-        callback: suspend (value: Map<NftCollection, List<NftAsset>>) -> Unit
+        callback: suspend (value: Map<NftCollectionRecord, List<NftAssetRecord>>) -> Unit
     ) {
         handleActiveAccountJob = coroutineScope.launch {
             nftManager.getCollectionAndAssets(account.id)

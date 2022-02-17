@@ -13,7 +13,7 @@ import java.math.BigDecimal
 
 class NftManager(private val nftDao: NftDao) {
 
-    fun getCollectionAndAssets(accountId: String): Flow<Map<NftCollection, List<NftAsset>>> =
+    fun getCollectionAndAssets(accountId: String): Flow<Map<NftCollectionRecord, List<NftAssetRecord>>> =
         combine(
             nftDao.getCollections(accountId),
             nftDao.getAssets(accountId)
@@ -28,7 +28,7 @@ class NftManager(private val nftDao: NftDao) {
 
     suspend fun refresh(account: Account, address: Address) = withContext(Dispatchers.IO) {
         val collections = fetchCollections(address).map { collectionResponse ->
-            NftCollection(
+            NftCollectionRecord(
                 accountId = account.id,
                 slug = collectionResponse.slug,
                 name = collectionResponse.name,
@@ -41,7 +41,7 @@ class NftManager(private val nftDao: NftDao) {
         }
 
         val assets = fetchAssets(address).map { assetResponse ->
-            NftAsset(
+            NftAssetRecord(
                 accountId = account.id,
                 collectionSlug = assetResponse.collection.slug,
                 tokenId = assetResponse.token_id,
@@ -93,11 +93,11 @@ class NftManager(private val nftDao: NftDao) {
         return assets
     }
 
-    suspend fun getAsset(accountId: String, tokenId: String): NftAsset? {
+    suspend fun getAsset(accountId: String, tokenId: String): NftAssetRecord? {
         return nftDao.getAsset(accountId, tokenId)
     }
 
-    fun getCollection(accountId: String, collectionSlug: String): NftCollection? {
+    fun getCollection(accountId: String, collectionSlug: String): NftCollectionRecord? {
         return nftDao.getCollection(accountId, collectionSlug)
     }
 }
