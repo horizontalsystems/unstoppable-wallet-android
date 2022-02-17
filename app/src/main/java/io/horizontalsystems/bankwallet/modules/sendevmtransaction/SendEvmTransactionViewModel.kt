@@ -252,10 +252,6 @@ class SendEvmTransactionViewModel(
                         Translator.getString(R.string.Swap_ToAmountTitle),
                         toCoinService.platformCoin.name
                     ),
-                    getEstimatedAmount(
-                        info?.let { toCoinService.amountData(it.estimatedAmountTo) },
-                        ValueType.Incoming
-                    ),
                     getGuaranteedAmount(toAmountMin)
                 )
             )
@@ -411,10 +407,6 @@ class SendEvmTransactionViewModel(
                                 Translator.getString(R.string.Swap_ToAmountTitle),
                                 coinServiceOut.platformCoin.name
                             ),
-                            getEstimatedAmount(
-                                info?.let { coinServiceOut.amountData(it.estimatedOut) },
-                                ValueType.Incoming
-                            ),
                             getGuaranteedAmount(coinServiceOut.amountData(trade.amountOutMin))
                         )
                     )
@@ -428,10 +420,6 @@ class SendEvmTransactionViewModel(
                                 Translator.getString(R.string.Swap_FromAmountTitle),
                                 coinServiceIn.platformCoin.name
                             ),
-                            getEstimatedAmount(
-                                info?.let { coinServiceOut.amountData(it.estimatedIn) },
-                                ValueType.Outgoing
-                            ),
                             getMaxAmount(coinServiceIn.amountData(trade.amountInMax))
                         )
                     )
@@ -443,7 +431,7 @@ class SendEvmTransactionViewModel(
                                 Translator.getString(R.string.Swap_ToAmountTitle),
                                 coinServiceOut.platformCoin.name
                             ),
-                            getGuaranteedAmount(coinServiceOut.amountData(trade.amountOut))
+                            getAmount(coinServiceOut.amountData(trade.amountOut),  ValueType.Incoming)
                         )
                     )
                 )
@@ -650,7 +638,7 @@ class SendEvmTransactionViewModel(
             amountData.secondary?.getFormatted(),
             ColoredValue(
                 "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMin)}",
-                getAmountColor(ValueType.Regular)
+                getAmountColor(ValueType.Incoming)
             )
         )
     }
@@ -660,27 +648,8 @@ class SendEvmTransactionViewModel(
             amountData.secondary?.getFormatted(),
             ColoredValue(
                 "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMax)}",
-                getAmountColor(ValueType.Regular)
+                getAmountColor(ValueType.Outgoing)
             )
-        )
-    }
-
-    private fun getEstimatedAmount(
-        amountData: SendModule.AmountData?,
-        type: ValueType
-    ): ViewItem {
-        val coinAmount = amountData?.primary?.getFormatted()
-
-        val coinAmountString = if (coinAmount != null) {
-            "$coinAmount" + " " + Translator.getString(R.string.Swap_AmountEstimated)
-        } else {
-            "---"
-        }
-        val amountColor = getAmountColor(if (coinAmount != null) type else ValueType.Disabled)
-
-        return ViewItem.Amount(
-            amountData?.secondary?.getFormatted() ?: "---",
-            ColoredValue(coinAmountString, amountColor)
         )
     }
 
