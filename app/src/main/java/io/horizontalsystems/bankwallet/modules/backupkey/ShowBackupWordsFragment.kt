@@ -29,6 +29,7 @@ class ShowBackupWordsFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        disallowScreenshot()
         _binding = FragmentShowBackupWordsBinding.inflate(inflater, container, false)
         val view = binding.root
         return view

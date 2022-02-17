@@ -32,6 +32,7 @@ class ShowKeyMainFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        disallowScreenshot()
         _binding = FragmentShowKeyMainBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
