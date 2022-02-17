@@ -58,7 +58,7 @@ class SendEvmTransactionView @JvmOverloads constructor(
                 val loading by feeCellViewModel.loadingLiveData.observeAsState(false)
 
                 EvmFeeCell(
-                    title = stringResource(R.string.FeeSettings_MaxFee),
+                    title = stringResource(R.string.FeeSettings_Fee),
                     value = fee,
                     loading = loading,
                     highlightEditButton = feeCellViewModel.highlightEditButton,

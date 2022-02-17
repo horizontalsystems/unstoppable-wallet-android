@@ -6,7 +6,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -24,7 +23,6 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.HsSlider
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 
@@ -68,11 +66,12 @@ fun Eip1559FeeSettings(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            EvmFeeCell(
+            MaxFeeCell(
                 title = stringResource(R.string.FeeSettings_MaxFee),
                 value = feeViewItem?.fee ?: "",
                 loading = feeViewItemLoading,
-                viewState = feeViewItemState
+                viewState = feeViewItemState,
+                navController = navController
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -81,19 +80,14 @@ fun Eip1559FeeSettings(
                     {
                         FeeInfoCell(
                             title = stringResource(R.string.FeeSettings_GasLimit),
-                            value = feeViewItem?.gasLimit
-                        ) {
-                            navController.slideFromBottom(
-                                R.id.feeSettingsInfoDialog,
-                                FeeSettingsInfoDialog.prepareParams(
-                                    Translator.getString(R.string.FeeSettings_GasLimit),
-                                    Translator.getString(R.string.FeeSettings_GasLimit_Info)
-                                )
-                            )
-                        }
+                            value = feeViewItem?.gasLimit,
+                            infoTitle = Translator.getString(R.string.FeeSettings_GasLimit),
+                            infoText = Translator.getString(R.string.FeeSettings_GasLimit_Info),
+                            navController = navController
+                        )
                     },
                     {
-                        FeeInfoCell(title = stringResource(R.string.FeeSettings_CurrentBaseFee), currentBaseFee)
+                        FeeCell(title = stringResource(R.string.FeeSettings_CurrentBaseFee), value = currentBaseFee)
                     }
                 )
             )
@@ -106,16 +100,11 @@ fun Eip1559FeeSettings(
                 settingsViewItems.add {
                     FeeInfoCell(
                         title = stringResource(R.string.FeeSettings_MaxBaseFee),
-                        value = "$maxBaseFee ${slider.unit}"
-                    ) {
-                        navController.slideFromBottom(
-                            R.id.feeSettingsInfoDialog,
-                            FeeSettingsInfoDialog.prepareParams(
-                                Translator.getString(R.string.FeeSettings_MaxBaseFee),
-                                Translator.getString(R.string.FeeSettings_MaxBaseFee_Info)
-                            )
-                        )
-                    }
+                        value = "$maxBaseFee ${slider.unit}",
+                        infoTitle = Translator.getString(R.string.FeeSettings_MaxBaseFee),
+                        infoText = Translator.getString(R.string.FeeSettings_MaxBaseFee_Info),
+                        navController = navController
+                    )
                 }
 
                 settingsViewItems.add {
@@ -134,16 +123,11 @@ fun Eip1559FeeSettings(
                 settingsViewItems.add {
                     FeeInfoCell(
                         title = stringResource(R.string.FeeSettings_MaxMinerTips),
-                        value = "$maxPriorityFee ${slider.unit}"
-                    ) {
-                        navController.slideFromBottom(
-                            R.id.feeSettingsInfoDialog,
-                            FeeSettingsInfoDialog.prepareParams(
-                                Translator.getString(R.string.FeeSettings_MaxMinerTips),
-                                Translator.getString(R.string.FeeSettings_MaxMinerTips_Info)
-                            )
-                        )
-                    }
+                        value = "$maxPriorityFee ${slider.unit}",
+                        infoTitle = Translator.getString(R.string.FeeSettings_MaxMinerTips),
+                        infoText = Translator.getString(R.string.FeeSettings_MaxMinerTips_Info),
+                        navController = navController
+                    )
                 }
 
                 settingsViewItems.add {
@@ -208,11 +192,12 @@ fun LegacyFeeSettings(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            EvmFeeCell(
-                title = stringResource(R.string.FeeSettings_Fee),
+            MaxFeeCell(
+                title = stringResource(R.string.FeeSettings_MaxFee),
                 value = feeViewItem?.fee ?: "",
                 loading = feeViewItemLoading,
-                viewState = feeViewItemState
+                viewState = feeViewItemState,
+                navController = navController
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -220,16 +205,11 @@ fun LegacyFeeSettings(
             settingsViewItems.add {
                 FeeInfoCell(
                     title = stringResource(R.string.FeeSettings_GasLimit),
-                    value = feeViewItem?.gasLimit
-                ) {
-                    navController.slideFromBottom(
-                        R.id.feeSettingsInfoDialog,
-                        FeeSettingsInfoDialog.prepareParams(
-                            Translator.getString(R.string.FeeSettings_GasLimit),
-                            Translator.getString(R.string.FeeSettings_GasLimit_Info)
-                        )
-                    )
-                }
+                    value = feeViewItem?.gasLimit,
+                    infoTitle = Translator.getString(R.string.FeeSettings_GasLimit),
+                    infoText = Translator.getString(R.string.FeeSettings_GasLimit_Info),
+                    navController = navController
+                )
             }
 
             sliderViewItem?.let { slider ->
@@ -238,16 +218,11 @@ fun LegacyFeeSettings(
                 settingsViewItems.add {
                     FeeInfoCell(
                         title = stringResource(R.string.FeeSettings_GasPrice),
-                        value = "$selectedGasPrice ${slider.unit}"
-                    ) {
-                        navController.slideFromBottom(
-                            R.id.feeSettingsInfoDialog,
-                            FeeSettingsInfoDialog.prepareParams(
-                                Translator.getString(R.string.FeeSettings_GasPrice),
-                                Translator.getString(R.string.FeeSettings_GasPrice_Info)
-                            )
-                        )
-                    }
+                        value = "$selectedGasPrice ${slider.unit}",
+                        infoTitle = Translator.getString(R.string.FeeSettings_GasPrice),
+                        infoText = Translator.getString(R.string.FeeSettings_GasPrice_Info),
+                        navController = navController
+                    )
                 }
 
                 settingsViewItems.add {
@@ -308,20 +283,54 @@ fun Cautions(cautions: List<CautionViewItem>) {
 }
 
 @Composable
-fun FeeInfoCell(title: String, value: String?, onClick: (() -> Unit)? = null) {
+fun FeeCell(title: String, value: String?) {
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .clickable(enabled = onClick != null, onClick = { onClick?.invoke() })
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        onClick?.let {
-            Image(
-                modifier = Modifier.padding(end = 16.dp),
-                painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
-            )
-        }
+        Text(
+            text = title,
+            style = ComposeAppTheme.typography.subhead2,
+            color = ComposeAppTheme.colors.grey
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = value ?: "",
+            style = ComposeAppTheme.typography.subhead1,
+            color = ComposeAppTheme.colors.leah,
+            textAlign = TextAlign.End,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+fun FeeInfoCell(
+    title: String,
+    value: String?,
+    infoTitle: String,
+    infoText: String,
+    navController: NavController
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable {
+                navController.slideFromBottom(
+                    R.id.feeSettingsInfoDialog,
+                    FeeSettingsInfoDialog.prepareParams(infoTitle, infoText)
+                )
+            }
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            modifier = Modifier.padding(end = 16.dp),
+            painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
+        )
         Text(
             text = title,
             style = ComposeAppTheme.typography.subhead2,
@@ -395,6 +404,65 @@ fun EvmFeeCell(
                         painter = painterResource(id = R.drawable.ic_edit_20),
                         colorFilter = ColorFilter.tint(tintColor),
                         contentDescription = ""
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun MaxFeeCell(
+    title: String,
+    value: String,
+    loading: Boolean,
+    viewState: ViewState?,
+    navController: NavController
+) {
+    CellSingleLineLawrenceSection {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable {
+                    navController.slideFromBottom(
+                        R.id.feeSettingsInfoDialog,
+                        FeeSettingsInfoDialog.prepareParams(
+                            Translator.getString(R.string.FeeSettings_MaxFee),
+                            Translator.getString(R.string.FeeSettings_MaxFee_Info)
+                        )
+                    )
+                }
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier.padding(end = 16.dp),
+                painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
+            )
+            Text(
+                text = title,
+                style = ComposeAppTheme.typography.subhead2,
+                color = ComposeAppTheme.colors.grey
+            )
+
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        color = ComposeAppTheme.colors.grey,
+                        strokeWidth = 1.5.dp
+                    )
+                } else {
+                    Text(
+                        text = value,
+                        style = ComposeAppTheme.typography.subhead1,
+                        color = if (viewState is ViewState.Error) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }

@@ -325,6 +325,7 @@
     <string name="FeeSettings_Title">Fee Settings</string>
     <string name="FeeSettings_Reset">Reset</string>
     <string name="FeeSettings_MaxFee">Max Fee</string>
+    <string name="FeeSettings_MaxFee_Info">A base fee is the algorithmically determined price users need to pay for a transaction on Ethereum blockchain. The base fee automatically set by Ethereum network and is not controlled by a specific entity.</string>
     <string name="FeeSettings_Fee">Fee</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">The fee for transacting on the network is measured in gas units. Gas Limit is the maximum amount of gas a user is willing to pay for confirming a transaction (min. 21,000). An insufficient gas limit is a common reason for a transaction to fail with an \'out of gas\' error.</string>
