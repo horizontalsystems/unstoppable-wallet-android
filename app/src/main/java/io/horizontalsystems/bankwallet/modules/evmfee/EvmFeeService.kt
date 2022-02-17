@@ -47,8 +47,6 @@ class EvmFeeService(
     }
 
     private fun sync(gasPriceServiceState: DataState<GasPriceInfo>) {
-        transactionStatus = DataState.Loading
-
         when (gasPriceServiceState) {
             is DataState.Error -> {
                 transactionStatus = gasPriceServiceState

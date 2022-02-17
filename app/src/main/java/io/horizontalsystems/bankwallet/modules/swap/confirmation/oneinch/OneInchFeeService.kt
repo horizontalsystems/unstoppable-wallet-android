@@ -72,8 +72,6 @@ class OneInchFeeService(
     }
 
     private fun sync(gasPriceInfo: GasPriceInfo) {
-        transactionStatus = DataState.Loading
-
         gasPriceInfoDisposable?.dispose()
         retryDisposable?.dispose()
 
