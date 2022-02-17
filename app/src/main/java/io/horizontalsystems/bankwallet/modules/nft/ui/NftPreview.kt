@@ -19,6 +19,7 @@ import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
@@ -94,6 +95,10 @@ private val asset = NftAssetItem(
     imagePreviewUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
     description = "description",
     ownedCount = 2,
+    contract = NftAssetContract(
+        "address",
+        "schema_name"
+    ),
     coinPrice = CoinValue(CoinValue.Kind.Coin(Coin("", "Ethereum", "ETH"), 8), BigDecimal("112.2979871")),
     currencyPrice = CurrencyValue(Currency("USD", "$", 2), BigDecimal("112.2979871")),
     onSale = false,

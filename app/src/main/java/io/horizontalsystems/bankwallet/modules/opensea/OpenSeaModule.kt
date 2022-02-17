@@ -34,7 +34,8 @@ object OpenSeaApiV1Response {
         val image_preview_url: String,
         val description: String?,
         val collection: Collection,
-        val last_sale: LastSale?
+        val last_sale: LastSale?,
+        val asset_contract: AssetContract,
     ) {
         data class Collection(
             val slug: String,
@@ -49,6 +50,11 @@ object OpenSeaApiV1Response {
                 val decimals: Int,
             )
         }
+
+        data class AssetContract(
+            val address: String,
+            val schema_name: String,
+        )
     }
 
     data class Assets(
