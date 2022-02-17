@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.session
+package io.horizontalsystems.bankwallet.modules.walletconnect.session.v1
 
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
@@ -21,5 +21,12 @@ object WalletConnectSessionModule {
 
     const val REMOTE_PEER_ID_KEY = "remote_peer_id"
     const val CONNECTION_LINK_KEY = "connection_link"
+
+    data class PeerMetaItem(
+        val name: String,
+        val url: String,
+        val description: String?,
+        val icon: String?
+    )
 
 }

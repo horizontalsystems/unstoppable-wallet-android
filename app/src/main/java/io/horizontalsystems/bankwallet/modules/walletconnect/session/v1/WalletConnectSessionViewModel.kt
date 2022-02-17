@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.session
+package io.horizontalsystems.bankwallet.modules.walletconnect.session.v1
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -75,6 +75,12 @@ class WalletConnectMainViewModel(private val service: WC1Service) : ViewModel() 
                 .let {
                     disposables.add(it)
                 }
+
+        service.start()
+    }
+
+    override fun onCleared() {
+        service.stop()
     }
 
     fun cancel() {
