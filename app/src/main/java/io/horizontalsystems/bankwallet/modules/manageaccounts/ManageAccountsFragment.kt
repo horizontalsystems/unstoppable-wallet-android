@@ -68,7 +68,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
     }
 
     ComposeAppTheme {
-        Column {
+        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             var menuItems: List<MenuItem> = listOf()
             var navigationIcon: @Composable (() -> Unit)? = null
 
