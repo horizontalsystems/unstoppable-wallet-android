@@ -14,12 +14,32 @@ class NftItemFactory(private val coinManager: ICoinManager) {
     fun createNftCollectionItem(
         collectionRecord: NftCollectionRecord,
         assetItems: List<NftAssetItem>
-    ) = NftCollectionItem(
-        slug = collectionRecord.slug,
-        name = collectionRecord.name,
-        imageUrl = collectionRecord.imageUrl,
-        assets = assetItems
-    )
+    ): NftCollectionItem {
+        val stats = collectionRecord.stats?.let { stats ->
+            platformCoinEth?.let {
+                val averagePrice7d = CoinValue(
+                    CoinValue.Kind.PlatformCoin(it),
+                    stats.averagePrice7d
+                )
+                val averagePrice30d = CoinValue(
+                    CoinValue.Kind.PlatformCoin(it),
+                    stats.averagePrice30d
+                )
+                NftCollectionItem.Stats(
+                    averagePrice7d,
+                    averagePrice30d,
+                )
+            }
+        }
+
+        return NftCollectionItem(
+            slug = collectionRecord.slug,
+            name = collectionRecord.name,
+            imageUrl = collectionRecord.imageUrl,
+            stats = stats,
+            assets = assetItems
+        )
+    }
 
     fun createNftAssetItem(
         assetRecord: NftAssetRecord,

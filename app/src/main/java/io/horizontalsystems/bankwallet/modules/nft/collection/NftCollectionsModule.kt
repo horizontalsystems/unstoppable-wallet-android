@@ -34,8 +34,15 @@ data class NftCollectionItem(
     val slug: String,
     val name: String,
     val imageUrl: String,
+    val stats: Stats?,
+
     val assets: List<NftAssetItem>
-)
+) {
+    data class Stats(
+        val averagePrice7d: CoinValue,
+        val averagePrice30d: CoinValue,
+    )
+}
 
 data class NftCollectionViewItem(
     val slug: String,
