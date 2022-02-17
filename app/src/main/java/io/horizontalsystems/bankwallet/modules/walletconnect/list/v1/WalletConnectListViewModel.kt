@@ -1,10 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.list
+package io.horizontalsystems.bankwallet.modules.walletconnect.list.v1
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule.Section
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionKillManager
 import io.horizontalsystems.core.SingleLiveEvent
@@ -63,8 +64,8 @@ class WalletConnectListViewModel(
         val sections = mutableListOf<Section>()
         items.forEach { item ->
             val sessions = item.sessions.map { session ->
-                WalletConnectListModule.Session(
-                    session = session,
+                WalletConnectListModule.SessionViewItem(
+                    sessionId = session.remotePeerId,
                     title = session.remotePeerMeta.name,
                     subtitle = getSubtitle(item.chain),
                     url = session.remotePeerMeta.url,
@@ -78,13 +79,13 @@ class WalletConnectListViewModel(
         sectionsLiveData.postValue(sections)
     }
 
-    private fun getSubtitle(chain: WalletConnectListService.Chain) = when (chain) {
-        WalletConnectListService.Chain.Ethereum,
-        WalletConnectListService.Chain.Ropsten,
-        WalletConnectListService.Chain.Rinkeby,
-        WalletConnectListService.Chain.Kovan,
-        WalletConnectListService.Chain.Goerli -> "Ethereum"
-        WalletConnectListService.Chain.BinanceSmartChain -> "Binance Smart Chain"
+    private fun getSubtitle(chain: WalletConnectListModule.Chain) = when (chain) {
+        WalletConnectListModule.Chain.Ethereum,
+        WalletConnectListModule.Chain.Ropsten,
+        WalletConnectListModule.Chain.Rinkeby,
+        WalletConnectListModule.Chain.Kovan,
+        WalletConnectListModule.Chain.Goerli -> "Ethereum"
+        WalletConnectListModule.Chain.BinanceSmartChain -> "Binance Smart Chain"
     }
 
     //TODO improve this method

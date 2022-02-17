@@ -20,7 +20,8 @@ import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WalletConnectSessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeRed
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
@@ -45,7 +46,7 @@ fun WCSessionList(
             Spacer(modifier = Modifier.height(12.dp))
         }
         CellMultilineLawrenceSection(section.sessions) {
-            SessionCell(it, navController)
+            SessionCell(it, section.version, navController)
         }
         Spacer(modifier = Modifier.height(20.dp))
     }
@@ -85,15 +86,32 @@ private fun PendingRequestsCell(pendingRequests: Int, navController: NavControll
 }
 
 @Composable
-private fun SessionCell(session: WalletConnectListModule.Session, navController: NavController) {
+private fun SessionCell(
+    session: WalletConnectListModule.SessionViewItem,
+    version: WalletConnectListModule.Version,
+    navController: NavController
+) {
     Row(
         modifier = Modifier
             .fillMaxSize()
             .clickable {
-                navController.slideFromBottom(
-                    R.id.walletConnectMainFragment,
-                    WalletConnectSessionModule.prepareParams(session.session.remotePeerId, null)
-                )
+                if (version == WalletConnectListModule.Version.Version2){
+                    navController.slideFromBottom(
+                        R.id.wc2SessionFragment,
+                        WC2SessionModule.prepareParams(
+                            session.sessionId,
+                            null,
+                        )
+                    )
+                } else {
+                    navController.slideFromBottom(
+                        R.id.walletConnectMainFragment,
+                        WalletConnectSessionModule.prepareParams(
+                            session.sessionId,
+                            null,
+                        )
+                    )
+                }
             }
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically

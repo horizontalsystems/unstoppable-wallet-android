@@ -16,8 +16,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class WC1Service(
-    remotePeerId: String?,
-    connectionLink: String?,
+    private val remotePeerId: String?,
+    private val connectionLink: String?,
     private val manager: WC1Manager,
     private val sessionManager: WC1SessionManager,
     private val requestManager: WC1RequestManager,
@@ -79,7 +79,7 @@ class WC1Service(
     val requestObservable: Flowable<WC1Request>
         get() = requestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    init {
+    fun start() {
         remotePeerId?.let {
             val session = sessionManager.sessions.firstOrNull { session -> session.remotePeerId == remotePeerId }
             if (session != null) {
@@ -104,6 +104,10 @@ class WC1Service(
                 .let {
                     disposable.add(it)
                 }
+    }
+
+    fun stop() {
+        disposable.clear()
     }
 
     private fun restoreSession(session: WalletConnectSession) {

@@ -62,6 +62,7 @@ android {
             resValue "string", "providerCoinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/provider.coins.json"
             resValue "string", "marketApiBaseUrl", "https://api-dev.blocksdecoded.com"
             resValue "string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom"
+            resValue "string", "walletConnectV2Key", "8b4f41c60880a3e3ad57d82fddb30568"
         }
 
         apptestnet {
@@ -99,6 +100,7 @@ android {
             resValue "string", "providerCoinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/provider.coins.json"
             resValue "string", "marketApiBaseUrl", "https://api.blocksdecoded.com"
             resValue "string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom"
+            resValue "string", "walletConnectV2Key", "0c5ca155c2f165a7d0c88686f2113a72"
         }
 
         appcenterrelease {
@@ -224,6 +226,8 @@ dependencies {
     // WalletConnect
     implementation 'com.github.horizontalsystems:wallet-connect-kotlin:d5f3cac'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    // WalletConnect V2
+    implementation "com.github.WalletConnect:WalletConnectKotlinV2:1.0.0-beta03"
 
     // Unstoppable Domains
     implementation 'com.unstoppabledomains:resolution:4.0.0'

@@ -1,0 +1,241 @@
+package io.horizontalsystems.bankwallet.modules.walletconnect.version2
+
+import android.util.Log
+import com.walletconnect.walletconnectv2.client.WalletConnect
+import com.walletconnect.walletconnectv2.client.WalletConnectClient
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.PublishSubject
+
+class WC2Service(
+    private val sessionTopic: String?,
+    private val connectionLink: String?,
+    private val wc2SessionManager: WC2SessionManager,
+) : WalletConnectClient.WalletDelegate {
+
+    private val TAG = "WC2Service"
+    private val disposable = CompositeDisposable()
+
+    private val eventSubject = PublishSubject.create<Event>()
+    val eventObservable: Flowable<Event>
+        get() = eventSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    var event: Event = Event.Default
+        private set(value) {
+            field = value
+            eventSubject.onNext(value)
+        }
+
+    sealed class Event {
+        object Default : Event()
+        class Invalid(val error: Throwable) : Event()
+        class WaitingForApproveSession(val proposal: WalletConnect.Model.SessionProposal) : Event()
+        class SessionRequest(
+            val sessionRequest: WalletConnect.Model.SessionRequest,
+            val session: WalletConnect.Model.SettledSession
+        ) : Event()
+
+        class SessionSettled(val session: WalletConnect.Model.SettledSession) : Event()
+        class SessionDeleted(val deletedSession: WalletConnect.Model.DeletedSession) : Event()
+        object Ready : Event()
+    }
+
+    fun start() {
+        Log.e(TAG, "start: ")
+        WalletConnectClient.setWalletDelegate(this)
+        connectionLink?.let {
+            pair(it)
+        }
+
+        sessionTopic?.let { topic ->
+            WalletConnectClient.getListOfSettledSessions().firstOrNull{ it.topic == topic}?.let {
+                event = Event.SessionSettled(it)
+            }
+        }
+    }
+
+    fun stop() {
+
+    }
+
+    fun pair(uri: String) {
+        Log.e(TAG, "pair: $uri")
+        val pair = WalletConnect.Params.Pair(uri.trim())
+        WalletConnectClient.pair(pair, object : WalletConnect.Listeners.Pairing {
+            override fun onSuccess(settledPairing: WalletConnect.Model.SettledPairing) {
+                val listOfSettledSessions = WalletConnectClient.getListOfSettledSessions()
+                listOfSettledSessions.forEach {
+                    Log.e(TAG, "settled session topic: ${it.topic}")
+                }
+                val settledSession = listOfSettledSessions.firstOrNull{ it.topic == settledPairing.topic} ?: return
+                event = Event.SessionSettled(settledSession)
+                Log.e(TAG, "pair onSuccess: ${settledPairing.topic}")
+            }
+
+            override fun onError(error: Throwable) {
+                Log.e(TAG, "pair onError: ", error)
+            }
+        })
+    }
+
+    fun approve(proposal: WalletConnect.Model.SessionProposal) {
+        val accounts =
+            proposal.chains.map { chainId -> "$chainId:0x022c0c42a80bd19EA4cF0F94c4F9F96645759716" }
+        val approve = WalletConnect.Params.Approve(proposal, accounts)
+
+        WalletConnectClient.approve(approve, object : WalletConnect.Listeners.SessionApprove {
+            override fun onSuccess(settledSession: WalletConnect.Model.SettledSession) {
+                Log.e(TAG, "approve onSuccess settledSession.topic: ${settledSession.topic}")
+                event = Event.SessionSettled(settledSession)
+            }
+
+            override fun onError(error: Throwable) {
+                Log.e(TAG, "onError: ", error)
+            }
+        })
+    }
+
+    fun reject(proposal: WalletConnect.Model.SessionProposal) {
+        val rejectionReason = "Reject Session"
+        val proposalTopic: String = proposal.topic
+        val reject = WalletConnect.Params.Reject(rejectionReason, proposalTopic)
+
+        WalletConnectClient.reject(reject, object : WalletConnect.Listeners.SessionReject {
+            override fun onSuccess(rejectedSession: WalletConnect.Model.RejectedSession) {
+//                stateSubject.onNext(RejectSession)
+                Log.e(TAG, "reject success: ")
+            }
+
+            override fun onError(error: Throwable) {
+                Log.e(TAG, "onError: ", error)
+            }
+        })
+    }
+
+    fun disconnect(topic: String) {
+        val disconnect = WalletConnect.Params.Disconnect(
+            sessionTopic = topic,
+            reason = "User disconnected session"
+        )
+
+        WalletConnectClient.disconnect(disconnect, object : WalletConnect.Listeners.SessionDelete {
+            override fun onSuccess(deletedSession: WalletConnect.Model.DeletedSession) {
+                event = Event.SessionDeleted(deletedSession)
+                Log.e(TAG, "session disconnected: $topic")
+            }
+
+            override fun onError(error: Throwable) {
+                Log.e(TAG, "onError: ", error)
+            }
+        })
+    }
+
+    fun respondRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
+        val response = WalletConnect.Params.Response(
+            sessionTopic = sessionRequest.topic,
+            jsonRpcResponse = WalletConnect.Model.JsonRpcResponse.JsonRpcResult(
+                sessionRequest.request.id,
+                "0xa3f20717a250c2b0b729b7e5becbff67fdaef7e0699da4de7ca5895b02a170a12d887fd3b17bfdce3481f10bea41f45ba9f709d39ce8325427b57afcfc994cee1b"
+            )
+        )
+
+        WalletConnectClient.respond(response, object : WalletConnect.Listeners.SessionPayload {
+            override fun onError(error: Throwable) {
+                Log.e(TAG, "onError: ", error)
+            }
+        })
+    }
+
+    fun rejectRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
+        val response = WalletConnect.Params.Response(
+            sessionTopic = sessionRequest.topic,
+            jsonRpcResponse = WalletConnect.Model.JsonRpcResponse.JsonRpcError(
+                sessionRequest.request.id,
+                WalletConnect.Model.JsonRpcResponse.Error(500, "Kotlin Wallet Error")
+            )
+        )
+
+        WalletConnectClient.respond(response, object : WalletConnect.Listeners.SessionPayload {
+            override fun onError(error: Throwable) {
+                Log.e(TAG, "onError: ", error)
+            }
+        })
+    }
+
+    fun sessionUpdate(session: WalletConnect.Model.SettledSession) {
+//        val proposalNonNull = proposal ?: return
+//
+//        val update = WalletConnect.Params.Update(
+//            sessionTopic = session.topic,
+//            sessionState = WalletConnect.Model.SessionState(accounts = listOf("${proposalNonNull.chains[0]}:0xa0A6c118b1B25207A8A764E1CAe1635339bedE62"))
+//        )
+//
+//        WalletConnectClient.update(update, object : WalletConnect.Listeners.SessionUpdate {
+//            override fun onSuccess(updatedSession: WalletConnect.Model.UpdatedSession) {
+////                stateSubject.onNext(
+////                    UpdateActiveSessions(
+////                        WalletConnectClient.getListOfSettledSessions(),
+////                        "Successful session update"
+////                    )
+////                )
+//            }
+//
+//            override fun onError(error: Throwable) {
+//                //Error
+//                Log.e(TAG, "onError: ", error)
+//            }
+//        })
+    }
+
+    fun sessionUpgrade(session: WalletConnect.Model.SettledSession) {
+        val permissions =
+            WalletConnect.Model.SessionPermissions(
+                blockchain = WalletConnect.Model.Blockchain(chains = listOf("eip155:80001")),
+                jsonRpc = WalletConnect.Model.Jsonrpc(listOf("eth_sign"))
+            )
+        val upgrade = WalletConnect.Params.Upgrade(topic = session.topic, permissions = permissions)
+
+        WalletConnectClient.upgrade(upgrade, object : WalletConnect.Listeners.SessionUpgrade {
+            override fun onSuccess(upgradedSession: WalletConnect.Model.UpgradedSession) {
+//                stateSubject.onNext(
+//                    UpdateActiveSessions(
+//                        WalletConnectClient.getListOfSettledSessions(),
+//                        "Successful session upgrade"
+//                    )
+//                )
+            }
+
+            override fun onError(error: Throwable) {
+                //Error
+                Log.e(TAG, "onError: ", error)
+            }
+        })
+    }
+
+    override fun onSessionProposal(sessionProposal: WalletConnect.Model.SessionProposal) {
+        Log.e(
+            TAG,
+            "onSessionProposal: protocol: ${sessionProposal.relayProtocol} accounts: ${sessionProposal.accounts}"
+        )
+        event = Event.WaitingForApproveSession(sessionProposal)
+    }
+
+    override fun onSessionRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
+        Log.e(TAG, "onSessionRequest topic: ${sessionRequest.topic}")
+        val session = WalletConnectClient.getListOfSettledSessions()
+            .find { session -> session.topic == sessionRequest.topic } ?: return
+        event = Event.SessionRequest(sessionRequest, session)
+    }
+
+    override fun onSessionDelete(deletedSession: WalletConnect.Model.DeletedSession) {
+        Log.e(TAG, "onSessionDelete topic: ${deletedSession.topic}")
+        event = Event.SessionDeleted(deletedSession)
+    }
+
+    override fun onSessionNotification(sessionNotification: WalletConnect.Model.SessionNotification) {
+        // Triggered when the peer emits events as notifications that match the list of types agreed upon session settlement
+        Log.e(TAG, "onSessionNotification: ${sessionNotification.topic}")
+    }
+
+}

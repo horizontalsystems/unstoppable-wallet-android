@@ -31,7 +31,10 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionList
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionsEmpty
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WalletConnectSessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -58,27 +61,29 @@ class WalletConnectListFragment : BaseFragment() {
 
 @Composable
 private fun WalletConnectSessionsScreen(navController: NavController) {
-    val viewModel =
-        viewModel<WalletConnectListViewModel>(factory = WalletConnectListModule.Factory())
-
     val qrScannerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
-                navController.slideFromBottom(
-                    R.id.walletConnectMainFragment,
-                    WalletConnectSessionModule.prepareParams(null, scannedText)
-                )
+                val wcVersion: Int = WalletConnectListModule.getVersionFromUri(scannedText)
+                if (wcVersion == 1) {
+                    navController.slideFromBottom(
+                        R.id.walletConnectMainFragment,
+                        WalletConnectSessionModule.prepareParams(null, scannedText)
+                    )
+                } else if(wcVersion == 2) {
+                    navController.slideFromBottom(
+                        R.id.wc2SessionFragment,
+                        WC2SessionModule.prepareParams(null, scannedText)
+                    )
+                }
             }
         }
-
-    val sections by viewModel.sectionsLiveData.observeAsState(listOf())
 
     ComposeAppTheme {
         SessionsScreen(
             navController,
             qrScannerLauncher,
-            sections,
         )
     }
 }
@@ -87,9 +92,14 @@ private fun WalletConnectSessionsScreen(navController: NavController) {
 private fun SessionsScreen(
     navController: NavController,
     qrScannerLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
-    sections: List<WalletConnectListModule.Section>,
+    viewModel: WalletConnectListViewModel = viewModel(factory = WalletConnectListModule.Factory()),
+    viewModelWc2: WC2ListViewModel = viewModel(factory = WalletConnectListModule.FactoryWC2())
 ) {
     val context = LocalContext.current
+
+    val sections by viewModel.sectionsLiveData.observeAsState(listOf())
+    val sectionsWc2 by viewModelWc2.sectionsLiveData.observeAsState(listOf())
+    val noSessions = sections.isEmpty() && sectionsWc2.isEmpty()
 
     Column(
         modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
@@ -116,10 +126,11 @@ private fun SessionsScreen(
             )
         )
         when {
-            sections.isEmpty() -> {
+            noSessions -> {
                 WCSessionsEmpty(qrScannerLauncher)
             }
             else -> {
+                sectionsWc2.forEach { WCSessionList(it, navController) }
                 sections.forEach { WCSessionList(it, navController) }
             }
         }

@@ -9,7 +9,7 @@ object WalletConnectModule {
 
     class Factory(
         private val remotePeerId: String?,
-        private val connectionLink: String?
+        private val connectionLink: String?,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
