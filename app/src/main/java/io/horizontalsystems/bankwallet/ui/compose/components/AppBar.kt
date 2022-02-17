@@ -18,8 +18,8 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 data class MenuItem(
     val title: TranslatableString,
     @DrawableRes val icon: Int? = null,
+    val enabled: Boolean = true,
     val onClick: () -> Unit,
-    val enabled: Boolean = true
 )
 
 @Composable
@@ -44,7 +44,7 @@ fun AppBarMenuButton(
 
 @Composable
 fun AppBar(
-    title: TranslatableString,
+    title: TranslatableString? = null,
     navigationIcon: @Composable (() -> Unit)? = null,
     menuItems: List<MenuItem> = listOf(),
     showSpinner: Boolean = false
@@ -52,13 +52,15 @@ fun AppBar(
     TopAppBar(
         modifier = Modifier.height(56.dp),
         title = {
-            Text(
-                text = title.getString(),
-                style = ComposeAppTheme.typography.title3,
-                color = ComposeAppTheme.colors.oz,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            title?.let {
+                Text(
+                    text = title.getString(),
+                    style = ComposeAppTheme.typography.title3,
+                    color = ComposeAppTheme.colors.oz,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
         navigationIcon = navigationIcon?.let {

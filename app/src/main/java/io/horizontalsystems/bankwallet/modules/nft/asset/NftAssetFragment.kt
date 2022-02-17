@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -64,7 +63,6 @@ class NftAssetFragment : BaseFragment() {
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun NftAssetScreen(navController: NavController, accountId: String?, tokenId: String?) {
     if (accountId == null || tokenId == null) return
@@ -76,17 +74,13 @@ fun NftAssetScreen(navController: NavController, accountId: String?, tokenId: St
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.Nfts_Title),
-                navigationIcon = {
-                    IconButton(onClick = navController::popBackStack) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close)
+                    ) {
+                        navController.popBackStack()
                     }
-                }
-
+                )
             )
             HSSwipeRefresh(
                 state = rememberSwipeRefreshState(false),
@@ -109,6 +103,7 @@ fun NftAssetScreen(navController: NavController, accountId: String?, tokenId: St
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun NftAsset(asset: NftAssetItem) {
     LazyColumn {
