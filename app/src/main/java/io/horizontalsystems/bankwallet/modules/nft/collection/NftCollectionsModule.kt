@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 
@@ -54,6 +55,7 @@ data class NftAssetItem(
     val imagePreviewUrl: String,
     val description: String,
     val ownedCount: Int,
+    val contract: NftAssetContract,
     val coinPrice: CoinValue?,
     val currencyPrice: CurrencyValue?,
     val onSale: Boolean,

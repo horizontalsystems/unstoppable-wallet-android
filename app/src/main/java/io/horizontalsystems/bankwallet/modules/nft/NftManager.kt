@@ -54,7 +54,11 @@ class NftManager(private val nftDao: NftDao) {
                         getCoinTypeId(last_sale.payment_token.address),
                         BigDecimal(last_sale.total_price).movePointLeft(last_sale.payment_token.decimals)
                     )
-                }
+                },
+                contract = NftAssetContract(
+                    assetResponse.asset_contract.address,
+                    assetResponse.asset_contract.schema_name
+                )
             )
         }
 

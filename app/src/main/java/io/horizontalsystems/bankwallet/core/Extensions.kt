@@ -206,6 +206,7 @@ fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit): Disposable {
         .subscribe(onSuccess)
 }
 
-fun String.shortenedAddress(characters: Int = 6) : String {
-    return take(characters) + "..." + takeLast(characters)
+fun String.shortenedAddress(characters: Int = 6) = when {
+    length <= characters * 2 + 4 -> this
+    else -> take(characters) + "..." + takeLast(characters)
 }

@@ -1037,6 +1037,10 @@
     <string name="NftAsset_Description">Description</string>
     <string name="NftAsset_Details">Details</string>
     <string name="NftAsset_Links">Links</string>
+    <string name="NftAsset_ContractAddress">Contract Address</string>
+    <string name="NftAsset_TokenId">Token ID</string>
+    <string name="NftAsset_TokenStandard">Token Standard</string>
+    <string name="NftAsset_Blockchain">Blockchain</string>
     <string name="PoweredBy_OpenSeaAPI">Powered by OpenSea API</string>
     <!--Rate list-->
 
