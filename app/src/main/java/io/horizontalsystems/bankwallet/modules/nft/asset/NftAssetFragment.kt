@@ -191,10 +191,20 @@ fun NftAssetScreen(navController: NavController, accountId: String?, tokenId: St
                                             NftAssetPriceCell(title, price)
                                         }
 
-                                        NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Properties))
-                                        NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Description))
-                                        NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Details))
-                                        NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Links))
+                                        NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Properties)) {
+
+                                        }
+                                        if (asset.description.isNotBlank()) {
+                                            NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Description)) {
+                                                InfoText(asset.description)
+                                            }
+                                        }
+                                        NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Details)) {
+
+                                        }
+                                        NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Links)) {
+
+                                        }
 
                                         Spacer(modifier = Modifier.height(32.dp))
                                         CellFooter(text = stringResource(id = R.string.PoweredBy_OpenSeaAPI))
@@ -212,14 +222,17 @@ fun NftAssetScreen(navController: NavController, accountId: String?, tokenId: St
 }
 
 @Composable
-private fun NftAssetSectionBlock(text: String) {
-    Spacer(modifier = Modifier.height(24.dp))
-    CellSingleLineClear(borderTop = true) {
-        Text(
-            text = text,
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah
-        )
+private fun NftAssetSectionBlock(text: String, content: @Composable () -> Unit) {
+    Column {
+        Spacer(modifier = Modifier.height(24.dp))
+        CellSingleLineClear(borderTop = true) {
+            Text(
+                text = text,
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.leah
+            )
+        }
+        content.invoke()
     }
 }
 

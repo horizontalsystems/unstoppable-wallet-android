@@ -32,6 +32,7 @@ object OpenSeaApiV1Response {
         val name: String,
         val image_url: String,
         val image_preview_url: String,
+        val description: String?,
         val collection: Collection,
         val last_sale: LastSale?
     ) {
