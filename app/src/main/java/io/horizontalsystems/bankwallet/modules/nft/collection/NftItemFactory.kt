@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.nft.collection
 
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.nft.NftAsset
-import io.horizontalsystems.bankwallet.modules.nft.NftCollection
+import io.horizontalsystems.bankwallet.modules.nft.NftAssetRecord
+import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionStats
 import io.horizontalsystems.marketkit.models.CoinType
 
@@ -12,17 +12,17 @@ class NftItemFactory(private val coinManager: ICoinManager) {
     private val platformCoinEth by lazy { coinManager.getPlatformCoin(CoinType.Ethereum) }
 
     fun createNftCollectionItem(
-        collection: NftCollection,
+        collectionRecord: NftCollectionRecord,
         assetItems: List<NftAssetItem>
     ) = NftCollectionItem(
-        slug = collection.slug,
-        name = collection.name,
-        imageUrl = collection.imageUrl,
+        slug = collectionRecord.slug,
+        name = collectionRecord.name,
+        imageUrl = collectionRecord.imageUrl,
         assets = assetItems
     )
 
     fun createNftAssetItem(
-        asset: NftAsset,
+        assetRecord: NftAssetRecord,
         collectionStats: NftCollectionStats?,
         priceType: PriceType
     ): NftAssetItem {
@@ -42,7 +42,7 @@ class NftItemFactory(private val coinManager: ICoinManager) {
             }
         }
 
-        val lastPrice: CoinValue? = asset.lastSale?.let { lastSale ->
+        val lastPrice: CoinValue? = assetRecord.lastSale?.let { lastSale ->
             coinManager.getPlatformCoin(CoinType.fromId(lastSale.coinTypeId))
                 ?.let { platformCoin ->
                     CoinValue(
@@ -65,12 +65,12 @@ class NftItemFactory(private val coinManager: ICoinManager) {
         }
 
         return NftAssetItem(
-            accountId = asset.accountId,
-            tokenId = asset.tokenId,
-            name = asset.name,
-            imageUrl = asset.imageUrl,
-            imagePreviewUrl = asset.imagePreviewUrl,
-            ownedCount = asset.ownedCount,
+            accountId = assetRecord.accountId,
+            tokenId = assetRecord.tokenId,
+            name = assetRecord.name,
+            imageUrl = assetRecord.imageUrl,
+            imagePreviewUrl = assetRecord.imagePreviewUrl,
+            ownedCount = assetRecord.ownedCount,
             coinPrice = coinPrice,
             currencyPrice = null,
             onSale = true,
@@ -79,7 +79,7 @@ class NftItemFactory(private val coinManager: ICoinManager) {
     }
 
     fun createNftAssetItem(
-        asset: NftAsset,
+        assetRecord: NftAssetRecord,
         collectionStats: NftCollectionStats?
     ): NftAssetItem {
         var averagePrice7d: CoinValue? = null
@@ -98,7 +98,7 @@ class NftItemFactory(private val coinManager: ICoinManager) {
             }
         }
 
-        val lastPrice: CoinValue? = asset.lastSale?.let { lastSale ->
+        val lastPrice: CoinValue? = assetRecord.lastSale?.let { lastSale ->
             coinManager.getPlatformCoin(CoinType.fromId(lastSale.coinTypeId))
                 ?.let { platformCoin ->
                     CoinValue(
@@ -115,12 +115,12 @@ class NftItemFactory(private val coinManager: ICoinManager) {
         )
 
         return NftAssetItem(
-            accountId = asset.accountId,
-            tokenId = asset.tokenId,
-            name = asset.name,
-            imageUrl = asset.imageUrl,
-            imagePreviewUrl = asset.imagePreviewUrl,
-            ownedCount = asset.ownedCount,
+            accountId = assetRecord.accountId,
+            tokenId = assetRecord.tokenId,
+            name = assetRecord.name,
+            imageUrl = assetRecord.imageUrl,
+            imagePreviewUrl = assetRecord.imagePreviewUrl,
+            ownedCount = assetRecord.ownedCount,
             coinPrice = null,
             currencyPrice = null,
             onSale = true,

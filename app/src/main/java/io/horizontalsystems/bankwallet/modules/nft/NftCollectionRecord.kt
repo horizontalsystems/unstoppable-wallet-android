@@ -5,7 +5,7 @@ import androidx.room.Entity
 import java.math.BigDecimal
 
 @Entity(primaryKeys = ["accountId", "slug"])
-data class NftCollection(
+data class NftCollectionRecord(
     val accountId: String,
     val slug: String,
     val name: String,
