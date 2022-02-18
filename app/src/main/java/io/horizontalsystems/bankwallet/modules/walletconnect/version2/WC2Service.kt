@@ -50,9 +50,11 @@ class WC2Service : WalletConnectClient.WalletDelegate {
         object Ready : Event()
     }
 
-    fun start() {
-        Log.e(TAG, "start: ")
+    init {
         WalletConnectClient.setWalletDelegate(this)
+    }
+
+    fun start() {
         sessionsUpdatedSubject.onNext(Unit)
     }
 
