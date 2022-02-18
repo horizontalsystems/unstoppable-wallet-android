@@ -87,12 +87,11 @@
     <fragment
         android:id="@+id/sendEvmConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_send_evm">
-    </fragment>
+        tools:layout="@layout/fragment_confirmation_send_evm"></fragment>
 
     <fragment
         android:id="@+id/sendEvmFeeSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.evmfee.SendEvmFeeSettingsFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment" />
 
     <fragment
         android:id="@+id/transactionInfoFragment"
@@ -105,8 +104,7 @@
     <fragment
         android:id="@+id/transactionSpeedUpCancelFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"
-        tools:layout="@layout/fragment_transaction_speedup_cancel">
-    </fragment>
+        tools:layout="@layout/fragment_transaction_speedup_cancel"></fragment>
     <fragment
         android:id="@+id/manageWalletsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment"
@@ -364,19 +362,16 @@
     <fragment
         android:id="@+id/uniswapConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_swap">
-    </fragment>
+        tools:layout="@layout/fragment_confirmation_swap"></fragment>
     <fragment
         android:id="@+id/oneInchConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_swap">
-    </fragment>
+        tools:layout="@layout/fragment_confirmation_swap"></fragment>
 
     <fragment
         android:id="@+id/swapApproveConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_approve_swap">
-    </fragment>
+        tools:layout="@layout/fragment_confirmation_approve_swap"></fragment>
 
     <fragment
         android:id="@+id/swapInfoFragment"

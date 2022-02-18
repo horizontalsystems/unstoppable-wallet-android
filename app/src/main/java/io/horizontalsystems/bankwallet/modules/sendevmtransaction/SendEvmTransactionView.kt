@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.databinding.*
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
-import io.horizontalsystems.bankwallet.modules.evmfee.SendEvmFeeSettingsFragment
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -66,7 +66,7 @@ class SendEvmTransactionView @JvmOverloads constructor(
                 ) {
                     navController.slideFromBottom(
                         resId = R.id.sendEvmFeeSettingsFragment,
-                        args = SendEvmFeeSettingsFragment.prepareParams(parentNavGraphId)
+                        args = EvmFeeSettingsFragment.prepareParams(parentNavGraphId)
                     )
                 }
             }

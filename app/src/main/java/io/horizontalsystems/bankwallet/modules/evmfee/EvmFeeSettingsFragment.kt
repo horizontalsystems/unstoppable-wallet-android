@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettings
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
-class SendEvmFeeSettingsFragment : BaseFragment() {
+class EvmFeeSettingsFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
