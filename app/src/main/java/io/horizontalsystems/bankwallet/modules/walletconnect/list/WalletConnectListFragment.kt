@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
@@ -71,7 +69,7 @@ private fun WalletConnectSessionsScreen(navController: NavController) {
                         R.id.walletConnectMainFragment,
                         WalletConnectSessionModule.prepareParams(null, scannedText)
                     )
-                } else if(wcVersion == 2) {
+                } else if (wcVersion == 2) {
                     navController.slideFromBottom(
                         R.id.wc2SessionFragment,
                         WC2SessionModule.prepareParams(null, scannedText)
@@ -96,10 +94,7 @@ private fun SessionsScreen(
     viewModelWc2: WC2ListViewModel = viewModel(factory = WalletConnectListModule.FactoryWC2())
 ) {
     val context = LocalContext.current
-
-    val sectionWc1 by viewModel.sectionLiveData.observeAsState()
-    val sectionWc2 by viewModelWc2.sectionsLiveData.observeAsState()
-    val noSessions = sectionWc1 == null && sectionWc2 == null
+    val noSessions = viewModel.sectionItem == null && viewModelWc2.sectionItem == null
 
     Column(
         modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
@@ -130,8 +125,8 @@ private fun SessionsScreen(
                 WCSessionsEmpty(qrScannerLauncher)
             }
             else -> {
-                sectionWc2?.let { WCSessionList(it, navController) }
-                sectionWc1?.let { WCSessionList(it, navController) }
+                viewModelWc2.sectionItem?.let { WCSessionList(it, navController) }
+                viewModel.sectionItem?.let { WCSessionList(it, navController) }
             }
         }
     }

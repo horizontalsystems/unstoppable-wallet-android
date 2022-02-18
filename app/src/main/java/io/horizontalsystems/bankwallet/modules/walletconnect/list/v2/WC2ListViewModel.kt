@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.list.v2
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.walletconnect.walletconnectv2.client.WalletConnect
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -14,7 +16,8 @@ class WC2ListViewModel(
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-    val sectionsLiveData = MutableLiveData<Section?>()
+    var sectionItem by mutableStateOf<Section?>(null)
+        private set
 
     init {
         service.sessionsObservable
@@ -28,7 +31,7 @@ class WC2ListViewModel(
 
     private fun sync(sessions: List<WalletConnect.Model.SettledSession>) {
         if (sessions.isEmpty()) {
-            sectionsLiveData.postValue(null)
+            sectionItem = null
             return
         }
 
@@ -42,7 +45,7 @@ class WC2ListViewModel(
             )
         }
         val section = Section(WalletConnectListModule.Version.Version2, sessionItems)
-        sectionsLiveData.postValue(section)
+        sectionItem = section
     }
 
     private fun getSubtitle(chains: List<String>): String {

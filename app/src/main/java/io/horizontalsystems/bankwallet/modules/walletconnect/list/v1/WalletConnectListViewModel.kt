@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.list.v1
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -17,7 +19,9 @@ class WalletConnectListViewModel(
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-    val sectionLiveData = MutableLiveData<Section?>()
+    var sectionItem by mutableStateOf<Section?>(null)
+        private set
+
     val killingSessionInProcessLiveEvent = SingleLiveEvent<Unit>()
     val killingSessionCompletedLiveEvent = SingleLiveEvent<Unit>()
     val killingSessionFailedLiveEvent = SingleLiveEvent<String>()
@@ -61,8 +65,8 @@ class WalletConnectListViewModel(
 //    }
 
     private fun sync(items: List<WalletConnectListService.Item>) {
-        if (items.isEmpty()){
-            sectionLiveData.postValue(null)
+        if (items.isEmpty()) {
+            sectionItem = null
             return
         }
         val sessions = mutableListOf<WalletConnectListModule.SessionViewItem>()
@@ -78,7 +82,7 @@ class WalletConnectListViewModel(
             }
             sessions.addAll(itemSessions)
         }
-        sectionLiveData.postValue(Section(WalletConnectListModule.Version.Version1, sessions))
+        sectionItem = Section(WalletConnectListModule.Version.Version1, sessions)
     }
 
     private fun getSuitableIcon(imageUrls: List<String>): String? {
