@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.core.IPinComponent
@@ -27,6 +28,7 @@ class MainSettingsService(
     private val termsManager: ITermsManager,
     private val pinComponent: IPinComponent,
     private val wc1SessionManager: WC1SessionManager,
+    private val wc2SessionManager: WC2SessionManager,
     private val wc1Manager: WC1Manager
 ) {
 
@@ -64,7 +66,7 @@ class MainSettingsService(
         get() = backupManager.allBackedUp
 
     val walletConnectSessionCount: Int
-        get() = wc1SessionManager.sessions.count()
+        get() = wc1SessionManager.sessions.count() + wc2SessionManager.sessions.count()
 
     val currentLanguageDisplayName: String
         get() = languageManager.currentLanguageName
@@ -87,7 +89,11 @@ class MainSettingsService(
         })
 
         disposables.add(wc1SessionManager.sessionsObservable.subscribe {
-            walletConnectSessionCountSubject.onNext(it.size)
+            walletConnectSessionCountSubject.onNext(walletConnectSessionCount)
+        })
+
+        disposables.add(wc2SessionManager.sessionsObservable.subscribe {
+            walletConnectSessionCountSubject.onNext(walletConnectSessionCount)
         })
 
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {

@@ -63,7 +63,10 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
         service.stop()
     }
 
-    private fun sync(sessionState: WC2SessionService.State? = null, connectionState: WC2PingService.State? = null) {
+    private fun sync(
+        sessionState: WC2SessionService.State? = null,
+        connectionState: WC2PingService.State? = null
+    ) {
         val state = sessionState ?: service.state
         val connection = connectionState ?: service.connectionState
 
@@ -73,7 +76,8 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
         }
 
         when (state) {
-            WC2SessionService.State.WaitingForApproveSession -> {
+            WC2SessionService.State.WaitingForApproveSession,
+            WC2SessionService.State.Ready -> {
                 peerMetaLiveData.postValue(service.appMetaItem)
             }
         }
@@ -97,14 +101,17 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
 
         statusLiveData.postValue(getStatus(connection))
 
-        val hint = when {
+        hintLiveData.postValue(getHint(connection, state))
+    }
+
+    private fun getHint(connection: WC2PingService.State, state: WC2SessionService.State): Int? =
+        when {
             connection is WC2PingService.State.Disconnected -> R.string.WalletConnect_Reconnect_Hint
             connection != WC2PingService.State.Connected -> null
             state == WC2SessionService.State.WaitingForApproveSession -> R.string.WalletConnect_Approve_Hint
             state == WC2SessionService.State.Ready -> R.string.WalletConnect_Ready_Hint
             else -> null
         }
-    }
 
     fun cancel() {
         service.reject()

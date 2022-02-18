@@ -54,7 +54,17 @@ object WalletConnectListModule {
         Ropsten(3),
         Rinkeby(4),
         Kovan(42),
-        Goerli(5),
+        Goerli(5);
+
+        val title: String
+            get() = when (this) {
+                Ethereum -> "Ethereum"
+                BinanceSmartChain -> "Binance Smart Chain"
+                Ropsten -> "Ropsten"
+                Rinkeby -> "Rinkeby"
+                Kovan -> "Kovan"
+                Goerli -> "Goerli"
+            }
     }
 
     fun getVersionFromUri(scannedText: String): Int {

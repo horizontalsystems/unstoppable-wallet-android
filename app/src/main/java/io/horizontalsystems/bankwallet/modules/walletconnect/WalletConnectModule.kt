@@ -26,4 +26,8 @@ object WalletConnectModule {
         }
     }
 
+    sealed class SessionError : Throwable()
+    object NoSuitableAccount : SessionError()
+    object UnsupportedChainId : SessionError()
+
 }

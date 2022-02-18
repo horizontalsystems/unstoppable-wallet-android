@@ -97,9 +97,9 @@ private fun SessionsScreen(
 ) {
     val context = LocalContext.current
 
-    val sections by viewModel.sectionsLiveData.observeAsState(listOf())
-    val sectionsWc2 by viewModelWc2.sectionsLiveData.observeAsState(listOf())
-    val noSessions = sections.isEmpty() && sectionsWc2.isEmpty()
+    val sectionWc1 by viewModel.sectionLiveData.observeAsState()
+    val sectionWc2 by viewModelWc2.sectionsLiveData.observeAsState()
+    val noSessions = sectionWc1 == null && sectionWc2 == null
 
     Column(
         modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
@@ -130,8 +130,8 @@ private fun SessionsScreen(
                 WCSessionsEmpty(qrScannerLauncher)
             }
             else -> {
-                sectionsWc2.forEach { WCSessionList(it, navController) }
-                sections.forEach { WCSessionList(it, navController) }
+                sectionWc2?.let { WCSessionList(it, navController) }
+                sectionWc1?.let { WCSessionList(it, navController) }
             }
         }
     }

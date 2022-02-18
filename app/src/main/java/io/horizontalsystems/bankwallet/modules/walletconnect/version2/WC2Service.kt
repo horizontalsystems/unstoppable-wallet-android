@@ -5,21 +5,30 @@ import com.walletconnect.walletconnectv2.client.WalletConnect
 import com.walletconnect.walletconnectv2.client.WalletConnectClient
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
-class WC2Service(
-    private val sessionTopic: String?,
-    private val connectionLink: String?,
-    private val wc2SessionManager: WC2SessionManager,
-) : WalletConnectClient.WalletDelegate {
+class WC2Service : WalletConnectClient.WalletDelegate {
 
     private val TAG = "WC2Service"
-    private val disposable = CompositeDisposable()
 
     private val eventSubject = PublishSubject.create<Event>()
     val eventObservable: Flowable<Event>
         get() = eventSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    private val sessionsUpdatedSubject = PublishSubject.create<Unit>()
+    val sessionsUpdatedObservable: Flowable<Unit>
+        get() = sessionsUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    private val sessionsRequestReceivedSubject = PublishSubject.create<WalletConnect.Model.SessionRequest>()
+    val sessionsRequestReceivedObservable: Flowable<WalletConnect.Model.SessionRequest>
+        get() = sessionsRequestReceivedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+//    private val pendingRequestUpdatedSubject = PublishSubject.create<Unit>()
+//    val pendingRequestUpdatedObservable: Flowable<Unit>
+//        get() = pendingRequestUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    val activeSessions: List<WalletConnect.Model.SettledSession>
+        get() = WalletConnectClient.getListOfSettledSessions()
 
     var event: Event = Event.Default
         private set(value) {
@@ -44,15 +53,7 @@ class WC2Service(
     fun start() {
         Log.e(TAG, "start: ")
         WalletConnectClient.setWalletDelegate(this)
-        connectionLink?.let {
-            pair(it)
-        }
-
-        sessionTopic?.let { topic ->
-            WalletConnectClient.getListOfSettledSessions().firstOrNull{ it.topic == topic}?.let {
-                event = Event.SessionSettled(it)
-            }
-        }
+        sessionsUpdatedSubject.onNext(Unit)
     }
 
     fun stop() {
@@ -68,7 +69,8 @@ class WC2Service(
                 listOfSettledSessions.forEach {
                     Log.e(TAG, "settled session topic: ${it.topic}")
                 }
-                val settledSession = listOfSettledSessions.firstOrNull{ it.topic == settledPairing.topic} ?: return
+                val settledSession =
+                    listOfSettledSessions.firstOrNull { it.topic == settledPairing.topic } ?: return
                 event = Event.SessionSettled(settledSession)
                 Log.e(TAG, "pair onSuccess: ${settledPairing.topic}")
             }
@@ -79,15 +81,16 @@ class WC2Service(
         })
     }
 
-    fun approve(proposal: WalletConnect.Model.SessionProposal) {
-        val accounts =
-            proposal.chains.map { chainId -> "$chainId:0x022c0c42a80bd19EA4cF0F94c4F9F96645759716" }
+    fun approve(proposal: WalletConnect.Model.SessionProposal, accounts: List<String>) {
+//        val accounts =
+//            proposal.chains.map { chainId -> "$chainId:0x022c0c42a80bd19EA4cF0F94c4F9F96645759716" }
         val approve = WalletConnect.Params.Approve(proposal, accounts)
 
         WalletConnectClient.approve(approve, object : WalletConnect.Listeners.SessionApprove {
             override fun onSuccess(settledSession: WalletConnect.Model.SettledSession) {
-                Log.e(TAG, "approve onSuccess settledSession.topic: ${settledSession.topic}")
+                Log.e(TAG, "approve onSuccess topic: ${settledSession.topic} accounts: ${settledSession.accounts}")
                 event = Event.SessionSettled(settledSession)
+                sessionsUpdatedSubject.onNext(Unit)
             }
 
             override fun onError(error: Throwable) {
@@ -122,6 +125,7 @@ class WC2Service(
         WalletConnectClient.disconnect(disconnect, object : WalletConnect.Listeners.SessionDelete {
             override fun onSuccess(deletedSession: WalletConnect.Model.DeletedSession) {
                 event = Event.SessionDeleted(deletedSession)
+                sessionsUpdatedSubject.onNext(Unit)
                 Log.e(TAG, "session disconnected: $topic")
             }
 
@@ -129,6 +133,8 @@ class WC2Service(
                 Log.e(TAG, "onError: ", error)
             }
         })
+
+        sessionsUpdatedSubject.onNext(Unit)
     }
 
     fun respondRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
@@ -145,6 +151,8 @@ class WC2Service(
                 Log.e(TAG, "onError: ", error)
             }
         })
+
+//        pendingRequestUpdatedSubject.onNext(Unit)
     }
 
     fun rejectRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
@@ -161,6 +169,8 @@ class WC2Service(
                 Log.e(TAG, "onError: ", error)
             }
         })
+
+//        pendingRequestUpdatedSubject.onNext(Unit)
     }
 
     fun sessionUpdate(session: WalletConnect.Model.SettledSession) {
@@ -226,11 +236,14 @@ class WC2Service(
         val session = WalletConnectClient.getListOfSettledSessions()
             .find { session -> session.topic == sessionRequest.topic } ?: return
         event = Event.SessionRequest(sessionRequest, session)
+        sessionsRequestReceivedSubject.onNext(sessionRequest)
+//        pendingRequestUpdatedSubject.onNext(Unit)
     }
 
     override fun onSessionDelete(deletedSession: WalletConnect.Model.DeletedSession) {
         Log.e(TAG, "onSessionDelete topic: ${deletedSession.topic}")
         event = Event.SessionDeleted(deletedSession)
+        sessionsUpdatedSubject.onNext(Unit)
     }
 
     override fun onSessionNotification(sessionNotification: WalletConnect.Model.SessionNotification) {

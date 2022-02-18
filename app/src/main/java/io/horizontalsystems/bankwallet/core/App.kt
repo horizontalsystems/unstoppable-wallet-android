@@ -27,9 +27,11 @@ import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionStorage
+import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionStorage
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1RequestManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
@@ -87,6 +89,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var wc1SessionStorage: WC1SessionStorage
         lateinit var wc1SessionManager: WC1SessionManager
         lateinit var wc1RequestManager: WC1RequestManager
+        lateinit var wc2Service: WC2Service
         lateinit var wc2SessionManager: WC2SessionManager
         lateinit var wc1Manager: WC1Manager
         lateinit var termsManager: ITermsManager
@@ -218,7 +221,8 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         wc1RequestManager = WC1RequestManager()
         wc1Manager = WC1Manager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
 
-        wc2SessionManager = WC2SessionManager()
+        wc2Service = WC2Service()
+        wc2SessionManager = WC2SessionManager(accountManager, WC2SessionStorage(appDatabase), wc2Service)
 
         termsManager = TermsManager(localStorage)
 
