@@ -264,23 +264,23 @@
     <string name="Send_Warning_LowFee">Uyarı! Takılma riski</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Ücret Ayarları</string>
-    <string name="FeeSettings_Reset">Reset</string>
+    <string name="FeeSettings_Reset">Sıfırla</string>
     <string name="FeeSettings_MaxFee">Maksimum Ücret</string>
     <string name="FeeSettings_Fee">Ücret</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
-    <string name="FeeSettings_GasLimit_Info">The fee for transacting on the network is measured in gas units. Gas Limit is the maximum amount of gas a user is willing to pay for confirming a transaction (min. 21,000). An insufficient gas limit is a common reason for a transaction to fail with an \'out of gas\' error.</string>
+    <string name="FeeSettings_GasLimit_Info">Ağ üzerinde işlem yapmanın ücreti gaz birimleri cinsinden ölçülür. Gaz Limiti, bir kullanıcının bir işlemi onaylamak için ödemeye razı olduğu maksimum gaz miktarıdır (min. 21.000). Gaz limitinin yetersiz olması, bir işlemin \"gaz kalmadı\" (\"out of gas\") hatasıyla başarısız olmasının yaygın bir nedenidir.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_GasPrice_Info">The fee for transacting on the network is measured in gas units. Gas Price is the amount a user is willing to spend per unit of gas. When the network is busy, gas prices are high, and low when it\'s idle. An insufficient gas price is often a reason for a transaction to remain pending for an extended period.</string>
-    <string name="FeeSettings_CurrentBaseFee">Current Base Fee</string>
-    <string name="FeeSettings_MaxBaseFee">Max Base Fee</string>
-    <string name="FeeSettings_MaxBaseFee_Info">A base fee is the algorithmically determined price users need to pay for a transaction on Ethereum blockchain. The base fee automatically set by Ethereum network and is not controlled by a specific entity.</string>
-    <string name="FeeSettings_MaxMinerTips">Max Miner Tips</string>
-    <string name="FeeSettings_MaxMinerTips_Info">Miner tips are defined as optional fees that users may include to incentivize network participants to prioritize user\'s transaction.</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Risky</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may fail or remain pending for a while or fail entirely.</string>
-    <string name="FeeSettings_Overpricing_Title">Fee Too High</string>
-    <string name="FeeSettings_Overpricing">The set transaction fee is higher than necessary for processing this transaction now.</string>
-    <string name="FeeSettings_Info_IUnderstand">I Understand</string>
+    <string name="FeeSettings_GasPrice_Info">Ağ üzerinde işlem yapmanın ücreti gaz birimleri cinsinden ölçülür. Gaz Fiyatı, bir kullanıcının bir işlemi gerçekleştirmek için ödemeye razı olduğu tutardır. Ağ yoğun olduğunda gaz fiyatları yüksek ve boşta olduğunda düşüktür. Gaz fiyatının yetersiz olması, genellikle bir işlemin uzun süre beklemede kalmasının bir nedenidir.</string>
+    <string name="FeeSettings_CurrentBaseFee">Mevcut Taban Ücret</string>
+    <string name="FeeSettings_MaxBaseFee">Maksimum Taban Ücret</string>
+    <string name="FeeSettings_MaxBaseFee_Info">Taban ücret, kullanıcıların Ethereum blok zincirindeki bir işlem için ödemeleri gereken algoritmik olarak belirlenmiş fiyattır. Taban ücret, Ethereum ağı tarafından otomatik olarak belirlenir ve belirli bir kişi veya kişiler tarafından kontrol edilmez.</string>
+    <string name="FeeSettings_MaxMinerTips">Maksimum Madenci Bahşişleri</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Madenci bahşişleri, bir işleme öncelik verilmesi amacıyla kullanıcıların ağ katılımcılarını teşvik etmek için ekleyebileceği isteğe bağlı ücretler olarak tanımlanır.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Riskli</string>
+    <string name="FeeSettings_RiskOfGettingStuck">İşlem başarısız olabilir veya bir süre beklemede kalabilir veya tamamen başarısız olabilir.</string>
+    <string name="FeeSettings_Overpricing_Title">Ücret Çok Yüksek</string>
+    <string name="FeeSettings_Overpricing">Belirlenen işlem ücreti, bu işlemin şimdi işlenmesi için gereken ücretten daha yüksek.</string>
+    <string name="FeeSettings_Info_IUnderstand">Anlıyorum</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">İşlem hızı</string>
     <string name="FeeInfo_Description">Hem Bitcoin hem de Ethereum blok zincirleri, kullanıcıların işlem yaparken ağ ücreti ödemesini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksek ve blok zincir daha az meşgul olduğunda ücretler daha düşüktür.</string>
@@ -322,12 +322,12 @@
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">Yetersiz Bakiye</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">İşlem, göndermek için %s gerektirir</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Mevcut %s bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Low Fee</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The set transaction fee amount is insufficient for processing this transaction now.</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Insufficient Liquidity</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.\"</string>
-    <string name="EthereumTransaction_Error_CannotEstimate_Title">Estimation Error</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">Check balance to ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will auto-retry in 3 sec…</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Düşük Ücret</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Belirlenen işlem ücreti, bu işlemin şimdi işlenmesi için yetersiz.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Likidite Yetersiz</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Muhtemelen bu işlemin gerçekleşmesi için yeterli likidite mevcut değil. Tutarı düşürmeyi deneyin.\"</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Tahmin Hatası</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Bakiyeyi kontrol edin ve ücreti karşılayacak kadar %s olduğundan emin olun. Veya fiyat kayma miktarını artırın ve tekrar deneyin. 3 saniye sonra otomatik olarak tekrar denenecektir…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Gelecekteki işlemler için ödeme yapabilmek için bakiyenizde biraz %s bırakmayı göz önünde bulundurun.</string>
     <!--Swap-->
     <string name="Swap">Takas</string>
