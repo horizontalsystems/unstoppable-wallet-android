@@ -29,8 +29,8 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.WCSessionError
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule.CONNECTION_LINK_KEY
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule.REMOTE_PEER_ID_KEY
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.CONNECTION_LINK_KEY
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.SESSION_TOPIC_KEY
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -42,9 +42,9 @@ class WC2SessionFragment : BaseFragment() {
 
     private val viewModel by viewModels<WC2SessionViewModel> {
         WC2SessionModule.Factory(
-            arguments?.getString(REMOTE_PEER_ID_KEY),
+            arguments?.getString(SESSION_TOPIC_KEY),
             arguments?.getString(CONNECTION_LINK_KEY),
-            )
+        )
     }
 
     override fun onCreateView(
@@ -120,7 +120,7 @@ fun WCSessionPage(
                     )
                 )
             )
-            if (viewModel.invalidUrlError){
+            if (viewModel.invalidUrlError) {
                 WCSessionError(
                     stringResource(R.string.WalletConnect_Error_InvalidUrl),
                     navController

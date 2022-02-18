@@ -24,10 +24,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
-import io.horizontalsystems.bankwallet.modules.evmfee.SendEvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
@@ -96,7 +93,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
         }
 
-        //Implement Merged changes
+        //todo Implement Merged changes
 //        binding.sendEvmTransactionView.init(
 //            sendEvmTransactionViewModel,
 //            feeViewModel,
@@ -125,7 +122,7 @@ private fun RequestScreen(
 
     val title by sendEvmTransactionViewModel.transactionTitleLiveData.observeAsState("")
     val transactionInfoItems by sendEvmTransactionViewModel.viewItemsLiveData.observeAsState()
-    val fee by feeViewModel.feeLiveData.observeAsState()
+    val fee by feeViewModel.feeLiveData.observeAsState("")
     val approveEnabled by sendEvmTransactionViewModel.sendEnabledLiveData.observeAsState(false)
 
     ComposeAppTheme {
@@ -185,15 +182,17 @@ private fun RequestScreen(
                     }
                 }
 
-                EvmFeeCell(
-                    title = stringResource(R.string.FeeSettings_MaxFee),
-                    value = fee
-                ) {
-                    navController.slideFromBottom(
-                        resId = R.id.sendEvmFeeSettingsFragment,
-                        args = SendEvmFeeSettingsFragment.prepareParams(R.id.walletConnectSendEthereumTransactionRequestFragment)
-                    )
-                }
+                //todo Implement merged changes
+//                EvmFeeCell(
+//                    title = stringResource(R.string.FeeSettings_MaxFee),
+//                    value = fee,
+//                    loading = false,
+//                ) {
+//                    navController.slideFromBottom(
+//                        resId = R.id.sendEvmFeeSettingsFragment,
+//                        args = SendEvmFeeSettingsFragment.prepareParams(R.id.walletConnectSendEthereumTransactionRequestFragment)
+//                    )
+//                }
 
                 Spacer(Modifier.height(24.dp))
             }

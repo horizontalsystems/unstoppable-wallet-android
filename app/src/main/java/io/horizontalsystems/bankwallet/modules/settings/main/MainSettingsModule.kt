@@ -18,6 +18,7 @@ object MainSettingsModule {
                 App.termsManager,
                 App.pinComponent,
                 App.wc1SessionManager,
+                App.wc2SessionManager,
                 App.wc1Manager
             )
             val viewModel = MainSettingsViewModel(

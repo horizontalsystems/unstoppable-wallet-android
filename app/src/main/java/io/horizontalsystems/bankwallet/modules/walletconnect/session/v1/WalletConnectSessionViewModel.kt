@@ -129,7 +129,6 @@ class WalletConnectMainViewModel(private val service: WC1Service) : ViewModel() 
 
         statusLiveData.postValue(getStatus(connectionState))
 
-
         val hint = when {
             connectionState is WalletConnectInteractor.State.Disconnected -> R.string.WalletConnect_Reconnect_Hint
             connectionState != WalletConnectInteractor.State.Connected -> null

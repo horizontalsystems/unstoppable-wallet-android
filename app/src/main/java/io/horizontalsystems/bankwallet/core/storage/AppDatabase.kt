@@ -16,10 +16,12 @@ import io.horizontalsystems.bankwallet.modules.nft.NftAssetRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession
+import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectV2Session
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionDao
+import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
 import io.horizontalsystems.marketkit.models.CoinType
 
-@Database(version = 38, exportSchema = false, entities = [
+@Database(version = 39, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -27,6 +29,7 @@ import io.horizontalsystems.marketkit.models.CoinType
     LogEntry::class,
     FavoriteCoin::class,
     WalletConnectSession::class,
+    WalletConnectV2Session::class,
     RestoreSettingRecord::class,
     ActiveAccount::class,
     AccountSettingRecord::class,
@@ -47,6 +50,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
     abstract fun wc1SessionDao(): WC1SessionDao
+    abstract fun wc2SessionDao(): WC2SessionDao
     abstract fun accountSettingDao(): AccountSettingDao
     abstract fun customTokenDao(): CustomTokenDao
     abstract fun evmAccountStateDao(): EvmAccountStateDao
@@ -98,6 +102,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_35_36,
                             Migration_36_37,
                             Migration_37_38,
+                            Migration_38_39,
                     )
                     .build()
         }

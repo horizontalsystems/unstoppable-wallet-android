@@ -2,10 +2,15 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.session.v2
 
 import android.util.Log
 import com.walletconnect.walletconnectv2.client.WalletConnect
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule.PeerMetaItem
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2PingService
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -14,9 +19,13 @@ import io.reactivex.subjects.PublishSubject
 
 class WC2SessionService(
     private val service: WC2Service,
+    private val wcManager: WC1Manager,
+    private val sessionManager: WC2SessionManager,
+    private val accountManager: IAccountManager,
     private val pingService: WC2PingService,
     private val connectivityManager: ConnectivityManager,
-    private val existingSession: WalletConnect.Model.SettledSession?
+    private val topic: String?,
+    private val connectionLink: String?
 ) {
 
     sealed class State {
@@ -30,7 +39,7 @@ class WC2SessionService(
     var proposal: WalletConnect.Model.SessionProposal? = null
         private set
 
-    var session: WalletConnect.Model.SettledSession? = existingSession
+    var session: WalletConnect.Model.SettledSession? = null
         private set
 
     private val stateSubject = PublishSubject.create<State>()
@@ -45,12 +54,12 @@ class WC2SessionService(
 
     val appMetaItem: PeerMetaItem?
         get() {
-            session?.let {
+            session?.peerAppMetaData?.let {
                 return PeerMetaItem(
-                    it.topic,
-                    it.peerAppMetaData?.url ?: "",
-                    it.peerAppMetaData?.description ?: "",
-                    it.peerAppMetaData?.icons?.last()
+                    it.name,
+                    it.url,
+                    it.description,
+                    it.icons.last()
                 )
             }
             proposal?.let {
@@ -70,15 +79,22 @@ class WC2SessionService(
     private val disposables = CompositeDisposable()
 
     fun start() {
-        existingSession?.let {
+        connectionLink?.let {
+            service.pair(it)
+        }
+
+        topic?.let { topic ->
+            val existingSession =
+                sessionManager.sessions.firstOrNull { it.topic == topic } ?: return@let
+            session = existingSession
             state = State.Ready
-            pingService.ping(it.topic)
+            pingService.ping(existingSession.topic)
         }
 
         connectivityManager.networkAvailabilitySignal
             .subscribeOn(Schedulers.io())
             .subscribe {
-                if (!connectivityManager.isConnected){
+                if (!connectivityManager.isConnected) {
                     pingService.disconnect()
                 } else {
                     session?.let {
@@ -107,7 +123,6 @@ class WC2SessionService(
                         }
                     }
                     is WC2Service.Event.SessionSettled -> {
-                        Log.e("TAG", "start SessionSettled: " )
                         session = event.session
                         state = State.Ready
                         pingService.receiveResponse()
@@ -135,10 +150,32 @@ class WC2SessionService(
     }
 
     fun approve() {
-        proposal?.let {
-            service.approve(it)
+        val proposal = proposal ?: return
+        val account = accountManager.activeAccount ?: run {
+            state = State.Invalid(WalletConnectModule.NoSuitableAccount)
+            return
         }
+
+        val chainIds = proposal.chains.mapNotNull { WC2Parser.getChainId(it) }
+
+        Log.e("TAG", "approve chainIds: $chainIds")
+
+        val wrappersMap = chainIds.associateWith { wcManager.evmKitWrapper(it, account) }
+
+        if (wrappersMap.isEmpty()) {
+            state = State.Invalid(WalletConnectModule.UnsupportedChainId)
+            return
+        }
+
+        val accounts: List<String> = chainIds.mapNotNull { chainId ->
+            val wrapper = wrappersMap[chainId] ?: return@mapNotNull null
+            "eip155:$chainId:${wrapper.evmKit.receiveAddress.eip55}"
+        }
+
+        Log.e("TAG", "approve: accounts: $accounts")
+        service.approve(proposal, accounts)
     }
+
 
     fun disconnect() {
         val sessionNonNull = session ?: return

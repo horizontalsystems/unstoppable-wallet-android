@@ -17,7 +17,7 @@ class WalletConnectListViewModel(
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-    val sectionsLiveData = MutableLiveData<List<Section>>()
+    val sectionLiveData = MutableLiveData<Section?>()
     val killingSessionInProcessLiveEvent = SingleLiveEvent<Unit>()
     val killingSessionCompletedLiveEvent = SingleLiveEvent<Unit>()
     val killingSessionFailedLiveEvent = SingleLiveEvent<String>()
@@ -61,34 +61,26 @@ class WalletConnectListViewModel(
 //    }
 
     private fun sync(items: List<WalletConnectListService.Item>) {
-        val sections = mutableListOf<Section>()
+        if (items.isEmpty()){
+            sectionLiveData.postValue(null)
+            return
+        }
+        val sessions = mutableListOf<WalletConnectListModule.SessionViewItem>()
         items.forEach { item ->
-            val sessions = item.sessions.map { session ->
+            val itemSessions = item.sessions.map { session ->
                 WalletConnectListModule.SessionViewItem(
                     sessionId = session.remotePeerId,
                     title = session.remotePeerMeta.name,
-                    subtitle = getSubtitle(item.chain),
+                    subtitle = item.chain.title,
                     url = session.remotePeerMeta.url,
                     imageUrl = getSuitableIcon(session.remotePeerMeta.icons),
                 )
             }
-            sections.add(
-                Section(WalletConnectListModule.Version.Version1, sessions)
-            )
+            sessions.addAll(itemSessions)
         }
-        sectionsLiveData.postValue(sections)
+        sectionLiveData.postValue(Section(WalletConnectListModule.Version.Version1, sessions))
     }
 
-    private fun getSubtitle(chain: WalletConnectListModule.Chain) = when (chain) {
-        WalletConnectListModule.Chain.Ethereum,
-        WalletConnectListModule.Chain.Ropsten,
-        WalletConnectListModule.Chain.Rinkeby,
-        WalletConnectListModule.Chain.Kovan,
-        WalletConnectListModule.Chain.Goerli -> "Ethereum"
-        WalletConnectListModule.Chain.BinanceSmartChain -> "Binance Smart Chain"
-    }
-
-    //TODO improve this method
     private fun getSuitableIcon(imageUrls: List<String>): String? {
         return imageUrls.lastOrNull { it.endsWith("png", ignoreCase = true) }
     }
