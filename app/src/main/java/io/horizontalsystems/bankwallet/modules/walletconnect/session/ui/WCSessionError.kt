@@ -28,7 +28,7 @@ fun WCSessionError(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_empty_in_circle_100),
+                painter = painterResource(id = R.drawable.ic_wallet_connect_in_circle_100),
                 contentDescription = null
             )
             Spacer(modifier = Modifier.height(24.dp))
