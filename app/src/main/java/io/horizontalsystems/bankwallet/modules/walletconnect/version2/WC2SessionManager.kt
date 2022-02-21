@@ -34,6 +34,7 @@ class WC2SessionManager(
         get() = service.activeSessions
 
     init {
+        service.start()
         syncSessions()
 
         accountManager.activeAccountObservable
@@ -72,6 +73,7 @@ class WC2SessionManager(
         val accountId = accountManager.activeAccount?.id ?: return
 
         val currentSessions = allSessions
+        Log.e(TAG, "syncSessions: ${currentSessions.size}")
         val allDbSessions = storage.getSessionsByAccountId(accountId)
 
         val dbTopics = allDbSessions.map { it.topic }
