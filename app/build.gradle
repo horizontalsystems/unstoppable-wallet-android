@@ -227,7 +227,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:wallet-connect-kotlin:d5f3cac'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     // WalletConnect V2
-    implementation "com.github.WalletConnect:WalletConnectKotlinV2:1.0.0-beta03"
+    implementation "com.github.WalletConnect:WalletConnectKotlinV2:1.0.0-beta04"
 
     // Unstoppable Domains
     implementation 'com.unstoppabledomains:resolution:4.0.0'
