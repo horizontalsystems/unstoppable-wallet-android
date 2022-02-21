@@ -12,12 +12,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -92,9 +91,6 @@ class WC2SessionFragment : BaseFragment() {
 //            }
 //        }
 
-        viewModel.errorLiveData.observe(viewLifecycleOwner) { error ->
-            error?.let { HudHelper.showErrorMessage(requireView(), it) }
-        }
     }
 
 }
@@ -136,10 +132,9 @@ fun WCSessionPage(
 private fun ColumnScope.WCSessionListContent(
     viewModel: WC2SessionViewModel
 ) {
-    val status by viewModel.statusLiveData.observeAsState()
-    val peerMeta by viewModel.peerMetaLiveData.observeAsState()
-    val buttonsStates by viewModel.buttonStatesLiveData.observeAsState()
-    val warningStringRes by viewModel.hintLiveData.observeAsState()
+
+    val view = LocalView.current
+    viewModel.showError?.let { HudHelper.showErrorMessage(view, it) }
 
     Column(
         modifier = Modifier
@@ -161,7 +156,7 @@ private fun ColumnScope.WCSessionListContent(
                     .size(72.dp)
                     .clip(RoundedCornerShape(15.dp)),
                 painter = rememberImagePainter(
-                    data = peerMeta?.icon,
+                    data = viewModel.peerMeta?.icon,
                     builder = {
                         error(R.drawable.coin_placeholder)
                     }
@@ -170,16 +165,16 @@ private fun ColumnScope.WCSessionListContent(
             )
             Text(
                 modifier = Modifier.padding(start = 16.dp),
-                text = peerMeta?.name ?: "",
+                text = viewModel.peerMeta?.name ?: "",
                 style = ComposeAppTheme.typography.headline1,
                 color = ComposeAppTheme.colors.leah
             )
         }
         CellSingleLineLawrenceSection(
             listOf(
-                { StatusCell(status) },
+                { StatusCell(viewModel.status) },
                 {
-                    val url = peerMeta?.url?.let { TextHelper.getCleanedUrl(it) } ?: ""
+                    val url = viewModel.peerMeta?.url?.let { TextHelper.getCleanedUrl(it) } ?: ""
                     TitleValueCell(stringResource(R.string.WalletConnect_Url), url)
                 },
                 {
@@ -189,7 +184,7 @@ private fun ColumnScope.WCSessionListContent(
                 },
             )
         )
-        warningStringRes?.let {
+        viewModel.hint?.let {
             Spacer(Modifier.height(12.dp))
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -198,7 +193,7 @@ private fun ColumnScope.WCSessionListContent(
         }
         Spacer(Modifier.height(24.dp))
     }
-    buttonsStates?.let { ActionButtons(viewModel, it) }
+    viewModel.buttonStates?.let { ActionButtons(viewModel, it) }
 }
 
 @Composable

@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectMainViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Request
@@ -18,15 +18,13 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
 
     private val TAG = "WC2SessionViewModel"
 
-    val peerMetaLiveData = MutableLiveData<WalletConnectSessionModule.PeerMetaItem?>()
-    val buttonStatesLiveData = MutableLiveData<WCSessionButtonStates>()
-    val hintLiveData = MutableLiveData<Int?>()
-    val errorLiveData = MutableLiveData<String?>()
-    val statusLiveData = MutableLiveData<WalletConnectMainViewModel.Status?>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val openRequestLiveEvent = SingleLiveEvent<WC1Request>()
 
     private val disposables = CompositeDisposable()
+
+    var peerMeta by mutableStateOf<WalletConnectSessionModule.PeerMetaItem?>(null)
+        private set
 
     var invalidUrlError by mutableStateOf(false)
         private set
@@ -35,6 +33,18 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
         private set
 
     var connecting by mutableStateOf(false)
+        private set
+
+    var buttonStates by mutableStateOf<WCSessionButtonStates?>(null)
+        private set
+
+    var hint by mutableStateOf<Int?>(null)
+        private set
+
+    var showError by mutableStateOf<String?>(null)
+        private set
+
+    var status by mutableStateOf<WalletConnectMainViewModel.Status?>(null)
         private set
 
     init {
@@ -75,43 +85,15 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
             return
         }
 
-        when (state) {
-            WC2SessionService.State.WaitingForApproveSession,
-            WC2SessionService.State.Ready -> {
-                peerMetaLiveData.postValue(service.appMetaItem)
-            }
-        }
-
+        peerMeta = service.appMetaItem
         connecting = connection == WC2PingService.State.Connecting
         closeEnabled = state == WC2SessionService.State.Ready
+        status = getStatus(connection)
+        hint = getHint(connection, state)
 
-        val cancelBtnState = getCancelButtonState(state)
-        val connectBtnState = getConnectButtonState(state, connection)
-        val disconnectBtnState = getDisconnectButtonState(state, connection)
-        val reconnectBtnState = getReconnectButtonState(connection)
-
-        buttonStatesLiveData.postValue(
-            WCSessionButtonStates(
-                connectBtnState,
-                disconnectBtnState,
-                cancelBtnState,
-                reconnectBtnState
-            )
-        )
-
-        statusLiveData.postValue(getStatus(connection))
-
-        hintLiveData.postValue(getHint(connection, state))
+        setButtons(state, connection)
+        setError(connectionState, state)
     }
-
-    private fun getHint(connection: WC2PingService.State, state: WC2SessionService.State): Int? =
-        when {
-            connection is WC2PingService.State.Disconnected -> R.string.WalletConnect_Reconnect_Hint
-            connection != WC2PingService.State.Connected -> null
-            state == WC2SessionService.State.WaitingForApproveSession -> R.string.WalletConnect_Approve_Hint
-            state == WC2SessionService.State.Ready -> R.string.WalletConnect_Ready_Hint
-            else -> null
-        }
 
     fun cancel() {
         service.reject()
@@ -174,4 +156,38 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
             else -> WCButtonState.Hidden
         }
     }
+
+    private fun setButtons(
+        state: WC2SessionService.State,
+        connection: WC2PingService.State
+    ) {
+        buttonStates = WCSessionButtonStates(
+            connect = getConnectButtonState(state, connection),
+            disconnect = getDisconnectButtonState(state, connection),
+            cancel = getCancelButtonState(state),
+            reconnect = getReconnectButtonState(connection)
+        )
+    }
+
+    private fun setError(
+        connectionState: WC2PingService.State?,
+        state: WC2SessionService.State
+    ) {
+        val error: String? = when {
+            connectionState is WC2PingService.State.Disconnected -> Translator.getString(R.string.Hud_Text_NoInternet)
+            state is WC2SessionService.State.Invalid -> state.error.message ?: state.error::class.java.simpleName
+            else -> null
+        }
+
+        showError = error
+    }
+
+    private fun getHint(connection: WC2PingService.State, state: WC2SessionService.State): Int? =
+        when {
+            connection is WC2PingService.State.Disconnected -> R.string.WalletConnect_Reconnect_Hint
+            connection != WC2PingService.State.Connected -> null
+            state == WC2SessionService.State.WaitingForApproveSession -> R.string.WalletConnect_Approve_Hint
+            state == WC2SessionService.State.Ready -> R.string.WalletConnect_Ready_Hint
+            else -> null
+        }
 }

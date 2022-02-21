@@ -274,7 +274,9 @@ class App : CoreApp(), WorkConfiguration.Provider  {
             )
         )
 
-        WalletConnectClient.initialize(initWallet)
+        WalletConnectClient.initialize(initWallet) {
+            Log.e("App", "WalletConnect initialize error: ", it)
+        }
     }
 
     private fun setAppTheme() {
