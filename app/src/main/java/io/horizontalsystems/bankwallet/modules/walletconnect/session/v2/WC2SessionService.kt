@@ -28,6 +28,8 @@ class WC2SessionService(
     private val connectionLink: String?
 ) {
 
+    private val TAG = "WC2SessionService"
+
     sealed class State {
         object Idle : State()
         class Invalid(val error: Throwable) : State()
@@ -161,8 +163,6 @@ class WC2SessionService(
 
         val chainIds = proposal.chains.mapNotNull { WC2Parser.getChainId(it) }
 
-        Log.e("TAG", "approve chainIds: $chainIds")
-
         val wrappersMap = chainIds.associateWith { wcManager.evmKitWrapper(it, account) }
 
         if (wrappersMap.isEmpty()) {
@@ -175,7 +175,7 @@ class WC2SessionService(
             "eip155:$chainId:${wrapper.evmKit.receiveAddress.eip55}"
         }
 
-        Log.e("TAG", "approve: accounts: $accounts")
+        Log.e(TAG, "approve: accounts: $accounts")
         service.approve(proposal, accounts)
     }
 

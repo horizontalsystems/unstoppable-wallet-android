@@ -85,8 +85,6 @@ class WC2Service : WalletConnectClient.WalletDelegate {
     }
 
     fun approve(proposal: WalletConnect.Model.SessionProposal, accounts: List<String>) {
-//        val accounts =
-//            proposal.chains.map { chainId -> "$chainId:0x022c0c42a80bd19EA4cF0F94c4F9F96645759716" }
         val approve = WalletConnect.Params.Approve(proposal, accounts)
 
         WalletConnectClient.approve(approve, object : WalletConnect.Listeners.SessionApprove {
