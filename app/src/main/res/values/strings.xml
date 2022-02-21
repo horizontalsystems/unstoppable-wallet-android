@@ -324,18 +324,18 @@
 
     <string name="FeeSettings_Title">Fee Settings</string>
     <string name="FeeSettings_Reset">Reset</string>
-    <string name="FeeSettings_MaxFee">Max Fee</string>
-    <string name="FeeSettings_MaxFee_Info">A base fee is the algorithmically determined price users need to pay for a transaction on Ethereum blockchain. The base fee automatically set by Ethereum network and is not controlled by a specific entity.</string>
+    <string name="FeeSettings_MaxFee">Max. Fee</string>
+    <string name="FeeSettings_MaxFee_Info">The maximum expected total fee for the given transaction. Typically, the actual transaction fee is going to be lower.</string>
     <string name="FeeSettings_Fee">Fee</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
-    <string name="FeeSettings_GasLimit_Info">The fee for transacting on the network is measured in gas units. Gas Limit is the maximum amount of gas a user is willing to pay for confirming a transaction (min. 21,000). An insufficient gas limit is a common reason for a transaction to fail with an \'out of gas\' error.</string>
+    <string name="FeeSettings_GasLimit_Info">The gas limit is the maximum amount of gas units a user is willing to spend when sending a given transaction. Complex transactions require more gas units than simpler ones. The gas limit is estimated and set automatically for each transaction.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
     <string name="FeeSettings_GasPrice_Info">The fee for transacting on the network is measured in gas units. Gas Price is the amount a user is willing to spend per unit of gas. When the network is busy, gas prices are high, and low when it\'s idle. An insufficient gas price is often a reason for a transaction to remain pending for an extended period.</string>
     <string name="FeeSettings_CurrentBaseFee">Current Base Fee</string>
     <string name="FeeSettings_MaxBaseFee">Max Base Fee</string>
-    <string name="FeeSettings_MaxBaseFee_Info">A base fee is the algorithmically determined price users need to pay for a transaction on Ethereum blockchain. The base fee automatically set by Ethereum network and is not controlled by a specific entity.</string>
+    <string name="FeeSettings_MaxBaseFee_Info">Each transaction on Ethereum requires the user to spend a certain amount of gas units for processing that transaction. The price of a single gas unit changes in real-time with network conditions and is not controlled by any single entity. The max. base fee rate in combination with optional miner tip (see below) refers to the highest price for a gas unit a user is willing to pay for sending the transaction.</string>
     <string name="FeeSettings_MaxMinerTips">Max Miner Tips</string>
-    <string name="FeeSettings_MaxMinerTips_Info">Miner tips are defined as optional fees that users may include to incentivize network participants to prioritize user\'s transaction.</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Miner fees (aka miner tip) refer to optional fees that users may include to incentivize network participants to prioritize their transactions.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Risky</string>
     <string name="FeeSettings_RiskOfGettingStuck">The transaction may fail or remain pending for a while or fail entirely.</string>
     <string name="FeeSettings_Overpricing_Title">Fee Too High</string>
