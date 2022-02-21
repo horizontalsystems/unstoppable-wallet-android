@@ -264,8 +264,8 @@
     <string name="Send_Warning_LowFee">هشدار! خطر گیر افتادن</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">تنظیمات قیمت</string>
-    <string name="FeeSettings_Reset">Reset</string>
-    <string name="FeeSettings_MaxFee">Max. Fee</string>
+    <string name="FeeSettings_Reset">تنظیم مجدد</string>
+    <string name="FeeSettings_MaxFee">حداکثر هزینه</string>
     <string name="FeeSettings_MaxFee_Info">The maximum expected total fee for the given transaction. Typically, the actual transaction fee is going to be lower.</string>
     <string name="FeeSettings_Fee">هزينه</string>
     <string name="FeeSettings_GasLimit">محدودیت گاز</string>
@@ -281,7 +281,7 @@
     <string name="FeeSettings_RiskOfGettingStuck">The transaction may fail or remain pending for a while or fail entirely.</string>
     <string name="FeeSettings_Overpricing_Title">Fee Too High</string>
     <string name="FeeSettings_Overpricing">The set transaction fee is higher than necessary for processing this transaction now.</string>
-    <string name="FeeSettings_Info_IUnderstand">I Understand</string>
+    <string name="FeeSettings_Info_IUnderstand">می فهمم</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">سرعت تراکنش</string>
     <string name="FeeInfo_Description">هر دو بلاک چین بیت کوین و اتریوم کاربران را ملزم به پرداخت هزینه های شبکه هنگام ارسال تراکنش ها می کنند. زمانی که تراکنش‌های زیادی در شبکه انجام می‌شود، کارمزدها بیشتر و زمانی که بلاک چین شلوغ‌تر است، کمتر است.</string>
@@ -325,7 +325,7 @@
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">موجودی %s فعلی زیر مقدار مورد نیاز برای تراکنش این معامله از جمله هزینه معامله است.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Low Fee</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The set transaction fee amount is insufficient for processing this transaction now.</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Insufficient Liquidity</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">نقدینگی ناکافی</string>
     <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.\"</string>
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Estimation Error</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Check balance to ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will auto-retry in 3 sec…</string>
