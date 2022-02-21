@@ -20,6 +20,7 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigInteger
@@ -65,7 +66,12 @@ object TransactionInfoOptionsModule {
                 NetworkType.EthGoerli, NetworkType.EthRinkeby,
                 NetworkType.EthMainNet -> {
                     val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
-                    Eip1559GasPriceService(gasPriceProvider, evmKit, transaction.maxPriorityFeePerGas)
+                    val minGasPrice = transaction.maxFeePerGas?.let { maxFeePerGas ->
+                        transaction.maxPriorityFeePerGas?.let { maxPriorityFeePerGas ->
+                            GasPrice.Eip1559(maxFeePerGas, maxPriorityFeePerGas)
+                        }
+                    }
+                    Eip1559GasPriceService(gasPriceProvider, evmKit, minGasPrice = minGasPrice)
                 }
                 NetworkType.BscMainNet -> {
                     val gasPriceProvider = LegacyGasPriceProvider(evmKit)

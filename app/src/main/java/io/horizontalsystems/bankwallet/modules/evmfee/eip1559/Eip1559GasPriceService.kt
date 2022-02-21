@@ -15,20 +15,25 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.Collections.max
+import kotlin.math.max
 import kotlin.math.min
 
 class Eip1559GasPriceService(
     private val gasProvider: Eip1559GasPriceProvider,
-    private val evmKit: EthereumKit,
-    private val minRecommendedPriorityFee: Long? = null,
-    private val initialGasPrice: GasPrice.Eip1559? = null
+    evmKit: EthereumKit,
+    minGasPrice: GasPrice.Eip1559? = null,
+    initialGasPrice: GasPrice.Eip1559? = null
 ) : IEvmGasPriceService {
 
     private val disposable = CompositeDisposable()
     private val blocksCount: Long = 10
     private val rewardPercentile = listOf(50)
     private val lastNRecommendedBaseFees = 2
+
+    private val minBaseFee: Long? = minGasPrice?.let { it.maxFeePerGas - it.maxPriorityFeePerGas }
+    private val minPriorityFee: Long? = minGasPrice?.maxPriorityFeePerGas
+    private val initialBaseFee: Long? = initialGasPrice?.let { it.maxFeePerGas - it.maxPriorityFeePerGas }
+    private val initialPriorityFee: Long? = initialGasPrice?.maxPriorityFeePerGas
 
     private val baseFeeRangeConfig = FeeRangeConfig(
         lowerBound = Bound.Multiplied(BigDecimal(0.5)),
@@ -71,11 +76,8 @@ class Eip1559GasPriceService(
         private set
 
     init {
-        if (initialGasPrice != null) {
-            setGasPrice(
-                initialGasPrice.maxFeePerGas - initialGasPrice.maxPriorityFeePerGas,
-                initialGasPrice.maxPriorityFeePerGas
-            )
+        if (initialBaseFee != null && initialPriorityFee != null) {
+            setGasPrice(initialBaseFee, initialPriorityFee)
         } else {
             setRecommended()
         }
@@ -156,10 +158,10 @@ class Eip1559GasPriceService(
     }
 
     private fun handle(feeHistory: FeeHistory) {
-        val recommendedBaseFee = roundToBillionthDigit(recommendedBaseFee(feeHistory))
+        val recommendedBaseFee = max(recommendedBaseFee(feeHistory), minBaseFee ?: 0)
         currentBaseFee = recommendedBaseFee
 
-        val recommendedPriorityFee = roundToBillionthDigit(recommendedPriorityFee(feeHistory))
+        val recommendedPriorityFee = max(recommendedPriorityFee(feeHistory), minPriorityFee ?: 0)
         currentPriorityFee = recommendedPriorityFee
 
         val newRecommendGasPrice = GasPrice.Eip1559(recommendedBaseFee + recommendedPriorityFee, recommendedPriorityFee)
@@ -179,7 +181,7 @@ class Eip1559GasPriceService(
 
     private fun recommendedBaseFee(feeHistory: FeeHistory): Long {
         val lastNRecommendedBaseFeesList = feeHistory.baseFeePerGas.takeLast(lastNRecommendedBaseFees)
-        return max(lastNRecommendedBaseFeesList)
+        return roundToBillionthDigit(java.util.Collections.max(lastNRecommendedBaseFeesList))
     }
 
     private fun recommendedPriorityFee(feeHistory: FeeHistory): Long {
@@ -196,7 +198,7 @@ class Eip1559GasPriceService(
         else
             0
 
-        return kotlin.math.max(priorityFee, minRecommendedPriorityFee ?: 0)
+        return roundToBillionthDigit(priorityFee)
     }
 
     private fun syncFeeRanges(newRecommendGasPrice: GasPrice.Eip1559) {
