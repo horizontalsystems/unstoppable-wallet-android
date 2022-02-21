@@ -13,7 +13,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectRequestBinding
+import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSendEvmBinding
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
@@ -38,7 +38,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
     private var approveEnabled = true
     private var rejectEnabled = true
 
-    private var _binding: FragmentWalletConnectRequestBinding? = null
+    private var _binding: FragmentConfirmationSendEvmBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -46,9 +46,8 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentWalletConnectRequestBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        _binding = FragmentConfirmationSendEvmBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -103,13 +102,13 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
     }
 
     private fun setButtons() {
-        binding.buttonsCompose.setContent {
+        binding.buttonSendCompose.setContent {
             ComposeAppTheme {
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                     ButtonPrimaryYellow(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                            .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                         title = getString(R.string.Button_Confirm),
                         onClick = {
                             logger.info("click confirm button")
@@ -120,7 +119,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
                     ButtonPrimaryDefault(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, bottom = 24.dp),
+                            .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                         title = getString(R.string.Button_Reject),
                         onClick = {
                             viewModel.reject()

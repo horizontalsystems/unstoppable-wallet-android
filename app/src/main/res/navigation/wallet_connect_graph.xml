@@ -43,7 +43,7 @@
     <fragment
         android:id="@+id/walletConnectSendEthereumTransactionRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestFragment"
-        tools:layout="@layout/fragment_wallet_connect_request">
+        tools:layout="@layout/fragment_confirmation_send_evm">
     </fragment>
     <fragment
         android:id="@+id/walletConnectSignMessageRequestFragment"

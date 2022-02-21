@@ -69,8 +69,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentConfirmationSendEvmBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -141,12 +140,8 @@ class SendEvmConfirmationFragment : BaseFragment() {
         binding.buttonSendCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
-                    modifier = Modifier.padding(
-                        start = 16.dp,
-                        top = 24.dp,
-                        end = 16.dp,
-                        bottom = 24.dp
-                    ),
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                     title = stringResource(R.string.Send_Confirmation_Send_Button),
                     onClick = {
                         logger.info("click send button")
