@@ -38,7 +38,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
 
     sealed class Event {
         object Default : Event()
-        class Invalid(val error: Throwable) : Event()
+        class Error(val error: Throwable) : Event()
         class WaitingForApproveSession(val proposal: WalletConnect.Model.SessionProposal) : Event()
         class SessionRequest(
             val sessionRequest: WalletConnect.Model.SessionRequest,
@@ -79,6 +79,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
 
             override fun onError(error: Throwable) {
                 Log.e(TAG, "pair onError: ", error)
+                event = Event.Error(error)
             }
         })
     }
@@ -97,6 +98,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
 
             override fun onError(error: Throwable) {
                 Log.e(TAG, "onError: ", error)
+                event = Event.Error(error)
             }
         })
     }
@@ -114,6 +116,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
 
             override fun onError(error: Throwable) {
                 Log.e(TAG, "onError: ", error)
+                event = Event.Error(error)
             }
         })
     }
@@ -121,7 +124,8 @@ class WC2Service : WalletConnectClient.WalletDelegate {
     fun disconnect(topic: String) {
         val disconnect = WalletConnect.Params.Disconnect(
             sessionTopic = topic,
-            reason = "User disconnected session"
+            reason = "User disconnected session",
+            reasonCode = 1000
         )
 
         WalletConnectClient.disconnect(disconnect, object : WalletConnect.Listeners.SessionDelete {
@@ -133,6 +137,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
 
             override fun onError(error: Throwable) {
                 Log.e(TAG, "onError: ", error)
+                event = Event.Error(error)
             }
         })
 
@@ -151,6 +156,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
         WalletConnectClient.respond(response, object : WalletConnect.Listeners.SessionPayload {
             override fun onError(error: Throwable) {
                 Log.e(TAG, "onError: ", error)
+                event = Event.Error(error)
             }
         })
 
@@ -169,6 +175,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
         WalletConnectClient.respond(response, object : WalletConnect.Listeners.SessionPayload {
             override fun onError(error: Throwable) {
                 Log.e(TAG, "onError: ", error)
+                event = Event.Error(error)
             }
         })
 

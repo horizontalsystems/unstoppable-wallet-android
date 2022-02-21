@@ -127,6 +127,9 @@ class WC2SessionService(
                         state = State.Ready
                         pingService.receiveResponse()
                     }
+                    is WC2Service.Event.Error -> {
+                        state = State.Invalid(event.error)
+                    }
                 }
             }
             .let {
