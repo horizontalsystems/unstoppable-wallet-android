@@ -48,12 +48,12 @@ class ShowBackupWordsFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner, { account ->
+        viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner) { account ->
             findNavController().slideFromRight(
                 R.id.showBackupWordsFragment_to_backupConfirmationKeyFragment,
                 BackupConfirmKeyModule.prepareParams(account)
             )
-        })
+        }
 
         binding.mnemonicPhraseView.populateWords(viewModel.words, viewModel.passphrase)
 
@@ -64,7 +64,7 @@ class ShowBackupWordsFragment : BaseFragment() {
         binding.buttonBackupCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 38.dp),
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 32.dp),
                     title = getString(R.string.BackupKey_ButtonBackup),
                     onClick = {
                         viewModel.onClickBackup()

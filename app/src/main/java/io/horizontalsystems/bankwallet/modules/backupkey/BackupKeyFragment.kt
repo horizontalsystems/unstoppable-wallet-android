@@ -52,18 +52,18 @@ class BackupKeyFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        viewModel.showKeyLiveEvent.observe(viewLifecycleOwner, {
+        viewModel.showKeyLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromRight(
                 R.id.backupKeyFragment_to_showBackupWordsFragment
             )
-        })
+        }
 
-        viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner, {
+        viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromRight(
                 R.id.backupKeyFragment_to_pinFragment,
                 PinModule.forUnlock()
             )
-        })
+        }
 
         subscribeFragmentResults()
 
@@ -74,7 +74,7 @@ class BackupKeyFragment : BaseFragment() {
         binding.buttonShowCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 38.dp),
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                     title = getString(R.string.BackupKey_ButtonBackup),
                     onClick = {
                         viewModel.onClickShow()

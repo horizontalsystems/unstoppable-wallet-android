@@ -35,8 +35,7 @@ class ShowPrivateKeyFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentShowPrivateKeyTabBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onDestroyView() {

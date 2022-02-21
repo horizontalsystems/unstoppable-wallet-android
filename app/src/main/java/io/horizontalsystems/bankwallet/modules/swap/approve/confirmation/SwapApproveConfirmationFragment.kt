@@ -16,7 +16,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationApproveSwapBinding
+import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSendEvmBinding
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
@@ -61,7 +61,7 @@ class SwapApproveConfirmationFragment : BaseFragment() {
 
     private var snackbarInProcess: CustomSnackbar? = null
 
-    private var _binding: FragmentConfirmationApproveSwapBinding? = null
+    private var _binding: FragmentConfirmationSendEvmBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -69,9 +69,8 @@ class SwapApproveConfirmationFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentConfirmationApproveSwapBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        _binding = FragmentConfirmationSendEvmBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -135,7 +134,7 @@ class SwapApproveConfirmationFragment : BaseFragment() {
             R.id.swapApproveConfirmationFragment
         )
 
-        binding.buttonApproveCompose.setViewCompositionStrategy(
+        binding.buttonSendCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
@@ -143,15 +142,10 @@ class SwapApproveConfirmationFragment : BaseFragment() {
     }
 
     private fun setButton(enabled: Boolean = false) {
-        binding.buttonApproveCompose.setContent {
+        binding.buttonSendCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
-                    modifier = Modifier.padding(
-                        start = 16.dp,
-                        top = 24.dp,
-                        end = 16.dp,
-                        bottom = 24.dp
-                    ),
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                     title = getString(R.string.Swap_Approve),
                     onClick = {
                         logger.info("click approve button")

@@ -36,8 +36,7 @@ class ShowKeyIntroFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentShowKeyIntroBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -52,18 +51,18 @@ class ShowKeyIntroFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        viewModel.showKeyLiveEvent.observe(viewLifecycleOwner, {
+        viewModel.showKeyLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromRight(
                 R.id.showKeyIntroFragment_to_showKeyMainFragment
             )
-        })
+        }
 
-        viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner, {
+        viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromRight(
                 R.id.showKeyIntroFragment_to_pinFragment,
                 PinModule.forUnlock()
             )
-        })
+        }
 
         binding.buttonShowCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -72,7 +71,7 @@ class ShowKeyIntroFragment : BaseFragment() {
         binding.buttonShowCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 38.dp),
+                    modifier = Modifier.padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 32.dp),
                     title = getString(R.string.ShowKey_ButtonShow),
                     onClick = {
                         viewModel.onClickShow()

@@ -12,7 +12,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
@@ -36,7 +37,7 @@ class SendEvmTransactionView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr) {
+) : NestedScrollView(context, attrs, defStyleAttr) {
 
     private val binding = ViewSendEvmTransactionBinding.inflate(LayoutInflater.from(context), this)
 
@@ -45,8 +46,20 @@ class SendEvmTransactionView @JvmOverloads constructor(
         feeCellViewModel: EvmFeeCellViewModel,
         viewLifecycleOwner: LifecycleOwner,
         navController: NavController,
-        parentNavGraphId: Int
+        parentNavGraphId: Int,
+        description: String? = null
     ) {
+        binding.description.isVisible = description != null
+        binding.description.text = description
+
+        val adapter = SendEvmTransactionAdapter()
+        binding.recyclerView.adapter = adapter
+
+        transactionViewModel.viewItemsLiveData.observe(viewLifecycleOwner) {
+            adapter.items = flattenSectionViewItems(it)
+            adapter.notifyDataSetChanged()
+        }
+
         binding.feeViewCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
@@ -70,14 +83,6 @@ class SendEvmTransactionView @JvmOverloads constructor(
                     )
                 }
             }
-        }
-
-        val adapter = SendEvmTransactionAdapter()
-        binding.recyclerView.adapter = adapter
-
-        transactionViewModel.viewItemsLiveData.observe(viewLifecycleOwner) {
-            adapter.items = flattenSectionViewItems(it)
-            adapter.notifyDataSetChanged()
         }
 
         binding.cautionsViewCompose.setViewCompositionStrategy(

@@ -17,7 +17,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.databinding.FragmentTransactionSpeedupCancelBinding
+import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSendEvmBinding
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
@@ -53,7 +53,7 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
 
     private var snackbarInProcess: CustomSnackbar? = null
 
-    private var _binding: FragmentTransactionSpeedupCancelBinding? = null
+    private var _binding: FragmentConfirmationSendEvmBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -61,9 +61,8 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentTransactionSpeedupCancelBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        _binding = FragmentConfirmationSendEvmBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -86,7 +85,6 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
         }
 
         binding.toolbar.title = speedUpCancelViewModel.title
-        binding.description.text = speedUpCancelViewModel.description
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -125,7 +123,8 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
             feeViewModel,
             viewLifecycleOwner,
             findNavController(),
-            R.id.transactionSpeedUpCancelFragment
+            R.id.transactionSpeedUpCancelFragment,
+            speedUpCancelViewModel.description
         )
 
         if (speedUpCancelViewModel.isTransactionPending) {
@@ -156,7 +155,7 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, top = 24.dp, end = 16.dp),
+                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                     title = speedUpCancelViewModel.buttonTitle,
                     onClick = {
                         logger.info("click send button")

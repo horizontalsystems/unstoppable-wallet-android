@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -143,15 +144,46 @@ fun Eip1559FeeSettings(
             CellSingleLineLawrenceSection(settingsViewItems)
 
             Cautions(cautions)
+
+            Spacer(modifier = Modifier.height(32.dp))
         }
 
-        ButtonPrimaryYellow(
+        ButtonsGroupWithShade {
+            ButtonPrimaryYellow(
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp)
+                    .fillMaxWidth(),
+                title = stringResource(R.string.Button_Done),
+                onClick = { navController.popBackStack() }
+            )
+        }
+    }
+}
+
+@Composable
+fun ButtonsGroupWithShade(
+    ButtonsContent: @Composable (() -> Unit)
+) {
+    Column(
+        modifier = Modifier.offset(y = -(24.dp))
+    ) {
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 32.dp),
-            title = stringResource(R.string.Button_Done),
-            onClick = { navController.popBackStack() }
+                .height(24.dp)
+                .background(
+                    brush = Brush.verticalGradient(
+                        listOf(ComposeAppTheme.colors.transparent, ComposeAppTheme.colors.tyler)
+                    )
+                )
         )
+        Box(
+            modifier = Modifier
+                .background(ComposeAppTheme.colors.tyler)
+                .padding(bottom = 8.dp) // With 24dp offset actual padding will be 32dp
+        ) {
+            ButtonsContent()
+        }
     }
 }
 
@@ -238,15 +270,19 @@ fun LegacyFeeSettings(
             CellSingleLineLawrenceSection(settingsViewItems)
 
             Cautions(cautions)
+
+            Spacer(modifier = Modifier.height(32.dp))
         }
 
-        ButtonPrimaryYellow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 32.dp),
-            title = stringResource(R.string.Button_Done),
-            onClick = { navController.popBackStack() }
-        )
+        ButtonsGroupWithShade {
+            ButtonPrimaryYellow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
+                title = stringResource(R.string.Button_Done),
+                onClick = { navController.popBackStack() }
+            )
+        }
     }
 }
 
