@@ -265,18 +265,18 @@
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Configuración de tarifas</string>
     <string name="FeeSettings_Reset">Reiniciar</string>
-    <string name="FeeSettings_MaxFee">Max. Fee</string>
-    <string name="FeeSettings_MaxFee_Info">The maximum expected total fee for the given transaction. Typically, the actual transaction fee is going to be lower.</string>
+    <string name="FeeSettings_MaxFee">Comisión Máx.</string>
+    <string name="FeeSettings_MaxFee_Info">La tarifa máxima total esperada para la transacción dada. Por lo general, la tarifa real de transacción va a ser menor.</string>
     <string name="FeeSettings_Fee">Comisión</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
-    <string name="FeeSettings_GasLimit_Info">The gas limit is the maximum amount of gas units a user is willing to spend when sending a given transaction. Complex transactions require more gas units than simpler ones. The gas limit is estimated and set automatically for each transaction.</string>
+    <string name="FeeSettings_GasLimit_Info">El límite de gas es la cantidad máxima de unidades de gas que un usuario está dispuesto a gastar al enviar una transacción determinada. Las transacciones complejas requieren más unidades de gas que las más simples. El límite de gas se calcula y se establece automáticamente para cada transacción.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_GasPrice_Info">The fee for transacting on the network is measured in gas units. Gas Price is the amount a user is willing to spend per unit of gas. When the network is busy, gas prices are high, and low when it\'s idle. An insufficient gas price is often a reason for a transaction to remain pending for an extended period.</string>
-    <string name="FeeSettings_CurrentBaseFee">Current Base Fee</string>
-    <string name="FeeSettings_MaxBaseFee">Max Base Fee</string>
-    <string name="FeeSettings_MaxBaseFee_Info">Each transaction on Ethereum requires the user to spend a certain amount of gas units for processing that transaction. The price of a single gas unit changes in real-time with network conditions and is not controlled by any single entity. The max. base fee rate in combination with optional miner tip (see below) refers to the highest price for a gas unit a user is willing to pay for sending the transaction.</string>
+    <string name="FeeSettings_GasPrice_Info">La tarifa por transacción en la red se mide en unidades de gas. El precio del gas es la cantidad que un usuario está dispuesto a gastar por unidad de gas. Cuando la red se encuentra ocupada, los precios del gas son altos y bajos cuando está inactiva. Un precio insuficiente del gas es a menudo una razón para que una transacción permanezca pendiente durante un período prolongado.</string>
+    <string name="FeeSettings_CurrentBaseFee">Tarifa Base actual</string>
+    <string name="FeeSettings_MaxBaseFee">Tarifa Base Máx.</string>
+    <string name="FeeSettings_MaxBaseFee_Info">Cada transacción en Ethereum requiere que el usuario gaste una cierta cantidad de unidades de gas para procesar esa transacción. El precio de una unidad de gas única cambia en tiempo real con condiciones de red y no está controlado por ninguna entidad única. La tasa de tarifa base máxima, combinado con sugerencia opcional de minero (ver más abajo), refiere al precio más alto por una unidad de gas que un usuario está dispuesto a pagar por enviar la transacción.</string>
     <string name="FeeSettings_MaxMinerTips">Tips de los mejores mineros</string>
-    <string name="FeeSettings_MaxMinerTips_Info">Miner fees (aka miner tip) refer to optional fees that users may include to incentivize network participants to prioritize their transactions.</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Las tarifas de los mineros (también conocido como consejo de mineros) se refieren a las tarifas opcionales que los usuarios pueden incluir a los participantes de la red para priorizar sus transacciones.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Arriesgado</string>
     <string name="FeeSettings_RiskOfGettingStuck">La transacción puede permanecer pendiente por un tiempo o fallar por completo.</string>
     <string name="FeeSettings_Overpricing_Title">Cuota demasiado alta</string>
