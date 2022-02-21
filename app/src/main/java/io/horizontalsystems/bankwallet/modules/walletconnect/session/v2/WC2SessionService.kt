@@ -137,12 +137,9 @@ class WC2SessionService(
             .let {
                 disposables.add(it)
             }
-
-        service.start()
     }
 
     fun stop() {
-        service.stop()
         disposables.clear()
     }
 
@@ -163,7 +160,11 @@ class WC2SessionService(
 
         val chainIds = proposal.chains.mapNotNull { WC2Parser.getChainId(it) }
 
-        val wrappersMap = chainIds.associateWith { wcManager.evmKitWrapper(it, account) }
+        val wrappersMap = chainIds.mapNotNull { chainId ->
+            wcManager.evmKitWrapper(chainId, account)?.let {
+                chainId to it
+            }
+        }.toMap()
 
         if (wrappersMap.isEmpty()) {
             state = State.Invalid(WalletConnectModule.UnsupportedChainId)
@@ -183,9 +184,9 @@ class WC2SessionService(
     fun disconnect() {
         val sessionNonNull = session ?: return
 
+        state = State.Killed
         service.disconnect(sessionNonNull.topic)
         pingService.disconnect()
-        state = State.Killed
     }
 
     fun reconnect() {

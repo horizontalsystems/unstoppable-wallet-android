@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectMainViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Request
@@ -92,7 +91,7 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
         hint = getHint(connection, state)
 
         setButtons(state, connection)
-        setError(connectionState, state)
+        setError(state)
     }
 
     fun cancel() {
@@ -170,12 +169,10 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
     }
 
     private fun setError(
-        connectionState: WC2PingService.State?,
         state: WC2SessionService.State
     ) {
-        val error: String? = when {
-            connectionState is WC2PingService.State.Disconnected -> Translator.getString(R.string.Hud_Text_NoInternet)
-            state is WC2SessionService.State.Invalid -> state.error.message ?: state.error::class.java.simpleName
+        val error: String? = when (state) {
+            is WC2SessionService.State.Invalid -> state.error.message ?: state.error::class.java.simpleName
             else -> null
         }
 

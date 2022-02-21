@@ -19,7 +19,8 @@ class WC2Service : WalletConnectClient.WalletDelegate {
     val sessionsUpdatedObservable: Flowable<Unit>
         get() = sessionsUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val sessionsRequestReceivedSubject = PublishSubject.create<WalletConnect.Model.SessionRequest>()
+    private val sessionsRequestReceivedSubject =
+        PublishSubject.create<WalletConnect.Model.SessionRequest>()
     val sessionsRequestReceivedObservable: Flowable<WalletConnect.Model.SessionRequest>
         get() = sessionsRequestReceivedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
@@ -50,11 +51,8 @@ class WC2Service : WalletConnectClient.WalletDelegate {
         object Ready : Event()
     }
 
-    init {
-        WalletConnectClient.setWalletDelegate(this)
-    }
-
     fun start() {
+        WalletConnectClient.setWalletDelegate(this)
         sessionsUpdatedSubject.onNext(Unit)
     }
 
@@ -89,7 +87,10 @@ class WC2Service : WalletConnectClient.WalletDelegate {
 
         WalletConnectClient.approve(approve, object : WalletConnect.Listeners.SessionApprove {
             override fun onSuccess(settledSession: WalletConnect.Model.SettledSession) {
-                Log.e(TAG, "approve onSuccess topic: ${settledSession.topic} accounts: ${settledSession.accounts}")
+                Log.e(
+                    TAG,
+                    "approve success topic: ${settledSession.topic} accounts: ${settledSession.accounts}"
+                )
                 event = Event.SessionSettled(settledSession)
                 sessionsUpdatedSubject.onNext(Unit)
             }
