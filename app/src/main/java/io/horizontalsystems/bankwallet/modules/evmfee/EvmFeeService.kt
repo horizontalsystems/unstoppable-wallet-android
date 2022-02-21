@@ -16,7 +16,8 @@ class EvmFeeService(
     private val evmKit: EthereumKit,
     private val gasPriceService: IEvmGasPriceService,
     private val transactionData: TransactionData,
-    private val gasLimitSurchargePercent: Int = 0
+    private val gasLimitSurchargePercent: Int = 0,
+    private val gasLimit: Long? = null
 ) : IEvmFeeService {
 
     private val disposable = CompositeDisposable()
@@ -63,19 +64,27 @@ class EvmFeeService(
     private fun sync(gasPriceInfo: GasPriceInfo) {
         gasPriceInfoDisposable?.dispose()
 
-        getTransactionAsync(gasPriceInfo, transactionData)
-            .subscribeIO({ transaction ->
-                transactionStatus = if (transaction.totalAmount > evmBalance) {
-                    DataState.Success(transaction.copy(errors = transaction.errors + FeeSettingsError.InsufficientBalance))
-                } else {
-                    DataState.Success(transaction)
-                }
-            }, {
-                transactionStatus = DataState.Error(it)
-            })
-            .let {
-                gasPriceInfoDisposable = it
-            }
+        if (gasLimit != null) {
+            val gasData = GasData(gasLimit, gasPriceInfo.gasPrice)
+            val transaction = Transaction(transactionData, gasData, gasPriceInfo.warnings, gasPriceInfo.errors)
+            sync(transaction)
+        } else {
+            getTransactionAsync(gasPriceInfo, transactionData)
+                .subscribeIO({ transaction ->
+                    sync(transaction)
+                }, {
+                    transactionStatus = DataState.Error(it)
+                })
+                .let { gasPriceInfoDisposable = it }
+        }
+    }
+
+    private fun sync(transaction: Transaction) {
+        transactionStatus = if (transaction.totalAmount > evmBalance) {
+            DataState.Success(transaction.copy(errors = transaction.errors + FeeSettingsError.InsufficientBalance))
+        } else {
+            DataState.Success(transaction)
+        }
     }
 
     private fun getTransactionAsync(gasPriceInfo: GasPriceInfo, transactionData: TransactionData): Single<Transaction> {
