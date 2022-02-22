@@ -36,11 +36,11 @@
     <string name="PercentTitle">Процент</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
-    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
+    <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
     <string name="Intro_Wallet_Screen2Description">Распоряжайтесь активами свободно и без ограничений.</string>
-    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
-    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
-    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
+    <string name="Intro_Wallet_Screen3Title">Избавьтесь от Границ</string>
+    <string name="Intro_Wallet_Screen3Description">Преодолейте барьеры и получите доступ к рынкам.</string>
+    <string name="Intro_Wallet_Screen4Title">Сохраняйте Конфиденциальность</string>
     <string name="Intro_Wallet_Screen4Description">Не допускайте утечку личных и финансовых данных.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Я Понимаю</string>
@@ -265,7 +265,7 @@
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Настройки Комиссии</string>
     <string name="FeeSettings_Reset">Сбросить</string>
-    <string name="FeeSettings_MaxFee">Макс. Комиссия</string>
+    <string name="FeeSettings_MaxFee">Max Fee</string>
     <string name="FeeSettings_MaxFee_Info">Максимальная ожидаемая общая комиссия за данную транзакцию. Обычно, фактическая комиссия будет меньше.</string>
     <string name="FeeSettings_Fee">Комиссия</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
@@ -278,7 +278,7 @@
     <string name="FeeSettings_MaxMinerTips">Оплата Майнерам</string>
     <string name="FeeSettings_MaxMinerTips_Info">Плата майнерам (\"miner tip\") или так называемые \"майнерские чаевые\" - это дополнительная сумма, которую пользователи могут отправлять участникам сети, чтобы мотивировать их на приоритизацию своих транзакций.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Риски</string>
-    <string name="FeeSettings_RiskOfGettingStuck">Обработка транзакции может не произойти или отложиться на некоторое время, или транзакцию могут полностью отклонить.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">The transaction may remain pending for a while or fail entirely.</string>
     <string name="FeeSettings_Overpricing_Title">Слишком Высокая Комиссия</string>
     <string name="FeeSettings_Overpricing">Установленная комиссия за транзакцию больше чем требуется для обработки этой транзакции.</string>
     <string name="FeeSettings_Info_IUnderstand">Я Понимаю</string>
@@ -326,7 +326,7 @@
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Низкая Комиссия</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Установленная сумма комиссии недостаточно для обработки этой транзакции.</string>
     <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Недостаточно Ликвидности</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.\"</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.</string>
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Ошибка Оценки</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Проверьте баланс и убедитесь, что на нем достаточно %s для покрытия комиссии. Или попробуйте увеличить предел скольжения цены и повторите попытку снова. Следующая попытка через 3 секунды…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Вы можете оставить некоторую сумму в размере %s на балансе, чтобы оплачивать будущие транзакции.</string>
