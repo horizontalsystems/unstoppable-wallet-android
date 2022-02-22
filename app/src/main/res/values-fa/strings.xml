@@ -265,7 +265,7 @@
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">تنظیمات قیمت</string>
     <string name="FeeSettings_Reset">تنظیم مجدد</string>
-    <string name="FeeSettings_MaxFee">Max Fee</string>
+    <string name="FeeSettings_MaxFee">حداکثر هزینه</string>
     <string name="FeeSettings_MaxFee_Info">حداکثر کارمزد کل مورد انتظار برای معامله در نظر گرفته شده. به طور معمول، کارمزد واقعی تراکنش کمتر خواهد بود.</string>
     <string name="FeeSettings_Fee">هزينه</string>
     <string name="FeeSettings_GasLimit">محدودیت گاز</string>
@@ -278,7 +278,7 @@
     <string name="FeeSettings_MaxMinerTips">نکات حداکثر ماینر</string>
     <string name="FeeSettings_MaxMinerTips_Info">هزینه‌های ماینر (معروف به نکته ماینر) به کارمزدهای اختیاری اشاره می کند که کاربران ممکن است برای تشویق مشارکت‌کنندگان شبکه برای اولویت‌بندی تراکنش‌های خود لحاظ کنند.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">پرمخاطره</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">تراکنش ممکن است شکست بخورد یا برای مدتی معلق بماند یا به طور کامل ناموفق باشد.</string>
     <string name="FeeSettings_Overpricing_Title">هزینه خیلی بالا</string>
     <string name="FeeSettings_Overpricing">کارمزد تراکنش تعیین‌شده در حال حاضر بیشتر از نیاز برای پردازش این تراکنش است.</string>
     <string name="FeeSettings_Info_IUnderstand">می فهمم</string>
@@ -326,7 +326,7 @@
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">هزینه پایین</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">مقدار کارمزد تراکنش تنظیم شده برای پردازش این تراکنش در حال حاضر کافی نیست.</string>
     <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">نقدینگی ناکافی</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">به احتمال زیاد نقدینگی کافی برای پردازش این معامله وجود ندارد. سعی کنید مقدار را کاهش دهید.</string>
     <string name="EthereumTransaction_Error_CannotEstimate_Title">تخمین خطا</string>
     <string name="EthereumTransaction_Error_CannotEstimate">تعادل را بررسی کنید تا مطمئن شوید %s کافی برای پوشش هزینه وجود دارد. یا سعی کنید مقدار لغزش قیمت را افزایش دهید و دوباره امتحان کنید. در عرض 3 ثانیه مجدداً خودکار انجام می شود…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">برخی از %s را در مانده حساب باقی بگذارید تا بتوانید برای تراکنش‌های آینده از آن استفاده کنید.</string>
