@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
 import io.reactivex.disposables.CompositeDisposable
 
 class WC2ListViewModel(
-    service: WC2ListService
+    private val service: WC2ListService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -24,9 +24,27 @@ class WC2ListViewModel(
             .subscribeIO { sync(it) }
             .let { disposables.add(it) }
 
+        service.pendingRequestsObservable
+            .subscribeIO { syncPendingRequestsCount(it.size) }
+            .let { disposables.add(it) }
+
         if (service.sessions.isNotEmpty()) {
             sync(service.sessions)
         }
+    }
+
+    private fun syncPendingRequestsCount(count: Int) {
+        sectionItem?.let {
+            setSectionViewItem(it.sessions, count)
+        }
+    }
+
+    private fun setSectionViewItem(
+        sessions: List<WalletConnectListModule.SessionViewItem>,
+        pendingRequestsCount: Int
+    ) {
+        val count = if (pendingRequestsCount > 0) pendingRequestsCount else null
+        sectionItem = Section(WalletConnectListModule.Version.Version2, sessions, count)
     }
 
     private fun sync(sessions: List<WalletConnect.Model.SettledSession>) {
@@ -44,8 +62,8 @@ class WC2ListViewModel(
                 imageUrl = session.peerAppMetaData?.icons?.lastOrNull(),
             )
         }
-        val section = Section(WalletConnectListModule.Version.Version2, sessionItems)
-        sectionItem = section
+
+        setSectionViewItem(sessionItems, service.pendingRequestsCount)
     }
 
     private fun getSubtitle(chains: List<String>): String {

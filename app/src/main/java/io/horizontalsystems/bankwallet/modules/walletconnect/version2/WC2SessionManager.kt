@@ -24,6 +24,10 @@ class WC2SessionManager(
     val sessionsObservable: Flowable<List<WalletConnect.Model.SettledSession>>
         get() = sessionsSubject.toFlowable(BackpressureStrategy.BUFFER)
 
+    private val pendingRequestsSubject = PublishSubject.create<List<WalletConnect.Model.JsonRpcHistory.HistoryEntry>>()
+    val pendingRequestsObservable: Flowable<List<WalletConnect.Model.JsonRpcHistory.HistoryEntry>>
+        get() = pendingRequestsSubject.toFlowable(BackpressureStrategy.BUFFER)
+
     val sessions: List<WalletConnect.Model.SettledSession>
         get() {
             val accountId = accountManager.activeAccount?.id ?: return emptyList()
@@ -55,6 +59,12 @@ class WC2SessionManager(
             }
             .let { disposable.add(it) }
 
+        service.pendingRequestUpdatedObservable
+            .subscribeIO {
+                syncPendingRequest()
+            }
+            .let { disposable.add(it) }
+
         service.sessionsRequestReceivedObservable
             .subscribeIO {
                 handleSessionRequest(it)
@@ -62,11 +72,12 @@ class WC2SessionManager(
             .let { disposable.add(it) }
     }
 
-    private fun handleDeletedAccount() {
-        val existingAccountIds = accountManager.accounts.map { it.id }
-        storage.deleteSessionsExcept(accountIds = existingAccountIds)
+    fun deleteSession(topic: String) {
+        service.disconnect(topic)
+    }
 
-        syncSessions()
+    fun pendingRequests(accountId: String? = null): List<WalletConnect.Model.JsonRpcHistory.HistoryEntry>{
+        return requests(accountId)
     }
 
     private fun syncSessions() {
@@ -91,11 +102,7 @@ class WC2SessionManager(
         storage.deleteSessionsByTopics(deletedTopics)
 
         sessionsSubject.onNext(getSessions(accountId))
-//        pendingRequestsRelay.accept(requests())
-    }
-
-    fun deleteSession(topic: String) {
-        service.disconnect(topic)
+        syncPendingRequest()
     }
 
     private fun handleSessionRequest(request: WalletConnect.Model.SessionRequest) {
@@ -120,16 +127,24 @@ class WC2SessionManager(
         return accountSessions
     }
 
-    private fun requests(accountId: String? = null): List<WalletConnect.Model.SessionRequest> {
-//        val allRequests = service.pendingRequests
-//        val dbSessions = storage.sessionsV2(accountId: accountId)
-//
-//        return allRequests.filter { request in
-//                dbSessions.contains { session in
-//                        session.topic == request.topic
-//                }
-//        }
-        return emptyList()
+    private fun syncPendingRequest() {
+        pendingRequestsSubject.onNext(requests())
+    }
+
+    private fun requests(accountId: String? = null): List<WalletConnect.Model.JsonRpcHistory.HistoryEntry> {
+        val sessions = accountId?.let { getSessions(it) } ?: allSessions
+        val pendingRequests = mutableListOf<WalletConnect.Model.JsonRpcHistory.HistoryEntry>()
+        sessions.forEach { session ->
+            pendingRequests.addAll(service.pendingRequests(session.topic))
+        }
+        return pendingRequests
+    }
+
+    private fun handleDeletedAccount() {
+        val existingAccountIds = accountManager.accounts.map { it.id }
+        storage.deleteSessionsExcept(accountIds = existingAccountIds)
+
+        syncSessions()
     }
 
 }
