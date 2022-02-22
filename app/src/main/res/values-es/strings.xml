@@ -265,7 +265,7 @@
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Configuración de tarifas</string>
     <string name="FeeSettings_Reset">Reiniciar</string>
-    <string name="FeeSettings_MaxFee">Max Fee</string>
+    <string name="FeeSettings_MaxFee">Comisión Máx.</string>
     <string name="FeeSettings_MaxFee_Info">La tarifa máxima total esperada para la transacción dada. Por lo general, la tarifa real de transacción va a ser menor.</string>
     <string name="FeeSettings_Fee">Comisión</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
@@ -278,7 +278,7 @@
     <string name="FeeSettings_MaxMinerTips">Tips de los mejores mineros</string>
     <string name="FeeSettings_MaxMinerTips_Info">Las tarifas de los mineros (también conocido como consejo de mineros) se refieren a las tarifas opcionales que los usuarios pueden incluir a los participantes de la red para priorizar sus transacciones.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Arriesgado</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">La transacción puede permanecer pendiente por un tiempo o fallar por completo.</string>
     <string name="FeeSettings_Overpricing_Title">Cuota demasiado alta</string>
     <string name="FeeSettings_Overpricing">La tarifa de transacción establecida es mayor de lo necesario para procesar esta transacción ahora.</string>
     <string name="FeeSettings_Info_IUnderstand">Entiendo</string>
@@ -326,7 +326,7 @@
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Tarifa baja</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">El monto de comisión de transacción establecido no es suficiente para procesar esta transacción ahora.</string>
     <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Liquidez insuficiente</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Probablemente no hay suficiente liquidez disponible para procesar esta operación. Intente reducir la cantidad.</string>
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Error de estimación</string>
     <string name="EthereumTransaction_Error_CannotEstimate">¡Error! Comprueba el saldo y asegúrate de que hay suficientes %s para cubrir la comisión. O intente aumentar la cantidad del deslizamiento del precio e intente de nuevo. Volverá a intentarlo en 3 segundos...</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Considere dejar algún %s en el saldo para poder pagar futuras transacciones.</string>
