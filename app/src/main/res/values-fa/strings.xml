@@ -264,18 +264,24 @@
     <string name="Send_Warning_LowFee">هشدار! خطر گیر افتادن</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">تنظیمات قیمت</string>
+    <string name="FeeSettings_Reset">تنظیم مجدد</string>
     <string name="FeeSettings_MaxFee">حداکثر هزینه</string>
+    <string name="FeeSettings_MaxFee_Info">حداکثر کارمزد کل مورد انتظار برای معامله در نظر گرفته شده. به طور معمول، کارمزد واقعی تراکنش کمتر خواهد بود.</string>
     <string name="FeeSettings_Fee">هزينه</string>
     <string name="FeeSettings_GasLimit">محدودیت گاز</string>
+    <string name="FeeSettings_GasLimit_Info">حد گاز حداکثر مقدار واحدهای گازی است که کاربر مایل است در هنگام ارسال یک تراکنش معین خرج کند. معاملات پیچیده به واحدهای گاز بیشتری نسبت به واحدهای ساده تر نیاز دارند. حد گاز برای هر تراکنش به طور خودکار تخمین زده و تنظیم می شود.</string>
     <string name="FeeSettings_GasPrice">قیمت گاز</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">خطر گیر افتادن</string>
-    <string name="FeeSettings_RiskOfGettingStuck">تراکنش ممکن است گیر کند یا موفقیت آمیز نباشد.</string>
-    <string name="FeeSettings_Overpricing_Title">قیمت گذاری بیش از حد</string>
-    <string name="FeeSettings_Overpricing">قیمت گاز بالاتر از حد لازم برای تراکنش است.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">قیمت پایه بالاست!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">در حال حاضر کارمزد پایه برای تراکنش بالا است. ممکن است زمانی که شبکه کمتر شلوغ باشد، پایین بیاید.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">قیمت پایه پایین</string>
-    <string name="FeeSettings_BaseFeeIsLow">تنظیم حداکثر قیمت پایه برای گنجاندن تراکنش بسیار کم است.</string>
+    <string name="FeeSettings_GasPrice_Info">کارمزد تراکنش در شبکه بر حسب واحد گاز سنجیده می شود. قیمت گاز مبلغی است که کاربر مایل است برای هر واحد گاز هزینه کند. وقتی شبکه شلوغ است، قیمت گاز بالاست و وقتی خلوت است پایین. قیمت ناکافی گاز اغلب دلیلی برای معلق ماندن یک معامله برای مدت طولانی است.</string>
+    <string name="FeeSettings_CurrentBaseFee">کارمزد پایه‌ی فعلی</string>
+    <string name="FeeSettings_MaxBaseFee">حداکثر قیمت پایه</string>
+    <string name="FeeSettings_MaxBaseFee_Info">هر تراکنش در اتریوم به کاربر نیاز دارد که مقدار مشخصی از واحدهای گاز را برای پردازش آن تراکنش خرج کند. قیمت یک واحد گاز در زمان واقعی با شرایط شبکه تغییر می کند و توسط هیچ نهاد واحدی کنترل نمی شود. حداکثر نرخ کارمزد پایه در ترکیب با نوک ماینر اختیاری (به زیر مراجعه کنید) به بالاترین قیمت برای یک واحد گاز اشاره دارد که کاربر مایل است برای ارسال تراکنش بپردازد.</string>
+    <string name="FeeSettings_MaxMinerTips">نکات حداکثر ماینر</string>
+    <string name="FeeSettings_MaxMinerTips_Info">هزینه‌های ماینر (معروف به نکته ماینر) به کارمزدهای اختیاری اشاره می کند که کاربران ممکن است برای تشویق مشارکت‌کنندگان شبکه برای اولویت‌بندی تراکنش‌های خود لحاظ کنند.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">پرمخاطره</string>
+    <string name="FeeSettings_RiskOfGettingStuck">تراکنش ممکن است شکست بخورد یا برای مدتی معلق بماند یا به طور کامل ناموفق باشد.</string>
+    <string name="FeeSettings_Overpricing_Title">هزینه خیلی بالا</string>
+    <string name="FeeSettings_Overpricing">کارمزد تراکنش تعیین‌شده در حال حاضر بیشتر از نیاز برای پردازش این تراکنش است.</string>
+    <string name="FeeSettings_Info_IUnderstand">می فهمم</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">سرعت تراکنش</string>
     <string name="FeeInfo_Description">هر دو بلاک چین بیت کوین و اتریوم کاربران را ملزم به پرداخت هزینه های شبکه هنگام ارسال تراکنش ها می کنند. زمانی که تراکنش‌های زیادی در شبکه انجام می‌شود، کارمزدها بیشتر و زمانی که بلاک چین شلوغ‌تر است، کمتر است.</string>
@@ -317,9 +323,12 @@
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">موجودی ناکافی</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">تراکنش برای ارسال به %s نیاز دارد</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">موجودی %s فعلی زیر مقدار مورد نیاز برای تراکنش این معامله از جمله هزینه معامله است.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">مقدار کارمزد انتخابی خیلی کم است و رد خواهد شد!</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">نقدینگی ناکافی</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">خطا! موجودی را بررسی کنید و مطمئن شوید که %s کافی برای پوشش هزینه وجود دارد. یا سعی کنید مقدار لغزش قیمت را افزایش دهید و دوباره امتحان کنید. 3 ثانیه دیگر دوباره امتحان می‌شود…</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">هزینه پایین</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">مقدار کارمزد تراکنش تنظیم شده برای پردازش این تراکنش در حال حاضر کافی نیست.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">نقدینگی ناکافی</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">به احتمال زیاد نقدینگی کافی برای پردازش این معامله وجود ندارد. سعی کنید مقدار را کاهش دهید.</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">تخمین خطا</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">تعادل را بررسی کنید تا مطمئن شوید %s کافی برای پوشش هزینه وجود دارد. یا سعی کنید مقدار لغزش قیمت را افزایش دهید و دوباره امتحان کنید. در عرض 3 ثانیه مجدداً خودکار انجام می شود…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">برخی از %s را در مانده حساب باقی بگذارید تا بتوانید برای تراکنش‌های آینده از آن استفاده کنید.</string>
     <!--Swap-->
     <string name="Swap">جایگزینی</string>

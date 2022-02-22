@@ -25,22 +25,22 @@
     <string name="Button_Start">Начать</string>
     <string name="Button_Create">Создать</string>
     <string name="Button_Restore">Восстановить</string>
-    <string name="Button_WatchAddress">Watch Address</string>
+    <string name="Button_WatchAddress">Посмотреть Адрес</string>
     <string name="Button_Reset">Сбросить</string>
     <string name="Button_Reconnect">Повторное Подключение</string>
     <string name="Button_Understand">Я Понимаю</string>
-    <string name="Button_Switch">Switch</string>
+    <string name="Button_Switch">Перекл.</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет Данных</string>
     <string name="Any">Любые</string>
     <string name="PercentTitle">Процент</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
-    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
+    <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
     <string name="Intro_Wallet_Screen2Description">Распоряжайтесь активами свободно и без ограничений.</string>
-    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
-    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
-    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
+    <string name="Intro_Wallet_Screen3Title">Избавьтесь от Границ</string>
+    <string name="Intro_Wallet_Screen3Description">Преодолейте барьеры и получите доступ к рынкам.</string>
+    <string name="Intro_Wallet_Screen4Title">Сохраняйте Конфиденциальность</string>
     <string name="Intro_Wallet_Screen4Description">Не допускайте утечку личных и финансовых данных.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Я Понимаю</string>
@@ -59,7 +59,7 @@
     <string name="CreateWallet_PassphraseDescription">Кодовые фразы обеспечивают дополнительную защиту для кошельков, позволяя пользователям создавать несколько независимых мультивалютных кошельков, использующих одну мнемоническую фразу для восстановления, но имеющих разные пароли.\n\nДля восстановления этих кошельков пользователю потребуются мнемоническая фраза для восстановления, а также пароль для каждого восстанавливаемого кошелька.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable? Share feedback and ideas to take it further.</string>
+    <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable? Поделитесь отзывами и идеями для дальнейшего развития кошелька.</string>
     <string name="RateApp_Button_RateIt">Оценить</string>
     <string name="RateApp_Button_NotNow">Не сейчас</string>
     <!--Restore-->
@@ -216,7 +216,7 @@
     <string name="Balance_Sort_24hPriceChange">По Изменение Цены (%)</string>
     <string name="Balance_Hidden">скрытое</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
-    <string name="Balance_NoWalletAlert">No wallets yet</string>
+    <string name="Balance_NoWalletAlert">Пока нет кошельков</string>
     <string name="Balance_NoCoinsAlert">Вы еще не добавили монеты в этот кошелек</string>
     <string name="Balance_WatchAccount_NoBalance">У кошелька с этим адресом нет баланса</string>
     <!--Send-->
@@ -264,18 +264,24 @@
     <string name="Send_Warning_LowFee">Внимание! Транзакция может застрять в сети</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Настройки Комиссии</string>
+    <string name="FeeSettings_Reset">Сбросить</string>
     <string name="FeeSettings_MaxFee">Макс. Комиссия</string>
+    <string name="FeeSettings_MaxFee_Info">Максимальная ожидаемая общая комиссия за данную транзакцию. Обычно, фактическая комиссия будет меньше.</string>
     <string name="FeeSettings_Fee">Комиссия</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">Gas Limit - это максимальное количество единиц газа, которое пользователь готов потратить при отправке конкретной транзакции. Для выполнения более комплексных транзакций требуется большее количество единиц газ, чем для выполнения более простых. Лимит газа автоматически рассчитывается и задается для каждой транзакции.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Risk of getting stuck</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may get stuck or fail.</string>
-    <string name="FeeSettings_Overpricing_Title">Overpricing</string>
-    <string name="FeeSettings_Overpricing">Стоимость газа превышает подходящую для транзакции цену.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">В настоящий момент базовая комиссия за транзакцию высокая. Она может уменьшиться при снижении сетевой нагрузки.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Low Base Fee</string>
-    <string name="FeeSettings_BaseFeeIsLow">The Max Base Fee set up is too low for including the transaction.</string>
+    <string name="FeeSettings_GasPrice_Info">Комиссия за сетевую транзакцию измеряется в единицах газа. Цена газа – это сумма, которую пользователь готов заплатить за единицу газа. Когда сеть занята, цены на газ повышаются, а во время простоя они наоборот снижаются. Слишком низкая цена газа зачастую является основанием для длительного сохранения отложенного статуса транзакции.</string>
+    <string name="FeeSettings_CurrentBaseFee">Текущая Базовая Комиссия</string>
+    <string name="FeeSettings_MaxBaseFee">Макс. Базовая Комиссия</string>
+    <string name="FeeSettings_MaxBaseFee_Info">Пользователь должен потратить определенное количество единиц газа на обработку каждой транзакции в Ethereum. Стоимость одной единицы газа изменяется в реальном времени в зависимости от статуса сети и не контролируется ни одной организацией. Максимальный размер базовой комиссии в сочетании с опциональными майнерскими чаевыми (см. ниже) - это самая высокая цена за единицу газа, которую пользователь готов оплатить за отправку транзакции.</string>
+    <string name="FeeSettings_MaxMinerTips">Оплата Майнерам</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Плата майнерам (\"miner tip\") или так называемые \"майнерские чаевые\" - это дополнительная сумма, которую пользователи могут отправлять участникам сети, чтобы мотивировать их на приоритизацию своих транзакций.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Риски</string>
+    <string name="FeeSettings_RiskOfGettingStuck">Обработка транзакции может отложиться на некоторое время, или транзакцию могут полностью отклонить.</string>
+    <string name="FeeSettings_Overpricing_Title">Слишком Высокая Комиссия</string>
+    <string name="FeeSettings_Overpricing">Установленная комиссия за транзакцию больше чем требуется для обработки этой транзакции.</string>
+    <string name="FeeSettings_Info_IUnderstand">Я Понимаю</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Скорость Транзакции</string>
     <string name="FeeInfo_Description">Пользователи блокчейнов для Bitcoin и Ethereum должны оплачивать сетевые комиссии при отправке транзакций. Комиссии обычно выше при обработке большего количества транзакций в сети и ниже при меньшей занятости блокчейна.</string>
@@ -293,7 +299,7 @@
     <string name="WalletConnect_UnknownRequest_Title">Вызов Контракта</string>
     <string name="WalletConnect_Status">Статус</string>
     <string name="WalletConnect_SignedTransactions">Подписанные Транзакции</string>
-    <string name="WalletConnect_Approve_Hint">Нажимая \"Подтвердить\", вы разрешаете этому приложению просматривать ваш общедоступный адрес. Это важный шаг для защиты ваших данных от потенциальных рисков фишинга.</string>
+    <string name="WalletConnect_Approve_Hint">Нажав на соединение, вы позволяете этому приложению просматривать ваш публичный адрес. Это важный шаг безопасности, чтобы защитить ваши данные от потенциальных рисков, связанных с фишингом.</string>
     <string name="WalletConnect_Ready_Hint">Вы можете перейти в браузер. Не закрывайте эту страницу во время использования браузера.</string>
     <string name="WalletConnect_Reconnect_Hint">Не удалось установить соединение. Попробуйте переподключиться снова.</string>
     <string name="WalletConnect_Error_InvalidUrl">Неверный URL-адрес</string>
@@ -314,13 +320,16 @@
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Внимание</string>
     <string name="EthereumTransaction_Error_Title">Ошибка</string>
-    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Недостаточно Средств</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">Для отправки транзакции требуется %s</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Текущий баланс %s ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Выбранное значение комиссии слишком низкое и будет отклонено!</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Недостаточно ликвидности</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">Ошибка! Проверьте баланс и убедитесь, что на нем достаточно %s для покрытия комиссии. Или попробуйте увеличить предел скольжения цены и повторите попытку снова. Следующая попытка через 3 секунды...</string>
-    <string name="EthereumTransaction_Warning_CoinNeededForFee">Consider leaving some %s on balance to be able to pay for future transactions.</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Низкая Комиссия</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Установленная сумма комиссии недостаточно для обработки этой транзакции.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Недостаточно Ликвидности</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Кажется, для этой сделки не хватает ликвидности. Попробуйте уменьшить сумму сделки.</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Ошибка Оценки</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Проверьте баланс и убедитесь, что на нем достаточно %s для покрытия комиссии. Или попробуйте увеличить предел скольжения цены и повторите попытку снова. Следующая попытка через 3 секунды…</string>
+    <string name="EthereumTransaction_Warning_CoinNeededForFee">Вы можете оставить некоторую сумму в размере %s на балансе, чтобы оплачивать будущие транзакции.</string>
     <!--Swap-->
     <string name="Swap">Обменять</string>
     <string name="Swap_FromAmountTitle">Вы платите</string>
@@ -382,7 +391,7 @@
     <string name="Approve_Info">Вы должны предоставить разрешение на смарт-контракт, чтобы обменять этот токен от своего имени. С помощью этого разрешения задается сумма, которая может быть использована в рамках смарт-контракта. Это не повлияет на ваш баланс, но вам придется заплатить небольшой сбор за исполнение транзакции.\n\nРазрешение может быть запрошено перед каждой сделкой, но дешевле заранее задать более высокую сумму для будущих сделок.</string>
     <string name="Approve_Error_AlreadyApproved">У вас уже есть разрешение на эту сумму</string>
     <string name="Approve_Spender">Покупатель</string>
-    <string name="Approve_YouApprove">Вы Подтверждаете</string>
+    <string name="Approve_YouApprove">Вы Разрешаете</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_Description">Этот обменный сервис работает при поддержке %s - децентрализованного протокола обмена токенов, созданного в блокчейне %s.\n\n%s полностью автоматизирован и управляется смарт-контрактами, которые надежным способом упрощают обмен токенами без осуществления каких-либо махинаций.</string>
     <string name="SwapInfo_DexRelated">o %s</string>
@@ -424,10 +433,10 @@
     <string name="Transactions_From">от %s</string>
     <string name="Transaction_Unlimited">неограниченно %s</string>
     <string name="Transactions_All">Все</string>
-    <string name="Transactions_Incoming">Received</string>
+    <string name="Transactions_Incoming">Получено</string>
     <string name="Transactions_Outgoing">Отправлено</string>
-    <string name="Transactions_Swaps">Swaps</string>
-    <string name="Transactions_Approvals">Approvals</string>
+    <string name="Transactions_Swaps">Обмены</string>
+    <string name="Transactions_Approvals">Разрешения</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Транзакция</string>
     <string name="TransactionInfo_Title">Информация о Транзакции</string>
@@ -463,7 +472,7 @@
     <string name="StatusInfo_Processing">В Процессе</string>
     <string name="StatusInfo_Confirmed">Завершено</string>
     <string name="StatusInfo_Failed">Не удалось</string>
-    <string name="StatusInfo_PendingDescription">The transaction has not been confirmed on the blockchain yet. Transactions sent with a recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected. Also keep in mind that status of an individual transaction shown in Unstoppable wallet interface typically updated with a short delay.</string>
+    <string name="StatusInfo_PendingDescription">Транзакция еще не подтверждена в блокчейне. Транзакции, отправленные с рекомендованной или более высокой комиссией, обычно обрабатываются в течение 10 минут. Транзакции, отправленные с низкой комиссией, могут обрабатываться в течение нескольких часов или дней и даже отклоняться. Учтите, что обновление статуса каждой транзакции, отображаемого в интерфейсе кошелька Unstoppable, обычно происходит с небольшой задержкой. </string>
     <string name="StatusInfo_ProcessingDescription">Транзакция уже включена в блокчейн, но пока не обработана. На данном этапе транзакции считаются завершенными для небольших платежей. Что касается завершения обработки более крупных транзакций, стоит дождаться смены статуса.</string>
     <string name="StatusInfo_ConfirmedDescription">Транзакция завершена и считается постоянной и необратимой.</string>
     <string name="StatusInfo_FailedDescription">Транзакция не была обработана, и передача заданной суммы не произошла. Транзакции со статусом отказа также записываются в блокчейн и за них взимаются комиссии. Приложение Unstoppable не может показать причину ошибочной обработки таких транзакций, но пользователи могут найти эту информацию на сайте block explorer, т.e. etherscan.io.</string>
@@ -627,11 +636,11 @@
     <string name="ManageAccounts_Title">Кошельки</string>
     <string name="ManageAccounts_CreateNewWallet">Создать</string>
     <string name="ManageAccounts_ImportWallet">Восстановить</string>
-    <string name="ManageAccounts_WatchAddress">Watch Address</string>
+    <string name="ManageAccounts_WatchAddress">Посмотреть Адрес</string>
     <string name="ManageAccounts_Hint">Совет: восстановление существующего кошелька при помощи другой кодовой фразы приведет к созданию нового кошелька. Это очень удобно, когда вы хотите использовать одну мнемоническую восстановительную фразу длиной от 12 до 24 слов для нескольких кошельков.</string>
     <string name="Watch_Address_Title">Адрес</string>
     <string name="Watch_Address_Hint">Адрес или Домен</string>
-    <string name="Watch_Address_Watch">Watch</string>
+    <string name="Watch_Address_Watch">Смотреть</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Названию</string>
     <string name="ManageAccount_Save">Сохранить</string>
@@ -640,7 +649,7 @@
     <string name="ManageAccount_NetworkSettings">Настройки Сети</string>
     <string name="ManageAccount_Unlink">Отсоединить</string>
     <string name="ManageAccount_BackupRequired_Title">Необходима Резервная Копия</string>
-    <string name="ManageAccount_BackupRequired_Description">You need to backup %1$s before you may receive %2$s.</string>
+    <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию %1$s перед получением %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">Все монеты, принадлежащие этому кошельку, будут отключены на вкладке баланса.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Если вы не сделали резервную копию приватного ключа для этого кошелька, вы потеряете доступ к вашим средствам.</string>
@@ -649,11 +658,11 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s слов с кодовой фразой</string>
     <string name="ManageAccount_SwitchWallet_Title">Сменить Кошелек</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Выберите кошелек для быстрого переключения</string>
-    <string name="ManageAccount_DeleteWarning">Are you sure want to delete this wallet?</string>
+    <string name="ManageAccount_DeleteWarning">Вы уверены, что хотите удалить этот кошелек?</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Настройки Сети</string>
-    <string name="NetworkSettings_SwithesAutomatically">switches automatically</string>
-    <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP network uses the links listed below and switches automatically.</string>
+    <string name="NetworkSettings_SwithesAutomatically">переходит автоматически</string>
+    <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP сеть использует перечисленные ниже ссылки и переключает их автоматически.</string>
     <string name="NetworkSettings_TestNetDisclaimer">Пожалуйста, не выбирайте опции Testnet, если вы не понимаете, что такое и как это работает.\n\nTestnet является параллельным блокчейном для тестирования целей в своей собственной валюте. Если кто-то отправляет регулярный платеж на ваш Testnet адрес, он будет утерян.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Ключ</string>
@@ -816,7 +825,7 @@
     <string name="CoinPage_MarketCap_Trillion">трл</string>
     <string name="CoinPage_Volume">Объём</string>
     <string name="CoinPage_NoData">Нет данных</string>
-    <string name="CoinPage_NoDataAvailable">No data available</string>
+    <string name="CoinPage_NoDataAvailable">Данные отсутствуют</string>
     <string name="CoinPage_AddToWallet">Добавить в кошелек</string>
     <string name="CoinPage_InWallet">В кошельке</string>
     <string name="CoinPage_Favorite">Избранное</string>
@@ -848,7 +857,7 @@
     <string name="BalanceSyncError_ButtonRetry">Повторить</string>
     <string name="BalanceSyncError_ButtonChangeSource">Сменить Источник</string>
     <string name="BalanceSyncError_ButtonReport">Пожаловаться</string>
-    <string name="BalanceSyncError_ReportButtonExplanation">The error text will be copied to your clipboard should you decide to report it.</string>
+    <string name="BalanceSyncError_ReportButtonExplanation">Сообщение об ошибке будет скопировано в ваш буфер обмена данными на случай, если вы решите о ней сообщить.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">Мы в соцсетях</string>
 </resources>

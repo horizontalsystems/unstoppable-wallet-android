@@ -264,18 +264,24 @@
     <string name="Send_Warning_LowFee">警告！有被骗的风险</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">费用设置</string>
+    <string name="FeeSettings_Reset">重置</string>
     <string name="FeeSettings_MaxFee">最大手续费</string>
+    <string name="FeeSettings_MaxFee_Info">给定交易的最大预计总费用。通常，实际交易费用会更低。</string>
     <string name="FeeSettings_Fee">费用</string>
     <string name="FeeSettings_GasLimit">GAS限制</string>
+    <string name="FeeSettings_GasLimit_Info">燃料限制是用户发送给定交易时愿意花费的最大燃料单位。复杂交易比简单交易需要更多的燃料单位。每一交易的燃料限制将自动得到估计和设置。</string>
     <string name="FeeSettings_GasPrice">GAS的价格</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">有被卡的风险</string>
-    <string name="FeeSettings_RiskOfGettingStuck">交易可能被卡或失败。</string>
-    <string name="FeeSettings_Overpricing_Title">定价过高</string>
-    <string name="FeeSettings_Overpricing">天然气价格高于交易所需的价格。</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">基础费用高！</string>
-    <string name="FeeSettings_BaseFeeIsHigh">此刻，交易的基本费用很高。当网络变得不那么拥挤时，费用可能会下降。</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">低基本费用</string>
-    <string name="FeeSettings_BaseFeeIsLow">设置的最大基本费用太低，不能包含交易。</string>
+    <string name="FeeSettings_GasPrice_Info">网上交易费用将按燃料单位计量。燃料价格是用户愿意按单位消费的金额。 当网络忙碌时，燃料价格就高，空闲时价格就低。 燃料价格不足常常是交易被长期搁置的一个原因。</string>
+    <string name="FeeSettings_CurrentBaseFee">当前基本费用</string>
+    <string name="FeeSettings_MaxBaseFee">最大基本费用</string>
+    <string name="FeeSettings_MaxBaseFee_Info">以太坊上的每笔交易都要求用户花费一定数量的燃料单位来处理该交易。单个燃料单元的价格随网络条件实时变化，不受任何单一实体的控制。最大基本费率与可选的矿工消费（见下文）是指用户愿意为发送交易支付的燃料单位的最高价格。</string>
+    <string name="FeeSettings_MaxMinerTips">最大矿工提示</string>
+    <string name="FeeSettings_MaxMinerTips_Info">矿工费用（又称矿工消费）是指用户可选择的费用，用户可以包括此费用以鼓励网络参与者让他们交易优先。</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">有风险</string>
+    <string name="FeeSettings_RiskOfGettingStuck">交易可能会在一段时间内仍然处于待处理状态或完全失败。</string>
+    <string name="FeeSettings_Overpricing_Title">费用太高</string>
+    <string name="FeeSettings_Overpricing">当前设置的交易费用高于处理此交易所需的费用。</string>
+    <string name="FeeSettings_Info_IUnderstand">我理解</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">交易速度</string>
     <string name="FeeInfo_Description">比特币和Etherum区块链都要求用户在发送交易时支付网络费用。当区块链上发生大量交易时费用较高；而区块链空闲时费用较低。</string>
@@ -317,9 +323,12 @@
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">可用额度不足</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">当前%s余额低于此交易所需金额，包括交易费用。</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">选定的费用太低，交易将被拒绝！</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">流动性不足</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">错误！检查余额并确保有足够的%s来支付费用。或者尝试增加价格下跌金额并重试。将在3秒后重试...</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">低费用</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">当前设置的交易费用金额不足以处理此交易。</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">流动性不足</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">可能没有足够的流动资金来处理此交易。请尝试降低减少金额。</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">估计错误</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">错误！检查余额并确保有足够的%s来支付费用。或者尝试增加价格下跌金额并重试。将在3秒后重试</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">考虑留下%s作为余额以便能够支付未来的交易。</string>
     <!--Swap-->
     <string name="Swap">互兑交易</string>

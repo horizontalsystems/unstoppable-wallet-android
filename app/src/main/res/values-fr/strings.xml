@@ -264,18 +264,24 @@
     <string name="Send_Warning_LowFee">Attention ! Risque de blocage</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Paramètres des frais</string>
-    <string name="FeeSettings_MaxFee">Frais Max</string>
+    <string name="FeeSettings_Reset">Réinitialiser</string>
+    <string name="FeeSettings_MaxFee">Max Fee</string>
+    <string name="FeeSettings_MaxFee_Info">Les frais totaux maximums escomptés pour la transaction donnée. En règle générale, les frais réels de la transaction sont inférieurs à ce montant.</string>
     <string name="FeeSettings_Fee">Frais</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">La limite de gas est le montant maximum d\'unités de gas qu\'un utilisateur est prêt à dépenser lors de l\'envoi d\'une transaction donnée. Les transactions complexes nécessitent plus d\'unités de gas que les transactions plus simples. La limite de gas est une estimation et est fixée automatiquement pour chaque transaction.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Risque de blocage</string>
-    <string name="FeeSettings_RiskOfGettingStuck">La transaction risque d\'être bloquée ou d\'échouer.</string>
-    <string name="FeeSettings_Overpricing_Title">Surfacturation</string>
-    <string name="FeeSettings_Overpricing">Le prix du gas est plus élevé que nécessaire pour la transaction.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Les frais de base sont élevés!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">Pour le moment, les frais de base pour effectuer des transactions sont élevés. Ils pourraient baisser lorsque le réseau sera moins encombré.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Frais de base minimes</string>
-    <string name="FeeSettings_BaseFeeIsLow">Les frais de base maximums définis sont trop faible pour inclure la transaction.</string>
+    <string name="FeeSettings_GasPrice_Info">Les frais pour effectuer des transactions sur le réseau sont mesurés en unités de gas. Le prix du gas est le montant qu\'un utilisateur est prêt à dépenser par unité de gas. Le prix du gas est élevé lorsque le réseau est encombré, et faible lorsqu\'il est inactif. Souvent, une transaction reste en suspens pendant une période prolongée si le montant du gas est insuffisant.</string>
+    <string name="FeeSettings_CurrentBaseFee">Frais de base actuels</string>
+    <string name="FeeSettings_MaxBaseFee">Frais de base maximum</string>
+    <string name="FeeSettings_MaxBaseFee_Info">Sur Ethereum, chaque transaction exige de l\'utilisateur qu\'il dépense une certaine quantité d\'unités de gas pour le traitement de ladite transaction. Le prix d\'une unité de gas unique change en temps réel en fonction des conditions du réseau et n\'est pas contrôlé par une seule entité. Le taux de frais de base maximum combiné au pourboire optionnel pour le mineur (voir ci-dessous) fait référence au prix le plus élevé pour une unité de gas qu\'un utilisateur est prêt à payer pour envoyer la transaction.</string>
+    <string name="FeeSettings_MaxMinerTips">Conseils pour Max Miner</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Les frais de mineur (aussi pourboire de mineur) font référence aux frais facultatifs que les utilisateurs peuvent inclure pour inciter les participants au réseau à donner la priorité à leurs transactions.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Risqué</string>
+    <string name="FeeSettings_RiskOfGettingStuck">The transaction may remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_Overpricing_Title">Frais trop élevés</string>
+    <string name="FeeSettings_Overpricing">Les frais de transaction fixés sont plus élevés que ce qui est nécessaire pour traiter cette transaction immédiatement.</string>
+    <string name="FeeSettings_Info_IUnderstand">J’ai Compris</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Vitesse de transaction</string>
     <string name="FeeInfo_Description">Les blockchains Bitcoin et Ethereum exigent que les utilisateurs paient des frais de réseau lors de l\'envoi de transactions. Les frais sont plus élevés lorsque de nombreuses transactions sont effectuées sur le réseau et inférieurs lorsque la blockchain est moins occupée.</string>
@@ -317,9 +323,12 @@
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">Solde insuffisant</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">La transaction nécessite %s pour l\'envoi</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Le solde actuel des %s est inférieur au montant requis pour traiter cette transaction, frais de transaction compris.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">La valeur de frais sélectionnée est trop faible et sera rejetée !</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Liquidité insuffisante</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">Erreur ! Vérifiez le solde et assurez-vous qu\'il y a suffisamment de %s pour couvrir les frais. Ou essayez d\'augmenter le montant du glissement de prix et réessayez. Nouvelle tentative dans 3 secondes...</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Frais faibles</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Le montant des frais de transaction défini est insuffisant pour traiter cette transaction immédiatement.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Liquidité insuffisante</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Erreur d\'estimation</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Vérifiez le solde pour vous assurer qu\'il y a suffisamment de %s pour couvrir les frais. Vous pouvez également tenter d\'augmenter le montant du glissement de prix et réessayer. Nouvelle tentative automatique dans 3 secondes…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Pensez à laisser quelques %s sur le solde pour payer de futures transactions.</string>
     <!--Swap-->
     <string name="Swap">Echanger</string>

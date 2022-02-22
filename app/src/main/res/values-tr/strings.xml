@@ -264,18 +264,24 @@
     <string name="Send_Warning_LowFee">Uyarı! Takılma riski</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Ücret Ayarları</string>
+    <string name="FeeSettings_Reset">Sıfırla</string>
     <string name="FeeSettings_MaxFee">Maksimum Ücret</string>
+    <string name="FeeSettings_MaxFee_Info">Verilen işlem için beklenen maksimum toplam ücret. Genellikle, gerçek işlem ücreti daha düşük olur.</string>
     <string name="FeeSettings_Fee">Ücret</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">Gaz limiti, bir kullanıcının belirli bir işlemi gerçekleştirirken harcamak istediği maksimum gaz birimi tutarıdır. Karmaşık işlemler, basit işlemlerden daha fazla gaz birimi gerektirir. Tahmini bir gaz limiti görüntülenir ve her işlem için otomatik olarak ayarlanır.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Takılma riski</string>
-    <string name="FeeSettings_RiskOfGettingStuck">İşlem takılabilir veya başarısız olabilir.</string>
-    <string name="FeeSettings_Overpricing_Title">Aşırı yüksek fiyat</string>
-    <string name="FeeSettings_Overpricing">Gaz ücreti, işlem için normal olandan daha yüksek.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Taban Ücret Yüksek!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">Şu anda işlem için taban ücret yüksek. Ağ yoğunluğu azaldığında bu ücret düşebilir.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Taban Ücret Düşük</string>
-    <string name="FeeSettings_BaseFeeIsLow">Belirlenen Maks Taban Ücret, işlemi eklemek için çok düşük.</string>
+    <string name="FeeSettings_GasPrice_Info">Ağ üzerinde işlem yapmanın ücreti gaz birimleri cinsinden ölçülür. Gaz Fiyatı, bir kullanıcının bir işlemi gerçekleştirmek için ödemeye razı olduğu tutardır. Ağ yoğun olduğunda gaz fiyatları yüksek ve boşta olduğunda düşüktür. Gaz fiyatının yetersiz olması, genellikle bir işlemin uzun süre beklemede kalmasının bir nedenidir.</string>
+    <string name="FeeSettings_CurrentBaseFee">Mevcut Taban Ücret</string>
+    <string name="FeeSettings_MaxBaseFee">Maksimum Taban Ücret</string>
+    <string name="FeeSettings_MaxBaseFee_Info">Ethereum üzerindeki her işlem, kullanıcının bu işlemi gerçekleştirmek için belirli miktarda gaz birimi harcamasını gerektirir. Tek bir gaz biriminin fiyatı, ağ koşullarına göre gerçek zamanlı olarak değişir ve herhangi bir kişi veya kişiler tarafından kontrol edilmez. Opsiyonel madenci bahşişi ile birlikte maksimum taban ücret (aşağıya bakınız), bir kullanıcının işlemi gerçekleştirmek için ödemeye hazır olduğu en yüksek gaz birimi fiyatını ifade eder.</string>
+    <string name="FeeSettings_MaxMinerTips">Maksimum Madenci Bahşişleri</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Madenci ğcretleri (ya da madenci bahşişleri), bir işleme öncelik verilmesi amacıyla kullanıcıların ağ katılımcılarını teşvik etmek için ekleyebileceği isteğe bağlı ücretler olarak tanımlanır.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Riskli</string>
+    <string name="FeeSettings_RiskOfGettingStuck">İşlem bir süre beklemede kalabilir veya tamamen başarısız olabilir.</string>
+    <string name="FeeSettings_Overpricing_Title">Ücret Çok Yüksek</string>
+    <string name="FeeSettings_Overpricing">Belirlenen işlem ücreti, bu işlemin şimdi işlenmesi için gereken ücretten daha yüksek.</string>
+    <string name="FeeSettings_Info_IUnderstand">Anlıyorum</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">İşlem hızı</string>
     <string name="FeeInfo_Description">Hem Bitcoin hem de Ethereum blok zincirleri, kullanıcıların işlem yaparken ağ ücreti ödemesini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksek ve blok zincir daha az meşgul olduğunda ücretler daha düşüktür.</string>
@@ -317,9 +323,12 @@
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">Yetersiz Bakiye</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">İşlem, göndermek için %s gerektirir</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Mevcut %s bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Seçilen ücret tutarı çok düşüktür ve reddedilecektir!</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likidite Yetersiz</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">Hata! Bakiyeyi kontrol edin ve ücreti karşılayacak kadar %s olduğundan emin olun. Veya fiyat kayma miktarını artırmayı deneyin ve tekrar deneyin. 3 saniye sonra tekrar denenecektir...</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Düşük Ücret</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Belirlenen işlem ücreti, bu işlemin şimdi işlenmesi için yetersiz.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Likidite Yetersiz</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Muhtemelen bu işlemin gerçekleşmesi için yeterli likidite mevcut değil. Tutarı düşürmeyi deneyin.</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Tahmin Hatası</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Bakiyeyi kontrol edin ve ücreti karşılayacak kadar %s olduğundan emin olun. Veya fiyat kayma miktarını artırın ve tekrar deneyin. 3 saniye sonra otomatik olarak tekrar denenecektir…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Gelecekteki işlemler için ödeme yapabilmek için bakiyenizde biraz %s bırakmayı göz önünde bulundurun.</string>
     <!--Swap-->
     <string name="Swap">Takas</string>

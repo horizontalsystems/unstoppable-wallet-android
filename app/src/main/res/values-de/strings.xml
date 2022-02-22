@@ -264,18 +264,24 @@
     <string name="Send_Warning_LowFee">Warnung! Gefahr des Festklemmens</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Gebühreneinstellungen</string>
+    <string name="FeeSettings_Reset">Zurücksetzen</string>
     <string name="FeeSettings_MaxFee">Max Gebühr</string>
+    <string name="FeeSettings_MaxFee_Info">Die maximal erwartete Gesamtgebühr für die jeweilige Transaktion. In der Regel ist die tatsächliche Transaktionsgebühr niedriger.</string>
     <string name="FeeSettings_Fee">Gebühr</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">Das Gaslimit ist die maximale Menge an Gaseinheiten, die ein Nutzer für eine bestimmte Transaktion auszugeben bereit ist. Komplexe Transaktionen erfordern mehr Gaseinheiten als einfachere Transaktionen. Das Gaslimit wird geschätzt und automatisch für jede Transaktion festgelegt.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Gefahr des Festklemmens</string>
-    <string name="FeeSettings_RiskOfGettingStuck">Die Transaktion kann festklemmen oder fehlschlagen.</string>
-    <string name="FeeSettings_Overpricing_Title">Zu teuer</string>
-    <string name="FeeSettings_Overpricing">Der Benzinpreis ist höher als für die Transaktion erforderlich.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Grundgebühr ist hoch!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">Im Moment ist die Grundgebühr für Transaktionen hoch. Sie kann sinken, wenn das Netzwerk weniger überlastet ist.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Geringe Grundgebühr</string>
-    <string name="FeeSettings_BaseFeeIsLow">Die eingestellte Max. Grundgebühr ist zu niedrig, um die Transaktion zu berücksichtigen.</string>
+    <string name="FeeSettings_GasPrice_Info">Die Gebühr für Transaktionen im Netzwerk wird in Gaseinheiten gemessen. Der Gaspreis ist der Betrag, den ein Nutzer für eine Einheit Gas auszugeben bereit ist. Wenn das Netzwerk ausgelastet ist, sind die Gaspreise hoch, und niedrig, wenn es nicht genutzt wird. Ein unzureichender Gaspreis ist oft ein Grund dafür, dass eine Transaktion über einen längeren Zeitraum aussteht.</string>
+    <string name="FeeSettings_CurrentBaseFee">Aktuelle Grundgebühr</string>
+    <string name="FeeSettings_MaxBaseFee">Max. Grundgebühr</string>
+    <string name="FeeSettings_MaxBaseFee_Info">Für jede Transaktion auf Ethereum muss der Nutzer eine bestimmte Menge an Gaseinheiten für die Abwicklung dieser Transaktion ausgeben. Der Preis für eine einzelne Gaseinheit ändert sich in Echtzeit mit den Netzwerkbedingungen und wird nicht von einer einzelnen Einheit kontrolliert. Der maximale Grundgebührensatz in Kombination mit dem optionalen Miner-Tipp (siehe unten) bezieht sich auf den höchsten Preis für eine Gaseinheit, den ein Nutzer bereit ist, für das Senden der Transaktion zu zahlen.</string>
+    <string name="FeeSettings_MaxMinerTips">Max. Miner-Tipps</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Miner-Gebühren (auch Miner-Tipp genannt) beziehen sich auf optionale Gebühren, die von den Nutzern erhoben werden können, um den Netzwerkteilnehmern einen Anreiz zu geben, ihre Transaktionen zu priorisieren.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Riskant</string>
+    <string name="FeeSettings_RiskOfGettingStuck">Die Transaktion kann eine Zeit lang ausstehend bleiben oder ganz fehlschlagen.</string>
+    <string name="FeeSettings_Overpricing_Title">Gebühr zu hoch</string>
+    <string name="FeeSettings_Overpricing">Die festgelegte Transaktionsgebühr ist höher als für die Bearbeitung dieser Transaktion jetzt erforderlich.</string>
+    <string name="FeeSettings_Info_IUnderstand">Ich stimme zu</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Transaktionsgeschwindigkeit</string>
     <string name="FeeInfo_Description">Sowohl Bitcoin als auch Ethereum Blockchains verlangen vom Benutzer, Netzwerkgebühren zu zahlen, wenn er Transaktionen versendet. Die Gebühren sind höher, wenn viele Transaktionen im Netzwerk durchgeführt werden und niedriger, wenn die Blockchain weniger beschäftigt ist.</string>
@@ -317,9 +323,12 @@
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">Unzureichendes Guthaben</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">Die Transaktion erfordert %s zum Senden</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Das aktuelle %s-Guthaben liegt unter dem für die Abwicklung dieser Transaktion erforderlichen Betrag einschließlich der Transaktionsgebühr.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Der gewählte Gebührenwert ist zu niedrig und wird abgelehnt!</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Unzureichende Liquidität</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">Fehler! Überprüfen Sie Ihr Guthaben und vergewissern Sie sich, dass genügend %s zur Deckung der Gebühr vorhanden sind. Oder versuchen Sie, die Kursdifferenz zu erhöhen und versuchen Sie es erneut. Wird in 3 Sekunden erneut versucht...</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Niedrige Gebühr</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Der eingestellte Betrag der Transaktionsgebühr reicht nicht aus, um diese Transaktion jetzt zu bearbeiten.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Unzureichende Liquidität</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Wahrscheinlich ist nicht genügend Liquidität vorhanden, um diesen Handel abzuwickeln. Versuchen Sie einen niedrigeren Betrag.</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Schätzungsfehler</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Überprüfen Sie Ihr Guthaben und vergewissern Sie sich, dass genügend %s zur Deckung der Gebühr vorhanden sind. Oder versuchen Sie, die Kursdifferenz zu erhöhen und versuchen Sie es erneut. Wird in 3 Sekunden erneut versucht…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Überlegen Sie, ob Sie einige %s auf dem Guthaben belassen wollen, um für zukünftige Transaktionen bezahlen zu können.</string>
     <!--Swap-->
     <string name="Swap">Tauschen</string>

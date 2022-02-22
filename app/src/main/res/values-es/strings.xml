@@ -58,8 +58,8 @@
     <string name="EnterPassphrase">Frase de contraseña</string>
     <string name="CreateWallet_PassphraseDescription">La frase de contraseña añade una capa de seguridad adicional a los monederos permitiendo a los usuarios crear múltiples monederos multi-monedas independientes usando una sola frase de recuperación mnemotécnica pero asociada con diferentes contraseñas.\n\nPara restaurar estos monederos un usuario necesitará una frase de recuperación mnemotécnica, así como una contraseña para cada monedero restaurado.</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">GM!</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable? Share feedback and ideas to take it further.</string>
+    <string name="RateApp_Title_Rate_This_App">¡GM!</string>
+    <string name="RateApp_Description_Rate_This_App">¿Disfrutas de Unstoppable? Comparte comentarios e ideas para mejorarlo.</string>
     <string name="RateApp_Button_RateIt">Valóralo</string>
     <string name="RateApp_Button_NotNow">No ahora</string>
     <!--Restore-->
@@ -101,24 +101,24 @@
     <string name="Market_Tab_Overview">Resumen</string>
     <string name="Market_Tab_Posts">Noticias</string>
     <string name="Market_Tab_Watchlist">Lista de Seguimiento</string>
-    <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
+    <string name="Market_Tab_Watchlist_EmptyList">Tu Watchlist está vacía.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
-    <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
+    <string name="Market_Category_TopCoins_Description">Mejores monedas por rango de límite de mercado</string>
     <string name="Market_SyncError">Error de sincronización</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Diagrama</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Capitalización Total</string>
     <string name="MarketGlobalMetrics_BtcDominance">Dominio Bitcoin</string>
     <string name="MarketGlobalMetrics_Volume">Volumen</string>
     <string name="MarketGlobalMetrics_DefiCap">Cap. DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total M.Cap description</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Descricipción de la Capitalización Total de mercado</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">El cambio histórico en la relación entre el límite de mercado de Bitcoin y el resto de los mercados de criptomonedas. \n\nPor lo general, cuando el dominio de Bitcoin tiende a ser más alto, el resto de las tendencias del mercado de criptomonedas disminuye y viceversa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">El cambio histórico en el volumen diario del mercado de operaciones agregadas para todas las criptomonedas.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">El cambio histórico en el volumen de operaciones diarias acumuladas por %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">El cambio histórico en el valor acumulado del mercado de los tokens en el sector de las finanzas descentralizadas.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">El cambio histórico en el valor acumulado de toda criptomoneda administrado por protocolos descentralizados.</string>
-    <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
+    <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtrar por cadena</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Todo</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">Esta moneda no es compatible todavía</string>
     <!--Market Search-->
@@ -264,18 +264,24 @@
     <string name="Send_Warning_LowFee">¡Advertencia! Riesgo de atascarse</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Configuración de tarifas</string>
+    <string name="FeeSettings_Reset">Reiniciar</string>
     <string name="FeeSettings_MaxFee">Comisión Máx.</string>
+    <string name="FeeSettings_MaxFee_Info">La tarifa máxima total esperada para la transacción dada. Por lo general, la tarifa real de transacción va a ser menor.</string>
     <string name="FeeSettings_Fee">Comisión</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">El límite de gas es la cantidad máxima de unidades de gas que un usuario está dispuesto a gastar al enviar una transacción determinada. Las transacciones complejas requieren más unidades de gas que las más simples. El límite de gas se calcula y se establece automáticamente para cada transacción.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">Riesgo de atascarse</string>
-    <string name="FeeSettings_RiskOfGettingStuck">La transacción puede quedarse atascada o fallar.</string>
-    <string name="FeeSettings_Overpricing_Title">Sobreprecio</string>
-    <string name="FeeSettings_Overpricing">El precio del gas es más alto de lo necesario para la transacción.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">Base Fee is High!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">At the moment the base fee for transacting is high. It may go down when the network becomes less congested.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">Tarifa Base baja</string>
-    <string name="FeeSettings_BaseFeeIsLow">La tarifa base máxima configurada es demasiado baja para incluir la transacción.</string>
+    <string name="FeeSettings_GasPrice_Info">La tarifa por transacción en la red se mide en unidades de gas. El precio del gas es la cantidad que un usuario está dispuesto a gastar por unidad de gas. Cuando la red se encuentra ocupada, los precios del gas son altos y bajos cuando está inactiva. Un precio insuficiente del gas es a menudo una razón para que una transacción permanezca pendiente durante un período prolongado.</string>
+    <string name="FeeSettings_CurrentBaseFee">Tarifa Base actual</string>
+    <string name="FeeSettings_MaxBaseFee">Tarifa Base Máx.</string>
+    <string name="FeeSettings_MaxBaseFee_Info">Cada transacción en Ethereum requiere que el usuario gaste una cierta cantidad de unidades de gas para procesar esa transacción. El precio de una unidad de gas única cambia en tiempo real con condiciones de red y no está controlado por ninguna entidad única. La tasa de tarifa base máxima, combinado con sugerencia opcional de minero (ver más abajo), refiere al precio más alto por una unidad de gas que un usuario está dispuesto a pagar por enviar la transacción.</string>
+    <string name="FeeSettings_MaxMinerTips">Tips de los mejores mineros</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Las tarifas de los mineros (también conocido como consejo de mineros) se refieren a las tarifas opcionales que los usuarios pueden incluir a los participantes de la red para priorizar sus transacciones.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Arriesgado</string>
+    <string name="FeeSettings_RiskOfGettingStuck">La transacción puede permanecer pendiente por un tiempo o fallar por completo.</string>
+    <string name="FeeSettings_Overpricing_Title">Cuota demasiado alta</string>
+    <string name="FeeSettings_Overpricing">La tarifa de transacción establecida es mayor de lo necesario para procesar esta transacción ahora.</string>
+    <string name="FeeSettings_Info_IUnderstand">Entiendo</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Velocidad de transacción</string>
     <string name="FeeInfo_Description">Las blockchain de Bitcoin como las de Ethereum requieren que los usuarios paguen comisiones de red al enviar transacciones. Las comisiones son más altas cuando muchas transacciones están teniendo lugar en la red y más bajas cuando el blockchain está menos ocupado.</string>
@@ -314,11 +320,14 @@
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
-    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Saldo insuficiente</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">La transacción requiere %s para enviar</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">El saldo actual de %s es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">El valor de la comisión seleccionada es demasiado bajo y será rechazado!</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Liquidez insuficiente</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Tarifa baja</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">El monto de comisión de transacción establecido no es suficiente para procesar esta transacción ahora.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Liquidez insuficiente</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Probablemente no hay suficiente liquidez disponible para procesar esta operación. Intente reducir la cantidad.</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Error de estimación</string>
     <string name="EthereumTransaction_Error_CannotEstimate">¡Error! Comprueba el saldo y asegúrate de que hay suficientes %s para cubrir la comisión. O intente aumentar la cantidad del deslizamiento del precio e intente de nuevo. Volverá a intentarlo en 3 segundos...</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Considere dejar algún %s en el saldo para poder pagar futuras transacciones.</string>
     <!--Swap-->
@@ -344,7 +353,7 @@
     <string name="Swap_Proceed">Siguiente</string>
     <string name="Swap_Approve">Aprobar</string>
     <string name="Swap_Approving">Aprobando...</string>
-    <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_Swapping">Intercambio</string>
     <string name="Swap_MaximumPaid">Máximo Pagado</string>
     <string name="Swap_MinimumGot">Cantidad Garantizada</string>
     <string name="Swap_PoweredBy">Desarrollado por</string>
@@ -610,7 +619,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Hud_Text_EmailAddressCopied">Dirección de correo electrónico copiada</string>
     <string name="Hud_Added_To_Watchlist">Añadido a tu Lista de Seguimiento</string>
     <string name="Hud_Added_To_Wallet">Agregar a Wallet</string>
-    <string name="Hud_Already_In_Wallet">Already added to wallet</string>
+    <string name="Hud_Already_In_Wallet">Ya se ha añadido al monedero</string>
     <string name="Hud_Removed_from_Watchlist">Eliminado de la Lista de Seguimiento</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
@@ -654,7 +663,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Configuración de Red</string>
     <string name="NetworkSettings_SwithesAutomatically">cambiar automáticamente</string>
-    <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP network uses the links listed below and switches automatically.</string>
+    <string name="NetworkSettings_SwithesAutomatically_Description">La red HTTP de MainNet utiliza los enlaces listados a continuación y cambia automáticamente.</string>
     <string name="NetworkSettings_TestNetDisclaimer">Por favor, no seleccione las opciones de la red de pruebas a menos que entienda qué es y cómo funciona.\n\nTestnet es un blockchain paralelo para pruebas con su propia moneda. Si alguien envía un pago regular a su dirección de Testnet, se perderá.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Clave</string>
@@ -739,7 +748,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">Precio</string>
     <string name="Coin_Tab_Market">Markets</string>
-    <string name="Coin_Tab_Details">Analytics</string>
+    <string name="Coin_Tab_Details">Estadísticas</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">Hoy</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
@@ -756,16 +765,16 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_Audits">Auditorias</string>
     <string name="CoinPage_Audits_Empty">No hay reportes de auditoría</string>
     <string name="CoinPage_Audits_PoweredBy">Con tecnología de Defiyield.app</string>
-    <string name="CoinPage_Audits_Issues">Issues: %d</string>
+    <string name="CoinPage_Audits_Issues">Problemas: %d</string>
     <string name="CoinPage_InvestorData">Información de Inversor</string>
     <string name="CoinPage_Treasuries">Treasuries</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filtros</string>
-    <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
+    <string name="CoinPage_Treasuries_PoweredBy">Desarrollado por Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Fondos invertidos</string>
     <string name="CoinPage_TokenDistribution">Token Distribution</string>
     <string name="CoinPage_TokenLiquidity">Token Liquidity</string>
-    <string name="CoinPage_TotalVolume">Total Volume</string>
+    <string name="CoinPage_TotalVolume">Volumen total</string>
     <string name="CoinPage_DetailsTvl">TVL</string>
     <string name="CoinPage_TokenTvl">Token TVL</string>
     <string name="CoinPage_SecurityParams">Parámetros de seguridad</string>
@@ -802,11 +811,11 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_Guide">Instructivos</string>
     <string name="CoinPage_Website">Sitio Web</string>
     <string name="CoinPage_Whitepaper">Documento informativo</string>
-    <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
-    <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
-    <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
-    <string name="CoinPage_Twitter_Replied">Replying to %s</string>
-    <string name="CoinPage_Twitter_SeeOnTwitter">See on Twitter</string>
+    <string name="CoinPage_Twitter_NotAvailable">Sin twitter disponible</string>
+    <string name="CoinPage_Twitter_Quoted">Cotizado %s</string>
+    <string name="CoinPage_Twitter_Retweeted">Retwitteado por %s</string>
+    <string name="CoinPage_Twitter_Replied">Respondiendo a: %s</string>
+    <string name="CoinPage_Twitter_SeeOnTwitter">Ver en Twitter</string>
     <string name="CoinPage_MarketCap">Cap. de Mercado</string>
     <string name="CoinPage_DilutedMarketCap">Cap. de Mercado Diluida</string>
     <string name="CoinPage_inCirculation">En circulación</string>
@@ -817,11 +826,11 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_NoData">No hay datos</string>
-    <string name="CoinPage_NoDataAvailable">No data available</string>
+    <string name="CoinPage_NoDataAvailable">No hay datos disponibles</string>
     <string name="CoinPage_AddToWallet">Agregar a Wallet</string>
     <string name="CoinPage_InWallet">En Wallet</string>
-    <string name="CoinPage_Favorite">Favorite</string>
-    <string name="CoinPage_Unfavorite">Unfavorite</string>
+    <string name="CoinPage_Favorite">Favorito</string>
+    <string name="CoinPage_Unfavorite">No favorito</string>
     <string name="CoinPage_Performance_Week">1 Semana</string>
     <string name="CoinPage_Performance_Month">1 Mes</string>
     <string name="CoinPage_ReadMore">Leer más</string>
@@ -835,7 +844,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_Bep2Symbol">Símbolo BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Mejores Monederos</string>
     <string name="CoinPage_MajorHolders_Description">El gráfico anterior muestra el % de todos los tokens en circulación retenidos por los 10 Monderos más importantes. Cuanto más bajo sea el %, más distribuída se encontrará la moneda.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">In top 10 Ethereum wallets</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">En el top 10 de monederos de Ethereum</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Máximos Ganadores</string>

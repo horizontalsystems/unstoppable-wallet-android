@@ -264,18 +264,24 @@
     <string name="Send_Warning_LowFee">경고! 갇힐 위험</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">수수료 설정</string>
+    <string name="FeeSettings_Reset">초기화</string>
     <string name="FeeSettings_MaxFee">최대 수수료</string>
+    <string name="FeeSettings_MaxFee_Info">주어진 거래에 대한 최대 예상 총 수수료입니다. 일반적으로 실제 거래 수수료는 더 낮습니다.</string>
     <string name="FeeSettings_Fee">수수료</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">가스 한도는 사용자가 주어진 거래를 보낼 때 기꺼이 지출할 가스 단위의 최대량입니다. 복잡한 거래에는 단순한 거래보다 더 많은 가스 단위가 필요합니다. 가스 한도는 각 거래에 대해 자동으로 추정 및 설정됩니다.</string>
     <string name="FeeSettings_GasPrice">Gas Used</string>
-    <string name="FeeSettings_RiskOfGettingStuck_Title">갇힐 위험</string>
-    <string name="FeeSettings_RiskOfGettingStuck">트랜잭션이 중단되거나 실패할 수 있습니다.</string>
-    <string name="FeeSettings_Overpricing_Title">과대 가격 층정</string>
-    <string name="FeeSettings_Overpricing">가스 가격이 거래에 필요한 것보다 높습니다.</string>
-    <string name="FeeSettings_BaseFeeIsHigh_Title">기본 수수료가 높습니다!</string>
-    <string name="FeeSettings_BaseFeeIsHigh">현재 거래에 대한 기본 수수료가 높습니다. 네트워크가 덜 혼잡해지면 다운될 수 있습니다.</string>
-    <string name="FeeSettings_BaseFeeIsLow_Title">낮은 기본 수수료</string>
-    <string name="FeeSettings_BaseFeeIsLow">최대 기본 수수료 설정이 거래를 포함하기에는 너무 낮습니다.</string>
+    <string name="FeeSettings_GasPrice_Info">네트워크 거래 수수료는 가스 단위로 측정됩니다. 가스 가격은 사용자가 가스 단위당 지출할 의향이 있는 금액입니다. 네트워크가 사용 중일 때는 가스 가격이 높고 유휴 상태일 때는 가스 가격이 낮습니다. 가스 가격이 충분하지 않아 거래가 장기간 보류 상태로 남아 있는 경우가 많습니다.</string>
+    <string name="FeeSettings_CurrentBaseFee">현재 기본 수수료</string>
+    <string name="FeeSettings_MaxBaseFee">최대 기본 수수료</string>
+    <string name="FeeSettings_MaxBaseFee_Info">이더리움의 각 트랜잭션은 사용자가 해당 트랜잭션을 처리하기 위해 일정량의 가스 단위를 소비해야 합니다. 단일 가스 장치의 가격은 네트워크 상태에 따라 실시간으로 변경되며 단일 개체에 의해 제어되지 않습니다. 최대 옵션 채굴자 팁(아래 참조)과 결합된 기본 수수료율은 사용자가 거래를 보내기 위해 지불할 용의가 있는 가스 단위의 최고 가격을 나타냅니다.</string>
+    <string name="FeeSettings_MaxMinerTips">최대 채굴자 팁</string>
+    <string name="FeeSettings_MaxMinerTips_Info">채굴자 수수료(일명 광부 팁)는 네트워크 참가자가 거래의 우선 순위를 정하도록 장려하기 위해 사용자가 포함할 수 있는 선택적 수수료를 나타냅니다.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">위험</string>
+    <string name="FeeSettings_RiskOfGettingStuck">트랜잭션이 잠시 동안 보류 상태로 유지되거나 완전히 실패할 수 있습니다.</string>
+    <string name="FeeSettings_Overpricing_Title">수수료가 너무 높음</string>
+    <string name="FeeSettings_Overpricing">설정된 거래 수수료가 지금 이 거래를 처리하는 데 필요한 것보다 높습니다.</string>
+    <string name="FeeSettings_Info_IUnderstand">이해합니다</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">거래 속도</string>
     <string name="FeeInfo_Description">비트코인과 이더리움 블록체인 모두 사용자가 거래를 보낼 때 네트워크 수수료를 지불해야 합니다. 수수료는 네트워크에서 많은 거래가 발생할 때 더 높고 블록체인이 적으면 더 낮습니다.</string>
@@ -317,9 +323,12 @@
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">잔액 부족</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">거래에서 전송하려면 %s가 필요합니다</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">현재 %s 잔액은 거래 수수료를 포함하여이 거래를 처리하는 데 필요한 금액보다 적습니다.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">선택한 수수료 값이 너무 낮아 거부됩니다!</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">유동성 부족</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">오류! 잔액을 확인하고 수수료를 충당하기에 충분한 %s이 있는지 확인하십시오. 또는 가격 슬리피지 양을 늘리고 다시 시도하십시오. 3초 후에 다시 시도합니다...</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">적은 수수료</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">설정된 거래 수수료 금액이 현재 이 거래를 처리하기에 충분하지 않습니다.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">유동성 부족</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">이 거래를 처리할 수 있는 유동성이 충분하지 않을 수 있습니다. 금액을 낮추십시오.</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">추정 오류</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">잔액을 확인하여 수수료를 충당하기에 충분한 %s이 있는지 확인하십시오. 또는 가격 슬리피지 금액을 늘리고 다시 시도하십시오. 3초 후에 자동 재시도합니다</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">향후 거래에 대해 지불할 수 있도록 일부 %s를 잔액으로 남겨두는 것이 좋습니다.</string>
     <!--Swap-->
     <string name="Swap">스왑</string>
