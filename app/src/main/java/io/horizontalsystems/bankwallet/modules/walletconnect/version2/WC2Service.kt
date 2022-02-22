@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.version2
 import android.util.Log
 import com.walletconnect.walletconnectv2.client.WalletConnect
 import com.walletconnect.walletconnectv2.client.WalletConnectClient
+import com.walletconnect.walletconnectv2.storage.history.model.JsonRpcStatus
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -24,12 +25,17 @@ class WC2Service : WalletConnectClient.WalletDelegate {
     val sessionsRequestReceivedObservable: Flowable<WalletConnect.Model.SessionRequest>
         get() = sessionsRequestReceivedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-//    private val pendingRequestUpdatedSubject = PublishSubject.create<Unit>()
-//    val pendingRequestUpdatedObservable: Flowable<Unit>
-//        get() = pendingRequestUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    private val pendingRequestUpdatedSubject = PublishSubject.create<Unit>()
+    val pendingRequestUpdatedObservable: Flowable<Unit>
+        get() = pendingRequestUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     val activeSessions: List<WalletConnect.Model.SettledSession>
         get() = WalletConnectClient.getListOfSettledSessions()
+
+    fun pendingRequests(topic: String): List<WalletConnect.Model.JsonRpcHistory.HistoryEntry> {
+        val history = WalletConnectClient.getJsonRpcHistory(topic)
+        return history.listOfRequests.filter { it.jsonRpcStatus == JsonRpcStatus.PENDING }
+    }
 
     var event: Event = Event.Default
         private set(value) {
@@ -159,7 +165,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
             }
         })
 
-//        pendingRequestUpdatedSubject.onNext(Unit)
+        pendingRequestUpdatedSubject.onNext(Unit)
     }
 
     fun rejectRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
@@ -178,7 +184,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
             }
         })
 
-//        pendingRequestUpdatedSubject.onNext(Unit)
+        pendingRequestUpdatedSubject.onNext(Unit)
     }
 
     fun sessionUpdate(session: WalletConnect.Model.SettledSession) {
@@ -245,7 +251,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
             .find { session -> session.topic == sessionRequest.topic } ?: return
         event = Event.SessionRequest(sessionRequest, session)
         sessionsRequestReceivedSubject.onNext(sessionRequest)
-//        pendingRequestUpdatedSubject.onNext(Unit)
+        pendingRequestUpdatedSubject.onNext(Unit)
     }
 
     override fun onSessionDelete(deletedSession: WalletConnect.Model.DeletedSession) {
