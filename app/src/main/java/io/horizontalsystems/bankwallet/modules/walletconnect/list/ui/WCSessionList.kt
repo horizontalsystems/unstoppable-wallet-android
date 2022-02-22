@@ -23,7 +23,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectL
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.BadgeRed
+import io.horizontalsystems.bankwallet.ui.compose.components.BadgeCount
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 
@@ -68,13 +68,13 @@ private fun PendingRequestsCell(pendingRequests: Int, navController: NavControll
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = "Pending Requests",
+            text = stringResource(R.string.WalletConnect_PendingRequests),
             style = ComposeAppTheme.typography.body,
             color = ComposeAppTheme.colors.leah
         )
         if (pendingRequests > 0) {
-            BadgeRed(
-                text = pendingRequests.toString()
+            BadgeCount(
+                text = pendingRequests.toString(),
             )
         }
         Image(
