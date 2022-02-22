@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -43,7 +46,27 @@ fun BadgeRatingD(modifier: Modifier = Modifier, text: String) {
 }
 
 @Composable
-fun BadgeRed(modifier: Modifier = Modifier, text: String) {
+fun BadgeCount(
+    modifier: Modifier = Modifier,
+    text: String,
+    background: Color = ComposeAppTheme.colors.lucian,
+    textColor: Color = ComposeAppTheme.colors.white,
+) {
+    Text(
+        modifier = modifier
+            .clip(RoundedCornerShape(4.dp))
+            .background(background)
+            .padding(horizontal = 4.dp, vertical = 2.dp)
+            .defaultMinSize(minWidth = 14.dp),
+        text = text,
+        color = textColor,
+        style = ComposeAppTheme.typography.captionSB,
+        textAlign = TextAlign.Center,
+    )
+}
+
+@Composable
+fun BadgeCircle(modifier: Modifier = Modifier, text: String) {
     Text(
         text,
         modifier = modifier
@@ -63,7 +86,10 @@ fun Modifier.badgeLayout() =
 
         val width = maxOf(placeable.width + minPadding, backgroundHeight)
         layout(width, backgroundHeight) {
-            placeable.place((width - placeable.width) / 2, (backgroundHeight - placeable.height)/2)
+            placeable.place(
+                (width - placeable.width) / 2,
+                (backgroundHeight - placeable.height) / 2
+            )
         }
     }
 
@@ -82,13 +108,26 @@ fun BagdePreview() {
 
 @Preview
 @Composable
-fun BagdeRedPreview() {
+fun BagdeCountPreview() {
     ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            BadgeRed(text = "123")
+            BadgeCount(text = "55")
+        }
+    }
+}
+
+@Preview
+@Composable
+fun BagdeCirclePreview() {
+    ComposeAppTheme {
+        Box(
+            modifier = Modifier.padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            BadgeCircle(text = "123")
         }
     }
 }
