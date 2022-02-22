@@ -265,7 +265,7 @@
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Paramètres des frais</string>
     <string name="FeeSettings_Reset">Réinitialiser</string>
-    <string name="FeeSettings_MaxFee">Frais max.</string>
+    <string name="FeeSettings_MaxFee">Max Fee</string>
     <string name="FeeSettings_MaxFee_Info">Les frais totaux maximums escomptés pour la transaction donnée. En règle générale, les frais réels de la transaction sont inférieurs à ce montant.</string>
     <string name="FeeSettings_Fee">Frais</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
@@ -278,7 +278,7 @@
     <string name="FeeSettings_MaxMinerTips">Conseils pour Max Miner</string>
     <string name="FeeSettings_MaxMinerTips_Info">Les frais de mineur (aussi pourboire de mineur) font référence aux frais facultatifs que les utilisateurs peuvent inclure pour inciter les participants au réseau à donner la priorité à leurs transactions.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Risqué</string>
-    <string name="FeeSettings_RiskOfGettingStuck">La transaction risque de rester en attente pendant un certain temps ou d\'échouer complètement.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">The transaction may remain pending for a while or fail entirely.</string>
     <string name="FeeSettings_Overpricing_Title">Frais trop élevés</string>
     <string name="FeeSettings_Overpricing">Les frais de transaction fixés sont plus élevés que ce qui est nécessaire pour traiter cette transaction immédiatement.</string>
     <string name="FeeSettings_Info_IUnderstand">J’ai Compris</string>
@@ -326,7 +326,7 @@
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Frais faibles</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Le montant des frais de transaction défini est insuffisant pour traiter cette transaction immédiatement.</string>
     <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Liquidité insuffisante</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Il n\'y a probablement pas assez de liquidités disponibles pour effectuer cette transaction. Essayez de réduire le montant.\"</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.</string>
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Erreur d\'estimation</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Vérifiez le solde pour vous assurer qu\'il y a suffisamment de %s pour couvrir les frais. Vous pouvez également tenter d\'augmenter le montant du glissement de prix et réessayer. Nouvelle tentative automatique dans 3 secondes…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Pensez à laisser quelques %s sur le solde pour payer de futures transactions.</string>
