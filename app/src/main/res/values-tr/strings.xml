@@ -265,7 +265,7 @@
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Ücret Ayarları</string>
     <string name="FeeSettings_Reset">Sıfırla</string>
-    <string name="FeeSettings_MaxFee">Max Fee</string>
+    <string name="FeeSettings_MaxFee">Maksimum Ücret</string>
     <string name="FeeSettings_MaxFee_Info">Verilen işlem için beklenen maksimum toplam ücret. Genellikle, gerçek işlem ücreti daha düşük olur.</string>
     <string name="FeeSettings_Fee">Ücret</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
@@ -278,7 +278,7 @@
     <string name="FeeSettings_MaxMinerTips">Maksimum Madenci Bahşişleri</string>
     <string name="FeeSettings_MaxMinerTips_Info">Madenci ğcretleri (ya da madenci bahşişleri), bir işleme öncelik verilmesi amacıyla kullanıcıların ağ katılımcılarını teşvik etmek için ekleyebileceği isteğe bağlı ücretler olarak tanımlanır.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Riskli</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">İşlem bir süre beklemede kalabilir veya tamamen başarısız olabilir.</string>
     <string name="FeeSettings_Overpricing_Title">Ücret Çok Yüksek</string>
     <string name="FeeSettings_Overpricing">Belirlenen işlem ücreti, bu işlemin şimdi işlenmesi için gereken ücretten daha yüksek.</string>
     <string name="FeeSettings_Info_IUnderstand">Anlıyorum</string>
@@ -326,7 +326,7 @@
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Düşük Ücret</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Belirlenen işlem ücreti, bu işlemin şimdi işlenmesi için yetersiz.</string>
     <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Likidite Yetersiz</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Muhtemelen bu işlemin gerçekleşmesi için yeterli likidite mevcut değil. Tutarı düşürmeyi deneyin.</string>
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Tahmin Hatası</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Bakiyeyi kontrol edin ve ücreti karşılayacak kadar %s olduğundan emin olun. Veya fiyat kayma miktarını artırın ve tekrar deneyin. 3 saniye sonra otomatik olarak tekrar denenecektir…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Gelecekteki işlemler için ödeme yapabilmek için bakiyenizde biraz %s bırakmayı göz önünde bulundurun.</string>
