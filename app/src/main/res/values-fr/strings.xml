@@ -265,7 +265,7 @@
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Paramètres des frais</string>
     <string name="FeeSettings_Reset">Réinitialiser</string>
-    <string name="FeeSettings_MaxFee">Max Fee</string>
+    <string name="FeeSettings_MaxFee">Frais Max</string>
     <string name="FeeSettings_MaxFee_Info">Les frais totaux maximums escomptés pour la transaction donnée. En règle générale, les frais réels de la transaction sont inférieurs à ce montant.</string>
     <string name="FeeSettings_Fee">Frais</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
@@ -278,7 +278,7 @@
     <string name="FeeSettings_MaxMinerTips">Conseils pour Max Miner</string>
     <string name="FeeSettings_MaxMinerTips_Info">Les frais de mineur (aussi pourboire de mineur) font référence aux frais facultatifs que les utilisateurs peuvent inclure pour inciter les participants au réseau à donner la priorité à leurs transactions.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Risqué</string>
-    <string name="FeeSettings_RiskOfGettingStuck">The transaction may remain pending for a while or fail entirely.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">La transaction risque de rester en attente pendant un certain temps ou d\'échouer complètement.</string>
     <string name="FeeSettings_Overpricing_Title">Frais trop élevés</string>
     <string name="FeeSettings_Overpricing">Les frais de transaction fixés sont plus élevés que ce qui est nécessaire pour traiter cette transaction immédiatement.</string>
     <string name="FeeSettings_Info_IUnderstand">J’ai Compris</string>
@@ -326,7 +326,7 @@
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Frais faibles</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Le montant des frais de transaction défini est insuffisant pour traiter cette transaction immédiatement.</string>
     <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Liquidité insuffisante</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Likely there is not enough liquidity available to process this trade. Try lowering the amount.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Il n\'y a probablement pas assez de liquidités disponibles pour effectuer cette transaction. Essayez de réduire le montant.</string>
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Erreur d\'estimation</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Vérifiez le solde pour vous assurer qu\'il y a suffisamment de %s pour couvrir les frais. Vous pouvez également tenter d\'augmenter le montant du glissement de prix et réessayer. Nouvelle tentative automatique dans 3 secondes…</string>
     <string name="EthereumTransaction_Warning_CoinNeededForFee">Pensez à laisser quelques %s sur le solde pour payer de futures transactions.</string>
@@ -472,10 +472,10 @@
     <string name="StatusInfo_Processing">Traitement en cours</string>
     <string name="StatusInfo_Confirmed">Terminé</string>
     <string name="StatusInfo_Failed">Échec</string>
-    <string name="StatusInfo_PendingDescription">La transaction n\'a pas encore été confirmée sur la blockchain. Les transactions envoyées avec un paramètre de frais recommandé ou supérieur sont généralement traitées dans les 10 minutes. Les transactions envoyées avec des frais faibles peuvent rester en attente pendant quelques heures, voire quelques jours, et peuvent même être rejetées. Gardez également à l\'esprit que le statut d\'une transaction individuelle affiché dans l\'interface du portefeuille Unstoppable est généralement mis à jour après un court délai.</string>
+    <string name="StatusInfo_PendingDescription">La transaction n\'a pas encore été confirmée sur la blockchain. Les transactions envoyées avec un montant de frais recommandé ou supérieur sont généralement traitées en quelques minutes. Les transactions envoyées avec des frais peu élevés risquent de rester en attente pendant quelques heures, voire quelques jours, et peuvent même être rejetées. Notez que le statut d\'une transaction individuelle dans l\'interface du portefeuille Unstoppable Wallet est généralement mis à jour avec un léger délai.</string>
     <string name="StatusInfo_ProcessingDescription">La transaction a déjà été incluse dans la blockchain mais n\'a pas été finalisée. En ce qui concerne les petits paiements, il est prudent de considérer que la transaction est terminée. Pour les paiements plus importants, il est recommandé d\'attendre que le statut de la transaction passe à terminé.</string>
     <string name="StatusInfo_ConfirmedDescription">La transaction est terminée et considérée comme permanente et irréversible.</string>
-    <string name="StatusInfo_FailedDescription">La transaction n\'a pas été traitée et aucun transfert de valeur n\'a eu lieu. Les transactions avec un statut d\'échec sont néanmoins inscrites sur la blockchain et génèrent des frais de transaction. L\'application Unstoppable n\'est pas en mesure d\'afficher la raison de l\'échec de ces transactions mais les utilisateurs peuvent la rechercher eux-mêmes sur un explorateur de bloc public, etherscan.io par exemple.</string>
+    <string name="StatusInfo_FailedDescription">La transaction n\'a pas été traitée et aucun transfert de fonds n\'a eu lieu. En fonction de la raison de l\'échec, certaines transactions qui ont échoué peuvent entraîner des frais de transaction. Les transactions qui ont été remplacées ou annulées par une autre transaction ne génèrent pas de frais et apparaîtront également comme ayant échoué. L\'application Unstoppable n\'est pas en mesure d\'indiquer la raison de l\'échec des transactions, mais les utilisateurs peuvent en trouver eux-mêmes la raison sur un explorateur de blocs public, comme etherscan.io par exemple.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Accélérer</string>
     <string name="TransactionInfoOptions_SpeedUp_Description">Cette action tentera d\'invalider la transaction précédente en la renvoyant avec des frais plus élevés. Si la transaction originale reste en attente lorsqu\'une nouvelle transaction est envoyée, il y a de fortes chances (non garanties) qu\'elle soit invalidée et remplacée. Seule une de ces deux transactions sera incluse dans la blockchain.</string>
