@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
@@ -21,6 +22,8 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
 
     var collectionViewItems by mutableStateOf<List<NftCollectionViewItem>>(listOf())
         private set
+    var totalCurrencyPrice by mutableStateOf<CurrencyValue?>(null)
+        private set
 
     init {
         viewModelScope.launch {
@@ -33,21 +36,21 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         service.start()
     }
 
-    private fun handleNftCollections(nftCollectionsState: DataState<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>>) {
+    private fun handleNftCollections(nftCollectionsState: DataState<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>>) {
         loading = nftCollectionsState.loading
 
         nftCollectionsState.dataOrNull?.let {
             viewState = ViewState.Success
 
-            syncItems(it)
+            syncItems(it.first, it.second)
         }
     }
 
-    private fun syncItems(collectionItems: Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>) {
-        val expandedStates = collectionViewItems.map {
-            it.slug to it.expanded
-        }.toMap()
-
+    private fun syncItems(
+        collectionItems: Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>,
+        totalCurrencyPrice: CurrencyValue
+    ) {
+        val expandedStates = collectionViewItems.associate { it.slug to it.expanded }
         collectionViewItems = collectionItems.map { (collectionRecord, assetItems) ->
             NftCollectionViewItem(
                 slug = collectionRecord.slug,
@@ -57,6 +60,8 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
                 expanded = expandedStates[collectionRecord.slug] ?: false
             )
         }
+
+        this.totalCurrencyPrice = totalCurrencyPrice
     }
 
     override fun onCleared() {

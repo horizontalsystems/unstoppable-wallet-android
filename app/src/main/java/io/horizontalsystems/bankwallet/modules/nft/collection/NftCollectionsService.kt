@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.core.orNull
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.reactivex.disposables.CompositeDisposable
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class NftCollectionsService(
     private val accountManager: IAccountManager,
@@ -25,7 +27,7 @@ class NftCollectionsService(
     val priceType by itemsPricedRepository::priceType
 
     private val _assetItemsPriced =
-        MutableStateFlow<DataState<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>>>(DataState.Loading)
+        MutableStateFlow<DataState<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>>>(DataState.Loading)
     val assetItemsPriced = _assetItemsPriced.asStateFlow()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -39,8 +41,13 @@ class NftCollectionsService(
         coroutineScope.launch {
             itemsPricedWithCurrencyRepository.items
                 .collect { assetItemsPriced ->
+                    val totalValue = assetItemsPriced.map { (_, assets) ->
+                        assets.sumOf { it.currencyPrice?.value?.multiply(it.assetItem.ownedCount.toBigDecimal()) ?: BigDecimal.ZERO }
+                    }.sumOf { it }
+
+                    val totalCurrencyValue = CurrencyValue(itemsPricedWithCurrencyRepository.baseCurrency, totalValue)
                     _assetItemsPriced.update {
-                        DataState.Success(assetItemsPriced)
+                        DataState.Success(Pair(assetItemsPriced, totalCurrencyValue))
                     }
                 }
         }
