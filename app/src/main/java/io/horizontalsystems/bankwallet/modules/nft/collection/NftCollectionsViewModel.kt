@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -23,7 +24,7 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
 
     init {
         viewModelScope.launch {
-            service.collectionItems
+            service.collectionRecords
                 .collect {
                     handleNftCollections(it)
                 }
@@ -32,7 +33,7 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         service.start()
     }
 
-    private fun handleNftCollections(nftCollectionsState: DataState<List<NftCollectionItem>>) {
+    private fun handleNftCollections(nftCollectionsState: DataState<Map<NftCollectionRecord, List<NftAssetItemPriced>>>) {
         loading = nftCollectionsState.loading
 
         nftCollectionsState.dataOrNull?.let {
@@ -42,18 +43,18 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         }
     }
 
-    private fun syncItems(collectionItems: List<NftCollectionItem>) {
+    private fun syncItems(collectionItems: Map<NftCollectionRecord, List<NftAssetItemPriced>>) {
         val expandedStates = collectionViewItems.map {
             it.slug to it.expanded
         }.toMap()
 
-        collectionViewItems = collectionItems.map { nftCollectionItem ->
+        collectionViewItems = collectionItems.map { (collectionRecord, assetItems) ->
             NftCollectionViewItem(
-                slug = nftCollectionItem.slug,
-                name = nftCollectionItem.name,
-                imageUrl = nftCollectionItem.imageUrl,
-                assets = nftCollectionItem.assets,
-                expanded = expandedStates[nftCollectionItem.slug] ?: false
+                slug = collectionRecord.slug,
+                name = collectionRecord.name,
+                imageUrl = collectionRecord.imageUrl,
+                assets = assetItems,
+                expanded = expandedStates[collectionRecord.slug] ?: false
             )
         }
     }
