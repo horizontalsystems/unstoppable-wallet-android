@@ -12,24 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItem
+import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItemPriced
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
-import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.models.Coin
-import java.math.BigDecimal
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun NftPreview(asset: NftAssetItem, onClick: () -> Unit) {
+fun NftPreview(asset: NftAssetItemPriced, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,11 +40,11 @@ fun NftPreview(asset: NftAssetItem, onClick: () -> Unit) {
         ) {
             Image(
                 modifier = Modifier.matchParentSize(),
-                painter = rememberImagePainter(asset.imagePreviewUrl),
+                painter = rememberImagePainter(asset.assetItem.imagePreviewUrl),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
-            if (asset.onSale) {
+            if (asset.assetItem.onSale) {
                 Badge(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -62,7 +55,7 @@ fun NftPreview(asset: NftAssetItem, onClick: () -> Unit) {
         }
         Text(
             modifier = Modifier.padding(start = 12.dp, top = 12.dp, end = 12.dp),
-            text = asset.name,
+            text = asset.assetItem.name,
             style = ComposeAppTheme.typography.microSB,
             color = ComposeAppTheme.colors.grey
         )
@@ -84,35 +77,5 @@ fun NftPreview(asset: NftAssetItem, onClick: () -> Unit) {
                 )
             }
         }
-    }
-}
-
-private val asset = NftAssetItem(
-    accountId = "accountId",
-    tokenId = "108510973921457929967077298367545831468135648058682555520544982493970263179265",
-    name = "Crypto Punk 312",
-    imageUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
-    imagePreviewUrl = "https://lh3.googleusercontent.com/FalCKtVbAX1qBf2_O7g72UufouUsMStkpYfDAe3O-4OO06O4ESwcv63GAnKmEslOaaE4XUyy4X1xdc5CqDFtmDYVwXEFE5P9pUi_",
-    description = "description",
-    ownedCount = 2,
-    contract = NftAssetContract(
-        "address",
-        "schema_name"
-    ),
-    coinPrice = CoinValue(CoinValue.Kind.Coin(Coin("", "Ethereum", "ETH"), 8), BigDecimal("112.2979871")),
-    currencyPrice = CurrencyValue(Currency("USD", "$", 2), BigDecimal("112.2979871")),
-    onSale = false,
-    prices = NftAssetItem.Prices(
-        average7d = null,
-        average30d = null,
-        last = null
-    )
-)
-
-@Preview
-@Composable
-fun NftPreviewPreview() {
-    ComposeAppTheme {
-        NftPreview(asset, {})
     }
 }

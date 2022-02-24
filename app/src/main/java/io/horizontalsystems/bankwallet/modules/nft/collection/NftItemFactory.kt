@@ -3,102 +3,12 @@ package io.horizontalsystems.bankwallet.modules.nft.collection
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetRecord
-import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionStats
 import io.horizontalsystems.marketkit.models.CoinType
 
 class NftItemFactory(private val coinManager: ICoinManager) {
 
     private val platformCoinEth by lazy { coinManager.getPlatformCoin(CoinType.Ethereum) }
-
-    fun createNftCollectionItem(
-        collectionRecord: NftCollectionRecord,
-        assetItems: List<NftAssetItem>
-    ): NftCollectionItem {
-        val stats = collectionRecord.stats?.let { stats ->
-            platformCoinEth?.let {
-                val averagePrice7d = CoinValue(
-                    CoinValue.Kind.PlatformCoin(it),
-                    stats.averagePrice7d
-                )
-                val averagePrice30d = CoinValue(
-                    CoinValue.Kind.PlatformCoin(it),
-                    stats.averagePrice30d
-                )
-                NftCollectionItem.Stats(
-                    averagePrice7d,
-                    averagePrice30d,
-                )
-            }
-        }
-
-        return NftCollectionItem(
-            slug = collectionRecord.slug,
-            name = collectionRecord.name,
-            imageUrl = collectionRecord.imageUrl,
-            stats = stats,
-            assets = assetItems
-        )
-    }
-
-    fun createNftAssetItem(
-        assetRecord: NftAssetRecord,
-        collectionStats: NftCollectionStats?,
-        priceType: PriceType
-    ): NftAssetItem {
-        var averagePrice7d: CoinValue? = null
-        var averagePrice30d: CoinValue? = null
-
-        collectionStats?.let { stats ->
-            platformCoinEth?.let {
-                averagePrice7d = CoinValue(
-                    CoinValue.Kind.PlatformCoin(it),
-                    stats.averagePrice7d
-                )
-                averagePrice30d = CoinValue(
-                    CoinValue.Kind.PlatformCoin(it),
-                    stats.averagePrice30d
-                )
-            }
-        }
-
-        val lastPrice: CoinValue? = assetRecord.lastSale?.let { lastSale ->
-            coinManager.getPlatformCoin(CoinType.fromId(lastSale.coinTypeId))
-                ?.let { platformCoin ->
-                    CoinValue(
-                        CoinValue.Kind.PlatformCoin(platformCoin),
-                        lastSale.totalPrice
-                    )
-                }
-        }
-
-        val assetItemPrices = NftAssetItem.Prices(
-            average7d = averagePrice7d,
-            average30d = averagePrice30d,
-            last = lastPrice
-        )
-
-        val coinPrice = when (priceType) {
-            PriceType.Days7 -> assetItemPrices.average7d
-            PriceType.Days30 -> assetItemPrices.average30d
-            PriceType.LastPrice -> assetItemPrices.last
-        }
-
-        return NftAssetItem(
-            accountId = assetRecord.accountId,
-            tokenId = assetRecord.tokenId,
-            name = assetRecord.name,
-            imageUrl = assetRecord.imageUrl,
-            imagePreviewUrl = assetRecord.imagePreviewUrl,
-            description = assetRecord.description,
-            ownedCount = assetRecord.ownedCount,
-            contract = assetRecord.contract,
-            coinPrice = coinPrice,
-            currencyPrice = null,
-            onSale = true,
-            prices = assetItemPrices
-        )
-    }
 
     fun createNftAssetItem(
         assetRecord: NftAssetRecord,
@@ -145,8 +55,6 @@ class NftItemFactory(private val coinManager: ICoinManager) {
             description = assetRecord.description,
             ownedCount = assetRecord.ownedCount,
             contract = assetRecord.contract,
-            coinPrice = null,
-            currencyPrice = null,
             onSale = true,
             prices = assetItemPrices
         )

@@ -115,7 +115,7 @@ fun NftCollectionsScreen(navController: NavController) {
                                     key = { it.slug }
                                 ) { collection ->
                                     NftsCollectionSection(collection, viewModel) {
-                                        navController.slideFromBottom(R.id.nftAssetFragment, NftAssetModule.prepareParams(it.accountId, it.tokenId))
+                                        navController.slideFromBottom(R.id.nftAssetFragment, NftAssetModule.prepareParams(it.assetItem.accountId, it.assetItem.tokenId))
                                     }
                                 }
                             }
