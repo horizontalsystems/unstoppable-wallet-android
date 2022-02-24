@@ -86,7 +86,7 @@ class AccountManager(
         accountsSubject.onNext(accounts)
         accountsDeletedSubject.onNext(Unit)
 
-        if (id == activeAccount?.id) {
+        if (id == cache.activeAccountId) {
             setActiveAccountId(accounts.firstOrNull()?.id)
         }
     }
