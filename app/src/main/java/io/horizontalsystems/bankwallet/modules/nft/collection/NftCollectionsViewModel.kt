@@ -24,7 +24,7 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
 
     init {
         viewModelScope.launch {
-            service.collectionRecords
+            service.assetItemsPriced
                 .collect {
                     handleNftCollections(it)
                 }
@@ -33,7 +33,7 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         service.start()
     }
 
-    private fun handleNftCollections(nftCollectionsState: DataState<Map<NftCollectionRecord, List<NftAssetItemPriced>>>) {
+    private fun handleNftCollections(nftCollectionsState: DataState<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>>) {
         loading = nftCollectionsState.loading
 
         nftCollectionsState.dataOrNull?.let {
@@ -43,7 +43,7 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         }
     }
 
-    private fun syncItems(collectionItems: Map<NftCollectionRecord, List<NftAssetItemPriced>>) {
+    private fun syncItems(collectionItems: Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>) {
         val expandedStates = collectionViewItems.map {
             it.slug to it.expanded
         }.toMap()

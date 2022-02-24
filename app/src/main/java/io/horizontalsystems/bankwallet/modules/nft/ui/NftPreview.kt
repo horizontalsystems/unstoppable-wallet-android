@@ -16,13 +16,13 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItemPriced
+import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItemPricedWithCurrency
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun NftPreview(asset: NftAssetItemPriced, onClick: () -> Unit) {
+fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

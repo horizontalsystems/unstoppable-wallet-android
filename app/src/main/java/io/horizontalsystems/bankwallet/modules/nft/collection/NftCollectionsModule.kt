@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
@@ -17,9 +18,18 @@ object NftCollectionsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val nftItemFactory = NftItemFactory(App.coinManager)
 
-            val repository = NftCollectionsRepository(App.nftManager, App.accountManager, nftItemFactory)
+            val assetItemsRepository = NftAssetItemsRepository(App.nftManager, nftItemFactory)
+            val assetItemsPricedRepository = NftAssetItemsPricedRepository()
+            val assetItemsPricedWithCurrencyRepository = NftAssetItemsPricedWithCurrencyRepository(
+                BalanceXRateRepository(App.currencyManager, App.marketKit)
+            )
 
-            val service = NftCollectionsService(repository, App.marketKit, App.currencyManager)
+            val service = NftCollectionsService(
+                App.accountManager,
+                assetItemsRepository,
+                assetItemsPricedRepository,
+                assetItemsPricedWithCurrencyRepository
+            )
 
             return NftCollectionsViewModel(service) as T
         }
@@ -37,7 +47,7 @@ data class NftCollectionViewItem(
     val name: String,
     val imageUrl: String,
     val expanded: Boolean,
-    val assets: List<NftAssetItemPriced>
+    val assets: List<NftAssetItemPricedWithCurrency>
 ) {
     val ownedAssetCount = assets.size
 }
@@ -63,6 +73,11 @@ data class NftAssetItem(
 
 data class NftAssetItemPriced(
     val assetItem: NftAssetItem,
+    val coinPrice: CoinValue?
+)
+
+data class NftAssetItemPricedWithCurrency(
+    val assetItem: NftAssetItem,
     val coinPrice: CoinValue?,
-    val currencyPrice: CurrencyValue?
+    val currencyPrice: CurrencyValue?,
 )
