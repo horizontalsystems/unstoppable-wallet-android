@@ -37,8 +37,7 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRecyclerviewBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -61,9 +60,9 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
             viewModel.refresh()
         }
 
-        viewModel.loadingLiveData.observe(viewLifecycleOwner, { loading ->
+        viewModel.loadingLiveData.observe(viewLifecycleOwner) { loading ->
             binding.pullToRefresh.isRefreshing = loading
-        })
+        }
 
         binding.errorViewCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -82,12 +81,11 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
             binding.errorViewCompose.isVisible = viewState is ViewState.Error
         }
 
-        viewModel.coinMajorHolders.observe(viewLifecycleOwner, { holders ->
-            val adapterChart =
-                CoinMajorHoldersPieAdapter(holders.filterIsInstance(MajorHolderItem.Item::class.java))
+        viewModel.coinMajorHolders.observe(viewLifecycleOwner) { holders ->
+            val adapterChart = CoinMajorHoldersPieAdapter(holders.filterIsInstance(MajorHolderItem.Item::class.java))
             val adapterItems = CoinMajorHoldersAdapter(holders, this)
             binding.recyclerView.adapter = ConcatAdapter(adapterChart, adapterItems)
-        })
+        }
     }
 
     override fun onAddressClick(address: String) {
