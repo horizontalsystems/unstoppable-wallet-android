@@ -34,7 +34,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
 
     fun pendingRequests(topic: String): List<WalletConnect.Model.JsonRpcHistory.HistoryEntry> {
         val history = WalletConnectClient.getJsonRpcHistory(topic)
-        return history.listOfRequests.filter { it.jsonRpcStatus == JsonRpcStatus.PENDING }
+        return history.listOfRequests.filter { it.jsonRpcStatus == JsonRpcStatus.PENDING && it.method == "wc_sessionPayload"}
     }
 
     var event: Event = Event.Default

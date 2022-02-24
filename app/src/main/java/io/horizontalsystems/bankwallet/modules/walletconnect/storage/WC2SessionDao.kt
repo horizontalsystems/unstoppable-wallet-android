@@ -9,6 +9,9 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnec
 @Dao
 interface WC2SessionDao {
 
+    @Query("SELECT * FROM WalletConnectV2Session")
+    fun getAll(): List<WalletConnectV2Session>
+
     @Query("SELECT * FROM WalletConnectV2Session WHERE accountId = :accountId")
     fun getByAccountId(accountId: String): List<WalletConnectV2Session>
 

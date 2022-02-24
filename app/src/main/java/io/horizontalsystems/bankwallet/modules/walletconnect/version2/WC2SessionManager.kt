@@ -85,17 +85,18 @@ class WC2SessionManager(
 
         val currentSessions = allSessions
         Log.e(TAG, "syncSessions: ${currentSessions.size}")
-        val allDbSessions = storage.getSessionsByAccountId(accountId)
 
-        val dbTopics = allDbSessions.map { it.topic }
+        val allDbSessions = storage.getAllSessions()
+        val allDbTopics = allDbSessions.map{ it.topic }
+        Log.e(TAG, "allDbTopics: $allDbTopics")
 
-        val newSessions = currentSessions.filterNot { dbTopics.contains(it.topic) }
-        val deletedTopics = dbTopics.filter { topic ->
+        val newSessions = currentSessions.filter { !allDbTopics.contains(it.topic) }
+        val deletedTopics = allDbTopics.filter { topic ->
             !currentSessions.any { it.topic == topic }
         }
 
         currentSessions.forEach { Log.e(TAG, "currentSessions: ${it.topic}") }
-        dbTopics.forEach { Log.e(TAG, "dbTopics: ${it}") }
+        newSessions.forEach { Log.e(TAG, "newSessions: ${it}") }
         deletedTopics.forEach { Log.e(TAG, "deletedTopics: ${it}") }
 
         storage.save(newSessions.map { WalletConnectV2Session(accountId, it.topic) })
