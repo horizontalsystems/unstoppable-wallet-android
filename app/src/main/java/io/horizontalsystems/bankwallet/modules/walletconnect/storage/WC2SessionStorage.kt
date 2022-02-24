@@ -9,6 +9,10 @@ class WC2SessionStorage(appDatabase: AppDatabase) {
         appDatabase.wc2SessionDao()
     }
 
+    fun getAllSessions(): List<WalletConnectV2Session> {
+        return dao.getAll()
+    }
+
     fun getSessionsByAccountId(accountId: String): List<WalletConnectV2Session> {
         return dao.getByAccountId(accountId)
     }

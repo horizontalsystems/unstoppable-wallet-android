@@ -28,9 +28,7 @@ class WC2ListViewModel(
             .subscribeIO { syncPendingRequestsCount(it.size) }
             .let { disposables.add(it) }
 
-        if (service.sessions.isNotEmpty()) {
-            sync(service.sessions)
-        }
+        sync(service.sessions)
     }
 
     private fun syncPendingRequestsCount(count: Int) {
@@ -48,7 +46,7 @@ class WC2ListViewModel(
     }
 
     private fun sync(sessions: List<WalletConnect.Model.SettledSession>) {
-        if (sessions.isEmpty()) {
+        if (sessions.isEmpty() && service.pendingRequestsCount == 0) {
             sectionItem = null
             return
         }

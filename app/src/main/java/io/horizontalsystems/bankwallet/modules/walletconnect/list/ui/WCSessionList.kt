@@ -60,7 +60,7 @@ private fun PendingRequestsCell(pendingRequests: Int, navController: NavControll
             .clickable(
                 enabled = pendingRequests > 0,
                 onClick = {
-//                    navController.slideFromRight(R.id.wcPendingRequestsFragment)
+                    navController.slideFromBottom(R.id.wc2RequestListFragment)
                 }
             )
             .padding(horizontal = 16.dp),
