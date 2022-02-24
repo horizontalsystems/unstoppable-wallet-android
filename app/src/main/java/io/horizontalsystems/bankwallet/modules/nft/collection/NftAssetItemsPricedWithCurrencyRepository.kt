@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.update
 class NftAssetItemsPricedWithCurrencyRepository(
     private val xRateRepository: BalanceXRateRepository
 ) {
-    private val _items = MutableStateFlow<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>>(mapOf())
-    val items = _items.asStateFlow()
+    private val _itemsFlow = MutableStateFlow<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>>(mapOf())
+    val itemsFlow = _itemsFlow.asStateFlow()
 
     val baseCurrency by xRateRepository::baseCurrency
 
@@ -31,7 +31,7 @@ class NftAssetItemsPricedWithCurrencyRepository(
     }
 
     private fun handleUpdatedRates(latestRates: Map<String, CoinPrice?>) {
-        _items.update {
+        _itemsFlow.update {
             it.map { (collectionRecord, items) ->
                 collectionRecord to items.map { item ->
                     val coinPrice = item.coinPrice
@@ -78,7 +78,7 @@ class NftAssetItemsPricedWithCurrencyRepository(
             }
         }.toMap()
 
-        _items.update { items }
+        _itemsFlow.update { items }
     }
 
     fun stop() {

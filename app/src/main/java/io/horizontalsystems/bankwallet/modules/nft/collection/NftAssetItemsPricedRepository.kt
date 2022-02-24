@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class NftAssetItemsPricedRepository {
-    private val _assetItemsPriced = MutableStateFlow<Map<NftCollectionRecord, List<NftAssetItemPriced>>>(mapOf())
-    val assetItemsPriced = _assetItemsPriced.asStateFlow()
+    private val _itemsFlow = MutableStateFlow<Map<NftCollectionRecord, List<NftAssetItemPriced>>>(mapOf())
+    val itemsFlow = _itemsFlow.asStateFlow()
 
     var priceType = PriceType.Days7
         private set
@@ -15,7 +15,7 @@ class NftAssetItemsPricedRepository {
     fun setPriceType(priceType: PriceType) {
         this.priceType = priceType
 
-        _assetItemsPriced.value.let { collections ->
+        _itemsFlow.value.let { collections ->
             val list = collections.map { (collectionItem, assetsPriced) ->
                 val assets = assetsPriced.map { assetPriced ->
                     assetPriced.copy(coinPrice = getAssetPrice(assetPriced.assetItem, priceType))
@@ -23,7 +23,7 @@ class NftAssetItemsPricedRepository {
                 collectionItem to assets
             }.toMap()
 
-            _assetItemsPriced.update { list }
+            _itemsFlow.update { list }
         }
     }
 
@@ -37,7 +37,7 @@ class NftAssetItemsPricedRepository {
             }
         }.toMap()
 
-        _assetItemsPriced.update { items }
+        _itemsFlow.update { items }
     }
 
     private fun getAssetPrice(assetItem: NftAssetItem, priceType: PriceType) = when (priceType) {

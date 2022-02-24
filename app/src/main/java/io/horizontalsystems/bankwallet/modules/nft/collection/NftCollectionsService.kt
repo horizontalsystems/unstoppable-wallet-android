@@ -26,41 +26,37 @@ class NftCollectionsService(
 ) {
     val priceType by itemsPricedRepository::priceType
 
-    private val _assetItemsPriced =
+    private val _serviceItemState =
         MutableStateFlow<DataState<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>>>(DataState.Loading)
-    val assetItemsPriced = _assetItemsPriced.asStateFlow()
+    val serviceItemState = _serviceItemState.asStateFlow()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val disposables = CompositeDisposable()
 
-    fun updatePriceType(priceType: PriceType) {
-        itemsPricedRepository.setPriceType(priceType)
-    }
-
     fun start() {
         coroutineScope.launch {
-            itemsPricedWithCurrencyRepository.items
+            itemsPricedWithCurrencyRepository.itemsFlow
                 .collect { assetItemsPriced ->
                     val totalValue = assetItemsPriced.map { (_, assets) ->
                         assets.sumOf { it.currencyPrice?.value?.multiply(it.assetItem.ownedCount.toBigDecimal()) ?: BigDecimal.ZERO }
                     }.sumOf { it }
 
                     val totalCurrencyValue = CurrencyValue(itemsPricedWithCurrencyRepository.baseCurrency, totalValue)
-                    _assetItemsPriced.update {
+                    _serviceItemState.update {
                         DataState.Success(Pair(assetItemsPriced, totalCurrencyValue))
                     }
                 }
         }
 
         coroutineScope.launch {
-            itemsPricedRepository.assetItemsPriced
+            itemsPricedRepository.itemsFlow
                 .collect { assetItemsPriced ->
                     itemsPricedWithCurrencyRepository.setItems(assetItemsPriced)
                 }
         }
 
         coroutineScope.launch {
-            itemsRepository.assetItems
+            itemsRepository.itemsFlow
                 .collect {
                     itemsPricedRepository.setAssetItems(it)
                 }
@@ -78,14 +74,8 @@ class NftCollectionsService(
         itemsPricedWithCurrencyRepository.start()
     }
 
-    private fun handleAccount(account: Account?) {
-        if (account != null) {
-            itemsRepository.setAccount(account)
-        } else {
-            _assetItemsPriced.update {
-                DataState.Error(NoActiveAccount())
-            }
-        }
+    fun updatePriceType(priceType: PriceType) {
+        itemsPricedRepository.setPriceType(priceType)
     }
 
     fun stop() {
@@ -96,5 +86,15 @@ class NftCollectionsService(
     suspend fun refresh() {
         itemsRepository.refresh()
         itemsPricedWithCurrencyRepository.refresh()
+    }
+
+    private fun handleAccount(account: Account?) {
+        if (account != null) {
+            itemsRepository.setAccount(account)
+        } else {
+            _serviceItemState.update {
+                DataState.Error(NoActiveAccount())
+            }
+        }
     }
 }

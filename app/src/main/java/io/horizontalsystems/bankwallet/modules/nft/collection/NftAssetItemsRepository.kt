@@ -19,9 +19,9 @@ class NftAssetItemsRepository(
     private val nftItemFactory: NftItemFactory
 ) {
     private var account: Account? = null
-    private val _assetItems =
+    private val _itemsFlow =
         MutableStateFlow<Map<NftCollectionRecord, List<NftAssetItem>>>(mapOf())
-    val assetItems = _assetItems.asStateFlow()
+    val itemsFlow = _itemsFlow.asStateFlow()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var handleActiveAccountJob: Job? = null
@@ -53,7 +53,7 @@ class NftAssetItemsRepository(
     }
 
     private fun handleUpdatedCollectionAssets(collectionAssets: Map<NftCollectionRecord, List<NftAssetRecord>>) {
-        _assetItems.update {
+        _itemsFlow.update {
             collectionAssets.map { (collection, assets) ->
                 val assetItems = assets.map { asset ->
                     nftItemFactory.createNftAssetItem(asset, collection.stats)
