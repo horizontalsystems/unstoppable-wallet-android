@@ -61,6 +61,7 @@ fun NftCollectionsScreen(navController: NavController) {
 
     val viewState = viewModel.viewState
     val collections = viewModel.collectionViewItems
+    val totalCurrencyValue = viewModel.totalCurrencyPrice
 
     val loading = viewModel.loading
 
@@ -93,7 +94,7 @@ fun NftCollectionsScreen(navController: NavController) {
                         Column {
                             CellSingleLineClear(borderTop = true) {
                                 Text(
-                                    text = "$ total",
+                                    text = totalCurrencyValue?.getFormatted() ?: "",
                                     style = ComposeAppTheme.typography.headline2,
                                     color = ComposeAppTheme.colors.jacob,
                                 )

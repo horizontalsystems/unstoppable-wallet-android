@@ -16,6 +16,8 @@ class NftAssetItemsPricedWithCurrencyRepository(
     private val _items = MutableStateFlow<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>>(mapOf())
     val items = _items.asStateFlow()
 
+    val baseCurrency by xRateRepository::baseCurrency
+
     private val disposables = CompositeDisposable()
 
     fun start() {
