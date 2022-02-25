@@ -24,12 +24,12 @@ object HsNftApiV1Response {
         val name: String,
         val description: String?,
         val asset_contracts: List<Asset.Contract>,
-        val image_data: ImageData,
+        val image_data: ImageData?,
         val links: Links,
         val stats: Stats,
     ) {
         data class ImageData(
-            val image_url: String,
+            val image_url: String?,
             val featured_image_url: String?,
         )
 
@@ -45,20 +45,20 @@ object HsNftApiV1Response {
         data class Stats(
             val seven_day_average_price: BigDecimal,
             val thirty_day_average_price: BigDecimal,
+            val total_supply: Int,
             val floor_price: BigDecimal,
         )
     }
 
-
     data class Asset(
         val token_id: String,
-        val name: String,
+        val name: String?,
         val symbol: String,
         val contract: Contract,
         val collection_uid: String,
         val description: String?,
-        val image_data: ImageData,
-        val links: Links,
+        val image_data: ImageData?,
+        val links: Links?,
         val attributes: List<Attribute>,
         val markets_data: MarketsData,
     ) {
@@ -68,13 +68,13 @@ object HsNftApiV1Response {
         )
 
         data class ImageData(
-            val image_url: String,
-            val image_preview_url: String,
+            val image_url: String?,
+            val image_preview_url: String?,
         )
 
         data class Links(
             val external_link: String?,
-            val permalink: String,
+            val permalink: String?,
         )
 
         data class Attribute(
@@ -88,7 +88,7 @@ object HsNftApiV1Response {
 
         data class MarketsData(
             val last_sale: LastSale?,
-            val sell_orders: List<Any>?,
+            val sell_orders: List<SellOrder>?,
         ) {
             data class LastSale(
                 val total_price: BigInteger,
@@ -97,6 +97,26 @@ object HsNftApiV1Response {
                 data class PaymentToken(
                     val address: String,
                     val decimals: Int
+                )
+            }
+
+            data class SellOrder(
+                val closing_date: String,
+                val current_price: BigDecimal,
+                val payment_token_contract: PaymentTokenContract,
+                val taker: Taker,
+                val side: Int,
+                val v: Int?,
+            ) {
+                data class Taker(
+                    val address: String
+                )
+
+                data class PaymentTokenContract(
+                    val address: String,
+                    val decimals: Int,
+                    val eth_price: BigDecimal,
+
                 )
             }
         }
@@ -112,7 +132,7 @@ class HsNftApiProvider : INftApiProvider {
             accountId = account.id,
             uid = collectionResponse.uid,
             name = collectionResponse.name,
-            imageUrl = collectionResponse.image_data.image_url,
+            imageUrl = collectionResponse.image_data?.image_url,
             stats = NftCollectionStats(
                 averagePrice7d = collectionResponse.stats.seven_day_average_price,
                 averagePrice30d = collectionResponse.stats.thirty_day_average_price
@@ -129,9 +149,9 @@ class HsNftApiProvider : INftApiProvider {
             collectionUid = assetResponse.collection_uid,
             tokenId = assetResponse.token_id,
             name = assetResponse.name,
-            imageUrl = assetResponse.image_data.image_url,
-            imagePreviewUrl = assetResponse.image_data.image_preview_url,
-            description = assetResponse.description ?: "",
+            imageUrl = assetResponse.image_data?.image_url,
+            imagePreviewUrl = assetResponse.image_data?.image_preview_url,
+            description = assetResponse.description,
             onSale = assetResponse.markets_data.sell_orders?.isNotEmpty() ?: false,
             lastSale = assetResponse.markets_data.last_sale?.let { last_sale ->
                 NftAssetLastSale(

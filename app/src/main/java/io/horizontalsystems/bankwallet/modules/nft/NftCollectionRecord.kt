@@ -9,7 +9,7 @@ data class NftCollectionRecord(
     val accountId: String,
     val uid: String,
     val name: String,
-    val imageUrl: String,
+    val imageUrl: String?,
 
     @Embedded
     val stats: NftCollectionStats?

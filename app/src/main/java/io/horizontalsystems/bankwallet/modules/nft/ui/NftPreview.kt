@@ -53,12 +53,14 @@ fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
                 )
             }
         }
-        Text(
-            modifier = Modifier.padding(start = 12.dp, top = 12.dp, end = 12.dp),
-            text = asset.assetItem.name,
-            style = ComposeAppTheme.typography.microSB,
-            color = ComposeAppTheme.colors.grey
-        )
+        asset.assetItem.name?.let {
+            Text(
+                modifier = Modifier.padding(start = 12.dp, top = 12.dp, end = 12.dp),
+                text = it,
+                style = ComposeAppTheme.typography.microSB,
+                color = ComposeAppTheme.colors.grey
+            )
+        }
         Row(
             modifier = Modifier.padding(start = 12.dp, top = 4.dp, end = 12.dp, bottom = 12.dp),
             verticalAlignment = Alignment.CenterVertically

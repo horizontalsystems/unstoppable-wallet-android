@@ -9,10 +9,10 @@ data class NftAssetRecord(
     val accountId: String,
     val collectionUid: String,
     val tokenId: String,
-    val name: String,
-    val imageUrl: String,
-    val imagePreviewUrl: String,
-    val description: String,
+    val name: String?,
+    val imageUrl: String?,
+    val imagePreviewUrl: String?,
+    val description: String?,
     val onSale: Boolean,
 
     @Embedded
