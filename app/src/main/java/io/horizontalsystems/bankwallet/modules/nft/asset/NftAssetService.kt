@@ -19,6 +19,8 @@ class NftAssetService(
             description = assetRecord.description,
             contract = assetRecord.contract,
             tokenId = assetRecord.tokenId,
+            assetLinks = assetRecord.links,
+            collectionLinks = collectionRecord.links,
             prices = NftAssetModuleAssetItem.Prices(
                 average7d = nftManager.nftAssetPriceToCoinValue(collectionRecord.averagePrice7d),
                 average30d = nftManager.nftAssetPriceToCoinValue(collectionRecord.averagePrice30d),

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
 
 object NftAssetModule {
@@ -34,6 +35,8 @@ data class NftAssetModuleAssetItem(
     val description: String?,
     val contract: NftAssetContract,
     val tokenId: String,
+    val assetLinks: HsNftApiV1Response.Asset.Links?,
+    val collectionLinks: HsNftApiV1Response.Collection.Links?,
     val prices: Prices
 ) {
     data class Prices(

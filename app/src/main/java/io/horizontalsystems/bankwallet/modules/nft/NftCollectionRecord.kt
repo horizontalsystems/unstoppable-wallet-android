@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.nft
 
 import androidx.room.Embedded
 import androidx.room.Entity
+import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
 
 @Entity(primaryKeys = ["accountId", "uid"])
 data class NftCollectionRecord(
@@ -18,4 +19,7 @@ data class NftCollectionRecord(
 
     @Embedded(prefix = "floorPrice_")
     val floorPrice: NftAssetPrice?,
+
+    @Embedded
+    val links: HsNftApiV1Response.Collection.Links?,
 )

@@ -25,7 +25,7 @@ object HsNftApiV1Response {
         val description: String?,
         val asset_contracts: List<Asset.Contract>,
         val image_data: ImageData?,
-        val links: Links,
+        val links: Links?,
         val stats: Stats,
     ) {
         data class ImageData(
@@ -74,7 +74,7 @@ object HsNftApiV1Response {
 
         data class Links(
             val external_link: String?,
-            val permalink: String?,
+            val permalink: String,
         )
 
         data class Attribute(
@@ -147,6 +147,7 @@ class HsNftApiProvider : INftApiProvider {
                 getCoinTypeId(zeroAddress),
                 collectionResponse.stats.floor_price
             ),
+            links = collectionResponse.links
         )
     }
 
@@ -172,7 +173,8 @@ class HsNftApiProvider : INftApiProvider {
             contract = NftAssetContract(
                 assetResponse.contract.address,
                 assetResponse.contract.type
-            )
+            ),
+            links = assetResponse.links
         )
     }
 
