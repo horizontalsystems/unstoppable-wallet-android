@@ -39,7 +39,7 @@ object NftCollectionsModule {
 enum class PriceType(override val title: TranslatableString) : WithTranslatableTitle {
     Days7(TranslatableString.ResString(R.string.Nfts_PriceType_Days_7)),
     Days30(TranslatableString.ResString(R.string.Nfts_PriceType_Days_30)),
-    LastPrice(TranslatableString.ResString(R.string.Nfts_PriceType_LastPrice))
+    LastSale(TranslatableString.ResString(R.string.Nfts_PriceType_LastSale))
 }
 
 data class NftCollectionViewItem(
