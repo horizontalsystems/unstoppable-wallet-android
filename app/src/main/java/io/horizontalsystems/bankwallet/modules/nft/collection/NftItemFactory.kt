@@ -55,7 +55,7 @@ class NftItemFactory(private val coinManager: ICoinManager) {
             description = assetRecord.description,
             ownedCount = assetRecord.ownedCount,
             contract = assetRecord.contract,
-            onSale = true,
+            onSale = assetRecord.onSale,
             prices = assetItemPrices
         )
     }
