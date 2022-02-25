@@ -1045,6 +1045,10 @@
     <string name="NftAsset_TokenId">Token ID</string>
     <string name="NftAsset_TokenStandard">Token Standard</string>
     <string name="NftAsset_Blockchain">Blockchain</string>
+    <string name="NftAsset_Links_Website">Website</string>
+    <string name="NftAsset_Links_OpenSea">OpenSea</string>
+    <string name="NftAsset_Links_Discord">Discord</string>
+    <string name="NftAsset_Links_Twitter">Twitter</string>
     <string name="PoweredBy_OpenSeaAPI">Powered by OpenSea API</string>
     <!--Rate list-->
 
