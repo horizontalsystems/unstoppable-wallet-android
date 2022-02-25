@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.hsnft
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
@@ -11,7 +12,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 object HsNftModule {
-    private val apiURL = "https://api-dev.blocksdecoded.com/v1/nft/"
+    private val apiURL = App.appConfigProvider.marketApiBaseUrl + "/v1/nft/"
 
     val apiServiceV1 = APIClient.retrofit(apiURL, 60)
         .create(HsNftApiV1::class.java)
