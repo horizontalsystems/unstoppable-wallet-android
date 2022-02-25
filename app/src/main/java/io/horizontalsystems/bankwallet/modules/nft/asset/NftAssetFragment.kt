@@ -121,11 +121,13 @@ private fun NftAsset(asset: NftAssetItem) {
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = asset.name,
-                    color = ComposeAppTheme.colors.leah,
-                    style = ComposeAppTheme.typography.headline1
-                )
+                asset.name?.let {
+                    Text(
+                        text = it,
+                        color = ComposeAppTheme.colors.leah,
+                        style = ComposeAppTheme.typography.headline1
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
@@ -218,7 +220,7 @@ private fun NftAsset(asset: NftAssetItem) {
                 NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Properties)) {
 
                 }
-                if (asset.description.isNotBlank()) {
+                if (!asset.description.isNullOrBlank()) {
                     NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Description)) {
                         InfoText(asset.description)
                     }

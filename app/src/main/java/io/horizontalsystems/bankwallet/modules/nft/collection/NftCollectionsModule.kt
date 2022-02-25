@@ -45,7 +45,7 @@ enum class PriceType(override val title: TranslatableString) : WithTranslatableT
 data class NftCollectionViewItem(
     val slug: String,
     val name: String,
-    val imageUrl: String,
+    val imageUrl: String?,
     val expanded: Boolean,
     val assets: List<NftAssetItemPricedWithCurrency>
 ) {
@@ -55,10 +55,10 @@ data class NftCollectionViewItem(
 data class NftAssetItem(
     val accountId: String,
     val tokenId: String,
-    val name: String,
-    val imageUrl: String,
-    val imagePreviewUrl: String,
-    val description: String,
+    val name: String?,
+    val imageUrl: String?,
+    val imagePreviewUrl: String?,
+    val description: String?,
     val ownedCount: Int,
     val contract: NftAssetContract,
     val onSale: Boolean,
