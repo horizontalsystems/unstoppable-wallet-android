@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.nft
 
 import androidx.room.Embedded
 import androidx.room.Entity
-import java.math.BigDecimal
 
 @Entity(primaryKeys = ["accountId", "uid"])
 data class NftCollectionRecord(
@@ -11,11 +10,12 @@ data class NftCollectionRecord(
     val name: String,
     val imageUrl: String?,
 
-    @Embedded
-    val stats: NftCollectionStats?
-)
+    @Embedded(prefix = "averagePrice7d_")
+    val averagePrice7d: NftAssetPrice?,
 
-data class NftCollectionStats(
-    val averagePrice7d: BigDecimal,
-    val averagePrice30d: BigDecimal,
+    @Embedded(prefix = "averagePrice30d_")
+    val averagePrice30d: NftAssetPrice?,
+
+    @Embedded(prefix = "floorPrice_")
+    val floorPrice: NftAssetPrice?,
 )

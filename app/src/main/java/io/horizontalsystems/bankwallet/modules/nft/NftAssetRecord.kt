@@ -16,7 +16,7 @@ data class NftAssetRecord(
     val onSale: Boolean,
 
     @Embedded
-    val lastSale: NftAssetLastSale?,
+    val lastSale: NftAssetPrice?,
 
     @Embedded
     val contract: NftAssetContract,
@@ -24,9 +24,9 @@ data class NftAssetRecord(
     val ownedCount: Int = 1
 )
 
-data class NftAssetLastSale(
+data class NftAssetPrice(
     val coinTypeId: String,
-    val totalPrice: BigDecimal
+    val value: BigDecimal
 )
 
 data class NftAssetContract(

@@ -56,7 +56,7 @@ class NftAssetItemsRepository(
         _itemsFlow.update {
             collectionAssets.map { (collection, assets) ->
                 val assetItems = assets.map { asset ->
-                    nftItemFactory.createNftAssetItem(asset, collection.stats)
+                    nftItemFactory.createNftAssetItem(asset, collection)
                 }
                 collection to assetItems
             }.toMap()

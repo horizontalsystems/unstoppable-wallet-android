@@ -45,8 +45,8 @@ object HsNftApiV1Response {
         data class Stats(
             val seven_day_average_price: BigDecimal,
             val thirty_day_average_price: BigDecimal,
-            val total_supply: Int,
             val floor_price: BigDecimal,
+            val total_supply: Int,
         )
     }
 
@@ -124,6 +124,8 @@ object HsNftApiV1Response {
 }
 
 class HsNftApiProvider : INftApiProvider {
+    private val zeroAddress = "0x0000000000000000000000000000000000000000"
+
     override suspend fun getCollectionRecords(
         address: Address,
         account: Account
@@ -133,10 +135,18 @@ class HsNftApiProvider : INftApiProvider {
             uid = collectionResponse.uid,
             name = collectionResponse.name,
             imageUrl = collectionResponse.image_data?.image_url,
-            stats = NftCollectionStats(
-                averagePrice7d = collectionResponse.stats.seven_day_average_price,
-                averagePrice30d = collectionResponse.stats.thirty_day_average_price
-            )
+            averagePrice7d = NftAssetPrice(
+                getCoinTypeId(zeroAddress),
+                collectionResponse.stats.seven_day_average_price
+            ),
+            averagePrice30d = NftAssetPrice(
+                getCoinTypeId(zeroAddress),
+                collectionResponse.stats.thirty_day_average_price
+            ),
+            floorPrice = NftAssetPrice(
+                getCoinTypeId(zeroAddress),
+                collectionResponse.stats.floor_price
+            ),
         )
     }
 
@@ -154,7 +164,7 @@ class HsNftApiProvider : INftApiProvider {
             description = assetResponse.description,
             onSale = assetResponse.markets_data.sell_orders?.isNotEmpty() ?: false,
             lastSale = assetResponse.markets_data.last_sale?.let { last_sale ->
-                NftAssetLastSale(
+                NftAssetPrice(
                     getCoinTypeId(last_sale.payment_token.address),
                     BigDecimal(last_sale.total_price).movePointLeft(last_sale.payment_token.decimals)
                 )
@@ -192,7 +202,7 @@ class HsNftApiProvider : INftApiProvider {
 
     private fun getCoinTypeId(paymentTokenAddress: String): String {
         val coinType = when (paymentTokenAddress) {
-            "0x0000000000000000000000000000000000000000" -> CoinType.Ethereum
+            zeroAddress -> CoinType.Ethereum
             else -> CoinType.Erc20(paymentTokenAddress.lowercase())
         }
 

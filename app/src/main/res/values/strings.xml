@@ -1033,6 +1033,10 @@
 
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_OwnedCount">Owned Count</string>
+    <string name="NftAsset_Price_Purchase">Purchase Price</string>
+    <string name="NftAsset_Price_Average7d">7D Average</string>
+    <string name="NftAsset_Price_Average30d">30D Average</string>
+    <string name="NftAsset_Price_Floor">Floor Price</string>
     <string name="NftAsset_Properties">Properties</string>
     <string name="NftAsset_Description">Description</string>
     <string name="NftAsset_Details">Details</string>
