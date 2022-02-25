@@ -149,7 +149,7 @@ private fun NftAsset(asset: NftAssetModuleAssetItem) {
 
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "collection name",
+                    text = asset.collectionName,
                     color = ComposeAppTheme.colors.grey,
                     style = ComposeAppTheme.typography.subhead1
                 )
