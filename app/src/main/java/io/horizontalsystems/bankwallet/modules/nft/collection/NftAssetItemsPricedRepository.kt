@@ -43,6 +43,6 @@ class NftAssetItemsPricedRepository {
     private fun getAssetPrice(assetItem: NftAssetItem, priceType: PriceType) = when (priceType) {
         PriceType.Days7 -> assetItem.prices.average7d
         PriceType.Days30 -> assetItem.prices.average30d
-        PriceType.LastPrice -> assetItem.prices.last
+        PriceType.LastSale -> assetItem.prices.last
     }
 }

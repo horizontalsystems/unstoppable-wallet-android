@@ -205,7 +205,7 @@ private fun NftAsset(asset: NftAssetItem) {
                 asset.prices.last?.let {
                     prices.add(
                         Pair(
-                            stringResource(id = R.string.Nfts_PriceType_LastPrice),
+                            stringResource(id = R.string.Nfts_PriceType_LastSale),
                             it
                         )
                     )
