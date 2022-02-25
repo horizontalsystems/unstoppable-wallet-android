@@ -47,6 +47,7 @@ class OpenSeaApiProvider : INftApiProvider {
             imageUrl = assetResponse.image_url,
             imagePreviewUrl = assetResponse.image_preview_url,
             description = assetResponse.description ?: "",
+            onSale = false,
             lastSale = assetResponse.last_sale?.let { last_sale ->
                 NftAssetLastSale(
                     getCoinTypeId(last_sale.payment_token.address),

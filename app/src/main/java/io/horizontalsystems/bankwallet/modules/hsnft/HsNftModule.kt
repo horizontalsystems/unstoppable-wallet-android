@@ -131,6 +131,7 @@ class HsNftApiProvider : INftApiProvider {
             imageUrl = assetResponse.image_data.image_url,
             imagePreviewUrl = assetResponse.image_data.image_preview_url,
             description = assetResponse.description ?: "",
+            onSale = assetResponse.markets_data.sell_orders?.isNotEmpty() ?: false,
             lastSale = assetResponse.markets_data.last_sale?.let { last_sale ->
                 NftAssetLastSale(
                     getCoinTypeId(last_sale.payment_token.address),
