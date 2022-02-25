@@ -76,7 +76,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                 }
                             )
                             .padding(16.dp),
-                        painter = painterResource(id = R.drawable.ic_image_2_24),
+                        painter = painterResource(id = R.drawable.ic_nft_24),
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.jacob
                     )

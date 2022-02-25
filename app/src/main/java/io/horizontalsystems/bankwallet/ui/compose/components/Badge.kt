@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.SteelDark
 
 @Composable
 fun Badge(modifier: Modifier = Modifier, text: String) {
@@ -22,6 +23,19 @@ fun Badge(modifier: Modifier = Modifier, text: String) {
             .padding(horizontal = 4.dp, vertical = 2.dp),
         text = text,
         color = ComposeAppTheme.colors.bran,
+        style = ComposeAppTheme.typography.microSB,
+    )
+}
+
+@Composable
+fun BadgeRatingD(modifier: Modifier = Modifier, text: String) {
+    Text(
+        modifier = modifier
+            .clip(RoundedCornerShape(4.dp))
+            .background(ComposeAppTheme.colors.lightGrey)
+            .padding(horizontal = 4.dp, vertical = 2.dp),
+        text = text,
+        color = SteelDark,
         style = ComposeAppTheme.typography.microSB,
     )
 }
