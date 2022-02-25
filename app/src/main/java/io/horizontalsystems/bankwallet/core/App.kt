@@ -244,7 +244,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         startTasks()
 
-        nftManager = NftManager(appDatabase.nftCollectionDao(), HsNftApiProvider())
+        nftManager = NftManager(appDatabase.nftCollectionDao(), HsNftApiProvider(), coinManager)
     }
 
     private fun setAppTheme() {

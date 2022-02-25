@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.nft
 
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -9,7 +12,8 @@ import kotlinx.coroutines.withContext
 
 class NftManager(
     private val nftDao: NftDao,
-    private val apiProvider: INftApiProvider
+    private val apiProvider: INftApiProvider,
+    private val coinManager: ICoinManager
 ) {
     fun getCollectionAndAssets(accountId: String): Flow<Map<NftCollectionRecord, List<NftAssetRecord>>> =
         combine(
@@ -31,11 +35,23 @@ class NftManager(
         nftDao.replaceCollectionAssets(account.id, collections, assets)
     }
 
-    suspend fun getAsset(accountId: String, tokenId: String): NftAssetRecord? {
+    suspend fun getAssetRecord(accountId: String, tokenId: String): NftAssetRecord? {
         return nftDao.getAsset(accountId, tokenId)
     }
 
-    fun getCollection(accountId: String, collectionSlug: String): NftCollectionRecord? {
+    fun getCollectionRecord(accountId: String, collectionSlug: String): NftCollectionRecord? {
         return nftDao.getCollection(accountId, collectionSlug)
+    }
+
+    fun nftAssetPriceToCoinValue(nftAssetPrice: NftAssetPrice?): CoinValue? {
+        if (nftAssetPrice == null) return null
+
+        return coinManager.getPlatformCoin(CoinType.fromId(nftAssetPrice.coinTypeId))
+            ?.let { platformCoin ->
+                CoinValue(
+                    CoinValue.Kind.PlatformCoin(platformCoin),
+                    nftAssetPrice.value
+                )
+            }
     }
 }

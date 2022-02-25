@@ -1,49 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection
 
-import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetRecord
-import io.horizontalsystems.bankwallet.modules.nft.NftCollectionStats
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
+import io.horizontalsystems.bankwallet.modules.nft.NftManager
 
-class NftItemFactory(private val coinManager: ICoinManager) {
-
-    private val platformCoinEth by lazy { coinManager.getPlatformCoin(CoinType.Ethereum) }
+class NftItemFactory(private val nftManager: NftManager) {
 
     fun createNftAssetItem(
         assetRecord: NftAssetRecord,
-        collectionStats: NftCollectionStats?
+        collection: NftCollectionRecord
     ): NftAssetItem {
-        var averagePrice7d: CoinValue? = null
-        var averagePrice30d: CoinValue? = null
-
-        collectionStats?.let { stats ->
-            platformCoinEth?.let {
-                averagePrice7d = CoinValue(
-                    CoinValue.Kind.PlatformCoin(it),
-                    stats.averagePrice7d
-                )
-                averagePrice30d = CoinValue(
-                    CoinValue.Kind.PlatformCoin(it),
-                    stats.averagePrice30d
-                )
-            }
-        }
-
-        val lastPrice: CoinValue? = assetRecord.lastSale?.let { lastSale ->
-            coinManager.getPlatformCoin(CoinType.fromId(lastSale.coinTypeId))
-                ?.let { platformCoin ->
-                    CoinValue(
-                        CoinValue.Kind.PlatformCoin(platformCoin),
-                        lastSale.totalPrice
-                    )
-                }
-        }
-
         val assetItemPrices = NftAssetItem.Prices(
-            average7d = averagePrice7d,
-            average30d = averagePrice30d,
-            last = lastPrice
+            average7d = nftManager.nftAssetPriceToCoinValue(collection.averagePrice7d),
+            average30d = nftManager.nftAssetPriceToCoinValue(collection.averagePrice30d),
+            last = nftManager.nftAssetPriceToCoinValue(assetRecord.lastSale)
         )
 
         return NftAssetItem(

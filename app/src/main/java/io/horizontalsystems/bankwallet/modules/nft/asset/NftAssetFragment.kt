@@ -36,7 +36,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.shortenedAddress
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -96,7 +95,7 @@ fun NftAssetScreen(navController: NavController, accountId: String?, tokenId: St
                         }
                     }
                     ViewState.Success -> {
-                        viewModel.assetItem?.let { asset ->
+                        viewModel.nftAssetItem?.let { asset ->
                             NftAsset(asset)
                         }
                     }
@@ -108,7 +107,7 @@ fun NftAssetScreen(navController: NavController, accountId: String?, tokenId: St
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-private fun NftAsset(asset: NftAssetItem) {
+private fun NftAsset(asset: NftAssetModuleAssetItem) {
     LazyColumn {
         item {
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -206,31 +205,31 @@ private fun NftAsset(asset: NftAssetItem) {
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
-                val prices = mutableListOf<Pair<String, CoinValue>>()
-                asset.prices.average7d?.let {
-                    prices.add(
-                        Pair(
-                            stringResource(id = R.string.Nfts_PriceType_Days_7),
-                            it
-                        )
+                val prices = mutableListOf<Pair<String, CoinValue?>>()
+                prices.add(
+                    Pair(
+                        stringResource(id = R.string.NftAsset_Price_Purchase),
+                        asset.prices.last
                     )
-                }
-                asset.prices.average30d?.let {
-                    prices.add(
-                        Pair(
-                            stringResource(id = R.string.Nfts_PriceType_Days_30),
-                            it
-                        )
+                )
+                prices.add(
+                    Pair(
+                        stringResource(id = R.string.NftAsset_Price_Average7d),
+                        asset.prices.average7d
                     )
-                }
-                asset.prices.last?.let {
-                    prices.add(
-                        Pair(
-                            stringResource(id = R.string.Nfts_PriceType_LastSale),
-                            it
-                        )
+                )
+                prices.add(
+                    Pair(
+                        stringResource(id = R.string.NftAsset_Price_Average30d),
+                        asset.prices.average30d
                     )
-                }
+                )
+                prices.add(
+                    Pair(
+                        stringResource(id = R.string.NftAsset_Price_Floor),
+                        asset.prices.floor
+                    )
+                )
 
                 CellMultilineLawrenceSection(prices) { (title, price) ->
                     NftAssetPriceCell(title, price)
@@ -359,7 +358,7 @@ private fun NftAssetSectionBlock(text: String, content: @Composable () -> Unit) 
 @Composable
 private fun NftAssetPriceCell(
     title: String,
-    coinValue: CoinValue
+    coinValue: CoinValue?
 ) {
     Row(
         modifier = Modifier
@@ -376,7 +375,7 @@ private fun NftAssetPriceCell(
         Column {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = coinValue.getFormatted(),
+                text = coinValue?.getFormatted() ?: "---",
                 color = ComposeAppTheme.colors.jacob,
                 style = ComposeAppTheme.typography.body,
                 textAlign = TextAlign.End,
