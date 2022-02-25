@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
+import io.horizontalsystems.bankwallet.modules.opensea.OpenSeaApiProvider
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
@@ -243,7 +244,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         startTasks()
 
-        nftManager = NftManager(appDatabase.nftCollectionDao())
+        nftManager = NftManager(appDatabase.nftCollectionDao(), OpenSeaApiProvider())
     }
 
     private fun setAppTheme() {
