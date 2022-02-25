@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItemPricedWithCurrency
@@ -34,13 +35,26 @@ fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 4.dp, top = 4.dp, end = 4.dp)
-                .height(150.dp)
+                .height(156.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(ComposeAppTheme.colors.steel20)
         ) {
+            val painter = rememberImagePainter(asset.assetItem.imagePreviewUrl)
+            if (painter.state !is ImagePainter.State.Success) {
+                asset.assetItem.name?.let {
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 12.dp, end = 12.dp)
+                            .align(Alignment.Center),
+                        text = it,
+                        style = ComposeAppTheme.typography.microSB,
+                        color = ComposeAppTheme.colors.grey
+                    )
+                }
+            }
             Image(
                 modifier = Modifier.matchParentSize(),
-                painter = rememberImagePainter(asset.assetItem.imagePreviewUrl),
+                painter = painter,
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )

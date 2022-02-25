@@ -26,7 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
+import coil.size.OriginalSize
+import coil.size.Scale
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -110,15 +113,31 @@ private fun NftAsset(asset: NftAssetItem) {
         item {
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Spacer(modifier = Modifier.height(12.dp))
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(328.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    painter = rememberImagePainter(asset.imageUrl),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillWidth
-                )
+                Box {
+                    val painter = rememberImagePainter(
+                        data = asset.imageUrl,
+                        builder = {
+                            size(OriginalSize)
+                            scale(Scale.FIT)
+                        })
+                    if (painter.state !is ImagePainter.State.Success) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(328.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(ComposeAppTheme.colors.steel20)
+                        )
+                    }
+                    Image(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp)),
+                        painter = painter,
+                        contentDescription = null,
+                        contentScale = ContentScale.FillWidth
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(24.dp))
                 asset.name?.let {
