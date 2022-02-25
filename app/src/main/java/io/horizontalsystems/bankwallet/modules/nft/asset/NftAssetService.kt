@@ -12,7 +12,7 @@ class NftAssetService(
 ) {
     suspend fun fetchAsset(): NftAssetItem? {
         val nftAssetItem = nftManager.getAsset(accountId, tokenId)?.let { asset ->
-            nftManager.getCollection(accountId, asset.collectionSlug)?.let { collection ->
+            nftManager.getCollection(accountId, asset.collectionUid)?.let { collection ->
                 nftItemFactory.createNftAssetItem(asset, collection.stats)
             }
         }

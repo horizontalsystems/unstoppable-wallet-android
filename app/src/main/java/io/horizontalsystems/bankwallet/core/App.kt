@@ -17,11 +17,11 @@ import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsEip20Provider
+import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
-import io.horizontalsystems.bankwallet.modules.opensea.OpenSeaApiProvider
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
@@ -244,7 +244,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         startTasks()
 
-        nftManager = NftManager(appDatabase.nftCollectionDao(), OpenSeaApiProvider())
+        nftManager = NftManager(appDatabase.nftCollectionDao(), HsNftApiProvider())
     }
 
     private fun setAppTheme() {

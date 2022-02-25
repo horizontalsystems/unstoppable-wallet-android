@@ -53,11 +53,11 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         val expandedStates = collectionViewItems.associate { it.slug to it.expanded }
         collectionViewItems = collectionItems.map { (collectionRecord, assetItems) ->
             NftCollectionViewItem(
-                slug = collectionRecord.slug,
+                slug = collectionRecord.uid,
                 name = collectionRecord.name,
                 imageUrl = collectionRecord.imageUrl,
                 assets = assetItems,
-                expanded = expandedStates[collectionRecord.slug] ?: false
+                expanded = expandedStates[collectionRecord.uid] ?: false
             )
         }
 

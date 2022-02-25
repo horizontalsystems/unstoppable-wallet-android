@@ -25,7 +25,7 @@ class OpenSeaApiProvider : INftApiProvider {
     ) = fetchCollections(address).map { collectionResponse ->
         NftCollectionRecord(
             accountId = account.id,
-            slug = collectionResponse.slug,
+            uid = collectionResponse.slug,
             name = collectionResponse.name,
             imageUrl = collectionResponse.image_url,
             stats = NftCollectionStats(
@@ -41,7 +41,7 @@ class OpenSeaApiProvider : INftApiProvider {
     ) = fetchAssets(address).map { assetResponse ->
         NftAssetRecord(
             accountId = account.id,
-            collectionSlug = assetResponse.collection.slug,
+            collectionUid = assetResponse.collection.slug,
             tokenId = assetResponse.token_id,
             name = assetResponse.name,
             imageUrl = assetResponse.image_url,

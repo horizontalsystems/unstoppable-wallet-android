@@ -16,10 +16,10 @@ class NftManager(
             nftDao.getCollections(accountId),
             nftDao.getAssets(accountId)
         ) { collections, assets ->
-            val assetsGroupByCollection = assets.groupBy { it.collectionSlug }
+            val assetsGroupByCollection = assets.groupBy { it.collectionUid }
 
             collections.map {
-                val collectionAssets = assetsGroupByCollection[it.slug] ?: listOf()
+                val collectionAssets = assetsGroupByCollection[it.uid] ?: listOf()
                 it to collectionAssets
             }.toMap()
         }
