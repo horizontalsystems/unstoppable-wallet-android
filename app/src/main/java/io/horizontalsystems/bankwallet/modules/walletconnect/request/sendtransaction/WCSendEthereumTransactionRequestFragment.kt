@@ -39,17 +39,17 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
+class WCSendEthereumTransactionRequestFragment : BaseFragment() {
     private val logger = AppLogger("wallet-connect")
-    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment)
+    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.wcSessionFragment)
     val vmFactory by lazy {
         WalletConnectRequestModule.Factory(
             baseViewModel.sharedSendEthereumTransactionRequest!!, baseViewModel.service
         )
     }
-    private val viewModel by viewModels<WalletConnectSendEthereumTransactionRequestViewModel> { vmFactory }
+    private val viewModel by viewModels<WCSendEthereumTransactionRequestViewModel> { vmFactory }
     private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
-    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.walletConnectSendEthereumTransactionRequestFragment) { vmFactory }
+    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.wcSendEthereumTransactionRequestFragment) { vmFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -114,7 +114,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
 private fun RequestScreen(
     navController: NavController,
     baseViewModel: WalletConnectViewModel,
-    viewModel: WalletConnectSendEthereumTransactionRequestViewModel,
+    viewModel: WCSendEthereumTransactionRequestViewModel,
     sendEvmTransactionViewModel: SendEvmTransactionViewModel,
     feeViewModel: EvmFeeCellViewModel,
     logger: AppLogger,

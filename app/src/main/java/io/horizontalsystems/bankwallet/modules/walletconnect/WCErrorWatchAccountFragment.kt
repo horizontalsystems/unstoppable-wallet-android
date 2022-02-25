@@ -26,7 +26,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFr
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 
-class WalletConnectErrorWatchAccountFragment : BaseComposableBottomSheetFragment() {
+class WCErrorWatchAccountFragment : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

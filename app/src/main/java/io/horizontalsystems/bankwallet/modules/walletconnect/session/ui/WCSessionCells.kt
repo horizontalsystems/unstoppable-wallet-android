@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectMainViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
 
@@ -70,7 +70,7 @@ fun TitleValueCell(title: String, value: String) {
 }
 
 @Composable
-fun StatusCell(connectionStatus: WalletConnectMainViewModel.Status?) {
+fun StatusCell(connectionStatus: WCSessionViewModel.Status?) {
     Row(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -86,9 +86,9 @@ fun StatusCell(connectionStatus: WalletConnectMainViewModel.Status?) {
         Spacer(Modifier.weight(1f))
         connectionStatus?.let { status ->
             val color = when (status) {
-                WalletConnectMainViewModel.Status.OFFLINE -> ComposeAppTheme.colors.lucian
-                WalletConnectMainViewModel.Status.CONNECTING -> ComposeAppTheme.colors.leah
-                WalletConnectMainViewModel.Status.ONLINE -> ComposeAppTheme.colors.remus
+                WCSessionViewModel.Status.OFFLINE -> ComposeAppTheme.colors.lucian
+                WCSessionViewModel.Status.CONNECTING -> ComposeAppTheme.colors.leah
+                WCSessionViewModel.Status.ONLINE -> ComposeAppTheme.colors.remus
             }
             Text(
                 text = stringResource(status.value),

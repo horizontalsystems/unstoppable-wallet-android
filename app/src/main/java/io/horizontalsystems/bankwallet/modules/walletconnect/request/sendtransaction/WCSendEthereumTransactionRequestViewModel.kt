@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransa
 
 import androidx.lifecycle.ViewModel
 
-class WalletConnectSendEthereumTransactionRequestViewModel(
-        private val service: WalletConnectSendEthereumTransactionRequestService
+class WCSendEthereumTransactionRequestViewModel(
+        private val service: WCSendEthereumTransactionRequestService
 ) : ViewModel() {
 
     fun approve(transactionHash: ByteArray) {

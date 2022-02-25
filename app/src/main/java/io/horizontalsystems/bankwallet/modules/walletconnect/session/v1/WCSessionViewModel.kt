@@ -14,7 +14,7 @@ import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 
-class WalletConnectMainViewModel(private val service: WC1Service) : ViewModel() {
+class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
 
     val connectingLiveData = MutableLiveData<Boolean>()
     val peerMetaLiveData = MutableLiveData<PeerMetaViewItem?>()

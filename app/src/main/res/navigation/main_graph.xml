@@ -476,12 +476,12 @@
         tools:layout="@layout/fragment_swap_select_token" />
 
     <dialog
-        android:id="@+id/walletConnectErrorNoAccountFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorNoAccountFragment" />
+        android:id="@+id/wcErrorNoAccountFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment" />
 
     <dialog
-        android:id="@+id/walletConnectErrorWatchAccountFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorWatchAccountFragment" />
+        android:id="@+id/wcErrorWatchAccountFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorWatchAccountFragment" />
 
     <dialog
         android:id="@+id/backupRequiredDialog"
