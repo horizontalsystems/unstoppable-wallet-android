@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEth
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
 import io.horizontalsystems.ethereumkit.models.TransactionData
 
-class WalletConnectSendEthereumTransactionRequestService(
+class WCSendEthereumTransactionRequestService(
     private val request: WC1SendEthereumTransactionRequest,
     private val baseService: WC1Service
 ) {

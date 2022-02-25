@@ -31,7 +31,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionLi
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionsEmpty
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -39,7 +39,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
 
-class WalletConnectListFragment : BaseFragment() {
+class WCListFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,8 +66,8 @@ private fun WalletConnectSessionsScreen(navController: NavController) {
                 val wcVersion: Int = WalletConnectListModule.getVersionFromUri(scannedText)
                 if (wcVersion == 1) {
                     navController.slideFromBottom(
-                        R.id.walletConnectMainFragment,
-                        WalletConnectSessionModule.prepareParams(null, scannedText)
+                        R.id.wcSessionFragment,
+                        WCSessionModule.prepareParams(null, scannedText)
                     )
                 } else if (wcVersion == 2) {
                     navController.slideFromBottom(

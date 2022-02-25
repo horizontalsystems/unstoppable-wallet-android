@@ -20,7 +20,7 @@ import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeCount
@@ -105,8 +105,8 @@ private fun SessionCell(
                     )
                 } else {
                     navController.slideFromBottom(
-                        R.id.walletConnectMainFragment,
-                        WalletConnectSessionModule.prepareParams(
+                        R.id.wcSessionFragment,
+                        WCSessionModule.prepareParams(
                             session.sessionId,
                             null,
                         )

@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
 
-class WalletConnectDisplayTypedMessageFragment : BaseFragment() {
+class WCDisplayTypedMessageFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectMainViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Request
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2PingService
 import io.horizontalsystems.core.SingleLiveEvent
@@ -22,7 +22,7 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
 
     private val disposables = CompositeDisposable()
 
-    var peerMeta by mutableStateOf<WalletConnectSessionModule.PeerMetaItem?>(null)
+    var peerMeta by mutableStateOf<WCSessionModule.PeerMetaItem?>(null)
         private set
 
     var invalidUrlError by mutableStateOf(false)
@@ -43,7 +43,7 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
     var showError by mutableStateOf<String?>(null)
         private set
 
-    var status by mutableStateOf<WalletConnectMainViewModel.Status?>(null)
+    var status by mutableStateOf<WCSessionViewModel.Status?>(null)
         private set
 
     init {
@@ -110,11 +110,11 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
         service.reconnect()
     }
 
-    private fun getStatus(connectionState: WC2PingService.State): WalletConnectMainViewModel.Status? {
+    private fun getStatus(connectionState: WC2PingService.State): WCSessionViewModel.Status? {
         return when (connectionState) {
-            WC2PingService.State.Connecting -> WalletConnectMainViewModel.Status.CONNECTING
-            WC2PingService.State.Connected -> WalletConnectMainViewModel.Status.ONLINE
-            is WC2PingService.State.Disconnected -> WalletConnectMainViewModel.Status.OFFLINE
+            WC2PingService.State.Connecting -> WCSessionViewModel.Status.CONNECTING
+            WC2PingService.State.Connected -> WCSessionViewModel.Status.ONLINE
+            is WC2PingService.State.Disconnected -> WCSessionViewModel.Status.OFFLINE
         }
     }
 

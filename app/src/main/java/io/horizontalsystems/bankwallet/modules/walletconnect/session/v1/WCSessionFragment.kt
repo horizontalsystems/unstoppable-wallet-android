@@ -33,8 +33,8 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewMo
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.WCSessionError
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule.CONNECTION_LINK_KEY
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WalletConnectSessionModule.REMOTE_PEER_ID_KEY
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule.CONNECTION_LINK_KEY
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule.REMOTE_PEER_ID_KEY
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SignMessageRequest
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -44,17 +44,17 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class WalletConnectSessionFragment : BaseFragment() {
+class WCSessionFragment : BaseFragment() {
 
-    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment) {
+    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.wcSessionFragment) {
         WalletConnectModule.Factory(
             arguments?.getString(REMOTE_PEER_ID_KEY),
             arguments?.getString(CONNECTION_LINK_KEY)
             )
     }
 
-    private val viewModel by viewModels<WalletConnectMainViewModel> {
-        WalletConnectSessionModule.Factory(baseViewModel.service)
+    private val viewModel by viewModels<WCSessionViewModel> {
+        WCSessionModule.Factory(baseViewModel.service)
     }
 
     override fun onCreateView(
@@ -89,14 +89,14 @@ class WalletConnectSessionFragment : BaseFragment() {
                     baseViewModel.sharedSendEthereumTransactionRequest = it
 
                     findNavController().slideFromBottom(
-                        R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment
+                        R.id.wcMainFragment_to_wcSendEthereumTransactionRequestFragment
                     )
                 }
                 is WC1SignMessageRequest -> {
                     baseViewModel.sharedSignMessageRequest = it
 
                     findNavController().slideFromBottom(
-                        R.id.walletConnectMainFragment_to_walletConnectSignMessageRequestFragment
+                        R.id.wcMainFragment_to_wcSignMessageRequestFragment
                     )
                 }
             }
@@ -112,7 +112,7 @@ class WalletConnectSessionFragment : BaseFragment() {
 @Composable
 fun WCSessionPage(
     navController: NavController,
-    viewModel: WalletConnectMainViewModel,
+    viewModel: WCSessionViewModel,
 ) {
     val closeEnabled by viewModel.closeEnabledLiveData.observeAsState(false)
     val connecting by viewModel.connectingLiveData.observeAsState(false)
@@ -147,7 +147,7 @@ fun WCSessionPage(
 
 @Composable
 private fun ColumnScope.WCSessionListContent(
-    viewModel: WalletConnectMainViewModel
+    viewModel: WCSessionViewModel
 ) {
     val status by viewModel.statusLiveData.observeAsState()
     val peerMeta by viewModel.peerMetaLiveData.observeAsState()
@@ -216,8 +216,8 @@ private fun ColumnScope.WCSessionListContent(
 
 @Composable
 private fun ActionButtons(
-    viewModel: WalletConnectMainViewModel,
-    buttonsStates: WalletConnectMainViewModel.ButtonStates
+    viewModel: WCSessionViewModel,
+    buttonsStates: WCSessionViewModel.ButtonStates
 ) {
     Column(Modifier.padding(horizontal = 24.dp)) {
         if (buttonsStates.connect.visible) {

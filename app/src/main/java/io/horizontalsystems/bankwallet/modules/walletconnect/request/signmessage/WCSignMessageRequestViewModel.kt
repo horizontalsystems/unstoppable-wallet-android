@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessag
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.core.SingleLiveEvent
 
-class WalletConnectSignMessageRequestViewModel(
-        private val service: WalletConnectSignMessageRequestService
+class WCSignMessageRequestViewModel(
+        private val service: WCSignMessageRequestModule.RequestAction
 ) : ViewModel() {
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val message = service.message

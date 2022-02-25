@@ -12,10 +12,10 @@ import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceServi
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestService
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestService
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestViewModel
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.models.Address
@@ -38,7 +38,7 @@ object WalletConnectRequestModule {
                 NetworkType.BscMainNet -> App.coinManager.getPlatformCoin(CoinType.BinanceSmartChain)!!
             }
         }
-        private val service by lazy { WalletConnectSendEthereumTransactionRequestService(request, baseService) }
+        private val service by lazy { WCSendEthereumTransactionRequestService(request, baseService) }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val gasPriceProvider = LegacyGasPriceProvider(evmKitWrapper.evmKit)
             when (evmKitWrapper.evmKit.networkType) {
@@ -68,8 +68,8 @@ object WalletConnectRequestModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
-                WalletConnectSendEthereumTransactionRequestViewModel::class.java -> {
-                    WalletConnectSendEthereumTransactionRequestViewModel(service) as T
+                WCSendEthereumTransactionRequestViewModel::class.java -> {
+                    WCSendEthereumTransactionRequestViewModel(service) as T
                 }
                 EvmFeeCellViewModel::class.java -> {
                     EvmFeeCellViewModel(feeService, gasPriceService, coinServiceFactory.baseCoinService) as T

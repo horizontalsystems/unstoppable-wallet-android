@@ -161,10 +161,10 @@ private fun SettingSections(
                             navController.slideFromRight(R.id.mainFragment_to_walletConnect)
                         }
                         WC1Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                            navController.slideFromBottom(R.id.walletConnectErrorNoAccountFragment)
+                            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
                         }
                         WC1Manager.SupportState.NotSupportedDueToWatchAccount -> {
-                            navController.slideFromBottom(R.id.walletConnectErrorWatchAccountFragment)
+                            navController.slideFromBottom(R.id.wcErrorWatchAccountFragment)
                         }
                     }
                 }

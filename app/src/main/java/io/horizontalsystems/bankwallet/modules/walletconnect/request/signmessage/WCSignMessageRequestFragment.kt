@@ -25,23 +25,23 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectRequestModule.TYPED_MESSAGE
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WalletConnectSignMessageRequestService.SignMessage
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestModule.SignMessage
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleTypedValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
-class WalletConnectSignMessageRequestFragment : BaseFragment() {
+class WCSignMessageRequestFragment : BaseFragment() {
 
-    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment)
+    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.wcSessionFragment)
     val vmFactory by lazy {
-        WalletConnectSignMessageRequestModule.Factory(
+        WCSignMessageRequestModule.Factory(
             baseViewModel.sharedSignMessageRequest!!,
             baseViewModel.service
         )
     }
-    private val viewModel by viewModels<WalletConnectSignMessageRequestViewModel> { vmFactory }
+    private val viewModel by viewModels<WCSignMessageRequestViewModel> { vmFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,7 +79,7 @@ class WalletConnectSignMessageRequestFragment : BaseFragment() {
 @Composable
 private fun SignMessageRequestScreen(
     navController: NavController,
-    viewModel: WalletConnectSignMessageRequestViewModel,
+    viewModel: WCSignMessageRequestViewModel,
 ) {
 
     ComposeAppTheme {
@@ -161,7 +161,7 @@ fun SignMessageButton(title: String, data: String, navController: NavController)
             .height(48.dp)
             .clickable {
                 navController.slideFromBottom(
-                    R.id.walletConnectSignMessageRequestFragment_to_walletConnectDisplayTypedMessageFragment,
+                    R.id.wcSignMessageRequestFragment_to_wcDisplayTypedMessageFragment,
                     bundleOf(TYPED_MESSAGE to data)
                 )
             }
