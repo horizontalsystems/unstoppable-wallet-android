@@ -7,7 +7,7 @@ import java.math.BigDecimal
 @Entity(primaryKeys = ["accountId", "tokenId"])
 data class NftAssetRecord(
     val accountId: String,
-    val collectionSlug: String,
+    val collectionUid: String,
     val tokenId: String,
     val name: String,
     val imageUrl: String,
@@ -30,5 +30,5 @@ data class NftAssetLastSale(
 
 data class NftAssetContract(
     val address: String,
-    val schemaName: String
+    val type: String
 )

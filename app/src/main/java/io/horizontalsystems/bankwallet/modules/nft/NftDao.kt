@@ -35,7 +35,7 @@ interface NftDao {
         insertAssets(assetRecords)
     }
 
-    @Query("SELECT * FROM NftCollectionRecord WHERE accountId = :accountId AND slug = :slug")
+    @Query("SELECT * FROM NftCollectionRecord WHERE accountId = :accountId AND uid = :slug")
     fun getCollection(accountId: String, slug: String): NftCollectionRecord?
 }
 

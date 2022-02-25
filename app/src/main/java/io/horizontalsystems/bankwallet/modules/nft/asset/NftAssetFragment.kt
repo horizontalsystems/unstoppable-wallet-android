@@ -274,7 +274,7 @@ private fun NftAsset(asset: NftAssetItem) {
                         add {
                             DetailItem(
                                 stringResource(id = R.string.NftAsset_TokenStandard),
-                                asset.contract.schemaName
+                                asset.contract.type
                             )
                         }
                         add {

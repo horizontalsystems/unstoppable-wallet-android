@@ -4,10 +4,10 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import java.math.BigDecimal
 
-@Entity(primaryKeys = ["accountId", "slug"])
+@Entity(primaryKeys = ["accountId", "uid"])
 data class NftCollectionRecord(
     val accountId: String,
-    val slug: String,
+    val uid: String,
     val name: String,
     val imageUrl: String,
 
