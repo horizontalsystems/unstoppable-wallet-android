@@ -6,11 +6,7 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule.PeerMetaItem
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2PingService
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.*
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -19,7 +15,7 @@ import io.reactivex.subjects.PublishSubject
 
 class WC2SessionService(
     private val service: WC2Service,
-    private val wcManager: WC1Manager,
+    private val wcManager: WC2Manager,
     private val sessionManager: WC2SessionManager,
     private val accountManager: IAccountManager,
     private val pingService: WC2PingService,
@@ -47,6 +43,10 @@ class WC2SessionService(
     private val stateSubject = PublishSubject.create<State>()
     val stateObservable: Flowable<State>
         get() = stateSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    private val pendingRequestSubject = PublishSubject.create<WalletConnect.Model.SessionRequest>()
+    val pendingRequestObservable: Flowable<WalletConnect.Model.SessionRequest>
+        get() = pendingRequestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     var state: State = State.Idle
         private set(value) {
@@ -131,6 +131,10 @@ class WC2SessionService(
                     }
                     is WC2Service.Event.Error -> {
                         state = State.Invalid(event.error)
+                    }
+                    is WC2Service.Event.SessionRequest -> {
+                        pendingRequestSubject.onNext(event.sessionRequest)
+                        pingService.receiveResponse()
                     }
                 }
             }

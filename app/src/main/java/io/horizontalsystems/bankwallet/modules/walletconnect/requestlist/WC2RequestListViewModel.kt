@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.requestlist
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.walletconnect.RequestType
 import io.reactivex.disposables.CompositeDisposable
 
 class WC2RequestListViewModel(
@@ -39,6 +40,7 @@ class WC2RequestListViewModel(
                 requests = item.requests.map { request ->
                     WC2RequestListModule.RequestViewItem(
                         request.id,
+                        RequestType.fromString(request.method),
                         title(request.method),
                         request.sessionName,
                     )

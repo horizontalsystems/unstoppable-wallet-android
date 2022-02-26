@@ -16,7 +16,7 @@ object WC2SessionModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val sessionService = WC2SessionService(
                 App.wc2Service,
-                App.wc1Manager,
+                App.wc2Manager,
                 App.wc2SessionManager,
                 App.accountManager,
                 WC2PingService(),

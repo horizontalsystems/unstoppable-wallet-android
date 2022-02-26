@@ -14,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 class WC2SessionManager(
     private val accountManager: IAccountManager,
     private val storage: WC2SessionStorage,
-    private val service: WC2Service
+    val service: WC2Service
 ) {
 
     private val TAG = "WC2SessionManager"
@@ -78,6 +78,15 @@ class WC2SessionManager(
 
     fun pendingRequests(accountId: String? = null): List<WalletConnect.Model.JsonRpcHistory.HistoryEntry>{
         return requests(accountId)
+    }
+
+    fun sessionByTopic(topic: String): WalletConnect.Model.SettledSession? {
+        return allSessions.firstOrNull { it.topic == topic }
+    }
+
+    fun pendingRequest(requestId: Long): WalletConnect.Model.JsonRpcHistory.HistoryEntry? {
+        val accountId = accountManager.activeAccount?.id ?: return null
+        return requests(accountId).firstOrNull { it.requestId == requestId }
     }
 
     private fun syncSessions() {

@@ -29,7 +29,7 @@ class WC1SignMessageRequestService(
             WCSignType.TYPED_MESSAGE -> {
                 val typeData = signer.parseTypedData(messageData)
                 val domain = typeData?.domain?.get("name")?.toString()
-                SignMessage.TypedMessage(messageData, domain ?: "")
+                SignMessage.TypedMessage(messageData, domain ?: "", null)
             }
         }
     }

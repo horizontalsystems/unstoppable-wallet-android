@@ -89,14 +89,14 @@ class WCSessionFragment : BaseFragment() {
                     baseViewModel.sharedSendEthereumTransactionRequest = it
 
                     findNavController().slideFromBottom(
-                        R.id.wcMainFragment_to_wcSendEthereumTransactionRequestFragment
+                        R.id.wcSessionFragment_to_wcSendEthereumTransactionRequestFragment
                     )
                 }
                 is WC1SignMessageRequest -> {
                     baseViewModel.sharedSignMessageRequest = it
 
                     findNavController().slideFromBottom(
-                        R.id.wcMainFragment_to_wcSignMessageRequestFragment
+                        R.id.wcSessionFragment_to_wcSignMessageRequestFragment
                     )
                 }
             }

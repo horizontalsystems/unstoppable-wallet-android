@@ -25,6 +25,9 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.walletconnect.RequestType
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.WCSessionError
@@ -72,24 +75,20 @@ class WC2SessionFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-//        viewModel.openRequestLiveEvent.observe(viewLifecycleOwner) {
-//            when (it) {
-//                is WC1SendEthereumTransactionRequest -> {
-//                    baseViewModel.sharedSendEthereumTransactionRequest = it
-//
-//                    findNavController().slideFromBottom(
-//                        R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment
-//                    )
-//                }
-//                is WC1SignMessageRequest -> {
-//                    baseViewModel.sharedSignMessageRequest = it
-//
-//                    findNavController().slideFromBottom(
-//                        R.id.walletConnectMainFragment_to_walletConnectSignMessageRequestFragment
-//                    )
-//                }
-//            }
-//        }
+        viewModel.openRequestLiveEvent.observe(viewLifecycleOwner) { (requestId, requestType) ->
+            when (requestType) {
+                RequestType.PersonalSign,
+                RequestType.EthSignTypedData -> {
+                    findNavController().slideFromBottom(
+                        R.id.wc2SessionFragment_to_wc2SignMessageRequestFragment,
+                        WC2SignMessageRequestFragment.prepareParams(requestId)
+                    )
+                }
+                RequestType.EthSendTransaction -> {
+
+                }
+            }
+        }
 
     }
 
