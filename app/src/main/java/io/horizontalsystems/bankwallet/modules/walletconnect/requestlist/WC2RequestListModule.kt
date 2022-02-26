@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.requestlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.walletconnect.RequestType
 
 object WC2RequestListModule {
 
@@ -24,6 +25,7 @@ object WC2RequestListModule {
 
     data class RequestViewItem(
         val requestId: Long,
+        val type: RequestType?,
         val title: String,
         val subtitle: String,
     )

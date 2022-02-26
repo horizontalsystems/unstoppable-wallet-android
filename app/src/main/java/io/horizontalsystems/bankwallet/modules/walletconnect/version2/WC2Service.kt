@@ -149,13 +149,10 @@ class WC2Service : WalletConnectClient.WalletDelegate {
         sessionsUpdatedSubject.onNext(Unit)
     }
 
-    fun respondRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
+    fun respondPendingRequest(requestId: Long, topic: String, data: String){
         val response = WalletConnect.Params.Response(
-            sessionTopic = sessionRequest.topic,
-            jsonRpcResponse = WalletConnect.Model.JsonRpcResponse.JsonRpcResult(
-                sessionRequest.request.id,
-                "0xa3f20717a250c2b0b729b7e5becbff67fdaef7e0699da4de7ca5895b02a170a12d887fd3b17bfdce3481f10bea41f45ba9f709d39ce8325427b57afcfc994cee1b"
-            )
+            sessionTopic = topic,
+            jsonRpcResponse = WalletConnect.Model.JsonRpcResponse.JsonRpcResult(requestId, data)
         )
 
         WalletConnectClient.respond(response, object : WalletConnect.Listeners.SessionPayload {
@@ -168,12 +165,31 @@ class WC2Service : WalletConnectClient.WalletDelegate {
         pendingRequestUpdatedSubject.onNext(Unit)
     }
 
-    fun rejectRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
+//    fun respondRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
+//        val response = WalletConnect.Params.Response(
+//            sessionTopic = sessionRequest.topic,
+//            jsonRpcResponse = WalletConnect.Model.JsonRpcResponse.JsonRpcResult(
+//                sessionRequest.request.id,
+//                "0xa3f20717a250c2b0b729b7e5becbff67fdaef7e0699da4de7ca5895b02a170a12d887fd3b17bfdce3481f10bea41f45ba9f709d39ce8325427b57afcfc994cee1b"
+//            )
+//        )
+//
+//        WalletConnectClient.respond(response, object : WalletConnect.Listeners.SessionPayload {
+//            override fun onError(error: Throwable) {
+//                Log.e(TAG, "onError: ", error)
+//                event = Event.Error(error)
+//            }
+//        })
+//
+//        pendingRequestUpdatedSubject.onNext(Unit)
+//    }
+
+    fun rejectRequest(topic: String, requestId: Long) {
         val response = WalletConnect.Params.Response(
-            sessionTopic = sessionRequest.topic,
+            sessionTopic = topic,
             jsonRpcResponse = WalletConnect.Model.JsonRpcResponse.JsonRpcError(
-                sessionRequest.request.id,
-                WalletConnect.Model.JsonRpcResponse.Error(500, "Kotlin Wallet Error")
+                requestId,
+                WalletConnect.Model.JsonRpcResponse.Error(500, "Unstoppable Wallet Error")
             )
         )
 

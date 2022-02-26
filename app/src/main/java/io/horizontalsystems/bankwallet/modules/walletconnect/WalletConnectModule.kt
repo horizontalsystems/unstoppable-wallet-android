@@ -31,3 +31,15 @@ object WalletConnectModule {
     object UnsupportedChainId : SessionError()
 
 }
+
+enum class RequestType(val value: String) {
+    PersonalSign("personal_sign"),
+    EthSignTypedData("eth_signTypedData"),
+    EthSendTransaction("eth_sendTransaction");
+
+    companion object {
+        private val map = values().associateBy(RequestType::value)
+
+        fun fromString(value: String?): RequestType? = map[value]
+    }
+}

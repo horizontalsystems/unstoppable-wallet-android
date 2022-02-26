@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.requestlist
 
-import com.google.gson.JsonParser
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -89,7 +89,7 @@ class WC2RequestListService(
                                 id = request.requestId,
                                 sessionName = allSessions.firstOrNull { it.topic == request.topic }?.peerAppMetaData?.name
                                     ?: "",
-                                method = getMethod(request.body),
+                                method = WC2Parser.getSessionRequestMethod(request.body),
                                 chainId = null
                             )
                         }
@@ -99,17 +99,5 @@ class WC2RequestListService(
         }
 
         items = itemList
-    }
-
-    private fun getMethod(body: String?): String? {
-        body?.let { string ->
-            val parsed = JsonParser.parseString(string)
-            if (parsed.isJsonObject) {
-                val params = parsed.asJsonObject.get("params").asJsonObject
-                val request = params.get("request").asJsonObject
-                return request.get("method").asString
-            }
-        }
-        return null
     }
 }
