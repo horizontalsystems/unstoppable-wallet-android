@@ -6,15 +6,15 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 class NftAssetItemsPricedWithCurrencyRepository(
     private val xRateRepository: BalanceXRateRepository
 ) {
-    private val _itemsFlow = MutableStateFlow<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>>(mapOf())
-    val itemsFlow = _itemsFlow.asStateFlow()
+    private val _itemsFlow = MutableSharedFlow<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val itemsFlow = _itemsFlow.asSharedFlow()
 
     val baseCurrency by xRateRepository::baseCurrency
 
@@ -31,24 +31,25 @@ class NftAssetItemsPricedWithCurrencyRepository(
     }
 
     private fun handleUpdatedRates(latestRates: Map<String, CoinPrice?>) {
-        _itemsFlow.update {
-            it.map { (collectionRecord, items) ->
-                collectionRecord to items.map { item ->
-                    val coinPrice = item.coinPrice
-                    val itemCoinUid = coinPrice?.coin?.uid
-                    if (latestRates.containsKey(itemCoinUid)) {
-                        val currencyPrice = latestRates[itemCoinUid]?.let { latestRate ->
-                            coinPrice?.let {
-                                CurrencyValue(xRateRepository.baseCurrency, coinPrice.value.multiply(latestRate.value))
-                            }
+        val currentValue = _itemsFlow.replayCache.lastOrNull() ?: return
+        val updatedValue = currentValue.map { (collectionRecord, items) ->
+            collectionRecord to items.map { item ->
+                val coinPrice = item.coinPrice
+                val itemCoinUid = coinPrice?.coin?.uid
+                if (latestRates.containsKey(itemCoinUid)) {
+                    val currencyPrice = latestRates[itemCoinUid]?.let { latestRate ->
+                        coinPrice?.let {
+                            CurrencyValue(xRateRepository.baseCurrency, coinPrice.value.multiply(latestRate.value))
                         }
-                        item.copy(currencyPrice = currencyPrice)
-                    } else {
-                        item
                     }
+                    item.copy(currencyPrice = currencyPrice)
+                } else {
+                    item
                 }
-            }.toMap()
-        }
+            }
+        }.toMap()
+
+        _itemsFlow.tryEmit(updatedValue)
     }
 
     fun setItems(itemsPriced: Map<NftCollectionRecord, List<NftAssetItemPriced>>) {
@@ -78,7 +79,7 @@ class NftAssetItemsPricedWithCurrencyRepository(
             }
         }.toMap()
 
-        _itemsFlow.update { items }
+        _itemsFlow.tryEmit(items)
     }
 
     fun stop() {
