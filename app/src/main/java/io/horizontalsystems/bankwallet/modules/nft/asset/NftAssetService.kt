@@ -5,10 +5,11 @@ import io.horizontalsystems.bankwallet.modules.nft.NftManager
 class NftAssetService(
     private val accountId: String,
     private val tokenId: String,
+    private val contractAddress: String,
     private val nftManager: NftManager
 ) {
     suspend fun fetchItem(): NftAssetModuleAssetItem {
-        val assetRecord = nftManager.getAssetRecord(accountId, tokenId) ?: throw NftNotFoundException()
+        val assetRecord = nftManager.getAssetRecord(accountId, tokenId, contractAddress) ?: throw NftNotFoundException()
         val collectionRecord = nftManager.getCollectionRecord(accountId, assetRecord.collectionUid) ?: throw NftNotFoundException()
 
         return NftAssetModuleAssetItem(

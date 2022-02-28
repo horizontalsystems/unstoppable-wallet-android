@@ -10,20 +10,26 @@ import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
 
 object NftAssetModule {
     @Suppress("UNCHECKED_CAST")
-    class Factory(private val accountId: String, private val tokenId: String) :
+    class Factory(
+        private val accountId: String,
+        private val tokenId: String,
+        private val contractAddress: String
+    ) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = NftAssetService(accountId, tokenId, App.nftManager)
+            val service = NftAssetService(accountId, tokenId, contractAddress, App.nftManager)
             return NftAssetViewModel(service) as T
         }
     }
 
     internal const val accountIdKey = "accountIdKey"
     internal const val tokenIdKey = "tokenIdKey"
+    internal const val contractAddressKey = "contractAddressKey"
 
-    fun prepareParams(accountId: String, tokenId: String) = bundleOf(
+    fun prepareParams(accountId: String, tokenId: String, contractAddress: String) = bundleOf(
         accountIdKey to accountId,
-        tokenIdKey to tokenId
+        tokenIdKey to tokenId,
+        contractAddressKey to contractAddress,
     )
 }
 

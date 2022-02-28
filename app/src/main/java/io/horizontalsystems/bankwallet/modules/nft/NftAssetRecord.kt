@@ -5,7 +5,7 @@ import androidx.room.Entity
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
 import java.math.BigDecimal
 
-@Entity(primaryKeys = ["accountId", "tokenId"])
+@Entity(primaryKeys = ["accountId", "tokenId", "contract_address"])
 data class NftAssetRecord(
     val accountId: String,
     val collectionUid: String,
@@ -19,7 +19,7 @@ data class NftAssetRecord(
     @Embedded
     val lastSale: NftAssetPrice?,
 
-    @Embedded
+    @Embedded(prefix = "contract_")
     val contract: NftAssetContract,
 
     @Embedded

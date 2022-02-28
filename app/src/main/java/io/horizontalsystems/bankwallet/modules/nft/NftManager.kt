@@ -35,8 +35,8 @@ class NftManager(
         nftDao.replaceCollectionAssets(account.id, collections, assets)
     }
 
-    suspend fun getAssetRecord(accountId: String, tokenId: String): NftAssetRecord? {
-        return nftDao.getAsset(accountId, tokenId)
+    suspend fun getAssetRecord(accountId: String, tokenId: String, contractAddress: String): NftAssetRecord? {
+        return nftDao.getAsset(accountId, tokenId, contractAddress)
     }
 
     fun getCollectionRecord(accountId: String, collectionSlug: String): NftCollectionRecord? {
