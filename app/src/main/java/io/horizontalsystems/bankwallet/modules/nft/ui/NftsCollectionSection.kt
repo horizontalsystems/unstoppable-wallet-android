@@ -1,20 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.nft.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItemPricedWithCurrency
@@ -23,14 +21,12 @@ import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionsView
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 
-@OptIn(ExperimentalCoilApi::class, androidx.compose.animation.ExperimentalAnimationApi::class)
-@Composable
-fun NftsCollectionSection(
+fun LazyListScope.nftsCollectionSection(
     collection: NftCollectionViewItem,
     viewModel: NftCollectionsViewModel,
     onClickAsset: (NftAssetItemPricedWithCurrency) -> Unit
 ) {
-    Column {
+    item(key = "${collection.slug}-header") {
         CellSingleLineClear(
             modifier = Modifier
                 .clickable(
@@ -75,28 +71,31 @@ fun NftsCollectionSection(
                 tint = ComposeAppTheme.colors.grey
             )
         }
+    }
 
-        AnimatedVisibility(visible = collection.expanded) {
-            Column(
-                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 32.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                collection.assets.chunked(2).forEach {
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        it.forEach { asset ->
-                            Box(modifier = Modifier.weight(1f)) {
-                                NftPreview(asset) {
-                                    onClickAsset.invoke(asset)
-                                }
+    if (collection.expanded) {
+        collection.assets.chunked(2).forEachIndexed { index, assets ->
+            item(key = "${collection.slug}-content-row-$index") {
+                Row(
+                    modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    assets.forEach { asset ->
+                        Box(modifier = Modifier.weight(1f)) {
+                            NftPreview(asset) {
+                                onClickAsset.invoke(asset)
                             }
                         }
+                    }
 
-                        if (it.size == 1) {
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
+                    if (assets.size == 1) {
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                 }
             }
+        }
+        item(key = "${collection.slug}-content-bottom-space") {
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
