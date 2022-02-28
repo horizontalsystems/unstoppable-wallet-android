@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -28,7 +27,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
-import io.horizontalsystems.bankwallet.modules.nft.ui.NftsCollectionSection
+import io.horizontalsystems.bankwallet.modules.nft.ui.nftsCollectionSection
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -113,11 +112,8 @@ fun NftCollectionsScreen(navController: NavController) {
                             }
 
                             LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
-                                items(
-                                    items = collections,
-                                    key = { it.slug }
-                                ) { collection ->
-                                    NftsCollectionSection(collection, viewModel) {
+                                collections.forEach { collection ->
+                                    nftsCollectionSection(collection, viewModel) {
                                         navController.slideFromBottom(R.id.nftAssetFragment, NftAssetModule.prepareParams(it.assetItem.accountId, it.assetItem.tokenId, it.assetItem.contract.address))
                                     }
                                 }
