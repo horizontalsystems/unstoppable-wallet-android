@@ -9,10 +9,10 @@ import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.update
 
 class NftAssetItemsRepository(
     private val nftManager: NftManager,
@@ -20,8 +20,8 @@ class NftAssetItemsRepository(
 ) {
     private var account: Account? = null
     private val _itemsFlow =
-        MutableStateFlow<Map<NftCollectionRecord, List<NftAssetItem>>>(mapOf())
-    val itemsFlow = _itemsFlow.asStateFlow()
+        MutableSharedFlow<Map<NftCollectionRecord, List<NftAssetItem>>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val itemsFlow = _itemsFlow.asSharedFlow()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var handleActiveAccountJob: Job? = null
@@ -53,14 +53,14 @@ class NftAssetItemsRepository(
     }
 
     private fun handleUpdatedCollectionAssets(collectionAssets: Map<NftCollectionRecord, List<NftAssetRecord>>) {
-        _itemsFlow.update {
+        _itemsFlow.tryEmit(
             collectionAssets.map { (collection, assets) ->
                 val assetItems = assets.map { asset ->
                     nftItemFactory.createNftAssetItem(asset, collection)
                 }
                 collection to assetItems
             }.toMap()
-        }
+        )
     }
 
     private fun getAddress(account: Account): Address {
