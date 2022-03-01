@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.ScrollableTabRow
@@ -111,78 +112,80 @@ private fun <T> HsChartLinePeriodsAndPoint(
     selectedPoint: SelectedPoint?,
     onSelectTab: (T) -> Unit,
 ) {
-    if (selectedPoint == null) {
+    Box {
         ChartTab(tabItems, onSelectTab)
-    } else {
-        TabPeriod(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(
-                    text = selectedPoint.value,
-                    style = ComposeAppTheme.typography.captionSB,
-                    color = ComposeAppTheme.colors.leah
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = selectedPoint.date,
-                    style = ComposeAppTheme.typography.caption,
-                    color = ComposeAppTheme.colors.grey
-                )
-            }
 
-            when (val extraData = selectedPoint.extraData) {
-                is SelectedPoint.ExtraData.Macd -> {
-                    Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                        extraData.histogram?.let {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = extraData.histogram,
-                                style = ComposeAppTheme.typography.caption,
-                                color = ComposeAppTheme.colors.lucian,
-                                textAlign = TextAlign.End
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            extraData.macd?.let {
+        if (selectedPoint != null) {
+            TabPeriod(
+                modifier = Modifier.background(ComposeAppTheme.colors.tyler).padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text(
+                        text = selectedPoint.value,
+                        style = ComposeAppTheme.typography.captionSB,
+                        color = ComposeAppTheme.colors.leah
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = selectedPoint.date,
+                        style = ComposeAppTheme.typography.caption,
+                        color = ComposeAppTheme.colors.grey
+                    )
+                }
+
+                when (val extraData = selectedPoint.extraData) {
+                    is SelectedPoint.ExtraData.Macd -> {
+                        Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                            extraData.histogram?.let {
                                 Text(
-                                    text = it,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = extraData.histogram,
                                     style = ComposeAppTheme.typography.caption,
-                                    color = ComposeAppTheme.colors.issykBlue,
+                                    color = ComposeAppTheme.colors.lucian,
                                     textAlign = TextAlign.End
                                 )
                             }
-                            Spacer(modifier = Modifier.width(4.dp))
-                            extraData.signal?.let {
-                                Text(
-                                    text = it,
-                                    style = ComposeAppTheme.typography.caption,
-                                    color = ComposeAppTheme.colors.jacob,
-                                    textAlign = TextAlign.End
-                                )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                extraData.macd?.let {
+                                    Text(
+                                        text = it,
+                                        style = ComposeAppTheme.typography.caption,
+                                        color = ComposeAppTheme.colors.issykBlue,
+                                        textAlign = TextAlign.End
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(4.dp))
+                                extraData.signal?.let {
+                                    Text(
+                                        text = it,
+                                        style = ComposeAppTheme.typography.caption,
+                                        color = ComposeAppTheme.colors.jacob,
+                                        textAlign = TextAlign.End
+                                    )
+                                }
                             }
                         }
                     }
-                }
-                is SelectedPoint.ExtraData.Volume -> {
-                    Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = stringResource(R.string.CoinPage_Volume),
-                            style = ComposeAppTheme.typography.caption,
-                            color = ComposeAppTheme.colors.grey,
-                            textAlign = TextAlign.End
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = extraData.volume,
-                            style = ComposeAppTheme.typography.caption,
-                            color = ComposeAppTheme.colors.grey,
-                            textAlign = TextAlign.End
-                        )
+                    is SelectedPoint.ExtraData.Volume -> {
+                        Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(R.string.CoinPage_Volume),
+                                style = ComposeAppTheme.typography.caption,
+                                color = ComposeAppTheme.colors.grey,
+                                textAlign = TextAlign.End
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = extraData.volume,
+                                style = ComposeAppTheme.typography.caption,
+                                color = ComposeAppTheme.colors.grey,
+                                textAlign = TextAlign.End
+                            )
+                        }
                     }
                 }
             }
