@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
+import com.walletconnect.walletconnectv2.client.WalletConnectClient
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
@@ -18,6 +19,12 @@ class MainActivity : BaseActivity() {
 
         navHost.navController.setGraph(R.navigation.main_graph, intent.extras)
         navHost.navController.addOnDestinationChangedListener(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        WalletConnectClient.shutdown()
     }
 
     override fun onTrimMemory(level: Int) {

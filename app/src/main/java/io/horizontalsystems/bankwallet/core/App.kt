@@ -321,7 +321,6 @@ class App : CoreApp(), WorkConfiguration.Provider  {
             else -> {  /*do nothing*/
             }
         }
-        WalletConnectClient.shutdown()
         super.onTrimMemory(level)
     }
 
