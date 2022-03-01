@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.requestlist
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Request
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -21,6 +23,10 @@ class WC2RequestListService(
     private val itemsSubject = PublishSubject.create<List<WC2RequestListModule.Item>>()
     val itemsObservable: Flowable<List<WC2RequestListModule.Item>>
         get() = itemsSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    private val pendingRequestSubject = PublishSubject.create<WC2Request>()
+    val pendingRequestObservable: Flowable<WC2Request>
+        get() = pendingRequestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     var items: List<WC2RequestListModule.Item> = listOf()
         set(value) {
@@ -41,6 +47,7 @@ class WC2RequestListService(
 
         sessionManager.pendingRequestsObservable
             .subscribeIO {
+                Log.e("TAG", "pendingRequestsObservable called: ", )
                 syncPendingRequests()
             }.let { disposables.add(it) }
 
@@ -54,6 +61,17 @@ class WC2RequestListService(
 
     fun select(accountId: String) {
         accountManager.setActiveAccountId(accountId)
+    }
+
+    fun onRequestClick(requestId: Long) {
+        try {
+            sessionManager.prepareRequestToOpen(requestId)
+            sessionManager.pendingRequestDataToOpen[requestId]?.let { requestData ->
+                pendingRequestSubject.onNext(requestData.pendingRequest)
+            }
+        } catch (error: Throwable){
+
+        }
     }
 
     private fun syncAccounts(accounts: List<Account>) {

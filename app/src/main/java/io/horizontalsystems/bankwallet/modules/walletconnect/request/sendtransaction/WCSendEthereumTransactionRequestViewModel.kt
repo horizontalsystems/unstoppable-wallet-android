@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransa
 import androidx.lifecycle.ViewModel
 
 class WCSendEthereumTransactionRequestViewModel(
-        private val service: WCSendEthereumTransactionRequestService
+        private val service: WCRequestModule.RequestAction
 ) : ViewModel() {
 
     fun approve(transactionHash: ByteArray) {
@@ -14,4 +14,7 @@ class WCSendEthereumTransactionRequestViewModel(
         service.reject()
     }
 
+    override fun onCleared() {
+        service.stop()
+    }
 }

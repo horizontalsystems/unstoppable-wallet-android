@@ -13,8 +13,8 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectRequestModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestModule.TYPED_MESSAGE
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleTypedValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -51,8 +51,8 @@ fun SignMessageRequestScreen(
                 Spacer(Modifier.height(12.dp))
 
                 when (val message = viewModel.message) {
-                    is WCSignMessageRequestModule.SignMessage.Message,
-                    is WCSignMessageRequestModule.SignMessage.PersonalMessage -> {
+                    is SignMessage.Message,
+                    is SignMessage.PersonalMessage -> {
                         Text(
                             modifier = Modifier.padding(horizontal = 24.dp),
                             text = message.data,
@@ -60,7 +60,7 @@ fun SignMessageRequestScreen(
                             style = ComposeAppTheme.typography.subhead2
                         )
                     }
-                    is WCSignMessageRequestModule.SignMessage.TypedMessage -> {
+                    is SignMessage.TypedMessage -> {
                         CellSingleLineLawrenceSection(
                             listOf({
                                 TitleTypedValueCell(
@@ -114,7 +114,7 @@ private fun SignMessageButton(title: String, data: String, navController: NavCon
             .clickable {
                 navController.slideFromBottom(
                     R.id.wcSignMessageRequestFragment_to_wcDisplayTypedMessageFragment,
-                    bundleOf(WalletConnectRequestModule.TYPED_MESSAGE to data)
+                    bundleOf(TYPED_MESSAGE to data)
                 )
             }
             .padding(horizontal = 16.dp),

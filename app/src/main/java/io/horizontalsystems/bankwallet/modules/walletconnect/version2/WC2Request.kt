@@ -1,51 +1,42 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.version1
+package io.horizontalsystems.bankwallet.modules.walletconnect.version2
 
-import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
-import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectTransaction
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
-import io.horizontalsystems.ethereumkit.core.toHexString
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.spv.core.toBigInteger
 import io.horizontalsystems.ethereumkit.spv.core.toLong
 import java.math.BigInteger
 
-interface WC1Request {
+interface WC2Request {
     val id: Long
-
-    fun convertResult(result: Any): String?
+    val topic: String
 }
 
-class WC1SendEthereumTransactionRequest(
+class WC2SendEthereumTransactionRequest(
         override val id: Long,
+        override val topic: String,
         val transaction: WalletConnectTransaction
-) : WC1Request {
+) : WC2Request {
 
-    constructor(id: Long, transaction: WCEthereumTransaction) : this(id, convertTx(transaction))
-
-    override fun convertResult(result: Any): String? {
-        return (result as? ByteArray)?.toHexString()
-    }
+    constructor(id: Long, topic: String, transaction: WC2EthereumTransaction) : this(id, topic, convertTx(transaction))
 
     sealed class TransactionError : Exception() {
         class NoRecipient : TransactionError()
     }
 }
 
-class WC1SignMessageRequest(
+class WC2SignMessageRequest(
         override val id: Long,
-        val message: WCEthereumSignMessage
-) : WC1Request {
+        override val topic: String,
+        val rawData: String,
+        val message: SignMessage
+) : WC2Request
 
-    override fun convertResult(result: Any): String? {
-        return (result as? ByteArray)?.toHexString()
-    }
-}
-
-fun convertTx(transaction: WCEthereumTransaction): WalletConnectTransaction {
+fun convertTx(transaction: WC2EthereumTransaction): WalletConnectTransaction {
     val to = transaction.to
     checkNotNull(to) {
-        throw WC1SendEthereumTransactionRequest.TransactionError.NoRecipient()
+        throw WC2SendEthereumTransactionRequest.TransactionError.NoRecipient()
     }
 
     return WalletConnectTransaction(
@@ -58,3 +49,14 @@ fun convertTx(transaction: WCEthereumTransaction): WalletConnectTransaction {
             data = transaction.data.hexStringToByteArray()
     )
 }
+
+data class WC2EthereumTransaction(
+    val from: String,
+    val to: String?,
+    val nonce: String?,
+    val gasPrice: String?,
+    val gas: String?,
+    val gasLimit: String?,
+    val value: String?,
+    val data: String
+)

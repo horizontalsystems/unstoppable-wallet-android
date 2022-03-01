@@ -44,8 +44,8 @@ class WC2SessionService(
     val stateObservable: Flowable<State>
         get() = stateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val pendingRequestSubject = PublishSubject.create<WalletConnect.Model.SessionRequest>()
-    val pendingRequestObservable: Flowable<WalletConnect.Model.SessionRequest>
+    private val pendingRequestSubject = PublishSubject.create<WC2Request>()
+    val pendingRequestObservable: Flowable<WC2Request>
         get() = pendingRequestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     var state: State = State.Idle
@@ -81,10 +81,6 @@ class WC2SessionService(
     private val disposables = CompositeDisposable()
 
     fun start() {
-        connectionLink?.let {
-            service.pair(it)
-        }
-
         topic?.let { topic ->
             val existingSession =
                 sessionManager.sessions.firstOrNull { it.topic == topic } ?: return@let
@@ -133,7 +129,15 @@ class WC2SessionService(
                         state = State.Invalid(event.error)
                     }
                     is WC2Service.Event.SessionRequest -> {
-                        pendingRequestSubject.onNext(event.sessionRequest)
+                        try {
+                            sessionManager.prepareRequestToOpen(event.sessionRequest.request.id)
+                            sessionManager.pendingRequestDataToOpen[event.sessionRequest.request.id]?.let { requestData ->
+                                pendingRequestSubject.onNext(requestData.pendingRequest)
+                            }
+                        } catch (throwable: Throwable) {
+                            state = State.Invalid(throwable)
+                        }
+
                         pingService.receiveResponse()
                     }
                 }
@@ -141,6 +145,10 @@ class WC2SessionService(
             .let {
                 disposables.add(it)
             }
+
+        connectionLink?.let {
+            service.pair(it)
+        }
     }
 
     fun stop() {

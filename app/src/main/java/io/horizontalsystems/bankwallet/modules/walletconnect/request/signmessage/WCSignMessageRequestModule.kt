@@ -10,6 +10,8 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SignMes
 
 object WCSignMessageRequestModule {
 
+    const val TYPED_MESSAGE = "typed_message"
+
     class Factory(
         private val signMessageRequest: WC1SignMessageRequest,
         private val baseService: WC1Service
@@ -37,8 +39,6 @@ object WCSignMessageRequestModule {
                 WCSignMessageRequestViewModel::class.java -> {
                     val service = WC2SignMessageRequestService(
                         requestId,
-                        App.wc2Manager,
-                        App.accountManager,
                         App.wc2SessionManager,
                     )
                     WCSignMessageRequestViewModel(service) as T
@@ -54,9 +54,10 @@ object WCSignMessageRequestModule {
         fun reject()
     }
 
-    sealed class SignMessage(val data: String) {
-        class Message(data: String) : SignMessage(data)
-        class PersonalMessage(data: String) : SignMessage(data)
-        class TypedMessage(data: String, val domain: String, val dAppName: String?) : SignMessage(data)
-    }
+}
+
+sealed class SignMessage(val data: String) {
+    class Message(data: String) : SignMessage(data)
+    class PersonalMessage(data: String) : SignMessage(data)
+    class TypedMessage(data: String, val domain: String, val dAppName: String?) : SignMessage(data)
 }

@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.version2
 
+import com.google.gson.Gson
 import com.google.gson.JsonParser
+import com.walletconnect.walletconnectv2.client.WalletConnect
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 
 object WC2Parser {
 
@@ -40,27 +44,74 @@ object WC2Parser {
         return null
     }
 
-    fun getMessageData(body: String?, address: String): String? {
+    fun getChainIdFromBody(body: String?): Int? {
         body?.let { string ->
             val parsed = JsonParser.parseString(string)
             if (parsed.isJsonObject) {
-                val params = parsed.asJsonObject.get("params").asJsonObject
-                val innerParams = params.get("request").asJsonObject.get("params").asJsonArray
-                return innerParams.firstOrNull { it.asString != address }?.asString
+                val chainIdData =
+                    parsed.asJsonObject.get("params").asJsonObject.get("chainId").asString
+                return getChainId(chainIdData)
             }
         }
         return null
     }
 
-    fun getChainIdFromBody(body: String?): Int? {
-        body?.let { string ->
+    fun parseTransactionRequest(
+        request: WalletConnect.Model.JsonRpcHistory.HistoryEntry,
+        address: String,
+        dAppName: String
+    ): WC2Request? {
+        request.body?.let { string ->
             val parsed = JsonParser.parseString(string)
             if (parsed.isJsonObject) {
-                val chainIdData = parsed.asJsonObject.get("params").asJsonObject.get("chainId").asString
-                return getChainId(chainIdData)
+                val requestNode =
+                    parsed.asJsonObject.get("params").asJsonObject.get("request").asJsonObject
+                when (requestNode.get("method").asString) {
+                    "eth_sendTransaction" -> {
+                        val params = requestNode.get("params").asJsonArray.first()
+                        val transaction =
+                            Gson().fromJson(params, WC2EthereumTransaction::class.java)
+                        return WC2SendEthereumTransactionRequest(
+                            request.requestId,
+                            request.topic,
+                            transaction
+                        )
+                    }
+                    "personal_sign" -> {
+                        val dataString = requestNode.get("params").asJsonArray
+                            .firstOrNull { it.asString != address }?.asString ?: ""
+                        val data = hexStringToUtf8String(dataString)
+                        return WC2SignMessageRequest(
+                            request.requestId,
+                            request.topic,
+                            dataString,
+                            SignMessage.PersonalMessage(data)
+                        )
+                    }
+                    "eth_signTypedData" -> {
+                        val dataString = requestNode.get("params").asJsonArray
+                            .firstOrNull { it.asString != address }?.asString ?: ""
+                        val data = hexStringToUtf8String(dataString)
+                        val domain = getSessionRequestDomainName(data) ?: ""
+                        val message = SignMessage.TypedMessage(data, domain, dAppName)
+                        return WC2SignMessageRequest(
+                            request.requestId,
+                            request.topic,
+                            dataString,
+                            message
+                        )
+                    }
+                }
+
             }
         }
         return null
+    }
+
+    private fun hexStringToUtf8String(hexString: String) = try {
+        String(hexString.hexStringToByteArray())
+    } catch (_: Throwable) {
+        hexString
     }
 
 }

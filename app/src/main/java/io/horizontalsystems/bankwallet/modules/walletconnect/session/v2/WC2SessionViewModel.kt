@@ -7,10 +7,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.walletconnect.RequestType
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2PingService
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Request
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
@@ -19,7 +19,7 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
     private val TAG = "WC2SessionViewModel"
 
     val closeLiveEvent = SingleLiveEvent<Unit>()
-    val openRequestLiveEvent = SingleLiveEvent<Pair<Long, RequestType>>()
+    val openRequestLiveEvent = SingleLiveEvent<WC2Request>()
 
     private val disposables = CompositeDisposable()
 
@@ -67,12 +67,8 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
             }
 
         service.pendingRequestObservable
-            .subscribeIO{ sessionRequest ->
-                val requestType = RequestType.fromString(sessionRequest.request.method)
-                requestType?.let {
-                    openRequestLiveEvent.postValue(Pair(sessionRequest.request.id, it))
-                }
-                Log.e(TAG, "request: ${sessionRequest.request.method}")
+            .subscribeIO{ wcRequest ->
+                openRequestLiveEvent.postValue(wcRequest)
             }.let {
                 disposables.add(it)
             }
