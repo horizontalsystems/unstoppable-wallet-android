@@ -28,6 +28,10 @@ class WC2SignMessageRequestService(
         pendingRequest.message
     }
 
+    override fun stop() {
+        sessionManager.pendingRequestDataToOpen.remove(requestId)
+    }
+
     private fun signMessage(request: WC2SignMessageRequest): ByteArray? {
         return when (request.message) {
             is SignMessage.Message,

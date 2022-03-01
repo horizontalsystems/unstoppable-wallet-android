@@ -34,6 +34,17 @@ class WC1SignMessageRequestService(
         }
     }
 
+    override fun sign() {
+        val signedMessage = signMessage(request.message)
+        baseService.approveRequest(request.id, signedMessage ?: byteArrayOf())
+    }
+
+    override fun reject() {
+        baseService.rejectRequest(request.id)
+    }
+
+    override fun stop() {}
+
     private fun hexStringToUtf8String(hexString: String) = try {
         String(hexString.hexStringToByteArray())
     } catch (_: Throwable) {
@@ -52,15 +63,6 @@ class WC1SignMessageRequestService(
                 }
             }
         }
-    }
-
-    override fun sign() {
-        val signedMessage = signMessage(request.message)
-        baseService.approveRequest(request.id, signedMessage ?: byteArrayOf())
-    }
-
-    override fun reject() {
-        baseService.rejectRequest(request.id)
     }
 
 }

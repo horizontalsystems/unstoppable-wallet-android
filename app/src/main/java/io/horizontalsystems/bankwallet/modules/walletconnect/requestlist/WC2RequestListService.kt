@@ -28,6 +28,10 @@ class WC2RequestListService(
     val pendingRequestObservable: Flowable<WC2Request>
         get() = pendingRequestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
+    private val errorSubject = PublishSubject.create<String>()
+    val errorObservable: Flowable<String>
+        get() = errorSubject.toFlowable(BackpressureStrategy.BUFFER)
+
     var items: List<WC2RequestListModule.Item> = listOf()
         set(value) {
             field = value
@@ -70,7 +74,7 @@ class WC2RequestListService(
                 pendingRequestSubject.onNext(requestData.pendingRequest)
             }
         } catch (error: Throwable){
-
+            errorSubject.onNext(error.message ?: error.javaClass.simpleName)
         }
     }
 

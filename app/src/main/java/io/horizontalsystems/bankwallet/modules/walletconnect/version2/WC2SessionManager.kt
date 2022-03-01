@@ -97,15 +97,17 @@ class WC2SessionManager(
 
     fun prepareRequestToOpen(requestId: Long) {
         val account = accountManager.activeAccount ?: throw RequestDataError.NoSuitableAccount
-        val request =
-            requests(account.id).firstOrNull { it.requestId == requestId } ?: throw Exception()
+        val request = requests(account.id)
+            .firstOrNull { it.requestId == requestId }
+            ?: throw RequestDataError.RequestNotFoundError
         val chainId =
             WC2Parser.getChainIdFromBody(request.body) ?: throw RequestDataError.UnsupportedChainId
         val evmKitWrapper =
             wcManager.evmKitWrapper(chainId, account) ?: throw RequestDataError.NoSuitableEvmKit
         val dAppName = sessionByTopic(request.topic)?.peerAppMetaData?.name ?: ""
+        val receiveAddress = evmKitWrapper.evmKit.receiveAddress.eip55
         val transactionRequest =
-            WC2Parser.parseTransactionRequest(request, evmKitWrapper.evmKit.receiveAddress.eip55, dAppName)
+            WC2Parser.parseTransactionRequest(request, receiveAddress, dAppName)
                 ?: throw RequestDataError.DataParsingError
         pendingRequestDataToOpen[requestId] = RequestData(transactionRequest, evmKitWrapper)
     }
@@ -114,11 +116,9 @@ class WC2SessionManager(
         val accountId = accountManager.activeAccount?.id ?: return
 
         val currentSessions = allSessions
-        Log.e(TAG, "syncSessions: ${currentSessions.size}")
 
         val allDbSessions = storage.getAllSessions()
         val allDbTopics = allDbSessions.map { it.topic }
-        Log.e(TAG, "allDbTopics: $allDbTopics")
 
         val newSessions = currentSessions.filter { !allDbTopics.contains(it.topic) }
         val deletedTopics = allDbTopics.filter { topic ->
@@ -188,6 +188,7 @@ class WC2SessionManager(
         object NoSuitableAccount : RequestDataError("No suitable account")
         object NoSuitableEvmKit : RequestDataError("No suitable evm kit")
         object DataParsingError : RequestDataError("Data parsing error")
+        object RequestNotFoundError : RequestDataError("Request not found error")
     }
 
 }

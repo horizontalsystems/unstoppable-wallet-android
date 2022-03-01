@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.ui.Requ
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SignMessageRequest
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 
 class WC2RequestListFragment : BaseFragment() {
 
@@ -57,6 +58,10 @@ class WC2RequestListFragment : BaseFragment() {
                     )
                 }
             }
+        }
+
+        viewModel.errorLiveEvent.observe(viewLifecycleOwner) { error ->
+            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), error)
         }
     }
 }
