@@ -50,8 +50,20 @@ fun FormsInput(
     val context = LocalContext.current
 
     val borderColor = when (state) {
-        is DataState.Error -> ComposeAppTheme.colors.red50
+        is DataState.Error -> {
+            if (state.error is FormsInputStateWarning) {
+                ComposeAppTheme.colors.yellow50
+            } else {
+                ComposeAppTheme.colors.red50
+            }
+        }
         else -> ComposeAppTheme.colors.steel20
+    }
+
+    val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
+        ComposeAppTheme.colors.jacob
+    } else {
+        ComposeAppTheme.colors.lucian
     }
 
     Column(modifier) {
@@ -115,7 +127,7 @@ fun FormsInput(
                         modifier = Modifier.padding(end = 8.dp),
                         painter = painterResource(id = R.drawable.ic_attention_20),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.lucian
+                        tint = cautionColor
                     )
                 }
                 is DataState.Success -> {
@@ -181,9 +193,11 @@ fun FormsInput(
             Text(
                 modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
                 text = it,
-                color = ComposeAppTheme.colors.lucian,
+                color = cautionColor,
                 style = ComposeAppTheme.typography.caption
             )
         }
     }
 }
+
+class FormsInputStateWarning(override val message: String?) : Exception()
