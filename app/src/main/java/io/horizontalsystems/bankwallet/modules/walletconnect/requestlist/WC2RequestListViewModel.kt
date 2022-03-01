@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.walletconnect.RequestType
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Request
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class WC2RequestListViewModel(
@@ -12,11 +14,19 @@ class WC2RequestListViewModel(
 
     private val disposables = CompositeDisposable()
     val sectionItems = MutableLiveData<List<WC2RequestListModule.SectionViewItem>>(listOf())
+    val openRequestLiveEvent = SingleLiveEvent<WC2Request>()
 
     init {
         service.itemsObservable
             .subscribeIO { sync(it) }
             .let { disposables.add(it) }
+
+        service.pendingRequestObservable
+            .subscribeIO{ wcRequest ->
+                openRequestLiveEvent.postValue(wcRequest)
+            }.let {
+                disposables.add(it)
+            }
 
         sync(service.items)
         service.start()
@@ -29,6 +39,10 @@ class WC2RequestListViewModel(
 
     fun onWalletSwitch(accountId: String) {
         service.select(accountId)
+    }
+
+    fun onRequestClick(requestViewItem: WC2RequestListModule.RequestViewItem) {
+        service.onRequestClick(requestViewItem.requestId)
     }
 
     private fun sync(items: List<WC2RequestListModule.Item>) {

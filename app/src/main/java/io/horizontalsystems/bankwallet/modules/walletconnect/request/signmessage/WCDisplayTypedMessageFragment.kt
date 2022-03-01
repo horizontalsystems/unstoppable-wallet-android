@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectRequestModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestModule.TYPED_MESSAGE
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -39,7 +39,7 @@ class WCDisplayTypedMessageFragment : BaseFragment() {
             setContent {
                 SignMessageTextScreen(
                     findNavController(),
-                    arguments?.getString(WalletConnectRequestModule.TYPED_MESSAGE)
+                    arguments?.getString(TYPED_MESSAGE)
                 )
             }
         }

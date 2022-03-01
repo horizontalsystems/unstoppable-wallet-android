@@ -19,12 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.RequestType
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.WC2RequestListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.WC2RequestListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -34,9 +31,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefa
 import io.horizontalsystems.bankwallet.ui.compose.components.HsRadioButton
 
 @Composable
-fun RequestListPage(navController: NavController) {
-
-    val viewModel = viewModel<WC2RequestListViewModel>(factory = WC2RequestListModule.Factory())
+fun RequestListPage(viewModel: WC2RequestListViewModel, navController: NavController) {
 
     val sections by viewModel.sectionItems.observeAsState()
 
@@ -59,8 +54,9 @@ fun RequestListPage(navController: NavController) {
             sections?.let { sections ->
                 WCRequestList(
                     sections,
-                    navController
-                ) { accountId -> viewModel.onWalletSwitch(accountId) }
+                    { viewItem -> viewModel.onRequestClick(viewItem) },
+                    { accountId -> viewModel.onWalletSwitch(accountId) }
+                )
             }
         }
     }
@@ -69,7 +65,7 @@ fun RequestListPage(navController: NavController) {
 @Composable
 private fun WCRequestList(
     sectionItems: List<WC2RequestListModule.SectionViewItem>,
-    navController: NavController?,
+    onRequestClick: (WC2RequestListModule.RequestViewItem) -> Unit,
     onWalletSwitch: (String) -> Unit
 ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -90,7 +86,7 @@ private fun WCRequestList(
                     RequestCell(
                         request,
                         section.active,
-                        navController
+                        onRequestClick
                     )
                 }
             }
@@ -139,7 +135,7 @@ private fun RequestsSectionHeaderCell(
 private fun RequestCell(
     viewItem: WC2RequestListModule.RequestViewItem,
     enabled: Boolean,
-    navController: NavController?
+    onRequestClick: (WC2RequestListModule.RequestViewItem) -> Unit,
 ) {
     Column(
         modifier = Modifier.background(ComposeAppTheme.colors.lawrence.copy(alpha = if (enabled) 1f else 0.5f))
@@ -153,7 +149,7 @@ private fun RequestCell(
                 .fillMaxWidth()
                 .height(60.dp)
                 .clickable(
-                    onClick = { openRequest(viewItem, navController) },
+                    onClick = { onRequestClick.invoke(viewItem) },
                     enabled = enabled
                 )
                 .padding(horizontal = 16.dp),
@@ -185,24 +181,6 @@ private fun RequestCell(
     }
 }
 
-private fun openRequest(
-    viewItem: WC2RequestListModule.RequestViewItem,
-    navController: NavController?
-) {
-    when (viewItem.type) {
-        RequestType.PersonalSign,
-        RequestType.EthSignTypedData -> {
-            navController?.slideFromBottom(
-                R.id.wc2RequestListFragment_to_wcSignMessageRequestFragment,
-                WC2SignMessageRequestFragment.prepareParams(viewItem.requestId)
-            )
-        }
-        RequestType.EthSendTransaction -> {
-
-        }
-    }
-}
-
 @Preview
 @Composable
 fun PreviewRequestList() {
@@ -216,6 +194,6 @@ fun PreviewRequestList() {
     )
 
     ComposeAppTheme {
-        WCRequestList(sections, null) { }
+        WCRequestList(sections, {}, {})
     }
 }

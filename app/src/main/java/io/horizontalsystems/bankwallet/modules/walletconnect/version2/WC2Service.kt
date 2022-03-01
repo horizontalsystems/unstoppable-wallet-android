@@ -71,14 +71,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
         val pair = WalletConnect.Params.Pair(uri.trim())
         WalletConnectClient.pair(pair, object : WalletConnect.Listeners.Pairing {
             override fun onSuccess(settledPairing: WalletConnect.Model.SettledPairing) {
-                val listOfSettledSessions = WalletConnectClient.getListOfSettledSessions()
-                listOfSettledSessions.forEach {
-                    Log.e(TAG, "settled session topic: ${it.topic}")
-                }
-                val settledSession =
-                    listOfSettledSessions.firstOrNull { it.topic == settledPairing.topic } ?: return
-                event = Event.SessionSettled(settledSession)
-                Log.e(TAG, "pair onSuccess: ${settledPairing.topic}")
+                Log.e(TAG, "onSuccess settledPairing: ${settledPairing.topic}")
             }
 
             override fun onError(error: Throwable) {
@@ -165,25 +158,6 @@ class WC2Service : WalletConnectClient.WalletDelegate {
         pendingRequestUpdatedSubject.onNext(Unit)
     }
 
-//    fun respondRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
-//        val response = WalletConnect.Params.Response(
-//            sessionTopic = sessionRequest.topic,
-//            jsonRpcResponse = WalletConnect.Model.JsonRpcResponse.JsonRpcResult(
-//                sessionRequest.request.id,
-//                "0xa3f20717a250c2b0b729b7e5becbff67fdaef7e0699da4de7ca5895b02a170a12d887fd3b17bfdce3481f10bea41f45ba9f709d39ce8325427b57afcfc994cee1b"
-//            )
-//        )
-//
-//        WalletConnectClient.respond(response, object : WalletConnect.Listeners.SessionPayload {
-//            override fun onError(error: Throwable) {
-//                Log.e(TAG, "onError: ", error)
-//                event = Event.Error(error)
-//            }
-//        })
-//
-//        pendingRequestUpdatedSubject.onNext(Unit)
-//    }
-
     fun rejectRequest(topic: String, requestId: Long) {
         val response = WalletConnect.Params.Response(
             sessionTopic = topic,
@@ -198,6 +172,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
                 Log.e(TAG, "onError: ", error)
                 event = Event.Error(error)
             }
+
         })
 
         pendingRequestUpdatedSubject.onNext(Unit)
@@ -254,10 +229,7 @@ class WC2Service : WalletConnectClient.WalletDelegate {
     }
 
     override fun onSessionProposal(sessionProposal: WalletConnect.Model.SessionProposal) {
-        Log.e(
-            TAG,
-            "onSessionProposal: protocol: ${sessionProposal.relayProtocol} accounts: ${sessionProposal.accounts}"
-        )
+        Log.e(TAG, "onSessionProposal: ${sessionProposal.topic}")
         event = Event.WaitingForApproveSession(sessionProposal)
     }
 

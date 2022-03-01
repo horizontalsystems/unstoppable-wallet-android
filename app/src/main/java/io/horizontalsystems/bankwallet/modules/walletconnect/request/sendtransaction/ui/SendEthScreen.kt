@@ -1,10 +1,5 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction
+package io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.ui
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -13,22 +8,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectRequestModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.AmountCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.SubheadCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleHexValueCell
@@ -36,94 +29,25 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleTyp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
-
-class WCSendEthereumTransactionRequestFragment : BaseFragment() {
-    private val logger = AppLogger("wallet-connect")
-    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.wcSessionFragment)
-    val vmFactory by lazy {
-        WalletConnectRequestModule.Factory(
-            baseViewModel.sharedSendEthereumTransactionRequest!!, baseViewModel.service
-        )
-    }
-    private val viewModel by viewModels<WCSendEthereumTransactionRequestViewModel> { vmFactory }
-    private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
-    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.wcSendEthereumTransactionRequestFragment) { vmFactory }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                RequestScreen(
-                    findNavController(),
-                    baseViewModel,
-                    viewModel,
-                    sendEvmTransactionViewModel,
-                    feeViewModel,
-                    logger,
-                )
-            }
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            viewModel.reject()
-            close()
-        }
-
-        sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner) { transactionHash ->
-            viewModel.approve(transactionHash)
-            HudHelper.showSuccessMessage(
-                requireActivity().findViewById(android.R.id.content),
-                R.string.Hud_Text_Done
-            )
-            close()
-        }
-
-        sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner) {
-            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
-        }
-
-        //todo Implement Merged changes
-//        binding.sendEvmTransactionView.init(
-//            sendEvmTransactionViewModel,
-//            feeViewModel,
-//            viewLifecycleOwner,
-//            findNavController(),
-//            R.id.walletConnectSendEthereumTransactionRequestFragment
-//        )
-    }
-
-    private fun close() {
-        baseViewModel.sharedSendEthereumTransactionRequest = null
-        findNavController().popBackStack()
-    }
-
-}
 
 @Composable
-private fun RequestScreen(
+fun SendEthRequestScreen(
     navController: NavController,
-    baseViewModel: WalletConnectViewModel,
     viewModel: WCSendEthereumTransactionRequestViewModel,
     sendEvmTransactionViewModel: SendEvmTransactionViewModel,
     feeViewModel: EvmFeeCellViewModel,
     logger: AppLogger,
+    parentNavGraphId: Int,
+    close: () -> Unit,
 ) {
 
     val title by sendEvmTransactionViewModel.transactionTitleLiveData.observeAsState("")
     val transactionInfoItems by sendEvmTransactionViewModel.viewItemsLiveData.observeAsState()
-    val fee by feeViewModel.feeLiveData.observeAsState("")
     val approveEnabled by sendEvmTransactionViewModel.sendEnabledLiveData.observeAsState(false)
+    val cautions by sendEvmTransactionViewModel.cautionsLiveData.observeAsState()
+    val fee by feeViewModel.feeLiveData.observeAsState("")
+    val viewState by feeViewModel.viewStateLiveData.observeAsState()
+    val loading by feeViewModel.loadingLiveData.observeAsState(false)
 
     ComposeAppTheme {
         Column(
@@ -182,17 +106,22 @@ private fun RequestScreen(
                     }
                 }
 
-                //todo Implement merged changes
-//                EvmFeeCell(
-//                    title = stringResource(R.string.FeeSettings_MaxFee),
-//                    value = fee,
-//                    loading = false,
-//                ) {
-//                    navController.slideFromBottom(
-//                        resId = R.id.sendEvmFeeSettingsFragment,
-//                        args = SendEvmFeeSettingsFragment.prepareParams(R.id.walletConnectSendEthereumTransactionRequestFragment)
-//                    )
-//                }
+                EvmFeeCell(
+                    title = stringResource(R.string.FeeSettings_MaxFee),
+                    value = fee,
+                    loading = loading,
+                    viewState = viewState,
+                    highlightEditButton = feeViewModel.highlightEditButton,
+                ) {
+                    navController.slideFromBottom(
+                        resId = R.id.sendEvmFeeSettingsFragment,
+                        args = EvmFeeSettingsFragment.prepareParams(parentNavGraphId)
+                    )
+                }
+
+                cautions?.let {
+                    Cautions(it)
+                }
 
                 Spacer(Modifier.height(24.dp))
             }
@@ -212,8 +141,7 @@ private fun RequestScreen(
                     title = stringResource(R.string.Button_Reject),
                     onClick = {
                         viewModel.reject()
-                        baseViewModel.sharedSendEthereumTransactionRequest = null
-                        navController.popBackStack()
+                        close()
                     }
                 )
                 Spacer(Modifier.height(32.dp))

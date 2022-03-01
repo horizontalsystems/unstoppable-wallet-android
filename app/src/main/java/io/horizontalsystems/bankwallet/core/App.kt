@@ -261,7 +261,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         initializeWalletConnectV2(appConfig)
 
         wc2Service = WC2Service()
-        wc2SessionManager = WC2SessionManager(accountManager, WC2SessionStorage(appDatabase), wc2Service)
+        wc2SessionManager = WC2SessionManager(accountManager, WC2SessionStorage(appDatabase), wc2Service, wc2Manager)
     }
 
     private fun initializeWalletConnectV2(appConfig: AppConfigProvider) {
