@@ -75,7 +75,26 @@
         <action
             android:id="@+id/mainFragment_to_releaseNotesFragment"
             app:destination="@id/releaseNotesFragment" />
+        <action
+            android:id="@+id/mainFragment_to_wc2SendEthereumTransactionRequestFragment"
+            app:destination="@id/wc2SendEthereumTransactionRequestFragment" />
+        <action
+            android:id="@+id/mainFragment_to_wc2SignMessageRequestFragment"
+            app:destination="@id/wc2SignMessageRequestFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/wc2SignMessageRequestFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestFragment">
+        <action
+            android:id="@+id/wcSignMessageRequestFragment_to_wcDisplayTypedMessageFragment"
+            app:destination="@id/wcDisplayTypedMessageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/wc2SendEthereumTransactionRequestFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestFragment"/>
+    <fragment
+        android:id="@+id/wcDisplayTypedMessageFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCDisplayTypedMessageFragment"/>
     <fragment
         android:id="@+id/sendEvmFragment"
         android:name="io.horizontalsystems.bankwallet.modules.sendevm.SendEvmFragment"

@@ -28,10 +28,13 @@ class WC2SessionManager(
     val sessionsObservable: Flowable<List<WalletConnect.Model.SettledSession>>
         get() = sessionsSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val pendingRequestsSubject =
-        PublishSubject.create<List<WalletConnect.Model.JsonRpcHistory.HistoryEntry>>()
-    val pendingRequestsObservable: Flowable<List<WalletConnect.Model.JsonRpcHistory.HistoryEntry>>
-        get() = pendingRequestsSubject.toFlowable(BackpressureStrategy.BUFFER)
+    private val pendingRequestCountSubject = PublishSubject.create<Int>()
+    val pendingRequestCountObservable: Flowable<Int>
+        get() = pendingRequestCountSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    private val pendingRequestSubject = PublishSubject.create<WC2Request>()
+    val pendingRequestObservable: Flowable<WC2Request>
+        get() = pendingRequestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     val sessions: List<WalletConnect.Model.SettledSession>
         get() {
@@ -136,15 +139,16 @@ class WC2SessionManager(
         syncPendingRequest()
     }
 
-    private fun handleSessionRequest(request: WalletConnect.Model.SessionRequest) {
-//        sessions
-//
-//        guard activeSessions.first(where: { session in session.topic == request.topic }) != nil,
-//        let request = try? WalletConnectV2RequestMapper.map(request: request) else {
-//            return
-//        }
-//
-//            sessionRequestReceivedRelay.accept(request)
+    private fun handleSessionRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
+        try{
+            prepareRequestToOpen(sessionRequest.request.id)
+        } catch (error: Throwable){
+            Log.e(TAG, "handleSessionRequest error: ", error)
+        }
+
+        pendingRequestDataToOpen[sessionRequest.request.id]?.let {
+            pendingRequestSubject.onNext(it.pendingRequest)
+        }
     }
 
     private fun getSessions(accountId: String): List<WalletConnect.Model.SettledSession> {
@@ -159,7 +163,7 @@ class WC2SessionManager(
     }
 
     private fun syncPendingRequest() {
-        pendingRequestsSubject.onNext(requests())
+        pendingRequestCountSubject.onNext(requests().size)
     }
 
     private fun requests(accountId: String? = null): List<WalletConnect.Model.JsonRpcHistory.HistoryEntry> {
