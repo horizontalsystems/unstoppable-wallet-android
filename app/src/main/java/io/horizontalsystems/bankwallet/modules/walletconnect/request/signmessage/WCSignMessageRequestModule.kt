@@ -52,6 +52,7 @@ object WCSignMessageRequestModule {
         val message: SignMessage?
         fun sign()
         fun reject()
+        fun stop()
     }
 
 }

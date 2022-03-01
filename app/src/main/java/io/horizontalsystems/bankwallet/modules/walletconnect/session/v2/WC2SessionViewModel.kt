@@ -20,6 +20,7 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
 
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val openRequestLiveEvent = SingleLiveEvent<WC2Request>()
+    val errorLiveEvent = SingleLiveEvent<String>()
 
     private val disposables = CompositeDisposable()
 
@@ -73,11 +74,19 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
                 disposables.add(it)
             }
 
+        service.errorObservable
+            .subscribeIO{ error ->
+                errorLiveEvent.postValue(error)
+            }.let {
+                disposables.add(it)
+            }
+
         service.start()
     }
 
     override fun onCleared() {
         service.stop()
+        disposables.clear()
     }
 
     private fun sync(

@@ -94,6 +94,10 @@ class WC2SessionFragment : BaseFragment() {
             }
         }
 
+        viewModel.errorLiveEvent.observe(viewLifecycleOwner) { error ->
+            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), error)
+        }
+
     }
 
 }

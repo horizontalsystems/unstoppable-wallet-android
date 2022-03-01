@@ -15,6 +15,7 @@ class WC2RequestListViewModel(
     private val disposables = CompositeDisposable()
     val sectionItems = MutableLiveData<List<WC2RequestListModule.SectionViewItem>>(listOf())
     val openRequestLiveEvent = SingleLiveEvent<WC2Request>()
+    val errorLiveEvent = SingleLiveEvent<String>()
 
     init {
         service.itemsObservable
@@ -24,6 +25,13 @@ class WC2RequestListViewModel(
         service.pendingRequestObservable
             .subscribeIO{ wcRequest ->
                 openRequestLiveEvent.postValue(wcRequest)
+            }.let {
+                disposables.add(it)
+            }
+
+        service.errorObservable
+            .subscribeIO{ error ->
+                errorLiveEvent.postValue(error)
             }.let {
                 disposables.add(it)
             }
