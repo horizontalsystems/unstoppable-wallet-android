@@ -25,7 +25,7 @@ class WC2ListViewModel(
             .let { disposables.add(it) }
 
         service.pendingRequestsObservable
-            .subscribeIO { syncPendingRequestsCount(it.size) }
+            .subscribeIO { syncPendingRequestsCount(it) }
             .let { disposables.add(it) }
 
         sync(service.sessions)

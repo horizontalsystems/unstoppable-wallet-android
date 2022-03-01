@@ -49,7 +49,7 @@ class WC2RequestListService(
                 syncPendingRequests()
             }.let { disposables.add(it) }
 
-        sessionManager.pendingRequestsObservable
+        sessionManager.pendingRequestCountObservable
             .subscribeIO {
                 Log.e("TAG", "pendingRequestsObservable called: ", )
                 syncPendingRequests()

@@ -23,6 +23,7 @@ object MainModule {
                 App.termsManager,
                 App.accountManager,
                 App.releaseNotesManager,
+                App.wc2SessionManager,
                 service,
             ) as T
         }
