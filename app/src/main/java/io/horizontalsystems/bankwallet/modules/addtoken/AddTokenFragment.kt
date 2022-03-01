@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarning
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
@@ -118,7 +119,7 @@ class AddTokenFragment : BaseFragment() {
 
     private fun getState(caution: Caution?, loading: Boolean) = when (caution?.type) {
         Caution.Type.Error -> DataState.Error(Exception(caution.text))
-        Caution.Type.Warning -> DataState.Error(Exception(caution.text))
+        Caution.Type.Warning -> DataState.Error(FormsInputStateWarning(caution.text))
         null -> if (loading) DataState.Loading else null
     }
 
