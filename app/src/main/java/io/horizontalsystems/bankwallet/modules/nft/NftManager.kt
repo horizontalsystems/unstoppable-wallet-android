@@ -4,6 +4,8 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
+import io.horizontalsystems.bankwallet.modules.hsnft.CollectionStats
 import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -53,5 +55,13 @@ class NftManager(
                     nftAssetPrice.value
                 )
             }
+    }
+
+    suspend fun collectionStats(collectionUid: String): CollectionStats {
+        return apiProvider.collectionStats(collectionUid)
+    }
+
+    suspend fun assetOrders(contractAddress: String, tokenId: String): List<AssetOrder> {
+        return apiProvider.assetOrders(contractAddress, tokenId)
     }
 }

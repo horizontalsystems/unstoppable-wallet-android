@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
+import java.util.*
 
 object NftAssetModule {
     @Suppress("UNCHECKED_CAST")
@@ -17,7 +20,8 @@ object NftAssetModule {
     ) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = NftAssetService(accountId, tokenId, contractAddress, App.nftManager)
+            val repository = NftAssetRepository(BalanceXRateRepository(App.currencyManager, App.marketKit))
+            val service = NftAssetService(accountId, tokenId, contractAddress, App.nftManager, repository)
             return NftAssetViewModel(service) as T
         }
     }
@@ -43,13 +47,31 @@ data class NftAssetModuleAssetItem(
     val tokenId: String,
     val assetLinks: HsNftApiV1Response.Asset.Links?,
     val collectionLinks: HsNftApiV1Response.Collection.Links?,
-    val prices: Prices
+    val stats: Stats
 ) {
-    data class Prices(
-        val average7d: CoinValue?,
-        val average30d: CoinValue?,
-        val last: CoinValue?,
-        val floor: CoinValue?,
+    data class Price(
+        val coinValue: CoinValue,
+        val currencyValue: CurrencyValue? = null
     )
+
+    data class Stats(
+        val lastSale: Price?,
+        val average7d: Price?,
+        val average30d: Price?,
+        val collectionFloor: Price? = null,
+        val sale: Sale? = null,
+        val bestOffer: Price? = null
+    )
+
+    data class Sale(
+        val untilDate: Date?,
+        val type: PriceType,
+        val price: Price?
+    ) {
+        enum class PriceType {
+            BuyNow, TopBid, MinimumBid
+        }
+    }
 }
+
 

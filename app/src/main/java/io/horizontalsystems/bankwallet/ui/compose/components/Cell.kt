@@ -19,6 +19,30 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
+fun CellMultilineLawrenceSection(
+    composableItems: List<@Composable () -> Unit>
+) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+    ) {
+        composableItems.forEachIndexed { index, composable ->
+            CellMultilineLawrence(borderTop = index != 0) {
+                composable()
+            }
+        }
+    }
+}
+
+@Composable
+fun CellMultilineLawrenceSection(
+    content: @Composable () -> Unit
+) {
+    CellMultilineLawrenceSection(listOf(content))
+}
+
+@Composable
 fun <T> CellMultilineLawrenceSection(
     items: Iterable<T>,
     itemContent: @Composable (T) -> Unit

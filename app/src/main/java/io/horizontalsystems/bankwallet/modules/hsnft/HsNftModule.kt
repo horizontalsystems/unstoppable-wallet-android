@@ -7,9 +7,13 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.nft.*
 import io.horizontalsystems.marketkit.models.CoinType
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.*
 
 object HsNftModule {
     private val apiURL = App.appConfigProvider.marketApiBaseUrl + "/v1/nft/"
@@ -88,7 +92,8 @@ object HsNftApiV1Response {
 
         data class MarketsData(
             val last_sale: LastSale?,
-            val sell_orders: List<SellOrder>?,
+            val sell_orders: List<Order>?,
+            val orders: List<Order>?
         ) {
             data class LastSale(
                 val total_price: BigInteger,
@@ -100,7 +105,7 @@ object HsNftApiV1Response {
                 )
             }
 
-            data class SellOrder(
+            data class Order(
                 val closing_date: String,
                 val current_price: BigDecimal,
                 val payment_token_contract: PaymentTokenContract,
@@ -115,13 +120,27 @@ object HsNftApiV1Response {
                 data class PaymentTokenContract(
                     val address: String,
                     val decimals: Int,
-                    val eth_price: BigDecimal,
-
+                    val eth_price: BigDecimal
                 )
             }
         }
     }
 }
+
+data class CollectionStats(
+    val averagePrice7d: NftAssetPrice?,
+    val averagePrice30d: NftAssetPrice?,
+    val floorPrice: NftAssetPrice?,
+)
+
+data class AssetOrder(
+    val closingDate: Date?,
+    val price: NftAssetPrice?,
+    val emptyTaker: Boolean,
+    val side: Int,
+    val v: Int?,
+    val ethValue: BigDecimal
+)
 
 class HsNftApiProvider : INftApiProvider {
     private val zeroAddress = "0x0000000000000000000000000000000000000000"
@@ -178,6 +197,52 @@ class HsNftApiProvider : INftApiProvider {
         )
     }
 
+    override suspend fun collectionStats(collectionUid: String): CollectionStats {
+        return HsNftModule.apiServiceV1.collectionStats(collectionUid).let { stats ->
+            CollectionStats(
+                averagePrice7d = NftAssetPrice(
+                    getCoinTypeId(zeroAddress),
+                    stats.seven_day_average_price
+                ),
+                averagePrice30d = NftAssetPrice(
+                    getCoinTypeId(zeroAddress),
+                    stats.thirty_day_average_price
+                ),
+                floorPrice = NftAssetPrice(
+                    getCoinTypeId(zeroAddress),
+                    stats.floor_price
+                )
+            )
+        }
+    }
+
+    override suspend fun assetOrders(contractAddress: String, tokenId: String): List<AssetOrder> {
+        return HsNftModule.apiServiceV1.asset(contractAddress, tokenId).let { asset ->
+            asset.markets_data.orders?.let { orders ->
+                orders.map { order ->
+                    val price = order.current_price.movePointLeft(order.payment_token_contract.decimals)
+
+                    val closingDate = try {
+                        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).apply {
+                            timeZone = TimeZone.getTimeZone("GMT")
+                        }
+                        sdf.parse(order.closing_date)
+                    } catch (ex: Exception) {
+                        null
+                    }
+                    AssetOrder(
+                        closingDate = closingDate,
+                        price = NftAssetPrice(getCoinTypeId(order.payment_token_contract.address), price),
+                        emptyTaker = order.taker.address == zeroAddress,
+                        side = order.side,
+                        v = order.v,
+                        ethValue = price.divide(order.payment_token_contract.eth_price, RoundingMode.HALF_EVEN)
+                    )
+                }
+            } ?: listOf()
+        }
+    }
+
     private suspend fun fetchAssets(address: Address): List<HsNftApiV1Response.Asset> {
         return fetchAllWithLimit(50) { offset, limit ->
             HsNftModule.apiServiceV1.assets(address.hex, offset, limit)
@@ -219,13 +284,24 @@ interface HsNftApiV1 {
         @Query("asset_owner") assetOwner: String,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int
-    ) : List<HsNftApiV1Response.Collection>
+    ): List<HsNftApiV1Response.Collection>
 
     @GET("assets")
     suspend fun assets(
         @Query("owner") owner: String,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
-    ) : List<HsNftApiV1Response.Asset>
+    ): List<HsNftApiV1Response.Asset>
+
+    @GET("collection/{uid}/stats")
+    suspend fun collectionStats(
+        @Path("uid") collectionUid: String
+    ): HsNftApiV1Response.Collection.Stats
+
+    @GET("asset/{contractAddress}/{tokenId}")
+    suspend fun asset(
+        @Path("contractAddress") contractAddress: String,
+        @Path("tokenId") tokenId: String
+    ): HsNftApiV1Response.Asset
 
 }

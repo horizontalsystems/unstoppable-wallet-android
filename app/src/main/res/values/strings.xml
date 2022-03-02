@@ -1030,6 +1030,7 @@
     <string name="Nfts_PriceType_Days_30">30D avg.</string>
     <string name="Nfts_PriceType_LastSale">Last Sale</string>
     <string name="Nfts_Asset_OnSale">On Sale</string>
+    <string name="Nfts_Asset_OnSaleUntil">until %s</string>
 
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_OwnedCount">Owned Count</string>
@@ -1037,6 +1038,10 @@
     <string name="NftAsset_Price_Average7d">7D Average</string>
     <string name="NftAsset_Price_Average30d">30D Average</string>
     <string name="NftAsset_Price_Floor">Floor Price</string>
+    <string name="NftAsset_Price_BuyNow">Buy Now</string>
+    <string name="NftAsset_Price_TopBid">Top Bid</string>
+    <string name="NftAsset_Price_MinimumBid">Minimum Bid</string>
+    <string name="NftAsset_Price_BestOffer">Best Offer</string>
     <string name="NftAsset_Properties">Properties</string>
     <string name="NftAsset_Description">Description</string>
     <string name="NftAsset_Details">Details</string>

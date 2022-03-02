@@ -56,8 +56,8 @@ data class CoinValue(
         return result
     }
 
-    fun getFormatted(): String {
-        return App.numberFormatter.formatCoin(value, coin.code, 0, 8)
+    fun getFormatted(maximumFractionDigits: Int = 8): String {
+        return App.numberFormatter.formatCoin(value, coin.code, 0, maximumFractionDigits)
     }
 
 }

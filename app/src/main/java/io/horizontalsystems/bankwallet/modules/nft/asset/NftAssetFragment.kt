@@ -36,14 +36,16 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.shortenedAddress
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Price
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 
 class NftAssetFragment : BaseFragment() {
@@ -216,35 +218,45 @@ private fun NftAsset(asset: NftAssetModuleAssetItem) {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
-                val prices = mutableListOf<Pair<String, CoinValue?>>()
+                Spacer(modifier = Modifier.height(12.dp))
+                val prices = mutableListOf<Pair<String, Price?>>()
                 prices.add(
                     Pair(
                         stringResource(id = R.string.NftAsset_Price_Purchase),
-                        asset.prices.last
+                        asset.stats.lastSale
                     )
                 )
                 prices.add(
                     Pair(
                         stringResource(id = R.string.NftAsset_Price_Average7d),
-                        asset.prices.average7d
+                        asset.stats.average7d
                     )
                 )
                 prices.add(
                     Pair(
                         stringResource(id = R.string.NftAsset_Price_Average30d),
-                        asset.prices.average30d
+                        asset.stats.average30d
                     )
                 )
                 prices.add(
                     Pair(
                         stringResource(id = R.string.NftAsset_Price_Floor),
-                        asset.prices.floor
+                        asset.stats.collectionFloor
                     )
                 )
 
                 CellMultilineLawrenceSection(prices) { (title, price) ->
                     NftAssetPriceCell(title, price)
+                }
+
+                asset.stats.sale?.let {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    NftAssetSale(it)
+                }
+
+                asset.stats.bestOffer?.let {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    NftAssetBestOffer(it)
                 }
 
                 NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Properties)) {
@@ -376,6 +388,51 @@ private fun NftAsset(asset: NftAssetModuleAssetItem) {
 }
 
 @Composable
+private fun NftAssetBestOffer(bestOffer: Price) {
+    CellMultilineLawrenceSection {
+        NftAssetPriceCell(stringResource(R.string.NftAsset_Price_BestOffer), bestOffer)
+    }
+}
+
+@Composable
+private fun NftAssetSale(sale: Sale) {
+    val saleComposables = mutableListOf<@Composable () -> Unit>()
+
+    saleComposables.add {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 10.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.Nfts_Asset_OnSale),
+                color = ComposeAppTheme.colors.leah,
+                style = ComposeAppTheme.typography.body,
+            )
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.Nfts_Asset_OnSaleUntil,
+                    sale.untilDate?.let { DateHelper.getFullDate(it) } ?: "---"),
+                color = ComposeAppTheme.colors.grey,
+                style = ComposeAppTheme.typography.subhead2,
+            )
+        }
+    }
+
+    saleComposables.add {
+        val title = when (sale.type) {
+            Sale.PriceType.BuyNow -> stringResource(R.string.NftAsset_Price_BuyNow)
+            Sale.PriceType.TopBid -> stringResource(R.string.NftAsset_Price_TopBid)
+            Sale.PriceType.MinimumBid -> stringResource(R.string.NftAsset_Price_MinimumBid)
+        }
+        NftAssetPriceCell(title, sale.price)
+    }
+
+    CellMultilineLawrenceSection(saleComposables)
+}
+
+@Composable
 private fun CellLink(icon: Painter, title: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier
@@ -445,7 +502,7 @@ private fun NftAssetSectionBlock(text: String, content: @Composable () -> Unit) 
 @Composable
 private fun NftAssetPriceCell(
     title: String,
-    coinValue: CoinValue?
+    price: Price?
 ) {
     Row(
         modifier = Modifier
@@ -462,7 +519,7 @@ private fun NftAssetPriceCell(
         Column {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = coinValue?.getFormatted() ?: "---",
+                text = price?.coinValue?.getFormatted(4) ?: "---",
                 color = ComposeAppTheme.colors.jacob,
                 style = ComposeAppTheme.typography.body,
                 textAlign = TextAlign.End,
@@ -470,7 +527,7 @@ private fun NftAssetPriceCell(
             Spacer(modifier = Modifier.height(1.dp))
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "$1,234.56",
+                text = price?.currencyValue?.getFormatted() ?: "---",
                 color = ComposeAppTheme.colors.grey,
                 style = ComposeAppTheme.typography.subhead2,
                 textAlign = TextAlign.End,
