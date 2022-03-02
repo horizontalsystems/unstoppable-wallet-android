@@ -61,26 +61,29 @@ fun SignMessageRequestScreen(
                         )
                     }
                     is SignMessage.TypedMessage -> {
-                        CellSingleLineLawrenceSection(
-                            listOf({
+                        val composableItems: MutableList<@Composable () -> Unit> = mutableListOf({
+                            TitleTypedValueCell(
+                                stringResource(R.string.WalletConnect_SignMessageRequest_Domain),
+                                message.domain
+                            )
+                        }, {
+                            SignMessageButton(
+                                stringResource(R.string.WalletConnect_SignMessageRequest_ShowMessageTitle),
+                                formatJson(message.data),
+                                navController
+                            )
+                        })
+                        message.dAppName?.let { dAppName ->
+                            composableItems.add {
                                 TitleTypedValueCell(
-                                    stringResource(R.string.WalletConnect_SignMessageRequest_Domain),
-                                    message.domain
+                                    stringResource(R.string.WalletConnect_SignMessageRequest_dApp),
+                                    dAppName
                                 )
-                            }, {
-                                SignMessageButton(
-                                    stringResource(R.string.WalletConnect_SignMessageRequest_ShowMessageTitle),
-                                    formatJson(message.data),
-                                    navController
-                                )
-                            }, {
-                                message.dAppName?.let { dAppName ->
-                                    TitleTypedValueCell(
-                                        stringResource(R.string.WalletConnect_SignMessageRequest_dApp),
-                                        dAppName
-                                    )
-                                }
-                            })
+                            }
+                        }
+
+                        CellSingleLineLawrenceSection(
+                            composableItems
                         )
                     }
                 }
