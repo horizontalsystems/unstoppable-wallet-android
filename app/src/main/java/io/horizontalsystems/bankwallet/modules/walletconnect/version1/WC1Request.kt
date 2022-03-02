@@ -54,6 +54,8 @@ fun convertTx(transaction: WCEthereumTransaction): WalletConnectTransaction {
             nonce = transaction.nonce?.hexStringToByteArray()?.toLong(),
             gasPrice = transaction.gasPrice?.hexStringToByteArray()?.toLong(),
             gasLimit = (transaction.gas ?: transaction.gasLimit)?.hexStringToByteArray()?.toLong(),
+            maxPriorityFeePerGas= transaction.maxPriorityFeePerGas?.hexStringToByteArray()?.toLong(),
+            maxFeePerGas= transaction.maxFeePerGas?.hexStringToByteArray()?.toLong(),
             value = transaction.value?.hexStringToByteArray()?.toBigInteger() ?: BigInteger.ZERO,
             data = transaction.data.hexStringToByteArray()
     )

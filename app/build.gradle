@@ -224,7 +224,7 @@ dependencies {
     implementation "cash.z.ecc.android:zcash-android-sdk:1.3.0-beta16"
 
     // WalletConnect
-    implementation 'com.github.horizontalsystems:wallet-connect-kotlin:d5f3cac'
+    implementation 'com.github.horizontalsystems:wallet-connect-kotlin:b9a50b8'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     // WalletConnect V2
     implementation "com.github.WalletConnect:WalletConnectKotlinV2:1.0.0-beta04"

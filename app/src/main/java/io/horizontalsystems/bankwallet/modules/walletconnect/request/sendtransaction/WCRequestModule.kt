@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
+import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
@@ -16,9 +17,12 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransac
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
+import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigInteger
@@ -30,40 +34,22 @@ object WCRequestModule {
         private val baseService: WC1Service
     ) : ViewModelProvider.Factory {
         private val evmKitWrapper by lazy { baseService.evmKitWrapper!! }
-        private val coin by lazy {
-            when (evmKitWrapper.evmKit.networkType) {
-                NetworkType.EthRopsten, NetworkType.EthKovan,
-                NetworkType.EthGoerli, NetworkType.EthRinkeby,
-                NetworkType.EthMainNet -> App.coinManager.getPlatformCoin(CoinType.Ethereum)!!
-                NetworkType.BscMainNet -> App.coinManager.getPlatformCoin(CoinType.BinanceSmartChain)!!
-            }
-        }
+        private val coin by lazy { platformCoin(evmKitWrapper.evmKit.networkType) }
         private val transaction = request.transaction
         private val transactionData =
             TransactionData(transaction.to, transaction.value, transaction.data)
-        private val gasPrice: Long? = transaction.gasPrice
+
+        private val gasPrice by lazy { getGasPrice(transaction) }
 
         private val service by lazy {
             WCSendEthereumTransactionRequestService(request.id, baseService)
         }
         private val gasPriceService: IEvmGasPriceService by lazy {
-            val gasPriceProvider = LegacyGasPriceProvider(evmKitWrapper.evmKit)
-            when (evmKitWrapper.evmKit.networkType) {
-                NetworkType.EthRopsten, NetworkType.EthKovan,
-                NetworkType.EthGoerli, NetworkType.EthRinkeby,
-                NetworkType.EthMainNet -> {
-                    // TODO switch to EIP1559 GasPrice service after wallet connect v2 integration
-                    LegacyGasPriceService(gasPriceProvider, gasPrice)
-                }
-                NetworkType.BscMainNet -> LegacyGasPriceService(gasPriceProvider, gasPrice)
-            }
+            getGasPriceService(gasPrice, evmKitWrapper.evmKit)
         }
+
         private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(
-                coin,
-                App.marketKit,
-                App.currencyManager
-            )
+            EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager)
         }
         private val feeService by lazy {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, transactionData, 10)
@@ -103,46 +89,31 @@ object WCRequestModule {
         }
     }
 
-    class FactoryV2(
-        private val requestId: Long,
-    ) : ViewModelProvider.Factory {
+    class FactoryV2(private val requestId: Long) : ViewModelProvider.Factory {
         private val service by lazy {
             WC2SendEthereumTransactionRequestService(requestId, App.wc2SessionManager)
         }
-        private val coin by lazy {
-            when (service.evmKitWrapper.evmKit.networkType) {
-                NetworkType.EthRopsten, NetworkType.EthKovan,
-                NetworkType.EthGoerli, NetworkType.EthRinkeby,
-                NetworkType.EthMainNet -> App.coinManager.getPlatformCoin(CoinType.Ethereum)!!
-                NetworkType.BscMainNet -> App.coinManager.getPlatformCoin(CoinType.BinanceSmartChain)!!
-            }
-        }
+        private val coin by lazy { platformCoin(service.evmKitWrapper.evmKit.networkType) }
         private val transaction = service.transactionRequest.transaction
         private val transactionData =
             TransactionData(transaction.to, transaction.value, transaction.data)
-        private val gasPrice: Long? = transaction.gasPrice
 
-        private val gasPriceService: IEvmGasPriceService by lazy {
-            val gasPriceProvider = LegacyGasPriceProvider(service.evmKitWrapper.evmKit)
-            when (service.evmKitWrapper.evmKit.networkType) {
-                NetworkType.EthRopsten, NetworkType.EthKovan,
-                NetworkType.EthGoerli, NetworkType.EthRinkeby,
-                NetworkType.EthMainNet -> {
-                    // TODO switch to EIP1559 GasPrice service after wallet connect v2 integration
-                    LegacyGasPriceService(gasPriceProvider, gasPrice)
-                }
-                NetworkType.BscMainNet -> LegacyGasPriceService(gasPriceProvider, gasPrice)
-            }
+        private val gasPrice by lazy { getGasPrice(transaction) }
+
+        private val gasPriceService by lazy {
+            getGasPriceService(gasPrice, service.evmKitWrapper.evmKit)
         }
+
         private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(
-                coin,
-                App.marketKit,
-                App.currencyManager
-            )
+            EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager)
         }
         private val feeService by lazy {
-            EvmFeeService(service.evmKitWrapper.evmKit, gasPriceService, transactionData, 10)
+            EvmFeeService(
+                service.evmKitWrapper.evmKit,
+                gasPriceService,
+                transactionData,
+                10
+            )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val sendService by lazy {
@@ -179,6 +150,39 @@ object WCRequestModule {
         }
     }
 
+    private fun platformCoin(networkType: NetworkType) =
+        when (networkType) {
+            NetworkType.EthRopsten, NetworkType.EthKovan,
+            NetworkType.EthGoerli, NetworkType.EthRinkeby,
+            NetworkType.EthMainNet -> App.coinManager.getPlatformCoin(CoinType.Ethereum)!!
+            NetworkType.BscMainNet -> App.coinManager.getPlatformCoin(CoinType.BinanceSmartChain)!!
+        }
+
+    private fun getGasPrice(transaction: WalletConnectTransaction): GasPrice? = when {
+        transaction.maxFeePerGas != null && transaction.maxPriorityFeePerGas != null -> {
+            GasPrice.Eip1559(transaction.maxFeePerGas, transaction.maxPriorityFeePerGas)
+        }
+        else -> {
+            transaction.gasPrice?.let { GasPrice.Legacy(it) }
+        }
+    }
+
+    private fun getGasPriceService(gasPrice: GasPrice?, evmKit: EthereumKit): IEvmGasPriceService {
+        return when (gasPrice) {
+            is GasPrice.Eip1559 -> {
+                val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
+                Eip1559GasPriceService(gasPriceProvider, evmKit, initialGasPrice = gasPrice)
+            }
+            else -> {
+                val gasPriceProvider = LegacyGasPriceProvider(evmKit)
+                LegacyGasPriceService(
+                    gasPriceProvider,
+                    initialGasPrice = (gasPrice as? GasPrice.Legacy)?.legacyGasPrice
+                )
+            }
+        }
+    }
+
     interface RequestAction {
         fun approve(transactionHash: ByteArray)
         fun reject()
@@ -193,6 +197,8 @@ data class WalletConnectTransaction(
     val nonce: Long?,
     val gasPrice: Long?,
     val gasLimit: Long?,
+    val maxPriorityFeePerGas: Long?,
+    val maxFeePerGas: Long?,
     val value: BigInteger,
     val data: ByteArray
 )
