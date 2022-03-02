@@ -21,10 +21,6 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SendEthereumTransactionRequest
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SignMessageRequest
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetWalletSelectDialog
 import io.horizontalsystems.core.findNavController
 
@@ -114,23 +110,6 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
         viewModel.openPlayMarketLiveEvent.observe(viewLifecycleOwner, Observer {
             openAppInPlayMarket()
         })
-
-        viewModel.openWalletConnectRequestLiveEvent.observe(viewLifecycleOwner) { wcRequest ->
-            when (wcRequest) {
-                is WC2SignMessageRequest -> {
-                    findNavController().slideFromBottom(
-                        R.id.mainFragment_to_wc2SignMessageRequestFragment,
-                        WC2SignMessageRequestFragment.prepareParams(wcRequest.id)
-                    )
-                }
-                is WC2SendEthereumTransactionRequest -> {
-                    findNavController().slideFromBottom(
-                        R.id.mainFragment_to_wc2SendEthereumTransactionRequestFragment,
-                        WC2SendEthereumTransactionRequestFragment.prepareParams(wcRequest.id)
-                    )
-                }
-            }
-        }
 
         viewModel.hideContentLiveData.observe(viewLifecycleOwner, Observer { hide ->
             binding.screenSecureDim.isVisible = hide

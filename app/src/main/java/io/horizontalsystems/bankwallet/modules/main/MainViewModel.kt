@@ -3,13 +3,14 @@ package io.horizontalsystems.bankwallet.modules.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IBackupManager
+import io.horizontalsystems.bankwallet.core.IRateAppManager
+import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.LaunchPage
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Request
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -24,7 +25,6 @@ class MainViewModel(
     private val termsManager: ITermsManager,
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
-    private val wcSessionManager: WC2SessionManager,
     private val service: MainService,
 ) : ViewModel() {
 
@@ -36,7 +36,6 @@ class MainViewModel(
     val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
     val transactionTabEnabledLiveData = MutableLiveData<Boolean>()
     val openWalletSwitcherLiveEvent = SingleLiveEvent<Pair<List<Account>, Account?>>()
-    val openWalletConnectRequestLiveEvent = SingleLiveEvent<WC2Request>()
 
     private val disposables = CompositeDisposable()
     private var contentHidden = pinComponent.isLocked
@@ -75,13 +74,6 @@ class MainViewModel(
                 .let {
                     disposables.add(it)
                 }
-
-        wcSessionManager.pendingRequestObservable
-            .subscribeIO{
-                openWalletConnectRequestLiveEvent.postValue(it)
-            }.let {
-                disposables.add(it)
-            }
 
         showWhatsNew()
     }

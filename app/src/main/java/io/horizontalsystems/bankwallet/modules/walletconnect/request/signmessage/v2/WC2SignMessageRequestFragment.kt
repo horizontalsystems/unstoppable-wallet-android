@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.annotation.StringRes
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
@@ -58,7 +57,7 @@ class WC2SignMessageRequestFragment : BaseFragment() {
     companion object {
         private const val REQUEST_ID_KEY = "request_id_key"
 
-        fun prepareParams(@StringRes requestId: Long) =
+        fun prepareParams(requestId: Long) =
             bundleOf(REQUEST_ID_KEY to requestId)
     }
 

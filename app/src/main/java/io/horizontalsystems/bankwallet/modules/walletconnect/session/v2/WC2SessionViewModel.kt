@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2PingService
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Request
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
@@ -19,8 +18,6 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
     private val TAG = "WC2SessionViewModel"
 
     val closeLiveEvent = SingleLiveEvent<Unit>()
-    val openRequestLiveEvent = SingleLiveEvent<WC2Request>()
-    val errorLiveEvent = SingleLiveEvent<String>()
 
     private val disposables = CompositeDisposable()
 
@@ -64,20 +61,6 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
                 sync(sessionState = it)
             }
             .let {
-                disposables.add(it)
-            }
-
-        service.pendingRequestObservable
-            .subscribeIO{ wcRequest ->
-                openRequestLiveEvent.postValue(wcRequest)
-            }.let {
-                disposables.add(it)
-            }
-
-        service.errorObservable
-            .subscribeIO{ error ->
-                errorLiveEvent.postValue(error)
-            }.let {
                 disposables.add(it)
             }
 
