@@ -27,7 +27,9 @@ class NftCollectionsService(
     val priceType by itemsPricedRepository::priceType
 
     private val _serviceItemState =
-        MutableStateFlow<DataState<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>>>(DataState.Loading)
+        MutableStateFlow<DataState<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>>>(
+            DataState.Loading
+        )
     val serviceItemState = _serviceItemState.asStateFlow()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -38,7 +40,9 @@ class NftCollectionsService(
             itemsPricedWithCurrencyRepository.itemsFlow
                 .collect { assetItemsPriced ->
                     val totalValue = assetItemsPriced.map { (_, assets) ->
-                        assets.sumOf { it.currencyPrice?.value?.multiply(it.assetItem.ownedCount.toBigDecimal()) ?: BigDecimal.ZERO }
+                        assets.sumOf {
+                            it.currencyPrice?.value?.multiply(it.assetItem.ownedCount.toBigDecimal()) ?: BigDecimal.ZERO
+                        }
                     }.sumOf { it }
 
                     val totalCurrencyValue = CurrencyValue(itemsPricedWithCurrencyRepository.baseCurrency, totalValue)

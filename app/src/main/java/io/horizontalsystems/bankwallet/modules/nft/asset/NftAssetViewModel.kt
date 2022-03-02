@@ -1,11 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.entities.ViewState
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
@@ -17,8 +19,14 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            nftAssetItem = service.fetchItem()
-            viewState = ViewState.Success
+            service.serviceItemState
+                .collect { assetItemState ->
+                    Log.e("AAA", "viewState: ${assetItemState.viewState}, assetItem: ${assetItemState.dataOrNull}")
+                    viewState = assetItemState.viewState
+                    nftAssetItem = assetItemState.dataOrNull
+                }
         }
+
+        service.start()
     }
 }
