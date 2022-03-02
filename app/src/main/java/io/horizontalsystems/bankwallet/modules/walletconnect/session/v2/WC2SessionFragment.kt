@@ -25,16 +25,11 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.WCSessionError
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.CONNECTION_LINK_KEY
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.SESSION_TOPIC_KEY
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SendEthereumTransactionRequest
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SignMessageRequest
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -75,27 +70,6 @@ class WC2SessionFragment : BaseFragment() {
 
         viewModel.closeLiveEvent.observe(viewLifecycleOwner) {
             findNavController().popBackStack()
-        }
-
-        viewModel.openRequestLiveEvent.observe(viewLifecycleOwner) { wcRequest ->
-            when (wcRequest) {
-                is WC2SignMessageRequest -> {
-                    findNavController().slideFromBottom(
-                        R.id.wc2SessionFragment_to_wc2SignMessageRequestFragment,
-                        WC2SignMessageRequestFragment.prepareParams(wcRequest.id)
-                    )
-                }
-                is WC2SendEthereumTransactionRequest -> {
-                    findNavController().slideFromBottom(
-                        R.id.wc2SessionFragment_to_wc2SendEthRequestFragment,
-                        WC2SendEthereumTransactionRequestFragment.prepareParams(wcRequest.id)
-                    )
-                }
-            }
-        }
-
-        viewModel.errorLiveEvent.observe(viewLifecycleOwner) { error ->
-            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), error)
         }
 
     }

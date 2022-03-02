@@ -23,9 +23,15 @@ object MainModule {
                 App.termsManager,
                 App.accountManager,
                 App.releaseNotesManager,
-                App.wc2SessionManager,
                 service,
             ) as T
+        }
+    }
+
+    class FactoryForActivityViewModel : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return MainActivityViewModel(App.wc2SessionManager) as T
         }
     }
 

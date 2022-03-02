@@ -47,11 +47,6 @@ class WC2Service : WalletConnectClient.WalletDelegate {
         object Default : Event()
         class Error(val error: Throwable) : Event()
         class WaitingForApproveSession(val proposal: WalletConnect.Model.SessionProposal) : Event()
-        class SessionRequest(
-            val sessionRequest: WalletConnect.Model.SessionRequest,
-            val session: WalletConnect.Model.SettledSession
-        ) : Event()
-
         class SessionSettled(val session: WalletConnect.Model.SettledSession) : Event()
         class SessionDeleted(val deletedSession: WalletConnect.Model.DeletedSession) : Event()
         object Ready : Event()
@@ -238,9 +233,6 @@ class WC2Service : WalletConnectClient.WalletDelegate {
 
     override fun onSessionRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
         Log.e(TAG, "onSessionRequest topic: ${sessionRequest.topic}")
-        val session = WalletConnectClient.getListOfSettledSessions()
-            .find { session -> session.topic == sessionRequest.topic } ?: return
-        event = Event.SessionRequest(sessionRequest, session)
         sessionsRequestReceivedSubject.onNext(sessionRequest)
         pendingRequestUpdatedSubject.onNext(Unit)
     }

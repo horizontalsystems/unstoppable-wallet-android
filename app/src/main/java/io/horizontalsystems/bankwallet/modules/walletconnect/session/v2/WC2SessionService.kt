@@ -44,14 +44,6 @@ class WC2SessionService(
     val stateObservable: Flowable<State>
         get() = stateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val pendingRequestSubject = PublishSubject.create<WC2Request>()
-    val pendingRequestObservable: Flowable<WC2Request>
-        get() = pendingRequestSubject.toFlowable(BackpressureStrategy.BUFFER)
-
-    private val errorSubject = PublishSubject.create<String>()
-    val errorObservable: Flowable<String>
-        get() = errorSubject.toFlowable(BackpressureStrategy.BUFFER)
-
     var state: State = State.Idle
         private set(value) {
             field = value
@@ -131,18 +123,6 @@ class WC2SessionService(
                     }
                     is WC2Service.Event.Error -> {
                         state = State.Invalid(event.error)
-                    }
-                    is WC2Service.Event.SessionRequest -> {
-                        try {
-                            sessionManager.prepareRequestToOpen(event.sessionRequest.request.id)
-                            sessionManager.pendingRequestDataToOpen[event.sessionRequest.request.id]?.let { requestData ->
-                                pendingRequestSubject.onNext(requestData.pendingRequest)
-                            }
-                        } catch (error: Throwable) {
-                            errorSubject.onNext(error.message ?: error.javaClass.simpleName)
-                        }
-
-                        pingService.receiveResponse()
                     }
                 }
             }
