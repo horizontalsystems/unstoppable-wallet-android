@@ -45,6 +45,8 @@ fun convertTx(transaction: WC2EthereumTransaction): WalletConnectTransaction {
             nonce = transaction.nonce?.hexStringToByteArray()?.toLong(),
             gasPrice = transaction.gasPrice?.hexStringToByteArray()?.toLong(),
             gasLimit = (transaction.gas ?: transaction.gasLimit)?.hexStringToByteArray()?.toLong(),
+            maxPriorityFeePerGas= transaction.maxPriorityFeePerGas?.hexStringToByteArray()?.toLong(),
+            maxFeePerGas= transaction.maxFeePerGas?.hexStringToByteArray()?.toLong(),
             value = transaction.value?.hexStringToByteArray()?.toBigInteger() ?: BigInteger.ZERO,
             data = transaction.data.hexStringToByteArray()
     )
@@ -57,6 +59,8 @@ data class WC2EthereumTransaction(
     val gasPrice: String?,
     val gas: String?,
     val gasLimit: String?,
+    val maxPriorityFeePerGas: String?,
+    val maxFeePerGas: String?,
     val value: String?,
     val data: String
 )
