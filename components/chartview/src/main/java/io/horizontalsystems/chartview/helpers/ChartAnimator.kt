@@ -11,7 +11,7 @@ class ChartAnimator(onUpdate: (() -> Unit)) {
 
     init {
         animator.interpolator = LinearInterpolator()
-        animator.duration = 1000
+        animator.duration = 300
         animator.addUpdateListener {
             animatedFraction = animator.animatedFraction
             onUpdate()
