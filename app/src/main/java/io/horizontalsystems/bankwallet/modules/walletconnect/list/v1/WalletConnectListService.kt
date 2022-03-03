@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.list.v1
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WCChain
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionKillManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionManager
 import io.reactivex.Flowable
@@ -59,8 +59,8 @@ class WalletConnectListService(private val sessionManager: WC1SessionManager) {
     }
 
     private fun getItems(sessions: List<WalletConnectSession>): List<Item> {
-        return WalletConnectListModule.Chain.values().mapNotNull { chain ->
-            val filteredSessions = sessions.filter { it.chainId == chain.value }
+        return WCChain.values().mapNotNull { chain ->
+            val filteredSessions = sessions.filter { it.chainId == chain.id }
 
             when {
                 filteredSessions.isNotEmpty() -> Item(chain, filteredSessions)
@@ -70,7 +70,7 @@ class WalletConnectListService(private val sessionManager: WC1SessionManager) {
     }
 
     data class Item(
-        val chain: WalletConnectListModule.Chain,
+        val chain: WCChain,
         val sessions: List<WalletConnectSession>
     )
 

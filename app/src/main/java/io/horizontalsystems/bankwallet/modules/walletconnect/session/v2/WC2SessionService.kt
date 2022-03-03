@@ -1,10 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session.v2
 
-import android.util.Log
 import com.walletconnect.walletconnectv2.client.WalletConnect
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule.PeerMetaItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.*
 import io.reactivex.BackpressureStrategy
@@ -34,21 +33,31 @@ class WC2SessionService(
         object Killed : State()
     }
 
+    var state: State = State.Idle
+        private set(value) {
+            field = value
+            stateSubject.onNext(value)
+        }
+
     var proposal: WalletConnect.Model.SessionProposal? = null
         private set
 
     var session: WalletConnect.Model.SettledSession? = null
         private set
 
+    private val networkConnectionErrorSubject = PublishSubject.create<Unit>()
+    val networkConnectionErrorObservable: Flowable<Unit>
+        get() = networkConnectionErrorSubject.toFlowable(BackpressureStrategy.BUFFER)
+
     private val stateSubject = PublishSubject.create<State>()
     val stateObservable: Flowable<State>
         get() = stateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    var state: State = State.Idle
-        private set(value) {
-            field = value
-            stateSubject.onNext(value)
-        }
+    private val allowedBlockchainsSubject = PublishSubject.create<List<WCBlockchain>>()
+    val allowedBlockchainsObservable: Flowable<List<WCBlockchain>>
+        get() = allowedBlockchainsSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    var blockchains = listOf<WCBlockchain>()
 
     val appMetaItem: PeerMetaItem?
         get() {
@@ -57,7 +66,8 @@ class WC2SessionService(
                     it.name,
                     it.url,
                     it.description,
-                    it.icons.last()
+                    it.icons.last(),
+                    false
                 )
             }
             proposal?.let {
@@ -65,7 +75,8 @@ class WC2SessionService(
                     it.name,
                     it.url,
                     it.description,
-                    it.icons.lastOrNull()?.toString()
+                    it.icons.lastOrNull()?.toString(),
+                    true
                 )
             }
             return null
@@ -73,6 +84,8 @@ class WC2SessionService(
 
     val connectionState by pingService::state
     val connectionStateObservable by pingService::stateObservable
+    val allowedBlockchains: List<WCBlockchain>
+        get() = blockchains.sortedBy { it.chainId }
 
     private val disposables = CompositeDisposable()
 
@@ -80,9 +93,11 @@ class WC2SessionService(
         topic?.let { topic ->
             val existingSession =
                 sessionManager.sessions.firstOrNull { it.topic == topic } ?: return@let
-            session = existingSession
-            state = State.Ready
             pingService.ping(existingSession.topic)
+            session = existingSession
+            blockchains = initialBlockchains
+            allowedBlockchainsSubject.onNext(allowedBlockchains)
+            state = State.Ready
         }
 
         connectivityManager.networkAvailabilitySignal
@@ -105,6 +120,13 @@ class WC2SessionService(
                 when (event) {
                     is WC2Service.Event.WaitingForApproveSession -> {
                         proposal = event.proposal
+                        blockchains = initialBlockchains
+                        allowedBlockchainsSubject.onNext(allowedBlockchains)
+                        if (blockchains.isEmpty()) {
+                            state =
+                                State.Invalid(WC2SessionManager.RequestDataError.UnsupportedChainId)
+                            return@subscribe
+                        }
                         state = State.WaitingForApproveSession
                         pingService.receiveResponse()
                     }
@@ -118,6 +140,8 @@ class WC2SessionService(
                     }
                     is WC2Service.Event.SessionSettled -> {
                         session = event.session
+                        blockchains = initialBlockchains
+                        allowedBlockchainsSubject.onNext(allowedBlockchains)
                         state = State.Ready
                         pingService.receiveResponse()
                     }
@@ -140,6 +164,10 @@ class WC2SessionService(
     }
 
     fun reject() {
+        if(!connectivityManager.isConnected){
+            networkConnectionErrorSubject.onNext(Unit)
+            return
+        }
         proposal?.let {
             service.reject(it)
             pingService.disconnect()
@@ -149,35 +177,30 @@ class WC2SessionService(
 
     fun approve() {
         val proposal = proposal ?: return
-        val account = accountManager.activeAccount ?: run {
-            state = State.Invalid(WalletConnectModule.NoSuitableAccount)
+
+        if(!connectivityManager.isConnected){
+            networkConnectionErrorSubject.onNext(Unit)
             return
         }
 
-        val chainIds = proposal.chains.mapNotNull { WC2Parser.getChainId(it) }
-
-        val wrappersMap = chainIds.mapNotNull { chainId ->
-            wcManager.evmKitWrapper(chainId, account)?.let {
-                chainId to it
-            }
-        }.toMap()
-
-        if (wrappersMap.isEmpty()) {
-            state = State.Invalid(WalletConnectModule.UnsupportedChainId)
+        if (accountManager.activeAccount == null) {
+            state = State.Invalid(WC2SessionManager.RequestDataError.NoSuitableAccount)
             return
         }
 
-        val accounts: List<String> = chainIds.mapNotNull { chainId ->
-            val wrapper = wrappersMap[chainId] ?: return@mapNotNull null
-            "eip155:$chainId:${wrapper.evmKit.receiveAddress.eip55}"
+        val accounts: List<String> = blockchains.filter { it.selected }.map { blockchain ->
+            "eip155:${blockchain.chainId}:${blockchain.address}"
         }
 
-        Log.e(TAG, "approve: accounts: $accounts")
         service.approve(proposal, accounts)
     }
 
-
     fun disconnect() {
+        if(!connectivityManager.isConnected){
+            networkConnectionErrorSubject.onNext(Unit)
+            return
+        }
+
         val sessionNonNull = session ?: return
 
         state = State.Killed
@@ -186,8 +209,65 @@ class WC2SessionService(
     }
 
     fun reconnect() {
+        if(!connectivityManager.isConnected){
+            networkConnectionErrorSubject.onNext(Unit)
+            return
+        }
         session?.let {
             pingService.ping(it.topic)
+        }
+    }
+
+    fun toggle(chainId: Int) {
+        val blockchain = blockchains.firstOrNull { it.chainId == chainId } ?: return
+
+        if (blockchain.selected && blockchains.filter { it.selected }.size < 2) {
+            return
+        }
+        val toggledBlockchain = WCBlockchain(
+            blockchain.chainId,
+            blockchain.name,
+            blockchain.address,
+            !blockchain.selected,
+        )
+        updateItemInBlockchains(toggledBlockchain)
+        allowedBlockchainsSubject.onNext(allowedBlockchains)
+    }
+
+    private fun updateItemInBlockchains(toggledBlockchain: WCBlockchain) {
+        val indexToUpdate = blockchains.indexOf(toggledBlockchain)
+        val updatedList = mutableListOf<WCBlockchain>()
+        blockchains.forEachIndexed { index, item ->
+            if (index == indexToUpdate) {
+                updatedList.add(toggledBlockchain)
+            } else {
+                updatedList.add(item)
+            }
+        }
+        blockchains = updatedList
+    }
+
+    private val initialBlockchains: List<WCBlockchain>
+        get() {
+            val account = accountManager.activeAccount ?: return emptyList()
+
+            session?.let { session ->
+                return getBlockchains(session.accounts, account)
+            }
+
+            proposal?.let { proposal ->
+                return getBlockchains(proposal.chains, account)
+            }
+            return emptyList()
+        }
+
+    private fun getBlockchains(accounts: List<String>, account: Account): List<WCBlockchain> {
+        val sessionAccountData = accounts.mapNotNull { WC2Parser.getAccountData(it) }
+        return sessionAccountData.mapNotNull { data ->
+            wcManager.evmKitWrapper(data.chain.id, account)?.let { evmKitWrapper ->
+                val address = evmKitWrapper.evmKit.receiveAddress.eip55
+                WCBlockchain(data.chain.id, data.chain.title, address, true)
+            }
         }
     }
 }

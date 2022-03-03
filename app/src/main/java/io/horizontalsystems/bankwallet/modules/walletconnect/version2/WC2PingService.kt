@@ -26,6 +26,7 @@ class WC2PingService {
         }
 
     fun ping(topic: String) {
+        state = State.Connecting
         val ping = WalletConnect.Params.Ping(topic)
 
         WalletConnectClient.ping(ping, object : WalletConnect.Listeners.SessionPing {

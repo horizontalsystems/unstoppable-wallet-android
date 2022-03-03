@@ -26,7 +26,8 @@ object WCSessionModule {
         val name: String,
         val url: String,
         val description: String?,
-        val icon: String?
+        val icon: String?,
+        val editable: Boolean,
     )
 
 }

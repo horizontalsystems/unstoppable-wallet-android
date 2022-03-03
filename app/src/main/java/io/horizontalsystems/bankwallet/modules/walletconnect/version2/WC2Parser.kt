@@ -3,8 +3,9 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.version2
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.walletconnect.walletconnectv2.client.WalletConnect
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WCAccountData
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WCChain
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 
 object WC2Parser {
@@ -19,7 +20,7 @@ object WC2Parser {
 
     fun getChainName(chain: String): String? {
         val chainId = getChainId(chain) ?: return null
-        return WalletConnectListModule.Chain.values().firstOrNull { it.value == chainId }?.title
+        return WCChain.values().firstOrNull { it.id == chainId }?.title
     }
 
     fun getSessionRequestMethod(body: String?): String? {
@@ -112,6 +113,24 @@ object WC2Parser {
         String(hexString.hexStringToByteArray())
     } catch (_: Throwable) {
         hexString
+    }
+
+    fun getAccountData(string: String): WCAccountData? {
+        val chunks = string.split(":")
+        if (chunks.size < 2) {
+            return null
+        }
+
+        val chainId = chunks[1].toIntOrNull() ?: return null
+        val chain = WCChain.values().firstOrNull { it.id == chainId }
+        val address: String? = when {
+            chunks.size >= 3 -> chunks[2]
+            else -> null
+        }
+
+        return chain?.let {
+            WCAccountData(eip = chunks[0], chain = chain, address = address)
+        }
     }
 
 }

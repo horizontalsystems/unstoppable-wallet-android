@@ -48,25 +48,6 @@ object WalletConnectListModule {
         Version2(R.string.WalletConnect_Version2)
     }
 
-    enum class Chain(val value: Int) {
-        Ethereum(1),
-        BinanceSmartChain(56),
-        Ropsten(3),
-        Rinkeby(4),
-        Kovan(42),
-        Goerli(5);
-
-        val title: String
-            get() = when (this) {
-                Ethereum -> "Ethereum"
-                BinanceSmartChain -> "Binance Smart Chain"
-                Ropsten -> "Ropsten"
-                Rinkeby -> "Rinkeby"
-                Kovan -> "Kovan"
-                Goerli -> "Goerli"
-            }
-    }
-
     fun getVersionFromUri(scannedText: String): Int {
         return when {
             scannedText.contains("@1?") -> 1
@@ -74,4 +55,5 @@ object WalletConnectListModule {
             else -> 0
         }
     }
+
 }

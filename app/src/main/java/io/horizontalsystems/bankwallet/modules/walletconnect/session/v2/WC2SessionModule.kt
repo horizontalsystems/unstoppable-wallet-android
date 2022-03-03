@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2PingService
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 
 object WC2SessionModule {
 
@@ -34,6 +35,14 @@ object WC2SessionModule {
         CONNECTION_LINK_KEY to connectionLink,
     )
 
+    data class BlockchainViewItem(
+        val chainId: Int,
+        val name: String,
+        val address: String,
+        val selected: Boolean,
+        val showCheckbox: Boolean
+    )
+
     const val SESSION_TOPIC_KEY = "session_topic_id"
     const val CONNECTION_LINK_KEY = "connection_link"
 }
@@ -48,5 +57,67 @@ data class WCSessionButtonStates(
     val connect: WCButtonState,
     val disconnect: WCButtonState,
     val cancel: WCButtonState,
-    val reconnect: WCButtonState
+    val reconnect: WCButtonState,
+    val remove: WCButtonState,
 )
+
+data class WCBlockchain(
+    val chainId: Int,
+    val name: String,
+    val address: String,
+    val selected: Boolean
+) {
+    override fun equals(other: Any?): Boolean {
+        return other is WCBlockchain && this.chainId == other.chainId
+    }
+
+    override fun hashCode(): Int {
+        return chainId.hashCode()
+    }
+
+    val addressShort: String
+        get() {
+            return if (address.length > 10) {
+                "${address.take(5)}...${address.takeLast(5)}"
+            } else {
+                address
+            }
+        }
+}
+
+data class WCAccountData(
+    val eip: String,
+    val chain: WCChain,
+    val address: String?
+)
+
+enum class WCChain(val id: Int) {
+    Ethereum(1),
+    BinanceSmartChain(56),
+    Ropsten(3),
+    Rinkeby(4),
+    Kovan(42),
+    Goerli(5);
+
+    val title: String
+        get() = when (this) {
+            Ethereum -> "Ethereum"
+            BinanceSmartChain -> "Binance Smart Chain"
+            Ropsten -> "Ropsten"
+            Rinkeby -> "Rinkeby"
+            Kovan -> "Kovan"
+            Goerli -> "Goerli"
+        }
+
+    val networkType: EthereumKit.NetworkType
+        get() {
+            return when (this) {
+                Ethereum -> EthereumKit.NetworkType.EthMainNet
+                BinanceSmartChain -> EthereumKit.NetworkType.BscMainNet
+                Ropsten -> EthereumKit.NetworkType.EthRopsten
+                Rinkeby -> EthereumKit.NetworkType.EthRinkeby
+                Kovan -> EthereumKit.NetworkType.EthKovan
+                Goerli -> EthereumKit.NetworkType.EthGoerli
+            }
+        }
+}

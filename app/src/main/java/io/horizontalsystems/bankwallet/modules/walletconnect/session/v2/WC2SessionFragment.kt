@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.WCSessionError
@@ -70,6 +71,10 @@ class WC2SessionFragment : BaseFragment() {
 
         viewModel.closeLiveEvent.observe(viewLifecycleOwner) {
             findNavController().popBackStack()
+        }
+
+        viewModel.showErrorLiveEvent.observe(viewLifecycleOwner) {
+            HudHelper.showErrorMessage(requireView(), getString(R.string.Hud_Text_NoInternet))
         }
 
     }
@@ -151,19 +156,24 @@ private fun ColumnScope.WCSessionListContent(
                 color = ComposeAppTheme.colors.leah
             )
         }
+        val composableItems = mutableListOf<@Composable () -> Unit>().apply {
+            add { StatusCell(viewModel.status) }
+            add {
+                val url = viewModel.peerMeta?.url?.let { TextHelper.getCleanedUrl(it) } ?: ""
+                TitleValueCell(stringResource(R.string.WalletConnect_Url), url)
+            }
+            add {
+                TitleValueCell(
+                    stringResource(R.string.WalletConnect_ActiveWallet), "Wallet1"
+                )
+            }
+            viewModel.blockchains.forEach {
+                add { BlockchainCell(it.name, it.address, it.selected, it.showCheckbox) { viewModel.toggle(it.chainId) } }
+            }
+        }
+
         CellSingleLineLawrenceSection(
-            listOf(
-                { StatusCell(viewModel.status) },
-                {
-                    val url = viewModel.peerMeta?.url?.let { TextHelper.getCleanedUrl(it) } ?: ""
-                    TitleValueCell(stringResource(R.string.WalletConnect_Url), url)
-                },
-                {
-                    TitleValueCell(
-                        stringResource(R.string.WalletConnect_ActiveWallet), "Wallet1"
-                    )
-                },
-            )
+            composableItems
         )
         viewModel.hint?.let {
             Spacer(Modifier.height(12.dp))
@@ -216,6 +226,14 @@ private fun ActionButtons(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Cancel),
                 onClick = { viewModel.cancel() }
+            )
+        }
+        if (buttonsStates.remove.visible) {
+            Spacer(Modifier.height(16.dp))
+            ButtonPrimaryRed(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(R.string.Button_Remove),
+                onClick = { viewModel.disconnect() }
             )
         }
         Spacer(Modifier.height(32.dp))
