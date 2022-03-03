@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
@@ -74,7 +73,6 @@ class NftAssetService(
         val collectionStats = nftManager.collectionStats(collectionUid)
 
         val (bestOffer, sale) = getOrderStats(assetOrders)
-        Log.e("AAA", "floor: ${collectionStats.floorPrice}")
         val newStatsItem = Stats(
             lastSale = asset.stats.lastSale,
             average7d = nftManager.nftAssetPriceToCoinValue(collectionStats.averagePrice7d)?.let { Price(it) },
