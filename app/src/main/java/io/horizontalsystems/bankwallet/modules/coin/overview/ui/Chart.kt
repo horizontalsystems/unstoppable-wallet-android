@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
@@ -259,7 +258,6 @@ fun PriceVolChart(
                 }
             },
             update = { chart ->
-                Log.e("AAA", "loading: $loading")
                 if (loading) {
                     chart.showSpinner()
                 } else {

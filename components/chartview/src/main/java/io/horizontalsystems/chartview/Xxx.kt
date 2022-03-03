@@ -4,68 +4,58 @@ import android.util.Log
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartPointF
 
-class Yyy(private val animator: ChartAnimator?) {
+class Yyy(
+    private val animator: ChartAnimator?,
 
-    private var fromPointsMap = linkedMapOf<Long, ChartPointF>()
-    private var fromStartTimestamp = 0L
-    private var fromEndTimestamp = 0L
-
-    private var toPointsMap = linkedMapOf<Long, ChartPointF>()
-    private var toStartTimestamp = 0L
-    private var toEndTimestamp = 0L
+    private val fromPointsMap: LinkedHashMap<Long, ChartPointF>,
+    private val fromStartTimestamp: Long,
+    private val fromEndTimestamp: Long,
+    private val toPointsMap: LinkedHashMap<Long, ChartPointF>,
+    private val toStartTimestamp: Long,
+    private val toEndTimestamp: Long,
+) {
+    private val fromPointsMapFilled: LinkedHashMap<Long, ChartPointF>
+    private val toPointsMapFilled: LinkedHashMap<Long, ChartPointF>
 
     private var currentFramePointsMap = linkedMapOf<Long, ChartPointF>()
     private var currentFrameStartTimestamp = 0L
     private var currentFrameEndTimestamp = 0L
 
-    fun setTransitionFrom(
-        pointsMap: LinkedHashMap<Long, ChartPointF>,
-        startTimestamp: Long,
-        endTimestamp: Long
-    ) {
-        fromPointsMap = pointsMap
-        fromStartTimestamp = startTimestamp
-        fromEndTimestamp = endTimestamp
-    }
-
-    fun setTransitionTo(
-        pointsMap: LinkedHashMap<Long, ChartPointF>,
-        startTimestamp: Long,
-        endTimestamp: Long
-    ) {
-        toPointsMap = pointsMap
-        toStartTimestamp = startTimestamp
-        toEndTimestamp = endTimestamp
-    }
-
-    fun calculate() {
+    init {
+        Log.e("AAA", "init XxxYyy")
         if (fromPointsMap.isNotEmpty() && toPointsMap.isNotEmpty()) {
-            val fromFilled = fillWith(fromPointsMap, toPointsMap, fromStartTimestamp)
-            val toFilled = fillWith(toPointsMap, fromPointsMap, toStartTimestamp)
-
-            fromPointsMap = fromFilled
-            toPointsMap = toFilled
+            fromPointsMapFilled = fillWith(fromPointsMap, toPointsMap, fromStartTimestamp)
+            toPointsMapFilled = fillWith(toPointsMap, fromPointsMap, toStartTimestamp)
+        } else {
+            fromPointsMapFilled = fromPointsMap
+            toPointsMapFilled = toPointsMap
         }
     }
 
     fun nextFrame() {
-        if (fromPointsMap.isEmpty() || animator == null) {
+        if (fromPointsMapFilled.isEmpty() || animator == null) {
             currentFramePointsMap = toPointsMap
             currentFrameStartTimestamp = toStartTimestamp
             currentFrameEndTimestamp = toEndTimestamp
         } else {
             val animatedFraction = animator.animatedFraction
 
-            Log.e("AAA", "animatedFraction: $animatedFraction")
-
-            val currentStartTimeStamp = getForFrame(fromStartTimestamp.toFloat(), toStartTimestamp.toFloat(), animatedFraction).toLong()
-            val currentEndTimeStamp = getForFrame(fromEndTimestamp.toFloat(), toEndTimestamp.toFloat(), animatedFraction).toLong()
+            val currentStartTimeStamp = getForFrame(
+                fromStartTimestamp.toFloat(),
+                toStartTimestamp.toFloat(),
+                animatedFraction
+            ).toLong()
+            val currentEndTimeStamp = getForFrame(
+                fromEndTimestamp.toFloat(),
+                toEndTimestamp.toFloat(),
+                animatedFraction
+            ).toLong()
 
             val currentPointsMap = mutableMapOf<Long, ChartPointF>()
-            for ((timestamp, prevPoint) in fromPointsMap) {
+            for ((timestamp, prevPoint) in fromPointsMapFilled) {
                 if (timestamp < currentStartTimeStamp || timestamp > currentEndTimeStamp) continue
 
-                val nextPoint = toPointsMap[timestamp]!!
+                val nextPoint = toPointsMapFilled[timestamp]!!
 
                 val currentX = getForFrame(prevPoint.x, nextPoint.x, animatedFraction)
                 val currentY = getForFrame(prevPoint.y, nextPoint.y, animatedFraction)
@@ -97,10 +87,11 @@ class Yyy(private val animator: ChartAnimator?) {
         return start + (change * animatedFraction)
     }
 
+companion object {
     fun fillWith(
         prevPointsMap: LinkedHashMap<Long, ChartPointF>,
         nextPointsMap: LinkedHashMap<Long, ChartPointF>,
-        prevStartTimestamp: Long
+        prevStartTimestamp: Long,
     ): LinkedHashMap<Long, ChartPointF> {
         val prevPointsMutableMap = prevPointsMap.toMutableMap()
 
@@ -114,20 +105,20 @@ class Yyy(private val animator: ChartAnimator?) {
         val prevA = getA(prevPointsMap, prevStartTimestamp)
 
         for ((timestamp, point) in nextPointsMap) {
-            if (!prevPointsMap.containsKey(timestamp)) {
+            if (!prevPointsMutableMap.containsKey(timestamp)) {
                 val x = (timestamp - prevStartTimestamp) / prevA
 
-                val timeStampBefore = prevTimestamps.filter { it < timestamp }.lastOrNull() ?: continue
-                val timeStampAfter = prevTimestamps.filter { it > timestamp }.firstOrNull() ?: continue
+                val timeStampBefore = prevTimestamps.lastOrNull { it < timestamp } ?: continue
+                val timeStampAfter = prevTimestamps.firstOrNull { it > timestamp } ?: continue
 
                 // y = (x - x1) * (y2 - y1) / (x2 - x1) + y1
 
-                val pointBefore = prevPointsMap[timeStampBefore]!!
-                val pointAfter = prevPointsMap[timeStampAfter]!!
+                val pointBefore = prevPointsMutableMap[timeStampBefore]!!
+                val pointAfter = prevPointsMutableMap[timeStampAfter]!!
 
                 val x1 = pointBefore.x
-                val x2 = pointAfter.x
                 val y1 = pointBefore.y
+                val x2 = pointAfter.x
                 val y2 = pointAfter.y
 
                 val y = (x - x1) * (y2 - y1) / (x2 - x1) + y1
@@ -135,6 +126,36 @@ class Yyy(private val animator: ChartAnimator?) {
                 prevPointsMutableMap[timestamp] = ChartPointF(x, y)
             }
         }
+
+//        val filledXs = prevPointsMutableMap.toSortedMap().map { it.value.x }
+//        if (filledXs != filledXs.sorted()) {
+//
+//            val fromOriginalXs = prevPointsMap.map { it.value.x }
+//
+//            val originalXsOrdered = fromOriginalXs == fromOriginalXs.sorted()
+//
+//            Log.e("AAA", "Not ordered: ${filledXs}")
+//            Log.e("AAA", "Ordering of original: $originalXsOrdered")
+//
+//
+//            var prevPointsMapExport = "\nval prevPointsMap\n"
+//            prevPointsMapExport += prevPointsMap.map { (t, p) ->
+//                "$t to ChartPointF(${p.x}f, ${p.y}f),"
+//            }.joinToString("\n")
+//
+//            Log.e("AAA", "\n\n$prevPointsMapExport\n\n")
+//
+//            var nextPointsMapExport = "\nval nextPointsMap\n"
+//            nextPointsMapExport += nextPointsMap.map { (t, p) ->
+//                "$t to ChartPointF(${p.x}f, ${p.y}f),"
+//            }.joinToString("\n")
+//
+//            Log.e("AAA", "\n\n$nextPointsMapExport\n\n")
+//            Log.e("AAA", "\n\nprevStartTimestamp = $prevStartTimestamp\n\n")
+//
+//            throw Exception("Stope")
+//        }
+
 
         val firstIntersectTimeStamp = nextPointsMap.keys.first { prevPointsMutableMap.containsKey(it) }
         // prevY = nextY / yRatio
@@ -164,5 +185,6 @@ class Yyy(private val animator: ChartAnimator?) {
 
         return (timestamp - startTimestamp) / x
     }
+}
 
 }

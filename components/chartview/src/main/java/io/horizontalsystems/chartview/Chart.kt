@@ -2,7 +2,6 @@ package io.horizontalsystems.chartview
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -82,14 +81,12 @@ class Chart @JvmOverloads constructor(
     }
 
     fun showSpinner() {
-        Log.e("AAA", "showSpinner")
         binding.chartError.isVisible = false
         binding.chartViewSpinner.isVisible = true
         binding.loadingShade.isVisible = true
     }
 
     fun hideSpinner() {
-        Log.e("AAA", "hideSpinner")
         binding.chartViewSpinner.isVisible = false
         binding.loadingShade.isVisible = false
     }
