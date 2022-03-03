@@ -1,9 +1,9 @@
 package io.horizontalsystems.chartview
 
-import android.graphics.PointF
 import android.util.Range
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.ChartPointF
 import java.math.BigDecimal
 import kotlin.math.abs
 
@@ -18,6 +18,16 @@ data class ChartData(
 
     fun values(name: Indicator): List<ChartDataValueImmutable> {
         return items.mapNotNull { it.values[name] }
+    }
+
+    fun valuesMap(name: Indicator): LinkedHashMap<Long, ChartDataValueImmutable> {
+        return LinkedHashMap(
+            items.mapNotNull { item ->
+                item.values[name]?.let {
+                    item.timestamp to it
+                }
+            }.toMap()
+        )
     }
 
     fun diff(): BigDecimal {
@@ -37,12 +47,20 @@ data class ChartData(
 }
 
 @Immutable
-data class ChartDataValueImmutable(val value: Float, val point: PointF)
+data class ChartDataValueImmutable(val value: Float, val point: ChartPointF)
 
 @Immutable
-data class ChartDataItemImmutable(val timestamp: Long, val values: Map<Indicator, ChartDataValueImmutable?>)
+data class ChartDataItemImmutable(
+    val timestamp: Long,
+    val values: Map<Indicator, ChartDataValueImmutable?>
+)
 
-class ChartDataBuilder private constructor(points: List<ChartPoint>, start: Long?, end: Long?, private val isExpired: Boolean = false) {
+class ChartDataBuilder private constructor(
+    points: List<ChartPoint>,
+    start: Long?,
+    end: Long?,
+    private val isExpired: Boolean = false
+) {
 
     companion object {
         fun buildFromPoints(
@@ -84,9 +102,9 @@ class ChartDataBuilder private constructor(points: List<ChartPoint>, start: Long
         val histogram = ranges[Indicator.MacdHistogram]
 
         val max = listOf(histogram?.lower, histogram?.upper)
-                .mapNotNull { it }
-                .map { abs(it) }
-                .maxOrNull() ?: 1f
+            .mapNotNull { it }
+            .map { abs(it) }
+            .maxOrNull() ?: 1f
 
         Range(-max, max)
     }
@@ -96,10 +114,17 @@ class ChartDataBuilder private constructor(points: List<ChartPoint>, start: Long
         val signal = ranges[Indicator.MacdSignal]
         val histogram = ranges[Indicator.MacdHistogram]
 
-        val max = listOf(macd?.lower, macd?.upper, signal?.lower, signal?.upper, histogram?.lower, histogram?.upper)
-                .mapNotNull { it }
-                .map { abs(it) }
-                .maxOrNull() ?: 1f
+        val max = listOf(
+            macd?.lower,
+            macd?.upper,
+            signal?.lower,
+            signal?.upper,
+            histogram?.lower,
+            histogram?.upper
+        )
+            .mapNotNull { it }
+            .map { abs(it) }
+            .maxOrNull() ?: 1f
 
         Range(-max, max)
     }
@@ -122,11 +147,11 @@ class ChartDataBuilder private constructor(points: List<ChartPoint>, start: Long
             val timestamp = point.timestamp - startTimestamp
             val x = (timestamp.toFloat() / visibleTimeInterval)
 
-            val valuesImmutable = mapOf(Indicator.Candle to ChartDataValueImmutable(point.value, PointF(x, getPointY(point.value, getRangeForIndicator(Indicator.Candle)))))
+            val valuesImmutable = mapOf(Indicator.Candle to ChartDataValueImmutable(point.value, ChartPointF(x, getPointY(point.value, getRangeForIndicator(Indicator.Candle)))))
                 .plus(
                     point.indicators.mapNotNull { (indicator, value) ->
                         value?.let {
-                            indicator to ChartDataValueImmutable(value, PointF(x, getPointY(value, getRangeForIndicator(indicator))))
+                            indicator to ChartDataValueImmutable(value, ChartPointF(x, getPointY(value, getRangeForIndicator(indicator))))
                         }
                     }
                 )

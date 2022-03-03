@@ -2,6 +2,7 @@ package io.horizontalsystems.chartview
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -81,12 +82,14 @@ class Chart @JvmOverloads constructor(
     }
 
     fun showSpinner() {
+        Log.e("AAA", "showSpinner")
         binding.chartError.isVisible = false
         binding.chartViewSpinner.isVisible = true
         binding.loadingShade.isVisible = true
     }
 
     fun hideSpinner() {
+        Log.e("AAA", "hideSpinner")
         binding.chartViewSpinner.isVisible = false
         binding.loadingShade.isVisible = false
     }
@@ -199,6 +202,12 @@ class Chart @JvmOverloads constructor(
             binding.chartMain.shape,
             config.curveVerticalOffset
         )
+        val pointsMap = PointConverter.curveMap(
+            data,
+            Candle,
+            binding.chartMain.shape,
+            config.curveVerticalOffset
+        )
         val volumes = PointConverter.volume(
             data.values(Volume),
             binding.chartBottom.shape,
@@ -293,12 +302,12 @@ class Chart @JvmOverloads constructor(
 
         // Candles
         mainCurve.setShape(binding.chartMain.shape)
-        mainCurve.setPoints(points)
+        mainCurve.setPointsMap(pointsMap, data.startTimestamp, data.endTimestamp)
         mainCurve.setColor(config.curveColor)
 
-        mainGradient.setPoints(points)
-        mainGradient.setShape(binding.chartMain.shape)
-        mainGradient.setShader(config.curveGradient)
+//        mainGradient.setPoints(points)
+//        mainGradient.setShape(binding.chartMain.shape)
+//        mainGradient.setShader(config.curveGradient)
 
         mainGrid.setShape(binding.chartMain.shape)
         mainGrid.set(timeline)

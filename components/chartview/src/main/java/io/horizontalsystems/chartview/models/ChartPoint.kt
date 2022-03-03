@@ -7,3 +7,5 @@ class ChartPoint(
     val timestamp: Long,
     val indicators: Map<Indicator, Float?> = mapOf()
 )
+
+

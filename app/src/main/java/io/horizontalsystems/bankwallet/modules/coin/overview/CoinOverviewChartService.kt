@@ -69,7 +69,7 @@ class CoinOverviewChartService(
             updatesSubscriptionKey = newKey
         }
 
-        val tmpChartInfo = marketKit.chartInfo(coinUid, currency.code, chartType.kitChartType)
+        val tmpChartInfo: ChartInfo? = marketKit.chartInfo(coinUid, currency.code, chartType.kitChartType)
         val tmpLastCoinPrice = marketKit.coinPrice(coinUid, currency.code)
 
         val items = if (tmpChartInfo != null && tmpLastCoinPrice != null) {
