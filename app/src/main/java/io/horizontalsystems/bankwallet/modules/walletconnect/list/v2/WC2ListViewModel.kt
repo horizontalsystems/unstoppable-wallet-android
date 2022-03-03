@@ -55,7 +55,7 @@ class WC2ListViewModel(
             WalletConnectListModule.SessionViewItem(
                 sessionId = session.topic,
                 title = session.peerAppMetaData?.name ?: "",
-                subtitle = getSubtitle(session.permissions.blockchain.chains),
+                subtitle = getSubtitle(session.accounts),
                 url = session.peerAppMetaData?.url ?: "",
                 imageUrl = session.peerAppMetaData?.icons?.lastOrNull(),
             )

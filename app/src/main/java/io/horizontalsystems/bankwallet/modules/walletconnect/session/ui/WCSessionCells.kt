@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,34 +13,38 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
 
 @Composable
-fun BlockchainCell(title: String, value: String, checked: Boolean) {
+fun BlockchainCell(
+    title: String,
+    value: String,
+    checked: Boolean,
+    showCheckbox: Boolean,
+    onCheckClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .clickable {
-                //todo update checked state
-            }
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        HsCheckbox(
-            checked = checked,
-            onCheckedChange = {
-
-            }
-        )
-        Spacer(Modifier.width(16.dp))
+        if (showCheckbox) {
+            HsCheckbox(
+                checked = checked,
+                onCheckedChange = { onCheckClick.invoke() }
+            )
+            Spacer(Modifier.width(16.dp))
+        }
         Text(
             text = title,
             color = ComposeAppTheme.colors.grey,
             style = ComposeAppTheme.typography.subhead2
         )
         Spacer(Modifier.weight(1f))
+        Spacer(Modifier.width(8.dp))
         Text(
             text = value,
             color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.subhead1
+            style = ComposeAppTheme.typography.subhead1,
         )
     }
 }
