@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
@@ -117,7 +118,9 @@ private fun <T> HsChartLinePeriodsAndPoint(
 
         if (selectedPoint != null) {
             TabPeriod(
-                modifier = Modifier.background(ComposeAppTheme.colors.tyler).padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .background(ComposeAppTheme.colors.tyler)
+                    .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
@@ -234,6 +237,8 @@ fun PriceVolChart(
     ) {
         Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
 
+        val coroutineScope = rememberCoroutineScope()
+
         AndroidView(
             modifier = Modifier.fillMaxSize(),
             factory = {
@@ -254,6 +259,7 @@ fun PriceVolChart(
                 }
             },
             update = { chart ->
+                Log.e("AAA", "loading: $loading")
                 if (loading) {
                     chart.showSpinner()
                 } else {

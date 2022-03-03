@@ -1,16 +1,17 @@
 package io.horizontalsystems.chartview.helpers
 
 import android.animation.ValueAnimator
-import android.view.animation.AccelerateInterpolator
+import android.view.animation.LinearInterpolator
 
 class ChartAnimator(onUpdate: (() -> Unit)) {
 
-    private var animatedFraction = 0f
+    var animatedFraction = 0f
+        private set
     private var animator = ValueAnimator()
 
     init {
-        animator.interpolator = AccelerateInterpolator()
-        animator.duration = 300
+        animator.interpolator = LinearInterpolator()
+        animator.duration = 1000
         animator.addUpdateListener {
             animatedFraction = animator.animatedFraction
             onUpdate()

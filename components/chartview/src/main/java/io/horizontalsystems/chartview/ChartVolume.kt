@@ -2,16 +2,16 @@ package io.horizontalsystems.chartview
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.PointF
 import android.graphics.RectF
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.ChartPointF
 
 class ChartVolume(private val config: ChartConfig, private val animator: ChartAnimator, override var isVisible: Boolean = true) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
 
-    private var bars = listOf<PointF>()
+    private var bars = listOf<ChartPointF>()
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -22,7 +22,7 @@ class ChartVolume(private val config: ChartConfig, private val animator: ChartAn
         shape = rect
     }
 
-    fun setPoints(points: List<PointF>) {
+    fun setPoints(points: List<ChartPointF>) {
         bars = points
     }
 
