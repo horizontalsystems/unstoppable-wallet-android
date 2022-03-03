@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,7 +20,6 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
         viewModelScope.launch {
             service.serviceItemState
                 .collect { assetItemState ->
-                    Log.e("AAA", "viewState: ${assetItemState.viewState}, assetItem: ${assetItemState.dataOrNull}")
                     viewState = assetItemState.viewState
                     nftAssetItem = assetItemState.dataOrNull
                 }
