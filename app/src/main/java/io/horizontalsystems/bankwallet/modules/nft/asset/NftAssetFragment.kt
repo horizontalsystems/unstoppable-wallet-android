@@ -192,36 +192,7 @@ private fun NftAsset(asset: NftAssetModuleAssetItem) {
         item {
             Column {
                 Spacer(modifier = Modifier.height(24.dp))
-                CellSingleLineLawrenceSection {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_nft_amount_20),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.grey
-                        )
 
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Text(
-                            text = stringResource(id = R.string.NftAsset_OwnedCount),
-                            color = ComposeAppTheme.colors.leah,
-                            style = ComposeAppTheme.typography.body
-                        )
-
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(
-                            text = asset.ownedCount.toString(),
-                            color = ComposeAppTheme.colors.grey,
-                            style = ComposeAppTheme.typography.subhead1
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
                 val prices = mutableListOf<Pair<String, Price?>>()
                 prices.add(
                     Pair(

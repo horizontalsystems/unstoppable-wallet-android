@@ -41,7 +41,7 @@ class NftCollectionsService(
                 .collect { assetItemsPriced ->
                     val totalValue = assetItemsPriced.map { (_, assets) ->
                         assets.sumOf {
-                            it.currencyPrice?.value?.multiply(it.assetItem.ownedCount.toBigDecimal()) ?: BigDecimal.ZERO
+                            it.currencyPrice?.value ?: BigDecimal.ZERO
                         }
                     }.sumOf { it }
 

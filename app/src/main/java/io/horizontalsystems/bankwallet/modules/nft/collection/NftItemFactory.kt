@@ -23,7 +23,6 @@ class NftItemFactory(private val nftManager: NftManager) {
             imageUrl = assetRecord.imageUrl,
             imagePreviewUrl = assetRecord.imagePreviewUrl,
             description = assetRecord.description,
-            ownedCount = assetRecord.ownedCount,
             contract = assetRecord.contract,
             onSale = assetRecord.onSale,
             prices = assetItemPrices
