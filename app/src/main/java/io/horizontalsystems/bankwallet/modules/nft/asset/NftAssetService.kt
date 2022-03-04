@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.nft.asset
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
+import io.horizontalsystems.bankwallet.modules.nft.NftAssetAttribute
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.*
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale.PriceType
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class NftAssetService(
     private val accountId: String,
@@ -54,7 +56,13 @@ class NftAssetService(
                         ?.let { Price(it) },
                     average30d = nftManager.nftAssetPriceToCoinValue(collectionRecord.averagePrice30d)
                         ?.let { Price(it) },
-                )
+                ),
+                attributes = assetRecord.attributes.map { attribute ->
+                    Attribute(
+                        attribute.type,
+                        attribute.value,
+                        getAttributePercentage(attribute, collectionRecord.totalSupply)?.let { "$it%" })
+                }
             )
 
             repository.set(asset)
@@ -62,6 +70,18 @@ class NftAssetService(
             syncStats(asset, tokenId, contractAddress, assetRecord.collectionUid)
         }
     }
+
+    private fun getAttributePercentage(attribute: NftAssetAttribute, totalSupply: Int): Number? =
+        if (attribute.count > 0 && totalSupply > 0) {
+            val percent = (attribute.count * 100f / totalSupply)
+            when {
+                percent >= 10 -> percent.roundToInt()
+                percent >= 1 -> (percent * 10).roundToInt() / 10f
+                else -> (percent * 100).roundToInt() / 100f
+            }
+        } else {
+            null
+        }
 
     private suspend fun syncStats(
         asset: NftAssetModuleAssetItem,

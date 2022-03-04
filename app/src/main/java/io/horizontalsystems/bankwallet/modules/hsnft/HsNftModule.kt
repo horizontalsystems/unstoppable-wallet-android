@@ -154,6 +154,7 @@ class HsNftApiProvider : INftApiProvider {
             uid = collectionResponse.uid,
             name = collectionResponse.name,
             imageUrl = collectionResponse.image_data?.image_url,
+            totalSupply = collectionResponse.stats.total_supply,
             averagePrice7d = NftAssetPrice(
                 getCoinTypeId(zeroAddress),
                 collectionResponse.stats.seven_day_average_price
@@ -193,7 +194,8 @@ class HsNftApiProvider : INftApiProvider {
                 assetResponse.contract.address,
                 assetResponse.contract.type
             ),
-            links = assetResponse.links
+            links = assetResponse.links,
+            attributes = assetResponse.attributes.map { NftAssetAttribute(it.trait_type, it.value, it.trait_count) }
         )
     }
 

@@ -19,11 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -259,9 +262,19 @@ private fun NftAsset(asset: NftAssetModuleAssetItem) {
                     NftAssetBestOffer(it)
                 }
 
-                NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Properties)) {
-
+                if (asset.attributes.isNotEmpty()) {
+                    NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Properties)) {
+                        ChipVerticalGrid(
+                            modifier = Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp),
+                            spacing = 7.dp
+                        ) {
+                            asset.attributes.forEach {
+                                NftAssetAttribute(it)
+                            }
+                        }
+                    }
                 }
+
                 if (!asset.description.isNullOrBlank()) {
                     NftAssetSectionBlock(text = stringResource(id = R.string.NftAsset_Description)) {
                         InfoText(asset.description)
@@ -383,6 +396,88 @@ private fun NftAsset(asset: NftAssetModuleAssetItem) {
                 Spacer(modifier = Modifier.height(32.dp))
                 CellFooter(text = stringResource(id = R.string.PoweredBy_OpenSeaAPI))
             }
+        }
+    }
+}
+
+@Composable
+private fun ChipVerticalGrid(
+    modifier: Modifier = Modifier,
+    spacing: Dp,
+    content: @Composable () -> Unit
+) {
+    Layout(
+        content = content,
+        modifier = modifier
+    ) { measurables, constraints ->
+        var currentRow = 0
+        var currentOrigin = IntOffset.Zero
+        val spacingValue = spacing.toPx().toInt()
+        val placeables = measurables.map { measurable ->
+            val placeable = measurable.measure(constraints)
+
+            if (currentOrigin.x > 0f && currentOrigin.x + placeable.width > constraints.maxWidth) {
+                currentRow += 1
+                currentOrigin = currentOrigin.copy(x = 0, y = currentOrigin.y + placeable.height + spacingValue)
+            }
+
+            placeable to currentOrigin.also {
+                currentOrigin = it.copy(x = it.x + placeable.width + spacingValue)
+            }
+        }
+
+        layout(
+            width = constraints.maxWidth,
+            height = placeables.lastOrNull()?.run { first.height + second.y } ?: 0
+        ) {
+            placeables.forEach {
+                val (placeable, origin) = it
+                placeable.place(origin.x, origin.y)
+            }
+        }
+    }
+}
+
+@Composable
+private fun NftAssetAttribute(attribute: NftAssetModuleAssetItem.Attribute) {
+    Box(
+        modifier = Modifier
+            .height(60.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 10.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = attribute.value,
+                    color = ComposeAppTheme.colors.leah,
+                    style = ComposeAppTheme.typography.body,
+                )
+                attribute.percent?.let { percent ->
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 6.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(ComposeAppTheme.colors.jeremy)
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),
+                            text = percent,
+                            color = ComposeAppTheme.colors.bran,
+                            style = ComposeAppTheme.typography.microSB,
+                            maxLines = 1,
+                        )
+                    }
+                }
+            }
+            Text(
+                text = attribute.type,
+                color = ComposeAppTheme.colors.grey,
+                style = ComposeAppTheme.typography.subhead2,
+            )
         }
     }
 }
