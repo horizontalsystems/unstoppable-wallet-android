@@ -30,6 +30,7 @@
     <string name="Button_Reconnect">اتصال مجدد</string>
     <string name="Button_Understand">می فهمم</string>
     <string name="Button_Switch">تغییر</string>
+    <string name="Button_Remove">Remove</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Any">هرکدام</string>
@@ -312,11 +313,23 @@
     <string name="WalletConnect_Disconnecting">قطع شدن</string>
     <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
     <string name="WalletConnect_SignMessageRequest_Domain">دامنه</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">پیام برای امضا</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">لطفا برای احراز هویت پیامی را امضا کنید</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">نشانه</string>
     <string name="WalletConnect_Error_NoWallet">کیف پول مناسبی وجود ندارد. شما باید کیف پول موجود را ایجاد یا بازیابی کنید</string>
     <string name="WalletConnect_Error_WatchAccount">این ویژگی با کیف‌پول‌های فقط مشاهده کار نمی‌کند، شما باید به یک کیف پول بازیابی یا ایجاد شده تغییر دهید </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported chain id</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
+    <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Request not found error</string>
+    <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
+    <string name="WalletConnect_PendingRequests">Pending Requests</string>
+    <string name="WalletConnect_ActiveWallet">Active Wallet</string>
+    <string name="WalletConnect_Input">Input</string>
+    <string name="WalletConnect_Version1">Version 1.0</string>
+    <string name="WalletConnect_Version2">Version 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">هشدار</string>
     <string name="EthereumTransaction_Error_Title">خطا</string>
