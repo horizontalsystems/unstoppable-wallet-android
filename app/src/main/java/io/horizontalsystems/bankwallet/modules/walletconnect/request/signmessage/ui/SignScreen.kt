@@ -69,7 +69,7 @@ fun SignMessageRequestScreen(
                         }, {
                             SignMessageButton(
                                 stringResource(R.string.WalletConnect_SignMessageRequest_ShowMessageTitle),
-                                formatJson(message.data),
+                                message.data,
                                 navController
                             )
                         })
@@ -117,7 +117,7 @@ private fun SignMessageButton(title: String, data: String, navController: NavCon
             .clickable {
                 navController.slideFromBottom(
                     R.id.wcSignMessageRequestFragment_to_wcDisplayTypedMessageFragment,
-                    bundleOf(TYPED_MESSAGE to data)
+                    bundleOf(TYPED_MESSAGE to formatJson(data))
                 )
             }
             .padding(horizontal = 16.dp),

@@ -31,6 +31,10 @@ class WC2ListViewModel(
         sync(service.sessions)
     }
 
+    override fun onCleared() {
+        disposables.clear()
+    }
+
     private fun syncPendingRequestsCount(count: Int) {
         sectionItem?.let {
             setSectionViewItem(it.sessions, count)
@@ -67,10 +71,6 @@ class WC2ListViewModel(
     private fun getSubtitle(chains: List<String>): String {
         val chainNames = chains.mapNotNull { WC2Parser.getChainName(it) }
         return chainNames.joinToString(", ")
-    }
-
-    override fun onCleared() {
-        disposables.clear()
     }
 
 }

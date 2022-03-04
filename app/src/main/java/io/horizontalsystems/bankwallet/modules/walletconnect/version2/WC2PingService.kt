@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.version2
 
-import android.util.Log
 import com.walletconnect.walletconnectv2.client.WalletConnect
 import com.walletconnect.walletconnectv2.client.WalletConnectClient
 import io.reactivex.BackpressureStrategy
@@ -35,7 +34,6 @@ class WC2PingService {
             }
 
             override fun onError(error: Throwable) {
-                Log.e("PingService", "onError: ", error)
                 state = State.Disconnected(error)
             }
         })

@@ -23,8 +23,6 @@ class WC2SessionService(
     private val connectionLink: String?
 ) {
 
-    private val TAG = "WC2SessionService"
-
     sealed class State {
         object Idle : State()
         class Invalid(val error: Throwable) : State()
@@ -39,11 +37,8 @@ class WC2SessionService(
             stateSubject.onNext(value)
         }
 
-    var proposal: WalletConnect.Model.SessionProposal? = null
-        private set
-
-    var session: WalletConnect.Model.SettledSession? = null
-        private set
+    private var proposal: WalletConnect.Model.SessionProposal? = null
+    private var session: WalletConnect.Model.SettledSession? = null
 
     private val networkConnectionErrorSubject = PublishSubject.create<Unit>()
     val networkConnectionErrorObservable: Flowable<Unit>
@@ -164,7 +159,7 @@ class WC2SessionService(
     }
 
     fun reject() {
-        if(!connectivityManager.isConnected){
+        if (!connectivityManager.isConnected) {
             networkConnectionErrorSubject.onNext(Unit)
             return
         }
@@ -178,7 +173,7 @@ class WC2SessionService(
     fun approve() {
         val proposal = proposal ?: return
 
-        if(!connectivityManager.isConnected){
+        if (!connectivityManager.isConnected) {
             networkConnectionErrorSubject.onNext(Unit)
             return
         }
@@ -196,7 +191,7 @@ class WC2SessionService(
     }
 
     fun disconnect() {
-        if(!connectivityManager.isConnected){
+        if (!connectivityManager.isConnected) {
             networkConnectionErrorSubject.onNext(Unit)
             return
         }
@@ -209,7 +204,7 @@ class WC2SessionService(
     }
 
     fun reconnect() {
-        if(!connectivityManager.isConnected){
+        if (!connectivityManager.isConnected) {
             networkConnectionErrorSubject.onNext(Unit)
             return
         }
