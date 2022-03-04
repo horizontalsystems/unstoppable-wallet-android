@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
@@ -39,7 +40,7 @@ fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
                 .clip(RoundedCornerShape(8.dp))
                 .background(ComposeAppTheme.colors.steel20)
         ) {
-            val painter = rememberImagePainter(asset.assetItem.imagePreviewUrl)
+            val painter = rememberImagePainter(asset.assetItem.imageUrl)
             if (painter.state !is ImagePainter.State.Success) {
                 asset.assetItem.name?.let {
                     Text(
@@ -72,7 +73,9 @@ fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
                 modifier = Modifier.padding(start = 12.dp, top = 12.dp, end = 12.dp),
                 text = it,
                 style = ComposeAppTheme.typography.microSB,
-                color = ComposeAppTheme.colors.grey
+                color = ComposeAppTheme.colors.grey,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
         Row(
