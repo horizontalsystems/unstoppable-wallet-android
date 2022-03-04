@@ -47,7 +47,7 @@ class CoinDetailsService(
 
     private fun fetchCharts(details: MarketInfoDetails): Single<Item> {
         val tvlsSingle: Single<List<ChartPoint>> = if (details.tvl != null) {
-            marketKit.marketInfoTvlSingle(fullCoin.coin.uid, currency.code, TimePeriod.Day30)
+            marketKit.marketInfoTvlSingle(fullCoin.coin.uid, currency.code, HsTimePeriod.Month1)
         } else {
             Single.just(listOf())
         }
