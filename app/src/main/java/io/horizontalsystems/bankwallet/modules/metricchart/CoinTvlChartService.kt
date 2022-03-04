@@ -8,7 +8,7 @@ import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.TimePeriod
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
 class CoinTvlChartService(
@@ -40,9 +40,9 @@ class CoinTvlChartService(
     }
 
     private fun getTimePeriod(chartType: ChartType) = when (chartType) {
-        ChartType.DAILY -> TimePeriod.Hour24
-        ChartType.WEEKLY -> TimePeriod.Day7
-        ChartType.MONTHLY -> TimePeriod.Day30
+        ChartType.DAILY -> HsTimePeriod.Day1
+        ChartType.WEEKLY -> HsTimePeriod.Week1
+        ChartType.MONTHLY -> HsTimePeriod.Month1
         else -> throw UnsupportedException("Unsupported chartType $chartType")
     }
 }

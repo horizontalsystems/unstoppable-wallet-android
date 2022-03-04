@@ -11,7 +11,7 @@ import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.DefiMarketInfo
-import io.horizontalsystems.marketkit.models.TimePeriod
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import java.math.BigDecimal
 
@@ -110,9 +110,9 @@ class GlobalMarketRepository(
         val tvlItems = defiMarketInfoList.map { defiMarketInfo ->
             val diffPercent: BigDecimal? = when (chartType) {
                 ChartView.ChartType.DAILY -> defiMarketInfo.tvlChange1D
-                ChartView.ChartType.WEEKLY -> defiMarketInfo.tvlChange7D
+                ChartView.ChartType.WEEKLY -> defiMarketInfo.tvlChange1W
                 ChartView.ChartType.MONTHLY,
-                ChartView.ChartType.MONTHLY_BY_DAY -> defiMarketInfo.tvlChange30D
+                ChartView.ChartType.MONTHLY_BY_DAY -> defiMarketInfo.tvlChange1M
                 else -> null
             }
             val diff: CurrencyValue? = diffPercent?.let {
@@ -150,12 +150,12 @@ class GlobalMarketRepository(
         }
     }
 
-    private fun getTimePeriod(chartType: ChartView.ChartType): TimePeriod {
+    private fun getTimePeriod(chartType: ChartView.ChartType): HsTimePeriod {
         return when (chartType) {
-            ChartView.ChartType.DAILY -> TimePeriod.Hour24
-            ChartView.ChartType.WEEKLY -> TimePeriod.Day7
+            ChartView.ChartType.DAILY -> HsTimePeriod.Day1
+            ChartView.ChartType.WEEKLY -> HsTimePeriod.Week1
             ChartView.ChartType.MONTHLY,
-            ChartView.ChartType.MONTHLY_BY_DAY -> TimePeriod.Day30
+            ChartView.ChartType.MONTHLY_BY_DAY -> HsTimePeriod.Month1
             else -> throw IllegalArgumentException("Wrong ChartType")
         }
     }
