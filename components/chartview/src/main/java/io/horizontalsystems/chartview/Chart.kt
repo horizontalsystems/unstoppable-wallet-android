@@ -164,6 +164,9 @@ class Chart @JvmOverloads constructor(
         maxValue: String?,
         minValue: String?
     ) {
+
+        animatorMain.cancel()
+
         config.setTrendColor(data)
 
         val emaFast = PointConverter.curve(
@@ -317,7 +320,6 @@ class Chart @JvmOverloads constructor(
         mainCurve.setZzz(mainCurveZzz!!)
         mainCurve.setColor(config.curveColor)
 
-        mainGradient.setPoints(points)
         mainGradient.setZzz(mainCurveZzz!!)
         mainGradient.setShape(binding.chartMain.shape)
         mainGradient.setShader(config.curveGradient)

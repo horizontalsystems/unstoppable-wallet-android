@@ -1,5 +1,6 @@
 package io.horizontalsystems.chartview
 
+import android.util.Log
 import io.horizontalsystems.chartview.models.ChartPointF
 
 class Zzz(
@@ -22,15 +23,15 @@ class Zzz(
     private val toMinValue: Float
     private val toMaxValue: Float
 
-    var frameValues = linkedMapOf<Long, Float>()
+    var frameValues = fromValues
         private set
-    var frameStartTimestamp = 0L
+    var frameStartTimestamp = fromStartTimestamp
         private set
-    var frameEndTimestamp = 0L
+    var frameEndTimestamp = fromEndTimestamp
         private set
-    var frameMinValue = 0f
+    var frameMinValue = fromMinValue
         private set
-    var frameMaxValue = 0f
+    var frameMaxValue = fromMaxValue
         private set
 
     private val fromValuesFilled: LinkedHashMap<Long, Float>
@@ -44,6 +45,9 @@ class Zzz(
                 }
             }.toMap().toSortedMap()
         )
+        Log.e("AAA", "fromValues: $fromValues")
+//        Log.e("AAA", "toValues: $toValues")
+
         toMinValue = toValues.values.minOrNull() ?: 0f
         toMaxValue = toValues.values.maxOrNull() ?: 0f
 
@@ -52,7 +56,7 @@ class Zzz(
     }
 
     fun nextFrame(animatedFraction: Float) {
-        if (fromValuesFilled.isEmpty()) {
+        if (fromValues.isEmpty()) {
             frameStartTimestamp = toStartTimestamp
             frameEndTimestamp = toEndTimestamp
 
