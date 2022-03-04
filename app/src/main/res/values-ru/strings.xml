@@ -30,6 +30,7 @@
     <string name="Button_Reconnect">Повторное Подключение</string>
     <string name="Button_Understand">Я Понимаю</string>
     <string name="Button_Switch">Перекл.</string>
+    <string name="Button_Remove">Remove</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет Данных</string>
     <string name="Any">Любые</string>
@@ -310,13 +311,25 @@
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
     <string name="WalletConnect_NewConnect">Новое Подключение</string>
     <string name="WalletConnect_Disconnecting">Отключение</string>
-    <string name="WalletConnect_SignMessageRequest_Title">Подписать</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Домен</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Сообщение для подписи</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Пожалуйста, подпишите сообщение для аутентификации</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Подписать</string>
     <string name="WalletConnect_Error_NoWallet">Нет подходящего кошелька. Вам нужно создать или восстановить текущий кошелек</string>
     <string name="WalletConnect_Error_WatchAccount">Эта функция не доступна для кошельков для просмотра, вам нужно выбрать восстановленный или созданный кошелек </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported chain id</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
+    <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Request not found error</string>
+    <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
+    <string name="WalletConnect_PendingRequests">Pending Requests</string>
+    <string name="WalletConnect_ActiveWallet">Active Wallet</string>
+    <string name="WalletConnect_Input">Input</string>
+    <string name="WalletConnect_Version1">Version 1.0</string>
+    <string name="WalletConnect_Version2">Version 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Внимание</string>
     <string name="EthereumTransaction_Error_Title">Ошибка</string>
