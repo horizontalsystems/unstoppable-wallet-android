@@ -80,14 +80,6 @@ class BinanceAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = binanceKit.latestBlockFlowable.map { }
 
-    override val explorerTitle: String = "binance.org"
-
-    override fun explorerUrl(transactionHash: String) = if (testMode) {
-        "https://testnet-explorer.binance.org/tx/$transactionHash"
-    } else {
-        "https://explorer.binance.org/tx/$transactionHash"
-    }
-
     override fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
         return try {
             val filter = getBinanceTransactionTypeFilter(transactionType)

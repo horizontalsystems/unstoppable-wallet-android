@@ -32,7 +32,7 @@ class OneInchKitHelper(
     }
 
     val smartContractAddress: Address
-        get() = oneInchKit.smartContractAddress
+        get() = oneInchKit.getRouterAddress
 
     fun getQuoteAsync(
         fromCoin: PlatformCoin,

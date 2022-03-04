@@ -157,7 +157,7 @@ class WC1Service(
         sessionData?.let { sessionData ->
             interactor?.let { interactor ->
                 val evmKitWrapper = sessionData.evmKitWrapper
-                val chainId = evmKitWrapper.evmKit.networkType.chainId
+                val chainId = evmKitWrapper.evmKit.chain.id
                 interactor.approveSession(evmKitWrapper.evmKit.receiveAddress.eip55, chainId)
 
                 val session = WalletConnectSession(

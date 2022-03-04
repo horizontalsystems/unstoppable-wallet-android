@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2PingService
-import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.Chain
 
 object WC2SessionModule {
 
@@ -100,15 +100,15 @@ enum class WCChain(val id: Int) {
             Goerli -> "Goerli"
         }
 
-    val networkType: EthereumKit.NetworkType
+    val chain: Chain
         get() {
             return when (this) {
-                Ethereum -> EthereumKit.NetworkType.EthMainNet
-                BinanceSmartChain -> EthereumKit.NetworkType.BscMainNet
-                Ropsten -> EthereumKit.NetworkType.EthRopsten
-                Rinkeby -> EthereumKit.NetworkType.EthRinkeby
-                Kovan -> EthereumKit.NetworkType.EthKovan
-                Goerli -> EthereumKit.NetworkType.EthGoerli
+                Ethereum -> Chain.Ethereum
+                BinanceSmartChain -> Chain.BinanceSmartChain
+                Ropsten -> Chain.EthereumRopsten
+                Rinkeby -> Chain.EthereumRinkeby
+                Kovan -> Chain.EthereumKovan
+                Goerli -> Chain.EthereumGoerli
             }
         }
 }

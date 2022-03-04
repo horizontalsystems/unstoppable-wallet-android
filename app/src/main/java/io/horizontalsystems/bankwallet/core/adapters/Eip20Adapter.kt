@@ -1,16 +1,18 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BalanceData
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.erc20kit.core.Erc20Kit
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
-import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Flowable
@@ -85,8 +87,8 @@ class Eip20Adapter(
     companion object {
         fun clear(walletId: String, testMode: Boolean) {
             val networkTypes = when {
-                testMode -> listOf(EthereumKit.NetworkType.EthRopsten)
-                else -> listOf(EthereumKit.NetworkType.EthMainNet, EthereumKit.NetworkType.BscMainNet)
+                testMode -> listOf(Chain.EthereumRopsten)
+                else -> listOf(Chain.Ethereum, Chain.BinanceSmartChain)
             }
 
             networkTypes.forEach {

@@ -10,10 +10,7 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.signer.Signer
-import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.ethereumkit.models.FullTransaction
-import io.horizontalsystems.ethereumkit.models.GasPrice
-import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.ethereumkit.models.*
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.reactivex.Observable
@@ -136,15 +133,15 @@ class EvmKitManager(
     ): EvmKitWrapper {
         val evmNetwork = evmNetworkProvider.getEvmNetwork(account)
         val seed = accountType.seed
-        val address = Signer.address(seed, evmNetwork.networkType)
-        val signer = Signer.getInstance(seed, evmNetwork.networkType)
+        val address = Signer.address(seed, evmNetwork.chain)
+        val signer = Signer.getInstance(seed, evmNetwork.chain)
 
         val kit = EthereumKit.getInstance(
             App.instance,
             address,
-            evmNetwork.networkType,
-            evmNetwork.syncSource,
-            etherscanApiKey,
+            evmNetwork.chain,
+            evmNetwork.rpcSource,
+            transactionSource(evmNetwork.chain, etherscanApiKey),
             account.id
         )
 
@@ -164,6 +161,14 @@ class EvmKitManager(
         return wrapper
     }
 
+    private fun transactionSource(chain: Chain, apiKey: String): TransactionSource {
+        return when (chain) {
+            Chain.BinanceSmartChain -> TransactionSource.bscscan(apiKey)
+            Chain.Ethereum -> TransactionSource.ethereumEtherscan(apiKey)
+            else -> TransactionSource.ropstenEtherscan(apiKey)
+        }
+    }
+
     private fun createKitInstance(
         accountType: AccountType.Address,
         account: Account
@@ -174,9 +179,9 @@ class EvmKitManager(
         val kit = EthereumKit.getInstance(
             App.instance,
             Address(address),
-            evmNetwork.networkType,
-            evmNetwork.syncSource,
-            etherscanApiKey,
+            evmNetwork.chain,
+            evmNetwork.rpcSource,
+            transactionSource(evmNetwork.chain, etherscanApiKey),
             account.id
         )
 
@@ -228,10 +233,10 @@ class EvmKitManager(
     }
 }
 
-val EthereumKit.SyncSource.urls: List<URL>
+val RpcSource.urls: List<URL>
     get() = when (this) {
-        is EthereumKit.SyncSource.WebSocket -> listOf(url)
-        is EthereumKit.SyncSource.Http -> urls
+        is RpcSource.WebSocket -> listOf(url)
+        is RpcSource.Http -> urls
     }
 
 class EvmKitWrapper(val evmKit: EthereumKit, val signer: Signer?) {

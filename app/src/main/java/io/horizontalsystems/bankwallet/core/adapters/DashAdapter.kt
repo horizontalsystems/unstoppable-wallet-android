@@ -39,14 +39,6 @@ class DashAdapter(
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
-    // ITransactionsAdapter
-
-    override val explorerTitle: String = "dash.org"
-
-    override fun explorerUrl(transactionHash: String): String? {
-        return if (testMode) null else "https://insight.dash.org/insight/tx/$transactionHash"
-    }
-
     //
     // DashKit Listener
     //

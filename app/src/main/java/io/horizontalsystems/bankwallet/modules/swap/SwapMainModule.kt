@@ -105,7 +105,7 @@ object SwapMainModule {
             }
 
         val mainNet: Boolean
-            get() = evmKitWrapper?.evmKit?.networkType?.isMainNet ?: false
+            get() = evmKitWrapper?.evmKit?.chain?.isMainNet ?: false
 
         val coin: PlatformCoin?
             get() = when (this) {

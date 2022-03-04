@@ -16,14 +16,14 @@ class WC2Manager(
 
     fun evmKitWrapper(chainId: Int, account: Account): EvmKitWrapper? {
         val evmKitWrapper = ethereumKitManager.evmKitWrapper(account)
-        if (evmKitWrapper.evmKit.networkType.chainId == chainId) {
+        if (evmKitWrapper.evmKit.chain.id == chainId) {
             return evmKitWrapper
         } else {
             ethereumKitManager.unlink(account)
         }
         
         val bscKitWrapper = binanceSmartChainKitManager.evmKitWrapper(account)
-        if (bscKitWrapper.evmKit.networkType.chainId == chainId) {
+        if (bscKitWrapper.evmKit.chain.id == chainId) {
             return bscKitWrapper
         } else {
             binanceSmartChainKitManager.unlink(account)

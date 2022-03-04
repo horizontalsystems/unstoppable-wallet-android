@@ -24,9 +24,8 @@ class WC1SessionManager(
 
     val sessions: List<WalletConnectSession>
         get() = accountManager.activeAccount?.let { account ->
-            val ethereumChainId = accountSettingManager.ethereumNetwork(account).networkType.chainId
-            val binanceSmartChainChainId =
-                accountSettingManager.binanceSmartChainNetwork(account).networkType.chainId
+            val ethereumChainId = accountSettingManager.ethereumNetwork(account).chain.id
+            val binanceSmartChainChainId = accountSettingManager.binanceSmartChainNetwork(account).chain.id
 
             storage.getSessions(account.id, listOf(ethereumChainId, binanceSmartChainChainId))
         } ?: listOf()

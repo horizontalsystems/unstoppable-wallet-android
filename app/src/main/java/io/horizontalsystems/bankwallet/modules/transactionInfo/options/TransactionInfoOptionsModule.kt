@@ -16,10 +16,10 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransac
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.CoinType
@@ -42,13 +42,9 @@ object TransactionInfoOptionsModule {
         }
 
         private val baseCoin by lazy {
-            when (evmKitWrapper.evmKit.networkType) {
-                NetworkType.EthMainNet,
-                NetworkType.EthRopsten,
-                NetworkType.EthKovan,
-                NetworkType.EthGoerli,
-                NetworkType.EthRinkeby -> App.marketKit.platformCoin(CoinType.Ethereum)!!
-                NetworkType.BscMainNet -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)!!
+            when (evmKitWrapper.evmKit.chain) {
+                Chain.BinanceSmartChain -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)!!
+                else -> App.marketKit.platformCoin(CoinType.Ethereum)!!
             }
         }
 
@@ -61,22 +57,17 @@ object TransactionInfoOptionsModule {
 
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
-            when (evmKit.networkType) {
-                NetworkType.EthRopsten, NetworkType.EthKovan,
-                NetworkType.EthGoerli, NetworkType.EthRinkeby,
-                NetworkType.EthMainNet -> {
-                    val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
-                    val minGasPrice = transaction.maxFeePerGas?.let { maxFeePerGas ->
-                        transaction.maxPriorityFeePerGas?.let { maxPriorityFeePerGas ->
-                            GasPrice.Eip1559(maxFeePerGas, maxPriorityFeePerGas)
-                        }
+            if (evmKit.chain.isEIP1559Supported) {
+                val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
+                val minGasPrice = transaction.maxFeePerGas?.let { maxFeePerGas ->
+                    transaction.maxPriorityFeePerGas?.let { maxPriorityFeePerGas ->
+                        GasPrice.Eip1559(maxFeePerGas, maxPriorityFeePerGas)
                     }
-                    Eip1559GasPriceService(gasPriceProvider, evmKit, minGasPrice = minGasPrice)
                 }
-                NetworkType.BscMainNet -> {
-                    val gasPriceProvider = LegacyGasPriceProvider(evmKit)
-                    LegacyGasPriceService(gasPriceProvider, transaction.gasPrice)
-                }
+                Eip1559GasPriceService(gasPriceProvider, evmKit, minGasPrice = minGasPrice)
+            } else {
+                val gasPriceProvider = LegacyGasPriceProvider(evmKit)
+                LegacyGasPriceService(gasPriceProvider, transaction.gasPrice)
             }
         }
 

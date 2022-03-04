@@ -199,9 +199,6 @@ interface ITransactionsAdapter {
     val lastBlockInfo: LastBlockInfo?
     val lastBlockUpdatedFlowable: Flowable<Unit>
 
-    val explorerTitle: String
-    fun explorerUrl(transactionHash: String): String?
-
     fun getTransactionsAsync(
         from: TransactionRecord?,
         coin: PlatformCoin?,
