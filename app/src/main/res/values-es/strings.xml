@@ -30,6 +30,7 @@
     <string name="Button_Reconnect">Volver a conectar</string>
     <string name="Button_Understand">Entiendo</string>
     <string name="Button_Switch">Cambiar</string>
+    <string name="Button_Remove">Remove</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Cualquier</string>
@@ -310,13 +311,25 @@
     <string name="WalletConnect_Status_Connecting">Conectando…</string>
     <string name="WalletConnect_NewConnect">Nueva Conexión</string>
     <string name="WalletConnect_Disconnecting">Desconectando</string>
-    <string name="WalletConnect_SignMessageRequest_Title">Solicitud de Firma</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Dominio</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Mensaje a firmar</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Por favor, firma un mensaje para autentificarte</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Firma</string>
     <string name="WalletConnect_Error_NoWallet">No es un monedero adecuado. Necesitas crear o restaurar el monedero existente</string>
     <string name="WalletConnect_Error_WatchAccount">Esta característica no funciona con los monederos \"watch-only\", necesita cambiar a un monedero restaurado o creado </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported chain id</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
+    <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Request not found error</string>
+    <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
+    <string name="WalletConnect_PendingRequests">Pending Requests</string>
+    <string name="WalletConnect_ActiveWallet">Active Wallet</string>
+    <string name="WalletConnect_Input">Input</string>
+    <string name="WalletConnect_Version1">Version 1.0</string>
+    <string name="WalletConnect_Version2">Version 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
