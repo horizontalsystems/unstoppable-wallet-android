@@ -44,7 +44,6 @@ class NftAssetService(
                 name = assetRecord.name,
                 imageUrl = assetRecord.imageUrl,
                 collectionName = collectionRecord.name,
-                ownedCount = assetRecord.ownedCount,
                 description = assetRecord.description,
                 contract = assetRecord.contract,
                 tokenId = assetRecord.tokenId,

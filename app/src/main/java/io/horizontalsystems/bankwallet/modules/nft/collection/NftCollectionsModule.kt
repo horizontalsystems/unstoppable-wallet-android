@@ -59,7 +59,6 @@ data class NftAssetItem(
     val imageUrl: String?,
     val imagePreviewUrl: String?,
     val description: String?,
-    val ownedCount: Int,
     val contract: NftAssetContract,
     val onSale: Boolean,
     val prices: Prices

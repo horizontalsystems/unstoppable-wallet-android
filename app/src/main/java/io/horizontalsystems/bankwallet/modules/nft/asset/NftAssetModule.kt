@@ -41,7 +41,6 @@ data class NftAssetModuleAssetItem(
     val name: String?,
     val imageUrl: String?,
     val collectionName: String,
-    val ownedCount: Int,
     val description: String?,
     val contract: NftAssetContract,
     val tokenId: String,
