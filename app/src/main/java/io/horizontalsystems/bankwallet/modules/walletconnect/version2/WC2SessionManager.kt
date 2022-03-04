@@ -69,7 +69,6 @@ class WC2SessionManager(
 
         service.pendingRequestUpdatedObservable
             .subscribeIO {
-                Log.e(TAG, "pendingRequestUpdatedObservable: ")
                 syncPendingRequest()
             }
             .let { disposable.add(it) }
@@ -81,21 +80,12 @@ class WC2SessionManager(
             .let { disposable.add(it) }
     }
 
-    fun deleteSession(topic: String) {
-        service.disconnect(topic)
-    }
-
     fun pendingRequests(accountId: String? = null): List<WalletConnect.Model.JsonRpcHistory.HistoryEntry> {
         return requests(accountId)
     }
 
     fun sessionByTopic(topic: String): WalletConnect.Model.SettledSession? {
         return allSessions.firstOrNull { it.topic == topic }
-    }
-
-    fun pendingRequest(requestId: Long): WalletConnect.Model.JsonRpcHistory.HistoryEntry? {
-        val accountId = accountManager.activeAccount?.id ?: return null
-        return requests(accountId).firstOrNull { it.requestId == requestId }
     }
 
     fun prepareRequestToOpen(requestId: Long) {
@@ -128,10 +118,6 @@ class WC2SessionManager(
             !currentSessions.any { it.topic == topic }
         }
 
-        currentSessions.forEach { Log.e(TAG, "currentSessions: ${it.topic}") }
-        newSessions.forEach { Log.e(TAG, "newSessions: ${it}") }
-        deletedTopics.forEach { Log.e(TAG, "deletedTopics: ${it}") }
-
         storage.save(newSessions.map { WalletConnectV2Session(accountId, it.topic) })
         storage.deleteSessionsByTopics(deletedTopics)
 
@@ -140,9 +126,9 @@ class WC2SessionManager(
     }
 
     private fun handleSessionRequest(sessionRequest: WalletConnect.Model.SessionRequest) {
-        try{
+        try {
             prepareRequestToOpen(sessionRequest.request.id)
-        } catch (error: Throwable){
+        } catch (error: Throwable) {
             Log.e(TAG, "handleSessionRequest error: ", error)
         }
 
@@ -187,12 +173,12 @@ class WC2SessionManager(
         val evmKitWrapper: EvmKitWrapper
     )
 
-    open class RequestDataError(message: String) : Throwable(message) {
-        object UnsupportedChainId : RequestDataError("Unsupported chain id")
-        object NoSuitableAccount : RequestDataError("No suitable account")
-        object NoSuitableEvmKit : RequestDataError("No suitable evm kit")
-        object DataParsingError : RequestDataError("Data parsing error")
-        object RequestNotFoundError : RequestDataError("Request not found error")
+    open class RequestDataError : Throwable() {
+        object UnsupportedChainId : RequestDataError()
+        object NoSuitableAccount : RequestDataError()
+        object NoSuitableEvmKit : RequestDataError()
+        object DataParsingError : RequestDataError()
+        object RequestNotFoundError : RequestDataError()
     }
 
 }

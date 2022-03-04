@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.requestlist
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
@@ -51,7 +50,6 @@ class WC2RequestListService(
 
         sessionManager.pendingRequestCountObservable
             .subscribeIO {
-                Log.e("TAG", "pendingRequestsObservable called: ", )
                 syncPendingRequests()
             }.let { disposables.add(it) }
 

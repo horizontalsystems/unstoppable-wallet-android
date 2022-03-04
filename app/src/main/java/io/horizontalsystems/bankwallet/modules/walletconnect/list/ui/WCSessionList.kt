@@ -95,7 +95,7 @@ private fun SessionCell(
         modifier = Modifier
             .fillMaxSize()
             .clickable {
-                if (version == WalletConnectListModule.Version.Version2){
+                if (version == WalletConnectListModule.Version.Version2) {
                     navController.slideFromBottom(
                         R.id.wc2SessionFragment,
                         WC2SessionModule.prepareParams(

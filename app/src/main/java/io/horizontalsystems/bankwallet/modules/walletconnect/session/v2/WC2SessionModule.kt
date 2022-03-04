@@ -74,15 +74,6 @@ data class WCBlockchain(
     override fun hashCode(): Int {
         return chainId.hashCode()
     }
-
-    val addressShort: String
-        get() {
-            return if (address.length > 10) {
-                "${address.take(5)}...${address.takeLast(5)}"
-            } else {
-                address
-            }
-        }
 }
 
 data class WCAccountData(

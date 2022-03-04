@@ -44,7 +44,6 @@ class WCDisplayTypedMessageFragment : BaseFragment() {
             }
         }
     }
-
 }
 
 @Composable

@@ -278,7 +278,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         )
 
         WalletConnectClient.initialize(initWallet) {
-            Log.e("App", "WalletConnect initialize error: ", it)
+            AppLog.warning("WalletConnect V2 initialization","error", it)
         }
     }
 
