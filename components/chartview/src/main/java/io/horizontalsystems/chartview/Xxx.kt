@@ -4,7 +4,7 @@ import android.util.Log
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartPointF
 
-class Yyy(
+class Xxx(
     private val animator: ChartAnimator?,
 
     private val fromPointsMap: LinkedHashMap<Long, ChartPointF>,

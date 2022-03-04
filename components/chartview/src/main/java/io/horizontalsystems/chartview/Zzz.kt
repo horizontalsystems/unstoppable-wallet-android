@@ -1,0 +1,128 @@
+package io.horizontalsystems.chartview
+
+class Zzz(
+    data: ChartData,
+    private val fromValues: LinkedHashMap<Long, Float>,
+    private val fromStartTimestamp: Long,
+    private val fromEndTimestamp: Long,
+    private val fromMinValue: Float,
+    private val fromMaxValue: Float,
+) {
+    private val toValues: LinkedHashMap<Long, Float>
+    private val toStartTimestamp = data.startTimestamp
+    private val toEndTimestamp = data.endTimestamp
+
+    private val toMinValue: Float
+    private val toMaxValue: Float
+
+    var frameValues = linkedMapOf<Long, Float>()
+        private set
+    var frameStartTimestamp = 0L
+        private set
+    var frameEndTimestamp = 0L
+        private set
+    var frameMinValue = 0f
+        private set
+    var frameMaxValue = 0f
+        private set
+
+    private val fromValuesFilled: LinkedHashMap<Long, Float>
+    private val toValuesFilled: LinkedHashMap<Long, Float>
+
+    init {
+        toValues = LinkedHashMap(
+            data.items.mapNotNull { chartDataItem ->
+                chartDataItem.values[Indicator.Candle]?.let {
+                    chartDataItem.timestamp to it.value
+                }
+            }.toMap().toSortedMap()
+        )
+        toMinValue = toValues.values.minOrNull() ?: 0f
+        toMaxValue = toValues.values.maxOrNull() ?: 0f
+
+        fromValuesFilled = fillWith(fromValues, toValues)
+        toValuesFilled = fillWith(toValues, fromValues)
+    }
+
+    fun nextFrame(animatedFraction: Float) {
+        if (fromValuesFilled.isEmpty()) {
+            frameStartTimestamp = toStartTimestamp
+            frameEndTimestamp = toEndTimestamp
+
+            frameMinValue = toMinValue
+            frameMaxValue = toMaxValue
+
+            frameValues = toValues
+        } else {
+            frameStartTimestamp = getForFrame(fromStartTimestamp.toFloat(), toStartTimestamp.toFloat(), animatedFraction).toLong()
+            frameEndTimestamp = getForFrame(fromEndTimestamp.toFloat(), toEndTimestamp.toFloat(), animatedFraction).toLong()
+
+            frameMinValue = getForFrame(fromMinValue, toMinValue, animatedFraction)
+            frameMaxValue = getForFrame(fromMaxValue, toMaxValue, animatedFraction)
+
+            val values = mutableMapOf<Long, Float>()
+            for ((timestamp, valueFrom) in fromValuesFilled) {
+                if (timestamp < frameStartTimestamp || timestamp > frameEndTimestamp) continue
+
+                val valueTo = toValuesFilled[timestamp]!!
+
+                val valueForFrame = getForFrame(valueFrom, valueTo, animatedFraction)
+                if (valueForFrame < frameMinValue || valueForFrame > frameMaxValue) continue
+
+                values[timestamp] = valueForFrame
+            }
+
+            frameValues = LinkedHashMap(values)
+        }
+    }
+
+    private fun getForFrame(start: Float, end: Float, animatedFraction: Float): Float {
+        val change = end - start
+
+        return start + (change * animatedFraction)
+    }
+
+
+    companion object {
+        fun fillWith(
+            prevPointsMap: LinkedHashMap<Long, Float>,
+            nextPointsMap: LinkedHashMap<Long, Float>,
+        ): LinkedHashMap<Long, Float> {
+            val prevPointsMutableMap = prevPointsMap.toMutableMap()
+
+            val prevTimestamps = prevPointsMap.keys
+
+            for ((timestamp, value) in nextPointsMap) {
+                if (!prevPointsMutableMap.containsKey(timestamp)) {
+                    val timeStampBefore = prevTimestamps.lastOrNull { it < timestamp } ?: continue
+                    val timeStampAfter = prevTimestamps.firstOrNull { it > timestamp } ?: continue
+
+                    val valueBefore = prevPointsMutableMap[timeStampBefore]!!
+                    val valueAfter = prevPointsMutableMap[timeStampAfter]!!
+
+                    // v = (t - t1) * (v2 - v1) / (t2 - t1) + v1
+
+                    val t1 = timeStampBefore
+                    val t2 = timeStampAfter
+                    val v1 = valueBefore
+                    val v2 = valueAfter
+                    val t = timestamp
+
+                    val v = (t - t1) * (v2 - v1) / (t2 - t1) + v1
+
+                    prevPointsMutableMap[timestamp] = v
+                }
+            }
+
+            for ((timestamp, value) in nextPointsMap) {
+                if (!prevPointsMutableMap.containsKey(timestamp)) {
+                    prevPointsMutableMap[timestamp] = value
+                }
+            }
+
+            return LinkedHashMap(prevPointsMutableMap.toSortedMap())
+        }
+
+    }
+
+}
