@@ -30,6 +30,7 @@
     <string name="Button_Reconnect">Yeniden bağlan</string>
     <string name="Button_Understand">Anlıyorum</string>
     <string name="Button_Switch">Değiştir</string>
+    <string name="Button_Remove">Remove</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Herhangi</string>
@@ -310,13 +311,25 @@
     <string name="WalletConnect_Status_Connecting">Bağlanıyor…</string>
     <string name="WalletConnect_NewConnect">Yeni bağlantı</string>
     <string name="WalletConnect_Disconnecting">Bağlantı kesiliyor</string>
-    <string name="WalletConnect_SignMessageRequest_Title">İmza Talebi</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">İmza için mesaj</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Lütfen doğrulamak için bir mesajı imzalayın</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
     <string name="WalletConnect_Error_NoWallet">Uygun Cüzdan yok. Cüzdan oluşturmanız veya mevcut cüzdanı geri yüklemeniz gerekiyor</string>
     <string name="WalletConnect_Error_WatchAccount">Bu özellik salt izlenir cüzdanlarda çalışmaz, geri yüklediğiniz veya oluşturduğunuz bir cüzdana geçmeniz gerekiyor </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported chain id</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
+    <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Request not found error</string>
+    <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
+    <string name="WalletConnect_PendingRequests">Pending Requests</string>
+    <string name="WalletConnect_ActiveWallet">Active Wallet</string>
+    <string name="WalletConnect_Input">Input</string>
+    <string name="WalletConnect_Version1">Version 1.0</string>
+    <string name="WalletConnect_Version2">Version 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Uyarı</string>
     <string name="EthereumTransaction_Error_Title">Hata</string>
