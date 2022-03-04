@@ -30,6 +30,7 @@
     <string name="Button_Reconnect">重新连接</string>
     <string name="Button_Understand">我理解</string>
     <string name="Button_Switch">切换</string>
+    <string name="Button_Remove">Remove</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Any">任何</string>
@@ -310,13 +311,25 @@
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
     <string name="WalletConnect_NewConnect">新连接</string>
     <string name="WalletConnect_Disconnecting">正在断开连接</string>
-    <string name="WalletConnect_SignMessageRequest_Title">签名请求</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
     <string name="WalletConnect_SignMessageRequest_Domain">域名</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">待签名消息</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">请对消息签名以便进行验证</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">签名</string>
     <string name="WalletConnect_Error_NoWallet">没有合适的钱包。您需要创建或恢复现有钱包</string>
     <string name="WalletConnect_Error_WatchAccount">此功能不适用于观察中的钱包，您需要切换到恢复或创建的钱包 </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported chain id</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
+    <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Request not found error</string>
+    <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
+    <string name="WalletConnect_PendingRequests">Pending Requests</string>
+    <string name="WalletConnect_ActiveWallet">Active Wallet</string>
+    <string name="WalletConnect_Input">Input</string>
+    <string name="WalletConnect_Version1">Version 1.0</string>
+    <string name="WalletConnect_Version2">Version 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
     <string name="EthereumTransaction_Error_Title">出错</string>
