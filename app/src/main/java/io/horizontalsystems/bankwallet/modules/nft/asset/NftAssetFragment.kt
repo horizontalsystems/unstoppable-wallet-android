@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -240,7 +241,7 @@ private fun NftAsset(asset: NftAssetModuleAssetItem) {
                             spacing = 7.dp
                         ) {
                             asset.attributes.forEach {
-                                NftAssetAttribute(it)
+                                NftAssetAttribute(context, it)
                             }
                         }
                     }
@@ -410,12 +411,15 @@ private fun ChipVerticalGrid(
 }
 
 @Composable
-private fun NftAssetAttribute(attribute: NftAssetModuleAssetItem.Attribute) {
+private fun NftAssetAttribute(context: Context, attribute: NftAssetModuleAssetItem.Attribute) {
     Box(
         modifier = Modifier
             .height(60.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence)
+            .clickable {
+                LinkHelper.openLinkInAppBrowser(context, attribute.searchUrl)
+            }
     ) {
         Column(
             modifier = Modifier
