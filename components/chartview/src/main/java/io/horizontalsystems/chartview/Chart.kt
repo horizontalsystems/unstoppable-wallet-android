@@ -34,7 +34,7 @@ class Chart @JvmOverloads constructor(
     private val animatorBottom = ChartAnimator { binding.chartBottom.invalidate() }
     private val animatorTopBottomRange = ChartAnimator { binding.topLowRange.invalidate() }
 
-    private val mainCurve = ChartCurve(config, animatorMain, isVisible = true)
+    private val mainCurve = ChartCurveXxx(config, animatorMain)
     private val mainGradient = ChartGradient(animatorMain)
 
     private val mainGrid = ChartGrid(config)
@@ -298,8 +298,9 @@ class Chart @JvmOverloads constructor(
         )
 
         // Candles
+        mainCurve.setCurveVerticalOffset(config.curveVerticalOffset)
         mainCurve.setShape(binding.chartMain.shape)
-        mainCurve.setPointsMap(pointsMap, data.startTimestamp, data.endTimestamp)
+        mainCurve.setChartData(data)
         mainCurve.setColor(config.curveColor)
 
 //        mainGradient.setPoints(points)
