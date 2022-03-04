@@ -156,6 +156,8 @@ class Chart @JvmOverloads constructor(
         )
     }
 
+    private var mainCurveZzz: Zzz? = null
+
     fun setData(
         data: ChartData,
         chartType: ChartView.ChartType,
@@ -297,15 +299,28 @@ class Chart @JvmOverloads constructor(
             )
         )
 
+        mainCurveZzz = Zzz(
+            data,
+            mainCurveZzz?.frameValues ?: linkedMapOf(),
+            mainCurveZzz?.frameStartTimestamp ?: 0L,
+            mainCurveZzz?.frameEndTimestamp ?: 0L,
+            mainCurveZzz?.frameMinValue ?: 0f,
+            mainCurveZzz?.frameMaxValue ?: 0f,
+            binding.chartMain.shape.right,
+            binding.chartMain.shape.bottom,
+            config.curveVerticalOffset
+        )
+
+
         // Candles
-        mainCurve.setCurveVerticalOffset(config.curveVerticalOffset)
         mainCurve.setShape(binding.chartMain.shape)
-        mainCurve.setChartData(data)
+        mainCurve.setZzz(mainCurveZzz!!)
         mainCurve.setColor(config.curveColor)
 
-//        mainGradient.setPoints(points)
-//        mainGradient.setShape(binding.chartMain.shape)
-//        mainGradient.setShader(config.curveGradient)
+        mainGradient.setPoints(points)
+        mainGradient.setZzz(mainCurveZzz!!)
+        mainGradient.setShape(binding.chartMain.shape)
+        mainGradient.setShader(config.curveGradient)
 
         mainGrid.setShape(binding.chartMain.shape)
         mainGrid.set(timeline)

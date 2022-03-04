@@ -1,5 +1,7 @@
 package io.horizontalsystems.chartview
 
+import io.horizontalsystems.chartview.models.ChartPointF
+
 class Zzz(
     data: ChartData,
     private val fromValues: LinkedHashMap<Long, Float>,
@@ -7,7 +9,12 @@ class Zzz(
     private val fromEndTimestamp: Long,
     private val fromMinValue: Float,
     private val fromMaxValue: Float,
-) {
+
+    private val xMax: Float,
+    private val yMax: Float,
+    private val curveVerticalOffset: Float,
+
+    ) {
     private val toValues: LinkedHashMap<Long, Float>
     private val toStartTimestamp = data.startTimestamp
     private val toEndTimestamp = data.endTimestamp
@@ -80,6 +87,27 @@ class Zzz(
         val change = end - start
 
         return start + (change * animatedFraction)
+    }
+
+    fun getFramePoints(): List<ChartPointF> {
+        // timestamp = ax + startTimestamp
+        // x = (timestamp - startTimestamp) / a
+        // a = (timestamp - startTimestamp) / x
+        val xRatio = (frameEndTimestamp - frameStartTimestamp) / xMax
+
+        // value = ay + minValue
+        // y = (value - minValue) / a
+        // a = (value - minValue) / y
+        val yRatio = (frameMaxValue - frameMinValue) / (yMax - 2 * curveVerticalOffset)
+
+        return frameValues.map { (timestamp, value) ->
+            val x = (timestamp - frameStartTimestamp) / xRatio
+            val y = (value - frameMinValue) / yRatio + curveVerticalOffset
+
+            val y2 = (y * -1) + yMax
+
+            ChartPointF(x, y2)
+        }
     }
 
 
