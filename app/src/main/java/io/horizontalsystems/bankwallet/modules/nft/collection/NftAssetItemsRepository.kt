@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.signer.Signer
+import io.horizontalsystems.ethereumkit.models.Chain
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -68,7 +69,7 @@ class NftAssetItemsRepository(
             is AccountType.Address -> type.address
             is AccountType.Mnemonic -> Signer.address(
                 type.seed,
-                EthereumKit.NetworkType.EthMainNet
+                Chain.Ethereum
             ).hex
             else -> throw Exception("Not Supported")
         }

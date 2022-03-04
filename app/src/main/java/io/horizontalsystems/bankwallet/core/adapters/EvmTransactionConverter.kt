@@ -12,6 +12,7 @@ import io.horizontalsystems.ethereumkit.decorations.ContractMethodDecoration
 import io.horizontalsystems.ethereumkit.decorations.RecognizedMethodDecoration
 import io.horizontalsystems.ethereumkit.decorations.UnknownMethodDecoration
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -90,8 +91,8 @@ class EvmTransactionConverter(
     }
 
     private fun getEip20Value(tokenAddress: Address, amount: BigInteger, negative: Boolean): TransactionValue {
-        val coinType = when (evmKit.networkType) {
-            EthereumKit.NetworkType.BscMainNet -> CoinType.Bep20(tokenAddress.hex)
+        val coinType = when (evmKit.chain) {
+            Chain.BinanceSmartChain -> CoinType.Bep20(tokenAddress.hex)
             else -> CoinType.Erc20(tokenAddress.hex)
         }
 

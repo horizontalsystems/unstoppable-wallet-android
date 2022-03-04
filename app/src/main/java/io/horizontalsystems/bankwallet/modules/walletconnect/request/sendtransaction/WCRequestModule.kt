@@ -18,10 +18,10 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransac
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.CoinType
@@ -34,7 +34,7 @@ object WCRequestModule {
         private val baseService: WC1Service
     ) : ViewModelProvider.Factory {
         private val evmKitWrapper by lazy { baseService.evmKitWrapper!! }
-        private val coin by lazy { platformCoin(evmKitWrapper.evmKit.networkType) }
+        private val coin by lazy { platformCoin(evmKitWrapper.evmKit.chain) }
         private val transaction = request.transaction
         private val transactionData =
             TransactionData(transaction.to, transaction.value, transaction.data)
@@ -93,7 +93,7 @@ object WCRequestModule {
         private val service by lazy {
             WC2SendEthereumTransactionRequestService(requestId, App.wc2SessionManager)
         }
-        private val coin by lazy { platformCoin(service.evmKitWrapper.evmKit.networkType) }
+        private val coin by lazy { platformCoin(service.evmKitWrapper.evmKit.chain) }
         private val transaction = service.transactionRequest.transaction
         private val transactionData =
             TransactionData(transaction.to, transaction.value, transaction.data)
@@ -150,12 +150,10 @@ object WCRequestModule {
         }
     }
 
-    private fun platformCoin(networkType: NetworkType) =
-        when (networkType) {
-            NetworkType.EthRopsten, NetworkType.EthKovan,
-            NetworkType.EthGoerli, NetworkType.EthRinkeby,
-            NetworkType.EthMainNet -> App.coinManager.getPlatformCoin(CoinType.Ethereum)!!
-            NetworkType.BscMainNet -> App.coinManager.getPlatformCoin(CoinType.BinanceSmartChain)!!
+    private fun platformCoin(chain: Chain) =
+        when (chain) {
+            Chain.BinanceSmartChain -> App.coinManager.getPlatformCoin(CoinType.BinanceSmartChain)!!
+            else -> App.coinManager.getPlatformCoin(CoinType.Ethereum)!!
         }
 
     private fun getGasPrice(transaction: WalletConnectTransaction): GasPrice? = when {

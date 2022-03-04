@@ -9,10 +9,10 @@ class NetworkTypeChecker(private val accountSettingManager: AccountSettingManage
     fun isMainNet(wallet: Wallet) = when (wallet.coinType) {
         is CoinType.Ethereum,
         is CoinType.Erc20 -> {
-            accountSettingManager.ethereumNetwork(wallet.account).networkType.isMainNet
+            accountSettingManager.ethereumNetwork(wallet.account).chain.isMainNet
         }
         is CoinType.BinanceSmartChain -> {
-            accountSettingManager.binanceSmartChainNetwork(wallet.account).networkType.isMainNet
+            accountSettingManager.binanceSmartChainNetwork(wallet.account).chain.isMainNet
         }
         else -> true
     }

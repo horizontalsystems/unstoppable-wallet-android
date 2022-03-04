@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.decorations.ContractMethodDecoration
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.oneinchkit.decorations.OneInchMethodDecoration
@@ -205,22 +206,14 @@ class SendEvmTransactionService(
     }
 
     private fun getEip20CoinType(contractAddress: String) =
-        when (evmKit.networkType) {
-            EthereumKit.NetworkType.EthMainNet,
-            EthereumKit.NetworkType.EthRopsten,
-            EthereumKit.NetworkType.EthKovan,
-            EthereumKit.NetworkType.EthGoerli,
-            EthereumKit.NetworkType.EthRinkeby -> CoinType.Erc20(contractAddress)
-            EthereumKit.NetworkType.BscMainNet -> CoinType.Bep20(contractAddress)
+        when (evmKit.chain) {
+            Chain.BinanceSmartChain -> CoinType.Bep20(contractAddress)
+            else -> CoinType.Erc20(contractAddress)
         }
 
-    private fun getEvmCoinType() = when (evmKit.networkType) {
-        EthereumKit.NetworkType.EthMainNet,
-        EthereumKit.NetworkType.EthRopsten,
-        EthereumKit.NetworkType.EthKovan,
-        EthereumKit.NetworkType.EthGoerli,
-        EthereumKit.NetworkType.EthRinkeby -> CoinType.Ethereum
-        EthereumKit.NetworkType.BscMainNet -> CoinType.BinanceSmartChain
+    private fun getEvmCoinType() = when (evmKit.chain) {
+        Chain.BinanceSmartChain -> CoinType.BinanceSmartChain
+        else -> CoinType.Ethereum
     }
 
     sealed class State {

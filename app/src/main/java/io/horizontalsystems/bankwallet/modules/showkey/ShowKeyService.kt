@@ -4,8 +4,8 @@ import io.horizontalsystems.bankwallet.core.managers.AccountSettingManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.IPinComponent
-import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.ethereumkit.core.signer.Signer
+import io.horizontalsystems.ethereumkit.core.toHexString
 
 class ShowKeyService(
     private val account: Account,
@@ -32,14 +32,14 @@ class ShowKeyService(
         get() = Signer.privateKey(
             words,
             passphrase,
-            accountSettingManager.ethereumNetwork(account).networkType
+            accountSettingManager.ethereumNetwork(account).chain
         ).toByteArray().toHexString()
 
     val binanceSmartChainPrivateKey: String
         get() = Signer.privateKey(
             words,
             passphrase,
-            accountSettingManager.binanceSmartChainNetwork(account).networkType
+            accountSettingManager.binanceSmartChainNetwork(account).chain
         ).toByteArray().toHexString()
 
 }

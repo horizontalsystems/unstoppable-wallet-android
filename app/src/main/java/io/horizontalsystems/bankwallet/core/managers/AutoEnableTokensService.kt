@@ -45,7 +45,7 @@ class AutoEnableTokensService(
         val account = kitManager.currentAccount ?: return
         val evmKit = kitManager.evmKitWrapper?.evmKit ?: return
 
-        val chainId = evmKit.networkType.chainId
+        val chainId = evmKit.chain.id
         val evmAccountState = evmAccountStateDao.get(account.id, chainId) ?: EvmAccountState(account.id, chainId, -1)
 
         if (evmAccountState.transactionsSyncedBlockNumber >= lastBlockNumber) return

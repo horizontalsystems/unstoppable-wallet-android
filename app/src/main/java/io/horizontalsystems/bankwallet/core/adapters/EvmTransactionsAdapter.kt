@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionTyp
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionTag
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -38,29 +39,6 @@ class EvmTransactionsAdapter(
 
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
         get() = evmKit.transactionsSyncStateFlowable.map {}
-
-    override val explorerTitle: String
-        get() = when (evmKit.networkType) {
-            EthereumKit.NetworkType.EthMainNet,
-            EthereumKit.NetworkType.EthRopsten,
-            EthereumKit.NetworkType.EthKovan,
-            EthereumKit.NetworkType.EthRinkeby,
-            EthereumKit.NetworkType.EthGoerli -> "etherscan.io"
-            EthereumKit.NetworkType.BscMainNet -> "bscscan.com"
-        }
-
-    override fun explorerUrl(transactionHash: String): String {
-        val domain = when (evmKit.networkType) {
-            EthereumKit.NetworkType.EthMainNet -> "etherscan.io"
-            EthereumKit.NetworkType.EthRopsten -> "ropsten.etherscan.io"
-            EthereumKit.NetworkType.EthKovan -> "kovan.etherscan.io"
-            EthereumKit.NetworkType.EthRinkeby -> "rinkeby.etherscan.io"
-            EthereumKit.NetworkType.BscMainNet -> "bscscan.com"
-            EthereumKit.NetworkType.EthGoerli -> "goerli.etherscan.io"
-        }
-
-        return "https://$domain/tx/$transactionHash"
-    }
 
     override fun getTransactionsAsync(
         from: TransactionRecord?,
@@ -127,10 +105,10 @@ class EvmTransactionsAdapter(
 
         fun clear(walletId: String, testMode: Boolean) {
             val networkTypes = when {
-                testMode -> listOf(EthereumKit.NetworkType.EthRopsten)
+                testMode -> listOf(Chain.EthereumRopsten)
                 else -> listOf(
-                    EthereumKit.NetworkType.EthMainNet,
-                    EthereumKit.NetworkType.BscMainNet
+                    Chain.Ethereum,
+                    Chain.BinanceSmartChain
                 )
             }
             networkTypes.forEach {

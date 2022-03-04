@@ -16,9 +16,9 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.CoinType
 
 object SendEvmConfirmationModule {
@@ -29,26 +29,19 @@ object SendEvmConfirmationModule {
     ) : ViewModelProvider.Factory {
 
         private val feeCoin by lazy {
-            when (evmKitWrapper.evmKit.networkType) {
-                NetworkType.EthRopsten, NetworkType.EthKovan,
-                NetworkType.EthGoerli, NetworkType.EthRinkeby,
-                NetworkType.EthMainNet -> App.marketKit.platformCoin(CoinType.Ethereum)!!
-                NetworkType.BscMainNet -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)!!
+            when (evmKitWrapper.evmKit.chain) {
+                Chain.BinanceSmartChain -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)!!
+                else -> App.marketKit.platformCoin(CoinType.Ethereum)!!
             }
         }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
-            when (evmKit.networkType) {
-                NetworkType.EthRopsten, NetworkType.EthKovan,
-                NetworkType.EthGoerli, NetworkType.EthRinkeby,
-                NetworkType.EthMainNet -> {
-                    val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
-                    Eip1559GasPriceService(gasPriceProvider, evmKit)
-                }
-                NetworkType.BscMainNet -> {
-                    val gasPriceProvider = LegacyGasPriceProvider(evmKit)
-                    LegacyGasPriceService(gasPriceProvider)
-                }
+            if (evmKit.chain.isEIP1559Supported) {
+                val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
+                Eip1559GasPriceService(gasPriceProvider, evmKit)
+            } else {
+                val gasPriceProvider = LegacyGasPriceProvider(evmKit)
+                LegacyGasPriceService(gasPriceProvider)
             }
         }
         private val feeService by lazy {

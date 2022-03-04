@@ -164,12 +164,6 @@ class ZcashAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override val explorerTitle: String = "blockchair.com"
-
-    override fun explorerUrl(transactionHash: String): String? {
-        return if (testMode) null else "https://blockchair.com/zcash/transaction/$transactionHash"
-    }
-
     override fun getTransactionsAsync(
         from: TransactionRecord?,
         coin: PlatformCoin?,

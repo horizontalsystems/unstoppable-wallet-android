@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Flowable
 import java.math.BigInteger
@@ -60,10 +61,10 @@ class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
 
         fun clear(walletId: String, testMode: Boolean) {
             val networkTypes = when {
-                testMode -> listOf(EthereumKit.NetworkType.EthRopsten)
+                testMode -> listOf(Chain.EthereumRopsten)
                 else -> listOf(
-                    EthereumKit.NetworkType.EthMainNet,
-                    EthereumKit.NetworkType.BscMainNet
+                    Chain.Ethereum,
+                    Chain.BinanceSmartChain
                 )
             }
             networkTypes.forEach {
