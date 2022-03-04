@@ -149,7 +149,7 @@ private fun ManageWalletsScreen(
     ) {
         SearchBar(
             title = stringResource(R.string.ManageCoins_title),
-            searchHintText = stringResource(R.string.Market_Search_Hint),
+            searchHintText = stringResource(R.string.ManageCoins_Search),
             navController = findNavController,
             menuItems = listOf(
                 MenuItem(
