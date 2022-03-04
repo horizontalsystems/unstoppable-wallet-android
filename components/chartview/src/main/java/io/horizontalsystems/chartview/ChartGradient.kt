@@ -9,7 +9,6 @@ import io.horizontalsystems.chartview.models.ChartPointF
 class ChartGradient(private val animator: ChartAnimator? = null, override var isVisible: Boolean = true) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
-    private var points = listOf<ChartPointF>()
 
     private val paint = Paint().apply {
         isAntiAlias = true
@@ -17,7 +16,12 @@ class ChartGradient(private val animator: ChartAnimator? = null, override var is
     }
 
     fun setPoints(list: List<ChartPointF>) {
-        points = list
+    }
+
+    private var zzz: Zzz? = null
+
+    fun setZzz(zzz: Zzz) {
+        this.zzz = zzz
     }
 
     fun setShader(gradient: ChartConfig.GradientColor) {
@@ -33,13 +37,14 @@ class ChartGradient(private val animator: ChartAnimator? = null, override var is
     }
 
     private fun Canvas.drawGradient() {
+        val points = zzz?.getFramePoints() ?: return
         if (points.size < 2) return
         val path = Path()
 
         points.forEachIndexed { index, point ->
             when (index) {
-                0 -> path.moveTo(point.x, getY(point))
-                else -> path.lineTo(point.x, getY(point))
+                0 -> path.moveTo(point.x, point.y)
+                else -> path.lineTo(point.x, point.y)
             }
         }
 

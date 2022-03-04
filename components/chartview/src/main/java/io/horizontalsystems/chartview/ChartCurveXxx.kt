@@ -23,10 +23,6 @@ class ChartCurveXxx(
         isAntiAlias = true
     }
 
-    private var curveVerticalOffset = 0f
-    fun setCurveVerticalOffset(v: Float) {
-        curveVerticalOffset = v
-    }
     fun setShape(rect: RectF) {
         shape = rect
     }
@@ -35,42 +31,19 @@ class ChartCurveXxx(
         paint.color = color
     }
 
-    private var pointsManager: PointsManager? = null
-    var zzz: Zzz? = null
+    private var zzz: Zzz? = null
 
-    fun setChartData(data: ChartData) {
-        zzz = Zzz(
-            data,
-            zzz?.frameValues ?: linkedMapOf(),
-            zzz?.frameStartTimestamp ?: 0L,
-            zzz?.frameEndTimestamp ?: 0L,
-            zzz?.frameMinValue ?: 0f,
-            zzz?.frameMaxValue ?: 0f,
-        )
-        pointsManager = PointsManager(
-            shape.right,
-            shape.bottom,
-            curveVerticalOffset
-        )
+    fun setZzz(zzz: Zzz) {
+        this.zzz = zzz
     }
 
     override fun draw(canvas: Canvas) {
         if (!isVisible) return
-//        if (valuesByTimestamp.isEmpty()) return
-
         val tmpZzz = zzz ?: return
-        val tmpYyy = pointsManager ?: return
 
         tmpZzz.nextFrame(animator?.animatedFraction ?: 1f)
 
-        val points = tmpYyy.getPoints(
-            tmpZzz.frameValues,
-            tmpZzz.frameStartTimestamp,
-            tmpZzz.frameEndTimestamp,
-            tmpZzz.frameMinValue,
-            tmpZzz.frameMaxValue,
-        )
-
+        val points = tmpZzz.getFramePoints()
         if (points.isEmpty()) return
 
         val path = Path()
