@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -106,7 +107,7 @@ class AddTokenFragment : BaseFragment() {
                     FormsInput(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         enabled = false,
-                        hint = "ERC20 / BEP20 / BEP2",
+                        hint = stringResource(R.string.AddToken_AddressOrSymbol),
                         state = getState(caution, loading),
                         qrScannerEnabled = true,
                     ) {
