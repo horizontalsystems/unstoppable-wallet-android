@@ -25,6 +25,8 @@ data class NftAssetRecord(
     @Embedded
     val links: HsNftApiV1Response.Asset.Links?,
 
+    val attributes: List<NftAssetAttribute>,
+
     val ownedCount: Int = 1,
 )
 
@@ -36,4 +38,10 @@ data class NftAssetPrice(
 data class NftAssetContract(
     val address: String,
     val type: String
+)
+
+data class NftAssetAttribute(
+    val type: String,
+    val value: String,
+    val count: Int
 )

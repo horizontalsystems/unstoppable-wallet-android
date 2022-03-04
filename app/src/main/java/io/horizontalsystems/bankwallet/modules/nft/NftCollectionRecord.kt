@@ -10,6 +10,7 @@ data class NftCollectionRecord(
     val uid: String,
     val name: String,
     val imageUrl: String?,
+    val totalSupply: Int,
 
     @Embedded(prefix = "averagePrice7d_")
     val averagePrice7d: NftAssetPrice?,

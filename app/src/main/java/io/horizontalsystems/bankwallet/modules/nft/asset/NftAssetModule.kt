@@ -47,7 +47,8 @@ data class NftAssetModuleAssetItem(
     val tokenId: String,
     val assetLinks: HsNftApiV1Response.Asset.Links?,
     val collectionLinks: HsNftApiV1Response.Collection.Links?,
-    val stats: Stats
+    val stats: Stats,
+    val attributes: List<Attribute>
 ) {
     data class Price(
         val coinValue: CoinValue,
@@ -72,6 +73,12 @@ data class NftAssetModuleAssetItem(
             BuyNow, TopBid, MinimumBid
         }
     }
+
+    data class Attribute(
+        val type: String,
+        val value: String,
+        val percent: String?
+    )
 }
 
 
