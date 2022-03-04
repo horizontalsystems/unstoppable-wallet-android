@@ -23,6 +23,10 @@ class ChartAnimator(onUpdate: (() -> Unit)) {
         animator.start()
     }
 
+    fun cancel() {
+        animator.cancel()
+    }
+
     fun getAnimatedY(y: Float, maxY: Float): Float {
         // Figure out top of column based on INVERSE of percentage. Bigger the percentage,
         // the smaller top is, since 100% goes to 0.
