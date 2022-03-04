@@ -60,7 +60,9 @@ class NftAssetService(
                     Attribute(
                         attribute.type,
                         attribute.value,
-                        getAttributePercentage(attribute, collectionRecord.totalSupply)?.let { "$it%" })
+                        getAttributePercentage(attribute, collectionRecord.totalSupply)?.let { "$it%" },
+                        getAttributeSearchUrl(attribute, collectionRecord.uid)
+                    )
                 }
             )
 
@@ -68,6 +70,12 @@ class NftAssetService(
 
             syncStats(asset, tokenId, contractAddress, assetRecord.collectionUid)
         }
+    }
+
+    private fun getAttributeSearchUrl(attribute: NftAssetAttribute, collectionUid: String): String {
+        return "https://opensea.io/assets/${collectionUid}?search[stringTraits][0][name]=${attribute.type}" +
+                "&search[stringTraits][0][values][0]=${attribute.value}" +
+                "&search[sortAscending]=true&search[sortBy]=PRICE"
     }
 
     private fun getAttributePercentage(attribute: NftAssetAttribute, totalSupply: Int): Number? =

@@ -76,7 +76,8 @@ data class NftAssetModuleAssetItem(
     data class Attribute(
         val type: String,
         val value: String,
-        val percent: String?
+        val percent: String?,
+        val searchUrl: String
     )
 }
 
