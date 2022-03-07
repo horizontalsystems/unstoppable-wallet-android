@@ -72,6 +72,15 @@ class Zzz(
             frameMaxValue = getForFrame(fromMaxValue, toMaxValue, animatedFraction)
 
             val values = mutableMapOf<Long, Float>()
+
+            val timestamps = fromValuesFilled.keys
+            valueForTimestamp(frameStartTimestamp, timestamps, fromValuesFilled)?.let {
+                values[frameStartTimestamp] = it
+            }
+            valueForTimestamp(frameEndTimestamp, timestamps, fromValuesFilled)?.let {
+                values[frameEndTimestamp] = it
+            }
+
             for ((timestamp, valueFrom) in fromValuesFilled) {
                 if (timestamp < frameStartTimestamp || timestamp > frameEndTimestamp) continue
 
@@ -83,7 +92,7 @@ class Zzz(
                 values[timestamp] = valueForFrame
             }
 
-            frameValues = LinkedHashMap(values)
+            frameValues = LinkedHashMap(values.toSortedMap())
         }
     }
 
@@ -122,27 +131,13 @@ class Zzz(
         ): LinkedHashMap<Long, Float> {
             val prevPointsMutableMap = prevPointsMap.toMutableMap()
 
-            val prevTimestamps = prevPointsMap.keys
+            val prevTimestamps = prevPointsMutableMap.keys
 
             for ((timestamp, value) in nextPointsMap) {
                 if (!prevPointsMutableMap.containsKey(timestamp)) {
-                    val timeStampBefore = prevTimestamps.lastOrNull { it < timestamp } ?: continue
-                    val timeStampAfter = prevTimestamps.firstOrNull { it > timestamp } ?: continue
-
-                    val valueBefore = prevPointsMutableMap[timeStampBefore]!!
-                    val valueAfter = prevPointsMutableMap[timeStampAfter]!!
-
-                    // v = (t - t1) * (v2 - v1) / (t2 - t1) + v1
-
-                    val t1 = timeStampBefore
-                    val t2 = timeStampAfter
-                    val v1 = valueBefore
-                    val v2 = valueAfter
-                    val t = timestamp
-
-                    val v = (t - t1) * (v2 - v1) / (t2 - t1) + v1
-
-                    prevPointsMutableMap[timestamp] = v
+                    valueForTimestamp(timestamp, prevTimestamps, prevPointsMutableMap)?.let {
+                        prevPointsMutableMap[timestamp] = it
+                    }
                 }
             }
 
@@ -155,6 +150,26 @@ class Zzz(
             return LinkedHashMap(prevPointsMutableMap.toSortedMap())
         }
 
-    }
+        private fun valueForTimestamp(
+            timestamp: Long,
+            timestamps: Collection<Long>,
+            values: Map<Long, Float>
+        ): Float? {
+            val timeStampBefore = timestamps.lastOrNull { it < timestamp } ?: return null
+            val timeStampAfter = timestamps.firstOrNull { it > timestamp } ?: return null
 
+            val valueBefore = values[timeStampBefore] ?: return null
+            val valueAfter = values[timeStampAfter] ?: return null
+
+            // v = (t - t1) * (v2 - v1) / (t2 - t1) + v1
+
+            val t1 = timeStampBefore
+            val t2 = timeStampAfter
+            val v1 = valueBefore
+            val v2 = valueAfter
+            val t = timestamp
+
+            return (t - t1) * (v2 - v1) / (t2 - t1) + v1
+        }
+    }
 }
