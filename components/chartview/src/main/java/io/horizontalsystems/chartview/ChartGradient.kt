@@ -15,9 +15,6 @@ class ChartGradient(private val animator: ChartAnimator? = null, override var is
         style = Paint.Style.FILL
     }
 
-    fun setPoints(list: List<ChartPointF>) {
-    }
-
     private var zzz: Zzz? = null
 
     fun setZzz(zzz: Zzz) {

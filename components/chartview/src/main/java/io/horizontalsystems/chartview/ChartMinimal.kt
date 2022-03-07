@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.chartview.Indicator.Candle
 import io.horizontalsystems.chartview.databinding.ViewChartMinimalBinding
-import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
 
 class ChartMinimal @JvmOverloads constructor(
@@ -19,24 +18,29 @@ class ChartMinimal @JvmOverloads constructor(
 
     private val config = ChartConfig(context, attrs)
 
-    private val mainCurve = ChartCurve(config, isVisible = true)
+    private val mainCurve = ChartCurveXxx(config)
     private val mainGradient = ChartGradient()
 
+    private var mainCurveZzz: Zzz? = null
 
     fun setData(data: ChartData) {
         config.setTrendColor(data)
 
-        val points = PointConverter.curveForMinimal(
-            data.values(Candle),
-            binding.chartMain.shape,
-            config.curveMinimalVerticalOffset
+        mainCurveZzz = Zzz(
+            data.valuesByTimestamp(Candle),
+            data.startTimestamp,
+            data.endTimestamp,
+            mainCurveZzz,
+            binding.chartMain.shape.right,
+            binding.chartMain.shape.bottom,
+            config.curveVerticalOffset
         )
 
         mainCurve.setShape(binding.chartMain.shape)
-        mainCurve.setPoints(points)
+        mainCurve.setZzz(mainCurveZzz!!)
         mainCurve.setColor(config.curveColor)
 
-        mainGradient.setPoints(points)
+        mainGradient.setZzz(mainCurveZzz!!)
         mainGradient.setShape(binding.chartMain.shape)
         mainGradient.setShader(config.curveGradient)
 
