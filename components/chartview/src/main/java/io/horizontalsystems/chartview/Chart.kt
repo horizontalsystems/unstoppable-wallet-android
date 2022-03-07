@@ -303,13 +303,14 @@ class Chart @JvmOverloads constructor(
         )
 
         mainCurveZzz = Zzz(
-            data,
+            data.valuesByTimestamp(Candle),
+            data.startTimestamp,
+            data.endTimestamp,
             mainCurveZzz,
             binding.chartMain.shape.right,
             binding.chartMain.shape.bottom,
-            config.curveVerticalOffset,
+            config.curveVerticalOffset
         )
-
 
         // Candles
         mainCurve.setShape(binding.chartMain.shape)
