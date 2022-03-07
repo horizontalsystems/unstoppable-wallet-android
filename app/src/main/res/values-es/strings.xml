@@ -637,7 +637,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gestor de monedas</string>
-    <string name="ManageCoins_Search">Buscar</string>
+    <string name="ManageCoins_Search">Token Name</string>
     <string name="ManageCoins_AddToken">Añadir Token</string>
     <string name="ManageCoins_NoResults">No se han encontrado resultados. Intente añadir un token manualmente si conoce su dirección de contrato inteligente.</string>
     <!-- Experimental Feature -->
@@ -728,6 +728,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Tipos de monedas</string>
+    <string name="AddToken_AddressOrSymbol">Address or Symbol</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
     <string name="AddToken_InvalidAddressError">Dirección de contrato inválida o símbolo BEP2</string>
     <string name="AddToken_ApiLimitExceeded">Límite de Api superado. Inténtalo de nuevo más tarde.</string>
