@@ -3,7 +3,9 @@ package io.horizontalsystems.chartview
 import io.horizontalsystems.chartview.models.ChartPointF
 
 class Zzz(
-    data: ChartData,
+    private val toValues: LinkedHashMap<Long, Float>,
+    private val toStartTimestamp: Long,
+    private val toEndTimestamp: Long,
     prevZzz: Zzz?,
     private val xMax: Float,
     private val yMax: Float,
@@ -14,10 +16,6 @@ class Zzz(
     private val fromEndTimestamp: Long
     private val fromMinValue: Float
     private val fromMaxValue: Float
-
-    private val toValues: LinkedHashMap<Long, Float>
-    private val toStartTimestamp = data.startTimestamp
-    private val toEndTimestamp = data.endTimestamp
 
     private val toMinValue: Float
     private val toMaxValue: Float
@@ -37,14 +35,6 @@ class Zzz(
     private val toValuesFilled: LinkedHashMap<Long, Float>
 
     init {
-        toValues = LinkedHashMap(
-            data.items.mapNotNull { chartDataItem ->
-                chartDataItem.values[Indicator.Candle]?.let {
-                    chartDataItem.timestamp to it.value
-                }
-            }.toMap().toSortedMap()
-        )
-
         toMinValue = toValues.values.minOrNull() ?: 0f
         toMaxValue = toValues.values.maxOrNull() ?: 0f
 

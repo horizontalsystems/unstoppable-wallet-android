@@ -20,6 +20,16 @@ data class ChartData(
         return items.mapNotNull { it.values[name] }
     }
 
+    fun valuesByTimestamp(name: Indicator): LinkedHashMap<Long, Float> {
+        return LinkedHashMap(
+            items.mapNotNull { item ->
+                item.values[name]?.let {
+                    item.timestamp to it.value
+                }
+            }.toMap()
+        )
+    }
+
     fun valuesMap(name: Indicator): LinkedHashMap<Long, ChartDataValueImmutable> {
         return LinkedHashMap(
             items.mapNotNull { item ->
