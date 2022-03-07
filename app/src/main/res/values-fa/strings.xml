@@ -633,7 +633,7 @@
     <string name="Hud_UnknownError">s%</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">مدیر سكه</string>
-    <string name="ManageCoins_Search">جستجو</string>
+    <string name="ManageCoins_Search">Token Name</string>
     <string name="ManageCoins_AddToken">اضافه کردن نشان</string>
     <string name="ManageCoins_NoResults">نتیجه ای پیدا نشد. اگر آدرس قرارداد هوشمند آن را می‌دانید، سعی کنید توکن را به صورت دستی اضافه کنید.</string>
     <!-- Experimental Feature -->
@@ -724,6 +724,7 @@
     <string name="AddToken_Decimals">اعشارها</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">انواع سکه</string>
+    <string name="AddToken_AddressOrSymbol">Address or Symbol</string>
     <string name="AddToken_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
     <string name="AddToken_InvalidAddressError">آدرس قرارداد یا نماد BEP2 نامعتبر است</string>
     <string name="AddToken_ApiLimitExceeded">از محدوده اپی فراتر رفت. بعدا دوباره تلاش کنید.</string>
