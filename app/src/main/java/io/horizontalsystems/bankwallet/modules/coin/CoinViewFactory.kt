@@ -243,6 +243,7 @@ class CoinViewFactory(
         when (coinType) {
             is CoinType.Erc20 -> ContractInfo(coinType.address, R.drawable.logo_ethereum_24,"https://etherscan.io/token/${coinType.address}")
             is CoinType.Bep20 -> ContractInfo(coinType.address, R.drawable.logo_binancesmartchain_24,"https://bscscan.com/token/${coinType.address}")
+            is CoinType.Mrc20 -> ContractInfo(coinType.address, R.drawable.logo_polygon_24, "https://polygonscan.com/token/${coinType.address}")
             is CoinType.Bep2 -> ContractInfo(coinType.symbol, R.drawable.logo_bep2_24,"https://explorer.binance.org/asset/${coinType.symbol}")
             is CoinType.ArbitrumOne -> ContractInfo(coinType.address, R.drawable.logo_arbitrum_24, "https://arbiscan.io/token/${coinType.address}")
             is CoinType.Avalanche -> ContractInfo(coinType.address, R.drawable.logo_avalanche_24, "https://avascan.info/blockchain/c/token/${coinType.address}")
@@ -252,7 +253,6 @@ class CoinViewFactory(
             is CoinType.Iotex -> ContractInfo(coinType.address, R.drawable.logo_iotex_24, "https://iotexscan.io/token/${coinType.address}")
             is CoinType.Moonriver -> ContractInfo(coinType.address, R.drawable.logo_moonriver_24, "https://blockscout.moonriver.moonbeam.network/address/${coinType.address}")
             is CoinType.OkexChain -> ContractInfo(coinType.address, R.drawable.logo_okex_24, "https://www.oklink.com/oec/address/${coinType.address}")
-            is CoinType.PolygonPos -> ContractInfo(coinType.address, R.drawable.logo_polygon_24, "https://polygonscan.com/token/${coinType.address}")
             is CoinType.Solana -> ContractInfo(coinType.address, R.drawable.logo_solana_24, "https://explorer.solana.com/address/${coinType.address}")
             is CoinType.Sora -> ContractInfo(coinType.address, R.drawable.logo_sora_24, "https://sorascan.com/sora-mainnet/asset/${coinType.address}")
             is CoinType.Tomochain -> ContractInfo(coinType.address, R.drawable.logo_tomochain_24, "https://scan.tomochain.com/tokens/${coinType.address}")

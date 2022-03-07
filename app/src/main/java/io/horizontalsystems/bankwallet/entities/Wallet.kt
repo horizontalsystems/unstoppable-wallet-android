@@ -32,7 +32,7 @@ data class Wallet(
             is CoinType.Iotex,
             is CoinType.Moonriver,
             is CoinType.OkexChain,
-            is CoinType.PolygonPos,
+            is CoinType.Polygon, is CoinType.Mrc20, //todo add Polygon support
             is CoinType.Solana,
             is CoinType.Sora,
             is CoinType.Tomochain,

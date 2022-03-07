@@ -96,7 +96,7 @@ val CoinType.isSupported: Boolean
         is CoinType.Iotex,
         is CoinType.Moonriver,
         is CoinType.OkexChain,
-        is CoinType.PolygonPos,
+        is CoinType.Polygon, is CoinType.Mrc20, //todo add Polygon support
         is CoinType.Solana,
         is CoinType.Sora,
         is CoinType.Tomochain,
@@ -106,21 +106,29 @@ val CoinType.isSupported: Boolean
 
 val CoinType.order: Int
     get() = when (this) {
-        is CoinType.Erc20 -> 1
-        is CoinType.Bep20 -> 2
-        is CoinType.Bep2 -> 3
-        is CoinType.Solana -> 4
-        is CoinType.Avalanche -> 5
-        is CoinType.Fantom -> 6
-        is CoinType.ArbitrumOne -> 7
-        is CoinType.PolygonPos -> 8
-        is CoinType.HuobiToken -> 9
-        is CoinType.HarmonyShard0 -> 10
-        is CoinType.Xdai -> 11
-        is CoinType.Moonriver -> 12
-        is CoinType.OkexChain -> 13
-        is CoinType.Sora -> 14
-        is CoinType.Tomochain -> 15
-        is CoinType.Iotex -> 16
+        is CoinType.Bitcoin -> 1
+        is CoinType.BitcoinCash -> 2
+        is CoinType.Litecoin -> 3
+        is CoinType.Dash -> 4
+        is CoinType.Zcash -> 5
+        is CoinType.Ethereum -> 6
+        is CoinType.BinanceSmartChain -> 7
+        is CoinType.Polygon -> 8
+        is CoinType.Erc20 -> 9
+        is CoinType.Bep20 -> 10
+        is CoinType.Mrc20 -> 11
+        is CoinType.Bep2 -> 12
+        is CoinType.Solana -> 13
+        is CoinType.Avalanche -> 14
+        is CoinType.Fantom -> 15
+        is CoinType.ArbitrumOne -> 16
+        is CoinType.HuobiToken -> 17
+        is CoinType.HarmonyShard0 -> 18
+        is CoinType.Xdai -> 19
+        is CoinType.Moonriver -> 20
+        is CoinType.OkexChain -> 21
+        is CoinType.Sora -> 22
+        is CoinType.Tomochain -> 23
+        is CoinType.Iotex -> 24
         else -> Int.MAX_VALUE
     }
