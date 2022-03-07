@@ -1,21 +1,20 @@
 package io.horizontalsystems.chartview
 
-import android.util.Log
 import io.horizontalsystems.chartview.models.ChartPointF
 
 class Zzz(
     data: ChartData,
-    private val fromValues: LinkedHashMap<Long, Float>,
-    private val fromStartTimestamp: Long,
-    private val fromEndTimestamp: Long,
-    private val fromMinValue: Float,
-    private val fromMaxValue: Float,
-
+    prevZzz: Zzz?,
     private val xMax: Float,
     private val yMax: Float,
     private val curveVerticalOffset: Float,
+) {
+    private val fromValues: LinkedHashMap<Long, Float>
+    private val fromStartTimestamp: Long
+    private val fromEndTimestamp: Long
+    private val fromMinValue: Float
+    private val fromMaxValue: Float
 
-    ) {
     private val toValues: LinkedHashMap<Long, Float>
     private val toStartTimestamp = data.startTimestamp
     private val toEndTimestamp = data.endTimestamp
@@ -23,15 +22,15 @@ class Zzz(
     private val toMinValue: Float
     private val toMaxValue: Float
 
-    var frameValues = fromValues
+    var frameValues: LinkedHashMap<Long, Float>
         private set
-    var frameStartTimestamp = fromStartTimestamp
+    var frameStartTimestamp: Long
         private set
-    var frameEndTimestamp = fromEndTimestamp
+    var frameEndTimestamp: Long
         private set
-    var frameMinValue = fromMinValue
+    var frameMinValue: Float
         private set
-    var frameMaxValue = fromMaxValue
+    var frameMaxValue: Float
         private set
 
     private val fromValuesFilled: LinkedHashMap<Long, Float>
@@ -45,11 +44,33 @@ class Zzz(
                 }
             }.toMap().toSortedMap()
         )
-        Log.e("AAA", "fromValues: $fromValues")
-//        Log.e("AAA", "toValues: $toValues")
 
         toMinValue = toValues.values.minOrNull() ?: 0f
         toMaxValue = toValues.values.maxOrNull() ?: 0f
+
+        if (prevZzz != null) {
+            fromValues = prevZzz.frameValues
+            fromStartTimestamp = prevZzz.frameStartTimestamp
+            fromEndTimestamp = prevZzz.frameEndTimestamp
+            fromMinValue = prevZzz.frameMinValue
+            fromMaxValue = prevZzz.frameMaxValue
+        } else {
+            fromValues = LinkedHashMap(
+                toValues.map { (timestamp, _) ->
+                    timestamp to 0F
+                }.toMap()
+            )
+            fromStartTimestamp = toStartTimestamp
+            fromEndTimestamp = toEndTimestamp
+            fromMinValue = toMinValue
+            fromMaxValue = toMinValue
+        }
+
+        frameValues = fromValues
+        frameStartTimestamp = fromStartTimestamp
+        frameEndTimestamp = fromEndTimestamp
+        frameMinValue = fromMinValue
+        frameMaxValue = fromMaxValue
 
         fromValuesFilled = fillWith(fromValues, toValues)
         toValuesFilled = fillWith(toValues, fromValues)
