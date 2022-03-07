@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.chart
 
 import androidx.annotation.CallSuper
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.ICurrencyManager
@@ -45,7 +44,7 @@ abstract class AbstractChartService {
 
     val indicatorsEnabledObservable = BehaviorSubject.create<Boolean>()
 
-    val chartPointsWrapperObservable = BehaviorSubject.create<DataState<ChartPointsWrapper>>()
+    val chartPointsWrapperObservable = BehaviorSubject.create<Result<ChartPointsWrapper>>()
 
     private var fetchItemsDisposable: Disposable? = null
     private val disposables = CompositeDisposable()
@@ -92,13 +91,10 @@ abstract class AbstractChartService {
 
         fetchItemsDisposable?.dispose()
         fetchItemsDisposable = getItems(tmpChartType, currency)
-            .doOnSubscribe {
-                chartPointsWrapperObservable.onNext(DataState.Loading)
-            }
             .subscribeIO({
-                chartPointsWrapperObservable.onNext(DataState.Success(it))
+                chartPointsWrapperObservable.onNext(Result.success(it))
             }, {
-                chartPointsWrapperObservable.onNext(DataState.Error(it))
+                chartPointsWrapperObservable.onNext(Result.failure(it))
             })
     }
 

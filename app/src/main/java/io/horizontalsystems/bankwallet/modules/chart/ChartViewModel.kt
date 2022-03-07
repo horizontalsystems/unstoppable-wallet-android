@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.entities.viewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
@@ -36,6 +37,8 @@ open class ChartViewModel(
     private val disposables = CompositeDisposable()
 
     init {
+        loadingLiveData.postValue(true)
+
         service.chartTypeObservable
             .subscribeIO { chartType ->
                 val tabItems = service.chartTypes.map {
@@ -74,9 +77,9 @@ open class ChartViewModel(
                     viewStateLiveData.postValue(it)
                 }
 
-                loadingLiveData.postValue(chartItemsDataState.loading)
+                loadingLiveData.postValue(false)
 
-                chartItemsDataState.dataOrNull?.let {
+                chartItemsDataState.getOrNull()?.let {
                     syncChartItems(it)
                 }
             }
@@ -88,10 +91,12 @@ open class ChartViewModel(
     }
 
     fun onSelectChartType(chartType: ChartView.ChartType) {
+        loadingLiveData.postValue(true)
         service.updateChartType(chartType)
     }
 
     fun onSelectIndicator(chartIndicator: ChartIndicator?) {
+        loadingLiveData.postValue(true)
         service.updateIndicator(chartIndicator)
     }
 
