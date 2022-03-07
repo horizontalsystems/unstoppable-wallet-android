@@ -304,14 +304,10 @@ class Chart @JvmOverloads constructor(
 
         mainCurveZzz = Zzz(
             data,
-            mainCurveZzz?.frameValues ?: linkedMapOf(),
-            mainCurveZzz?.frameStartTimestamp ?: 0L,
-            mainCurveZzz?.frameEndTimestamp ?: 0L,
-            mainCurveZzz?.frameMinValue ?: 0f,
-            mainCurveZzz?.frameMaxValue ?: 0f,
+            mainCurveZzz,
             binding.chartMain.shape.right,
             binding.chartMain.shape.bottom,
-            config.curveVerticalOffset
+            config.curveVerticalOffset,
         )
 
 
