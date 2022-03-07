@@ -11,3 +11,10 @@ sealed class ViewState {
         else -> null
     }
 }
+
+val <T> Result<T>.viewState: ViewState?
+    get() = when {
+        isSuccess -> ViewState.Success
+        isFailure -> exceptionOrNull()?.let { ViewState.Error(it) }
+        else -> null
+    }
