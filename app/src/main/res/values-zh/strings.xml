@@ -636,7 +636,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">代币管理</string>
-    <string name="ManageCoins_Search">查询</string>
+    <string name="ManageCoins_Search">Token Name</string>
     <string name="ManageCoins_AddToken">添加代币</string>
     <string name="ManageCoins_NoResults">找不到结果。如果您知道智能合约地址，请尝试手动添加代币。</string>
     <!-- Experimental Feature -->
@@ -727,6 +727,7 @@
     <string name="AddToken_Decimals">小数</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">代币类型</string>
+    <string name="AddToken_AddressOrSymbol">Address or Symbol</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidAddressError">找不到符号</string>
     <string name="AddToken_ApiLimitExceeded">超过Api限制。请稍后再试。</string>
