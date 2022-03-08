@@ -83,24 +83,9 @@ class Zzz(
             frameMaxValue = getForFrame(fromMaxValue, toMaxValue, animatedFraction)
 
             val values = mutableMapOf<Long, Float>()
-
-            val timestamps = fromValuesFilled.keys
-            valueForTimestamp(frameStartTimestamp, timestamps, fromValuesFilled)?.let {
-                values[frameStartTimestamp] = it
-            }
-            valueForTimestamp(frameEndTimestamp, timestamps, fromValuesFilled)?.let {
-                values[frameEndTimestamp] = it
-            }
-
             for ((timestamp, valueFrom) in fromValuesFilled) {
-                if (timestamp < frameStartTimestamp || timestamp > frameEndTimestamp) continue
-
                 val valueTo = toValuesFilled[timestamp]!!
-
-                val valueForFrame = getForFrame(valueFrom, valueTo, animatedFraction)
-                if (valueForFrame < frameMinValue || valueForFrame > frameMaxValue) continue
-
-                values[timestamp] = valueForFrame
+                values[timestamp] = getForFrame(valueFrom, valueTo, animatedFraction)
             }
 
             frameValues = LinkedHashMap(values.toSortedMap())
