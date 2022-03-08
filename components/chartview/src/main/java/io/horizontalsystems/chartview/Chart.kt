@@ -167,6 +167,22 @@ class Chart @JvmOverloads constructor(
 
         animatorMain.cancel()
 
+        val candleValues = data.valuesByTimestamp(Candle)
+        val minCandleValue = candleValues.values.minOrNull() ?: 0f
+        val maxCandleValue = candleValues.values.maxOrNull() ?: 0f
+
+        mainCurveZzz = Zzz(
+            candleValues,
+            data.startTimestamp,
+            data.endTimestamp,
+            minCandleValue,
+            maxCandleValue,
+            mainCurveZzz,
+            binding.chartMain.shape.right,
+            binding.chartMain.shape.bottom,
+            config.curveVerticalOffset
+        )
+
         config.setTrendColor(data)
 
         val emaFast = PointConverter.curve(
@@ -199,17 +215,6 @@ class Chart @JvmOverloads constructor(
 
         val coordinates =
             PointConverter.coordinates(data, binding.chartMain.shape, config.curveVerticalOffset)
-        val points = PointConverter.curve(
-            data.values(Candle),
-            binding.chartMain.shape,
-            config.curveVerticalOffset
-        )
-        val pointsMap = PointConverter.curveMap(
-            data,
-            Candle,
-            binding.chartMain.shape,
-            config.curveVerticalOffset
-        )
         val volumes = PointConverter.volume(
             data.values(Volume),
             binding.chartBottom.shape,
@@ -300,16 +305,6 @@ class Chart @JvmOverloads constructor(
                 Macd.slowPeriod.toString() to config.gridLabelColor,
                 Macd.fastPeriod.toString() to config.gridLabelColor
             )
-        )
-
-        mainCurveZzz = Zzz(
-            data.valuesByTimestamp(Candle),
-            data.startTimestamp,
-            data.endTimestamp,
-            mainCurveZzz,
-            binding.chartMain.shape.right,
-            binding.chartMain.shape.bottom,
-            config.curveVerticalOffset
         )
 
         // Candles

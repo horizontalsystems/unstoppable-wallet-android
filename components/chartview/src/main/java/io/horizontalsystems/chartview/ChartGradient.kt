@@ -4,7 +4,6 @@ import android.graphics.*
 import androidx.core.graphics.ColorUtils.setAlphaComponent
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartConfig
-import io.horizontalsystems.chartview.models.ChartPointF
 
 class ChartGradient(private val animator: ChartAnimator? = null, override var isVisible: Boolean = true) : ChartDraw {
 
@@ -51,13 +50,6 @@ class ChartGradient(private val animator: ChartAnimator? = null, override var is
         path.close()
 
         drawPath(path, paint)
-    }
-
-    private fun getY(point: ChartPointF) : Float {
-        return when {
-            animator != null -> animator.getAnimatedY(point.y, shape.bottom)
-            else -> point.y
-        }
     }
 
     private fun setGradient(colorStart: Int, colorEnd: Int) {

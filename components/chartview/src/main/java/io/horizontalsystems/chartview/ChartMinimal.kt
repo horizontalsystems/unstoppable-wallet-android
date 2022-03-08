@@ -26,10 +26,16 @@ class ChartMinimal @JvmOverloads constructor(
     fun setData(data: ChartData) {
         config.setTrendColor(data)
 
+        val candleValues = data.valuesByTimestamp(Candle)
+        val minCandleValue = candleValues.values.minOrNull() ?: 0f
+        val maxCandleValue = candleValues.values.maxOrNull() ?: 0f
+
         mainCurveZzz = Zzz(
-            data.valuesByTimestamp(Candle),
+            candleValues,
             data.startTimestamp,
             data.endTimestamp,
+            minCandleValue,
+            maxCandleValue,
             mainCurveZzz,
             binding.chartMain.shape.right,
             binding.chartMain.shape.bottom,
