@@ -55,7 +55,7 @@ class Chart @JvmOverloads constructor(
     private val rsiCurve = ChartCurve(config, animatorBottom)
     private val rsiRange = ChartGridRange(config, isVisible = false)
 
-    private val dominanceCurve = ChartCurve(config, animatorMain)
+    private val dominanceCurve = ChartCurveXxx(config, animatorMain)
     private val dominanceLabel = ChartBottomLabel(config)
 
     fun setListener(listener: Listener) {
@@ -157,6 +157,7 @@ class Chart @JvmOverloads constructor(
     }
 
     private var mainCurveZzz: Zzz? = null
+    private var dominanceCurveZzz: Zzz? = null
 
     fun setData(
         data: ChartData,
@@ -228,21 +229,28 @@ class Chart @JvmOverloads constructor(
         )
 
         //Dominance
-        val dominancePoints = data.values(Dominance)
-        if (dominancePoints.isNotEmpty()) {
-            val dominance = PointConverter.curve(
-                dominancePoints,
-                binding.chartMain.shape,
+        val dominanceValues = data.valuesByTimestamp(Dominance)
+        if (dominanceValues.isNotEmpty()) {
+            dominanceCurveZzz = Zzz(
+                dominanceValues,
+                data.startTimestamp,
+                data.endTimestamp,
+                dominanceValues.values.minOrNull() ?: 0f,
+                dominanceValues.values.maxOrNull() ?: 0f,
+                dominanceCurveZzz,
+                binding.chartMain.shape.right,
+                binding.chartMain.shape.bottom,
                 config.curveVerticalOffset
             )
 
             dominanceCurve.setShape(binding.chartMain.shape)
-            dominanceCurve.setPoints(dominance)
+            dominanceCurve.setZzz(dominanceCurveZzz!!)
             dominanceCurve.setColor(config.curveSlowColor)
 
             dominanceLabel.setShape(binding.chartMain.shape)
-            val dominancePercent = decimalFormat.format(dominancePoints.last().value)
-            val diff = dominancePoints.last().value - dominancePoints.first().value
+            val dValues = dominanceValues.values
+            val dominancePercent = decimalFormat.format(dValues.last())
+            val diff = dValues.last() - dValues.first()
             val diffColor = if (diff > 0f) config.trendUpColor else config.trendDownColor
             val diffFormatted = decimalFormat.format(diff)
             dominanceLabel.setValues(
