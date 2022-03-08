@@ -6,6 +6,8 @@ class Zzz(
     private val toValues: LinkedHashMap<Long, Float>,
     private val toStartTimestamp: Long,
     private val toEndTimestamp: Long,
+    private val toMinValue: Float,
+    private val toMaxValue: Float,
     prevZzz: Zzz?,
     private val xMax: Float,
     private val yMax: Float,
@@ -16,9 +18,6 @@ class Zzz(
     private val fromEndTimestamp: Long
     private val fromMinValue: Float
     private val fromMaxValue: Float
-
-    private val toMinValue: Float
-    private val toMaxValue: Float
 
     var frameValues: LinkedHashMap<Long, Float>
         private set
@@ -35,9 +34,6 @@ class Zzz(
     private val toValuesFilled: LinkedHashMap<Long, Float>
 
     init {
-        toMinValue = toValues.values.minOrNull() ?: 0f
-        toMaxValue = toValues.values.maxOrNull() ?: 0f
-
         if (prevZzz != null) {
             fromValues = prevZzz.frameValues
             fromStartTimestamp = prevZzz.frameStartTimestamp

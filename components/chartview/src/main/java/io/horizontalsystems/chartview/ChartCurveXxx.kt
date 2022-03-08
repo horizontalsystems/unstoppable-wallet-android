@@ -6,7 +6,6 @@ import android.graphics.Path
 import android.graphics.RectF
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartConfig
-import io.horizontalsystems.chartview.models.ChartPointF
 
 class ChartCurveXxx(
     private val config: ChartConfig,
@@ -56,13 +55,6 @@ class ChartCurveXxx(
         }
 
         canvas.drawPath(path, paint)
-    }
-
-    private fun getY(point: ChartPointF): Float {
-        return when {
-            animator != null -> animator.getAnimatedY(point.y, shape.bottom)
-            else -> point.y
-        }
     }
 
 }
