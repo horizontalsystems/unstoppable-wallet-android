@@ -58,6 +58,16 @@ class Chart @JvmOverloads constructor(
     private val dominanceCurve = ChartCurveXxx(config, animatorMain)
     private val dominanceLabel = ChartBottomLabel(config)
 
+    private var mainCurveZzz: Zzz? = null
+    private var dominanceCurveZzz: Zzz? = null
+
+    init {
+        animatorMain.addUpdateListener {
+            mainCurveZzz?.nextFrame(animatorMain.animatedFraction)
+            dominanceCurveZzz?.nextFrame(animatorMain.animatedFraction)
+        }
+    }
+
     fun setListener(listener: Listener) {
         binding.chartTouch.onUpdate(object : Listener {
             override fun onTouchDown() {
@@ -155,9 +165,6 @@ class Chart @JvmOverloads constructor(
             isVisible = visible
         )
     }
-
-    private var mainCurveZzz: Zzz? = null
-    private var dominanceCurveZzz: Zzz? = null
 
     fun setData(
         data: ChartData,

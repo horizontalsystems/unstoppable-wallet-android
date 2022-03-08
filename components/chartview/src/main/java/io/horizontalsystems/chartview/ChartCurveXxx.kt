@@ -40,8 +40,6 @@ class ChartCurveXxx(
         if (!isVisible) return
         val tmpZzz = zzz ?: return
 
-        tmpZzz.nextFrame(animator?.animatedFraction ?: 1f)
-
         val points = tmpZzz.getFramePoints()
         if (points.isEmpty()) return
 
