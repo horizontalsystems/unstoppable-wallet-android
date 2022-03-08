@@ -49,7 +49,7 @@ class Zzz(
             fromStartTimestamp = toStartTimestamp
             fromEndTimestamp = toEndTimestamp
             fromMinValue = toMinValue
-            fromMaxValue = toMinValue
+            fromMaxValue = toMaxValue
         }
 
         frameValues = fromValues
@@ -123,7 +123,7 @@ class Zzz(
         ): LinkedHashMap<Long, Float> {
             val prevPointsMutableMap = prevPointsMap.toMutableMap()
 
-            val prevTimestamps = prevPointsMutableMap.keys
+            val prevTimestamps = prevPointsMutableMap.keys.toList()
 
             for ((timestamp, value) in nextPointsMap) {
                 if (!prevPointsMutableMap.containsKey(timestamp)) {
