@@ -18,6 +18,10 @@ class ChartAnimator(onUpdate: (() -> Unit)) {
         }
     }
 
+    fun addUpdateListener(listener: ValueAnimator.AnimatorUpdateListener) {
+        animator.addUpdateListener(listener)
+    }
+
     fun start() {
         animator.setFloatValues(0f)
         animator.start()
