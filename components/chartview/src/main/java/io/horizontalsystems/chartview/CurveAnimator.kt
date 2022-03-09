@@ -2,13 +2,13 @@ package io.horizontalsystems.chartview
 
 import io.horizontalsystems.chartview.models.ChartPointF
 
-class Zzz(
+class CurveAnimator(
     private val toValues: LinkedHashMap<Long, Float>,
     private val toStartTimestamp: Long,
     private val toEndTimestamp: Long,
     private val toMinValue: Float,
     private val toMaxValue: Float,
-    prevZzz: Zzz?,
+    prevCurveAnimator: CurveAnimator?,
     private val xMax: Float,
     private val yMax: Float,
     private val curveVerticalOffset: Float,
@@ -35,12 +35,12 @@ class Zzz(
 //    private val matchTimestamps: List<Pair<Long, Long>>
 
     init {
-        if (prevZzz != null) {
-            fromValues = prevZzz.frameValues
-            fromStartTimestamp = prevZzz.frameStartTimestamp
-            fromEndTimestamp = prevZzz.frameEndTimestamp
-            fromMinValue = prevZzz.frameMinValue
-            fromMaxValue = prevZzz.frameMaxValue
+        if (prevCurveAnimator != null) {
+            fromValues = prevCurveAnimator.frameValues
+            fromStartTimestamp = prevCurveAnimator.frameStartTimestamp
+            fromEndTimestamp = prevCurveAnimator.frameEndTimestamp
+            fromMinValue = prevCurveAnimator.frameMinValue
+            fromMaxValue = prevCurveAnimator.frameMaxValue
         } else {
             fromValues = LinkedHashMap(
                 toValues.map { (timestamp, _) ->
