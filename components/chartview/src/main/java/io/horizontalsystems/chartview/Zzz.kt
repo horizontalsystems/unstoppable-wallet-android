@@ -32,6 +32,7 @@ class Zzz(
 
     private val fromValuesFilled: LinkedHashMap<Long, Float>
     private val toValuesFilled: LinkedHashMap<Long, Float>
+    private val matchTimestamps: List<Pair<Long, Long>>
 
     init {
         if (prevZzz != null) {
@@ -60,10 +61,12 @@ class Zzz(
 
         fromValuesFilled = fillWith(fromValues, toValues)
         toValuesFilled = fillWith(toValues, fromValues)
+
+        matchTimestamps = matchTimestamps(fromValues.keys.toList(), toValues.keys.toList())
     }
 
     fun nextFrame(animatedFraction: Float) {
-        if (fromValues.isEmpty()) {
+        if (fromValues.isEmpty() || animatedFraction == 1f) {
             frameStartTimestamp = toStartTimestamp
             frameEndTimestamp = toEndTimestamp
 
@@ -79,9 +82,19 @@ class Zzz(
             frameMaxValue = getForFrame(fromMaxValue, toMaxValue, animatedFraction)
 
             val values = mutableMapOf<Long, Float>()
-            for ((timestamp, valueFrom) in fromValuesFilled) {
-                val valueTo = toValuesFilled[timestamp]!!
-                values[timestamp] = getForFrame(valueFrom, valueTo, animatedFraction)
+//            for ((timestamp, valueFrom) in fromValuesFilled) {
+//                val valueTo = toValuesFilled[timestamp]!!
+//                values[timestamp] = getForFrame(valueFrom, valueTo, animatedFraction)
+//            }
+
+            matchTimestamps.forEach { (t1, t2) ->
+                val valueFrom = fromValues[t1]!!
+                val valueTo = toValues[t2]!!
+
+                val t3 =  getForFrame(t1.toFloat(), t2.toFloat(), animatedFraction).toLong()
+
+                values[t3] = getForFrame(valueFrom, valueTo, animatedFraction)
+
             }
 
             frameValues = LinkedHashMap(values.toSortedMap())
@@ -117,6 +130,52 @@ class Zzz(
 
 
     companion object {
+        fun matchTimestamps(
+            timestampsFrom: List<Long>,
+            timestampsTo: List<Long>
+        ): List<Pair<Long, Long>> {
+
+            val result = mutableListOf<Pair<Long, Long>>()
+
+            val timestampsFromMutable = timestampsFrom.toMutableList()
+            val timestampsToMutable = timestampsTo.toMutableList()
+
+            var t1 = timestampsFromMutable.removeFirst()
+            var t2 = timestampsToMutable.removeFirst()
+
+            while (true) {
+                result.add(t1 to t2)
+
+                if (timestampsFromMutable.isEmpty() && timestampsToMutable.isEmpty()) {
+                    break
+                }
+
+                if (t1 == t2) {
+                    if (timestampsFromMutable.isNotEmpty()) {
+                        t1 = timestampsFromMutable.removeFirst()
+                    }
+                    if (timestampsToMutable.isNotEmpty()) {
+                        t2 = timestampsToMutable.removeFirst()
+                    }
+                }
+                else if (t1 < t2) {
+                    if (timestampsFromMutable.isNotEmpty()) {
+                        t1 = timestampsFromMutable.removeFirst()
+                    } else if (timestampsToMutable.isNotEmpty()) {
+                        t2 = timestampsToMutable.removeFirst()
+                    }
+                } else if (t1 > t2) {
+                    if (timestampsToMutable.isNotEmpty()) {
+                        t2 = timestampsToMutable.removeFirst()
+                    } else if (timestampsFromMutable.isNotEmpty()) {
+                        t1 = timestampsFromMutable.removeFirst()
+                    }
+                }
+            }
+
+            return result
+        }
+
         fun fillWith(
             prevPointsMap: LinkedHashMap<Long, Float>,
             nextPointsMap: LinkedHashMap<Long, Float>,
