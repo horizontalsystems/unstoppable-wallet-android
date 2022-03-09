@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
-import io.horizontalsystems.bankwallet.core.NoDataException
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
@@ -72,12 +71,8 @@ class CoinOverviewChartService(
 
         val tmpChartInfo: ChartInfo? = marketKit.chartInfo(coinUid, currency.code, chartType.kitChartType)
         val tmpLastCoinPrice = marketKit.coinPrice(coinUid, currency.code)
-        val items = doGetItems(tmpChartInfo, tmpLastCoinPrice, chartType)
 
-        return when {
-            items != null -> Single.just(items)
-            else -> Single.error(NoDataException())
-        }
+        return Single.just(doGetItems(tmpChartInfo, tmpLastCoinPrice, chartType))
     }
 
     private fun unsubscribeFromUpdates() {
@@ -106,10 +101,10 @@ class CoinOverviewChartService(
         chartInfo: ChartInfo?,
         lastCoinPrice: CoinPrice?,
         chartType: ChartView.ChartType
-    ): ChartPointsWrapper? {
-        if (chartInfo == null || lastCoinPrice == null) return null
+    ): ChartPointsWrapper {
+        if (chartInfo == null || lastCoinPrice == null) return ChartPointsWrapper(chartType, listOf())
         val points = chartInfo.points
-        if (points.isEmpty()) return null
+        if (points.isEmpty()) return ChartPointsWrapper(chartType, listOf())
 
         val values = points.map { it.value.toFloat() }
         val emaFast = IndicatorHelper.ema(values, Indicator.EmaFast.period)
