@@ -194,7 +194,8 @@ class Chart @JvmOverloads constructor(
             mainCurveAnimator,
             binding.chartMain.shape.right,
             binding.chartMain.shape.bottom,
-            config.curveVerticalOffset
+            config.curveVerticalOffset,
+            config.curveVerticalOffset,
         )
 
         config.setTrendColor(data)
@@ -253,7 +254,8 @@ class Chart @JvmOverloads constructor(
                 dominanceCurveAnimator,
                 binding.chartMain.shape.right,
                 binding.chartMain.shape.bottom,
-                config.curveVerticalOffset
+                config.curveVerticalOffset,
+                config.curveVerticalOffset,
             )
 
             dominanceCurve.setShape(binding.chartMain.shape)
