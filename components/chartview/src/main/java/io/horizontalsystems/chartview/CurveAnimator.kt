@@ -11,7 +11,8 @@ class CurveAnimator(
     prevCurveAnimator: CurveAnimator?,
     private val xMax: Float,
     private val yMax: Float,
-    private val curveVerticalOffset: Float,
+    private val curveTopOffset: Float,
+    private val curveBottomOffset: Float,
 ) {
     private val fromValues: LinkedHashMap<Long, Float>
     private val fromStartTimestamp: Long
@@ -116,11 +117,11 @@ class CurveAnimator(
         // value = ay + minValue
         // y = (value - minValue) / a
         // a = (value - minValue) / y
-        val yRatio = (frameMaxValue - frameMinValue) / (yMax - 2 * curveVerticalOffset)
+        val yRatio = (frameMaxValue - frameMinValue) / (yMax - curveTopOffset - curveBottomOffset)
 
         return frameValues.map { (timestamp, value) ->
             val x = (timestamp - frameStartTimestamp) / xRatio
-            val y = (value - frameMinValue) / yRatio + curveVerticalOffset
+            val y = (value - frameMinValue) / yRatio + curveBottomOffset
 
             val y2 = (y * -1) + yMax
 

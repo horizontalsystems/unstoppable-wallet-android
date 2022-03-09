@@ -37,7 +37,8 @@ class ChartMinimal @JvmOverloads constructor(
             null,
             binding.chartMain.shape.right,
             binding.chartMain.shape.bottom,
-            config.curveMinimalVerticalOffset
+            0f,
+            config.curveMinimalVerticalOffset,
         )
         mainCurveAnimator.nextFrame(1f)
 
