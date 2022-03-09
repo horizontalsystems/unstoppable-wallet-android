@@ -3,7 +3,7 @@ package io.horizontalsystems.chartview
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class ZzzTest {
+class CurveAnimatorTest {
 
     @Test
     fun matchTimestamps3() {
@@ -15,7 +15,7 @@ class ZzzTest {
             787600L to 784000L,
         )
 
-        val actual = Zzz.matchTimestamps(timestamps1, timestamps2)
+        val actual = CurveAnimator.matchTimestamps(timestamps1, timestamps2)
 
         assertEquals(expected, actual)
     }
@@ -33,7 +33,7 @@ class ZzzTest {
             8L to 9L,
         )
 
-        val actual = Zzz.matchTimestamps(timestamps1, timestamps2)
+        val actual = CurveAnimator.matchTimestamps(timestamps1, timestamps2)
 
         assertEquals(expected, actual)
     }
@@ -52,7 +52,7 @@ class ZzzTest {
             9L to 8L,
         )
 
-        val actual = Zzz.matchTimestamps(timestamps1, timestamps2)
+        val actual = CurveAnimator.matchTimestamps(timestamps1, timestamps2)
 
         assertEquals(expected, actual)
     }
@@ -163,7 +163,7 @@ class ZzzTest {
             1646731545L to 1.6f
         )
 
-        val filled = Zzz.fillWith(to, from)
+        val filled = CurveAnimator.fillWith(to, from)
 
         assert(false) {
             val x = filled.map { (k, v) ->
@@ -189,7 +189,7 @@ class ZzzTest {
             1638403200L to 7.405244f,
         )
 
-        val filled = Zzz.fillWith(to, from)
+        val filled = CurveAnimator.fillWith(to, from)
 
         assert(false) {
             val x = filled.map { (k, v) ->

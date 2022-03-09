@@ -4,13 +4,9 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartConfig
 
-class ChartCurveXxx(
-    private val config: ChartConfig,
-    private val animator: ChartAnimator? = null
-) : ChartDraw {
+class ChartCurve2(private val config: ChartConfig) : ChartDraw {
     override var isVisible: Boolean = true
 
     private var shape = RectF(0f, 0f, 0f, 0f)
@@ -22,6 +18,8 @@ class ChartCurveXxx(
         isAntiAlias = true
     }
 
+    private var curveAnimator: CurveAnimator? = null
+
     fun setShape(rect: RectF) {
         shape = rect
     }
@@ -30,17 +28,15 @@ class ChartCurveXxx(
         paint.color = color
     }
 
-    private var zzz: Zzz? = null
-
-    fun setZzz(zzz: Zzz) {
-        this.zzz = zzz
+    fun setCurveAnimator(curveAnimator: CurveAnimator) {
+        this.curveAnimator = curveAnimator
     }
 
     override fun draw(canvas: Canvas) {
         if (!isVisible) return
-        val tmpZzz = zzz ?: return
+        val tmpCurveAnimator = curveAnimator ?: return
 
-        val points = tmpZzz.getFramePoints()
+        val points = tmpCurveAnimator.getFramePoints()
         if (points.isEmpty()) return
 
         val path = Path()

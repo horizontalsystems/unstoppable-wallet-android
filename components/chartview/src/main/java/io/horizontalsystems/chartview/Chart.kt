@@ -34,7 +34,7 @@ class Chart @JvmOverloads constructor(
     private val animatorBottom = ChartAnimator { binding.chartBottom.invalidate() }
     private val animatorTopBottomRange = ChartAnimator { binding.topLowRange.invalidate() }
 
-    private val mainCurve = ChartCurveXxx(config, animatorMain)
+    private val mainCurve = ChartCurve2(config)
     private val mainGradient = ChartGradient(animatorMain)
 
     private val mainGrid = ChartGrid(config)
@@ -55,16 +55,16 @@ class Chart @JvmOverloads constructor(
     private val rsiCurve = ChartCurve(config, animatorBottom)
     private val rsiRange = ChartGridRange(config, isVisible = false)
 
-    private val dominanceCurve = ChartCurveXxx(config, animatorMain)
+    private val dominanceCurve = ChartCurve2(config)
     private val dominanceLabel = ChartBottomLabel(config)
 
-    private var mainCurveZzz: Zzz? = null
-    private var dominanceCurveZzz: Zzz? = null
+    private var mainCurveAnimator: CurveAnimator? = null
+    private var dominanceCurveAnimator: CurveAnimator? = null
 
     init {
         animatorMain.addUpdateListener {
-            mainCurveZzz?.nextFrame(animatorMain.animatedFraction)
-            dominanceCurveZzz?.nextFrame(animatorMain.animatedFraction)
+            mainCurveAnimator?.nextFrame(animatorMain.animatedFraction)
+            dominanceCurveAnimator?.nextFrame(animatorMain.animatedFraction)
         }
     }
 
@@ -179,13 +179,13 @@ class Chart @JvmOverloads constructor(
         val minCandleValue = candleValues.values.minOrNull() ?: 0f
         val maxCandleValue = candleValues.values.maxOrNull() ?: 0f
 
-        mainCurveZzz = Zzz(
+        mainCurveAnimator = CurveAnimator(
             candleValues,
             data.startTimestamp,
             data.endTimestamp,
             minCandleValue,
             maxCandleValue,
-            mainCurveZzz,
+            mainCurveAnimator,
             binding.chartMain.shape.right,
             binding.chartMain.shape.bottom,
             config.curveVerticalOffset
@@ -238,20 +238,20 @@ class Chart @JvmOverloads constructor(
         //Dominance
         val dominanceValues = data.valuesByTimestamp(Dominance)
         if (dominanceValues.isNotEmpty()) {
-            dominanceCurveZzz = Zzz(
+            dominanceCurveAnimator = CurveAnimator(
                 dominanceValues,
                 data.startTimestamp,
                 data.endTimestamp,
                 dominanceValues.values.minOrNull() ?: 0f,
                 dominanceValues.values.maxOrNull() ?: 0f,
-                dominanceCurveZzz,
+                dominanceCurveAnimator,
                 binding.chartMain.shape.right,
                 binding.chartMain.shape.bottom,
                 config.curveVerticalOffset
             )
 
             dominanceCurve.setShape(binding.chartMain.shape)
-            dominanceCurve.setZzz(dominanceCurveZzz!!)
+            dominanceCurve.setCurveAnimator(dominanceCurveAnimator!!)
             dominanceCurve.setColor(config.curveSlowColor)
 
             dominanceLabel.setShape(binding.chartMain.shape)
@@ -324,10 +324,10 @@ class Chart @JvmOverloads constructor(
 
         // Candles
         mainCurve.setShape(binding.chartMain.shape)
-        mainCurve.setZzz(mainCurveZzz!!)
+        mainCurve.setCurveAnimator(mainCurveAnimator!!)
         mainCurve.setColor(config.curveColor)
 
-        mainGradient.setZzz(mainCurveZzz!!)
+        mainGradient.setCurveAnimator(mainCurveAnimator!!)
         mainGradient.setShape(binding.chartMain.shape)
         mainGradient.setShader(config.curveGradient)
 

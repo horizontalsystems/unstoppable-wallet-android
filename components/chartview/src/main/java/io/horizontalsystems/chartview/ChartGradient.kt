@@ -14,10 +14,10 @@ class ChartGradient(private val animator: ChartAnimator? = null, override var is
         style = Paint.Style.FILL
     }
 
-    private var zzz: Zzz? = null
+    private var curveAnimator: CurveAnimator? = null
 
-    fun setZzz(zzz: Zzz) {
-        this.zzz = zzz
+    fun setCurveAnimator(curveAnimator: CurveAnimator) {
+        this.curveAnimator = curveAnimator
     }
 
     fun setShader(gradient: ChartConfig.GradientColor) {
@@ -33,7 +33,7 @@ class ChartGradient(private val animator: ChartAnimator? = null, override var is
     }
 
     private fun Canvas.drawGradient() {
-        val points = zzz?.getFramePoints() ?: return
+        val points = curveAnimator?.getFramePoints() ?: return
         if (points.size < 2) return
         val path = Path()
 

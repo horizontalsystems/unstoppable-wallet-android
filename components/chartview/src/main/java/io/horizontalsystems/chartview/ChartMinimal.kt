@@ -18,7 +18,7 @@ class ChartMinimal @JvmOverloads constructor(
 
     private val config = ChartConfig(context, attrs)
 
-    private val mainCurve = ChartCurveXxx(config)
+    private val mainCurve = ChartCurve2(config)
     private val mainGradient = ChartGradient()
 
     fun setData(data: ChartData) {
@@ -28,7 +28,7 @@ class ChartMinimal @JvmOverloads constructor(
         val minCandleValue = candleValues.values.minOrNull() ?: 0f
         val maxCandleValue = candleValues.values.maxOrNull() ?: 0f
 
-        val mainCurveZzz = Zzz(
+        val mainCurveAnimator = CurveAnimator(
             candleValues,
             data.startTimestamp,
             data.endTimestamp,
@@ -39,13 +39,13 @@ class ChartMinimal @JvmOverloads constructor(
             binding.chartMain.shape.bottom,
             config.curveMinimalVerticalOffset
         )
-        mainCurveZzz.nextFrame(1f)
+        mainCurveAnimator.nextFrame(1f)
 
         mainCurve.setShape(binding.chartMain.shape)
-        mainCurve.setZzz(mainCurveZzz)
+        mainCurve.setCurveAnimator(mainCurveAnimator)
         mainCurve.setColor(config.curveColor)
 
-        mainGradient.setZzz(mainCurveZzz)
+        mainGradient.setCurveAnimator(mainCurveAnimator)
         mainGradient.setShape(binding.chartMain.shape)
         mainGradient.setShader(config.curveGradient)
 
