@@ -82,9 +82,7 @@ class MetricsPageFragment : BaseFragment() {
         val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
         val viewState = itemsViewState?.merge(chartViewState)
         val marketData by viewModel.marketLiveData.observeAsState()
-        val itemsLoading by viewModel.loadingLiveData.observeAsState(false)
-        val chartLoading by chartViewModel.loadingLiveData.observeAsState(false)
-        val loading = itemsLoading || chartLoading
+        val loading by viewModel.loadingLiveData.observeAsState(false)
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
 
         Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {

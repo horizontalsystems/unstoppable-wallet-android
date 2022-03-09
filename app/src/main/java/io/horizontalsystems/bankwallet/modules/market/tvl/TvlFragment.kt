@@ -80,9 +80,7 @@ class TvlFragment : BaseFragment() {
         val viewState = itemsViewState?.merge(chartViewState)
         val tvlData by tvlViewModel.tvlLiveData.observeAsState()
         val tvlDiffType by tvlViewModel.tvlDiffTypeLiveData.observeAsState()
-        val itemsLoading by tvlViewModel.loadingLiveData.observeAsState(false)
-        val chartLoading by chartViewModel.loadingLiveData.observeAsState(false)
-        val loading = itemsLoading || chartLoading
+        val loading  by tvlViewModel.loadingLiveData.observeAsState(false)
         val isRefreshing by tvlViewModel.isRefreshingLiveData.observeAsState(false)
         val chainSelectorDialogState by tvlViewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
 
