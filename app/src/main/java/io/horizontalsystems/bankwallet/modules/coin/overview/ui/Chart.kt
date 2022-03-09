@@ -269,6 +269,7 @@ fun PriceVolChart(
                         chart.showError(viewState.t.localizedMessage ?: "")
                     }
                     ViewState.Success -> {
+                        chart.hideError()
                         chartInfoData?.let {
                             chart.post {
                                 chart.setData(it.chartData, it.chartType, it.maxValue, it.minValue)

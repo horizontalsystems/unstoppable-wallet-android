@@ -107,6 +107,12 @@ class Chart @JvmOverloads constructor(
         binding.chartError.text = error
     }
 
+    fun hideError() {
+        showChart(true)
+        binding.chartError.isVisible = false
+        binding.chartError.text = null
+    }
+
     private var indicator: ChartIndicator? = null
 
     fun hideAllIndicators() {
