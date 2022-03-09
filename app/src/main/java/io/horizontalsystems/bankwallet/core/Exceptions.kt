@@ -13,6 +13,11 @@ class NoFeeSendTransactionError : Exception()
 class FailedTransaction(errorMessage: String?) : RuntimeException(errorMessage) {
     override fun toString() = message ?: "Transaction failed."
 }
+class NoDataException() : Exception() {
+    override fun getLocalizedMessage(): String {
+        return Translator.getString(R.string.CoinPage_NoData)
+    }
+}
 
 sealed class EvmError(message: String? = null) : Throwable(message) {
     object InsufficientBalanceWithFee : EvmError()
