@@ -32,7 +32,7 @@ class Zzz(
 
     private val fromValuesFilled: LinkedHashMap<Long, Float>
     private val toValuesFilled: LinkedHashMap<Long, Float>
-    private val matchTimestamps: List<Pair<Long, Long>>
+//    private val matchTimestamps: List<Pair<Long, Long>>
 
     init {
         if (prevZzz != null) {
@@ -62,7 +62,7 @@ class Zzz(
         fromValuesFilled = fillWith(fromValues, toValues)
         toValuesFilled = fillWith(toValues, fromValues)
 
-        matchTimestamps = matchTimestamps(fromValues.keys.toList(), toValues.keys.toList())
+//        matchTimestamps = matchTimestamps(fromValues.keys.toList(), toValues.keys.toList())
     }
 
     fun nextFrame(animatedFraction: Float) {
@@ -82,20 +82,20 @@ class Zzz(
             frameMaxValue = getForFrame(fromMaxValue, toMaxValue, animatedFraction)
 
             val values = mutableMapOf<Long, Float>()
-//            for ((timestamp, valueFrom) in fromValuesFilled) {
-//                val valueTo = toValuesFilled[timestamp]!!
-//                values[timestamp] = getForFrame(valueFrom, valueTo, animatedFraction)
-//            }
-
-            matchTimestamps.forEach { (t1, t2) ->
-                val valueFrom = fromValues[t1]!!
-                val valueTo = toValues[t2]!!
-
-                val t3 =  getForFrame(t1.toFloat(), t2.toFloat(), animatedFraction).toLong()
-
-                values[t3] = getForFrame(valueFrom, valueTo, animatedFraction)
-
+            for ((timestamp, valueFrom) in fromValuesFilled) {
+                val valueTo = toValuesFilled[timestamp]!!
+                values[timestamp] = getForFrame(valueFrom, valueTo, animatedFraction)
             }
+
+//            matchTimestamps.forEach { (t1, t2) ->
+//                val valueFrom = fromValues[t1]!!
+//                val valueTo = toValues[t2]!!
+//
+//                val t3 =  getForFrame(t1.toFloat(), t2.toFloat(), animatedFraction).toLong()
+//
+//                values[t3] = getForFrame(valueFrom, valueTo, animatedFraction)
+//
+//            }
 
             frameValues = LinkedHashMap(values.toSortedMap())
         }
