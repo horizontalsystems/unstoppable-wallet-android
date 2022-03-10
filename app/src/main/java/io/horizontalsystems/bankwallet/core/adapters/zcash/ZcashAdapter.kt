@@ -41,6 +41,7 @@ class ZcashAdapter(
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
     private val confirmationsThreshold = 10
+    private val decimalCount = 8
     private val network: ZcashNetwork = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
     private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
     private val lightWalletDHost = if (testMode) network.defaultHost else "zcash.horizontalsystems.xyz"
@@ -131,7 +132,7 @@ class ZcashAdapter(
         get() {
             val totalZatoshi = synchronizer.saplingBalances.value.availableZatoshi
             return if (totalZatoshi > 0)
-                totalZatoshi.convertZatoshiToZec()
+                totalZatoshi.convertZatoshiToZec(decimalCount)
             else
                 BigDecimal.ZERO
         }
@@ -141,7 +142,7 @@ class ZcashAdapter(
             val latestBalance = synchronizer.saplingBalances.value
             val lockedBalance = synchronizer.saplingBalances.value.pendingZatoshi
             return if (lockedBalance > 0)
-                lockedBalance.convertZatoshiToZec()
+                lockedBalance.convertZatoshiToZec(decimalCount)
             else
                 BigDecimal.ZERO
         }
@@ -192,10 +193,10 @@ class ZcashAdapter(
 
     //region ISendZcashAdapter
     override val availableBalance: BigDecimal
-        get() = (synchronizer.saplingBalances.value.availableZatoshi - defaultFee()).coerceAtLeast(0).convertZatoshiToZec()
+        get() = (synchronizer.saplingBalances.value.availableZatoshi - defaultFee()).coerceAtLeast(0).convertZatoshiToZec(decimalCount)
 
     override val fee: BigDecimal
-        get() = defaultFee().convertZatoshiToZec()
+        get() = defaultFee().convertZatoshiToZec(decimalCount)
 
     override fun validate(address: String): ZCashAddressType {
         return runBlocking {
@@ -317,12 +318,12 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight,
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
+                fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(decimalCount),
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
                 showRawTransaction = false,
-                amount = transaction.value.convertZatoshiToZec(),
+                amount = transaction.value.convertZatoshiToZec(decimalCount),
                 from = null,
                 memo = transaction.memo,
                 source = wallet.transactionSource
@@ -336,12 +337,12 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight,
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
+                fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(decimalCount),
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
                 showRawTransaction = false,
-                amount = transaction.value.convertZatoshiToZec(),
+                amount = transaction.value.convertZatoshiToZec(decimalCount),
                 to = transaction.toAddress,
                 sentToSelf = false,
                 memo = transaction.memo,
