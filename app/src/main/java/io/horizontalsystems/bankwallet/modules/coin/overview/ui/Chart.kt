@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.doOnLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
@@ -271,10 +272,10 @@ fun PriceVolChart(
                     }
                     ViewState.Success -> {
                         chart.hideError()
-                        chartInfoData?.let {
-                            val chartType = ChartView.ChartType.fromString(it.chartInterval.value)
-                            chart.post {
-                                chart.setData(it.chartData, chartType, it.maxValue, it.minValue)
+                        chartInfoData?.let { chartInfoData ->
+                            val chartType = ChartView.ChartType.fromString(chartInfoData.chartInterval.value)
+                            chart.doOnLayout {
+                                chart.setData(chartInfoData.chartData, chartType, chartInfoData.maxValue, chartInfoData.minValue)
                                 if (chartIndicator != null) {
                                     chart.setIndicator(chartIndicator, true)
                                 } else {
