@@ -28,6 +28,7 @@ import io.horizontalsystems.chartview.ChartDataItemImmutable
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 @Composable
 fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
@@ -50,7 +51,7 @@ fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
 }
 
 @Composable
-fun Chart(chartViewModel: ChartViewModel, onChangeHoldingPointState: (Boolean) -> Unit = {}, onSelectChartType: ((ChartView.ChartType) -> Unit)? = null) {
+fun Chart(chartViewModel: ChartViewModel, onChangeHoldingPointState: (Boolean) -> Unit = {}, onSelectChartInterval: ((HsTimePeriod) -> Unit)? = null) {
     val chartDataWrapper by chartViewModel.dataWrapperLiveData.observeAsState()
     val chartTabs by chartViewModel.tabItemsLiveData.observeAsState(listOf())
     val chartIndicators by chartViewModel.indicatorsLiveData.observeAsState(listOf())
@@ -62,8 +63,8 @@ fun Chart(chartViewModel: ChartViewModel, onChangeHoldingPointState: (Boolean) -
         Chart(
             tabItems = chartTabs,
             onSelectTab = {
-                chartViewModel.onSelectChartType(it)
-                onSelectChartType?.invoke(it)
+                chartViewModel.onSelectChartInterval(it)
+                onSelectChartInterval?.invoke(it)
             },
             indicators = chartIndicators,
             onSelectIndicator = {
@@ -271,8 +272,9 @@ fun PriceVolChart(
                     ViewState.Success -> {
                         chart.hideError()
                         chartInfoData?.let {
+                            val chartType = ChartView.ChartType.fromString(it.chartInterval.value)
                             chart.post {
-                                chart.setData(it.chartData, it.chartType, it.maxValue, it.minValue)
+                                chart.setData(it.chartData, chartType, it.maxValue, it.minValue)
                                 if (chartIndicator != null) {
                                     chart.setIndicator(chartIndicator, true)
                                 } else {

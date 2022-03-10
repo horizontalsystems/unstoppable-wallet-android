@@ -17,14 +17,10 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
-import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.horizontalsystems.marketkit.models.PlatformType
+import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -90,7 +86,7 @@ interface ILocalStorage {
 }
 
 interface IChartTypeStorage {
-    var chartType: ChartView.ChartType
+    var chartInterval: HsTimePeriod
 }
 
 interface IRestoreSettingsStorage {

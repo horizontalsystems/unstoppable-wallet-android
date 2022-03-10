@@ -4,9 +4,9 @@ import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
-import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
 class MetricsPageChartService(
@@ -15,19 +15,24 @@ class MetricsPageChartService(
     private val globalMarketRepository: GlobalMarketRepository,
 ) : AbstractChartService() {
 
-    override val initialChartType: ChartView.ChartType = ChartView.ChartType.DAILY
+    override val initialChartInterval: HsTimePeriod = HsTimePeriod.Day1
 
-    override val chartTypes = listOf(ChartView.ChartType.DAILY,
-        ChartView.ChartType.WEEKLY,
-        ChartView.ChartType.MONTHLY)
+    override val chartIntervals = listOf(
+        HsTimePeriod.Day1,
+        HsTimePeriod.Week1,
+        HsTimePeriod.Month1
+    )
 
     override fun getItems(
-        chartType: ChartView.ChartType,
+        chartInterval: HsTimePeriod,
         currency: Currency,
     ): Single<ChartPointsWrapper> {
-        return globalMarketRepository.getGlobalMarketPoints(currency.code, chartType, metricsType)
-            .map {
-                ChartPointsWrapper(chartType, it)
-            }
+        return globalMarketRepository.getGlobalMarketPoints(
+            currency.code,
+            chartInterval,
+            metricsType
+        ).map {
+            ChartPointsWrapper(chartInterval, it)
+        }
     }
 }

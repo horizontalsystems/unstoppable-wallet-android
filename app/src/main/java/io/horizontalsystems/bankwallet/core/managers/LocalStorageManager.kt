@@ -19,10 +19,10 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 class LocalStorageManager(private val preferences: SharedPreferences)
     : ILocalStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard, IMarketStorage {
@@ -40,7 +40,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val BASE_ZCASH_PROVIDER = "base_zcash_provider"
     private val SYNC_MODE = "sync_mode"
     private val SORT_TYPE = "balance_sort_type"
-    private val CHART_TYPE = "prev_chart_type"
+    private val CHART_INTERVAL = "prev_chart_interval"
     private val APP_VERSIONS = "app_versions"
     private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
     private val LOCK_TIME_ENABLED = "lock_time_enabled"
@@ -259,10 +259,12 @@ class LocalStorageManager(private val preferences: SharedPreferences)
 
     //  IChartTypeStorage
 
-    override var chartType: ChartView.ChartType
-        get() = ChartView.ChartType.fromString(preferences.getString(CHART_TYPE, null)) ?: ChartView.ChartType.TODAY
-        set(mode) {
-            preferences.edit().putString(CHART_TYPE, mode.name).apply()
+    override var chartInterval: HsTimePeriod
+        get() = HsTimePeriod.values().firstOrNull {
+            preferences.getString(CHART_INTERVAL, null) == it.value
+        } ?: HsTimePeriod.Day1
+        set(interval) {
+            preferences.edit().putString(CHART_INTERVAL, interval.value).apply()
         }
 
     override var torEnabled: Boolean

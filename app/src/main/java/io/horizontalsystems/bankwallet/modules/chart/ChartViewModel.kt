@@ -15,11 +15,11 @@ import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.ChartDataItemImmutable
-import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
@@ -28,7 +28,7 @@ open class ChartViewModel(
     private val service: AbstractChartService,
     private val chartNumberFormatter: ChartModule.ChartNumberFormatter
 ) : ViewModel() {
-    val tabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
+    val tabItemsLiveData = MutableLiveData<List<TabItem<HsTimePeriod>>>()
     val indicatorsLiveData = MutableLiveData<List<TabItem<ChartIndicator>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
     val loadingLiveData = MutableLiveData<Boolean>()
@@ -41,7 +41,7 @@ open class ChartViewModel(
 
         service.chartTypeObservable
             .subscribeIO { chartType ->
-                val tabItems = service.chartTypes.map {
+                val tabItems = service.chartIntervals.map {
                     TabItem(Translator.getString(it.stringResId), it == chartType, it)
                 }
                 tabItemsLiveData.postValue(tabItems)
@@ -90,9 +90,9 @@ open class ChartViewModel(
         service.start()
     }
 
-    fun onSelectChartType(chartType: ChartView.ChartType) {
+    fun onSelectChartInterval(chartInterval: HsTimePeriod) {
         loadingLiveData.postValue(true)
-        service.updateChartType(chartType)
+        service.updateChartInterval(chartInterval)
     }
 
     fun onSelectIndicator(chartIndicator: ChartIndicator?) {
@@ -122,7 +122,7 @@ open class ChartViewModel(
 
         val chartInfoData = ChartInfoData(
             chartData,
-            chartPointsWrapper.chartType,
+            chartPointsWrapper.chartInterval,
             maxValue,
             minValue
         )
@@ -214,16 +214,13 @@ private val ChartIndicator.stringResId: Int
         ChartIndicator.Rsi -> R.string.CoinPage_IndicatorRSI
     }
 
-val ChartView.ChartType.stringResId: Int
+val HsTimePeriod.stringResId: Int
     get() = when (this) {
-        ChartView.ChartType.TODAY -> R.string.CoinPage_TimeDuration_Today
-        ChartView.ChartType.DAILY -> R.string.CoinPage_TimeDuration_Day
-        ChartView.ChartType.WEEKLY -> R.string.CoinPage_TimeDuration_Week
-        ChartView.ChartType.WEEKLY2 -> R.string.CoinPage_TimeDuration_TwoWeeks
-        ChartView.ChartType.MONTHLY -> R.string.CoinPage_TimeDuration_Month
-        ChartView.ChartType.MONTHLY_BY_DAY -> R.string.CoinPage_TimeDuration_Month
-        ChartView.ChartType.MONTHLY3 -> R.string.CoinPage_TimeDuration_Month3
-        ChartView.ChartType.MONTHLY6 -> R.string.CoinPage_TimeDuration_HalfYear
-        ChartView.ChartType.MONTHLY12 -> R.string.CoinPage_TimeDuration_Year
-        ChartView.ChartType.MONTHLY24 -> R.string.CoinPage_TimeDuration_Year2
+        HsTimePeriod.Day1 -> R.string.CoinPage_TimeDuration_Day
+        HsTimePeriod.Week1 -> R.string.CoinPage_TimeDuration_Week
+        HsTimePeriod.Week2 -> R.string.CoinPage_TimeDuration_TwoWeeks
+        HsTimePeriod.Month1 -> R.string.CoinPage_TimeDuration_Month
+        HsTimePeriod.Month3 -> R.string.CoinPage_TimeDuration_Month3
+        HsTimePeriod.Month6 -> R.string.CoinPage_TimeDuration_HalfYear
+        HsTimePeriod.Year1 -> R.string.CoinPage_TimeDuration_Year
     }
