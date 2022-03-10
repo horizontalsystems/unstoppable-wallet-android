@@ -4,7 +4,6 @@ import android.graphics.RectF
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataValueImmutable
 import io.horizontalsystems.chartview.Coordinate
-import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.Indicator.*
 import io.horizontalsystems.chartview.models.ChartPointF
 import io.horizontalsystems.chartview.models.MacdInfo
@@ -66,19 +65,6 @@ object PointConverter {
         return getPoints(values, shape, height, verticalPadding)
     }
 
-    fun curveMap(chartData: ChartData, indicator: Indicator, shape: RectF, verticalPadding: Float): LinkedHashMap<Long, ChartPointF> {
-        //use padding both for top and bottom
-        val height = shape.height() - verticalPadding * 2
-
-        return getPointsMap(chartData.valuesMap(indicator), shape, height, verticalPadding)
-    }
-
-    fun curveForMinimal(values: List<ChartDataValueImmutable>, shape: RectF, verticalPadding: Float): List<ChartPointF> {
-        //use padding only for bottom side
-        val height = shape.height() - verticalPadding
-        return getPoints(values, shape, height, verticalPadding)
-    }
-
     fun histogram(values: List<ChartDataValueImmutable>, shape: RectF, verticalPadding: Float): List<ChartPointF> {
         val height = shape.height() - verticalPadding * 2
         return getPoints(values, shape, height, verticalPadding)
@@ -92,16 +78,5 @@ object PointConverter {
 
             ChartPointF(x, shape.height() - verticalPadding - y)
         }
-    }
-
-    private fun getPointsMap(values: LinkedHashMap<Long, ChartDataValueImmutable>, shape: RectF, height: Float, verticalPadding: Float): LinkedHashMap<Long, ChartPointF> {
-        return LinkedHashMap(values.map { (timestamp, it) ->
-            val point = it.point
-            val x = point.x * shape.width()
-            val y = point.y * height
-
-            timestamp to ChartPointF(x, shape.height() - verticalPadding - y)
-        }.toMap()
-        )
     }
 }

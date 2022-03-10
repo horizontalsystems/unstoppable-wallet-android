@@ -30,16 +30,6 @@ data class ChartData(
         )
     }
 
-    fun valuesMap(name: Indicator): LinkedHashMap<Long, ChartDataValueImmutable> {
-        return LinkedHashMap(
-            items.mapNotNull { item ->
-                item.values[name]?.let {
-                    item.timestamp to it
-                }
-            }.toMap()
-        )
-    }
-
     fun diff(): BigDecimal {
         val values = items.mapNotNull { it.values[Indicator.Candle]?.value }
         if (values.isEmpty()) {
