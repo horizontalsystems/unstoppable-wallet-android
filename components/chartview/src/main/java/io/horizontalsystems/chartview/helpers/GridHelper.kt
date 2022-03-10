@@ -20,19 +20,15 @@ object GridHelper {
         calendar.set(Calendar.SECOND, 0)
 
         when (chartType) {
-            ChartType.TODAY,
-            ChartType.DAILY -> {
-            }
-            ChartType.WEEKLY,
-            ChartType.WEEKLY2,
-            ChartType.MONTHLY,
-            ChartType.MONTHLY_BY_DAY -> {
+            ChartType.Day1 -> {}
+            ChartType.Week1,
+            ChartType.Week2,
+            ChartType.Month1 -> {
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
             }
-            ChartType.MONTHLY3,
-            ChartType.MONTHLY6,
-            ChartType.MONTHLY12,
-            ChartType.MONTHLY24 -> {
+            ChartType.Month3,
+            ChartType.Month6,
+            ChartType.Year1 -> {
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
                 calendar.set(Calendar.DATE, 1)
             }
@@ -55,35 +51,32 @@ object GridHelper {
 
     private fun moveColumn(type: ChartType, calendar: Calendar) {
         when (type) {
-            ChartType.TODAY -> calendar.add(Calendar.HOUR_OF_DAY, -6)       // 6 hour
-            ChartType.DAILY -> calendar.add(Calendar.HOUR_OF_DAY, -6)       // 6 hour
-            ChartType.WEEKLY -> calendar.add(Calendar.DAY_OF_WEEK, -2)      // 2 days
-            ChartType.WEEKLY2 -> calendar.add(Calendar.DAY_OF_WEEK, -3)      // 3 days
-            ChartType.MONTHLY,
-            ChartType.MONTHLY_BY_DAY -> calendar.add(Calendar.DAY_OF_MONTH, -6)    // 6 days
-            ChartType.MONTHLY3 -> calendar.add(Calendar.DAY_OF_MONTH, -14)  // 6 days
-            ChartType.MONTHLY6 -> calendar.add(Calendar.MONTH, -1)          // 1 month
-            ChartType.MONTHLY12 -> calendar.add(Calendar.MONTH, -2)         // 2 month
-            ChartType.MONTHLY24 -> calendar.add(Calendar.MONTH, -4)         // 4 month
+            ChartType.Day1 -> calendar.add(Calendar.HOUR_OF_DAY, -6)       // 6 hour
+            ChartType.Week1 -> calendar.add(Calendar.DAY_OF_WEEK, -2)      // 2 days
+            ChartType.Week2 -> calendar.add(Calendar.DAY_OF_WEEK, -3)      // 3 days
+            ChartType.Month1 -> calendar.add(Calendar.DAY_OF_MONTH, -6)    // 6 days
+            ChartType.Month3 -> calendar.add(Calendar.DAY_OF_MONTH, -14)  // 6 days
+            ChartType.Month6 -> calendar.add(Calendar.MONTH, -1)          // 1 month
+            ChartType.Year1 -> calendar.add(Calendar.MONTH, -2)         // 2 month
         }
     }
 
     private fun columnLabel(calendar: Calendar, type: ChartType): String {
         return when (type) {
-            ChartType.TODAY,
-            ChartType.DAILY -> calendar.get(Calendar.HOUR_OF_DAY).toString()
-            ChartType.WEEKLY -> formatDate(calendar.time, "EEE")
-            ChartType.WEEKLY2,
-            ChartType.MONTHLY,
-            ChartType.MONTHLY_BY_DAY,
-            ChartType.MONTHLY3 -> calendar.get(Calendar.DAY_OF_MONTH).toString()
-            ChartType.MONTHLY6,
-            ChartType.MONTHLY12,
-            ChartType.MONTHLY24 -> formatDate(calendar.time, "MMM")
+            ChartType.Day1 -> calendar.get(Calendar.HOUR_OF_DAY).toString()
+            ChartType.Week1 -> formatDate(calendar.time, "EEE")
+            ChartType.Week2,
+            ChartType.Month1,
+            ChartType.Month3 -> calendar.get(Calendar.DAY_OF_MONTH).toString()
+            ChartType.Month6,
+            ChartType.Year1 -> formatDate(calendar.time, "MMM")
         }
     }
 
     private fun formatDate(date: Date, pattern: String): String {
-        return SimpleDateFormat(getBestDateTimePattern(Locale.getDefault(), pattern), Locale.getDefault()).format(date)
+        return SimpleDateFormat(
+            getBestDateTimePattern(Locale.getDefault(), pattern),
+            Locale.getDefault()
+        ).format(date)
     }
 }

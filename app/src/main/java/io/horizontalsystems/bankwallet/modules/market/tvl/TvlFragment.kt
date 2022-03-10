@@ -116,7 +116,7 @@ class TvlFragment : BaseFragment() {
                         LazyColumn {
                             item {
                                 Chart(chartViewModel) {
-                                    tvlViewModel.onSelectChartType(it)
+                                    tvlViewModel.onSelectChartInterval(it)
                                 }
                             }
 

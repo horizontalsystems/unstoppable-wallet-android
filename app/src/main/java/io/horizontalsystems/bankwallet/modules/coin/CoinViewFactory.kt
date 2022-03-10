@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.entities.order
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
@@ -20,7 +19,7 @@ import java.net.URI
 
 data class ChartInfoData(
     val chartData: ChartData,
-    val chartType: ChartView.ChartType,
+    val chartInterval: HsTimePeriod,
     val maxValue: String?,
     val minValue: String?
 )
@@ -53,7 +52,7 @@ sealed class RoiViewItem {
     abstract var listPosition: ListPosition?
     class HeaderRowViewItem(
         val title: String,
-        val periods: List<TimePeriod>,
+        val periods: List<HsTimePeriod>,
         override var listPosition: ListPosition? = null
     ) : RoiViewItem()
 
@@ -128,7 +127,7 @@ class CoinViewFactory(
     private val numberFormatter: IAppNumberFormatter
 ) {
 
-    fun getRoi(performance: Map<String, Map<TimePeriod, BigDecimal>>): List<RoiViewItem> {
+    fun getRoi(performance: Map<String, Map<HsTimePeriod, BigDecimal>>): List<RoiViewItem> {
         val rows = mutableListOf<RoiViewItem>()
 
         val timePeriods = performance.map { it.value.keys }.flatten().distinct()

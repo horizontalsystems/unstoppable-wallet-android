@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
-import io.horizontalsystems.bankwallet.core.UnsupportedException
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
-import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
@@ -17,32 +15,24 @@ class CoinTvlChartService(
     private val coinUid: String,
 ) : AbstractChartService() {
 
-    override val initialChartType = ChartType.MONTHLY
-    override val chartTypes = listOf(
-        ChartType.DAILY,
-        ChartType.WEEKLY,
-        ChartType.MONTHLY,
+    override val initialChartInterval = HsTimePeriod.Month1
+    override val chartIntervals = listOf(
+        HsTimePeriod.Day1,
+        HsTimePeriod.Week1,
+        HsTimePeriod.Month1
     )
 
-    override fun getItems(chartType: ChartType, currency: Currency): Single<ChartPointsWrapper> = try {
-        val timePeriod = getTimePeriod(chartType)
-        marketKit.marketInfoTvlSingle(coinUid, currency.code, timePeriod)
+    override fun getItems(
+        chartInterval: HsTimePeriod,
+        currency: Currency
+    ): Single<ChartPointsWrapper> = try {
+        marketKit.marketInfoTvlSingle(coinUid, currency.code, chartInterval)
             .map { info ->
-                info.map { point ->
-                    ChartPoint(point.value.toFloat(), point.timestamp)
-                }
+                info.map { ChartPoint(it.value.toFloat(), it.timestamp) }
             }
-            .map {
-                ChartPointsWrapper(chartType, it)
-            }
+            .map { ChartPointsWrapper(chartInterval, it) }
     } catch (e: Exception) {
         Single.error(e)
     }
 
-    private fun getTimePeriod(chartType: ChartType) = when (chartType) {
-        ChartType.DAILY -> HsTimePeriod.Day1
-        ChartType.WEEKLY -> HsTimePeriod.Week1
-        ChartType.MONTHLY -> HsTimePeriod.Month1
-        else -> throw UnsupportedException("Unsupported chartType $chartType")
-    }
 }

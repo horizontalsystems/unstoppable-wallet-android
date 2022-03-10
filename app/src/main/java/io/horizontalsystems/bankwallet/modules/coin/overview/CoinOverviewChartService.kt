@@ -4,8 +4,6 @@ import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
-import io.horizontalsystems.bankwallet.modules.metricchart.kitChartType
-import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.helpers.IndicatorHelper
 import io.horizontalsystems.chartview.models.ChartIndicator
@@ -14,7 +12,9 @@ import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.ChartInfo
+import io.horizontalsystems.marketkit.models.ChartPointType
 import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 
@@ -25,19 +25,9 @@ class CoinOverviewChartService(
     private val coinUid: String,
 ) : AbstractChartService() {
 
-    override val initialChartType by chartTypeStorage::chartType
+    override val initialChartInterval by chartTypeStorage::chartInterval
 
-    override val chartTypes = listOf(
-        ChartView.ChartType.TODAY,
-        ChartView.ChartType.DAILY,
-        ChartView.ChartType.WEEKLY,
-        ChartView.ChartType.WEEKLY2,
-        ChartView.ChartType.MONTHLY,
-        ChartView.ChartType.MONTHLY3,
-        ChartView.ChartType.MONTHLY6,
-        ChartView.ChartType.MONTHLY12,
-        ChartView.ChartType.MONTHLY24
-    )
+    override val chartIntervals = HsTimePeriod.values().toList()
 
     override val chartIndicators = listOf(
         ChartIndicator.Ema,
@@ -53,33 +43,33 @@ class CoinOverviewChartService(
         unsubscribeFromUpdates()
     }
 
-    override fun updateChartType(chartType: ChartView.ChartType) {
-        super.updateChartType(chartType)
-        chartTypeStorage.chartType = chartType
+    override fun updateChartInterval(chartInterval: HsTimePeriod) {
+        super.updateChartInterval(chartInterval)
+        chartTypeStorage.chartInterval = chartInterval
     }
 
     override fun getItems(
-        chartType: ChartView.ChartType,
+        chartInterval: HsTimePeriod,
         currency: Currency,
     ): Single<ChartPointsWrapper> {
-        val newKey = chartType.name + currency.code
+        val newKey = chartInterval.name + currency.code
         if (newKey != updatesSubscriptionKey) {
             unsubscribeFromUpdates()
-            subscribeForUpdates(currency, chartType)
+            subscribeForUpdates(currency, chartInterval)
             updatesSubscriptionKey = newKey
         }
 
-        val tmpChartInfo: ChartInfo? = marketKit.chartInfo(coinUid, currency.code, chartType.kitChartType)
+        val tmpChartInfo: ChartInfo? = marketKit.chartInfo(coinUid, currency.code, chartInterval)
         val tmpLastCoinPrice = marketKit.coinPrice(coinUid, currency.code)
 
-        return Single.just(doGetItems(tmpChartInfo, tmpLastCoinPrice, chartType))
+        return Single.just(doGetItems(tmpChartInfo, tmpLastCoinPrice, chartInterval))
     }
 
     private fun unsubscribeFromUpdates() {
         disposables.clear()
     }
 
-    private fun subscribeForUpdates(currency: Currency, chartType: ChartView.ChartType) {
+    private fun subscribeForUpdates(currency: Currency, chartInterval: HsTimePeriod) {
         marketKit.coinPriceObservable(coinUid, currency.code)
             .subscribeIO {
                 dataInvalidated()
@@ -88,7 +78,7 @@ class CoinOverviewChartService(
                 disposables.add(it)
             }
 
-        marketKit.getChartInfoAsync(coinUid, currency.code, chartType.kitChartType)
+        marketKit.getChartInfoAsync(coinUid, currency.code, chartInterval)
             .subscribeIO {
                 dataInvalidated()
             }
@@ -100,11 +90,11 @@ class CoinOverviewChartService(
     private fun doGetItems(
         chartInfo: ChartInfo?,
         lastCoinPrice: CoinPrice?,
-        chartType: ChartView.ChartType
+        chartInterval: HsTimePeriod
     ): ChartPointsWrapper {
-        if (chartInfo == null || lastCoinPrice == null) return ChartPointsWrapper(chartType, listOf())
+        if (chartInfo == null || lastCoinPrice == null) return ChartPointsWrapper(chartInterval, listOf())
         val points = chartInfo.points
-        if (points.isEmpty()) return ChartPointsWrapper(chartType, listOf())
+        if (points.isEmpty()) return ChartPointsWrapper(chartInterval, listOf())
 
         val values = points.map { it.value.toFloat() }
         val emaFast = IndicatorHelper.ema(values, Indicator.EmaFast.period)
@@ -116,7 +106,7 @@ class CoinOverviewChartService(
         val items = points
             .mapIndexed { index, chartPoint ->
                 val indicators = mapOf(
-                    Indicator.Volume to chartPoint.volume?.toFloat(),
+                    Indicator.Volume to chartPoint.extra[ChartPointType.Volume]?.toFloat(),
                     Indicator.EmaFast to emaFast.getOrNull(index),
                     Indicator.EmaSlow to emaSlow.getOrNull(index),
                     Indicator.Rsi to rsi.getOrNull(index),
@@ -136,7 +126,7 @@ class CoinOverviewChartService(
         if (lastCoinPrice.timestamp > items.last().timestamp) {
             items.add(ChartPoint(lastCoinPrice.value.toFloat(), timestamp = lastCoinPrice.timestamp))
 
-            if (chartType == ChartView.ChartType.DAILY) {
+            if (chartInterval == HsTimePeriod.Day1) {
                 val startTimestamp = lastCoinPrice.timestamp - 24 * 60 * 60
                 val startValue = (lastCoinPrice.value * 100.toBigDecimal()) / (lastCoinPrice.diff + 100.toBigDecimal())
                 val startItem = ChartPoint(startValue.toFloat(), startTimestamp)
@@ -148,7 +138,7 @@ class CoinOverviewChartService(
 
         items.removeIf { it.timestamp < chartInfo.startTimestamp }
 
-        return ChartPointsWrapper(chartType, items, chartInfo.startTimestamp, chartInfo.endTimestamp, chartInfo.isExpired)
+        return ChartPointsWrapper(chartInterval, items, chartInfo.startTimestamp, chartInfo.endTimestamp, chartInfo.isExpired)
     }
 
 }

@@ -127,7 +127,13 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         val appConfig = AppConfigProvider()
         appConfigProvider = appConfig
 
-        marketKit = MarketKit.getInstance(this, appConfig.marketApiBaseUrl, appConfig.marketApiKey, appConfig.cryptoCompareApiKey, appConfig.defiyieldProviderApiKey)
+        marketKit = MarketKit.getInstance(
+            this,
+            appConfig.marketApiBaseUrl,
+            appConfig.marketApiKey,
+            cryptoCompareApiKey = appConfig.cryptoCompareApiKey,
+            defiYieldApiKey = appConfig.defiyieldProviderApiKey
+        )
         marketKit.sync()
 
         feeRateProvider = FeeRateProvider(appConfigProvider)

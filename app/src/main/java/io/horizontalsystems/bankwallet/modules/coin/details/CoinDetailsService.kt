@@ -52,11 +52,11 @@ class CoinDetailsService(
             Single.just(listOf())
         }
 
-        val volumeSingle = marketKit.chartInfoSingle(fullCoin.coin.uid, currency.code, ChartType.MONTHLY_BY_DAY)
+        val volumeSingle = marketKit.chartInfoSingle(fullCoin.coin.uid, currency.code, HsTimePeriod.Month1)
             .map { chartInfo ->
                 chartInfo.points.mapNotNull { point ->
-                    point.volume?.let {
-                        ChartPoint(it, it, point.timestamp)
+                    point.extra[ChartPointType.Volume]?.let { volume ->
+                        ChartPoint(volume, point.timestamp, emptyMap())
                     }
                 }
             }

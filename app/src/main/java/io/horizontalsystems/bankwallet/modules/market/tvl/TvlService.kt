@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -21,7 +21,7 @@ class TvlService(
     val marketTvlItemsObservable: BehaviorSubject<DataState<List<TvlModule.MarketTvlItem>>> =
         BehaviorSubject.createDefault(DataState.Loading)
 
-    private var chartType: ChartView.ChartType = ChartView.ChartType.DAILY
+    private var chartInterval: HsTimePeriod = HsTimePeriod.Day1
         set(value) {
             field = value
             updateTvlData(false)
@@ -47,7 +47,7 @@ class TvlService(
 
     private fun updateTvlData(forceRefresh: Boolean) {
         tvlDataDisposable?.dispose()
-        globalMarketRepository.getMarketTvlItems(currency, chain, chartType, sortDescending, forceRefresh)
+        globalMarketRepository.getMarketTvlItems(currency, chain, chartInterval, sortDescending, forceRefresh)
             .doOnSubscribe { marketTvlItemsObservable.onNext(DataState.Loading) }
             .subscribeIO({
                 marketTvlItemsObservable.onNext(DataState.Success(it))
@@ -78,7 +78,7 @@ class TvlService(
         tvlDataDisposable?.dispose()
     }
 
-    fun updateChartType(chartType: ChartView.ChartType) {
-        this.chartType = chartType
+    fun updateChartInterval(chartInterval: HsTimePeriod) {
+        this.chartInterval = chartInterval
     }
 }

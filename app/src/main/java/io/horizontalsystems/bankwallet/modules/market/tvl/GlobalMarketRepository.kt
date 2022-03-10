@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
-import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.entities.Currency
@@ -23,10 +22,10 @@ class GlobalMarketRepository(
 
     fun getGlobalMarketPoints(
         currencyCode: String,
-        chartType: ChartView.ChartType,
+        chartInterval: HsTimePeriod,
         metricsType: MetricsType
     ): Single<List<ChartPoint>> {
-        return marketKit.globalMarketPointsSingle(currencyCode, getTimePeriod(chartType))
+        return marketKit.globalMarketPointsSingle(currencyCode, chartInterval)
             .map { list ->
                 list.map { point ->
                     val value = when (metricsType) {
@@ -46,9 +45,9 @@ class GlobalMarketRepository(
     fun getTvlGlobalMarketPoints(
         chain: String,
         currencyCode: String,
-        chartType: ChartView.ChartType,
+        chartInterval: HsTimePeriod,
     ): Single<List<ChartPoint>> {
-        return marketKit.marketInfoGlobalTvlSingle(chain, currencyCode, getTimePeriod(chartType))
+        return marketKit.marketInfoGlobalTvlSingle(chain, currencyCode, chartInterval)
             .map { list ->
                 list.map { point ->
                       ChartPoint(point.value.toFloat(), point.timestamp)
@@ -75,14 +74,14 @@ class GlobalMarketRepository(
     fun getMarketTvlItems(
         currency: Currency,
         chain: TvlModule.Chain,
-        chartType: ChartView.ChartType,
+        chartInterval: HsTimePeriod,
         sortDescending: Boolean,
         forceRefresh: Boolean
     ): Single<List<TvlModule.MarketTvlItem>> =
         Single.create { emitter ->
             try {
                 val defiMarketInfos = defiMarketInfos(currency.code, forceRefresh)
-                val marketTvlItems = getMarketTvlItems(defiMarketInfos, currency, chain, chartType, sortDescending)
+                val marketTvlItems = getMarketTvlItems(defiMarketInfos, currency, chain, chartInterval, sortDescending)
                 emitter.onSuccess(marketTvlItems)
             } catch (error: Throwable) {
                 emitter.onError(error)
@@ -104,15 +103,14 @@ class GlobalMarketRepository(
         defiMarketInfoList: List<DefiMarketInfo>,
         currency: Currency,
         chain: TvlModule.Chain,
-        chartType: ChartView.ChartType,
+        chartInterval: HsTimePeriod,
         sortDescending: Boolean
     ): List<TvlModule.MarketTvlItem> {
         val tvlItems = defiMarketInfoList.map { defiMarketInfo ->
-            val diffPercent: BigDecimal? = when (chartType) {
-                ChartView.ChartType.DAILY -> defiMarketInfo.tvlChange1D
-                ChartView.ChartType.WEEKLY -> defiMarketInfo.tvlChange1W
-                ChartView.ChartType.MONTHLY,
-                ChartView.ChartType.MONTHLY_BY_DAY -> defiMarketInfo.tvlChange1M
+            val diffPercent: BigDecimal? = when (chartInterval) {
+                HsTimePeriod.Day1 -> defiMarketInfo.tvlChange1D
+                HsTimePeriod.Week1 -> defiMarketInfo.tvlChange1W
+                HsTimePeriod.Month1 -> defiMarketInfo.tvlChange1M
                 else -> null
             }
             val diff: CurrencyValue? = diffPercent?.let {
@@ -147,16 +145,6 @@ class GlobalMarketRepository(
             chainTvlItems.sortedByDescending { it.tvl.value }
         } else {
             chainTvlItems.sortedBy { it.tvl.value }
-        }
-    }
-
-    private fun getTimePeriod(chartType: ChartView.ChartType): HsTimePeriod {
-        return when (chartType) {
-            ChartView.ChartType.DAILY -> HsTimePeriod.Day1
-            ChartView.ChartType.WEEKLY -> HsTimePeriod.Week1
-            ChartView.ChartType.MONTHLY,
-            ChartView.ChartType.MONTHLY_BY_DAY -> HsTimePeriod.Month1
-            else -> throw IllegalArgumentException("Wrong ChartType")
         }
     }
 
