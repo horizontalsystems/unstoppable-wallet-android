@@ -11,8 +11,7 @@ object AddressInputModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val addressViewModel = AddressViewModel()
 
-            val coinCode = getChainCoinCode(coinType) ?: coinCode
-            addressViewModel.addAddressHandler(AddressHandlerUdn(coinCode))
+            addressViewModel.addAddressHandler(AddressHandlerUdn(coinType, coinCode))
 
             when (coinType) {
                 CoinType.Bitcoin,
@@ -34,13 +33,6 @@ object AddressInputModule {
 
 
             return addressViewModel as T
-        }
-
-        private fun getChainCoinCode(coinType: CoinType): String? = when (coinType) {
-            CoinType.Ethereum -> "ETH"
-            is CoinType.Erc20 -> "ETH"
-            CoinType.Bitcoin -> "BTC"
-            else -> null
         }
     }
 
