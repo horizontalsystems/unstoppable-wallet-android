@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
@@ -82,7 +83,7 @@ class MarketSearchFragment : BaseFragment() {
                             is MarketSearchModule.DiscoveryItem.Category -> {
                                 findNavController().slideFromBottom(
                                     R.id.marketCategoryFragment,
-                                    MarketCategoryFragment.prepareParams(viewItemType.coinCategory)
+                                    bundleOf(MarketCategoryFragment.categoryKey to viewItemType.coinCategory)
                                 )
                             }
                         }

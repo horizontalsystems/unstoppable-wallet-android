@@ -13,12 +13,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ViewItemState
@@ -31,26 +29,12 @@ import io.horizontalsystems.marketkit.models.CoinCategory
 
 class MarketCategoryFragment : BaseFragment() {
 
-    private val categoryUid by lazy {
-        arguments?.getString(categoryUidKey)
-    }
-    private val categoryName by lazy {
-        arguments?.getString(categoryNameKey)
-    }
-    private val categoryDescription by lazy {
-        arguments?.getString(categoryDescriptionKey)
-    }
-    private val categoryImageUrl by lazy {
-        arguments?.getString(categoryImageUrlKey)
+    private val coinCategory by lazy {
+        arguments?.get(categoryKey) as CoinCategory
     }
 
     val viewModel by viewModels<MarketCategoryViewModel> {
-        MarketCategoryModule.Factory(
-            categoryUid!!,
-            categoryName!!,
-            categoryDescription!!,
-            categoryImageUrl!!
-        )
+        MarketCategoryModule.Factory(coinCategory)
     }
 
     override fun onCreateView(
@@ -81,19 +65,7 @@ class MarketCategoryFragment : BaseFragment() {
     }
 
     companion object {
-        private const val categoryUidKey = "category_uid_field"
-        private const val categoryNameKey = "category_name_field"
-        private const val categoryDescriptionKey = "category_description_field"
-        private const val categoryImageUrlKey = "category_image_url_field"
-
-        fun prepareParams(coinCategory: CoinCategory): Bundle {
-            return bundleOf(
-                categoryUidKey to coinCategory.uid,
-                categoryNameKey to coinCategory.name,
-                categoryDescriptionKey to coinCategory.description["en"],
-                categoryImageUrlKey to coinCategory.imageUrl,
-            )
-        }
+        const val categoryKey = "coin_category"
     }
 
 }
