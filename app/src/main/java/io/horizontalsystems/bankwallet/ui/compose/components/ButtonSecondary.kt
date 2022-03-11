@@ -264,7 +264,6 @@ fun ButtonSecondary(
                             minWidth = SecondaryButtonDefaults.MinWidth,
                             minHeight = SecondaryButtonDefaults.MinHeight
                         )
-                        .height(SecondaryButtonDefaults.MinHeight)
                         .padding(contentPadding),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,

@@ -123,7 +123,7 @@ class PrivateKeyViewHolder(
                         backgroundColor = ComposeAppTheme.colors.steel20,
                         contentColor = ComposeAppTheme.colors.oz
                     ),
-                    content = { Text(key.value, textAlign = TextAlign.Center) },
+                    content = { Text(key.value, textAlign = TextAlign.Center, maxLines = 2) },
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                     onClick = {
                         onClick(key)
