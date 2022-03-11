@@ -110,7 +110,11 @@ class GlobalMarketRepository(
             val diffPercent: BigDecimal? = when (chartInterval) {
                 HsTimePeriod.Day1 -> defiMarketInfo.tvlChange1D
                 HsTimePeriod.Week1 -> defiMarketInfo.tvlChange1W
+                HsTimePeriod.Week2 -> defiMarketInfo.tvlChange2W
                 HsTimePeriod.Month1 -> defiMarketInfo.tvlChange1M
+                HsTimePeriod.Month3 -> defiMarketInfo.tvlChange3M
+                HsTimePeriod.Month6 -> defiMarketInfo.tvlChange6M
+                HsTimePeriod.Year1 -> defiMarketInfo.tvlChange1Y
                 else -> null
             }
             val diff: CurrencyValue? = diffPercent?.let {
