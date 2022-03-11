@@ -23,7 +23,7 @@ class TorManager(
 
     override val torObservable = BehaviorSubject.create<TorStatus>()
     override val isTorNotificationEnabled: Boolean
-        get() = kit.isNotificationEnabled
+        get() = kit.notificationsEnabled
 
     private val disposables = CompositeDisposable()
     private var listener: Listener? = null
