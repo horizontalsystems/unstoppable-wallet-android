@@ -634,7 +634,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Crypto Monnaie</string>
-    <string name="ManageCoins_Search">Token Name</string>
+    <string name="ManageCoins_Search">Token code or name</string>
     <string name="ManageCoins_AddToken">Ajouter le token</string>
     <string name="ManageCoins_NoResults">Aucun résultat trouvé. Essayez d\'ajouter le token manuellement si vous connaissez son adresse de contrat intelligent.</string>
     <!-- Experimental Feature -->
@@ -725,7 +725,7 @@
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Type(s) de pièce</string>
-    <string name="AddToken_AddressOrSymbol">Address or Symbol</string>
+    <string name="AddToken_AddressOrSymbol">Contract Address</string>
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
     <string name="AddToken_InvalidAddressError">Adresse du contrat ou symbole BEP2 non valide</string>
     <string name="AddToken_ApiLimitExceeded">Limite d\'Api dépassée. Réessayez plus tard.</string>
