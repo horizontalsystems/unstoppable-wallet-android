@@ -767,7 +767,7 @@
     <!--Manage Coins-->
 
     <string name="ManageCoins_title">Coin Manager</string>
-    <string name="ManageCoins_Search">Token Name</string>
+    <string name="ManageCoins_Search">Token code or name</string>
     <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
 
@@ -878,7 +878,7 @@
     <string name="AddToken_Decimals">Decimals</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Coin Type(s)</string>
-    <string name="AddToken_AddressOrSymbol">Address or Symbol</string>
+    <string name="AddToken_AddressOrSymbol">Contract Address</string>
 
     <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
     <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
