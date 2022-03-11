@@ -878,10 +878,10 @@
     <string name="NftAsset_Details">Détailles</string>
     <string name="NftAsset_Links">Liens</string>
     <string name="NftAsset_ContractAddress">Adresse du contrat</string>
-    <string name="NftAsset_TokenId">Token ID</string>
-    <string name="NftAsset_TokenStandard">Token Standard</string>
+    <string name="NftAsset_TokenId">Identifiant du token</string>
+    <string name="NftAsset_TokenStandard">Standard du token</string>
     <string name="NftAsset_Blockchain">Blockchain</string>
-    <string name="NftAsset_Links_Website">Website</string>
+    <string name="NftAsset_Links_Website">Site Web</string>
     <string name="NftAsset_Links_OpenSea">OpenSea</string>
     <string name="NftAsset_Links_Discord">Discord</string>
     <string name="NftAsset_Links_Twitter">Twitter</string>
