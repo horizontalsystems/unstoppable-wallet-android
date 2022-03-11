@@ -30,7 +30,7 @@
     <string name="Button_Reconnect">重新连接</string>
     <string name="Button_Understand">我理解</string>
     <string name="Button_Switch">切换</string>
-    <string name="Button_Remove">Remove</string>
+    <string name="Button_Remove">移除</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Any">任何</string>
@@ -311,7 +311,7 @@
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
     <string name="WalletConnect_NewConnect">新连接</string>
     <string name="WalletConnect_Disconnecting">正在断开连接</string>
-    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
+    <string name="WalletConnect_SignMessageRequest_Title">签名请求</string>
     <string name="WalletConnect_SignMessageRequest_Domain">域名</string>
     <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">待签名消息</string>
@@ -325,11 +325,11 @@
     <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Request not found error</string>
     <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
-    <string name="WalletConnect_PendingRequests">Pending Requests</string>
-    <string name="WalletConnect_ActiveWallet">Active Wallet</string>
-    <string name="WalletConnect_Input">Input</string>
-    <string name="WalletConnect_Version1">Version 1.0</string>
-    <string name="WalletConnect_Version2">Version 2.0</string>
+    <string name="WalletConnect_PendingRequests">待处理请求</string>
+    <string name="WalletConnect_ActiveWallet">激活钱包</string>
+    <string name="WalletConnect_Input">输入</string>
+    <string name="WalletConnect_Version1">版本 1.0</string>
+    <string name="WalletConnect_Version2">版本 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
     <string name="EthereumTransaction_Error_Title">出错</string>
@@ -636,7 +636,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">代币管理</string>
-    <string name="ManageCoins_Search">Token code or name</string>
+    <string name="ManageCoins_Search">代币代码或名称</string>
     <string name="ManageCoins_AddToken">添加代币</string>
     <string name="ManageCoins_NoResults">找不到结果。如果您知道智能合约地址，请尝试手动添加代币。</string>
     <!-- Experimental Feature -->
@@ -727,7 +727,7 @@
     <string name="AddToken_Decimals">小数</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">代币类型</string>
-    <string name="AddToken_AddressOrSymbol">Contract Address</string>
+    <string name="AddToken_AddressOrSymbol">智能合约地址</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidAddressError">找不到符号</string>
     <string name="AddToken_ApiLimitExceeded">超过Api限制。请稍后再试。</string>
@@ -859,35 +859,35 @@
     <string name="CoinPage_MajorHolders_Description">上方图表显示了前10个钱包所持有的所有代币的百分比。 百分比越低，代币的分布越广。</string>
     <string name="CoinPage_MajorHolders_InTopWallets">前10名地址</string>
     <string name="CoinPage_CoinInvestments_Lead">领投</string>
-    <string name="Nfts_Title">NFTs</string>
+    <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">7D avg.</string>
     <string name="Nfts_PriceType_Days_30">30D avg.</string>
-    <string name="Nfts_PriceType_LastSale">Last Sale</string>
-    <string name="Nfts_Asset_OnSale">On Sale</string>
-    <string name="Nfts_Asset_OnSaleUntil">until %s</string>
+    <string name="Nfts_PriceType_LastSale">收盘价</string>
+    <string name="Nfts_Asset_OnSale">在售</string>
+    <string name="Nfts_Asset_OnSaleUntil">直到 %s</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_OwnedCount">Owned Count</string>
     <string name="NftAsset_Price_Purchase">Purchase Price</string>
     <string name="NftAsset_Price_Average7d">7D Average</string>
     <string name="NftAsset_Price_Average30d">30D Average</string>
-    <string name="NftAsset_Price_Floor">Floor Price</string>
-    <string name="NftAsset_Price_BuyNow">Buy Now</string>
-    <string name="NftAsset_Price_TopBid">Top Bid</string>
-    <string name="NftAsset_Price_MinimumBid">Minimum Bid</string>
-    <string name="NftAsset_Price_BestOffer">Best Offer</string>
-    <string name="NftAsset_Properties">Properties</string>
-    <string name="NftAsset_Description">Description</string>
-    <string name="NftAsset_Details">Details</string>
-    <string name="NftAsset_Links">Links</string>
-    <string name="NftAsset_ContractAddress">Contract Address</string>
-    <string name="NftAsset_TokenId">Token ID</string>
-    <string name="NftAsset_TokenStandard">Token Standard</string>
-    <string name="NftAsset_Blockchain">Blockchain</string>
-    <string name="NftAsset_Links_Website">Website</string>
+    <string name="NftAsset_Price_Floor">底价</string>
+    <string name="NftAsset_Price_BuyNow">立即购买</string>
+    <string name="NftAsset_Price_TopBid">最高出价</string>
+    <string name="NftAsset_Price_MinimumBid">最低出价</string>
+    <string name="NftAsset_Price_BestOffer">最佳报价</string>
+    <string name="NftAsset_Properties">属性</string>
+    <string name="NftAsset_Description">描述</string>
+    <string name="NftAsset_Details">详细信息</string>
+    <string name="NftAsset_Links">链接</string>
+    <string name="NftAsset_ContractAddress">智能合约地址</string>
+    <string name="NftAsset_TokenId">代币 ID</string>
+    <string name="NftAsset_TokenStandard">代币标准</string>
+    <string name="NftAsset_Blockchain">区块链</string>
+    <string name="NftAsset_Links_Website">网站</string>
     <string name="NftAsset_Links_OpenSea">OpenSea</string>
     <string name="NftAsset_Links_Discord">Discord</string>
     <string name="NftAsset_Links_Twitter">Twitter</string>
-    <string name="PoweredBy_OpenSeaAPI">Powered by OpenSea API</string>
+    <string name="PoweredBy_OpenSeaAPI">由 OpenSea API 提供支持</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">涨幅榜</string>
     <string name="RateList_TopLosers">跌幅榜</string>
