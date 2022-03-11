@@ -30,7 +30,7 @@
     <string name="Button_Reconnect">Reconnexion</string>
     <string name="Button_Understand">J’ai Compris</string>
     <string name="Button_Switch">Basculer</string>
-    <string name="Button_Remove">Remove</string>
+    <string name="Button_Remove">Supprimer</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
     <string name="Any">N\'importe lequel</string>
@@ -311,7 +311,7 @@
     <string name="WalletConnect_Status_Connecting">Connexion en cours…</string>
     <string name="WalletConnect_NewConnect">Nouvelle connexion</string>
     <string name="WalletConnect_Disconnecting">Déconnexion</string>
-    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Signer la demande</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Domaine</string>
     <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message à signer</string>
@@ -325,9 +325,9 @@
     <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Request not found error</string>
     <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
-    <string name="WalletConnect_PendingRequests">Pending Requests</string>
-    <string name="WalletConnect_ActiveWallet">Active Wallet</string>
-    <string name="WalletConnect_Input">Input</string>
+    <string name="WalletConnect_PendingRequests">Demandes en attente</string>
+    <string name="WalletConnect_ActiveWallet">Activer le portefeuille</string>
+    <string name="WalletConnect_Input">Entrées</string>
     <string name="WalletConnect_Version1">Version 1.0</string>
     <string name="WalletConnect_Version2">Version 2.0</string>
     <!--EthereumTransaction-->
@@ -634,7 +634,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Crypto Monnaie</string>
-    <string name="ManageCoins_Search">Token code or name</string>
+    <string name="ManageCoins_Search">Code ou nom du jeton</string>
     <string name="ManageCoins_AddToken">Ajouter le token</string>
     <string name="ManageCoins_NoResults">Aucun résultat trouvé. Essayez d\'ajouter le token manuellement si vous connaissez son adresse de contrat intelligent.</string>
     <!-- Experimental Feature -->
@@ -725,7 +725,7 @@
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Type(s) de pièce</string>
-    <string name="AddToken_AddressOrSymbol">Contract Address</string>
+    <string name="AddToken_AddressOrSymbol">Adresse du contrat</string>
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
     <string name="AddToken_InvalidAddressError">Adresse du contrat ou symbole BEP2 non valide</string>
     <string name="AddToken_ApiLimitExceeded">Limite d\'Api dépassée. Réessayez plus tard.</string>
@@ -860,24 +860,24 @@
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">7D avg.</string>
     <string name="Nfts_PriceType_Days_30">30D avg.</string>
-    <string name="Nfts_PriceType_LastSale">Last Sale</string>
-    <string name="Nfts_Asset_OnSale">On Sale</string>
-    <string name="Nfts_Asset_OnSaleUntil">until %s</string>
+    <string name="Nfts_PriceType_LastSale">Dernière vente</string>
+    <string name="Nfts_Asset_OnSale">En Vente</string>
+    <string name="Nfts_Asset_OnSaleUntil">jusqu\'à: %s</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_OwnedCount">Owned Count</string>
     <string name="NftAsset_Price_Purchase">Purchase Price</string>
     <string name="NftAsset_Price_Average7d">7D Average</string>
     <string name="NftAsset_Price_Average30d">30D Average</string>
-    <string name="NftAsset_Price_Floor">Floor Price</string>
-    <string name="NftAsset_Price_BuyNow">Buy Now</string>
-    <string name="NftAsset_Price_TopBid">Top Bid</string>
-    <string name="NftAsset_Price_MinimumBid">Minimum Bid</string>
-    <string name="NftAsset_Price_BestOffer">Best Offer</string>
-    <string name="NftAsset_Properties">Properties</string>
-    <string name="NftAsset_Description">Description</string>
-    <string name="NftAsset_Details">Details</string>
-    <string name="NftAsset_Links">Links</string>
-    <string name="NftAsset_ContractAddress">Contract Address</string>
+    <string name="NftAsset_Price_Floor">Prix plancher</string>
+    <string name="NftAsset_Price_BuyNow">Acheter Maintenant</string>
+    <string name="NftAsset_Price_TopBid">Meilleure enchère</string>
+    <string name="NftAsset_Price_MinimumBid">Enchère minimale</string>
+    <string name="NftAsset_Price_BestOffer">Meilleure offre</string>
+    <string name="NftAsset_Properties">Propriétés</string>
+    <string name="NftAsset_Description">Libellé</string>
+    <string name="NftAsset_Details">Détailles</string>
+    <string name="NftAsset_Links">Liens</string>
+    <string name="NftAsset_ContractAddress">Adresse du contrat</string>
     <string name="NftAsset_TokenId">Token ID</string>
     <string name="NftAsset_TokenStandard">Token Standard</string>
     <string name="NftAsset_Blockchain">Blockchain</string>
