@@ -7,14 +7,12 @@ import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.marketkit.models.CoinCategory
 
 object MarketCategoryModule {
 
     class Factory(
-        private val categoryUid: String,
-        private val categoryName: String,
-        private val categoryDescription: String,
-        private val categoryImageUrl: String,
+        private val coinCategory: CoinCategory
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -22,11 +20,12 @@ object MarketCategoryModule {
             val service = MarketCategoryService(
                 marketCategoryRepository,
                 App.currencyManager,
-                categoryUid,
+                App.languageManager,
+                coinCategory,
                 defaultTopMarket,
                 defaultSortingField
             )
-            return MarketCategoryViewModel(service, categoryName, categoryDescription, categoryImageUrl) as T
+            return MarketCategoryViewModel(service) as T
         }
 
         companion object {

@@ -13,10 +13,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MarketCategoryViewModel(
-    private val service: MarketCategoryService,
-    private val categoryName: String,
-    private val categoryDescription: String,
-    private val categoryImageUrl: String
+    private val service: MarketCategoryService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -63,9 +60,9 @@ class MarketCategoryViewModel(
     private fun syncHeader() {
         headerLiveData.postValue(
             MarketModule.Header(
-                categoryName,
-                categoryDescription,
-                ImageSource.Remote(categoryImageUrl)
+                service.coinCategoryName,
+                service.coinCategoryDescription,
+                ImageSource.Remote(service.coinCategoryImageUrl)
             )
         )
     }
