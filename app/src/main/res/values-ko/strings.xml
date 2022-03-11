@@ -633,7 +633,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">코인 매니저</string>
-    <string name="ManageCoins_Search">Token Name</string>
+    <string name="ManageCoins_Search">Token code or name</string>
     <string name="ManageCoins_AddToken">토큰 추가</string>
     <string name="ManageCoins_NoResults">검색 결과가 없습니다. 스마트 계약 주소를 알고 있는 경우 토큰을 수동으로 추가해 보십시오.</string>
     <!-- Experimental Feature -->
@@ -724,7 +724,7 @@
     <string name="AddToken_Decimals">소수점</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">코인 유형</string>
-    <string name="AddToken_AddressOrSymbol">Address or Symbol</string>
+    <string name="AddToken_AddressOrSymbol">Contract Address</string>
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
     <string name="AddToken_InvalidAddressError">잘못된 계약 주소 또는 BEP2 기호</string>
     <string name="AddToken_ApiLimitExceeded">API 한도를 초과했습니다. 나중에 다시 시도하세요.</string>
