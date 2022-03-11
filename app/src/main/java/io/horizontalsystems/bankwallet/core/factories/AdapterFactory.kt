@@ -68,8 +68,12 @@ class AdapterFactory(
                     Eip20Adapter(context, binanceSmartChainKitManager.evmKitWrapper(wallet.account), coinType.address, baseCoin, coinManager, wallet)
                 }
             }
-            is CoinType.Polygon, is CoinType.Mrc20, //todo add Polygon support
-            is CoinType.ArbitrumOne,
+            CoinType.Polygon,
+            CoinType.EthereumArbitrumOne,
+            is CoinType.Mrc20,
+            is CoinType.OptimismErc20,
+            is CoinType.ArbitrumOneErc20,
+            is CoinType.EthereumOptimism, //todo add new types support
             is CoinType.Avalanche,
             is CoinType.Fantom,
             is CoinType.HarmonyShard0,

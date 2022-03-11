@@ -93,7 +93,6 @@ class BalanceViewItemFactory {
         return when (coinType) {
             CoinType.Bitcoin, CoinType.Litecoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Zcash -> 10
             CoinType.Ethereum, CoinType.BinanceSmartChain, is CoinType.Erc20, is CoinType.Bep2, is CoinType.Bep20 -> 50
-            is CoinType.ArbitrumOne,
             is CoinType.Avalanche,
             is CoinType.Fantom,
             is CoinType.HarmonyShard0,
@@ -101,7 +100,11 @@ class BalanceViewItemFactory {
             is CoinType.Iotex,
             is CoinType.Moonriver,
             is CoinType.OkexChain,
-            is CoinType.Polygon, is CoinType.Mrc20, //todo add Polygon support
+            CoinType.EthereumOptimism,
+            CoinType.EthereumArbitrumOne,
+            is CoinType.OptimismErc20,
+            is CoinType.ArbitrumOneErc20,
+            is CoinType.Polygon, is CoinType.Mrc20, //todo add new types support
             is CoinType.Solana,
             is CoinType.Sora,
             is CoinType.Tomochain,

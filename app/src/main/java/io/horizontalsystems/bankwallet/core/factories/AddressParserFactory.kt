@@ -17,7 +17,6 @@ class AddressParserFactory {
             is CoinType.Bep20 -> AddressParser("", true)
             is CoinType.Bep2 -> AddressParser("binance", true)
             is CoinType.Zcash -> AddressParser("zcash", true)
-            is CoinType.ArbitrumOne,
             is CoinType.Avalanche,
             is CoinType.Fantom,
             is CoinType.HarmonyShard0,
@@ -25,7 +24,11 @@ class AddressParserFactory {
             is CoinType.Iotex,
             is CoinType.Moonriver,
             is CoinType.OkexChain,
-            is CoinType.Polygon, is CoinType.Mrc20, //todo add Polygon support
+            CoinType.EthereumOptimism,
+            CoinType.EthereumArbitrumOne,
+            is CoinType.OptimismErc20,
+            is CoinType.ArbitrumOneErc20,
+            is CoinType.Polygon, is CoinType.Mrc20, //todo add new types support
             is CoinType.Solana,
             is CoinType.Sora,
             is CoinType.Tomochain,

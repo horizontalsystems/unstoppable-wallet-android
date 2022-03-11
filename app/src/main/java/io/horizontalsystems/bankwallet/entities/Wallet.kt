@@ -24,7 +24,6 @@ data class Wallet(
             is CoinType.Bep2 -> TransactionSource.Blockchain.Bep2(coinType.symbol)
             is CoinType.Erc20 -> TransactionSource.Blockchain.Ethereum
             is CoinType.Bep20 -> TransactionSource.Blockchain.BinanceSmartChain
-            is CoinType.ArbitrumOne,
             is CoinType.Avalanche,
             is CoinType.Fantom,
             is CoinType.HarmonyShard0,
@@ -32,7 +31,11 @@ data class Wallet(
             is CoinType.Iotex,
             is CoinType.Moonriver,
             is CoinType.OkexChain,
-            is CoinType.Polygon, is CoinType.Mrc20, //todo add Polygon support
+            CoinType.EthereumOptimism,
+            CoinType.EthereumArbitrumOne,
+            is CoinType.OptimismErc20,
+            is CoinType.ArbitrumOneErc20,
+            is CoinType.Polygon, is CoinType.Mrc20, //todo add new types support
             is CoinType.Solana,
             is CoinType.Sora,
             is CoinType.Tomochain,
