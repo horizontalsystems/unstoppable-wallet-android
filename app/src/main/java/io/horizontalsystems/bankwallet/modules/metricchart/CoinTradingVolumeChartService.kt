@@ -17,11 +17,7 @@ class CoinTradingVolumeChartService(
 
     override val initialChartInterval = HsTimePeriod.Day1
 
-    override val chartIntervals = listOf(
-        HsTimePeriod.Day1,
-        HsTimePeriod.Month6,
-        HsTimePeriod.Year1
-    )
+    override val chartIntervals = HsTimePeriod.values().toList()
 
     override fun getItems(
         chartInterval: HsTimePeriod,

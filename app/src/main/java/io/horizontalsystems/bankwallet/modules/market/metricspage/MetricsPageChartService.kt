@@ -17,11 +17,7 @@ class MetricsPageChartService(
 
     override val initialChartInterval: HsTimePeriod = HsTimePeriod.Day1
 
-    override val chartIntervals = listOf(
-        HsTimePeriod.Day1,
-        HsTimePeriod.Week1,
-        HsTimePeriod.Month1
-    )
+    override val chartIntervals = HsTimePeriod.values().toList()
 
     override fun getItems(
         chartInterval: HsTimePeriod,
