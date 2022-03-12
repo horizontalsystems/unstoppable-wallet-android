@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
@@ -13,8 +15,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.databinding.ViewHolderSectionDividerBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderTransactionInfoExplorerBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderTransactionInfoItemBinding
-import io.horizontalsystems.bankwallet.modules.transactionInfo.*
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType.*
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatusViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -204,7 +209,10 @@ class TransactionInfoAdapter(
         private fun setButtons(item: TransactionInfoViewItem) {
             binding.buttonsCompose.setContent {
                 ComposeAppTheme {
-                    Row(modifier = Modifier.padding(start = 16.dp)) {
+                    Row(
+                        modifier = Modifier.padding(start = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         if (item.type is Decorated) {
                             val endPadding = if (item.type.actionButton != null) 8.dp else 0.dp
                             ButtonSecondaryDefault(

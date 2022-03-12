@@ -127,7 +127,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.5'
+        kotlinCompilerExtensionVersion '1.1.1'
     }
 }
 
@@ -251,16 +251,16 @@ dependencies {
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.4.0'
     // Compose Material Design
-    implementation 'androidx.compose.material:material:1.0.5'
+    implementation 'androidx.compose.material:material:1.1.1'
     // Animations
-    implementation 'androidx.compose.animation:animation:1.0.5'
+    implementation 'androidx.compose.animation:animation:1.1.1'
     // Tooling support (Previews, etc.)
-    implementation 'androidx.compose.ui:ui-tooling:1.0.5'
+    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
     implementation "com.google.accompanist:accompanist-swiperefresh:0.18.0"
 
-    implementation "androidx.compose.runtime:runtime-livedata:1.0.5"
+    implementation "androidx.compose.runtime:runtime-livedata:1.1.1"
     implementation "io.coil-kt:coil-compose:1.4.0"
     implementation "io.coil-kt:coil-svg:1.4.0"
     implementation("io.coil-kt:coil-gif:1.4.0")
@@ -269,7 +269,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-appcompat-theme:0.20.3"
 
     // UI Tests
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.5'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
 
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

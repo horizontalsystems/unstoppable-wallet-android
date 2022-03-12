@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.RecyclerView
@@ -79,7 +80,7 @@ class CoinMajorHoldersAdapter(
 
             binding.buttonsCompose.setContent {
                 ComposeAppTheme {
-                    Row() {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         ButtonSecondaryDefault(
                             modifier = Modifier.padding(start = 8.dp, end = 8.dp),
                             title = item.address,
