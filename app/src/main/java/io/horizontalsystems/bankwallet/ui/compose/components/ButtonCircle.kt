@@ -2,12 +2,14 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -49,13 +51,16 @@ fun ButtonSecondaryCircle(
 ) {
     val shape = CircleShape
     Box(modifier = modifier) {
-        IconButton(
-            onClick = { onClick() },
+        Box(
             modifier = Modifier
                 .size(28.dp)
                 .clip(shape)
+                .clickable(
+                    enabled = enabled,
+                    onClick = { onClick() }
+                )
                 .background(ComposeAppTheme.colors.steel20),
-            enabled = enabled
+            contentAlignment = Alignment.Center
         ) {
             Icon(
                 painter = painterResource(id = icon),
