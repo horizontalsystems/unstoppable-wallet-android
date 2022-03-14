@@ -163,37 +163,47 @@ open class ChartViewModel(
             )
             val dayAndTime = DateHelper.getDayAndTime(Date(item.timestamp * 1000))
 
-            val extraData = when (service.indicator) {
-                ChartIndicator.Macd -> {
-                    val macd = item.values[Indicator.Macd]?.let {
-                        App.numberFormatter.format(it.value, 0, 2)
-                    }
-                    val histogram = item.values[Indicator.MacdHistogram]?.let {
-                        App.numberFormatter.format(it.value, 0, 2)
-                    }
-                    val signal = item.values[Indicator.MacdSignal]?.let {
-                        App.numberFormatter.format(it.value, 0, 2)
-                    }
-
-                    SelectedPoint.ExtraData.Macd(macd, histogram, signal)
-                }
-                else -> {
-                    item.values[Indicator.Volume]?.let { volume ->
-                        SelectedPoint.ExtraData.Volume(
-                            App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, volume.value.toBigDecimal()))
-                        )
-                    }
-                }
-            }
-
             SelectedPoint(
                 value = value,
                 date = dayAndTime,
-                extraData = extraData,
+                extraData = getItemExtraData(item),
             )
         }
     }
 
+    private fun getItemExtraData(item: ChartDataItemImmutable): SelectedPoint.ExtraData? {
+        if (service.indicator == ChartIndicator.Macd) {
+            val macd = item.values[Indicator.Macd]?.let {
+                App.numberFormatter.format(it.value, 0, 2)
+            }
+            val histogram = item.values[Indicator.MacdHistogram]?.let {
+                App.numberFormatter.format(it.value, 0, 2)
+            }
+            val signal = item.values[Indicator.MacdSignal]?.let {
+                App.numberFormatter.format(it.value, 0, 2)
+            }
+
+            return SelectedPoint.ExtraData.Macd(macd, histogram, signal)
+        }
+
+        val dominance = item.values[Indicator.Dominance]
+        val volume = item.values[Indicator.Volume]
+
+        return when {
+            dominance != null -> SelectedPoint.ExtraData.Dominance(
+                App.numberFormatter.format(dominance.value, 0, 2, suffix = "%")
+            )
+            volume != null -> SelectedPoint.ExtraData.Volume(
+                App.numberFormatter.formatCurrencyValueAsShortened(
+                    CurrencyValue(
+                        service.currency,
+                        volume.value.toBigDecimal()
+                    )
+                )
+            )
+            else -> null
+        }
+    }
 }
 
 data class SelectedPoint(
@@ -203,6 +213,7 @@ data class SelectedPoint(
 ) {
     sealed class ExtraData {
         class Volume(val volume: String) : ExtraData()
+        class Dominance(val dominance: String) : ExtraData()
         class Macd(val macd: String?, val histogram: String?, val signal: String?) : ExtraData()
     }
 }

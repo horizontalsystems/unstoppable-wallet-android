@@ -191,6 +191,25 @@ private fun <T> HsChartLinePeriodsAndPoint(
                             )
                         }
                     }
+                    is SelectedPoint.ExtraData.Dominance -> {
+                        Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(R.string.Market_BtcDominance),
+                                style = ComposeAppTheme.typography.caption,
+                                color = ComposeAppTheme.colors.grey,
+                                textAlign = TextAlign.End
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = extraData.dominance,
+                                style = ComposeAppTheme.typography.caption,
+                                color = ComposeAppTheme.colors.jacob,
+                                textAlign = TextAlign.End
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -237,8 +256,6 @@ fun PriceVolChart(
             .height(182.dp)
     ) {
         Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
-
-        val coroutineScope = rememberCoroutineScope()
 
         AndroidView(
             modifier = Modifier.fillMaxSize(),
