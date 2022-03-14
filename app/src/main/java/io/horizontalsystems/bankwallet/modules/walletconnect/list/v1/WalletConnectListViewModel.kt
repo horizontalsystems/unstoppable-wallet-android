@@ -40,6 +40,10 @@ class WalletConnectListViewModel(
             .let { disposables.add(it) }
     }
 
+    fun onDelete(sessionsId: String) {
+        service.kill(sessionsId)
+    }
+
     private fun sync(state: WC1SessionKillManager.State) {
         when (state) {
             is WC1SessionKillManager.State.Failed -> {
@@ -59,10 +63,6 @@ class WalletConnectListViewModel(
             }
         }
     }
-
-//    fun onClickDelete(sessionViewItem: WalletConnectViewItem.Session) {
-//        service.kill(sessionViewItem.session)
-//    }
 
     private fun sync(items: List<WalletConnectListService.Item>) {
         if (items.isEmpty()) {

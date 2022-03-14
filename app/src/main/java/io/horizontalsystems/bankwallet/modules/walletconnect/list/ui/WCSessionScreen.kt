@@ -98,8 +98,11 @@ fun WCSessionsContent(
                 WCSessionsEmpty(qrScannerLauncher)
             }
             else -> {
-                viewModelWc2.sectionItem?.let { WCSessionList(it, navController) }
-                viewModel.sectionItem?.let { WCSessionList(it, navController) }
+                    WCSessionList(
+                        viewModelWc2,
+                        viewModel,
+                        navController
+                    )
             }
         }
     }
