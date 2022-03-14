@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -85,36 +86,38 @@ fun NftCollectionsScreen(navController: NavController) {
                 state = rememberSwipeRefreshState(loading),
                 onRefresh = viewModel::refresh
             ) {
-                when (viewState) {
-                    is ViewState.Error -> {
-                        ListErrorView(stringResource(R.string.Error)) {
+                Crossfade(viewState) { viewState ->
+                    when (viewState) {
+                        is ViewState.Error -> {
+                            ListErrorView(stringResource(R.string.Error)) {
 
-                        }
-                    }
-                    ViewState.Success -> {
-                        Column {
-                            CellSingleLineClear(borderTop = true) {
-                                Text(
-                                    text = totalCurrencyValue?.getFormatted() ?: "",
-                                    style = ComposeAppTheme.typography.headline2,
-                                    color = ComposeAppTheme.colors.jacob,
-                                )
-                                Spacer(modifier = Modifier.weight(1f))
-                                var priceType by remember { mutableStateOf(viewModel.priceType) }
-
-                                ButtonSecondaryToggle(
-                                    select = Select(priceType, PriceType.values().toList()),
-                                    onSelect = {
-                                        viewModel.updatePriceType(it)
-                                        priceType = it
-                                    }
-                                )
                             }
+                        }
+                        ViewState.Success -> {
+                            Column {
+                                CellSingleLineClear(borderTop = true) {
+                                    Text(
+                                        text = totalCurrencyValue?.getFormatted() ?: "",
+                                        style = ComposeAppTheme.typography.headline2,
+                                        color = ComposeAppTheme.colors.jacob,
+                                    )
+                                    Spacer(modifier = Modifier.weight(1f))
+                                    var priceType by remember { mutableStateOf(viewModel.priceType) }
 
-                            LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
-                                collections.forEach { collection ->
-                                    nftsCollectionSection(collection, viewModel) {
-                                        navController.slideFromBottom(R.id.nftAssetFragment, NftAssetModule.prepareParams(it.assetItem.accountId, it.assetItem.tokenId, it.assetItem.contract.address))
+                                    ButtonSecondaryToggle(
+                                        select = Select(priceType, PriceType.values().toList()),
+                                        onSelect = {
+                                            viewModel.updatePriceType(it)
+                                            priceType = it
+                                        }
+                                    )
+                                }
+
+                                LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
+                                    collections.forEach { collection ->
+                                        nftsCollectionSection(collection, viewModel) {
+                                            navController.slideFromBottom(R.id.nftAssetFragment, NftAssetModule.prepareParams(it.assetItem.accountId, it.assetItem.tokenId, it.assetItem.contract.address))
+                                        }
                                     }
                                 }
                             }

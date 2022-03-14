@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -46,69 +47,71 @@ fun CoinOverviewScreen(
             viewModel.refresh()
         },
         content = {
-            when (viewState) {
-                ViewState.Success -> {
-                    overview?.let { overview ->
-                        var scrollingEnabled by remember { mutableStateOf(true) }
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    ViewState.Success -> {
+                        overview?.let { overview ->
+                            var scrollingEnabled by remember { mutableStateOf(true) }
 
-                        Column(modifier = Modifier.verticalScroll(rememberScrollState(), enabled = scrollingEnabled)) {
-                            CoinScreenTitle(
-                                fullCoin.coin.name,
-                                fullCoin.coin.marketCapRank,
-                                fullCoin.coin.iconUrl,
-                                fullCoin.iconPlaceholder
-                            )
-
-                            Chart(
-                                chartViewModel = chartViewModel,
-                                onChangeHoldingPointState = { holding ->
-                                    scrollingEnabled = !holding
-                                }
-                            )
-
-                            if (overview.marketData.isNotEmpty()) {
-                                Spacer(modifier = Modifier.height(12.dp))
-                                MarketData(overview.marketData)
-                            }
-
-                            if (overview.roi.isNotEmpty()) {
-                                Spacer(modifier = Modifier.height(12.dp))
-                                Roi(overview.roi)
-                            }
-
-                            if (overview.categories.isNotEmpty()) {
-                                Spacer(modifier = Modifier.height(24.dp))
-                                Categories(overview.categories)
-                            }
-
-                            if (overview.contracts.isNotEmpty()) {
-                                Spacer(modifier = Modifier.height(24.dp))
-                                Contracts(
-                                    contracts = overview.contracts,
-                                    onClickCopy = onClickCopyContract,
-                                    onClickExplorer = onClickExplorerContract,
+                            Column(modifier = Modifier.verticalScroll(rememberScrollState(), enabled = scrollingEnabled)) {
+                                CoinScreenTitle(
+                                    fullCoin.coin.name,
+                                    fullCoin.coin.marketCapRank,
+                                    fullCoin.coin.iconUrl,
+                                    fullCoin.iconPlaceholder
                                 )
-                            }
 
-                            if (overview.about.isNotBlank()) {
-                                Spacer(modifier = Modifier.height(24.dp))
-                                About(overview.about)
-                            }
+                                Chart(
+                                    chartViewModel = chartViewModel,
+                                    onChangeHoldingPointState = { holding ->
+                                        scrollingEnabled = !holding
+                                    }
+                                )
 
-                            if (overview.links.isNotEmpty()) {
-                                Spacer(modifier = Modifier.height(24.dp))
-                                Links(overview.links, onCoinLinkClick)
-                            }
+                                if (overview.marketData.isNotEmpty()) {
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    MarketData(overview.marketData)
+                                }
 
-                            Spacer(modifier = Modifier.height(32.dp))
-                            CellFooter(text = stringResource(id = R.string.Market_PoweredByApi))
+                                if (overview.roi.isNotEmpty()) {
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    Roi(overview.roi)
+                                }
+
+                                if (overview.categories.isNotEmpty()) {
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                    Categories(overview.categories)
+                                }
+
+                                if (overview.contracts.isNotEmpty()) {
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                    Contracts(
+                                        contracts = overview.contracts,
+                                        onClickCopy = onClickCopyContract,
+                                        onClickExplorer = onClickExplorerContract,
+                                    )
+                                }
+
+                                if (overview.about.isNotBlank()) {
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                    About(overview.about)
+                                }
+
+                                if (overview.links.isNotEmpty()) {
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                    Links(overview.links, onCoinLinkClick)
+                                }
+
+                                Spacer(modifier = Modifier.height(32.dp))
+                                CellFooter(text = stringResource(id = R.string.Market_PoweredByApi))
+                            }
                         }
-                    }
 
-                }
-                is ViewState.Error -> {
-                    ListErrorView(stringResource(id = R.string.BalanceSyncError_Title)) {
-                        viewModel.retry()
+                    }
+                    is ViewState.Error -> {
+                        ListErrorView(stringResource(id = R.string.BalanceSyncError_Title)) {
+                            viewModel.retry()
+                        }
                     }
                 }
             }

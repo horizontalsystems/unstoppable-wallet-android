@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -65,50 +66,52 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
         state = rememberSwipeRefreshState(isRefreshing),
         onRefresh = { viewModel.refresh() },
     ) {
-        when (val tmp = viewState) {
-            ViewState.Success -> {
-                LazyColumn(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                ) {
-                    items(items) { tweet: TweetViewItem ->
-                        Spacer(modifier = Modifier.height(12.dp))
-                        CellTweet(tweet) {
-                            LinkHelper.openLinkInAppBrowser(context, it.url)
+        Crossfade(viewState) { viewState ->
+            when (viewState) {
+                ViewState.Success -> {
+                    LazyColumn(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                    ) {
+                        items(items) { tweet: TweetViewItem ->
+                            Spacer(modifier = Modifier.height(12.dp))
+                            CellTweet(tweet) {
+                                LinkHelper.openLinkInAppBrowser(context, it.url)
+                            }
                         }
-                    }
 
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .padding(vertical = 32.dp)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            ButtonSecondaryDefault(
-                                title = stringResource(id = R.string.CoinPage_Twitter_SeeOnTwitter),
-                                onClick = {
-                                    LinkHelper.openLinkInAppBrowser(context, viewModel.twitterPageUrl)
-                                }
-                            )
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .padding(vertical = 32.dp)
+                                    .fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                ButtonSecondaryDefault(
+                                    title = stringResource(id = R.string.CoinPage_Twitter_SeeOnTwitter),
+                                    onClick = {
+                                        LinkHelper.openLinkInAppBrowser(context, viewModel.twitterPageUrl)
+                                    }
+                                )
+                            }
                         }
                     }
                 }
-            }
-            is ViewState.Error -> {
-                if (tmp.t is TweetsProvider.UserNotFound) {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Text(
-                            modifier = Modifier.align(Alignment.Center),
-                            text = stringResource(id = R.string.CoinPage_Twitter_NotAvailable),
-                            color = ComposeAppTheme.colors.grey,
-                            style = ComposeAppTheme.typography.subhead2,
-                        )
-                    }
-                } else {
-                    ListErrorView(
-                        stringResource(R.string.Market_SyncError)
-                    ) {
-                        viewModel.refresh()
+                is ViewState.Error -> {
+                    if (viewState.t is TweetsProvider.UserNotFound) {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Text(
+                                modifier = Modifier.align(Alignment.Center),
+                                text = stringResource(id = R.string.CoinPage_Twitter_NotAvailable),
+                                color = ComposeAppTheme.colors.grey,
+                                style = ComposeAppTheme.typography.subhead2,
+                            )
+                        }
+                    } else {
+                        ListErrorView(
+                            stringResource(R.string.Market_SyncError)
+                        ) {
+                            viewModel.refresh()
+                        }
                     }
                 }
             }

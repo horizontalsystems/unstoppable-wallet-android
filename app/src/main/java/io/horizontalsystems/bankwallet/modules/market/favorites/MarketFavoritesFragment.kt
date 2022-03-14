@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -83,7 +84,7 @@ fun MarketFavoritesScreen(
             viewModel.refresh()
         }
     ) {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        Crossfade(targetState = viewState, modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) { viewState ->
             when (viewState) {
                 is ViewState.Error -> {
                     ListErrorView(
@@ -97,15 +98,17 @@ fun MarketFavoritesScreen(
                         if (data.marketItems.isEmpty()) {
                             NoFavorites()
                         } else {
-                            MarketFavoritesMenu(
-                                data.sortingFieldSelect,
-                                data.marketFieldSelect,
-                                viewModel::onClickSortingField,
-                                viewModel::onSelectMarketField
-                            )
-                            CoinList(data.marketItems, scrollToTopAfterUpdate, onCoinClick)
-                            if (scrollToTopAfterUpdate) {
-                                scrollToTopAfterUpdate = false
+                            Column {
+                                MarketFavoritesMenu(
+                                    data.sortingFieldSelect,
+                                    data.marketFieldSelect,
+                                    viewModel::onClickSortingField,
+                                    viewModel::onSelectMarketField
+                                )
+                                CoinList(data.marketItems, scrollToTopAfterUpdate, onCoinClick)
+                                if (scrollToTopAfterUpdate) {
+                                    scrollToTopAfterUpdate = false
+                                }
                             }
                         }
                     }
