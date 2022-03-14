@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.ScrollableTabRow
@@ -10,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -115,13 +115,20 @@ private fun <T> HsChartLinePeriodsAndPoint(
     onSelectTab: (T) -> Unit,
 ) {
     Box {
-        ChartTab(tabItems, onSelectTab)
+        // Hide ChartTab if point is selected.
+        // Simply hiding and showing makes period tabs shows up with scrolling animation
+        // The desired behavior is to show without any animation
+        // Solved it with alpha property
+        val alpha = if (selectedPoint != null) 0f else 1f
+        ChartTab(
+            modifier = Modifier.alpha(alpha),
+            tabItems = tabItems,
+            onSelect = onSelectTab
+        )
 
         if (selectedPoint != null) {
             TabPeriod(
-                modifier = Modifier
-                    .background(ComposeAppTheme.colors.tyler)
-                    .padding(horizontal = 16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
@@ -308,10 +315,10 @@ fun PriceVolChart(
 }
 
 @Composable
-fun <T> ChartTab(tabItems: List<TabItem<T>>, onSelect: (T) -> Unit) {
+fun <T> ChartTab(modifier: Modifier = Modifier, tabItems: List<TabItem<T>>, onSelect: (T) -> Unit) {
     val tabIndex = tabItems.indexOfFirst { it.selected }
 
-    TabPeriod {
+    TabPeriod(modifier = modifier) {
         ScrollableTabRow(
             selectedTabIndex = tabIndex,
             modifier = Modifier,
