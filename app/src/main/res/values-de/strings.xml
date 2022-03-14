@@ -325,9 +325,9 @@
     <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Request not found error</string>
     <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
-    <string name="WalletConnect_PendingRequests">Pending Requests</string>
-    <string name="WalletConnect_ActiveWallet">Active Wallet</string>
-    <string name="WalletConnect_Input">Input</string>
+    <string name="WalletConnect_PendingRequests">Ausstehende Anfragen</string>
+    <string name="WalletConnect_ActiveWallet">Aktive Wallet</string>
+    <string name="WalletConnect_Input">Eingabe</string>
     <string name="WalletConnect_Version1">Version 1.0</string>
     <string name="WalletConnect_Version2">Version 2.0</string>
     <!--EthereumTransaction-->
@@ -634,7 +634,7 @@
     <string name="Hud_UnknownError">%s </string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Wallets</string>
-    <string name="ManageCoins_Search">Token code or name</string>
+    <string name="ManageCoins_Search">Token-Code oder Name</string>
     <string name="ManageCoins_AddToken">Token hinzufügen</string>
     <string name="ManageCoins_NoResults">Keine Ergebnisse gefunden. Versuchen Sie, den Token manuell hinzuzufügen, wenn Sie die Adresse des Smart Contracts kennen.</string>
     <!-- Experimental Feature -->
@@ -725,7 +725,7 @@
     <string name="AddToken_Decimals">Dezimalen</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Cointyp(en)</string>
-    <string name="AddToken_AddressOrSymbol">Contract Address</string>
+    <string name="AddToken_AddressOrSymbol">Vertragsadresse</string>
     <string name="AddToken_CoinAlreadyInListWarning">Dieser Token befindet sich bereits in der Coin-Verwaltungsliste</string>
     <string name="AddToken_InvalidAddressError">Ungültige Vertragsadresse oder BEP2-Symbol</string>
     <string name="AddToken_ApiLimitExceeded">Api Limit überschritten. Versuchen Sie es später erneut.</string>
@@ -860,28 +860,28 @@
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">7D avg.</string>
     <string name="Nfts_PriceType_Days_30">30D avg.</string>
-    <string name="Nfts_PriceType_LastSale">Last Sale</string>
-    <string name="Nfts_Asset_OnSale">On Sale</string>
-    <string name="Nfts_Asset_OnSaleUntil">until %s</string>
+    <string name="Nfts_PriceType_LastSale">Letzter Verkauf</string>
+    <string name="Nfts_Asset_OnSale">Im Verkauf</string>
+    <string name="Nfts_Asset_OnSaleUntil">bis %s</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_OwnedCount">Owned Count</string>
     <string name="NftAsset_Price_Purchase">Purchase Price</string>
     <string name="NftAsset_Price_Average7d">7D Average</string>
     <string name="NftAsset_Price_Average30d">30D Average</string>
-    <string name="NftAsset_Price_Floor">Floor Price</string>
-    <string name="NftAsset_Price_BuyNow">Buy Now</string>
-    <string name="NftAsset_Price_TopBid">Top Bid</string>
-    <string name="NftAsset_Price_MinimumBid">Minimum Bid</string>
-    <string name="NftAsset_Price_BestOffer">Best Offer</string>
-    <string name="NftAsset_Properties">Properties</string>
-    <string name="NftAsset_Description">Description</string>
-    <string name="NftAsset_Details">Details</string>
+    <string name="NftAsset_Price_Floor">Mindestpreis</string>
+    <string name="NftAsset_Price_BuyNow">Jetzt kaufen</string>
+    <string name="NftAsset_Price_TopBid">Top-Gebot</string>
+    <string name="NftAsset_Price_MinimumBid">Mindestgebot</string>
+    <string name="NftAsset_Price_BestOffer">Bestes Angebot</string>
+    <string name="NftAsset_Properties">Eigenschaften</string>
+    <string name="NftAsset_Description">Beschreibung</string>
+    <string name="NftAsset_Details">Info</string>
     <string name="NftAsset_Links">Links</string>
-    <string name="NftAsset_ContractAddress">Contract Address</string>
+    <string name="NftAsset_ContractAddress">Vertragsadresse</string>
     <string name="NftAsset_TokenId">Token ID</string>
-    <string name="NftAsset_TokenStandard">Token Standard</string>
+    <string name="NftAsset_TokenStandard">Token-Standard</string>
     <string name="NftAsset_Blockchain">Blockchain</string>
-    <string name="NftAsset_Links_Website">Website</string>
+    <string name="NftAsset_Links_Website">Webseite</string>
     <string name="NftAsset_Links_OpenSea">OpenSea</string>
     <string name="NftAsset_Links_Discord">Discord</string>
     <string name="NftAsset_Links_Twitter">Twitter</string>
