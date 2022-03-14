@@ -28,13 +28,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -88,7 +88,9 @@ class MarketOverviewFragment : BaseFragment() {
     private fun MarketOverviewScreen() {
         val loading by viewModel.loadingLiveData.observeAsState()
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
-        val viewItemState by viewModel.viewItemStateLiveData.observeAsState()
+        val viewState by viewModel.viewStateLiveData.observeAsState()
+        val viewItem by viewModel.viewItem.observeAsState()
+
         val scrollState = rememberScrollState()
 
         HSSwipeRefresh(
@@ -97,46 +99,48 @@ class MarketOverviewFragment : BaseFragment() {
                 viewModel.refresh()
             }
         ) {
-            Crossfade(viewItemState) { state ->
-                when (state) {
-                    is ViewItemState.Error -> {
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    is ViewState.Error -> {
                         ListErrorView(
                             stringResource(R.string.Market_SyncError)
                         ) {
                             viewModel.onErrorClick()
                         }
                     }
-                    is ViewItemState.Loaded -> {
-                        Column(
-                            modifier = Modifier
-                                .verticalScroll(scrollState)
-                        ) {
-                            Box(
+                    is ViewState.Success -> {
+                        viewItem?.let { viewItem ->
+                            Column(
                                 modifier = Modifier
-                                    .height(240.dp)
+                                    .verticalScroll(scrollState)
                             ) {
-                                MetricChartsView(state.viewItem.marketMetrics)
-                            }
-                            BoardsView(
-                                boards = state.viewItem.boards,
-                                onClickSeeAll = { listType ->
-                                    val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
-                                        listType
-                                    )
-                                    val args = MarketTopCoinsFragment.prepareParams(
-                                        sortingField,
-                                        topMarket,
-                                        marketField
-                                    )
+                                Box(
+                                    modifier = Modifier
+                                        .height(240.dp)
+                                ) {
+                                    MetricChartsView(viewItem.marketMetrics)
+                                }
+                                BoardsView(
+                                    boards = viewItem.boards,
+                                    onClickSeeAll = { listType ->
+                                        val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
+                                            listType
+                                        )
+                                        val args = MarketTopCoinsFragment.prepareParams(
+                                            sortingField,
+                                            topMarket,
+                                            marketField
+                                        )
 
-                                    findNavController().slideFromBottom(
-                                        R.id.marketTopCoinsFragment,
-                                        args
-                                    )
-                                },
-                                onSelectTopMarket = { topMarket, listType ->
-                                    viewModel.onSelectTopMarket(topMarket, listType)
-                                })
+                                        findNavController().slideFromBottom(
+                                            R.id.marketTopCoinsFragment,
+                                            args
+                                        )
+                                    },
+                                    onSelectTopMarket = { topMarket, listType ->
+                                        viewModel.onSelectTopMarket(topMarket, listType)
+                                    })
+                            }
                         }
                     }
                 }

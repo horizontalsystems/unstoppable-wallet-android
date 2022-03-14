@@ -29,11 +29,6 @@ object MarketOverviewModule {
         }
     }
 
-    sealed class ViewItemState {
-        class Error(val error: String) : ViewItemState()
-        class Loaded(val viewItem: ViewItem) : ViewItemState()
-    }
-
     @Immutable
     data class ViewItem(
         val marketMetrics: MarketMetrics,

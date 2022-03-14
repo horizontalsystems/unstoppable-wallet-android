@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ListType
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.Board
@@ -14,7 +15,6 @@ import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewMod
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsPoint
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
@@ -34,7 +34,8 @@ class MarketOverviewViewModel(
     private val disposables = CompositeDisposable()
 
     val loadingLiveData = MutableLiveData<Boolean>()
-    val viewItemStateLiveData = MutableLiveData<ViewItemState>()
+    val viewStateLiveData = MutableLiveData<ViewState>()
+    val viewItem = MutableLiveData<MarketOverviewModule.ViewItem>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
 
     init {
@@ -62,21 +63,18 @@ class MarketOverviewViewModel(
         ) { it }.subscribeIO { array ->
             val errorDataState = array.firstOrNull { it is DataState.Error } as? DataState.Error
 
-            val viewItemState: ViewItemState? = if (errorDataState != null) {
-                ViewItemState.Error(errorDataState.error.message ?: errorDataState.error.javaClass.simpleName)
+            if (errorDataState != null) {
+                viewStateLiveData.postValue(ViewState.Error(errorDataState.error))
             } else {
                 val topGainerMarketItems = (array[0] as DataState<List<MarketItem>>).dataOrNull
                 val topLoserMarketItems = (array[1] as DataState<List<MarketItem>>).dataOrNull
                 val marketMetrics = (array[2] as DataState<MarketMetricsItem>).dataOrNull
 
                 if (topGainerMarketItems != null && topLoserMarketItems != null && marketMetrics != null) {
-                    ViewItemState.Loaded(getViewItem(topGainerMarketItems, topLoserMarketItems, marketMetrics))
-                } else {
-                    null
+                    val viewItem = getViewItem(topGainerMarketItems, topLoserMarketItems, marketMetrics)
+                    this.viewItem.postValue(viewItem)
+                    viewStateLiveData.postValue(ViewState.Success)
                 }
-            }
-            viewItemState?.let {
-                viewItemStateLiveData.postValue(it)
             }
         }.let { disposables.add(it) }
 
