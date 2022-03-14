@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -104,52 +105,54 @@ class TvlFragment : BaseFragment() {
                     tvlViewModel.refresh()
                 }
             ) {
-                when (viewState) {
-                    is ViewState.Error -> {
-                        ListErrorView(
-                            stringResource(R.string.Market_SyncError)
-                        ) {
-                            tvlViewModel.onErrorClick()
-                        }
-                    }
-                    ViewState.Success -> {
-                        LazyColumn {
-                            item {
-                                Chart(chartViewModel) {
-                                    tvlViewModel.onSelectChartInterval(it)
-                                }
+                Crossfade(viewState) { viewState ->
+                    when (viewState) {
+                        is ViewState.Error -> {
+                            ListErrorView(
+                                stringResource(R.string.Market_SyncError)
+                            ) {
+                                tvlViewModel.onErrorClick()
                             }
-
-                            tvlData?.let { tvlData ->
+                        }
+                        ViewState.Success -> {
+                            LazyColumn {
                                 item {
-                                    TvlMenu(
-                                        tvlData.chainSelect,
-                                        tvlData.sortDescending,
-                                        tvlDiffType,
-                                        tvlViewModel::onClickChainSelector,
-                                        tvlViewModel::onToggleSortType,
-                                        tvlViewModel::onToggleTvlDiffType
-                                    )
+                                    Chart(chartViewModel) {
+                                        tvlViewModel.onSelectChartInterval(it)
+                                    }
                                 }
 
-                                items(tvlData.coinTvlViewItems) { item ->
-                                    DefiMarket(
-                                        item.name,
-                                        item.chain,
-                                        item.iconUrl,
-                                        item.iconPlaceholder,
-                                        item.tvl,
-                                        when (tvlDiffType) {
-                                            TvlDiffType.Percent -> item.tvlChangePercent?.let {
-                                                MarketDataValue.DiffNew(Value.Percent(item.tvlChangePercent))
-                                            }
-                                            TvlDiffType.Currency -> item.tvlChangeAmount?.let {
-                                                MarketDataValue.DiffNew(Value.Currency(item.tvlChangeAmount))
-                                            }
-                                            else -> null
-                                        },
-                                        item.rank
-                                    ) { onCoinClick(item.coinUid) }
+                                tvlData?.let { tvlData ->
+                                    item {
+                                        TvlMenu(
+                                            tvlData.chainSelect,
+                                            tvlData.sortDescending,
+                                            tvlDiffType,
+                                            tvlViewModel::onClickChainSelector,
+                                            tvlViewModel::onToggleSortType,
+                                            tvlViewModel::onToggleTvlDiffType
+                                        )
+                                    }
+
+                                    items(tvlData.coinTvlViewItems) { item ->
+                                        DefiMarket(
+                                            item.name,
+                                            item.chain,
+                                            item.iconUrl,
+                                            item.iconPlaceholder,
+                                            item.tvl,
+                                            when (tvlDiffType) {
+                                                TvlDiffType.Percent -> item.tvlChangePercent?.let {
+                                                    MarketDataValue.DiffNew(Value.Percent(item.tvlChangePercent))
+                                                }
+                                                TvlDiffType.Currency -> item.tvlChangeAmount?.let {
+                                                    MarketDataValue.DiffNew(Value.Currency(item.tvlChangeAmount))
+                                                }
+                                                else -> null
+                                            },
+                                            item.rank
+                                        ) { onCoinClick(item.coinUid) }
+                                    }
                                 }
                             }
                         }

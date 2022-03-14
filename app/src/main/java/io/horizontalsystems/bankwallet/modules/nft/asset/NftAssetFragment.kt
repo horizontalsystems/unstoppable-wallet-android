@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -103,15 +104,17 @@ fun NftAssetScreen(
                 state = rememberSwipeRefreshState(false),
                 onRefresh = { }
             ) {
-                when (viewState) {
-                    is ViewState.Error -> {
-                        ListErrorView(stringResource(R.string.Error)) {
+                Crossfade(viewState) { viewState ->
+                    when (viewState) {
+                        is ViewState.Error -> {
+                            ListErrorView(stringResource(R.string.Error)) {
 
+                            }
                         }
-                    }
-                    ViewState.Success -> {
-                        viewModel.nftAssetItem?.let { asset ->
-                            NftAsset(asset)
+                        ViewState.Success -> {
+                            viewModel.nftAssetItem?.let { asset ->
+                                NftAsset(asset)
+                            }
                         }
                     }
                 }

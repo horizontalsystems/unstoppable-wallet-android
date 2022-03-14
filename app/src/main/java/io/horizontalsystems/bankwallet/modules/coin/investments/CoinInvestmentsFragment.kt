@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -104,23 +105,25 @@ private fun CoinInvestmentsScreen(
             state = rememberSwipeRefreshState(isRefreshing || loading),
             onRefresh = viewModel::refresh
         ) {
-            when (viewState) {
-                is ViewState.Error -> {
-                    ListErrorView(stringResource(R.string.Market_SyncError)) { viewModel.onErrorClick() }
-                }
-                ViewState.Success -> {
-                    LazyColumn {
-                        viewItems?.forEach { viewItem ->
-                            item {
-                                CoinInvestmentHeader(viewItem.amount, viewItem.info)
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    is ViewState.Error -> {
+                        ListErrorView(stringResource(R.string.Market_SyncError)) { viewModel.onErrorClick() }
+                    }
+                    ViewState.Success -> {
+                        LazyColumn {
+                            viewItems?.forEach { viewItem ->
+                                item {
+                                    CoinInvestmentHeader(viewItem.amount, viewItem.info)
 
-                                Spacer(modifier = Modifier.height(12.dp))
-                            }
-                            item {
-                                CellSingleLineLawrenceSection(viewItem.fundViewItems) { fundViewItem ->
-                                    CoinInvestmentFund(fundViewItem) { onClickFundUrl(fundViewItem.url) }
+                                    Spacer(modifier = Modifier.height(12.dp))
                                 }
-                                Spacer(modifier = Modifier.height(24.dp))
+                                item {
+                                    CellSingleLineLawrenceSection(viewItem.fundViewItems) { fundViewItem ->
+                                        CoinInvestmentFund(fundViewItem) { onClickFundUrl(fundViewItem.url) }
+                                    }
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                }
                             }
                         }
                     }

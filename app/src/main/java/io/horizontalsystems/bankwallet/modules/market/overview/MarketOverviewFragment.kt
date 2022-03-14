@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -96,45 +97,47 @@ class MarketOverviewFragment : BaseFragment() {
                 viewModel.refresh()
             }
         ) {
-            when (val state = viewItemState) {
-                is ViewItemState.Error -> {
-                    ListErrorView(
-                        stringResource(R.string.Market_SyncError)
-                    ) {
-                        viewModel.onErrorClick()
-                    }
-                }
-                is ViewItemState.Loaded -> {
-                    Column(
-                        modifier = Modifier
-                            .verticalScroll(scrollState)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .height(240.dp)
+            Crossfade(viewItemState) { state ->
+                when (state) {
+                    is ViewItemState.Error -> {
+                        ListErrorView(
+                            stringResource(R.string.Market_SyncError)
                         ) {
-                            MetricChartsView(state.viewItem.marketMetrics)
+                            viewModel.onErrorClick()
                         }
-                        BoardsView(
-                            boards = state.viewItem.boards,
-                            onClickSeeAll = { listType ->
-                                val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
-                                    listType
-                                )
-                                val args = MarketTopCoinsFragment.prepareParams(
-                                    sortingField,
-                                    topMarket,
-                                    marketField
-                                )
+                    }
+                    is ViewItemState.Loaded -> {
+                        Column(
+                            modifier = Modifier
+                                .verticalScroll(scrollState)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .height(240.dp)
+                            ) {
+                                MetricChartsView(state.viewItem.marketMetrics)
+                            }
+                            BoardsView(
+                                boards = state.viewItem.boards,
+                                onClickSeeAll = { listType ->
+                                    val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
+                                        listType
+                                    )
+                                    val args = MarketTopCoinsFragment.prepareParams(
+                                        sortingField,
+                                        topMarket,
+                                        marketField
+                                    )
 
-                                findNavController().slideFromBottom(
-                                    R.id.marketTopCoinsFragment,
-                                    args
-                                )
-                            },
-                            onSelectTopMarket = { topMarket, listType ->
-                                viewModel.onSelectTopMarket(topMarket, listType)
-                            })
+                                    findNavController().slideFromBottom(
+                                        R.id.marketTopCoinsFragment,
+                                        args
+                                    )
+                                },
+                                onSelectTopMarket = { topMarket, listType ->
+                                    viewModel.onSelectTopMarket(topMarket, listType)
+                                })
+                        }
                     }
                 }
             }

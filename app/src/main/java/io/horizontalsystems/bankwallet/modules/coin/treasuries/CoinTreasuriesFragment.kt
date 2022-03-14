@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -89,49 +90,51 @@ class CoinTreasuriesFragment : BaseFragment() {
                     viewModel.refresh()
                 }
             ) {
-                when (viewState) {
-                    is ViewState.Error -> {
-                        ListErrorView(
-                            stringResource(R.string.Market_SyncError)
-                        ) {
-                            viewModel.onErrorClick()
+                Crossfade(viewState) { viewState ->
+                    when (viewState) {
+                        is ViewState.Error -> {
+                            ListErrorView(
+                                stringResource(R.string.Market_SyncError)
+                            ) {
+                                viewModel.onErrorClick()
+                            }
                         }
-                    }
-                    ViewState.Success -> {
-                        LazyColumn {
-                            treasuriesData?.let { treasuriesData ->
-                                item {
-                                    CoinTreasuriesMenu(
-                                        treasuryTypeSelect = treasuriesData.treasuryTypeSelect,
-                                        sortDescending = treasuriesData.sortDescending,
-                                        onClickTreasuryTypeSelector = viewModel::onClickTreasuryTypeSelector,
-                                        onToggleSortType = viewModel::onToggleSortType
-                                    )
-                                }
-
-                                items(treasuriesData.coinTreasuries) { item ->
-                                    MultilineClear(
-                                        borderBottom = true
-                                    ) {
-                                        CoinImage(
-                                            iconUrl = item.fundLogoUrl,
-                                            modifier = Modifier
-                                                .padding(end = 16.dp)
-                                                .size(24.dp)
+                        ViewState.Success -> {
+                            LazyColumn {
+                                treasuriesData?.let { treasuriesData ->
+                                    item {
+                                        CoinTreasuriesMenu(
+                                            treasuryTypeSelect = treasuriesData.treasuryTypeSelect,
+                                            sortDescending = treasuriesData.sortDescending,
+                                            onClickTreasuryTypeSelector = viewModel::onClickTreasuryTypeSelector,
+                                            onToggleSortType = viewModel::onToggleSortType
                                         )
-                                        Column(
-                                            modifier = Modifier.fillMaxWidth()
+                                    }
+
+                                    items(treasuriesData.coinTreasuries) { item ->
+                                        MultilineClear(
+                                            borderBottom = true
                                         ) {
-                                            MarketCoinFirstRow(item.fund, item.amount)
-                                            Spacer(modifier = Modifier.height(3.dp))
-                                            CoinTreasurySecondRow(item.country, item.amountInCurrency)
+                                            CoinImage(
+                                                iconUrl = item.fundLogoUrl,
+                                                modifier = Modifier
+                                                    .padding(end = 16.dp)
+                                                    .size(24.dp)
+                                            )
+                                            Column(
+                                                modifier = Modifier.fillMaxWidth()
+                                            ) {
+                                                MarketCoinFirstRow(item.fund, item.amount)
+                                                Spacer(modifier = Modifier.height(3.dp))
+                                                CoinTreasurySecondRow(item.country, item.amountInCurrency)
+                                            }
                                         }
                                     }
-                                }
 
-                                item {
-                                    Spacer(modifier = Modifier.height(32.dp))
-                                    CellFooter(text = stringResource(id = R.string.CoinPage_Treasuries_PoweredBy))
+                                    item {
+                                        Spacer(modifier = Modifier.height(32.dp))
+                                        CellFooter(text = stringResource(id = R.string.CoinPage_Treasuries_PoweredBy))
+                                    }
                                 }
                             }
                         }

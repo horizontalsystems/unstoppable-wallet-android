@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -123,7 +124,7 @@ class CoinDetailsFragment : BaseFragment() {
         onClickVolumeChart: () -> Unit,
         onClickTvlChart: () -> Unit,
     ) {
-        val viewState by viewModel.viewStateLiveData.observeAsState(ViewState.Success)
+        val viewState by viewModel.viewStateLiveData.observeAsState()
         val viewItem by viewModel.viewItemLiveData.observeAsState()
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
         val loading by viewModel.loadingLiveData.observeAsState(false)
@@ -132,48 +133,50 @@ class CoinDetailsFragment : BaseFragment() {
             state = rememberSwipeRefreshState(isRefreshing || loading),
             onRefresh = { viewModel.refresh() },
         ) {
-            when (viewState) {
-                ViewState.Success -> {
-                    val detailBlocks: MutableList<@Composable (borderTop: Boolean) -> Unit> = mutableListOf()
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    ViewState.Success -> {
+                        val detailBlocks: MutableList<@Composable (borderTop: Boolean) -> Unit> = mutableListOf()
 
-                    viewItem?.let { viewItem ->
-                        viewItem.volumeChart?.let { volumeChart ->
-                            detailBlocks.add { borderTop -> TokenVolume(volumeChart, borderTop, onClickVolumeChart) }
-                        }
-
-                        if (viewItem.hasMajorHolders) {
-                            detailBlocks.add { borderTop -> TokenDistribution(viewItem, borderTop) }
-                        }
-
-                        if (viewItem.treasuries != null || viewItem.fundsInvested != null || viewItem.reportsCount != null) {
-                            detailBlocks.add { borderTop -> InvestorData(viewItem, borderTop) }
-                        }
-
-                        if (viewItem.tvlChart != null || viewItem.tvlRank != null || viewItem.tvlRatio != null) {
-                            detailBlocks.add { borderTop -> TokenTvl(viewItem, borderTop, onClickTvlChart) }
-                        }
-
-                        if (viewItem.securityViewItems.isNotEmpty() || viewItem.auditAddresses.isNotEmpty()) {
-                            detailBlocks.add { borderTop -> SecurityParameters(viewItem, borderTop) }
-                        }
-                    }
-
-                    if (detailBlocks.size > 0) {
-                        LazyColumn {
-                            items(detailBlocks.size) { index ->
-                                detailBlocks[index].invoke(index != 0)
+                        viewItem?.let { viewItem ->
+                            viewItem.volumeChart?.let { volumeChart ->
+                                detailBlocks.add { borderTop -> TokenVolume(volumeChart, borderTop, onClickVolumeChart) }
                             }
-                            item {
-                                Spacer(modifier = Modifier.height(32.dp))
+
+                            if (viewItem.hasMajorHolders) {
+                                detailBlocks.add { borderTop -> TokenDistribution(viewItem, borderTop) }
+                            }
+
+                            if (viewItem.treasuries != null || viewItem.fundsInvested != null || viewItem.reportsCount != null) {
+                                detailBlocks.add { borderTop -> InvestorData(viewItem, borderTop) }
+                            }
+
+                            if (viewItem.tvlChart != null || viewItem.tvlRank != null || viewItem.tvlRatio != null) {
+                                detailBlocks.add { borderTop -> TokenTvl(viewItem, borderTop, onClickTvlChart) }
+                            }
+
+                            if (viewItem.securityViewItems.isNotEmpty() || viewItem.auditAddresses.isNotEmpty()) {
+                                detailBlocks.add { borderTop -> SecurityParameters(viewItem, borderTop) }
                             }
                         }
+
+                        if (detailBlocks.size > 0) {
+                            LazyColumn {
+                                items(detailBlocks.size) { index ->
+                                    detailBlocks[index].invoke(index != 0)
+                                }
+                                item {
+                                    Spacer(modifier = Modifier.height(32.dp))
+                                }
+                            }
+                        }
                     }
-                }
-                is ViewState.Error -> {
-                    ListErrorView(
-                        stringResource(R.string.Market_SyncError)
-                    ) {
-                        viewModel.refresh()
+                    is ViewState.Error -> {
+                        ListErrorView(
+                            stringResource(R.string.Market_SyncError)
+                        ) {
+                            viewModel.refresh()
+                        }
                     }
                 }
             }

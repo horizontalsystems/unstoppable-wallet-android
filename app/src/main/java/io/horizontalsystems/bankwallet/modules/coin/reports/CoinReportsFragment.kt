@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -101,26 +102,28 @@ private fun CoinReportsScreen(
             state = rememberSwipeRefreshState(isRefreshing || loading),
             onRefresh = viewModel::refresh
         ) {
-            when (viewState) {
-                is ViewState.Error -> {
-                    ListErrorView(stringResource(R.string.Market_SyncError)) { viewModel.onErrorClick() }
-                }
-                ViewState.Success -> {
-                    LazyColumn {
-                        reportViewItems?.let {
-                            items(it) { report ->
-                                Spacer(modifier = Modifier.height(12.dp))
-                                CellNews(
-                                    source = report.author,
-                                    title = report.title,
-                                    body = report.body,
-                                    date = report.date,
-                                ) {
-                                    onClickReportUrl(report.url)
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    is ViewState.Error -> {
+                        ListErrorView(stringResource(R.string.Market_SyncError)) { viewModel.onErrorClick() }
+                    }
+                    ViewState.Success -> {
+                        LazyColumn {
+                            reportViewItems?.let {
+                                items(it) { report ->
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                    CellNews(
+                                        source = report.author,
+                                        title = report.title,
+                                        body = report.body,
+                                        date = report.date,
+                                    ) {
+                                        onClickReportUrl(report.url)
+                                    }
                                 }
-                            }
-                            item {
-                                Spacer(modifier = Modifier.height(12.dp))
+                                item {
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                }
                             }
                         }
                     }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -63,29 +64,31 @@ private fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factor
             viewModel.refresh()
         }
     ) {
-        when (viewState) {
-            is ViewState.Error -> {
-                ListErrorView(
-                    stringResource(R.string.Market_SyncError)
-                ) {
-                    viewModel.onErrorClick()
-                }
-            }
-            ViewState.Success -> {
-                LazyColumn {
-                    items(items) { postItem ->
-                        Spacer(modifier = Modifier.height(12.dp))
-                        CellNews(
-                            source = postItem.source,
-                            title = postItem.title,
-                            body = postItem.body,
-                            date = postItem.timeAgo,
-                        ) {
-                            LinkHelper.openLinkInAppBrowser(context, postItem.url)
-                        }
+        Crossfade(viewState) { viewState ->
+            when (viewState) {
+                is ViewState.Error -> {
+                    ListErrorView(
+                        stringResource(R.string.Market_SyncError)
+                    ) {
+                        viewModel.onErrorClick()
                     }
-                    item {
-                        Spacer(modifier = Modifier.height(12.dp))
+                }
+                ViewState.Success -> {
+                    LazyColumn {
+                        items(items) { postItem ->
+                            Spacer(modifier = Modifier.height(12.dp))
+                            CellNews(
+                                source = postItem.source,
+                                title = postItem.title,
+                                body = postItem.body,
+                                date = postItem.timeAgo,
+                            ) {
+                                LinkHelper.openLinkInAppBrowser(context, postItem.url)
+                            }
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
                     }
                 }
             }

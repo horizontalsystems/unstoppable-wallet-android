@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -105,37 +106,39 @@ class MetricsPageFragment : BaseFragment() {
                     viewModel.refresh()
                 }
             ) {
-                when (viewState) {
-                    is ViewState.Error -> {
-                        ListErrorView(
-                            stringResource(R.string.Market_SyncError)
-                        ) {
-                            viewModel.onErrorClick()
-                        }
-                    }
-                    ViewState.Success -> {
-                        LazyColumn {
-                            item {
-                                Chart(chartViewModel)
+                Crossfade(viewState) { viewState ->
+                    when (viewState) {
+                        is ViewState.Error -> {
+                            ListErrorView(
+                                stringResource(R.string.Market_SyncError)
+                            ) {
+                                viewModel.onErrorClick()
                             }
-                            marketData?.let { marketData ->
+                        }
+                        ViewState.Success -> {
+                            LazyColumn {
                                 item {
-                                    Menu(
-                                        marketData.menu,
-                                        viewModel::onToggleSortType,
-                                        viewModel::onSelectMarketField
-                                    )
+                                    Chart(chartViewModel)
                                 }
-                                items(marketData.marketViewItems) { marketViewItem ->
-                                    MarketCoin(
-                                        marketViewItem.fullCoin.coin.name,
-                                        marketViewItem.fullCoin.coin.code,
-                                        marketViewItem.fullCoin.coin.iconUrl,
-                                        marketViewItem.fullCoin.iconPlaceholder,
-                                        marketViewItem.coinRate,
-                                        marketViewItem.marketDataValue,
-                                        marketViewItem.rank,
-                                    ) { onCoinClick(marketViewItem.fullCoin.coin.uid) }
+                                marketData?.let { marketData ->
+                                    item {
+                                        Menu(
+                                            marketData.menu,
+                                            viewModel::onToggleSortType,
+                                            viewModel::onSelectMarketField
+                                        )
+                                    }
+                                    items(marketData.marketViewItems) { marketViewItem ->
+                                        MarketCoin(
+                                            marketViewItem.fullCoin.coin.name,
+                                            marketViewItem.fullCoin.coin.code,
+                                            marketViewItem.fullCoin.coin.iconUrl,
+                                            marketViewItem.fullCoin.iconPlaceholder,
+                                            marketViewItem.coinRate,
+                                            marketViewItem.marketDataValue,
+                                            marketViewItem.rank,
+                                        ) { onCoinClick(marketViewItem.fullCoin.coin.uid) }
+                                    }
                                 }
                             }
                         }
