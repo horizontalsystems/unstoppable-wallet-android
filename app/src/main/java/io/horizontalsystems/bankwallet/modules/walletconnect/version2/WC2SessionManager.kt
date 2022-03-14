@@ -88,6 +88,10 @@ class WC2SessionManager(
         return allSessions.firstOrNull { it.topic == topic }
     }
 
+    fun deleteSession(sessionId: String) {
+        service.disconnect(sessionId)
+    }
+
     fun prepareRequestToOpen(requestId: Long) {
         val account = accountManager.activeAccount ?: throw RequestDataError.NoSuitableAccount
         val request = requests(account.id)

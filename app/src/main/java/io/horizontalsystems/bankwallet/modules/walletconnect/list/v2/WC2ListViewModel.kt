@@ -73,4 +73,8 @@ class WC2ListViewModel(
         return chainNames.joinToString(", ")
     }
 
+    fun onDelete(sessionId: String) {
+        service.delete(sessionId)
+    }
+
 }

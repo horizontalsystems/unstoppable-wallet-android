@@ -1,152 +1,141 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.list.ui
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import android.content.res.Resources
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.BadgeCount
-import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+
+const val ACTION_ITEM_WIDTH = 84
+const val CELL_OFFSET = -84f // we have 1 icon action in a row, so that's 84
+
+fun Float.dp(): Float = this * density + 0.5f
+
+val density: Float
+    get() = Resources.getSystem().displayMetrics.density
 
 @Composable
 fun WCSessionList(
-    section: WalletConnectListModule.Section,
+    viewModelWc2: WC2ListViewModel,
+    viewModelWc1: WalletConnectListViewModel,
     navController: NavController
 ) {
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+    var revealedCardIds by remember { mutableStateOf(listOf<String>()) }
+
+    LazyColumn {
+        viewModelWc2.sectionItem?.let { section ->
+            WCSection(
+                section,
+                navController,
+                revealedCardIds,
+                onExpand = { id ->
+                    if (!revealedCardIds.contains(id)) {
+                        revealedCardIds = listOf(id)
+                    }
+                },
+                onCollapse = { id ->
+                    revealedCardIds = revealedCardIds.toMutableList().also {
+                        it.remove(id)
+                    }
+                },
+                onDelete = { viewModelWc2.onDelete(it) }
+            )
+        }
+        viewModelWc1.sectionItem?.let { section ->
+            WCSection(
+                section,
+                navController,
+                revealedCardIds,
+                onExpand = { id ->
+                    if (!revealedCardIds.contains(id)) {
+                        revealedCardIds = listOf(id)
+                    }
+                },
+                onCollapse = { id ->
+                    revealedCardIds = revealedCardIds.toMutableList().also {
+                        it.remove(id)
+                    }
+                },
+                onDelete = { viewModelWc1.onDelete(it) }
+            )
+        }
+    }
+}
+
+private fun LazyListScope.WCSection(
+    section: WalletConnectListModule.Section,
+    navController: NavController,
+    revealedCardIds: List<String>,
+    onExpand: (String) -> Unit,
+    onCollapse: (String) -> Unit,
+    onDelete: (String) -> Unit
+) {
+    item {
         Text(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
             text = stringResource(section.version.value),
             style = ComposeAppTheme.typography.subhead1,
             color = ComposeAppTheme.colors.grey
         )
-        if (section.pendingRequests != null) {
-            CellSingleLineLawrenceSection(listOf(section.pendingRequests)) {
-                PendingRequestsCell(it, navController)
-            }
+    }
+    section.pendingRequests?.let {
+        item {
+            PendingRequestsCell(it, navController)
             Spacer(modifier = Modifier.height(12.dp))
         }
-        CellMultilineLawrenceSection(section.sessions) {
-            SessionCell(it, section.version, navController)
+    }
+    itemsIndexed(section.sessions, key = { _, item -> item.sessionId }) { index, item ->
+        val showDivider = showDivider(section.sessions.size, index)
+        val shape = getShape(section.sessions.size, index)
+        Box(Modifier.fillMaxWidth().height(60.dp)) {
+            ActionsRow(
+                actionIconWidth = ACTION_ITEM_WIDTH.dp,
+                onDelete = { onDelete(item.sessionId) },
+            )
+            DraggableCardSimple(
+                isRevealed = revealedCardIds.contains(item.sessionId),
+                cardOffset = CELL_OFFSET.dp(),
+                onExpand = { onExpand(item.sessionId) },
+                onCollapse = { onCollapse(item.sessionId) },
+                content = {
+                    WCSessionCell(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clip(shape)
+                            .background(ComposeAppTheme.colors.lawrence),
+                        showDivider = showDivider,
+                        session = item,
+                        version = section.version,
+                        navController = navController
+                    )
+                }
+            )
         }
-        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
-@Composable
-private fun PendingRequestsCell(pendingRequests: Int, navController: NavController) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(
-                enabled = pendingRequests > 0,
-                onClick = {
-                    navController.slideFromBottom(R.id.wc2RequestListFragment)
-                }
-            )
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            modifier = Modifier.weight(1f),
-            text = stringResource(R.string.WalletConnect_PendingRequests),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah
-        )
-        if (pendingRequests > 0) {
-            BadgeCount(
-                text = pendingRequests.toString(),
-            )
-        }
-        Image(
-            modifier = Modifier.padding(start = 8.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null
-        )
-    }
+private fun getShape(itemsCount: Int, index: Int): Shape = when {
+    itemsCount == 1 -> RoundedCornerShape(12.dp)
+    itemsCount - 1 == index -> RoundedCornerShape(0.dp, 0.dp, 12.dp, 12.dp)
+    0 == index -> RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp)
+    else -> RoundedCornerShape(0.dp)
 }
 
-@Composable
-private fun SessionCell(
-    session: WalletConnectListModule.SessionViewItem,
-    version: WalletConnectListModule.Version,
-    navController: NavController
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable {
-                if (version == WalletConnectListModule.Version.Version2) {
-                    navController.slideFromBottom(
-                        R.id.wc2SessionFragment,
-                        WC2SessionModule.prepareParams(
-                            session.sessionId,
-                            null,
-                        )
-                    )
-                } else {
-                    navController.slideFromBottom(
-                        R.id.wcSessionFragment,
-                        WCSessionModule.prepareParams(
-                            session.sessionId,
-                            null,
-                        )
-                    )
-                }
-            }
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            modifier = Modifier
-                .size(24.dp)
-                .clip(RoundedCornerShape(4.dp)),
-            painter = rememberImagePainter(
-                data = session.imageUrl,
-                builder = {
-                    error(R.drawable.coin_placeholder)
-                }
-            ),
-            contentDescription = null,
-        )
-        Spacer(Modifier.width(16.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = session.title,
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.leah,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                text = session.subtitle,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey
-            )
-        }
-        Image(
-            modifier = Modifier.padding(start = 5.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null
-        )
-    }
+private fun showDivider(itemsCount: Int, index: Int): Boolean = when {
+    itemsCount == 1 || index == 0 -> false
+    else -> true
 }

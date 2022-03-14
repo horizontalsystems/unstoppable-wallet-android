@@ -24,18 +24,23 @@ class WalletConnectListService(private val sessionManager: WC1SessionManager) {
 
     val sessionKillingStateObservable = PublishSubject.create<WC1SessionKillManager.State>()
 
-    fun kill(session: WalletConnectSession) {
+    fun kill(sessionId: String) {
         sessionKillingStateObservable.onNext(WC1SessionKillManager.State.Processing)
 
-        val sessionKillManager = WC1SessionKillManager(session)
+        items.forEach { item ->
+            item.sessions.forEach { session ->
+                if (session.remotePeerId == sessionId){
+                    val sessionKillManager = WC1SessionKillManager(session)
+                    sessionKillManager.stateObservable
+                        .subscribeIO {
+                            onUpdateSessionKillManager(it)
+                        }.let { sessionKillDisposable.add(it) }
 
-        sessionKillManager.stateObservable
-            .subscribeIO {
-                onUpdateSessionKillManager(it)
-            }.let { sessionKillDisposable.add(it) }
-
-        sessionKillManager.kill()
-        this.sessionKillManager = sessionKillManager
+                    sessionKillManager.kill()
+                    this.sessionKillManager = sessionKillManager
+                }
+            }
+        }
     }
 
     private fun onUpdateSessionKillManager(state: WC1SessionKillManager.State) {
