@@ -42,6 +42,7 @@
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Any</string>
+    <string name="SyncError">Sync error. Try Again</string>
 
     <string name="FooterText" translatable="false">© Horizontal Systems 2022</string>
 
@@ -1045,6 +1046,7 @@
     <string name="Nfts_PriceType_LastSale">Last Sale</string>
     <string name="Nfts_Asset_OnSale">On Sale</string>
     <string name="Nfts_Asset_OnSaleUntil">until %s</string>
+    <string name="Nfts_Empty">You don\'t have an NFT in your wallet</string>
 
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_OwnedCount">Owned Count</string>

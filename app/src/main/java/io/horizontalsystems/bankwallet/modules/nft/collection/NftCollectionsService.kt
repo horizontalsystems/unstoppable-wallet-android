@@ -6,15 +6,15 @@ import io.horizontalsystems.bankwallet.core.orNull
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -26,41 +26,44 @@ class NftCollectionsService(
 ) {
     val priceType by itemsPricedRepository::priceType
 
-    private val _serviceItemState =
-        MutableStateFlow<DataState<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>>>(
-            DataState.Loading
+    private val _serviceItemDataFlow =
+        MutableSharedFlow<DataWithError<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>?>>(
+            replay = 1,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST
         )
-    val serviceItemState = _serviceItemState.asStateFlow()
+    val serviceItemDataFlow = _serviceItemDataFlow.asSharedFlow()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val disposables = CompositeDisposable()
 
-    fun start() {
+    suspend fun start() {
         coroutineScope.launch {
-            itemsPricedWithCurrencyRepository.itemsFlow
-                .collect { assetItemsPriced ->
-                    val totalValue = assetItemsPriced.map { (_, assets) ->
-                        assets.sumOf {
-                            it.currencyPrice?.value ?: BigDecimal.ZERO
-                        }
-                    }.sumOf { it }
-
-                    val totalCurrencyValue = CurrencyValue(itemsPricedWithCurrencyRepository.baseCurrency, totalValue)
-                    _serviceItemState.update {
-                        DataState.Success(Pair(assetItemsPriced, totalCurrencyValue))
+            itemsPricedWithCurrencyRepository.itemsDataFlow
+                .collect { data ->
+                    val itemsWithTotalValue = data.value?.let { assetItemsPriced ->
+                        val totalValue = assetItemsPriced.map { (_, assets) ->
+                            assets.sumOf {
+                                it.currencyPrice?.value ?: BigDecimal.ZERO
+                            }
+                        }.sumOf { it }
+                        Pair(
+                            assetItemsPriced,
+                            CurrencyValue(itemsPricedWithCurrencyRepository.baseCurrency, totalValue)
+                        )
                     }
+                    _serviceItemDataFlow.tryEmit(DataWithError(itemsWithTotalValue, data.error))
                 }
         }
 
         coroutineScope.launch {
-            itemsPricedRepository.itemsFlow
+            itemsPricedRepository.itemsDataFlow
                 .collect { assetItemsPriced ->
                     itemsPricedWithCurrencyRepository.setItems(assetItemsPriced)
                 }
         }
 
         coroutineScope.launch {
-            itemsRepository.itemsFlow
+            itemsRepository.itemsDataFlow
                 .collect {
                     itemsPricedRepository.setAssetItems(it)
                 }
@@ -68,7 +71,9 @@ class NftCollectionsService(
 
         accountManager.activeAccountObservable
             .subscribeIO {
-                handleAccount(it.orNull)
+                coroutineScope.launch {
+                    handleAccount(it.orNull)
+                }
             }
             .let {
                 disposables.add(it)
@@ -83,7 +88,6 @@ class NftCollectionsService(
     }
 
     fun stop() {
-        itemsRepository.stop()
         itemsPricedWithCurrencyRepository.stop()
     }
 
@@ -92,13 +96,11 @@ class NftCollectionsService(
         itemsPricedWithCurrencyRepository.refresh()
     }
 
-    private fun handleAccount(account: Account?) {
+    private suspend fun handleAccount(account: Account?) {
         if (account != null) {
             itemsRepository.setAccount(account)
         } else {
-            _serviceItemState.update {
-                DataState.Error(NoActiveAccount())
-            }
+            _serviceItemDataFlow.tryEmit(DataWithError(null, NoActiveAccount()))
         }
     }
 }

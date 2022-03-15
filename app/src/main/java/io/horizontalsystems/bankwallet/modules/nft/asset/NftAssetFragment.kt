@@ -88,6 +88,7 @@ fun NftAssetScreen(
     val viewModel =
         viewModel<NftAssetViewModel>(factory = NftAssetModule.Factory(accountId, tokenId, contractAddress))
     val viewState = viewModel.viewState
+    val errorMessage = viewModel.errorMessage
 
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -102,14 +103,12 @@ fun NftAssetScreen(
             )
             HSSwipeRefresh(
                 state = rememberSwipeRefreshState(false),
-                onRefresh = { }
+                onRefresh = viewModel::refresh
             ) {
                 Crossfade(viewState) { viewState ->
                     when (viewState) {
                         is ViewState.Error -> {
-                            ListErrorView(stringResource(R.string.Error)) {
-
-                            }
+                            ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                         }
                         ViewState.Success -> {
                             viewModel.nftAssetItem?.let { asset ->
@@ -120,6 +119,8 @@ fun NftAssetScreen(
                 }
             }
         }
+
+        ErrorMessageHud(errorMessage)
     }
 }
 
@@ -372,6 +373,13 @@ private fun NftAsset(asset: NftAssetModuleAssetItem) {
                 CellFooter(text = stringResource(id = R.string.PoweredBy_OpenSeaAPI))
             }
         }
+    }
+}
+
+@Composable
+private fun ErrorMessageHud(errorMessage: TranslatableString?) {
+    errorMessage?.let {
+        HudHelper.showErrorMessage(LocalView.current, it.getString())
     }
 }
 
