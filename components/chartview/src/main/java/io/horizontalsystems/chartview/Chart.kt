@@ -267,7 +267,12 @@ class Chart @JvmOverloads constructor(
             val dominancePercent = decimalFormat.format(dValues.last())
             val diff = dValues.last() - dValues.first()
             val diffColor = if (diff > 0f) config.trendUpColor else config.trendDownColor
-            val diffFormatted = decimalFormat.format(diff)
+            val sign = when {
+                diff > 0f -> "+"
+                diff < 0f -> "-"
+                else -> ""
+            }
+            val diffFormatted = sign + decimalFormat.format(diff)
             dominanceLabel.setValues(
                 mapOf(
                     "$diffFormatted%" to diffColor,
