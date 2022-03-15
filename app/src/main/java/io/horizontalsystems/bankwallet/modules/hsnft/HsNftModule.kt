@@ -49,7 +49,7 @@ object HsNftApiV1Response {
         data class Stats(
             val seven_day_average_price: BigDecimal,
             val thirty_day_average_price: BigDecimal,
-            val floor_price: BigDecimal,
+            val floor_price: BigDecimal?,
             val total_supply: Int,
         )
     }
@@ -163,10 +163,9 @@ class HsNftApiProvider : INftApiProvider {
                 getCoinTypeId(zeroAddress),
                 collectionResponse.stats.thirty_day_average_price
             ),
-            floorPrice = NftAssetPrice(
-                getCoinTypeId(zeroAddress),
-                collectionResponse.stats.floor_price
-            ),
+            floorPrice = collectionResponse.stats.floor_price?.let {
+                NftAssetPrice(getCoinTypeId(zeroAddress), it)
+            },
             links = collectionResponse.links
         )
     }
@@ -210,10 +209,9 @@ class HsNftApiProvider : INftApiProvider {
                     getCoinTypeId(zeroAddress),
                     stats.thirty_day_average_price
                 ),
-                floorPrice = NftAssetPrice(
-                    getCoinTypeId(zeroAddress),
-                    stats.floor_price
-                )
+                floorPrice = stats.floor_price?.let {
+                    NftAssetPrice(getCoinTypeId(zeroAddress), it)
+                }
             )
         }
     }
