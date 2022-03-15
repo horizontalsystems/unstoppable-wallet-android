@@ -21,7 +21,7 @@ class MetricsPageService(
     val currency by currencyManager::baseCurrency
 
     val marketItemsObservable: BehaviorSubject<DataState<List<MarketItem>>> =
-        BehaviorSubject.createDefault(DataState.Loading)
+        BehaviorSubject.create()
 
     var sortDescending: Boolean = true
         set(value) {

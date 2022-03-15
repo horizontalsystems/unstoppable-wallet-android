@@ -19,7 +19,7 @@ class TvlService(
     val currency by currencyManager::baseCurrency
 
     val marketTvlItemsObservable: BehaviorSubject<DataState<List<TvlModule.MarketTvlItem>>> =
-        BehaviorSubject.createDefault(DataState.Loading)
+        BehaviorSubject.create()
 
     private var chartInterval: HsTimePeriod = HsTimePeriod.Day1
         set(value) {

@@ -20,7 +20,6 @@ class CoinMajorHoldersService(
 
     private fun fetch() {
         marketKit.topHoldersSingle(coinUid)
-            .doOnSubscribe { stateSubject.onNext(DataState.Loading) }
             .subscribeIO({
                 stateSubject.onNext(DataState.Success(it))
             }, {

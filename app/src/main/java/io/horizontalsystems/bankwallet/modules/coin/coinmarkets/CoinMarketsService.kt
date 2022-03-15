@@ -31,8 +31,7 @@ class CoinMarketsService(
 
     val volumeMenu = Select(volumeType, volumeOptions)
 
-    val stateObservable: BehaviorSubject<DataState<List<MarketTickerItem>>> = BehaviorSubject.createDefault(
-        DataState.Loading)
+    val stateObservable: BehaviorSubject<DataState<List<MarketTickerItem>>> = BehaviorSubject.create()
 
     val currency get() = currencyManager.baseCurrency
 
