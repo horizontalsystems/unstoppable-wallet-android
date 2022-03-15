@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -71,9 +72,7 @@ class NftCollectionsService(
 
         accountManager.activeAccountObservable
             .subscribeIO {
-                coroutineScope.launch {
-                    handleAccount(it.orNull)
-                }
+                handleAccount(it.orNull)
             }
             .let {
                 disposables.add(it)
@@ -88,6 +87,7 @@ class NftCollectionsService(
     }
 
     fun stop() {
+        coroutineScope.cancel()
         itemsPricedWithCurrencyRepository.stop()
     }
 
@@ -96,11 +96,13 @@ class NftCollectionsService(
         itemsPricedWithCurrencyRepository.refresh()
     }
 
-    private suspend fun handleAccount(account: Account?) {
-        if (account != null) {
-            itemsRepository.setAccount(account)
-        } else {
-            _serviceItemDataFlow.tryEmit(DataWithError(null, NoActiveAccount()))
+    private fun handleAccount(account: Account?) {
+        coroutineScope.launch {
+            if (account != null) {
+                itemsRepository.setAccount(account)
+            } else {
+                _serviceItemDataFlow.tryEmit(DataWithError(null, NoActiveAccount()))
+            }
         }
     }
 }
