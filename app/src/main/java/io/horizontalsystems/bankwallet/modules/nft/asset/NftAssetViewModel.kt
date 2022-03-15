@@ -27,7 +27,9 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
         viewModelScope.launch {
             service.serviceDataFlow
                 .collect { assetData ->
-                    viewState = assetData.viewState
+                    assetData.viewState?.let {
+                        viewState = it
+                    }
                     nftAssetItem = assetData.value
                     errorMessage = assetData.error?.let { errorText(it) }
                 }
