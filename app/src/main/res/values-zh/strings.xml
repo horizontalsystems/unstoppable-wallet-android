@@ -34,6 +34,7 @@
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Any">任何</string>
+    <string name="SyncError">Sync error. Try Again</string>
     <string name="PercentTitle">百分比</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -865,6 +866,7 @@
     <string name="Nfts_PriceType_LastSale">收盘价</string>
     <string name="Nfts_Asset_OnSale">在售</string>
     <string name="Nfts_Asset_OnSaleUntil">直到 %s</string>
+    <string name="Nfts_Empty">You don\'t have an NFT in your wallet</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_OwnedCount">Owned Count</string>
     <string name="NftAsset_Price_Purchase">Purchase Price</string>
