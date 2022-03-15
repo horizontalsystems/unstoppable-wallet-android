@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
@@ -83,7 +84,6 @@ class MetricsPageFragment : BaseFragment() {
         val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
         val viewState = itemsViewState?.merge(chartViewState)
         val marketData by viewModel.marketLiveData.observeAsState()
-        val loading by viewModel.loadingLiveData.observeAsState(false)
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
 
         Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -101,13 +101,16 @@ class MetricsPageFragment : BaseFragment() {
             )
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing || loading),
+                state = rememberSwipeRefreshState(isRefreshing),
                 onRefresh = {
                     viewModel.refresh()
                 }
             ) {
                 Crossfade(viewState) { viewState ->
                     when (viewState) {
+                        is ViewState.Loading -> {
+                            Loading()
+                        }
                         is ViewState.Error -> {
                             ListErrorView(
                                 stringResource(R.string.Market_SyncError)

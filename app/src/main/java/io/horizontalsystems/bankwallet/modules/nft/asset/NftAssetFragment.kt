@@ -42,6 +42,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.shortenedAddress
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Price
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -107,6 +108,9 @@ fun NftAssetScreen(
             ) {
                 Crossfade(viewState) { viewState ->
                     when (viewState) {
+                        is ViewState.Loading -> {
+                            Loading()
+                        }
                         is ViewState.Error -> {
                             ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                         }

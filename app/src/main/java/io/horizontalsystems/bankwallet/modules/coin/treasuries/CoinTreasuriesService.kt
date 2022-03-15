@@ -50,7 +50,6 @@ class CoinTreasuriesService(
         disposable?.dispose()
 
         repository.coinTreasuriesSingle(coin.uid, currency.code, treasuryType, sortDescending, forceRefresh)
-            .doOnSubscribe { stateSubject.onNext(DataState.Loading) }
             .subscribeIO({
                 stateSubject.onNext(DataState.Success(it))
             }, {

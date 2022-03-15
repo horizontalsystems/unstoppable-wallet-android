@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -68,6 +69,9 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
     ) {
         Crossfade(viewState) { viewState ->
             when (viewState) {
+                ViewState.Loading -> {
+                    Loading()
+                }
                 ViewState.Success -> {
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 16.dp),

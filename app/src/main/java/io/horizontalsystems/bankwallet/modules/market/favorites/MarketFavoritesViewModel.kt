@@ -34,8 +34,7 @@ class MarketFavoritesViewModel(
     private val sortingFieldSelect: Select<SortingField>
         get() = Select(service.sortingField, service.sortingFieldTypes)
 
-    val viewStateLiveData = MutableLiveData<ViewState>()
-    val loadingLiveData = MutableLiveData<Boolean>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val viewItemLiveData = MutableLiveData<ViewItem>()
     val sortingFieldSelectorStateLiveData = MutableLiveData<SelectorDialogState>()
@@ -43,8 +42,6 @@ class MarketFavoritesViewModel(
     init {
         service.marketItemsObservable
             .subscribeIO { state ->
-                loadingLiveData.postValue(state == DataState.Loading)
-
                 when (state) {
                     is DataState.Success -> {
                         viewStateLiveData.postValue(ViewState.Success)

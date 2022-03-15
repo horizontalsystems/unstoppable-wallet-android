@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
-    var viewState by mutableStateOf<ViewState?>(null)
+    var viewState by mutableStateOf<ViewState>(ViewState.Loading)
         private set
 
     var nftAssetItem by mutableStateOf<NftAssetModuleAssetItem?>(null)

@@ -37,9 +37,6 @@ class MarketFavoritesService(
         favoritesDisposable?.dispose()
 
         repository.get(sortingField, currencyManager.baseCurrency, forceRefresh)
-            .doOnSubscribe {
-                marketItemsSubject.onNext(DataState.Loading)
-            }
             .subscribeIO({ marketItems ->
                 marketItemsSubject.onNext(DataState.Success(marketItems))
             }, { error ->

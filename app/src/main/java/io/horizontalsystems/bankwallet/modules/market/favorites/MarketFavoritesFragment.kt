@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -72,20 +73,22 @@ fun MarketFavoritesScreen(
     onCoinClick: (String) -> Unit
 ) {
     val viewState by viewModel.viewStateLiveData.observeAsState()
-    val loading by viewModel.loadingLiveData.observeAsState(false)
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val marketFavoritesData by viewModel.viewItemLiveData.observeAsState()
     val sortingFieldDialogState by viewModel.sortingFieldSelectorStateLiveData.observeAsState()
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
+        state = rememberSwipeRefreshState(isRefreshing),
         onRefresh = {
             viewModel.refresh()
         }
     ) {
         Crossfade(targetState = viewState, modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) { viewState ->
             when (viewState) {
+                is ViewState.Loading -> {
+                    Loading()
+                }
                 is ViewState.Error -> {
                     ListErrorView(
                         stringResource(R.string.Market_SyncError)

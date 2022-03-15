@@ -72,7 +72,6 @@ class CoinDetailsService(
 
     private fun fetch() {
         marketKit.marketInfoDetailsSingle(fullCoin.coin.uid, currency.code)
-            .doOnSubscribe { stateSubject.onNext(DataState.Loading) }
             .flatMap { details ->
                 fetchCharts(details)
             }

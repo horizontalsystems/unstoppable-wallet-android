@@ -26,11 +26,10 @@ class TvlViewModel(
         }
     private var tvlItems: List<TvlModule.MarketTvlItem> = listOf()
 
-    val loadingLiveData = MutableLiveData<Boolean>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val tvlLiveData = MutableLiveData<TvlModule.TvlData>()
     val tvlDiffTypeLiveData = MutableLiveData(tvlDiffType)
-    val viewStateLiveData = MutableLiveData<ViewState>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val chainSelectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
 
     init {
@@ -39,8 +38,6 @@ class TvlViewModel(
                 tvlItemsDataState.viewState?.let {
                     viewStateLiveData.postValue(it)
                 }
-
-                loadingLiveData.postValue(tvlItemsDataState.loading)
 
                 tvlItemsDataState.dataOrNull?.let {
                     tvlItems = it

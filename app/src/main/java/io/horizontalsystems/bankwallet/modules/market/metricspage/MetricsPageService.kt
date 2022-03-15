@@ -36,7 +36,6 @@ class MetricsPageService(
     private fun syncMarketItems() {
         marketDataDisposable?.dispose()
         globalMarketRepository.getMarketItems(currency, sortDescending, metricsType)
-            .doOnSubscribe { marketItemsObservable.onNext(DataState.Loading) }
             .subscribeIO({
                 marketItemsObservable.onNext(DataState.Success(it))
             }, {
