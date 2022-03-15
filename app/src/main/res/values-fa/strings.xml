@@ -34,6 +34,7 @@
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Any">هرکدام</string>
+    <string name="SyncError">Sync error. Try Again</string>
     <string name="PercentTitle">درصد</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -862,6 +863,7 @@
     <string name="Nfts_PriceType_LastSale">Last Sale</string>
     <string name="Nfts_Asset_OnSale">On Sale</string>
     <string name="Nfts_Asset_OnSaleUntil">until %s</string>
+    <string name="Nfts_Empty">You don\'t have an NFT in your wallet</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_OwnedCount">Owned Count</string>
     <string name="NftAsset_Price_Purchase">Purchase Price</string>
