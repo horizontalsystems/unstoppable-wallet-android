@@ -32,7 +32,7 @@ open class ChartViewModel(
     val indicatorsLiveData = MutableLiveData<List<TabItem<ChartIndicator>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
     val loadingLiveData = MutableLiveData<Boolean>()
-    val viewStateLiveData = MutableLiveData<ViewState>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
 
     private val disposables = CompositeDisposable()
 

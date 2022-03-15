@@ -48,7 +48,6 @@ class TvlService(
     private fun updateTvlData(forceRefresh: Boolean) {
         tvlDataDisposable?.dispose()
         globalMarketRepository.getMarketTvlItems(currency, chain, chartInterval, sortDescending, forceRefresh)
-            .doOnSubscribe { marketTvlItemsObservable.onNext(DataState.Loading) }
             .subscribeIO({
                 marketTvlItemsObservable.onNext(DataState.Success(it))
             }, {

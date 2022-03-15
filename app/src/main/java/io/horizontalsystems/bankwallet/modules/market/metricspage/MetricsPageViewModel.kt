@@ -23,10 +23,9 @@ class MetricsPageViewModel(
     private var marketField: MarketField
     private var marketItems: List<MarketItem> = listOf()
 
-    val loadingLiveData = MutableLiveData<Boolean>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val marketLiveData = MutableLiveData<MetricsPageModule.MarketData>()
-    val viewStateLiveData = MutableLiveData<ViewState>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
 
     val metricsType: MetricsType
         get() = service.metricsType
@@ -45,8 +44,6 @@ class MetricsPageViewModel(
                 marketItemsDataState.viewState?.let {
                     viewStateLiveData.postValue(it)
                 }
-
-                loadingLiveData.postValue(marketItemsDataState.loading)
 
                 marketItemsDataState?.dataOrNull?.let {
                     marketItems = it

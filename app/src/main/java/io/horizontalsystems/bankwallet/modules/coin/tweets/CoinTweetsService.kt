@@ -36,7 +36,6 @@ class CoinTweetsService(
     }
 
     private fun fetch() {
-        stateSubject.onNext(DataState.Loading)
         val tmpUser = user
 
         val twitterUserSingle = if (tmpUser != null) {

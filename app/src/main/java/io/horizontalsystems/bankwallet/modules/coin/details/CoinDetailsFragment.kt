@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.Se
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartTvlFragment
@@ -127,14 +128,16 @@ class CoinDetailsFragment : BaseFragment() {
         val viewState by viewModel.viewStateLiveData.observeAsState()
         val viewItem by viewModel.viewItemLiveData.observeAsState()
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
-        val loading by viewModel.loadingLiveData.observeAsState(false)
 
         HSSwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing || loading),
+            state = rememberSwipeRefreshState(isRefreshing),
             onRefresh = { viewModel.refresh() },
         ) {
             Crossfade(viewState) { viewState ->
                 when (viewState) {
+                    is ViewState.Loading -> {
+                        Loading()
+                    }
                     ViewState.Success -> {
                         val detailBlocks: MutableList<@Composable (borderTop: Boolean) -> Unit> = mutableListOf()
 

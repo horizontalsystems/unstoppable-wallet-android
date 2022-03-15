@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
@@ -86,21 +87,23 @@ class MarketOverviewFragment : BaseFragment() {
 
     @Composable
     private fun MarketOverviewScreen() {
-        val loading by viewModel.loadingLiveData.observeAsState()
-        val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
+        val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
         val viewState by viewModel.viewStateLiveData.observeAsState()
         val viewItem by viewModel.viewItem.observeAsState()
 
         val scrollState = rememberScrollState()
 
         HSSwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
+            state = rememberSwipeRefreshState(isRefreshing),
             onRefresh = {
                 viewModel.refresh()
             }
         ) {
             Crossfade(viewState) { viewState ->
                 when (viewState) {
+                    is ViewState.Loading -> {
+                        Loading()
+                    }
                     is ViewState.Error -> {
                         ListErrorView(
                             stringResource(R.string.Market_SyncError)

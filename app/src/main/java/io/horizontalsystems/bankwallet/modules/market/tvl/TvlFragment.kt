@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.Value
@@ -81,7 +82,6 @@ class TvlFragment : BaseFragment() {
         val viewState = itemsViewState?.merge(chartViewState)
         val tvlData by tvlViewModel.tvlLiveData.observeAsState()
         val tvlDiffType by tvlViewModel.tvlDiffTypeLiveData.observeAsState()
-        val loading  by tvlViewModel.loadingLiveData.observeAsState(false)
         val isRefreshing by tvlViewModel.isRefreshingLiveData.observeAsState(false)
         val chainSelectorDialogState by tvlViewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
 
@@ -100,13 +100,16 @@ class TvlFragment : BaseFragment() {
             )
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing || loading),
+                state = rememberSwipeRefreshState(isRefreshing),
                 onRefresh = {
                     tvlViewModel.refresh()
                 }
             ) {
                 Crossfade(viewState) { viewState ->
                     when (viewState) {
+                        is ViewState.Loading -> {
+                            Loading()
+                        }
                         is ViewState.Error -> {
                             ListErrorView(
                                 stringResource(R.string.Market_SyncError)

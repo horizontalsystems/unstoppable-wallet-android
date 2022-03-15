@@ -49,6 +49,9 @@ fun CoinOverviewScreen(
         content = {
             Crossfade(viewState) { viewState ->
                 when (viewState) {
+                    is ViewState.Loading -> {
+                        Loading()
+                    }
                     ViewState.Success -> {
                         overview?.let { overview ->
                             var scrollingEnabled by remember { mutableStateOf(true) }

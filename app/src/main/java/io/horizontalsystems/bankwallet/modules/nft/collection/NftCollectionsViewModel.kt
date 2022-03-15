@@ -19,7 +19,7 @@ import java.net.UnknownHostException
 class NftCollectionsViewModel(private val service: NftCollectionsService) : ViewModel() {
     val priceType by service::priceType
 
-    var viewState by mutableStateOf<ViewState?>(null)
+    var viewState by mutableStateOf<ViewState>(ViewState.Loading)
         private set
     var loading by mutableStateOf(false)
         private set

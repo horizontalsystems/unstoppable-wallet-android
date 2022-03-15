@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.overview
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
@@ -30,30 +29,25 @@ class MarketOverviewService(
         private set
 
     val topMarketOptions: List<TopMarket> = TopMarket.values().toList()
-
-    val topGainersObservable: BehaviorSubject<DataState<List<MarketItem>>> =
-        BehaviorSubject.createDefault(DataState.Loading)
-
-    val topLosersObservable: BehaviorSubject<DataState<List<MarketItem>>> =
-        BehaviorSubject.createDefault(DataState.Loading)
-
-    val marketMetricsObservable: BehaviorSubject<DataState<MarketMetricsItem>> =
-        BehaviorSubject.createDefault(DataState.Loading)
+    val topGainersObservable: BehaviorSubject<Result<List<MarketItem>>> = BehaviorSubject.create()
+    val topLosersObservable: BehaviorSubject<Result<List<MarketItem>>> = BehaviorSubject.create()
+    val marketMetricsObservable: BehaviorSubject<Result<MarketMetricsItem>> =
+        BehaviorSubject.create()
 
     private fun updateGainers(forceRefresh: Boolean) {
         gainersDisposable?.dispose()
 
-        topMarketsRepository.get(
-            gainersTopMarket.value,
-            SortingField.TopGainers,
-            topListSize,
-            currencyManager.baseCurrency,
-            forceRefresh
-        )
-            .doOnSubscribe { topGainersObservable.onNext(DataState.Loading) }
+        topMarketsRepository
+            .get(
+                gainersTopMarket.value,
+                SortingField.TopGainers,
+                topListSize,
+                currencyManager.baseCurrency,
+                forceRefresh
+            )
             .subscribeIO(
-                { topGainersObservable.onNext(DataState.Success(it)) },
-                { topGainersObservable.onNext(DataState.Error(it)) }
+                { topGainersObservable.onNext(Result.success(it)) },
+                { topGainersObservable.onNext(Result.failure(it)) }
             )
             .let { gainersDisposable = it }
     }
@@ -61,17 +55,17 @@ class MarketOverviewService(
     private fun updateLosers(forceRefresh: Boolean) {
         losersDisposable?.dispose()
 
-        topMarketsRepository.get(
-            losersTopMarket.value,
-            SortingField.TopLosers,
-            topListSize,
-            currencyManager.baseCurrency,
-            forceRefresh
-        )
-            .doOnSubscribe { topLosersObservable.onNext(DataState.Loading) }
+        topMarketsRepository
+            .get(
+                losersTopMarket.value,
+                SortingField.TopLosers,
+                topListSize,
+                currencyManager.baseCurrency,
+                forceRefresh
+            )
             .subscribeIO(
-                { topLosersObservable.onNext(DataState.Success(it)) },
-                { topLosersObservable.onNext(DataState.Error(it)) }
+                { topLosersObservable.onNext(Result.success(it)) },
+                { topLosersObservable.onNext(Result.failure(it)) }
             )
             .let { losersDisposable = it }
     }
@@ -80,10 +74,9 @@ class MarketOverviewService(
         metricsDisposable?.dispose()
 
         marketMetricsRepository.get(currencyManager.baseCurrency, true)
-            .doOnSubscribe { marketMetricsObservable.onNext(DataState.Loading) }
             .subscribeIO(
-                { marketMetricsObservable.onNext(DataState.Success(it)) },
-                { marketMetricsObservable.onNext(DataState.Error(it)) }
+                { marketMetricsObservable.onNext(Result.success(it)) },
+                { marketMetricsObservable.onNext(Result.failure(it)) }
             )
             .let { metricsDisposable = it }
     }

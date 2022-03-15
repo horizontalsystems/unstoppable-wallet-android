@@ -24,6 +24,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellNews
@@ -53,19 +54,21 @@ class MarketPostsFragment : BaseFragment() {
 @Composable
 private fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = MarketPostsModule.Factory())) {
     val items by viewModel.itemsLiveData.observeAsState(listOf())
-    val loading by viewModel.loadingLiveData.observeAsState()
-    val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
+    val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val viewState by viewModel.viewStateLiveData.observeAsState()
     val context = LocalContext.current
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
+        state = rememberSwipeRefreshState(isRefreshing),
         onRefresh = {
             viewModel.refresh()
         }
     ) {
         Crossfade(viewState) { viewState ->
             when (viewState) {
+                is ViewState.Loading -> {
+                    Loading()
+                }
                 is ViewState.Error -> {
                     ListErrorView(
                         stringResource(R.string.Market_SyncError)
