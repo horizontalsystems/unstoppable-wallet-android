@@ -48,7 +48,9 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         val data = dataWithError.value
         val error = dataWithError.error
 
-        viewState = dataWithError.viewState
+        dataWithError.viewState?.let {
+            viewState = it
+        }
 
         if (data != null) {
             syncItems(data.first, data.second)
