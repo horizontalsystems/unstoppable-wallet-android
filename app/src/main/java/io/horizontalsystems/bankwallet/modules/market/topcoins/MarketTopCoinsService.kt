@@ -18,7 +18,7 @@ class MarketTopCoinsService(
 ) {
     private var disposable: Disposable? = null
 
-    val stateObservable: BehaviorSubject<DataState<List<MarketItem>>> = BehaviorSubject.createDefault(DataState.Loading)
+    val stateObservable: BehaviorSubject<DataState<List<MarketItem>>> = BehaviorSubject.create()
 
     val topMarkets = TopMarket.values().toList()
     var topMarket: TopMarket = topMarket
@@ -41,14 +41,14 @@ class MarketTopCoinsService(
     private fun sync(forceRefresh: Boolean) {
         disposable?.dispose()
 
-        topMarketsRepository.get(
-            topMarket.value,
-            sortingField,
-            topMarket.value,
-            currencyManager.baseCurrency,
-            forceRefresh
-        )
-            .doOnSubscribe { stateObservable.onNext(DataState.Loading) }
+        topMarketsRepository
+            .get(
+                topMarket.value,
+                sortingField,
+                topMarket.value,
+                currencyManager.baseCurrency,
+                forceRefresh
+            )
             .subscribeIO({
                 stateObservable.onNext(DataState.Success(it))
             }, {
