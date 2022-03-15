@@ -5,15 +5,16 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
-import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsModule.VolumeMenuType
 import io.reactivex.disposables.CompositeDisposable
 
 class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel() {
     val volumeMenu by service::volumeMenu
     val sortingType by service::sortType
-    val viewStateLiveData = MutableLiveData<ViewItemState>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
+    val viewItemsLiveData = MutableLiveData<List<MarketTickerViewItem>>()
 
     private val disposables = CompositeDisposable()
 
@@ -30,17 +31,11 @@ class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel(
     }
 
     private fun syncState(state: DataState<List<MarketTickerItem>>) {
-        if (state is DataState.Success) {
-            viewStateLiveData.postValue(ViewItemState.Data(
-                state.data.map { createViewItem(it) }
-            ))
-        } else if (state is DataState.Error) {
-            viewStateLiveData.postValue(ViewItemState.Error(convertErrorMessage(state.error)))
-        }
-    }
+        viewStateLiveData.postValue(state.viewState)
 
-    private fun convertErrorMessage(it: Throwable): String {
-        return it.message ?: it.javaClass.simpleName
+        state.dataOrNull?.let { data ->
+            viewItemsLiveData.postValue(data.map { createViewItem(it) })
+        }
     }
 
     private fun createViewItem(item: MarketTickerItem): MarketTickerViewItem {

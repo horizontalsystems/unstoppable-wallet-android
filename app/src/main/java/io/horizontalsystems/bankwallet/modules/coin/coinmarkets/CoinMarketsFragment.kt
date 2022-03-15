@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,9 +28,10 @@ import androidx.navigation.navGraphViewModels
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
-import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsModule.ViewItemState
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -67,38 +69,44 @@ fun CoinMarketsScreen(
 ) {
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     val viewItemState by viewModel.viewStateLiveData.observeAsState()
+    val viewItems by viewModel.viewItemsLiveData.observeAsState()
 
     Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
-            CoinMarketsMenu(
-                viewModel.sortingType,
-                viewModel.volumeMenu,
-                {
-                    viewModel.toggleSortType(it)
-                    scrollToTopAfterUpdate = true
-                },
-                { viewModel.toggleVolumeType(it) }
-            )
-
-            when (val state = viewItemState) {
-                is ViewItemState.Error -> {
+        Crossfade(viewItemState) { viewItemState ->
+            when (viewItemState) {
+                is ViewState.Loading -> {
+                    Loading()
+                }
+                is ViewState.Error -> {
                     ListErrorView(
                         stringResource(R.string.Market_SyncError)
                     ) {
                         viewModel.onErrorClick()
                     }
                 }
-                is ViewItemState.Data -> {
-                    if (state.items.isEmpty()) {
-                        NoDataAvailable()
-                    } else {
-                        CoinMarketList(state.items, scrollToTopAfterUpdate)
-                        if (scrollToTopAfterUpdate) {
-                            scrollToTopAfterUpdate = false
+                is ViewState.Success -> {
+                    Column {
+                        CoinMarketsMenu(
+                            viewModel.sortingType,
+                            viewModel.volumeMenu,
+                            {
+                                viewModel.toggleSortType(it)
+                                scrollToTopAfterUpdate = true
+                            },
+                            { viewModel.toggleVolumeType(it) }
+                        )
+                        viewItems?.let { items ->
+                            if (items.isEmpty()) {
+                                NoDataAvailable()
+                            } else {
+                                CoinMarketList(items, scrollToTopAfterUpdate)
+                                if (scrollToTopAfterUpdate) {
+                                    scrollToTopAfterUpdate = false
+                                }
+                            }
                         }
                     }
                 }
-                else -> {}
             }
         }
     }
