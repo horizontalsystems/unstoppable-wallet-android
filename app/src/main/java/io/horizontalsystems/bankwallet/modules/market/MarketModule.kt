@@ -58,12 +58,6 @@ object MarketModule {
         val description: String,
         val icon: ImageSource,
     )
-
-    sealed class ViewItemState {
-        class Error(val error: String) : ViewItemState()
-        class Data(val items: List<MarketViewItem>) : ViewItemState()
-    }
-
 }
 
 data class MarketItem(
