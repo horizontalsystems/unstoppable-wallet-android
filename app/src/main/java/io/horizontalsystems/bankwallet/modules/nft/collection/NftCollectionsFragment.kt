@@ -6,19 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -38,6 +41,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTogg
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 
 class NftCollectionsFragment : BaseFragment() {
 
@@ -64,6 +68,7 @@ fun NftCollectionsScreen(navController: NavController) {
     val viewState = viewModel.viewState
     val collections = viewModel.collectionViewItems
     val totalCurrencyValue = viewModel.totalCurrencyPrice
+    val errorMessage = viewModel.errorMessage
 
     val loading = viewModel.loading
 
@@ -89,34 +94,43 @@ fun NftCollectionsScreen(navController: NavController) {
                 Crossfade(viewState) { viewState ->
                     when (viewState) {
                         is ViewState.Error -> {
-                            ListErrorView(stringResource(R.string.Error)) {
-
-                            }
+                            ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                         }
                         ViewState.Success -> {
-                            Column {
-                                CellSingleLineClear(borderTop = true) {
-                                    Text(
-                                        text = totalCurrencyValue?.getFormatted() ?: "",
-                                        style = ComposeAppTheme.typography.headline2,
-                                        color = ComposeAppTheme.colors.jacob,
-                                    )
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    var priceType by remember { mutableStateOf(viewModel.priceType) }
+                            if (collections.isEmpty()) {
+                                EmptyNftList()
+                            } else {
+                                Column {
+                                    CellSingleLineClear(borderTop = true) {
+                                        Text(
+                                            text = totalCurrencyValue?.getFormatted() ?: "",
+                                            style = ComposeAppTheme.typography.headline2,
+                                            color = ComposeAppTheme.colors.jacob,
+                                        )
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        var priceType by remember { mutableStateOf(viewModel.priceType) }
 
-                                    ButtonSecondaryToggle(
-                                        select = Select(priceType, PriceType.values().toList()),
-                                        onSelect = {
-                                            viewModel.updatePriceType(it)
-                                            priceType = it
-                                        }
-                                    )
-                                }
+                                        ButtonSecondaryToggle(
+                                            select = Select(priceType, PriceType.values().toList()),
+                                            onSelect = {
+                                                viewModel.updatePriceType(it)
+                                                priceType = it
+                                            }
+                                        )
+                                    }
 
-                                LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
-                                    collections.forEach { collection ->
-                                        nftsCollectionSection(collection, viewModel) {
-                                            navController.slideFromBottom(R.id.nftAssetFragment, NftAssetModule.prepareParams(it.assetItem.accountId, it.assetItem.tokenId, it.assetItem.contract.address))
+                                    LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
+                                        collections.forEach { collection ->
+                                            nftsCollectionSection(collection, viewModel) {
+                                                navController.slideFromBottom(
+                                                    R.id.nftAssetFragment,
+                                                    NftAssetModule.prepareParams(
+                                                        it.assetItem.accountId,
+                                                        it.assetItem.tokenId,
+                                                        it.assetItem.contract.address
+                                                    )
+                                                )
+                                            }
                                         }
                                     }
                                 }
@@ -127,5 +141,45 @@ fun NftCollectionsScreen(navController: NavController) {
             }
         }
     }
+    
+    ErrorMessageHud(errorMessage)
 }
 
+@Composable
+private fun ErrorMessageHud(errorMessage: TranslatableString?) {
+    errorMessage?.let {
+        HudHelper.showErrorMessage(LocalView.current, it.getString())
+    }
+}
+
+@Composable
+fun EmptyNftList() {
+    Column {
+        Row(Modifier.weight(22f)) {}
+
+        Row(modifier = Modifier.weight(78f), verticalAlignment = Alignment.Top) {
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(ComposeAppTheme.colors.steel20, shape = CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_image_empty),
+                        contentDescription = "back button",
+                        tint = ComposeAppTheme.colors.grey
+                    )
+                }
+                Text(
+                    modifier = Modifier.padding(top = 32.dp),
+                    text = stringResource(R.string.Nfts_Empty),
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis,
+                    color = ComposeAppTheme.colors.grey,
+                    style = ComposeAppTheme.typography.subhead2
+                )
+            }
+        }
+    }
+}

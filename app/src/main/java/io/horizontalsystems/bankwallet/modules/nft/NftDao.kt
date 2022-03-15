@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NftDao {
     @Query("SELECT * FROM NftCollectionRecord WHERE accountId = :accountId")
-    fun getCollections(accountId: String): Flow<List<NftCollectionRecord>>
+    suspend fun getCollections(accountId: String): List<NftCollectionRecord>
 
     @Query("SELECT * FROM NftAssetRecord WHERE accountId = :accountId")
-    fun getAssets(accountId: String): Flow<List<NftAssetRecord>>
+    suspend fun getAssets(accountId: String): List<NftAssetRecord>
 
     @Query("SELECT * FROM NftAssetRecord WHERE accountId = :accountId AND tokenId = :tokenId AND contract_address = :contractAddress")
     suspend fun getAsset(accountId: String, tokenId: String, contractAddress: String): NftAssetRecord?

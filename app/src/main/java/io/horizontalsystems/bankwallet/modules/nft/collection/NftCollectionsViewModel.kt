@@ -5,12 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
+import io.horizontalsystems.bankwallet.modules.nft.viewState
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 
 class NftCollectionsViewModel(private val service: NftCollectionsService) : ViewModel() {
     val priceType by service::priceType
@@ -19,30 +23,44 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         private set
     var loading by mutableStateOf(false)
         private set
-
+    var errorMessage by mutableStateOf<TranslatableString?>(null)
+        private set
     var collectionViewItems by mutableStateOf<List<NftCollectionViewItem>>(listOf())
         private set
     var totalCurrencyPrice by mutableStateOf<CurrencyValue?>(null)
         private set
 
     init {
+        loading = true
         viewModelScope.launch {
-            service.serviceItemState
+            service.serviceItemDataFlow
                 .collect {
                     handleNftCollections(it)
                 }
         }
-
-        service.start()
+        viewModelScope.launch {
+            service.start()
+        }
     }
 
-    private fun handleNftCollections(nftCollectionsState: DataState<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>>) {
-        loading = nftCollectionsState.loading
+    private fun handleNftCollections(dataWithError: DataWithError<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>?>) {
+        loading = false
+        val data = dataWithError.value
+        val error = dataWithError.error
 
-        nftCollectionsState.dataOrNull?.let {
-            viewState = ViewState.Success
+        viewState = dataWithError.viewState
 
-            syncItems(it.first, it.second)
+        if (data != null) {
+            syncItems(data.first, data.second)
+        }
+
+        errorMessage = error?.let { errorText(it) }
+    }
+
+    private fun errorText(error: Exception): TranslatableString {
+        return when (error) {
+            is UnknownHostException -> TranslatableString.ResString(R.string.Hud_Text_NoInternet)
+            else -> TranslatableString.PlainString(error.message ?: error.javaClass.simpleName)
         }
     }
 

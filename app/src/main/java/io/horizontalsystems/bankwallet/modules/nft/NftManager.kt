@@ -8,8 +8,6 @@ import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
 import io.horizontalsystems.bankwallet.modules.hsnft.CollectionStats
 import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.withContext
 
 class NftManager(
@@ -17,24 +15,35 @@ class NftManager(
     private val apiProvider: INftApiProvider,
     private val coinManager: ICoinManager
 ) {
-    fun getCollectionAndAssets(accountId: String): Flow<Map<NftCollectionRecord, List<NftAssetRecord>>> =
-        combine(
-            nftDao.getCollections(accountId),
-            nftDao.getAssets(accountId)
-        ) { collections, assets ->
-            val assetsGroupByCollection = assets.groupBy { it.collectionUid }
+    suspend fun getCollectionAndAssetsFromCache(accountId: String): Map<NftCollectionRecord, List<NftAssetRecord>> {
+        val collections = nftDao.getCollections(accountId)
+        val assets = nftDao.getAssets(accountId)
 
-            collections.map {
-                val collectionAssets = assetsGroupByCollection[it.uid] ?: listOf()
-                it to collectionAssets
-            }.toMap()
-        }
+        return map(assets, collections)
+    }
 
-    suspend fun refresh(account: Account, address: Address) = withContext(Dispatchers.IO) {
+    suspend fun getCollectionAndAssetsFromApi(
+        account: Account,
+        address: Address
+    ): Map<NftCollectionRecord, List<NftAssetRecord>> = withContext(Dispatchers.IO) {
         val collections = apiProvider.getCollectionRecords(address, account)
         val assets = apiProvider.getAssetRecords(address, account)
 
         nftDao.replaceCollectionAssets(account.id, collections, assets)
+
+        map(assets, collections)
+    }
+
+    private fun map(
+        assets: List<NftAssetRecord>,
+        collections: List<NftCollectionRecord>
+    ): Map<NftCollectionRecord, List<NftAssetRecord>> {
+        val assetsGroupByCollection = assets.groupBy { it.collectionUid }
+
+        return collections.associateWith {
+            val collectionAssets = assetsGroupByCollection[it.uid] ?: listOf()
+            collectionAssets
+        }.toSortedMap { o1, o2 -> o1.name.compareTo(o2.name) }
     }
 
     suspend fun getAssetRecord(accountId: String, tokenId: String, contractAddress: String): NftAssetRecord? {

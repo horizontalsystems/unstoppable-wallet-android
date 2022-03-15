@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -15,9 +16,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -257,35 +258,45 @@ fun ListErrorView(
     errorText: String,
     onClick: (() -> Unit)? = null
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            modifier = Modifier
-                .size(48.dp),
-            painter = painterResource(id = R.drawable.ic_attention_24),
-            contentDescription = errorText,
-            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-        )
-        Spacer(Modifier.height(16.dp))
-        Text(
-            text = errorText,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2,
-        )
-        Spacer(Modifier.height(24.dp))
-        onClick?.let {
-            ButtonSecondaryDefault(
-                modifier = Modifier
-                    .width(145.dp)
-                    .height(28.dp),
-                title = stringResource(id = R.string.Button_Retry),
-                onClick = {
-                    it.invoke()
+    Column {
+        Row(Modifier.weight(22f)) {}
+
+        Row(modifier = Modifier.weight(78f), verticalAlignment = Alignment.Top) {
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(ComposeAppTheme.colors.steel20, shape = CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_sync_error),
+                        contentDescription = "back button",
+                        tint = ComposeAppTheme.colors.grey
+                    )
                 }
-            )
+                Text(
+                    modifier = Modifier.padding(top = 32.dp),
+                    text = errorText,
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis,
+                    color = ComposeAppTheme.colors.grey,
+                    style = ComposeAppTheme.typography.subhead2
+                )
+                onClick?.let {
+                    Spacer(Modifier.height(32.dp))
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .padding(horizontal = 48.dp)
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        title = stringResource(id = R.string.Button_Retry),
+                        onClick = {
+                            it.invoke()
+                        }
+                    )
+                }
+            }
         }
     }
 }
@@ -485,7 +496,8 @@ fun RowScope.CategoryCard(
 @Composable
 fun PreviewListErrorView() {
     ComposeAppTheme {
-        ListErrorView(errorText = "Sync Error 123")
+        ListErrorView(errorText = "Sync error. Try again") {
+        }
     }
 }
 

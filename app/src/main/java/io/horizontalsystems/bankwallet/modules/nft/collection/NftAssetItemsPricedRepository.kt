@@ -1,13 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection
 
+import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 class NftAssetItemsPricedRepository {
-    private val _itemsFlow = MutableSharedFlow<Map<NftCollectionRecord, List<NftAssetItemPriced>>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-    val itemsFlow = _itemsFlow.asSharedFlow()
+    private val _itemsDataFlow = MutableSharedFlow<DataWithError<Map<NftCollectionRecord, List<NftAssetItemPriced>>?>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val itemsDataFlow = _itemsDataFlow.asSharedFlow()
 
     var priceType = PriceType.Days7
         private set
@@ -15,29 +19,29 @@ class NftAssetItemsPricedRepository {
     fun setPriceType(priceType: PriceType) {
         this.priceType = priceType
 
-        _itemsFlow.replayCache.lastOrNull()?.let { collections ->
-            val list = collections.map { (collectionItem, assetsPriced) ->
+        _itemsDataFlow.replayCache.lastOrNull()?.let { data ->
+            val list = data.value?.map { (collectionItem, assetsPriced) ->
                 val assets = assetsPriced.map { assetPriced ->
                     assetPriced.copy(coinPrice = getAssetPrice(assetPriced.assetItem, priceType))
                 }
                 collectionItem to assets
-            }.toMap()
+            }?.toMap()
 
-            _itemsFlow.tryEmit(list)
+            _itemsDataFlow.tryEmit(DataWithError(list, null))
         }
     }
 
-    fun setAssetItems(assetItems: Map<NftCollectionRecord, List<NftAssetItem>>) {
-        val items = assetItems.map { (collectionRecord, assetItems) ->
+    fun setAssetItems(data: DataWithError<Map<NftCollectionRecord, List<NftAssetItem>>?>) {
+        val items = data.value?.map { (collectionRecord, assetItems) ->
             collectionRecord to assetItems.map { assetItem ->
                 NftAssetItemPriced(
                     assetItem = assetItem,
                     coinPrice = getAssetPrice(assetItem, priceType)
                 )
             }
-        }.toMap()
+        }?.toMap()
 
-        _itemsFlow.tryEmit(items)
+        _itemsDataFlow.tryEmit(DataWithError(items, data.error))
     }
 
     private fun getAssetPrice(assetItem: NftAssetItem, priceType: PriceType) = when (priceType) {
