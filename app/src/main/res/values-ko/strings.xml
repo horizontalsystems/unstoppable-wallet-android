@@ -34,6 +34,7 @@
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Any">어떤</string>
+    <string name="SyncError">Sync error. Try Again</string>
     <string name="PercentTitle">퍼센트율</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -862,6 +863,7 @@
     <string name="Nfts_PriceType_LastSale">마지막 판매</string>
     <string name="Nfts_Asset_OnSale">할인 중</string>
     <string name="Nfts_Asset_OnSaleUntil">%s 까지</string>
+    <string name="Nfts_Empty">You don\'t have an NFT in your wallet</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_OwnedCount">Owned Count</string>
     <string name="NftAsset_Price_Purchase">Purchase Price</string>
