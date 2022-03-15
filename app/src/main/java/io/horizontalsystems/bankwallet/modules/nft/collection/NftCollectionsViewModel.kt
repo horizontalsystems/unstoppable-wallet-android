@@ -31,7 +31,6 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         private set
 
     init {
-        loading = true
         viewModelScope.launch {
             service.serviceItemDataFlow
                 .collect {
@@ -44,7 +43,6 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
     }
 
     private fun handleNftCollections(dataWithError: DataWithError<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>?>) {
-        loading = false
         val data = dataWithError.value
         val error = dataWithError.error
 
