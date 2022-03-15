@@ -41,7 +41,7 @@ class AccountManager(
         get() = accountsDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override fun setActiveAccountId(activeAccountId: String?) {
-        if (cache.activeAccount?.id != activeAccountId) {
+        if (cache.activeAccountId != activeAccountId) {
             storage.activeAccountId = activeAccountId
             cache.activeAccountId = activeAccountId
             activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
