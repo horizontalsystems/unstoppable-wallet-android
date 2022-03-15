@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -19,11 +18,6 @@ object CoinMarketsModule {
             val service = CoinMarketsService(fullCoin, App.currencyManager, App.marketKit)
             return CoinMarketsViewModel(service) as T
         }
-    }
-
-    sealed class ViewItemState {
-        class Error(val error: String) : ViewItemState()
-        class Data(val items: List<MarketTickerViewItem>) : ViewItemState()
     }
 
     @Immutable
