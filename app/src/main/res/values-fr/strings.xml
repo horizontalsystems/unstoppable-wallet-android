@@ -34,7 +34,7 @@
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
     <string name="Any">N\'importe lequel</string>
-    <string name="SyncError">Sync error. Try Again</string>
+    <string name="SyncError">Erreur de synchronisation. Réessayez</string>
     <string name="PercentTitle">Percent</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Soyez Unstoppable</string>
@@ -320,12 +320,12 @@
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signer</string>
     <string name="WalletConnect_Error_NoWallet">Aucun portefeuille adéquat. Vous devez créer ou restaurer un portefeuille existant</string>
     <string name="WalletConnect_Error_WatchAccount">Cette fonctionnalité ne peut être utilisée avec les portefeuilles de type watching only. Vous devez basculer vers un portefeuille restauré ou en créer un </string>
-    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported chain id</string>
-    <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
-    <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
-    <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
-    <string name="WalletConnect_Error_RequestNotFoundError">Request not found error</string>
-    <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">ID de chaîne non pris en charge</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">Aucun compte approprié</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">Aucun kit evm approprié</string>
+    <string name="WalletConnect_Error_DataParsingError">Erreur d\'analyse des données</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Erreur de requête non trouvée</string>
+    <string name="WalletConnect_NoConnection">Vous n\'avez aucune dapp connectée</string>
     <string name="WalletConnect_PendingRequests">Demandes en attente</string>
     <string name="WalletConnect_ActiveWallet">Activer le portefeuille</string>
     <string name="WalletConnect_Input">Entrées</string>
@@ -859,17 +859,17 @@
     <string name="CoinPage_MajorHolders_InTopWallets">Dans le top 10 des portefeuilles Ethereum</string>
     <string name="CoinPage_CoinInvestments_Lead">En tête</string>
     <string name="Nfts_Title">NFTs</string>
-    <string name="Nfts_PriceType_Days_7">7D avg.</string>
-    <string name="Nfts_PriceType_Days_30">30D avg.</string>
+    <string name="Nfts_PriceType_Days_7">Moy. 7D</string>
+    <string name="Nfts_PriceType_Days_30">Moy. 30D</string>
     <string name="Nfts_PriceType_LastSale">Dernière vente</string>
     <string name="Nfts_Asset_OnSale">En Vente</string>
     <string name="Nfts_Asset_OnSaleUntil">jusqu\'à: %s</string>
-    <string name="Nfts_Empty">You don\'t have an NFT in your wallet</string>
+    <string name="Nfts_Empty">Vous n\'avez pas de NFT dans votre portefeuille</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
-    <string name="NftAsset_OwnedCount">Owned Count</string>
-    <string name="NftAsset_Price_Purchase">Purchase Price</string>
-    <string name="NftAsset_Price_Average7d">7D Average</string>
-    <string name="NftAsset_Price_Average30d">30D Average</string>
+    <string name="NftAsset_OwnedCount">Nombre de personnes possédées</string>
+    <string name="NftAsset_Price_Purchase">Prix d\'achat</string>
+    <string name="NftAsset_Price_Average7d">Moyenne 7D</string>
+    <string name="NftAsset_Price_Average30d">Moyenne 30D</string>
     <string name="NftAsset_Price_Floor">Prix plancher</string>
     <string name="NftAsset_Price_BuyNow">Acheter Maintenant</string>
     <string name="NftAsset_Price_TopBid">Meilleure enchère</string>
@@ -887,7 +887,7 @@
     <string name="NftAsset_Links_OpenSea">OpenSea</string>
     <string name="NftAsset_Links_Discord">Discord</string>
     <string name="NftAsset_Links_Twitter">Twitter</string>
-    <string name="PoweredBy_OpenSeaAPI">Powered by OpenSea API</string>
+    <string name="PoweredBy_OpenSeaAPI">Propulsé par OpenSea API</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Les grands gagnants</string>
     <string name="RateList_TopLosers">Les gros perdants</string>
