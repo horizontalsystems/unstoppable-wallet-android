@@ -18,12 +18,12 @@ class CoinMajorHoldersViewModel(
 
     val viewStateLiveData = MutableLiveData<ViewState?>(null)
     val coinMajorHolders = MutableLiveData<List<MajorHolderItem>>()
-    val loadingLiveData = MutableLiveData<Boolean>()
+    val isRefreshingLiveData = MutableLiveData<Boolean>()
 
     init {
         service.stateObservable
             .subscribeIO({ state ->
-                loadingLiveData.postValue(state == DataState.Loading)
+                isRefreshingLiveData.postValue(false)
 
                 when (state) {
                     is DataState.Success -> {
@@ -47,6 +47,7 @@ class CoinMajorHoldersViewModel(
     }
 
     fun refresh() {
+        isRefreshingLiveData.postValue(true)
         service.refresh()
     }
 

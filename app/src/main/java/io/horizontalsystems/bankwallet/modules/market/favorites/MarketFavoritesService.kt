@@ -21,7 +21,7 @@ class MarketFavoritesService(
     private var currencyManagerDisposable: Disposable? = null
 
     private val marketItemsSubject: BehaviorSubject<DataState<List<MarketItem>>> =
-        BehaviorSubject.createDefault(DataState.Loading)
+        BehaviorSubject.create()
     val marketItemsObservable: Observable<DataState<List<MarketItem>>>
         get() = marketItemsSubject
 

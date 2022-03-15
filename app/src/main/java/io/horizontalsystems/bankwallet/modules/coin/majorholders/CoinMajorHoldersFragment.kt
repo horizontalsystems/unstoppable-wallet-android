@@ -60,7 +60,7 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
             viewModel.refresh()
         }
 
-        viewModel.loadingLiveData.observe(viewLifecycleOwner) { loading ->
+        viewModel.isRefreshingLiveData.observe(viewLifecycleOwner) { loading ->
             binding.pullToRefresh.isRefreshing = loading
         }
 
