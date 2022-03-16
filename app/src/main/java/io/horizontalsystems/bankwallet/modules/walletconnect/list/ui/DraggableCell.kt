@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.list.ui
 
 import android.annotation.SuppressLint
+import android.content.res.Resources
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
@@ -18,7 +19,7 @@ import androidx.compose.ui.unit.IntOffset
 import kotlin.math.roundToInt
 
 const val MIN_DRAG_AMOUNT = 3
-fun Float.dp(): Float = this * density + 0.5f
+fun Float.densityPixel(): Float = this * Resources.getSystem().displayMetrics.density
 
 @SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable
@@ -39,7 +40,7 @@ fun DraggableCardSimple(
     val offsetTransition by transition.animateFloat(
         label = "cardOffsetTransition",
         transitionSpec = { tween(durationMillis = 200) },
-        targetValueByState = { if (isRevealed) -cardOffset.dp() else 0f },
+        targetValueByState = { if (isRevealed) -cardOffset.densityPixel() else 0f },
     )
 
     Box(

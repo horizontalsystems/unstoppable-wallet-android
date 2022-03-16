@@ -109,10 +109,11 @@ fun MarketFavoritesScreen(
                                     viewModel::onSelectMarketField
                                 )
                                 CoinList(
-                                    data.marketItems,
-                                    scrollToTopAfterUpdate,
-                                    { uid -> viewModel.removeFromFavorites(uid) },
-                                    onCoinClick
+                                    items = data.marketItems,
+                                    scrollToTop = scrollToTopAfterUpdate,
+                                    onAddFavorite = { /*not used */ },
+                                    onRemoveFavorite = { uid -> viewModel.removeFromFavorites(uid) },
+                                    onCoinClick = onCoinClick
                                 )
                                 if (scrollToTopAfterUpdate) {
                                     scrollToTopAfterUpdate = false

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.list.ui
 
-import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,9 +23,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectL
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-
-val density: Float
-    get() = Resources.getSystem().displayMetrics.density
 
 @Composable
 fun WCSessionList(

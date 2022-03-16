@@ -30,18 +30,21 @@ fun WCSessionCell(
     version: WalletConnectListModule.Version,
     navController: NavController
 ) {
-    Column {
+    Box(
+        modifier = modifier
+            .height(60.dp)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
         if (showDivider) {
             Divider(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.align(Alignment.TopCenter)
             )
         }
         Row(
             modifier = modifier
-                .height(60.dp)
-                .fillMaxWidth()
                 .clickable {
                     if (version == WalletConnectListModule.Version.Version2) {
                         navController.slideFromBottom(
