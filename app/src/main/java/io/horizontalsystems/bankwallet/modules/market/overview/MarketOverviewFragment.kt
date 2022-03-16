@@ -42,7 +42,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoin
+import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinClear
 import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.core.findNavController
@@ -252,7 +252,7 @@ class MarketOverviewFragment : BaseFragment() {
                 .clip(getRoundedCornerShape(firstItem))
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
-            MarketCoin(
+            MarketCoinClear(
                 marketViewItem.coinName,
                 marketViewItem.coinCode,
                 marketViewItem.iconUrl,

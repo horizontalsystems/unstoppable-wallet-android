@@ -169,6 +169,7 @@ data class MarketViewItem(
     val coinRate: String,
     val marketDataValue: MarketDataValue,
     val rank: String?,
+    val favorited: Boolean,
 ) {
 
     val coinUid: String
@@ -197,7 +198,8 @@ data class MarketViewItem(
     companion object {
         fun create(
             marketItem: MarketItem,
-            marketField: MarketField
+            marketField: MarketField,
+            favorited: Boolean = false
         ): MarketViewItem {
             val marketDataValue = when (marketField) {
                 MarketField.MarketCap -> {
@@ -239,7 +241,8 @@ data class MarketViewItem(
                     6
                 ),
                 marketDataValue,
-                marketItem.fullCoin.coin.marketCapRank?.toString()
+                marketItem.fullCoin.coin.marketCapRank?.toString(),
+                favorited
             )
         }
     }
