@@ -12,11 +12,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
@@ -78,27 +76,26 @@ fun CoinMarketsScreen(
                     Loading()
                 }
                 is ViewState.Error -> {
-                    ListErrorView(
-                        stringResource(R.string.Market_SyncError)
-                    ) {
-                        viewModel.onErrorClick()
-                    }
+                    ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
                 is ViewState.Success -> {
-                    Column {
-                        CoinMarketsMenu(
-                            viewModel.sortingType,
-                            viewModel.volumeMenu,
-                            {
-                                viewModel.toggleSortType(it)
-                                scrollToTopAfterUpdate = true
-                            },
-                            { viewModel.toggleVolumeType(it) }
-                        )
-                        viewItems?.let { items ->
+                    viewItems?.let { items ->
+                        Column {
                             if (items.isEmpty()) {
-                                NoDataAvailable()
+                                ListEmptyView(
+                                    text = stringResource(R.string.CoinPage_NoDataAvailable),
+                                    icon = R.drawable.ic_no_data
+                                )
                             } else {
+                                CoinMarketsMenu(
+                                    viewModel.sortingType,
+                                    viewModel.volumeMenu,
+                                    {
+                                        viewModel.toggleSortType(it)
+                                        scrollToTopAfterUpdate = true
+                                    },
+                                    { viewModel.toggleVolumeType(it) }
+                                )
                                 CoinMarketList(items, scrollToTopAfterUpdate)
                                 if (scrollToTopAfterUpdate) {
                                     scrollToTopAfterUpdate = false
@@ -109,20 +106,6 @@ fun CoinMarketsScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun NoDataAvailable() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        Text(
-            text = stringResource(R.string.CoinPage_NoDataAvailable),
-            modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.Center),
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey,
-        )
     }
 }
 

@@ -175,11 +175,7 @@ class CoinDetailsFragment : BaseFragment() {
                         }
                     }
                     is ViewState.Error -> {
-                        ListErrorView(
-                            stringResource(R.string.Market_SyncError)
-                        ) {
-                            viewModel.refresh()
-                        }
+                        ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                     }
                 }
             }

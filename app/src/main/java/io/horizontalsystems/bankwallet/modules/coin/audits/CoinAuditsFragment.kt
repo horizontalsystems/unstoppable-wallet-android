@@ -108,11 +108,14 @@ private fun CoinAuditsScreen(
                         Loading()
                     }
                     is ViewState.Error -> {
-                        ListErrorView(stringResource(R.string.Market_SyncError)) { viewModel.onErrorClick() }
+                        ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                     }
                     ViewState.Success -> {
                         if (viewItems?.isEmpty() == true) {
-                            NoAudits()
+                            ListEmptyView(
+                                text = stringResource(R.string.CoinPage_Audits_Empty),
+                                icon = R.drawable.ic_not_available
+                            )
                         } else {
                             LazyColumn {
                                 viewItems?.forEach { viewItem ->

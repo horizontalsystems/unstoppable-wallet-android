@@ -40,10 +40,7 @@ import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinVi
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItemState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
-import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.core.findNavController
@@ -165,21 +162,28 @@ private fun ManageWalletsScreen(
             }
         )
 
-        LazyColumn {
-            item {
-                Spacer(modifier = Modifier.height(12.dp))
-                Divider(
-                    thickness = 1.dp,
-                    color = ComposeAppTheme.colors.steel10,
+        coinItems?.let {
+            if (it.isEmpty()) {
+                ListEmptyView(
+                    text = stringResource(R.string.ManageCoins_NoResults),
+                    icon = R.drawable.ic_not_found
                 )
-            }
-            coinItems?.let {
-                items(it) { viewItem ->
-                    CoinCell(
-                        viewItem = viewItem,
-                        onItemClick = { onItemClick(viewItem, viewModel) },
-                        onSettingClick = { viewModel.onClickSettings(viewItem.uid) },
-                    )
+            } else {
+                LazyColumn {
+                    item {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Divider(
+                            thickness = 1.dp,
+                            color = ComposeAppTheme.colors.steel10,
+                        )
+                    }
+                    items(it) { viewItem ->
+                        CoinCell(
+                            viewItem = viewItem,
+                            onItemClick = { onItemClick(viewItem, viewModel) },
+                            onSettingClick = { viewModel.onClickSettings(viewItem.uid) },
+                        )
+                    }
                 }
             }
         }

@@ -37,6 +37,8 @@ class BalanceViewModel(
             .let {
                 disposables.add(it)
             }
+        
+        service.start()
     }
 
     private fun refreshViewItems() {

@@ -111,11 +111,7 @@ class TvlFragment : BaseFragment() {
                             Loading()
                         }
                         is ViewState.Error -> {
-                            ListErrorView(
-                                stringResource(R.string.Market_SyncError)
-                            ) {
-                                tvlViewModel.onErrorClick()
-                            }
+                            ListErrorView(stringResource(R.string.SyncError), tvlViewModel::onErrorClick)
                         }
                         ViewState.Success -> {
                             LazyColumn {

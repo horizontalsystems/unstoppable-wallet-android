@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -126,7 +127,28 @@ fun CoinList(
 @Composable
 fun ListErrorView(
     errorText: String,
-    onClick: (() -> Unit)? = null
+    onClick: () -> Unit
+) {
+    ScreenMessageWithAction(
+        text = errorText,
+        icon = R.drawable.ic_sync_error,
+        action = Pair(stringResource(id = R.string.Button_Retry), onClick)
+    )
+}
+
+@Composable
+fun ListEmptyView(
+    text: String,
+    @DrawableRes icon: Int
+) {
+    ScreenMessageWithAction(text = text, icon = icon, action = null)
+}
+
+@Composable
+fun ScreenMessageWithAction(
+    text: String,
+    @DrawableRes icon: Int,
+    action: Pair<String, (() -> Unit)>?
 ) {
     Column {
         Row(Modifier.weight(22f)) {}
@@ -140,30 +162,30 @@ fun ListErrorView(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_sync_error),
-                        contentDescription = "back button",
+                        painter = painterResource(icon),
+                        contentDescription = text,
                         tint = ComposeAppTheme.colors.grey
                     )
                 }
                 Text(
-                    modifier = Modifier.padding(top = 32.dp),
-                    text = errorText,
+                    modifier = Modifier
+                        .padding(top = 32.dp)
+                        .padding(horizontal = 48.dp),
+                    text = text,
                     textAlign = TextAlign.Center,
                     overflow = TextOverflow.Ellipsis,
                     color = ComposeAppTheme.colors.grey,
                     style = ComposeAppTheme.typography.subhead2
                 )
-                onClick?.let {
+                action?.let { (name, onClick) ->
                     Spacer(Modifier.height(32.dp))
                     ButtonPrimaryYellow(
                         modifier = Modifier
                             .padding(horizontal = 48.dp)
                             .fillMaxWidth()
                             .height(50.dp),
-                        title = stringResource(id = R.string.Button_Retry),
-                        onClick = {
-                            it.invoke()
-                        }
+                        title = name,
+                        onClick = onClick
                     )
                 }
             }

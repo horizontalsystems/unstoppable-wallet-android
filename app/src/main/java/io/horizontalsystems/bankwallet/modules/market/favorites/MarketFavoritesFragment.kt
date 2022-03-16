@@ -5,24 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -84,22 +80,24 @@ fun MarketFavoritesScreen(
             viewModel.refresh()
         }
     ) {
-        Crossfade(targetState = viewState, modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) { viewState ->
+        Crossfade(
+            targetState = viewState,
+            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+        ) { viewState ->
             when (viewState) {
                 is ViewState.Loading -> {
                     Loading()
                 }
                 is ViewState.Error -> {
-                    ListErrorView(
-                        stringResource(R.string.Market_SyncError)
-                    ) {
-                        viewModel.onErrorClick()
-                    }
+                    ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
                 ViewState.Success -> {
                     marketFavoritesData?.let { data ->
                         if (data.marketItems.isEmpty()) {
-                            NoFavorites()
+                            ListEmptyView(
+                                text = stringResource(R.string.Market_Tab_Watchlist_EmptyList),
+                                icon = R.drawable.ic_rate_24
+                            )
                         } else {
                             Column {
                                 MarketFavoritesMenu(
@@ -157,32 +155,6 @@ fun MarketFavoritesMenu(
             modifier = Modifier.padding(end = 16.dp),
             select = marketFieldSelect,
             onSelect = onSelectMarketField
-        )
-    }
-}
-
-@Composable
-fun NoFavorites() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            modifier = Modifier
-                .size(48.dp),
-            painter = painterResource(id = R.drawable.ic_rate_24),
-            contentDescription = stringResource(id = R.string.Market_Tab_Watchlist_EmptyList),
-            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-        )
-        Spacer(Modifier.height(24.dp))
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 48.dp),
-            text = stringResource(id = R.string.Market_Tab_Watchlist_EmptyList),
-            textAlign = TextAlign.Center,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2,
         )
     }
 }
