@@ -30,9 +30,11 @@
     <string name="Button_Reconnect">اتصال مجدد</string>
     <string name="Button_Understand">می فهمم</string>
     <string name="Button_Switch">تغییر</string>
+    <string name="Button_Remove">حذف</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Any">هرکدام</string>
+    <string name="SyncError">خطای همگام سازی دوباره امتحان کنید</string>
     <string name="PercentTitle">درصد</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -310,13 +312,25 @@
     <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
     <string name="WalletConnect_NewConnect">اتصال جدید</string>
     <string name="WalletConnect_Disconnecting">قطع شدن</string>
-    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
+    <string name="WalletConnect_SignMessageRequest_Title">امضای درخواست</string>
     <string name="WalletConnect_SignMessageRequest_Domain">دامنه</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">پیام برای امضا</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">لطفا برای احراز هویت پیامی را امضا کنید</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">نشانه</string>
     <string name="WalletConnect_Error_NoWallet">کیف پول مناسبی وجود ندارد. شما باید کیف پول موجود را ایجاد یا بازیابی کنید</string>
     <string name="WalletConnect_Error_WatchAccount">این ویژگی با کیف‌پول‌های فقط مشاهده کار نمی‌کند، شما باید به یک کیف پول بازیابی یا ایجاد شده تغییر دهید </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">شناسه زنجیره پشتیبانی نشده</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">حساب مناسبی وجود ندارد</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">بدون کیت evm مناسب</string>
+    <string name="WalletConnect_Error_DataParsingError">خطای تجزیه داده ها</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">خطای درخواست یافت نشد</string>
+    <string name="WalletConnect_NoConnection">شما هیچ برنامه متصل ندارید</string>
+    <string name="WalletConnect_PendingRequests">درخواست های معلق</string>
+    <string name="WalletConnect_ActiveWallet">کیف پول فعال</string>
+    <string name="WalletConnect_Input">ورودی</string>
+    <string name="WalletConnect_Version1">نسخه 1.0</string>
+    <string name="WalletConnect_Version2">نسخه 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">هشدار</string>
     <string name="EthereumTransaction_Error_Title">خطا</string>
@@ -472,10 +486,10 @@
     <string name="StatusInfo_Processing">پردازش</string>
     <string name="StatusInfo_Confirmed">انجام شد</string>
     <string name="StatusInfo_Failed">ناموفق</string>
-    <string name="StatusInfo_PendingDescription">The transaction has not been confirmed on the blockchain yet. Transactions sent with a recommended or higher fee setting are generally processed within a few minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected. Note that status of an individual transaction in Unstoppable wallet interface typically updated with a short delay.</string>
+    <string name="StatusInfo_PendingDescription">این تراکنش هنوز در بلاک چین تایید نشده است. تراکنش هایی که با تنظیم کارمزد توصیه شده یا بالاتر ارسال می شوند، معمولاً ظرف چند دقیقه پردازش می شوند. تراکنش هایی که با کارمزد پایین ارسال می شوند ممکن است به مدت چند ساعت یا حتی چند روز معلق بمانند و حتی رد شوند. به خاطر داشته باشید که وضعیت تراکنش فردی در رابطه با کیف پول غیرقابل توقف معمولاً با تاخیر کوتاهی به روز رسانی می شود.</string>
     <string name="StatusInfo_ProcessingDescription">این تراکنش قبلاً در بلاک چین گنجانده شده است اما نهایی نشده است. در این مرحله، برای پرداخت‌های کوچک‌تر می‌توان تراکنش را کامل‌تر در نظر گرفت. برای پرداخت‌های بزرگ‌تر، توصیه می‌شود منتظر بمانید تا وضعیت تراکنش تکمیل شود.</string>
     <string name="StatusInfo_ConfirmedDescription">تراکنش تکمیل شده و دائمی و غیرقابل برگشت تلقی می شود.</string>
-    <string name="StatusInfo_FailedDescription">The transaction did not get processed and no value transfer took place. Depending on the fail reason, some failed transactions may consume transaction fees. Transactions that were replaced or cancelled by another transaction do not consume transaction fees and will also appear sa failed. The Unstoppable app is unable to show the reason for failed transactions, but users are able to look it up themselves on a public block explorer i.e. etherscan.io.</string>
+    <string name="StatusInfo_FailedDescription">تراکنش پردازش نشده است و هیچ انتقال ارزشی صورت نگرفته است. با توجه به به دلیل رد شدن، برخی از تراکنش های ناموفق ممکن است هزینه تراکنش را کسر کنند. تراکنش‌هایی که با تراکنش دیگری جایگزین یا کنسل شده‌اند، کارمزد تراکنش را کسر نمی‌کنند و همچنین به عنوان تراکنش ناموفق در نظر گرفته می شوند. برنامه غیرقابل توقف نمی تواند دلیل تراکنش های ناموفق را نشان دهد، اما خود کاربران می توانند آن را در یک کاوشگر بلوک عمومی برای مثال etherscan.io جستجو کنند.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">افزایش سرعت</string>
     <string name="TransactionInfoOptions_SpeedUp_Description">این اقدام با ارسال مجدد تراکنش قبلی با کارمزد بالاتر، تلاش می‌کند تا تراکنش قبلی را باطل کند. اگر تراکنش اصلی هنگام ارسال تراکنش جدید معلق بماند، احتمال باطل شدن و جایگزینی آن زیاد است (تضمین نشده است). تنها یکی از این دو تراکنش در بلاک چین گنجانده خواهد شد.</string>
@@ -620,7 +634,7 @@
     <string name="Hud_UnknownError">s%</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">مدیر سكه</string>
-    <string name="ManageCoins_Search">جستجو</string>
+    <string name="ManageCoins_Search">کد رمز یا نام</string>
     <string name="ManageCoins_AddToken">اضافه کردن نشان</string>
     <string name="ManageCoins_NoResults">نتیجه ای پیدا نشد. اگر آدرس قرارداد هوشمند آن را می‌دانید، سعی کنید توکن را به صورت دستی اضافه کنید.</string>
     <!-- Experimental Feature -->
@@ -711,6 +725,7 @@
     <string name="AddToken_Decimals">اعشارها</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">انواع سکه</string>
+    <string name="AddToken_AddressOrSymbol">آدرس قرارداد</string>
     <string name="AddToken_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
     <string name="AddToken_InvalidAddressError">آدرس قرارداد یا نماد BEP2 نامعتبر است</string>
     <string name="AddToken_ApiLimitExceeded">از محدوده اپی فراتر رفت. بعدا دوباره تلاش کنید.</string>
@@ -842,6 +857,36 @@
     <string name="CoinPage_MajorHolders_Description">Chart above shows the % of all tokens in circulation held by top 10 wallets. The lower the % the more distributed the coin is.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">In top 10 Ethereum wallets</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
+    <string name="Nfts_Title">NFTها</string>
+    <string name="Nfts_PriceType_Days_7">7 دی اوت</string>
+    <string name="Nfts_PriceType_Days_30">30 دی اوت</string>
+    <string name="Nfts_PriceType_LastSale">آخرین فروش</string>
+    <string name="Nfts_Asset_OnSale">فروش ویژه</string>
+    <string name="Nfts_Asset_OnSaleUntil">تا %s</string>
+    <string name="Nfts_Empty">شما NFT در کیف پول خود ندارید</string>
+    <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_OwnedCount">تعداد متعلق به</string>
+    <string name="NftAsset_Price_Purchase">مبلغ خرید</string>
+    <string name="NftAsset_Price_Average7d">7 دی اوت</string>
+    <string name="NftAsset_Price_Average30d">30 دی اوت</string>
+    <string name="NftAsset_Price_Floor">قیمت طبقه</string>
+    <string name="NftAsset_Price_BuyNow">هم اکنون خریداری کنید</string>
+    <string name="NftAsset_Price_TopBid">پیشنهاد برتر</string>
+    <string name="NftAsset_Price_MinimumBid">حداقل پیشنهاد</string>
+    <string name="NftAsset_Price_BestOffer">بهترین پیشنهاد</string>
+    <string name="NftAsset_Properties">ویژگی‌ها</string>
+    <string name="NftAsset_Description">توضیحات</string>
+    <string name="NftAsset_Details">جزئیات</string>
+    <string name="NftAsset_Links">لینک‌ ها</string>
+    <string name="NftAsset_ContractAddress">آدرس قرارداد</string>
+    <string name="NftAsset_TokenId">شناسه توکن</string>
+    <string name="NftAsset_TokenStandard">استانداردهای توکن</string>
+    <string name="NftAsset_Blockchain">زنجیره بلوکی</string>
+    <string name="NftAsset_Links_Website">وب سایت پروژه</string>
+    <string name="NftAsset_Links_OpenSea">OpenSea</string>
+    <string name="NftAsset_Links_Discord">Discord</string>
+    <string name="NftAsset_Links_Twitter">Twitter</string>
+    <string name="PoweredBy_OpenSeaAPI">پشتیبانی شده توسط OpenSea API</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>

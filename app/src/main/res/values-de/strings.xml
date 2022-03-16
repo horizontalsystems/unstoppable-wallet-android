@@ -30,9 +30,11 @@
     <string name="Button_Reconnect">Neu verbinden</string>
     <string name="Button_Understand">Ich stimme zu</string>
     <string name="Button_Switch">Wechseln</string>
+    <string name="Button_Remove">Entfernen</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">k. A.</string>
     <string name="Any">Beliebig</string>
+    <string name="SyncError">Sync-Fehler. Versuchen Sie es erneut</string>
     <string name="PercentTitle">Prozent</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -312,11 +314,23 @@
     <string name="WalletConnect_Disconnecting">Verbindung wird getrennt</string>
     <string name="WalletConnect_SignMessageRequest_Title">Signaturanfrage</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Zu unterzeichnende Nachricht</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Bitte signieren Sie eine Nachricht zur Authentifizierung</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signieren</string>
     <string name="WalletConnect_Error_NoWallet">Kein passendes Wallet. Sie müssen ein neues Wallet erstellen oder ein bestehendes Wallet wiederherstellen</string>
     <string name="WalletConnect_Error_WatchAccount">Diese Funktion funktioniert nicht mit den Watch Only Wallets, Sie müssen zu einem wiederhergestellten oder erstellten Wallet wechseln </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Nicht unterstützte Kettennummer</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">Kein passendes Konto</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">Kein passendes evm Kit</string>
+    <string name="WalletConnect_Error_DataParsingError">Datenverarbeitungsfehler</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Anforderungsfehler nicht gefunden</string>
+    <string name="WalletConnect_NoConnection">Du hast keine verbundenen Dapps</string>
+    <string name="WalletConnect_PendingRequests">Ausstehende Anfragen</string>
+    <string name="WalletConnect_ActiveWallet">Aktive Wallet</string>
+    <string name="WalletConnect_Input">Eingabe</string>
+    <string name="WalletConnect_Version1">Version 1.0</string>
+    <string name="WalletConnect_Version2">Version 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warnung</string>
     <string name="EthereumTransaction_Error_Title">Fehler</string>
@@ -621,7 +635,7 @@
     <string name="Hud_UnknownError">%s </string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Wallets</string>
-    <string name="ManageCoins_Search">Suche</string>
+    <string name="ManageCoins_Search">Token-Code oder Name</string>
     <string name="ManageCoins_AddToken">Token hinzufügen</string>
     <string name="ManageCoins_NoResults">Keine Ergebnisse gefunden. Versuchen Sie, den Token manuell hinzuzufügen, wenn Sie die Adresse des Smart Contracts kennen.</string>
     <!-- Experimental Feature -->
@@ -712,6 +726,7 @@
     <string name="AddToken_Decimals">Dezimalen</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Cointyp(en)</string>
+    <string name="AddToken_AddressOrSymbol">Vertragsadresse</string>
     <string name="AddToken_CoinAlreadyInListWarning">Dieser Token befindet sich bereits in der Coin-Verwaltungsliste</string>
     <string name="AddToken_InvalidAddressError">Ungültige Vertragsadresse oder BEP2-Symbol</string>
     <string name="AddToken_ApiLimitExceeded">Api Limit überschritten. Versuchen Sie es später erneut.</string>
@@ -843,6 +858,36 @@
     <string name="CoinPage_MajorHolders_Description">Chart above shows the % of all tokens in circulation held by top 10 wallets. The lower the % the more distributed the coin is.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">In top 10 Ethereum wallets</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
+    <string name="Nfts_Title">NFTs</string>
+    <string name="Nfts_PriceType_Days_7">Durchschnitt 7D</string>
+    <string name="Nfts_PriceType_Days_30">Durchschnitt 30D</string>
+    <string name="Nfts_PriceType_LastSale">Letzter Verkauf</string>
+    <string name="Nfts_Asset_OnSale">Im Verkauf</string>
+    <string name="Nfts_Asset_OnSaleUntil">bis %s</string>
+    <string name="Nfts_Empty">Sie haben keinen NFT in Ihrer Brieftasche</string>
+    <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_OwnedCount">Eigene Anzahl</string>
+    <string name="NftAsset_Price_Purchase">Einkaufspreis</string>
+    <string name="NftAsset_Price_Average7d">7D Durchschnitt</string>
+    <string name="NftAsset_Price_Average30d">30D Durchschnitt</string>
+    <string name="NftAsset_Price_Floor">Mindestpreis</string>
+    <string name="NftAsset_Price_BuyNow">Jetzt kaufen</string>
+    <string name="NftAsset_Price_TopBid">Top-Gebot</string>
+    <string name="NftAsset_Price_MinimumBid">Mindestgebot</string>
+    <string name="NftAsset_Price_BestOffer">Bestes Angebot</string>
+    <string name="NftAsset_Properties">Eigenschaften</string>
+    <string name="NftAsset_Description">Beschreibung</string>
+    <string name="NftAsset_Details">Info</string>
+    <string name="NftAsset_Links">Links</string>
+    <string name="NftAsset_ContractAddress">Vertragsadresse</string>
+    <string name="NftAsset_TokenId">Token ID</string>
+    <string name="NftAsset_TokenStandard">Token-Standard</string>
+    <string name="NftAsset_Blockchain">Blockchain</string>
+    <string name="NftAsset_Links_Website">Webseite</string>
+    <string name="NftAsset_Links_OpenSea">OpenSea</string>
+    <string name="NftAsset_Links_Discord">Discord</string>
+    <string name="NftAsset_Links_Twitter">Twitter</string>
+    <string name="PoweredBy_OpenSeaAPI">Unterstützt von OpenSea API</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Verlierer</string>

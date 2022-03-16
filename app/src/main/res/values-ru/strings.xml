@@ -30,9 +30,11 @@
     <string name="Button_Reconnect">Повторное Подключение</string>
     <string name="Button_Understand">Я Понимаю</string>
     <string name="Button_Switch">Перекл.</string>
+    <string name="Button_Remove">Удалить</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет Данных</string>
     <string name="Any">Любые</string>
+    <string name="SyncError">Ошибка синхронизации. Повторите попытку</string>
     <string name="PercentTitle">Процент</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -310,13 +312,25 @@
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
     <string name="WalletConnect_NewConnect">Новое Подключение</string>
     <string name="WalletConnect_Disconnecting">Отключение</string>
-    <string name="WalletConnect_SignMessageRequest_Title">Подписать</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Запрос на подпись</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Домен</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Сообщение для подписи</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Пожалуйста, подпишите сообщение для аутентификации</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Подписать</string>
     <string name="WalletConnect_Error_NoWallet">Нет подходящего кошелька. Вам нужно создать или восстановить текущий кошелек</string>
     <string name="WalletConnect_Error_WatchAccount">Эта функция не доступна для кошельков для просмотра, вам нужно выбрать восстановленный или созданный кошелек </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Неподдерживаемый идентификатор цепочки</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">Нет подходящего набора evm</string>
+    <string name="WalletConnect_Error_DataParsingError">Ошибка разбора данных</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Запрос не найден</string>
+    <string name="WalletConnect_NoConnection">У вас нет подключенных dapps</string>
+    <string name="WalletConnect_PendingRequests">Отложенные Запросы</string>
+    <string name="WalletConnect_ActiveWallet">Активный Кошелек</string>
+    <string name="WalletConnect_Input">Ввод</string>
+    <string name="WalletConnect_Version1">Версия 1.0</string>
+    <string name="WalletConnect_Version2">Версия 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Внимание</string>
     <string name="EthereumTransaction_Error_Title">Ошибка</string>
@@ -623,7 +637,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Токены</string>
-    <string name="ManageCoins_Search">Поиск</string>
+    <string name="ManageCoins_Search">Код или название токена</string>
     <string name="ManageCoins_AddToken">Добавить Токен</string>
     <string name="ManageCoins_NoResults">Ничего не найдено. Попробуйте добавить токен вручную, если вы знаете его адрес смарт-контракта.</string>
     <!-- Experimental Feature -->
@@ -714,6 +728,7 @@
     <string name="AddToken_Decimals">Десятичные Знаки</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Тип(-ы) токенов</string>
+    <string name="AddToken_AddressOrSymbol">Адрес Контракта</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
     <string name="AddToken_InvalidAddressError">Неверный адрес контракта или символ BEP2</string>
     <string name="AddToken_ApiLimitExceeded">Превышен лимит Api. Повторите попытку позже.</string>
@@ -845,6 +860,36 @@
     <string name="CoinPage_MajorHolders_Description">На графике выше показано % всех токенов, находящихся в обороте топ-10 кошельков. Чем ниже это процентное соотношение, тем выше распределение коина.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">Топ-10 кошельков Ethereum</string>
     <string name="CoinPage_CoinInvestments_Lead">Лид</string>
+    <string name="Nfts_Title">NFT</string>
+    <string name="Nfts_PriceType_Days_7">7Д сред.</string>
+    <string name="Nfts_PriceType_Days_30">30Д сред.</string>
+    <string name="Nfts_PriceType_LastSale">Последняя Продажа</string>
+    <string name="Nfts_Asset_OnSale">В Продаже</string>
+    <string name="Nfts_Asset_OnSaleUntil">до %s</string>
+    <string name="Nfts_Empty">У вас нет NFT в вашем кошельке</string>
+    <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_OwnedCount">Owned Count</string>
+    <string name="NftAsset_Price_Purchase">Цена Покупки</string>
+    <string name="NftAsset_Price_Average7d">Средн. 7Д</string>
+    <string name="NftAsset_Price_Average30d">Сред. 30Д</string>
+    <string name="NftAsset_Price_Floor">Минимальная Цена</string>
+    <string name="NftAsset_Price_BuyNow">Купить Сейчас</string>
+    <string name="NftAsset_Price_TopBid">Макс. Cтавка</string>
+    <string name="NftAsset_Price_MinimumBid">Мин. Ставка</string>
+    <string name="NftAsset_Price_BestOffer">Лучшее Предложение</string>
+    <string name="NftAsset_Properties">Параметры</string>
+    <string name="NftAsset_Description">Описание</string>
+    <string name="NftAsset_Details">Детали</string>
+    <string name="NftAsset_Links">Ссылки</string>
+    <string name="NftAsset_ContractAddress">Адрес контракта</string>
+    <string name="NftAsset_TokenId">ID токена</string>
+    <string name="NftAsset_TokenStandard">Стандарт Токена</string>
+    <string name="NftAsset_Blockchain">Блокчейн</string>
+    <string name="NftAsset_Links_Website">Веб-сайт</string>
+    <string name="NftAsset_Links_OpenSea">OpenSea</string>
+    <string name="NftAsset_Links_Discord">Discord</string>
+    <string name="NftAsset_Links_Twitter">Twitter</string>
+    <string name="PoweredBy_OpenSeaAPI">При поддержке OpenSea API</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Взлеты</string>
     <string name="RateList_TopLosers">Падения</string>

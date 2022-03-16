@@ -30,9 +30,11 @@
     <string name="Button_Reconnect">재연결</string>
     <string name="Button_Understand">이해합니다</string>
     <string name="Button_Switch">전환</string>
+    <string name="Button_Remove">삭제</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Any">어떤</string>
+    <string name="SyncError">동기화 오류입니다. 다시 시도하십시오</string>
     <string name="PercentTitle">퍼센트율</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -312,11 +314,23 @@
     <string name="WalletConnect_Disconnecting">연결을 끊는 중...</string>
     <string name="WalletConnect_SignMessageRequest_Title">서명 요청</string>
     <string name="WalletConnect_SignMessageRequest_Domain">도메인</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">서명할 메시지</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">인증을 위해 메시지에 서명하십시오</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">가입</string>
     <string name="WalletConnect_Error_NoWallet">적합한 지갑이 없습니다. 기존 지갑을 생성하거나 복원해야 합니다.</string>
     <string name="WalletConnect_Error_WatchAccount">이 기능은 시계 전용 지갑에서는 작동하지 않으므로 복원 또는 생성된 지갑으로 전환해야 합니다 </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">지원되지 않는 체인 ID</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">적합한 계정이 없습니다.</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">적합한 evm 키트가 없습니다.</string>
+    <string name="WalletConnect_Error_DataParsingError">데이터 파싱 오류</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">요청을 찾을 수 없음 오류</string>
+    <string name="WalletConnect_NoConnection">연결된 dapp이 없습니다.</string>
+    <string name="WalletConnect_PendingRequests">보류 중인 요청</string>
+    <string name="WalletConnect_ActiveWallet">지갑 활성화</string>
+    <string name="WalletConnect_Input">입력</string>
+    <string name="WalletConnect_Version1">버전 1.0</string>
+    <string name="WalletConnect_Version2">버전 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">경고</string>
     <string name="EthereumTransaction_Error_Title">오류</string>
@@ -620,7 +634,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">코인 매니저</string>
-    <string name="ManageCoins_Search">검색</string>
+    <string name="ManageCoins_Search">토큰 코드 또는 이름</string>
     <string name="ManageCoins_AddToken">토큰 추가</string>
     <string name="ManageCoins_NoResults">검색 결과가 없습니다. 스마트 계약 주소를 알고 있는 경우 토큰을 수동으로 추가해 보십시오.</string>
     <!-- Experimental Feature -->
@@ -711,6 +725,7 @@
     <string name="AddToken_Decimals">소수점</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">코인 유형</string>
+    <string name="AddToken_AddressOrSymbol">계약 주소</string>
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
     <string name="AddToken_InvalidAddressError">잘못된 계약 주소 또는 BEP2 기호</string>
     <string name="AddToken_ApiLimitExceeded">API 한도를 초과했습니다. 나중에 다시 시도하세요.</string>
@@ -842,6 +857,36 @@
     <string name="CoinPage_MajorHolders_Description">위의 차트는 상위 10개 지갑이 보유한 전체 토큰의 %를 보여줍니다. %가 낮을수록 코인이 더 많이 분배됩니다.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">상위 10위 이더리움 지갑</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
+    <string name="Nfts_Title">NFT</string>
+    <string name="Nfts_PriceType_Days_7">평균 7일</string>
+    <string name="Nfts_PriceType_Days_30">평균 30일</string>
+    <string name="Nfts_PriceType_LastSale">마지막 판매</string>
+    <string name="Nfts_Asset_OnSale">할인 중</string>
+    <string name="Nfts_Asset_OnSaleUntil">%s 까지</string>
+    <string name="Nfts_Empty">지갑에 NFT가 없습니다.</string>
+    <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_OwnedCount">가진 갯수</string>
+    <string name="NftAsset_Price_Purchase">구매 가격</string>
+    <string name="NftAsset_Price_Average7d">평균 7일</string>
+    <string name="NftAsset_Price_Average30d">평균 30일</string>
+    <string name="NftAsset_Price_Floor">바닥 가격</string>
+    <string name="NftAsset_Price_BuyNow">지금 구매</string>
+    <string name="NftAsset_Price_TopBid">최고 매수가</string>
+    <string name="NftAsset_Price_MinimumBid">최저 매수가</string>
+    <string name="NftAsset_Price_BestOffer">최고 제안</string>
+    <string name="NftAsset_Properties">속성</string>
+    <string name="NftAsset_Description">설명</string>
+    <string name="NftAsset_Details">상세 정보</string>
+    <string name="NftAsset_Links">링크</string>
+    <string name="NftAsset_ContractAddress">계약 주소</string>
+    <string name="NftAsset_TokenId">토큰 ID</string>
+    <string name="NftAsset_TokenStandard">토큰 표준</string>
+    <string name="NftAsset_Blockchain">블록 체인</string>
+    <string name="NftAsset_Links_Website">웹사이트</string>
+    <string name="NftAsset_Links_OpenSea">OpenSea</string>
+    <string name="NftAsset_Links_Discord">Discord</string>
+    <string name="NftAsset_Links_Twitter">Twitter</string>
+    <string name="PoweredBy_OpenSeaAPI">OpenSea API 제공</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>

@@ -30,9 +30,11 @@
     <string name="Button_Reconnect">Yeniden bağlan</string>
     <string name="Button_Understand">Anlıyorum</string>
     <string name="Button_Switch">Değiştir</string>
+    <string name="Button_Remove">Kaldır</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Herhangi</string>
+    <string name="SyncError">Senkronizasyon hatası. Tekrar deneyin</string>
     <string name="PercentTitle">Yüzde</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -312,11 +314,23 @@
     <string name="WalletConnect_Disconnecting">Bağlantı kesiliyor</string>
     <string name="WalletConnect_SignMessageRequest_Title">İmza Talebi</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">İmza için mesaj</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Lütfen doğrulamak için bir mesajı imzalayın</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
     <string name="WalletConnect_Error_NoWallet">Uygun Cüzdan yok. Cüzdan oluşturmanız veya mevcut cüzdanı geri yüklemeniz gerekiyor</string>
     <string name="WalletConnect_Error_WatchAccount">Bu özellik salt izlenir cüzdanlarda çalışmaz, geri yüklediğiniz veya oluşturduğunuz bir cüzdana geçmeniz gerekiyor </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Desteklenmeyen zincir kimliği</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">Uygun hesap yok</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">Uygun evm kiti yok</string>
+    <string name="WalletConnect_Error_DataParsingError">Veri ayrıştırma hatası</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">İstek bulunamadı hatası</string>
+    <string name="WalletConnect_NoConnection">Bağlı dapp\'niz yok</string>
+    <string name="WalletConnect_PendingRequests">bekleyen istekler</string>
+    <string name="WalletConnect_ActiveWallet">Aktif Cüzdan</string>
+    <string name="WalletConnect_Input">Giriş</string>
+    <string name="WalletConnect_Version1">Sürüm 1.0</string>
+    <string name="WalletConnect_Version2">Sürüm 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Uyarı</string>
     <string name="EthereumTransaction_Error_Title">Hata</string>
@@ -623,7 +637,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Cüzdanlar</string>
-    <string name="ManageCoins_Search">Ara</string>
+    <string name="ManageCoins_Search">Jeton kodu veya adı</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
     <string name="ManageCoins_NoResults">Hiçbir sonuç bulunamadı. Akıllı sözleşme adresini biliyorsanız tokeni manüel olarak eklemeyi deneyin.</string>
     <!-- Experimental Feature -->
@@ -714,6 +728,7 @@
     <string name="AddToken_Decimals">Ondalıklar</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Kripto Para Tipi/Tipleri</string>
+    <string name="AddToken_AddressOrSymbol">Sözleşme Adresi</string>
     <string name="AddToken_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
     <string name="AddToken_InvalidAddressError">Geçersiz sözleşme adresi veya BEP2 sembolü</string>
     <string name="AddToken_ApiLimitExceeded">Api limiti aşıldı. Daha sonra tekrar deneyin.</string>
@@ -845,6 +860,36 @@
     <string name="CoinPage_MajorHolders_Description">Chart above shows the % of all tokens in circulation held by top 10 wallets. The lower the % the more distributed the coin is.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">In top 10 Ethereum wallets</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
+    <string name="Nfts_Title">NFT\'ler</string>
+    <string name="Nfts_PriceType_Days_7">Ortalama 7G</string>
+    <string name="Nfts_PriceType_Days_30">Ortalama 30G</string>
+    <string name="Nfts_PriceType_LastSale">Son İndirim</string>
+    <string name="Nfts_Asset_OnSale">İndirimde</string>
+    <string name="Nfts_Asset_OnSaleUntil">%s kadar</string>
+    <string name="Nfts_Empty">Cüzdanınızda NFT yok</string>
+    <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_OwnedCount">Sahip Olunan Sayısı</string>
+    <string name="NftAsset_Price_Purchase">Paket Fiyatı</string>
+    <string name="NftAsset_Price_Average7d">Ortalama 7G</string>
+    <string name="NftAsset_Price_Average30d">Ortalama 30G</string>
+    <string name="NftAsset_Price_Floor">Taban Fiyatı</string>
+    <string name="NftAsset_Price_BuyNow">Şimdi Al</string>
+    <string name="NftAsset_Price_TopBid">En Yüksek Teklif</string>
+    <string name="NftAsset_Price_MinimumBid">Minimum Teklif</string>
+    <string name="NftAsset_Price_BestOffer">En İyi Teklif</string>
+    <string name="NftAsset_Properties">Özellikler</string>
+    <string name="NftAsset_Description">Açıklama</string>
+    <string name="NftAsset_Details">Ayrıntılar</string>
+    <string name="NftAsset_Links">Bağlantılar</string>
+    <string name="NftAsset_ContractAddress">Sözleşme Adresi</string>
+    <string name="NftAsset_TokenId">Token Kimliği</string>
+    <string name="NftAsset_TokenStandard">Token Standardı</string>
+    <string name="NftAsset_Blockchain">Blockchain</string>
+    <string name="NftAsset_Links_Website">Web sitesi</string>
+    <string name="NftAsset_Links_OpenSea">OpenSea</string>
+    <string name="NftAsset_Links_Discord">Discord</string>
+    <string name="NftAsset_Links_Twitter">Twitter</string>
+    <string name="PoweredBy_OpenSeaAPI">OpenSea API tarafından desteklenmektedir</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>

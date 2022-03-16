@@ -30,9 +30,11 @@
     <string name="Button_Reconnect">Volver a conectar</string>
     <string name="Button_Understand">Entiendo</string>
     <string name="Button_Switch">Cambiar</string>
+    <string name="Button_Remove">Eliminar</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Cualquier</string>
+    <string name="SyncError">Error de sincronización. Inténtalo de nuevo</string>
     <string name="PercentTitle">Percent</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -312,11 +314,23 @@
     <string name="WalletConnect_Disconnecting">Desconectando</string>
     <string name="WalletConnect_SignMessageRequest_Title">Solicitud de Firma</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Dominio</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Mensaje a firmar</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Por favor, firma un mensaje para autentificarte</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Firma</string>
     <string name="WalletConnect_Error_NoWallet">No es un monedero adecuado. Necesitas crear o restaurar el monedero existente</string>
     <string name="WalletConnect_Error_WatchAccount">Esta característica no funciona con los monederos \"watch-only\", necesita cambiar a un monedero restaurado o creado </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Id de cadena no soportado</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">No hay cuenta adecuada</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">No hay kit de evm adecuado</string>
+    <string name="WalletConnect_Error_DataParsingError">Error de análisis de datos</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Petición no encontrada error</string>
+    <string name="WalletConnect_NoConnection">No tienes ninguna dapps conectadas</string>
+    <string name="WalletConnect_PendingRequests">Solicitudes Pendientes</string>
+    <string name="WalletConnect_ActiveWallet">Active su cartera</string>
+    <string name="WalletConnect_Input">Entrada</string>
+    <string name="WalletConnect_Version1">Versión 1.0</string>
+    <string name="WalletConnect_Version2">Versión 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
@@ -624,7 +638,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gestor de monedas</string>
-    <string name="ManageCoins_Search">Buscar</string>
+    <string name="ManageCoins_Search">Código o nombre del token</string>
     <string name="ManageCoins_AddToken">Añadir Token</string>
     <string name="ManageCoins_NoResults">No se han encontrado resultados. Intente añadir un token manualmente si conoce su dirección de contrato inteligente.</string>
     <!-- Experimental Feature -->
@@ -715,6 +729,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Tipos de monedas</string>
+    <string name="AddToken_AddressOrSymbol">Dirección del contrato</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
     <string name="AddToken_InvalidAddressError">Dirección de contrato inválida o símbolo BEP2</string>
     <string name="AddToken_ApiLimitExceeded">Límite de Api superado. Inténtalo de nuevo más tarde.</string>
@@ -846,6 +861,36 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_MajorHolders_Description">El gráfico anterior muestra el % de todos los tokens en circulación retenidos por los 10 Monderos más importantes. Cuanto más bajo sea el %, más distribuída se encontrará la moneda.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">En el top 10 de monederos de Ethereum</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
+    <string name="Nfts_Title">NFTS</string>
+    <string name="Nfts_PriceType_Days_7">Promedio 7D.</string>
+    <string name="Nfts_PriceType_Days_30">Promedio 30D.</string>
+    <string name="Nfts_PriceType_LastSale">Última venta</string>
+    <string name="Nfts_Asset_OnSale">En venta</string>
+    <string name="Nfts_Asset_OnSaleUntil">hasta %s</string>
+    <string name="Nfts_Empty">No tiene un NFT en su cartera</string>
+    <string name="NftAsset_OpenSea">Abierto</string>
+    <string name="NftAsset_OwnedCount">Cuenta de posesiones</string>
+    <string name="NftAsset_Price_Purchase">Precio compra</string>
+    <string name="NftAsset_Price_Average7d">Promedio 7D</string>
+    <string name="NftAsset_Price_Average30d">Promedio 7D</string>
+    <string name="NftAsset_Price_Floor">Precio mínimo</string>
+    <string name="NftAsset_Price_BuyNow">Comprar ahora</string>
+    <string name="NftAsset_Price_TopBid">Lcitación Superior</string>
+    <string name="NftAsset_Price_MinimumBid">Licitación Mínima</string>
+    <string name="NftAsset_Price_BestOffer">Mejor oferta</string>
+    <string name="NftAsset_Properties">Propiedades</string>
+    <string name="NftAsset_Description">Descripción</string>
+    <string name="NftAsset_Details">Detalles</string>
+    <string name="NftAsset_Links">Enlaces</string>
+    <string name="NftAsset_ContractAddress">Dirección del contrato</string>
+    <string name="NftAsset_TokenId">ID del token</string>
+    <string name="NftAsset_TokenStandard">Token estándar</string>
+    <string name="NftAsset_Blockchain">Blockchain</string>
+    <string name="NftAsset_Links_Website">Sitio Web</string>
+    <string name="NftAsset_Links_OpenSea">Abierto</string>
+    <string name="NftAsset_Links_Discord">Discord</string>
+    <string name="NftAsset_Links_Twitter">Twitter</string>
+    <string name="PoweredBy_OpenSeaAPI">Desarrollado por OpenSea API</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Máximos Ganadores</string>
     <string name="RateList_TopLosers">Peores perdedores</string>

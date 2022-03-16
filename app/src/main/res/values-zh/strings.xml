@@ -30,9 +30,11 @@
     <string name="Button_Reconnect">重新连接</string>
     <string name="Button_Understand">我理解</string>
     <string name="Button_Switch">切换</string>
+    <string name="Button_Remove">移除</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Any">任何</string>
+    <string name="SyncError">同步错误。请再试一次</string>
     <string name="PercentTitle">百分比</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -312,11 +314,23 @@
     <string name="WalletConnect_Disconnecting">正在断开连接</string>
     <string name="WalletConnect_SignMessageRequest_Title">签名请求</string>
     <string name="WalletConnect_SignMessageRequest_Domain">域名</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">待签名消息</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">请对消息签名以便进行验证</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">签名</string>
     <string name="WalletConnect_Error_NoWallet">没有合适的钱包。您需要创建或恢复现有钱包</string>
     <string name="WalletConnect_Error_WatchAccount">此功能不适用于观察中的钱包，您需要切换到恢复或创建的钱包 </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">不支持的链号</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">没有合适的帐户</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">没有合适的 evm 套件</string>
+    <string name="WalletConnect_Error_DataParsingError">数据解析错误</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">请求找不到错误</string>
+    <string name="WalletConnect_NoConnection">您没有任何已连接的dapps</string>
+    <string name="WalletConnect_PendingRequests">待处理请求</string>
+    <string name="WalletConnect_ActiveWallet">激活钱包</string>
+    <string name="WalletConnect_Input">输入</string>
+    <string name="WalletConnect_Version1">版本 1.0</string>
+    <string name="WalletConnect_Version2">版本 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
     <string name="EthereumTransaction_Error_Title">出错</string>
@@ -623,7 +637,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">代币管理</string>
-    <string name="ManageCoins_Search">查询</string>
+    <string name="ManageCoins_Search">代币代码或名称</string>
     <string name="ManageCoins_AddToken">添加代币</string>
     <string name="ManageCoins_NoResults">找不到结果。如果您知道智能合约地址，请尝试手动添加代币。</string>
     <!-- Experimental Feature -->
@@ -714,6 +728,7 @@
     <string name="AddToken_Decimals">小数</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">代币类型</string>
+    <string name="AddToken_AddressOrSymbol">智能合约地址</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidAddressError">找不到符号</string>
     <string name="AddToken_ApiLimitExceeded">超过Api限制。请稍后再试。</string>
@@ -845,6 +860,36 @@
     <string name="CoinPage_MajorHolders_Description">上方图表显示了前10个钱包所持有的所有代币的百分比。 百分比越低，代币的分布越广。</string>
     <string name="CoinPage_MajorHolders_InTopWallets">前10名地址</string>
     <string name="CoinPage_CoinInvestments_Lead">领投</string>
+    <string name="Nfts_Title">NFT</string>
+    <string name="Nfts_PriceType_Days_7">平均7天</string>
+    <string name="Nfts_PriceType_Days_30">平均30天</string>
+    <string name="Nfts_PriceType_LastSale">收盘价</string>
+    <string name="Nfts_Asset_OnSale">在售</string>
+    <string name="Nfts_Asset_OnSaleUntil">直到 %s</string>
+    <string name="Nfts_Empty">你的钱包中没有 NFT</string>
+    <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_OwnedCount">拥有数量</string>
+    <string name="NftAsset_Price_Purchase">购买价格</string>
+    <string name="NftAsset_Price_Average7d">平均7天</string>
+    <string name="NftAsset_Price_Average30d">平均30天</string>
+    <string name="NftAsset_Price_Floor">底价</string>
+    <string name="NftAsset_Price_BuyNow">立即购买</string>
+    <string name="NftAsset_Price_TopBid">最高出价</string>
+    <string name="NftAsset_Price_MinimumBid">最低出价</string>
+    <string name="NftAsset_Price_BestOffer">最佳报价</string>
+    <string name="NftAsset_Properties">属性</string>
+    <string name="NftAsset_Description">描述</string>
+    <string name="NftAsset_Details">详细信息</string>
+    <string name="NftAsset_Links">链接</string>
+    <string name="NftAsset_ContractAddress">智能合约地址</string>
+    <string name="NftAsset_TokenId">代币 ID</string>
+    <string name="NftAsset_TokenStandard">代币标准</string>
+    <string name="NftAsset_Blockchain">区块链</string>
+    <string name="NftAsset_Links_Website">网站</string>
+    <string name="NftAsset_Links_OpenSea">OpenSea</string>
+    <string name="NftAsset_Links_Discord">Discord</string>
+    <string name="NftAsset_Links_Twitter">Twitter</string>
+    <string name="PoweredBy_OpenSeaAPI">由 OpenSea API 提供支持</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">涨幅榜</string>
     <string name="RateList_TopLosers">跌幅榜</string>
