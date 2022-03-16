@@ -17,8 +17,7 @@ object MarketFavoritesModule {
             val repository = MarketFavoritesRepository(App.marketKit, App.marketFavoritesManager)
             val menuService = MarketFavoritesMenuService(App.localStorage)
             val service = MarketFavoritesService(repository, menuService, App.currencyManager, App.backgroundManager)
-            val favoritesManagerService = MarketFavoritesManagerService(App.marketFavoritesManager)
-            return MarketFavoritesViewModel(service, favoritesManagerService, menuService) as T
+            return MarketFavoritesViewModel(service, menuService) as T
         }
     }
 

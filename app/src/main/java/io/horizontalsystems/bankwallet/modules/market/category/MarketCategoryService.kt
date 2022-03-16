@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.category
 
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
@@ -9,20 +10,23 @@ import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.marketkit.models.CoinCategory
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketCategoryService(
     private val marketCategoryRepository: MarketCategoryRepository,
     private val currencyManager: ICurrencyManager,
     private val languageManager: ILanguageManager,
+    private val favoritesManager: MarketFavoritesManager,
     private val coinCategory: CoinCategory,
     topMarket: TopMarket = TopMarket.Top250,
     sortingField: SortingField = SortingField.HighestCap,
 ) {
-    private var disposable: Disposable? = null
+    private var disposables = CompositeDisposable()
 
-    val stateObservable: BehaviorSubject<DataState<List<MarketItem>>> = BehaviorSubject.create()
+    private var marketItems: List<MarketItem> = listOf()
+
+    val stateObservable: BehaviorSubject<DataState<List<MarketItemWrapper>>> = BehaviorSubject.create()
 
     var topMarket: TopMarket = topMarket
         private set
@@ -44,7 +48,7 @@ class MarketCategoryService(
     }
 
     private fun sync(forceRefresh: Boolean) {
-        disposable?.dispose()
+        disposables.clear()
 
         marketCategoryRepository
             .get(
@@ -55,17 +59,31 @@ class MarketCategoryService(
                 currencyManager.baseCurrency,
                 forceRefresh
             )
-            .subscribeIO({
-                stateObservable.onNext(DataState.Success(it))
+            .subscribeIO({ items ->
+                marketItems = items
+                syncItems()
             }, {
                 stateObservable.onNext(DataState.Error(it))
             }).let {
-                disposable = it
+                disposables.add(it)
             }
+    }
+
+    private fun syncItems() {
+        val favorites = favoritesManager.getAll().map { it.coinUid }
+        val items = marketItems.map { MarketItemWrapper(it, favorites.contains(it.fullCoin.coin.uid)) }
+        stateObservable.onNext(DataState.Success(items))
     }
 
     fun start() {
         sync(true)
+
+        favoritesManager.dataUpdatedAsync
+            .subscribeIO {
+                syncItems()
+            }.let {
+                disposables.add(it)
+            }
     }
 
     fun refresh() {
@@ -73,6 +91,14 @@ class MarketCategoryService(
     }
 
     fun stop() {
-        disposable?.dispose()
+        disposables.clear()
+    }
+
+    fun addFavorite(coinUid: String) {
+        favoritesManager.add(coinUid)
+    }
+
+    fun removeFavorite(coinUid: String) {
+        favoritesManager.remove(coinUid)
     }
 }

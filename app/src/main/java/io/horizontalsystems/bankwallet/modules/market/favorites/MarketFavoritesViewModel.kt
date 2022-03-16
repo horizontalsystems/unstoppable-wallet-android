@@ -7,9 +7,9 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.ViewItem
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 
 class MarketFavoritesViewModel(
     private val service: MarketFavoritesService,
-    private val favoritesManagerService: MarketFavoritesManagerService,
     private val menuService: MarketFavoritesMenuService
 ) : ViewModel() {
 
@@ -27,7 +26,7 @@ class MarketFavoritesViewModel(
 
     private val marketFieldTypes = MarketField.values().toList()
     private var marketField: MarketField by menuService::marketField
-    private var marketItems: List<MarketItem> = listOf()
+    private var marketItemsWrapper: List<MarketItemWrapper> = listOf()
 
     private val marketFieldSelect: Select<MarketField>
         get() = Select(marketField, marketFieldTypes)
@@ -46,7 +45,7 @@ class MarketFavoritesViewModel(
                 when (state) {
                     is DataState.Success -> {
                         viewStateLiveData.postValue(ViewState.Success)
-                        marketItems = state.data
+                        marketItemsWrapper = state.data
                         syncViewItem()
                     }
                     is DataState.Error -> {
@@ -72,8 +71,8 @@ class MarketFavoritesViewModel(
             ViewItem(
                 sortingFieldSelect,
                 marketFieldSelect,
-                marketItems.map {
-                    MarketViewItem.create(it, marketField, true)
+                marketItemsWrapper.map {
+                    MarketViewItem.create(it.marketItem, marketField, true)
                 }
             )
         )
@@ -112,6 +111,6 @@ class MarketFavoritesViewModel(
     }
 
     fun removeFromFavorites(uid: String) {
-        favoritesManagerService.removeFavorite(uid)
+        service.removeFavorite(uid)
     }
 }
