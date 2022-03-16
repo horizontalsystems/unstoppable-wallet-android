@@ -76,8 +76,9 @@ class EnableCoinService(
     }
 
     fun enable(fullCoin: FullCoin, account: Account? = null) {
-        if (fullCoin.platforms.size == 1) {
-            val platformCoin = PlatformCoin(fullCoin.platforms.first(), fullCoin.coin)
+        val supportedPlatforms = fullCoin.supportedPlatforms
+        if (supportedPlatforms.size == 1) {
+            val platformCoin = PlatformCoin(supportedPlatforms.first(), fullCoin.coin)
             when {
                 platformCoin.coinType.restoreSettingTypes.isNotEmpty() -> {
                     restoreSettingsService.approveSettings(platformCoin, account)
@@ -95,8 +96,9 @@ class EnableCoinService(
     }
 
     fun configure(fullCoin: FullCoin, configuredPlatformCoins: List<ConfiguredPlatformCoin>) {
-        if (fullCoin.platforms.size == 1) {
-            val platform = fullCoin.platforms.first()
+        val supportedPlatforms = fullCoin.supportedPlatforms
+        if (supportedPlatforms.size == 1) {
+            val platform = supportedPlatforms.first()
             if (platform.coinType.coinSettingTypes.isNotEmpty()) {
                 val settings = configuredPlatformCoins.map { it.coinSettings }
                 val platformCoin = PlatformCoin(platform, fullCoin.coin)

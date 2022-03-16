@@ -91,7 +91,7 @@ class RestoreBlockchainsService(
 
     private fun handleCancelEnable(fullCoin: FullCoin) {
         val internalItem =
-            internalItems.firstOrNull { fullCoin.platforms.contains(it.platformCoin.platform) }
+            internalItems.firstOrNull { fullCoin.supportedPlatforms.contains(it.platformCoin.platform) }
                 ?: return
 
         if (!isEnabled(internalItem)) {

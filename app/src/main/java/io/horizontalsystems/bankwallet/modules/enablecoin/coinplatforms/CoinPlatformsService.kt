@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms
 
+import io.horizontalsystems.bankwallet.entities.supportedPlatforms
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Platform
@@ -11,8 +12,9 @@ class CoinPlatformsService {
     val requestObservable = PublishSubject.create<Request>()
 
     fun approvePlatforms(fullCoin: FullCoin, currentPlatforms: List<Platform> = listOf()) {
-        if (fullCoin.platforms.size == 1) {
-            approvePlatformsObservable.onNext(CoinWithPlatforms(fullCoin.coin, fullCoin.platforms))
+        val supportedPlatforms = fullCoin.supportedPlatforms
+        if (supportedPlatforms.size == 1) {
+            approvePlatformsObservable.onNext(CoinWithPlatforms(fullCoin.coin, supportedPlatforms))
         } else {
             requestObservable.onNext(Request(fullCoin, currentPlatforms))
         }
