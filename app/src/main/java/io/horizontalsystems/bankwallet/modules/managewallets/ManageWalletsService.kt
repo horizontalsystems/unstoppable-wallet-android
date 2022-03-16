@@ -88,10 +88,7 @@ class ManageWalletsService(
     }
 
     private fun item(fullCoin: FullCoin): Item {
-        val supportedPlatforms = fullCoin.platforms.filter { it.coinType.isSupported }
-        val fullCoin = FullCoin(fullCoin.coin, supportedPlatforms)
-
-        val itemState = if (fullCoin.platforms.isEmpty()) {
+        val itemState = if (fullCoin.supportedPlatforms.isEmpty()) {
             ItemState.Unsupported
         } else {
             val enabled = isEnabled(fullCoin.coin)
@@ -104,13 +101,16 @@ class ManageWalletsService(
         return Item(fullCoin, itemState)
     }
 
-    private fun hasSettingsOrPlatforms(fullCoin: FullCoin) =
-        if (fullCoin.platforms.size == 1) {
-            val platform = fullCoin.platforms[0]
+    private fun hasSettingsOrPlatforms(fullCoin: FullCoin): Boolean {
+        val supportedPlatforms = fullCoin.supportedPlatforms
+
+        return if (supportedPlatforms.size == 1) {
+            val platform = supportedPlatforms[0]
             platform.coinType.coinSettingTypes.isNotEmpty()
         } else {
             true
         }
+    }
 
     private fun syncState() {
         items = fullCoins.map { item(it) }

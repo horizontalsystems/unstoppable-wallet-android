@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.label
+import io.horizontalsystems.bankwallet.entities.supportedPlatforms
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Supported
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Unsupported
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
@@ -44,8 +45,8 @@ class ManageWalletsViewModel(
     private fun viewItem(
         item: ManageWalletsService.Item,
     ): CoinViewItem {
-        val label: String? =
-            if (item.fullCoin.platforms.size == 1) item.fullCoin.platforms.first().coinType.label else null
+        val supportedPlatforms = item.fullCoin.supportedPlatforms
+        val label = supportedPlatforms.singleOrNull()?.coinType?.label
         val state = when (item.state) {
             is Supported -> CoinViewItemState.ToggleVisible(
                 item.state.enabled,
