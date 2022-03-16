@@ -26,7 +26,6 @@ import io.horizontalsystems.marketkit.models.MarketInfoDetails
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 class CoinDetailsViewModel(
     private val service: CoinDetailsService,
@@ -131,9 +130,14 @@ class CoinDetailsViewModel(
             io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(), it.timestamp)
         }
 
-        val diff = (last.value / first.value - BigDecimal.ONE) * BigDecimal(100)
+        val lastItemValue = last.value
+        val firstItemValue = first.value
+
+        val diff = (lastItemValue - firstItemValue) / firstItemValue * 100.toBigDecimal()
         val chartData = ChartDataBuilder.buildFromPoints(points)
-        val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, last.value))
+        val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency,
+            lastItemValue
+        ))
 
         return CoinDetailsModule.ChartViewItem(
             badge = badge,

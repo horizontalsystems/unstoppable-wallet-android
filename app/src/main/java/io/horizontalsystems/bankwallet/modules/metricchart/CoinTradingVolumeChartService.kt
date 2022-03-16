@@ -6,6 +6,7 @@ import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.ChartPointType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
@@ -27,7 +28,12 @@ class CoinTradingVolumeChartService(
             .map { info ->
                 val items = info.points
                     .filter { it.timestamp >= info.startTimestamp }
-                    .map { ChartPoint(it.value.toFloat(), it.timestamp) }
+                    .mapNotNull { chartPoint ->
+                        chartPoint.extra[ChartPointType.Volume]?.let {
+                            ChartPoint(it.toFloat(), chartPoint.timestamp)
+                        }
+                    }
+
                 ChartPointsWrapper(
                     chartInterval,
                     items,
