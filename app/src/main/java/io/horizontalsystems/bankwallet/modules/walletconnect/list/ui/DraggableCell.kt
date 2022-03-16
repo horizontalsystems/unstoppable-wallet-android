@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.IntOffset
 import kotlin.math.roundToInt
 
 const val MIN_DRAG_AMOUNT = 3
+fun Float.dp(): Float = this * density + 0.5f
 
 @SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable
@@ -38,7 +39,7 @@ fun DraggableCardSimple(
     val offsetTransition by transition.animateFloat(
         label = "cardOffsetTransition",
         transitionSpec = { tween(durationMillis = 200) },
-        targetValueByState = { if (isRevealed) cardOffset else 0f },
+        targetValueByState = { if (isRevealed) -cardOffset.dp() else 0f },
     )
 
     Box(

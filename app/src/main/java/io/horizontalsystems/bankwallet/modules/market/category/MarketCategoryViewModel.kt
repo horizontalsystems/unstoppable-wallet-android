@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesToggleService
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.reactivex.disposables.CompositeDisposable
@@ -14,7 +15,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MarketCategoryViewModel(
-    private val service: MarketCategoryService
+    private val service: MarketCategoryService,
+    private val favoritesToggleService: MarketFavoritesToggleService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -76,9 +78,10 @@ class MarketCategoryViewModel(
     }
 
     private fun syncMarketViewItems() {
+        val favorites = favoritesToggleService.allFavorites
         viewItemsLiveData.postValue(
             marketItems.map {
-                MarketViewItem.create(it, marketField)
+                MarketViewItem.create(it, marketField, favorites.contains(it.fullCoin.coin.uid))
             }
         )
     }
@@ -125,5 +128,10 @@ class MarketCategoryViewModel(
     override fun onCleared() {
         service.stop()
         disposables.clear()
+    }
+
+    fun onToggleFavorite(uid: String) {
+        favoritesToggleService.toggleCoinFavorite(uid)
+        syncMarketViewItems()
     }
 }

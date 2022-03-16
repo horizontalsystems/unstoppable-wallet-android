@@ -132,7 +132,7 @@ class MetricsPageFragment : BaseFragment() {
                                         )
                                     }
                                     items(marketData.marketViewItems) { marketViewItem ->
-                                        MarketCoin(
+                                        MarketCoinClear(
                                             marketViewItem.fullCoin.coin.name,
                                             marketViewItem.fullCoin.coin.code,
                                             marketViewItem.fullCoin.coin.iconUrl,

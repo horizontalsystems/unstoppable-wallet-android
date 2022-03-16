@@ -151,7 +151,12 @@ fun TopCoinsScreen(
                                     )
                                 }
                                 viewItems?.let {
-                                    CoinList(it, scrollToTopAfterUpdate, onCoinClick)
+                                    CoinList(
+                                        it,
+                                        scrollToTopAfterUpdate,
+                                        { uid -> viewModel.onToggleFavorite(uid) },
+                                        onCoinClick
+                                    )
                                     if (scrollToTopAfterUpdate) {
                                         scrollToTopAfterUpdate = false
                                     }

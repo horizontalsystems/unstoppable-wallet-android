@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class MarketFavoritesViewModel(
     private val service: MarketFavoritesService,
+    private val favoritesToggleService: MarketFavoritesToggleService,
     private val menuService: MarketFavoritesMenuService
 ) : ViewModel() {
 
@@ -72,7 +73,7 @@ class MarketFavoritesViewModel(
                 sortingFieldSelect,
                 marketFieldSelect,
                 marketItems.map {
-                    MarketViewItem.create(it, marketField)
+                    MarketViewItem.create(it, marketField, true)
                 }
             )
         )
@@ -108,5 +109,9 @@ class MarketFavoritesViewModel(
     override fun onCleared() {
         disposables.clear()
         service.stop()
+    }
+
+    fun removeFromFavorites(uid: String) {
+        favoritesToggleService.remove(uid)
     }
 }

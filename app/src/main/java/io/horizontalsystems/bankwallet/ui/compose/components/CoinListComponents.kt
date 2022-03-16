@@ -6,16 +6,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -27,8 +25,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -38,22 +41,69 @@ import kotlinx.coroutines.launch
 fun CoinList(
     items: List<MarketViewItem>,
     scrollToTop: Boolean,
-    onCoinClick: (String) -> Unit
+    onCoinFavoriteToggle: (String) -> Unit,
+    onCoinClick: (String) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+    var revealedCardIds by remember { mutableStateOf(listOf<String>()) }
 
     LazyColumn(state = listState) {
-        items(items) { item ->
-            MarketCoin(
-                item.fullCoin.coin.name,
-                item.fullCoin.coin.code,
-                item.fullCoin.coin.iconUrl,
-                item.fullCoin.iconPlaceholder,
-                item.coinRate,
-                item.marketDataValue,
-                item.rank
-            ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+        itemsIndexed(items, key = { _, item -> item.coinUid }) { index, item ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            ) {
+                ActionsRow(
+                    content = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
+                                .width(100.dp)
+                                .clickable { onCoinFavoriteToggle(item.coinUid) },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = if (item.favorited) R.drawable.ic_star_off_24 else R.drawable.ic_star_24),
+                                tint = ComposeAppTheme.colors.claude,
+                                contentDescription = "delete",
+                            )
+                        }
+                    }
+                )
+                DraggableCardSimple(
+                    isRevealed = revealedCardIds.contains(item.coinUid),
+                    cardOffset = 100f,
+                    onExpand = {
+                        if (!revealedCardIds.contains(item.coinUid)) {
+                            revealedCardIds = listOf(item.coinUid)
+                        }
+                    },
+                    onCollapse = {
+                        revealedCardIds = revealedCardIds.toMutableList().also {
+                            it.remove(item.coinUid)
+                        }
+                    },
+                    content = {
+                        MarketCoin(
+                            item.fullCoin.coin.name,
+                            item.fullCoin.coin.code,
+                            item.fullCoin.coin.iconUrl,
+                            item.fullCoin.iconPlaceholder,
+                            item.coinRate,
+                            item.marketDataValue,
+                            item.rank
+                        ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+                    }
+                )
+                Divider(
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel10,
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                )
+            }
         }
         item {
             Spacer(modifier = Modifier.height(32.dp))
@@ -62,193 +112,6 @@ fun CoinList(
             coroutineScope.launch {
                 listState.scrollToItem(0)
             }
-        }
-    }
-}
-
-@Composable
-fun MarketCoin(
-    coinName: String,
-    coinCode: String,
-    coinIconUrl: String,
-    coinIconPlaceholder: Int,
-    coinRate: String? = null,
-    marketDataValue: MarketDataValue? = null,
-    label: String? = null,
-    onClick: (() -> Unit)? = null
-) {
-    MultilineClear(
-        onClick = onClick,
-        borderBottom = true
-    ) {
-        CoinImage(
-            iconUrl = coinIconUrl,
-            placeholder = coinIconPlaceholder,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(24.dp)
-        )
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            MarketCoinFirstRow(coinName, coinRate)
-            Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(coinCode, marketDataValue, label)
-        }
-    }
-}
-
-@Composable
-fun MultilineClear(
-    modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
-    borderTop: Boolean = false,
-    borderBottom: Boolean = false,
-    content: @Composable RowScope.() -> Unit
-) {
-    Box(
-        modifier = modifier
-            .height(60.dp)
-            .clickable { onClick?.invoke() }
-    ) {
-        if (borderTop) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
-        }
-        if (borderBottom) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            content()
-        }
-    }
-}
-
-@Composable
-fun MarketCoinFirstRow(coinName: String, rate: String?) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = coinName,
-            color = ComposeAppTheme.colors.oz,
-            style = ComposeAppTheme.typography.body,
-            maxLines = 1,
-        )
-        rate?.let {
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = rate,
-                color = ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.body,
-                maxLines = 1,
-            )
-        }
-    }
-}
-
-@Composable
-fun MarketCoinSecondRow(
-    coinCode: String,
-    marketDataValue: MarketDataValue?,
-    label: String?
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        label?.let { labelText ->
-            Box(
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(ComposeAppTheme.colors.jeremy)
-            ) {
-                Text(
-                    modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),
-                    text = labelText,
-                    color = ComposeAppTheme.colors.bran,
-                    style = ComposeAppTheme.typography.microSB,
-                    maxLines = 1,
-                )
-            }
-        }
-        Text(
-            text = coinCode,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2,
-            maxLines = 1,
-        )
-        marketDataValue?.let {
-            Spacer(modifier = Modifier.weight(1f))
-            MarketDataValueComponent(marketDataValue)
-        }
-    }
-}
-
-@Composable
-private fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
-    when (marketDataValue) {
-        is MarketDataValue.MarketCap -> {
-            Row {
-                Text(
-                    text = "MCap",
-                    color = ComposeAppTheme.colors.jacob,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = marketDataValue.value,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-            }
-        }
-        is MarketDataValue.Volume -> {
-            Row {
-                Text(
-                    text = "Vol",
-                    color = ComposeAppTheme.colors.jacob,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = marketDataValue.value,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-            }
-        }
-        is MarketDataValue.Diff -> {
-            Text(
-                text = RateText(marketDataValue.value),
-                color = RateColor(marketDataValue.value),
-                style = ComposeAppTheme.typography.subhead2,
-                maxLines = 1,
-            )
-        }
-        is MarketDataValue.DiffNew -> {
-            Text(
-                text = formatValueAsDiff(marketDataValue.value),
-                color = diffColor(marketDataValue.value.raw()),
-                style = ComposeAppTheme.typography.subhead2,
-                maxLines = 1,
-            )
         }
     }
 }

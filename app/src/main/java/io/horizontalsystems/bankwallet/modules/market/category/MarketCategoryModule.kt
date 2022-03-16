@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesToggleService
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.marketkit.models.CoinCategory
 
@@ -25,7 +26,8 @@ object MarketCategoryModule {
                 defaultTopMarket,
                 defaultSortingField
             )
-            return MarketCategoryViewModel(service) as T
+            val favoritesToggleService = MarketFavoritesToggleService(App.marketFavoritesManager)
+            return MarketCategoryViewModel(service, favoritesToggleService) as T
         }
 
         companion object {

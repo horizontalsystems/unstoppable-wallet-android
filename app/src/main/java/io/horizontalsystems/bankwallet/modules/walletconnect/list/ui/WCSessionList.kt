@@ -7,23 +7,23 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-
-const val ACTION_ITEM_WIDTH = 84
-const val CELL_OFFSET = -84f // we have 1 icon action in a row, so that's 84
-
-fun Float.dp(): Float = this * density + 0.5f
 
 val density: Float
     get() = Resources.getSystem().displayMetrics.density
@@ -103,12 +103,26 @@ private fun LazyListScope.WCSection(
         val shape = getShape(section.sessions.size, index)
         Box(Modifier.fillMaxWidth().height(60.dp)) {
             ActionsRow(
-                actionIconWidth = ACTION_ITEM_WIDTH.dp,
-                onDelete = { onDelete(item.sessionId) },
+                content = {
+                    IconButton(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(end = 16.dp)
+                            .width(84.dp),
+                        onClick = { onDelete(item.sessionId) },
+                        content = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_circle_minus_24),
+                                tint = Color.Gray,
+                                contentDescription = "delete",
+                            )
+                        }
+                    )
+                },
             )
             DraggableCardSimple(
                 isRevealed = revealedCardIds.contains(item.sessionId),
-                cardOffset = CELL_OFFSET.dp(),
+                cardOffset = 84f,
                 onExpand = { onExpand(item.sessionId) },
                 onCollapse = { onCollapse(item.sessionId) },
                 content = {
