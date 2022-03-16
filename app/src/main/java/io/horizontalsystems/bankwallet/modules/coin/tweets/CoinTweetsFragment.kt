@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellTweet
+import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 
@@ -73,29 +74,36 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
                     Loading()
                 }
                 ViewState.Success -> {
-                    LazyColumn(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    ) {
-                        items(items) { tweet: TweetViewItem ->
-                            Spacer(modifier = Modifier.height(12.dp))
-                            CellTweet(tweet) {
-                                LinkHelper.openLinkInAppBrowser(context, it.url)
+                    if (items.isEmpty()) {
+                        ListEmptyView(
+                            text = stringResource(R.string.CoinPage_Twitter_NoTweets),
+                            icon = R.drawable.ic_no_tweets
+                        )
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        ) {
+                            items(items) { tweet: TweetViewItem ->
+                                Spacer(modifier = Modifier.height(12.dp))
+                                CellTweet(tweet) {
+                                    LinkHelper.openLinkInAppBrowser(context, it.url)
+                                }
                             }
-                        }
 
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .padding(vertical = 32.dp)
-                                    .fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                ButtonSecondaryDefault(
-                                    title = stringResource(id = R.string.CoinPage_Twitter_SeeOnTwitter),
-                                    onClick = {
-                                        LinkHelper.openLinkInAppBrowser(context, viewModel.twitterPageUrl)
-                                    }
-                                )
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(vertical = 32.dp)
+                                        .fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    ButtonSecondaryDefault(
+                                        title = stringResource(id = R.string.CoinPage_Twitter_SeeOnTwitter),
+                                        onClick = {
+                                            LinkHelper.openLinkInAppBrowser(context, viewModel.twitterPageUrl)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
@@ -111,11 +119,7 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
                             )
                         }
                     } else {
-                        ListErrorView(
-                            stringResource(R.string.Market_SyncError)
-                        ) {
-                            viewModel.refresh()
-                        }
+                        ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                     }
                 }
             }

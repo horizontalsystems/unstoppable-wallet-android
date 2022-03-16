@@ -112,11 +112,7 @@ class MetricsPageFragment : BaseFragment() {
                             Loading()
                         }
                         is ViewState.Error -> {
-                            ListErrorView(
-                                stringResource(R.string.Market_SyncError)
-                            ) {
-                                viewModel.onErrorClick()
-                            }
+                            ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
                         ViewState.Success -> {
                             LazyColumn {

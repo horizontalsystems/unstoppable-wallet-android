@@ -70,9 +70,7 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
 
         binding.errorViewCompose.setContent {
             ComposeAppTheme {
-                ListErrorView(stringResource(R.string.Market_SyncError)) {
-                    viewModel.onErrorClick()
-                }
+                ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
             }
         }
 

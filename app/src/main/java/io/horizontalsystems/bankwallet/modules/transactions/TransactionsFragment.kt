@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
@@ -67,14 +66,14 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
     val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
     val filterTypes by viewModel.filterTypesLiveData.observeAsState()
     val transactions by viewModel.transactionList.observeAsState()
-    val showSpinner by viewModel.syncingLiveData.observeAsState(false)
+    val syncing by viewModel.syncingLiveData.observeAsState(false)
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
                 TranslatableString.ResString(R.string.Transactions_Title),
-                showSpinner = showSpinner
+                showSpinner = syncing
             )
             filterTypes?.let { filterTypes ->
                 FilterTypeTabs(
@@ -90,15 +89,15 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
             }
             transactions?.let { transactionItems ->
                 if (transactionItems.isEmpty()) {
-                    Box(Modifier.fillMaxSize()) {
-                        Text(
-                            modifier = Modifier
-                                .padding(horizontal = 48.dp)
-                                .align(Alignment.Center),
-                            text = stringResource(id = R.string.Transactions_EmptyList),
-                            textAlign = TextAlign.Center,
-                            color = ComposeAppTheme.colors.grey,
-                            style = ComposeAppTheme.typography.subhead2,
+                    if (syncing) {
+                        ListEmptyView(
+                            text = stringResource(R.string.Transactions_WaitForSync),
+                            icon = R.drawable.ic_clock
+                        )
+                    } else {
+                        ListEmptyView(
+                            text = stringResource(R.string.Transactions_EmptyList),
+                            icon = R.drawable.ic_outgoingraw
                         )
                     }
                 } else {

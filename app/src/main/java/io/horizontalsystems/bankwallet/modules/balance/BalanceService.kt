@@ -49,7 +49,7 @@ class BalanceService(
 
     private val disposables = CompositeDisposable()
 
-    init {
+    fun start() {
         activeWalletRepository.itemsObservable
             .subscribeIO { wallets ->
                 handleWalletsUpdate(wallets)
