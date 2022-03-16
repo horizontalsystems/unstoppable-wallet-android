@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.*
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesToggleService
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesManagerService
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsModule.Menu
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.reactivex.disposables.CompositeDisposable
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class MarketTopCoinsViewModel(
     private val service: MarketTopCoinsService,
-    private val favoritesToggleService: MarketFavoritesToggleService,
+    private val favoritesManagerService: MarketFavoritesManagerService,
     private var marketField: MarketField
 ) : ViewModel() {
 
@@ -41,6 +41,13 @@ class MarketTopCoinsViewModel(
         service.stateObservable
             .subscribeIO {
                 syncState(it)
+            }.let {
+                disposables.add(it)
+            }
+
+        favoritesManagerService.dataUpdated
+            .subscribeIO {
+                syncMarketViewItems()
             }.let {
                 disposables.add(it)
             }
@@ -83,7 +90,7 @@ class MarketTopCoinsViewModel(
     }
 
     private fun syncMarketViewItems() {
-        val favorites = favoritesToggleService.allFavorites
+        val favorites = favoritesManagerService.allFavorites
         viewItemsLiveData.postValue(
             marketItems.map {
                 MarketViewItem.create(it, marketField, favorites.contains(it.fullCoin.coin.uid))
@@ -143,8 +150,11 @@ class MarketTopCoinsViewModel(
         )
     }
 
-    fun onToggleFavorite(uid: String) {
-        favoritesToggleService.toggleCoinFavorite(uid)
-        syncMarketViewItems()
+    fun onAddFavorite(uid: String) {
+        favoritesManagerService.addFavorite(uid)
+    }
+
+    fun onRemoveFavorite(uid: String) {
+        favoritesManagerService.removeFavorite(uid)
     }
 }

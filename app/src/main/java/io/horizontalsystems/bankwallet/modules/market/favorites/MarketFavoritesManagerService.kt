@@ -2,25 +2,22 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 
-class MarketFavoritesToggleService(
+class MarketFavoritesManagerService(
     private val favoritesManager: MarketFavoritesManager
 ) {
+
+    val dataUpdated by favoritesManager::dataUpdatedAsync
 
     val allFavorites: HashSet<String>
         get() = favoritesManager.getAll()
             .map { it.coinUid }
             .toHashSet()
 
-    fun toggleCoinFavorite(uid: String) {
-        val inFavorites = favoritesManager.isCoinInFavorites(uid)
-        if (inFavorites) {
-            favoritesManager.remove(uid)
-        } else {
-            favoritesManager.add(uid)
-        }
+    fun addFavorite(uid: String) {
+        favoritesManager.add(uid)
     }
 
-    fun remove(uid: String) {
+    fun removeFavorite(uid: String) {
         favoritesManager.remove(uid)
     }
 }

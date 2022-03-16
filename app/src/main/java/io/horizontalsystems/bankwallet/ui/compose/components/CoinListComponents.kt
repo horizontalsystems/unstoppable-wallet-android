@@ -41,7 +41,8 @@ import kotlinx.coroutines.launch
 fun CoinList(
     items: List<MarketViewItem>,
     scrollToTop: Boolean,
-    onCoinFavoriteToggle: (String) -> Unit,
+    onAddFavorite: (String) -> Unit,
+    onRemoveFavorite: (String) -> Unit,
     onCoinClick: (String) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -62,7 +63,13 @@ fun CoinList(
                                 .fillMaxHeight()
                                 .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
                                 .width(100.dp)
-                                .clickable { onCoinFavoriteToggle(item.coinUid) },
+                                .clickable {
+                                    if (item.favorited) {
+                                        onRemoveFavorite(item.coinUid)
+                                    } else {
+                                        onAddFavorite(item.coinUid)
+                                    }
+                                },
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(

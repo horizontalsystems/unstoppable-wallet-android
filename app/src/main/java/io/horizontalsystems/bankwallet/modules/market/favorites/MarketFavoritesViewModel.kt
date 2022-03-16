@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class MarketFavoritesViewModel(
     private val service: MarketFavoritesService,
-    private val favoritesToggleService: MarketFavoritesToggleService,
+    private val favoritesManagerService: MarketFavoritesManagerService,
     private val menuService: MarketFavoritesMenuService
 ) : ViewModel() {
 
@@ -112,6 +112,6 @@ class MarketFavoritesViewModel(
     }
 
     fun removeFromFavorites(uid: String) {
-        favoritesToggleService.remove(uid)
+        favoritesManagerService.removeFavorite(uid)
     }
 }
