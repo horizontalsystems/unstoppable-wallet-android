@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesManagerService
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.marketkit.models.CoinCategory
 
@@ -22,12 +22,12 @@ object MarketCategoryModule {
                 marketCategoryRepository,
                 App.currencyManager,
                 App.languageManager,
+                App.marketFavoritesManager,
                 coinCategory,
                 defaultTopMarket,
                 defaultSortingField
             )
-            val favoritesManagerService = MarketFavoritesManagerService(App.marketFavoritesManager)
-            return MarketCategoryViewModel(service, favoritesManagerService) as T
+            return MarketCategoryViewModel(service) as T
         }
 
         companion object {
@@ -42,3 +42,8 @@ object MarketCategoryModule {
     )
 
 }
+
+data class MarketItemWrapper(
+    val marketItem: MarketItem,
+    val favorited: Boolean,
+)

@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.*
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesManagerService
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.reactivex.disposables.CompositeDisposable
@@ -16,12 +15,11 @@ import kotlinx.coroutines.launch
 
 class MarketCategoryViewModel(
     private val service: MarketCategoryService,
-    private val favoritesManagerService: MarketFavoritesManagerService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
     private val marketFields = MarketField.values().toList()
-    private var marketItems: List<MarketItem> = listOf()
+    private var marketItems: List<MarketItemWrapper> = listOf()
     private var marketField = MarketField.PriceDiff
 
     val headerLiveData = MutableLiveData<MarketModule.Header>()
@@ -43,17 +41,10 @@ class MarketCategoryViewModel(
                 disposables.add(it)
             }
 
-        favoritesManagerService.dataUpdated
-            .subscribeIO {
-                syncMarketViewItems()
-            }.let {
-                disposables.add(it)
-            }
-
         service.start()
     }
 
-    private fun syncState(state: DataState<List<MarketItem>>) {
+    private fun syncState(state: DataState<List<MarketItemWrapper>>) {
         viewStateLiveData.postValue(state.viewState)
 
         state.dataOrNull?.let {
@@ -85,10 +76,9 @@ class MarketCategoryViewModel(
     }
 
     private fun syncMarketViewItems() {
-        val favorites = favoritesManagerService.allFavorites
         viewItemsLiveData.postValue(
             marketItems.map {
-                MarketViewItem.create(it, marketField, favorites.contains(it.fullCoin.coin.uid))
+                MarketViewItem.create(it.marketItem, marketField, it.favorited)
             }
         )
     }
@@ -138,10 +128,10 @@ class MarketCategoryViewModel(
     }
 
     fun onAddFavorite(uid: String) {
-        favoritesManagerService.addFavorite(uid)
+        service.addFavorite(uid)
     }
 
     fun onRemoveFavorite(uid: String) {
-        favoritesManagerService.removeFavorite(uid)
+        service.removeFavorite(uid)
     }
 }

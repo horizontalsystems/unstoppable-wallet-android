@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.Observable
@@ -20,9 +20,9 @@ class MarketFavoritesService(
     private var repositoryDisposable: Disposable? = null
     private var currencyManagerDisposable: Disposable? = null
 
-    private val marketItemsSubject: BehaviorSubject<DataState<List<MarketItem>>> =
+    private val marketItemsSubject: BehaviorSubject<DataState<List<MarketItemWrapper>>> =
         BehaviorSubject.create()
-    val marketItemsObservable: Observable<DataState<List<MarketItem>>>
+    val marketItemsObservable: Observable<DataState<List<MarketItemWrapper>>>
         get() = marketItemsSubject
 
     val sortingFieldTypes = SortingField.values().toList()
@@ -38,7 +38,9 @@ class MarketFavoritesService(
 
         repository.get(sortingField, currencyManager.baseCurrency, forceRefresh)
             .subscribeIO({ marketItems ->
-                marketItemsSubject.onNext(DataState.Success(marketItems))
+                marketItemsSubject.onNext(DataState.Success(marketItems.map {
+                    MarketItemWrapper(it, true)
+                }))
             }, { error ->
                 marketItemsSubject.onNext(DataState.Error(error))
             }).let {
@@ -52,6 +54,10 @@ class MarketFavoritesService(
 
     private fun forceRefresh() {
         fetch(true)
+    }
+
+    fun removeFavorite(uid: String) {
+        repository.removeFavorite(uid)
     }
 
     fun refresh() {
