@@ -165,6 +165,10 @@ class ManageWalletsService(
 
     fun enable(uid: String) {
         val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid } ?: return
+        enable(fullCoin)
+    }
+
+    fun enable(fullCoin: FullCoin) {
         enableCoinService.enable(fullCoin, account)
     }
 

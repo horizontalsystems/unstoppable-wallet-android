@@ -144,7 +144,7 @@ class CoinFragment : BaseFragment() {
                     true
                 }
                 R.id.menuAddToWallet -> {
-                    manageWalletsViewModel.enable(viewModel.fullCoin.coin.uid)
+                    manageWalletsViewModel.enable(viewModel.fullCoin)
                     true
                 }
                 R.id.menuInWallet -> {
