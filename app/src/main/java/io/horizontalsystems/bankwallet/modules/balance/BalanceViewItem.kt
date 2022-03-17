@@ -160,15 +160,11 @@ class BalanceViewItemFactory {
     }
 
     private fun lockedCoinValue(state: AdapterState?, balance: BigDecimal, coinCode: String, hideBalance: Boolean): DeemedValue {
-        val visible = balance > BigDecimal.ZERO
+        val visible = !hideBalance && balance > BigDecimal.ZERO
         val deemed = state !is AdapterState.Synced
 
-        val value = if (hideBalance) {
-            Translator.getString(R.string.Balance_Hidden)
-        } else {
-            val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(balance)
-            App.numberFormatter.formatCoin(balance, coinCode, 0, significantDecimal)
-        }
+        val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(balance)
+        val value = App.numberFormatter.formatCoin(balance, coinCode, 0, significantDecimal)
 
         return DeemedValue(value, deemed, visible)
     }

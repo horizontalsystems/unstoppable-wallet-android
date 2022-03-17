@@ -2,11 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import android.content.Intent
 import android.view.View
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -183,19 +179,10 @@ fun BalanceCard(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navContr
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ExpandableContent(viewItem: BalanceViewItem, navController: NavController, viewModel: BalanceViewModel) {
-
-    val enterExpand = remember {
-        expandVertically(animationSpec = tween(250))
-    }
-
-    val exitCollapse = remember {
-        shrinkVertically(animationSpec = tween(250))
-    }
-
     AnimatedVisibility(
         visible = viewItem.expanded,
-        enter = enterExpand,
-        exit = exitCollapse
+        enter = expandVertically() + fadeIn(),
+        exit = shrinkVertically() + fadeOut()
     ) {
         Column {
             LockedValueRow(viewItem)
@@ -297,7 +284,11 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
 
 @Composable
 private fun LockedValueRow(viewItem: BalanceViewItem) {
-    if (viewItem.coinValueLocked.visible) {
+    AnimatedVisibility(
+        visible = viewItem.coinValueLocked.visible,
+        enter = expandVertically() + fadeIn(),
+        exit = shrinkVertically() + fadeOut()
+    ) {
         Divider(
             modifier = Modifier.padding(horizontal = 14.dp),
             thickness = 1.dp,
