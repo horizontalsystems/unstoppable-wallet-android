@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -20,6 +21,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
@@ -86,17 +88,23 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
             elevation = 0.dp
         )
 
-        viewModel.balanceViewItemsWrapper?.let { (headerViewItem, balanceViewItems) ->
-            if (balanceViewItems.isNotEmpty()) {
-                BalanceItems(
-                    headerViewItem,
-                    balanceViewItems,
-                    viewModel,
-                    accountViewItem,
-                    navController
-                )
-            } else {
-                BalanceItemsEmpty(navController, accountViewItem)
+        Crossfade(viewModel.viewState) { viewState ->
+            when (viewState) {
+                is ViewState.Success -> {
+                    viewModel.balanceViewItemsWrapper?.let { (headerViewItem, balanceViewItems) ->
+                        if (balanceViewItems.isNotEmpty()) {
+                            BalanceItems(
+                                headerViewItem,
+                                balanceViewItems,
+                                viewModel,
+                                accountViewItem,
+                                navController
+                            )
+                        } else {
+                            BalanceItemsEmpty(navController, accountViewItem)
+                        }
+                    }
+                }
             }
         }
     }
