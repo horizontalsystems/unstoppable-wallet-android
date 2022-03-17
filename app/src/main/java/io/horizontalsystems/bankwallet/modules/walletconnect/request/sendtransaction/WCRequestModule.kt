@@ -166,16 +166,20 @@ object WCRequestModule {
     }
 
     private fun getGasPriceService(gasPrice: GasPrice?, evmKit: EthereumKit): IEvmGasPriceService {
-        return when (gasPrice) {
-            is GasPrice.Eip1559 -> {
-                val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
-                Eip1559GasPriceService(gasPriceProvider, evmKit, initialGasPrice = gasPrice)
-            }
-            else -> {
+        return when {
+            gasPrice is GasPrice.Legacy || gasPrice == null && !evmKit.chain.isEIP1559Supported -> {
                 val gasPriceProvider = LegacyGasPriceProvider(evmKit)
                 LegacyGasPriceService(
                     gasPriceProvider,
                     initialGasPrice = (gasPrice as? GasPrice.Legacy)?.legacyGasPrice
+                )
+            }
+            else -> {
+                val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
+                Eip1559GasPriceService(
+                    gasPriceProvider,
+                    evmKit,
+                    initialGasPrice = gasPrice as? GasPrice.Eip1559
                 )
             }
         }
