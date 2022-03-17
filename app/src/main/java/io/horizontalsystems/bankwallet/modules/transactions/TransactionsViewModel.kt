@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValueNew
 import io.horizontalsystems.core.helpers.DateHelper
@@ -24,6 +25,7 @@ class TransactionsViewModel(
     val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
     val transactionList = MutableLiveData<Map<String, List<TransactionViewItem>>>()
+    val viewState = MutableLiveData<ViewState>(ViewState.Loading)
 
     private val disposables = CompositeDisposable()
 
@@ -65,6 +67,7 @@ class TransactionsViewModel(
                     .groupBy { it.formattedDate }
 
                 transactionList.postValue(viewItems)
+                viewState.postValue(ViewState.Success)
             }
             .let {
                 disposables.add(it)
