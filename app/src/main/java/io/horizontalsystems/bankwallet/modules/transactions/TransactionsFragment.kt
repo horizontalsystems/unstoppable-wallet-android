@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -30,6 +31,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -66,6 +68,7 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
     val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
     val filterTypes by viewModel.filterTypesLiveData.observeAsState()
     val transactions by viewModel.transactionList.observeAsState()
+    val viewState by viewModel.viewState.observeAsState()
     val syncing by viewModel.syncingLiveData.observeAsState(false)
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
 
@@ -87,29 +90,36 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
                     { viewModel.setFilterCoin(it) },
                     { scrollToTopAfterUpdate = true })
             }
-            transactions?.let { transactionItems ->
-                if (transactionItems.isEmpty()) {
-                    if (syncing) {
-                        ListEmptyView(
-                            text = stringResource(R.string.Transactions_WaitForSync),
-                            icon = R.drawable.ic_clock
-                        )
-                    } else {
-                        ListEmptyView(
-                            text = stringResource(R.string.Transactions_EmptyList),
-                            icon = R.drawable.ic_outgoingraw
-                        )
-                    }
-                } else {
-                    TransactionList(
-                        transactionItems,
-                        scrollToTopAfterUpdate,
-                        { viewModel.willShow(it) },
-                        { onTransactionClick(it, viewModel, navController) },
-                        { viewModel.onBottomReached() }
-                    )
-                    if (scrollToTopAfterUpdate) {
-                        scrollToTopAfterUpdate = false
+
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    ViewState.Success -> {
+                        transactions?.let { transactionItems ->
+                            if (transactionItems.isEmpty()) {
+                                if (syncing) {
+                                    ListEmptyView(
+                                        text = stringResource(R.string.Transactions_WaitForSync),
+                                        icon = R.drawable.ic_clock
+                                    )
+                                } else {
+                                    ListEmptyView(
+                                        text = stringResource(R.string.Transactions_EmptyList),
+                                        icon = R.drawable.ic_outgoingraw
+                                    )
+                                }
+                            } else {
+                                TransactionList(
+                                    transactionItems,
+                                    scrollToTopAfterUpdate,
+                                    { viewModel.willShow(it) },
+                                    { onTransactionClick(it, viewModel, navController) },
+                                    { viewModel.onBottomReached() }
+                                )
+                                if (scrollToTopAfterUpdate) {
+                                    scrollToTopAfterUpdate = false
+                                }
+                            }
+                        }
                     }
                 }
             }
