@@ -75,6 +75,7 @@ class WC2RequestListViewModel(
 
     private fun title(method: String?): String = when (method) {
         "personal_sign" -> "Personal Sign Request"
+        "eth_sign" -> "Standard Sign Request"
         "eth_signTypedData" -> "Typed Sign Request"
         "eth_sendTransaction" -> "Approve Transaction"
         else -> "Unsupported"
