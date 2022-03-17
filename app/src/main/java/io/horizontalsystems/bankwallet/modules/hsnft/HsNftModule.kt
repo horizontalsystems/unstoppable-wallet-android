@@ -54,6 +54,11 @@ object HsNftApiV1Response {
         )
     }
 
+    data class Assets(
+        val cursor: Cursor,
+        val assets: List<Asset>
+    )
+    data class Cursor(val next: String?, val previous: String)
     data class Asset(
         val token_id: String,
         val name: String?,
@@ -244,27 +249,28 @@ class HsNftApiProvider : INftApiProvider {
     }
 
     private suspend fun fetchAssets(address: Address): List<HsNftApiV1Response.Asset> {
-        return fetchAllWithLimit(50) { offset, limit ->
-            HsNftModule.apiServiceV1.assets(address.hex, offset, limit)
-        }
+        val assets = mutableListOf<HsNftApiV1Response.Asset>()
+        var cursor: String? = null
+        val limit = 50
+        do {
+            val response = HsNftModule.apiServiceV1.assets(address.hex, cursor, limit)
+            assets.addAll(response.assets)
+            cursor = response.cursor.next
+        } while (response.assets.size >= limit)
+        return assets
     }
 
     private suspend fun fetchCollections(address: Address): List<HsNftApiV1Response.Collection> {
-        return fetchAllWithLimit(300) { offset, limit ->
-            HsNftModule.apiServiceV1.collections(address.hex, offset, limit)
-        }
-    }
-
-    private suspend fun <T> fetchAllWithLimit(limit: Int, f: suspend (Int, Int) -> List<T>): List<T> {
-        val assets = mutableListOf<T>()
-        var offset = 0
+        val collections = mutableListOf<HsNftApiV1Response.Collection>()
+        var page = 1
+        val limit = 300
         do {
-            val elements = f.invoke(offset, limit)
-            assets.addAll(elements)
-            offset += limit
-        } while (elements.size >= limit)
+            val collectionsResponse = HsNftModule.apiServiceV1.collections(address.hex, page, limit)
+            collections.addAll(collectionsResponse)
+            page++
+        } while (collectionsResponse.size >= limit)
 
-        return assets
+        return collections
     }
 
     private fun getCoinTypeId(paymentTokenAddress: String): String {
@@ -282,16 +288,16 @@ interface HsNftApiV1 {
     @GET("collections")
     suspend fun collections(
         @Query("asset_owner") assetOwner: String,
-        @Query("offset") offset: Int,
+        @Query("page") page: Int,
         @Query("limit") limit: Int
     ): List<HsNftApiV1Response.Collection>
 
     @GET("assets")
     suspend fun assets(
         @Query("owner") owner: String,
-        @Query("offset") offset: Int,
+        @Query("cursor") cursor: String?,
         @Query("limit") limit: Int,
-    ): List<HsNftApiV1Response.Asset>
+    ): HsNftApiV1Response.Assets
 
     @GET("collection/{uid}/stats")
     suspend fun collectionStats(
@@ -301,7 +307,8 @@ interface HsNftApiV1 {
     @GET("asset/{contractAddress}/{tokenId}")
     suspend fun asset(
         @Path("contractAddress") contractAddress: String,
-        @Path("tokenId") tokenId: String
+        @Path("tokenId") tokenId: String,
+        @Query("include_orders") includeOrders: Boolean = true
     ): HsNftApiV1Response.Asset
 
 }
