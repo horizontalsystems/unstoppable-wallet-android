@@ -43,7 +43,7 @@ class NftManager(
         return collections.associateWith {
             val collectionAssets = assetsGroupByCollection[it.uid] ?: listOf()
             collectionAssets
-        }.toSortedMap { o1, o2 -> o1.name.compareTo(o2.name) }
+        }.toSortedMap { o1, o2 -> o1.name.compareTo(o2.name, ignoreCase = true) }
     }
 
     suspend fun getAssetRecord(accountId: String, tokenId: String, contractAddress: String): NftAssetRecord? {
