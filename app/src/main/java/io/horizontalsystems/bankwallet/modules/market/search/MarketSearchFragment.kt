@@ -126,7 +126,10 @@ fun MarketSearchScreen(
                 }
                 is MarketSearchModule.DataState.SearchResult -> {
                     if (screenState.coinItems.isEmpty()) {
-                        NoResults()
+                        ListEmptyView(
+                            text = stringResource(R.string.EmptyResults),
+                            icon = R.drawable.ic_not_found
+                        )
                     } else {
                         MarketSearchResults(
                             screenState.coinItems,
@@ -137,20 +140,6 @@ fun MarketSearchScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun NoResults() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        Text(
-            text = stringResource(R.string.EmptyResults),
-            modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.Center),
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey,
-        )
     }
 }
 

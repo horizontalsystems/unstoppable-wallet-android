@@ -162,6 +162,7 @@ fun ScreenMessageWithAction(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
+                        modifier = Modifier.size(48.dp),
                         painter = painterResource(icon),
                         contentDescription = text,
                         tint = ComposeAppTheme.colors.grey
