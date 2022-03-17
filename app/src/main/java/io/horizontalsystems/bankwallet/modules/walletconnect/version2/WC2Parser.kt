@@ -78,7 +78,8 @@ object WC2Parser {
                             transaction
                         )
                     }
-                    "personal_sign" -> {
+                    "personal_sign",
+                    "eth_sign" -> {
                         val dataString = requestNode.get("params").asJsonArray
                             .firstOrNull { it.asString != address }?.asString ?: ""
                         val data = hexStringToUtf8String(dataString)
