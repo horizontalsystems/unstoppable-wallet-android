@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -17,6 +18,8 @@ class BalanceViewModel(
     private val balanceViewItemFactory: BalanceViewItemFactory
 ) : ViewModel() {
 
+    var viewState by mutableStateOf<ViewState>(ViewState.Loading)
+        private set
     val sortTypes = listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
     var balanceViewItemsWrapper by mutableStateOf<Pair<BalanceHeaderViewItem, List<BalanceViewItem>>?>(null)
         private set
@@ -59,6 +62,7 @@ class BalanceViewModel(
         )
 
         viewModelScope.launch {
+            viewState = ViewState.Success
             balanceViewItemsWrapper = Pair(headerViewItem, items)
         }
     }
