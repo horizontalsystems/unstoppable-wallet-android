@@ -2,9 +2,21 @@ package io.horizontalsystems.bankwallet.modules.nft
 
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import io.horizontalsystems.bankwallet.core.storage.AccountRecord
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
 
-@Entity(primaryKeys = ["accountId", "uid"])
+@Entity(
+    primaryKeys = ["accountId", "uid"],
+    foreignKeys = [ForeignKey(
+        entity = AccountRecord::class,
+        parentColumns = ["id"],
+        childColumns = ["accountId"],
+        onDelete = ForeignKey.CASCADE,
+        deferred = true
+    )
+    ]
+)
 data class NftCollectionRecord(
     val accountId: String,
     val uid: String,
