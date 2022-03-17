@@ -152,7 +152,7 @@ fun Wallets(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
-            contentPadding = PaddingValues(top = 12.dp, bottom = 18.dp, start = 16.dp, end = 16.dp),
+            contentPadding = PaddingValues(top = 8.dp, bottom = 18.dp, start = 16.dp, end = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(balanceViewItems) { item ->
