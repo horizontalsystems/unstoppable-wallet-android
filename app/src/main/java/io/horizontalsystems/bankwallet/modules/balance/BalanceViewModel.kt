@@ -106,14 +106,10 @@ class BalanceViewModel(
         }
     }
 
-//    fun disable(viewItem: BalanceViewItem) {
-//        service.disable(viewItem.wallet)
-//    }
-//
-//    fun enable(wallet: Wallet) {
-//        service.enable(wallet)
-//    }
-//
+    fun disable(viewItem: BalanceViewItem) {
+        service.disable(viewItem.wallet)
+    }
+
     fun getSyncErrorDetails(viewItem: BalanceViewItem): SyncError = when {
         service.networkAvailable -> SyncError.Dialog(viewItem.wallet, viewItem.errorMessage)
         else -> SyncError.NetworkNotAvailable()
