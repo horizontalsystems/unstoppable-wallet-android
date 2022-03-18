@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.list.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -10,8 +9,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
@@ -97,14 +96,18 @@ private fun LazyListScope.WCSection(
     itemsIndexed(section.sessions, key = { _, item -> item.sessionId }) { index, item ->
         val showDivider = showDivider(section.sessions.size, index)
         val shape = getShape(section.sessions.size, index)
-        Box(Modifier.fillMaxWidth().height(60.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp),
+            contentAlignment = Alignment.Center
+        ) {
             ActionsRow(
                 content = {
                     IconButton(
                         modifier = Modifier
                             .fillMaxHeight()
-                            .padding(end = 16.dp)
-                            .width(84.dp),
+                            .width(88.dp),
                         onClick = { onDelete(item.sessionId) },
                         content = {
                             Icon(
@@ -118,15 +121,12 @@ private fun LazyListScope.WCSection(
             )
             DraggableCardSimple(
                 isRevealed = revealedCardIds.contains(item.sessionId),
-                cardOffset = 84f,
+                cardOffset = 72f,
                 onExpand = { onExpand(item.sessionId) },
                 onCollapse = { onCollapse(item.sessionId) },
                 content = {
                     WCSessionCell(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .clip(shape)
-                            .background(ComposeAppTheme.colors.lawrence),
+                        shape = shape,
                         showDivider = showDivider,
                         session = item,
                         version = section.version,

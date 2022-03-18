@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.list.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -24,16 +26,38 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun WCSessionCell(
-    modifier: Modifier = Modifier,
+    shape: Shape,
     showDivider: Boolean = false,
     session: WalletConnectListModule.SessionViewItem,
     version: WalletConnectListModule.Version,
-    navController: NavController
+    navController: NavController,
 ) {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .height(60.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(shape)
+            .background(ComposeAppTheme.colors.lawrence)
+            .clickable {
+                if (version == WalletConnectListModule.Version.Version2) {
+                    navController.slideFromBottom(
+                        R.id.wc2SessionFragment,
+                        WC2SessionModule.prepareParams(
+                            session.sessionId,
+                            null,
+                        )
+                    )
+                } else {
+                    navController.slideFromBottom(
+                        R.id.wcSessionFragment,
+                        WCSessionModule.prepareParams(
+                            session.sessionId,
+                            null,
+                        )
+                    )
+                }
+            },
         contentAlignment = Alignment.Center
     ) {
         if (showDivider) {
@@ -44,27 +68,7 @@ fun WCSessionCell(
             )
         }
         Row(
-            modifier = modifier
-                .clickable {
-                    if (version == WalletConnectListModule.Version.Version2) {
-                        navController.slideFromBottom(
-                            R.id.wc2SessionFragment,
-                            WC2SessionModule.prepareParams(
-                                session.sessionId,
-                                null,
-                            )
-                        )
-                    } else {
-                        navController.slideFromBottom(
-                            R.id.wcSessionFragment,
-                            WCSessionModule.prepareParams(
-                                session.sessionId,
-                                null,
-                            )
-                        )
-                    }
-                }
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
