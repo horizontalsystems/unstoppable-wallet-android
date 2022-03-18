@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -127,6 +128,7 @@ fun BalanceItems(
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Wallets(
     balanceViewItems: List<BalanceViewItem>,
@@ -135,6 +137,8 @@ fun Wallets(
     accountId: String,
     sortType: BalanceSortType
 ) {
+    var revealedCardIds by remember { mutableStateOf(listOf<String>()) }
+
     val listState = rememberSaveable(
         accountId,
         sortType,
@@ -152,11 +156,27 @@ fun Wallets(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
-            contentPadding = PaddingValues(top = 8.dp, bottom = 18.dp, start = 16.dp, end = 16.dp),
+            contentPadding = PaddingValues(top = 8.dp, bottom = 18.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(balanceViewItems) { item ->
-                BalanceCard(viewItem = item, viewModel, navController)
+            items(balanceViewItems, key = { item -> item.wallet.coin.uid }) { item ->
+                BalanceCard(
+                    viewItem = item,
+                    viewModel = viewModel,
+                    navController = navController,
+                    modifier = Modifier.animateItemPlacement(),
+                    revealedCardIds = revealedCardIds,
+                    onExpand = { id ->
+                        if (!revealedCardIds.contains(id)) {
+                            revealedCardIds = listOf(id)
+                        }
+                    },
+                    onCollapse = { id ->
+                        revealedCardIds = revealedCardIds.toMutableList().also {
+                            it.remove(id)
+                        }
+                    },
+                )
             }
         }
     }
