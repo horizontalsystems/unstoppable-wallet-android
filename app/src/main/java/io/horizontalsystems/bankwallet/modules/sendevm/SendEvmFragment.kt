@@ -4,25 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.databinding.FragmentSendEvmBinding
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationModule
-import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -30,7 +32,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.FullCoin
 
 class SendEvmFragment : BaseFragment() {
 
@@ -40,165 +41,95 @@ class SendEvmFragment : BaseFragment() {
     private val availableBalanceViewModel by viewModels<SendAvailableBalanceViewModel> { vmFactory }
     private val amountViewModel by viewModels<AmountInputViewModel> { vmFactory }
 
-    private var _binding: FragmentSendEvmBinding? = null
-    private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSendEvmBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setToolbar(wallet.platformCoin.fullCoin)
-
-        availableBalanceViewModel.viewStateLiveData.observe(viewLifecycleOwner, { state ->
-            binding.availableBalanceSpinner.isVisible =
-                state is SendAvailableBalanceViewModel.ViewState.Loading
-            binding.availableBalanceValue.text =
-                (state as? SendAvailableBalanceViewModel.ViewState.Loaded)?.value
-        })
-
-        binding.amountInput.onTextChangeCallback =
-            { _, new -> amountViewModel.onChangeAmount(new ?: "") }
-        binding.amountInput.onTapSecondaryCallback = { amountViewModel.onSwitch() }
-        binding.amountInput.onTapMaxCallback = { amountViewModel.onClickMax() }
-        binding.amountInput.postDelayed({ binding.amountInput.setFocus() }, 200)
-
-
-        amountViewModel.amountLiveData.observe(viewLifecycleOwner, { amount ->
-            if (binding.amountInput.getAmount() != amount && !amountViewModel.areAmountsEqual(
-                    binding.amountInput.getAmount(),
-                    amount
-                )
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
-                binding.amountInput.setAmount(amount)
-        })
+            setContent {
+                SendEvmScreen(
+                    findNavController(),
+                    wallet,
+                    viewModel,
+                    availableBalanceViewModel,
+                    amountViewModel
+                )
+            }
+        }
+    }
+}
 
-        amountViewModel.revertAmountLiveData.observe(viewLifecycleOwner, { revertAmount ->
-            binding.amountInput.revertAmount(revertAmount)
-        })
+@Composable
+fun SendEvmScreen(
+    navController: NavController,
+    wallet: Wallet,
+    viewModel: SendEvmViewModel,
+    availableBalanceViewModel: SendAvailableBalanceViewModel,
+    amountViewModel: AmountInputViewModel
+) {
+    ComposeAppTheme {
+        val fullCoin = wallet.platformCoin.fullCoin
+        val proceedEnabled by viewModel.proceedEnabledLiveData.observeAsState(false)
+        val amountCaution by viewModel.amountCautionLiveData.observeAsState()
+        val proceedEvent by viewModel.proceedLiveEvent.observeAsState()
 
-        amountViewModel.maxEnabledLiveData.observe(viewLifecycleOwner, { maxEnabled ->
-            binding.amountInput.maxButtonVisible = maxEnabled
-        })
-
-        amountViewModel.secondaryTextLiveData.observe(viewLifecycleOwner, { secondaryText ->
-            binding.amountInput.setSecondaryText(secondaryText)
-        })
-
-        amountViewModel.inputParamsLiveData.observe(viewLifecycleOwner, {
-            binding.amountInput.setInputParams(it)
-        })
-
-        viewModel.amountCautionLiveData.observe(viewLifecycleOwner, { caution ->
-            setAmountInputCaution(caution)
-        })
-
-        viewModel.proceedLiveEvent.observe(viewLifecycleOwner, { sendData ->
-            findNavController().slideFromRight(
+        proceedEvent?.let { sendData ->
+            navController.slideFromRight(
                 R.id.sendEvmConfirmationFragment,
                 SendEvmConfirmationModule.prepareParams(sendData)
             )
-        })
+        }
 
-        binding.buttonProceedCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        setProceedButton(viewModel)
-    }
-
-    private fun setToolbar(fullCoin: FullCoin) {
-        binding.toolbarCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(this)
-        )
-        binding.toolbarCompose.setContent {
-            ComposeAppTheme {
-                AppBar(
-                    title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
-                    navigationIcon = {
-                        CoinImage(
-                            iconUrl = fullCoin.coin.iconUrl,
-                            placeholder = fullCoin.iconPlaceholder,
-                            modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
-                        )
-                    },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = {
-                                findNavController().popBackStack()
-                            }
-                        )
+        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            AppBar(
+                title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
+                navigationIcon = {
+                    CoinImage(
+                        iconUrl = fullCoin.coin.iconUrl,
+                        placeholder = fullCoin.iconPlaceholder,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .size(24.dp)
+                    )
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.popBackStack()
+                        }
                     )
                 )
+            )
+
+            AvailableBalance(availableBalanceViewModel)
+
+            Spacer(modifier = Modifier.height(8.dp))
+            HSAmountInput(amountViewModel, amountCaution)
+
+            Spacer(modifier = Modifier.height(12.dp))
+            HSAddressInput(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                coinType = wallet.coinType,
+                coinCode = wallet.coin.code
+            ) {
+                viewModel.onEnterAddress(it)
             }
+            ButtonPrimaryYellow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                title = stringResource(R.string.Send_DialogProceed),
+                onClick = {
+                    viewModel.onClickProceed()
+                },
+                enabled = proceedEnabled
+            )
         }
     }
-
-    private fun setAmountInputCaution(caution: Caution?) {
-        binding.txtHintError.isVisible = caution != null
-        binding.txtHintError.text = caution?.text
-        binding.background.hasError = caution != null
-
-        when (caution?.type) {
-            Caution.Type.Error -> {
-                binding.background.hasError = true
-                binding.txtHintError.setTextColor(requireContext().getColor(R.color.red_d))
-            }
-            Caution.Type.Warning -> {
-                binding.background.hasWarning = true
-                binding.txtHintError.setTextColor(requireContext().getColor(R.color.yellow_d))
-            }
-            else -> {
-                binding.background.clearStates()
-            }
-        }
-    }
-
-    private fun setProceedButton(viewModel: SendEvmViewModel) {
-        binding.buttonProceedCompose.setContent {
-            ComposeAppTheme {
-                val proceedEnabled by viewModel.proceedEnabledLiveData.observeAsState(false)
-
-                Column {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HSAddressInput(
-                        coinType = wallet.coinType,
-                        coinCode = wallet.coin.code
-                    ) {
-                        viewModel.onEnterAddress(it)
-                    }
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                top = 24.dp,
-                                bottom = 24.dp
-                            ),
-                        title = getString(R.string.Send_DialogProceed),
-                        onClick = {
-                            viewModel.onClickProceed()
-                        },
-                        enabled = proceedEnabled
-                    )
-                }
-
-            }
-        }
-    }
-
 }
