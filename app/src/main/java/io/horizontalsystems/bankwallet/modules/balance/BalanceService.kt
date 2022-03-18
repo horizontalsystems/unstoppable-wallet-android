@@ -14,7 +14,6 @@ class BalanceService(
     private val activeWalletRepository: BalanceActiveWalletRepository,
     private val xRateRepository: BalanceXRateRepository,
     private val adapterRepository: BalanceAdapterRepository,
-    private val networkTypeChecker: NetworkTypeChecker,
     private val localStorage: ILocalStorage,
     private val connectivityManager: ConnectivityManager,
     private val balanceSorter: BalanceSorter,
@@ -145,7 +144,7 @@ class BalanceService(
         val balanceItems = wallets.map { wallet ->
             BalanceModule.BalanceItem(
                 wallet,
-                networkTypeChecker.isMainNet(wallet),
+                adapterRepository.isMainNet(wallet),
                 adapterRepository.balanceData(wallet),
                 adapterRepository.state(wallet),
                 latestRates[wallet.coin.uid]

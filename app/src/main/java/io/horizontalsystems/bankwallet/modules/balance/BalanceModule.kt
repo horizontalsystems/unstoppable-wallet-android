@@ -20,10 +20,9 @@ object BalanceModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val balanceService = BalanceService(
-                BalanceActiveWalletRepository(App.walletManager, App.accountSettingManager),
+                BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager),
                 BalanceXRateRepository(App.currencyManager, App.marketKit),
                 BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
-                NetworkTypeChecker(App.accountSettingManager),
                 App.localStorage,
                 App.connectivityManager,
                 BalanceSorter(),

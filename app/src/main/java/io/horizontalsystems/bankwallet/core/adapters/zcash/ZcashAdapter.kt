@@ -114,6 +114,8 @@ class ZcashAdapter(
     override fun refresh() {
     }
 
+    override val isMainnet = true
+
     override val debugInfo: String
         get() = ""
     //endregion
@@ -153,6 +155,9 @@ class ZcashAdapter(
 
     //region ITransactionsAdapter
 
+    override val explorerTitle: String
+        get() = "blockchair.com"
+
     override val transactionsState: AdapterState
         get() = syncState
 
@@ -189,6 +194,10 @@ class ZcashAdapter(
             transactions.map { getTransactionRecord(it) }
         }
     }
+
+    override fun getTransactionUrl(transactionHash: String): String? =
+        if (testMode) null else "https://blockchair.com/zcash/transaction/$transactionHash"
+
     //endregion
 
     //region ISendZcashAdapter

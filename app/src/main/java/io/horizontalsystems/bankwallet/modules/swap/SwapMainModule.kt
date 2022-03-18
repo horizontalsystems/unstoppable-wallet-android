@@ -99,10 +99,7 @@ object SwapMainModule {
         BinanceSmartChain("binanceSmartChain", "Binance Smart Chain");
 
         val evmKitWrapper: EvmKitWrapper?
-            get() = when (this) {
-                Ethereum -> App.ethereumKitManager.evmKitWrapper
-                BinanceSmartChain -> App.binanceSmartChainKitManager.evmKitWrapper
-            }
+            get() = null // TODO: MultiChain
 
         val mainNet: Boolean
             get() = evmKitWrapper?.evmKit?.chain?.isMainNet ?: false

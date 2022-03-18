@@ -44,6 +44,12 @@ class BitcoinCashAdapter(
     // BitcoinCashKit Listener
     //
 
+    override val explorerTitle: String
+        get() = "btc.com"
+
+    override fun getTransactionUrl(transactionHash: String): String? =
+        if (testMode) null else "https://bch.btc.com/$transactionHash"
+
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
     }

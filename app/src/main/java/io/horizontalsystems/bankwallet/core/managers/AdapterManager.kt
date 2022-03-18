@@ -3,9 +3,8 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.adapters.BaseEvmAdapter
-import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -19,8 +18,7 @@ import java.util.concurrent.ConcurrentHashMap
 class AdapterManager(
     private val walletManager: IWalletManager,
     private val adapterFactory: AdapterFactory,
-    private val ethereumKitManager: EvmKitManager,
-    private val binanceSmartChainKitManager: EvmKitManager,
+    private val evmBlockchainManager: EvmBlockchainManager,
     private val binanceKitManager: BinanceKitManager
 ) : IAdapterManager, HandlerThread("A") {
 
@@ -44,37 +42,21 @@ class AdapterManager(
             }
         )
 
-        ethereumKitManager.evmKitUpdatedObservable
-            .subscribeIO {
-                handleUpdatedEthereumKit()
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        binanceSmartChainKitManager.evmKitUpdatedObservable
-            .subscribeIO {
-                handleUpdatedBinanceSmartChainKit()
-            }
-            .let {
-                disposables.add(it)
-            }
-    }
-
-    private fun handleUpdatedEthereumKit() {
-        handleUpdatedKit {
-            it.coinType is CoinType.Ethereum || it.coinType is CoinType.Erc20
+        for (blockchain in evmBlockchainManager.allBlockchains) {
+            evmBlockchainManager.getEvmKitManager(blockchain).evmKitUpdatedObservable
+                .subscribeIO {
+                    handleUpdatedKit(blockchain)
+                }
+                .let {
+                    disposables.add(it)
+                }
         }
     }
 
-    private fun handleUpdatedBinanceSmartChainKit() {
-        handleUpdatedKit {
-            it.coinType is CoinType.BinanceSmartChain || it.coinType is CoinType.Bep20
+    private fun handleUpdatedKit(blockchain: EvmBlockchain) {
+        val wallets = adaptersMap.keys().toList().filter {
+            blockchain.supports(it.coinType)
         }
-    }
-
-    private fun handleUpdatedKit(filter: (Wallet) -> Boolean) {
-        val wallets = adaptersMap.keys().toList().filter(filter)
 
         if (wallets.isEmpty()) return
 
@@ -97,8 +79,10 @@ class AdapterManager(
             adaptersMap.values.forEach { it.refresh() }
         }
 
-        ethereumKitManager.evmKitWrapper?.evmKit?.refresh()
-        binanceSmartChainKitManager.evmKitWrapper?.evmKit?.refresh()
+        for (blockchain in evmBlockchainManager.allBlockchains) {
+            evmBlockchainManager.getEvmKitManager(blockchain).evmKitWrapper?.evmKit?.refresh()
+        }
+
         binanceKitManager.binanceKit?.refresh()
     }
 
@@ -110,7 +94,7 @@ class AdapterManager(
         wallets.forEach { wallet ->
             var adapter = currentAdapters.remove(wallet)
             if (adapter == null) {
-                adapterFactory.adapter(wallet)?.let {
+                adapterFactory.getAdapter(wallet)?.let {
                     it.start()
 
                     adapter = it
@@ -152,7 +136,7 @@ class AdapterManager(
 
             //add and start new adapters
             walletsToRefresh.forEach { wallet ->
-                adapterFactory.adapter(wallet)?.let { adapter ->
+                adapterFactory.getAdapter(wallet)?.let { adapter ->
                     adaptersMap[wallet] = adapter
                     adapter.start()
                 }
@@ -163,19 +147,13 @@ class AdapterManager(
     }
 
     override fun refreshByWallet(wallet: Wallet) {
-        val adapter = adaptersMap[wallet] ?: return
+        val blockchain = evmBlockchainManager.getBlockchain(wallet.coinType)
 
-        when (adapter) {
-            is BinanceAdapter -> binanceKitManager.binanceKit?.refresh()
-            is BaseEvmAdapter -> {
-                when (wallet.coinType) {
-                    CoinType.Ethereum, is CoinType.Erc20 -> ethereumKitManager.evmKitWrapper?.evmKit?.refresh()
-                    CoinType.BinanceSmartChain, is CoinType.Bep20 -> binanceSmartChainKitManager.evmKitWrapper?.evmKit?.refresh()
-                }
-            }
-            else -> adapter.refresh()
+        if (blockchain != null) {
+            evmBlockchainManager.getEvmKitManager(blockchain).evmKitWrapper?.evmKit?.refresh()
+        } else {
+            adaptersMap[wallet]?.refresh()
         }
-
     }
 
     override fun getAdapterForWallet(wallet: Wallet): IAdapter? {

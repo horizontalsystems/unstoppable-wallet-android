@@ -52,6 +52,10 @@ class BinanceAdapter(
     override val debugInfo: String
         get() = ""
 
+    // IBaseAdapter
+
+    override val isMainnet = true
+
     // IBalanceAdapter
 
     override val balanceState: AdapterState
@@ -67,6 +71,9 @@ class BinanceAdapter(
         get() = asset.balanceFlowable.map { }
 
     // ITransactionsAdapter
+
+    override val explorerTitle: String =
+        "binance.org"
 
     override val transactionsState: AdapterState
         get() = syncState
@@ -137,6 +144,9 @@ class BinanceAdapter(
             )
         }
     }
+
+    override fun getTransactionUrl(transactionHash: String): String? =
+        if (testMode) "https://testnet-explorer.binance.org/tx/$transactionHash" else "https://explorer.binance.org/tx/$transactionHash"
 
     // ISendBinanceAdapter
 

@@ -18,7 +18,7 @@ object NetworkSettingsModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val networkSettingsService = NetworkSettingsService(account, App.accountSettingManager)
+            val networkSettingsService = NetworkSettingsService(account, App.evmSyncSourceManager, App.evmBlockchainManager)
             return NetworkSettingsViewModel(networkSettingsService) as T
         }
     }

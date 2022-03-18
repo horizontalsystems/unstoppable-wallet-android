@@ -100,7 +100,8 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var activateCoinManager: ActivateCoinManager
         lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
-        lateinit var evmNetworkManager: EvmNetworkManager
+        lateinit var evmSyncSourceManager: EvmSyncSourceManager
+        lateinit var evmBlockchainManager: EvmBlockchainManager
         lateinit var accountSettingManager: AccountSettingManager
         lateinit var nftManager: NftManager
     }
@@ -141,11 +142,9 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         appDatabase = AppDatabase.getInstance(this)
 
-        evmNetworkManager = EvmNetworkManager(appConfigProvider)
-        accountSettingManager = AccountSettingManager(AccountSettingRecordStorage(appDatabase), evmNetworkManager)
+        accountSettingManager = AccountSettingManager(AccountSettingRecordStorage(appDatabase))
+        evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, accountSettingManager)
 
-        ethereumKitManager = EvmKitManager(appConfig.etherscanApiKey, backgroundManager, EvmNetworkProviderEth(accountSettingManager))
-        binanceSmartChainKitManager = EvmKitManager(appConfig.bscscanApiKey, backgroundManager, EvmNetworkProviderBsc(accountSettingManager))
         binanceKitManager = BinanceKitManager(testMode)
 
         accountsStorage = AccountsStorage(appDatabase)
@@ -195,8 +194,8 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         val zcashBirthdayProvider = ZcashBirthdayProvider(this, testMode)
         restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
 
-        val adapterFactory = AdapterFactory(instance, testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager)
-        adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
+        val adapterFactory = AdapterFactory(instance, testMode, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager)
+        adapterManager = AdapterManager(walletManager, adapterFactory, evmBlockchainManager, binanceKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
         initialSyncModeSettingsManager = InitialSyncSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
@@ -225,10 +224,10 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
 
         wc1SessionStorage = WC1SessionStorage(appDatabase)
-        wc1SessionManager = WC1SessionManager(wc1SessionStorage, accountManager, accountSettingManager)
+        wc1SessionManager = WC1SessionManager(wc1SessionStorage, accountManager, evmSyncSourceManager)
         wc1RequestManager = WC1RequestManager()
-        wc1Manager = WC1Manager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
-        wc2Manager = WC2Manager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
+        wc1Manager = WC1Manager(accountManager, evmBlockchainManager)
+        wc2Manager = WC2Manager(accountManager, evmBlockchainManager)
 
         termsManager = TermsManager(localStorage)
 
@@ -253,6 +252,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         )
 
         val evmAccountStateDao = appDatabase.evmAccountStateDao()
+        // TODO: MultiChain
         AutoEnableTokensService(ethereumKitManager, walletActivator, enableCoinsErc20Provider, evmAccountStateDao).start()
         AutoEnableTokensService(binanceSmartChainKitManager, walletActivator, enableCoinsBep20Provider, evmAccountStateDao).start()
 

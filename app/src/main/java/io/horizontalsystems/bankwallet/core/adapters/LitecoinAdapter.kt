@@ -41,6 +41,13 @@ class LitecoinAdapter(
     // LitecoinKit Listener
     //
 
+    override val explorerTitle: String
+        get() = "blockchair.com"
+
+
+    override fun getTransactionUrl(transactionHash: String): String? =
+        if (testMode) null else "https://blockchair.com/litecoin/transaction/$transactionHash"
+
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
     }

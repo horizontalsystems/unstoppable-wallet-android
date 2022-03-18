@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.databinding.FragmentEvmNetworkBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderDescriptionBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderMultilineLawrenceBinding
-import io.horizontalsystems.bankwallet.modules.basecurrency.RVAdapterSectionHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
 
@@ -51,27 +50,13 @@ class EvmNetworkFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        viewModel.sectionViewItemsLiveData.observe(viewLifecycleOwner) { sectionViewItems ->
+        viewModel.viewItemsLiveData.observe(viewLifecycleOwner) { viewItems ->
             val adapters = mutableListOf<RecyclerView.Adapter<out RecyclerView.ViewHolder>>()
-            sectionViewItems.forEach { section ->
-                adapters.add(RVAdapterSectionHeader(section.title))
-                adapters.add(SectionItemsAdapter(section.viewItems) {
-                    viewModel.onSelectViewItem(it)
-                })
-                section.description?.let {
-                    adapters.add(DescriptionAdapter(section.description))
-                }
-            }
+            adapters.add(SectionItemsAdapter(viewItems) {
+                viewModel.onSelectViewItem(it)
+            })
 
             binding.rvItems.adapter = ConcatAdapter(adapters)
-        }
-
-        viewModel.confirmLiveEvent.observe(viewLifecycleOwner) {
-            val dialog = TestnetDisclaimerDialog()
-            dialog.onConfirm = {
-                viewModel.confirmSelection()
-            }
-            dialog.show(childFragmentManager, "selector_dialog")
         }
 
         viewModel.finishLiveEvent.observe(viewLifecycleOwner) {

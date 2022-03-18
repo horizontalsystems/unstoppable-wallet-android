@@ -21,7 +21,6 @@ class ShowKeyViewModel(
     val privateKeys: List<ShowKeyModule.PrivateKey>
         get() = listOf(
             ShowKeyModule.PrivateKey("Ethereum", service.ethereumPrivateKey),
-            ShowKeyModule.PrivateKey("Binance Smart Chain", service.binanceSmartChainPrivateKey),
         )
 
     fun onClickShow() {

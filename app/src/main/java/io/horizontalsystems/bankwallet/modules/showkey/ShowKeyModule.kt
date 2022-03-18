@@ -16,7 +16,7 @@ object ShowKeyModule {
     class Factory(private val account: Account) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = ShowKeyService(account, App.pinComponent, App.accountSettingManager)
+            val service = ShowKeyService(account, App.pinComponent, App.evmBlockchainManager)
             return ShowKeyViewModel(service) as T
         }
     }

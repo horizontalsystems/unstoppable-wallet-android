@@ -43,6 +43,12 @@ class DashAdapter(
     // DashKit Listener
     //
 
+    override val explorerTitle: String
+        get() = "dash.org"
+
+    override fun getTransactionUrl(transactionHash: String): String? =
+        if (testMode) null else "https://insight.dash.org/insight/tx/$transactionHash"
+
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
     }

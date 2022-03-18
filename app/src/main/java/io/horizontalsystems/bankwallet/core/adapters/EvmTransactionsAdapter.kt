@@ -22,11 +22,18 @@ class EvmTransactionsAdapter(
     val evmKitWrapper: EvmKitWrapper,
     baseCoin: PlatformCoin,
     coinManager: ICoinManager,
-    source: TransactionSource
+    source: TransactionSource,
+    private val evmTransactionSource: io.horizontalsystems.ethereumkit.models.TransactionSource
 ) : ITransactionsAdapter {
 
     private val evmKit = evmKitWrapper.evmKit
     private val transactionConverter = EvmTransactionConverter(coinManager, evmKit, source, baseCoin)
+
+    override val explorerTitle: String
+        get() = evmTransactionSource.name
+
+    override fun getTransactionUrl(transactionHash: String): String? =
+        evmTransactionSource.transactionUrl(transactionHash)
 
     override val lastBlockInfo: LastBlockInfo?
         get() = evmKit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }

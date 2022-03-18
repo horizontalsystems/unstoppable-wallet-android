@@ -126,7 +126,7 @@ class WC1Service(
 
     private fun initSession(peerId: String, peerMeta: WCPeerMeta, chainId: Int) {
         val account = manager.activeAccount ?: throw SessionError.NoSuitableAccount
-        val evmKitWrapper = manager.evmKitWrapper(chainId, account) ?: throw SessionError.UnsupportedChainId
+        val evmKitWrapper = manager.getEvmKitWrapper(chainId, account) ?: throw SessionError.UnsupportedChainId
 
         sessionData = SessionData(peerId, peerMeta, account, evmKitWrapper)
     }

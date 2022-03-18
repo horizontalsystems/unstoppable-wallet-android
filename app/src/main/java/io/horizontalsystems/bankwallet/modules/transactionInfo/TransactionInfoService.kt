@@ -2,9 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
-import io.horizontalsystems.bankwallet.core.managers.AccountSettingManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
@@ -15,7 +13,6 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.MarketKit
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -28,9 +25,7 @@ class TransactionInfoService(
     transactionRecord: TransactionRecord,
     private val adapter: ITransactionsAdapter,
     private val marketKit: MarketKit,
-    private val currencyManager: ICurrencyManager,
-    private val testMode: Boolean,
-    private val accountSettingManager: AccountSettingManager
+    private val currencyManager: ICurrencyManager
 ) : Clearable {
 
     val transactionHash: String get() = transactionInfoItem.record.transactionHash
@@ -41,7 +36,12 @@ class TransactionInfoService(
     private val transactionInfoItemSubject = BehaviorSubject.create<TransactionInfoItem>()
     val transactionInfoItemObservable: Observable<TransactionInfoItem> = transactionInfoItemSubject
 
-    private var transactionInfoItem = TransactionInfoItem(transactionRecord, adapter.lastBlockInfo, getExplorerData(transactionRecord), mapOf())
+    private var transactionInfoItem = TransactionInfoItem(
+        transactionRecord,
+        adapter.lastBlockInfo,
+        TransactionInfoModule.ExplorerData(adapter.explorerTitle, adapter.getTransactionUrl(transactionRecord.transactionHash)),
+        mapOf()
+    )
 
     private val coinUidsForRates: List<String>
         get() {
@@ -185,58 +185,6 @@ class TransactionInfoService(
 
     override fun clear() {
         disposables.clear()
-    }
-
-    private fun ethereumChain(account: Account): Chain {
-        return accountSettingManager.ethereumNetwork(account).chain
-    }
-
-    private fun getExplorerData(record: TransactionRecord): TransactionInfoModule.ExplorerData {
-        val hash = record.transactionHash
-        val blockchain = record.source.blockchain
-        val account = record.source.account
-
-        return when (blockchain) {
-            is TransactionSource.Blockchain.Bitcoin -> TransactionInfoModule.ExplorerData(
-                "blockchair.com",
-                if (testMode) null else "https://blockchair.com/bitcoin/transaction/$hash"
-            )
-            is TransactionSource.Blockchain.BitcoinCash -> TransactionInfoModule.ExplorerData(
-                "btc.com",
-                if (testMode) null else "https://bch.btc.com/$hash"
-            )
-            is TransactionSource.Blockchain.Litecoin -> TransactionInfoModule.ExplorerData(
-                "blockchair.com",
-                if (testMode) null else "https://blockchair.com/litecoin/transaction/$hash"
-            )
-            is TransactionSource.Blockchain.Dash -> TransactionInfoModule.ExplorerData(
-                "dash.org",
-                if (testMode) null else "https://insight.dash.org/insight/tx/$hash"
-            )
-            is TransactionSource.Blockchain.Ethereum -> {
-                val domain = when (ethereumChain(account)) {
-                    Chain.Ethereum -> "etherscan.io"
-                    Chain.EthereumRopsten -> "ropsten.etherscan.io"
-                    Chain.EthereumKovan -> "kovan.etherscan.io"
-                    Chain.EthereumRinkeby -> "rinkeby.etherscan.io"
-                    Chain.EthereumGoerli -> "goerli.etherscan.io"
-                    else -> throw IllegalArgumentException("")
-                }
-                TransactionInfoModule.ExplorerData("etherscan.io", "https://$domain/tx/0x$hash")
-            }
-            is TransactionSource.Blockchain.Bep2 -> TransactionInfoModule.ExplorerData(
-                "binance.org",
-                if (testMode) "https://testnet-explorer.binance.org/tx/$hash" else "https://explorer.binance.org/tx/$hash"
-            )
-            is TransactionSource.Blockchain.BinanceSmartChain -> TransactionInfoModule.ExplorerData(
-                "bscscan.com",
-                "https://bscscan.com/tx/0x$hash"
-            )
-            is TransactionSource.Blockchain.Zcash -> TransactionInfoModule.ExplorerData(
-                "blockchair.com",
-                if (testMode) null else "https://blockchair.com/zcash/transaction/$hash"
-            )
-        }
     }
 
 }

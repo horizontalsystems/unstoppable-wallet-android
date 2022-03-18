@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.syncerror
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule
 import io.horizontalsystems.marketkit.models.CoinType
 
 class SyncErrorViewModel(
@@ -20,9 +20,9 @@ class SyncErrorViewModel(
         CoinType.Dash,
         CoinType.Litecoin -> SourceType.PrivacySettings
         CoinType.Ethereum,
-        is CoinType.Erc20 -> SourceType.EvmNetworkSettings(EvmNetworkModule.Blockchain.Ethereum, wallet.account)
+        is CoinType.Erc20 -> SourceType.EvmNetworkSettings(EvmBlockchain.Ethereum, wallet.account)
         CoinType.BinanceSmartChain,
-        is CoinType.Bep20 -> SourceType.EvmNetworkSettings(EvmNetworkModule.Blockchain.BinanceSmartChain, wallet.account)
+        is CoinType.Bep20 -> SourceType.EvmNetworkSettings(EvmBlockchain.BinanceSmartChain, wallet.account)
         else -> throw IllegalStateException("Source is not changeable")
     }
 
@@ -32,7 +32,7 @@ class SyncErrorViewModel(
 
     sealed class SourceType {
         object PrivacySettings : SourceType()
-        class EvmNetworkSettings(val blockchain: EvmNetworkModule.Blockchain, val account: Account) : SourceType()
+        class EvmNetworkSettings(val blockchain: EvmBlockchain, val account: Account) : SourceType()
     }
 
     private fun sourceChangeable(coinType: CoinType) = when (coinType) {

@@ -189,6 +189,7 @@ interface IBinanceKitManager {
 }
 
 interface ITransactionsAdapter {
+    val explorerTitle: String
     val transactionsState: AdapterState
     val transactionsStateUpdatedFlowable: Flowable<Unit>
 
@@ -208,11 +209,13 @@ interface ITransactionsAdapter {
         coin: PlatformCoin?,
         transactionType: FilterTransactionType
     ): Flowable<List<TransactionRecord>>
+
+    fun getTransactionUrl(transactionHash: String): String?
 }
 
 class UnsupportedFilterException : Exception()
 
-interface IBalanceAdapter {
+interface IBalanceAdapter: IBaseAdapter {
     val balanceState: AdapterState
     val balanceStateUpdatedFlowable: Flowable<Unit>
 
@@ -224,7 +227,7 @@ data class BalanceData(val available: BigDecimal, val locked: BigDecimal = BigDe
     val total get() = available + locked
 }
 
-interface IReceiveAdapter {
+interface IReceiveAdapter: IBaseAdapter {
     val receiveAddress: String
 }
 
@@ -294,6 +297,10 @@ interface IAdapter {
     fun refresh()
 
     val debugInfo: String
+}
+
+interface IBaseAdapter {
+    val isMainnet: Boolean
 }
 
 interface IAccountsStorage {

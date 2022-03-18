@@ -100,7 +100,7 @@ class WC2SessionManager(
         val chainId =
             WC2Parser.getChainIdFromBody(request.body) ?: throw RequestDataError.UnsupportedChainId
         val evmKitWrapper =
-            wcManager.evmKitWrapper(chainId, account) ?: throw RequestDataError.NoSuitableEvmKit
+            wcManager.getEvmKitWrapper(chainId, account) ?: throw RequestDataError.NoSuitableEvmKit
         val dAppName = sessionByTopic(request.topic)?.peerAppMetaData?.name ?: ""
         val receiveAddress = evmKitWrapper.evmKit.receiveAddress.eip55
         val transactionRequest =
