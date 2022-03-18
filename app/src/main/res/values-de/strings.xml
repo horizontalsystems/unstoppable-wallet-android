@@ -218,7 +218,7 @@
     <string name="Balance_Hidden">verborgen</string>
     <string name="Balance_Backup_Alert">Sie müssen ein Backup des %s Wallet machen, bevor Sie %s erhalten können.</string>
     <string name="Balance_NoWalletAlert">Noch keine Wallets</string>
-    <string name="Balance_NoCoinsAlert">You don\'t have an added coins.\nAdd the coins you will be using</string>
+    <string name="Balance_NoCoinsAlert">Sie haben keine Münzen hinzugefügt.\nFügen Sie die Münzen hinzu, die Sie verwenden werden</string>
     <string name="Balance_WatchAccount_NoBalance">Diese Wallet-Adresse hat keinen Kontostand</string>
     <!--Send-->
     <string name="Send_Title">%s senden</string>
@@ -432,7 +432,7 @@
     <string name="Transactions_Title">Transaktionen</string>
     <string name="Transactions_FilterAll">ALLE</string>
     <string name="Transactions_EmptyList">Sie haben noch keine offenen oder früheren Transaktionen</string>
-    <string name="Transactions_WaitForSync">Please wait for the sync to finish.</string>
+    <string name="Transactions_WaitForSync">Bitte warten bis die Synchronisation abgeschlossen ist.</string>
     <string name="Transactions_Pending">Anstehend</string>
     <string name="Transactions_Receive">Empfangen</string>
     <string name="Transactions_Completed">Abgeschlossen</string>
