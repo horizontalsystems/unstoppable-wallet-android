@@ -106,7 +106,6 @@
     <string name="Market_Tab_Watchlist_EmptyList">您的观察列表为空。</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">币种排名描述</string>
-    <string name="Market_SyncError">同步出错</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">图表</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">总市值</string>
@@ -219,7 +218,7 @@
     <string name="Balance_Hidden">隐藏</string>
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <string name="Balance_NoWalletAlert">尚无钱包</string>
-    <string name="Balance_NoCoinsAlert">您还没有添加任何代币到此钱包中。</string>
+    <string name="Balance_NoCoinsAlert">您没有添加的硬币。\n添加您将使用的硬币</string>
     <string name="Balance_WatchAccount_NoBalance">此钱包地址没有任何余额</string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
@@ -433,6 +432,7 @@
     <string name="Transactions_Title">交易</string>
     <string name="Transactions_FilterAll">所有</string>
     <string name="Transactions_EmptyList">您还没有任何待定或成功的交易</string>
+    <string name="Transactions_WaitForSync">请等待同步结束。</string>
     <string name="Transactions_Pending">待处理</string>
     <string name="Transactions_Receive">接收</string>
     <string name="Transactions_Completed">已完成</string>
@@ -826,6 +826,7 @@
     <string name="CoinPage_Website">网站</string>
     <string name="CoinPage_Whitepaper">白皮书</string>
     <string name="CoinPage_Twitter_NotAvailable">没有twitter</string>
+    <string name="CoinPage_Twitter_NoTweets">暂无推文</string>
     <string name="CoinPage_Twitter_Quoted">引用 %s</string>
     <string name="CoinPage_Twitter_Retweeted">转发 %s</string>
     <string name="CoinPage_Twitter_Replied">回复 %s</string>

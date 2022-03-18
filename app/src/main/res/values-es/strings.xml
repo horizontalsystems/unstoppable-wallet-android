@@ -106,7 +106,6 @@
     <string name="Market_Tab_Watchlist_EmptyList">Tu Watchlist está vacía.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Mejores monedas por rango de límite de mercado</string>
-    <string name="Market_SyncError">Error de sincronización</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Diagrama</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Capitalización Total</string>
@@ -219,7 +218,7 @@
     <string name="Balance_Hidden">oculto</string>
     <string name="Balance_Backup_Alert">Necesita respaldar el monedero %s antes de poder recibir %s.</string>
     <string name="Balance_NoWalletAlert">Todavía no hay monederos</string>
-    <string name="Balance_NoCoinsAlert">No has añadido ninguna moneda a este monedero</string>
+    <string name="Balance_NoCoinsAlert">No tienes monedas añadidas.\nAñade las monedas que usarás</string>
     <string name="Balance_WatchAccount_NoBalance">Esta dirección de billetera no tiene saldo</string>
     <!--Send-->
     <string name="Send_Title">Enviar %s</string>
@@ -433,6 +432,7 @@
     <string name="Transactions_Title">Transacciones</string>
     <string name="Transactions_FilterAll">TODO</string>
     <string name="Transactions_EmptyList">Todavía no tienes transacciones pendientes o pasadas</string>
+    <string name="Transactions_WaitForSync">Por favor, espere a que termine la sincronización.</string>
     <string name="Transactions_Pending">Pendiente</string>
     <string name="Transactions_Receive">Recibir</string>
     <string name="Transactions_Completed">Finalizado</string>
@@ -827,6 +827,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_Website">Sitio Web</string>
     <string name="CoinPage_Whitepaper">Documento informativo</string>
     <string name="CoinPage_Twitter_NotAvailable">Sin twitter disponible</string>
+    <string name="CoinPage_Twitter_NoTweets">Aún no hay tweets</string>
     <string name="CoinPage_Twitter_Quoted">Cotizado %s</string>
     <string name="CoinPage_Twitter_Retweeted">Retwitteado por %s</string>
     <string name="CoinPage_Twitter_Replied">Respondiendo a: %s</string>

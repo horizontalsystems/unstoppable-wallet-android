@@ -106,7 +106,6 @@
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
-    <string name="Market_SyncError">Senk. hatası</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
@@ -219,7 +218,7 @@
     <string name="Balance_Hidden">gizli</string>
     <string name="Balance_Backup_Alert">Öncelikle %s cüzdanınızı yedeklemeniz gerekiyor daha sonra %s kripto parasını alabilirsiniz.</string>
     <string name="Balance_NoWalletAlert">Henüz cüzdan yok</string>
-    <string name="Balance_NoCoinsAlert">Bu cüzdana hiç jeton eklemediniz</string>
+    <string name="Balance_NoCoinsAlert">Eklenmiş jetonunuz yok.\nKullanacağınız jetonları ekleyin</string>
     <string name="Balance_WatchAccount_NoBalance">Bu cüzdan adresinde bakiye bulunmuyor</string>
     <!--Send-->
     <string name="Send_Title">%s gönder</string>
@@ -433,6 +432,7 @@
     <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_FilterAll">HEPSI</string>
     <string name="Transactions_EmptyList">Henüz herhangi bir bekleyen veya geçmiş işlem yok</string>
+    <string name="Transactions_WaitForSync">Lütfen güncellemenin bitmesini bekleyin.</string>
     <string name="Transactions_Pending">Devam ediyor</string>
     <string name="Transactions_Receive">Al</string>
     <string name="Transactions_Completed">Tamamlandı</string>
@@ -826,6 +826,7 @@
     <string name="CoinPage_Website">Website</string>
     <string name="CoinPage_Whitepaper">Whitepaper</string>
     <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
+    <string name="CoinPage_Twitter_NoTweets">Henüz tweet yok</string>
     <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
     <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
     <string name="CoinPage_Twitter_Replied">Replying to %s</string>

@@ -106,7 +106,6 @@
     <string name="Market_Tab_Watchlist_EmptyList">Список избранного пуст.</string>
     <string name="Market_Category_TopCoins">Лучшие Токены</string>
     <string name="Market_Category_TopCoins_Description">Топ токенов по рыночной капитализации</string>
-    <string name="Market_SyncError">Ошибка Синхронизации</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Общая Капитализация</string>
@@ -219,7 +218,7 @@
     <string name="Balance_Hidden">скрытое</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <string name="Balance_NoWalletAlert">Пока нет кошельков</string>
-    <string name="Balance_NoCoinsAlert">Вы еще не добавили монеты в этот кошелек</string>
+    <string name="Balance_NoCoinsAlert">У вас нет добавленных монет.\nДобавьте монеты, которые вы будете использовать</string>
     <string name="Balance_WatchAccount_NoBalance">У кошелька с этим адресом нет баланса</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
@@ -433,6 +432,7 @@
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
     <string name="Transactions_EmptyList">У вас ещё нет незавершенных или прошлых транзакций</string>
+    <string name="Transactions_WaitForSync">Пожалуйста, дождитесь завершение синхронизации.</string>
     <string name="Transactions_Pending">В обработке</string>
     <string name="Transactions_Receive">Получено</string>
     <string name="Transactions_Completed">Завершено</string>
@@ -826,6 +826,7 @@
     <string name="CoinPage_Website">Веб-сайт</string>
     <string name="CoinPage_Whitepaper">Документ</string>
     <string name="CoinPage_Twitter_NotAvailable">Twitter не доступен</string>
+    <string name="CoinPage_Twitter_NoTweets">Пока нет твитов</string>
     <string name="CoinPage_Twitter_Quoted">Цитировано %s</string>
     <string name="CoinPage_Twitter_Retweeted">Ретвитнуто %s</string>
     <string name="CoinPage_Twitter_Replied">Ответ на %s</string>
@@ -868,7 +869,7 @@
     <string name="Nfts_Asset_OnSaleUntil">до %s</string>
     <string name="Nfts_Empty">У вас нет NFT в вашем кошельке</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
-    <string name="NftAsset_OwnedCount">Owned Count</string>
+    <string name="NftAsset_OwnedCount">Собственный Счет</string>
     <string name="NftAsset_Price_Purchase">Цена Покупки</string>
     <string name="NftAsset_Price_Average7d">Средн. 7Д</string>
     <string name="NftAsset_Price_Average30d">Сред. 30Д</string>

@@ -106,7 +106,6 @@
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top des coins par cap de marché</string>
-    <string name="Market_SyncError">Erreur de synchronisation</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Graphique</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Cap totale</string>
@@ -219,7 +218,7 @@
     <string name="Balance_Hidden">masqué</string>
     <string name="Balance_Backup_Alert">Vous devez sauvegarder le portefeuille %1$s avant de recevoir %2$s.</string>
     <string name="Balance_NoWalletAlert">Pas de portefeuille actuellement</string>
-    <string name="Balance_NoCoinsAlert">Vous n\'avez ajouté aucune pièce à ce portefeuille</string>
+    <string name="Balance_NoCoinsAlert">Vous n\'avez pas de pièces ajoutées.\nAjoutez les pièces que vous utiliserez</string>
     <string name="Balance_WatchAccount_NoBalance">Cette adresse de portefeuille n\'a pas de solde</string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
@@ -433,6 +432,7 @@
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">TOUS</string>
     <string name="Transactions_EmptyList">Vous n\'avez encore aucune transaction en cours ou passée</string>
+    <string name="Transactions_WaitForSync">Veuillez attendre la fin de la synchronisation.</string>
     <string name="Transactions_Pending">En attente</string>
     <string name="Transactions_Receive">Recevoir</string>
     <string name="Transactions_Completed">Terminé</string>
@@ -824,6 +824,7 @@
     <string name="CoinPage_Website">Site Web</string>
     <string name="CoinPage_Whitepaper">Livre blanc</string>
     <string name="CoinPage_Twitter_NotAvailable">Twitter n\'est pas disponible</string>
+    <string name="CoinPage_Twitter_NoTweets">Pas encore de tweets</string>
     <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
     <string name="CoinPage_Twitter_Retweeted">A retweeté @%s</string>
     <string name="CoinPage_Twitter_Replied">Répondre à %s</string>

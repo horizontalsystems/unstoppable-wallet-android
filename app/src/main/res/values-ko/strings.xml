@@ -106,7 +106,6 @@
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
-    <string name="Market_SyncError">동기화 오류</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
@@ -219,7 +218,7 @@
     <string name="Balance_Hidden">숨겨짐</string>
     <string name="Balance_Backup_Alert">귀하께서 %s를 받기전에 %s 지갑의 백업이 필요합니다.</string>
     <string name="Balance_NoWalletAlert">아직 지갑이 없습니다</string>
-    <string name="Balance_NoCoinsAlert">이 지갑에 코인을 넣지 않았습니다</string>
+    <string name="Balance_NoCoinsAlert">추가된 코인이 없습니다.\n사용할 코인을 추가하세요.</string>
     <string name="Balance_WatchAccount_NoBalance">이 지갑 주소에는 잔액이 없습니다</string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
@@ -433,6 +432,7 @@
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">전부</string>
     <string name="Transactions_EmptyList">당신은 아직 보류 중 또는 과거에 완료된 거래가 없습니다</string>
+    <string name="Transactions_WaitForSync">동기화가 끝날 때까지 기다려 주십시오.</string>
     <string name="Transactions_Pending">보류 중</string>
     <string name="Transactions_Receive">수신</string>
     <string name="Transactions_Completed">완료</string>
@@ -823,6 +823,7 @@
     <string name="CoinPage_Website">Website</string>
     <string name="CoinPage_Whitepaper">Whitepaper</string>
     <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
+    <string name="CoinPage_Twitter_NoTweets">아직 트윗이 없습니다</string>
     <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
     <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
     <string name="CoinPage_Twitter_Replied">Replying to %s</string>
