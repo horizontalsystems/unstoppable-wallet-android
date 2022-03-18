@@ -51,8 +51,7 @@ class TransactionRecordRepository(
                 TransactionSource.Blockchain.Dash,
                 TransactionSource.Blockchain.Zcash,
                 is TransactionSource.Blockchain.Bep2 -> mergedWallets.add(wallet)
-                TransactionSource.Blockchain.Ethereum,
-                TransactionSource.Blockchain.BinanceSmartChain -> {
+                is TransactionSource.Blockchain.Evm -> {
                     if (mergedWallets.none { it.source == wallet.source }) {
                         mergedWallets.add(TransactionWallet(null, wallet.source, null))
                     }

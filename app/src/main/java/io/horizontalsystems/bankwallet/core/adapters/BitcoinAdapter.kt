@@ -41,6 +41,13 @@ class BitcoinAdapter(
     // BitcoinKit Listener
     //
 
+    override val explorerTitle: String
+        get() = "blockchair.com"
+
+
+    override fun getTransactionUrl(transactionHash: String): String? =
+        if (testMode) null else "https://blockchair.com/bitcoin/transaction/$transactionHash"
+
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
     }

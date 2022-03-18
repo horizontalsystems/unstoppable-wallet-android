@@ -259,7 +259,7 @@ class WC2SessionService(
     private fun getBlockchains(accounts: List<String>, account: Account): List<WCBlockchain> {
         val sessionAccountData = accounts.mapNotNull { WC2Parser.getAccountData(it) }
         return sessionAccountData.mapNotNull { data ->
-            wcManager.evmKitWrapper(data.chain.id, account)?.let { evmKitWrapper ->
+            wcManager.getEvmKitWrapper(data.chain.id, account)?.let { evmKitWrapper ->
                 val address = evmKitWrapper.evmKit.receiveAddress.eip55
                 WCBlockchain(data.chain.id, data.chain.title, address, true)
             }

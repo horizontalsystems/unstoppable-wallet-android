@@ -24,8 +24,6 @@ object TransactionInfoModule {
                 adapter,
                 App.marketKit,
                 App.currencyManager,
-                App.instance.testMode,
-                App.accountSettingManager
             )
             val factory = TransactionInfoViewItemFactory(
                 App.numberFormatter,

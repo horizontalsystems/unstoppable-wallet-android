@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CoinSettings
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 import java.util.*
@@ -59,9 +60,7 @@ data class TransactionSource(
         object Litecoin : Blockchain()
         object BitcoinCash : Blockchain()
         object Dash : Blockchain()
-        object Ethereum : Blockchain()
         object Zcash : Blockchain()
-        object BinanceSmartChain : Blockchain()
         class Bep2(val symbol: String) : Blockchain(){
             override fun hashCode(): Int {
                 return this.symbol.hashCode()
@@ -73,6 +72,7 @@ data class TransactionSource(
                 }
             }
         }
+        class Evm(val evmBlockchain: EvmBlockchain) : Blockchain() {}
 
         fun getTitle(): String {
             return when(this){
@@ -80,10 +80,9 @@ data class TransactionSource(
                 Litecoin -> "Litecoin"
                 BitcoinCash -> "BitcoinCash"
                 Dash -> "Dash"
-                Ethereum -> "Ethereum"
                 Zcash -> "Zcash"
-                BinanceSmartChain -> "Binance Smart Chain"
                 is Bep2 -> "Binance Chain"
+                is Evm -> this.evmBlockchain.shortName
             }
         }
     }

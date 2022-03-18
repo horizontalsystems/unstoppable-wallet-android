@@ -9,8 +9,8 @@ class WC1SessionStorage(appDatabase: AppDatabase) {
         appDatabase.wc1SessionDao()
     }
 
-    fun getSessions(accountId: String, chainIds: List<Int>): List<WalletConnectSession> {
-        return dao.getByAccountId(accountId, chainIds)
+    fun getSessions(accountId: String): List<WalletConnectSession> {
+        return dao.getByAccountId(accountId)
     }
 
     fun save(session: WalletConnectSession) {

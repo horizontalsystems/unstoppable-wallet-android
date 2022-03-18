@@ -1,17 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.networksettings
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.managers.AccountSettingManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.EvmNetwork
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
+import io.horizontalsystems.bankwallet.entities.EvmSyncSource
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class NetworkSettingsService(
     val account: Account,
-    private val accountSettingManager: AccountSettingManager
+    private val evmSyncSourceManager: EvmSyncSourceManager,
+    private val evmBlockchainManager: EvmBlockchainManager
 ) : Clearable {
     private val disposables = CompositeDisposable()
 
@@ -27,25 +30,14 @@ class NetworkSettingsService(
         get() = itemsRelay
 
     init {
-        accountSettingManager.ethereumNetworkObservable
+        evmSyncSourceManager.syncSourceObservable
             .subscribeIO {
                 handleSettingsUpdated(it.first)
             }.let {
                 disposables.add(it)
             }
 
-        accountSettingManager.binanceSmartChainNetworkObservable
-            .subscribeIO {
-                handleSettingsUpdated(it.first)
-            }.let {
-                disposables.add(it)
-            }
-        
         syncItems()
-    }
-
-    private fun evmItem(blockchain: Blockchain, evmNetwork: EvmNetwork): Item {
-        return Item(blockchain, evmNetwork.name)
     }
 
     private fun handleSettingsUpdated(account: Account) {
@@ -55,10 +47,9 @@ class NetworkSettingsService(
     }
 
     private fun syncItems() {
-        items = listOf(
-            evmItem(Blockchain.Ethereum, accountSettingManager.ethereumNetwork(account)),
-            evmItem(Blockchain.BinanceSmartChain, accountSettingManager.binanceSmartChainNetwork(account))
-        )
+        items = evmBlockchainManager.allBlockchains.map {
+            Item(it, evmSyncSourceManager.getSyncSource(account, it))
+        }
     }
 
     override fun clear() {
@@ -69,6 +60,6 @@ class NetworkSettingsService(
         Ethereum, BinanceSmartChain
     }
 
-    data class Item(val blockchain: Blockchain, val value: String)
+    data class Item(val blockchain: EvmBlockchain, val syncSource: EvmSyncSource)
 }
 

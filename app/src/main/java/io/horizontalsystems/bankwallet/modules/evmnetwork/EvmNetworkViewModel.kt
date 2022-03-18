@@ -13,11 +13,8 @@ class EvmNetworkViewModel(private val service: EvmNetworkService) : ViewModel() 
 
     private val disposables = CompositeDisposable()
 
-    val sectionViewItemsLiveData = MutableLiveData<List<SectionViewItem>>()
+    val viewItemsLiveData = MutableLiveData<List<ViewItem>>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
-    val confirmLiveEvent = SingleLiveEvent<Unit>()
-
-    private var tmpViewItem: ViewItem? = null
 
     init {
         service.itemsObservable
@@ -30,68 +27,28 @@ class EvmNetworkViewModel(private val service: EvmNetworkService) : ViewModel() 
     }
 
     private fun sync(items: List<EvmNetworkService.Item>) {
-        val (mainNetItems, testNetItems) = items.partition { it.isMainNet }
-
-        val sectionViewItems: List<SectionViewItem> = listOfNotNull(
-            sectionViewItem("MainNet", mainNetItems),
-            sectionViewItem("TestNet", testNetItems)
-        )
-
-        sectionViewItemsLiveData.postValue(sectionViewItems)
-    }
-
-    private fun sectionViewItem(title: String, items: List<EvmNetworkService.Item>): SectionViewItem? {
         val viewItems = items.map { viewItem(it) }.sortedBy { it.name }
-        val selectedItem = items.firstOrNull { it.selected }
-
-        val description = selectedItem?.let {
-            val urls = selectedItem.network.rpcSource.urls
-            val formattedUrls = if (urls.size > 1) urls.joinToString(separator = "") { "  •  $it \n" } else null
-            formattedUrls?.let { "${Translator.getString(R.string.NetworkSettings_SwithesAutomatically_Description)}\n\n$formattedUrls" }
-        }
-
-        if (viewItems.isEmpty()) return null
-
-        return SectionViewItem(title, viewItems, description)
+        viewItemsLiveData.postValue(viewItems)
     }
 
     private fun viewItem(item: EvmNetworkService.Item): ViewItem {
-        val url = if (item.network.rpcSource.urls.size == 1)
-            item.network.rpcSource.urls.first().toString()
+        val url = if (item.syncSource.rpcSource.urls.size == 1)
+            item.syncSource.rpcSource.urls.first().toString()
         else
             Translator.getString(R.string.NetworkSettings_SwithesAutomatically)
 
         return ViewItem(
-            item.network.id,
-            item.network.name,
+            item.syncSource.id,
+            item.syncSource.name,
             url,
             item.selected
         )
     }
 
-    val title: String
-        get() = when (service.blockchain) {
-            EvmNetworkModule.Blockchain.Ethereum -> "Ethereum"
-            EvmNetworkModule.Blockchain.BinanceSmartChain -> "Binance Smart Chain"
-        }
+    val title: String =
+        service.blockchain.name
 
     fun onSelectViewItem(viewItem: ViewItem) {
-        if (service.isConfirmationRequired(viewItem.id)) {
-            tmpViewItem = viewItem
-            confirmLiveEvent.postValue(Unit)
-        } else {
-            setNetwork(viewItem)
-        }
-    }
-
-    fun confirmSelection() {
-        tmpViewItem?.let {
-            setNetwork(it)
-            tmpViewItem = null
-        }
-    }
-
-    private fun setNetwork(viewItem: ViewItem) {
         service.setCurrentNetwork(viewItem.id)
         finishLiveEvent.postValue(Unit)
     }
