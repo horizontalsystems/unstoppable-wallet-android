@@ -297,6 +297,7 @@ interface HsNftApiV1 {
         @Query("owner") owner: String,
         @Query("cursor") cursor: String?,
         @Query("limit") limit: Int,
+        @Query("include_orders") includeOrders: Boolean = true
     ): HsNftApiV1Response.Assets
 
     @GET("collection/{uid}/stats")
