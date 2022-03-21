@@ -16,8 +16,8 @@ import androidx.compose.ui.window.Dialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun <T>SelectorDialogCompose(
-    title: String,
+fun <T> SelectorDialogCompose(
+    title: String? = null,
     items: List<TabItem<T>>,
     onDismissRequest: () -> Unit,
     onSelectItem: (T) -> Unit
@@ -28,17 +28,19 @@ fun <T>SelectorDialogCompose(
                 .clip(RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
-            Box(modifier = Modifier.height(40.dp)) {
-                Text(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                        .align(Alignment.Center),
-                    text = title,
-                    style = ComposeAppTheme.typography.subhead1,
-                    color = ComposeAppTheme.colors.grey,
-                    textAlign = TextAlign.Center
-                )
+            title?.let {
+                Box(modifier = Modifier.height(40.dp)) {
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.Center),
+                        text = title,
+                        style = ComposeAppTheme.typography.subhead1,
+                        color = ComposeAppTheme.colors.grey,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
 
             items.forEach {

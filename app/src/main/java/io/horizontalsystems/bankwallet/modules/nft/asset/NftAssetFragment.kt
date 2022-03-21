@@ -1,11 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,7 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +34,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ShareCompat
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
@@ -43,8 +49,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.shortenedAddress
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Price
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -53,6 +58,11 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.net.URL
+
 
 class NftAssetFragment : BaseFragment() {
 
@@ -116,7 +126,7 @@ fun NftAssetScreen(
                         }
                         ViewState.Success -> {
                             viewModel.nftAssetItem?.let { asset ->
-                                NftAsset(asset)
+                                NftAsset(asset, viewModel.viewModelScope)
                             }
                         }
                     }
@@ -130,8 +140,27 @@ fun NftAssetScreen(
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-private fun NftAsset(asset: NftAssetModuleAssetItem) {
+private fun NftAsset(
+    asset: NftAssetModuleAssetItem,
+    coroutineScope: CoroutineScope
+) {
     val context = LocalContext.current
+    val view = LocalView.current
+
+    var nftFileByteArray by remember { mutableStateOf(byteArrayOf()) }
+
+    val pickerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { uri ->
+                    context.contentResolver.openOutputStream(uri).use { outputStream ->
+                        outputStream?.write(nftFileByteArray)
+                    }
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                }
+            }
+        }
+
     LazyColumn {
         item {
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -180,6 +209,8 @@ private fun NftAsset(asset: NftAssetModuleAssetItem) {
 
                 Spacer(modifier = Modifier.height(24.dp))
                 Row {
+                    var showActionSelectorDialog by remember { mutableStateOf(false) }
+
                     ButtonPrimaryDefault(
                         modifier = Modifier.weight(1f),
                         title = stringResource(id = R.string.NftAsset_OpenSea),
@@ -192,8 +223,76 @@ private fun NftAsset(asset: NftAssetModuleAssetItem) {
                     Spacer(modifier = Modifier.width(8.dp))
                     ButtonPrimaryCircle(
                         icon = R.drawable.ic_more_24,
-                        onClick = { /*TODO*/ }
+                        onClick = {
+                            showActionSelectorDialog = true
+                        }
                     )
+
+                    if (showActionSelectorDialog) {
+                        SelectorDialogCompose(
+                            items = NftAssetAction.values().map { (TabItem(stringResource(it.title), false, it)) },
+                            onDismissRequest = {
+                                showActionSelectorDialog = false
+                            },
+                            onSelectItem = { selectedOption ->
+                                when (selectedOption) {
+                                    NftAssetAction.Share -> {
+                                        asset.assetLinks?.permalink?.let {
+                                            ShareCompat.IntentBuilder(context)
+                                                .setType("text/plain")
+                                                .setText(it)
+                                                .startChooser()
+                                        }
+                                    }
+                                    NftAssetAction.Save -> {
+                                        coroutineScope.launch(Dispatchers.IO) {
+                                            try {
+                                                val url = asset.imageUrl ?: throw IllegalStateException("No URL!")
+                                                val fileName = "${asset.collectionName}-${asset.tokenId}"
+                                                var extension: String?
+
+                                                val connection = URL(url).openConnection()
+                                                connection.connect()
+                                                connection.getInputStream().use { input ->
+                                                    val disposition = try {
+                                                        connection.getHeaderField("Content-Disposition")
+                                                    } catch (e: Exception) {
+                                                        null
+                                                    }
+                                                    val headerFileName = if (disposition != null) {
+                                                        val index = disposition.indexOf("filename=")
+                                                        if (index > 0) {
+                                                            disposition.substring(index + 10, disposition.length - 1)
+                                                        } else {
+                                                            null
+                                                        }
+                                                    } else {
+                                                        url.substring(url.lastIndexOf("/") + 1, url.length)
+                                                    }
+
+                                                    extension = headerFileName?.split(".")?.lastOrNull()
+                                                    nftFileByteArray = input.readBytes()
+                                                }
+
+                                                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                                                    addCategory(Intent.CATEGORY_OPENABLE)
+                                                    type = connection.contentType
+                                                    putExtra(
+                                                        Intent.EXTRA_TITLE,
+                                                        "$fileName${extension?.let { ".$it" } ?: ""}")
+                                                }
+
+                                                pickerLauncher.launch(intent)
+                                            } catch (e: Exception) {
+                                                e.printStackTrace()
+                                                HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    }
                 }
             }
         }

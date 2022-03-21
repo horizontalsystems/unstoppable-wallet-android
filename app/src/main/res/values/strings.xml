@@ -1050,6 +1050,8 @@
     <string name="Nfts_Empty">You don\'t have an NFT in your wallet</string>
 
     <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_Action_Share">Share</string>
+    <string name="NftAsset_Action_Save">Save</string>
     <string name="NftAsset_OwnedCount">Owned Count</string>
     <string name="NftAsset_Price_Purchase">Purchase Price</string>
     <string name="NftAsset_Price_Average7d">7D Average</string>

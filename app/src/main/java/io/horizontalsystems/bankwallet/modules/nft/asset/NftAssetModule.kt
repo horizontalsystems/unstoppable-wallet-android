@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
+import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -79,6 +81,9 @@ data class NftAssetModuleAssetItem(
         val percent: String?,
         val searchUrl: String
     )
+
+    enum class NftAssetAction(@StringRes val title: Int) {
+        Share(R.string.NftAsset_Action_Share),
+        Save(R.string.NftAsset_Action_Save)
+    }
 }
-
-
