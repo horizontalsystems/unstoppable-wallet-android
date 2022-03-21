@@ -54,7 +54,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.CoinType
 
 @Composable
-fun BalanceCard(
+fun BalanceCardSwipable(
     viewItem: BalanceViewItem,
     viewModel: BalanceViewModel,
     navController: NavController,
@@ -92,14 +92,14 @@ fun BalanceCard(
             onReveal = { onReveal(viewItem.uid) },
             onConceal = onConceal,
             content = {
-                BalanceCardCell(viewItem, viewModel, navController)
+                BalanceCard(viewItem, viewModel, navController)
             }
         )
     }
 }
 
 @Composable
-private fun BalanceCardCell(
+fun BalanceCard(
     viewItem: BalanceViewItem,
     viewModel: BalanceViewModel,
     navController: NavController

@@ -164,26 +164,30 @@ fun Wallets(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(balanceViewItems, key = { item -> item.uid }) { item ->
-                BalanceCard(
-                    viewItem = item,
-                    viewModel = viewModel,
-                    navController = navController,
-                    modifier = Modifier.animateItemPlacement(
-                        spring(
-                            stiffness = Spring.StiffnessMedium,
-                            visibilityThreshold = IntOffset.VisibilityThreshold
-                        )
-                    ),
-                    revealed = revealedCardId == item.uid,
-                    onReveal = { id ->
-                        if (revealedCardId != id) {
-                            revealedCardId = id
-                        }
-                    },
-                    onConceal = {
-                        revealedCardId = null
-                    },
-                )
+                if (item.isWatchAccount) {
+                    BalanceCard(item, viewModel, navController)
+                } else {
+                    BalanceCardSwipable(
+                        viewItem = item,
+                        viewModel = viewModel,
+                        navController = navController,
+                        modifier = Modifier.animateItemPlacement(
+                            spring(
+                                stiffness = Spring.StiffnessMedium,
+                                visibilityThreshold = IntOffset.VisibilityThreshold
+                            )
+                        ),
+                        revealed = revealedCardId == item.uid,
+                        onReveal = { id ->
+                            if (revealedCardId != id) {
+                                revealedCardId = id
+                            }
+                        },
+                        onConceal = {
+                            revealedCardId = null
+                        },
+                    )
+                }
             }
         }
     }
