@@ -3,6 +3,9 @@ package io.horizontalsystems.bankwallet.modules.balance.ui
 import android.content.Intent
 import android.view.View
 import androidx.compose.animation.*
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
@@ -234,10 +238,19 @@ private fun BalanceCardCell(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun ExpandableContent(viewItem: BalanceViewItem, navController: NavController, viewModel: BalanceViewModel) {
+private fun ExpandableContent(
+    viewItem: BalanceViewItem,
+    navController: NavController,
+    viewModel: BalanceViewModel
+) {
     AnimatedVisibility(
         visible = viewItem.expanded,
-        enter = expandVertically() + fadeIn(),
+        enter = expandVertically(
+            spring(
+                stiffness = Spring.StiffnessMedium,
+                visibilityThreshold = IntSize.VisibilityThreshold
+            )
+        ) + fadeIn(),
         exit = shrinkVertically() + fadeOut()
     ) {
         Column {
