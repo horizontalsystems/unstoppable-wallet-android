@@ -26,8 +26,8 @@ const val MIN_DRAG_AMOUNT = 3
 fun DraggableCardSimple(
     isRevealed: Boolean,
     cardOffset: Float,
-    onExpand: () -> Unit,
-    onCollapse: () -> Unit,
+    onReveal: () -> Unit,
+    onConceal: () -> Unit,
     content: @Composable () -> Unit,
 ) {
     val transitionState = remember {
@@ -52,8 +52,8 @@ fun DraggableCardSimple(
             .pointerInput(Unit) {
                 detectHorizontalDragGestures { _, dragAmount ->
                     when {
-                        dragAmount <= -MIN_DRAG_AMOUNT -> onExpand()
-                        dragAmount > MIN_DRAG_AMOUNT -> onCollapse()
+                        dragAmount <= -MIN_DRAG_AMOUNT -> onReveal()
+                        dragAmount > MIN_DRAG_AMOUNT -> onConceal()
                     }
                 }
             },

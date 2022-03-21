@@ -84,12 +84,12 @@ fun CoinList(
                 DraggableCardSimple(
                     isRevealed = revealedCardIds.contains(item.coinUid),
                     cardOffset = 100f,
-                    onExpand = {
+                    onReveal = {
                         if (!revealedCardIds.contains(item.coinUid)) {
                             revealedCardIds = listOf(item.coinUid)
                         }
                     },
-                    onCollapse = {
+                    onConceal = {
                         revealedCardIds = revealedCardIds.toMutableList().also {
                             it.remove(item.coinUid)
                         }

@@ -166,12 +166,12 @@ fun Wallets(
                     navController = navController,
                     modifier = Modifier.animateItemPlacement(),
                     revealedCardIds = revealedCardIds,
-                    onExpand = { id ->
+                    onReveal = { id ->
                         if (!revealedCardIds.contains(id)) {
                             revealedCardIds = listOf(id)
                         }
                     },
-                    onCollapse = { id ->
+                    onConceal = { id ->
                         revealedCardIds = revealedCardIds.toMutableList().also {
                             it.remove(id)
                         }
