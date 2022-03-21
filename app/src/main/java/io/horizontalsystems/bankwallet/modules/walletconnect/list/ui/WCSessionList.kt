@@ -37,12 +37,12 @@ fun WCSessionList(
                 section,
                 navController,
                 revealedCardIds,
-                onExpand = { id ->
+                onReveal = { id ->
                     if (!revealedCardIds.contains(id)) {
                         revealedCardIds = listOf(id)
                     }
                 },
-                onCollapse = { id ->
+                onConceal = { id ->
                     revealedCardIds = revealedCardIds.toMutableList().also {
                         it.remove(id)
                     }
@@ -55,12 +55,12 @@ fun WCSessionList(
                 section,
                 navController,
                 revealedCardIds,
-                onExpand = { id ->
+                onReveal = { id ->
                     if (!revealedCardIds.contains(id)) {
                         revealedCardIds = listOf(id)
                     }
                 },
-                onCollapse = { id ->
+                onConceal = { id ->
                     revealedCardIds = revealedCardIds.toMutableList().also {
                         it.remove(id)
                     }
@@ -75,8 +75,8 @@ private fun LazyListScope.WCSection(
     section: WalletConnectListModule.Section,
     navController: NavController,
     revealedCardIds: List<String>,
-    onExpand: (String) -> Unit,
-    onCollapse: (String) -> Unit,
+    onReveal: (String) -> Unit,
+    onConceal: (String) -> Unit,
     onDelete: (String) -> Unit
 ) {
     item {
@@ -122,8 +122,8 @@ private fun LazyListScope.WCSection(
             DraggableCardSimple(
                 isRevealed = revealedCardIds.contains(item.sessionId),
                 cardOffset = 72f,
-                onExpand = { onExpand(item.sessionId) },
-                onCollapse = { onCollapse(item.sessionId) },
+                onReveal = { onReveal(item.sessionId) },
+                onConceal = { onConceal(item.sessionId) },
                 content = {
                     WCSessionCell(
                         shape = shape,
