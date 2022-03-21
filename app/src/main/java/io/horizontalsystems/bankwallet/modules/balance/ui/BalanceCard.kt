@@ -63,7 +63,6 @@ fun BalanceCard(
     onReveal: (String) -> Unit,
     onConceal: () -> Unit,
 ) {
-    val coinUid = viewItem.wallet.coin.uid
 
     Box(
         modifier = modifier.fillMaxWidth(),
@@ -90,7 +89,7 @@ fun BalanceCard(
         DraggableCardSimple(
             isRevealed = revealed,
             cardOffset = 72f,
-            onReveal = { onReveal(coinUid) },
+            onReveal = { onReveal(viewItem.uid) },
             onConceal = onConceal,
             content = {
                 BalanceCardCell(viewItem, viewModel, navController)

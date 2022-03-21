@@ -17,6 +17,7 @@ import java.math.BigDecimal
 
 @Immutable
 data class BalanceViewItem(
+    val uid: String,
     val wallet: Wallet,
     val coinCode: String,
     val coinTitle: String,
@@ -180,6 +181,7 @@ class BalanceViewItemFactory {
         val fiatLockedVisibility = !hideBalance && item.balanceData.locked > BigDecimal.ZERO
 
         return BalanceViewItem(
+                uid = item.wallet.coin.uid + (item.wallet.badge ?: ""),
                 wallet = item.wallet,
                 coinCode = coin.code,
                 coinTitle = coin.name,
