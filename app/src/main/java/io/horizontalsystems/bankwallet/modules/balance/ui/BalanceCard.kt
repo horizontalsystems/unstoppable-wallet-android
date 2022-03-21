@@ -55,7 +55,7 @@ fun BalanceCardSwipable(
     viewModel: BalanceViewModel,
     navController: NavController,
     revealed: Boolean,
-    onReveal: (String) -> Unit,
+    onReveal: (Int) -> Unit,
     onConceal: () -> Unit,
 ) {
 
@@ -84,7 +84,7 @@ fun BalanceCardSwipable(
         DraggableCardSimple(
             isRevealed = revealed,
             cardOffset = 72f,
-            onReveal = { onReveal(viewItem.uid) },
+            onReveal = { onReveal(viewItem.wallet.hashCode()) },
             onConceal = onConceal,
             content = {
                 BalanceCard(viewItem, viewModel, navController)

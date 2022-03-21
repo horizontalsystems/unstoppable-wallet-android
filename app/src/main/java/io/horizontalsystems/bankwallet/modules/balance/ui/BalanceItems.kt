@@ -137,7 +137,7 @@ fun Wallets(
     accountId: String,
     sortType: BalanceSortType
 ) {
-    var revealedCardId by remember { mutableStateOf<String?>(null) }
+    var revealedCardId by remember { mutableStateOf<Int?>(null) }
 
     val listState = rememberSaveable(
         accountId,
@@ -159,7 +159,7 @@ fun Wallets(
             contentPadding = PaddingValues(top = 8.dp, bottom = 18.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(balanceViewItems, key = { item -> item.uid }) { item ->
+            items(balanceViewItems, key = { item -> item.wallet.hashCode() }) { item ->
                 if (item.isWatchAccount) {
                     BalanceCard(item, viewModel, navController)
                 } else {
@@ -167,10 +167,10 @@ fun Wallets(
                         viewItem = item,
                         viewModel = viewModel,
                         navController = navController,
-                        revealed = revealedCardId == item.uid,
-                        onReveal = { id ->
-                            if (revealedCardId != id) {
-                                revealedCardId = id
+                        revealed = revealedCardId == item.wallet.hashCode(),
+                        onReveal = { walletHashCode ->
+                            if (revealedCardId != walletHashCode) {
+                                revealedCardId = walletHashCode
                             }
                         },
                         onConceal = {
