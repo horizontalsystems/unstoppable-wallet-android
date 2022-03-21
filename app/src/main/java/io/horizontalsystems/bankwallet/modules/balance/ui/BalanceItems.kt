@@ -1,8 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.VisibilityThreshold
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,7 +16,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -171,12 +167,6 @@ fun Wallets(
                         viewItem = item,
                         viewModel = viewModel,
                         navController = navController,
-                        modifier = Modifier.animateItemPlacement(
-                            spring(
-                                stiffness = Spring.StiffnessMedium,
-                                visibilityThreshold = IntOffset.VisibilityThreshold
-                            )
-                        ),
                         revealed = revealedCardId == item.uid,
                         onReveal = { id ->
                             if (revealedCardId != id) {
