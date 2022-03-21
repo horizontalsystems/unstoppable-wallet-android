@@ -163,7 +163,7 @@ fun Wallets(
             contentPadding = PaddingValues(top = 8.dp, bottom = 18.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(balanceViewItems, key = { item -> item.wallet.coin.uid }) { item ->
+            items(balanceViewItems, key = { item -> item.uid }) { item ->
                 BalanceCard(
                     viewItem = item,
                     viewModel = viewModel,
@@ -174,7 +174,7 @@ fun Wallets(
                             visibilityThreshold = IntOffset.VisibilityThreshold
                         )
                     ),
-                    revealed = revealedCardId == item.wallet.coin.uid,
+                    revealed = revealedCardId == item.uid,
                     onReveal = { id ->
                         if (revealedCardId != id) {
                             revealedCardId = id
