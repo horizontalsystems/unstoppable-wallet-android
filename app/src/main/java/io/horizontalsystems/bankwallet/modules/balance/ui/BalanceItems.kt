@@ -141,7 +141,7 @@ fun Wallets(
     accountId: String,
     sortType: BalanceSortType
 ) {
-    var revealedCardIds by remember { mutableStateOf(listOf<String>()) }
+    var revealedCardId by remember { mutableStateOf<String?>(null) }
 
     val listState = rememberSaveable(
         accountId,
@@ -174,16 +174,14 @@ fun Wallets(
                             visibilityThreshold = IntOffset.VisibilityThreshold
                         )
                     ),
-                    revealedCardIds = revealedCardIds,
+                    revealed = revealedCardId == item.wallet.coin.uid,
                     onReveal = { id ->
-                        if (!revealedCardIds.contains(id)) {
-                            revealedCardIds = listOf(id)
+                        if (revealedCardId != id) {
+                            revealedCardId = id
                         }
                     },
-                    onConceal = { id ->
-                        revealedCardIds = revealedCardIds.toMutableList().also {
-                            it.remove(id)
-                        }
+                    onConceal = {
+                        revealedCardId = null
                     },
                 )
             }

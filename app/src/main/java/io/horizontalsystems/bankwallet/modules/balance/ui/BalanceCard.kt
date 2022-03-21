@@ -59,9 +59,9 @@ fun BalanceCard(
     viewModel: BalanceViewModel,
     navController: NavController,
     modifier: Modifier = Modifier,
-    revealedCardIds: List<String>,
+    revealed: Boolean,
     onReveal: (String) -> Unit,
-    onConceal: (String) -> Unit,
+    onConceal: () -> Unit,
 ) {
     val coinUid = viewItem.wallet.coin.uid
 
@@ -88,10 +88,10 @@ fun BalanceCard(
         )
 
         DraggableCardSimple(
-            isRevealed = revealedCardIds.contains(coinUid),
+            isRevealed = revealed,
             cardOffset = 72f,
             onReveal = { onReveal(coinUid) },
-            onConceal = { onConceal(coinUid) },
+            onConceal = onConceal,
             content = {
                 BalanceCardCell(viewItem, viewModel, navController)
             }

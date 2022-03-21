@@ -48,7 +48,7 @@ fun CoinList(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
-    var revealedCardIds by remember { mutableStateOf(listOf<String>()) }
+    var revealedCardId by remember { mutableStateOf<String?>(null) }
 
     LazyColumn(state = listState) {
         itemsIndexed(items, key = { _, item -> item.coinUid }) { index, item ->
@@ -82,17 +82,15 @@ fun CoinList(
                     }
                 )
                 DraggableCardSimple(
-                    isRevealed = revealedCardIds.contains(item.coinUid),
+                    isRevealed = revealedCardId == item.coinUid,
                     cardOffset = 100f,
                     onReveal = {
-                        if (!revealedCardIds.contains(item.coinUid)) {
-                            revealedCardIds = listOf(item.coinUid)
+                        if (revealedCardId != item.coinUid) {
+                            revealedCardId = item.coinUid
                         }
                     },
                     onConceal = {
-                        revealedCardIds = revealedCardIds.toMutableList().also {
-                            it.remove(item.coinUid)
-                        }
+                        revealedCardId = null
                     },
                     content = {
                         MarketCoin(
