@@ -29,23 +29,21 @@ fun WCSessionList(
     viewModelWc1: WalletConnectListViewModel,
     navController: NavController
 ) {
-    var revealedCardIds by remember { mutableStateOf(listOf<String>()) }
+    var revealedCardId by remember { mutableStateOf<String?>(null) }
 
     LazyColumn {
         viewModelWc2.sectionItem?.let { section ->
             WCSection(
                 section,
                 navController,
-                revealedCardIds,
+                revealedCardId,
                 onReveal = { id ->
-                    if (!revealedCardIds.contains(id)) {
-                        revealedCardIds = listOf(id)
+                    if (revealedCardId != id) {
+                        revealedCardId = id
                     }
                 },
-                onConceal = { id ->
-                    revealedCardIds = revealedCardIds.toMutableList().also {
-                        it.remove(id)
-                    }
+                onConceal = {
+                    revealedCardId = null
                 },
                 onDelete = { viewModelWc2.onDelete(it) }
             )
@@ -54,16 +52,14 @@ fun WCSessionList(
             WCSection(
                 section,
                 navController,
-                revealedCardIds,
+                revealedCardId,
                 onReveal = { id ->
-                    if (!revealedCardIds.contains(id)) {
-                        revealedCardIds = listOf(id)
+                    if (revealedCardId != id) {
+                        revealedCardId = id
                     }
                 },
-                onConceal = { id ->
-                    revealedCardIds = revealedCardIds.toMutableList().also {
-                        it.remove(id)
-                    }
+                onConceal = {
+                    revealedCardId = null
                 },
                 onDelete = { viewModelWc1.onDelete(it) }
             )
@@ -74,9 +70,9 @@ fun WCSessionList(
 private fun LazyListScope.WCSection(
     section: WalletConnectListModule.Section,
     navController: NavController,
-    revealedCardIds: List<String>,
+    revealedCardId: String?,
     onReveal: (String) -> Unit,
-    onConceal: (String) -> Unit,
+    onConceal: () -> Unit,
     onDelete: (String) -> Unit
 ) {
     item {
@@ -120,10 +116,10 @@ private fun LazyListScope.WCSection(
                 },
             )
             DraggableCardSimple(
-                isRevealed = revealedCardIds.contains(item.sessionId),
+                isRevealed = revealedCardId == item.sessionId,
                 cardOffset = 72f,
                 onReveal = { onReveal(item.sessionId) },
-                onConceal = { onConceal(item.sessionId) },
+                onConceal = onConceal,
                 content = {
                     WCSessionCell(
                         shape = shape,
