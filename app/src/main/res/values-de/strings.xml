@@ -867,6 +867,8 @@
     <string name="Nfts_Asset_OnSaleUntil">bis %s</string>
     <string name="Nfts_Empty">Sie haben keinen NFT in Ihrer Brieftasche</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_Action_Share">Teilen</string>
+    <string name="NftAsset_Action_Save">Speichern</string>
     <string name="NftAsset_OwnedCount">Eigene Anzahl</string>
     <string name="NftAsset_Price_Purchase">Einkaufspreis</string>
     <string name="NftAsset_Price_Average7d">7D Durchschnitt</string>

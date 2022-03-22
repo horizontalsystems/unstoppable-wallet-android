@@ -866,6 +866,8 @@
     <string name="Nfts_Asset_OnSaleUntil">%s 까지</string>
     <string name="Nfts_Empty">지갑에 NFT가 없습니다.</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_Action_Share">공유</string>
+    <string name="NftAsset_Action_Save">저장</string>
     <string name="NftAsset_OwnedCount">가진 갯수</string>
     <string name="NftAsset_Price_Purchase">구매 가격</string>
     <string name="NftAsset_Price_Average7d">평균 7일</string>

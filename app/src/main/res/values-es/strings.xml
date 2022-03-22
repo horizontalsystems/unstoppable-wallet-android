@@ -870,6 +870,8 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Nfts_Asset_OnSaleUntil">hasta %s</string>
     <string name="Nfts_Empty">No tiene un NFT en su cartera</string>
     <string name="NftAsset_OpenSea">Abierto</string>
+    <string name="NftAsset_Action_Share">Compartir</string>
+    <string name="NftAsset_Action_Save">Guardar</string>
     <string name="NftAsset_OwnedCount">Cuenta de posesiones</string>
     <string name="NftAsset_Price_Purchase">Precio compra</string>
     <string name="NftAsset_Price_Average7d">Promedio 7D</string>

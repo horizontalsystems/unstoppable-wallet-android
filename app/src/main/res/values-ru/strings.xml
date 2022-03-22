@@ -869,6 +869,8 @@
     <string name="Nfts_Asset_OnSaleUntil">до %s</string>
     <string name="Nfts_Empty">У вас нет NFT в вашем кошельке</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_Action_Share">Поделиться</string>
+    <string name="NftAsset_Action_Save">Сохранить</string>
     <string name="NftAsset_OwnedCount">Собственный Счет</string>
     <string name="NftAsset_Price_Purchase">Цена Покупки</string>
     <string name="NftAsset_Price_Average7d">Средн. 7Д</string>

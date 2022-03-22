@@ -866,6 +866,8 @@
     <string name="Nfts_Asset_OnSaleUntil">تا %s</string>
     <string name="Nfts_Empty">شما NFT در کیف پول خود ندارید</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_Action_Share">به اشتراك گذاشتن</string>
+    <string name="NftAsset_Action_Save">ذخیره</string>
     <string name="NftAsset_OwnedCount">تعداد متعلق به</string>
     <string name="NftAsset_Price_Purchase">مبلغ خرید</string>
     <string name="NftAsset_Price_Average7d">7 دی اوت</string>

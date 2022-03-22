@@ -869,6 +869,8 @@
     <string name="Nfts_Asset_OnSaleUntil">%s kadar</string>
     <string name="Nfts_Empty">Cüzdanınızda NFT yok</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_Action_Share">Paylaş</string>
+    <string name="NftAsset_Action_Save">Kaydet</string>
     <string name="NftAsset_OwnedCount">Sahip Olunan Sayısı</string>
     <string name="NftAsset_Price_Purchase">Paket Fiyatı</string>
     <string name="NftAsset_Price_Average7d">Ortalama 7G</string>

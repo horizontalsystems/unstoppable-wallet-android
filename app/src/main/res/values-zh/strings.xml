@@ -869,6 +869,8 @@
     <string name="Nfts_Asset_OnSaleUntil">直到 %s</string>
     <string name="Nfts_Empty">你的钱包中没有 NFT</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_Action_Share">分享</string>
+    <string name="NftAsset_Action_Save">保存</string>
     <string name="NftAsset_OwnedCount">拥有数量</string>
     <string name="NftAsset_Price_Purchase">购买价格</string>
     <string name="NftAsset_Price_Average7d">平均7天</string>
