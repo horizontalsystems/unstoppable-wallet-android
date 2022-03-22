@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.sendevm
 
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -13,13 +14,17 @@ import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.math.RoundingMode
 import java.util.*
+import kotlin.math.min
 import io.horizontalsystems.ethereumkit.models.Address as EvmAddress
 
 class SendEvmService(
     val sendCoin: PlatformCoin,
     val adapter: ISendEthereumAdapter
 ) : IAvailableBalanceService, IAmountInputService, Clearable {
+
+    private val coinDecimal = min(sendCoin.decimals, App.appConfigProvider.maxDecimal)
 
     private val stateSubject = PublishSubject.create<State>()
     var state: State = State.NotReady
@@ -63,7 +68,7 @@ class SendEvmService(
         } catch (error: Throwable) {
             throw AmountError.InvalidDecimal
         }
-        if (amount > adapter.balanceData.available) {
+        if (amount > availableBalance) {
             throw AmountError.InsufficientBalance
         }
         return evmAmount
@@ -71,7 +76,7 @@ class SendEvmService(
 
     //region IAvailableBalanceService
     override val availableBalance: BigDecimal
-        get() = adapter.balanceData.available
+        get() = adapter.balanceData.available.setScale(coinDecimal, RoundingMode.DOWN)
     //endregion
 
     //region IAmountInputService
@@ -81,20 +86,17 @@ class SendEvmService(
     override val coin: PlatformCoin
         get() = sendCoin
 
-    override val balance: BigDecimal
-        get() = adapter.balanceData.available
-
     override val amountObservable: Flowable<BigDecimal>
         get() = Flowable.empty()
 
     override val coinObservable: Flowable<Optional<PlatformCoin>>
         get() = Flowable.empty()
 
-    override fun onChangeAmount(amount: BigDecimal) {
-        if (amount > BigDecimal.ZERO) {
+    fun onChangeAmount(amount: BigDecimal?) {
+        if (amount != null && amount > BigDecimal.ZERO) {
             var amountWarning: AmountWarning? = null
             try {
-                if (amount == balance && (sendCoin.coinType is CoinType.Ethereum ||
+                if (amount == availableBalance && (sendCoin.coinType is CoinType.Ethereum ||
                         sendCoin.coinType is CoinType.BinanceSmartChain || sendCoin.coinType is CoinType.Polygon ||
                         sendCoin.coinType is CoinType.EthereumOptimism || sendCoin.coinType is CoinType.EthereumArbitrumOne)) {
                     amountWarning = AmountWarning.CoinNeededForFee

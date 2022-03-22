@@ -39,7 +39,6 @@ class SendEvmFragment : BaseFragment() {
     private val vmFactory by lazy { SendEvmModule.Factory(wallet) }
     private val viewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment) { vmFactory }
     private val availableBalanceViewModel by viewModels<SendAvailableBalanceViewModel> { vmFactory }
-    private val amountViewModel by viewModels<AmountInputViewModel> { vmFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,8 +54,7 @@ class SendEvmFragment : BaseFragment() {
                     findNavController(),
                     wallet,
                     viewModel,
-                    availableBalanceViewModel,
-                    amountViewModel
+                    availableBalanceViewModel
                 )
             }
         }
@@ -68,8 +66,7 @@ fun SendEvmScreen(
     navController: NavController,
     wallet: Wallet,
     viewModel: SendEvmViewModel,
-    availableBalanceViewModel: SendAvailableBalanceViewModel,
-    amountViewModel: AmountInputViewModel
+    availableBalanceViewModel: SendAvailableBalanceViewModel
 ) {
     ComposeAppTheme {
         val fullCoin = wallet.platformCoin.fullCoin
@@ -82,6 +79,7 @@ fun SendEvmScreen(
                 R.id.sendEvmConfirmationFragment,
                 SendEvmConfirmationModule.prepareParams(sendData)
             )
+            viewModel.onHandleProceedEvent()
         }
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -113,9 +111,10 @@ fun SendEvmScreen(
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 caution = amountCaution,
-                maxEnabled = true,
+                availableBalance = viewModel.availableBalance,
                 wallet = wallet
             ) {
+                viewModel.onEnterAmount(it)
             }
 
             Spacer(modifier = Modifier.height(12.dp))
