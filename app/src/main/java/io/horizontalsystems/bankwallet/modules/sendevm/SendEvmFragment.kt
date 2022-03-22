@@ -109,8 +109,14 @@ fun SendEvmScreen(
 
             AvailableBalance(availableBalanceViewModel)
 
-            Spacer(modifier = Modifier.height(8.dp))
-            HSAmountInput(amountViewModel, amountCaution)
+            Spacer(modifier = Modifier.height(12.dp))
+            HSAmountInput(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                caution = amountCaution,
+                maxEnabled = true,
+                wallet = wallet
+            ) {
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
             HSAddressInput(
