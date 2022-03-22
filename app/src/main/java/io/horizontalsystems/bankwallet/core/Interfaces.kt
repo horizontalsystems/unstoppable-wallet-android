@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionTyp
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.*
@@ -87,7 +86,7 @@ interface ILocalStorage {
 }
 
 interface IChartTypeStorage {
-    var chartType: ChartType
+    var chartInterval: HsTimePeriod
 }
 
 interface IRestoreSettingsStorage {
@@ -122,17 +121,18 @@ interface IAccountManager {
 interface IBackupManager {
     val allBackedUp: Boolean
     val allBackedUpFlowable: Flowable<Boolean>
-    fun setIsBackedUp(id: String)
 }
 
 interface IAccountFactory {
     fun account(type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
+    fun watchAccount(address: String, domain: String?): Account
 }
 
 interface IWalletStorage {
     fun wallets(account: Account): List<Wallet>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
+    fun isEnabled(accountId: String, coinId: String): Boolean
     fun clear()
 }
 
@@ -195,16 +195,22 @@ interface ITransactionsAdapter {
     val lastBlockInfo: LastBlockInfo?
     val lastBlockUpdatedFlowable: Flowable<Unit>
 
-    val explorerTitle: String
-    fun explorerUrl(transactionHash: String): String?
+    fun getTransactionsAsync(
+        from: TransactionRecord?,
+        coin: PlatformCoin?,
+        limit: Int,
+        transactionType: FilterTransactionType
+    ): Single<List<TransactionRecord>>
 
-    fun getTransactionsAsync(from: TransactionRecord?, coin: PlatformCoin?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>>
     fun getRawTransaction(transactionHash: String): String? = null
 
-    fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>>
+    fun getTransactionRecordsFlowable(
+        coin: PlatformCoin?,
+        transactionType: FilterTransactionType
+    ): Flowable<List<TransactionRecord>>
 }
 
-class UnsupportedFilterException: Exception()
+class UnsupportedFilterException : Exception()
 
 interface IBalanceAdapter {
     val balanceState: AdapterState
@@ -259,24 +265,9 @@ interface ISendDashAdapter {
 }
 
 interface ISendEthereumAdapter {
-    val evmKit: EthereumKit
+    val evmKitWrapper: EvmKitWrapper
     val balanceData: BalanceData
-    val ethereumBalance: BigDecimal
-    val minimumRequiredBalance: BigDecimal
-    val minimumSendAmount: BigDecimal
 
-    fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal
-    fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
-    fun validate(address: String)
-    fun send(
-        amount: BigDecimal,
-        address: String,
-        gasPrice: Long,
-        gasLimit: Long,
-        logger: AppLogger
-    ): Single<Unit>
-
-    fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long>
     fun getTransactionData(amount: BigInteger, address: Address): TransactionData
 }
 
@@ -325,6 +316,7 @@ interface IEnabledWalletStorage {
     fun save(enabledWallets: List<EnabledWallet>)
     fun delete(enabledWallets: List<EnabledWallet>)
     fun deleteAll()
+    fun isEnabled(accountId: String, coinId: String): Boolean
 }
 
 interface IBlockchainSettingsStorage {
@@ -403,7 +395,7 @@ interface IFeeRateProvider {
     }
 }
 
-interface ICustomRangedFeeProvider: IFeeRateProvider {
+interface ICustomRangedFeeProvider : IFeeRateProvider {
     val customFeeRange: LongRange
 }
 
@@ -449,7 +441,7 @@ interface ICoinManager {
     fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin>
     fun featuredFullCoins(enabledPlatformCoins: List<PlatformCoin>): List<FullCoin>
     fun fullCoins(filter: String = "", limit: Int = 20): List<FullCoin>
-    fun getFullCoin(coinUid: String) : FullCoin?
+    fun getFullCoin(coinUid: String): FullCoin?
 }
 
 interface IAddTokenBlockchainService {

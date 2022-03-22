@@ -117,7 +117,7 @@ class Typography internal constructor(
         body = body.withFontFamily(defaultFontFamily),
         bodyItalic = bodyItalic.withFontFamily(defaultFontFamily),
         subhead1 = subhead1.withFontFamily(defaultFontFamily),
-        subhead2 = subhead2.withFontFamily(defaultFontFamily),
+        subhead2 = subhead2.withFontFamily(defaultFontFamily).copy(lineHeight = 20.sp),
         subheadItalic = subheadItalic.withFontFamily(defaultFontFamily),
         caption = caption.withFontFamily(defaultFontFamily),
         captionSB = captionSB.withFontFamily(defaultFontFamily),

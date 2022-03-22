@@ -1,11 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
-
-androidExtensions {
-    experimental = true
-}
 
 android {
     compileSdkVersion compile_sdk_version
@@ -14,8 +10,8 @@ android {
         applicationId "io.horizontalsystems.bankwallet"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 58
-        versionName "0.23.3"
+        versionCode 59
+        versionName "0.24.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
@@ -31,8 +27,8 @@ android {
     }
 
     buildFeatures {
-        // Enables Jetpack Compose for this module
         compose true
+        viewBinding true
     }
 
     signingConfigs {
@@ -66,6 +62,7 @@ android {
             resValue "string", "providerCoinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/provider.coins.json"
             resValue "string", "marketApiBaseUrl", "https://api-dev.blocksdecoded.com"
             resValue "string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom"
+            resValue "string", "walletConnectV2Key", "8b4f41c60880a3e3ad57d82fddb30568"
         }
 
         apptestnet {
@@ -103,6 +100,7 @@ android {
             resValue "string", "providerCoinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/provider.coins.json"
             resValue "string", "marketApiBaseUrl", "https://api.blocksdecoded.com"
             resValue "string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom"
+            resValue "string", "walletConnectV2Key", "0c5ca155c2f165a7d0c88686f2113a72"
         }
 
         appcenterrelease {
@@ -129,7 +127,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.0'
+        kotlinCompilerExtensionVersion '1.1.1'
     }
 }
 
@@ -150,11 +148,16 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
     implementation "androidx.preference:preference-ktx:1.1.1"
-    implementation "androidx.browser:browser:1.3.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    //Splash screen
+    //alpha02 has bug with forced dark mode on Xiaomi phones
+    implementation "androidx.core:core-splashscreen:1.0.0-beta01"
 
     // Room
-    def room_version = '2.3.0'
+    def room_version = '2.4.1'
     implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     // alternately - if using Java8, use the following instead of compiler
@@ -162,7 +165,7 @@ dependencies {
     // optional - ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
 
-    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     implementation "com.google.android.material:material:$material_version"
 
@@ -176,33 +179,33 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.9'
     implementation "androidx.biometric:biometric:$biometric_version"
 
-    implementation 'com.squareup.picasso:picasso:2.8'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
-    implementation 'com.atlassian.commonmark:commonmark:0.15.1'
+    implementation 'com.atlassian.commonmark:commonmark:0.17.0'
     implementation "io.noties.markwon:core:4.6.2"
 
     // ViewPager circle indicator
     implementation 'me.relex:circleindicator:2.1.6'
 
     //Custom tabs, chrome
-    implementation "androidx.browser:browser:1.3.0"
+    implementation "androidx.browser:browser:1.4.0"
 
     // Navigation component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_ktx_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_ktx_version"
 
-    api 'com.journeyapps:zxing-android-embedded:4.1.0'
+    api 'com.journeyapps:zxing-android-embedded:4.3.0'
 
     // WorkManager Kotlin
-    def work_version = "2.7.0"
+    def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // WorkManager RxJava2 support
     implementation "androidx.work:work-rxjava2:$work_version"
 
-    def leakCanary = 'com.squareup.leakcanary:leakcanary-android:2.7'
+    def leakCanary = 'com.squareup.leakcanary:leakcanary-android:2.8'
     appcenterdebugImplementation leakCanary
     apptestnetImplementation leakCanary
     debugImplementation leakCanary
@@ -211,24 +214,26 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:110018d'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:a91b91c'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:eb33b43'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:fe01dfa'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:b4ebb16'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:fe2a3be'
-    implementation 'com.github.horizontalsystems:market-kit-android:1378882'
+    implementation 'com.github.horizontalsystems:market-kit-android:7ad42787'
 
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:1.3.0-beta16"
 
     // WalletConnect
-    implementation 'com.github.horizontalsystems:wallet-connect-kotlin:d5f3cac'
+    implementation 'com.github.horizontalsystems:wallet-connect-kotlin:b9a50b8'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    // WalletConnect V2
+    implementation "com.github.WalletConnect:WalletConnectKotlinV2:1.0.0-beta04"
 
     // Unstoppable Domains
     implementation 'com.unstoppabledomains:resolution:4.0.0'
 
     // in case native file tor.so not loading, do full gradle clean and build.
-    implementation 'com.github.horizontalsystems:tor-kit-android:149b7b5'
+    implementation 'com.github.horizontalsystems:tor-kit-android:6c775c1'
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
     // UI modules
@@ -244,25 +249,27 @@ dependencies {
     implementation project(':components:seekbar')
 
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation 'androidx.activity:activity-compose:1.4.0'
     // Compose Material Design
-    implementation 'androidx.compose.material:material:1.0.2'
+    implementation 'androidx.compose.material:material:1.1.1'
     // Animations
-    implementation 'androidx.compose.animation:animation:1.0.2'
+    implementation 'androidx.compose.animation:animation:1.1.1'
     // Tooling support (Previews, etc.)
-    implementation 'androidx.compose.ui:ui-tooling:1.0.2'
+    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-beta01'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
     implementation "com.google.accompanist:accompanist-swiperefresh:0.18.0"
 
-    implementation "androidx.compose.runtime:runtime-livedata:1.0.2"
-    implementation "io.coil-kt:coil-compose:1.3.1"
+    implementation "androidx.compose.runtime:runtime-livedata:1.1.1"
+    implementation "io.coil-kt:coil-compose:1.4.0"
+    implementation "io.coil-kt:coil-svg:1.4.0"
+    implementation("io.coil-kt:coil-gif:1.4.0")
 
     // When using a AppCompat theme
-    implementation "com.google.accompanist:accompanist-appcompat-theme:0.15.0"
+    implementation "com.google.accompanist:accompanist-appcompat-theme:0.20.3"
 
     // UI Tests
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.1'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
 
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

@@ -26,8 +26,6 @@ class MarketPostService(
     }
 
     private fun fetchPosts() {
-        stateSubject.onNext(DataState.Loading)
-
         disposable?.dispose()
         disposable = marketKit.postsSingle()
             .subscribeOn(Schedulers.io())

@@ -16,7 +16,7 @@ object MarketOverviewModule {
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val topMarketsRepository = TopMarketsRepository(App.marketKit)
             val marketMetricsRepository = MarketMetricsRepository(App.marketKit)
             val service = MarketOverviewService(
@@ -27,11 +27,6 @@ object MarketOverviewModule {
             )
             return MarketOverviewViewModel(service) as T
         }
-    }
-
-    sealed class ViewItemState {
-        class Error(val error: String) : ViewItemState()
-        class Loaded(val viewItem: ViewItem) : ViewItemState()
     }
 
     @Immutable

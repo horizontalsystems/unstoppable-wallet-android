@@ -10,18 +10,34 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ViewSendMemoBinding
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
-import kotlinx.android.synthetic.main.view_send_memo.*
 
+class SendMemoFragment(
+    private val maxLength: Int, hidden: Boolean,
+    private val handler: SendModule.ISendHandler
+) : SendSubmoduleFragment() {
+    private val presenter by activityViewModels<SendMemoPresenter> {
+        SendMemoModule.Factory(maxLength, hidden, handler)
+    }
 
-class SendMemoFragment(private val maxLength: Int, hidden: Boolean,
-                       private val handler: SendModule.ISendHandler) : SendSubmoduleFragment() {
-    private val presenter by activityViewModels<SendMemoPresenter> { SendMemoModule.Factory(maxLength, hidden, handler) }
+    private var _binding: ViewSendMemoBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.view_send_memo, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ViewSendMemoBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,7 +45,7 @@ class SendMemoFragment(private val maxLength: Int, hidden: Boolean,
 
         val presenterView = presenter.view as SendMemoView
 
-        memoInput.addTextChangedListener(object : TextWatcher {
+        binding.memoInput.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable?) {
                 presenter.onTextEntered(s?.toString() ?: "")
@@ -41,11 +57,11 @@ class SendMemoFragment(private val maxLength: Int, hidden: Boolean,
         })
 
         presenterView.maxLength.observe(viewLifecycleOwner, Observer { maxLength ->
-            memoInput.filters = arrayOf(InputFilter.LengthFilter(maxLength))
+            binding.memoInput.filters = arrayOf(InputFilter.LengthFilter(maxLength))
         })
 
         presenterView.hidden.observe(viewLifecycleOwner, { hidden ->
-            memoWrapper.isVisible = !hidden
+            binding.memoWrapper.isVisible = !hidden
         })
     }
 

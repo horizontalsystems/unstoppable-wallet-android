@@ -10,21 +10,37 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.databinding.ViewAmountInputBinding
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
-import kotlinx.android.synthetic.main.view_amount_input.*
 
 class SendAmountFragment(
-        private val wallet: Wallet,
-        private val amountModuleDelegate: SendAmountModule.IAmountModuleDelegate,
-        private val sendHandler: SendModule.ISendHandler)
-    : SendSubmoduleFragment() {
+    private val wallet: Wallet,
+    private val amountModuleDelegate: SendAmountModule.IAmountModuleDelegate,
+    private val sendHandler: SendModule.ISendHandler
+) : SendSubmoduleFragment() {
 
-    private val presenter by activityViewModels<SendAmountPresenter> { SendAmountModule.Factory(wallet, sendHandler) }
+    private val presenter by activityViewModels<SendAmountPresenter> {
+        SendAmountModule.Factory(wallet, sendHandler)
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.view_amount_input, container, false)
+    private var _binding: ViewAmountInputBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ViewAmountInputBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,13 +50,13 @@ class SendAmountFragment(
         val presenterView = presenter.view as SendAmountView
         presenter.moduleDelegate = amountModuleDelegate
 
-        amountInput.onTextChangeCallback = { _, new -> presenter.onAmountChange(new ?: "") }
-        amountInput.onTapSecondaryCallback = { presenter.onSwitchClick() }
-        amountInput.onTapMaxCallback = { presenter.onMaxClick() }
-        amountInput.setFocus()
+        binding.amountInput.onTextChangeCallback = { _, new -> presenter.onAmountChange(new ?: "") }
+        binding.amountInput.onTapSecondaryCallback = { presenter.onSwitchClick() }
+        binding.amountInput.onTapMaxCallback = { presenter.onMaxClick() }
+        binding.amountInput.setFocus()
 
         presenterView.amount.observe(viewLifecycleOwner, Observer { amount ->
-            amountInput.setAmount(amount)
+            binding.amountInput.setAmount(amount)
         })
 
         presenterView.availableBalance.observe(viewLifecycleOwner, Observer { amount ->
@@ -48,15 +64,15 @@ class SendAmountFragment(
         })
 
         presenterView.hint.observe(viewLifecycleOwner, Observer { hint ->
-            amountInput.setSecondaryText(hint)
+            binding.amountInput.setSecondaryText(hint)
         })
 
         presenterView.maxButtonVisibleValue.observe(viewLifecycleOwner, Observer { visible ->
-            amountInput.maxButtonVisible = visible
+            binding.amountInput.maxButtonVisible = visible
         })
 
         presenterView.revertAmount.observe(viewLifecycleOwner, Observer { amount ->
-            amountInput.revertAmount(amount)
+            binding.amountInput.revertAmount(amount)
         })
 
         presenterView.validationError.observe(viewLifecycleOwner, Observer {
@@ -68,7 +84,7 @@ class SendAmountFragment(
         })
 
         presenterView.inputParamsLiveData.observe(viewLifecycleOwner, {
-            amountInput.setInputParams(it)
+            binding.amountInput.setInputParams(it)
         })
     }
 
@@ -77,20 +93,20 @@ class SendAmountFragment(
     }
 
     private fun setLoading(loading: Boolean) {
-        availableBalanceValue.isInvisible = loading
-        processSpinner.isVisible = loading
+        binding.availableBalanceValue.isInvisible = loading
+        binding.processSpinner.isVisible = loading
     }
 
     private fun setAvailableBalance(availableBalance: String) {
-        availableBalanceValue.setText(availableBalance)
+        binding.availableBalanceValue.setText(availableBalance)
     }
 
     private fun setValidationError(error: SendAmountModule.ValidationError?) {
-        processSpinner.isInvisible = true
-        txtHintError.isVisible = error != null
-        background.hasError = error != null
+        binding.processSpinner.isInvisible = true
+        binding.txtHintError.isVisible = error != null
+        binding.background.hasError = error != null
 
-        txtHintError.text = when (error) {
+        binding.txtHintError.text = when (error) {
             is SendAmountModule.ValidationError.InsufficientBalance -> {
                 error.availableBalance?.let {
                     context?.getString(R.string.Send_Error_BalanceAmount, it.getFormatted())
@@ -107,7 +123,15 @@ class SendAmountFragment(
                 }
             }
             is SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance -> {
-                context?.getString(R.string.Send_Error_MinRequiredBalance, App.numberFormatter.formatCoin(error.minimumRequiredBalance.value, error.minimumRequiredBalance.coin.code, 0, 8))
+                context?.getString(
+                    R.string.Send_Error_MinRequiredBalance,
+                    App.numberFormatter.formatCoin(
+                        error.minimumRequiredBalance.value,
+                        error.minimumRequiredBalance.coin.code,
+                        0,
+                        8
+                    )
+                )
             }
             else -> null
         }

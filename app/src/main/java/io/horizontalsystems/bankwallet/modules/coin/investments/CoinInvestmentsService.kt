@@ -31,7 +31,6 @@ class CoinInvestmentsService(
         disposable?.dispose()
 
         marketKit.investmentsSingle(coinUid)
-            .doOnSubscribe { stateSubject.onNext(DataState.Loading) }
             .subscribeIO({ coinInvestments ->
                 stateSubject.onNext(DataState.Success(coinInvestments))
             }, { error ->

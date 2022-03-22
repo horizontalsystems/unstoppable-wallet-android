@@ -25,7 +25,6 @@ class CoinAuditsService(
         disposable?.dispose()
 
         marketKit.auditReportsSingle(addresses)
-            .doOnSubscribe { stateSubject.onNext(DataState.Loading) }
             .subscribeIO({ auditors ->
                 stateSubject.onNext(DataState.Success(auditorItems(auditors)))
             }, { error ->

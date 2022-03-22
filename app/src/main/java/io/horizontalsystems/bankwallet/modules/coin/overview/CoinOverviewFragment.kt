@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
@@ -27,6 +29,7 @@ class CoinOverviewFragment : BaseFragment() {
 
     private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
     private val viewModel by viewModels<CoinOverviewViewModel> { vmFactory }
+    private val chartViewModel by viewModels<ChartViewModel> { vmFactory }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View {
         return ComposeView(requireContext()).apply {
@@ -37,6 +40,7 @@ class CoinOverviewFragment : BaseFragment() {
                 ComposeAppTheme {
                     CoinOverviewScreen(
                         viewModel,
+                        chartViewModel,
                         {
                             TextHelper.copyText(it.rawValue)
                             HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
@@ -61,9 +65,10 @@ class CoinOverviewFragment : BaseFragment() {
                     MarkdownFragment.markdownUrlKey to absoluteUrl,
                     MarkdownFragment.handleRelativeUrlKey to true
                 )
-                findNavController().navigate(R.id.coinFragment_to_markdownFragment,
-                    arguments,
-                    navOptions())
+                findNavController().slideFromRight(
+                    R.id.coinFragment_to_markdownFragment,
+                    arguments
+                )
             }
             else -> LinkHelper.openLinkInAppBrowser(requireContext(), absoluteUrl)
         }

@@ -1,27 +1,33 @@
 package io.horizontalsystems.chartview
 
-import android.graphics.PointF
 import android.util.Range
+import androidx.compose.runtime.Immutable
+import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.models.ChartPointF
 import java.math.BigDecimal
 import kotlin.math.abs
 
-class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endTimestamp: Long, val isExpired: Boolean = false) {
+@Immutable
+data class ChartData(
+    val items: List<ChartDataItemImmutable>,
+    val startTimestamp: Long,
+    val endTimestamp: Long,
+    val isExpired: Boolean = false,
+    val valueRange: Range<Float>
+) {
 
-    class Value(val value: Float, var point: PointF = PointF(0f, 0f))
-
-    class Item(val timestamp: Long, val values: MutableMap<Indicator, Value?> = mutableMapOf()) {
-
-        fun setPoint(x: Float, indicator: Indicator, range: Range<Float>) {
-            val delta = range.upper - range.lower
-            values[indicator]?.let {
-                val y = if (delta == 0F && range.upper > 0f) 0.5f else (it.value - range.lower) / delta
-                it.point = PointF(x, y)
-            }
-        }
+    fun values(name: Indicator): List<ChartDataValueImmutable> {
+        return items.mapNotNull { it.values[name] }
     }
 
-    fun values(name: Indicator): List<Value> {
-        return items.mapNotNull { it.values[name] }
+    fun valuesByTimestamp(name: Indicator): LinkedHashMap<Long, Float> {
+        return LinkedHashMap(
+            items.mapNotNull { item ->
+                item.values[name]?.let {
+                    item.timestamp to it.value
+                }
+            }.toMap()
+        )
     }
 
     fun diff(): BigDecimal {
@@ -38,49 +44,44 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
 
         return ((lastValue - firstValue) / firstValue * 100).toBigDecimal()
     }
+}
 
-    fun add(values: List<Value?>, name: Indicator) {
-        val start = items.size - values.size
-        for (i in values.indices) {
-            val value = values[i] ?: continue
-            items[i + start].values[name] = value
+@Immutable
+data class ChartDataValueImmutable(val value: Float, val point: ChartPointF)
+
+@Immutable
+data class ChartDataItemImmutable(
+    val timestamp: Long,
+    val values: Map<Indicator, ChartDataValueImmutable?>
+)
+
+class ChartDataBuilder private constructor(
+    points: List<ChartPoint>,
+    start: Long?,
+    end: Long?,
+    private val isExpired: Boolean = false
+) {
+
+    companion object {
+        fun buildFromPoints(
+            points: List<ChartPoint>,
+            startTimestamp: Long? = null,
+            endTimestamp: Long? = null,
+            isExpired: Boolean = false
+        ): ChartData {
+            return ChartDataBuilder(
+                points,
+                startTimestamp,
+                endTimestamp,
+                isExpired
+            ).build()
         }
     }
 
-    fun insert(item: Item) {
-        val index = items.indexOfFirst { it.timestamp >= item.timestamp }
-        if (index == -1) {
-            return
-        }
-
-        if (items[index].timestamp == item.timestamp) {
-            items.removeAt(index)
-        }
-
-        items.add(index, item)
-    }
-
-    // Ranges
+    private val startTimestamp = start ?: points.first().timestamp
+    private val endTimestamp = end ?: points.last().timestamp
 
     private val ranges: MutableMap<Indicator, Range<Float>> = mutableMapOf()
-
-    fun range(item: Item, indicator: Indicator) {
-        val currValue = item.values[indicator]?.value ?: return
-        val prevRange = ranges[indicator] ?: Range(currValue, currValue)
-
-        var prevLower = prevRange.lower
-        var prevUpper = prevRange.upper
-
-        if (prevLower > currValue) {
-            prevLower = currValue
-        }
-
-        if (prevUpper < currValue) {
-            prevUpper = currValue
-        }
-
-        ranges[indicator] = Range(prevLower, prevUpper)
-    }
 
     val valueRange by lazy {
         ranges[Indicator.Candle] ?: Range(0f, 1f)
@@ -101,9 +102,9 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
         val histogram = ranges[Indicator.MacdHistogram]
 
         val max = listOf(histogram?.lower, histogram?.upper)
-                .mapNotNull { it }
-                .map { abs(it) }
-                .maxOrNull() ?: 1f
+            .mapNotNull { it }
+            .map { abs(it) }
+            .maxOrNull() ?: 1f
 
         Range(-max, max)
     }
@@ -113,11 +114,93 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
         val signal = ranges[Indicator.MacdSignal]
         val histogram = ranges[Indicator.MacdHistogram]
 
-        val max = listOf(macd?.lower, macd?.upper, signal?.lower, signal?.upper, histogram?.lower, histogram?.upper)
-                .mapNotNull { it }
-                .map { abs(it) }
-                .maxOrNull() ?: 1f
+        val max = listOf(
+            macd?.lower,
+            macd?.upper,
+            signal?.lower,
+            signal?.upper,
+            histogram?.lower,
+            histogram?.upper
+        )
+            .mapNotNull { it }
+            .map { abs(it) }
+            .maxOrNull() ?: 1f
 
         Range(-max, max)
+    }
+
+    val immutableItems: List<ChartDataItemImmutable>
+
+    init {
+        points.forEach { point: ChartPoint ->
+            adjustRange(Indicator.Candle, point.value)
+            point.indicators.forEach { (indicator, value) ->
+                value?.let {
+                    adjustRange(indicator, it)
+                }
+            }
+        }
+
+        val visibleTimeInterval = endTimestamp - startTimestamp
+
+        immutableItems = points.map { point ->
+            val timestamp = point.timestamp - startTimestamp
+            val x = (timestamp.toFloat() / visibleTimeInterval)
+
+            val valuesImmutable = mapOf(Indicator.Candle to ChartDataValueImmutable(point.value, ChartPointF(x, getPointY(point.value, getRangeForIndicator(Indicator.Candle)))))
+                .plus(
+                    point.indicators.mapNotNull { (indicator, value) ->
+                        value?.let {
+                            indicator to ChartDataValueImmutable(value, ChartPointF(x, getPointY(value, getRangeForIndicator(indicator))))
+                        }
+                    }
+                )
+
+            ChartDataItemImmutable(point.timestamp, valuesImmutable)
+        }
+    }
+
+    private fun getPointY(
+        value: Float,
+        range: Range<Float>,
+    ): Float {
+        val delta = range.upper - range.lower
+        return if (delta == 0F && range.upper > 0f) 0.5f else (value - range.lower) / delta
+    }
+
+
+    fun getRangeForIndicator(indicator: Indicator) = when (indicator) {
+        Indicator.Candle -> valueRange
+        Indicator.EmaFast -> valueRange
+        Indicator.EmaSlow -> valueRange
+        Indicator.Volume -> volumeRange
+        Indicator.Dominance -> dominanceRange
+        Indicator.Rsi -> rsiRange
+        Indicator.Macd -> macdRange
+        Indicator.MacdSignal -> macdRange
+        Indicator.MacdHistogram -> histogramRange
+    }
+
+    // Ranges
+
+    private fun adjustRange(indicator: Indicator, value: Float) {
+        val prevRange = ranges[indicator] ?: Range(value, value)
+
+        var prevLower = prevRange.lower
+        var prevUpper = prevRange.upper
+
+        if (prevLower > value) {
+            prevLower = value
+        }
+
+        if (prevUpper < value) {
+            prevUpper = value
+        }
+
+        ranges[indicator] = Range(prevLower, prevUpper)
+    }
+
+    fun build(): ChartData {
+        return ChartData(immutableItems, startTimestamp, endTimestamp, isExpired, valueRange)
     }
 }

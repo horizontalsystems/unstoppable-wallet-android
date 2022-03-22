@@ -12,8 +12,8 @@ import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 
 class MarketAdvancedSearchViewModel(
-        val service: MarketAdvancedSearchService,
-        private val clearables: List<Clearable>
+    val service: MarketAdvancedSearchService,
+    private val clearables: List<Clearable>
 ) : ViewModel() {
 
     // Options
@@ -25,12 +25,20 @@ class MarketAdvancedSearchViewModel(
     val periodViewItemOptions = TimePeriod.values().map {
         ViewItemWrapper(Translator.getString(it.titleResId), it, R.color.leah)
     }
-    val priceChangeViewItemOptions = listOf(ViewItemWrapper.getAny<PriceChange>()) + PriceChange.values().map {
-        ViewItemWrapper<PriceChange?>(Translator.getString(it.titleResId), it, it.colorResId)
+    val priceChangeViewItemOptions =
+        listOf(ViewItemWrapper.getAny<PriceChange>()) + PriceChange.values().map {
+            ViewItemWrapper<PriceChange?>(Translator.getString(it.titleResId), it, it.colorResId)
+        }
+    val blockchainOptions = MarketAdvancedSearchModule.Blockchain.values().map {
+        ViewItemWrapper(it.value, it, R.color.leah)
     }
 
     // ViewItem
-    var coinListViewItem = ViewItemWrapper(Translator.getString(CoinList.Top250.titleResId), CoinList.Top250, R.color.leah)
+    var coinListViewItem = ViewItemWrapper(
+        Translator.getString(CoinList.Top250.titleResId),
+        CoinList.Top250,
+        R.color.leah
+    )
         set(value) {
             field = value
             coinListViewItemLiveData.postValue(value)
@@ -58,13 +66,38 @@ class MarketAdvancedSearchViewModel(
 
             service.filterLiquidity = value.item?.values
         }
-    var periodViewItem = ViewItemWrapper(Translator.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
+    var periodViewItem = ViewItemWrapper(
+        Translator.getString(TimePeriod.TimePeriod_1D.titleResId),
+        TimePeriod.TimePeriod_1D,
+        R.color.leah
+    )
         set(value) {
             field = value
             periodViewItemLiveData.postValue(value)
 
             service.filterPeriod = value.item
         }
+
+    var selectedBlockchainIndexes = listOf<Int>()
+        set(value) {
+            field = value
+            selectedBlockchainIndexesViewItem =
+                if (value.isEmpty())
+                    ViewItemWrapper.getAny()
+                else
+                    ViewItemWrapper(value.size.toString(), value.size, R.color.leah)
+
+            val selectedBlockchains =
+                value.map { MarketAdvancedSearchModule.Blockchain.values()[it] }
+            service.filterBlockchains = selectedBlockchains
+        }
+
+    private var selectedBlockchainIndexesViewItem: ViewItemWrapper<Int?> = ViewItemWrapper.getAny()
+        set(value) {
+            field = value
+            blockchainsViewItemLiveData.postValue(value)
+        }
+
     var priceChangeViewItem: ViewItemWrapper<PriceChange?> = ViewItemWrapper.getAny()
         set(value) {
             field = value
@@ -110,6 +143,7 @@ class MarketAdvancedSearchViewModel(
     val liquidityViewItemLiveData = MutableLiveData(liquidityViewItem)
     val periodViewItemLiveData = MutableLiveData(periodViewItem)
     val priceChangeViewItemLiveData = MutableLiveData(priceChangeViewItem)
+    val blockchainsViewItemLiveData = MutableLiveData(selectedBlockchainIndexesViewItem)
     val updateResultButton = MutableLiveData<Triple<String, Boolean, Boolean>>()
     val errorLiveEvent = SingleLiveEvent<String>()
     val outperformedBtcOnFilter = MutableLiveData(false)
@@ -122,37 +156,49 @@ class MarketAdvancedSearchViewModel(
 
     init {
         service.numberOfItemsAsync
-                .subscribe {
-                    val title = when (it) {
-                        is DataState.Success -> Translator.getString(R.string.Market_Filter_ShowResults_Counter, it.data)
-                        is DataState.Error -> Translator.getString(R.string.Market_Filter_ShowResults)
-                        is DataState.Loading -> ""
-                    }
-                    val showSpinner = it is DataState.Loading
-                    val enabled = it is DataState.Success && it.data > 0
-                    updateResultButton.postValue(Triple(title, showSpinner, enabled))
+            .subscribe {
+                val title = when (it) {
+                    is DataState.Success -> Translator.getString(
+                        R.string.Market_Filter_ShowResults_Counter,
+                        it.data
+                    )
+                    is DataState.Error -> Translator.getString(R.string.Market_Filter_ShowResults)
+                    is DataState.Loading -> ""
+                }
+                val showSpinner = it is DataState.Loading
+                val enabled = it is DataState.Success && it.data > 0
+                updateResultButton.postValue(Triple(title, showSpinner, enabled))
 
-                    it.errorOrNull?.let {
-                        errorLiveEvent.postValue(convertErrorMessage(it))
-                    }
+                it.errorOrNull?.let {
+                    errorLiveEvent.postValue(convertErrorMessage(it))
                 }
-                .let {
-                    disposable.add(it)
-                }
+            }
+            .let {
+                disposable.add(it)
+            }
     }
 
     fun reset() {
-        coinListViewItem = ViewItemWrapper(Translator.getString(CoinList.Top250.titleResId), CoinList.Top250, R.color.leah)
+        coinListViewItem = ViewItemWrapper(
+            Translator.getString(CoinList.Top250.titleResId),
+            CoinList.Top250,
+            R.color.leah
+        )
         marketCapViewItem = ViewItemWrapper.getAny()
         volumeViewItem = ViewItemWrapper.getAny()
         liquidityViewItem = ViewItemWrapper.getAny()
-        periodViewItem = ViewItemWrapper(Translator.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
+        periodViewItem = ViewItemWrapper(
+            Translator.getString(TimePeriod.TimePeriod_1D.titleResId),
+            TimePeriod.TimePeriod_1D,
+            R.color.leah
+        )
         priceChangeViewItem = ViewItemWrapper.getAny()
         outperformedBtcOn = false
         outperformedEthOn = false
         outperformedBnbOn = false
         priceCloseToAth = false
         priceCloseToAtl = false
+        selectedBlockchainIndexes = listOf()
     }
 
     override fun onCleared() {

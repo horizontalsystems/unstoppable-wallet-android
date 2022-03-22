@@ -1,24 +1,32 @@
 package io.horizontalsystems.bankwallet.modules.market.category
 
+import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.core.ICurrencyManager
-import io.reactivex.disposables.Disposable
+import io.horizontalsystems.core.ILanguageManager
+import io.horizontalsystems.marketkit.models.CoinCategory
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketCategoryService(
     private val marketCategoryRepository: MarketCategoryRepository,
     private val currencyManager: ICurrencyManager,
-    private val coinCategoryUid: String,
+    private val languageManager: ILanguageManager,
+    private val favoritesManager: MarketFavoritesManager,
+    private val coinCategory: CoinCategory,
     topMarket: TopMarket = TopMarket.Top250,
     sortingField: SortingField = SortingField.HighestCap,
 ) {
-    private var disposable: Disposable? = null
+    private var disposables = CompositeDisposable()
 
-    val stateObservable: BehaviorSubject<DataState<List<MarketItem>>> = BehaviorSubject.createDefault(DataState.Loading)
+    private var marketItems: List<MarketItem> = listOf()
+
+    val stateObservable: BehaviorSubject<DataState<List<MarketItemWrapper>>> = BehaviorSubject.create()
 
     var topMarket: TopMarket = topMarket
         private set
@@ -27,34 +35,55 @@ class MarketCategoryService(
     var sortingField: SortingField = sortingField
         private set
 
+    val coinCategoryName: String get() = coinCategory.name
+    val coinCategoryDescription: String get() = coinCategory.description[languageManager.currentLanguage]
+        ?: coinCategory.description["en"]
+        ?: coinCategory.description.keys.firstOrNull()
+        ?: ""
+    val coinCategoryImageUrl: String get() = coinCategory.imageUrl
+
     fun setSortingField(sortingField: SortingField) {
         this.sortingField = sortingField
         sync(false)
     }
 
     private fun sync(forceRefresh: Boolean) {
-        disposable?.dispose()
+        disposables.clear()
 
-        marketCategoryRepository.get(
-            coinCategoryUid,
-            topMarket.value,
-            sortingField,
-            topMarket.value,
-            currencyManager.baseCurrency,
-            forceRefresh
-        )
-            .doOnSubscribe { stateObservable.onNext(DataState.Loading) }
-            .subscribeIO({
-                stateObservable.onNext(DataState.Success(it))
+        marketCategoryRepository
+            .get(
+                coinCategory.uid,
+                topMarket.value,
+                sortingField,
+                topMarket.value,
+                currencyManager.baseCurrency,
+                forceRefresh
+            )
+            .subscribeIO({ items ->
+                marketItems = items
+                syncItems()
             }, {
                 stateObservable.onNext(DataState.Error(it))
             }).let {
-                disposable = it
+                disposables.add(it)
             }
+    }
+
+    private fun syncItems() {
+        val favorites = favoritesManager.getAll().map { it.coinUid }
+        val items = marketItems.map { MarketItemWrapper(it, favorites.contains(it.fullCoin.coin.uid)) }
+        stateObservable.onNext(DataState.Success(items))
     }
 
     fun start() {
         sync(true)
+
+        favoritesManager.dataUpdatedAsync
+            .subscribeIO {
+                syncItems()
+            }.let {
+                disposables.add(it)
+            }
     }
 
     fun refresh() {
@@ -62,6 +91,14 @@ class MarketCategoryService(
     }
 
     fun stop() {
-        disposable?.dispose()
+        disposables.clear()
+    }
+
+    fun addFavorite(coinUid: String) {
+        favoritesManager.add(coinUid)
+    }
+
+    fun removeFavorite(coinUid: String) {
+        favoritesManager.remove(coinUid)
     }
 }

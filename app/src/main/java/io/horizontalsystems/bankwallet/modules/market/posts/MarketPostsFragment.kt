@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +24,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellNews
@@ -52,40 +54,40 @@ class MarketPostsFragment : BaseFragment() {
 @Composable
 private fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = MarketPostsModule.Factory())) {
     val items by viewModel.itemsLiveData.observeAsState(listOf())
-    val loading by viewModel.loadingLiveData.observeAsState()
-    val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
+    val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val viewState by viewModel.viewStateLiveData.observeAsState()
     val context = LocalContext.current
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
+        state = rememberSwipeRefreshState(isRefreshing),
         onRefresh = {
             viewModel.refresh()
         }
     ) {
-        when (viewState) {
-            is ViewState.Error -> {
-                ListErrorView(
-                    stringResource(R.string.Market_SyncError)
-                ) {
-                    viewModel.onErrorClick()
+        Crossfade(viewState) { viewState ->
+            when (viewState) {
+                is ViewState.Loading -> {
+                    Loading()
                 }
-            }
-            ViewState.Success -> {
-                LazyColumn {
-                    items(items) { postItem ->
-                        Spacer(modifier = Modifier.height(12.dp))
-                        CellNews(
-                            source = postItem.source,
-                            title = postItem.title,
-                            body = postItem.body,
-                            date = postItem.timeAgo,
-                        ) {
-                            LinkHelper.openLinkInAppBrowser(context, postItem.url)
+                is ViewState.Error -> {
+                    ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                }
+                ViewState.Success -> {
+                    LazyColumn {
+                        items(items) { postItem ->
+                            Spacer(modifier = Modifier.height(12.dp))
+                            CellNews(
+                                source = postItem.source,
+                                title = postItem.title,
+                                body = postItem.body,
+                                date = postItem.timeAgo,
+                            ) {
+                                LinkHelper.openLinkInAppBrowser(context, postItem.url)
+                            }
                         }
-                    }
-                    item {
-                        Spacer(modifier = Modifier.height(12.dp))
+                        item {
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
                     }
                 }
             }

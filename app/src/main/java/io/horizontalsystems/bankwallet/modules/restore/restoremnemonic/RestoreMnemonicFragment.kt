@@ -17,19 +17,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.Utils
-import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment.Companion.ACCOUNT_TYPE_KEY
+import io.horizontalsystems.bankwallet.databinding.FragmentRestoreMnemonicBinding
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment.Companion.ACCOUNT_TYPE_KEY
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import kotlinx.android.synthetic.main.fragment_restore_mnemonic.*
-import kotlinx.android.synthetic.main.fragment_restore_mnemonic.passphrase
-import kotlinx.android.synthetic.main.fragment_restore_mnemonic.passphraseDescription
-import kotlinx.android.synthetic.main.fragment_restore_mnemonic.passphraseToggle
-import kotlinx.android.synthetic.main.fragment_restore_mnemonic.toolbar
-import kotlinx.android.synthetic.main.view_input_address.view.*
 
 class RestoreMnemonicFragment : BaseFragment() {
     private val viewModel by viewModels<RestoreMnemonicViewModel> { RestoreMnemonicModule.Factory() }
@@ -37,7 +33,7 @@ class RestoreMnemonicFragment : BaseFragment() {
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable) {
             if (s.isNotEmpty()) {
-                viewModel.onTextChange(s.toString(), wordsInput.selectionStart)
+                viewModel.onTextChange(s.toString(), binding.wordsInput.selectionStart)
             }
         }
 
@@ -49,16 +45,30 @@ class RestoreMnemonicFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_restore_mnemonic, container, false)
+    private var _binding: FragmentRestoreMnemonicBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentRestoreMnemonicBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.next -> {
                     viewModel.onProceed()
@@ -71,36 +81,48 @@ class RestoreMnemonicFragment : BaseFragment() {
         bindListeners()
         observeEvents()
 
-        KeyboardHelper.showKeyboardDelayed(requireActivity(), wordsInput, 200)
+        KeyboardHelper.showKeyboardDelayed(requireActivity(), binding.wordsInput, 200)
     }
 
     private fun observeEvents() {
         viewModel.proceedLiveEvent.observe(viewLifecycleOwner, Observer { accountType ->
             hideKeyboard()
-            findNavController().navigate(R.id.restoreSelectCoinsFragment, bundleOf(ACCOUNT_TYPE_KEY to accountType), navOptions())
+            findNavController().slideFromRight(
+                R.id.restoreSelectCoinsFragment,
+                bundleOf(ACCOUNT_TYPE_KEY to accountType)
+            )
         })
 
         viewModel.invalidRangesLiveData.observe(viewLifecycleOwner, Observer { invalidRanges ->
-            wordsInput.removeTextChangedListener(textWatcher)
+            binding.wordsInput.removeTextChangedListener(textWatcher)
 
-            val cursor = wordsInput.selectionStart
-            val spannableString = SpannableString(wordsInput.text.toString())
+            val cursor = binding.wordsInput.selectionStart
+            val spannableString = SpannableString(binding.wordsInput.text.toString())
 
             invalidRanges.forEach { range ->
-                val spannableColorSpan = ForegroundColorSpan(requireContext().getColor(R.color.lucian))
-                if (range.last < wordsInput.text.length) {
-                    spannableString.setSpan(spannableColorSpan, range.first, range.last + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                val spannableColorSpan =
+                    ForegroundColorSpan(requireContext().getColor(R.color.lucian))
+                if (range.last < binding.wordsInput.text.length) {
+                    spannableString.setSpan(
+                        spannableColorSpan,
+                        range.first,
+                        range.last + 1,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                 }
             }
 
-            wordsInput.setText(spannableString)
-            wordsInput.setSelection(cursor)
-            wordsInput.addTextChangedListener(textWatcher)
+            binding.wordsInput.setText(spannableString)
+            binding.wordsInput.setSelection(cursor)
+            binding.wordsInput.addTextChangedListener(textWatcher)
         })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
             val errorMessage = when (it) {
-                is RestoreMnemonicService.ValidationError.InvalidWordCountException -> getString(R.string.Restore_Error_MnemonicWordCount, it.count)
+                is RestoreMnemonicService.ValidationError.InvalidWordCountException -> getString(
+                    R.string.Restore_Error_MnemonicWordCount,
+                    it.count
+                )
                 is Mnemonic.ChecksumException -> getString(R.string.Restore_InvalidChecksum)
                 else -> getString(R.string.Restore_ValidationFailed)
             }
@@ -108,27 +130,27 @@ class RestoreMnemonicFragment : BaseFragment() {
         })
 
         viewModel.inputsVisibleLiveData.observe(viewLifecycleOwner) {
-            passphraseToggle.setChecked(it)
-            passphrase.isVisible = it
-            passphraseDescription.isVisible = it
+            binding.passphraseToggle.setChecked(it)
+            binding.passphrase.isVisible = it
+            binding.passphraseDescription.isVisible = it
         }
 
         viewModel.passphraseCautionLiveData.observe(viewLifecycleOwner) {
-            passphrase.setError(it)
+            binding.passphrase.setError(it)
         }
 
         viewModel.clearInputsLiveEvent.observe(viewLifecycleOwner) {
-            passphrase.setText(null)
+            binding.passphrase.setText(null)
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun bindListeners() {
-        wordsInput.addTextChangedListener(textWatcher)
+        binding.wordsInput.addTextChangedListener(textWatcher)
 
         //fixes scrolling in EditText when it's inside NestedScrollView
-        wordsInput.setOnTouchListener { v, event ->
-            if (wordsInput.hasFocus()) {
+        binding.wordsInput.setOnTouchListener { v, event ->
+            if (binding.wordsInput.hasFocus()) {
                 v.parent.requestDisallowInterceptTouchEvent(true)
                 when (event.action and MotionEvent.ACTION_MASK) {
                     MotionEvent.ACTION_SCROLL -> {
@@ -140,15 +162,15 @@ class RestoreMnemonicFragment : BaseFragment() {
             return@setOnTouchListener false
         }
 
-        passphraseToggle.setOnCheckedChangeListenerSingle {
+        binding.passphraseToggle.setOnCheckedChangeListenerSingle {
             viewModel.onTogglePassphrase(it)
         }
 
-        passphrase.onTextChange { old, new ->
+        binding.passphrase.onTextChange { old, new ->
             if (viewModel.validatePassphrase(new)) {
                 viewModel.onChangePassphrase(new ?: "")
             } else {
-                passphrase.revertText(old)
+                binding.passphrase.revertText(old)
             }
         }
     }

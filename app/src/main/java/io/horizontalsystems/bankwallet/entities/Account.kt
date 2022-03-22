@@ -3,16 +3,22 @@ package io.horizontalsystems.bankwallet.entities
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import kotlinx.android.parcel.Parcelize
+import io.horizontalsystems.bankwallet.core.shortenedAddress
+import io.horizontalsystems.hdwalletkit.Mnemonic
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class Account(
+data class Account(
     val id: String,
-    var name: String,
+    val name: String,
     val type: AccountType,
     val origin: AccountOrigin,
-    var isBackedUp: Boolean = false
+    val isBackedUp: Boolean = false
 ) : Parcelable {
+
+    @IgnoredOnParcel
+    val isWatchAccount = type is AccountType.Address
 
     override fun equals(other: Any?): Boolean {
         if (other is Account) {
@@ -30,7 +36,13 @@ class Account(
 @Parcelize
 open class AccountType : Parcelable {
     @Parcelize
+    data class Address(val address: String) : AccountType()
+
+    @Parcelize
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
+        @IgnoredOnParcel
+        val seed by lazy { Mnemonic().toSeed(words, passphrase) }
+
         override fun equals(other: Any?): Boolean {
             return other is Mnemonic
                     && words.toTypedArray().contentEquals(other.words.toTypedArray())
@@ -77,6 +89,7 @@ open class AccountType : Parcelable {
                     Translator.getString(R.string.ManageAccount_NWords, count)
                 }
             }
+            is Address -> this.address.shortenedAddress()
             else -> ""
         }
 }

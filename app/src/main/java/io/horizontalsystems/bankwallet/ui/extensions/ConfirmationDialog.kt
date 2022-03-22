@@ -2,20 +2,27 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
-import androidx.compose.foundation.layout.*
+import android.view.ViewGroup
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import kotlinx.android.synthetic.main.fragment_confirmation_dialog.*
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 
 class ConfirmationDialog(
     private val listener: Listener,
@@ -26,15 +33,13 @@ class ConfirmationDialog(
     private val actionButtonTitle: String?,
     private val cancelButtonTitle: String?,
     private val destructiveButtonTitle: String?
-) : BaseBottomSheetDialogFragment() {
+) : BaseComposableBottomSheetFragment() {
 
     interface Listener {
         fun onActionButtonClick() {}
         fun onDestructiveButtonClick() {}
         fun onCancelButtonClick() {}
     }
-
-    private lateinit var contentTextView: TextView
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
@@ -46,72 +51,84 @@ class ConfirmationDialog(
         listener.onCancelButtonClick()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setContentView(R.layout.fragment_confirmation_dialog)
-
-        setTitle(title)
-        setSubtitle(subtitle)
-
-        // if null set default "Attention" ICON
-        icon?.let {
-            setHeaderIcon(it)
-        } ?: setHeaderIcon(R.drawable.ic_attention_yellow_24)
-
-        contentTextView = view.findViewById(R.id.contentText)
-
-        contentTextView.isVisible = contentText != null
-        contentTextView.text = contentText
-
-        buttonsCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        setButtons()
-    }
-
-    private fun setButtons() {
-        buttonsCompose.setContent {
-            ComposeAppTheme {
-                Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                    actionButtonTitle?.let {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = actionButtonTitle,
-                            onClick = {
-                                listener.onActionButtonClick()
-                                dismiss()
-                            }
-                        )
-                    }
-                    destructiveButtonTitle?.let {
-                        ButtonPrimaryRed(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
-                            title = destructiveButtonTitle,
-                            onClick = {
-                                listener.onDestructiveButtonClick()
-                                dismiss()
-                            }
-                        )
-                    }
-                    cancelButtonTitle?.let {
-                        ButtonPrimaryDefault(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
-                            title = cancelButtonTitle,
-                            onClick = {
-                                listener.onCancelButtonClick()
-                                dismiss()
-                            }
-                        )
-                    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    BottomScreen()
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun BottomScreen() {
+        BottomSheetHeader(
+            iconPainter = painterResource(icon ?: R.drawable.ic_attention_yellow_24),
+            title = title,
+            subtitle = subtitle,
+            onCloseClick = { close() }
+        ) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10
+            )
+            contentText?.let {
+                TextImportantWarning(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    text = it
+                )
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel10
+                )
+            }
+            actionButtonTitle?.let {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                    title = actionButtonTitle,
+                    onClick = {
+                        listener.onActionButtonClick()
+                        dismiss()
+                    }
+                )
+            }
+            destructiveButtonTitle?.let {
+                ButtonPrimaryRed(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                    title = destructiveButtonTitle,
+                    onClick = {
+                        listener.onDestructiveButtonClick()
+                        dismiss()
+                    }
+                )
+            }
+            cancelButtonTitle?.let {
+                ButtonPrimaryDefault(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                    title = cancelButtonTitle,
+                    onClick = {
+                        listener.onCancelButtonClick()
+                        dismiss()
+                    }
+                )
+            }
+            Spacer(Modifier.height(16.dp))
         }
     }
 

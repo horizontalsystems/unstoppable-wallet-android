@@ -3,18 +3,18 @@ package io.horizontalsystems.chartview
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.ChartPointF
 
 class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : View(context, attrs, defStyleAttr) {
 
     private var listener: Chart.Listener? = null
 
-    private var touchPoint: PointF? = null
+    private var touchPoint: ChartPointF? = null
     private var offsetBottom = 0f
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -75,9 +75,9 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
     private fun onMove(coordinate: Coordinate?, listener: Chart.Listener) {
         if (coordinate == null) return
         if (coordinate.x != touchPoint?.x) {
-            listener.onTouchSelect(coordinate.point)
+            listener.onTouchSelect(coordinate.item)
 
-            touchPoint = PointF(coordinate.x, coordinate.y)
+            touchPoint = ChartPointF(coordinate.x, coordinate.y)
             invalidate()
         }
     }

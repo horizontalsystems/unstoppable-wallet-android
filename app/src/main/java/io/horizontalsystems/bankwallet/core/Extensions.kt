@@ -21,6 +21,12 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
+val <T> Optional<T>.orNull: T?
+    get() = when {
+        isPresent -> get()
+        else -> null
+    }
+
 val Coin.isCustom: Boolean get() = uid.startsWith(CustomToken.uidPrefix)
 
 val Coin.iconUrl: String
@@ -94,6 +100,7 @@ val CoinType.blockchainLogo: Int
         CoinType.BinanceSmartChain -> R.drawable.logo_binancesmartchain_24
         is CoinType.Bep2 -> R.drawable.logo_bep2_24
         CoinType.Litecoin -> R.drawable.logo_litecoin_24
+        CoinType.Zcash -> R.drawable.logo_zcash_24
         else -> R.drawable.coin_placeholder
     }
 
@@ -197,4 +204,9 @@ fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit): Disposable {
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
         .subscribe(onSuccess)
+}
+
+fun String.shortenedAddress(characters: Int = 6) = when {
+    length <= characters * 2 + 4 -> this
+    else -> take(characters) + "..." + takeLast(characters)
 }

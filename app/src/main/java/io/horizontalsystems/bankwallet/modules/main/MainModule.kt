@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object MainModule {
 
@@ -25,6 +25,13 @@ object MainModule {
                 App.releaseNotesManager,
                 service,
             ) as T
+        }
+    }
+
+    class FactoryForActivityViewModel : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return MainActivityViewModel(App.wc2SessionManager) as T
         }
     }
 

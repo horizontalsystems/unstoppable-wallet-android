@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule
 import io.reactivex.subjects.PublishSubject
 
 class TermsManager(private val localStorage: ILocalStorage) : ITermsManager {
@@ -9,14 +10,10 @@ class TermsManager(private val localStorage: ILocalStorage) : ITermsManager {
     override val termsAcceptedSignal = PublishSubject.create<Boolean>()
 
     override val terms: List<Term>
-        get() {
-            return termIds.map { term(it) }
-        }
+        get() = TermsModule.TermType.values().map { term(it.key) }
 
     override val termsAccepted: Boolean
-        get() {
-            return terms.all { it.checked }
-        }
+        get() = terms.all { it.checked }
 
     override fun update(term: Term) {
         val oldTermsAccepted = termsAccepted
@@ -32,10 +29,6 @@ class TermsManager(private val localStorage: ILocalStorage) : ITermsManager {
 
     private fun term(id: String): Term {
         return Term(id, localStorage.checkedTerms.firstOrNull { it.id == id }?.checked ?: false)
-    }
-
-    companion object{
-        val termIds = listOf("academy", "backup", "owner", "recover", "phone", "root", "bugs", "pin")
     }
 }
 

@@ -2,38 +2,39 @@ package io.horizontalsystems.chartview
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.chartview.Indicator.*
+import io.horizontalsystems.chartview.databinding.ViewChartBinding
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.GridHelper
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.ChartIndicator
-import io.horizontalsystems.chartview.models.PointInfo
-import kotlinx.android.synthetic.main.view_chart.view.*
 import java.text.DecimalFormat
 
-class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : ConstraintLayout(context, attrs, defStyleAttr) {
+class Chart @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    private val binding = ViewChartBinding.inflate(LayoutInflater.from(context), this)
 
     interface Listener {
         fun onTouchDown()
         fun onTouchUp()
-        fun onTouchSelect(point: PointInfo)
-    }
-
-    init {
-        inflate(context, R.layout.view_chart, this)
+        fun onTouchSelect(item: ChartDataItemImmutable)
     }
 
     private val config = ChartConfig(context, attrs)
-    private val animatorMain = ChartAnimator { chartMain.invalidate() }
-    private val animatorBottom = ChartAnimator { chartBottom.invalidate() }
-    private val animatorTopBottomRange = ChartAnimator { topLowRange.invalidate() }
+    private val animatorMain = ChartAnimator { binding.chartMain.invalidate() }
+    private val animatorBottom = ChartAnimator { binding.chartBottom.invalidate() }
+    private val animatorTopBottomRange = ChartAnimator { binding.topLowRange.invalidate() }
 
-    private val mainCurve = ChartCurve(config, animatorMain, isVisible = true)
+    private val mainCurve = ChartCurve2(config)
     private val mainGradient = ChartGradient(animatorMain)
 
     private val mainGrid = ChartGrid(config)
@@ -54,58 +55,89 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     private val rsiCurve = ChartCurve(config, animatorBottom)
     private val rsiRange = ChartGridRange(config, isVisible = false)
 
-    private val dominanceCurve = ChartCurve(config, animatorMain)
+    private val dominanceCurve = ChartCurve2(config)
     private val dominanceLabel = ChartBottomLabel(config)
 
+    private var mainCurveAnimator: CurveAnimator? = null
+    private var dominanceCurveAnimator: CurveAnimator? = null
+
+    init {
+        animatorMain.addUpdateListener {
+            mainCurveAnimator?.nextFrame(animatorMain.animatedFraction)
+            dominanceCurveAnimator?.nextFrame(animatorMain.animatedFraction)
+        }
+    }
+
     fun setListener(listener: Listener) {
-        chartTouch.onUpdate(object : Listener {
+        binding.chartTouch.onUpdate(object : Listener {
             override fun onTouchDown() {
                 mainCurve.setColor(config.curvePressedColor)
                 mainGradient.setShader(config.pressedGradient)
-                chartMain.invalidate()
+                binding.chartMain.invalidate()
                 listener.onTouchDown()
             }
 
             override fun onTouchUp() {
                 mainCurve.setColor(config.curveColor)
                 mainGradient.setShader(config.curveGradient)
-                chartMain.invalidate()
+                binding.chartMain.invalidate()
                 listener.onTouchUp()
             }
 
-            override fun onTouchSelect(point: PointInfo) {
-                listener.onTouchSelect(point)
+            override fun onTouchSelect(item: ChartDataItemImmutable) {
+                listener.onTouchSelect(item)
             }
         })
     }
 
     fun showSpinner() {
-        chartError.isVisible = false
-        chartViewSpinner.isVisible = true
-        loadingShade.isVisible = true
+        binding.chartError.isVisible = false
+        binding.chartViewSpinner.isVisible = true
+        binding.loadingShade.isVisible = true
     }
 
     fun hideSpinner() {
-        chartViewSpinner.isVisible = false
-        loadingShade.isVisible = false
+        binding.chartViewSpinner.isVisible = false
+        binding.loadingShade.isVisible = false
     }
 
     fun showError(error: String) {
         showChart(false)
-        chartError.isVisible = true
-        chartError.text = error
+        binding.chartError.isVisible = true
+        binding.chartError.text = error
     }
 
-    fun setIndicator(indicator: ChartIndicator, visible: Boolean){
-        if (visible){
+    fun hideError() {
+        showChart(true)
+        binding.chartError.isVisible = false
+        binding.chartError.text = null
+    }
+
+    private var indicator: ChartIndicator? = null
+
+    fun hideAllIndicators() {
+        indicator?.let {
+            setIndicator(it, false)
+        }
+    }
+
+    fun setIndicator(indicator: ChartIndicator, visible: Boolean) {
+        this.indicator = indicator
+        if (visible) {
             hideOtherIndicators(indicator)
         }
-        when(indicator){
+        when (indicator) {
             ChartIndicator.Ema -> {
                 setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = visible)
                 animatorMain.start()
             }
-            ChartIndicator.Macd -> setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = visible)
+            ChartIndicator.Macd -> setVisible(
+                macdCurve,
+                macdSignal,
+                macdHistogram,
+                macdLabel,
+                isVisible = visible
+            )
             ChartIndicator.Rsi -> setVisible(rsiCurve, rsiRange, isVisible = visible)
         }
 
@@ -117,155 +149,236 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
     private fun hideOtherIndicators(indicator: ChartIndicator) {
         ChartIndicator.values().filter { it != indicator }.forEach {
-            if (it == ChartIndicator.Ema && emaFastCurve.isVisible){
+            if (it == ChartIndicator.Ema && emaFastCurve.isVisible) {
                 setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = false)
                 animatorMain.start()
             }
-            if (it == ChartIndicator.Macd && macdCurve.isVisible){
+            if (it == ChartIndicator.Macd && macdCurve.isVisible) {
                 setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = false)
             }
-            if (it == ChartIndicator.Rsi && rsiCurve.isVisible){
+            if (it == ChartIndicator.Rsi && rsiCurve.isVisible) {
                 setVisible(rsiCurve, rsiRange, isVisible = false)
             }
         }
     }
 
     fun showChart(visible: Boolean = true) {
-        setVisible(chartMain, topLowRange, chartBottom, chartTimeline, isVisible = visible)
+        setVisible(
+            binding.chartMain,
+            binding.topLowRange,
+            binding.chartBottom,
+            binding.chartTimeline,
+            isVisible = visible
+        )
     }
 
-    fun setData(data: ChartData, chartType: ChartView.ChartType, maxValue: String?, minValue: String?) {
+    fun setData(
+        data: ChartData,
+        chartType: ChartView.ChartType,
+        maxValue: String?,
+        minValue: String?
+    ) {
+
+        animatorMain.cancel()
+
+        val candleValues = data.valuesByTimestamp(Candle)
+        val minCandleValue = candleValues.values.minOrNull() ?: 0f
+        val maxCandleValue = candleValues.values.maxOrNull() ?: 0f
+
+        mainCurveAnimator = CurveAnimator(
+            candleValues,
+            data.startTimestamp,
+            data.endTimestamp,
+            minCandleValue,
+            maxCandleValue,
+            mainCurveAnimator,
+            binding.chartMain.shape.right,
+            binding.chartMain.shape.bottom,
+            config.curveVerticalOffset,
+            config.curveVerticalOffset,
+        )
+
         config.setTrendColor(data)
 
-        val emaFast = PointConverter.curve(data.values(EmaFast), chartMain.shape, config.curveVerticalOffset)
-        val emaSlow = PointConverter.curve(data.values(EmaSlow), chartMain.shape, config.curveVerticalOffset)
-        val rsi = PointConverter.curve(data.values(Rsi), chartBottom.shape, 0f)
+        val emaFast = PointConverter.curve(
+            data.values(EmaFast),
+            binding.chartMain.shape,
+            config.curveVerticalOffset
+        )
+        val emaSlow = PointConverter.curve(
+            data.values(EmaSlow),
+            binding.chartMain.shape,
+            config.curveVerticalOffset
+        )
+        val rsi = PointConverter.curve(data.values(Rsi), binding.chartBottom.shape, 0f)
 
-        val macd = PointConverter.curve(data.values(Macd), chartBottom.shape, config.macdLineOffset)
-        val signal = PointConverter.curve(data.values(MacdSignal), chartBottom.shape, config.macdLineOffset)
-        val histogram = PointConverter.histogram(data.values(MacdHistogram), chartBottom.shape, config.macdHistogramOffset)
+        val macd = PointConverter.curve(
+            data.values(Macd),
+            binding.chartBottom.shape,
+            config.macdLineOffset
+        )
+        val signal = PointConverter.curve(
+            data.values(MacdSignal),
+            binding.chartBottom.shape,
+            config.macdLineOffset
+        )
+        val histogram = PointConverter.histogram(
+            data.values(MacdHistogram),
+            binding.chartBottom.shape,
+            config.macdHistogramOffset
+        )
 
-        val coordinates = PointConverter.coordinates(data, chartMain.shape, config.curveVerticalOffset)
-        val points = PointConverter.curve(data.values(Candle), chartMain.shape, config.curveVerticalOffset)
-        val volumes = PointConverter.volume(data.values(Volume), chartBottom.shape, config.volumeOffset)
-        val timeline = GridHelper.map(chartType, data.startTimestamp, data.endTimestamp, chartMain.shape.right)
+        val coordinates =
+            PointConverter.coordinates(data, binding.chartMain.shape, config.curveVerticalOffset)
+        val volumes = PointConverter.volume(
+            data.values(Volume),
+            binding.chartBottom.shape,
+            config.volumeOffset
+        )
+        val timeline = GridHelper.map(
+            chartType,
+            data.startTimestamp,
+            data.endTimestamp,
+            binding.chartMain.shape.right
+        )
 
         //Dominance
-        val dominancePoints = data.values(Dominance)
-        if (dominancePoints.isNotEmpty()) {
-            val dominance = PointConverter.curve(
-                dominancePoints,
-                chartMain.shape,
-                config.curveVerticalOffset
+        val dominanceValues = data.valuesByTimestamp(Dominance)
+        if (dominanceValues.isNotEmpty()) {
+            dominanceCurveAnimator = CurveAnimator(
+                dominanceValues,
+                data.startTimestamp,
+                data.endTimestamp,
+                dominanceValues.values.minOrNull() ?: 0f,
+                dominanceValues.values.maxOrNull() ?: 0f,
+                dominanceCurveAnimator,
+                binding.chartMain.shape.right,
+                binding.chartMain.shape.bottom,
+                config.curveVerticalOffset,
+                config.curveVerticalOffset,
             )
 
-            dominanceCurve.setShape(chartMain.shape)
-            dominanceCurve.setPoints(dominance)
+            dominanceCurve.setShape(binding.chartMain.shape)
+            dominanceCurve.setCurveAnimator(dominanceCurveAnimator!!)
             dominanceCurve.setColor(config.curveSlowColor)
 
-            dominanceLabel.setShape(chartMain.shape)
-            val dominancePercent = decimalFormat.format(dominancePoints.last().value)
-            val diff = dominancePoints.last().value - dominancePoints.first().value
+            dominanceLabel.setShape(binding.chartMain.shape)
+            val dValues = dominanceValues.values
+            val dominancePercent = decimalFormat.format(dValues.last())
+            val diff = dValues.last() - dValues.first()
             val diffColor = if (diff > 0f) config.trendUpColor else config.trendDownColor
-            val diffFormatted = decimalFormat.format(diff)
-            dominanceLabel.setValues(mapOf(
-                "$diffFormatted%" to diffColor,
-                "BTC Dominance $dominancePercent%" to config.curveDominanceLabelColor
-            ))
+            val sign = when {
+                diff > 0f -> "+"
+                diff < 0f -> "-"
+                else -> ""
+            }
+            val diffFormatted = sign + decimalFormat.format(diff)
+            dominanceLabel.setValues(
+                mapOf(
+                    "$diffFormatted%" to diffColor,
+                    "BTC Dominance $dominancePercent%" to config.curveDominanceLabelColor
+                )
+            )
 
             dominanceCurve.isVisible = true
             dominanceLabel.isVisible = true
         }
 
-        chartTouch.configure(config, chartTimeline.shape.height())
-        chartTouch.setCoordinates(coordinates)
+        binding.chartTouch.configure(config, binding.chartTimeline.shape.height())
+        binding.chartTouch.setCoordinates(coordinates)
 
         // EMA
-        emaFastCurve.setShape(chartMain.shape)
+        emaFastCurve.setShape(binding.chartMain.shape)
         emaFastCurve.setPoints(emaFast)
         emaFastCurve.setColor(config.curveFastColor)
 
-        emaSlowCurve.setShape(chartMain.shape)
+        emaSlowCurve.setShape(binding.chartMain.shape)
         emaSlowCurve.setPoints(emaSlow)
         emaSlowCurve.setColor(config.curveSlowColor)
 
-        emaLabel.setShape(chartMain.shape)
-        emaLabel.setValues(mapOf(
+        emaLabel.setShape(binding.chartMain.shape)
+        emaLabel.setValues(
+            mapOf(
                 EmaSlow.period.toString() to config.curveSlowColor,
-                EmaFast.period.toString() to config.curveFastColor))
+                EmaFast.period.toString() to config.curveFastColor
+            )
+        )
 
         // RSI
-        rsiCurve.setShape(chartBottom.shape)
+        rsiCurve.setShape(binding.chartBottom.shape)
         rsiCurve.setPoints(rsi)
         rsiCurve.setColor(config.curveSlowColor)
 
-        rsiRange.setShape(chartBottom.shape)
-        rsiRange.setOffset(chartBottom.shape.height() * 0.3f)
+        rsiRange.setShape(binding.chartBottom.shape)
+        rsiRange.setOffset(binding.chartBottom.shape.height() * 0.3f)
         rsiRange.setValues(Rsi.max.toString(), Rsi.min.toString(), true)
 
         // MACD
-        macdCurve.setShape(chartBottom.shape)
+        macdCurve.setShape(binding.chartBottom.shape)
         macdCurve.setPoints(macd)
         macdCurve.setColor(config.curveFastColor)
 
-        macdSignal.setShape(chartBottom.shape)
+        macdSignal.setShape(binding.chartBottom.shape)
         macdSignal.setPoints(signal)
         macdSignal.setColor(config.curveSlowColor)
 
-        macdHistogram.setShape(chartBottom.shape)
+        macdHistogram.setShape(binding.chartBottom.shape)
         macdHistogram.setPoints(histogram)
 
-        macdLabel.setShape(chartBottom.shape)
-        macdLabel.setOffset(chartBottom.shape.height() * 0.3f)
-        macdLabel.setValues(mapOf(
+        macdLabel.setShape(binding.chartBottom.shape)
+        macdLabel.setOffset(binding.chartBottom.shape.height() * 0.3f)
+        macdLabel.setValues(
+            mapOf(
                 Macd.signalPeriod.toString() to config.gridLabelColor,
                 Macd.slowPeriod.toString() to config.gridLabelColor,
-                Macd.fastPeriod.toString() to config.gridLabelColor))
+                Macd.fastPeriod.toString() to config.gridLabelColor
+            )
+        )
 
         // Candles
-        mainCurve.setShape(chartMain.shape)
-        mainCurve.setPoints(points)
+        mainCurve.setShape(binding.chartMain.shape)
+        mainCurve.setCurveAnimator(mainCurveAnimator!!)
         mainCurve.setColor(config.curveColor)
 
-        mainGradient.setPoints(points)
-        mainGradient.setShape(chartMain.shape)
+        mainGradient.setCurveAnimator(mainCurveAnimator!!)
+        mainGradient.setShape(binding.chartMain.shape)
         mainGradient.setShader(config.curveGradient)
 
-        mainGrid.setShape(chartMain.shape)
+        mainGrid.setShape(binding.chartMain.shape)
         mainGrid.set(timeline)
 
-        mainRange.setShape(chartMain.shape)
+        mainRange.setShape(binding.chartMain.shape)
         mainRange.setValues(maxValue, minValue)
 
         // Volume
         bottomVolume.setPoints(volumes)
-        bottomVolume.setShape(chartBottom.shape)
+        bottomVolume.setShape(binding.chartBottom.shape)
 
         // Timeline
         timelineGrid.setColumns(timeline)
-        timelineGrid.setShape(chartTimeline.shape)
+        timelineGrid.setShape(binding.chartTimeline.shape)
 
         // ---------------------------
         // *********
         // ---------------------------
 
-        chartMain.clear()
-        chartMain.add(mainCurve, mainGradient)
-        chartMain.add(mainGrid, emaLabel, dominanceLabel)
-        chartMain.add(emaFastCurve, emaSlowCurve)
-        chartMain.add(dominanceCurve)
+        binding.chartMain.clear()
+        binding.chartMain.add(mainCurve, mainGradient)
+        binding.chartMain.add(mainGrid, emaLabel, dominanceLabel)
+        binding.chartMain.add(emaFastCurve, emaSlowCurve)
+        binding.chartMain.add(dominanceCurve)
 
-        topLowRange.clear()
-        topLowRange.add(mainRange)
+        binding.topLowRange.clear()
+        binding.topLowRange.add(mainRange)
 
-        chartBottom.clear()
-        chartBottom.add(bottomVolume)
-        chartBottom.add(macdHistogram, macdCurve, macdSignal, macdLabel)
-        chartBottom.add(rsiCurve, rsiRange)
+        binding.chartBottom.clear()
+        binding.chartBottom.add(bottomVolume)
+        binding.chartBottom.add(macdHistogram, macdCurve, macdSignal, macdLabel)
+        binding.chartBottom.add(rsiCurve, rsiRange)
 
-        chartTimeline.clear()
-        chartTimeline.add(timelineGrid)
-        chartTimeline.invalidate()
+        binding.chartTimeline.clear()
+        binding.chartTimeline.add(timelineGrid)
+        binding.chartTimeline.invalidate()
 
         animatorMain.start()
         animatorTopBottomRange.start()
@@ -280,7 +393,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         view.forEach { it.isVisible = isVisible }
     }
 
-    companion object{
+    companion object {
         private val decimalFormat = DecimalFormat("#.##")
     }
 

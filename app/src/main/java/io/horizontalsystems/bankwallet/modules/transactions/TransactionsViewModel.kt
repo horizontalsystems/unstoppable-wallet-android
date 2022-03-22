@@ -7,8 +7,9 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
+import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValueNew
 import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
@@ -23,7 +24,8 @@ class TransactionsViewModel(
     val syncingLiveData = MutableLiveData<Boolean>()
     val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
-    val transactionList = MutableLiveData<ItemsList>()
+    val transactionList = MutableLiveData<Map<String, List<TransactionViewItem>>>()
+    val viewState = MutableLiveData<ViewState>(ViewState.Loading)
 
     private val disposables = CompositeDisposable()
 
@@ -59,35 +61,17 @@ class TransactionsViewModel(
             }
 
         service.itemsObservable
-            .subscribeIO {
-                val transactionList = when {
-                    it.isNotEmpty() -> {
-                        val viewItems = it.map { transactionViewItem2Factory.convertToViewItemCached(it) }
-                        ItemsList.Filled(viewItems, generateHeaders(viewItems))
-                    }
-                    else -> ItemsList.Blank
-                }
-                this.transactionList.postValue(transactionList)
+            .subscribeIO { items ->
+                val viewItems = items
+                    .map { transactionViewItem2Factory.convertToViewItemCached(it) }
+                    .groupBy { it.formattedDate }
+
+                transactionList.postValue(viewItems)
+                viewState.postValue(ViewState.Success)
             }
             .let {
                 disposables.add(it)
             }
-    }
-
-    private fun generateHeaders(viewItems: List<TransactionViewItem>): Map<Int, String> {
-        val headers = mutableMapOf<Int, String>()
-
-        var prevSectionHeader: String? = null
-        viewItems.forEachIndexed { index, transactionViewItem ->
-            val sectionHeader = transactionViewItem.formattedDate
-
-            if (sectionHeader != prevSectionHeader) {
-                headers[index] = sectionHeader
-                prevSectionHeader = sectionHeader
-            }
-        }
-
-        return headers
     }
 
     fun setFilterTransactionType(filterType: FilterTransactionType) {
@@ -104,11 +88,6 @@ class TransactionsViewModel(
 
     fun willShow(viewItem: TransactionViewItem) {
         service.fetchRateIfNeeded(viewItem.uid)
-    }
-
-    sealed class ItemsList(val items: List<TransactionViewItem>, val headers: Map<Int, String>) {
-        object Blank : ItemsList(listOf(), mapOf())
-        class Filled(items: List<TransactionViewItem>, headers: Map<Int, String>) : ItemsList(items, headers)
     }
 
     override fun onCleared() {
@@ -132,20 +111,14 @@ data class TransactionViewItem(
     val progress: Int?,
     val title: String,
     val subtitle: String,
-    val primaryValue: ColoredValue?,
-    val secondaryValue: ColoredValue?,
+    val primaryValue: ColoredValueNew?,
+    val secondaryValue: ColoredValueNew?,
     val date: Date,
     val sentToSelf: Boolean = false,
     val doubleSpend: Boolean = false,
     val locked: Boolean? = null
 ) {
     val formattedDate = formatDate(date).uppercase()
-
-    fun itemTheSame(newItem: TransactionViewItem) = uid == newItem.uid
-
-    fun contentTheSame(newItem: TransactionViewItem): Boolean {
-        return this == newItem
-    }
 
     private fun formatDate(date: Date): String {
         val calendar = Calendar.getInstance()
@@ -167,5 +140,14 @@ data class TransactionViewItem(
 }
 
 enum class FilterTransactionType {
-    All, Incoming, Outgoing, Swap, Approve
+    All, Incoming, Outgoing, Swap, Approve;
+
+    val title: Int
+        get() = when (this) {
+            All -> R.string.Transactions_All
+            Incoming -> R.string.Transactions_Incoming
+            Outgoing -> R.string.Transactions_Outgoing
+            Swap -> R.string.Transactions_Swaps
+            Approve -> R.string.Transactions_Approvals
+        }
 }

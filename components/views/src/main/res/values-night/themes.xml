@@ -52,6 +52,7 @@
         <item name="SecondaryButtonStartGradient">#33ffffff</item>
         <item name="SecondaryButtonEndGradient">#00ffffff</item>
         <item name="MarketCircleGradient">@drawable/market_circle_dark</item>
+        <item name="SplashScreenBackground">@drawable/ic_intro_background</item>
 
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white_20</item>

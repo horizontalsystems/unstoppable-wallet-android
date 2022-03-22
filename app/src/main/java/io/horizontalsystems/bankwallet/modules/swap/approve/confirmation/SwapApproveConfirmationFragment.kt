@@ -16,7 +16,8 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSendEvmBinding
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalInfoKey
@@ -33,7 +34,6 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.fragment_confirmation_approve_swap.*
 
 class SwapApproveConfirmationFragment : BaseFragment() {
     private val logger = AppLogger("swap-approve")
@@ -44,8 +44,8 @@ class SwapApproveConfirmationFragment : BaseFragment() {
             mainViewModel.dex.blockchain
         )
     }
-    private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
-    private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
+    private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
+    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.swapApproveConfirmationFragment) { vmFactory }
     private val transactionData: TransactionData
         get() {
             val transactionDataParcelable =
@@ -61,17 +61,27 @@ class SwapApproveConfirmationFragment : BaseFragment() {
 
     private var snackbarInProcess: CustomSnackbar? = null
 
+    private var _binding: FragmentConfirmationSendEvmBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_confirmation_approve_swap, container, false)
+    ): View {
+        _binding = FragmentConfirmationSendEvmBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        snackbarInProcess?.dismiss()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
                     findNavController().popBackStack(R.id.swapApproveFragment, true)
@@ -80,23 +90,23 @@ class SwapApproveConfirmationFragment : BaseFragment() {
                 else -> false
             }
         }
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
+        sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
             setButton(enabled)
-        })
+        }
 
-        sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner) {
             snackbarInProcess = HudHelper.showInProcessMessage(
                 requireView(),
                 R.string.Swap_Approving,
                 SnackbarDuration.INDEFINITE
             )
-        })
+        }
 
-        sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner) {
             HudHelper.showSuccessMessage(
                 requireActivity().findViewById(android.R.id.content),
                 R.string.Hud_Text_Done
@@ -108,29 +118,23 @@ class SwapApproveConfirmationFragment : BaseFragment() {
                 )
                 findNavController().popBackStack(R.id.swapApproveFragment, false)
             }, 1200)
-        })
+        }
 
-        sendViewModel.sendFailedLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner) {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
 
             findNavController().popBackStack()
-        })
+        }
 
-        sendEvmTransactionView.init(
-            sendViewModel,
+        binding.sendEvmTransactionView.init(
+            sendEvmTransactionViewModel,
             feeViewModel,
             viewLifecycleOwner,
-            parentFragmentManager,
-            showSpeedInfoListener = {
-                findNavController().navigate(
-                    R.id.swapApproveConfirmationFragment_to_feeSpeedInfo,
-                    null,
-                    navOptions()
-                )
-            }
+            findNavController(),
+            R.id.swapApproveConfirmationFragment
         )
 
-        buttonApproveCompose.setViewCompositionStrategy(
+        binding.buttonSendCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
@@ -138,29 +142,19 @@ class SwapApproveConfirmationFragment : BaseFragment() {
     }
 
     private fun setButton(enabled: Boolean = false) {
-        buttonApproveCompose.setContent {
+        binding.buttonSendCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
-                    modifier = Modifier.padding(
-                        start = 16.dp,
-                        top = 24.dp,
-                        end = 16.dp,
-                        bottom = 24.dp
-                    ),
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                     title = getString(R.string.Swap_Approve),
                     onClick = {
                         logger.info("click approve button")
-                        sendViewModel.send(logger)
+                        sendEvmTransactionViewModel.send(logger)
                     },
                     enabled = enabled
                 )
             }
         }
-    }
-
-    override fun onDestroyView() {
-        snackbarInProcess?.dismiss()
-        super.onDestroyView()
     }
 
 }

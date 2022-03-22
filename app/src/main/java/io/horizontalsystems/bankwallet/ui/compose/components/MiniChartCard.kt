@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.doOnLayout
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartMinimal
@@ -67,7 +68,7 @@ fun MiniChartCard(
                     ChartMinimal(context)
                 },
                 update = { view ->
-                    view.post {
+                    view.doOnLayout {
                         view.setData(chartViewItem.chartData)
                     }
                 }

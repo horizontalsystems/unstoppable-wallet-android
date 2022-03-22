@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
@@ -12,13 +13,18 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ViewInputBinding
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import kotlinx.android.synthetic.main.view_input.view.*
 
-class InputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : ConstraintLayout(context, attrs, defStyleAttr) {
+class InputView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    private val binding = ViewInputBinding.inflate(LayoutInflater.from(context), this)
 
     private var onTextChangeCallback: ((prevText: String?, newText: String?) -> Unit)? = null
     private var onPasteCallback: ((text: String?) -> Unit)? = null
@@ -38,27 +44,25 @@ class InputView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
 
     init {
-        inflate(context, R.layout.view_input, this)
-
         val ta = context.obtainStyledAttributes(attrs, R.styleable.InputView)
         try {
-            input.hint = ta.getString(R.styleable.InputView_android_hint)
+            binding.input.hint = ta.getString(R.styleable.InputView_android_hint)
             val inputType = ta.getInt(R.styleable.InputView_android_inputType, -1)
             if (inputType != -1) {
-                input.inputType = inputType
+                binding.input.inputType = inputType
 
                 // When inputType is password it uses monospace font and hint looks different. We need to set it to Typeface.DEFAULT
-                input.typeface = Typeface.DEFAULT
+                binding.input.typeface = Typeface.DEFAULT
             }
         } finally {
             ta.recycle()
         }
 
-        input.addTextChangedListener(textWatcher)
+        binding.input.addTextChangedListener(textWatcher)
     }
 
     fun setText(text: String?, skipChangeEvent: Boolean = true) {
-        input.apply {
+        binding.input.apply {
             if (skipChangeEvent) {
                 removeTextChangedListener(textWatcher)
             }
@@ -75,24 +79,24 @@ class InputView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
 
     fun setHint(text: String?) {
-        input.hint = text
+        binding.input.hint = text
     }
 
     fun setError(caution: Caution?) {
-        error.text = caution?.text
-        error.isVisible = caution != null
+        binding.error.text = caution?.text
+        binding.error.isVisible = caution != null
 
         when (caution?.type) {
             Caution.Type.Error -> {
-                inputBackground.hasError = true
-                error.setTextColor(context.getColor(R.color.red_d))
+                binding.inputBackground.hasError = true
+                binding.error.setTextColor(context.getColor(R.color.red_d))
             }
             Caution.Type.Warning -> {
-                inputBackground.hasWarning = true
-                error.setTextColor(context.getColor(R.color.yellow_d))
+                binding.inputBackground.hasWarning = true
+                binding.error.setTextColor(context.getColor(R.color.yellow_d))
             }
             else -> {
-                inputBackground.clearStates()
+                binding.inputBackground.clearStates()
             }
         }
     }
@@ -106,29 +110,29 @@ class InputView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
 
     fun setEditable(isEditable: Boolean) {
-        input.isEnabled = isEditable
+        binding.input.isEnabled = isEditable
     }
 
     fun bindPrefix(prefix: String?) {
-        txtPrefix.text = prefix
-        txtPrefix.isVisible = !prefix.isNullOrBlank()
+        binding.txtPrefix.text = prefix
+        binding.txtPrefix.isVisible = !prefix.isNullOrBlank()
     }
 
     fun revertText(text: String?) {
         setText(text)
         val shake = AnimationUtils.loadAnimation(context, R.anim.shake_edittext)
-        input.startAnimation(shake)
+        binding.input.startAnimation(shake)
     }
 
     private fun setDeleteButtonVisibility(visible: Boolean) {
-        buttonDeleteCompose.setContent {
+        binding.buttonDeleteCompose.setContent {
             if (visible) {
                 ComposeAppTheme {
                     ButtonSecondaryCircle(
                         modifier = Modifier.padding(end = 8.dp),
                         icon = R.drawable.ic_delete_20,
                         onClick = {
-                            input.text = null
+                            binding.input.text = null
                         }
                     )
                 }

@@ -7,23 +7,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ActivityRootedDeviceBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import kotlinx.android.synthetic.main.activity_rooted_device.*
 
 class RootedDeviceActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<RootedDeviceViewModel> { RootedDeviceModule.Factory() }
+    private lateinit var binding: ActivityRootedDeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_rooted_device)
+
+        binding = ActivityRootedDeviceBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         viewModel.openMainActivity.observe(this, {
             finish()
         })
 
-        buttonUnderstandCompose.setContent {
+        binding.buttonUnderstandCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
                     modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 50.dp),

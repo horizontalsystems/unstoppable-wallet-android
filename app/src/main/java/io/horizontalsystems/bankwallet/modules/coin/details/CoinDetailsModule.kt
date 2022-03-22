@@ -13,14 +13,14 @@ import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.marketkit.models.FullCoin
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object CoinDetailsModule {
 
     class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = CoinDetailsService(fullCoin, App.marketKit, App.currencyManager)
 
             return CoinDetailsViewModel(

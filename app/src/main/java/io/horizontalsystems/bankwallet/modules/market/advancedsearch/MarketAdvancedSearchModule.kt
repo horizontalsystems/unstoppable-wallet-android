@@ -6,16 +6,60 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.marketkit.models.CoinType
 
 object MarketAdvancedSearchModule {
     class Factory : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MarketAdvancedSearchService(App.marketKit, App.currencyManager)
             return MarketAdvancedSearchViewModel(service, listOf(service)) as T
         }
 
+    }
+
+    val blockchainToCoinTypesMap = mapOf(
+        Blockchain.Ethereum to listOf(CoinType.Erc20::class.java),
+        Blockchain.BinanceSmartChain to listOf(CoinType.BinanceSmartChain::class.java, CoinType.Bep20::class.java),
+        Blockchain.Polygon to listOf(CoinType.Polygon::class.java, CoinType.Mrc20::class.java),
+        Blockchain.Binance to listOf(CoinType.Bep2::class.java),
+        Blockchain.Optimism to listOf(CoinType.EthereumOptimism::class.java, CoinType.OptimismErc20::class.java),
+        Blockchain.ArbitrumOne to listOf(CoinType.EthereumArbitrumOne::class.java, CoinType.ArbitrumOneErc20::class.java),
+        Blockchain.Avalanche to listOf(CoinType.Avalanche::class.java),
+        Blockchain.Fantom to listOf(CoinType.Fantom::class.java),
+        Blockchain.Harmony to listOf(CoinType.HarmonyShard0::class.java),
+        Blockchain.Huobi to listOf(CoinType.HuobiToken::class.java),
+        Blockchain.Iotex to listOf(CoinType.Iotex::class.java),
+        Blockchain.Moonriver to listOf(CoinType.Moonriver::class.java),
+        Blockchain.Okex to listOf(CoinType.OkexChain::class.java),
+        Blockchain.Solana to listOf(CoinType.Solana::class.java),
+        Blockchain.Sora to listOf(CoinType.Sora::class.java),
+        Blockchain.Tomochain to listOf(CoinType.Tomochain::class.java),
+        Blockchain.Xdai to listOf(CoinType.Xdai::class.java),
+    )
+
+    enum class Blockchain(val value: String) {
+        Ethereum("Ethereum"),
+        BinanceSmartChain("Binance Smart Chain"),
+        Binance("Binance"),
+        ArbitrumOne("Arbitrum One"),
+        Avalanche("Avalanche"),
+        Fantom("Fantom"),
+        Harmony("Harmony"),
+        Huobi("Huobi"),
+        Iotex("Iotex"),
+        Moonriver("Moonriver"),
+        Okex("Okex"),
+        Optimism("Optimism"),
+        Polygon("Polygon"),
+        Solana("Solana"),
+        Sora("Sora"),
+        Tomochain("Tomochain"),
+        Xdai("Xdai");
+
+        fun contains(coinType: CoinType): Boolean =
+            blockchainToCoinTypesMap[this]?.contains(coinType.javaClass) == true
     }
 }
 

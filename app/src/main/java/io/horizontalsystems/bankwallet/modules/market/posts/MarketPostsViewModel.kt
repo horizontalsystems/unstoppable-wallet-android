@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.disposables.CompositeDisposable
@@ -13,8 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 class MarketPostsViewModel(private val service: MarketPostService) : ViewModel() {
 
     val itemsLiveData = MutableLiveData<List<MarketPostsModule.PostViewItem>>()
-    val viewStateLiveData = MutableLiveData<ViewState>()
-    val loadingLiveData = MutableLiveData<Boolean>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
 
     private val disposables = CompositeDisposable()
@@ -38,7 +36,7 @@ class MarketPostsViewModel(private val service: MarketPostService) : ViewModel()
     init {
         service.stateObservable
             .subscribeIO { state ->
-                isRefreshingLiveData.postValue(state == DataState.Loading)
+                isRefreshingLiveData.postValue(false)
 
                 state.dataOrNull?.let { posts ->
                     val postViewItems = posts.map {

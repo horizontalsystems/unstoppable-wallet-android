@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.settings.guides
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ViewHolderGuidePreviewBinding
 import io.horizontalsystems.bankwallet.entities.Guide
-import io.horizontalsystems.views.inflate
 
-class GuidesAdapter(private var listener: Listener) : RecyclerView.Adapter<ViewHolderGuide>(), ViewHolderGuide.ClickListener {
+class GuidesAdapter(private var listener: Listener) : RecyclerView.Adapter<ViewHolderGuide>(),
+    ViewHolderGuide.ClickListener {
 
     interface Listener {
         fun onItemClick(guide: Guide)
@@ -19,7 +20,11 @@ class GuidesAdapter(private var listener: Listener) : RecyclerView.Adapter<ViewH
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderGuide {
-        return ViewHolderGuide(inflate(parent, R.layout.view_holder_guide_preview), this)
+        return ViewHolderGuide(
+            ViewHolderGuidePreviewBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ), this
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolderGuide, position: Int) {

@@ -88,7 +88,6 @@ val CoinType.isSupported: Boolean
         is CoinType.Erc20,
         is CoinType.Bep20,
         is CoinType.Bep2 -> true
-        is CoinType.ArbitrumOne,
         is CoinType.Avalanche,
         is CoinType.Fantom,
         is CoinType.HarmonyShard0,
@@ -96,7 +95,11 @@ val CoinType.isSupported: Boolean
         is CoinType.Iotex,
         is CoinType.Moonriver,
         is CoinType.OkexChain,
-        is CoinType.PolygonPos,
+        CoinType.EthereumOptimism,
+        CoinType.EthereumArbitrumOne,
+        is CoinType.OptimismErc20,
+        is CoinType.ArbitrumOneErc20,
+        is CoinType.Polygon, is CoinType.Mrc20, //todo add Polygon support
         is CoinType.Solana,
         is CoinType.Sora,
         is CoinType.Tomochain,
@@ -106,21 +109,32 @@ val CoinType.isSupported: Boolean
 
 val CoinType.order: Int
     get() = when (this) {
-        is CoinType.Erc20 -> 1
-        is CoinType.Bep20 -> 2
-        is CoinType.Bep2 -> 3
-        is CoinType.Solana -> 4
-        is CoinType.Avalanche -> 5
-        is CoinType.Fantom -> 6
-        is CoinType.ArbitrumOne -> 7
-        is CoinType.PolygonPos -> 8
-        is CoinType.HuobiToken -> 9
-        is CoinType.HarmonyShard0 -> 10
-        is CoinType.Xdai -> 11
-        is CoinType.Moonriver -> 12
-        is CoinType.OkexChain -> 13
-        is CoinType.Sora -> 14
-        is CoinType.Tomochain -> 15
-        is CoinType.Iotex -> 16
+        is CoinType.Bitcoin -> 1
+        is CoinType.BitcoinCash -> 2
+        is CoinType.Litecoin -> 3
+        is CoinType.Dash -> 4
+        is CoinType.Zcash -> 5
+        is CoinType.Ethereum -> 6
+        is CoinType.BinanceSmartChain -> 7
+        is CoinType.Polygon -> 8
+        CoinType.EthereumOptimism -> 9
+        CoinType.EthereumArbitrumOne -> 10
+        is CoinType.Erc20 -> 11
+        is CoinType.Bep20 -> 12
+        is CoinType.Mrc20 -> 13
+        is CoinType.OptimismErc20 -> 14
+        is CoinType.ArbitrumOneErc20 -> 15
+        is CoinType.Bep2 -> 16
+        is CoinType.Solana -> 17
+        is CoinType.Avalanche -> 18
+        is CoinType.Fantom -> 19
+        is CoinType.HuobiToken -> 20
+        is CoinType.HarmonyShard0 -> 21
+        is CoinType.Xdai -> 22
+        is CoinType.Moonriver -> 23
+        is CoinType.OkexChain -> 24
+        is CoinType.Sora -> 25
+        is CoinType.Tomochain -> 26
+        is CoinType.Iotex -> 27
         else -> Int.MAX_VALUE
     }

@@ -47,7 +47,12 @@ class ManageAccountViewModel(
     }
 
     private fun syncAccount(account: Account) {
-        keyActionStateLiveData.postValue(if (account.isBackedUp) KeyActionState.ShowRecoveryPhrase else KeyActionState.BackupRecoveryPhrase)
+        val keyActionState = when {
+            account.isWatchAccount -> KeyActionState.None
+            account.isBackedUp -> KeyActionState.ShowRecoveryPhrase
+            else -> KeyActionState.BackupRecoveryPhrase
+        }
+        keyActionStateLiveData.postValue(keyActionState)
     }
 
     private fun syncAccountSettings() {
@@ -66,17 +71,13 @@ class ManageAccountViewModel(
         finishLiveEvent.postValue(Unit)
     }
 
-    fun onUnlink() {
-        service.deleteAccount()
-    }
-
     override fun onCleared() {
         disposable.clear()
         clearables.forEach(Clearable::clear)
     }
 
     enum class KeyActionState {
-        ShowRecoveryPhrase, BackupRecoveryPhrase
+        None, ShowRecoveryPhrase, BackupRecoveryPhrase
     }
 
     data class AdditionalViewItem(

@@ -1,122 +1,56 @@
 package io.horizontalsystems.bankwallet.modules.swap.settings
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IAddressParser
-import io.horizontalsystems.bankwallet.core.convertedError
+import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 interface IRecipientAddressService {
     val initialAddress: Address?
-    val recipientAddressError: Throwable?
-    val recipientAddressErrorObservable: Observable<Unit>
+    val recipientAddressState: Observable<DataState<Unit>>
 
     fun setRecipientAddress(address: Address?)
+    fun setRecipientAddressWithError(address: Address?, error: Throwable?) = Unit
     fun setRecipientAmount(amount: BigDecimal)
 }
 
-class RecipientAddressViewModel(
-        private val service: IRecipientAddressService,
-        private val resolutionService: AddressResolutionService,
-        private val addressParser: IAddressParser,
-        override val inputFieldPlaceholder: String,
-        private val clearables: List<Clearable>
-) : ViewModel(), IVerifiedInputViewModel {
+class RecipientAddressViewModel(private val service: IRecipientAddressService) : ViewModel() {
 
-    override val setTextLiveData = MutableLiveData<String?>()
-    override val cautionLiveData = MutableLiveData<Caution?>(null)
-    override val isLoadingLiveData = SingleLiveEvent<Boolean>()
-    override val initialValue: String?
-        get() = service.initialAddress?.title
+    val initialAddress by service::initialAddress
 
-    private var isEditing = false
-    private var forceShowError = false
+    var error by mutableStateOf<Throwable?>(null)
+        private set
 
-    private var disposables = CompositeDisposable()
+    private val disposables = CompositeDisposable()
 
     init {
-        service.recipientAddressErrorObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    sync()
-                }.let {
-                    disposables.add(it)
+        service.recipientAddressState
+            .subscribeIO {
+                viewModelScope.launch {
+                    error = it.errorOrNull
                 }
-
-        resolutionService.resolveFinishedAsync
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { address ->
-                    forceShowError = true
-
-                    if (address.isPresent) {
-                        service.setRecipientAddress(address.get())
-                    } else {
-                        sync()
-                    }
-                }.let {
-                    disposables.add(it)
-                }
-
-        resolutionService.isResolvingAsync
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    isLoadingLiveData.postValue(it)
-                }.let {
-                    disposables.add(it)
-                }
-
-        sync()
-    }
-
-    override fun onChangeText(text: String?) {
-        forceShowError = false
-
-        service.setRecipientAddress(text?.let { Address(it) })
-        resolutionService.setText(text)
-
-        if (text == null || text.isEmpty()) {
-            return
-        }
-
-        val addressData = addressParser.parse(text)
-
-        addressData.amount?.let {
-            service.setRecipientAmount(it)
-        }
-    }
-
-    fun onChangeFocus(hasFocus: Boolean) {
-        if (hasFocus) {
-            forceShowError = true
-        }
-
-        isEditing = hasFocus
-        sync()
-    }
-
-    private fun sync() {
-        if ((isEditing && !forceShowError) || resolutionService.isResolving) {
-            cautionLiveData.postValue(null)
-        } else {
-            val caution = service.recipientAddressError?.convertedError?.localizedMessage?.let {
-                Caution(it, Caution.Type.Error)
+            }.let {
+                disposables.add(it)
             }
-
-            cautionLiveData.postValue(caution)
-        }
     }
 
     override fun onCleared() {
-        clearables.forEach(Clearable::clear)
         disposables.clear()
+    }
+
+    fun setAddress(address: Address?) {
+        service.setRecipientAddress(address)
+    }
+
+    fun setAddressWithError(address: Address?, error: Throwable?) {
+        service.setRecipientAddressWithError(address, error)
     }
 }

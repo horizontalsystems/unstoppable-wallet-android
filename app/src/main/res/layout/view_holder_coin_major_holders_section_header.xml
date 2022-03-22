@@ -2,7 +2,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/sectionTitle"
     style="@style/Body"
-    android:layout_marginTop="24dp"
+    android:layout_marginTop="7dp"
     android:layout_width="match_parent"
     android:layout_height="44dp"
     android:gravity="center_vertical"

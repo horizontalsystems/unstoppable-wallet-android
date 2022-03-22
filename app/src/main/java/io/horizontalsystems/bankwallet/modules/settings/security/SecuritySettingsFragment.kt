@@ -10,93 +10,119 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.databinding.FragmentSettingsSecurityBinding
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.views.ListPosition
-import kotlinx.android.synthetic.main.fragment_settings_security.*
 
 class SecuritySettingsFragment : BaseFragment() {
 
     private val viewModel by viewModels<SecuritySettingsViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_settings_security, container, false)
+    private var _binding: FragmentSettingsSecurityBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSettingsSecurityBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
         viewModel.init()
 
-        changePin.setOnSingleClickListener {
+        binding.changePin.setOnSingleClickListener {
             viewModel.delegate.didTapEditPin()
         }
 
-        privacy.setOnSingleClickListener {
+        binding.privacy.setOnSingleClickListener {
             viewModel.delegate.didTapPrivacy()
         }
 
-        biometricAuth.setOnClickListener {
-            biometricAuth.switchToggle()
+        binding.biometricAuth.setOnClickListener {
+            binding.biometricAuth.switchToggle()
         }
 
-        biometricAuth.setOnCheckedChangeListener {
+        binding.biometricAuth.setOnCheckedChangeListener {
             viewModel.delegate.didSwitchBiometricEnabled(it)
         }
 
-        enablePin.setOnSingleClickListener {
-            enablePin.switchToggle()
+        binding.enablePin.setOnSingleClickListener {
+            binding.enablePin.switchToggle()
         }
 
-        enablePin.setOnCheckedChangeListenerSingle {
+        binding.enablePin.setOnCheckedChangeListenerSingle {
             viewModel.delegate.didSwitchPinSet(it)
         }
 
         //  Handling view model live events
 
         viewModel.pinSetLiveData.observe(viewLifecycleOwner, Observer { pinEnabled ->
-            enablePin.setChecked(pinEnabled)
-            enablePin.showAttention(!pinEnabled)
+            binding.enablePin.setChecked(pinEnabled)
+            binding.enablePin.showAttention(!pinEnabled)
         })
 
         viewModel.editPinVisibleLiveData.observe(viewLifecycleOwner, Observer { pinEnabled ->
-            changePin.isVisible = pinEnabled
-            enablePin.setListPosition(if (pinEnabled) ListPosition.First else ListPosition.Single)
+            binding.changePin.isVisible = pinEnabled
+            binding.enablePin.setListPosition(if (pinEnabled) ListPosition.First else ListPosition.Single)
             if (pinEnabled) {
-                changePin.setListPosition(ListPosition.Last)
+                binding.changePin.setListPosition(ListPosition.Last)
             }
         })
 
         viewModel.biometricSettingsVisibleLiveData.observe(viewLifecycleOwner, Observer { enabled ->
-            biometricAuth.isVisible = enabled
-            txtBiometricAuthInfo.isVisible = enabled
+            binding.biometricAuth.isVisible = enabled
+            binding.txtBiometricAuthInfo.isVisible = enabled
         })
 
         viewModel.biometricEnabledLiveData.observe(viewLifecycleOwner, Observer {
-            biometricAuth.setChecked(it)
+            binding.biometricAuth.setChecked(it)
         })
 
         //  Router
 
         viewModel.openEditPinLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.securitySettingsFragment_to_pinFragment, PinModule.forEditPin(), navOptions())
+            findNavController().slideFromRight(
+                R.id.securitySettingsFragment_to_pinFragment,
+                PinModule.forEditPin()
+            )
         })
 
         viewModel.openSetPinLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.securitySettingsFragment_to_pinFragment, PinModule.forSetPin(), navOptions())
+            findNavController().slideFromRight(
+                R.id.securitySettingsFragment_to_pinFragment,
+                PinModule.forSetPin()
+            )
         })
 
         viewModel.openUnlockPinLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.securitySettingsFragment_to_pinFragment, PinModule.forUnlock(), navOptions())
+            findNavController().slideFromRight(
+                R.id.securitySettingsFragment_to_pinFragment,
+                PinModule.forUnlock()
+            )
         })
 
         viewModel.openPrivacySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.securitySettingsFragment_to_privacySettingsFragment, null, navOptions())
+            findNavController().slideFromRight(
+                R.id.securitySettingsFragment_to_privacySettingsFragment
+            )
         })
 
         subscribeFragmentResult()

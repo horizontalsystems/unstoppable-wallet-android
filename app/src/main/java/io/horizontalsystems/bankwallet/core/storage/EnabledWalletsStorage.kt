@@ -23,4 +23,8 @@ class EnabledWalletsStorage(private val appDatabase: AppDatabase) : IEnabledWall
     override fun delete(enabledWallets: List<EnabledWallet>) {
         appDatabase.walletsDao().deleteWallets(enabledWallets)
     }
+
+    override fun isEnabled(accountId: String, coinId: String): Boolean {
+        return appDatabase.walletsDao().count(accountId, coinId) > 0
+    }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,12 +21,12 @@ import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfo
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeader
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
@@ -35,8 +36,6 @@ import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -47,8 +46,9 @@ class TvlFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        val viewModel by viewModels<TvlViewModel> { TvlModule.Factory() }
+        val vmFactory = TvlModule.Factory()
+        val tvlChartViewModel by viewModels<TvlChartViewModel> { vmFactory }
+        val viewModel by viewModels<TvlViewModel> { vmFactory }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -56,7 +56,7 @@ class TvlFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    TvlScreen(viewModel) { onCoinClick(it) }
+                    TvlScreen(viewModel, tvlChartViewModel) { onCoinClick(it) }
                 }
             }
         }
@@ -65,7 +65,7 @@ class TvlFragment : BaseFragment() {
     private fun onCoinClick(coinUid: String?) {
         if (coinUid != null) {
             val arguments = CoinFragment.prepareParams(coinUid)
-            findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+            findNavController().slideFromRight(R.id.coinFragment, arguments)
         } else {
             HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_CoinNotSupported)
         }
@@ -73,16 +73,17 @@ class TvlFragment : BaseFragment() {
 
     @Composable
     private fun TvlScreen(
-        viewModel: TvlViewModel,
+        tvlViewModel: TvlViewModel,
+        chartViewModel: TvlChartViewModel,
         onCoinClick: (String?) -> Unit
     ) {
-        val viewState by viewModel.viewStateLiveData.observeAsState()
-        val chartData by viewModel.chartLiveData.observeAsState()
-        val tvlData by viewModel.tvlLiveData.observeAsState()
-        val tvlDiffType by viewModel.tvlDiffTypeLiveData.observeAsState()
-        val loading by viewModel.loadingLiveData.observeAsState(false)
-        val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
-        val chainSelectorDialogState by viewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
+        val itemsViewState by tvlViewModel.viewStateLiveData.observeAsState()
+        val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
+        val viewState = itemsViewState?.merge(chartViewState)
+        val tvlData by tvlViewModel.tvlLiveData.observeAsState()
+        val tvlDiffType by tvlViewModel.tvlDiffTypeLiveData.observeAsState()
+        val isRefreshing by tvlViewModel.isRefreshingLiveData.observeAsState(false)
+        val chainSelectorDialogState by tvlViewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
@@ -99,76 +100,58 @@ class TvlFragment : BaseFragment() {
             )
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing || loading),
+                state = rememberSwipeRefreshState(isRefreshing),
                 onRefresh = {
-                    viewModel.refresh()
+                    tvlViewModel.refresh()
                 }
             ) {
-                when (viewState) {
-                    is ViewState.Error -> {
-                        ListErrorView(
-                            stringResource(R.string.Market_SyncError)
-                        ) {
-                            viewModel.onErrorClick()
+                Crossfade(viewState) { viewState ->
+                    when (viewState) {
+                        is ViewState.Loading -> {
+                            Loading()
                         }
-                    }
-                    ViewState.Success -> {
-                        LazyColumn {
-                            chartData?.let { chartData ->
+                        is ViewState.Error -> {
+                            ListErrorView(stringResource(R.string.SyncError), tvlViewModel::onErrorClick)
+                        }
+                        ViewState.Success -> {
+                            LazyColumn {
                                 item {
-                                    ChartInfoHeader(chartData.subtitle)
-
-                                    ChartInfo(
-                                        CoinChartAdapter.ViewItemWrapper(chartData.chartInfoData),
-                                        chartData.currency,
-                                        CoinChartAdapter.ChartViewType.MarketMetricChart,
-                                        listOf(
-                                            Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
-                                            Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
-                                            Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month)
-                                        ),
-                                        object : CoinChartAdapter.Listener {
-                                            override fun onChartTouchDown() = Unit
-
-                                            override fun onChartTouchUp() = Unit
-
-                                            override fun onTabSelect(chartType: ChartType) {
-                                                viewModel.onSelectChartType(chartType)
-                                            }
-                                        })
-                                }
-                            }
-
-                            tvlData?.let { tvlData ->
-                                item {
-                                    TvlMenu(
-                                        tvlData.chainSelect,
-                                        tvlData.sortDescending,
-                                        tvlDiffType,
-                                        viewModel::onClickChainSelector,
-                                        viewModel::onToggleSortType,
-                                        viewModel::onToggleTvlDiffType
-                                    )
+                                    Chart(chartViewModel) {
+                                        tvlViewModel.onSelectChartInterval(it)
+                                    }
                                 }
 
-                                items(tvlData.coinTvlViewItems) { item ->
-                                    DefiMarket(
-                                        item.name,
-                                        item.chain,
-                                        item.iconUrl,
-                                        item.iconPlaceholder,
-                                        item.tvl,
-                                        when (tvlDiffType) {
-                                            TvlDiffType.Percent -> item.tvlChangePercent?.let {
-                                                MarketDataValue.DiffNew(Value.Percent(item.tvlChangePercent))
-                                            }
-                                            TvlDiffType.Currency -> item.tvlChangeAmount?.let {
-                                                MarketDataValue.DiffNew(Value.Currency(item.tvlChangeAmount))
-                                            }
-                                            else -> null
-                                        },
-                                        item.rank
-                                    ) { onCoinClick(item.coinUid) }
+                                tvlData?.let { tvlData ->
+                                    item {
+                                        TvlMenu(
+                                            tvlData.chainSelect,
+                                            tvlData.sortDescending,
+                                            tvlDiffType,
+                                            tvlViewModel::onClickChainSelector,
+                                            tvlViewModel::onToggleSortType,
+                                            tvlViewModel::onToggleTvlDiffType
+                                        )
+                                    }
+
+                                    items(tvlData.coinTvlViewItems) { item ->
+                                        DefiMarket(
+                                            item.name,
+                                            item.chain,
+                                            item.iconUrl,
+                                            item.iconPlaceholder,
+                                            item.tvl,
+                                            when (tvlDiffType) {
+                                                TvlDiffType.Percent -> item.tvlChangePercent?.let {
+                                                    MarketDataValue.DiffNew(Value.Percent(item.tvlChangePercent))
+                                                }
+                                                TvlDiffType.Currency -> item.tvlChangeAmount?.let {
+                                                    MarketDataValue.DiffNew(Value.Currency(item.tvlChangeAmount))
+                                                }
+                                                else -> null
+                                            },
+                                            item.rank
+                                        ) { onCoinClick(item.coinUid) }
+                                    }
                                 }
                             }
                         }
@@ -178,10 +161,13 @@ class TvlFragment : BaseFragment() {
                 when (val option = chainSelectorDialogState) {
                     is SelectorDialogState.Opened -> {
                         AlertGroup(
-                            R.string.MarketGlobalMetrics_ChainSelectorTitle,
-                            option.select,
-                            viewModel::onSelectChain,
-                            viewModel::onChainSelectorDialogDismiss
+                            title = R.string.MarketGlobalMetrics_ChainSelectorTitle,
+                            select = option.select,
+                            onSelect = {
+                                chartViewModel.onSelectChain(it)
+                                tvlViewModel.onSelectChain(it)
+                            },
+                            onDismiss = tvlViewModel::onChainSelectorDialogDismiss
                         )
                     }
                 }

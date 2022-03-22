@@ -2,55 +2,75 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
-import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
+import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
+import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
-import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
+import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
+import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 
 object OneInchConfirmationModule {
     private const val oneInchSwapParametersKey = "oneInchSwapParametersKey"
 
     class Factory(
-            private val blockchain: SwapMainModule.Blockchain,
-            private val arguments: Bundle
+        private val blockchain: SwapMainModule.Blockchain,
+        private val arguments: Bundle
     ) : ViewModelProvider.Factory {
 
-        private val oneInchSwapParameters by lazy { arguments.getParcelable<OneInchSwapParameters>(oneInchSwapParametersKey)!! }
-        private val evmKit by lazy { blockchain.evmKit!! }
-        private val oneInchKitHelper by lazy { OneInchKitHelper(evmKit) }
+        private val oneInchSwapParameters by lazy {
+            arguments.getParcelable<OneInchSwapParameters>(
+                oneInchSwapParametersKey
+            )!!
+        }
+        private val evmKitWrapper by lazy { blockchain.evmKitWrapper!! }
+        private val oneInchKitHelper by lazy { OneInchKitHelper(evmKitWrapper.evmKit) }
         private val coin by lazy { blockchain.coin!! }
-        private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
-            OneInchTransactionFeeService(oneInchKitHelper, oneInchSwapParameters, feeRateProvider)
+        private val gasPriceService: IEvmGasPriceService by lazy {
+            val evmKit = evmKitWrapper.evmKit
+            if (evmKit.chain.isEIP1559Supported) {
+                val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
+                Eip1559GasPriceService(gasPriceProvider, evmKit)
+            } else {
+                val gasPriceProvider = LegacyGasPriceProvider(evmKit)
+                LegacyGasPriceService(gasPriceProvider)
+            }
+        }
+        private val feeService by lazy {
+            OneInchFeeService(oneInchKitHelper, evmKitWrapper.evmKit, gasPriceService, oneInchSwapParameters)
         }
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager) }
-        private val sendService by lazy { OneInchSendEvmTransactionService(evmKit, transactionService, App.activateCoinManager) }
+        private val sendService by lazy {
+            OneInchSendEvmTransactionService(
+                evmKitWrapper,
+                feeService,
+                App.activateCoinManager
+            )
+        }
+        private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory) as T
                 }
-                EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService) as T
+                EvmFeeCellViewModel::class.java -> {
+                    EvmFeeCellViewModel(feeService, gasPriceService, coinServiceFactory.baseCoinService) as T
                 }
                 else -> throw IllegalArgumentException()
             }
         }
     }
 
-    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, oneInchSwapParameters: OneInchSwapParameters) {
-        fragment.findNavController().navigate(navigateTo, bundleOf(oneInchSwapParametersKey to oneInchSwapParameters), navOptions)
-    }
-
+    fun prepareParams(oneInchSwapParameters: OneInchSwapParameters) =
+        bundleOf(oneInchSwapParametersKey to oneInchSwapParameters)
 }

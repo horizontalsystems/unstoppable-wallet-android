@@ -18,16 +18,13 @@ class CoinReportsViewModel(
 ) : ViewModel() {
     private val disposables = CompositeDisposable()
 
-    val viewStateLiveData = MutableLiveData<ViewState>()
-    val loadingLiveData = MutableLiveData<Boolean>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val reportViewItemsLiveData = MutableLiveData<List<ReportViewItem>>()
 
     init {
         service.stateObservable
             .subscribeIO({ state ->
-                loadingLiveData.postValue(state == DataState.Loading)
-
                 when (state) {
                     is DataState.Success -> {
                         viewStateLiveData.postValue(ViewState.Success)

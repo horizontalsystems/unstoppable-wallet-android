@@ -10,16 +10,21 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun TabBalance(
+    modifier: Modifier = Modifier,
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
-    content: @Composable() (RowScope.() -> Unit),
+    content: @Composable (RowScope.() -> Unit),
 ) {
-    BarSingleLine(Modifier.padding(horizontal = 16.dp), borderTop, borderBottom, content)
+    BarSingleLine(modifier.padding(horizontal = 16.dp), borderTop, borderBottom, content = content)
 }
 
 @Composable
-fun TabPeriod(content: @Composable RowScope.() -> Unit) {
-    BarSingleLine(Modifier, true, false, content)
+fun TabPeriod(
+    modifier: Modifier = Modifier,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    content: @Composable RowScope.() -> Unit,
+) {
+    BarSingleLine(modifier, true, false, horizontalArrangement, content)
 }
 
 @Composable
@@ -27,6 +32,7 @@ fun BarSingleLine(
     modifier: Modifier = Modifier,
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     content: @Composable RowScope.() -> Unit,
 ) {
     Box(
@@ -52,7 +58,8 @@ fun BarSingleLine(
 
         Row(
             modifier = modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = horizontalArrangement
         ) {
             content.invoke(this)
         }

@@ -7,13 +7,10 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
+import io.horizontalsystems.bankwallet.modules.chart.ChartNumberFormatterShortened
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.FullCoin
 import java.math.BigDecimal
 
@@ -21,12 +18,24 @@ object TvlModule {
 
     @Suppress("UNCHECKED_CAST")
     class Factory : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val globalMarketRepository = GlobalMarketRepository(App.marketKit)
-            val service = TvlService(App.currencyManager, globalMarketRepository)
-            val factory = MetricChartFactory(App.numberFormatter)
-            val tvlViewItemFactory = TvlViewItemFactory()
-            return TvlViewModel(service, factory, tvlViewItemFactory) as T
+        private val globalMarketRepository: GlobalMarketRepository by lazy {
+            GlobalMarketRepository(App.marketKit)
+        }
+
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return when (modelClass) {
+                TvlViewModel::class.java -> {
+                    val service = TvlService(App.currencyManager, globalMarketRepository)
+                    val tvlViewItemFactory = TvlViewItemFactory()
+                    TvlViewModel(service, tvlViewItemFactory) as T
+                }
+                TvlChartViewModel::class.java -> {
+                    val chartService = TvlChartService(App.currencyManager, globalMarketRepository)
+                    val chartNumberFormatter = ChartNumberFormatterShortened()
+                    TvlChartViewModel(chartService, chartNumberFormatter) as T
+                }
+                else -> throw IllegalArgumentException()
+            }
         }
     }
 
@@ -39,13 +48,6 @@ object TvlModule {
         val diff: CurrencyValue?,
         val diffPercent: BigDecimal?,
         val rank: String
-    )
-
-    @Immutable
-    data class ChartData(
-        val subtitle: ChartInfoHeaderItem,
-        val currency: Currency,
-        val chartInfoData: ChartInfoData
     )
 
     @Immutable

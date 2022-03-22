@@ -9,17 +9,18 @@ import android.view.View
 class ChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : View(context, attrs, defStyleAttr) {
 
-    enum class ChartType {
-        TODAY,
-        DAILY,
-        WEEKLY,
-        WEEKLY2,
-        MONTHLY,
-        MONTHLY_BY_DAY,
-        MONTHLY3,
-        MONTHLY6,
-        MONTHLY12,
-        MONTHLY24;
+    enum class ChartType(val value: String) {
+        Day1("1d"),
+        Week1("1w"),
+        Week2("2w"),
+        Month1("1m"),
+        Month3("3m"),
+        Month6("6m"),
+        Year1("1y");
+
+        companion object {
+            fun fromString(value: String): ChartType = values().first { it.value == value }
+        }
     }
 
     val shape = RectF(0f,0f,0f,0f)

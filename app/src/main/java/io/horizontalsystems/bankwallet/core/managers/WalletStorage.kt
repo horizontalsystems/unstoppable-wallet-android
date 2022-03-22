@@ -42,6 +42,10 @@ class WalletStorage(
         storage.delete(wallets.map { enabledWallet(it) })
     }
 
+    override fun isEnabled(accountId: String, coinId: String): Boolean {
+        return storage.isEnabled(accountId, coinId)
+    }
+
     override fun clear() {
         storage.deleteAll()
     }

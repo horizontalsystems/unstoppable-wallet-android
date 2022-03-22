@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
@@ -12,7 +13,7 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowan
 import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.uniswapkit.UniswapKit
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 object UniswapModule {
 
@@ -21,14 +22,23 @@ object UniswapModule {
     @Parcelize
     data class PriceImpactViewItem(val level: UniswapTradeService.PriceImpactLevel, val value: String) : Parcelable
 
+    abstract class UniswapWarnings : Warning() {
+        object PriceImpactWarning : UniswapWarnings()
+    }
+
     class AllowanceViewModelFactory(
-            private val service: UniswapService
+        private val service: UniswapService
     ) : ViewModelProvider.Factory {
 
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SwapAllowanceViewModel::class.java -> {
-                    SwapAllowanceViewModel(service, service.allowanceService, service.pendingAllowanceService, SwapViewItemHelper(App.numberFormatter)) as T
+                    SwapAllowanceViewModel(
+                        service,
+                        service.allowanceService,
+                        service.pendingAllowanceService,
+                        SwapViewItemHelper(App.numberFormatter)
+                    ) as T
                 }
                 else -> throw IllegalArgumentException()
             }
@@ -36,21 +46,32 @@ object UniswapModule {
     }
 
     class Factory(
-            dex: SwapMainModule.Dex
+        dex: SwapMainModule.Dex
     ) : ViewModelProvider.Factory {
 
-        private val evmKit: EthereumKit by lazy { dex.blockchain.evmKit!! }
+        private val evmKit: EthereumKit by lazy { dex.blockchain.evmKitWrapper?.evmKit!! }
         private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
         private val uniswapProvider by lazy { UniswapProvider(uniswapKit) }
-        private val allowanceService by lazy { SwapAllowanceService(uniswapProvider.routerAddress, App.adapterManager, evmKit) }
-        private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
+        private val allowanceService by lazy {
+            SwapAllowanceService(
+                uniswapProvider.routerAddress,
+                App.adapterManager,
+                evmKit
+            )
+        }
+        private val pendingAllowanceService by lazy {
+            SwapPendingAllowanceService(
+                App.adapterManager,
+                allowanceService
+            )
+        }
         private val service by lazy {
             UniswapService(
-                    dex,
-                    tradeService,
-                    allowanceService,
-                    pendingAllowanceService,
-                    App.adapterManager
+                dex,
+                tradeService,
+                allowanceService,
+                pendingAllowanceService,
+                App.adapterManager
             )
         }
         private val tradeService by lazy {
@@ -61,7 +82,7 @@ object UniswapModule {
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             return when (modelClass) {
                 UniswapViewModel::class.java -> {

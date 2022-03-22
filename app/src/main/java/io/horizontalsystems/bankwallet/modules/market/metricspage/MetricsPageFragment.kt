@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -23,19 +25,18 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfo
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeader
-import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.findNavController
 
 class MetricsPageFragment : BaseFragment() {
@@ -49,7 +50,9 @@ class MetricsPageFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val viewModel by viewModels<MetricsPageViewModel> { MetricsPageModule.Factory(metricsType!!) }
+        val factory = MetricsPageModule.Factory(metricsType!!)
+        val chartViewModel by viewModels<ChartViewModel> { factory }
+        val viewModel by viewModels<MetricsPageViewModel> { factory }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -57,7 +60,9 @@ class MetricsPageFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    MetricsPage(viewModel) { onCoinClick(it) }
+                    MetricsPage(viewModel, chartViewModel) {
+                        onCoinClick(it)
+                    }
                 }
             }
         }
@@ -66,15 +71,19 @@ class MetricsPageFragment : BaseFragment() {
     private fun onCoinClick(coinUid: String) {
         val arguments = CoinFragment.prepareParams(coinUid)
 
-        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinFragment, arguments)
     }
 
     @Composable
-    fun MetricsPage(viewModel: MetricsPageViewModel, onCoinClick: (String) -> Unit) {
-        val viewState by viewModel.viewStateLiveData.observeAsState()
-        val chartData by viewModel.chartLiveData.observeAsState()
+    fun MetricsPage(
+        viewModel: MetricsPageViewModel,
+        chartViewModel: ChartViewModel,
+        onCoinClick: (String) -> Unit,
+    ) {
+        val itemsViewState by viewModel.viewStateLiveData.observeAsState()
+        val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
+        val viewState = itemsViewState?.merge(chartViewState)
         val marketData by viewModel.marketLiveData.observeAsState()
-        val loading by viewModel.loadingLiveData.observeAsState(false)
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
 
         Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -92,63 +101,43 @@ class MetricsPageFragment : BaseFragment() {
             )
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing || loading),
+                state = rememberSwipeRefreshState(isRefreshing),
                 onRefresh = {
                     viewModel.refresh()
                 }
             ) {
-                when (viewState) {
-                    is ViewState.Error -> {
-                        ListErrorView(
-                            stringResource(R.string.Market_SyncError)
-                        ) {
-                            viewModel.onErrorClick()
+                Crossfade(viewState) { viewState ->
+                    when (viewState) {
+                        is ViewState.Loading -> {
+                            Loading()
                         }
-                    }
-                    ViewState.Success -> {
-                        LazyColumn {
-                            chartData?.let { chartData ->
+                        is ViewState.Error -> {
+                            ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                        }
+                        ViewState.Success -> {
+                            LazyColumn {
                                 item {
-                                    ChartInfoHeader(chartData.subtitle)
-
-                                    ChartInfo(
-                                        CoinChartAdapter.ViewItemWrapper(chartData.chartInfoData),
-                                        chartData.currency,
-                                        CoinChartAdapter.ChartViewType.MarketMetricChart,
-                                        listOf(
-                                            Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
-                                            Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
-                                            Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month)
-                                        ),
-                                        object : CoinChartAdapter.Listener {
-                                            override fun onChartTouchDown() = Unit
-                                            override fun onChartTouchUp() = Unit
-
-                                            override fun onTabSelect(chartType: ChartView.ChartType) {
-                                                viewModel.onSelectChartType(chartType)
-                                            }
-                                        })
+                                    Chart(chartViewModel)
                                 }
-                            }
-
-                            marketData?.let { marketData ->
-                                item {
-                                    Menu(
-                                        marketData.menu,
-                                        viewModel::onToggleSortType,
-                                        viewModel::onSelectMarketField
-                                    )
-                                }
-                                items(marketData.marketViewItems) { marketViewItem ->
-                                    MarketCoin(
-                                        marketViewItem.fullCoin.coin.name,
-                                        marketViewItem.fullCoin.coin.code,
-                                        marketViewItem.fullCoin.coin.iconUrl,
-                                        marketViewItem.fullCoin.iconPlaceholder,
-                                        marketViewItem.coinRate,
-                                        marketViewItem.marketDataValue,
-                                        marketViewItem.rank,
-                                    ) { onCoinClick(marketViewItem.fullCoin.coin.uid) }
+                                marketData?.let { marketData ->
+                                    item {
+                                        Menu(
+                                            marketData.menu,
+                                            viewModel::onToggleSortType,
+                                            viewModel::onSelectMarketField
+                                        )
+                                    }
+                                    items(marketData.marketViewItems) { marketViewItem ->
+                                        MarketCoinClear(
+                                            marketViewItem.fullCoin.coin.name,
+                                            marketViewItem.fullCoin.coin.code,
+                                            marketViewItem.fullCoin.coin.iconUrl,
+                                            marketViewItem.fullCoin.iconPlaceholder,
+                                            marketViewItem.coinRate,
+                                            marketViewItem.marketDataValue,
+                                            marketViewItem.rank,
+                                        ) { onCoinClick(marketViewItem.fullCoin.coin.uid) }
+                                    }
                                 }
                             }
                         }

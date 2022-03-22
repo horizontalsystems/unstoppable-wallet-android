@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.coin
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.bankwallet.entities.isSupported
+import io.horizontalsystems.bankwallet.entities.supportedPlatforms
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -41,9 +41,11 @@ class CoinService(
     }
 
     private fun emitCoinState() {
+        val activeAccount = accountManager.activeAccount
         _coinState.onNext(when {
-            accountManager.activeAccount == null -> CoinState.NoActiveAccount
-            fullCoin.platforms.none { it.coinType.isSupported } -> CoinState.Unsupported
+            activeAccount == null -> CoinState.NoActiveAccount
+            activeAccount.isWatchAccount -> CoinState.WatchAccount
+            fullCoin.supportedPlatforms.isEmpty() -> CoinState.Unsupported
             walletManager.activeWallets.any { it.coin.uid == coinUid } -> {
                 if (initialCoinInWallet) {
                     CoinState.InWallet

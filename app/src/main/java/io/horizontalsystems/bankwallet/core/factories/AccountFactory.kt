@@ -14,17 +14,37 @@ class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
 
         return Account(
                 id = id,
-                name = getNextWalletName(),
+                name = getNextAccountName(),
                 type = type,
                 origin = origin,
                 isBackedUp = backedUp
         )
     }
 
+    override fun watchAccount(address: String, domain: String?): Account {
+        val id = UUID.randomUUID().toString()
+        return Account(
+            id = id,
+            name = domain ?: getNextWatchAccountName(),
+            type = AccountType.Address(address),
+            origin = AccountOrigin.Restored,
+            isBackedUp = true
+        )
+    }
 
-    private fun getNextWalletName(): String {
-        val count = accountManager.accounts.count()
+    private fun getNextWatchAccountName(): String {
+        val watchAccountsCount = accountManager.accounts.count {
+            it.type is AccountType.Address
+        }
 
-        return "Wallet ${count + 1}"
+        return "Watch Wallet ${watchAccountsCount + 1}"
+    }
+
+    private fun getNextAccountName(): String {
+        val nonWatchAccountsCount = accountManager.accounts.count {
+            it.type !is AccountType.Address
+        }
+
+        return "Wallet ${nonWatchAccountsCount + 1}"
     }
 }

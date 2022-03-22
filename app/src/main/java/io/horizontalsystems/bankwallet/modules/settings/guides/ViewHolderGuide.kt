@@ -1,15 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.settings.guides
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.databinding.ViewHolderGuidePreviewBinding
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.core.helpers.DateHelper
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_guide_preview.*
 
-class ViewHolderGuide(override val containerView: View, private val listener: ClickListener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderGuide(
+    private val binding: ViewHolderGuidePreviewBinding,
+    private val listener: ClickListener
+) : RecyclerView.ViewHolder(binding.root) {
 
     interface ClickListener {
         fun onClick(guide: Guide)
@@ -18,7 +19,7 @@ class ViewHolderGuide(override val containerView: View, private val listener: Cl
     private var guide: Guide? = null
 
     init {
-        containerView.setOnSingleClickListener {
+        binding.wrapper.setOnSingleClickListener {
             guide?.let {
                 listener.onClick(it)
             }
@@ -28,13 +29,13 @@ class ViewHolderGuide(override val containerView: View, private val listener: Cl
     fun bind(guide: Guide) {
         this.guide = guide
 
-        title.text = guide.title
-        date.text = DateHelper.shortDate(guide.updatedAt)
+        binding.title.text = guide.title
+        binding.date.text = DateHelper.shortDate(guide.updatedAt)
 
-        image.setImageDrawable(null)
+        binding.image.setImageDrawable(null)
 
         guide.imageUrl?.let {
-            Picasso.get().load(it).into(image)
+            Picasso.get().load(it).into(binding.image)
         }
 
     }

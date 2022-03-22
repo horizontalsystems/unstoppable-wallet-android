@@ -3,16 +3,18 @@ package io.horizontalsystems.bankwallet.core
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.MenuItem
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
-import androidx.core.graphics.BlendModeColorFilterCompat
-import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.AlertDialogKeyboardFragment
+
+
+
 
 abstract class BaseFragment(@LayoutRes layoutResId: Int = 0) : Fragment(layoutResId) {
 
@@ -24,26 +26,10 @@ abstract class BaseFragment(@LayoutRes layoutResId: Int = 0) : Fragment(layoutRe
         menuItem.isEnabled = enabled
         context?.let { ctx ->
             val color = ctx.getColor(if (enabled) R.color.jacob else R.color.grey)
-            menuItem.icon.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_ATOP)
+            val spannable = SpannableString(menuItem.title)
+            spannable.setSpan(ForegroundColorSpan(color), 0, spannable.length, 0)
+            menuItem.title = spannable
         }
-    }
-
-    protected fun navOptions(): NavOptions {
-        return NavOptions.Builder()
-                .setEnterAnim(R.anim.slide_from_right)
-                .setExitAnim(R.anim.slide_to_left)
-                .setPopEnterAnim(R.anim.slide_from_left)
-                .setPopExitAnim(R.anim.slide_to_right)
-                .build()
-    }
-
-    protected fun navOptionsFromBottom(): NavOptions {
-        return NavOptions.Builder()
-                .setEnterAnim(R.anim.slide_from_bottom)
-                .setExitAnim(R.anim.slide_to_top)
-                .setPopEnterAnim(R.anim.slide_from_top)
-                .setPopExitAnim(R.anim.slide_to_bottom)
-                .build()
     }
 
     protected fun allowScreenshot() {

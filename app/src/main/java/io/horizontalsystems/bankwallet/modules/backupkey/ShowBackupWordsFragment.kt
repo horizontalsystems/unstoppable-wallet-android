@@ -11,47 +11,60 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.databinding.FragmentShowBackupWordsBinding
 import io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_show_backup_words.*
-import kotlinx.android.synthetic.main.fragment_show_backup_words.toolbar
 
 class ShowBackupWordsFragment : BaseFragment() {
     private val viewModel by navGraphViewModels<BackupKeyViewModel>(R.id.backupKeyFragment)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    private var _binding: FragmentShowBackupWordsBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         disallowScreenshot()
-        return inflater.inflate(R.layout.fragment_show_backup_words, container, false)
+        _binding = FragmentShowBackupWordsBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     override fun onDestroyView() {
-        allowScreenshot()
         super.onDestroyView()
+        allowScreenshot()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner, { account ->
-            BackupConfirmKeyModule.start(this, R.id.showBackupWordsFragment_to_backupConfirmationKeyFragment, navOptions(), account)
-        })
+        viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner) { account ->
+            findNavController().slideFromRight(
+                R.id.showBackupWordsFragment_to_backupConfirmationKeyFragment,
+                BackupConfirmKeyModule.prepareParams(account)
+            )
+        }
 
-        mnemonicPhraseView.populateWords(viewModel.words, viewModel.passphrase)
+        binding.mnemonicPhraseView.populateWords(viewModel.words, viewModel.passphrase)
 
-        buttonBackupCompose.setViewCompositionStrategy(
+        binding.buttonBackupCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        buttonBackupCompose.setContent {
+        binding.buttonBackupCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 38.dp),
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 32.dp),
                     title = getString(R.string.BackupKey_ButtonBackup),
                     onClick = {
                         viewModel.onClickBackup()

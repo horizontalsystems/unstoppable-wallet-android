@@ -2,11 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.settings.uniswap
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapDeadlineViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
@@ -27,20 +23,14 @@ object UniswapSettingsModule {
         private val service by lazy { UniswapSettingsService(tradeService.tradeOptions) }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val evmCoin = blockchain.coin ?: throw IllegalArgumentException()
 
             return when (modelClass) {
                 UniswapSettingsViewModel::class.java -> UniswapSettingsViewModel(service, tradeService) as T
                 SwapDeadlineViewModel::class.java -> SwapDeadlineViewModel(service) as T
                 SwapSlippageViewModel::class.java -> SwapSlippageViewModel(service) as T
-                RecipientAddressViewModel::class.java -> {
-                    val addressParser = App.addressParserFactory.parser(evmCoin.coinType)
-                    val coinCode = AddressResolutionService.getChainCoinCode(evmCoin.coinType) ?: evmCoin.code
-                    val resolutionService = AddressResolutionService(coinCode, true)
-                    val placeholder = Translator.getString(R.string.SwapSettings_RecipientPlaceholder)
-                    RecipientAddressViewModel(service, resolutionService, addressParser, placeholder, listOf(service, resolutionService)) as T
-                }
+                RecipientAddressViewModel::class.java -> RecipientAddressViewModel(service) as T
                 else -> throw IllegalArgumentException()
             }
         }

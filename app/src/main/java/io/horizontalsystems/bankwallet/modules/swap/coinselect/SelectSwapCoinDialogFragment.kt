@@ -10,32 +10,42 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchDialogFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentSwapSelectTokenBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
-import kotlinx.android.synthetic.main.fragment_swap_select_token.*
 
 class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
 
     private var viewModel: SelectSwapCoinViewModel? = null
+
+    private var _binding: FragmentSwapSelectTokenBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _binding = FragmentSwapSelectTokenBinding.inflate(inflater, container, false)
+        val view = binding.root
         dialog?.window?.setWindowAnimations(R.style.RightDialogAnimations)
-        return inflater.inflate(R.layout.fragment_swap_select_token, container, false)
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-        configureSearchMenu(toolbar.menu)
+        configureSearchMenu(binding.toolbar.menu)
 
         val dex = arguments?.getParcelable<SwapMainModule.Dex>(dexKey)
         val requestId = arguments?.getLong(requestIdKey)
@@ -49,7 +59,7 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
 
         val adapter = SelectSwapCoinAdapter(onClickItem = { closeWithResult(it, requestId) })
 
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
         viewModel?.coinItemsLivedData?.observe(viewLifecycleOwner, { items ->
             adapter.items = items
@@ -80,9 +90,7 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
         const val requestIdKey = "requestIdKey"
         const val coinBalanceItemResultKey = "coinBalanceItemResultKey"
 
-        fun params(requestId: Long, dex: SwapMainModule.Dex): Bundle {
-            return bundleOf(requestIdKey to requestId, dexKey to dex)
-        }
+        fun prepareParams(requestId: Long, dex: SwapMainModule.Dex) = bundleOf(requestIdKey to requestId, dexKey to dex)
     }
 
 }

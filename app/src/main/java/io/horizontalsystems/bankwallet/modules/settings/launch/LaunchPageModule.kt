@@ -8,7 +8,7 @@ object LaunchPageModule {
 
     class Factory() : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = LaunchPageService(App.localStorage)
             return LaunchPageViewModel(service) as T
         }

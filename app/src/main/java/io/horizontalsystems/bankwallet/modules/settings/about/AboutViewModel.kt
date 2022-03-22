@@ -2,59 +2,33 @@ package io.horizontalsystems.bankwallet.modules.settings.about
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.core.ITermsManager
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
-import io.horizontalsystems.core.ISystemInfoManager
-import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.reactivex.disposables.Disposable
 
 class AboutViewModel(
-    private val appConfigProvider: AppConfigProvider,
-    private val clipboardManager: IClipboardManager,
-    termsManager: ITermsManager,
-    systemInfoManager: ISystemInfoManager
+    private val service: AboutService,
 ) : ViewModel() {
 
-    val openLinkLiveData = SingleLiveEvent<String>()
-    val showShareAppLiveData = SingleLiveEvent<String>()
-    val termsAcceptedData = MutableLiveData<Boolean>()
-    val showCopiedLiveEvent = SingleLiveEvent<Unit>()
+    val githubLink by service::githubLink
+    val appWebPageLink by service::appWebPageLink
+    val reportEmail by service::reportEmail
+    val appVersion by service::appVersion
 
-    val appVersion = systemInfoManager.appVersion
-    val reportEmail = appConfigProvider.reportEmail
+    val termsShowAlertLiveData = MutableLiveData(!service.termsAccepted)
 
     var disposable: Disposable? = null
 
     init {
-        termsAcceptedData.postValue(termsManager.termsAccepted)
+        service.termsAcceptedObservable
+            .subscribeIO { termsShowAlertLiveData.postValue(!it) }
+            .let { disposable = it }
 
-        disposable = termsManager.termsAcceptedSignal
-                .subscribe { allAccepted ->
-                    termsAcceptedData.postValue(allAccepted)
-                }
+        service.start()
     }
 
     override fun onCleared() {
+        service.stop()
         disposable?.dispose()
-        super.onCleared()
-    }
-
-    fun onGithubLinkTap() {
-        openLinkLiveData.postValue(appConfigProvider.appGithubLink)
-    }
-
-    fun onSiteLinkTap() {
-        openLinkLiveData.postValue(appConfigProvider.appWebPageLink)
-    }
-
-    fun onTellFriendsTap() {
-        showShareAppLiveData.postValue(appConfigProvider.appWebPageLink)
-    }
-
-    fun didFailSendMail() {
-        clipboardManager.copyText(reportEmail)
-        showCopiedLiveEvent.call()
     }
 
 }

@@ -3,17 +3,15 @@ package io.horizontalsystems.bankwallet.modules.swap
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
 import androidx.savedstate.SavedStateRegistryOwner
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.coincard.ISwapCoinCardService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
@@ -24,12 +22,10 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFra
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapFragment
-import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.util.*
 
@@ -40,13 +36,7 @@ object SwapMainModule {
 
     private const val coinFromKey = "coinFromKey"
 
-    fun start(fragment: Fragment, navOptions: NavOptions, coinFrom: PlatformCoin) {
-        fragment.findNavController().navigate(
-            R.id.mainFragment_to_swapFragment,
-            bundleOf(coinFromKey to coinFrom),
-            navOptions
-        )
-    }
+    fun prepareParams(coinFrom: PlatformCoin) = bundleOf(coinFromKey to coinFrom)
 
     interface ISwapProvider : Parcelable {
         val id: String
@@ -108,14 +98,14 @@ object SwapMainModule {
         Ethereum("ethereum", "Ethereum"),
         BinanceSmartChain("binanceSmartChain", "Binance Smart Chain");
 
-        val evmKit: EthereumKit?
+        val evmKitWrapper: EvmKitWrapper?
             get() = when (this) {
-                Ethereum -> App.ethereumKitManager.evmKit
-                BinanceSmartChain -> App.binanceSmartChainKitManager.evmKit
+                Ethereum -> App.ethereumKitManager.evmKitWrapper
+                BinanceSmartChain -> App.binanceSmartChainKitManager.evmKitWrapper
             }
 
         val mainNet: Boolean
-            get() = evmKit?.networkType?.isMainNet ?: false
+            get() = evmKitWrapper?.evmKit?.chain?.isMainNet ?: false
 
         val coin: PlatformCoin?
             get() = when (this) {
@@ -237,7 +227,7 @@ object SwapMainModule {
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(
+        override fun <T : ViewModel> create(
             key: String,
             modelClass: Class<T>,
             handle: SavedStateHandle

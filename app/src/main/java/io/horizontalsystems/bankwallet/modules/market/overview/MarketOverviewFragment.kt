@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,19 +26,23 @@ import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinClear
 import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.core.findNavController
@@ -66,75 +71,76 @@ class MarketOverviewFragment : BaseFragment() {
     private fun onItemClick(marketViewItem: MarketViewItem) {
         val arguments = CoinFragment.prepareParams(marketViewItem.coinUid)
 
-        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinFragment, arguments)
     }
 
     private fun openMetricsPage(metricsType: MetricsType) {
         if (metricsType == MetricsType.TvlInDefi) {
-            findNavController().navigate(R.id.tvlFragment, null, navOptionsFromBottom())
+            findNavController().slideFromBottom(R.id.tvlFragment)
         } else {
-            val arguments = MetricsPageFragment.prepareParams(metricsType)
-            findNavController().navigate(
+            findNavController().slideFromBottom(
                 R.id.mainFragment_to_metricPageFragment,
-                arguments,
-                navOptionsFromBottom()
+                MetricsPageFragment.prepareParams(metricsType)
             )
         }
     }
 
     @Composable
     private fun MarketOverviewScreen() {
-        val loading by viewModel.loadingLiveData.observeAsState()
-        val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
-        val viewItemState by viewModel.viewItemStateLiveData.observeAsState()
+        val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
+        val viewState by viewModel.viewStateLiveData.observeAsState()
+        val viewItem by viewModel.viewItem.observeAsState()
+
         val scrollState = rememberScrollState()
 
         HSSwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
+            state = rememberSwipeRefreshState(isRefreshing),
             onRefresh = {
                 viewModel.refresh()
             }
         ) {
-            when (val state = viewItemState) {
-                is ViewItemState.Error -> {
-                    ListErrorView(
-                        stringResource(R.string.Market_SyncError)
-                    ) {
-                        viewModel.onErrorClick()
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    is ViewState.Loading -> {
+                        Loading()
                     }
-                }
-                is ViewItemState.Loaded -> {
-                    Column(
-                        modifier = Modifier
-                            .verticalScroll(scrollState)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .height(240.dp)
-                        ) {
-                            MetricChartsView(state.viewItem.marketMetrics)
-                        }
-                        BoardsView(
-                            boards = state.viewItem.boards,
-                            onClickSeeAll = { listType ->
-                                val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
-                                    listType
-                                )
-                                val args = MarketTopCoinsFragment.prepareParams(
-                                    sortingField,
-                                    topMarket,
-                                    marketField
-                                )
+                    is ViewState.Error -> {
+                        ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                    }
+                    is ViewState.Success -> {
+                        viewItem?.let { viewItem ->
+                            Column(
+                                modifier = Modifier
+                                    .verticalScroll(scrollState)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .height(240.dp)
+                                ) {
+                                    MetricChartsView(viewItem.marketMetrics)
+                                }
+                                BoardsView(
+                                    boards = viewItem.boards,
+                                    onClickSeeAll = { listType ->
+                                        val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
+                                            listType
+                                        )
+                                        val args = MarketTopCoinsFragment.prepareParams(
+                                            sortingField,
+                                            topMarket,
+                                            marketField
+                                        )
 
-                                findNavController().navigate(
-                                    R.id.marketTopCoinsFragment,
-                                    args,
-                                    navOptionsFromBottom()
-                                )
-                            },
-                            onSelectTopMarket = { topMarket, listType ->
-                                viewModel.onSelectTopMarket(topMarket, listType)
-                            })
+                                        findNavController().slideFromBottom(
+                                            R.id.marketTopCoinsFragment,
+                                            args
+                                        )
+                                    },
+                                    onSelectTopMarket = { topMarket, listType ->
+                                        viewModel.onSelectTopMarket(topMarket, listType)
+                                    })
+                            }
+                        }
                     }
                 }
             }
@@ -242,7 +248,7 @@ class MarketOverviewFragment : BaseFragment() {
                 .clip(getRoundedCornerShape(firstItem))
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
-            MarketCoin(
+            MarketCoinClear(
                 marketViewItem.coinName,
                 marketViewItem.coinCode,
                 marketViewItem.iconUrl,

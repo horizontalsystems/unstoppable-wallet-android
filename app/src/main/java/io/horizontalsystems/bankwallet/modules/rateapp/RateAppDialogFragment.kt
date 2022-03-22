@@ -1,45 +1,47 @@
 package io.horizontalsystems.bankwallet.modules.rateapp
 
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.FragmentRateAppDialogBinding
 
 class RateAppDialogFragment(private var listener: Listener? = null) : DialogFragment() {
 
-    interface Listener{
+    interface Listener {
         fun onClickRateApp()
         fun onClickCancel() {}
         fun onDismiss() {}
     }
 
-    override fun onCreateDialog(bundle: Bundle?): Dialog {
-        val rootView = View.inflate(context, R.layout.fragment_rate_app_dialog, null) as ViewGroup
+    private var _binding: FragmentRateAppDialogBinding? = null
+    private val binding get() = _binding!!
 
-        rootView.findViewById<TextView>(R.id.btnRateApp)?.let { btn ->
-            btn.setOnClickListener {
-                listener?.onClickRateApp()
-                dismiss()
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onCreateDialog(bundle: Bundle?): Dialog {
+        _binding = FragmentRateAppDialogBinding.inflate(LayoutInflater.from(context))
+
+        binding.btnRateApp.setOnClickListener {
+            listener?.onClickRateApp()
+            dismiss()
         }
 
-        rootView.findViewById<TextView>(R.id.btnNotNow)?.let { btn ->
-            btn.setOnClickListener {
-                listener?.onClickCancel()
-                dismiss()
-            }
+        binding.btnNotNow.setOnClickListener {
+            listener?.onClickCancel()
+            dismiss()
         }
 
         val builder = activity?.let { AlertDialog.Builder(it, R.style.AlertDialog) }
-        builder?.setView(rootView)
+        builder?.setView(binding.root)
         val mDialog = builder?.create()
         mDialog?.setCanceledOnTouchOutside(false)
 
@@ -51,9 +53,9 @@ class RateAppDialogFragment(private var listener: Listener? = null) : DialogFrag
         super.onDismiss(dialog)
     }
 
-    companion object{
+    companion object {
 
-        fun show(activity: FragmentActivity, listener: Listener? = null){
+        fun show(activity: FragmentActivity, listener: Listener? = null) {
             val fragmentManager: FragmentManager = activity.supportFragmentManager
             RateAppDialogFragment(listener).show(fragmentManager, "RateApp")
         }

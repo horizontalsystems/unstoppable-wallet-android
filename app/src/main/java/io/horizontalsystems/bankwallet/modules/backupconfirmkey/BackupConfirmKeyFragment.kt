@@ -10,25 +10,43 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentBackupWordsConfirmBinding
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
-import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
 class BackupConfirmKeyFragment : BaseFragment() {
-    private val viewModel by viewModels<BackupConfirmKeyViewModel> { BackupConfirmKeyModule.Factory(arguments?.getParcelable(BackupConfirmKeyModule.ACCOUNT)!!) }
+    private val viewModel by viewModels<BackupConfirmKeyViewModel> {
+        BackupConfirmKeyModule.Factory(
+            arguments?.getParcelable(BackupConfirmKeyModule.ACCOUNT)!!
+        )
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_backup_words_confirm, container, false)
+    private var _binding: FragmentBackupWordsConfirmBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentBackupWordsConfirmBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.itemDone -> {
                     onClickDone()
@@ -38,12 +56,12 @@ class BackupConfirmKeyFragment : BaseFragment() {
             }
         }
 
-        passphrase.isVisible = viewModel.passpraseVisible
-        passphraseDescription.isVisible = viewModel.passpraseVisible
+        binding.passphrase.isVisible = viewModel.passpraseVisible
+        binding.passphraseDescription.isVisible = viewModel.passpraseVisible
 
         viewModel.indexViewItemLiveData.observe(viewLifecycleOwner, { indexViewItem ->
-            wordOne.bindPrefix(indexViewItem.first)
-            wordTwo.bindPrefix(indexViewItem.second)
+            binding.wordOne.bindPrefix(indexViewItem.first)
+            binding.wordTwo.bindPrefix(indexViewItem.second)
         })
 
         viewModel.successLiveEvent.observe(viewLifecycleOwner, {
@@ -54,36 +72,36 @@ class BackupConfirmKeyFragment : BaseFragment() {
         })
 
         viewModel.firstWordCautionLiveData.observe(viewLifecycleOwner) {
-            wordOne.setError(it)
+            binding.wordOne.setError(it)
         }
 
         viewModel.secondWordCautionLiveData.observe(viewLifecycleOwner) {
-            wordTwo.setError(it)
+            binding.wordTwo.setError(it)
         }
 
         viewModel.passphraseCautionLiveData.observe(viewLifecycleOwner) {
-            passphrase.setError(it)
+            binding.passphrase.setError(it)
         }
 
         viewModel.clearInputsLiveEvent.observe(viewLifecycleOwner) {
-            wordOne.setText(null)
-            wordTwo.setText(null)
-            passphrase.setText(null)
+            binding.wordOne.setText(null)
+            binding.wordTwo.setText(null)
+            binding.passphrase.setText(null)
         }
 
-        wordOne.onTextChange { _, text ->
+        binding.wordOne.onTextChange { _, text ->
             viewModel.onChangeFirstWord(text ?: "")
         }
 
-        wordTwo.onTextChange { _, text ->
+        binding.wordTwo.onTextChange { _, text ->
             viewModel.onChangeSecondWord(text ?: "")
         }
 
-        passphrase.onTextChange { _, text ->
+        binding.passphrase.onTextChange { _, text ->
             viewModel.onChangePassphrase(text ?: "")
         }
 
-        KeyboardHelper.showKeyboardDelayed(requireActivity(), wordOne, 200)
+        KeyboardHelper.showKeyboardDelayed(requireActivity(), binding.wordOne, 200)
 
         viewModel.onViewCreated()
     }

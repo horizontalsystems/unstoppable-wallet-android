@@ -37,14 +37,6 @@ class BitcoinAdapter(
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
-    // ITransactionsAdapter
-
-    override val explorerTitle: String = "btc.com"
-
-    override fun explorerUrl(transactionHash: String): String? {
-        return if (testMode) null else "https://btc.com/$transactionHash"
-    }
-
     //
     // BitcoinKit Listener
     //

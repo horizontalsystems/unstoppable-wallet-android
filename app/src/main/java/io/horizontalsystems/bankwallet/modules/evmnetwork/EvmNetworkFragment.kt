@@ -1,25 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.evmnetwork
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.databinding.FragmentEvmNetworkBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderDescriptionBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderMultilineLawrenceBinding
 import io.horizontalsystems.bankwallet.modules.basecurrency.RVAdapterSectionHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_evm_network.*
-import kotlinx.android.synthetic.main.view_holder_description.*
-import kotlinx.android.synthetic.main.view_holder_multiline_lawrence.*
 
-class EvmNetworkFragment : BaseFragment(R.layout.fragment_evm_network) {
+class EvmNetworkFragment : BaseFragment() {
 
     private val viewModel by viewModels<EvmNetworkViewModel> {
         EvmNetworkModule.Factory(
@@ -27,11 +25,29 @@ class EvmNetworkFragment : BaseFragment(R.layout.fragment_evm_network) {
         )
     }
 
+    private var _binding: FragmentEvmNetworkBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentEvmNetworkBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.title = viewModel.title
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.title = viewModel.title
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
@@ -47,7 +63,7 @@ class EvmNetworkFragment : BaseFragment(R.layout.fragment_evm_network) {
                 }
             }
 
-            rvItems.adapter = ConcatAdapter(adapters)
+            binding.rvItems.adapter = ConcatAdapter(adapters)
         }
 
         viewModel.confirmLiveEvent.observe(viewLifecycleOwner) {
@@ -68,8 +84,12 @@ class SectionItemsAdapter(
     private val items: List<EvmNetworkViewModel.ViewItem>,
     private val onSelect: (EvmNetworkViewModel.ViewItem) -> Unit
 ) : RecyclerView.Adapter<ViewHolderMultilineLawrence>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolderMultilineLawrence.create(parent, onSelect)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMultilineLawrence {
+        return ViewHolderMultilineLawrence(
+            ViewHolderMultilineLawrenceBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ), onSelect)
+    }
 
     override fun onBindViewHolder(holder: ViewHolderMultilineLawrence, position: Int) {
         holder.bind(items[position], ListPosition.getListPosition(items.size, position))
@@ -79,14 +99,14 @@ class SectionItemsAdapter(
 }
 
 class ViewHolderMultilineLawrence(
-    override val containerView: View,
+    private val itemBinding: ViewHolderMultilineLawrenceBinding,
     onSelect: (EvmNetworkViewModel.ViewItem) -> Unit
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+) : RecyclerView.ViewHolder(itemBinding.root) {
 
     private var item: EvmNetworkViewModel.ViewItem? = null
 
     init {
-        containerView.setOnSingleClickListener {
+        itemBinding.wrapper.setOnSingleClickListener {
             item?.let {
                 onSelect(it)
             }
@@ -96,24 +116,24 @@ class ViewHolderMultilineLawrence(
     fun bind(item: EvmNetworkViewModel.ViewItem, listPosition: ListPosition) {
         this.item = item
 
-        containerView.setBackgroundResource(listPosition.getBackground())
+        itemBinding.wrapper.setBackgroundResource(listPosition.getBackground())
 
-        title.text = item.name
-        subtitle.text = item.url
-        checkmarkIcon.isInvisible = !item.selected
-    }
-
-    companion object {
-        fun create(parent: ViewGroup, onSelect: (EvmNetworkViewModel.ViewItem) -> Unit): ViewHolderMultilineLawrence {
-            return ViewHolderMultilineLawrence(inflate(parent, R.layout.view_holder_multiline_lawrence), onSelect)
-        }
+        itemBinding.title.text = item.name
+        itemBinding.subtitle.text = item.url
+        itemBinding.checkmarkIcon.isInvisible = !item.selected
     }
 }
 
 class DescriptionAdapter(
     private val description: String
 ) : RecyclerView.Adapter<ViewHolderDescription>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolderDescription.create(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderDescription {
+        return ViewHolderDescription(
+            ViewHolderDescriptionBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
+    }
 
     override fun onBindViewHolder(holder: ViewHolderDescription, position: Int) {
         holder.bind(description)
@@ -123,17 +143,10 @@ class DescriptionAdapter(
 }
 
 class ViewHolderDescription(
-    override val containerView: View
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    val binding: ViewHolderDescriptionBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(description: String) {
-        text.text = description
-    }
-
-    companion object {
-        fun create(parent: ViewGroup): ViewHolderDescription {
-            return ViewHolderDescription(inflate(parent, R.layout.view_holder_description))
-        }
+        binding.text.text = description
     }
 }
-

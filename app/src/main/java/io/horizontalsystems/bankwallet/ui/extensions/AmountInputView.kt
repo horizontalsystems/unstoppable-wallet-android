@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -15,17 +16,19 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
+import io.horizontalsystems.bankwallet.databinding.ViewInputAmountBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.core.helpers.KeyboardHelper
-import kotlinx.android.synthetic.main.view_input_amount.view.*
 
 class AmountInputView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    private val binding = ViewInputAmountBinding.inflate(LayoutInflater.from(context), this)
 
     var maxButtonVisible: Boolean = false
         set(value) {
@@ -52,19 +55,17 @@ class AmountInputView @JvmOverloads constructor(
     }
 
     init {
-        inflate(context, R.layout.view_input_amount, this)
-
-        editTxtAmount.addTextChangedListener(textWatcher)
+        binding.editTxtAmount.addTextChangedListener(textWatcher)
     }
 
     private fun updateButtons() {
-        amountInputButtonsCompose.setContent {
+        binding.amountInputButtonsCompose.setContent {
             ComposeAppTheme {
                 Row(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (editTxtAmount.text.isEmpty()) {
+                    if (binding.editTxtAmount.text.isEmpty()) {
                         if (maxButtonVisible) {
                             ButtonSecondaryDefault(
                                 modifier = Modifier.padding(end = 8.dp),
@@ -73,12 +74,12 @@ class AmountInputView @JvmOverloads constructor(
                             )
                         }
                     } else {
-                        if (!estimatedLabel.isVisible) {
+                        if (!binding.estimatedLabel.isVisible) {
                             ButtonSecondaryCircle(
                                 modifier = Modifier.padding(end = 8.dp),
                                 icon = R.drawable.ic_delete_20,
                                 onClick = {
-                                    editTxtAmount.text = null
+                                    binding.editTxtAmount.text = null
                                 }
                             )
                         }
@@ -89,17 +90,17 @@ class AmountInputView @JvmOverloads constructor(
     }
 
     fun getAmount(): String? {
-        return editTxtAmount.text?.toString()
+        return binding.editTxtAmount.text?.toString()
     }
 
     fun setAmount(text: String?, skipChangeEvent: Boolean = true) {
-        editTxtAmount.apply {
+        binding.editTxtAmount.apply {
             if (skipChangeEvent) {
                 removeTextChangedListener(textWatcher)
             }
 
             setText(text)
-            editTxtAmount.setSelection(text?.length ?: 0)
+            setSelection(text?.length ?: 0)
             updateButtons()
 
             if (skipChangeEvent) {
@@ -110,17 +111,17 @@ class AmountInputView @JvmOverloads constructor(
 
     fun setInputParams(inputParams: InputParams) {
         val primaryColor = getPrimaryTextColor(inputParams.amountType)
-        topAmountPrefix.setTextColor(context.getColor(primaryColor))
-        editTxtAmount.setTextColor(context.getColor(primaryColor))
+        binding.topAmountPrefix.setTextColor(context.getColor(primaryColor))
+        binding.editTxtAmount.setTextColor(context.getColor(primaryColor))
 
-        topAmountPrefix.text = inputParams.primaryPrefix
-        topAmountPrefix.isVisible = inputParams.primaryPrefix?.isNotBlank() ?: false
+        binding.topAmountPrefix.text = inputParams.primaryPrefix
+        binding.topAmountPrefix.isVisible = inputParams.primaryPrefix?.isNotBlank() ?: false
 
         val hintTextColor = getSecondaryTextColor(inputParams.amountType, inputParams.switchEnabled)
 
-        txtHintInfo.setTextColor(context.getColor(hintTextColor))
+        binding.txtHintInfo.setTextColor(context.getColor(hintTextColor))
 
-        secondaryArea.setOnClickListener {
+        binding.secondaryArea.setOnClickListener {
             if (inputParams.switchEnabled) onTapSecondaryCallback?.invoke() else null
         }
     }
@@ -144,15 +145,15 @@ class AmountInputView @JvmOverloads constructor(
     }
 
     fun setSecondaryText(text: String?) {
-        txtHintInfo.text = text
+        binding.txtHintInfo.text = text
     }
 
     fun setWarningText(text: String?) {
-        txtWarningInfo.text = text
+        binding.txtWarningInfo.text = text
     }
 
     fun setFocus() {
-        KeyboardHelper.showKeyboard(context, editTxtAmount)
+        KeyboardHelper.showKeyboard(context, binding.editTxtAmount)
     }
 
     fun revertAmount(amount: String?) {
@@ -160,16 +161,16 @@ class AmountInputView @JvmOverloads constructor(
 
         setAmount(amount)
         val shake = AnimationUtils.loadAnimation(context, R.anim.shake_edittext)
-        editTxtAmount.startAnimation(shake)
+        binding.editTxtAmount.startAnimation(shake)
     }
 
     fun setEstimated(visible: Boolean) {
-        estimatedLabel.isVisible = visible
+        binding.estimatedLabel.isVisible = visible
         updateButtons()
     }
 
     fun setAmountEnabled(enabled: Boolean) {
-        editTxtAmount.isEnabled = enabled
+        binding.editTxtAmount.isEnabled = enabled
     }
 
     class InputParams(

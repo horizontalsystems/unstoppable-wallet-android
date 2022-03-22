@@ -3,12 +3,17 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
-import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItemState
-import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.bankwallet.entities.label
+import io.horizontalsystems.bankwallet.entities.supportedPlatforms
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Supported
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Unsupported
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItem
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItemState
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsViewModel(
@@ -17,7 +22,7 @@ class ManageWalletsViewModel(
 ) : ViewModel() {
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem>>()
-    val disableCoinLiveData = MutableLiveData<Coin>()
+    val disableCoinLiveData = MutableLiveData<String>()
 
     private var disposables = CompositeDisposable()
 
@@ -27,43 +32,53 @@ class ManageWalletsViewModel(
             .let { disposables.add(it) }
 
         service.cancelEnableCoinObservable
-            .subscribeIO { disableCoinLiveData.postValue(it) }
+            .subscribeIO { disableCoinLiveData.postValue(it.uid) }
             .let { disposables.add(it) }
 
         sync(service.items)
     }
 
     private fun sync(items: List<ManageWalletsService.Item>) {
-        val itemsSize = items.size
-        val viewItems = items.mapIndexed { index, item -> viewItem(item, ListPosition.getListPosition(itemsSize, index)) }
+        val viewItems = items.map { viewItem(it) }
         viewItemsLiveData.postValue(viewItems)
     }
 
-    private fun viewItem(item: ManageWalletsService.Item, listPosition: ListPosition): CoinViewItem {
-        return when (item.state) {
-            is ManageWalletsService.ItemState.Supported -> {
-                CoinViewItem(
-                    item.fullCoin,
-                    CoinViewItemState.ToggleVisible(item.state.enabled, item.state.hasSettings),
-                    listPosition
-                )
-            }
-            ManageWalletsService.ItemState.Unsupported -> {
-                CoinViewItem(item.fullCoin, CoinViewItemState.ToggleHidden, listPosition)
-            }
+    private fun viewItem(
+        item: ManageWalletsService.Item,
+    ): CoinViewItem {
+        val supportedPlatforms = item.fullCoin.supportedPlatforms
+        val label = supportedPlatforms.singleOrNull()?.coinType?.label
+        val state = when (item.state) {
+            is Supported -> CoinViewItemState.ToggleVisible(
+                item.state.enabled,
+                item.state.hasSettings
+            )
+            is Unsupported -> CoinViewItemState.ToggleHidden
         }
+        return CoinViewItem(
+            item.fullCoin.coin.uid,
+            ImageSource.Remote(item.fullCoin.coin.iconUrl, item.fullCoin.iconPlaceholder),
+            item.fullCoin.coin.name,
+            item.fullCoin.coin.code,
+            state,
+            label,
+        )
     }
 
     fun enable(fullCoin: FullCoin) {
         service.enable(fullCoin)
     }
 
-    fun disable(fullCoin: FullCoin) {
-        service.disable(fullCoin)
+    fun enable(uid: String) {
+        service.enable(uid)
     }
 
-    fun onClickSettings(fullCoin: FullCoin) {
-        service.configure(fullCoin)
+    fun disable(uid: String) {
+        service.disable(uid)
+    }
+
+    fun onClickSettings(uid: String) {
+        service.configure(uid)
     }
 
     fun updateFilter(filter: String) {

@@ -8,15 +8,16 @@ import io.horizontalsystems.chartview.models.ChartConfig
 class ChartGradient(private val animator: ChartAnimator? = null, override var isVisible: Boolean = true) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
-    private var points = listOf<PointF>()
 
     private val paint = Paint().apply {
         isAntiAlias = true
         style = Paint.Style.FILL
     }
 
-    fun setPoints(list: List<PointF>) {
-        points = list
+    private var curveAnimator: CurveAnimator? = null
+
+    fun setCurveAnimator(curveAnimator: CurveAnimator) {
+        this.curveAnimator = curveAnimator
     }
 
     fun setShader(gradient: ChartConfig.GradientColor) {
@@ -32,13 +33,14 @@ class ChartGradient(private val animator: ChartAnimator? = null, override var is
     }
 
     private fun Canvas.drawGradient() {
+        val points = curveAnimator?.getFramePoints() ?: return
         if (points.size < 2) return
         val path = Path()
 
         points.forEachIndexed { index, point ->
             when (index) {
-                0 -> path.moveTo(point.x, getY(point))
-                else -> path.lineTo(point.x, getY(point))
+                0 -> path.moveTo(point.x, point.y)
+                else -> path.lineTo(point.x, point.y)
             }
         }
 
@@ -48,13 +50,6 @@ class ChartGradient(private val animator: ChartAnimator? = null, override var is
         path.close()
 
         drawPath(path, paint)
-    }
-
-    private fun getY(point: PointF) : Float {
-        return when {
-            animator != null -> animator.getAnimatedY(point.y, shape.bottom)
-            else -> point.y
-        }
     }
 
     private fun setGradient(colorStart: Int, colorEnd: Int) {

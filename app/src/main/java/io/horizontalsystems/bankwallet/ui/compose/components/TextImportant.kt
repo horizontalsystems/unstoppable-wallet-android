@@ -10,18 +10,66 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun TextImportant(text: String, title: String? = null, @DrawableRes icon: Int? = null) {
+fun TextImportantWarning(
+    modifier: Modifier = Modifier,
+    text: String,
+    title: String? = null,
+    @DrawableRes icon: Int? = null
+) {
+    TextImportant(
+        modifier = modifier,
+        text = text,
+        title = title,
+        icon = icon,
+        borderColor = ComposeAppTheme.colors.jacob,
+        backgroundColor = ComposeAppTheme.colors.yellow20,
+        textColor = ComposeAppTheme.colors.jacob,
+        iconColor = ComposeAppTheme.colors.jacob
+    )
+}
+
+@Composable
+fun TextImportantError(
+    modifier: Modifier = Modifier,
+    text: String,
+    title: String? = null,
+    @DrawableRes icon: Int? = null
+) {
+    TextImportant(
+        modifier = modifier,
+        text = text,
+        title = title,
+        icon = icon,
+        borderColor = ComposeAppTheme.colors.lucian,
+        backgroundColor = ComposeAppTheme.colors.red20,
+        textColor = ComposeAppTheme.colors.lucian,
+        iconColor = ComposeAppTheme.colors.lucian
+    )
+}
+
+@Composable
+fun TextImportant(
+    modifier: Modifier = Modifier,
+    text: String,
+    title: String? = null,
+    @DrawableRes icon: Int? = null,
+    borderColor: Color,
+    backgroundColor: Color,
+    textColor: Color,
+    iconColor: Color
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .border(1.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(8.dp))
-            .background(ComposeAppTheme.colors.yellow20)
+            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+            .background(backgroundColor)
             .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -33,13 +81,13 @@ fun TextImportant(text: String, title: String? = null, @DrawableRes icon: Int? =
                     Icon(
                         painter = painterResource(id = icon),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.jacob
+                        tint = iconColor
                     )
                 }
                 title?.let {
                     Text(
                         text = it,
-                        color = ComposeAppTheme.colors.jacob,
+                        color = textColor,
                         style = ComposeAppTheme.typography.subhead1
                     )
                 }
@@ -51,6 +99,4 @@ fun TextImportant(text: String, title: String? = null, @DrawableRes icon: Int? =
             style = ComposeAppTheme.typography.subhead2
         )
     }
-
-
 }

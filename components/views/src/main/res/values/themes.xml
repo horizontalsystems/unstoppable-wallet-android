@@ -51,18 +51,17 @@
         <item name="SecondaryButtonStartGradient">#ffffffff</item>
         <item name="SecondaryButtonEndGradient">#00ffffff</item>
         <item name="MarketCircleGradient">@drawable/market_circle_light</item>
+        <item name="SplashScreenBackground">@drawable/ic_intro_background_light</item>
 
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white</item>
         <item name="ColorWindowBackground">@color/light</item>
     </style>
 
-    <style name="LauncherTheme" parent="Theme.AppTheme">
-        <item name="android:windowBackground">@color/tyler</item>
-        <item name="android:windowLightStatusBar">false</item>
-    </style>
-
-    <style name="OnboardingTheme" parent="Theme.AppTheme.DayNight">
-        <item name="android:windowBackground">@color/darkest</item>
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/tyler</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        <item name="postSplashScreenTheme">@style/Theme.AppTheme</item>
     </style>
 </resources>

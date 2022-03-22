@@ -1,34 +1,38 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -38,22 +42,74 @@ import kotlinx.coroutines.launch
 fun CoinList(
     items: List<MarketViewItem>,
     scrollToTop: Boolean,
-    onCoinClick: (String) -> Unit
+    onAddFavorite: (String) -> Unit,
+    onRemoveFavorite: (String) -> Unit,
+    onCoinClick: (String) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+    var revealedCardId by remember { mutableStateOf<String?>(null) }
 
     LazyColumn(state = listState) {
-        items(items) { item ->
-            MarketCoin(
-                item.fullCoin.coin.name,
-                item.fullCoin.coin.code,
-                item.fullCoin.coin.iconUrl,
-                item.fullCoin.iconPlaceholder,
-                item.coinRate,
-                item.marketDataValue,
-                item.rank
-            ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+        itemsIndexed(items, key = { _, item -> item.coinUid }) { index, item ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            ) {
+                ActionsRow(
+                    content = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
+                                .width(100.dp)
+                                .clickable {
+                                    if (item.favorited) {
+                                        onRemoveFavorite(item.coinUid)
+                                    } else {
+                                        onAddFavorite(item.coinUid)
+                                    }
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = if (item.favorited) R.drawable.ic_star_off_24 else R.drawable.ic_star_24),
+                                tint = ComposeAppTheme.colors.claude,
+                                contentDescription = "delete",
+                            )
+                        }
+                    }
+                )
+                DraggableCardSimple(
+                    isRevealed = revealedCardId == item.coinUid,
+                    cardOffset = 100f,
+                    onReveal = {
+                        if (revealedCardId != item.coinUid) {
+                            revealedCardId = item.coinUid
+                        }
+                    },
+                    onConceal = {
+                        revealedCardId = null
+                    },
+                    content = {
+                        MarketCoin(
+                            item.fullCoin.coin.name,
+                            item.fullCoin.coin.code,
+                            item.fullCoin.coin.iconUrl,
+                            item.fullCoin.iconPlaceholder,
+                            item.coinRate,
+                            item.marketDataValue,
+                            item.rank
+                        ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+                    }
+                )
+                Divider(
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel10,
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                )
+            }
         }
         item {
             Spacer(modifier = Modifier.height(32.dp))
@@ -67,226 +123,71 @@ fun CoinList(
 }
 
 @Composable
-fun MarketCoin(
-    coinName: String,
-    coinCode: String,
-    coinIconUrl: String,
-    coinIconPlaceholder: Int,
-    coinRate: String? = null,
-    marketDataValue: MarketDataValue? = null,
-    label: String? = null,
-    onClick: (() -> Unit)? = null
-) {
-    MultilineClear(
-        onClick = onClick,
-        borderBottom = true
-    ) {
-        CoinImage(
-            iconUrl = coinIconUrl,
-            placeholder = coinIconPlaceholder,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(24.dp)
-        )
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            MarketCoinFirstRow(coinName, coinRate)
-            Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(coinCode, marketDataValue, label)
-        }
-    }
-}
-
-@Composable
-fun MultilineClear(
-    modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
-    borderTop: Boolean = false,
-    borderBottom: Boolean = false,
-    content: @Composable RowScope.() -> Unit
-) {
-    Box(
-        modifier = modifier
-            .height(60.dp)
-            .clickable { onClick?.invoke() }
-    ) {
-        if (borderTop) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
-        }
-        if (borderBottom) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            content()
-        }
-    }
-}
-
-@Composable
-fun MarketCoinFirstRow(coinName: String, rate: String?) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = coinName,
-            color = ComposeAppTheme.colors.oz,
-            style = ComposeAppTheme.typography.body,
-            maxLines = 1,
-        )
-        rate?.let {
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = rate,
-                color = ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.body,
-                maxLines = 1,
-            )
-        }
-    }
-}
-
-@Composable
-fun MarketCoinSecondRow(
-    coinCode: String,
-    marketDataValue: MarketDataValue?,
-    label: String?
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        label?.let { labelText ->
-            Box(
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(ComposeAppTheme.colors.jeremy)
-            ) {
-                Text(
-                    modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),
-                    text = labelText,
-                    color = ComposeAppTheme.colors.bran,
-                    style = ComposeAppTheme.typography.microSB,
-                    maxLines = 1,
-                )
-            }
-        }
-        Text(
-            text = coinCode,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2,
-            maxLines = 1,
-        )
-        marketDataValue?.let {
-            Spacer(modifier = Modifier.weight(1f))
-            MarketDataValueComponent(marketDataValue)
-        }
-    }
-}
-
-@Composable
-private fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
-    when (marketDataValue) {
-        is MarketDataValue.MarketCap -> {
-            Row {
-                Text(
-                    text = "MCap",
-                    color = ComposeAppTheme.colors.jacob,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = marketDataValue.value,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-            }
-        }
-        is MarketDataValue.Volume -> {
-            Row {
-                Text(
-                    text = "Vol",
-                    color = ComposeAppTheme.colors.jacob,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = marketDataValue.value,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-            }
-        }
-        is MarketDataValue.Diff -> {
-            Text(
-                text = RateText(marketDataValue.value),
-                color = RateColor(marketDataValue.value),
-                style = ComposeAppTheme.typography.subhead2,
-                maxLines = 1,
-            )
-        }
-        is MarketDataValue.DiffNew -> {
-            Text(
-                text = formatValueAsDiff(marketDataValue.value),
-                color = diffColor(marketDataValue.value.raw()),
-                style = ComposeAppTheme.typography.subhead2,
-                maxLines = 1,
-            )
-        }
-    }
-}
-
-@Composable
 fun ListErrorView(
     errorText: String,
-    onClick: (() -> Unit)? = null
+    onClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            modifier = Modifier
-                .size(48.dp),
-            painter = painterResource(id = R.drawable.ic_attention_24),
-            contentDescription = errorText,
-            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-        )
-        Spacer(Modifier.height(16.dp))
-        Text(
-            text = errorText,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2,
-        )
-        Spacer(Modifier.height(24.dp))
-        onClick?.let {
-            ButtonSecondaryDefault(
-                modifier = Modifier
-                    .width(145.dp)
-                    .height(28.dp),
-                title = stringResource(id = R.string.Button_Retry),
-                onClick = {
-                    it.invoke()
+    ScreenMessageWithAction(
+        text = errorText,
+        icon = R.drawable.ic_sync_error,
+        action = Pair(stringResource(id = R.string.Button_Retry), onClick)
+    )
+}
+
+@Composable
+fun ListEmptyView(
+    text: String,
+    @DrawableRes icon: Int
+) {
+    ScreenMessageWithAction(text = text, icon = icon, action = null)
+}
+
+@Composable
+fun ScreenMessageWithAction(
+    text: String,
+    @DrawableRes icon: Int,
+    action: Pair<String, (() -> Unit)>?
+) {
+    Column {
+        Row(Modifier.weight(22f)) {}
+
+        Row(modifier = Modifier.weight(78f), verticalAlignment = Alignment.Top) {
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(ComposeAppTheme.colors.steel20, shape = CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        modifier = Modifier.size(48.dp),
+                        painter = painterResource(icon),
+                        contentDescription = text,
+                        tint = ComposeAppTheme.colors.grey
+                    )
                 }
-            )
+                Text(
+                    modifier = Modifier
+                        .padding(top = 32.dp)
+                        .padding(horizontal = 48.dp),
+                    text = text,
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis,
+                    color = ComposeAppTheme.colors.grey,
+                    style = ComposeAppTheme.typography.subhead2
+                )
+                action?.let { (name, onClick) ->
+                    Spacer(Modifier.height(32.dp))
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .padding(horizontal = 48.dp)
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        title = name,
+                        onClick = onClick
+                    )
+                }
+            }
         }
     }
 }
@@ -377,7 +278,6 @@ fun TopCloseButton(
     }
 }
 
-@ExperimentalCoilApi
 @Composable
 fun DescriptionCard(title: String, description: String, image: ImageSource) {
     Column {
@@ -416,8 +316,7 @@ fun DescriptionCard(title: String, description: String, image: ImageSource) {
     }
 }
 
-@ExperimentalCoilApi
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RowScope.CategoryCard(
     type: DiscoveryItem,
@@ -488,11 +387,11 @@ fun RowScope.CategoryCard(
 @Composable
 fun PreviewListErrorView() {
     ComposeAppTheme {
-        ListErrorView(errorText = "Sync Error 123")
+        ListErrorView(errorText = "Sync error. Try again") {
+        }
     }
 }
 
-@ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
 fun CardPreview() {
