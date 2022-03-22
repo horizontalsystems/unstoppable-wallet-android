@@ -5,10 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
-import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.Warning
-import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm
-import io.horizontalsystems.bankwallet.core.fiat.FiatServiceSendEvm
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
@@ -103,18 +101,6 @@ object SendEvmModule {
             return when (modelClass) {
                 SendEvmViewModel::class.java -> {
                     SendEvmViewModel(service, listOf(service)) as T
-                }
-                AmountInputViewModel::class.java -> {
-                    val switchService = AmountTypeSwitchServiceSendEvm()
-                    val fiatService = FiatServiceSendEvm(switchService, App.currencyManager, App.marketKit)
-                    switchService.add(fiatService.toggleAvailableObservable)
-
-                    AmountInputViewModel(
-                        service,
-                        fiatService,
-                        switchService,
-                        clearables = listOf(service, fiatService, switchService)
-                    ) as T
                 }
                 SendAvailableBalanceViewModel::class.java -> {
                     val coinService = EvmCoinService(wallet.platformCoin, App.currencyManager, App.marketKit)

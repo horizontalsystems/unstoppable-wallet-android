@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.disposables.CompositeDisposable
+import java.math.BigDecimal
 
 class SendEvmViewModel(
         val service: SendEvmService,
@@ -22,6 +23,7 @@ class SendEvmViewModel(
     val proceedEnabledLiveData = MutableLiveData(false)
     val amountCautionLiveData = MutableLiveData<Caution?>(null)
     val proceedLiveEvent = SingleLiveEvent<SendEvmData>()
+    val availableBalance: BigDecimal get() = service.availableBalance
 
     val coin: PlatformCoin
         get() = service.coin
@@ -68,5 +70,13 @@ class SendEvmViewModel(
 
     fun onEnterAddress(address: Address?) {
         service.setRecipientAddress(address)
+    }
+
+    fun onEnterAmount(amount: BigDecimal?) {
+        service.onChangeAmount(amount)
+    }
+
+    fun onHandleProceedEvent() {
+        proceedLiveEvent.postValue(null)
     }
 }

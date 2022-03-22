@@ -20,8 +20,8 @@ class AmountInputViewModel2(
     private val marketKit: MarketKit,
     private val currencyManager: ICurrencyManager,
     private val coin: Coin,
-    val coinDecimal: Int,
-    val currencyDecimal: Int
+    private val coinDecimal: Int,
+    private val currencyDecimal: Int
 ) : ViewModel() {
 
     var inputMode by mutableStateOf(AmountInputModule.InputMode.Coin)
@@ -33,22 +33,24 @@ class AmountInputViewModel2(
     var hint by mutableStateOf("")
         private set
 
-    private var disposables = CompositeDisposable()
-    private var rate = marketKit.coinPrice(coin.uid, currencyManager.baseCurrency.code)
     var coinAmount: BigDecimal? = null
+        private set
+
+    private var rate = marketKit.coinPrice(coin.uid, currencyManager.baseCurrency.code)
     private var currencyAmount: BigDecimal? = null
+    private var disposables = CompositeDisposable()
 
     init {
         marketKit.coinPriceObservable(coin.uid, currencyManager.baseCurrency.code)
             .subscribeIO {
                 rate = it
-                updateHint()
+                refreshHint()
             }
             .let {
                 disposables.add(it)
             }
 
-        updateHint()
+        refreshHint()
         updateInputPrefix()
     }
 
@@ -60,21 +62,31 @@ class AmountInputViewModel2(
         val amount = if (text.isNotBlank()) text.toBigDecimalOrNull()?.stripTrailingZeros() else null
 
         when (inputMode) {
-            AmountInputModule.InputMode.Coin -> {
-                coinAmount = amount
-                currencyAmount = rate?.let { rate ->
-                    amount?.times(rate.value)?.setScale(currencyDecimal, RoundingMode.CEILING)?.stripTrailingZeros()
-                }
-            }
-            AmountInputModule.InputMode.Currency -> {
-                coinAmount = rate?.let { rate ->
-                    amount?.divide(rate.value, coinDecimal, RoundingMode.CEILING)?.stripTrailingZeros()
-                }
-                currencyAmount = amount
-            }
+            AmountInputModule.InputMode.Coin -> updateCoinAmount(amount)
+            AmountInputModule.InputMode.Currency -> updateCurrencyAmount(amount)
         }
 
-        updateHint()
+        refreshHint()
+    }
+
+    fun onEnterCoinAmount(amount: BigDecimal) {
+        updateCoinAmount(amount)
+        refreshHint()
+    }
+
+    private fun updateCurrencyAmount(amount: BigDecimal?) {
+        coinAmount = rate?.let { rate ->
+            amount?.divide(rate.value, coinDecimal, RoundingMode.CEILING)?.stripTrailingZeros()
+        }
+        currencyAmount = amount
+    }
+
+    private fun updateCoinAmount(amount: BigDecimal?) {
+        coinAmount = amount
+        currencyAmount = rate?.let { rate ->
+            amount?.times(rate.value)?.setScale(currencyDecimal, RoundingMode.CEILING)
+                ?.stripTrailingZeros()
+        }
     }
 
     fun getEnterAmount(): String {
@@ -86,7 +98,7 @@ class AmountInputViewModel2(
 
     }
 
-    private fun updateHint() {
+    private fun refreshHint() {
         hint = if (rate == null) {
             ""
         } else {
@@ -107,7 +119,7 @@ class AmountInputViewModel2(
             AmountInputModule.InputMode.Currency -> AmountInputModule.InputMode.Coin
         }
 
-        updateHint()
+        refreshHint()
         updateInputPrefix()
     }
 

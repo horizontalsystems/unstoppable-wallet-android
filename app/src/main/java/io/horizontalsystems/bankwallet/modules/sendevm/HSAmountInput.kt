@@ -35,19 +35,12 @@ import java.math.BigDecimal
 
 @Composable
 fun HSAmountInput(
-//    amountViewModel: AmountInputViewModel,
     modifier: Modifier = Modifier,
     caution: Caution?,
-    maxEnabled: Boolean,
+    availableBalance: BigDecimal,
     wallet: Wallet,
     onValueChange: (BigDecimal?) -> Unit
 ) {
-//    val amount by amountViewModel.amountLiveData.observeAsState()
-//    val revertAmount by amountViewModel.revertAmountLiveData.observeAsState()
-//    val maxEnabled by amountViewModel.maxEnabledLiveData.observeAsState(false)
-//    val secondaryText by amountViewModel.secondaryTextLiveData.observeAsState()
-//    val inputParams by amountViewModel.inputParamsLiveData.observeAsState()
-
     val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(wallet))
 
     val borderColor = when (caution?.type) {
@@ -146,11 +139,16 @@ fun HSAmountInput(
                             onValueChange.invoke(viewModel.coinAmount)
                         }
                     )
-                } else if (maxEnabled) {
+                } else if (availableBalance > BigDecimal.ZERO) {
                     ButtonSecondaryDefault(
                         modifier = Modifier.padding(8.dp),
                         title = stringResource(R.string.Send_Button_Max),
                         onClick = {
+                            viewModel.onEnterCoinAmount(availableBalance)
+                            val text = viewModel.getEnterAmount()
+                            textState = textState.copy(text = text, selection = TextRange(text.length))
+
+                            onValueChange.invoke(viewModel.coinAmount)
                         }
                     )
                 }
@@ -171,8 +169,7 @@ fun HSAmountInput(
                         onClick = {
                             viewModel.onToggleInputMode()
                             val text = viewModel.getEnterAmount()
-                            textState =
-                                textState.copy(text = text, selection = TextRange(text.length))
+                            textState = textState.copy(text = text, selection = TextRange(text.length))
                         },
                     )
             ) {
