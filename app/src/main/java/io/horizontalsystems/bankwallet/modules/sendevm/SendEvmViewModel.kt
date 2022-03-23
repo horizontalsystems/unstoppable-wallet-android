@@ -17,21 +17,25 @@ class SendEvmViewModel(
 ) : ViewModel(), AmountInputViewModel2.AmountValidator {
 
     val availableBalance get() = service.availableBalance
-    val coinDecimal get() = service.coinDecimal
-    val fiatDecimal get() = service.fiatDecimal
+    val coinMaxAllowedDecimals get() = service.coinMaxAllowedDecimals
+    val fiatMaxAllowedDecimals get() = service.fiatMaxAllowedDecimals
 
     var proceedEnabled by mutableStateOf(false)
         private set
     var amountInputMode by mutableStateOf(AmountInputModule.InputMode.Coin)
+        private set
+    var sendData: SendEvmData? = null
         private set
 
     private val disposables = CompositeDisposable()
 
     init {
         viewModelScope.launch {
-            service.sendingAvailable
-                .collect {
-                    proceedEnabled = it
+            service.sendDataResult
+                .collect { sendDataState ->
+                    sendData = sendDataState.getOrNull()
+
+                    proceedEnabled = sendDataState.isSuccess
                 }
         }
     }
@@ -51,8 +55,6 @@ class SendEvmViewModel(
     fun onUpdateAmountInputMode(mode: AmountInputModule.InputMode) {
         amountInputMode = mode
     }
-
-    fun getSendData() = service.getSendData()
 
     override fun validateAmount(amount: BigDecimal?): Caution? {
         return service.validateAmount(amount)
