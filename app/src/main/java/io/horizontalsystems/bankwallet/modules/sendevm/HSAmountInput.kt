@@ -36,15 +36,20 @@ import java.math.BigDecimal
 @Composable
 fun HSAmountInput(
     modifier: Modifier = Modifier,
-    caution: Caution?,
     availableBalance: BigDecimal,
     coin: Coin,
     coinDecimal: Int,
     fiatDecimal: Int,
+    amountValidator: AmountInputViewModel2.AmountValidator? = null,
     onUpdateInputMode: (AmountInputModule.InputMode) -> Unit,
     onValueChange: (BigDecimal?) -> Unit
 ) {
-    val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coin, coinDecimal, fiatDecimal))
+    val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coin, coinDecimal, fiatDecimal, amountValidator))
+    LaunchedEffect(availableBalance) {
+        viewModel.availableBalance = availableBalance
+    }
+
+    val caution = viewModel.caution
 
     val borderColor = when (caution?.type) {
         Caution.Type.Error -> ComposeAppTheme.colors.red50
@@ -94,7 +99,7 @@ fun HSAmountInput(
                             textState = textFieldValue
 
                             viewModel.onEnterAmount(text)
-                            onValueChange.invoke(viewModel.coinAmount)
+                            onValueChange.invoke(viewModel.getResultCoinAmount())
                         } else {
                             // todo: shake animation
                         }
@@ -139,19 +144,19 @@ fun HSAmountInput(
                             textState = textState.copy(text = "")
 
                             viewModel.onEnterAmount(textState.text)
-                            onValueChange.invoke(viewModel.coinAmount)
+                            onValueChange.invoke(viewModel.getResultCoinAmount())
                         }
                     )
-                } else if (availableBalance > BigDecimal.ZERO) {
+                } else if (viewModel.isMaxEnabled) {
                     ButtonSecondaryDefault(
                         modifier = Modifier.padding(8.dp),
                         title = stringResource(R.string.Send_Button_Max),
                         onClick = {
-                            viewModel.onEnterCoinAmount(availableBalance)
+                            viewModel.onClickMax()
                             val text = viewModel.getEnterAmount()
                             textState = textState.copy(text = text, selection = TextRange(text.length))
 
-                            onValueChange.invoke(viewModel.coinAmount)
+                            onValueChange.invoke(viewModel.getResultCoinAmount())
                         }
                     )
                 }

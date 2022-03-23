@@ -2,16 +2,16 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData.AdditionalInfo
+import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
@@ -21,87 +21,40 @@ import io.horizontalsystems.ethereumkit.models.Address as EvmAddress
 class SendEvmService(
     val sendCoin: PlatformCoin,
     val adapter: ISendEthereumAdapter
-) : Clearable {
-
+) {
     val coinDecimal = min(sendCoin.decimals, App.appConfigProvider.maxDecimal)
     val fiatDecimal = App.appConfigProvider.fiatDecimal
+    val availableBalance: BigDecimal
+        get() = adapter.balanceData.available.setScale(coinDecimal, RoundingMode.DOWN)
 
-    private val stateSubject = PublishSubject.create<State>()
-    var state: State = State.NotReady
-        private set(value) {
-            field = value
-            stateSubject.onNext(value)
-        }
-    val stateObservable: Flowable<State>
-        get() = stateSubject.toFlowable(BackpressureStrategy.BUFFER)
+    private var _sendingAvailable = MutableSharedFlow<Boolean>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val sendingAvailable = _sendingAvailable.asSharedFlow()
 
     private var evmAmount: BigInteger? = null
     private var addressData: AddressData? = null
 
-    private val amountCautionSubject = PublishSubject.create<AmountCaution>()
-    private var amountCaution: AmountCaution = AmountCaution()
-        set(value) {
-            field = value
-            amountCautionSubject.onNext(value)
-        }
-    val amountCautionObservable: Flowable<AmountCaution>
-        get() = amountCautionSubject.toFlowable(BackpressureStrategy.BUFFER)
+    fun getSendData(): SendEvmData? {
+        val tmpEvmAmount = evmAmount ?: return null
+        val tmpAddressData = addressData ?: return null
 
-    private fun syncState() {
-        val amountError = this.amountCaution.error
-        val evmAmount = this.evmAmount
-        val addressData = this.addressData
+        val transactionData = adapter.getTransactionData(tmpEvmAmount, tmpAddressData.evmAddress)
+        val additionalInfo = AdditionalInfo.Send(SendEvmData.SendInfo(tmpAddressData.domain))
 
-        state = if (amountError == null && evmAmount != null && addressData != null) {
-            val transactionData = adapter.getTransactionData(evmAmount, addressData.evmAddress)
-            val additionalInfo = AdditionalInfo.Send(SendEvmData.SendInfo(addressData.domain))
-            State.Ready(SendEvmData(transactionData, additionalInfo))
-        } else {
-            State.NotReady
-        }
+        return SendEvmData(transactionData, additionalInfo)
     }
 
-    @Throws
-    private fun validEvmAmount(amount: BigDecimal): BigInteger {
-        val evmAmount = try {
+    fun setAmount(amount: BigDecimal?) {
+        evmAmount = if (amount != null && amount > BigDecimal.ZERO) {
             amount.movePointRight(sendCoin.decimals).toBigInteger()
-        } catch (error: Throwable) {
-            throw AmountError.InvalidDecimal
-        }
-        if (amount > availableBalance) {
-            throw AmountError.InsufficientBalance
-        }
-        return evmAmount
-    }
-
-    val availableBalance: BigDecimal
-        get() = adapter.balanceData.available.setScale(coinDecimal, RoundingMode.DOWN)
-
-    fun onChangeAmount(amount: BigDecimal?) {
-        if (amount != null && amount > BigDecimal.ZERO) {
-            var amountWarning: AmountWarning? = null
-            try {
-                if (amount == availableBalance && (sendCoin.coinType is CoinType.Ethereum ||
-                        sendCoin.coinType is CoinType.BinanceSmartChain || sendCoin.coinType is CoinType.Polygon ||
-                        sendCoin.coinType is CoinType.EthereumOptimism || sendCoin.coinType is CoinType.EthereumArbitrumOne)) {
-                    amountWarning = AmountWarning.CoinNeededForFee
-                }
-                evmAmount = validEvmAmount(amount)
-                amountCaution = AmountCaution(null, amountWarning)
-            } catch (error: Throwable) {
-                evmAmount = null
-                amountCaution = AmountCaution(error, null)
-            }
         } else {
-            evmAmount = null
-            amountCaution = AmountCaution()
+            null
         }
 
         syncState()
     }
-    //endregion
-
-    //region IRecipientAddressService
 
     fun setRecipientAddress(address: Address?) {
         addressData = address?.let {
@@ -110,30 +63,26 @@ class SendEvmService(
         syncState()
     }
 
-    override fun clear() = Unit
-
-    //endregion
-
-    sealed class State {
-        class Ready(val sendData: SendEvmData) : State()
-        object NotReady : State()
+    private fun syncState() {
+        _sendingAvailable.tryEmit(evmAmount != null && addressData != null)
     }
 
-    sealed class AmountError : Throwable() {
-        object InvalidDecimal : AmountError()
-        object InsufficientBalance : AmountError() {
-            override fun getLocalizedMessage(): String {
-                return Translator.getString(R.string.Swap_ErrorInsufficientBalance)
-            }
-        }
-    }
+    fun validateAmount(amount: BigDecimal?): Caution? {
+        if (amount != availableBalance) return null
+        if (
+            sendCoin.coinType !is CoinType.Ethereum
+            && sendCoin.coinType !is CoinType.BinanceSmartChain
+            && sendCoin.coinType !is CoinType.Polygon
+            && sendCoin.coinType !is CoinType.EthereumOptimism
+            && sendCoin.coinType !is CoinType.EthereumArbitrumOne
+        ) return null
 
-    class AmountCaution(val error: Throwable? = null, val amountWarning: AmountWarning? = null)
 
-    enum class AmountWarning {
-        CoinNeededForFee
+        return Caution(
+            Translator.getString(R.string.EthereumTransaction_Warning_CoinNeededForFee, sendCoin.coin.code),
+            Caution.Type.Warning
+        )
     }
 
     data class AddressData(val evmAddress: EvmAddress, val domain: String?)
-
 }

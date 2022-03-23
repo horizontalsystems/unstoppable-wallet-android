@@ -65,16 +65,6 @@ fun SendEvmScreen(
     ComposeAppTheme {
         val fullCoin = wallet.platformCoin.fullCoin
         val proceedEnabled = viewModel.proceedEnabled
-        val proceedEvent = viewModel.proceedEvent
-        val amountCaution = viewModel.amountCaution
-
-        proceedEvent?.let { sendData ->
-            navController.slideFromRight(
-                R.id.sendEvmConfirmationFragment,
-                SendEvmConfirmationModule.prepareParams(sendData)
-            )
-            viewModel.onHandleProceedEvent()
-        }
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
@@ -110,17 +100,18 @@ fun SendEvmScreen(
             Spacer(modifier = Modifier.height(12.dp))
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                caution = amountCaution,
                 availableBalance = viewModel.availableBalance,
                 coin = wallet.coin,
                 coinDecimal = viewModel.coinDecimal,
                 fiatDecimal = viewModel.fiatDecimal,
+                amountValidator = viewModel,
                 onUpdateInputMode = {
                     viewModel.onUpdateAmountInputMode(it)
+                },
+                onValueChange = {
+                    viewModel.onEnterAmount(it)
                 }
-            ) {
-                viewModel.onEnterAmount(it)
-            }
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
             HSAddressInput(
@@ -136,7 +127,12 @@ fun SendEvmScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
-                    viewModel.onClickProceed()
+                    viewModel.getSendData()?.let {
+                        navController.slideFromRight(
+                            R.id.sendEvmConfirmationFragment,
+                            SendEvmConfirmationModule.prepareParams(it)
+                        )
+                    }
                 },
                 enabled = proceedEnabled
             )

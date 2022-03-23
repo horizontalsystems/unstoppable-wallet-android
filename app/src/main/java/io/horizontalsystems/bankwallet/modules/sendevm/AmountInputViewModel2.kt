@@ -5,8 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Coin
@@ -19,8 +22,18 @@ class AmountInputViewModel2(
     private val currencyManager: ICurrencyManager,
     private val coin: Coin,
     private val coinDecimal: Int,
-    private val fiatDecimal: Int
+    private val fiatDecimal: Int,
+    private val amountValidator: AmountValidator?,
 ) : ViewModel() {
+
+    interface AmountValidator {
+        fun validateAmount(amount: BigDecimal?): Caution?
+    }
+
+    var availableBalance = BigDecimal.ZERO
+
+    val isMaxEnabled: Boolean
+        get() = availableBalance > BigDecimal.ZERO
 
     var inputMode by mutableStateOf(AmountInputModule.InputMode.Coin)
         private set
@@ -31,8 +44,10 @@ class AmountInputViewModel2(
     var hint by mutableStateOf("")
         private set
 
-    var coinAmount: BigDecimal? = null
+    var caution by mutableStateOf<Caution?>(null)
         private set
+
+    private var coinAmount: BigDecimal? = null
 
     private val currency = currencyManager.baseCurrency
     private var rate = marketKit.coinPrice(coin.uid, currency.code)
@@ -53,6 +68,11 @@ class AmountInputViewModel2(
         updateInputPrefix()
     }
 
+    fun getResultCoinAmount() = when {
+        caution?.type != Caution.Type.Error -> coinAmount
+        else -> null
+    }
+
     override fun onCleared() {
         disposables.clear()
     }
@@ -66,11 +86,13 @@ class AmountInputViewModel2(
         }
 
         refreshHint()
+        refreshCaution()
     }
 
-    fun onEnterCoinAmount(amount: BigDecimal) {
-        updateCoinAmount(amount)
+    fun onClickMax() {
+        updateCoinAmount(availableBalance)
         refreshHint()
+        refreshCaution()
     }
 
     private fun updateCurrencyAmount(amount: BigDecimal?) {
@@ -93,7 +115,19 @@ class AmountInputViewModel2(
             AmountInputModule.InputMode.Currency -> currencyAmount
         }
         return amount?.toPlainString() ?: ""
+    }
 
+    private fun refreshCaution() {
+        val tmpCoinAmount = coinAmount
+
+        caution = when {
+            tmpCoinAmount == null -> null
+            tmpCoinAmount > availableBalance -> Caution(
+                Translator.getString(R.string.Swap_ErrorInsufficientBalance),
+                Caution.Type.Error
+            )
+            else -> amountValidator?.validateAmount(tmpCoinAmount)
+        }
     }
 
     private fun refreshHint() {
@@ -148,14 +182,20 @@ object AmountInputModule {
     }
 
     @Suppress("UNCHECKED_CAST")
-    class Factory(private val coin: Coin, private val coinDecimal: Int, private val fiatDecimal: Int) : ViewModelProvider.Factory {
+    class Factory(
+        private val coin: Coin,
+        private val coinDecimal: Int,
+        private val fiatDecimal: Int,
+        private val amountValidator: AmountInputViewModel2.AmountValidator?
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return AmountInputViewModel2(
                 App.marketKit,
                 App.currencyManager,
                 coin,
                 coinDecimal,
-                fiatDecimal
+                fiatDecimal,
+                amountValidator
             ) as T
         }
 
