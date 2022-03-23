@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -66,9 +64,9 @@ fun SendEvmScreen(
 ) {
     ComposeAppTheme {
         val fullCoin = wallet.platformCoin.fullCoin
-        val proceedEnabled by viewModel.proceedEnabledLiveData.observeAsState(false)
-        val amountCaution by viewModel.amountCautionLiveData.observeAsState()
-        val proceedEvent by viewModel.proceedLiveEvent.observeAsState()
+        val proceedEnabled = viewModel.proceedEnabled
+        val proceedEvent = viewModel.proceedEvent
+        val amountCaution = viewModel.amountCaution
 
         proceedEvent?.let { sendData ->
             navController.slideFromRight(
