@@ -24,7 +24,8 @@ class SendEvmService(
     val adapter: ISendEthereumAdapter
 ) : IAvailableBalanceService, IAmountInputService, Clearable {
 
-    private val coinDecimal = min(sendCoin.decimals, App.appConfigProvider.maxDecimal)
+    val coinDecimal = min(sendCoin.decimals, App.appConfigProvider.maxDecimal)
+    val fiatDecimal = App.appConfigProvider.fiatDecimal
 
     private val stateSubject = PublishSubject.create<State>()
     var state: State = State.NotReady

@@ -7,21 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Coin
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 import java.math.RoundingMode
-import kotlin.math.min
 
 class AmountInputViewModel2(
     private val marketKit: MarketKit,
     private val currencyManager: ICurrencyManager,
     private val coin: Coin,
     private val coinDecimal: Int,
-    private val currencyDecimal: Int
+    private val fiatDecimal: Int
 ) : ViewModel() {
 
     var inputMode by mutableStateOf(AmountInputModule.InputMode.Coin)
@@ -36,12 +34,13 @@ class AmountInputViewModel2(
     var coinAmount: BigDecimal? = null
         private set
 
-    private var rate = marketKit.coinPrice(coin.uid, currencyManager.baseCurrency.code)
+    private val currency = currencyManager.baseCurrency
+    private var rate = marketKit.coinPrice(coin.uid, currency.code)
     private var currencyAmount: BigDecimal? = null
     private var disposables = CompositeDisposable()
 
     init {
-        marketKit.coinPriceObservable(coin.uid, currencyManager.baseCurrency.code)
+        marketKit.coinPriceObservable(coin.uid, currency.code)
             .subscribeIO {
                 rate = it
                 refreshHint()
@@ -84,8 +83,7 @@ class AmountInputViewModel2(
     private fun updateCoinAmount(amount: BigDecimal?) {
         coinAmount = amount
         currencyAmount = rate?.let { rate ->
-            amount?.times(rate.value)?.setScale(currencyDecimal, RoundingMode.CEILING)
-                ?.stripTrailingZeros()
+            amount?.times(rate.value)?.setScale(fiatDecimal, RoundingMode.DOWN)?.stripTrailingZeros()
         }
     }
 
@@ -104,7 +102,7 @@ class AmountInputViewModel2(
         } else {
             when (inputMode) {
                 AmountInputModule.InputMode.Coin -> {
-                    App.numberFormatter.format(currencyAmount ?: BigDecimal.ZERO, currencyDecimal, currencyDecimal, prefix = currencyManager.baseCurrency.symbol)
+                    App.numberFormatter.format(currencyAmount ?: BigDecimal.ZERO, fiatDecimal, fiatDecimal, prefix = currency.symbol)
                 }
                 AmountInputModule.InputMode.Currency -> {
                     App.numberFormatter.formatCoin(coinAmount ?: BigDecimal.ZERO, coin.code, 0, coinDecimal)
@@ -126,7 +124,7 @@ class AmountInputViewModel2(
     private fun updateInputPrefix() {
         inputPrefix = when (inputMode) {
             AmountInputModule.InputMode.Coin -> null
-            AmountInputModule.InputMode.Currency -> currencyManager.baseCurrency.symbol
+            AmountInputModule.InputMode.Currency -> currency.symbol
         }
     }
 
@@ -136,7 +134,7 @@ class AmountInputViewModel2(
 
         val maxAllowedScale = when (inputMode) {
             AmountInputModule.InputMode.Coin -> coinDecimal
-            AmountInputModule.InputMode.Currency -> currencyDecimal
+            AmountInputModule.InputMode.Currency -> fiatDecimal
         }
 
         return amount.scale() <= maxAllowedScale
@@ -150,16 +148,14 @@ object AmountInputModule {
     }
 
     @Suppress("UNCHECKED_CAST")
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(private val coin: Coin, private val coinDecimal: Int, private val fiatDecimal: Int) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val coinDecimal = min(wallet.decimal, App.appConfigProvider.maxDecimal)
-            val currencyDecimal = App.appConfigProvider.fiatDecimal
             return AmountInputViewModel2(
                 App.marketKit,
                 App.currencyManager,
-                wallet.coin,
+                coin,
                 coinDecimal,
-                currencyDecimal
+                fiatDecimal
             ) as T
         }
 

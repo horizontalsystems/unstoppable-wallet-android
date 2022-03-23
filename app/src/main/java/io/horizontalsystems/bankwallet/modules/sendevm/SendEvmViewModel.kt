@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.sendevm
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
@@ -23,7 +26,12 @@ class SendEvmViewModel(
     val proceedEnabledLiveData = MutableLiveData(false)
     val amountCautionLiveData = MutableLiveData<Caution?>(null)
     val proceedLiveEvent = SingleLiveEvent<SendEvmData>()
-    val availableBalance: BigDecimal get() = service.availableBalance
+    val availableBalance get() = service.availableBalance
+    val coinDecimal get() = service.coinDecimal
+    val fiatDecimal get() = service.fiatDecimal
+
+    var amountInputMode by mutableStateOf(AmountInputModule.InputMode.Coin)
+        private set
 
     val coin: PlatformCoin
         get() = service.coin
@@ -78,5 +86,9 @@ class SendEvmViewModel(
 
     fun onHandleProceedEvent() {
         proceedLiveEvent.postValue(null)
+    }
+
+    fun onUpdateAmountInputMode(mode: AmountInputModule.InputMode) {
+        amountInputMode = mode
     }
 }

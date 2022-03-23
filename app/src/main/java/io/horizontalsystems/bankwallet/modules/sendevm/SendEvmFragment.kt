@@ -105,14 +105,25 @@ fun SendEvmScreen(
                 )
             )
 
-            AvailableBalance(availableBalanceViewModel)
+            AvailableBalance(
+                coin = wallet.coin,
+                coinDecimal = viewModel.coinDecimal,
+                fiatDecimal = viewModel.fiatDecimal,
+                availableBalance = viewModel.availableBalance,
+                amountInputMode = viewModel.amountInputMode
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 caution = amountCaution,
                 availableBalance = viewModel.availableBalance,
-                wallet = wallet
+                coin = wallet.coin,
+                coinDecimal = viewModel.coinDecimal,
+                fiatDecimal = viewModel.fiatDecimal,
+                onUpdateInputMode = {
+                    viewModel.onUpdateAmountInputMode(it)
+                }
             ) {
                 viewModel.onEnterAmount(it)
             }
