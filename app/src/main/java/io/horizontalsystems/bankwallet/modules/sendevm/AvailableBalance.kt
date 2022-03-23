@@ -3,17 +3,38 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AdditionalDataCell2
+import io.horizontalsystems.marketkit.models.Coin
+import java.math.BigDecimal
 
 @Composable
-fun AvailableBalance(availableBalanceViewModel: SendAvailableBalanceViewModel) {
-    val availableBalanceViewState by availableBalanceViewModel.viewStateLiveData.observeAsState()
+fun AvailableBalance(
+    coin: Coin,
+    coinDecimal: Int,
+    fiatDecimal: Int,
+    availableBalance: BigDecimal,
+    amountInputMode: AmountInputModule.InputMode
+) {
+    val viewModel = viewModel<AvailableBalanceViewModel>(
+        factory = AvailableBalanceModule.Factory(
+            coin,
+            coinDecimal,
+            fiatDecimal
+        )
+    )
+    val formatted = viewModel.formatted
+
+    LaunchedEffect(availableBalance, amountInputMode) {
+        viewModel.availableBalance = availableBalance
+        viewModel.amountInputMode = amountInputMode
+        viewModel.refreshFormatted()
+    }
 
     AdditionalDataCell2 {
         Text(
@@ -24,18 +45,14 @@ fun AvailableBalance(availableBalanceViewModel: SendAvailableBalanceViewModel) {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        when (val tmpState = availableBalanceViewState) {
-            is SendAvailableBalanceViewModel.ViewState.Loaded -> {
-                Text(
-                    text = tmpState.value ?: "",
-                    style = ComposeAppTheme.typography.subhead2,
-                    color = ComposeAppTheme.colors.leah
-                )
-            }
-            is SendAvailableBalanceViewModel.ViewState.Loading -> {
-//                TODO("Circle progress")
-            }
-            null -> Unit
+        if (formatted != null) {
+            Text(
+                text = formatted,
+                style = ComposeAppTheme.typography.subhead2,
+                color = ComposeAppTheme.colors.leah
+            )
+        } else {
+            // TODO("Circle progress")
         }
     }
 }

@@ -25,12 +25,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.marketkit.models.Coin
 import java.math.BigDecimal
 
 @Composable
@@ -38,10 +38,13 @@ fun HSAmountInput(
     modifier: Modifier = Modifier,
     caution: Caution?,
     availableBalance: BigDecimal,
-    wallet: Wallet,
+    coin: Coin,
+    coinDecimal: Int,
+    fiatDecimal: Int,
+    onUpdateInputMode: (AmountInputModule.InputMode) -> Unit,
     onValueChange: (BigDecimal?) -> Unit
 ) {
-    val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(wallet))
+    val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coin, coinDecimal, fiatDecimal))
 
     val borderColor = when (caution?.type) {
         Caution.Type.Error -> ComposeAppTheme.colors.red50
@@ -168,6 +171,7 @@ fun HSAmountInput(
                         indication = null,
                         onClick = {
                             viewModel.onToggleInputMode()
+                            onUpdateInputMode.invoke(viewModel.inputMode)
                             val text = viewModel.getEnterAmount()
                             textState = textState.copy(text = text, selection = TextRange(text.length))
                         },
