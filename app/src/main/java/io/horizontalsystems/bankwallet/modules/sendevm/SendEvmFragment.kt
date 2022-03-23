@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -38,7 +37,6 @@ class SendEvmFragment : BaseFragment() {
     private val wallet by lazy { requireArguments().getParcelable<Wallet>(SendEvmModule.walletKey)!! }
     private val vmFactory by lazy { SendEvmModule.Factory(wallet) }
     private val viewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment) { vmFactory }
-    private val availableBalanceViewModel by viewModels<SendAvailableBalanceViewModel> { vmFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,8 +51,7 @@ class SendEvmFragment : BaseFragment() {
                 SendEvmScreen(
                     findNavController(),
                     wallet,
-                    viewModel,
-                    availableBalanceViewModel
+                    viewModel
                 )
             }
         }
@@ -65,8 +62,7 @@ class SendEvmFragment : BaseFragment() {
 fun SendEvmScreen(
     navController: NavController,
     wallet: Wallet,
-    viewModel: SendEvmViewModel,
-    availableBalanceViewModel: SendAvailableBalanceViewModel
+    viewModel: SendEvmViewModel
 ) {
     ComposeAppTheme {
         val fullCoin = wallet.platformCoin.fullCoin
