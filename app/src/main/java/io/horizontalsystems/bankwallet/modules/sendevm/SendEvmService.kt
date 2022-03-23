@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
+import io.horizontalsystems.bankwallet.core.NotEnoughData
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData.AdditionalInfo
@@ -22,29 +23,19 @@ class SendEvmService(
     val sendCoin: PlatformCoin,
     val adapter: ISendEthereumAdapter
 ) {
-    val coinDecimal = min(sendCoin.decimals, App.appConfigProvider.maxDecimal)
-    val fiatDecimal = App.appConfigProvider.fiatDecimal
+    val coinMaxAllowedDecimals = min(sendCoin.decimals, App.appConfigProvider.maxDecimal)
+    val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
     val availableBalance: BigDecimal
-        get() = adapter.balanceData.available.setScale(coinDecimal, RoundingMode.DOWN)
+        get() = adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN)
 
-    private var _sendingAvailable = MutableSharedFlow<Boolean>(
+    private var _sendDataResult = MutableSharedFlow<Result<SendEvmData>>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-    val sendingAvailable = _sendingAvailable.asSharedFlow()
+    val sendDataResult = _sendDataResult.asSharedFlow()
 
     private var evmAmount: BigInteger? = null
     private var addressData: AddressData? = null
-
-    fun getSendData(): SendEvmData? {
-        val tmpEvmAmount = evmAmount ?: return null
-        val tmpAddressData = addressData ?: return null
-
-        val transactionData = adapter.getTransactionData(tmpEvmAmount, tmpAddressData.evmAddress)
-        val additionalInfo = AdditionalInfo.Send(SendEvmData.SendInfo(tmpAddressData.domain))
-
-        return SendEvmData(transactionData, additionalInfo)
-    }
 
     fun setAmount(amount: BigDecimal?) {
         evmAmount = if (amount != null && amount > BigDecimal.ZERO) {
@@ -64,7 +55,22 @@ class SendEvmService(
     }
 
     private fun syncState() {
-        _sendingAvailable.tryEmit(evmAmount != null && addressData != null)
+        val sendEvmData = getSendData()
+        if (sendEvmData == null) {
+            _sendDataResult.tryEmit(Result.failure(NotEnoughData()))
+        } else {
+            _sendDataResult.tryEmit(Result.success(sendEvmData))
+        }
+    }
+
+    private fun getSendData(): SendEvmData? {
+        val tmpEvmAmount = evmAmount ?: return null
+        val tmpAddressData = addressData ?: return null
+
+        val transactionData = adapter.getTransactionData(tmpEvmAmount, tmpAddressData.evmAddress)
+        val additionalInfo = AdditionalInfo.Send(SendEvmData.SendInfo(tmpAddressData.domain))
+
+        return SendEvmData(transactionData, additionalInfo)
     }
 
     fun validateAmount(amount: BigDecimal?): Caution? {

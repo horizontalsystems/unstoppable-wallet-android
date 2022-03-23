@@ -91,8 +91,8 @@ fun SendEvmScreen(
 
             AvailableBalance(
                 coin = wallet.coin,
-                coinDecimal = viewModel.coinDecimal,
-                fiatDecimal = viewModel.fiatDecimal,
+                coinDecimal = viewModel.coinMaxAllowedDecimals,
+                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 availableBalance = viewModel.availableBalance,
                 amountInputMode = viewModel.amountInputMode
             )
@@ -102,8 +102,8 @@ fun SendEvmScreen(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 availableBalance = viewModel.availableBalance,
                 coin = wallet.coin,
-                coinDecimal = viewModel.coinDecimal,
-                fiatDecimal = viewModel.fiatDecimal,
+                coinDecimal = viewModel.coinMaxAllowedDecimals,
+                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 amountValidator = viewModel,
                 onUpdateInputMode = {
                     viewModel.onUpdateAmountInputMode(it)
@@ -127,7 +127,7 @@ fun SendEvmScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
-                    viewModel.getSendData()?.let {
+                    viewModel.sendData?.let {
                         navController.slideFromRight(
                             R.id.sendEvmConfirmationFragment,
                             SendEvmConfirmationModule.prepareParams(it)
