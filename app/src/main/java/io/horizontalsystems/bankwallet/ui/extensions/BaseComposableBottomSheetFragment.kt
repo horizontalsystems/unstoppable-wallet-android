@@ -6,7 +6,9 @@ import android.widget.FrameLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -66,6 +68,7 @@ fun BottomSheetHeader(
             .padding(horizontal = 8.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
+            .verticalScroll(rememberScrollState())
             .background(color = ComposeAppTheme.colors.lawrence)
     ) {
         Row(Modifier.height(64.dp)) {

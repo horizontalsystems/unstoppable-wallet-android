@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market.advancedsearch
 
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
@@ -22,7 +21,7 @@ import java.math.BigDecimal
 class MarketAdvancedSearchService(
     private val marketKit: MarketKit,
     private val currencyManager: ICurrencyManager
-) : Clearable, IMarketListFetcher {
+) : IMarketListFetcher {
 
     val currencyCode: String
         get() = currencyManager.baseCurrency.code
@@ -111,7 +110,7 @@ class MarketAdvancedSearchService(
     private var disposables = CompositeDisposable()
     private var cache: List<MarketInfo>? = null
 
-    init {
+    fun start() {
         refreshCounter()
 
         currencyManager.baseCurrencyUpdatedSignal
@@ -121,6 +120,22 @@ class MarketAdvancedSearchService(
             }
             .let {
                 disposables.add(it)
+            }
+    }
+
+    fun stop() {
+        topItemsDisposable?.dispose()
+        disposables.dispose()
+    }
+
+    override fun fetchAsync(currency: Currency): Single<List<MarketItem>> {
+        return getTopMarketList(currency)
+            .map { coinMarkets ->
+                coinMarkets.map {
+                    val coinMarket = it.value
+
+                    MarketItem.createFromCoinMarket(coinMarket, currency, filterPeriod)
+                }
             }
     }
 
@@ -136,17 +151,6 @@ class MarketAdvancedSearchService(
                 numberOfItemsAsync.onNext(DataState.Error(it))
             })
 
-    }
-
-    override fun fetchAsync(currency: Currency): Single<List<MarketItem>> {
-        return getTopMarketList(currency)
-            .map { coinMarkets ->
-                coinMarkets.map {
-                    val coinMarket = it.value
-
-                    MarketItem.createFromCoinMarket(coinMarket, currency, filterPeriod)
-                }
-            }
     }
 
     private fun getTopMarketList(currency: Currency): Single<Map<Int, MarketInfo>> {
@@ -229,11 +233,5 @@ class MarketAdvancedSearchService(
         }
 
         return false
-    }
-
-
-    override fun clear() {
-        topItemsDisposable?.dispose()
-        disposables.dispose()
     }
 }
