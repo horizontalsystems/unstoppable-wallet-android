@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.convertedError
@@ -12,8 +12,8 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class SendEvmViewModel(
@@ -22,9 +22,12 @@ class SendEvmViewModel(
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
-    val proceedEnabledLiveData = MutableLiveData(false)
-    val amountCautionLiveData = MutableLiveData<Caution?>(null)
-    val proceedLiveEvent = SingleLiveEvent<SendEvmData>()
+    var proceedEnabled by mutableStateOf(false)
+        private set
+    var proceedEvent by mutableStateOf<SendEvmData?>(null)
+        private set
+    var amountCaution by mutableStateOf<Caution?>(null)
+        private set
     val availableBalance get() = service.availableBalance
     val coinDecimal get() = service.coinDecimal
     val fiatDecimal get() = service.fiatDecimal
@@ -41,12 +44,14 @@ class SendEvmViewModel(
 
     fun onClickProceed() {
         (service.state as? SendEvmService.State.Ready)?.let { readyState ->
-            proceedLiveEvent.postValue(readyState.sendData)
+            proceedEvent = readyState.sendData
         }
     }
 
     private fun sync(state: SendEvmService.State) {
-        proceedEnabledLiveData.postValue(state is SendEvmService.State.Ready)
+        viewModelScope.launch {
+            proceedEnabled = state is SendEvmService.State.Ready
+        }
     }
 
     private fun sync(amountCaution: SendEvmService.AmountCaution) {
@@ -64,7 +69,7 @@ class SendEvmViewModel(
             )
         }
 
-        amountCautionLiveData.postValue(caution)
+        this.amountCaution = caution
     }
 
     override fun onCleared() {
@@ -81,7 +86,7 @@ class SendEvmViewModel(
     }
 
     fun onHandleProceedEvent() {
-        proceedLiveEvent.postValue(null)
+        proceedEvent = null
     }
 
     fun onUpdateAmountInputMode(mode: AmountInputModule.InputMode) {
