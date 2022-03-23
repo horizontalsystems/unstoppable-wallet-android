@@ -13,7 +13,7 @@ class NftAssetItemsPricedRepository {
     )
     val itemsDataFlow = _itemsDataFlow.asSharedFlow()
 
-    var priceType = PriceType.Days7
+    var priceType = PriceType.LastSale
         private set
 
     fun setPriceType(priceType: PriceType) {
