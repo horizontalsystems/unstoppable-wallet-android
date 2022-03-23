@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.Warning
-import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
@@ -93,21 +92,13 @@ object SendEvmModule {
 
 
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
-        private val adapter by lazy { App.adapterManager.getAdapterForWallet(wallet) as ISendEthereumAdapter }
-        private val service by lazy { SendEvmService(wallet.platformCoin, adapter) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
-                SendEvmViewModel::class.java -> {
-                    SendEvmViewModel(service, listOf(service)) as T
-                }
-                SendAvailableBalanceViewModel::class.java -> {
-                    val coinService = EvmCoinService(wallet.platformCoin, App.currencyManager, App.marketKit)
-                    SendAvailableBalanceViewModel(service, coinService, listOf(service, coinService)) as T
-                }
-                else -> throw IllegalArgumentException()
-            }
+            val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendEthereumAdapter
+            val service = SendEvmService(wallet.platformCoin, adapter)
+
+            return SendEvmViewModel(service, listOf(service)) as T
         }
     }
 

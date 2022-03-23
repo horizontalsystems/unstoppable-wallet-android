@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
@@ -32,9 +31,6 @@ class SendEvmViewModel(
 
     var amountInputMode by mutableStateOf(AmountInputModule.InputMode.Coin)
         private set
-
-    val coin: PlatformCoin
-        get() = service.coin
 
     init {
         service.stateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }

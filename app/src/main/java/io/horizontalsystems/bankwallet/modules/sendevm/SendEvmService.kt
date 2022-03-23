@@ -15,14 +15,13 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
-import java.util.*
 import kotlin.math.min
 import io.horizontalsystems.ethereumkit.models.Address as EvmAddress
 
 class SendEvmService(
     val sendCoin: PlatformCoin,
     val adapter: ISendEthereumAdapter
-) : IAvailableBalanceService, IAmountInputService, Clearable {
+) : Clearable {
 
     val coinDecimal = min(sendCoin.decimals, App.appConfigProvider.maxDecimal)
     val fiatDecimal = App.appConfigProvider.fiatDecimal
@@ -75,23 +74,8 @@ class SendEvmService(
         return evmAmount
     }
 
-    //region IAvailableBalanceService
-    override val availableBalance: BigDecimal
+    val availableBalance: BigDecimal
         get() = adapter.balanceData.available.setScale(coinDecimal, RoundingMode.DOWN)
-    //endregion
-
-    //region IAmountInputService
-    override val amount: BigDecimal
-        get() = BigDecimal.ZERO
-
-    override val coin: PlatformCoin
-        get() = sendCoin
-
-    override val amountObservable: Flowable<BigDecimal>
-        get() = Flowable.empty()
-
-    override val coinObservable: Flowable<Optional<PlatformCoin>>
-        get() = Flowable.empty()
 
     fun onChangeAmount(amount: BigDecimal?) {
         if (amount != null && amount > BigDecimal.ZERO) {
