@@ -98,7 +98,7 @@ object SendEvmModule {
             val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendEthereumAdapter
             val service = SendEvmService(wallet.platformCoin, adapter)
 
-            return SendEvmViewModel(service, listOf(service)) as T
+            return SendEvmViewModel(service) as T
         }
     }
 
