@@ -14,9 +14,33 @@ object MarketAdvancedSearchModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MarketAdvancedSearchService(App.marketKit, App.currencyManager)
-            return MarketAdvancedSearchViewModel(service, listOf(service)) as T
+            return MarketAdvancedSearchViewModel(service) as T
         }
 
+    }
+
+    enum class FilterDropdown(val titleResId: Int){
+        CoinSet(R.string.Market_Filter_ChooseSet),
+        MarketCap(R.string.Market_Filter_MarketCap),
+        TradingVolume(R.string.Market_Filter_Volume),
+        Blockchain(R.string.Market_Filter_Blockchains),
+        PriceChange(R.string.Market_Filter_PriceChange),
+        PricePeriod(R.string.Market_Filter_PricePeriod),
+    }
+
+    enum class FilterSwitch(val titleResId: Int){
+        OutperformedBtc(R.string.Market_Filter_OutperformedBtc),
+        OutperformedEth(R.string.Market_Filter_OutperformedEth),
+        OutperformedBnb(R.string.Market_Filter_OutperformedBnb),
+        PriceCloseToAth(R.string.Market_Filter_PriceCloseToAth),
+        PriceCloseToAtl(R.string.Market_Filter_PriceCloseToAtl),
+    }
+
+    data class Section(val header: Int?, val items: List<Item>)
+
+    sealed class Item {
+        class DropDown(val type: FilterDropdown, val value: String?) : Item()
+        class Switch(val type: FilterSwitch, val selected: Boolean) : Item()
     }
 
     val blockchainToCoinTypesMap = mapOf(
@@ -179,3 +203,21 @@ enum class PriceChange(@StringRes val titleResId: Int, @ColorRes val colorResId:
     Negative_100_minus(R.string.Market_Filter_PriceChange_Negative_100_minus, R.color.lucian, Pair(null, -100)),
 }
 
+class FilterViewItemWrapper<T>(val title: String?, val item: T) {
+    override fun equals(other: Any?) = when {
+        other !is FilterViewItemWrapper<*> -> false
+        else -> item == other.item
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + (item?.hashCode() ?: 0)
+        return result
+    }
+
+    companion object {
+        fun <T>getAny(): FilterViewItemWrapper<T?> {
+            return FilterViewItemWrapper(null, null)
+        }
+    }
+}

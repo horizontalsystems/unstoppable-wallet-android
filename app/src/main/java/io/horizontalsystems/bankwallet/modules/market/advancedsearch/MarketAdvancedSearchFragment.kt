@@ -4,228 +4,148 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.databinding.FragmentMarketSearchFilterBinding
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.FilterDropdown.*
+import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.FilterDropdown.PriceChange
+import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.Item
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetMarketSearchFilterSelectDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetMarketSearchFilterSelectMultipleDialog
-import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class MarketAdvancedSearchFragment : BaseFragment() {
 
-    private val marketAdvancedSearchViewModel by navGraphViewModels<MarketAdvancedSearchViewModel>(R.id.marketAdvancedSearchFragment) {
+    private val viewModel by navGraphViewModels<MarketAdvancedSearchViewModel>(R.id.marketAdvancedSearchFragment) {
         MarketAdvancedSearchModule.Factory()
     }
-
-    private var _binding: FragmentMarketSearchFilterBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMarketSearchFilterBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuReset -> {
-                    marketAdvancedSearchViewModel.reset()
-                    true
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    AdvancedSearchScreen(
+                        viewModel,
+                        findNavController(),
+                    ) { filterType -> openSelectionDialog(filterType) }
                 }
-                else -> false
             }
         }
-
-        marketAdvancedSearchViewModel.coinListViewItemLiveData.observe(viewLifecycleOwner) {
-            binding.filterCoinList.setValueColored(it.title, it.color)
-        }
-        binding.filterCoinList.setOnSingleClickListener {
-            showSelectorDialog(
-                title = R.string.Market_Filter_ChooseSet,
-                headerIcon = R.drawable.ic_circle_coin_24,
-                items = marketAdvancedSearchViewModel.coinListsViewItemOptions,
-                selectedItem = marketAdvancedSearchViewModel.coinListViewItem,
-            ) {
-                marketAdvancedSearchViewModel.coinListViewItem = it
-            }
-        }
-
-        marketAdvancedSearchViewModel.marketCapViewItemLiveData.observe(viewLifecycleOwner) {
-            binding.filterMarketCap.setValueColored(it.title, it.color)
-        }
-        binding.filterMarketCap.setOnSingleClickListener {
-            showSelectorDialog(
-                title = R.string.Market_Filter_MarketCap,
-                headerIcon = R.drawable.ic_usd_24,
-                items = marketAdvancedSearchViewModel.marketCapViewItemOptions,
-                selectedItem = marketAdvancedSearchViewModel.marketCapViewItem,
-            ) {
-                marketAdvancedSearchViewModel.marketCapViewItem = it
-            }
-        }
-
-        marketAdvancedSearchViewModel.volumeViewItemLiveData.observe(viewLifecycleOwner) {
-            binding.filterVolume.setValueColored(it.title, it.color)
-        }
-        binding.filterVolume.setOnSingleClickListener {
-            showSelectorDialog(
-                title = R.string.Market_Filter_Volume,
-                subtitleText = getString(R.string.TimePeriod_24h),
-                headerIcon = R.drawable.ic_chart_24,
-                items = marketAdvancedSearchViewModel.volumeViewItemOptions,
-                selectedItem = marketAdvancedSearchViewModel.volumeViewItem,
-            ) {
-                marketAdvancedSearchViewModel.volumeViewItem = it
-            }
-        }
-
-        marketAdvancedSearchViewModel.periodViewItemLiveData.observe(viewLifecycleOwner) {
-            binding.filterPeriod.setValueColored(it.title, it.color)
-        }
-        binding.filterPeriod.setOnSingleClickListener {
-            showSelectorDialog(
-                title = R.string.Market_Filter_PricePeriod,
-                headerIcon = R.drawable.ic_circle_clock_24,
-                items = marketAdvancedSearchViewModel.periodViewItemOptions,
-                selectedItem = marketAdvancedSearchViewModel.periodViewItem,
-            ) {
-                marketAdvancedSearchViewModel.periodViewItem = it
-            }
-        }
-
-        marketAdvancedSearchViewModel.priceChangeViewItemLiveData.observe(viewLifecycleOwner) {
-            binding.filterPriceChange.setValueColored(it.title, it.color)
-        }
-
-        binding.filterBlockchains.setOnSingleClickListener {
-            showMultipleSelectorDialog(
-                title = R.string.Market_Filter_Blockchains,
-                headerIcon = R.drawable.ic_blocks_24,
-                items = marketAdvancedSearchViewModel.blockchainOptions,
-                selectedIndexes = marketAdvancedSearchViewModel.selectedBlockchainIndexes,
-            ) { selectedIndexes ->
-                marketAdvancedSearchViewModel.selectedBlockchainIndexes = selectedIndexes
-            }
-        }
-
-        marketAdvancedSearchViewModel.blockchainsViewItemLiveData.observe(viewLifecycleOwner) {
-            binding.filterBlockchains.setValueColored(it.title, it.color)
-        }
-
-        binding.filterPriceChange.setOnSingleClickListener {
-            showSelectorDialog(
-                title = R.string.Market_Filter_PriceChange,
-                headerIcon = R.drawable.ic_market_24,
-                items = marketAdvancedSearchViewModel.priceChangeViewItemOptions,
-                selectedItem = marketAdvancedSearchViewModel.priceChangeViewItem,
-            ) {
-                marketAdvancedSearchViewModel.priceChangeViewItem = it
-            }
-        }
-
-        marketAdvancedSearchViewModel.outperformedBtcOnFilter.observe(
-            viewLifecycleOwner,
-            { checked ->
-                binding.filterOutperformedBtc.setChecked(checked)
-            })
-        binding.filterOutperformedBtc.onCheckedChange { checked ->
-            marketAdvancedSearchViewModel.outperformedBtcOn = checked
-        }
-
-        marketAdvancedSearchViewModel.outperformedEthOnFilter.observe(
-            viewLifecycleOwner,
-            { checked ->
-                binding.filterOutperformedEth.setChecked(checked)
-            })
-        binding.filterOutperformedEth.onCheckedChange { checked ->
-            marketAdvancedSearchViewModel.outperformedEthOn = checked
-        }
-
-        marketAdvancedSearchViewModel.outperformedBnbOnFilter.observe(
-            viewLifecycleOwner,
-            { checked ->
-                binding.filterOutperformedBnb.setChecked(checked)
-            })
-        binding.filterOutperformedBnb.onCheckedChange { checked ->
-            marketAdvancedSearchViewModel.outperformedBnbOn = checked
-        }
-
-        marketAdvancedSearchViewModel.priceCloseToAthFilter.observe(viewLifecycleOwner, { checked ->
-            binding.filterPriceCloseToAth.setChecked(checked)
-        })
-        binding.filterPriceCloseToAth.onCheckedChange { checked ->
-            marketAdvancedSearchViewModel.priceCloseToAth = checked
-        }
-
-        marketAdvancedSearchViewModel.priceCloseToAtlFilter.observe(viewLifecycleOwner, { checked ->
-            binding.filterPriceCloseToAtl.setChecked(checked)
-        })
-        binding.filterPriceCloseToAtl.onCheckedChange { checked ->
-            marketAdvancedSearchViewModel.priceCloseToAtl = checked
-        }
-
-        marketAdvancedSearchViewModel.updateResultButton.observe(
-            viewLifecycleOwner,
-            { (title, showSpinner, enabled) ->
-                setButton(title, showSpinner, enabled)
-            })
-
-        marketAdvancedSearchViewModel.errorLiveEvent.observe(viewLifecycleOwner) {
-            HudHelper.showErrorMessage(requireView(), it)
-        }
-
-        // Dispose the Composition when viewLifecycleOwner is destroyed
-        binding.submitButtonCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        setButton()
     }
 
-    private fun setButton(
-        title: String = getString(R.string.Market_Filter_ShowResults),
-        showSpinner: Boolean = false,
-        enabled: Boolean = false
-    ) {
-        binding.submitButtonCompose.setContent {
-            ComposeAppTheme {
-                ButtonPrimaryYellowWithSpinner(
-                    modifier = Modifier.padding(start = 16.dp, bottom = 24.dp, end = 16.dp),
-                    title = title,
-                    onClick = {
-                        findNavController().slideFromRight(
-                            R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults
-                        )
-                    },
-                    showSpinner = showSpinner,
-                    enabled = enabled
+    private fun openSelectionDialog(filterType: MarketAdvancedSearchModule.FilterDropdown) {
+        when (filterType) {
+            CoinSet -> showFilterCoinListDialog()
+            MarketCap -> showFilterMarketCapDialog()
+            TradingVolume -> showFilterVolumeDialog()
+            Blockchain -> showFilterBlockchainsDialog()
+            PriceChange -> showPriceChangeDialog()
+            PricePeriod -> showPeriodDialog()
+        }
+    }
 
-                )
-            }
+    private fun showFilterCoinListDialog() {
+        showSelectorDialog(
+            title = R.string.Market_Filter_ChooseSet,
+            headerIcon = R.drawable.ic_circle_coin_24,
+            items = viewModel.coinListsViewItemOptions,
+            selectedItem = viewModel.coinListViewItem,
+        ) {
+            viewModel.coinListViewItem = it
+        }
+    }
+
+    private fun showFilterMarketCapDialog() {
+        showSelectorDialog(
+            title = R.string.Market_Filter_MarketCap,
+            headerIcon = R.drawable.ic_usd_24,
+            items = viewModel.marketCapViewItemOptions,
+            selectedItem = viewModel.marketCapViewItem,
+        ) {
+            viewModel.marketCapViewItem = it
+        }
+    }
+
+    private fun showFilterVolumeDialog() {
+        showSelectorDialog(
+            title = R.string.Market_Filter_Volume,
+            subtitleText = getString(R.string.TimePeriod_24h),
+            headerIcon = R.drawable.ic_chart_24,
+            items = viewModel.volumeViewItemOptions,
+            selectedItem = viewModel.volumeViewItem,
+        ) {
+            viewModel.volumeViewItem = it
+        }
+    }
+
+    private fun showFilterBlockchainsDialog() {
+        showMultipleSelectorDialog(
+            title = R.string.Market_Filter_Blockchains,
+            headerIcon = R.drawable.ic_blocks_24,
+            items = viewModel.blockchainOptions,
+            selectedIndexes = viewModel.selectedBlockchainIndexes,
+        ) { selectedIndexes ->
+            viewModel.selectedBlockchainIndexes = selectedIndexes
+        }
+    }
+
+    private fun showPriceChangeDialog() {
+        showSelectorDialog(
+            title = R.string.Market_Filter_PriceChange,
+            headerIcon = R.drawable.ic_market_24,
+            items = viewModel.priceChangeViewItemOptions,
+            selectedItem = viewModel.priceChangeViewItem,
+        ) {
+            viewModel.priceChangeViewItem = it
+        }
+    }
+
+    private fun showPeriodDialog() {
+        showSelectorDialog(
+            title = R.string.Market_Filter_PricePeriod,
+            headerIcon = R.drawable.ic_circle_clock_24,
+            items = viewModel.periodViewItemOptions,
+            selectedItem = viewModel.periodViewItem,
+        ) {
+            viewModel.periodViewItem = it
         }
     }
 
@@ -233,9 +153,9 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         title: Int,
         subtitleText: String = "---------",
         headerIcon: Int,
-        items: List<ViewItemWrapper<ItemClass>>,
-        selectedItem: ViewItemWrapper<ItemClass>,
-        onSelectListener: (ViewItemWrapper<ItemClass>) -> Unit
+        items: List<FilterViewItemWrapper<ItemClass>>,
+        selectedItem: FilterViewItemWrapper<ItemClass>?,
+        onSelectListener: (FilterViewItemWrapper<ItemClass>) -> Unit
     ) {
         val dialog = BottomSheetMarketSearchFilterSelectDialog<ItemClass>()
         dialog.titleText = getString(title)
@@ -252,7 +172,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         title: Int,
         subtitleText: String = "---------",
         headerIcon: Int,
-        items: List<ViewItemWrapper<ItemClass>>,
+        items: List<FilterViewItemWrapper<ItemClass>>,
         selectedIndexes: List<Int>,
         onSelectListener: (List<Int>) -> Unit
     ) {
@@ -266,5 +186,194 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         )
 
         dialog.show(childFragmentManager, "selector_dialog")
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun AdvancedSearchScreen(
+    viewModel: MarketAdvancedSearchViewModel,
+    navController: NavController,
+    onClick: (MarketAdvancedSearchModule.FilterDropdown) -> Unit,
+) {
+    val errorMessage = viewModel.errorMessage
+
+    Surface(color = ComposeAppTheme.colors.tyler) {
+        Column {
+            AppBar(
+                TranslatableString.ResString(R.string.Market_Filters),
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = "back button",
+                            tint = ComposeAppTheme.colors.jacob
+                        )
+                    }
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Reset),
+                        onClick = { viewModel.reset() }
+                    )
+                ),
+            )
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                AdvancedSearchContent(viewModel, onClick)
+            }
+
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellowWithSpinner(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    title = viewModel.buttonTitle,
+                    onClick = {
+                        navController.slideFromRight(
+                            R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults
+                        )
+                    },
+                    showSpinner = viewModel.showSpinner,
+                    enabled = viewModel.buttonEnabled,
+                )
+            }
+        }
+    }
+
+    errorMessage?.let {
+        HudHelper.showErrorMessage(LocalView.current, it.getString())
+    }
+}
+
+@Composable
+fun AdvancedSearchContent(
+    viewModel: MarketAdvancedSearchViewModel,
+    onDropdownClick: (MarketAdvancedSearchModule.FilterDropdown) -> Unit,
+) {
+    val sections by viewModel.sectionsLiveData.observeAsState(listOf())
+
+    sections.forEach { section ->
+        section.header?.let {
+            SectionHeader(it)
+        }
+        val composables = mutableListOf<@Composable () -> Unit>()
+        section.items.forEach { item ->
+            when (item) {
+                is Item.Switch -> {
+                    composables.add {
+                        AdvancedSearchSwitch(item.type.titleResId, item.selected) { checked ->
+                            viewModel.onSwitchChanged(item.type, checked)
+                        }
+                    }
+                }
+                is Item.DropDown -> {
+                    composables.add {
+                        AdvancedSearchDropdown(item.type, item.value, onDropdownClick)
+                    }
+                }
+            }
+        }
+        Spacer(Modifier.height(12.dp))
+        CellSingleLineLawrenceSection(composables)
+    }
+    Spacer(modifier = Modifier.height(32.dp))
+}
+
+@Composable
+private fun SectionHeader(header: Int) {
+    Text(
+        text = stringResource(header),
+        style = ComposeAppTheme.typography.subhead1,
+        color = ComposeAppTheme.colors.grey,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.padding(start = 16.dp, top = 44.dp, end = 16.dp, bottom = 1.dp)
+    )
+}
+
+@Composable
+private fun AdvancedSearchDropdown(
+    type: MarketAdvancedSearchModule.FilterDropdown,
+    value: String?,
+    onDropdownClick: (MarketAdvancedSearchModule.FilterDropdown) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxHeight()
+            .clickable { onDropdownClick(type) }
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(type.titleResId),
+            style = ComposeAppTheme.typography.body,
+            color = ComposeAppTheme.colors.leah,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(Modifier.weight(1f))
+        FilterMenu(value) { onDropdownClick(type) }
+    }
+}
+
+@Composable
+private fun AdvancedSearchSwitch(
+    titleResId: Int,
+    enabled: Boolean,
+    onChecked: (Boolean) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxHeight()
+            .clickable { onChecked(!enabled) }
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(titleResId),
+            style = ComposeAppTheme.typography.body,
+            color = ComposeAppTheme.colors.leah,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(Modifier.weight(1f))
+        HsSwitch(
+            checked = enabled,
+            onCheckedChange = onChecked,
+        )
+    }
+}
+
+@Composable
+fun FilterMenu(title: String?, onClick: () -> Unit) {
+    val valueText = title ?: stringResource(R.string.Any)
+    Row(
+        Modifier
+            .fillMaxHeight()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick,
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            valueText,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = if (title != null) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey,
+            modifier = Modifier.weight(1f, fill = false)
+        )
+        Icon(
+            modifier = Modifier.padding(start = 4.dp),
+            painter = painterResource(id = R.drawable.ic_down_arrow_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
     }
 }
