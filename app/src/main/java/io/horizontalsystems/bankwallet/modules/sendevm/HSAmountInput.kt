@@ -52,6 +52,7 @@ fun HSAmountInput(
         viewModel.availableBalance = availableBalance
     }
 
+    val hint = viewModel.hint
     val caution = viewModel.caution
 
     val borderColor = when (caution?.type) {
@@ -190,9 +191,9 @@ fun HSAmountInput(
                     modifier = Modifier
                         .padding(start = 12.dp, bottom = 12.dp, end = 12.dp)
                         .align(Alignment.Bottom),
-                    text = viewModel.hint,
+                    text = hint ?: stringResource(R.string.NotAvailable),
                     style = ComposeAppTheme.typography.subhead2,
-                    color = hintTextColor,
+                    color = if (hint == null) ComposeAppTheme.colors.grey50 else hintTextColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

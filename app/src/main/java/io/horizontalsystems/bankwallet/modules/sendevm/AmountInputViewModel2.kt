@@ -41,7 +41,7 @@ class AmountInputViewModel2(
     var inputPrefix by mutableStateOf<String?>(null)
         private set
 
-    var hint by mutableStateOf("")
+    var hint by mutableStateOf<String?>(null)
         private set
 
     var caution by mutableStateOf<Caution?>(null)
@@ -132,7 +132,7 @@ class AmountInputViewModel2(
 
     private fun refreshHint() {
         hint = if (rate == null) {
-            ""
+            null
         } else {
             when (inputMode) {
                 AmountInputModule.InputMode.Coin -> {
