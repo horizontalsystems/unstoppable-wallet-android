@@ -72,7 +72,17 @@ data class TransactionSource(
                 }
             }
         }
-        class Evm(val evmBlockchain: EvmBlockchain) : Blockchain() {}
+        class Evm(val evmBlockchain: EvmBlockchain) : Blockchain() {
+            override fun hashCode(): Int {
+                return this.evmBlockchain.hashCode()
+            }
+            override fun equals(other: Any?): Boolean {
+                return when(other){
+                    is Evm -> this.evmBlockchain == other.evmBlockchain
+                    else -> false
+                }
+            }
+        }
 
         fun getTitle(): String {
             return when(this){

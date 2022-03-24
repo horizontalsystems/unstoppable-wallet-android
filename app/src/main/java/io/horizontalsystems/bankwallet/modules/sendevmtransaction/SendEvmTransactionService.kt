@@ -208,11 +208,17 @@ class SendEvmTransactionService(
     private fun getEip20CoinType(contractAddress: String) =
         when (evmKit.chain) {
             Chain.BinanceSmartChain -> CoinType.Bep20(contractAddress)
+            Chain.Polygon -> CoinType.Mrc20(contractAddress)
+            Chain.Optimism -> CoinType.OptimismErc20(contractAddress)
+            Chain.ArbitrumOne -> CoinType.ArbitrumOneErc20(contractAddress)
             else -> CoinType.Erc20(contractAddress)
         }
 
     private fun getEvmCoinType() = when (evmKit.chain) {
         Chain.BinanceSmartChain -> CoinType.BinanceSmartChain
+        Chain.Polygon -> CoinType.Polygon
+        Chain.Optimism -> CoinType.EthereumOptimism
+        Chain.ArbitrumOne -> CoinType.EthereumArbitrumOne
         else -> CoinType.Ethereum
     }
 

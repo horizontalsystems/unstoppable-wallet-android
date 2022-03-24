@@ -33,7 +33,7 @@ object OneInchModule {
     }
 
     class Factory(dex: SwapMainModule.Dex) : ViewModelProvider.Factory {
-        private val evmKit: EthereumKit by lazy { dex.blockchain.evmKitWrapper?.evmKit!! }
+        private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(dex.blockchain).evmKitWrapper?.evmKit!! }
         private val oneIncKitHelper by lazy { OneInchKitHelper(evmKit) }
         private val allowanceService by lazy { SwapAllowanceService(oneIncKitHelper.smartContractAddress, App.adapterManager, evmKit) }
         private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }

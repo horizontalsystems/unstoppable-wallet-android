@@ -27,7 +27,7 @@ class EvmTransactionsAdapter(
 ) : ITransactionsAdapter {
 
     private val evmKit = evmKitWrapper.evmKit
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKit, source, baseCoin)
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, baseCoin)
 
     override val explorerTitle: String
         get() = evmTransactionSource.name
@@ -79,9 +79,12 @@ class EvmTransactionsAdapter(
         }
 
     private fun coinTagName(coin: PlatformCoin) = when (val type = coin.coinType) {
-        CoinType.Ethereum, CoinType.BinanceSmartChain -> TransactionTag.EVM_COIN
+        CoinType.Ethereum, CoinType.BinanceSmartChain, CoinType.Polygon, CoinType.EthereumOptimism, CoinType.EthereumArbitrumOne -> TransactionTag.EVM_COIN
         is CoinType.Erc20 -> type.address
         is CoinType.Bep20 -> type.address
+        is CoinType.Mrc20 -> type.address
+        is CoinType.OptimismErc20 -> type.address
+        is CoinType.ArbitrumOneErc20 -> type.address
         else -> throw IllegalArgumentException()
     }
 
@@ -115,7 +118,10 @@ class EvmTransactionsAdapter(
                 testMode -> listOf(Chain.EthereumRopsten)
                 else -> listOf(
                     Chain.Ethereum,
-                    Chain.BinanceSmartChain
+                    Chain.BinanceSmartChain,
+                    Chain.Polygon,
+                    Chain.Optimism,
+                    Chain.ArbitrumOne
                 )
             }
             networkTypes.forEach {

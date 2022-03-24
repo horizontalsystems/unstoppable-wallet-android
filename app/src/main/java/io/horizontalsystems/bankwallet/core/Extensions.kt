@@ -98,6 +98,9 @@ val CoinType.blockchainLogo: Int
         CoinType.BitcoinCash -> R.drawable.logo_bitcoincash_24
         CoinType.Dash -> R.drawable.logo_dash_24
         CoinType.BinanceSmartChain -> R.drawable.logo_binancesmartchain_24
+        CoinType.Polygon -> R.drawable.logo_polygon_24
+        CoinType.EthereumOptimism -> R.drawable.logo_optimism_24
+        CoinType.EthereumArbitrumOne -> R.drawable.logo_arbitrum_24
         is CoinType.Bep2 -> R.drawable.logo_bep2_24
         CoinType.Litecoin -> R.drawable.logo_litecoin_24
         CoinType.Zcash -> R.drawable.logo_zcash_24

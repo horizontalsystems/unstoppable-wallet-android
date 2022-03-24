@@ -79,8 +79,8 @@ interface ILocalStorage {
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
 
-    fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String?
-    fun setSwapProviderId(blockchain: SwapMainModule.Blockchain, providerId: String)
+    fun getSwapProviderId(blockchain: EvmBlockchain): String?
+    fun setSwapProviderId(blockchain: EvmBlockchain, providerId: String)
 
     fun clear()
 }

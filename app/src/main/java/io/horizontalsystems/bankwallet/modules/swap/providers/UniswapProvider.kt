@@ -49,7 +49,16 @@ class UniswapProvider(private val uniswapKit: UniswapKit) {
             is CoinType.Bep20 -> {
                 uniswapKit.token(Address(coinType.address), coin.decimals)
             }
-            CoinType.Ethereum, CoinType.BinanceSmartChain -> {
+            is CoinType.Mrc20 -> {
+                uniswapKit.token(Address(coinType.address), coin.decimals)
+            }
+            is CoinType.OptimismErc20 -> {
+                uniswapKit.token(Address(coinType.address), coin.decimals)
+            }
+            is CoinType.ArbitrumOneErc20 -> {
+                uniswapKit.token(Address(coinType.address), coin.decimals)
+            }
+            CoinType.Ethereum, CoinType.BinanceSmartChain, CoinType.Polygon, CoinType.EthereumOptimism, CoinType.EthereumArbitrumOne -> {
                 uniswapKit.etherToken()
             }
             else -> throw Exception("Invalid coin for swap: $coin")

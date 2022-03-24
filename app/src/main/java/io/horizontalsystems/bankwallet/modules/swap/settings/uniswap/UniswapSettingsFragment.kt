@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.databinding.FragmentSwapSettingsUniswapBinding
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
@@ -33,16 +34,11 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 class UniswapSettingsFragment : SwapSettingsBaseFragment() {
     private val uniswapViewModel by navGraphViewModels<UniswapViewModel>(R.id.swapFragment) {
-        UniswapModule.Factory(
-            dex
-        )
+        UniswapModule.Factory(dex)
     }
 
     private val vmFactory by lazy {
-        UniswapSettingsModule.Factory(
-            uniswapViewModel.tradeService,
-            dex.blockchain
-        )
+        UniswapSettingsModule.Factory(uniswapViewModel.tradeService)
     }
     private val uniswapSettingsViewModel by viewModels<UniswapSettingsViewModel> { vmFactory }
     private val deadlineViewModel by viewModels<SwapDeadlineViewModel> { vmFactory }
@@ -58,8 +54,7 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSwapSettingsUniswapBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -98,7 +93,7 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
     private fun setRecipientAddressCompose() {
         binding.recipientAddressCompose.setContent {
             ComposeAppTheme {
-                dex.blockchain.coin?.let { platformCoin ->
+                App.marketKit.platformCoin(dex.blockchain.baseCoinType)?.let { platformCoin ->
                     Column {
                         Spacer(modifier = Modifier.height(12.dp))
                         Header {

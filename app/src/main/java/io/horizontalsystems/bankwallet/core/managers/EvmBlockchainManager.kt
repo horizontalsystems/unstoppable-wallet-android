@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.ethereumkit.models.Chain
@@ -9,7 +10,7 @@ import io.horizontalsystems.marketkit.models.PlatformCoin
 class EvmBlockchainManager(
     private val backgroundManager: BackgroundManager,
     private val syncSourceManager: EvmSyncSourceManager,
-    private val coinManager: CoinManager
+    private val coinManager: ICoinManager
 ) {
 
     private var evmKitManagersMap: MutableMap<EvmBlockchain, Pair<EvmKitManager, String>> = mutableMapOf()

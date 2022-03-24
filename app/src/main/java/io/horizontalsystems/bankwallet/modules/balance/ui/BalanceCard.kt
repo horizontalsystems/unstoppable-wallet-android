@@ -284,7 +284,8 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             onClick = {
                 when (viewItem.wallet.coinType) {
                     CoinType.Ethereum, is CoinType.Erc20,
-                    CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
+                    CoinType.BinanceSmartChain, is CoinType.Bep20,
+                    CoinType.Polygon, is CoinType.Mrc20 -> {
                         navController.slideFromBottom(
                             R.id.mainFragment_to_sendEvmFragment,
                             bundleOf(SendEvmModule.walletKey to viewItem.wallet)

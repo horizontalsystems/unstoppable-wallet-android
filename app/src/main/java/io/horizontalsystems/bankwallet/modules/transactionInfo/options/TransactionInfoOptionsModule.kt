@@ -44,6 +44,9 @@ object TransactionInfoOptionsModule {
         private val baseCoin by lazy {
             when (evmKitWrapper.evmKit.chain) {
                 Chain.BinanceSmartChain -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)!!
+                Chain.Polygon -> App.marketKit.platformCoin(CoinType.Polygon)!!
+                Chain.Optimism -> App.marketKit.platformCoin(CoinType.EthereumOptimism)!!
+                Chain.ArbitrumOne -> App.marketKit.platformCoin(CoinType.EthereumArbitrumOne)!!
                 else -> App.marketKit.platformCoin(CoinType.Ethereum)!!
             }
         }

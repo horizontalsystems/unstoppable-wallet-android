@@ -23,6 +23,12 @@ class SyncErrorViewModel(
         is CoinType.Erc20 -> SourceType.EvmNetworkSettings(EvmBlockchain.Ethereum, wallet.account)
         CoinType.BinanceSmartChain,
         is CoinType.Bep20 -> SourceType.EvmNetworkSettings(EvmBlockchain.BinanceSmartChain, wallet.account)
+        CoinType.Polygon,
+        is CoinType.Mrc20 -> SourceType.EvmNetworkSettings(EvmBlockchain.Polygon, wallet.account)
+        CoinType.EthereumOptimism,
+        is CoinType.OptimismErc20 -> SourceType.EvmNetworkSettings(EvmBlockchain.Optimism, wallet.account)
+        CoinType.EthereumArbitrumOne,
+        is CoinType.ArbitrumOneErc20 -> SourceType.EvmNetworkSettings(EvmBlockchain.ArbitrumOne, wallet.account)
         else -> throw IllegalStateException("Source is not changeable")
     }
 

@@ -21,7 +21,7 @@ class WatchAddressService(
 
         val account = accountFactory.watchAccount(tmpAddress.hex, tmpAddress.domain)
         accountManager.save(account)
-        walletActivator.activateWallets(account, listOf(CoinType.Ethereum, CoinType.BinanceSmartChain))
+        walletActivator.activateWallets(account, listOf(CoinType.Ethereum, CoinType.BinanceSmartChain, CoinType.Polygon))
     }
 }
 

@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
@@ -40,6 +41,7 @@ import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.pin.PinComponent
 import io.reactivex.plugins.RxJavaPlugins
@@ -153,6 +155,9 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         AppLog.logsDao = appDatabase.logsDao()
 
         coinManager = CoinManager(marketKit, CustomTokenStorage(appDatabase))
+        evmBlockchainManager = EvmBlockchainManager(backgroundManager, evmSyncSourceManager, coinManager)
+        ethereumKitManager = EvmKitManager(Chain.Ethereum, backgroundManager, evmSyncSourceManager)
+        binanceSmartChainKitManager = EvmKitManager(Chain.BinanceSmartChain, backgroundManager, evmSyncSourceManager)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)

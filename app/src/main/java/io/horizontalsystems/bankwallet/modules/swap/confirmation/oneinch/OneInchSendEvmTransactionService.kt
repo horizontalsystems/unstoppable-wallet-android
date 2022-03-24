@@ -152,9 +152,15 @@ class OneInchSendEvmTransactionService(
     private fun getSwapToken(coin: PlatformCoin): OneInchMethodDecoration.Token {
         return when (val coinType = coin.coinType) {
             CoinType.Ethereum,
-            CoinType.BinanceSmartChain -> OneInchMethodDecoration.Token.EvmCoin
+            CoinType.BinanceSmartChain,
+            CoinType.Polygon,
+            CoinType.EthereumOptimism,
+            CoinType.EthereumArbitrumOne -> OneInchMethodDecoration.Token.EvmCoin
             is CoinType.Erc20 -> OneInchMethodDecoration.Token.Eip20(Address(coinType.address))
             is CoinType.Bep20 -> OneInchMethodDecoration.Token.Eip20(Address(coinType.address))
+            is CoinType.Mrc20 -> OneInchMethodDecoration.Token.Eip20(Address(coinType.address))
+            is CoinType.OptimismErc20 -> OneInchMethodDecoration.Token.Eip20(Address(coinType.address))
+            is CoinType.ArbitrumOneErc20 -> OneInchMethodDecoration.Token.Eip20(Address(coinType.address))
             else -> throw IllegalStateException("Not supported coin for swap")
         }
     }

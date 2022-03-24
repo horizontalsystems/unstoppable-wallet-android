@@ -84,34 +84,18 @@ class OneInchFeeService(
             gasPrice = gasPriceInfo.gasPrice
         )
             .subscribeIO({ swap ->
-                sync(swap, gasPriceInfo.warnings, gasPriceInfo.errors)
+                sync(swap, gasPriceInfo)
             }, { error ->
                 onError(error, gasPriceInfo)
             })
             .let { gasPriceInfoDisposable = it }
     }
 
-    private fun sync(swap: Swap, warnings: List<Warning>, errors: List<Throwable>) {
+    private fun sync(swap: Swap, gasPriceInfo: GasPriceInfo) {
         val swapTx = swap.transaction
-
-        val gasPrice = if (swapTx.gasPrice != null) {
-            GasPrice.Legacy(swapTx.gasPrice!!)
-        } else if (swapTx.maxFeePerGas != null && swapTx.maxPriorityFeePerGas != null) {
-            GasPrice.Eip1559(swapTx.maxFeePerGas!!, swapTx.maxPriorityFeePerGas!!)
-        } else {
-            null
-        }
-
-        if (gasPrice == null) {
-            transactionStatus = DataState.Error(
-                FeeSettingsError.InvalidGasPriceType("No GasPrice returned from 1inch API")
-            )
-            return
-        }
-
         val gasData = GasData(
             gasLimit = getSurchargedGasLimit(swapTx.gasLimit),
-            gasPrice = gasPrice
+            gasPrice = gasPriceInfo.gasPrice
         )
 
         parameters = parameters.copy(
@@ -119,13 +103,13 @@ class OneInchFeeService(
         )
 
         val transactionData = TransactionData(swapTx.to, swapTx.value, swapTx.data)
-        val transaction = Transaction(transactionData, gasData, warnings, errors)
+        val transaction = Transaction(transactionData, gasData, gasPriceInfo.warnings, gasPriceInfo.errors)
 
         transactionStatus = if (transaction.totalAmount > evmBalance) {
             DataState.Success(
                 transaction.copy(
-                    warnings = warnings,
-                    errors = errors + FeeSettingsError.InsufficientBalance
+                    warnings = gasPriceInfo.warnings,
+                    errors = gasPriceInfo.errors + FeeSettingsError.InsufficientBalance
                 )
             )
         } else {
