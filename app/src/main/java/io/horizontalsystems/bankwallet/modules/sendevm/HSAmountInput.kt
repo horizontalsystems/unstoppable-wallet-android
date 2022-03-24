@@ -15,6 +15,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
@@ -36,6 +38,7 @@ import java.math.BigDecimal
 @Composable
 fun HSAmountInput(
     modifier: Modifier = Modifier,
+    focusRequester: FocusRequester = remember { FocusRequester() },
     availableBalance: BigDecimal,
     coin: Coin,
     coinDecimal: Int,
@@ -90,7 +93,8 @@ fun HSAmountInput(
                 BasicTextField(
                     modifier = Modifier
                         .padding(start = 12.dp, top = 12.dp)
-                        .weight(1f),
+                        .weight(1f)
+                        .focusRequester(focusRequester),
                     value = textState,
                     singleLine = true,
                     onValueChange = { textFieldValue ->

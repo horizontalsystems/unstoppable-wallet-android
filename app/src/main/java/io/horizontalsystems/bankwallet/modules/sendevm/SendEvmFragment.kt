@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
@@ -65,6 +68,11 @@ fun SendEvmScreen(
     ComposeAppTheme {
         val fullCoin = wallet.platformCoin.fullCoin
         val proceedEnabled = viewModel.proceedEnabled
+        val focusRequester = remember { FocusRequester() }
+
+        SideEffect {
+            focusRequester.requestFocus()
+        }
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
@@ -100,6 +108,7 @@ fun SendEvmScreen(
             Spacer(modifier = Modifier.height(12.dp))
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
+                focusRequester = focusRequester,
                 availableBalance = viewModel.availableBalance,
                 coin = wallet.coin,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
