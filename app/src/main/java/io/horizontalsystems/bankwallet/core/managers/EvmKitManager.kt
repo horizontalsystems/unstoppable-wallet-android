@@ -45,7 +45,7 @@ class EvmKitManager(
 
         stopEvmKit()
 
-        evmKitUpdatedRelay.onNext(Unit)
+        evmKitUpdatedSubject.onNext(Unit)
     }
 
     private val kitStartedSubject = BehaviorSubject.createDefault(false)
@@ -61,10 +61,10 @@ class EvmKitManager(
     private var useCount = 0
     var currentAccount: Account? = null
         private set
-    private val evmKitUpdatedRelay = PublishSubject.create<Unit>()
+    private val evmKitUpdatedSubject = PublishSubject.create<Unit>()
 
     val evmKitUpdatedObservable: Observable<Unit>
-        get() = evmKitUpdatedRelay
+        get() = evmKitUpdatedSubject
 
     val statusInfo: Map<String, Any>?
         get() = evmKitWrapper?.evmKit?.statusInfo()

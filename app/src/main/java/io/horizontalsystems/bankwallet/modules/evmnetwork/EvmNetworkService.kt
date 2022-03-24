@@ -16,12 +16,12 @@ class EvmNetworkService(
 ) : Clearable {
     private val disposables = CompositeDisposable()
 
-    private val itemsRelay = BehaviorSubject.create<List<Item>>()
+    private val itemsSubject = BehaviorSubject.create<List<Item>>()
     var items = listOf<Item>()
         private set(value) {
             field = value
 
-            itemsRelay.onNext(value)
+            itemsSubject.onNext(value)
         }
 
     private val currentSyncSource: EvmSyncSource
@@ -40,7 +40,7 @@ class EvmNetworkService(
     }
 
     val itemsObservable: Observable<List<Item>>
-        get() = itemsRelay
+        get() = itemsSubject
 
     fun setCurrentNetwork(id: String) {
         if (currentSyncSource.id == id) return

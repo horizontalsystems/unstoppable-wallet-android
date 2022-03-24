@@ -11,10 +11,10 @@ import io.reactivex.subjects.PublishSubject
 
 class EvmSyncSourceManager(appConfigProvider: AppConfigProvider, val accountSettingManager: AccountSettingManager) {
 
-    private val syncSourceRelay = PublishSubject.create<Triple<Account, EvmBlockchain, EvmSyncSource>>()
+    private val syncSourceSubject = PublishSubject.create<Triple<Account, EvmBlockchain, EvmSyncSource>>()
 
     val syncSourceObservable: Observable<Triple<Account, EvmBlockchain, EvmSyncSource>>
-        get() = syncSourceRelay
+        get() = syncSourceSubject
 
     val defaultSyncSources: Map<EvmBlockchain, List<EvmSyncSource>> =
         mapOf(
@@ -73,7 +73,7 @@ class EvmSyncSourceManager(appConfigProvider: AppConfigProvider, val accountSett
 
     fun save(syncSource: EvmSyncSource, account: Account, blockchain: EvmBlockchain) {
         accountSettingManager.save(syncSource.name, account, blockchain)
-        syncSourceRelay.onNext(Triple(account, blockchain, syncSource))
+        syncSourceSubject.onNext(Triple(account, blockchain, syncSource))
     }
 
 }

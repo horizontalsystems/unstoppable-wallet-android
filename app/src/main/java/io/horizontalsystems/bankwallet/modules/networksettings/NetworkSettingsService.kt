@@ -18,16 +18,16 @@ class NetworkSettingsService(
 ) : Clearable {
     private val disposables = CompositeDisposable()
 
-    private val itemsRelay = PublishSubject.create<List<Item>>()
+    private val itemsSubject = PublishSubject.create<List<Item>>()
     var items = listOf<Item>()
         private set(value) {
             field = value
             
-            itemsRelay.onNext(value)
+            itemsSubject.onNext(value)
         }
 
     val itemsObservable: Observable<List<Item>>
-        get() = itemsRelay
+        get() = itemsSubject
 
     init {
         evmSyncSourceManager.syncSourceObservable
