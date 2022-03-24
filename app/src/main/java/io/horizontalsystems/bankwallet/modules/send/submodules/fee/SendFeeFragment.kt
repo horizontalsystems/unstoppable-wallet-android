@@ -58,8 +58,6 @@ class SendFeeFragment(
 
         super.onViewCreated(view, savedInstanceState)
 
-        val presenterView = presenter.view as SendFeeView
-
         binding.txError.isVisible = false
 
         binding.txSpeedMenuClickArea.setOnClickListener {
@@ -77,25 +75,25 @@ class SendFeeFragment(
             }
         })
 
-        presenterView.showAdjustableFeeMenu.observe(viewLifecycleOwner, Observer { visible ->
+        presenter.showAdjustableFeeMenu.observe(viewLifecycleOwner, Observer { visible ->
             binding.speedViews.isVisible = visible
         })
 
-        presenterView.primaryFee.observe(
+        presenter.primaryFee.observe(
             viewLifecycleOwner,
             Observer { binding.txFeePrimary.text = " $it" })
 
-        presenterView.secondaryFee.observe(viewLifecycleOwner, Observer { fiatFee ->
+        presenter.secondaryFee.observe(viewLifecycleOwner, Observer { fiatFee ->
             fiatFee?.let { binding.txFeeSecondary.text = " | $it" }
         })
 
-        presenterView.feePriority.observe(viewLifecycleOwner, Observer { feePriority ->
+        presenter.feePriority.observe(viewLifecycleOwner, Observer { feePriority ->
             context?.let {
                 binding.txSpeedMenu.text = TextHelper.getFeeRatePriorityString(it, feePriority)
             }
         })
 
-        presenterView.showFeePriorityOptions.observe(viewLifecycleOwner, Observer { feeRates ->
+        presenter.showFeePriorityOptions.observe(viewLifecycleOwner, Observer { feeRates ->
             val selectorItems = feeRates.map { feeRateViewItem ->
                 val caption = context?.let { context ->
                     TextHelper.getFeeRatePriorityString(context, feeRateViewItem.feeRatePriority)
@@ -111,11 +109,11 @@ class SendFeeFragment(
                 .show(parentFragmentManager, "fee_rate_priority_selector")
         })
 
-        presenterView.showCustomFeePriority.observe(viewLifecycleOwner, Observer { isVisible ->
+        presenter.showCustomFeePriority.observe(viewLifecycleOwner, Observer { isVisible ->
             binding.customFeeSeekBar.isVisible = isVisible
         })
 
-        presenterView.setCustomFeeParams.observe(
+        presenter.setCustomFeeParams.observe(
             viewLifecycleOwner,
             Observer { (value, range, label) ->
                 binding.customFeeSeekBar.progress = value
@@ -126,7 +124,7 @@ class SendFeeFragment(
                 }
             })
 
-        presenterView.insufficientFeeBalanceError.observe(viewLifecycleOwner, Observer { error ->
+        presenter.insufficientFeeBalanceError.observe(viewLifecycleOwner, Observer { error ->
             binding.feeError.isVisible = error != null
 
             if (error != null) {
@@ -143,15 +141,15 @@ class SendFeeFragment(
             }
         })
 
-        presenterView.setLoading.observe(viewLifecycleOwner, Observer { loading ->
+        presenter.setLoading.observe(viewLifecycleOwner, Observer { loading ->
             setLoading(loading)
         })
 
-        presenterView.setError.observe(viewLifecycleOwner, Observer { error ->
+        presenter.setError.observe(viewLifecycleOwner, Observer { error ->
             setError(error)
         })
 
-        presenterView.showLowFeeWarningLiveData.observe(viewLifecycleOwner, { show ->
+        presenter.showLowFeeWarningLiveData.observe(viewLifecycleOwner, { show ->
             binding.lowFeeWarning.isVisible = show
         })
     }
