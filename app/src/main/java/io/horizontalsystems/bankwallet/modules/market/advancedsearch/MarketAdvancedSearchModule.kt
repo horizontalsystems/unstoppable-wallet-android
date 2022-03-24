@@ -6,14 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.marketkit.models.CoinType
+import io.reactivex.Single
 
 object MarketAdvancedSearchModule {
     class Factory : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = MarketAdvancedSearchService(App.marketKit, App.currencyManager)
+            val service = MarketAdvancedSearchService(App.marketKit, App.currencyManager.baseCurrency)
             return MarketAdvancedSearchViewModel(service) as T
         }
 
@@ -220,4 +222,8 @@ class FilterViewItemWrapper<T>(val title: String?, val item: T) {
             return FilterViewItemWrapper(null, null)
         }
     }
+}
+
+interface IMarketListFetcher {
+    fun fetchAsync(): Single<List<MarketItem>>
 }
