@@ -36,46 +36,6 @@ class SendFeePresenter(
     val setError = MutableLiveData<Exception>()
     val showLowFeeWarningLiveData = MutableLiveData<Boolean>()
 
-    private fun setAdjustableFeeVisible(visible: Boolean) {
-        showAdjustableFeeMenu.postValue(visible)
-    }
-
-    private fun setPrimaryFee(feeAmount: String?) {
-        primaryFee.postValue(feeAmount)
-    }
-
-    private fun setSecondaryFee(feeAmount: String?) {
-        secondaryFee.postValue(feeAmount)
-    }
-
-    private fun setFeePriority(priority: FeeRatePriority) {
-        feePriority.postValue(priority)
-    }
-
-    private fun showFeeRatePrioritySelector(feeRates: List<SendFeeModule.FeeRateInfoViewItem>) {
-        showFeePriorityOptions.value = feeRates
-    }
-
-    private fun showCustomFeePriority(show: Boolean) {
-        showCustomFeePriority.postValue(show)
-    }
-
-    private fun setCustomFeeParams(value: Int, range: IntRange, label: String?) {
-        setCustomFeeParams.postValue(Triple(value, range, label))
-    }
-
-    private fun setFee(fee: SendModule.AmountInfo, convertedFee: SendModule.AmountInfo?) {
-    }
-
-    private fun setInsufficientFeeBalanceError(insufficientFeeBalance: SendFeeModule.InsufficientFeeBalance?) {
-        insufficientFeeBalanceError.postValue(insufficientFeeBalance)
-    }
-
-    private fun showLowFeeWarning(show: Boolean) {
-        showLowFeeWarningLiveData.postValue(show)
-    }
-
-
     var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
     private var xRate: BigDecimal? = null
@@ -90,7 +50,7 @@ class SendFeePresenter(
         set(value) {
             field = value
             value?.let {
-                showLowFeeWarning(value < recommendedFeeRate ?: BigInteger.ZERO)
+                showLowFeeWarningLiveData.postValue(value < recommendedFeeRate ?: BigInteger.ZERO)
             }
         }
 
@@ -111,22 +71,22 @@ class SendFeePresenter(
 
         try {
             validate()
-            setInsufficientFeeBalanceError(null)
+            insufficientFeeBalanceError.postValue(null)
         } catch (e: SendFeeModule.InsufficientFeeBalance) {
-            setInsufficientFeeBalanceError(e)
+            insufficientFeeBalanceError.postValue(e)
         }
     }
 
     private fun syncFees() {
-        setPrimaryFee(helper.feeAmount(fee, inputType, xRate))
-        setSecondaryFee(helper.feeAmount(fee, inputType.reversed(), xRate))
+        primaryFee.postValue(helper.feeAmount(fee, inputType, xRate))
+        secondaryFee.postValue(helper.feeAmount(fee, inputType.reversed(), xRate))
     }
 
     private fun syncFeeRateLabels() {
-        showCustomFeePriority(feeRatePriority is FeeRatePriority.Custom)
+        showCustomFeePriority.postValue(feeRatePriority is FeeRatePriority.Custom)
 
         feeRatePriority?.let {
-            setFeePriority(it)
+            feePriority.postValue(it)
         }
     }
 
@@ -147,7 +107,13 @@ class SendFeePresenter(
         val adjustedFeeRateValue = feeRateValue.coerceAtMost(customPriorityUnit.fromBaseUnit(priority.range.last)).toInt()   // value can't be more than slider upper range
         this.customFeeRate = adjustedFeeRateValue.toBigInteger()
 
-        setCustomFeeParams(adjustedFeeRateValue, range, customPriorityUnit.getLabel())
+        setCustomFeeParams.postValue(
+            Triple<Int, IntRange, String?>(
+                adjustedFeeRateValue,
+                range,
+                customPriorityUnit.getLabel()
+            )
+        )
     }
 
     private fun getSmartFee(): Long? {
@@ -245,14 +211,14 @@ class SendFeePresenter(
         syncFees()
         syncError()
 
-        setAdjustableFeeVisible(interactor.feeRatePriorityList.isNotEmpty())
+        showAdjustableFeeMenu.postValue(interactor.feeRatePriorityList.isNotEmpty())
     }
 
     override fun onClickFeeRatePriority() {
         val items = interactor.feeRatePriorityList.map { priority ->
             SendFeeModule.FeeRateInfoViewItem(priority, priority == feeRatePriority)
         }
-        showFeeRatePrioritySelector(items)
+        showFeePriorityOptions.value = items
     }
 
     override fun onChangeFeeRate(feeRatePriority: FeeRatePriority) {
@@ -284,17 +250,17 @@ class SendFeePresenter(
     override fun didUpdate(feeRate: BigInteger, feeRatePriority: FeeRatePriority) {
         when (feeRatePriority) {
             FeeRatePriority.HIGH -> {
-                showLowFeeWarning(false)
+                showLowFeeWarningLiveData.postValue(false)
             }
             FeeRatePriority.RECOMMENDED -> {
                 recommendedFeeRate = feeRate
-                showLowFeeWarning(false)
+                showLowFeeWarningLiveData.postValue(false)
             }
             is FeeRatePriority.Custom -> {
                 // handled in customFeeRate setter
             }
             FeeRatePriority.LOW -> {
-                showLowFeeWarning(true)
+                showLowFeeWarningLiveData.postValue(true)
             }
         }
 
