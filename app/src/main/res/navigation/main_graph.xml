@@ -126,8 +126,7 @@
         tools:layout="@layout/fragment_confirmation_send_evm" />
     <fragment
         android:id="@+id/manageWalletsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment"
-        tools:layout="@layout/fragment_manage_wallets">
+        android:name="io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment">
         <action
             android:id="@+id/manageWalletsFragment_to_addToken"
             app:destination="@id/addTokenFragment" />
@@ -151,8 +150,7 @@
 
     <fragment
         android:id="@+id/manageAccountFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment"
-        tools:layout="@layout/fragment_manage_account">
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment">
         <action
             android:id="@+id/manageAccountFragment_to_showKeyFragment"
             app:destination="@id/showKeyIntroFragment" />
@@ -220,8 +218,7 @@
     </fragment>
     <fragment
         android:id="@+id/appStatusFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusFragment"
-        tools:layout="@layout/fragment_app_status" />
+        android:name="io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusFragment"/>
     <fragment
         android:id="@+id/faqListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.faq.FaqListFragment"
@@ -257,12 +254,10 @@
         tools:layout="@layout/fragment_theme_switcher" />
     <fragment
         android:id="@+id/termsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment"
-        tools:layout="@layout/fragment_terms_settings" />
+        android:name="io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment"/>
     <fragment
         android:id="@+id/aboutAppFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment"
-        tools:layout="@layout/fragment_about">
+        android:name="io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment">
         <action
             android:id="@+id/aboutAppFragment_to_appStatusFragment"
             app:destination="@id/appStatusFragment" />
@@ -307,8 +302,7 @@
     </fragment>
     <fragment
         android:id="@+id/coinMarketsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment"
-        tools:layout="@layout/fragment_coin_markets" />
+        android:name="io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment"/>
     <fragment
         android:id="@+id/coinMajorHoldersFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment"
@@ -416,22 +410,20 @@
     </fragment>
     <fragment
         android:id="@+id/marketAdvancedSearchFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchFragment"
-        tools:layout="@layout/fragment_market_search_filter">
+        android:name="io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchFragment">
         <action
             android:id="@+id/marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults"
             app:destination="@id/marketAdvancedSearchResultsFragment" />
     </fragment>
     <fragment
         android:id="@+id/marketTopCoinsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment"></fragment>
+        android:name="io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment"/>
     <fragment
         android:id="@+id/marketCategoryFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment"></fragment>
+        android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment"/>
     <fragment
         android:id="@+id/marketAdvancedSearchResultsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchResultsFragment"
-        tools:layout="@layout/fragment_market_advanced_search_results" />
+        android:name="io.horizontalsystems.bankwallet.modules.market.filtersresult.MarketAdvancedSearchResultsFragment"/>
     <fragment
         android:id="@+id/createAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment"
@@ -445,8 +437,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment" />
     <fragment
         android:id="@+id/restoreSelectCoinsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment"
-        tools:layout="@layout/fragment_manage_wallets" />
+        android:name="io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment"/>
     <fragment
         android:id="@+id/receiveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment"

@@ -3,14 +3,11 @@ package io.horizontalsystems.bankwallet.modules.market.advancedsearch
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
 import io.horizontalsystems.bankwallet.modules.market.priceChangeValue
-import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.MarketInfo
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -20,11 +17,11 @@ import java.math.BigDecimal
 
 class MarketAdvancedSearchService(
     private val marketKit: MarketKit,
-    private val currencyManager: ICurrencyManager
+    private val baseCurrency: Currency
 ) : IMarketListFetcher {
 
     val currencyCode: String
-        get() = currencyManager.baseCurrency.code
+        get() = baseCurrency.code
 
     private val allTimeDeltaPercent = BigDecimal.TEN
 
@@ -102,8 +99,6 @@ class MarketAdvancedSearchService(
             refreshCounter()
         }
 
-    override val dataUpdatedAsync: Observable<Unit> = Observable.empty()
-
     var numberOfItemsAsync = BehaviorSubject.create<DataState<Int>>()
 
     private var topItemsDisposable: Disposable? = null
@@ -112,15 +107,6 @@ class MarketAdvancedSearchService(
 
     fun start() {
         refreshCounter()
-
-        currencyManager.baseCurrencyUpdatedSignal
-            .subscribeIO {
-                cache = null
-                refreshCounter()
-            }
-            .let {
-                disposables.add(it)
-            }
     }
 
     fun stop() {
@@ -128,13 +114,13 @@ class MarketAdvancedSearchService(
         disposables.dispose()
     }
 
-    override fun fetchAsync(currency: Currency): Single<List<MarketItem>> {
-        return getTopMarketList(currency)
+    override fun fetchAsync(): Single<List<MarketItem>> {
+        return getTopMarketList()
             .map { coinMarkets ->
                 coinMarkets.map {
                     val coinMarket = it.value
 
-                    MarketItem.createFromCoinMarket(coinMarket, currency, filterPeriod)
+                    MarketItem.createFromCoinMarket(coinMarket, baseCurrency, filterPeriod)
                 }
             }
     }
@@ -143,7 +129,7 @@ class MarketAdvancedSearchService(
         topItemsDisposable?.dispose()
 
         numberOfItemsAsync.onNext(DataState.Loading)
-        topItemsDisposable = getTopMarketList(currencyManager.baseCurrency)
+        topItemsDisposable = getTopMarketList()
             .map { it.size }
             .subscribeIO({
                 numberOfItemsAsync.onNext(DataState.Success(it))
@@ -153,11 +139,11 @@ class MarketAdvancedSearchService(
 
     }
 
-    private fun getTopMarketList(currency: Currency): Single<Map<Int, MarketInfo>> {
+    private fun getTopMarketList(): Single<Map<Int, MarketInfo>> {
         val topMarketListAsync = if (cache != null) {
             Single.just(cache)
         } else {
-            marketKit.advancedMarketInfosSingle(coinCount, currencyManager.baseCurrency.code)
+            marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code)
                 .doOnSuccess {
                     cache = it
                 }
