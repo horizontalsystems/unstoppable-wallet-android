@@ -16,7 +16,7 @@ class ReceiveViewModel(
     init {
         val receiveAdapter = adapterManager.getReceiveAdapterForWallet(wallet) ?: throw NoReceiverAdapter()
 
-        testNet = receiveAdapter.isMainnet
+        testNet = !receiveAdapter.isMainnet
         receiveAddress = receiveAdapter.receiveAddress
         addressType = wallet.coinSettings.derivation?.addressType
     }

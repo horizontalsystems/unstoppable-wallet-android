@@ -15,10 +15,7 @@ class AppStatusService(
         private val localStorage: ILocalStorage,
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
-        private val adapterManager: IAdapterManager,
-        private val ethereumKitManager: EvmKitManager,
-        private val binanceSmartChainKitManager: EvmKitManager,
-        private val binanceKitManager: IBinanceKitManager
+        private val adapterManager: IAdapterManager
 ) {
 
     val status: LinkedHashMap<String, Any>
@@ -81,9 +78,6 @@ class AppStatusService(
         val blockchainStatus = LinkedHashMap<String, Any>()
 
         blockchainStatus.putAll(getBitcoinForkStatuses())
-        ethereumKitManager.statusInfo?.let { blockchainStatus["Ethereum"] = it }
-        binanceSmartChainKitManager.statusInfo?.let { blockchainStatus["Binance Smart Chain"] = it }
-        binanceKitManager.statusInfo?.let { blockchainStatus["Binance DEX"] = it }
 
         return blockchainStatus
     }

@@ -24,9 +24,12 @@ class OneInchKitHelper(
 
     private fun getCoinAddress(coin: PlatformCoin): Address {
         return when (val coinType = coin.coinType) {
-            CoinType.Ethereum, CoinType.BinanceSmartChain -> evmCoinAddress
+            CoinType.Ethereum, CoinType.BinanceSmartChain, CoinType.Polygon, CoinType.EthereumOptimism, CoinType.EthereumArbitrumOne -> evmCoinAddress
             is CoinType.Erc20 -> Address(coinType.address)
             is CoinType.Bep20 -> Address(coinType.address)
+            is CoinType.Mrc20 -> Address(coinType.address)
+            is CoinType.OptimismErc20 -> Address(coinType.address)
+            is CoinType.ArbitrumOneErc20 -> Address(coinType.address)
             else -> throw IllegalStateException("Unsupported coinType: $coinType")
         }
     }

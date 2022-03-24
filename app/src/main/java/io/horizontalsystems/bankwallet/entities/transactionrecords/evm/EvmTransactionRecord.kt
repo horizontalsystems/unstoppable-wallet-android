@@ -11,7 +11,7 @@ import io.horizontalsystems.marketkit.models.PlatformCoin
 abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: PlatformCoin, source: TransactionSource) :
     TransactionRecord(
         uid = fullTransaction.transaction.hash.toHexString(),
-        transactionHash = fullTransaction.transaction.hash.toHexString(),
+        transactionHash = "0x${fullTransaction.transaction.hash.toHexString()}",
         transactionIndex = fullTransaction.receiptWithLogs?.receipt?.transactionIndex ?: 0,
         blockHeight = fullTransaction.receiptWithLogs?.receipt?.blockNumber?.toInt(),
         confirmationsThreshold = BaseEvmAdapter.confirmationsThreshold,

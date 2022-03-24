@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swap
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.subjects.PublishSubject
@@ -23,7 +24,7 @@ class SwapMainService(
         get() = providers.filter { it.supports(dex.blockchain) }
 
     val blockchainTitle: String
-        get() = dex.blockchain.title
+        get() = dex.blockchain.name
 
     fun setProvider(provider: SwapMainModule.ISwapProvider) {
         if (dex.provider.id != provider.id) {
@@ -37,28 +38,25 @@ class SwapMainService(
     private fun getDex(coinFrom: PlatformCoin?): SwapMainModule.Dex {
         val blockchain = getBlockchainForCoin(coinFrom)
         val provider = getSwapProvider(blockchain)
-            ?: throw IllegalStateException("No provider found for ${blockchain.title}")
+            ?: throw IllegalStateException("No provider found for ${blockchain.name}")
 
         return SwapMainModule.Dex(blockchain, provider)
     }
 
-    private fun getSwapProvider(blockchain: SwapMainModule.Blockchain): SwapMainModule.ISwapProvider? {
+    private fun getSwapProvider(blockchain: EvmBlockchain): SwapMainModule.ISwapProvider? {
         val providerId = localStorage.getSwapProviderId(blockchain)
-            ?: getDefaultSwapProviderId(blockchain)
+            ?: SwapMainModule.OneInchProvider.id
 
         return providers.firstOrNull { it.id == providerId }
     }
 
-    private fun getDefaultSwapProviderId(blockchain: SwapMainModule.Blockchain) =
-        if (blockchain.mainNet)
-            SwapMainModule.OneInchProvider.id
-        else
-            SwapMainModule.UniswapProvider.id
-
     private fun getBlockchainForCoin(coin: PlatformCoin?) =
         when (coin?.coinType) {
-            CoinType.Ethereum, is CoinType.Erc20, null -> SwapMainModule.Blockchain.Ethereum
-            CoinType.BinanceSmartChain, is CoinType.Bep20 -> SwapMainModule.Blockchain.BinanceSmartChain
+            CoinType.Ethereum, is CoinType.Erc20, null -> EvmBlockchain.Ethereum
+            CoinType.BinanceSmartChain, is CoinType.Bep20 -> EvmBlockchain.BinanceSmartChain
+            CoinType.Polygon, is CoinType.Mrc20 -> EvmBlockchain.Polygon
+            CoinType.EthereumOptimism, is CoinType.OptimismErc20 -> EvmBlockchain.Optimism
+            CoinType.EthereumArbitrumOne, is CoinType.ArbitrumOneErc20 -> EvmBlockchain.ArbitrumOne
             else -> throw IllegalStateException("Swap not supported for ${coin.coinType}")
         }
 

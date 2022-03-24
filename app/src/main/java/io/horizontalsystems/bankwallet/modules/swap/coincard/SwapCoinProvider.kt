@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Blockchain
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Dex
 import io.horizontalsystems.core.ICurrencyManager
@@ -48,8 +48,11 @@ class SwapCoinProvider(
     }
 
     private fun dexSupportsCoin(coin: PlatformCoin) = when (coin.coinType) {
-        CoinType.Ethereum, is CoinType.Erc20 -> dex.blockchain == Blockchain.Ethereum
-        CoinType.BinanceSmartChain, is CoinType.Bep20 -> dex.blockchain == Blockchain.BinanceSmartChain
+        CoinType.Ethereum, is CoinType.Erc20 -> dex.blockchain == EvmBlockchain.Ethereum
+        CoinType.BinanceSmartChain, is CoinType.Bep20 -> dex.blockchain == EvmBlockchain.BinanceSmartChain
+        CoinType.Polygon, is CoinType.Mrc20 -> dex.blockchain == EvmBlockchain.Polygon
+        CoinType.EthereumOptimism, is CoinType.OptimismErc20 -> dex.blockchain == EvmBlockchain.Optimism
+        CoinType.EthereumArbitrumOne, is CoinType.ArbitrumOneErc20 -> dex.blockchain == EvmBlockchain.ArbitrumOne
         else -> false
     }
 
@@ -73,8 +76,11 @@ class SwapCoinProvider(
     }
 
     private fun platformType(): PlatformType = when (dex.blockchain) {
-        Blockchain.Ethereum -> PlatformType.Ethereum
-        Blockchain.BinanceSmartChain -> PlatformType.BinanceSmartChain
+        EvmBlockchain.Ethereum -> PlatformType.Ethereum
+        EvmBlockchain.BinanceSmartChain -> PlatformType.BinanceSmartChain
+        EvmBlockchain.Polygon -> PlatformType.Polygon
+        EvmBlockchain.Optimism -> PlatformType.Optimism
+        EvmBlockchain.ArbitrumOne -> PlatformType.ArbitrumOne
     }
 
     fun getCoins(filter: String): List<CoinBalanceItem> {

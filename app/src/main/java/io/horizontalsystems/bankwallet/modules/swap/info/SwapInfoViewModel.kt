@@ -11,7 +11,7 @@ class SwapInfoViewModel(
 
     private val dexName = dex.provider.title
 
-    private val blockchain = dex.blockchain.title
+    private val blockchain = dex.blockchain.name
 
     val title = dex.provider.title
 

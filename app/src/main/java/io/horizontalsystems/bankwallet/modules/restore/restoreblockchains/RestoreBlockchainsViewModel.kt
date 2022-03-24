@@ -33,7 +33,7 @@ class RestoreBlockchainsViewModel(
             .let { disposables.add(it) }
 
         service.cancelEnableBlockchainObservable
-            .subscribeIO { disableBlockchainLiveData.postValue(it.name) }
+            .subscribeIO { disableBlockchainLiveData.postValue(it.uid) }
             .let { disposables.add(it) }
 
         sync(service.items)
@@ -56,7 +56,7 @@ class RestoreBlockchainsViewModel(
         }
 
         return CoinViewItem(
-            item.blockchain.name,
+            item.blockchain.uid,
             item.blockchain.icon,
             item.blockchain.title,
             item.blockchain.description,
@@ -65,17 +65,17 @@ class RestoreBlockchainsViewModel(
     }
 
     fun enable(uid: String) {
-        val blockchain = RestoreBlockchainsModule.Blockchain.valueOf(uid)
+        val blockchain = RestoreBlockchainsModule.Blockchain.getBlockchainByUid(uid) ?: return
         service.enable(blockchain)
     }
 
     fun disable(uid: String) {
-        val blockchain = RestoreBlockchainsModule.Blockchain.valueOf(uid)
+        val blockchain = RestoreBlockchainsModule.Blockchain.getBlockchainByUid(uid) ?: return
         service.disable(blockchain)
     }
 
     fun onClickSettings(uid: String) {
-        val blockchain = RestoreBlockchainsModule.Blockchain.valueOf(uid)
+        val blockchain = RestoreBlockchainsModule.Blockchain.getBlockchainByUid(uid) ?: return
         service.configure(blockchain)
     }
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
@@ -15,19 +16,18 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 
 object UniswapConfirmationModule {
 
     class Factory(
-        private val blockchain: SwapMainModule.Blockchain,
+        private val blockchain: EvmBlockchain,
         private val sendEvmData: SendEvmData
     ) : ViewModelProvider.Factory {
 
-        private val evmKitWrapper by lazy { blockchain.evmKitWrapper!! }
-        private val coin by lazy { blockchain.coin!! }
+        private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchain).evmKitWrapper!! }
+        private val coin by lazy { App.marketKit.platformCoin(blockchain.baseCoinType)!! }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
             if (evmKit.chain.isEIP1559Supported) {

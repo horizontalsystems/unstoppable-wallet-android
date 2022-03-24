@@ -92,7 +92,8 @@ class BalanceViewItemFactory {
     private fun getDefaultSyncingProgress(coinType: CoinType): Int {
         return when (coinType) {
             CoinType.Bitcoin, CoinType.Litecoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Zcash -> 10
-            CoinType.Ethereum, CoinType.BinanceSmartChain, is CoinType.Erc20, is CoinType.Bep2, is CoinType.Bep20 -> 50
+            CoinType.Ethereum, CoinType.BinanceSmartChain, is CoinType.Erc20, is CoinType.Bep2, is CoinType.Bep20,
+            CoinType.Polygon, is CoinType.Mrc20 -> 50
             is CoinType.Avalanche,
             is CoinType.Fantom,
             is CoinType.HarmonyShard0,
@@ -104,7 +105,6 @@ class BalanceViewItemFactory {
             CoinType.EthereumArbitrumOne,
             is CoinType.OptimismErc20,
             is CoinType.ArbitrumOneErc20,
-            is CoinType.Polygon, is CoinType.Mrc20, //todo add new types support
             is CoinType.Solana,
             is CoinType.Sora,
             is CoinType.Tomochain,

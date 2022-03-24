@@ -556,9 +556,12 @@ class SendEvmTransactionViewModel(
     }
 
     private fun getCoinService(coin: PlatformCoin) = when (val coinType = coin.coinType) {
-        CoinType.Ethereum, CoinType.BinanceSmartChain -> coinServiceFactory.baseCoinService
+        CoinType.Ethereum, CoinType.BinanceSmartChain, CoinType.Polygon, CoinType.EthereumOptimism, CoinType.EthereumArbitrumOne -> coinServiceFactory.baseCoinService
         is CoinType.Erc20 -> coinServiceFactory.getCoinService(coinType.address)
         is CoinType.Bep20 -> coinServiceFactory.getCoinService(coinType.address)
+        is CoinType.Mrc20 -> coinServiceFactory.getCoinService(coinType.address)
+        is CoinType.OptimismErc20 -> coinServiceFactory.getCoinService(coinType.address)
+        is CoinType.ArbitrumOneErc20 -> coinServiceFactory.getCoinService(coinType.address)
         else -> null
     }
 

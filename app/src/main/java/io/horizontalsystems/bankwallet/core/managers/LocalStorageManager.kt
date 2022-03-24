@@ -7,10 +7,7 @@ import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IMarketStorage
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.LaunchPage
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
@@ -402,16 +399,16 @@ class LocalStorageManager(private val preferences: SharedPreferences)
             preferences.edit().putBoolean(RELAUNCH_BY_SETTING_CHANGE, value).commit()
         }
 
-    override fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String? {
+    override fun getSwapProviderId(blockchain: EvmBlockchain): String? {
         return preferences.getString(getSwapProviderKey(blockchain), null)
     }
 
-    override fun setSwapProviderId(blockchain: SwapMainModule.Blockchain, providerId: String) {
+    override fun setSwapProviderId(blockchain: EvmBlockchain, providerId: String) {
         preferences.edit().putString(getSwapProviderKey(blockchain), providerId).apply()
     }
 
-    private fun getSwapProviderKey(blockchain: SwapMainModule.Blockchain): String {
-        return SWAP_PROVIDER + blockchain.id + if (blockchain.mainNet) "MainNet" else "TestNet"
+    private fun getSwapProviderKey(blockchain: EvmBlockchain): String {
+        return SWAP_PROVIDER + blockchain.uid
     }
 
 }

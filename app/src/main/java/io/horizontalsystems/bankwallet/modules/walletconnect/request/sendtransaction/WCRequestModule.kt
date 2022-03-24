@@ -153,6 +153,9 @@ object WCRequestModule {
     private fun platformCoin(chain: Chain) =
         when (chain) {
             Chain.BinanceSmartChain -> App.coinManager.getPlatformCoin(CoinType.BinanceSmartChain)!!
+            Chain.Polygon -> App.coinManager.getPlatformCoin(CoinType.Polygon)!!
+            Chain.Optimism -> App.coinManager.getPlatformCoin(CoinType.EthereumOptimism)!!
+            Chain.ArbitrumOne -> App.coinManager.getPlatformCoin(CoinType.EthereumArbitrumOne)!!
             else -> App.coinManager.getPlatformCoin(CoinType.Ethereum)!!
         }
 

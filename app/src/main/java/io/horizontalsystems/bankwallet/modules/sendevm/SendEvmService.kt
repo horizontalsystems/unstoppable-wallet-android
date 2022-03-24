@@ -94,7 +94,9 @@ class SendEvmService(
         if (amount > BigDecimal.ZERO) {
             var amountWarning: AmountWarning? = null
             try {
-                if (amount == balance && (sendCoin.coinType is CoinType.Ethereum || sendCoin.coinType is CoinType.BinanceSmartChain)) {
+                if (amount == balance && (sendCoin.coinType is CoinType.Ethereum ||
+                        sendCoin.coinType is CoinType.BinanceSmartChain || sendCoin.coinType is CoinType.Polygon ||
+                        sendCoin.coinType is CoinType.EthereumOptimism || sendCoin.coinType is CoinType.EthereumArbitrumOne)) {
                     amountWarning = AmountWarning.CoinNeededForFee
                 }
                 evmAmount = validEvmAmount(amount)

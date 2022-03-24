@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.entities
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.shortenedAddress
 import io.horizontalsystems.marketkit.models.CoinType
 
 val CoinType.blockchainType: String?
@@ -10,6 +11,9 @@ val CoinType.blockchainType: String?
         return when (this) {
             is CoinType.Erc20 -> "ERC20"
             is CoinType.Bep20 -> "BEP20"
+            is CoinType.Polygon, is CoinType.Mrc20 -> "POLYGON"
+            is CoinType.EthereumOptimism, is CoinType.OptimismErc20 -> "OPTIMISM"
+            is CoinType.EthereumArbitrumOne, is CoinType.ArbitrumOneErc20 -> "ARBITRUM"
             is CoinType.Bep2 -> "BEP2"
             else -> null
         }
@@ -17,18 +21,24 @@ val CoinType.blockchainType: String?
 
 val CoinType.platformType: String
     get() = when (this) {
-        CoinType.Ethereum, is CoinType.Erc20 -> "Ethereum"
-        CoinType.BinanceSmartChain, is CoinType.Bep20 -> "Binance Smart Chain"
+        CoinType.Ethereum -> "Ethereum"
+        is CoinType.Erc20 -> "ERC20"
+        CoinType.BinanceSmartChain -> "Binance Smart Chain"
+        is CoinType.Bep20 -> "BEP20"
+        CoinType.Polygon, is CoinType.Mrc20 -> "Polygon"
+        CoinType.EthereumOptimism, is CoinType.EthereumOptimism -> "Polygon"
+        CoinType.EthereumArbitrumOne, is CoinType.ArbitrumOneErc20 -> "ArbitrumOne"
         is CoinType.Bep2 -> "Binance"
         else -> ""
     }
 
 val CoinType.platformCoinType: String
     get() = when (this) {
-        CoinType.Ethereum, CoinType.BinanceSmartChain -> Translator.getString(R.string.CoinPlatforms_Native)
-        is CoinType.Erc20 -> "ERC20"
-        is CoinType.Bep20 -> "BEP20"
-        is CoinType.Bep2 -> "BEP2"
+        CoinType.Ethereum, CoinType.BinanceSmartChain, CoinType.Polygon, CoinType.EthereumOptimism, CoinType.EthereumArbitrumOne -> Translator.getString(R.string.CoinPlatforms_Native)
+        is CoinType.Erc20 -> this.address.shortenedAddress()
+        is CoinType.Bep20 -> this.address.shortenedAddress()
+        is CoinType.Mrc20 -> this.address.shortenedAddress()
+        is CoinType.Bep2 -> this.symbol
         else -> ""
     }
 
@@ -52,7 +62,11 @@ val CoinType.label: String?
     }
 
 val CoinType.swappable: Boolean
-    get() = this is CoinType.Ethereum || this is CoinType.Erc20 || this is CoinType.BinanceSmartChain || this is CoinType.Bep20
+    get() = this is CoinType.Ethereum || this is CoinType.Erc20 ||
+        this is CoinType.BinanceSmartChain || this is CoinType.Bep20 ||
+        this is CoinType.Polygon || this is CoinType.Mrc20 ||
+        this is CoinType.EthereumOptimism || this is CoinType.OptimismErc20 ||
+        this is CoinType.EthereumArbitrumOne || this is CoinType.ArbitrumOneErc20
 
 val CoinType.coinSettingTypes: List<CoinSettingType>
     get() = when (this) {
@@ -85,8 +99,10 @@ val CoinType.isSupported: Boolean
         CoinType.Zcash,
         CoinType.Ethereum,
         CoinType.BinanceSmartChain,
+        CoinType.Polygon,
         is CoinType.Erc20,
         is CoinType.Bep20,
+        is CoinType.Mrc20,
         is CoinType.Bep2 -> true
         is CoinType.Avalanche,
         is CoinType.Fantom,
@@ -99,7 +115,6 @@ val CoinType.isSupported: Boolean
         CoinType.EthereumArbitrumOne,
         is CoinType.OptimismErc20,
         is CoinType.ArbitrumOneErc20,
-        is CoinType.Polygon, is CoinType.Mrc20, //todo add Polygon support
         is CoinType.Solana,
         is CoinType.Sora,
         is CoinType.Tomochain,

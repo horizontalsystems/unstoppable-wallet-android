@@ -7,7 +7,8 @@ object TransactionInfoAddressMapper {
         "0x05ff2b0db69458a0750badebc4f9e13add608c7f" to "PancakeSwap",
         "0x10ed43c718714eb63d5aa57b78b54704e256024e" to "PancakeSwap v.2",
         "0x11111112542d85b3ef69ae05771c2dccff4faa26" to "1inch v3.0",
-        "0x1111111254fb6c44bac0bed2854e76f90643097d" to "1inch v4.0"
+        "0x1111111254fb6c44bac0bed2854e76f90643097d" to "1inch v4.0",
+        "0xa5e0829caced8ffdd4de3c43696c57f7d7a678ff" to "QuickSwap"
     )
 
     fun map(address: String): String {

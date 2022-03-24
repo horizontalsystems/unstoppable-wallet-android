@@ -43,7 +43,9 @@ class TransactionAdapterManager(
             if (newAdapterMap.containsKey(source)) continue
 
             val transactionsAdapter = when (source.blockchain) {
-                is TransactionSource.Blockchain.Evm -> adapterFactory.evmTransactionsAdapter(wallet.transactionSource, source.blockchain.evmBlockchain)
+                is TransactionSource.Blockchain.Evm -> {
+                    adapterFactory.evmTransactionsAdapter(wallet.transactionSource, source.blockchain.evmBlockchain)
+                }
                 else -> adapter as? ITransactionsAdapter
             }
 

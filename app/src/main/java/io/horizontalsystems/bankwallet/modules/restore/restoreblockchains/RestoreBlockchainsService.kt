@@ -57,8 +57,8 @@ class RestoreBlockchainsService(
     }
 
     private fun syncInternalItems() {
-        val platformCoins = coinManager.getPlatformCoins(Blockchain.values().map { it.coinType })
-        internalItems = Blockchain.values().mapNotNull { blockchain ->
+        val platformCoins = coinManager.getPlatformCoins(Blockchain.all.map { it.coinType })
+        internalItems = Blockchain.all.mapNotNull { blockchain ->
             platformCoins.firstOrNull { it.coinType == blockchain.coinType }?.let { platformCoin ->
                 InternalItem(blockchain, platformCoin)
             }
@@ -123,14 +123,17 @@ class RestoreBlockchainsService(
         canRestore.onNext(enabledCoins.isNotEmpty() && !enableCoinServiceIsBusy)
     }
 
+    private fun getInternalItemByBlockchain(blockchain: Blockchain): InternalItem? =
+        internalItems.firstOrNull { it.blockchain.uid == blockchain.uid }
+
     fun enable(blockchain: Blockchain) {
-        val internalItem = internalItems.firstOrNull { it.blockchain == blockchain } ?: return
+        val internalItem = getInternalItemByBlockchain(blockchain) ?: return
 
         enableCoinService.enable(internalItem.platformCoin.fullCoin)
     }
 
     fun disable(blockchain: Blockchain) {
-        val internalItem = internalItems.firstOrNull { it.blockchain == blockchain } ?: return
+        val internalItem = getInternalItemByBlockchain(blockchain) ?: return
         enabledCoins.removeIf { it.platformCoin == internalItem.platformCoin }
 
         syncState()
@@ -138,7 +141,7 @@ class RestoreBlockchainsService(
     }
 
     fun configure(blockchain: Blockchain) {
-        val internalItem = internalItems.firstOrNull { it.blockchain == blockchain } ?: return
+        val internalItem = getInternalItemByBlockchain(blockchain) ?: return
 
         enableCoinService.configure(
             internalItem.platformCoin.fullCoin,
