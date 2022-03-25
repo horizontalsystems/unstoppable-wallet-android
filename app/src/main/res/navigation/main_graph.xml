@@ -410,7 +410,7 @@
     </fragment>
     <fragment
         android:id="@+id/marketAdvancedSearchFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchFragment">
+        android:name="io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersFragment">
         <action
             android:id="@+id/marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults"
             app:destination="@id/marketAdvancedSearchResultsFragment" />
@@ -423,7 +423,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment"/>
     <fragment
         android:id="@+id/marketAdvancedSearchResultsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.filtersresult.MarketAdvancedSearchResultsFragment"/>
+        android:name="io.horizontalsystems.bankwallet.modules.market.filtersresult.MarketFiltersResultsFragment"/>
     <fragment
         android:id="@+id/createAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment"

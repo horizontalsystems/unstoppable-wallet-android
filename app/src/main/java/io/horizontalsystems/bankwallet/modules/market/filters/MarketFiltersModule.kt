@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.advancedsearch
+package io.horizontalsystems.bankwallet.modules.market.filters
 
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
@@ -10,13 +10,13 @@ import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
 
-object MarketAdvancedSearchModule {
+object MarketFiltersModule {
     class Factory : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = MarketAdvancedSearchService(App.marketKit, App.currencyManager.baseCurrency)
-            return MarketAdvancedSearchViewModel(service) as T
+            val service = MarketFiltersService(App.marketKit, App.currencyManager.baseCurrency)
+            return MarketFiltersViewModel(service) as T
         }
 
     }

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.advancedsearch
+package io.horizontalsystems.bankwallet.modules.market.filters
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -15,7 +15,7 @@ import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
 
 
-class MarketAdvancedSearchService(
+class MarketFiltersService(
     private val marketKit: MarketKit,
     private val baseCurrency: Currency
 ) : IMarketListFetcher {
@@ -62,7 +62,7 @@ class MarketAdvancedSearchService(
 
             refreshCounter()
         }
-    var filterBlockchains: List<MarketAdvancedSearchModule.Blockchain> = listOf()
+    var filterBlockchains: List<MarketFiltersModule.Blockchain> = listOf()
         set(value) {
             field = value
 

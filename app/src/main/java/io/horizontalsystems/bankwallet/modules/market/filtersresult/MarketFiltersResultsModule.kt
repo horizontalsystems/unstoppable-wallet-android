@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.market.filtersresult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.IMarketListFetcher
+import io.horizontalsystems.bankwallet.modules.market.filters.IMarketListFetcher
 
 object MarketFiltersResultsModule {
     class Factory(val service: IMarketListFetcher) : ViewModelProvider.Factory {

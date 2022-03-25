@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.advancedsearch
+package io.horizontalsystems.bankwallet.modules.market.filters
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,9 +33,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.FilterDropdown.*
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.FilterDropdown.PriceChange
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.Item
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.*
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.PriceChange
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.Item
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -44,10 +44,10 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetMarketSearchFilt
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class MarketAdvancedSearchFragment : BaseFragment() {
+class MarketFiltersFragment : BaseFragment() {
 
-    private val viewModel by navGraphViewModels<MarketAdvancedSearchViewModel>(R.id.marketAdvancedSearchFragment) {
-        MarketAdvancedSearchModule.Factory()
+    private val viewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment) {
+        MarketFiltersModule.Factory()
     }
 
     override fun onCreateView(
@@ -71,7 +71,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         }
     }
 
-    private fun openSelectionDialog(filterType: MarketAdvancedSearchModule.FilterDropdown) {
+    private fun openSelectionDialog(filterType: MarketFiltersModule.FilterDropdown) {
         when (filterType) {
             CoinSet -> showFilterCoinListDialog()
             MarketCap -> showFilterMarketCapDialog()
@@ -192,9 +192,9 @@ class MarketAdvancedSearchFragment : BaseFragment() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AdvancedSearchScreen(
-    viewModel: MarketAdvancedSearchViewModel,
+    viewModel: MarketFiltersViewModel,
     navController: NavController,
-    onClick: (MarketAdvancedSearchModule.FilterDropdown) -> Unit,
+    onClick: (MarketFiltersModule.FilterDropdown) -> Unit,
 ) {
     val errorMessage = viewModel.errorMessage
 
@@ -252,8 +252,8 @@ private fun AdvancedSearchScreen(
 
 @Composable
 fun AdvancedSearchContent(
-    viewModel: MarketAdvancedSearchViewModel,
-    onDropdownClick: (MarketAdvancedSearchModule.FilterDropdown) -> Unit,
+    viewModel: MarketFiltersViewModel,
+    onDropdownClick: (MarketFiltersModule.FilterDropdown) -> Unit,
 ) {
     val sections by viewModel.sectionsLiveData.observeAsState(listOf())
 
@@ -298,9 +298,9 @@ private fun SectionHeader(header: Int) {
 
 @Composable
 private fun AdvancedSearchDropdown(
-    type: MarketAdvancedSearchModule.FilterDropdown,
+    type: MarketFiltersModule.FilterDropdown,
     value: String?,
-    onDropdownClick: (MarketAdvancedSearchModule.FilterDropdown) -> Unit,
+    onDropdownClick: (MarketFiltersModule.FilterDropdown) -> Unit,
 ) {
     Row(
         modifier = Modifier
