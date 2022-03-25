@@ -31,55 +31,39 @@ class SendBitcoinHandler(
       SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate,
       SendHodlerModule.IHodlerModuleDelegate {
 
-    private val interactor = this
-    var interactorDelegate = this
-
     private val disposables = CompositeDisposable()
 
-    private val isLockTimeEnabled: Boolean
-        get() = storage.isLockTimeEnabled
-
-    private val balance = adapter.balanceData.available
-
-    private fun fetchAvailableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?) {
+    private fun fetchAvailableBalance(
+        feeRate: Long,
+        address: String?,
+        pluginData: Map<Byte, IPluginData>?
+    ) {
         Single.just(adapter.availableBalance(feeRate, address, pluginData))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ availableBalance ->
-                interactorDelegate.didFetchAvailableBalance(availableBalance)
+                didFetchAvailableBalance(availableBalance)
             }, {
 
             })
             .let { disposables.add(it) }
     }
 
-    private fun fetchMinimumAmount(address: String?): BigDecimal {
-        return adapter.minimumSendAmount(address)
-    }
-
-    private fun fetchMaximumAmount(pluginData: Map<Byte, IPluginData>): BigDecimal? {
-        return adapter.maximumSendAmount(pluginData)
-    }
-
-    private fun validate(address: String, pluginData: Map<Byte, IPluginData>?) {
-        adapter.validate(address, pluginData)
-    }
-
-    private fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?) {
+    private fun fetchFee(
+        amount: BigDecimal,
+        feeRate: Long,
+        address: String?,
+        pluginData: Map<Byte, IPluginData>?
+    ) {
         Single.just(adapter.fee(amount, feeRate, address, pluginData))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ fee ->
-                interactorDelegate.didFetchFee(fee)
+                feeModule.setFee(fee)
             }, {
 
             })
             .let { disposables.add(it) }
-    }
-
-    private fun send(amount: BigDecimal, address: String, feeRate: Long,
-                      pluginData: Map<Byte, IPluginData>?, logger: AppLogger): Single<Unit> {
-        return adapter.send(amount, address, feeRate, pluginData, storage.transactionSortingType, logger)
     }
 
     private fun clear() {
@@ -106,13 +90,13 @@ class SendBitcoinHandler(
     }
 
     private fun syncMinimumAmount() {
-        amountModule.setMinimumAmount(interactor.fetchMinimumAmount(addressModule.currentAddress?.hex))
+        amountModule.setMinimumAmount(adapter.minimumSendAmount(addressModule.currentAddress?.hex))
         syncValidation()
     }
 
     private fun syncMaximumAmount() {
         hodlerModule?.let {
-            amountModule.setMaximumAmount(interactor.fetchMaximumAmount(it.pluginData()))
+            amountModule.setMaximumAmount(adapter.maximumSendAmount(it.pluginData()))
             syncValidation()
         }
     }
@@ -159,23 +143,23 @@ class SendBitcoinHandler(
 
             val feeRateValue = (feeModule.feeRateState as FeeRateState.Value).value
             feeModule.setError(null)
-            interactor.fetchAvailableBalance(feeRateValue, addressModule.currentAddress?.hex, hodlerModule?.pluginData())
-            interactor.fetchFee(amountModule.currentAmount, feeRateValue, addressModule.currentAddress?.hex, hodlerModule?.pluginData())
+            fetchAvailableBalance(feeRateValue, addressModule.currentAddress?.hex, hodlerModule?.pluginData())
+            fetchFee(amountModule.currentAmount, feeRateValue, addressModule.currentAddress?.hex, hodlerModule?.pluginData())
         }
     }
 
     override val inputItems: List<SendModule.Input> =
-            mutableListOf<SendModule.Input>().apply {
-                add(SendModule.Input.Amount)
-                add(SendModule.Input.Address())
-                add(SendModule.Input.Fee)
-                if (coinType is CoinType.Bitcoin && interactor.isLockTimeEnabled)
-                    add(SendModule.Input.Hodler)
-                add(SendModule.Input.ProceedButton)
-            }
+        mutableListOf<SendModule.Input>().apply {
+            add(SendModule.Input.Amount)
+            add(SendModule.Input.Address())
+            add(SendModule.Input.Fee)
+            if (coinType is CoinType.Bitcoin && storage.isLockTimeEnabled)
+                add(SendModule.Input.Hodler)
+            add(SendModule.Input.ProceedButton)
+        }
 
     override fun onModulesDidLoad() {
-        feeModule.setBalance(interactor.balance)
+        feeModule.setBalance(adapter.balanceData.available)
         feeModule.fetchFeeRate()
 
         syncState()
@@ -206,7 +190,14 @@ class SendBitcoinHandler(
     override fun sendSingle(logger: AppLogger): Single<Unit> {
         return when (val feeRate = feeModule.feeRate) {
             null -> Single.error(NoFeeSendTransactionError())
-            else -> interactor.send(amountModule.validAmount(), addressModule.validAddress().hex, feeRate, hodlerModule?.pluginData(), logger)
+            else -> adapter.send(
+                amountModule.validAmount(),
+                addressModule.validAddress().hex,
+                feeRate,
+                hodlerModule?.pluginData(),
+                storage.transactionSortingType,
+                logger
+            )
         }
     }
 
@@ -215,10 +206,6 @@ class SendBitcoinHandler(
     private fun didFetchAvailableBalance(availableBalance: BigDecimal) {
         amountModule.setAvailableBalance(availableBalance)
         syncValidation()
-    }
-
-    private fun didFetchFee(fee: BigDecimal) {
-        feeModule.setFee(fee)
     }
 
     // SendAmountModule.ModuleDelegate
@@ -240,7 +227,7 @@ class SendBitcoinHandler(
     // SendAddressModule.ModuleDelegate
 
     override fun validate(address: String) {
-        interactor.validate(address, hodlerModule?.pluginData())
+        adapter.validate(address, hodlerModule?.pluginData())
     }
 
     override fun onUpdateAddress() {
