@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
-import java.math.BigInteger
 
 
 object SendFeeModule {
@@ -26,20 +25,6 @@ object SendFeeModule {
         fun onChangeFeeRate(feeRatePriority: FeeRatePriority)
         fun onChangeFeeRateValue(value: Int)
         fun onClickFeeRatePriority()
-    }
-
-    interface IInteractor {
-        val feeRatePriorityList: List<FeeRatePriority>
-        val defaultFeeRatePriority: FeeRatePriority?
-        fun getRate(coinUid: String): BigDecimal?
-        fun syncFeeRate(feeRatePriority: FeeRatePriority)
-        fun onClear()
-    }
-
-    interface IInteractorDelegate {
-        fun didUpdate(feeRate: BigInteger, feeRatePriority: FeeRatePriority)
-        fun didReceiveError(error: Exception)
-        fun didUpdateExchangeRate(rate: BigDecimal)
     }
 
     interface IFeeModule {
@@ -82,12 +67,21 @@ object SendFeeModule {
 
             val baseCurrency = App.currencyManager.baseCurrency
             val helper = SendFeePresenterHelper(App.numberFormatter, feeCoin, baseCurrency)
-            val interactor = SendFeeInteractor(baseCurrency, App.marketKit, feeRateProvider, feeCoin)
 
-            val presenter = SendFeePresenter(interactor, helper, coin, baseCurrency, feeCoinData, customPriorityUnit, FeeRateAdjustmentHelper(App.appConfigProvider))
+            val presenter = SendFeePresenter(
+                helper,
+                coin,
+                feeCoinData,
+                customPriorityUnit,
+                FeeRateAdjustmentHelper(App.appConfigProvider),
+
+                baseCurrency,
+                App.marketKit,
+                feeRateProvider,
+                feeCoin
+            )
 
             presenter.moduleDelegate = feeModuleDelegate
-            interactor.delegate = presenter
             sendHandler.feeModule = presenter
 
             return presenter as T
