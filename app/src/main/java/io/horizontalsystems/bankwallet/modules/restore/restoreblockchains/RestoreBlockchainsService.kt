@@ -27,7 +27,6 @@ class RestoreBlockchainsService(
     val enabledCoins = mutableListOf<ConfiguredPlatformCoin>()
 
     private var restoreSettingsMap = mutableMapOf<PlatformCoin, RestoreSettings>()
-    private var enableCoinServiceIsBusy = false
 
     val cancelEnableBlockchainObservable = PublishSubject.create<Blockchain>()
     val canRestore = BehaviorSubject.createDefault(false)
@@ -75,12 +74,9 @@ class RestoreBlockchainsService(
             restoreSettingsMap[platformCoin] = restoreSettings
         }
 
-        val existingConfiguredPlatformCoins =
-            enabledCoins.filter { it.platformCoin == platformCoin }
-        val newConfiguredPlatformCoins =
-            configuredPlatformCoins.minus(existingConfiguredPlatformCoins)
-        val removedConfiguredPlatformCoins =
-            existingConfiguredPlatformCoins.minus(configuredPlatformCoins)
+        val existingConfiguredPlatformCoins = enabledCoins.filter { it.platformCoin == platformCoin }
+        val newConfiguredPlatformCoins = configuredPlatformCoins.minus(existingConfiguredPlatformCoins)
+        val removedConfiguredPlatformCoins = existingConfiguredPlatformCoins.minus(configuredPlatformCoins)
 
         enabledCoins.addAll(newConfiguredPlatformCoins)
         enabledCoins.removeAll(removedConfiguredPlatformCoins)
@@ -120,7 +116,7 @@ class RestoreBlockchainsService(
     }
 
     private fun syncCanRestore() {
-        canRestore.onNext(enabledCoins.isNotEmpty() && !enableCoinServiceIsBusy)
+        canRestore.onNext(enabledCoins.isNotEmpty())
     }
 
     private fun getInternalItemByBlockchain(blockchain: Blockchain): InternalItem? =
