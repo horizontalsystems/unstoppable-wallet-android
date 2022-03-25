@@ -7,8 +7,10 @@ import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.advancedsearch.IMarketListFetcher
+import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryModule
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.bankwallet.modules.market.sort
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -22,9 +24,15 @@ class MarketFiltersResultService(
     var marketItems: List<MarketItem> = listOf()
 
     val sortingFields = SortingField.values().toList()
-    val marketFields = MarketField.values().toList()
+    private val marketFields = MarketField.values().toList()
     var sortingField = SortingField.HighestCap
     var marketField = MarketField.PriceDiff
+
+    val menu: MarketCategoryModule.Menu
+        get() = MarketCategoryModule.Menu(
+            Select(sortingField, sortingFields),
+            Select(marketField, marketFields)
+        )
 
     private var fetchDisposable: Disposable? = null
     private var favoriteDisposable: Disposable? = null

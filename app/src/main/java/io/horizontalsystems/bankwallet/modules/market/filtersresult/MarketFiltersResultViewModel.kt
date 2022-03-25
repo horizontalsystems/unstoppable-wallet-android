@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.market.filtersresult
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -8,7 +11,6 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryModule
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -20,10 +22,12 @@ class MarketFiltersResultViewModel(
 
     private var marketItems: List<MarketItemWrapper> = listOf()
 
-    val menuLiveData = MutableLiveData<MarketCategoryModule.Menu>()
     val viewStateLiveData = MutableLiveData<ViewState>()
     val viewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
     val selectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
+
+    var menuState by mutableStateOf(service.menu)
+        private set
 
     private val disposable = CompositeDisposable()
 
@@ -93,12 +97,7 @@ class MarketFiltersResultViewModel(
     }
 
     private fun syncMenu() {
-        menuLiveData.postValue(
-            MarketCategoryModule.Menu(
-                Select(service.sortingField, service.sortingFields),
-                Select(service.marketField, service.marketFields)
-            )
-        )
+        menuState = service.menu
     }
 
     private fun syncMarketViewItems() {
