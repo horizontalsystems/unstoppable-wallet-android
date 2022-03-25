@@ -20,13 +20,6 @@ object SendFeeModule {
     class InsufficientFeeBalance(val coin: PlatformCoin, val coinProtocol: String, val feeCoin: PlatformCoin, val fee: CoinValue) :
             Exception()
 
-    interface IViewDelegate {
-        fun onViewDidLoad()
-        fun onChangeFeeRate(feeRatePriority: FeeRatePriority)
-        fun onChangeFeeRateValue(value: Int)
-        fun onClickFeeRatePriority()
-    }
-
     interface IFeeModule {
         val isValid: Boolean
         val feeRateState: FeeRateState

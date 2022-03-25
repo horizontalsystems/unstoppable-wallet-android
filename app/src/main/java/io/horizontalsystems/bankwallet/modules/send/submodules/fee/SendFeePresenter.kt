@@ -30,7 +30,7 @@ class SendFeePresenter(
     private val marketKit: MarketKit,
     private val feeRateProvider: IFeeRateProvider?,
     private val interactorPlatformCoin: PlatformCoin
-) : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule {
+) : ViewModel(), SendFeeModule.IFeeModule {
 
     val showAdjustableFeeMenu = MutableLiveData<Boolean>()
     val primaryFee = MutableLiveData<String?>()
@@ -244,7 +244,7 @@ class SendFeePresenter(
 
     // SendFeeModule.IViewDelegate
 
-    override fun onViewDidLoad() {
+    fun onViewDidLoad() {
         xRate = marketKit.coinPrice(platformCoin.coin.uid, baseCurrency.code)?.value
 
         syncFeeRateLabels()
@@ -254,14 +254,14 @@ class SendFeePresenter(
         showAdjustableFeeMenu.postValue(feeRatePriorityList.isNotEmpty())
     }
 
-    override fun onClickFeeRatePriority() {
+    fun onClickFeeRatePriority() {
         val items = feeRatePriorityList.map { priority ->
             SendFeeModule.FeeRateInfoViewItem(priority, priority == feeRatePriority)
         }
         showFeePriorityOptions.value = items
     }
 
-    override fun onChangeFeeRate(feeRatePriority: FeeRatePriority) {
+    fun onChangeFeeRate(feeRatePriority: FeeRatePriority) {
         if (feeRatePriority is FeeRatePriority.Custom) {
             updateCustomFeeParams(feeRatePriority)
         } else {
@@ -277,7 +277,7 @@ class SendFeePresenter(
         fetchFeeRate()
     }
 
-    override fun onChangeFeeRateValue(value: Int) {
+    fun onChangeFeeRateValue(value: Int) {
         customPriorityUnit ?: return
 
         val converted = customPriorityUnit.convertToBaseUnit(value.toLong())
