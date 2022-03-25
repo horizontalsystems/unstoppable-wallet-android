@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.market.filters
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -83,32 +82,32 @@ class MarketFiltersViewModel(
     )
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             service.coinCount = value.item.itemsCount
         }
 
     var marketCapViewItem = rangeEmpty
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             service.filterMarketCap = value.item?.values
         }
     var volumeViewItem = rangeEmpty
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             service.filterVolume = value.item?.values
         }
     var liquidityViewItem = rangeEmpty
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             service.filterLiquidity = value.item?.values
         }
     var selectedBlockchainIndexes = listOf<Int>()
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             val selectedBlockchains =
                 value.map { MarketFiltersModule.Blockchain.values()[it] }
             service.filterBlockchains = selectedBlockchains
@@ -120,54 +119,54 @@ class MarketFiltersViewModel(
     )
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             service.filterPeriod = value.item
         }
     var priceChangeViewItem: FilterViewItemWrapper<PriceChange?> = FilterViewItemWrapper.getAny()
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             service.filterPriceChange = value.item?.values
         }
     private var outperformedBtcOn = false
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             service.filterOutperformedBtcOn = value
         }
     private var outperformedEthOn = false
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             service.filterOutperformedEthOn = value
         }
     private var outperformedBnbOn = false
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             service.filterOutperformedBnbOn = value
         }
     private var priceCloseToAth = false
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             service.filterPriceCloseToAth = value
         }
     private var priceCloseToAtl = false
         set(value) {
             field = value
-            updateItems()
+            updateSections()
             service.filterPriceCloseToAtl = value
         }
 
-    private fun updateItems() {
-        sectionsLiveData.postValue(sections)
+    private fun updateSections() {
+        sectionsState = sections
     }
 
-    // LiveData
-    val sectionsLiveData = MutableLiveData(sections)
-
     val disposable = CompositeDisposable()
+
+    var sectionsState by mutableStateOf(sections)
+        private set
 
     var showSpinner by mutableStateOf(false)
         private set

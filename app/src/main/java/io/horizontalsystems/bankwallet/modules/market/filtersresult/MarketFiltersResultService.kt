@@ -86,9 +86,11 @@ class MarketFiltersResultService(
 
     private fun syncItems() {
         val favorites = favoritesManager.getAll().map { it.coinUid }
+
         val items = marketItems
             .sort(sortingField)
             .map { MarketItemWrapper(it, favorites.contains(it.fullCoin.coin.uid)) }
+
         stateObservable.onNext(DataState.Success(items))
     }
 
