@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceHandler
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceInteractor
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinHandler
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinInteractor
 import io.horizontalsystems.bankwallet.modules.send.dash.SendDashHandler
 import io.horizontalsystems.bankwallet.modules.send.dash.SendDashInteractor
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
@@ -22,7 +21,6 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodler
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZcashHandler
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZcashInteractor
-import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -47,24 +45,6 @@ object SendModule {
         fun onProceedClicked()
         fun onSendConfirmed(logger: AppLogger)
         fun onClear()
-    }
-
-    interface ISendBitcoinInteractor {
-        val balance: BigDecimal
-        val isLockTimeEnabled: Boolean
-
-        fun fetchAvailableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?)
-        fun fetchMinimumAmount(address: String?): BigDecimal
-        fun fetchMaximumAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
-        fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?)
-        fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
-        fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, logger: AppLogger): Single<Unit>
-        fun clear()
-    }
-
-    interface ISendBitcoinInteractorDelegate {
-        fun didFetchAvailableBalance(availableBalance: BigDecimal)
-        fun didFetchFee(fee: BigDecimal)
     }
 
     interface ISendDashInteractor {
@@ -186,10 +166,7 @@ object SendModule {
 
             val handler: ISendHandler = when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
                 is ISendBitcoinAdapter -> {
-                    val bitcoinInteractor = SendBitcoinInteractor(adapter, App.localStorage, App.btcBlockchainManager)
-                    val handler = SendBitcoinHandler(bitcoinInteractor, wallet.coinType)
-
-                    bitcoinInteractor.delegate = handler
+                    val handler = SendBitcoinHandler(adapter, App.localStorage, wallet.coinType)
 
                     presenter.amountModuleDelegate = handler
                     presenter.addressModuleDelegate = handler
