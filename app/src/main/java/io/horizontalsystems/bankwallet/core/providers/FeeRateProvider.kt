@@ -6,7 +6,6 @@ import io.horizontalsystems.feeratekit.FeeRateKit
 import io.horizontalsystems.feeratekit.model.FeeProviderConfig
 import io.reactivex.Single
 import java.math.BigInteger
-import kotlin.math.ceil
 
 class FeeRateProvider(appConfig: AppConfigProvider) {
 
@@ -61,8 +60,6 @@ class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFe
 
     override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.bitcoinFeeRate(mediumPriorityBlockCount)
 
-    override var defaultFeeRatePriority: FeeRatePriority = FeeRatePriority.RECOMMENDED
-
     override fun feeRate(feeRatePriority: FeeRatePriority): Single<BigInteger> {
         return when (feeRatePriority) {
             FeeRatePriority.LOW -> feeRateProvider.bitcoinFeeRate(lowPriorityBlockCount)
@@ -86,9 +83,4 @@ class BitcoinCashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRatePro
 class DashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
     override val feeRatePriorityList: List<FeeRatePriority> = listOf()
     override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.dashFeeRate()
-}
-
-private fun getAdjustedGasPrice(recommendedGasPrice: Long, multiply: Double?): BigInteger {
-    val adjustedGasPrice = recommendedGasPrice.toDouble() * (multiply ?: 1.0)
-    return ceil(adjustedGasPrice).toBigDecimal().toBigInteger()
 }
