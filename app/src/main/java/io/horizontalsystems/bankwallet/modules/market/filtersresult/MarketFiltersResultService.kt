@@ -6,9 +6,9 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.IMarketListFetcher
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryModule
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
+import io.horizontalsystems.bankwallet.modules.market.filters.IMarketListFetcher
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.reactivex.disposables.Disposable

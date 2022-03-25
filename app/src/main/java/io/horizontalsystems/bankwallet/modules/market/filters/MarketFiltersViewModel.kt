@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.advancedsearch
+package io.horizontalsystems.bankwallet.modules.market.filters
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,17 +8,17 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.FilterDropdown.*
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.FilterSwitch.*
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.Item.DropDown
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.Item.Switch
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchModule.Section
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.*
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterSwitch.*
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.Item.DropDown
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.Item.Switch
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.Section
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 
-class MarketAdvancedSearchViewModel(
-    val service: MarketAdvancedSearchService,
+class MarketFiltersViewModel(
+    val service: MarketFiltersService,
 ) : ViewModel() {
 
     private val sections: List<Section>
@@ -72,7 +72,7 @@ class MarketAdvancedSearchViewModel(
         listOf(FilterViewItemWrapper.getAny<PriceChange>()) + PriceChange.values().map {
             FilterViewItemWrapper<PriceChange?>(Translator.getString(it.titleResId), it)
         }
-    val blockchainOptions = MarketAdvancedSearchModule.Blockchain.values().map {
+    val blockchainOptions = MarketFiltersModule.Blockchain.values().map {
         FilterViewItemWrapper(it.value, it)
     }
 
@@ -110,7 +110,7 @@ class MarketAdvancedSearchViewModel(
             field = value
             updateItems()
             val selectedBlockchains =
-                value.map { MarketAdvancedSearchModule.Blockchain.values()[it] }
+                value.map { MarketFiltersModule.Blockchain.values()[it] }
             service.filterBlockchains = selectedBlockchains
         }
 
@@ -231,7 +231,7 @@ class MarketAdvancedSearchViewModel(
         service.stop()
     }
 
-    fun onSwitchChanged(type: MarketAdvancedSearchModule.FilterSwitch, enabled: Boolean) {
+    fun onSwitchChanged(type: MarketFiltersModule.FilterSwitch, enabled: Boolean) {
         when (type) {
             OutperformedBtc -> outperformedBtcOn = enabled
             OutperformedEth -> outperformedEthOn = enabled

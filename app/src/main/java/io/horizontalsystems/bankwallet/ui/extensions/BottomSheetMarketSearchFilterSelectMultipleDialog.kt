@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.FilterViewItemWrapper
+import io.horizontalsystems.bankwallet.modules.market.filters.FilterViewItemWrapper
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrence
 

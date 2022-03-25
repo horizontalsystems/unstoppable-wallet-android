@@ -31,16 +31,16 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchViewModel
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersViewModel
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
-class MarketAdvancedSearchResultsFragment : BaseFragment() {
+class MarketFiltersResultsFragment : BaseFragment() {
 
-    private val marketSearchFilterViewModel by navGraphViewModels<MarketAdvancedSearchViewModel>(R.id.marketAdvancedSearchFragment)
+    private val marketSearchFilterViewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment)
     private val viewModel by viewModels<MarketFiltersResultViewModel> {
         MarketFiltersResultsModule.Factory(marketSearchFilterViewModel.service)
     }
