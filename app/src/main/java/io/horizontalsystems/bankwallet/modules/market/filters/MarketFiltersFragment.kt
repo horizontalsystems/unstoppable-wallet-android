@@ -15,8 +15,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -255,9 +253,8 @@ fun AdvancedSearchContent(
     viewModel: MarketFiltersViewModel,
     onDropdownClick: (MarketFiltersModule.FilterDropdown) -> Unit,
 ) {
-    val sections by viewModel.sectionsLiveData.observeAsState(listOf())
 
-    sections.forEach { section ->
+    viewModel.sectionsState.forEach { section ->
         section.header?.let {
             SectionHeader(it)
         }

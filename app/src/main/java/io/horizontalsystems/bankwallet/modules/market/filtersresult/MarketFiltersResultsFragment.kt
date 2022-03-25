@@ -11,7 +11,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -72,9 +71,6 @@ private fun SearchResultsScreen(
 ) {
 
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
-    val viewItemState by viewModel.viewStateLiveData.observeAsState(ViewState.Loading)
-    val viewItems by viewModel.viewItemsLiveData.observeAsState()
-    val selectorDialogState by viewModel.selectorDialogStateLiveData.observeAsState()
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -91,7 +87,7 @@ private fun SearchResultsScreen(
                 },
             )
 
-            Crossfade(viewItemState) { state ->
+            Crossfade(viewModel.viewState) { state ->
                 when (state) {
                     is ViewState.Loading -> {
                         Loading()
@@ -103,25 +99,24 @@ private fun SearchResultsScreen(
                         Column {
                             ListHeaderMenu(viewModel)
 
-                            viewItems?.let {
-                                CoinList(
-                                    items = it,
-                                    scrollToTop = scrollToTopAfterUpdate,
-                                    onAddFavorite = { uid ->
-                                        viewModel.onAddFavorite(uid)
-                                    },
-                                    onRemoveFavorite = { uid ->
-                                        viewModel.onRemoveFavorite(uid)
-                                    },
-                                    onCoinClick = { coinUid ->
-                                        val arguments = CoinFragment.prepareParams(coinUid)
-                                        navController.slideFromRight(R.id.coinFragment, arguments)
-                                    }
-                                )
-                                if (scrollToTopAfterUpdate) {
-                                    scrollToTopAfterUpdate = false
+                            CoinList(
+                                items = viewModel.viewItemsState,
+                                scrollToTop = scrollToTopAfterUpdate,
+                                onAddFavorite = { uid ->
+                                    viewModel.onAddFavorite(uid)
+                                },
+                                onRemoveFavorite = { uid ->
+                                    viewModel.onRemoveFavorite(uid)
+                                },
+                                onCoinClick = { coinUid ->
+                                    val arguments = CoinFragment.prepareParams(coinUid)
+                                    navController.slideFromRight(R.id.coinFragment, arguments)
                                 }
+                            )
+                            if (scrollToTopAfterUpdate) {
+                                scrollToTopAfterUpdate = false
                             }
+
                         }
                     }
                 }
@@ -130,7 +125,7 @@ private fun SearchResultsScreen(
         }
 
         //Dialog
-        (selectorDialogState as? SelectorDialogState.Opened)?.let { state ->
+        (viewModel.selectorDialogState as? SelectorDialogState.Opened)?.let { state ->
             AlertGroup(
                 title = R.string.Market_Sort_PopupTitle,
                 select = state.select,
