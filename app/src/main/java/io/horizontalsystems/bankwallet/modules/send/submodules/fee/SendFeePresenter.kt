@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.IFeeRateProvider
+import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.FeeRateState
@@ -10,19 +12,25 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.math.BigInteger
 
 class SendFeePresenter(
-        private val interactor: SendFeeModule.IInteractor,
-        private val helper: SendFeePresenterHelper,
-        private val baseCoin: PlatformCoin,
-        private val baseCurrency: Currency,
-        private val feeCoinData: Pair<PlatformCoin, String>?,
-        private val customPriorityUnit: CustomPriorityUnit?,
-        private val feeRateAdjustmentHelper: FeeRateAdjustmentHelper)
-    : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule, SendFeeModule.IInteractorDelegate {
+    private val helper: SendFeePresenterHelper,
+    private val baseCoin: PlatformCoin,
+    private val feeCoinData: Pair<PlatformCoin, String>?,
+    private val customPriorityUnit: CustomPriorityUnit?,
+    private val feeRateAdjustmentHelper: FeeRateAdjustmentHelper,
+
+    private val baseCurrency: Currency,
+    private val marketKit: MarketKit,
+    private val feeRateProvider: IFeeRateProvider?,
+    private val interactorPlatformCoin: PlatformCoin
+) : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule {
 
     val showAdjustableFeeMenu = MutableLiveData<Boolean>()
     val primaryFee = MutableLiveData<String?>()
@@ -55,12 +63,29 @@ class SendFeePresenter(
         }
 
     private var fetchedFeeRate: BigInteger? = null
-    private var feeRatePriority: FeeRatePriority? = interactor.defaultFeeRatePriority
+    private var feeRatePriority: FeeRatePriority? = feeRateProvider?.defaultFeeRatePriority
     private var feeRateAdjustmentInfo: FeeRateAdjustmentInfo = FeeRateAdjustmentInfo(SendAmountInfo.NotEntered, null, baseCurrency, null)
     private var recommendedFeeRate: BigInteger? = null
 
     private val platformCoin: PlatformCoin
         get() = feeCoinData?.first ?: baseCoin
+
+    private val feeRatePriorityList: List<FeeRatePriority> = feeRateProvider?.feeRatePriorityList ?: listOf()
+    private val disposables = CompositeDisposable()
+
+    init {
+        if (!interactorPlatformCoin.coin.isCustom) {
+            marketKit.coinPriceObservable(interactorPlatformCoin.coin.uid, baseCurrency.code)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe { marketInfo ->
+                    didUpdateExchangeRate(marketInfo.value)
+                }
+                .let {
+                    disposables.add(it)
+                }
+        }
+    }
 
     private fun syncError() {
 
@@ -176,9 +201,24 @@ class SendFeePresenter(
         error = null
 
         feeRatePriority?.let {
-            interactor.syncFeeRate(it)
+            this.syncFeeRate(it)
         }
     }
+
+    private fun syncFeeRate(feeRatePriority: FeeRatePriority) {
+        if (feeRateProvider == null)
+            return
+
+        feeRateProvider.feeRate(feeRatePriority)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                didUpdate(it, feeRatePriority)
+            }, {
+                didReceiveError(it as Exception)
+            })
+            .let { disposables.add(it) }
+    }
+
 
     override fun setAvailableFeeBalance(availableFeeBalance: BigDecimal) {
         this.availableFeeBalance = availableFeeBalance
@@ -205,17 +245,17 @@ class SendFeePresenter(
     // SendFeeModule.IViewDelegate
 
     override fun onViewDidLoad() {
-        xRate = interactor.getRate(platformCoin.coin.uid)
+        xRate = marketKit.coinPrice(platformCoin.coin.uid, baseCurrency.code)?.value
 
         syncFeeRateLabels()
         syncFees()
         syncError()
 
-        showAdjustableFeeMenu.postValue(interactor.feeRatePriorityList.isNotEmpty())
+        showAdjustableFeeMenu.postValue(feeRatePriorityList.isNotEmpty())
     }
 
     override fun onClickFeeRatePriority() {
-        val items = interactor.feeRatePriorityList.map { priority ->
+        val items = feeRatePriorityList.map { priority ->
             SendFeeModule.FeeRateInfoViewItem(priority, priority == feeRatePriority)
         }
         showFeePriorityOptions.value = items
@@ -247,7 +287,7 @@ class SendFeePresenter(
 
     // IInteractorDelegate
 
-    override fun didUpdate(feeRate: BigInteger, feeRatePriority: FeeRatePriority) {
+    private fun didUpdate(feeRate: BigInteger, feeRatePriority: FeeRatePriority) {
         when (feeRatePriority) {
             FeeRatePriority.HIGH -> {
                 showLowFeeWarningLiveData.postValue(false)
@@ -268,12 +308,12 @@ class SendFeePresenter(
         moduleDelegate?.onUpdateFeeRate()
     }
 
-    override fun didReceiveError(error: Exception) {
+    private fun didReceiveError(error: Exception) {
         this.error = error
         moduleDelegate?.onUpdateFeeRate()
     }
 
-    override fun didUpdateExchangeRate(rate: BigDecimal) {
+    private fun didUpdateExchangeRate(rate: BigDecimal) {
         xRate = rate
         syncFees()
     }
@@ -281,6 +321,6 @@ class SendFeePresenter(
     // ViewModel
 
     override fun onCleared() {
-        interactor.onClear()
+        disposables.dispose()
     }
 }
