@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchViewModel
-import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryModule
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -75,7 +74,6 @@ private fun SearchResultsScreen(
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     val viewItemState by viewModel.viewStateLiveData.observeAsState(ViewState.Loading)
     val viewItems by viewModel.viewItemsLiveData.observeAsState()
-    val menu by viewModel.menuLiveData.observeAsState()
     val selectorDialogState by viewModel.selectorDialogStateLiveData.observeAsState()
 
     Surface(color = ComposeAppTheme.colors.tyler) {
@@ -103,9 +101,7 @@ private fun SearchResultsScreen(
                     }
                     is ViewState.Success -> {
                         Column {
-                            menu?.let {
-                                ListHeaderMenu(it, viewModel)
-                            }
+                            ListHeaderMenu(viewModel)
 
                             viewItems?.let {
                                 CoinList(
@@ -151,7 +147,6 @@ private fun SearchResultsScreen(
 
 @Composable
 private fun ListHeaderMenu(
-    menu: MarketCategoryModule.Menu,
     viewModel: MarketFiltersResultViewModel,
 ) {
     Header(borderTop = true, borderBottom = true) {
@@ -164,14 +159,14 @@ private fun ListHeaderMenu(
         ) {
             Box(modifier = Modifier.weight(1f)) {
                 SortMenu(
-                    titleRes = menu.sortingFieldSelect.selected.titleResId,
+                    titleRes = viewModel.menuState.sortingFieldSelect.selected.titleResId,
                     onClick = viewModel::showSelectorMenu
                 )
             }
 
             Box(modifier = Modifier.padding(start = 8.dp)) {
                 ButtonSecondaryToggle(
-                    select = menu.marketFieldSelect,
+                    select = viewModel.menuState.marketFieldSelect,
                     onSelect = viewModel::marketFieldSelected
                 )
             }
