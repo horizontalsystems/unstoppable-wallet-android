@@ -11,15 +11,11 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
-import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.hodler.HodlerData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 
 class SendBitcoinHandler(
@@ -30,45 +26,6 @@ class SendBitcoinHandler(
     : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate,
       SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate,
       SendHodlerModule.IHodlerModuleDelegate {
-
-    private val disposables = CompositeDisposable()
-
-    private fun fetchAvailableBalance(
-        feeRate: Long,
-        address: String?,
-        pluginData: Map<Byte, IPluginData>?
-    ) {
-        Single.just(adapter.availableBalance(feeRate, address, pluginData))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ availableBalance ->
-                didFetchAvailableBalance(availableBalance)
-            }, {
-
-            })
-            .let { disposables.add(it) }
-    }
-
-    private fun fetchFee(
-        amount: BigDecimal,
-        feeRate: Long,
-        address: String?,
-        pluginData: Map<Byte, IPluginData>?
-    ) {
-        Single.just(adapter.fee(amount, feeRate, address, pluginData))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ fee ->
-                feeModule.setFee(fee)
-            }, {
-
-            })
-            .let { disposables.add(it) }
-    }
-
-    private fun clear() {
-        disposables.clear()
-    }
 
     private fun syncValidation() {
         var amountError: Throwable? = null
@@ -143,8 +100,22 @@ class SendBitcoinHandler(
 
             val feeRateValue = (feeModule.feeRateState as FeeRateState.Value).value
             feeModule.setError(null)
-            fetchAvailableBalance(feeRateValue, addressModule.currentAddress?.hex, hodlerModule?.pluginData())
-            fetchFee(amountModule.currentAmount, feeRateValue, addressModule.currentAddress?.hex, hodlerModule?.pluginData())
+            amountModule.setAvailableBalance(
+                adapter.availableBalance(
+                    feeRateValue,
+                    addressModule.currentAddress?.hex,
+                    hodlerModule?.pluginData()
+                )
+            )
+            feeModule.setFee(
+                adapter.fee(
+                    amountModule.currentAmount,
+                    feeRateValue,
+                    addressModule.currentAddress?.hex,
+                    hodlerModule?.pluginData()
+                )
+            )
+            syncValidation()
         }
     }
 
@@ -200,15 +171,6 @@ class SendBitcoinHandler(
             )
         }
     }
-
-    // SendModule.ISendBitcoinInteractorDelegate
-
-    private fun didFetchAvailableBalance(availableBalance: BigDecimal) {
-        amountModule.setAvailableBalance(availableBalance)
-        syncValidation()
-    }
-
-    // SendAmountModule.ModuleDelegate
 
     override fun onChangeAmount() {
         syncState()
