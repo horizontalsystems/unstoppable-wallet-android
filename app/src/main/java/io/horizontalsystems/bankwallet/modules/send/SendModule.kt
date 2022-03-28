@@ -44,7 +44,6 @@ object SendModule {
         fun onModulesDidLoad()
         fun onProceedClicked()
         fun onSendConfirmed(logger: AppLogger)
-        fun onClear()
     }
 
     interface ISendDashInteractor {
@@ -94,13 +93,6 @@ object SendModule {
 
     interface IRouter {
         fun closeWithSuccess()
-    }
-
-    interface ISendInteractor {
-        var delegate: ISendInteractorDelegate
-
-        fun send(sendSingle: Single<Unit>, logger: AppLogger)
-        fun clear()
     }
 
     interface ISendInteractorDelegate {
@@ -160,9 +152,8 @@ object SendModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val view = SendView()
-            val interactor: ISendInteractor = SendInteractor()
             val router = SendRouter()
-            val presenter = SendPresenter(interactor, router)
+            val presenter = SendPresenter(router)
 
             val handler: ISendHandler = when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
                 is ISendBitcoinAdapter -> {
@@ -218,7 +209,6 @@ object SendModule {
 
             view.delegate = presenter
             handler.delegate = presenter
-            interactor.delegate = presenter
 
             return presenter as T
         }

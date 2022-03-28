@@ -8,11 +8,13 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.CustomPriorityUnit
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class SendPresenter(
-        private val interactor: SendModule.ISendInteractor,
-        val router: SendModule.IRouter)
-    : ViewModel(), SendModule.IViewDelegate, SendModule.ISendInteractorDelegate, SendModule.ISendHandlerDelegate {
+    val router: SendModule.IRouter
+) : ViewModel(), SendModule.IViewDelegate, SendModule.ISendInteractorDelegate, SendModule.ISendHandlerDelegate {
 
     var amountModuleDelegate: SendAmountModule.IAmountModuleDelegate? = null
     var addressModuleDelegate: SendAddressModule.IAddressModuleDelegate? = null
@@ -22,6 +24,8 @@ class SendPresenter(
 
     override lateinit var view: SendModule.IView
     override lateinit var handler: SendModule.ISendHandler
+
+    private var disposables = CompositeDisposable()
 
     // SendModule.IViewDelegate
 
@@ -38,18 +42,25 @@ class SendPresenter(
     }
 
     override fun onSendConfirmed(logger: AppLogger) {
-        interactor.send(handler.sendSingle(logger), logger)
-    }
+        handler.sendSingle(logger).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                logger.info("success")
 
-    override fun onClear() {
-        interactor.clear()
+                didSend()
+            }, { error ->
+                logger.warning("failed", error)
 
+                didFailToSend(error)
+            }).let {
+                disposables.add(it)
+            }
     }
 
     // ViewModel
 
     override fun onCleared() {
-        interactor.clear()
+        disposables.clear()
         handler.onClear()
     }
 
