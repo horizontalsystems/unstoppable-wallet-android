@@ -9,6 +9,13 @@
         <action
             android:id="@+id/wcListFragment_to_wcSessionFragment"
             app:destination="@id/wcSessionFragment" />
+        <deepLink
+            app:action=""
+            android:id="@+id/deepLink"
+            app:uri="wc:{topic}"/>
+        <argument android:name="topic" app:argType="string"/>
+        <argument android:name="bridge" app:argType="string"/>
+        <argument android:name="key" app:argType="string"/>
     </fragment>
     <fragment
         android:id="@+id/wcSessionFragment"
@@ -19,13 +26,6 @@
         <action
             android:id="@+id/wcSessionFragment_to_wcSignMessageRequestFragment"
             app:destination="@id/wcSignMessageRequestFragment" />
-        <deepLink
-            app:action=""
-            android:id="@+id/deepLink"
-            app:uri="wc:{topic}"/>
-        <argument android:name="topic" app:argType="string"/>
-        <argument android:name="bridge" app:argType="string"/>
-        <argument android:name="key" app:argType="string"/>
     </fragment>
     <fragment
         android:id="@+id/wc2SessionFragment"

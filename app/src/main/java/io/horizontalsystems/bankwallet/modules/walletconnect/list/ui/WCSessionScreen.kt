@@ -17,37 +17,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 
 @Composable
-fun WCSessionsScreen(navController: NavController) {
+fun WCSessionsScreen(
+    navController: NavController,
+    onAddressScanned: (String) -> Unit
+) {
     val qrScannerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
-                val wcVersion: Int = WalletConnectListModule.getVersionFromUri(scannedText)
-                if (wcVersion == 1) {
-                    navController.slideFromBottom(
-                        R.id.wcSessionFragment,
-                        WCSessionModule.prepareParams(null, scannedText)
-                    )
-                } else if (wcVersion == 2) {
-                    navController.slideFromBottom(
-                        R.id.wc2SessionFragment,
-                        WC2SessionModule.prepareParams(null, scannedText)
-                    )
-                }
+                onAddressScanned(scannedText)
             }
         }
 
