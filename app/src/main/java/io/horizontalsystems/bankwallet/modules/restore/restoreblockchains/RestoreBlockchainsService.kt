@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
@@ -18,13 +19,14 @@ class RestoreBlockchainsService(
     private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
     private val coinManager: ICoinManager,
-    private val enableCoinService: EnableCoinService
+    private val enableCoinService: EnableCoinService,
+    private val evmBlockchainManager: EvmBlockchainManager
 ) : Clearable {
 
     private val disposables = CompositeDisposable()
 
     private var internalItems = listOf<InternalItem>()
-    val enabledCoins = mutableListOf<ConfiguredPlatformCoin>()
+    private val enabledCoins = mutableListOf<ConfiguredPlatformCoin>()
 
     private var restoreSettingsMap = mutableMapOf<PlatformCoin, RestoreSettings>()
 
@@ -33,7 +35,7 @@ class RestoreBlockchainsService(
 
     val itemsObservable = BehaviorSubject.create<List<Item>>()
     var items: List<Item> = listOf()
-        set(value) {
+        private set(value) {
             field = value
             itemsObservable.onNext(value)
         }
@@ -101,11 +103,8 @@ class RestoreBlockchainsService(
 
     private fun item(internalItem: InternalItem): Item {
         val enabled = isEnabled(internalItem)
-        val state = ItemState.Supported(
-            enabled,
-            hasSettings = enabled && hasSettings(internalItem.platformCoin)
-        )
-        return Item(internalItem.blockchain, state)
+        val hasSettings = enabled && hasSettings(internalItem.platformCoin)
+        return Item(internalItem.blockchain, enabled, hasSettings)
     }
 
     private fun hasSettings(platformCoin: PlatformCoin) =
@@ -152,6 +151,12 @@ class RestoreBlockchainsService(
             enableCoinService.save(settings, account, platformCoin.coinType)
         }
 
+        items.filter { it.enabled }.forEach { item ->
+            (item.blockchain as? Blockchain.Evm)?.let { evmBlockchain ->
+                evmBlockchainManager.getEvmAccountManager(evmBlockchain.evmBlockchain).markAutoEnable(account)
+            }
+        }
+
         if (enabledCoins.isEmpty()) return
 
         val wallets = enabledCoins.map { Wallet(it, account) }
@@ -162,11 +167,8 @@ class RestoreBlockchainsService(
 
     data class Item(
         val blockchain: Blockchain,
-        val state: ItemState
+        val enabled: Boolean,
+        val hasSettings: Boolean
     )
 
-    sealed class ItemState {
-        object Unsupported : ItemState()
-        class Supported(val enabled: Boolean, val hasSettings: Boolean) : ItemState()
-    }
 }

@@ -13,17 +13,17 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
+import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
+import io.horizontalsystems.bankwallet.core.providers.TokenBalanceProvider
 import io.horizontalsystems.bankwallet.core.storage.*
-import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsEip20Provider
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
-import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
@@ -41,7 +41,6 @@ import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.pin.PinComponent
 import io.reactivex.plugins.RxJavaPlugins
@@ -50,7 +49,7 @@ import java.util.logging.Logger
 import kotlin.system.exitProcess
 import androidx.work.Configuration as WorkConfiguration
 
-class App : CoreApp(), WorkConfiguration.Provider  {
+class App : CoreApp(), WorkConfiguration.Provider {
 
     companion object : ICoreApp by CoreApp {
 
@@ -79,8 +78,6 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var blockchainSettingsStorage: IBlockchainSettingsStorage
-        lateinit var ethereumKitManager: EvmKitManager
-        lateinit var binanceSmartChainKitManager: EvmKitManager
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
@@ -155,9 +152,6 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         AppLog.logsDao = appDatabase.logsDao()
 
         coinManager = CoinManager(marketKit, CustomTokenStorage(appDatabase))
-        evmBlockchainManager = EvmBlockchainManager(backgroundManager, evmSyncSourceManager, coinManager)
-        ethereumKitManager = EvmKitManager(Chain.Ethereum, backgroundManager, evmSyncSourceManager)
-        binanceSmartChainKitManager = EvmKitManager(Chain.BinanceSmartChain, backgroundManager, evmSyncSourceManager)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
@@ -187,6 +181,22 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         }
 
         encryptionManager = EncryptionManager(keyProvider)
+
+        walletActivator = WalletActivator(walletManager, marketKit, walletStorage)
+
+        val tokenBalanceProvider = TokenBalanceProvider()
+        val evmAccountManagerFactory = EvmAccountManagerFactory(
+            accountManager,
+            tokenBalanceProvider,
+            walletActivator,
+            appDatabase.evmAccountStateDao()
+        )
+        evmBlockchainManager = EvmBlockchainManager(
+            backgroundManager,
+            evmSyncSourceManager,
+            coinManager,
+            evmAccountManagerFactory
+        )
 
         systemInfoManager = SystemInfoManager()
 
@@ -242,25 +252,6 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
 
-        walletActivator = WalletActivator(walletManager, marketKit, walletStorage)
-
-        val enableCoinsErc20Provider = EnableCoinsEip20Provider(
-            networkManager,
-            EnableCoinsEip20Provider.EnableCoinMode.Erc20,
-            appConfig.etherscanApiKey
-        )
-
-        val enableCoinsBep20Provider = EnableCoinsEip20Provider(
-            networkManager,
-            EnableCoinsEip20Provider.EnableCoinMode.Bep20,
-            appConfig.bscscanApiKey
-        )
-
-        val evmAccountStateDao = appDatabase.evmAccountStateDao()
-        // TODO: MultiChain
-        AutoEnableTokensService(ethereumKitManager, walletActivator, enableCoinsErc20Provider, evmAccountStateDao).start()
-        AutoEnableTokensService(binanceSmartChainKitManager, walletActivator, enableCoinsBep20Provider, evmAccountStateDao).start()
-
         setAppTheme()
 
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
@@ -289,7 +280,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         )
 
         WalletConnectClient.initialize(initWallet) {
-            AppLog.warning("WalletConnect V2 initialization","error", it)
+            AppLog.warning("WalletConnect V2 initialization", "error", it)
         }
     }
 
@@ -363,7 +354,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
                 WorkManager.getInstance(instance).enqueue(request)
             }
 
-            if (!localStorage.favoriteCoinIdsMigrated){
+            if (!localStorage.favoriteCoinIdsMigrated) {
                 val request = OneTimeWorkRequestBuilder<MigrateFavoriteCoinIdsWorker>().build()
                 WorkManager.getInstance(instance).enqueue(request)
             }

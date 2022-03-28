@@ -124,17 +124,7 @@ class EvmKitManager(
 
         kit.start()
 
-        val wrapper = EvmKitWrapper(kit, blockchain, signer)
-
-        return wrapper
-    }
-
-    private fun transactionSource(chain: Chain, apiKey: String): TransactionSource {
-        return when (chain) {
-            Chain.BinanceSmartChain -> TransactionSource.bscscan(apiKey)
-            Chain.Ethereum -> TransactionSource.ethereumEtherscan(apiKey)
-            else -> TransactionSource.ropstenEtherscan(apiKey)
-        }
+        return EvmKitWrapper(kit, blockchain, signer)
     }
 
     private fun createKitInstance(
@@ -165,9 +155,7 @@ class EvmKitManager(
 
         kit.start()
 
-        val wrapper = EvmKitWrapper(kit, blockchain, null)
-
-        return wrapper
+        return EvmKitWrapper(kit, blockchain, null)
     }
 
     @Synchronized
