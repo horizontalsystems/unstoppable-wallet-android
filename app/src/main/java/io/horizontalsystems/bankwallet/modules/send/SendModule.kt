@@ -27,25 +27,6 @@ import java.math.BigDecimal
 
 object SendModule {
 
-    interface IView {
-        var delegate: IViewDelegate
-
-        fun loadInputItems(inputs: List<Input>)
-        fun setSendButtonEnabled(actionState: SendPresenter.ActionState)
-        fun showConfirmation(confirmationViewItems: List<SendConfirmationViewItem>)
-        fun showErrorInToast(error: Throwable)
-    }
-
-    interface IViewDelegate {
-        var view: IView
-        val handler: ISendHandler
-
-        fun onViewDidLoad()
-        fun onModulesDidLoad()
-        fun onProceedClicked()
-        fun onSendConfirmed(logger: AppLogger)
-    }
-
     interface ISendDashInteractor {
         fun fetchAvailableBalance(address: String?)
         fun fetchMinimumAmount(address: String?): BigDecimal
@@ -151,9 +132,7 @@ object SendModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-            val view = SendView()
-            val router = SendRouter()
-            val presenter = SendPresenter(router)
+            val presenter = SendPresenter()
 
             val handler: ISendHandler = when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
                 is ISendBitcoinAdapter -> {
@@ -204,10 +183,8 @@ object SendModule {
                 }
             }
 
-            presenter.view = view
             presenter.handler = handler
 
-            view.delegate = presenter
             handler.delegate = presenter
 
             return presenter as T

@@ -30,7 +30,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter
-import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -40,11 +39,10 @@ import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
 import java.net.UnknownHostException
 
-class ConfirmationFragment(sendPresenter: SendPresenter) : BaseFragment() {
+class ConfirmationFragment(private val sendPresenter: SendPresenter) : BaseFragment() {
 
-    private var sendView: SendView = sendPresenter.view as SendView
     private val viewModel by viewModels<SendConfirmationViewModel> {
-        SendConfirmationModule.Factory(sendView.confirmationViewItems.value)
+        SendConfirmationModule.Factory(sendPresenter.confirmationViewItems.value)
     }
     private val logger = AppLogger("send")
     private var snackbarInProcess: CustomSnackbar? = null
@@ -74,7 +72,7 @@ class ConfirmationFragment(sendPresenter: SendPresenter) : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sendView.error.observe(viewLifecycleOwner, { errorMsgTextRes ->
+        sendPresenter.error.observe(viewLifecycleOwner, { errorMsgTextRes ->
             snackbarInProcess?.dismiss()
             errorMsgTextRes?.let {
                 HudHelper.showErrorMessage(requireView(), getErrorText(it))
@@ -91,7 +89,7 @@ class ConfirmationFragment(sendPresenter: SendPresenter) : BaseFragment() {
     private fun onSendClick() {
         viewModel.onSendClick()
         val logger = logger.getScopedUnique().apply { info("click") }
-        sendView.delegate.onSendConfirmed(logger)
+        sendPresenter.onSendConfirmed(logger)
         snackbarInProcess = HudHelper.showInProcessMessage(
             requireView(),
             R.string.Send_Sending,

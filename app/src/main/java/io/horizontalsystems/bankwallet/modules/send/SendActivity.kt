@@ -60,8 +60,8 @@ class SendActivity : BaseActivity() {
         mainPresenter =
             ViewModelProvider(this, SendModule.Factory(wallet)).get(SendPresenter::class.java)
 
-        subscribeToViewEvents(mainPresenter.view as SendView, wallet)
-        subscribeToRouterEvents(mainPresenter.router as SendRouter)
+        subscribeToViewEvents(mainPresenter, wallet)
+        subscribeToRouterEvents(mainPresenter)
 
         mainPresenter.onViewDidLoad()
     }
@@ -95,8 +95,8 @@ class SendActivity : BaseActivity() {
         }
     }
 
-    private fun subscribeToRouterEvents(router: SendRouter) {
-        router.closeWithSuccess.observe(this, Observer {
+    private fun subscribeToRouterEvents(presenter: SendPresenter) {
+        presenter.closeWithSuccess.observe(this, Observer {
             HudHelper.showSuccessMessage(
                 findViewById(android.R.id.content),
                 R.string.Send_Success,
@@ -108,13 +108,13 @@ class SendActivity : BaseActivity() {
         })
     }
 
-    private fun subscribeToViewEvents(presenterView: SendView, wallet: Wallet) {
-        presenterView.inputItems.observe(this, Observer { inputItems ->
+    private fun subscribeToViewEvents(presenter: SendPresenter, wallet: Wallet) {
+        presenter.inputItems.observe(this, Observer { inputItems ->
             addInputItems(wallet, inputItems)
         })
 
 
-        presenterView.showSendConfirmation.observe(this, Observer {
+        presenter.showSendConfirmation.observe(this, Observer {
             hideSoftKeyboard()
 
             supportFragmentManager.commit {
@@ -129,7 +129,7 @@ class SendActivity : BaseActivity() {
             }
         })
 
-        presenterView.sendButtonEnabled.observe(this, Observer { actionState ->
+        presenter.sendButtonEnabled.observe(this, Observer { actionState ->
             val defaultTitle = getString(R.string.Send_DialogProceed)
 
             when (actionState) {
