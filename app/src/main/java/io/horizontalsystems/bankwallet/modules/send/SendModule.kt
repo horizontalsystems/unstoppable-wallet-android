@@ -41,20 +41,6 @@ object SendModule {
         fun didFetchFee(fee: BigDecimal)
     }
 
-    interface ISendEthereumInteractor {
-        val balance: BigDecimal
-        val ethereumBalance: BigDecimal
-        val minimumRequiredBalance: BigDecimal
-        val minimumAmount: BigDecimal
-
-        fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal
-        fun validate(address: String)
-        fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
-        fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit>
-        fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long>
-
-    }
-
     interface ISendBinanceInteractor {
         val availableBalance: BigDecimal
         val availableBinanceBalance: BigDecimal
@@ -70,16 +56,6 @@ object SendModule {
 
         fun validate(address: String): ZcashAdapter.ZCashAddressType
         fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
-    }
-
-    interface IRouter {
-        fun closeWithSuccess()
-    }
-
-    interface ISendInteractorDelegate {
-        fun sync()
-        fun didSend()
-        fun didFailToSend(error: Throwable)
     }
 
     interface ISendHandler {
