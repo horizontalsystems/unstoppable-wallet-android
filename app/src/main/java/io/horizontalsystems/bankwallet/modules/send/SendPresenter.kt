@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.modules.address.AddressValidationException
@@ -8,13 +9,19 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.CustomPriorityUnit
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerModule
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class SendPresenter(
-    val router: SendModule.IRouter
-) : ViewModel(), SendModule.IViewDelegate, SendModule.ISendInteractorDelegate, SendModule.ISendHandlerDelegate {
+class SendPresenter : ViewModel(), SendModule.ISendHandlerDelegate {
+
+    val error = SingleLiveEvent<Throwable>()
+    val confirmationViewItems = MutableLiveData<List<SendModule.SendConfirmationViewItem>>()
+    val showSendConfirmation = SingleLiveEvent<Unit>()
+    val sendButtonEnabled = MutableLiveData<ActionState>()
+    val inputItems = SingleLiveEvent<List<SendModule.Input>>()
+    val closeWithSuccess = SingleLiveEvent<Unit>()
 
     var amountModuleDelegate: SendAmountModule.IAmountModuleDelegate? = null
     var addressModuleDelegate: SendAddressModule.IAddressModuleDelegate? = null
@@ -22,36 +29,36 @@ class SendPresenter(
     var hodlerModuleDelegate: SendHodlerModule.IHodlerModuleDelegate? = null
     var customPriorityUnit: CustomPriorityUnit? = null
 
-    override lateinit var view: SendModule.IView
-    override lateinit var handler: SendModule.ISendHandler
+    lateinit var handler: SendModule.ISendHandler
 
     private var disposables = CompositeDisposable()
 
     // SendModule.IViewDelegate
 
-    override fun onViewDidLoad() {
-        view.loadInputItems(handler.inputItems)
+    fun onViewDidLoad() {
+        inputItems.value = handler.inputItems
     }
 
-    override fun onModulesDidLoad() {
+    fun onModulesDidLoad() {
         handler.onModulesDidLoad()
     }
 
-    override fun onProceedClicked() {
-        view.showConfirmation(handler.confirmationViewItems())
+    fun onProceedClicked() {
+        confirmationViewItems.value = handler.confirmationViewItems()
+        showSendConfirmation.call()
     }
 
-    override fun onSendConfirmed(logger: AppLogger) {
+    fun onSendConfirmed(logger: AppLogger) {
         handler.sendSingle(logger).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 logger.info("success")
 
-                didSend()
+                closeWithSuccess.call()
             }, { error ->
                 logger.warning("failed", error)
 
-                didFailToSend(error)
+                this.error.value = error
             }).let {
                 disposables.add(it)
             }
@@ -66,16 +73,8 @@ class SendPresenter(
 
     // SendModule.ISendInteractorDelegate
 
-    override fun sync() {
+    fun sync() {
         handler.sync()
-    }
-
-    override fun didSend() {
-        router.closeWithSuccess()
-    }
-
-    override fun didFailToSend(error: Throwable) {
-        view.showErrorInToast(error)
     }
 
     // SendModule.ISendHandlerDelegate
@@ -93,7 +92,7 @@ class SendPresenter(
             actionState = ActionState.Disabled(null)
         }
 
-        view.setSendButtonEnabled(actionState)
+        sendButtonEnabled.postValue(actionState)
     }
 
     private fun isEmptyAmountError(error: Throwable): Boolean {
