@@ -6,8 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionsScreen
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.core.findNavController
 
 class WCListFragment : BaseFragment() {
@@ -22,8 +26,36 @@ class WCListFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                WCSessionsScreen(findNavController())
+                WCSessionsScreen(
+                    findNavController()
+                ) { connectUri -> handleConnectionUri(connectUri) }
             }
+        }
+    }
+
+    private fun handleConnectionUri(connectUri: String) {
+        val wcVersion: Int = WalletConnectListModule.getVersionFromUri(connectUri)
+        if (wcVersion == 1) {
+            findNavController().slideFromBottom(
+                R.id.wcSessionFragment,
+                WCSessionModule.prepareParams(null, connectUri)
+            )
+        } else if (wcVersion == 2) {
+            findNavController().slideFromBottom(
+                R.id.wc2SessionFragment,
+                WC2SessionModule.prepareParams(null, connectUri)
+            )
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val deepLinkUri = activity?.intent?.data?.toString()
+
+        if (deepLinkUri != null) {
+            activity?.intent?.data = null
+
+            handleConnectionUri(deepLinkUri)
         }
     }
 }
