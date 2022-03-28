@@ -97,16 +97,12 @@ sealed class InvestorItem {
     ) : InvestorItem()
 }
 
-sealed class MajorHolderItem {
-    object Header : MajorHolderItem()
-
-    class Item(
-        val index: Int,
-        val address: String,
-        val share: BigDecimal,
-        val sharePercent: String
-    ) : MajorHolderItem()
-}
+class MajorHolderItem(
+    val index: Int,
+    val address: String,
+    val share: BigDecimal,
+    val sharePercent: String
+)
 
 data class CoinLink(
     val url: String,
@@ -162,13 +158,12 @@ class CoinViewFactory(
             return list
         }
 
-        list.add(MajorHolderItem.Header)
         topTokenHolders
             .sortedByDescending { it.share }
             .forEachIndexed { index, holder ->
                 val shareFormatted = numberFormatter.format(holder.share, 0, 2, suffix = "%")
                 list.add(
-                    MajorHolderItem.Item(
+                    MajorHolderItem(
                         index + 1,
                         holder.address,
                         holder.share,
