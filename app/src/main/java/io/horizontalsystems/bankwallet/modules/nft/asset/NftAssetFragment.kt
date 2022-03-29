@@ -192,13 +192,11 @@ private fun NftAsset(
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
-                asset.name?.let {
-                    Text(
-                        text = it,
-                        color = ComposeAppTheme.colors.leah,
-                        style = ComposeAppTheme.typography.headline1
-                    )
-                }
+                Text(
+                    text = asset.name ?: "#${asset.tokenId}",
+                    color = ComposeAppTheme.colors.leah,
+                    style = ComposeAppTheme.typography.headline1
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(

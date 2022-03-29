@@ -57,7 +57,7 @@ fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
                 modifier = Modifier.matchParentSize(),
                 painter = painter,
                 contentDescription = null,
-                contentScale = ContentScale.FillWidth
+                contentScale = ContentScale.Crop
             )
             if (asset.assetItem.onSale) {
                 BadgeRatingD(
@@ -68,23 +68,21 @@ fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
                 )
             }
         }
-        asset.assetItem.name?.let {
-            Text(
-                modifier = Modifier.padding(start = 12.dp, top = 12.dp, end = 12.dp),
-                text = it,
-                style = ComposeAppTheme.typography.microSB,
-                color = ComposeAppTheme.colors.grey,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
+        Text(
+            modifier = Modifier.padding(start = 12.dp, top = 12.dp, end = 12.dp),
+            text = asset.assetItem.name ?: "#${asset.assetItem.tokenId}",
+            style = ComposeAppTheme.typography.microSB,
+            color = ComposeAppTheme.colors.grey,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
         Row(
             modifier = Modifier.padding(start = 12.dp, top = 4.dp, end = 12.dp, bottom = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 modifier = Modifier.padding(end = 4.dp),
-                text = asset.coinPrice?.getFormatted() ?: "---",
+                text = asset.coinPrice?.getFormatted(4) ?: "---",
                 style = ComposeAppTheme.typography.captionSB,
                 color = ComposeAppTheme.colors.leah
             )

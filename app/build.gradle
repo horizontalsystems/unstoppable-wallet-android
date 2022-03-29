@@ -153,8 +153,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     //Splash screen
-    //alpha02 has bug with forced dark mode on Xiaomi phones
-    implementation "androidx.core:core-splashscreen:1.0.0-beta01"
+    implementation "androidx.core:core-splashscreen:1.0.0-beta02"
 
     // Room
     def room_version = '2.4.1'
