@@ -13,7 +13,6 @@ class SyncErrorViewModel(
     val reportEmail: String
 ) : ViewModel() {
 
-    val sourceChangeable = sourceChangeable(wallet.coinType)
     val sourceType = when (wallet.coinType) {
         CoinType.Bitcoin,
         CoinType.BitcoinCash,
@@ -23,7 +22,7 @@ class SyncErrorViewModel(
         is CoinType.Erc20 -> SourceType.EvmNetworkSettings(EvmNetworkModule.Blockchain.Ethereum, wallet.account)
         CoinType.BinanceSmartChain,
         is CoinType.Bep20 -> SourceType.EvmNetworkSettings(EvmNetworkModule.Blockchain.BinanceSmartChain, wallet.account)
-        else -> throw IllegalStateException("Source is not changeable")
+        else -> null
     }
 
     fun retry() {
@@ -35,15 +34,4 @@ class SyncErrorViewModel(
         class EvmNetworkSettings(val blockchain: EvmNetworkModule.Blockchain, val account: Account) : SourceType()
     }
 
-    private fun sourceChangeable(coinType: CoinType) = when (coinType) {
-        is CoinType.Bitcoin,
-        is CoinType.BitcoinCash,
-        is CoinType.Dash,
-        is CoinType.Litecoin,
-        is CoinType.BinanceSmartChain,
-        is CoinType.Bep20,
-        is CoinType.Ethereum,
-        is CoinType.Erc20 -> true
-        else -> false
-    }
 }

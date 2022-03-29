@@ -114,7 +114,7 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                     navController.popBackStack()
                 }
             )
-            if (viewModel.sourceChangeable) {
+            viewModel.sourceType?.let { sourceType ->
                 Spacer(Modifier.height(16.dp))
                 ButtonPrimaryDefault(
                     modifier = Modifier
@@ -124,7 +124,7 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                     onClick = {
                         navController.popBackStack()
 
-                        when (val sourceType = viewModel.sourceType) {
+                        when (sourceType) {
                             is SyncErrorViewModel.SourceType.EvmNetworkSettings -> {
                                 navController.slideFromRight(
                                     R.id.evmNetworkFragment,
