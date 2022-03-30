@@ -40,26 +40,27 @@ fun HSAmountInput(
     modifier: Modifier = Modifier,
     focusRequester: FocusRequester = remember { FocusRequester() },
     availableBalance: BigDecimal,
-    minimumSendAmount: BigDecimal? = null,
-    maximumSendAmount: BigDecimal? = null,
+    error: Throwable? = null,
     coin: Coin,
     coinDecimal: Int,
     fiatDecimal: Int,
     amountValidator: AmountInputViewModel2.AmountValidator? = null,
     onUpdateInputMode: (AmountInputModule.InputMode) -> Unit,
-    onValueChange: (BigDecimal?) -> Unit
+    onValueChange: (BigDecimal?) -> Unit,
 ) {
     val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coin, coinDecimal, fiatDecimal, amountValidator))
-    LaunchedEffect(availableBalance, minimumSendAmount, maximumSendAmount) {
+    LaunchedEffect(availableBalance) {
         viewModel.availableBalance = availableBalance
-        viewModel.minimumSendAmount = minimumSendAmount
-        viewModel.maximumSendAmount = maximumSendAmount
-        viewModel.validate()
-        onValueChange.invoke(viewModel.getResultCoinAmount())
     }
 
     val hint = viewModel.hint
-    val caution = viewModel.caution
+
+    val caution = error?.let {
+        Caution(
+            it.localizedMessage ?: it.javaClass.simpleName,
+            Caution.Type.Error
+        )
+    }
 
     val borderColor = when (caution?.type) {
         Caution.Type.Error -> ComposeAppTheme.colors.red50
@@ -110,7 +111,7 @@ fun HSAmountInput(
                             textState = textFieldValue
 
                             viewModel.onEnterAmount(text)
-                            onValueChange.invoke(viewModel.getResultCoinAmount())
+                            onValueChange.invoke(viewModel.coinAmount)
                         } else {
                             // todo: shake animation
                         }
@@ -155,7 +156,7 @@ fun HSAmountInput(
                             textState = textState.copy(text = "")
 
                             viewModel.onEnterAmount(textState.text)
-                            onValueChange.invoke(viewModel.getResultCoinAmount())
+                            onValueChange.invoke(viewModel.coinAmount)
                         }
                     )
                 } else if (viewModel.isMaxEnabled) {
@@ -167,7 +168,7 @@ fun HSAmountInput(
                             val text = viewModel.getEnterAmount()
                             textState = textState.copy(text = text, selection = TextRange(text.length))
 
-                            onValueChange.invoke(viewModel.getResultCoinAmount())
+                            onValueChange.invoke(viewModel.coinAmount)
                         }
                     )
                 }

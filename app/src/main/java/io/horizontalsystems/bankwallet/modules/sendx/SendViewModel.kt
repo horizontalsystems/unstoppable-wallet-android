@@ -16,11 +16,10 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
     var uiState by mutableStateOf(
         SendUiState(
             availableBalance = BigDecimal.ZERO,
-            minimumSendAmount = null,
-            maximumSendAmount = null,
             fee = BigDecimal.ZERO,
             addressError = null,
-            canBeSend = false,
+            amountError = null,
+            canBeSend = false
         )
     )
         private set
@@ -37,11 +36,10 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
                 .collect {
                     uiState = SendUiState(
                         availableBalance = it.availableBalance,
-                        minimumSendAmount = it.minimumSendAmount,
-                        maximumSendAmount = it.maximumSendAmount,
                         fee = it.fee,
                         addressError = it.addressError,
-                        canBeSend = it.canBeSend,
+                        amountError = it.amountError,
+                        canBeSend = it.canBeSend
                     )
                 }
         }
@@ -63,9 +61,8 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
 
 data class SendUiState(
     val availableBalance: BigDecimal,
-    val minimumSendAmount: BigDecimal?,
-    val maximumSendAmount: BigDecimal?,
     val fee: BigDecimal,
     val addressError: Throwable?,
+    val amountError: Throwable?,
     val canBeSend: Boolean,
 )
