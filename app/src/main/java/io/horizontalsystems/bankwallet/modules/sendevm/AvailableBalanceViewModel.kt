@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Coin
@@ -21,7 +22,7 @@ class AvailableBalanceViewModel(
     private val marketKit: MarketKit
 ) : ViewModel() {
 
-    var amountInputMode: AmountInputModule.InputMode? = null
+    var amountInputType: SendModule.InputType? = null
     var availableBalance: BigDecimal? = null
 
     private val currency = currencyManager.baseCurrency
@@ -48,14 +49,14 @@ class AvailableBalanceViewModel(
 
     fun refreshFormatted() {
         val tmpAvailableBalance = availableBalance ?: return
-        val tmpAmountInputMode = amountInputMode ?: return
+        val tmpAmountInputMode = amountInputType ?: return
 
         formatted = when (tmpAmountInputMode) {
-            AmountInputModule.InputMode.Coin -> {
+            SendModule.InputType.COIN -> {
                 App.numberFormatter.formatCoin(tmpAvailableBalance, coin.code, 0, coinDecimal)
 
             }
-            AmountInputModule.InputMode.Currency -> {
+            SendModule.InputType.CURRENCY -> {
                 val currencyAmount = rate?.let {
                     tmpAvailableBalance.times(it.value)
                 } ?: BigDecimal.ZERO

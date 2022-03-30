@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.sendevm.AmountInputModule
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -22,9 +21,6 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
             canBeSend = false
         )
     )
-        private set
-
-    var amountInputMode by mutableStateOf(AmountInputModule.InputMode.Coin)
         private set
 
     val fiatMaxAllowedDecimals: Int = 2
@@ -44,10 +40,6 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
                 }
         }
         service.start()
-    }
-
-    fun onUpdateAmountInputMode(inputMode: AmountInputModule.InputMode) {
-        amountInputMode = inputMode
     }
 
     fun onEnterAmount(amount: BigDecimal?) {

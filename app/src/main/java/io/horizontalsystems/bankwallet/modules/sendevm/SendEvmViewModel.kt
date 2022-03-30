@@ -22,8 +22,6 @@ class SendEvmViewModel(
 
     var proceedEnabled by mutableStateOf(false)
         private set
-    var amountInputMode by mutableStateOf(AmountInputModule.InputMode.Coin)
-        private set
     var sendData: SendEvmData? = null
         private set
 
@@ -50,10 +48,6 @@ class SendEvmViewModel(
 
     fun onEnterAmount(amount: BigDecimal?) {
         service.setAmount(amount)
-    }
-
-    fun onUpdateAmountInputMode(mode: AmountInputModule.InputMode) {
-        amountInputMode = mode
     }
 
     override fun validateAmount(amount: BigDecimal?): Caution? {

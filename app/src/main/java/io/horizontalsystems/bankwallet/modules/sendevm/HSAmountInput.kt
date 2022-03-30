@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -45,10 +46,11 @@ fun HSAmountInput(
     coinDecimal: Int,
     fiatDecimal: Int,
     amountValidator: AmountInputViewModel2.AmountValidator? = null,
-    onUpdateInputMode: (AmountInputModule.InputMode) -> Unit,
+    onClickHint: () -> Unit,
     onValueChange: (BigDecimal?) -> Unit,
+    inputType: SendModule.InputType
 ) {
-    val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coin, coinDecimal, fiatDecimal, amountValidator))
+    val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coin, coinDecimal, fiatDecimal, amountValidator, inputType))
     LaunchedEffect(availableBalance) {
         viewModel.availableBalance = availableBalance
     }
@@ -72,15 +74,22 @@ fun HSAmountInput(
         mutableStateOf(TextFieldValue(""))
     }
 
+    LaunchedEffect(inputType) {
+        viewModel.setInputType(inputType)
+
+        val text = viewModel.getEnterAmount()
+        textState = textState.copy(text = text, selection = TextRange(text.length))
+    }
+
     val inputTextColor: Color
     val hintTextColor: Color
 
-    when (viewModel.inputMode) {
-        AmountInputModule.InputMode.Coin -> {
+    when (inputType) {
+        SendModule.InputType.COIN -> {
             inputTextColor = ComposeAppTheme.colors.leah
             hintTextColor = ComposeAppTheme.colors.jacob
         }
-        AmountInputModule.InputMode.Currency -> {
+        SendModule.InputType.CURRENCY -> {
             inputTextColor = ComposeAppTheme.colors.jacob
             hintTextColor = ComposeAppTheme.colors.leah
         }
@@ -186,12 +195,7 @@ fun HSAmountInput(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
-                        onClick = {
-                            viewModel.onToggleInputMode()
-                            onUpdateInputMode.invoke(viewModel.inputMode)
-                            val text = viewModel.getEnterAmount()
-                            textState = textState.copy(text = text, selection = TextRange(text.length))
-                        },
+                        onClick = onClickHint
                     )
             ) {
                 Text(

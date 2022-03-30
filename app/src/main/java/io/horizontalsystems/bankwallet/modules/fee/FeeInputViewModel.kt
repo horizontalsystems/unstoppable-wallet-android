@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.sendevm.AmountInputModule
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Coin
@@ -21,7 +21,7 @@ class FeeInputViewModel(
     private val marketKit: MarketKit
 ) : ViewModel() {
 
-    var amountInputMode: AmountInputModule.InputMode? = null
+    var amountInputType: SendModule.InputType? = null
     var fee = BigDecimal.ZERO
 
     private val currency = currencyManager.baseCurrency
@@ -47,7 +47,7 @@ class FeeInputViewModel(
     }
 
     fun refreshFormatted() {
-        val tmpAmountInputMode = amountInputMode ?: return
+        val tmpAmountInputType = amountInputType ?: return
 
         val values = mutableListOf(
             App.numberFormatter.formatCoin(fee, coin.code, 0, coinDecimal)
@@ -55,9 +55,9 @@ class FeeInputViewModel(
 
         rate?.let {
             val currencyStr = App.numberFormatter.format(fee.times(it.value), fiatDecimal, fiatDecimal, prefix = currency.symbol)
-            when (tmpAmountInputMode) {
-                AmountInputModule.InputMode.Coin -> values.add(currencyStr)
-                AmountInputModule.InputMode.Currency -> values.add(0, currencyStr)
+            when (tmpAmountInputType) {
+                SendModule.InputType.COIN -> values.add(currencyStr)
+                SendModule.InputType.CURRENCY -> values.add(0, currencyStr)
             }
         }
 
