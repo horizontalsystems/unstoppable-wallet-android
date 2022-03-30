@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.NotEnoughData
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData.AdditionalInfo
-import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.coroutines.channels.BufferOverflow
@@ -38,10 +37,12 @@ class SendEvmService(
     private var addressData: AddressData? = null
 
     fun setAmount(amount: BigDecimal?) {
-        evmAmount = if (amount != null && amount > BigDecimal.ZERO) {
-            amount.movePointRight(sendCoin.decimals).toBigInteger()
-        } else {
-            null
+        if (validateAmount(amount)) {
+            evmAmount = if (amount != null && amount > BigDecimal.ZERO) {
+                amount.movePointRight(sendCoin.decimals).toBigInteger()
+            } else {
+                null
+            }
         }
 
         syncState()
@@ -73,21 +74,29 @@ class SendEvmService(
         return SendEvmData(transactionData, additionalInfo)
     }
 
-    fun validateAmount(amount: BigDecimal?): Caution? {
-        if (amount != availableBalance) return null
-        if (
-            sendCoin.coinType !is CoinType.Ethereum
-            && sendCoin.coinType !is CoinType.BinanceSmartChain
-            && sendCoin.coinType !is CoinType.Polygon
-            && sendCoin.coinType !is CoinType.EthereumOptimism
-            && sendCoin.coinType !is CoinType.EthereumArbitrumOne
-        ) return null
+    private fun isCoinUsedForFee() = when (sendCoin.coinType) {
+        is CoinType.Ethereum,
+        is CoinType.BinanceSmartChain,
+        is CoinType.Polygon,
+        is CoinType.EthereumOptimism,
+        is CoinType.EthereumArbitrumOne -> true
+        else -> false
+    }
 
+    private fun validateAmount(amount: BigDecimal?): Boolean {
+        val amountError = when {
+            amount == null -> null
+            amount == BigDecimal.ZERO -> null
+            amount > availableBalance -> {
+                Error(Translator.getString(R.string.Swap_ErrorInsufficientBalance))
+            }
+            amount == availableBalance && isCoinUsedForFee() -> {
+                Error(Translator.getString(R.string.EthereumTransaction_Warning_CoinNeededForFee))
+            }
+            else -> null
+        }
 
-        return Caution(
-            Translator.getString(R.string.EthereumTransaction_Warning_CoinNeededForFee, sendCoin.coin.code),
-            Caution.Type.Warning
-        )
+        return amountError == null
     }
 
     data class AddressData(val evmAddress: EvmAddress, val domain: String?)

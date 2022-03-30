@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,12 +39,6 @@ class SendBitcoinService(
     private var fee: BigDecimal = BigDecimal.ZERO
     private var addressError: Throwable? = null
     private var amountError: Throwable? = null
-
-    var sendInputType: SendModule.InputType
-        get() = localStorage.sendInputType ?: SendModule.InputType.COIN
-        set(value) {
-            localStorage.sendInputType = value
-        }
 
     fun start() {
         adapter.balanceData

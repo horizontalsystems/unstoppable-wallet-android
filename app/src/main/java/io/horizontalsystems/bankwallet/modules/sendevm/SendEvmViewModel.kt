@@ -6,15 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SendEvmViewModel(
-    val service: SendEvmService
-) : ViewModel(), AmountInputViewModel2.AmountValidator {
+class SendEvmViewModel(val service: SendEvmService) : ViewModel() {
 
     val availableBalance get() = service.availableBalance
     val coinMaxAllowedDecimals get() = service.coinMaxAllowedDecimals
@@ -48,9 +45,5 @@ class SendEvmViewModel(
 
     fun onEnterAmount(amount: BigDecimal?) {
         service.setAmount(amount)
-    }
-
-    override fun validateAmount(amount: BigDecimal?): Caution? {
-        return service.validateAmount(amount)
     }
 }
