@@ -40,6 +40,8 @@ fun HSAmountInput(
     modifier: Modifier = Modifier,
     focusRequester: FocusRequester = remember { FocusRequester() },
     availableBalance: BigDecimal,
+    minimumSendAmount: BigDecimal? = null,
+    maximumSendAmount: BigDecimal? = null,
     coin: Coin,
     coinDecimal: Int,
     fiatDecimal: Int,
@@ -48,8 +50,12 @@ fun HSAmountInput(
     onValueChange: (BigDecimal?) -> Unit
 ) {
     val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coin, coinDecimal, fiatDecimal, amountValidator))
-    LaunchedEffect(availableBalance) {
+    LaunchedEffect(availableBalance, minimumSendAmount, maximumSendAmount) {
         viewModel.availableBalance = availableBalance
+        viewModel.minimumSendAmount = minimumSendAmount
+        viewModel.maximumSendAmount = maximumSendAmount
+        viewModel.validate()
+        onValueChange.invoke(viewModel.getResultCoinAmount())
     }
 
     val hint = viewModel.hint
