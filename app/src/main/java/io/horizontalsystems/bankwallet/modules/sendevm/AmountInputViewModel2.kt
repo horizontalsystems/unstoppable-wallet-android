@@ -5,9 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.core.ICurrencyManager
@@ -31,8 +29,6 @@ class AmountInputViewModel2(
     }
 
     var availableBalance = BigDecimal.ZERO
-    var minimumSendAmount: BigDecimal? = null
-    var maximumSendAmount: BigDecimal? = null
 
     val isMaxEnabled: Boolean
         get() = availableBalance > BigDecimal.ZERO
@@ -46,10 +42,8 @@ class AmountInputViewModel2(
     var hint by mutableStateOf<String?>(null)
         private set
 
-    var caution by mutableStateOf<Caution?>(null)
+    var coinAmount: BigDecimal? = null
         private set
-
-    private var coinAmount: BigDecimal? = null
 
     private val currency = currencyManager.baseCurrency
     private var rate = marketKit.coinPrice(coin.uid, currency.code)
@@ -70,11 +64,6 @@ class AmountInputViewModel2(
         updateInputPrefix()
     }
 
-    fun getResultCoinAmount() = when {
-        caution?.type != Caution.Type.Error -> coinAmount
-        else -> null
-    }
-
     override fun onCleared() {
         disposables.clear()
     }
@@ -88,13 +77,11 @@ class AmountInputViewModel2(
         }
 
         refreshHint()
-        validate()
     }
 
     fun onClickMax() {
         updateCoinAmount(availableBalance)
         refreshHint()
-        validate()
     }
 
     private fun updateCurrencyAmount(amount: BigDecimal?) {
@@ -117,30 +104,6 @@ class AmountInputViewModel2(
             AmountInputModule.InputMode.Currency -> currencyAmount
         }
         return amount?.toPlainString() ?: ""
-    }
-
-    fun validate() {
-        val tmpCoinAmount = coinAmount
-        val tmpMinimumSendAmount = minimumSendAmount
-        val tmpMaximumSendAmount = maximumSendAmount
-
-        caution = when {
-            tmpCoinAmount == null -> null
-            tmpCoinAmount == BigDecimal.ZERO -> null
-            tmpCoinAmount > availableBalance -> Caution(
-                Translator.getString(R.string.Swap_ErrorInsufficientBalance),
-                Caution.Type.Error
-            )
-            tmpMinimumSendAmount != null && tmpCoinAmount < tmpMinimumSendAmount -> Caution(
-                Translator.getString(R.string.Send_Error_MinimumAmount, tmpMinimumSendAmount),
-                Caution.Type.Error
-            )
-            tmpMaximumSendAmount != null && tmpCoinAmount < tmpMaximumSendAmount -> Caution(
-                Translator.getString(R.string.Send_Error_MaximumAmount, tmpMaximumSendAmount),
-                Caution.Type.Error
-            )
-            else -> amountValidator?.validateAmount(tmpCoinAmount)
-        }
     }
 
     private fun refreshHint() {

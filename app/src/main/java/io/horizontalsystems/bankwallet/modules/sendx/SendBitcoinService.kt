@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.sendx
 
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bitcoincore.core.IPluginData
@@ -18,10 +20,9 @@ class SendBitcoinService(
 ) {
     data class ServiceState(
         val availableBalance: BigDecimal,
-        val minimumSendAmount: BigDecimal?,
-        val maximumSendAmount: BigDecimal?,
         val fee: BigDecimal,
         val addressError: Throwable?,
+        val amountError: Throwable?,
         val canBeSend: Boolean,
     )
     private var feeRate: Long = 1 // todo
@@ -38,6 +39,7 @@ class SendBitcoinService(
     private lateinit var availableBalance: BigDecimal
     private var fee: BigDecimal = BigDecimal.ZERO
     private var addressError: Throwable? = null
+    private var amountError: Throwable? = null
 
     var sendInputType: SendModule.InputType
         get() = localStorage.sendInputType ?: SendModule.InputType.COIN
@@ -62,11 +64,10 @@ class SendBitcoinService(
         _stateFlow.update {
             ServiceState(
                 availableBalance = availableBalance,
-                minimumSendAmount = minimumSendAmount,
-                maximumSendAmount = maximumSendAmount,
                 fee = fee,
                 addressError = addressError,
-                canBeSend = amount != null && address != null && addressError == null
+                amountError = amountError,
+                canBeSend = amount != null && amountError == null && address != null && addressError == null
             )
         }
     }
@@ -91,18 +92,46 @@ class SendBitcoinService(
 
     fun setAmount(amount: BigDecimal?) {
         this.amount = amount
-        refreshFee()
+
+        if (validateAmount()) {
+            refreshFee()
+        }
 
         emitState()
+    }
+
+    private fun validateAmount(): Boolean {
+        val tmpCoinAmount = amount
+        val tmpMinimumSendAmount = minimumSendAmount
+        val tmpMaximumSendAmount = maximumSendAmount
+
+        amountError = when {
+            tmpCoinAmount == null -> null
+            tmpCoinAmount == BigDecimal.ZERO -> null
+            tmpCoinAmount > availableBalance -> {
+                Error(Translator.getString(R.string.Swap_ErrorInsufficientBalance))
+            }
+            tmpMinimumSendAmount != null && tmpCoinAmount < tmpMinimumSendAmount -> {
+                Error(Translator.getString(R.string.Send_Error_MinimumAmount, tmpMinimumSendAmount))
+            }
+            tmpMaximumSendAmount != null && tmpCoinAmount < tmpMaximumSendAmount -> {
+                Error(Translator.getString(R.string.Send_Error_MaximumAmount, tmpMaximumSendAmount))
+            }
+            else -> null
+        }
+
+        return amountError == null
     }
 
     fun setAddress(address: Address?) {
         this.address = address
 
         if (validateAddress()) {
-            refreshFee()
             refreshMinimumSendAmount()
             refreshAvailableBalance()
+            if (validateAmount()) {
+                refreshFee()
+            }
         }
 
         emitState()

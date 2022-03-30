@@ -33,9 +33,8 @@ fun SendScreen(navController: NavController, wallet: Wallet) {
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
-    val minimumSendAmount = uiState.minimumSendAmount
-    val maximumSendAmount = uiState.maximumSendAmount
     val addressError = uiState.addressError
+    val amountError = uiState.amountError
     val fee = uiState.fee
     val proceedEnabled = uiState.canBeSend
 
@@ -83,12 +82,10 @@ fun SendScreen(navController: NavController, wallet: Wallet) {
                 modifier = Modifier.padding(horizontal = 16.dp),
                 focusRequester = focusRequester,
                 availableBalance = availableBalance,
-                minimumSendAmount = minimumSendAmount,
-                maximumSendAmount = maximumSendAmount,
+                error = amountError,
                 coin = wallet.coin,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-//                amountValidator = viewModel,
                 onUpdateInputMode = {
                     viewModel.onUpdateAmountInputMode(it)
                 },
