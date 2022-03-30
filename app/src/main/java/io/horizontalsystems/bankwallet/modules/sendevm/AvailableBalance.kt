@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AdditionalDataCell2
 import io.horizontalsystems.marketkit.models.Coin
@@ -19,7 +20,7 @@ fun AvailableBalance(
     coinDecimal: Int,
     fiatDecimal: Int,
     availableBalance: BigDecimal,
-    amountInputMode: AmountInputModule.InputMode
+    amountInputType: SendModule.InputType
 ) {
     val viewModel = viewModel<AvailableBalanceViewModel>(
         factory = AvailableBalanceModule.Factory(
@@ -30,9 +31,9 @@ fun AvailableBalance(
     )
     val formatted = viewModel.formatted
 
-    LaunchedEffect(availableBalance, amountInputMode) {
+    LaunchedEffect(availableBalance, amountInputType) {
         viewModel.availableBalance = availableBalance
-        viewModel.amountInputMode = amountInputMode
+        viewModel.amountInputType = amountInputType
         viewModel.refreshFormatted()
     }
 

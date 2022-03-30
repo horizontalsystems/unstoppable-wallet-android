@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -25,6 +26,8 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationModule
+import io.horizontalsystems.bankwallet.modules.sendx.AmountInputModeModule
+import io.horizontalsystems.bankwallet.modules.sendx.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -66,9 +69,12 @@ fun SendEvmScreen(
     viewModel: SendEvmViewModel
 ) {
     ComposeAppTheme {
+        val amountInputModeViewModel = viewModel<AmountInputModeViewModel>(factory = AmountInputModeModule.Factory())
+
         val fullCoin = wallet.platformCoin.fullCoin
         val proceedEnabled = viewModel.proceedEnabled
         val focusRequester = remember { FocusRequester() }
+        val amountInputType = amountInputModeViewModel.inputType
 
         SideEffect {
             focusRequester.requestFocus()
@@ -102,7 +108,7 @@ fun SendEvmScreen(
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 availableBalance = viewModel.availableBalance,
-                amountInputMode = viewModel.amountInputMode
+                amountInputType = amountInputType
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -114,12 +120,13 @@ fun SendEvmScreen(
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 amountValidator = viewModel,
-                onUpdateInputMode = {
-                    viewModel.onUpdateAmountInputMode(it)
+                onClickHint = {
+                    amountInputModeViewModel.onToggleInputType()
                 },
                 onValueChange = {
                     viewModel.onEnterAmount(it)
-                }
+                },
+                inputType = amountInputType
             )
 
             Spacer(modifier = Modifier.height(12.dp))

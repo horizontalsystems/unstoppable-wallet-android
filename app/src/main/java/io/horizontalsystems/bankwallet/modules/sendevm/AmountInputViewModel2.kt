@@ -6,7 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
@@ -22,6 +24,8 @@ class AmountInputViewModel2(
     private val coinDecimal: Int,
     private val fiatDecimal: Int,
     private val amountValidator: AmountValidator?,
+    private val localStorage: ILocalStorage,
+    private var inputType: SendModule.InputType
 ) : ViewModel() {
 
     interface AmountValidator {
@@ -32,9 +36,6 @@ class AmountInputViewModel2(
 
     val isMaxEnabled: Boolean
         get() = availableBalance > BigDecimal.ZERO
-
-    var inputMode by mutableStateOf(AmountInputModule.InputMode.Coin)
-        private set
 
     var inputPrefix by mutableStateOf<String?>(null)
         private set
@@ -71,9 +72,9 @@ class AmountInputViewModel2(
     fun onEnterAmount(text: String) {
         val amount = if (text.isNotBlank()) text.toBigDecimalOrNull()?.stripTrailingZeros() else null
 
-        when (inputMode) {
-            AmountInputModule.InputMode.Coin -> updateCoinAmount(amount)
-            AmountInputModule.InputMode.Currency -> updateCurrencyAmount(amount)
+        when (inputType) {
+            SendModule.InputType.COIN -> updateCoinAmount(amount)
+            SendModule.InputType.CURRENCY -> updateCurrencyAmount(amount)
         }
 
         refreshHint()
@@ -99,9 +100,9 @@ class AmountInputViewModel2(
     }
 
     fun getEnterAmount(): String {
-        val amount = when (inputMode) {
-            AmountInputModule.InputMode.Coin -> coinAmount
-            AmountInputModule.InputMode.Currency -> currencyAmount
+        val amount = when (inputType) {
+            SendModule.InputType.COIN -> coinAmount
+            SendModule.InputType.CURRENCY -> currencyAmount
         }
         return amount?.toPlainString() ?: ""
     }
@@ -110,31 +111,28 @@ class AmountInputViewModel2(
         hint = if (rate == null) {
             null
         } else {
-            when (inputMode) {
-                AmountInputModule.InputMode.Coin -> {
+            when (inputType) {
+                SendModule.InputType.COIN -> {
                     App.numberFormatter.format(currencyAmount ?: BigDecimal.ZERO, fiatDecimal, fiatDecimal, prefix = currency.symbol)
                 }
-                AmountInputModule.InputMode.Currency -> {
+                SendModule.InputType.CURRENCY -> {
                     App.numberFormatter.formatCoin(coinAmount ?: BigDecimal.ZERO, coin.code, 0, coinDecimal)
                 }
             }
         }
     }
 
-    fun onToggleInputMode() {
-        inputMode = when (inputMode) {
-            AmountInputModule.InputMode.Coin -> AmountInputModule.InputMode.Currency
-            AmountInputModule.InputMode.Currency -> AmountInputModule.InputMode.Coin
-        }
+    fun setInputType(inputType: SendModule.InputType) {
+        this.inputType = inputType
 
         refreshHint()
         updateInputPrefix()
     }
 
     private fun updateInputPrefix() {
-        inputPrefix = when (inputMode) {
-            AmountInputModule.InputMode.Coin -> null
-            AmountInputModule.InputMode.Currency -> currency.symbol
+        inputPrefix = when (inputType) {
+            SendModule.InputType.COIN -> null
+            SendModule.InputType.CURRENCY -> currency.symbol
         }
     }
 
@@ -142,9 +140,9 @@ class AmountInputViewModel2(
         val amount = if (text.isNotBlank()) text.toBigDecimalOrNull() else null
         if (amount == null) return true
 
-        val maxAllowedScale = when (inputMode) {
-            AmountInputModule.InputMode.Coin -> coinDecimal
-            AmountInputModule.InputMode.Currency -> fiatDecimal
+        val maxAllowedScale = when (inputType) {
+            SendModule.InputType.COIN -> coinDecimal
+            SendModule.InputType.CURRENCY -> fiatDecimal
         }
 
         return amount.scale() <= maxAllowedScale
@@ -153,16 +151,14 @@ class AmountInputViewModel2(
 }
 
 object AmountInputModule {
-    enum class InputMode {
-        Coin, Currency;
-    }
 
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val coin: Coin,
         private val coinDecimal: Int,
         private val fiatDecimal: Int,
-        private val amountValidator: AmountInputViewModel2.AmountValidator?
+        private val amountValidator: AmountInputViewModel2.AmountValidator?,
+        private val inputType: SendModule.InputType
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return AmountInputViewModel2(
@@ -171,7 +167,9 @@ object AmountInputModule {
                 coin,
                 coinDecimal,
                 fiatDecimal,
-                amountValidator
+                amountValidator,
+                App.localStorage,
+                inputType
             ) as T
         }
 

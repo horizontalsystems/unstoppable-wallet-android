@@ -6,7 +6,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
-import io.horizontalsystems.bankwallet.modules.sendevm.AmountInputModule
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.marketkit.models.Coin
 import java.math.BigDecimal
 
@@ -16,7 +16,7 @@ fun HSFeeInput(
     coinDecimal: Int,
     fiatDecimal: Int,
     fee: BigDecimal,
-    amountInputMode: AmountInputModule.InputMode,
+    amountInputType: SendModule.InputType,
     onClick: (() -> Unit)? = null
 ) {
     val viewModel = viewModel<FeeInputViewModel>(
@@ -28,9 +28,9 @@ fun HSFeeInput(
     )
     val formatted = viewModel.formatted
 
-    LaunchedEffect(fee, amountInputMode) {
+    LaunchedEffect(fee, amountInputType) {
         viewModel.fee = fee
-        viewModel.amountInputMode = amountInputMode
+        viewModel.amountInputType = amountInputType
         viewModel.refreshFormatted()
     }
 
