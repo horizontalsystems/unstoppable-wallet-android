@@ -45,12 +45,11 @@ fun HSAmountInput(
     coin: Coin,
     coinDecimal: Int,
     fiatDecimal: Int,
-    amountValidator: AmountInputViewModel2.AmountValidator? = null,
     onClickHint: () -> Unit,
     onValueChange: (BigDecimal?) -> Unit,
     inputType: SendModule.InputType
 ) {
-    val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coin, coinDecimal, fiatDecimal, amountValidator, inputType))
+    val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coin, coinDecimal, fiatDecimal, inputType))
     LaunchedEffect(availableBalance) {
         viewModel.availableBalance = availableBalance
     }

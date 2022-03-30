@@ -119,7 +119,6 @@ fun SendEvmScreen(
                 coin = wallet.coin,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                amountValidator = viewModel,
                 onClickHint = {
                     amountInputModeViewModel.onToggleInputType()
                 },

@@ -6,10 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Coin
@@ -23,14 +21,8 @@ class AmountInputViewModel2(
     private val coin: Coin,
     private val coinDecimal: Int,
     private val fiatDecimal: Int,
-    private val amountValidator: AmountValidator?,
-    private val localStorage: ILocalStorage,
     private var inputType: SendModule.InputType
 ) : ViewModel() {
-
-    interface AmountValidator {
-        fun validateAmount(amount: BigDecimal?): Caution?
-    }
 
     var availableBalance = BigDecimal.ZERO
 
@@ -157,7 +149,6 @@ object AmountInputModule {
         private val coin: Coin,
         private val coinDecimal: Int,
         private val fiatDecimal: Int,
-        private val amountValidator: AmountInputViewModel2.AmountValidator?,
         private val inputType: SendModule.InputType
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -167,8 +158,6 @@ object AmountInputModule {
                 coin,
                 coinDecimal,
                 fiatDecimal,
-                amountValidator,
-                App.localStorage,
                 inputType
             ) as T
         }
