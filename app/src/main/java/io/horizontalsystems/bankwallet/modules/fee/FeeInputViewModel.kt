@@ -22,7 +22,7 @@ class FeeInputViewModel(
 ) : ViewModel() {
 
     var amountInputMode: AmountInputModule.InputMode? = null
-    var fee: BigDecimal? = null
+    var fee = BigDecimal.ZERO
 
     private val currency = currencyManager.baseCurrency
     private var rate = marketKit.coinPrice(coin.uid, currency.code)
@@ -47,15 +47,14 @@ class FeeInputViewModel(
     }
 
     fun refreshFormatted() {
-        val tmpFee = fee ?: return
         val tmpAmountInputMode = amountInputMode ?: return
 
-        val values = mutableListOf<String>(
-            App.numberFormatter.formatCoin(tmpFee, coin.code, 0, coinDecimal)
+        val values = mutableListOf(
+            App.numberFormatter.formatCoin(fee, coin.code, 0, coinDecimal)
         )
 
         rate?.let {
-            val currencyStr = App.numberFormatter.format(tmpFee.times(it.value), fiatDecimal, fiatDecimal, prefix = currency.symbol)
+            val currencyStr = App.numberFormatter.format(fee.times(it.value), fiatDecimal, fiatDecimal, prefix = currency.symbol)
             when (tmpAmountInputMode) {
                 AmountInputModule.InputMode.Coin -> values.add(currencyStr)
                 AmountInputModule.InputMode.Currency -> values.add(0, currencyStr)

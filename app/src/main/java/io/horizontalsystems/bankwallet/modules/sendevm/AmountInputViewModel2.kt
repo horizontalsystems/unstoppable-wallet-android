@@ -31,6 +31,8 @@ class AmountInputViewModel2(
     }
 
     var availableBalance = BigDecimal.ZERO
+    var minimumSendAmount: BigDecimal? = null
+    var maximumSendAmount: BigDecimal? = null
 
     val isMaxEnabled: Boolean
         get() = availableBalance > BigDecimal.ZERO
@@ -86,13 +88,13 @@ class AmountInputViewModel2(
         }
 
         refreshHint()
-        refreshCaution()
+        validate()
     }
 
     fun onClickMax() {
         updateCoinAmount(availableBalance)
         refreshHint()
-        refreshCaution()
+        validate()
     }
 
     private fun updateCurrencyAmount(amount: BigDecimal?) {
@@ -117,13 +119,24 @@ class AmountInputViewModel2(
         return amount?.toPlainString() ?: ""
     }
 
-    private fun refreshCaution() {
+    fun validate() {
         val tmpCoinAmount = coinAmount
+        val tmpMinimumSendAmount = minimumSendAmount
+        val tmpMaximumSendAmount = maximumSendAmount
 
         caution = when {
             tmpCoinAmount == null -> null
+            tmpCoinAmount == BigDecimal.ZERO -> null
             tmpCoinAmount > availableBalance -> Caution(
                 Translator.getString(R.string.Swap_ErrorInsufficientBalance),
+                Caution.Type.Error
+            )
+            tmpMinimumSendAmount != null && tmpCoinAmount < tmpMinimumSendAmount -> Caution(
+                Translator.getString(R.string.Send_Error_MinimumAmount, tmpMinimumSendAmount),
+                Caution.Type.Error
+            )
+            tmpMaximumSendAmount != null && tmpCoinAmount < tmpMaximumSendAmount -> Caution(
+                Translator.getString(R.string.Send_Error_MaximumAmount, tmpMaximumSendAmount),
                 Caution.Type.Error
             )
             else -> amountValidator?.validateAmount(tmpCoinAmount)
