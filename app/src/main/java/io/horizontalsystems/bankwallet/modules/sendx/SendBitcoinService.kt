@@ -35,7 +35,7 @@ class SendBitcoinService(
     private var minimumSendAmount: BigDecimal? = null
     private var maximumSendAmount: BigDecimal? = null
 
-    private lateinit var availableBalance: BigDecimal
+    private var availableBalance: BigDecimal = BigDecimal.ZERO
     private var fee: BigDecimal = BigDecimal.ZERO
     private var addressError: Throwable? = null
     private var amountError: Throwable? = null
