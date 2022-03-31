@@ -1,21 +1,26 @@
 package io.horizontalsystems.bankwallet.modules.sendx
 
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.marketkit.models.CoinType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class SendBitcoinService(
     private val adapter: ISendBitcoinAdapter,
     private val localStorage: ILocalStorage,
-    private val coinType: CoinType
+    private val coinType: CoinType,
+    private val feeRateProvider: IFeeRateProvider
 ) {
     data class ServiceState(
         val availableBalance: BigDecimal,
@@ -24,7 +29,7 @@ class SendBitcoinService(
         val amountError: Throwable?,
         val canBeSend: Boolean,
     )
-    private var feeRate: Long = 1 // todo
+    private var feeRate: Long = 0
     private var amount: BigDecimal? = null
     private var address: Address? = null
     private var pluginData: Map<Byte, IPluginData>? = null
@@ -39,18 +44,24 @@ class SendBitcoinService(
     private var fee: BigDecimal = BigDecimal.ZERO
     private var addressError: Throwable? = null
     private var amountError: Throwable? = null
+    private var feeRatePriority = FeeRatePriority.RECOMMENDED
 
-    fun start() {
+    suspend fun start() {
         adapter.balanceData
 
         refreshMinimumSendAmount()
         refreshMaximumSendAmount()
 
+        refreshFeeRate()
         refreshAvailableBalance()
         refreshFee()
 
         emitState()
 //        adapter.send()
+    }
+
+    private suspend fun refreshFeeRate() = withContext(Dispatchers.IO) {
+        feeRate = feeRateProvider.feeRate(feeRatePriority).blockingGet().toLong()
     }
 
     private fun emitState() {
