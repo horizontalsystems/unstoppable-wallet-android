@@ -39,7 +39,10 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
                     )
                 }
         }
-        service.start()
+
+        viewModelScope.launch {
+            service.start()
+        }
     }
 
     fun onEnterAmount(amount: BigDecimal?) {
