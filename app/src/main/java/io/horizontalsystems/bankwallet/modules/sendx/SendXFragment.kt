@@ -28,7 +28,9 @@ class SendXFragment : BaseFragment() {
             )
             setContent {
                 val viewModel by navGraphViewModels<SendViewModel>(R.id.sendXFragment) { SendModule.Factory(wallet) }
-                SendScreen(findNavController(), viewModel)
+                val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment) { XRateModule.Factory(wallet.coin.uid) }
+
+                SendScreen(findNavController(), viewModel, xRateViewModel)
             }
         }
     }

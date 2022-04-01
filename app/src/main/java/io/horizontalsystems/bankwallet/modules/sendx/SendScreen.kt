@@ -26,7 +26,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 
 @Composable
-fun SendScreen(navController: NavController, viewModel: SendViewModel) {
+fun SendScreen(
+    navController: NavController,
+    viewModel: SendViewModel,
+    xRateViewModel: XRateViewModel
+) {
     val amountInputModeViewModel = viewModel<AmountInputModeViewModel>(factory = AmountInputModeModule.Factory())
 
     val wallet = viewModel.wallet
@@ -38,6 +42,8 @@ fun SendScreen(navController: NavController, viewModel: SendViewModel) {
     val fee = uiState.fee
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
+
+    val rate = xRateViewModel.rate
 
     ComposeAppTheme {
         val fullCoin = wallet.platformCoin.fullCoin
@@ -71,11 +77,12 @@ fun SendScreen(navController: NavController, viewModel: SendViewModel) {
             )
 
             AvailableBalance(
-                coin = wallet.coin,
+                coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 availableBalance = availableBalance,
-                amountInputType = amountInputType
+                amountInputType = amountInputType,
+                rate = rate
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -84,7 +91,7 @@ fun SendScreen(navController: NavController, viewModel: SendViewModel) {
                 focusRequester = focusRequester,
                 availableBalance = availableBalance,
                 error = amountError,
-                coin = wallet.coin,
+                coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 onClickHint = {
@@ -93,7 +100,8 @@ fun SendScreen(navController: NavController, viewModel: SendViewModel) {
                 onValueChange = {
                     viewModel.onEnterAmount(it)
                 },
-                inputType = amountInputType
+                inputType = amountInputType,
+                rate = rate
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -108,11 +116,12 @@ fun SendScreen(navController: NavController, viewModel: SendViewModel) {
 
             Spacer(modifier = Modifier.height(12.dp))
             HSFeeInput(
-                coin = wallet.coin,
+                coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 fee = fee,
-                amountInputType = amountInputType
+                amountInputType = amountInputType,
+                rate = rate
             ) {
 
             }
