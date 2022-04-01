@@ -11,19 +11,18 @@ object AddTokenModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val ethereumService =
-                AddEvmTokenBlockchainService(AddEvmTokenBlockchainService.Blockchain.Ethereum, App.networkManager)
-            val binanceSmartChainService = AddEvmTokenBlockchainService(
-                AddEvmTokenBlockchainService.Blockchain.BinanceSmartChain,
-                App.networkManager
-            )
-            val binanceService = AddBep2TokenBlockchainService(App.networkManager)
-            val services = listOf(ethereumService, binanceSmartChainService, binanceService)
+            val services = buildList {
+                addAll(
+                    App.evmBlockchainManager.allBlockchains.map {
+                        AddEvmTokenBlockchainService(it, App.networkManager)
+                    }
+                )
+                add(AddBep2TokenBlockchainService(App.networkManager))
+            }
 
             val service = AddTokenService(App.coinManager, services, App.walletManager, App.accountManager)
-            val viewModel = AddTokenViewModel(service)
 
-            return viewModel as T
+            return AddTokenViewModel(service) as T
         }
     }
 

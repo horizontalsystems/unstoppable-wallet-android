@@ -349,11 +349,6 @@ class App : CoreApp(), WorkConfiguration.Provider {
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 
-            if (!localStorage.customTokensRestoreCompleted) {
-                val request = OneTimeWorkRequestBuilder<RestoreCustomTokenWorker>().build()
-                WorkManager.getInstance(instance).enqueue(request)
-            }
-
             if (!localStorage.favoriteCoinIdsMigrated) {
                 val request = OneTimeWorkRequestBuilder<MigrateFavoriteCoinIdsWorker>().build()
                 WorkManager.getInstance(instance).enqueue(request)

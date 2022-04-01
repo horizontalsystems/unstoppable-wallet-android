@@ -15,14 +15,13 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 
-class LocalStorageManager(private val preferences: SharedPreferences)
-    : ILocalStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard, IMarketStorage {
+class LocalStorageManager(private val preferences: SharedPreferences) : ILocalStorage, IPinStorage, IChartTypeStorage,
+    IThirdKeyboard, IMarketStorage {
 
     private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"
     private val SEND_INPUT_TYPE = "send_input_type"
@@ -61,7 +60,6 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val SWAP_PROVIDER = "swap_provider_"
     private val LAUNCH_PAGE = "launch_page"
     private val MAIN_TAB = "main_tab"
-    private val CUSTOM_TOKENS_RESTORE_COMPLETED = "custom_tokens_restore_completed"
     private val FAVORITE_COIN_IDS_MIGRATED = "favorite_coins_ids_migrated"
     private val MARKET_FAVORITES_SORTING_FIELD = "market_favorites_sorting_field"
     private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
@@ -130,7 +128,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     override var sortType: BalanceSortType
         get() {
             val sortString = preferences.getString(SORT_TYPE, null)
-                    ?: BalanceSortType.Value.getAsString()
+                ?: BalanceSortType.Value.getAsString()
             return BalanceSortType.getTypeFromString(sortString)
         }
         set(sortType) {
@@ -172,7 +170,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
 
     override var currentTheme: ThemeType
         get() = preferences.getString(CURRENT_THEME, null)?.let { ThemeType.valueOf(it) }
-                ?: ThemeType.System
+            ?: ThemeType.System
         set(themeType) {
             preferences.edit().putString(CURRENT_THEME, themeType.value).apply()
         }
@@ -288,7 +286,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         get() {
             val txSortingTypeString = preferences.getString(TRANSACTION_DATA_SORTING_TYPE, null)
             return txSortingTypeString?.let { TransactionDataSortingType.valueOf(it) }
-                    ?: TransactionDataSortingType.Shuffle
+                ?: TransactionDataSortingType.Shuffle
         }
         set(sortingType) {
             preferences.edit().putString(TRANSACTION_DATA_SORTING_TYPE, sortingType.value).apply()
@@ -363,12 +361,6 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         }
         set(value) {
             preferences.edit().putString(MAIN_TAB, value?.name).apply()
-        }
-
-    override var customTokensRestoreCompleted: Boolean
-        get() = preferences.getBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, false)
-        set(value) {
-            preferences.edit().putBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, value).apply()
         }
 
     override var favoriteCoinIdsMigrated: Boolean
