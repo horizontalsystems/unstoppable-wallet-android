@@ -104,11 +104,12 @@ fun SendEvmScreen(
             )
 
             AvailableBalance(
-                coin = wallet.coin,
+                coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 availableBalance = viewModel.availableBalance,
-                amountInputType = amountInputType
+                amountInputType = amountInputType,
+                rate = null
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -116,7 +117,7 @@ fun SendEvmScreen(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 focusRequester = focusRequester,
                 availableBalance = viewModel.availableBalance,
-                coin = wallet.coin,
+                coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 onClickHint = {
@@ -125,7 +126,8 @@ fun SendEvmScreen(
                 onValueChange = {
                     viewModel.onEnterAmount(it)
                 },
-                inputType = amountInputType
+                inputType = amountInputType,
+                rate = null
             )
 
             Spacer(modifier = Modifier.height(12.dp))

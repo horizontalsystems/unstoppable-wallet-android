@@ -27,13 +27,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.marketkit.models.Coin
 import java.math.BigDecimal
 
 @Composable
@@ -42,16 +42,20 @@ fun HSAmountInput(
     focusRequester: FocusRequester = remember { FocusRequester() },
     availableBalance: BigDecimal,
     error: Throwable? = null,
-    coin: Coin,
+    coinCode: String,
     coinDecimal: Int,
     fiatDecimal: Int,
     onClickHint: () -> Unit,
     onValueChange: (BigDecimal?) -> Unit,
-    inputType: SendModule.InputType
+    inputType: SendModule.InputType,
+    rate: CurrencyValue?
 ) {
-    val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coin, coinDecimal, fiatDecimal, inputType))
+    val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coinCode, coinDecimal, fiatDecimal, inputType))
     LaunchedEffect(availableBalance) {
         viewModel.setAvailableBalance(availableBalance)
+    }
+    LaunchedEffect(rate) {
+        viewModel.setRate(rate)
     }
 
     val hint = viewModel.hint

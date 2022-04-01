@@ -6,19 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.Coin
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 class AmountInputViewModel2(
-    private val marketKit: MarketKit,
-    private val currencyManager: ICurrencyManager,
-    private val coin: Coin,
+    private val coinCode: String,
     private val coinDecimal: Int,
     private val fiatDecimal: Int,
     private var inputType: SendModule.InputType
@@ -38,21 +33,11 @@ class AmountInputViewModel2(
     var coinAmount: BigDecimal? = null
         private set
 
-    private val currency = currencyManager.baseCurrency
-    private var rate = marketKit.coinPrice(coin.uid, currency.code)
+    private var rate: CurrencyValue? = null
     private var currencyAmount: BigDecimal? = null
     private var disposables = CompositeDisposable()
 
     init {
-        marketKit.coinPriceObservable(coin.uid, currency.code)
-            .subscribeIO {
-                rate = it
-                refreshHint()
-            }
-            .let {
-                disposables.add(it)
-            }
-
         refreshHint()
         refreshInputPrefix()
     }
@@ -100,15 +85,17 @@ class AmountInputViewModel2(
     }
 
     private fun refreshHint() {
-        hint = if (rate == null) {
+        val tmpRate = rate
+
+        hint = if (tmpRate == null) {
             null
         } else {
             when (inputType) {
                 SendModule.InputType.COIN -> {
-                    App.numberFormatter.format(currencyAmount ?: BigDecimal.ZERO, fiatDecimal, fiatDecimal, prefix = currency.symbol)
+                    App.numberFormatter.format(currencyAmount ?: BigDecimal.ZERO, fiatDecimal, fiatDecimal, prefix = tmpRate.currency.symbol)
                 }
                 SendModule.InputType.CURRENCY -> {
-                    App.numberFormatter.formatCoin(coinAmount ?: BigDecimal.ZERO, coin.code, 0, coinDecimal)
+                    App.numberFormatter.formatCoin(coinAmount ?: BigDecimal.ZERO, coinCode, 0, coinDecimal)
                 }
             }
         }
@@ -126,6 +113,11 @@ class AmountInputViewModel2(
         refreshIsMaxEnabled()
     }
 
+    fun setRate(rate: CurrencyValue?) {
+        this.rate = rate
+        refreshHint()
+    }
+
     private fun refreshIsMaxEnabled() {
         isMaxEnabled = availableBalance > BigDecimal.ZERO
     }
@@ -133,7 +125,7 @@ class AmountInputViewModel2(
     private fun refreshInputPrefix() {
         inputPrefix = when (inputType) {
             SendModule.InputType.COIN -> null
-            SendModule.InputType.CURRENCY -> currency.symbol
+            SendModule.InputType.CURRENCY -> rate?.currency?.symbol
         }
     }
 
@@ -155,16 +147,14 @@ object AmountInputModule {
 
     @Suppress("UNCHECKED_CAST")
     class Factory(
-        private val coin: Coin,
+        private val coinCode: String,
         private val coinDecimal: Int,
         private val fiatDecimal: Int,
         private val inputType: SendModule.InputType
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return AmountInputViewModel2(
-                App.marketKit,
-                App.currencyManager,
-                coin,
+                coinCode,
                 coinDecimal,
                 fiatDecimal,
                 inputType

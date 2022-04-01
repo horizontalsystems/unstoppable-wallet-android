@@ -6,46 +6,22 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.Coin
-import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
 class AvailableBalanceViewModel(
-    private val coin: Coin,
+    private val coinCode: String,
     private val coinDecimal: Int,
-    private val fiatDecimal: Int,
-    private val currencyManager: ICurrencyManager,
-    private val marketKit: MarketKit
+    private val fiatDecimal: Int
 ) : ViewModel() {
 
     var amountInputType: SendModule.InputType? = null
     var availableBalance: BigDecimal? = null
-
-    private val currency = currencyManager.baseCurrency
-    private var rate = marketKit.coinPrice(coin.uid, currency.code)
-    private var disposables = CompositeDisposable()
+    var xRate: CurrencyValue? = null
 
     var formatted by mutableStateOf<String?>(null)
         private set
-
-    init {
-        marketKit.coinPriceObservable(coin.uid, currency.code)
-            .subscribeIO {
-                rate = it
-                refreshFormatted()
-            }
-            .let {
-                disposables.add(it)
-            }
-    }
-
-    override fun onCleared() {
-        disposables.clear()
-    }
 
     fun refreshFormatted() {
         val tmpAvailableBalance = availableBalance ?: return
@@ -53,15 +29,15 @@ class AvailableBalanceViewModel(
 
         formatted = when (tmpAmountInputMode) {
             SendModule.InputType.COIN -> {
-                App.numberFormatter.formatCoin(tmpAvailableBalance, coin.code, 0, coinDecimal)
+                App.numberFormatter.formatCoin(tmpAvailableBalance, coinCode, 0, coinDecimal)
 
             }
             SendModule.InputType.CURRENCY -> {
-                val currencyAmount = rate?.let {
-                    tmpAvailableBalance.times(it.value)
-                } ?: BigDecimal.ZERO
-
-                App.numberFormatter.format(currencyAmount, fiatDecimal, fiatDecimal, prefix = currency.symbol)
+                xRate
+                    ?.let {
+                        it.copy(value = tmpAvailableBalance.times(it.value))
+                    }
+                    ?.getFormatted(fiatDecimal, fiatDecimal)
             }
         }
     }
@@ -71,18 +47,16 @@ object AvailableBalanceModule {
 
     @Suppress("UNCHECKED_CAST")
     class Factory(
-        private val coin: Coin,
+        private val coinCode: String,
         private val coinDecimal: Int,
         private val fiatDecimal: Int,
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return AvailableBalanceViewModel(
-                coin,
+                coinCode,
                 coinDecimal,
-                fiatDecimal,
-                App.currencyManager,
-                App.marketKit
+                fiatDecimal
             ) as T
         }
     }
