@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
+    val wallet by service::wallet
 
     var uiState by mutableStateOf(
         SendUiState(

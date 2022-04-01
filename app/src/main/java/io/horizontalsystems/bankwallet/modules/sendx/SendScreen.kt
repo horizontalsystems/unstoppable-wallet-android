@@ -14,7 +14,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInput
 import io.horizontalsystems.bankwallet.modules.sendevm.AvailableBalance
@@ -27,9 +26,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 
 @Composable
-fun SendScreen(navController: NavController, wallet: Wallet) {
-    val viewModel = viewModel<SendViewModel>(factory = SendModule.Factory(wallet))
+fun SendScreen(navController: NavController, viewModel: SendViewModel) {
     val amountInputModeViewModel = viewModel<AmountInputModeViewModel>(factory = AmountInputModeModule.Factory())
+
+    val wallet = viewModel.wallet
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
