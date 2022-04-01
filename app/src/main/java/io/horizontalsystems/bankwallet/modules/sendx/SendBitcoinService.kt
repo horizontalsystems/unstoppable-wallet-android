@@ -1,25 +1,28 @@
 package io.horizontalsystems.bankwallet.modules.sendx
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.core.IFeeRateProvider
-import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
+import kotlin.math.min
 
 class SendBitcoinService(
     private val adapter: ISendBitcoinAdapter,
     private val feeRateProvider: IFeeRateProvider,
     val wallet: Wallet
 ) {
+    val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
+    val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
+
     data class ServiceState(
         val availableBalance: BigDecimal,
         val fee: BigDecimal,
@@ -151,5 +154,32 @@ class SendBitcoinService(
 
         return addressError == null
     }
+
+    fun getConfirmationData(): ConfirmationData {
+        return ConfirmationData(
+            amount = amount!!,
+            fee = fee,
+            address = address!!,
+            platformCoin = wallet.platformCoin
+        )
+    }
+
+    suspend fun send() = withContext(Dispatchers.IO) {
+        adapter.send(
+            amount!!,
+            address!!.hex,
+            feeRate,
+            pluginData,
+            transactionSorting = null,
+            logger = AppLogger()
+        ).blockingGet()
+    }
+
+    data class ConfirmationData(
+        val amount: BigDecimal,
+        val fee: BigDecimal,
+        val address: Address,
+        val platformCoin: PlatformCoin
+    )
 
 }
