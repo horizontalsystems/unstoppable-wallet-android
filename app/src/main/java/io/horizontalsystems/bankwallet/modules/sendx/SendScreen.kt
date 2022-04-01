@@ -9,11 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInput
 import io.horizontalsystems.bankwallet.modules.sendevm.AvailableBalance
@@ -29,10 +29,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 fun SendScreen(
     navController: NavController,
     viewModel: SendViewModel,
-    xRateViewModel: XRateViewModel
+    xRateViewModel: XRateViewModel,
+    amountInputModeViewModel: AmountInputModeViewModel
 ) {
-    val amountInputModeViewModel = viewModel<AmountInputModeViewModel>(factory = AmountInputModeModule.Factory())
-
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
 
@@ -132,12 +131,7 @@ fun SendScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
-//                    viewModel.sendData?.let {
-//                        navController.slideFromRight(
-//                            R.id.sendEvmFragment_to_sendEvmConfirmationFragment,
-//                            SendEvmConfirmationModule.prepareParams(it)
-//                        )
-//                    }
+                    navController.slideFromRight(R.id.sendConfirmation)
                 },
                 enabled = proceedEnabled
             )

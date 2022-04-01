@@ -58,12 +58,16 @@ class ConfirmationFragment(private val sendPresenter: SendPresenter) : BaseFragm
             )
             setContent {
                 ComposeAppTheme {
+                    val viewDataState by viewModel.viewDataLiveData.observeAsState()
+                    val sendButtonState by viewModel.sendButtonLiveData.observeAsState()
+
                     SendConfirmScreen(
-                        viewModel,
-                        { parentFragmentManager.popBackStack() },
-                        { requireActivity().finish() },
-                        { onAddressCopy(it) },
-                        { onSendClick() }
+                        viewDataState = viewDataState,
+                        sendButtonState = sendButtonState,
+                        onBackButtonClick = { parentFragmentManager.popBackStack() },
+                        onCloseButtonClick = { requireActivity().finish() },
+                        onClickCopy = { onAddressCopy(it) },
+                        onSendButtonClick = { onSendClick() }
                     )
                 }
             }
@@ -114,15 +118,13 @@ class ConfirmationFragment(private val sendPresenter: SendPresenter) : BaseFragm
 
 @Composable
 fun SendConfirmScreen(
-    viewModel: SendConfirmationViewModel,
+    viewDataState: SendConfirmationModule.ViewData?,
+    sendButtonState: SendConfirmationModule.SendButton?,
     onBackButtonClick: () -> Unit,
     onCloseButtonClick: () -> Unit,
     onClickCopy: (String) -> Unit,
     onSendButtonClick: () -> Unit,
 ) {
-    val viewDataState by viewModel.viewDataLiveData.observeAsState()
-    val sendButtonState by viewModel.sendButtonLiveData.observeAsState()
-
     val primarySectionItems = mutableListOf<@Composable () -> Unit>()
     val secondarySectionItems = mutableListOf<@Composable () -> Unit>()
 
@@ -210,7 +212,7 @@ fun SendConfirmScreen(
 }
 
 @Composable
-private fun SectionTitleCell(title: Int, value: String) {
+fun SectionTitleCell(title: Int, value: String) {
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -238,7 +240,7 @@ private fun SectionTitleCell(title: Int, value: String) {
 }
 
 @Composable
-private fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, locked: Boolean) {
+fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, locked: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -273,7 +275,7 @@ private fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, locked: B
 }
 
 @Composable
-private fun AddressCell(address: String, onClickCopy: (String) -> Unit) {
+fun AddressCell(address: String, onClickCopy: (String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -297,7 +299,7 @@ private fun AddressCell(address: String, onClickCopy: (String) -> Unit) {
 }
 
 @Composable
-private fun MemoCell(value: String) {
+fun MemoCell(value: String) {
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -319,7 +321,7 @@ private fun MemoCell(value: String) {
 }
 
 @Composable
-private fun ValueCell(title: String, value: String) {
+fun ValueCell(title: String, value: String) {
     Row(
         modifier = Modifier
             .fillMaxSize()

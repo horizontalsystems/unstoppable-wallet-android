@@ -12,6 +12,8 @@ import java.math.BigDecimal
 
 class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
     val wallet by service::wallet
+    val coinMaxAllowedDecimals by service::coinMaxAllowedDecimals
+    val fiatMaxAllowedDecimals by service::fiatMaxAllowedDecimals
 
     var uiState by mutableStateOf(
         SendUiState(
@@ -24,8 +26,6 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
     )
         private set
 
-    val fiatMaxAllowedDecimals: Int = 2
-    val coinMaxAllowedDecimals: Int = 8
 
     init {
         viewModelScope.launch {
@@ -52,6 +52,16 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
 
     fun onEnterAddress(address: Address?) {
         service.setAddress(address)
+    }
+
+    fun getConfirmationViewItem(): SendBitcoinService.ConfirmationData {
+        return service.getConfirmationData()
+    }
+
+    fun onClickSend() {
+        viewModelScope.launch {
+            service.send()
+        }
     }
 }
 
