@@ -24,10 +24,10 @@ class AmountInputViewModel2(
     private var inputType: SendModule.InputType
 ) : ViewModel() {
 
-    var availableBalance = BigDecimal.ZERO
+    private var availableBalance = BigDecimal.ZERO
 
-    val isMaxEnabled: Boolean
-        get() = availableBalance > BigDecimal.ZERO
+    var isMaxEnabled by mutableStateOf(false)
+        private set
 
     var inputPrefix by mutableStateOf<String?>(null)
         private set
@@ -54,7 +54,7 @@ class AmountInputViewModel2(
             }
 
         refreshHint()
-        updateInputPrefix()
+        refreshInputPrefix()
     }
 
     override fun onCleared() {
@@ -118,10 +118,19 @@ class AmountInputViewModel2(
         this.inputType = inputType
 
         refreshHint()
-        updateInputPrefix()
+        refreshInputPrefix()
     }
 
-    private fun updateInputPrefix() {
+    fun setAvailableBalance(availableBalance: BigDecimal) {
+        this.availableBalance = availableBalance
+        refreshIsMaxEnabled()
+    }
+
+    private fun refreshIsMaxEnabled() {
+        isMaxEnabled = availableBalance > BigDecimal.ZERO
+    }
+
+    private fun refreshInputPrefix() {
         inputPrefix = when (inputType) {
             SendModule.InputType.COIN -> null
             SendModule.InputType.CURRENCY -> currency.symbol
