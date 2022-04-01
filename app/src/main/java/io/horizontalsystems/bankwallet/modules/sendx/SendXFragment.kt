@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.navigation.navGraphViewModels
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
@@ -25,7 +27,8 @@ class SendXFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                SendScreen(findNavController(), wallet)
+                val viewModel by navGraphViewModels<SendViewModel>(R.id.sendXFragment) { SendModule.Factory(wallet) }
+                SendScreen(findNavController(), viewModel)
             }
         }
     }

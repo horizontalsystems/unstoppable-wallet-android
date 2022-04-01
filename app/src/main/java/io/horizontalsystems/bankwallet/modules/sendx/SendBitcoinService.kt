@@ -3,12 +3,11 @@ package io.horizontalsystems.bankwallet.modules.sendx
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bitcoincore.core.IPluginData
-import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -18,9 +17,8 @@ import java.math.BigDecimal
 
 class SendBitcoinService(
     private val adapter: ISendBitcoinAdapter,
-    private val localStorage: ILocalStorage,
-    private val coinType: CoinType,
-    private val feeRateProvider: IFeeRateProvider
+    private val feeRateProvider: IFeeRateProvider,
+    val wallet: Wallet
 ) {
     data class ServiceState(
         val availableBalance: BigDecimal,

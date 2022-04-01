@@ -15,7 +15,7 @@ object SendModule {
             val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendBitcoinAdapter
             val provider = FeeRateProviderFactory.provider(wallet.coinType)
 
-            val service = SendBitcoinService(adapter, App.localStorage, wallet.coinType, provider!!)
+            val service = SendBitcoinService(adapter, provider!!, wallet)
 
             return SendViewModel(service) as T
         }
