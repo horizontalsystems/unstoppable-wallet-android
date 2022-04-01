@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
@@ -73,7 +72,6 @@ interface ILocalStorage {
     var ignoreRootedDeviceWarning: Boolean
     var launchPage: LaunchPage?
     var mainTab: MainModule.MainTab?
-    var customTokensRestoreCompleted: Boolean
     var favoriteCoinIdsMigrated: Boolean
     var marketFavoritesSortingField: SortingField?
     var marketFavoritesMarketField: MarketField?
@@ -153,7 +151,7 @@ interface INetworkManager {
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
     fun getBep2TokeInfo(symbol: String): Single<TokenInfoService.Bep2TokenInfo>
-    fun getEvmTokeInfo(tokenType: String, address: String): Single<TokenInfoService.EvmTokenInfo>
+    fun getEvmTokeInfo(apiPath: String, address: String): Single<TokenInfoService.EvmTokenInfo>
 
     suspend fun subscribe(host: String, path: String, body: String): JsonObject
     suspend fun unsubscribe(host: String, path: String, body: String): JsonObject
