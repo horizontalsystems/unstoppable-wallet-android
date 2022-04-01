@@ -51,7 +51,7 @@ fun HSAmountInput(
 ) {
     val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coin, coinDecimal, fiatDecimal, inputType))
     LaunchedEffect(availableBalance) {
-        viewModel.availableBalance = availableBalance
+        viewModel.setAvailableBalance(availableBalance)
     }
 
     val hint = viewModel.hint
