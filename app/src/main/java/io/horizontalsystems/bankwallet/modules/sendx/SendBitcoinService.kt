@@ -66,13 +66,14 @@ class SendBitcoinService(
     }
 
     private fun emitState() {
+        val tmpAmount = amount
         _stateFlow.update {
             ServiceState(
                 availableBalance = availableBalance,
                 fee = fee,
                 addressError = addressError,
                 amountError = amountError,
-                canBeSend = amount != null && amountError == null && address != null && addressError == null
+                canBeSend = tmpAmount != null && tmpAmount > BigDecimal.ZERO && amountError == null && address != null && addressError == null,
             )
         }
     }
@@ -164,14 +165,14 @@ class SendBitcoinService(
         )
     }
 
-    suspend fun send() = withContext(Dispatchers.IO) {
+    suspend fun send(logger: AppLogger) = withContext(Dispatchers.IO) {
         adapter.send(
             amount!!,
             address!!.hex,
             feeRate,
             pluginData,
             transactionSorting = null,
-            logger = AppLogger()
+            logger = logger
         ).blockingGet()
     }
 
