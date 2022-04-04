@@ -37,7 +37,7 @@ fun SendScreen(
 
     val availableBalance = uiState.availableBalance
     val addressError = uiState.addressError
-    val amountError = uiState.amountError
+    val amountCaution = uiState.amountCaution
     val fee = uiState.fee
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
@@ -89,7 +89,7 @@ fun SendScreen(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 focusRequester = focusRequester,
                 availableBalance = availableBalance,
-                error = amountError,
+                caution = amountCaution,
                 coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,

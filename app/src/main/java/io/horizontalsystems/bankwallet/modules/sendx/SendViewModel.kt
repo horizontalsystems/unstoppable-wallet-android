@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.Address
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
             availableBalance = BigDecimal.ZERO,
             fee = BigDecimal.ZERO,
             addressError = null,
-            amountError = null,
+            amountCaution = null,
             canBeSend = false,
             sendResult = null
         )
@@ -36,7 +37,7 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
                         availableBalance = it.availableBalance,
                         fee = it.fee,
                         addressError = it.addressError,
-                        amountError = it.amountError,
+                        amountCaution = it.amountCaution,
                         canBeSend = it.canBeSend,
                         sendResult = it.sendResult,
                     )
@@ -71,7 +72,7 @@ data class SendUiState(
     val availableBalance: BigDecimal,
     val fee: BigDecimal,
     val addressError: Throwable?,
-    val amountError: Throwable?,
+    val amountCaution: HSCaution?,
     val canBeSend: Boolean,
     val sendResult: SendResult?,
 )

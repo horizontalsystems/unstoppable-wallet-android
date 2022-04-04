@@ -14,6 +14,9 @@ class HSCaution(val s: TranslatableString, val type: Type = Type.Error) {
     enum class Type {
         Error, Warning
     }
+
+    fun isError() = type == Type.Error
+    fun isWarning() = type == Type.Warning
 }
 class NotEnoughData() : Exception()
 class UnsupportedException(override val message: String?) : Exception()
