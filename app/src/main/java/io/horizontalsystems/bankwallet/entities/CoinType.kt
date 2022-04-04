@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shortenedAddress
 import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 
 val CoinType.blockchainType: String?
     get() {
@@ -153,3 +154,9 @@ val CoinType.order: Int
         is CoinType.Iotex -> 27
         else -> Int.MAX_VALUE
     }
+
+val CoinType.customCoinUid: String
+    get() = "custom_${id}"
+
+val PlatformCoin.isCustom: Boolean
+    get() = coin.uid == coinType.customCoinUid

@@ -1,11 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.customCoinUid
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.CustomCoin
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.Platform
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -66,11 +69,11 @@ class AddTokenService(
 
         disposable = joinedCustomTokensSingle(validServices, reference)
             .subscribeOn(Schedulers.io())
-            .subscribe({ customTokens ->
-                state = if (customTokens.isEmpty()) {
+            .subscribe({ customCoins ->
+                state = if (customCoins.isEmpty()) {
                     AddTokenModule.State.Failed(TokenError.NotFound)
                 } else {
-                    AddTokenModule.State.Fetched(customTokens)
+                    AddTokenModule.State.Fetched(customCoins)
                 }
             }, { error ->
                 state = AddTokenModule.State.Failed(error)
@@ -78,12 +81,19 @@ class AddTokenService(
     }
 
     fun save() {
-        val customTokens = (state as? AddTokenModule.State.Fetched)?.customTokens ?: return
-        coinManager.save(customTokens)
-
+        val customCoins = (state as? AddTokenModule.State.Fetched)?.customCoins ?: return
         val account = accountManager.activeAccount ?: return
-        val wallets = customTokens.map { customToken -> Wallet(customToken.platformCoin, account) }
 
+        val platformCoins = customCoins.map { customCoin ->
+            val coinType = customCoin.type
+            val coinUid = coinType.customCoinUid
+            PlatformCoin(
+                Platform(coinType, customCoin.decimals, coinUid),
+                Coin(coinUid, customCoin.name, customCoin.code)
+            )
+        }
+
+        val wallets = platformCoins.map { Wallet(it, account) }
         walletManager.save(wallets)
     }
 
@@ -94,15 +104,15 @@ class AddTokenService(
     private fun joinedCustomTokensSingle(
         services: List<IAddTokenBlockchainService>,
         reference: String
-    ): Single<List<CustomToken>> {
-        val singles: List<Single<Optional<CustomToken>>> = services.map { service ->
-            service.customTokenAsync(reference)
+    ): Single<List<CustomCoin>> {
+        val singles: List<Single<Optional<CustomCoin>>> = services.map { service ->
+            service.customCoinsSingle(reference)
                 .map { Optional.of(it) }
-                .onErrorReturn { Optional.empty<CustomToken>() }
+                .onErrorReturn { Optional.empty<CustomCoin>() }
         }
 
         return Single.zip(singles) { array ->
-            val customTokens = array.map { it as? Optional<CustomToken> }
+            val customTokens = array.map { it as? Optional<CustomCoin> }
             customTokens.mapNotNull { it?.orElse(null) }
         }
     }

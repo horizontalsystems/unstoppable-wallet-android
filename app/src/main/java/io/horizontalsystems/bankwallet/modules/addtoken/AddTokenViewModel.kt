@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.bankwallet.entities.blockchainType
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.CustomCoin
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -73,7 +73,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
     private fun getViewItemByState(state: AddTokenModule.State): AddTokenModule.ViewItem? {
         return when (state) {
             is AddTokenModule.State.AlreadyExists -> getPlatformCoinsViewItem(state.platformCoins)
-            is AddTokenModule.State.Fetched -> getCustomTokensViewItem(state.customTokens)
+            is AddTokenModule.State.Fetched -> getCustomCoinsViewItem(state.customCoins)
             else -> null
         }
     }
@@ -87,12 +87,12 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
         )
     }
 
-    private fun getCustomTokensViewItem(customTokens: List<CustomToken>): AddTokenModule.ViewItem {
+    private fun getCustomCoinsViewItem(customCoins: List<CustomCoin>): AddTokenModule.ViewItem {
         return AddTokenModule.ViewItem(
-            coinType = customTokens.mapNotNull { it.coinType.blockchainType }.joinToString(separator = " / "),
-            coinName = customTokens.firstOrNull()?.coinName,
-            symbol = customTokens.firstOrNull()?.coinCode,
-            decimals = customTokens.firstOrNull()?.decimal
+            coinType = customCoins.mapNotNull { it.type.blockchainType }.joinToString(separator = " / "),
+            coinName = customCoins.firstOrNull()?.name,
+            symbol = customCoins.firstOrNull()?.code,
+            decimals = customCoins.firstOrNull()?.decimals
         )
     }
 

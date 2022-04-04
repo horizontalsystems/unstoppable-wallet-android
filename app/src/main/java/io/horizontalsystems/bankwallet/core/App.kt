@@ -151,11 +151,16 @@ class App : CoreApp(), WorkConfiguration.Provider {
 
         AppLog.logsDao = appDatabase.logsDao()
 
-        coinManager = CoinManager(marketKit, CustomTokenStorage(appDatabase))
+        accountCleaner = AccountCleaner(testMode)
+        accountManager = AccountManager(accountsStorage, accountCleaner)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
+        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
+
+        walletManager = WalletManager(accountManager, walletStorage)
+        coinManager = CoinManager(marketKit, walletManager)
+
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-        walletStorage = WalletStorage(coinManager, enabledWalletsStorage)
 
         LocalStorageManager(preferences).apply {
             localStorage = this
@@ -169,11 +174,9 @@ class App : CoreApp(), WorkConfiguration.Provider {
 
         wordsManager = WordsManager()
         networkManager = NetworkManager()
-        accountCleaner = AccountCleaner(testMode)
-        accountManager = AccountManager(accountsStorage, accountCleaner)
         accountFactory = AccountFactory(accountManager)
         backupManager = BackupManager(accountManager)
-        walletManager = WalletManager(accountManager, walletStorage)
+
 
         KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {
             keyStoreManager = this
@@ -194,7 +197,7 @@ class App : CoreApp(), WorkConfiguration.Provider {
         evmBlockchainManager = EvmBlockchainManager(
             backgroundManager,
             evmSyncSourceManager,
-            coinManager,
+            marketKit,
             evmAccountManagerFactory
         )
 

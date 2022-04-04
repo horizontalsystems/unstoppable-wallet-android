@@ -12,7 +12,7 @@ object CoinModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = CoinService(coinUid, App.coinManager, App.marketFavoritesManager, App.walletManager, App.accountManager)
+            val service = CoinService(coinUid, App.marketKit, App.marketFavoritesManager, App.walletManager, App.accountManager)
             return CoinViewModel(service, listOf(service)) as T
         }
 

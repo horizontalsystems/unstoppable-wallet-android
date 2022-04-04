@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.isCustom
+import io.horizontalsystems.bankwallet.entities.isCustom
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.Currency
@@ -25,7 +25,7 @@ class SendAmountInteractor(
     init {
         backgroundManager.registerListener(this)
 
-        if (!platformCoin.coin.isCustom) {
+        if (!platformCoin.isCustom) {
             marketKit.coinPriceObservable(platformCoin.coin.uid, baseCurrency.code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())

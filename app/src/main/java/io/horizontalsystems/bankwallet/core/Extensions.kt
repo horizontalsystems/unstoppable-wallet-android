@@ -7,7 +7,6 @@ import android.widget.ImageView
 import androidx.annotation.CheckResult
 import coil.load
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.bankwallet.entities.label
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.ethereumkit.core.toRawHexString
@@ -26,8 +25,6 @@ val <T> Optional<T>.orNull: T?
         isPresent -> get()
         else -> null
     }
-
-val Coin.isCustom: Boolean get() = uid.startsWith(CustomToken.uidPrefix)
 
 val Coin.iconUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/$uid@3x.png"

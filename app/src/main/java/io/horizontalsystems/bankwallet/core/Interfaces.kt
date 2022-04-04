@@ -19,7 +19,9 @@ import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -335,14 +337,6 @@ interface IBlockchainSettingsStorage {
     fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode)
 }
 
-interface ICustomTokenStorage {
-    fun customTokens(platformType: PlatformType, filter: String): List<CustomToken>
-    fun customTokens(filter: String): List<CustomToken>
-    fun customTokens(coinTypeIds: List<String>): List<CustomToken>
-    fun customToken(coinType: CoinType): CustomToken?
-    fun save(customTokens: List<CustomToken>)
-}
-
 interface IWalletManager {
     val activeWallets: List<Wallet>
     val activeWalletsUpdatedObservable: Observable<List<Wallet>>
@@ -439,20 +433,7 @@ interface IRateAppManager {
 }
 
 interface ICoinManager {
-    fun save(customTokens: List<CustomToken>)
     fun getPlatformCoin(coinType: CoinType): PlatformCoin?
-    fun getPlatformCoinsByCoinTypeIds(coinTypeIds: List<String>): List<PlatformCoin>
-    fun getPlatformCoins(platformType: PlatformType, filter: String, limit: Int = 20): List<PlatformCoin>
-    fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin>
-    fun featuredFullCoins(enabledPlatformCoins: List<PlatformCoin>): List<FullCoin>
-    fun fullCoins(filter: String = "", limit: Int = 20): List<FullCoin>
-    fun getFullCoin(coinUid: String): FullCoin?
-}
-
-interface IAddTokenBlockchainService {
-    fun isValid(reference: String): Boolean
-    fun coinType(reference: String): CoinType
-    fun customTokenAsync(reference: String): Single<CustomToken>
 }
 
 interface ITermsManager {
