@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.sendx
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -29,7 +28,7 @@ class SendBitcoinService(
         val availableBalance: BigDecimal,
         val fee: BigDecimal,
         val addressError: Throwable?,
-        val amountError: Throwable?,
+        val amountCaution: HSCaution?,
         val canBeSend: Boolean,
         val sendResult: SendResult?
     )
@@ -47,7 +46,7 @@ class SendBitcoinService(
     private var availableBalance: BigDecimal = BigDecimal.ZERO
     private var fee: BigDecimal = BigDecimal.ZERO
     private var addressError: Throwable? = null
-    private var amountError: Throwable? = null
+    private var amountCaution: HSCaution? = null
     private var feeRatePriority = FeeRatePriority.RECOMMENDED
     private var sendResult: SendResult? = null
 
@@ -73,13 +72,21 @@ class SendBitcoinService(
 
     private fun emitState() {
         val tmpAmount = amount
+        val tmpAmountCaution = amountCaution
+
+        val canBeSend =
+            tmpAmount != null && tmpAmount > BigDecimal.ZERO
+                && (tmpAmountCaution == null || tmpAmountCaution.isWarning())
+                && address != null
+                && addressError == null
+
         _stateFlow.update {
             ServiceState(
                 availableBalance = availableBalance,
                 fee = fee,
                 addressError = addressError,
-                amountError = amountError,
-                canBeSend = tmpAmount != null && tmpAmount > BigDecimal.ZERO && amountError == null && address != null && addressError == null,
+                amountCaution = amountCaution,
+                canBeSend = canBeSend,
                 sendResult = sendResult
             )
         }
@@ -118,22 +125,22 @@ class SendBitcoinService(
         val tmpMinimumSendAmount = minimumSendAmount
         val tmpMaximumSendAmount = maximumSendAmount
 
-        amountError = when {
+        amountCaution = when {
             tmpCoinAmount == null -> null
             tmpCoinAmount == BigDecimal.ZERO -> null
             tmpCoinAmount > availableBalance -> {
-                Error(Translator.getString(R.string.Swap_ErrorInsufficientBalance))
+                HSCaution(TranslatableString.ResString(R.string.Swap_ErrorInsufficientBalance))
             }
             tmpMinimumSendAmount != null && tmpCoinAmount < tmpMinimumSendAmount -> {
-                Error(Translator.getString(R.string.Send_Error_MinimumAmount, tmpMinimumSendAmount))
+                HSCaution(TranslatableString.ResString(R.string.Send_Error_MinimumAmount, tmpMinimumSendAmount))
             }
             tmpMaximumSendAmount != null && tmpCoinAmount < tmpMaximumSendAmount -> {
-                Error(Translator.getString(R.string.Send_Error_MaximumAmount, tmpMaximumSendAmount))
+                HSCaution(TranslatableString.ResString(R.string.Send_Error_MaximumAmount, tmpMaximumSendAmount))
             }
             else -> null
         }
 
-        return amountError == null
+        return amountCaution == null
     }
 
     fun setAddress(address: Address?) {

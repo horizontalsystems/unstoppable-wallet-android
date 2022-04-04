@@ -27,9 +27,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -41,7 +41,7 @@ fun HSAmountInput(
     modifier: Modifier = Modifier,
     focusRequester: FocusRequester = remember { FocusRequester() },
     availableBalance: BigDecimal,
-    error: Throwable? = null,
+    caution: HSCaution? = null,
     coinCode: String,
     coinDecimal: Int,
     fiatDecimal: Int,
@@ -60,16 +60,9 @@ fun HSAmountInput(
 
     val hint = viewModel.hint
 
-    val caution = error?.let {
-        Caution(
-            it.localizedMessage ?: it.javaClass.simpleName,
-            Caution.Type.Error
-        )
-    }
-
     val borderColor = when (caution?.type) {
-        Caution.Type.Error -> ComposeAppTheme.colors.red50
-        Caution.Type.Warning -> ComposeAppTheme.colors.yellow50
+        HSCaution.Type.Error -> ComposeAppTheme.colors.red50
+        HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
         else -> ComposeAppTheme.colors.steel20
     }
 
@@ -216,12 +209,12 @@ fun HSAmountInput(
 
         caution?.let { caution ->
             val color: Color = when (caution.type) {
-                Caution.Type.Error -> ComposeAppTheme.colors.redD
-                Caution.Type.Warning -> ComposeAppTheme.colors.yellowD
+                HSCaution.Type.Error -> ComposeAppTheme.colors.redD
+                HSCaution.Type.Warning -> ComposeAppTheme.colors.yellowD
             }
             Text(
                 modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
-                text = caution.text,
+                text = caution.getString(),
                 style = ComposeAppTheme.typography.caption,
                 color = color,
             )
