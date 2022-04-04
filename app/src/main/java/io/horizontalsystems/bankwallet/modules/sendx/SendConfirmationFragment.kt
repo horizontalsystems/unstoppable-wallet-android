@@ -72,7 +72,9 @@ fun SendConfirmationScreen(
     amountInputModeViewModel: AmountInputModeViewModel
 ) {
     val confirmationViewItem = sendViewModel.getConfirmationViewItem()
-    val sendResult = sendViewModel.sendResult
+    val uiState = sendViewModel.uiState
+
+    val sendResult = uiState.sendResult
     val view = LocalView.current
 
     when (sendResult) {

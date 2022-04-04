@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.sendx
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -23,4 +24,9 @@ object SendModule {
 
 }
 
+sealed class SendResult {
+    object Sending : SendResult()
+    object Sent : SendResult()
+    class Failed(val caution: HSCaution) : SendResult()
+}
 
