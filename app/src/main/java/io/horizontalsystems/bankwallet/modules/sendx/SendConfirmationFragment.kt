@@ -145,13 +145,13 @@ fun SendConfirmationScreen(
                         CellSingleLineLawrence {
                             SectionTitleCell(
                                 R.string.Send_Confirmation_YouSend,
-                                confirmationViewItem.platformCoin.name
+                                confirmationViewItem.coin.name
                             )
                         }
                         CellSingleLineLawrence(borderTop = true) {
                             val coinAmount = App.numberFormatter.formatCoin(
                                 confirmationViewItem.amount,
-                                confirmationViewItem.platformCoin.coin.code,
+                                confirmationViewItem.coin.code,
                                 0,
                                 sendViewModel.coinMaxAllowedDecimals
                             )
@@ -169,7 +169,7 @@ fun SendConfirmationScreen(
 
                     Spacer(modifier = Modifier.height(8.dp))
                     HSFeeInput(
-                        coinCode = confirmationViewItem.platformCoin.code,
+                        coinCode = confirmationViewItem.coin.code,
                         coinDecimal = sendViewModel.coinMaxAllowedDecimals,
                         fiatDecimal = sendViewModel.fiatMaxAllowedDecimals,
                         fee = confirmationViewItem.fee,

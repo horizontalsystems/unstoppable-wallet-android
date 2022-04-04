@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincore.core.IPluginData
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -168,7 +168,7 @@ class SendBitcoinService(
             amount = amount!!,
             fee = fee,
             address = address!!,
-            platformCoin = wallet.platformCoin
+            coin = wallet.platformCoin.coin
         )
     }
 
@@ -208,7 +208,7 @@ class SendBitcoinService(
         val amount: BigDecimal,
         val fee: BigDecimal,
         val address: Address,
-        val platformCoin: PlatformCoin
+        val coin: Coin
     )
 
 }
