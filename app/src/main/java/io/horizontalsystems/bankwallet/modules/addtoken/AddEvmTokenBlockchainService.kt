@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.bankwallet.entities.EvmBlockchain
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.CustomCoin
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
@@ -26,10 +26,10 @@ class AddEvmTokenBlockchainService(
         return blockchain.getEvm20CoinType(reference.lowercase())
     }
 
-    override fun customTokenAsync(reference: String): Single<CustomToken> {
+    override fun customCoinsSingle(reference: String): Single<CustomCoin> {
         return networkManager.getEvmTokeInfo(apiPath(blockchain), reference)
             .map { tokenInfo ->
-                CustomToken(tokenInfo.name, tokenInfo.symbol, coinType(reference), tokenInfo.decimals)
+                CustomCoin(coinType(reference), tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals)
             }
     }
 

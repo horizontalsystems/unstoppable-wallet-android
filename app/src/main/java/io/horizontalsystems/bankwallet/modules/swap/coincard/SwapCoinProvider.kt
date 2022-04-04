@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.coincard
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.EvmBlockchain
@@ -11,12 +10,10 @@ import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.horizontalsystems.marketkit.models.PlatformType
 import java.math.BigDecimal
 
 class SwapCoinProvider(
     private val dex: Dex,
-    private val coinManager: ICoinManager,
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
     private val currencyManager: ICurrencyManager,
@@ -24,7 +21,7 @@ class SwapCoinProvider(
 ) {
 
     private fun getCoinItems(filter: String): List<CoinBalanceItem> {
-        val platformCoins = coinManager.getPlatformCoins(platformType(), filter)
+        val platformCoins = marketKit.platformCoins(dex.blockchain.platformType, filter)
 
         return platformCoins.map { CoinBalanceItem(it, null, null) }
     }
@@ -73,14 +70,6 @@ class SwapCoinProvider(
                 it.value
             }
         }
-    }
-
-    private fun platformType(): PlatformType = when (dex.blockchain) {
-        EvmBlockchain.Ethereum -> PlatformType.Ethereum
-        EvmBlockchain.BinanceSmartChain -> PlatformType.BinanceSmartChain
-        EvmBlockchain.Polygon -> PlatformType.Polygon
-        EvmBlockchain.Optimism -> PlatformType.Optimism
-        EvmBlockchain.ArbitrumOne -> PlatformType.ArbitrumOne
     }
 
     fun getCoins(filter: String): List<CoinBalanceItem> {

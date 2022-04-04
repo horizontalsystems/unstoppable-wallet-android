@@ -40,7 +40,7 @@ object RestoreBlockchainsModule {
                 App.accountFactory,
                 App.accountManager,
                 App.walletManager,
-                App.coinManager,
+                App.marketKit,
                 enableCoinService,
                 App.evmBlockchainManager
             )

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.entities
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformType
 import kotlinx.parcelize.Parcelize
 
 sealed class EvmBlockchain(
@@ -28,6 +29,15 @@ sealed class EvmBlockchain(
 
     @Parcelize
     object ArbitrumOne: EvmBlockchain("arbitrum-one", "Arbitrum One", "Arbitrum One", "L2 chain", R.drawable.logo_arbitrum_24, CoinType.EthereumArbitrumOne)
+
+    val platformType: PlatformType
+        get() = when (this) {
+            ArbitrumOne -> PlatformType.ArbitrumOne
+            BinanceSmartChain -> PlatformType.BinanceSmartChain
+            Ethereum -> PlatformType.Ethereum
+            Optimism -> PlatformType.Optimism
+            Polygon -> PlatformType.Polygon
+        }
 
     fun getEvm20CoinType(address: String) =
         when (this) {

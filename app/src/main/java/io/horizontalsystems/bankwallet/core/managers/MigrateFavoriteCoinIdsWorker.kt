@@ -15,7 +15,7 @@ class MigrateFavoriteCoinIdsWorker(ctx: Context, params: WorkerParameters) :
 
     override fun doWork(): Result {
         val localStorage = App.localStorage
-        val coinManager = App.coinManager
+        val marketKit = App.marketKit
         val favoritesManager = App.marketFavoritesManager
 
         val coinUidsToRemove = mutableListOf<String>()
@@ -37,7 +37,7 @@ class MigrateFavoriteCoinIdsWorker(ctx: Context, params: WorkerParameters) :
         val coinTypeIds = favoritesToUpdate.map { it.coinUid }
 
         //handle uid like "erc20|0x6de037ef9ad2725eb40118bb1702ebb27e4aeb24"
-        coinManager.getPlatformCoinsByCoinTypeIds(coinTypeIds).let { platformCoins ->
+        marketKit.platformCoinsByCoinTypeIds(coinTypeIds).let { platformCoins ->
             coinUidsToAdd.addAll(platformCoins.map { it.coin.uid })
         }
 

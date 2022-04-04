@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsModule.Blockchain
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsModule.InternalItem
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.disposables.CompositeDisposable
@@ -18,7 +19,7 @@ class RestoreBlockchainsService(
     private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
-    private val coinManager: ICoinManager,
+    private val marketKit: MarketKit,
     private val enableCoinService: EnableCoinService,
     private val evmBlockchainManager: EvmBlockchainManager
 ) : Clearable {
@@ -58,7 +59,7 @@ class RestoreBlockchainsService(
     }
 
     private fun syncInternalItems() {
-        val platformCoins = coinManager.getPlatformCoins(Blockchain.all.map { it.coinType })
+        val platformCoins = marketKit.platformCoins(Blockchain.all.map { it.coinType })
         internalItems = Blockchain.all.mapNotNull { blockchain ->
             platformCoins.firstOrNull { it.coinType == blockchain.coinType }?.let { platformCoin ->
                 InternalItem(blockchain, platformCoin)
