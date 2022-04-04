@@ -1,10 +1,20 @@
 package io.horizontalsystems.bankwallet.core
 
+import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 
+class HSCaution(val s: TranslatableString, val type: Type = Type.Error) {
+    @Composable
+    fun getString() = s.getString()
+
+    enum class Type {
+        Error, Warning
+    }
+}
 class NotEnoughData() : Exception()
 class UnsupportedException(override val message: String?) : Exception()
 class UnsupportedAccountException : Exception()

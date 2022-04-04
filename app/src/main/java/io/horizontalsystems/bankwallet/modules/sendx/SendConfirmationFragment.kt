@@ -11,9 +11,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,6 +33,9 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.snackbar.SnackbarDuration
+import kotlinx.coroutines.delay
 
 class SendConfirmationFragment : BaseFragment() {
 
@@ -67,6 +72,36 @@ fun SendConfirmationScreen(
     amountInputModeViewModel: AmountInputModeViewModel
 ) {
     val confirmationViewItem = sendViewModel.getConfirmationViewItem()
+    val sendResult = sendViewModel.sendResult
+    val view = LocalView.current
+
+    when (sendResult) {
+        SendResult.Sending -> {
+            HudHelper.showInProcessMessage(
+                view,
+                R.string.Send_Sending,
+                SnackbarDuration.INDEFINITE
+            )
+        }
+        SendResult.Sent -> {
+            HudHelper.showSuccessMessage(
+                view,
+                R.string.Send_Success,
+                SnackbarDuration.LONG
+            )
+        }
+        is SendResult.Failed -> {
+            HudHelper.showErrorMessage(view, sendResult.caution.getString())
+        }
+        null -> Unit
+    }
+
+    LaunchedEffect(sendResult) {
+        if (sendResult == SendResult.Sent) {
+            delay(1200)
+            navController.popBackStack(R.id.sendXFragment, true)
+        }
+    }
 
     ComposeAppTheme {
         Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -126,7 +161,7 @@ fun SendConfirmationScreen(
                             ConfirmAmountCell(currencyAmount, coinAmount, true)
                         }
                         CellSingleLineLawrence(borderTop = true) {
-                            AddressCell(confirmationViewItem.address.hex, {  })
+                            AddressCell(confirmationViewItem.address.hex, { })
                         }
                     }
 
@@ -141,22 +176,38 @@ fun SendConfirmationScreen(
                     )
                 }
 
-                ButtonPrimaryYellow(
+                SendButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
                         .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                    title = stringResource(R.string.Send_Confirmation_Send_Button),
-                    onClick = {
-                        sendViewModel.onClickSend()
-                    },
-                    enabled = true
-                )
+                    sendResult = sendResult
+                ) {
+                    sendViewModel.onClickSend()
+                }
             }
         }
     }
-
 }
 
-
-
+@Composable
+private fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> Unit) {
+    when (sendResult) {
+        SendResult.Sending -> {
+            ButtonPrimaryYellow(
+                modifier = modifier,
+                title = stringResource(R.string.Send_Sending),
+                onClick = { },
+                enabled = false
+            )
+        }
+        else -> {
+            ButtonPrimaryYellow(
+                modifier = modifier,
+                title = stringResource(R.string.Send_Confirmation_Send_Button),
+                onClick = onClickSend,
+                enabled = true
+            )
+        }
+    }
+}
