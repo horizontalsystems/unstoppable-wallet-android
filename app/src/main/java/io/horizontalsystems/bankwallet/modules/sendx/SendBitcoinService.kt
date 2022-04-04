@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
+import java.net.UnknownHostException
 import kotlin.math.min
 
 class SendBitcoinService(
@@ -29,6 +31,7 @@ class SendBitcoinService(
         val addressError: Throwable?,
         val amountError: Throwable?,
         val canBeSend: Boolean,
+        val sendResult: SendResult?
     )
     private var feeRate: Long = 0
     private var amount: BigDecimal? = null
@@ -46,6 +49,9 @@ class SendBitcoinService(
     private var addressError: Throwable? = null
     private var amountError: Throwable? = null
     private var feeRatePriority = FeeRatePriority.RECOMMENDED
+    private var sendResult: SendResult? = null
+
+    private val logger = AppLogger("send")
 
     suspend fun start() {
         adapter.balanceData
@@ -74,6 +80,7 @@ class SendBitcoinService(
                 addressError = addressError,
                 amountError = amountError,
                 canBeSend = tmpAmount != null && tmpAmount > BigDecimal.ZERO && amountError == null && address != null && addressError == null,
+                sendResult = sendResult
             )
         }
     }
@@ -165,15 +172,36 @@ class SendBitcoinService(
         )
     }
 
-    suspend fun send(logger: AppLogger) = withContext(Dispatchers.IO) {
-        adapter.send(
-            amount!!,
-            address!!.hex,
-            feeRate,
-            pluginData,
-            transactionSorting = null,
-            logger = logger
-        ).blockingGet()
+    suspend fun send() = withContext(Dispatchers.IO) {
+        val logger = logger.getScopedUnique()
+        logger.info("click")
+
+        try {
+            sendResult = SendResult.Sent
+
+            val send = adapter.send(
+                amount!!,
+                address!!.hex,
+                feeRate,
+                pluginData,
+                transactionSorting = null,
+                logger = logger
+            ).blockingGet()
+
+            logger.info("success")
+            sendResult = SendResult.Sent
+        } catch (e: Throwable) {
+            logger.warning("failed", e)
+            sendResult = SendResult.Failed(createCaution(e))
+        }
+
+        emitState()
+    }
+
+    private fun createCaution(error: Throwable) = when (error) {
+        is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
+        is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
+        else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 
     data class ConfirmationData(
