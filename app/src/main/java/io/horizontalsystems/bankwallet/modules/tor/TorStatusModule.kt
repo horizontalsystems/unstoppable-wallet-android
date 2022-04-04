@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.tor
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.TorStatus
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 
 object TorStatusModule {
 

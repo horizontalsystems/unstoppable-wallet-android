@@ -1,21 +1,21 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.Bip
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.models.*
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -30,7 +30,7 @@ import java.util.*
 
 abstract class BitcoinBaseAdapter(
     open val kit: AbstractKit,
-    open val syncMode: SyncMode? = null,
+    open val syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
     val wallet: Wallet,
     protected val testMode: Boolean
@@ -200,7 +200,7 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?, logger: AppLogger): Single<Unit> {
+    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortMode?, logger: AppLogger): Single<Unit> {
         val sortingType = getTransactionSortingType(transactionSorting)
         return Single.create { emitter ->
             try {
@@ -347,8 +347,8 @@ abstract class BitcoinBaseAdapter(
         const val confirmationsThreshold = 3
         const val decimal = 8
 
-        fun getTransactionSortingType(sortType: TransactionDataSortingType?): TransactionDataSortType = when (sortType) {
-            TransactionDataSortingType.Bip69 -> TransactionDataSortType.Bip69
+        fun getTransactionSortingType(sortType: TransactionDataSortMode?): TransactionDataSortType = when (sortType) {
+            TransactionDataSortMode.Bip69 -> TransactionDataSortType.Bip69
             else -> TransactionDataSortType.Shuffle
         }
 
@@ -358,14 +358,6 @@ abstract class BitcoinBaseAdapter(
             AccountType.Derivation.bip84 -> Bip.BIP84
         }
 
-        fun getSyncMode(mode: SyncMode?): BitcoinCore.SyncMode {
-            return when (mode) {
-                SyncMode.Slow -> BitcoinCore.SyncMode.Full()
-                SyncMode.New -> BitcoinCore.SyncMode.NewWallet()
-                SyncMode.Fast -> BitcoinCore.SyncMode.Api()
-                null -> throw AdapterErrorWrongParameters("SyncMode is null")
-            }
-        }
     }
 
 }

@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
-import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.entities.EvmSyncSource
 import io.horizontalsystems.ethereumkit.models.RpcSource
@@ -9,11 +9,14 @@ import io.horizontalsystems.ethereumkit.models.TransactionSource
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class EvmSyncSourceManager(appConfigProvider: AppConfigProvider, val accountSettingManager: AccountSettingManager) {
+class EvmSyncSourceManager(
+    appConfigProvider: AppConfigProvider,
+    private val blockchainSettingsStorage: BlockchainSettingsStorage
+    ) {
 
-    private val syncSourceSubject = PublishSubject.create<Triple<Account, EvmBlockchain, EvmSyncSource>>()
+    private val syncSourceSubject = PublishSubject.create<EvmBlockchain>()
 
-    val syncSourceObservable: Observable<Triple<Account, EvmBlockchain, EvmSyncSource>>
+    val syncSourceObservable: Observable<EvmBlockchain>
         get() = syncSourceSubject
 
     val defaultSyncSources: Map<EvmBlockchain, List<EvmSyncSource>> =
@@ -62,18 +65,18 @@ class EvmSyncSourceManager(appConfigProvider: AppConfigProvider, val accountSett
     fun getAllBlockchains(blockchain: EvmBlockchain): List<EvmSyncSource> =
         defaultSyncSources[blockchain] ?: listOf()
 
-    fun getSyncSource(account: Account, blockchain: EvmBlockchain): EvmSyncSource {
+    fun getSyncSource(blockchain: EvmBlockchain): EvmSyncSource {
         val syncSources = getAllBlockchains(blockchain)
 
-        val syncSourceName = accountSettingManager.getEvmSyncSourceName(account, blockchain)
+        val syncSourceName = blockchainSettingsStorage.evmSyncSourceName(blockchain)
         val syncSource = syncSources.firstOrNull { it.name == syncSourceName }
 
         return syncSource ?: syncSources[0]
     }
 
-    fun save(syncSource: EvmSyncSource, account: Account, blockchain: EvmBlockchain) {
-        accountSettingManager.save(syncSource.name, account, blockchain)
-        syncSourceSubject.onNext(Triple(account, blockchain, syncSource))
+    fun save(syncSource: EvmSyncSource, blockchain: EvmBlockchain) {
+        blockchainSettingsStorage.save(syncSource.name, blockchain)
+        syncSourceSubject.onNext(blockchain)
     }
 
 }

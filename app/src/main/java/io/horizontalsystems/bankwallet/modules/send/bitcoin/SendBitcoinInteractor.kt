@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.send.bitcoin
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
+import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
+import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.reactivex.Single
@@ -13,7 +15,9 @@ import java.math.BigDecimal
 
 class SendBitcoinInteractor(
         private val adapter: ISendBitcoinAdapter,
-        private val storage: ILocalStorage)
+        private val storage: ILocalStorage,
+        private val btcBlockchainManager: BtcBlockchainManager,
+        )
     : SendModule.ISendBitcoinInteractor {
 
     private val disposables = CompositeDisposable()
@@ -63,7 +67,7 @@ class SendBitcoinInteractor(
 
     override fun send(amount: BigDecimal, address: String, feeRate: Long,
                       pluginData: Map<Byte, IPluginData>?, logger: AppLogger): Single<Unit> {
-        return adapter.send(amount, address, feeRate, pluginData, storage.transactionSortingType, logger)
+        return adapter.send(amount, address, feeRate, pluginData, btcBlockchainManager.transactionSortMode(BtcBlockchain.Bitcoin), logger)
     }
 
     override fun clear() {

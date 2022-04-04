@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.feeratekit.FeeRateKit
 import io.horizontalsystems.feeratekit.model.FeeProviderConfig

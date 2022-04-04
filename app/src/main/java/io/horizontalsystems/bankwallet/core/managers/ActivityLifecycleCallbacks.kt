@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsFragment
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 
 class ActivityLifecycleCallbacks(

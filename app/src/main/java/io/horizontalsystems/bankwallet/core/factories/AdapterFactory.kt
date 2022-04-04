@@ -3,13 +3,12 @@ package io.horizontalsystems.bankwallet.core.factories
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.IInitialSyncModeSettingsManager
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.entities.EvmBlockchain
-import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
@@ -18,14 +17,14 @@ import io.horizontalsystems.marketkit.models.CoinType
 class AdapterFactory(
     private val context: Context,
     private val testMode: Boolean,
+    private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val binanceKitManager: BinanceKitManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
-    private val coinManager: ICoinManager) {
-
-    var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager? = null
+    private val coinManager: ICoinManager,
+) {
 
     private fun getEvmAdapter(wallet: Wallet): IAdapter? {
         val blockchain = evmBlockchainManager.getBlockchain(wallet.coinType) ?: return null
@@ -43,14 +42,25 @@ class AdapterFactory(
     }
 
     fun getAdapter(wallet: Wallet): IAdapter? {
-        val syncMode = initialSyncModeSettingsManager?.setting(wallet.coinType, wallet.account.origin)?.syncMode ?: SyncMode.Fast
 
         return when (val coinType = wallet.coinType) {
             is CoinType.Zcash -> ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.coinType), testMode)
-            is CoinType.Bitcoin -> BitcoinAdapter(wallet, syncMode, testMode, backgroundManager)
-            is CoinType.Litecoin -> LitecoinAdapter(wallet, syncMode, testMode, backgroundManager)
-            is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, syncMode, testMode, backgroundManager)
-            is CoinType.Dash -> DashAdapter(wallet, syncMode, testMode, backgroundManager)
+            is CoinType.Bitcoin -> {
+                val syncMode = btcBlockchainManager.syncMode(BtcBlockchain.Bitcoin, wallet.account.origin)
+                BitcoinAdapter(wallet, syncMode, testMode, backgroundManager)
+            }
+            is CoinType.Litecoin -> {
+                val syncMode = btcBlockchainManager.syncMode(BtcBlockchain.Litecoin, wallet.account.origin)
+                LitecoinAdapter(wallet, syncMode, testMode, backgroundManager)
+            }
+            is CoinType.BitcoinCash -> {
+                val syncMode = btcBlockchainManager.syncMode(BtcBlockchain.BitcoinCash, wallet.account.origin)
+                BitcoinCashAdapter(wallet, syncMode, testMode, backgroundManager)
+            }
+            is CoinType.Dash -> {
+                val syncMode = btcBlockchainManager.syncMode(BtcBlockchain.Dash, wallet.account.origin)
+                DashAdapter(wallet, syncMode, testMode, backgroundManager)
+            }
             is CoinType.Bep2 -> {
                 coinManager.getPlatformCoin(CoinType.Bep2("BNB"))?.let { feePlatformCoin ->
                     BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol, feePlatformCoin, wallet, testMode)
@@ -80,7 +90,7 @@ class AdapterFactory(
     fun evmTransactionsAdapter(source: TransactionSource, blockchain: EvmBlockchain): ITransactionsAdapter? {
         val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchain).getEvmKitWrapper(source.account, blockchain)
         val baseCoin = evmBlockchainManager.getBasePlatformCoin(blockchain) ?: return null
-        val syncSource = evmSyncSourceManager.getSyncSource(source.account, blockchain)
+        val syncSource = evmSyncSourceManager.getSyncSource(blockchain)
 
         return EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source, syncSource.transactionSource)
     }

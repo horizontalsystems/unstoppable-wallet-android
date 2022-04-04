@@ -60,6 +60,8 @@ class App : CoreApp(), WorkConfiguration.Provider {
         lateinit var chartTypeStorage: IChartTypeStorage
         lateinit var restoreSettingsStorage: IRestoreSettingsStorage
 
+        lateinit var blockchainSettingsStorage: BlockchainSettingsStorage
+        lateinit var btcBlockchainManager: BtcBlockchainManager
         lateinit var wordsManager: WordsManager
         lateinit var networkManager: INetworkManager
         lateinit var backgroundStateChangeListener: BackgroundStateChangeListener
@@ -77,12 +79,10 @@ class App : CoreApp(), WorkConfiguration.Provider {
         lateinit var appDatabase: AppDatabase
         lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
-        lateinit var blockchainSettingsStorage: IBlockchainSettingsStorage
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeCoinProvider
-        lateinit var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
@@ -101,7 +101,6 @@ class App : CoreApp(), WorkConfiguration.Provider {
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
         lateinit var evmBlockchainManager: EvmBlockchainManager
-        lateinit var accountSettingManager: AccountSettingManager
         lateinit var nftManager: NftManager
     }
 
@@ -141,8 +140,10 @@ class App : CoreApp(), WorkConfiguration.Provider {
 
         appDatabase = AppDatabase.getInstance(this)
 
-        accountSettingManager = AccountSettingManager(AccountSettingRecordStorage(appDatabase))
-        evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, accountSettingManager)
+        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
+        evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage)
+
+        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage)
 
         binanceKitManager = BinanceKitManager(testMode)
 
@@ -161,6 +162,7 @@ class App : CoreApp(), WorkConfiguration.Provider {
         coinManager = CoinManager(marketKit, walletManager)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
+        walletStorage = WalletStorage(coinManager, enabledWalletsStorage)
 
         LocalStorageManager(preferences).apply {
             localStorage = this
@@ -212,13 +214,9 @@ class App : CoreApp(), WorkConfiguration.Provider {
         val zcashBirthdayProvider = ZcashBirthdayProvider(this, testMode)
         restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
 
-        val adapterFactory = AdapterFactory(instance, testMode, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager)
-        adapterManager = AdapterManager(walletManager, adapterFactory, evmBlockchainManager, binanceKitManager)
+        val adapterFactory = AdapterFactory(instance, testMode, btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager)
+        adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
-
-        initialSyncModeSettingsManager = InitialSyncSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
-
-        adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
 
         feeCoinProvider = FeeCoinProvider(marketKit)
 

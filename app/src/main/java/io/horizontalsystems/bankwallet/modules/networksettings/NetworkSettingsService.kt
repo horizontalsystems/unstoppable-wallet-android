@@ -32,7 +32,7 @@ class NetworkSettingsService(
     init {
         evmSyncSourceManager.syncSourceObservable
             .subscribeIO {
-                handleSettingsUpdated(it.first)
+//                handleSettingsUpdated(it.first)
             }.let {
                 disposables.add(it)
             }
@@ -47,9 +47,9 @@ class NetworkSettingsService(
     }
 
     private fun syncItems() {
-        items = evmBlockchainManager.allBlockchains.map {
-            Item(it, evmSyncSourceManager.getSyncSource(account, it))
-        }
+//        items = evmBlockchainManager.allBlockchains.map {
+//            Item(it, evmSyncSourceManager.getSyncSource(account, it))
+//        }
     }
 
     override fun clear() {

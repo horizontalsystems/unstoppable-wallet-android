@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITorManager
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.tor.ConnectionStatus
 import io.horizontalsystems.tor.Tor
 import io.horizontalsystems.tor.TorKit
@@ -13,11 +14,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class TorManager(
-        context: Context,
-        val localStorage: ILocalStorage)
-    : ITorManager {
+    context: Context,
+    val localStorage: ILocalStorage
+) : ITorManager {
 
-    interface Listener{
+    interface Listener {
         fun onStatusChange(torStatus: TorStatus)
     }
 
@@ -54,11 +55,11 @@ class TorManager(
         return kit.stopTor()
     }
 
-    override fun enableTor() {
+    override fun setTorAsEnabled() {
         localStorage.torEnabled = true
     }
 
-    override fun disableTor() {
+    override fun setTorAsDisabled() {
         localStorage.torEnabled = false
     }
 
@@ -71,18 +72,11 @@ class TorManager(
 
     private fun getStatus(torinfo: Tor.Info): TorStatus {
         return when (torinfo.connection.status) {
-            ConnectionStatus.CONNECTED ->TorStatus.Connected
-            ConnectionStatus.CONNECTING ->TorStatus.Connecting
-            ConnectionStatus.CLOSED ->TorStatus.Closed
-            ConnectionStatus.FAILED ->TorStatus.Failed
+            ConnectionStatus.CONNECTED -> TorStatus.Connected
+            ConnectionStatus.CONNECTING -> TorStatus.Connecting
+            ConnectionStatus.CLOSED -> TorStatus.Closed
+            ConnectionStatus.FAILED -> TorStatus.Failed
         }
     }
 
-}
-
-enum class TorStatus(val value: String) {
-    Connected("Connected"),
-    Connecting("Connecting"),
-    Closed("Closed"),
-    Failed("Failed");
 }

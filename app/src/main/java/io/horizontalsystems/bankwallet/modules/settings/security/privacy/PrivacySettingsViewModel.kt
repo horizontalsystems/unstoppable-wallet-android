@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.InitialSyncSetting
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.core.SingleLiveEvent
 
 class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySettingsView, PrivacySettingsModule.IPrivacySettingsRouter {
