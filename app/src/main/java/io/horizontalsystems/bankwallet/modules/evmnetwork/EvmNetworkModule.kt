@@ -15,14 +15,12 @@ object EvmNetworkModule {
 
     class Factory(arguments: Bundle) : ViewModelProvider.Factory {
         private val blockchain = arguments.getParcelable<EvmBlockchain>("blockchain")!!
-        private val account = arguments.getParcelable<Account>("account")!!
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val service = EvmNetworkService(
                 blockchain,
-                account,
                 App.evmSyncSourceManager
             )
 

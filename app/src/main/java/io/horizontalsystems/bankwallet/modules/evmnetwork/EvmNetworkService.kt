@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.evmnetwork
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.entities.EvmSyncSource
 import io.reactivex.Observable
@@ -11,7 +10,6 @@ import io.reactivex.subjects.BehaviorSubject
 
 class EvmNetworkService(
     val blockchain: EvmBlockchain,
-    private val account: Account,
     private val evmSyncSourceManager: EvmSyncSourceManager
 ) : Clearable {
     private val disposables = CompositeDisposable()
@@ -25,7 +23,7 @@ class EvmNetworkService(
         }
 
     private val currentSyncSource: EvmSyncSource
-        get() = evmSyncSourceManager.getSyncSource(account, blockchain)
+        get() = evmSyncSourceManager.getSyncSource(blockchain)
 
     init {
         syncItems()
@@ -47,7 +45,7 @@ class EvmNetworkService(
 
         val syncSource = items.find { it.syncSource.id == id }?.syncSource ?: return
 
-        evmSyncSourceManager.save(syncSource, account, blockchain)
+        evmSyncSourceManager.save(syncSource, blockchain)
     }
 
     override fun clear() {

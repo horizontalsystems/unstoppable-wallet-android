@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.tor
 
-import io.horizontalsystems.bankwallet.core.managers.TorStatus
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.core.SingleLiveEvent
 
 class TorStatusView: TorStatusModule.View {

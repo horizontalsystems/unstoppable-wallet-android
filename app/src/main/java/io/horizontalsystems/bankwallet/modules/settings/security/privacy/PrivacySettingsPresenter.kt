@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
-import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
-import io.horizontalsystems.bankwallet.entities.InitialSyncSetting
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.views.ListPosition
 
 class PrivacySettingsPresenter(
     private val interactor: PrivacySettingsModule.IPrivacySettingsInteractor,
@@ -22,14 +20,14 @@ class PrivacySettingsPresenter(
     private val isActiveAccountCreated: Boolean
         get() = interactor.activeAccount?.origin == AccountOrigin.Created
 
-    private val syncItems: List<PrivacySettingsViewItem>
-        get() = interactor.syncSettings().mapIndexed { index, (initialSyncSetting, changeable) ->
-            PrivacySettingsViewItem(
-                initialSyncSetting,
-                changeable,
-                listPosition = ListPosition.getListPosition(interactor.syncSettings().size, index)
-            )
-        }
+//    private val syncItems: List<PrivacySettingsViewItem>
+//        get() = interactor.syncSettings().mapIndexed { index, (initialSyncSetting, changeable) ->
+//            PrivacySettingsViewItem(
+//                initialSyncSetting,
+//                changeable,
+//                listPosition = ListPosition.getListPosition(interactor.syncSettings().size, index)
+//            )
+//        }
 
     private val syncModeOptions = listOf(SyncMode.Fast, SyncMode.Slow)
 
@@ -37,10 +35,10 @@ class PrivacySettingsPresenter(
         interactor.subscribeToTorStatus()
 
         view?.toggleTorEnabled(interactor.isTorEnabled)
-        view?.setTransactionsOrdering(interactor.transactionsSortingType)
-
-        if (!isActiveAccountCreated)
-            view?.setRestoreWalletSettingsViewItems(syncItems)
+//        view?.setTransactionsOrdering(interactor.transactionsSortingType)
+//
+//        if (!isActiveAccountCreated)
+//            view?.setRestoreWalletSettingsViewItems(syncItems)
     }
 
     override fun didSwitchTorEnabled(checked: Boolean) {
@@ -88,18 +86,18 @@ class PrivacySettingsPresenter(
 
     override fun onTransactionOrderSettingTap() {
         val types = TransactionDataSortingType.values().toList()
-        val selectedItem = interactor.transactionsSortingType
-        view?.showTransactionsSortingOptions(types, selectedItem)
+//        val selectedItem = interactor.transactionsSortingType
+//        view?.showTransactionsSortingOptions(types, selectedItem)
     }
 
     override fun onSelectSyncMode(syncMode: SyncMode, coinType: CoinType) {
-        interactor.saveSyncModeSetting(InitialSyncSetting(coinType, syncMode))
-        view?.setRestoreWalletSettingsViewItems(syncItems)
+//        interactor.saveSyncModeSetting(InitialSyncSetting(coinType, syncMode))
+//        view?.setRestoreWalletSettingsViewItems(syncItems)
     }
 
     override fun onSelectTransactionSorting(transactionDataSortingType: TransactionDataSortingType) {
-        interactor.transactionsSortingType = transactionDataSortingType
-        view?.setTransactionsOrdering(interactor.transactionsSortingType)
+//        interactor.transactionsSortingType = transactionDataSortingType
+//        view?.setTransactionsOrdering(interactor.transactionsSortingType)
     }
 
     override fun onShowPrivacySettingsInfoClick() {

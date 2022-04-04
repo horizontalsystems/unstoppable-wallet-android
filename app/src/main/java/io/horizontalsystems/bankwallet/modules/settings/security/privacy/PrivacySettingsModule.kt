@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
 
@@ -37,7 +37,7 @@ object PrivacySettingsModule {
     interface IPrivacySettingsInteractor {
         val wallets: List<Wallet>
         val activeAccount: Account?
-        var transactionsSortingType: TransactionDataSortingType
+//        var transactionsSortingType: TransactionDataSortingType
         var isTorEnabled: Boolean
         val isTorNotificationEnabled: Boolean
         fun stopTor()
@@ -45,8 +45,8 @@ object PrivacySettingsModule {
         fun disableTor()
         fun subscribeToTorStatus()
 
-        fun syncSettings(): List<Pair<InitialSyncSetting, Boolean>>
-        fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting)
+//        fun syncSettings(): List<Pair<InitialSyncSetting, Boolean>>
+//        fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting)
 
         fun clear()
     }
@@ -64,7 +64,7 @@ object PrivacySettingsModule {
         val interactor = PrivacySettingsInteractor(
                 App.pinComponent,
                 App.torKitManager,
-                App.initialSyncModeSettingsManager,
+//                App.initialSyncModeSettingsManager,
                 App.walletManager,
                 App.accountManager,
                 App.localStorage)

@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ISendDashAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bitcoincore.BitcoinCore
@@ -20,13 +19,13 @@ import java.math.BigDecimal
 
 class DashAdapter(
         override val kit: DashKit,
-        syncMode: SyncMode?,
+        syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         wallet: Wallet,
         testMode: Boolean
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, testMode), DashKit.Listener, ISendDashAdapter {
 
-    constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) :
+    constructor(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean, backgroundManager: BackgroundManager) :
             this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet, testMode)
 
     init {
@@ -104,7 +103,7 @@ class DashAdapter(
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean): DashKit {
+        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean): DashKit {
             val account = wallet.account
             val accountType = account.type
             if (accountType is AccountType.Mnemonic) {
@@ -112,7 +111,7 @@ class DashAdapter(
                         words = accountType.words,
                         passphrase = accountType.passphrase,
                         walletId = account.id,
-                        syncMode = getSyncMode(syncMode),
+                        syncMode = syncMode,
                         networkType = getNetworkType(testMode),
                         confirmationsThreshold = confirmationsThreshold)
             }

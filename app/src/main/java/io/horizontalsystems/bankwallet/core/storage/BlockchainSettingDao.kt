@@ -4,22 +4,18 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import io.horizontalsystems.bankwallet.entities.BlockchainSetting
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
 
 @Dao
 interface BlockchainSettingDao {
 
-    @Query("SELECT * FROM BlockchainSetting")
-    fun getAll(): List<BlockchainSetting>
+    @Query("SELECT * FROM BlockchainSettingRecord")
+    fun getAll(): List<BlockchainSettingRecord>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(item: BlockchainSetting)
+    fun insert(item: BlockchainSettingRecord)
 
-    @Query("SELECT * FROM BlockchainSetting WHERE coinType = :coinType AND `key` == :key")
-    fun getSetting(coinType: CoinType, key: String): BlockchainSetting?
-
-    @Query("DELETE FROM BlockchainSetting WHERE `key` = :key")
-    fun deleteDerivationSettings(key: String)
+    @Query("SELECT * FROM BlockchainSettingRecord WHERE blockchainUid = :blockchainUid AND `key` == :key")
+    fun getBlockchainSetting(blockchainUid: String, key: String): BlockchainSettingRecord?
 
 }

@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
-import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bitcoincash.BitcoinCashKit
@@ -21,13 +20,13 @@ import java.math.BigDecimal
 
 class BitcoinCashAdapter(
         override val kit: BitcoinCashKit,
-        syncMode: SyncMode?,
+        syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         wallet: Wallet,
         testMode: Boolean
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, testMode), BitcoinCashKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) :
+    constructor(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean, backgroundManager: BackgroundManager) :
             this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet, testMode)
 
     init {
@@ -82,7 +81,7 @@ class BitcoinCashAdapter(
 
     companion object {
 
-        private fun createKit(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean): BitcoinCashKit {
+        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean): BitcoinCashKit {
             val account = wallet.account
             val accountType = (account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
             val bchCoinType = wallet.coinSettings.bitcoinCashCoinType ?: throw AdapterErrorWrongParameters("BitcoinCashCoinType is null")
@@ -95,7 +94,7 @@ class BitcoinCashAdapter(
                     words = accountType.words,
                     passphrase = accountType.passphrase,
                     walletId = account.id,
-                    syncMode = getSyncMode(syncMode ?: SyncMode.Slow),
+                    syncMode = syncMode,
                     networkType = getNetworkType(testMode, kitCoinType),
                     confirmationsThreshold = confirmationsThreshold)
         }

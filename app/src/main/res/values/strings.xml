@@ -898,6 +898,11 @@
     <string name="CoinPlatformsSelector_Title">Coin Type</string>
     <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains. Select version(s) you would like to use.</string>
 
+    <!-- Security Center -->
+
+    <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN SETTINGS</string>
+    <string name="SecurityCenter_Internet">INTERNET</string>
+
     <!-- Blockchain Settings -->
 
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>

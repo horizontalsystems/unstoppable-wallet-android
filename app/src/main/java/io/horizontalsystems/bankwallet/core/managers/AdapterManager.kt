@@ -4,9 +4,9 @@ import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -18,8 +18,9 @@ import java.util.concurrent.ConcurrentHashMap
 class AdapterManager(
     private val walletManager: IWalletManager,
     private val adapterFactory: AdapterFactory,
+    btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val binanceKitManager: BinanceKitManager
+    private val binanceKitManager: BinanceKitManager,
 ) : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
@@ -42,6 +43,12 @@ class AdapterManager(
             }
         )
 
+        disposables.add(btcBlockchainManager.restoreModeUpdatedObservable
+            .subscribeIO {
+                handleUpdatedRestoreMode(it)
+            }
+        )
+
         for (blockchain in evmBlockchainManager.allBlockchains) {
             evmBlockchainManager.getEvmKitManager(blockchain).evmKitUpdatedObservable
                 .subscribeIO {
@@ -54,6 +61,21 @@ class AdapterManager(
     }
 
     private fun handleUpdatedKit(blockchain: EvmBlockchain) {
+        val wallets = adaptersMap.keys().toList().filter {
+            blockchain.supports(it.coinType)
+        }
+
+        if (wallets.isEmpty()) return
+
+        wallets.forEach {
+            adaptersMap[it]?.stop()
+            adaptersMap.remove(it)
+        }
+
+        initAdapters(walletManager.activeWallets)
+    }
+
+    private fun handleUpdatedRestoreMode(blockchain: BtcBlockchain) {
         val wallets = adaptersMap.keys().toList().filter {
             blockchain.supports(it.coinType)
         }

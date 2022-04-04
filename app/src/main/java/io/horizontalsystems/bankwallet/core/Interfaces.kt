@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
@@ -63,7 +64,6 @@ interface ILocalStorage {
     var torEnabled: Boolean
     var appLaunchCount: Int
     var rateAppLastRequestTime: Long
-    var transactionSortingType: TransactionDataSortingType
     var balanceHidden: Boolean
     var checkedTerms: List<Term>
     var mainShowedOnce: Boolean
@@ -254,7 +254,7 @@ interface ISendBitcoinAdapter {
         address: String,
         feeRate: Long,
         pluginData: Map<Byte, IPluginData>?,
-        transactionSorting: TransactionDataSortingType?,
+        transactionSorting: TransactionDataSortMode?,
         logger: AppLogger
     ): Single<Unit>
 }
@@ -326,15 +326,12 @@ interface IEnabledWalletStorage {
     fun isEnabled(accountId: String, coinId: String): Boolean
 }
 
-interface IBlockchainSettingsStorage {
-    var bitcoinCashCoinType: BitcoinCashCoinType?
-    fun derivationSetting(coinType: CoinType): DerivationSetting?
-    fun saveDerivationSetting(derivationSetting: DerivationSetting)
-    fun deleteDerivationSettings()
-    fun initialSyncSetting(coinType: CoinType): InitialSyncSetting?
-    fun saveInitialSyncSetting(initialSyncSetting: InitialSyncSetting)
-    fun ethereumRpcModeSetting(coinType: CoinType): EthereumRpcMode?
-    fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode)
+interface ICustomTokenStorage {
+    fun customTokens(platformType: PlatformType, filter: String): List<CustomToken>
+    fun customTokens(filter: String): List<CustomToken>
+    fun customTokens(coinTypeIds: List<String>): List<CustomToken>
+    fun customToken(coinType: CoinType): CustomToken?
+    fun save(customTokens: List<CustomToken>)
 }
 
 interface IWalletManager {
@@ -394,18 +391,8 @@ interface IFeeRateProvider {
     }
 }
 
-interface ICustomRangedFeeProvider : IFeeRateProvider {
-    val customFeeRange: LongRange
-}
-
 interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
-}
-
-interface IInitialSyncModeSettingsManager {
-    fun allSettings(): List<Pair<InitialSyncSetting, Boolean>>
-    fun setting(coinType: CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
-    fun save(setting: InitialSyncSetting)
 }
 
 interface IAccountCleaner {
@@ -415,8 +402,8 @@ interface IAccountCleaner {
 interface ITorManager {
     fun start()
     fun stop(): Single<Boolean>
-    fun enableTor()
-    fun disableTor()
+    fun setTorAsEnabled()
+    fun setTorAsDisabled()
     fun setListener(listener: TorManager.Listener)
     val isTorEnabled: Boolean
     val isTorNotificationEnabled: Boolean

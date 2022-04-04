@@ -32,16 +32,16 @@ class EvmKitManager(
         backgroundManager.registerListener(this)
 
         syncSourceManager.syncSourceObservable
-            .subscribeIO { (account, blockchain, _) ->
-                handleUpdateNetwork(account, blockchain)
+            .subscribeIO { blockchain ->
+                handleUpdateNetwork(blockchain)
             }
             .let {
                 disposables.add(it)
             }
     }
 
-    private fun handleUpdateNetwork(account: Account, blockchain: EvmBlockchain) {
-        if (account != currentAccount || blockchain != evmKitWrapper?.blockchain) return
+    private fun handleUpdateNetwork(blockchain: EvmBlockchain) {
+        if (blockchain != evmKitWrapper?.blockchain) return
 
         stopEvmKit()
 
@@ -99,7 +99,7 @@ class EvmKitManager(
         account: Account,
         blockchain: EvmBlockchain
     ): EvmKitWrapper {
-        val syncSource = syncSourceManager.getSyncSource(account, blockchain)
+        val syncSource = syncSourceManager.getSyncSource(blockchain)
         val seed = accountType.seed
         val address = Signer.address(seed, chain)
         val signer = Signer.getInstance(seed, chain)
@@ -132,7 +132,7 @@ class EvmKitManager(
         account: Account,
         blockchain: EvmBlockchain
     ): EvmKitWrapper {
-        val syncSource = syncSourceManager.getSyncSource(account, blockchain)
+        val syncSource = syncSourceManager.getSyncSource(blockchain)
         val address = accountType.address
 
         val kit = EthereumKit.getInstance(

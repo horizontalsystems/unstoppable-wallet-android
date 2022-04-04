@@ -7,7 +7,10 @@ import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IMarketStorage
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
+import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
@@ -45,7 +48,6 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
     private val TOR_ENABLED = "tor_enabled"
     private val APP_LAUNCH_COUNT = "app_launch_count"
     private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
-    private val TRANSACTION_DATA_SORTING_TYPE = "transaction_data_sorting_type"
     private val BALANCE_HIDDEN = "balance_hidden"
     private val CHECKED_TERMS = "checked_terms"
     private val MARKET_CURRENT_TAB = "market_current_tab"
@@ -280,16 +282,6 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
         get() = preferences.getLong(RATE_APP_LAST_REQ_TIME, 0)
         set(value) {
             preferences.edit().putLong(RATE_APP_LAST_REQ_TIME, value).apply()
-        }
-
-    override var transactionSortingType: TransactionDataSortingType
-        get() {
-            val txSortingTypeString = preferences.getString(TRANSACTION_DATA_SORTING_TYPE, null)
-            return txSortingTypeString?.let { TransactionDataSortingType.valueOf(it) }
-                ?: TransactionDataSortingType.Shuffle
-        }
-        set(sortingType) {
-            preferences.edit().putString(TRANSACTION_DATA_SORTING_TYPE, sortingType.value).apply()
         }
 
     override var balanceHidden: Boolean

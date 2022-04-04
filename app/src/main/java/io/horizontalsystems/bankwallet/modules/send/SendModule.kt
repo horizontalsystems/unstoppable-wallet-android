@@ -186,7 +186,7 @@ object SendModule {
 
             val handler: ISendHandler = when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
                 is ISendBitcoinAdapter -> {
-                    val bitcoinInteractor = SendBitcoinInteractor(adapter, App.localStorage)
+                    val bitcoinInteractor = SendBitcoinInteractor(adapter, App.localStorage, App.btcBlockchainManager)
                     val handler = SendBitcoinHandler(bitcoinInteractor, wallet.coinType)
 
                     bitcoinInteractor.delegate = handler
