@@ -17,9 +17,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -33,7 +36,6 @@ import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
@@ -66,7 +68,6 @@ class ConfirmationFragment(private val sendPresenter: SendPresenter) : BaseFragm
                         sendButtonState = sendButtonState,
                         onBackButtonClick = { parentFragmentManager.popBackStack() },
                         onCloseButtonClick = { requireActivity().finish() },
-                        onClickCopy = { onAddressCopy(it) },
                         onSendButtonClick = { onSendClick() }
                     )
                 }
@@ -101,11 +102,6 @@ class ConfirmationFragment(private val sendPresenter: SendPresenter) : BaseFragm
         )
     }
 
-    private fun onAddressCopy(it: String) {
-        TextHelper.copyText(it)
-        HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
-    }
-
     private fun getErrorText(error: Throwable): String {
         return when (error) {
             is UnknownHostException -> getString(R.string.Hud_Text_NoInternet)
@@ -122,7 +118,6 @@ fun SendConfirmScreen(
     sendButtonState: SendConfirmationModule.SendButton?,
     onBackButtonClick: () -> Unit,
     onCloseButtonClick: () -> Unit,
-    onClickCopy: (String) -> Unit,
     onSendButtonClick: () -> Unit,
 ) {
     val primarySectionItems = mutableListOf<@Composable () -> Unit>()
@@ -137,7 +132,7 @@ fun SendConfirmScreen(
             ConfirmAmountCell(data.currencyAmount, data.coinAmount, locked)
         }
         primarySectionItems.add {
-            AddressCell(data.toAddress, onClickCopy)
+            AddressCell(data.toAddress)
         }
 
         data.memo?.let {
@@ -275,7 +270,10 @@ fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, locked: Boolean) 
 }
 
 @Composable
-fun AddressCell(address: String, onClickCopy: (String) -> Unit) {
+fun AddressCell(address: String) {
+    val clipboardManager = LocalClipboardManager.current
+    val view = LocalView.current
+
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -292,7 +290,10 @@ fun AddressCell(address: String, onClickCopy: (String) -> Unit) {
             modifier = Modifier
                 .padding(start = 8.dp),
             title = address,
-            onClick = { onClickCopy.invoke(address) },
+            onClick = {
+                clipboardManager.setText(AnnotatedString(address))
+                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+            },
             ellipsis = Ellipsis.Middle(10)
         )
     }

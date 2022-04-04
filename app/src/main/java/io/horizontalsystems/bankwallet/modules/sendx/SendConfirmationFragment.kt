@@ -163,7 +163,7 @@ fun SendConfirmationScreen(
                             ConfirmAmountCell(currencyAmount, coinAmount, true)
                         }
                         CellSingleLineLawrence(borderTop = true) {
-                            AddressCell(confirmationViewItem.address.hex, { })
+                            AddressCell(confirmationViewItem.address.hex)
                         }
                     }
 
