@@ -30,6 +30,10 @@ sealed class EvmBlockchain(
     @Parcelize
     object ArbitrumOne: EvmBlockchain("arbitrum-one", "Arbitrum One", "Arbitrum One", "L2 chain", R.drawable.logo_arbitrum_24, CoinType.EthereumArbitrumOne)
 
+    @Parcelize
+    object PulseChain: EvmBlockchain("pulsechain", "PulseChain", "PulseChain", "Ethereum PoS Fork", null, CoinType.Ethereum)
+
+
     val platformType: PlatformType
         get() = when (this) {
             ArbitrumOne -> PlatformType.ArbitrumOne
@@ -37,6 +41,7 @@ sealed class EvmBlockchain(
             Ethereum -> PlatformType.Ethereum
             Optimism -> PlatformType.Optimism
             Polygon -> PlatformType.Polygon
+            PulseChain -> PlatformType.PulseChain
         }
 
     fun getEvm20CoinType(address: String) =
@@ -46,6 +51,7 @@ sealed class EvmBlockchain(
             Polygon -> CoinType.Mrc20(address)
             Optimism -> CoinType.OptimismErc20(address)
             ArbitrumOne -> CoinType.ArbitrumOneErc20(address)
+            PulseChain -> CoinType.Erc20(address)
         }
 
     fun supports(coinType: CoinType) : Boolean {
@@ -55,6 +61,7 @@ sealed class EvmBlockchain(
             Polygon -> (coinType == CoinType.Polygon || coinType is CoinType.Mrc20)
             Optimism -> (coinType == CoinType.EthereumOptimism || coinType is CoinType.OptimismErc20)
             ArbitrumOne -> (coinType == CoinType.EthereumArbitrumOne || coinType is CoinType.ArbitrumOneErc20)
+            PulseChain -> (coinType == CoinType.Ethereum || coinType is CoinType.Erc20)
         }
     }
 

@@ -16,6 +16,7 @@ val CoinType.blockchainType: String?
             is CoinType.EthereumOptimism, is CoinType.OptimismErc20 -> "OPTIMISM"
             is CoinType.EthereumArbitrumOne, is CoinType.ArbitrumOneErc20 -> "ARBITRUM"
             is CoinType.Bep2 -> "BEP2"
+            //TBV: is a PRC20 coin type required, since pulse is a ERC20 compatible fork?
             else -> null
         }
     }
@@ -30,6 +31,7 @@ val CoinType.platformType: String
         CoinType.EthereumOptimism, is CoinType.EthereumOptimism -> "Polygon"
         CoinType.EthereumArbitrumOne, is CoinType.ArbitrumOneErc20 -> "ArbitrumOne"
         is CoinType.Bep2 -> "Binance"
+        //TBV: is PulseChain required, since pulse is a ERC20 compatible fork?
         else -> ""
     }
 

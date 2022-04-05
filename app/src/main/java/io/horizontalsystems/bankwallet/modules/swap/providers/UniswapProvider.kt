@@ -9,6 +9,7 @@ import io.horizontalsystems.uniswapkit.models.*
 import io.reactivex.Single
 import java.math.BigDecimal
 
+//TODO add https://pulsex.com/ unsiwap fork on pulse chain
 class UniswapProvider(private val uniswapKit: UniswapKit) {
 
     val routerAddress: Address
