@@ -326,14 +326,6 @@ interface IEnabledWalletStorage {
     fun isEnabled(accountId: String, coinId: String): Boolean
 }
 
-interface ICustomTokenStorage {
-    fun customTokens(platformType: PlatformType, filter: String): List<CustomToken>
-    fun customTokens(filter: String): List<CustomToken>
-    fun customTokens(coinTypeIds: List<String>): List<CustomToken>
-    fun customToken(coinType: CoinType): CustomToken?
-    fun save(customTokens: List<CustomToken>)
-}
-
 interface IWalletManager {
     val activeWallets: List<Wallet>
     val activeWalletsUpdatedObservable: Observable<List<Wallet>>
