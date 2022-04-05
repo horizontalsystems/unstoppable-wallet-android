@@ -162,7 +162,7 @@ class App : CoreApp(), WorkConfiguration.Provider {
         coinManager = CoinManager(marketKit, walletManager)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-        walletStorage = WalletStorage(coinManager, enabledWalletsStorage)
+        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
         LocalStorageManager(preferences).apply {
             localStorage = this
