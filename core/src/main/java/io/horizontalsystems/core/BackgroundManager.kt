@@ -37,6 +37,7 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
     val inBackground: Boolean
         get() = foregroundActivityCount == 0
 
+    @Synchronized
     override fun onActivityStarted(activity: Activity) {
         if (foregroundActivityCount == 0) {
             listeners.forEach { listener ->
@@ -47,6 +48,7 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         foregroundActivityCount++
     }
 
+    @Synchronized
     override fun onActivityStopped(activity: Activity) {
         foregroundActivityCount--
 
@@ -59,10 +61,12 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         }
     }
 
+    @Synchronized
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         aliveActivityCount++
     }
 
+    @Synchronized
     override fun onActivityDestroyed(activity: Activity) {
         aliveActivityCount--
 
