@@ -121,8 +121,7 @@ fun SendScreen(
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 fee = fee,
                 amountInputType = amountInputType,
-                rate = rate,
-                enabled = fee != null
+                rate = rate
             ) {
                 navController.slideFromBottom(R.id.feeSettings)
             }
