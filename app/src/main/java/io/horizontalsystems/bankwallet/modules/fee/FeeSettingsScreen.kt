@@ -116,6 +116,8 @@ fun FeeSettingsScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             sendViewModel.feeRateRange?.let { valueRange ->
+                var sliderValue by remember { mutableStateOf(feeRate) }
+
                 CellSingleLineLawrenceSection2 {
                     CellSingleLineLawrence {
                         Row(
@@ -133,7 +135,7 @@ fun FeeSettingsScreen(
                             Spacer(modifier = Modifier.weight(1f))
 
                             Text(
-                                text = feeRate.toString(),
+                                text = "$sliderValue " + stringResource(R.string.Send_TxSpeed_CustomFeeHint),
                                 style = ComposeAppTheme.typography.subhead1,
                                 color = ComposeAppTheme.colors.leah,
                                 maxLines = 1,
@@ -142,7 +144,6 @@ fun FeeSettingsScreen(
                         }
                     }
                     CellSingleLineLawrence(borderTop = true) {
-                        var sliderValue by remember { mutableStateOf(feeRate) }
                         HsSlider(
                             value = feeRate,
                             onValueChange = {
