@@ -16,7 +16,7 @@ object LaunchModule {
     }
 
     interface IInteractor {
-        val isPinNotSet: Boolean
+        val isLocked: Boolean
         val isAccountsEmpty: Boolean
         val isSystemLockOff: Boolean
         val mainShowedOnce: Boolean

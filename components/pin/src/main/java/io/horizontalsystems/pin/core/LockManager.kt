@@ -4,10 +4,11 @@ import io.horizontalsystems.core.helpers.DateHelper
 import java.util.*
 
 class LockManager(
-        private val pinManager: PinManager
+    private val pinManager: PinManager
 ) {
 
-    var isLocked: Boolean = false
+    var isLocked: Boolean = true
+        private set
     private val lockTimeout = 60L
     private var appLastVisitTime: Long = 0
 
@@ -36,6 +37,11 @@ class LockManager(
 
     fun updateLastExitDate() {
         appLastVisitTime = Date().time
+    }
+
+    fun lock() {
+        isLocked = true
+        appLastVisitTime = 0
     }
 
 }
