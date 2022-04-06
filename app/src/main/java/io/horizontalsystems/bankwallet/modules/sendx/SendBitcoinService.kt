@@ -24,13 +24,20 @@ class SendBitcoinService(
     val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
+    var feeRatePriorities: List<FeeRatePriority> = listOf()
+        private set
+    var feeRateRange: ClosedRange<Long>? = null
+        private set
+
     data class ServiceState(
         val availableBalance: BigDecimal,
         val fee: BigDecimal,
         val addressError: Throwable?,
         val amountCaution: HSCaution?,
         val canBeSend: Boolean,
-        val sendResult: SendResult?
+        val sendResult: SendResult?,
+        val feeRatePriority: FeeRatePriority,
+        val feeRate: Long
     )
     private var feeRate: Long = 0
     private var amount: BigDecimal? = null
@@ -47,13 +54,15 @@ class SendBitcoinService(
     private var fee: BigDecimal = BigDecimal.ZERO
     private var addressError: Throwable? = null
     private var amountCaution: HSCaution? = null
-    private var feeRatePriority = FeeRatePriority.RECOMMENDED
+    private var feeRatePriority: FeeRatePriority = FeeRatePriority.RECOMMENDED
     private var sendResult: SendResult? = null
 
     private val logger = AppLogger("send")
 
     suspend fun start() {
         adapter.balanceData
+
+        initFeeRateMetaData()
 
         refreshMinimumSendAmount()
         refreshMaximumSendAmount()
@@ -66,8 +75,13 @@ class SendBitcoinService(
 //        adapter.send()
     }
 
+    private suspend fun initFeeRateMetaData() = withContext(Dispatchers.IO) {
+        feeRatePriorities = feeRateProvider.feeRatePriorityList
+        feeRateRange = feeRateProvider.getFeeRateRange()
+    }
+
     private suspend fun refreshFeeRate() = withContext(Dispatchers.IO) {
-        feeRate = feeRateProvider.feeRate(feeRatePriority).blockingGet().toLong()
+        feeRate = feeRateProvider.getFeeRate(feeRatePriority)
     }
 
     private fun emitState() {
@@ -83,6 +97,8 @@ class SendBitcoinService(
         _stateFlow.update {
             ServiceState(
                 availableBalance = availableBalance,
+                feeRatePriority = feeRatePriority,
+                feeRate = feeRate,
                 fee = fee,
                 addressError = addressError,
                 amountCaution = amountCaution,
@@ -153,6 +169,17 @@ class SendBitcoinService(
                 refreshFee()
             }
         }
+
+        emitState()
+    }
+
+    suspend fun setFeeRatePriority(feeRatePriority: FeeRatePriority) {
+        this.feeRatePriority = feeRatePriority
+
+        refreshFeeRate()
+        refreshAvailableBalance()
+        refreshFee()
+        validateAmount()
 
         emitState()
     }

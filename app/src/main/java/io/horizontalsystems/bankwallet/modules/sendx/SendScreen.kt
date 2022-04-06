@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInput
@@ -122,7 +123,7 @@ fun SendScreen(
                 amountInputType = amountInputType,
                 rate = rate
             ) {
-
+                navController.slideFromBottom(R.id.feeSettings)
             }
 
             ButtonPrimaryYellow(

@@ -63,7 +63,7 @@ class SendFeePresenter(
         }
 
     private var fetchedFeeRate: BigInteger? = null
-    private var feeRatePriority: FeeRatePriority? = feeRateProvider?.defaultFeeRatePriority
+    private var feeRatePriority: FeeRatePriority? = null
     private var feeRateAdjustmentInfo: FeeRateAdjustmentInfo = FeeRateAdjustmentInfo(SendAmountInfo.NotEntered, null, baseCurrency, null)
     private var recommendedFeeRate: BigInteger? = null
 
@@ -108,7 +108,7 @@ class SendFeePresenter(
     }
 
     private fun syncFeeRateLabels() {
-        showCustomFeePriority.postValue(feeRatePriority is FeeRatePriority.Custom)
+//        showCustomFeePriority.postValue(feeRatePriority is FeeRatePriority.Custom)
 
         feeRatePriority?.let {
             feePriority.postValue(it)
@@ -124,22 +124,22 @@ class SendFeePresenter(
         }
     }
 
-    private fun updateCustomFeeParams(priority: FeeRatePriority.Custom) {
-        customPriorityUnit ?: return
-
-        val range = IntRange(customPriorityUnit.fromBaseUnit(priority.range.first).toInt(), customPriorityUnit.fromBaseUnit(priority.range.last).toInt())
-        val feeRateValue = (feeRate ?: priority.value).let { customPriorityUnit.fromBaseUnit(it) }
-        val adjustedFeeRateValue = feeRateValue.coerceAtMost(customPriorityUnit.fromBaseUnit(priority.range.last)).toInt()   // value can't be more than slider upper range
-        this.customFeeRate = adjustedFeeRateValue.toBigInteger()
-
-        setCustomFeeParams.postValue(
-            Triple<Int, IntRange, String?>(
-                adjustedFeeRateValue,
-                range,
-                customPriorityUnit.getLabel()
-            )
-        )
-    }
+//    private fun updateCustomFeeParams(priority: FeeRatePriority.Custom) {
+//        customPriorityUnit ?: return
+//
+//        val range = IntRange(customPriorityUnit.fromBaseUnit(priority.range.first).toInt(), customPriorityUnit.fromBaseUnit(priority.range.last).toInt())
+//        val feeRateValue = (feeRate ?: priority.value).let { customPriorityUnit.fromBaseUnit(it) }
+//        val adjustedFeeRateValue = feeRateValue.coerceAtMost(customPriorityUnit.fromBaseUnit(priority.range.last)).toInt()   // value can't be more than slider upper range
+//        this.customFeeRate = adjustedFeeRateValue.toBigInteger()
+//
+//        setCustomFeeParams.postValue(
+//            Triple<Int, IntRange, String?>(
+//                adjustedFeeRateValue,
+//                range,
+//                customPriorityUnit.getLabel()
+//            )
+//        )
+//    }
 
     private fun getSmartFee(): Long? {
         return fetchedFeeRate?.let {
@@ -209,14 +209,14 @@ class SendFeePresenter(
         if (feeRateProvider == null)
             return
 
-        feeRateProvider.feeRate(feeRatePriority)
-            .subscribeOn(Schedulers.io())
-            .subscribe({
-                didUpdate(it, feeRatePriority)
-            }, {
-                didReceiveError(it as Exception)
-            })
-            .let { disposables.add(it) }
+//        feeRateProvider.feeRate(feeRatePriority)
+//            .subscribeOn(Schedulers.io())
+//            .subscribe({
+//                didUpdate(it, feeRatePriority)
+//            }, {
+//                didReceiveError(it as Exception)
+//            })
+//            .let { disposables.add(it) }
     }
 
 
@@ -262,11 +262,11 @@ class SendFeePresenter(
     }
 
     fun onChangeFeeRate(feeRatePriority: FeeRatePriority) {
-        if (feeRatePriority is FeeRatePriority.Custom) {
-            updateCustomFeeParams(feeRatePriority)
-        } else {
-            customFeeRate = null
-        }
+//        if (feeRatePriority is FeeRatePriority.Custom) {
+//            updateCustomFeeParams(feeRatePriority)
+//        } else {
+//            customFeeRate = null
+//        }
 
         this.feeRatePriority = feeRatePriority
 

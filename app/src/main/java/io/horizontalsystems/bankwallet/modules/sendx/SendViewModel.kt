@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.Address
 import kotlinx.coroutines.flow.collect
@@ -15,15 +16,19 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
     val wallet by service::wallet
     val coinMaxAllowedDecimals by service::coinMaxAllowedDecimals
     val fiatMaxAllowedDecimals by service::fiatMaxAllowedDecimals
+    val feeRatePriorities by service::feeRatePriorities
+    val feeRateRange by service::feeRateRange
 
     var uiState by mutableStateOf(
         SendUiState(
             availableBalance = BigDecimal.ZERO,
             fee = BigDecimal.ZERO,
+            feeRatePriority = FeeRatePriority.RECOMMENDED,
             addressError = null,
             amountCaution = null,
             canBeSend = false,
-            sendResult = null
+            sendResult = null,
+            feeRate = 0
         )
     )
         private set
@@ -36,6 +41,8 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
                     uiState = SendUiState(
                         availableBalance = it.availableBalance,
                         fee = it.fee,
+                        feeRate = it.feeRate,
+                        feeRatePriority = it.feeRatePriority,
                         addressError = it.addressError,
                         amountCaution = it.amountCaution,
                         canBeSend = it.canBeSend,
@@ -57,6 +64,12 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
         service.setAddress(address)
     }
 
+    fun onEnterFeeRatePriority(feeRatePriority: FeeRatePriority) {
+        viewModelScope.launch {
+            service.setFeeRatePriority(feeRatePriority)
+        }
+    }
+
     fun getConfirmationViewItem(): SendBitcoinService.ConfirmationData {
         return service.getConfirmationData()
     }
@@ -71,6 +84,8 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
 data class SendUiState(
     val availableBalance: BigDecimal,
     val fee: BigDecimal,
+    val feeRatePriority: FeeRatePriority,
+    val feeRate: Long,
     val addressError: Throwable?,
     val amountCaution: HSCaution?,
     val canBeSend: Boolean,
