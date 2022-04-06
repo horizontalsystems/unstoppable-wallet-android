@@ -16,7 +16,7 @@ class FeeInputViewModel(
 ) : ViewModel() {
 
     var amountInputType: SendModule.InputType? = null
-    var fee = BigDecimal.ZERO
+    var fee: BigDecimal? = null
     var rate: CurrencyValue? = null
 
     var formatted by mutableStateOf<String?>(null)
@@ -24,21 +24,26 @@ class FeeInputViewModel(
 
     fun refreshFormatted() {
         val tmpAmountInputType = amountInputType ?: return
+        val tmpFee = fee
 
-        val values = mutableListOf(
-            App.numberFormatter.formatCoin(fee, coinCode, 0, coinDecimal)
-        )
+        if (tmpFee != null) {
+            val values = mutableListOf(
+                App.numberFormatter.formatCoin(tmpFee, coinCode, 0, coinDecimal)
+            )
 
-        rate?.let {
-            val currencyStr = it.copy(value = fee.times(it.value)).getFormatted(fiatDecimal, fiatDecimal)
+            rate?.let {
+                val currencyStr = it.copy(value = tmpFee.times(it.value)).getFormatted(fiatDecimal, fiatDecimal)
 
-            when (tmpAmountInputType) {
-                SendModule.InputType.COIN -> values.add(currencyStr)
-                SendModule.InputType.CURRENCY -> values.add(0, currencyStr)
+                when (tmpAmountInputType) {
+                    SendModule.InputType.COIN -> values.add(currencyStr)
+                    SendModule.InputType.CURRENCY -> values.add(0, currencyStr)
+                }
             }
-        }
 
-        formatted = values.joinToString(" | ")
+            formatted = values.joinToString(" | ")
+        } else {
+            formatted = null
+        }
     }
 
 }

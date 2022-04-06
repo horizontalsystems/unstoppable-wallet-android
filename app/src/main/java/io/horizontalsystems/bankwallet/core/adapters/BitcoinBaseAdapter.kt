@@ -234,14 +234,14 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal {
+    fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal? {
         return try {
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
             val fee = kit.fee(satoshiAmount, address, senderPay = true, feeRate = feeRate.toInt(), pluginData = pluginData
                     ?: mapOf())
             satoshiToBTC(fee, RoundingMode.CEILING)
         } catch (e: Exception) {
-            BigDecimal.ZERO
+            null
         }
     }
 

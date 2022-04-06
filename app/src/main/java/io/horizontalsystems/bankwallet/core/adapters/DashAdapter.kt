@@ -84,7 +84,7 @@ class DashAdapter(
         return availableBalance(feeRate, address, mapOf())
     }
 
-    override fun fee(amount: BigDecimal, address: String?): BigDecimal {
+    override fun fee(amount: BigDecimal, address: String?): BigDecimal? {
         return fee(amount, feeRate, address, mapOf())
     }
 

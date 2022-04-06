@@ -387,7 +387,7 @@ fun FeeInfoCell(
 @Composable
 fun EvmFeeCell(
     title: String,
-    value: String,
+    value: String?,
     loading: Boolean,
     viewState: ViewState?,
     highlightEditButton: Boolean = false,
@@ -418,10 +418,18 @@ fun EvmFeeCell(
                         strokeWidth = 1.5.dp
                     )
                 } else {
+                    val color = if (viewState is ViewState.Error) {
+                        ComposeAppTheme.colors.lucian
+                    } else if (value == null) {
+                        ComposeAppTheme.colors.grey50
+                    } else {
+                        ComposeAppTheme.colors.leah
+                    }
+
                     Text(
-                        text = value,
+                        text = value ?: stringResource(R.string.NotAvailable),
                         style = ComposeAppTheme.typography.subhead1,
-                        color = if (viewState is ViewState.Error) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
+                        color = color,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

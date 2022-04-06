@@ -31,7 +31,7 @@ class SendBitcoinService(
 
     data class ServiceState(
         val availableBalance: BigDecimal,
-        val fee: BigDecimal,
+        val fee: BigDecimal?,
         val addressError: Throwable?,
         val amountCaution: HSCaution?,
         val canBeSend: Boolean,
@@ -51,7 +51,7 @@ class SendBitcoinService(
     private var maximumSendAmount: BigDecimal? = null
 
     private var availableBalance: BigDecimal = BigDecimal.ZERO
-    private var fee: BigDecimal = BigDecimal.ZERO
+    private var fee: BigDecimal? = null
     private var addressError: Throwable? = null
     private var amountCaution: HSCaution? = null
     private var feeRatePriority: FeeRatePriority = FeeRatePriority.RECOMMENDED
@@ -115,7 +115,7 @@ class SendBitcoinService(
     private fun refreshFee() {
         fee = amount?.let {
             adapter.fee(it, feeRate, address?.hex, pluginData)
-        } ?: BigDecimal.ZERO
+        }
     }
 
     private fun refreshMaximumSendAmount() {
@@ -200,7 +200,7 @@ class SendBitcoinService(
     fun getConfirmationData(): ConfirmationData {
         return ConfirmationData(
             amount = amount!!,
-            fee = fee,
+            fee = fee!!,
             address = address!!,
             coin = wallet.platformCoin.coin
         )
