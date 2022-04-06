@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
@@ -61,7 +62,7 @@ fun ButtonSecondaryDefault(
 fun ButtonSecondaryWithIcon(
     modifier: Modifier = Modifier,
     title: String,
-    @DrawableRes iconRight: Int? = null,
+    iconRight: Painter,
     onClick: () -> Unit,
     enabled: Boolean = true
 ) {
@@ -72,19 +73,22 @@ fun ButtonSecondaryWithIcon(
             backgroundColor = ComposeAppTheme.colors.steel20,
             contentColor = ComposeAppTheme.colors.oz
         ),
+        contentPadding = PaddingValues(start = 16.dp, end = 12.dp),
         content = {
-            if (iconRight != null) {
-                Row {
-                    Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Icon(
-                        modifier = Modifier.padding(start = 4.dp),
-                        painter = painterResource(id = iconRight),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
-                    )
-                }
-            } else {
-                Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Row {
+                Text(
+                    text = title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = ComposeAppTheme.colors.leah
+                )
+                Icon(
+                    modifier = Modifier.padding(start = 4.dp),
+                    painter = iconRight,
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey
+                )
             }
         },
         enabled = enabled

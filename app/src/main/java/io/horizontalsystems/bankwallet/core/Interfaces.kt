@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.entities.*
@@ -372,16 +373,9 @@ interface IAppNumberFormatter {
 
 interface IFeeRateProvider {
     val feeRatePriorityList: List<FeeRatePriority>
-    val recommendedFeeRate: Single<BigInteger>
-    val defaultFeeRatePriority: FeeRatePriority
-        get() = FeeRatePriority.RECOMMENDED
-
-    fun feeRate(feeRatePriority: FeeRatePriority): Single<BigInteger> {
-        if (feeRatePriority is FeeRatePriority.Custom) {
-            return Single.just(feeRatePriority.value.toBigInteger())
-        }
-        return recommendedFeeRate
-    }
+        get() = listOf()
+    suspend fun getFeeRate(feeRatePriority: FeeRatePriority): Long
+    suspend fun getFeeRateRange(): ClosedRange<Long>? = null
 }
 
 interface IAddressParser {
@@ -423,12 +417,12 @@ interface ITermsManager {
     fun update(term: Term)
 }
 
-sealed class FeeRatePriority {
-    object LOW : FeeRatePriority()
-    object RECOMMENDED : FeeRatePriority()
-    object HIGH : FeeRatePriority()
+sealed class FeeRatePriority(val titleRes: Int) {
+    object LOW : FeeRatePriority(R.string.Send_TxSpeed_Low)
+    object RECOMMENDED : FeeRatePriority(R.string.Send_TxSpeed_Recommended)
+    object HIGH : FeeRatePriority(R.string.Send_TxSpeed_High)
 
-    class Custom(val value: Long, val range: LongRange) : FeeRatePriority()
+    class Custom(val value: Long) : FeeRatePriority(R.string.Send_TxSpeed_Custom)
 }
 
 interface Clearable {
