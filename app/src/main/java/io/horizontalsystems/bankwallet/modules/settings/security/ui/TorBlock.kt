@@ -21,13 +21,7 @@ fun TorBlock(
     viewModel: SecurityTorSettingsViewModel,
     showAppRestartAlert: () -> Unit,
     showNotificationsNotEnabledAlert: () -> Unit,
-    restartApp: () -> Unit
 ) {
-
-    if (viewModel.restartApp) {
-        restartApp()
-        viewModel.appRestarted()
-    }
 
     if (viewModel.showRestartAlert) {
         showAppRestartAlert()
