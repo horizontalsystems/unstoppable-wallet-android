@@ -40,7 +40,9 @@ class LauncherActivity : AppCompatActivity() {
         })
 
         viewModel.openMainModule.observe(this, Observer {
-            MainModule.start(this)
+            MainModule.start(this, intent.data)
+            intent.data = null
+
             if(App.localStorage.torEnabled) {
                 val intent = Intent(this, TorConnectionActivity::class.java)
                 startActivity(intent)
