@@ -18,7 +18,6 @@ fun HSFeeInput(
     fee: BigDecimal?,
     amountInputType: SendModule.InputType,
     rate: CurrencyValue?,
-    enabled: Boolean = true,
     onClick: (() -> Unit)? = null,
 ) {
     val viewModel = viewModel<FeeInputViewModel>(
@@ -42,6 +41,6 @@ fun HSFeeInput(
         value = formatted,
         loading = false,
         viewState = null,
-        onClick = if (enabled) onClick else null
+        onClick = onClick
     )
 }

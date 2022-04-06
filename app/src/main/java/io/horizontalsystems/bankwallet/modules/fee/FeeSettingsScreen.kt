@@ -42,9 +42,9 @@ fun FeeSettingsScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.FeeSettings_Reset),
-                        enabled = false,
+                        enabled = feeRatePriority != FeeRatePriority.RECOMMENDED,
                         onClick = {
-
+                            sendViewModel.onEnterFeeRatePriority(FeeRatePriority.RECOMMENDED)
                         }
                     )
                 )
@@ -116,7 +116,7 @@ fun FeeSettingsScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             sendViewModel.feeRateRange?.let { valueRange ->
-                var sliderValue by remember { mutableStateOf(feeRate) }
+                var sliderValue by remember(feeRate) { mutableStateOf(feeRate) }
 
                 CellSingleLineLawrenceSection2 {
                     CellSingleLineLawrence {
