@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
-import io.horizontalsystems.bankwallet.modules.networksettings.NetworkSettingsModule
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
 import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -146,17 +145,6 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                         }
                     }
                     KeyActionState.None -> Unit
-                }
-                actionItems.add {
-                    AccountActionItem(
-                        title = stringResource(id = R.string.ManageAccount_NetworkSettings),
-                        icon = painterResource(id = R.drawable.ic_blocks_20)
-                    ) {
-                        navController.slideFromRight(
-                            R.id.manageAccountFragment_to_networkSettingsFragment,
-                            NetworkSettingsModule.prepareParams(viewModel.account)
-                        )
-                    }
                 }
 
                 additionalViewItems.forEach { additionViewItem ->

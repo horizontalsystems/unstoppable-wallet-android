@@ -23,7 +23,8 @@ object BlockchainSettingsModule {
     data class BlockchainViewItem(
         val title: String,
         val subtitle: String,
-        val icon: Int
+        val icon: Int,
+        val blockchainItem: BlockchainItem
     )
 
     sealed class BlockchainItem {

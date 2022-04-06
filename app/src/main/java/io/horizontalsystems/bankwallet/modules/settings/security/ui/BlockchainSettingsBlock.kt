@@ -12,18 +12,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule
+import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule
 import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
 
 @Composable
-fun BlockchainSettingsBLock(blockchainSettingsViewModel: BlockchainSettingsViewModel) {
+fun BlockchainSettingsBlock(
+    blockchainSettingsViewModel: BlockchainSettingsViewModel,
+    navController: NavController
+) {
     CellMultilineLawrenceSection(blockchainSettingsViewModel.viewItems) { item ->
-        BlockchainSettingCell(item) {}
+        BlockchainSettingCell(item) {
+            when(item.blockchainItem){
+                is BlockchainSettingsModule.BlockchainItem.Btc -> {
+                    val params = BtcBlockchainSettingsModule.args(item.blockchainItem.blockchain)
+                    navController.slideFromRight(R.id.btcBlockchainSettingsFragment, params)
+                }
+                is BlockchainSettingsModule.BlockchainItem.Evm -> {
+                    val params = EvmNetworkModule.args(item.blockchainItem.blockchain)
+                    navController.slideFromRight(R.id.evmNetworkFragment, params)
+                }
+            }
+        }
     }
+    Text(
+        text = stringResource(R.string.SecurityCenter_BlockchainSettingsFooterDescription),
+        style = ComposeAppTheme.typography.subhead2,
+        color = ComposeAppTheme.colors.grey,
+        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+    )
 }
 
 @Composable
@@ -45,7 +70,6 @@ private fun BlockchainSettingCell(
         )
         Column(modifier = Modifier.weight(1f)) {
             Text(
-
                 text = item.title,
                 style = ComposeAppTheme.typography.body,
                 color = ComposeAppTheme.colors.leah,

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.evmnetwork
+package io.horizontalsystems.bankwallet.modules.btcblockchainsettings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -25,18 +26,17 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.info.InfoFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinListHeaderWithInfoButton
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
-class EvmNetworkFragment : BaseFragment() {
+class BtcBlockchainSettingsFragment : BaseFragment() {
 
-    private val viewModel by viewModels<EvmNetworkViewModel> {
-        EvmNetworkModule.Factory(requireArguments())
+    private val viewModel by viewModels<BtcBlockchainSettingsViewModel> {
+        BtcBlockchainSettingsModule.Factory(requireArguments())
     }
 
     override fun onCreateView(
@@ -51,7 +51,7 @@ class EvmNetworkFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    EvmNetworkScreen(
+                    BtcBlockchainSettingsScreen(
                         viewModel,
                         findNavController()
                     )
@@ -63,19 +63,14 @@ class EvmNetworkFragment : BaseFragment() {
 }
 
 @Composable
-private fun EvmNetworkScreen(
-    viewModel: EvmNetworkViewModel,
+private fun BtcBlockchainSettingsScreen(
+    viewModel: BtcBlockchainSettingsViewModel,
     navController: NavController
 ) {
 
     if (viewModel.closeScreen) {
         navController.popBackStack()
     }
-
-    val infoParams = InfoFragment.prepareParams(
-        stringResource(R.string.EvmNetwork_SyncMode),
-        stringResource(R.string.EvmNetwork_SyncModeDescription)
-    )
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -92,27 +87,35 @@ private fun EvmNetworkScreen(
                 },
             )
 
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(top = 12.dp, bottom = 30.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
             ) {
+                Spacer(Modifier.height(12.dp))
 
-                item {
-                    CoinListHeaderWithInfoButton(
-                        R.string.EvmNetwork_SyncMode,
-                    ) {
-                        navController.slideFromBottom(R.id.infoFragment, infoParams)
-                    }
-                }
+                TextImportantWarning(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceChangeWarning)
+                )
 
-                item {
-                    CellMultilineLawrenceSection(viewModel.viewItems) { item ->
-                        NetworkSettingCell(item.name, item.url, item.selected) {
-                            viewModel.onSelectViewItem(item)
-                        }
-                    }
-                }
+                RestoreSourceSettings(viewModel, navController)
 
+                TransactionDataSortSettings(viewModel, navController)
+
+                Spacer(Modifier.height(30.dp))
+            }
+
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(R.string.Button_Save),
+                    enabled = viewModel.saveButtonEnabled,
+                    onClick = { viewModel.onSaveClick() }
+                )
             }
         }
 
@@ -120,7 +123,70 @@ private fun EvmNetworkScreen(
 }
 
 @Composable
-private fun NetworkSettingCell(
+private fun RestoreSourceSettings(
+    viewModel: BtcBlockchainSettingsViewModel,
+    navController: NavController
+) {
+    val infoParams = InfoFragment.prepareParams(
+        stringResource(R.string.BtcBlockchainSettings_RestoreSource),
+        stringResource(R.string.BtcBlockchainSettings_RestoreSourceDescription)
+    )
+    BlockchainSettingSection(
+        viewModel.restoreSources,
+        infoParams,
+        R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription,
+        { viewItem -> viewModel.onSelectRestoreMode(viewItem) },
+        navController
+    )
+}
+
+@Composable
+private fun TransactionDataSortSettings(
+    viewModel: BtcBlockchainSettingsViewModel,
+    navController: NavController
+) {
+    val infoParams = InfoFragment.prepareParams(
+        stringResource(R.string.BtcBlockchainSettings_TransactionInputsOutputs),
+        stringResource(R.string.BtcBlockchainSettings_TransactionInputsOutputsDescription)
+    )
+    BlockchainSettingSection(
+        viewModel.transactionSortModes,
+        infoParams,
+        R.string.BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription,
+        { viewItem -> viewModel.onSelectTransactionMode(viewItem) },
+        navController
+    )
+}
+
+@Composable
+private fun BlockchainSettingSection(
+    restoreSources: List<BtcBlockchainSettingsModule.ViewItem>,
+    restoreSourceInfoParams: Bundle,
+    settingDescriptionTextRes: Int,
+    onItemClick: (BtcBlockchainSettingsModule.ViewItem) -> Unit,
+    navController: NavController
+) {
+    Spacer(Modifier.height(12.dp))
+    CoinListHeaderWithInfoButton(
+        R.string.BtcBlockchainSettings_RestoreSource,
+    ) {
+        navController.slideFromBottom(R.id.infoFragment, restoreSourceInfoParams)
+    }
+    CellMultilineLawrenceSection(restoreSources) { item ->
+        SettingCell(item.title, item.subtitle, item.selected) {
+            onItemClick(item)
+        }
+    }
+    Text(
+        text = stringResource(settingDescriptionTextRes),
+        style = ComposeAppTheme.typography.subhead2,
+        color = ComposeAppTheme.colors.grey,
+        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+    )
+}
+
+@Composable
+private fun SettingCell(
     title: String,
     subtitle: String,
     checked: Boolean,

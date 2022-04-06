@@ -4,9 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class BlockchainSettingsViewModel(
     private val service: BlockchainSettingsService
@@ -35,20 +37,24 @@ class BlockchainSettingsViewModel(
     }
 
     private fun sync(blockchainItems: List<BlockchainSettingsModule.BlockchainItem>) {
-        viewItems = blockchainItems.map { item ->
-            when (item) {
-                is BlockchainSettingsModule.BlockchainItem.Btc -> BlockchainSettingsModule.BlockchainViewItem(
-                    title = item.blockchain.title,
-                    subtitle = "${Translator.getString(item.restoreMode.title)}, ${
-                        Translator.getString(item.transactionMode.title)
-                    }",
-                    icon = item.blockchain.icon24
-                )
-                is BlockchainSettingsModule.BlockchainItem.Evm -> BlockchainSettingsModule.BlockchainViewItem(
-                    title = item.blockchain.name,
-                    subtitle = item.syncSource.name,
-                    icon = item.blockchain.icon24
-                )
+        viewModelScope.launch {
+            viewItems = blockchainItems.map { item ->
+                when (item) {
+                    is BlockchainSettingsModule.BlockchainItem.Btc -> BlockchainSettingsModule.BlockchainViewItem(
+                        title = item.blockchain.title,
+                        subtitle = "${Translator.getString(item.restoreMode.title)}, ${
+                            Translator.getString(item.transactionMode.title)
+                        }",
+                        icon = item.blockchain.icon24,
+                        blockchainItem = item
+                    )
+                    is BlockchainSettingsModule.BlockchainItem.Evm -> BlockchainSettingsModule.BlockchainViewItem(
+                        title = item.blockchain.name,
+                        subtitle = item.syncSource.name,
+                        icon = item.blockchain.icon24,
+                        blockchainItem = item
+                    )
+                }
             }
         }
     }

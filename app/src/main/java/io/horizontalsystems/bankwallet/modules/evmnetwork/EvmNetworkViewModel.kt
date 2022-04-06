@@ -1,20 +1,26 @@
 package io.horizontalsystems.bankwallet.modules.evmnetwork
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.urls
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class EvmNetworkViewModel(private val service: EvmNetworkService) : ViewModel() {
 
     private val disposables = CompositeDisposable()
 
-    val viewItemsLiveData = MutableLiveData<List<ViewItem>>()
-    val finishLiveEvent = SingleLiveEvent<Unit>()
+    var closeScreen by mutableStateOf(false)
+        private set
+
+    var viewItems by mutableStateOf<List<ViewItem>>(listOf())
+        private set
 
     init {
         service.itemsObservable
@@ -27,8 +33,9 @@ class EvmNetworkViewModel(private val service: EvmNetworkService) : ViewModel() 
     }
 
     private fun sync(items: List<EvmNetworkService.Item>) {
-        val viewItems = items.map { viewItem(it) }.sortedBy { it.name }
-        viewItemsLiveData.postValue(viewItems)
+        viewModelScope.launch {
+            viewItems = items.map { viewItem(it) }.sortedBy { it.name }
+        }
     }
 
     private fun viewItem(item: EvmNetworkService.Item): ViewItem {
@@ -50,19 +57,13 @@ class EvmNetworkViewModel(private val service: EvmNetworkService) : ViewModel() 
 
     fun onSelectViewItem(viewItem: ViewItem) {
         service.setCurrentNetwork(viewItem.id)
-        finishLiveEvent.postValue(Unit)
+        closeScreen = true
     }
 
     override fun onCleared() {
         service.clear()
         disposables.clear()
     }
-
-    data class SectionViewItem(
-        val title: String,
-        val viewItems: List<ViewItem>,
-        val description: String?
-    )
 
     data class ViewItem(
         val id: String,

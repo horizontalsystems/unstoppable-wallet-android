@@ -129,7 +129,7 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
             )
             val infoParameters = InfoParameters(title, description)
 
-            findNavController().slideFromBottom(R.id.infoFragment, InfoFragment.prepareParams(infoParameters))
+            findNavController().slideFromBottom(R.id.explainerFragment, ExplainerFragment.prepareParams(infoParameters))
         }
     }
 
@@ -140,7 +140,7 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
             val infoParameters =
                 InfoParameters(title, description, transactionHash, conflictingHash)
 
-            findNavController().slideFromBottom(R.id.infoFragment, InfoFragment.prepareParams(infoParameters))
+            findNavController().slideFromBottom(R.id.explainerFragment, ExplainerFragment.prepareParams(infoParameters))
         }
     }
 
