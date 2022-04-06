@@ -15,9 +15,10 @@ fun HSFeeInput(
     coinCode: String,
     coinDecimal: Int,
     fiatDecimal: Int,
-    fee: BigDecimal,
+    fee: BigDecimal?,
     amountInputType: SendModule.InputType,
     rate: CurrencyValue?,
+    enabled: Boolean = true,
     onClick: (() -> Unit)? = null,
 ) {
     val viewModel = viewModel<FeeInputViewModel>(
@@ -38,9 +39,9 @@ fun HSFeeInput(
 
     EvmFeeCell(
         title = stringResource(R.string.Send_Fee),
-        value = formatted ?: "",
+        value = formatted,
         loading = false,
         viewState = null,
-        onClick = onClick
+        onClick = if (enabled) onClick else null
     )
 }

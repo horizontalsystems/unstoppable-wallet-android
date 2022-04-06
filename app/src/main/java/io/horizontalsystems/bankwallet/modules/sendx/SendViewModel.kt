@@ -22,7 +22,7 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
     var uiState by mutableStateOf(
         SendUiState(
             availableBalance = BigDecimal.ZERO,
-            fee = BigDecimal.ZERO,
+            fee = null,
             feeRatePriority = FeeRatePriority.RECOMMENDED,
             addressError = null,
             amountCaution = null,
@@ -83,7 +83,7 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
 
 data class SendUiState(
     val availableBalance: BigDecimal,
-    val fee: BigDecimal,
+    val fee: BigDecimal?,
     val feeRatePriority: FeeRatePriority,
     val feeRate: Long,
     val addressError: Throwable?,

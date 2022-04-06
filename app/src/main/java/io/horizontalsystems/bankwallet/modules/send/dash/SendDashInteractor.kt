@@ -39,7 +39,7 @@ class SendDashInteractor(private val adapter: ISendDashAdapter) : SendModule.ISe
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ fee ->
-                    delegate?.didFetchFee(fee)
+                    delegate?.didFetchFee(fee ?: BigDecimal.ZERO)
                 }, {
 
                 })

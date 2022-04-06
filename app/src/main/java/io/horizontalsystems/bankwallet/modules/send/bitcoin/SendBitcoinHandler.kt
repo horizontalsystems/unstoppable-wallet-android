@@ -113,7 +113,7 @@ class SendBitcoinHandler(
                     feeRateValue,
                     addressModule.currentAddress?.hex,
                     hodlerModule?.pluginData()
-                )
+                ) ?: BigDecimal.ZERO
             )
             syncValidation()
         }
