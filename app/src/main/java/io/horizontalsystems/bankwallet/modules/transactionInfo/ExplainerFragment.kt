@@ -16,7 +16,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import kotlinx.parcelize.Parcelize
 
-class InfoFragment : BaseDialogFragment() {
+class ExplainerFragment : BaseDialogFragment() {
 
     private var _binding: FragmentInfoBinding? = null
     private val binding get() = _binding!!

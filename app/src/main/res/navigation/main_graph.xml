@@ -5,7 +5,6 @@
     android:id="@+id/main_graph"
     app:startDestination="@id/mainFragment">
 
-    <include app:graph="@navigation/privacy_settings_graph" />
     <include app:graph="@navigation/wallet_connect_graph" />
 
     <fragment
@@ -42,9 +41,6 @@
         <action
             android:id="@+id/mainFragment_to_experimentalFeaturesFragment"
             app:destination="@id/experimentalFeaturesFragment" />
-        <action
-            android:id="@+id/mainFragment_to_privacySettingsFragment"
-            app:destination="@id/privacy_settings_graph" />
         <action
             android:id="@+id/mainFragment_to_backupKeyFragment"
             app:destination="@id/backupKeyFragment" />
@@ -157,9 +153,6 @@
         <action
             android:id="@+id/manageAccountFragment_to_backupKeyFragment"
             app:destination="@id/backupKeyFragment" />
-        <action
-            android:id="@+id/manageAccountFragment_to_networkSettingsFragment"
-            app:destination="@id/networkSettingsFragment" />
     </fragment>
 
     <fragment
@@ -204,14 +197,13 @@
         android:id="@+id/backupConfirmationKeyFragment"
         android:name="io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyFragment"
         tools:layout="@layout/fragment_backup_words_confirm" />
+    <fragment
+        android:id="@+id/infoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.InfoFragment"/>
 
     <fragment
         android:id="@+id/securitySettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsFragment"
-        tools:layout="@layout/fragment_settings_security">
-        <action
-            android:id="@+id/securitySettingsFragment_to_privacySettingsFragment"
-            app:destination="@id/privacy_settings_graph" />
+        android:name="io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsFragment">
         <action
             android:id="@+id/securitySettingsFragment_to_pinFragment"
             app:destination="@id/pinFragment" />
@@ -443,17 +435,12 @@
         android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment"
         android:label="ReceiveFragment" />
     <fragment
-        android:id="@+id/networkSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.networksettings.NetworkSettingsFragment"
-        android:label="NetworkSettingsFragment">
-        <action
-            android:id="@+id/networkSettingsFragment_to_evmNetworkFragment"
-            app:destination="@id/evmNetworkFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/evmNetworkFragment"
         android:name="io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment"
         android:label="EvmNetworkFragment" />
+    <fragment
+        android:id="@+id/btcBlockchainSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsFragment"/>
     <fragment
         android:id="@+id/tvlFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment" />
@@ -466,14 +453,9 @@
         android:id="@+id/nftAssetFragment"
         android:name="io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetFragment" />
 
-    <!--  Dialogs/BottomSheets  -->
-    <!--    <dialog-->
-    <!--        android:id="@+id/transactionInfoDialog"-->
-    <!--        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"-->
-    <!--        tools:layout="@layout/fragment_transaction_info" />-->
     <dialog
-        android:id="@+id/infoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.InfoFragment"
+        android:id="@+id/explainerFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.ExplainerFragment"
         tools:layout="@layout/fragment_info" />
     <dialog
         android:id="@+id/statusInfoDialog"

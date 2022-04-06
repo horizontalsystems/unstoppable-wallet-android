@@ -33,7 +33,7 @@ import io.horizontalsystems.bankwallet.modules.settings.security.passcode.Securi
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTorSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTorSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.settings.security.ui.BlockchainSettingsBLock
+import io.horizontalsystems.bankwallet.modules.settings.security.ui.BlockchainSettingsBlock
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.TorBlock
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
@@ -61,12 +61,6 @@ class SecuritySettingsFragment : BaseFragment() {
     private val passcodeViewModel by viewModels<SecurityPasscodeSettingsViewModel> {
         SecurityPasscodeSettingsModule.Factory()
     }
-
-//        viewModel.openPrivacySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-//            findNavController().slideFromRight(
-//                R.id.securitySettingsFragment_to_privacySettingsFragment
-//            )
-//        })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -217,7 +211,7 @@ private fun SecurityCenterScreen(
 
                 item {
                     CoinListHeader(R.string.SecurityCenter_BlockchainSettings)
-                    BlockchainSettingsBLock(blockchainSettingsViewModel)
+                    BlockchainSettingsBlock(blockchainSettingsViewModel, navController)
                 }
 
             }

@@ -1,9 +1,12 @@
 package io.horizontalsystems.bankwallet.entities
 
+import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.marketkit.models.CoinType
+import kotlinx.parcelize.Parcelize
 
-enum class BtcBlockchain(val raw: String) {
+@Parcelize
+enum class BtcBlockchain(val raw: String): Parcelable {
     Bitcoin("bitcoin"),
     BitcoinCash("bitcoinCash"),
     Litecoin("litecoin"),

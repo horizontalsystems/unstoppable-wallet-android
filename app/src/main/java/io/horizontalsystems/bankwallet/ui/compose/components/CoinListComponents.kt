@@ -234,7 +234,7 @@ fun HeaderWithSorting(
                 Box(modifier = Modifier.padding(start = 8.dp)) {
                     ButtonSecondaryToggle(
                         select = topMarketSelect,
-                        onSelect = onSelectTopMarket ?: {}) //TODO
+                        onSelect = onSelectTopMarket ?: {})
                 }
             }
 
