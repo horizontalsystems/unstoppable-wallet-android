@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.settings.security.tor
 
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.ITorManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.core.IPinComponent
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -11,13 +10,9 @@ import io.reactivex.subjects.BehaviorSubject
 class SecurityTorSettingsService(
     private val torManager: ITorManager,
     private val pinComponent: IPinComponent,
-    private val walletManager: IWalletManager,
 ) {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
-
-    val needToRestartAppForTor: Boolean
-        get() = walletManager.activeWallets.isNotEmpty()
 
     private val torConnectionStatusSubject = BehaviorSubject.create<TorStatus>()
     val torConnectionStatusObservable: Observable<TorStatus>
@@ -62,15 +57,14 @@ class SecurityTorSettingsService(
     fun enableTor() {
         torEnabled = true
         torManager.start()
+        restartAppSubject.onNext(Unit)
     }
 
     fun disableTor() {
         torEnabled = false
         torManager.stop()
             .subscribe({
-                if (needToRestartAppForTor) {
-                    restartAppSubject.onNext(Unit)
-                }
+                restartAppSubject.onNext(Unit)
             }, {
                 Log.e("SecurityTorSettingsService", "stopTor", it)
             })

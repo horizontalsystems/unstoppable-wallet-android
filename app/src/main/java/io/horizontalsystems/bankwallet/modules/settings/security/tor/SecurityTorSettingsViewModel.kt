@@ -54,12 +54,9 @@ class SecurityTorSettingsViewModel(
     fun setTorEnabledWithChecks(enabled: Boolean) {
         if (enabled && !service.isTorNotificationEnabled) {
             showTorNotificationNotEnabledAlert = true
-        } else if (service.needToRestartAppForTor) {
-            torCheckEnabled = enabled
-            showRestartAlert = true
         } else {
             torCheckEnabled = enabled
-            setTorEnabled(enabled)
+            showRestartAlert = true
         }
     }
 

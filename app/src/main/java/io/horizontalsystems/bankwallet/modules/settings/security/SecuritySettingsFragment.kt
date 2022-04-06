@@ -175,6 +175,11 @@ private fun SecurityCenterScreen(
     restartApp: () -> Unit,
 ) {
 
+    if (torViewModel.restartApp) {
+        restartApp()
+        torViewModel.appRestarted()
+    }
+
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
@@ -205,7 +210,6 @@ private fun SecurityCenterScreen(
                         torViewModel,
                         showAppRestartAlert,
                         showNotificationsNotEnabledAlert,
-                        restartApp
                     )
                 }
 

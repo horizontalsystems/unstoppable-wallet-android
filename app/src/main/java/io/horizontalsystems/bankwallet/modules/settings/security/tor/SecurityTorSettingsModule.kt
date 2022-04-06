@@ -13,7 +13,6 @@ object SecurityTorSettingsModule {
             val service = SecurityTorSettingsService(
                 App.torKitManager,
                 App.pinComponent,
-                App.walletManager
             )
             return SecurityTorSettingsViewModel(service) as T
         }
