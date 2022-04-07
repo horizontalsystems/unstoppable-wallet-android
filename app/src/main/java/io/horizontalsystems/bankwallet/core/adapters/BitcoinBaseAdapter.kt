@@ -224,8 +224,12 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun minimumSendAmount(address: String?): BigDecimal {
-        return satoshiToBTC(kit.minimumSpendableValue(address).toLong(), RoundingMode.CEILING)
+    fun minimumSendAmount(address: String?): BigDecimal? {
+        return try {
+            satoshiToBTC(kit.minimumSpendableValue(address).toLong(), RoundingMode.CEILING)
+        } catch (e: Exception) {
+            null
+        }
     }
 
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal? {

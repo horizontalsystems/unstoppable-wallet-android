@@ -59,6 +59,8 @@ class SendBitcoinService(
     private var feeRatePriority: FeeRatePriority = FeeRatePriority.RECOMMENDED
     private var sendResult: SendResult? = null
 
+    private var validAddress: Address? = null
+
     private val logger = AppLogger("send")
 
     suspend fun start() {
@@ -77,15 +79,6 @@ class SendBitcoinService(
 //        adapter.send()
     }
 
-    private suspend fun initFeeRateMetaData() = withContext(Dispatchers.IO) {
-        feeRatePriorities = feeRateProvider.feeRatePriorityList
-        feeRateRange = feeRateProvider.getFeeRateRange()
-    }
-
-    private suspend fun refreshFeeRate() = withContext(Dispatchers.IO) {
-        feeRate = feeRateProvider.getFeeRate(feeRatePriority)
-    }
-
     private fun emitState() {
         val tmpAmount = amount
         val tmpAmountCaution = amountCaution
@@ -93,8 +86,7 @@ class SendBitcoinService(
         val canBeSend =
             tmpAmount != null && tmpAmount > BigDecimal.ZERO
                 && (tmpAmountCaution == null || tmpAmountCaution.isWarning())
-                && address != null
-                && addressError == null
+                && validAddress != null
 
         _stateFlow.update {
             ServiceState(
@@ -111,14 +103,27 @@ class SendBitcoinService(
         }
     }
 
-    private fun refreshAvailableBalance() {
-        availableBalance = adapter.availableBalance(feeRate, address?.hex, pluginData)
+    private suspend fun initFeeRateMetaData() = withContext(Dispatchers.IO) {
+        feeRatePriorities = feeRateProvider.feeRatePriorityList
+        feeRateRange = feeRateProvider.getFeeRateRange()
+    }
+
+    private suspend fun refreshFeeRate() = withContext(Dispatchers.IO) {
+        feeRate = feeRateProvider.getFeeRate(feeRatePriority)
     }
 
     private fun refreshFee() {
         fee = amount?.let {
-            adapter.fee(it, feeRate, address?.hex, pluginData)
+            adapter.fee(it, feeRate, validAddress?.hex, pluginData)
         }
+    }
+
+    private fun refreshValidAddress() {
+        validAddress = if (addressError == null) address else null
+    }
+
+    private fun refreshAvailableBalance() {
+        availableBalance = adapter.availableBalance(feeRate, validAddress?.hex, pluginData)
     }
 
     private fun refreshMaximumSendAmount() {
@@ -126,18 +131,7 @@ class SendBitcoinService(
     }
 
     private fun refreshMinimumSendAmount() {
-        minimumSendAmount = adapter.minimumSendAmount(address?.hex)
-    }
-
-    fun setAmount(amount: BigDecimal?) {
-        this.amount = amount
-
-        if (validateAmount()) {
-            refreshFee()
-        }
-        validateFeeRate()
-
-        emitState()
+        minimumSendAmount = adapter.minimumSendAmount(validAddress?.hex)
     }
 
     private fun validateFeeRate() {
@@ -154,7 +148,7 @@ class SendBitcoinService(
         }
     }
 
-    private fun validateAmount(): Boolean {
+    private fun validateAmount() {
         val tmpCoinAmount = amount
         val tmpMinimumSendAmount = minimumSendAmount
         val tmpMaximumSendAmount = maximumSendAmount
@@ -173,21 +167,41 @@ class SendBitcoinService(
             }
             else -> null
         }
+    }
 
-        return amountCaution == null
+    private fun validateAddress() {
+        addressError = null
+        val address = this.address ?: return
+
+        try {
+            adapter.validate(address.hex, pluginData)
+        } catch (e: Exception) {
+            addressError = e
+        }
+    }
+
+    fun setAmount(amount: BigDecimal?) {
+        this.amount = amount
+
+        refreshFee()
+
+        validateAmount()
+        validateFeeRate()
+
+        emitState()
     }
 
     fun setAddress(address: Address?) {
         this.address = address
+        validateAddress()
 
-        if (validateAddress()) {
-            refreshMinimumSendAmount()
-            refreshAvailableBalance()
-            if (validateAmount()) {
-                refreshFee()
-            }
-            validateFeeRate()
-        }
+        refreshValidAddress()
+        refreshAvailableBalance()
+        refreshMinimumSendAmount()
+        refreshFee()
+
+        validateAmount()
+        validateFeeRate()
 
         emitState()
     }
@@ -196,8 +210,8 @@ class SendBitcoinService(
         this.feeRatePriority = feeRatePriority
 
         refreshFeeRate()
-        refreshFee()
         refreshAvailableBalance()
+        refreshFee()
 
         validateAmount()
         validateFeeRate()
@@ -205,24 +219,11 @@ class SendBitcoinService(
         emitState()
     }
 
-    private fun validateAddress(): Boolean {
-        addressError = null
-        val address = this.address ?: return true
-
-        try {
-            adapter.validate(address.hex, pluginData)
-        } catch (e: Exception) {
-            addressError = e
-        }
-
-        return addressError == null
-    }
-
     fun getConfirmationData(): ConfirmationData {
         return ConfirmationData(
             amount = amount!!,
             fee = fee!!,
-            address = address!!,
+            address = validAddress!!,
             coin = wallet.platformCoin.coin
         )
     }
@@ -236,7 +237,7 @@ class SendBitcoinService(
 
             val send = adapter.send(
                 amount!!,
-                address!!.hex,
+                validAddress!!.hex,
                 feeRate,
                 pluginData,
                 transactionSorting = null,

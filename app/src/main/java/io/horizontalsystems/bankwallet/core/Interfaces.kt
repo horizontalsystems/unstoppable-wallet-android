@@ -241,7 +241,7 @@ interface ISendBitcoinAdapter {
         pluginData: Map<Byte, IPluginData>?
     ): BigDecimal
 
-    fun minimumSendAmount(address: String?): BigDecimal
+    fun minimumSendAmount(address: String?): BigDecimal?
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
     fun fee(
         amount: BigDecimal,
@@ -263,7 +263,7 @@ interface ISendBitcoinAdapter {
 
 interface ISendDashAdapter {
     fun availableBalance(address: String?): BigDecimal
-    fun minimumSendAmount(address: String?): BigDecimal
+    fun minimumSendAmount(address: String?): BigDecimal?
     fun fee(amount: BigDecimal, address: String?): BigDecimal?
     fun validate(address: String)
     fun send(amount: BigDecimal, address: String, logger: AppLogger): Single<Unit>
