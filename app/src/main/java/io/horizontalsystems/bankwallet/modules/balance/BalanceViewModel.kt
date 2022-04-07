@@ -5,12 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class BalanceViewModel(
@@ -30,22 +29,22 @@ class BalanceViewModel(
     var sortType by service::sortType
 
     private var expandedWallet: Wallet? = null
-    private val disposables = CompositeDisposable()
 
     init {
-        service.balanceItemsObservable
-            .subscribeIO {
-                refreshViewItems()
-            }
-            .let {
-                disposables.add(it)
-            }
-        
+        viewModelScope.launch {
+            service.balanceItemsFlow
+                .collect { items ->
+                    refreshViewItems(items)
+                }
+        }
+
         service.start()
     }
 
-    private fun refreshViewItems() {
-        val items = service.balanceItems.map { balanceItem ->
+    private fun refreshViewItems(items: List<BalanceModule.BalanceItem>? = null) {
+        val balanceItems = items ?: service.balanceItemsFlow.value ?: return
+
+        val balanceViewItems = balanceItems.map { balanceItem ->
             balanceViewItemFactory.viewItem(
                 balanceItem,
                 service.baseCurrency,
@@ -56,14 +55,14 @@ class BalanceViewModel(
         }
 
         val headerViewItem = balanceViewItemFactory.headerViewItem(
-            service.balanceItems,
+            balanceItems,
             service.baseCurrency,
             service.balanceHidden
         )
 
         viewModelScope.launch {
             viewState = ViewState.Success
-            balanceViewItemsWrapper = Pair(headerViewItem, items)
+            balanceViewItemsWrapper = Pair(headerViewItem, balanceViewItems)
         }
     }
 

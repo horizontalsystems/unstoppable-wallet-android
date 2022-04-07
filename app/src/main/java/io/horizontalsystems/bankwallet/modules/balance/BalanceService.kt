@@ -8,9 +8,11 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.isCustom
 import io.horizontalsystems.marketkit.models.CoinPrice
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -40,15 +42,15 @@ class BalanceService(
         private set
 
     private val allBalanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
-    val balanceItems: List<BalanceModule.BalanceItem>
+    private val balanceItems: List<BalanceModule.BalanceItem>
         get() = if (isWatchAccount) {
             allBalanceItems.filter { it.balanceData.total > BigDecimal.ZERO }
         } else {
             allBalanceItems
         }
 
-    private val balanceItemsSubject = PublishSubject.create<Unit>()
-    val balanceItemsObservable: Observable<Unit> get() = balanceItemsSubject
+    private val _balanceItemsFlow = MutableStateFlow<List<BalanceModule.BalanceItem>?>(null)
+    val balanceItemsFlow = _balanceItemsFlow.asStateFlow()
 
     private val disposables = CompositeDisposable()
 
@@ -87,12 +89,13 @@ class BalanceService(
 
     }
 
+    @Synchronized
     private fun sortAndEmitItems() {
         val sorted = balanceSorter.sort(allBalanceItems, sortType)
         allBalanceItems.clear()
         allBalanceItems.addAll(sorted)
 
-        balanceItemsSubject.onNext(Unit)
+        _balanceItemsFlow.update { balanceItems }
     }
 
     @Synchronized
