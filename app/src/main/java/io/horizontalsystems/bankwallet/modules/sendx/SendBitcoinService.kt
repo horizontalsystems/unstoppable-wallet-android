@@ -34,6 +34,7 @@ class SendBitcoinService(
         val fee: BigDecimal?,
         val addressError: Throwable?,
         val amountCaution: HSCaution?,
+        val feeRateCaution: HSCaution?,
         val canBeSend: Boolean,
         val sendResult: SendResult?,
         val feeRatePriority: FeeRatePriority,
@@ -54,6 +55,7 @@ class SendBitcoinService(
     private var fee: BigDecimal? = null
     private var addressError: Throwable? = null
     private var amountCaution: HSCaution? = null
+    private var feeRateCaution: HSCaution? = null
     private var feeRatePriority: FeeRatePriority = FeeRatePriority.RECOMMENDED
     private var sendResult: SendResult? = null
 
@@ -68,8 +70,8 @@ class SendBitcoinService(
         refreshMaximumSendAmount()
 
         refreshFeeRate()
-        refreshAvailableBalance()
         refreshFee()
+        refreshAvailableBalance()
 
         emitState()
 //        adapter.send()
@@ -102,6 +104,7 @@ class SendBitcoinService(
                 fee = fee,
                 addressError = addressError,
                 amountCaution = amountCaution,
+                feeRateCaution = feeRateCaution,
                 canBeSend = canBeSend,
                 sendResult = sendResult
             )
@@ -132,8 +135,23 @@ class SendBitcoinService(
         if (validateAmount()) {
             refreshFee()
         }
+        validateFeeRate()
 
         emitState()
+    }
+
+    private fun validateFeeRate() {
+        val tmpCoinAmount = amount
+
+        feeRateCaution = if (tmpCoinAmount != null && tmpCoinAmount > availableBalance) {
+            HSCaution(
+                TranslatableString.ResString(R.string.Swap_ErrorInsufficientBalance),
+                HSCaution.Type.Error,
+                TranslatableString.ResString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, wallet.coin.code)
+            )
+        } else {
+            null
+        }
     }
 
     private fun validateAmount(): Boolean {
@@ -168,6 +186,7 @@ class SendBitcoinService(
             if (validateAmount()) {
                 refreshFee()
             }
+            validateFeeRate()
         }
 
         emitState()
@@ -177,9 +196,11 @@ class SendBitcoinService(
         this.feeRatePriority = feeRatePriority
 
         refreshFeeRate()
-        refreshAvailableBalance()
         refreshFee()
+        refreshAvailableBalance()
+
         validateAmount()
+        validateFeeRate()
 
         emitState()
     }

@@ -7,9 +7,16 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 
-class HSCaution(val s: TranslatableString, val type: Type = Type.Error) {
+class HSCaution(
+    val s: TranslatableString,
+    val type: Type = Type.Error,
+    val description: TranslatableString? = null
+) {
     @Composable
     fun getString() = s.getString()
+
+    @Composable
+    fun getDescription() = description?.getString()
 
     enum class Type {
         Error, Warning
