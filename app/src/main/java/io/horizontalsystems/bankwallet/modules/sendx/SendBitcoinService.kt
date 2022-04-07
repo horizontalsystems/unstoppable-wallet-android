@@ -40,28 +40,26 @@ class SendBitcoinService(
         val feeRatePriority: FeeRatePriority,
         val feeRate: Long
     )
-    private var feeRate: Long = 0
-    private var amount: BigDecimal? = null
-    private var address: Address? = null
-    private var pluginData: Map<Byte, IPluginData>? = null
-
     private var _stateFlow = MutableStateFlow<ServiceState?>(null)
     val stateFlow = _stateFlow.filterNotNull()
 
+    private val logger = AppLogger("send")
+
+    private var amount: BigDecimal? = null
+    private var address: Address? = null
+    private var feeRatePriority: FeeRatePriority = FeeRatePriority.RECOMMENDED
+    private var pluginData: Map<Byte, IPluginData>? = null
+
+    private var validAddress: Address? = null
     private var minimumSendAmount: BigDecimal? = null
     private var maximumSendAmount: BigDecimal? = null
-
     private var availableBalance: BigDecimal = BigDecimal.ZERO
+    private var feeRate: Long = 0
     private var fee: BigDecimal? = null
     private var addressError: Throwable? = null
     private var amountCaution: HSCaution? = null
     private var feeRateCaution: HSCaution? = null
-    private var feeRatePriority: FeeRatePriority = FeeRatePriority.RECOMMENDED
     private var sendResult: SendResult? = null
-
-    private var validAddress: Address? = null
-
-    private val logger = AppLogger("send")
 
     suspend fun start() {
         adapter.balanceData
