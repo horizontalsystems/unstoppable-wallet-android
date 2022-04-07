@@ -158,6 +158,15 @@ fun FeeSettingsScreen(
                 }
             }
 
+            uiState.feeRateCaution?.let {
+                TextImportantError(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                    icon = R.drawable.ic_attention_20,
+                    title = it.getString(),
+                    text = it.getDescription() ?: ""
+                )
+            }
+
             Spacer(modifier = Modifier.weight(1f))
 
             ButtonPrimaryYellow(

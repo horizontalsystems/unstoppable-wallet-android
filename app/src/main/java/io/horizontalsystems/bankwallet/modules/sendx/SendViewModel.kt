@@ -24,11 +24,12 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
             availableBalance = BigDecimal.ZERO,
             fee = null,
             feeRatePriority = FeeRatePriority.RECOMMENDED,
+            feeRate = 0,
             addressError = null,
             amountCaution = null,
+            feeRateCaution = null,
             canBeSend = false,
-            sendResult = null,
-            feeRate = 0
+            sendResult = null
         )
     )
         private set
@@ -45,6 +46,7 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
                         feeRatePriority = it.feeRatePriority,
                         addressError = it.addressError,
                         amountCaution = it.amountCaution,
+                        feeRateCaution = it.feeRateCaution,
                         canBeSend = it.canBeSend,
                         sendResult = it.sendResult,
                     )
@@ -88,6 +90,7 @@ data class SendUiState(
     val feeRate: Long,
     val addressError: Throwable?,
     val amountCaution: HSCaution?,
+    val feeRateCaution: HSCaution?,
     val canBeSend: Boolean,
     val sendResult: SendResult?,
 )
