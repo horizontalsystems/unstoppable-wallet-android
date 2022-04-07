@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.modules.sendx.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.SendViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.XRateViewModel
@@ -32,6 +33,7 @@ fun FeeSettingsScreen(
     val fee = uiState.fee
     val feeRatePriority = uiState.feeRatePriority
     val feeRate = uiState.feeRate
+    val feeRateCaution = uiState.feeRateCaution
 
     ComposeAppTheme {
         Column(modifier = Modifier
@@ -158,13 +160,24 @@ fun FeeSettingsScreen(
                 }
             }
 
-            uiState.feeRateCaution?.let {
-                TextImportantError(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
-                    icon = R.drawable.ic_attention_20,
-                    title = it.getString(),
-                    text = it.getDescription() ?: ""
-                )
+            when (feeRateCaution?.type) {
+                HSCaution.Type.Error -> {
+                    TextImportantError(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                        icon = R.drawable.ic_attention_20,
+                        title = feeRateCaution.getString(),
+                        text = feeRateCaution.getDescription() ?: ""
+                    )
+                }
+                HSCaution.Type.Warning -> {
+                    TextImportantWarning(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                        icon = R.drawable.ic_attention_20,
+                        title = feeRateCaution.getString(),
+                        text = feeRateCaution.getDescription() ?: ""
+                    )
+                }
+                null -> {}
             }
 
             Spacer(modifier = Modifier.weight(1f))

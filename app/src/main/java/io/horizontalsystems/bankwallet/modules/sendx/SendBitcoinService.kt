@@ -50,6 +50,8 @@ class SendBitcoinService(
     private var feeRatePriority: FeeRatePriority = FeeRatePriority.RECOMMENDED
     private var pluginData: Map<Byte, IPluginData>? = null
 
+    private var lowFeeRate: Long = 0
+
     private var validAddress: Address? = null
     private var minimumSendAmount: BigDecimal? = null
     private var maximumSendAmount: BigDecimal? = null
@@ -104,6 +106,7 @@ class SendBitcoinService(
     private suspend fun initFeeRateMetaData() = withContext(Dispatchers.IO) {
         feeRatePriorities = feeRateProvider.feeRatePriorityList
         feeRateRange = feeRateProvider.getFeeRateRange()
+        lowFeeRate = feeRateProvider.getFeeRate(FeeRatePriority.LOW)
     }
 
     private suspend fun refreshFeeRate() = withContext(Dispatchers.IO) {
@@ -140,6 +143,12 @@ class SendBitcoinService(
                 TranslatableString.ResString(R.string.Swap_ErrorInsufficientBalance),
                 HSCaution.Type.Error,
                 TranslatableString.ResString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, wallet.coin.code)
+            )
+        } else if (feeRate <= lowFeeRate) {
+            HSCaution(
+                TranslatableString.ResString(R.string.Send_Warning_LowFee),
+                HSCaution.Type.Warning,
+                TranslatableString.ResString(R.string.Send_Warning_LowFee_Description)
             )
         } else {
             null
