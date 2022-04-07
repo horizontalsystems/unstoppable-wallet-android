@@ -47,7 +47,7 @@ class SendBitcoinHandler(
     }
 
     private fun syncMinimumAmount() {
-        amountModule.setMinimumAmount(adapter.minimumSendAmount(addressModule.currentAddress?.hex))
+        amountModule.setMinimumAmount(adapter.minimumSendAmount(addressModule.currentAddress?.hex) ?: BigDecimal.ZERO)
         syncValidation()
     }
 

@@ -43,7 +43,7 @@ class SendDashHandler(
     }
 
     private fun syncMinimumAmount() {
-        amountModule.setMinimumAmount(interactor.fetchMinimumAmount(addressModule.currentAddress?.hex))
+        amountModule.setMinimumAmount(interactor.fetchMinimumAmount(addressModule.currentAddress?.hex) ?: BigDecimal.ZERO)
         syncValidation()
     }
 

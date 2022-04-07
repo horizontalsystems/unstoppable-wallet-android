@@ -29,7 +29,7 @@ object SendModule {
 
     interface ISendDashInteractor {
         fun fetchAvailableBalance(address: String?)
-        fun fetchMinimumAmount(address: String?): BigDecimal
+        fun fetchMinimumAmount(address: String?): BigDecimal?
         fun fetchFee(amount: BigDecimal, address: String?)
         fun validate(address: String)
         fun send(amount: BigDecimal, address: String, logger: AppLogger): Single<Unit>
