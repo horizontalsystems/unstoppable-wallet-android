@@ -39,16 +39,17 @@ import io.horizontalsystems.core.findNavController
 
 class MarketFiltersResultsFragment : BaseFragment() {
 
-    private val marketSearchFilterViewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment)
-    private val viewModel by viewModels<MarketFiltersResultViewModel> {
-        MarketFiltersResultsModule.Factory(marketSearchFilterViewModel.service)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val viewModel = getViewModel()
+
+        if (viewModel == null) {
+            findNavController().popBackStack()
+            return ComposeView(requireContext())
+        }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -59,6 +60,18 @@ class MarketFiltersResultsFragment : BaseFragment() {
                     SearchResultsScreen(viewModel, findNavController())
                 }
             }
+        }
+    }
+
+    private fun getViewModel(): MarketFiltersResultViewModel? {
+        return try {
+            val marketSearchFilterViewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment)
+            val viewModel by viewModels<MarketFiltersResultViewModel> {
+                MarketFiltersResultsModule.Factory(marketSearchFilterViewModel.service)
+            }
+            viewModel
+        } catch (e: RuntimeException) {
+            null
         }
     }
 
