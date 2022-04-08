@@ -42,12 +42,13 @@ class BalanceService(
         private set
 
     private val allBalanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
-    private val balanceItems: List<BalanceModule.BalanceItem>
-        get() = if (isWatchAccount) {
-            allBalanceItems.filter { it.balanceData.total > BigDecimal.ZERO }
-        } else {
-            allBalanceItems
-        }
+
+    /* getBalanceItems should return new immutable list */
+    private fun getBalanceItems(): List<BalanceModule.BalanceItem> = if (isWatchAccount) {
+        allBalanceItems.filter { it.balanceData.total > BigDecimal.ZERO }
+    } else {
+        allBalanceItems.toList()
+    }
 
     private val _balanceItemsFlow = MutableStateFlow<List<BalanceModule.BalanceItem>?>(null)
     val balanceItemsFlow = _balanceItemsFlow.asStateFlow()
@@ -95,7 +96,7 @@ class BalanceService(
         allBalanceItems.clear()
         allBalanceItems.addAll(sorted)
 
-        _balanceItemsFlow.update { balanceItems }
+        _balanceItemsFlow.update { getBalanceItems() }
     }
 
     @Synchronized

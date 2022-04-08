@@ -34,16 +34,14 @@ class BalanceViewModel(
         viewModelScope.launch {
             service.balanceItemsFlow
                 .collect { items ->
-                    refreshViewItems(items)
+                    items?.let { refreshViewItems(it) }
                 }
         }
 
         service.start()
     }
 
-    private fun refreshViewItems(items: List<BalanceModule.BalanceItem>? = null) {
-        val balanceItems = items ?: service.balanceItemsFlow.value ?: return
-
+    private fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>) {
         val balanceViewItems = balanceItems.map { balanceItem ->
             balanceViewItemFactory.viewItem(
                 balanceItem,
@@ -74,7 +72,7 @@ class BalanceViewModel(
     fun onBalanceClick() {
         service.balanceHidden = !service.balanceHidden
 
-        refreshViewItems()
+        service.balanceItemsFlow.value?.let { refreshViewItems(it) }
     }
 
     fun onItem(viewItem: BalanceViewItem) {
@@ -83,7 +81,7 @@ class BalanceViewModel(
             else -> viewItem.wallet
         }
 
-        refreshViewItems()
+        service.balanceItemsFlow.value?.let { refreshViewItems(it) }
     }
 
     fun getWalletForReceive(viewItem: BalanceViewItem) = when {
