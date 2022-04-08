@@ -280,9 +280,7 @@ class App : CoreApp(), WorkConfiguration.Provider {
             )
         )
 
-        WalletConnectClient.initialize(initWallet) {
-            AppLog.warning("WalletConnect V2 initialization", "error", it)
-        }
+        WalletConnectClient.initialize(initWallet)
     }
 
     private fun setAppTheme() {
