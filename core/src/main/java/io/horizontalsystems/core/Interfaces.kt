@@ -53,6 +53,7 @@ interface IPinComponent {
     fun clear()
     fun onUnlock()
     fun shouldShowPin(activity: Activity): Boolean
+    fun lock()
 }
 
 interface ILanguageManager {

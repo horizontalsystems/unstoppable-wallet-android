@@ -14,9 +14,11 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         fun willEnterForeground(activity: Activity) {}
         fun willEnterForeground() {}
         fun didEnterBackground() {}
+        fun onAllActivitiesDestroyed() {}
     }
 
-    private var refs: Int = 0
+    private var foregroundActivityCount: Int = 0
+    private var aliveActivityCount: Int = 0
     private var listeners: MutableList<Listener> = ArrayList()
 
     @Synchronized
@@ -30,25 +32,27 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
     }
 
     val inForeground: Boolean
-        get() = refs > 0
+        get() = foregroundActivityCount > 0
 
     val inBackground: Boolean
-        get() = refs == 0
+        get() = foregroundActivityCount == 0
 
+    @Synchronized
     override fun onActivityStarted(activity: Activity) {
-        if (refs == 0) {
+        if (foregroundActivityCount == 0) {
             listeners.forEach { listener ->
                 listener.willEnterForeground(activity)
                 listener.willEnterForeground()
             }
         }
-        refs++
+        foregroundActivityCount++
     }
 
+    @Synchronized
     override fun onActivityStopped(activity: Activity) {
-        refs--
+        foregroundActivityCount--
 
-        if (refs == 0) {
+        if (foregroundActivityCount == 0) {
             //App is in background
             listeners.forEach { listener ->
                 listener.didEnterBackground()
@@ -57,14 +61,26 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         }
     }
 
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
+    @Synchronized
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        aliveActivityCount++
+    }
+
+    @Synchronized
+    override fun onActivityDestroyed(activity: Activity) {
+        aliveActivityCount--
+
+        if (aliveActivityCount == 0) {
+            listeners.forEach { listener ->
+                listener.onAllActivitiesDestroyed()
+            }
+        }
+    }
 
     override fun onActivityPaused(p0: Activity) {}
 
     override fun onActivityResumed(p0: Activity) {}
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
-
-    override fun onActivityDestroyed(activity: Activity) {}
 
 }

@@ -11,7 +11,7 @@ class CustomTokenStorage(appDatabase: AppDatabase) : ICustomTokenStorage {
 
     override fun customTokens(platformType: PlatformType, filter: String): List<CustomToken> {
         val platformCondition =
-            platformType.coinTypeIdPrefixes.joinToString(" OR ") { "coinType LIKE '$it%'" }
+            "coinType LIKE '${platformType.evmCoinTypeIdPrefix}%' OR coinType = '${platformType.baseCoinType.id}%'"
 
         val query =
             """
