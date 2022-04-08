@@ -37,7 +37,7 @@ object SendErrorFetchFeeRateFailed : HSCaution(
     Type.Error
 )
 
-object SendErrorLowFee : HSCaution(
+object SendWarningLowFee : HSCaution(
     TranslatableString.ResString(R.string.Send_Warning_LowFee),
     Type.Warning,
     TranslatableString.ResString(R.string.Send_Warning_LowFee_Description)

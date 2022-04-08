@@ -153,16 +153,13 @@ class SendBitcoinService(
     }
 
     private fun validateFeeRate() {
-        val tmpCoinAmount = amount
         val tmpLowFeeRate = lowFeeRate
         val tmpFeeRate = feeRate
 
         feeRateCaution = if (tmpFeeRate == null) {
             SendErrorFetchFeeRateFailed
-        } else if (tmpCoinAmount != null && tmpCoinAmount > availableBalance) {
-            SendErrorInsufficientBalance(wallet.coin.code)
         } else if (tmpLowFeeRate != null && tmpFeeRate <= tmpLowFeeRate) {
-            SendErrorLowFee
+            SendWarningLowFee
         } else {
             null
         }
@@ -206,7 +203,6 @@ class SendBitcoinService(
         refreshFee()
 
         validateAmount()
-        validateFeeRate()
 
         emitState()
     }
@@ -221,7 +217,6 @@ class SendBitcoinService(
         refreshFee()
 
         validateAmount()
-        validateFeeRate()
 
         emitState()
     }

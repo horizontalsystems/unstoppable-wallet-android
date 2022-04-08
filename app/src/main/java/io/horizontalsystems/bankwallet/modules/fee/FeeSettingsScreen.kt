@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.modules.sendx.AmountInputModeViewModel
+import io.horizontalsystems.bankwallet.modules.sendx.SendErrorInsufficientBalance
 import io.horizontalsystems.bankwallet.modules.sendx.SendViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.XRateViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -34,6 +35,7 @@ fun FeeSettingsScreen(
     val feeRatePriority = uiState.feeRatePriority
     val feeRate = uiState.feeRate
     val feeRateCaution = uiState.feeRateCaution
+    val amountCaution = uiState.amountCaution
 
     ComposeAppTheme {
         Column(modifier = Modifier
@@ -161,6 +163,13 @@ fun FeeSettingsScreen(
                         )
                     }
                 }
+            }
+
+            if (amountCaution is SendErrorInsufficientBalance) {
+                FeeRateCaution(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                    feeRateCaution = amountCaution
+                )
             }
 
             feeRateCaution?.let {
