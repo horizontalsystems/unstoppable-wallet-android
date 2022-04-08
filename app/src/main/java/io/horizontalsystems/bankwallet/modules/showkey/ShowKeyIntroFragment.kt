@@ -53,13 +53,13 @@ class ShowKeyIntroFragment : BaseFragment() {
 
         viewModel.showKeyLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromRight(
-                R.id.showKeyIntroFragment_to_showKeyMainFragment
+                R.id.showKeyMainFragment
             )
         }
 
         viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromRight(
-                R.id.showKeyIntroFragment_to_pinFragment,
+                R.id.pinFragment,
                 PinModule.forUnlock()
             )
         }

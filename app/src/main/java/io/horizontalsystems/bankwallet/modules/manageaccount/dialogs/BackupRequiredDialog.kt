@@ -98,7 +98,7 @@ fun BackupRequiredScreen(navController: NavController, account: Account, coinTit
                 onClick = {
                     navController.popBackStack()
                     navController.slideFromRight(
-                        R.id.mainFragment_to_backupKeyFragment,
+                        R.id.backupKeyFragment,
                         BackupKeyModule.prepareParams(account)
                     )
                 }

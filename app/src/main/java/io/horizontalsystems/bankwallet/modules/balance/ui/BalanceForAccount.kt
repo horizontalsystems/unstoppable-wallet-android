@@ -46,7 +46,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                 indication = null,
                             ) {
                                 navController.slideFromBottom(
-                                    R.id.mainFragment_to_manageKeysFragment,
+                                    R.id.manageAccountsFragment,
                                     ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
                                 )
                             },

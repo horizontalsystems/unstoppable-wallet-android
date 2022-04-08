@@ -51,7 +51,7 @@ class MarketFragment : BaseWithSearchFragment() {
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.search -> {
-                    findNavController().slideFromRight(R.id.mainFragment_to_marketSearchFragment)
+                    findNavController().slideFromRight(R.id.marketSearchFragment)
                     true
                 }
                 else -> false

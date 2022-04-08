@@ -109,7 +109,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                 R.string.SettingsAboutApp_WhatsNew,
                 R.drawable.ic_info_20,
                 onClick = {
-                    navController.slideFromRight(R.id.aboutAppFragment_to_releaseNotesFragment)
+                    navController.slideFromRight(R.id.releaseNotesFragment)
                 }
             )
         }
@@ -123,7 +123,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                 R.string.Settings_AppStatus,
                 R.drawable.ic_app_status,
                 onClick = {
-                    navController.slideFromRight(R.id.aboutAppFragment_to_appStatusFragment)
+                    navController.slideFromRight(R.id.appStatusFragment)
                 }
             )
         }, {
@@ -132,7 +132,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                 R.drawable.ic_terms_20,
                 showAlert = termsShowAlert,
                 onClick = {
-                    navController.slideFromRight(R.id.aboutAppFragment_to_termsFragment)
+                    navController.slideFromRight(R.id.termsFragment)
                 }
             )
         })

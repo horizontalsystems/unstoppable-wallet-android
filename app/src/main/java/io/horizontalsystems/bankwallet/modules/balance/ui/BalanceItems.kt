@@ -113,9 +113,7 @@ fun BalanceItems(
                 ButtonSecondaryCircle(
                     icon = R.drawable.ic_manage_2,
                     onClick = {
-                        navController.slideFromRight(
-                            R.id.mainFragment_to_manageWalletsFragment
-                        )
+                        navController.slideFromRight(R.id.manageWalletsFragment)
                     }
                 )
             }

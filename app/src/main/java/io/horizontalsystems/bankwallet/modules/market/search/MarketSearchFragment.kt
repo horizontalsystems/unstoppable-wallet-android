@@ -66,7 +66,7 @@ class MarketSearchFragment : BaseFragment() {
                     onBackButtonClick = { findNavController().popBackStack() },
                     onFilterButtonClick = {
                         findNavController().slideFromRight(
-                            R.id.marketSearchFragment_to_marketAdvancedSearchFragment
+                            R.id.marketAdvancedSearchFragment
                         )
                     },
                     onCoinClick = { coin ->
@@ -77,7 +77,7 @@ class MarketSearchFragment : BaseFragment() {
                         when (viewItemType) {
                             MarketSearchModule.DiscoveryItem.TopCoins -> {
                                 findNavController().slideFromBottom(
-                                    R.id.marketSearchFragment_to_marketTopCoinsFragment
+                                    R.id.marketTopCoinsFragment
                                 )
                             }
                             is MarketSearchModule.DiscoveryItem.Category -> {

@@ -100,12 +100,12 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
             }
         })
 
-        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, {
+        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromBottom(
-                R.id.mainFragment_to_releaseNotesFragment,
+                R.id.releaseNotesFragment,
                 bundleOf(ReleaseNotesFragment.showAsClosablePopupKey to true)
             )
-        })
+        }
 
         viewModel.openPlayMarketLiveEvent.observe(viewLifecycleOwner, Observer {
             openAppInPlayMarket()

@@ -43,9 +43,9 @@ class ExperimentalFeaturesFragment : BaseFragment() {
 
         val router = presenter.router as ExperimentalFeaturesRouter
 
-        router.showBitcoinHodlingLiveEvent.observe(this, Observer {
+        router.showBitcoinHodlingLiveEvent.observe(viewLifecycleOwner, Observer {
             findNavController().slideFromRight(
-                R.id.experimentalFeaturesFragment_to_bitcoinHodlingFragment
+                R.id.bitcoinHodlingFragment
             )
         })
 

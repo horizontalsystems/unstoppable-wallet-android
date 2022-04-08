@@ -116,7 +116,7 @@ private fun SignMessageButton(title: String, data: String, navController: NavCon
             .height(48.dp)
             .clickable {
                 navController.slideFromBottom(
-                    R.id.wcSignMessageRequestFragment_to_wcDisplayTypedMessageFragment,
+                    R.id.wcDisplayTypedMessageFragment,
                     bundleOf(TYPED_MESSAGE to formatJson(data))
                 )
             }

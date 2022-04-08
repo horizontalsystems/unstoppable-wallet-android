@@ -149,7 +149,7 @@ class OneInchFragment : SwapBaseFragment() {
 
         oneInchViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
             findNavController().slideFromBottom(
-                R.id.swapFragment_to_swapApproveFragment,
+                R.id.swapApproveFragment,
                 SwapApproveModule.prepareParams(approveData)
             )
         })
@@ -157,7 +157,7 @@ class OneInchFragment : SwapBaseFragment() {
         oneInchViewModel.openConfirmationLiveEvent()
             .observe(viewLifecycleOwner, { oneInchSwapParameters ->
                 findNavController().slideFromRight(
-                    R.id.swapFragment_to_oneInchConfirmationFragment,
+                    R.id.oneInchConfirmationFragment,
                     OneInchConfirmationModule.prepareParams(oneInchSwapParameters)
                 )
             })
