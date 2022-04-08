@@ -158,22 +158,11 @@ class SendBitcoinService(
         val tmpFeeRate = feeRate
 
         feeRateCaution = if (tmpFeeRate == null) {
-            HSCaution(
-                TranslatableString.ResString(R.string.Send_Error_FetchFeeRateFailed),
-                HSCaution.Type.Error
-            )
+            SendErrorFetchFeeRateFailed
         } else if (tmpCoinAmount != null && tmpCoinAmount > availableBalance) {
-            HSCaution(
-                TranslatableString.ResString(R.string.Swap_ErrorInsufficientBalance),
-                HSCaution.Type.Error,
-                TranslatableString.ResString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, wallet.coin.code)
-            )
+            SendErrorInsufficientBalance(wallet.coin.code)
         } else if (tmpLowFeeRate != null && tmpFeeRate <= tmpLowFeeRate) {
-            HSCaution(
-                TranslatableString.ResString(R.string.Send_Warning_LowFee),
-                HSCaution.Type.Warning,
-                TranslatableString.ResString(R.string.Send_Warning_LowFee_Description)
-            )
+            SendErrorLowFee
         } else {
             null
         }
@@ -188,13 +177,13 @@ class SendBitcoinService(
             tmpCoinAmount == null -> null
             tmpCoinAmount == BigDecimal.ZERO -> null
             tmpCoinAmount > availableBalance -> {
-                HSCaution(TranslatableString.ResString(R.string.Swap_ErrorInsufficientBalance))
+                SendErrorInsufficientBalance(wallet.coin.code)
             }
             tmpMinimumSendAmount != null && tmpCoinAmount < tmpMinimumSendAmount -> {
-                HSCaution(TranslatableString.ResString(R.string.Send_Error_MinimumAmount, tmpMinimumSendAmount))
+                SendErrorMinimumSendAmount(tmpMinimumSendAmount)
             }
             tmpMaximumSendAmount != null && tmpCoinAmount < tmpMaximumSendAmount -> {
-                HSCaution(TranslatableString.ResString(R.string.Send_Error_MaximumAmount, tmpMaximumSendAmount))
+                SendErrorMaximumSendAmount(tmpMaximumSendAmount)
             }
             else -> null
         }
