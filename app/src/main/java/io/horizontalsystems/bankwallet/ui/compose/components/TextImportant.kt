@@ -93,10 +93,12 @@ fun TextImportant(
                 }
             }
         }
-        Text(
-            text = text,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.subhead2
-        )
+        if (text.isNotEmpty()) {
+            Text(
+                text = text,
+                color = ComposeAppTheme.colors.leah,
+                style = ComposeAppTheme.typography.subhead2
+            )
+        }
     }
 }

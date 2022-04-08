@@ -96,7 +96,9 @@ fun FeeSettingsScreen(
                             },
                             onSelectItem = {
                                 if (it is FeeRatePriority.Custom) {
-                                    sendViewModel.onEnterFeeRatePriority(FeeRatePriority.Custom(feeRate))
+                                    feeRate?.let {
+                                        sendViewModel.onEnterFeeRatePriority(FeeRatePriority.Custom(feeRate))
+                                    }
                                 } else {
                                     sendViewModel.onEnterFeeRatePriority(it)
                                 }
@@ -115,9 +117,10 @@ fun FeeSettingsScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            val valueRange = sendViewModel.feeRateRange
+            if (feeRate != null && valueRange != null) {
+                Spacer(modifier = Modifier.height(8.dp))
 
-            sendViewModel.feeRateRange?.let { valueRange ->
                 var sliderValue by remember(feeRate) { mutableStateOf(feeRate) }
 
                 CellSingleLineLawrenceSection2 {
@@ -160,24 +163,11 @@ fun FeeSettingsScreen(
                 }
             }
 
-            when (feeRateCaution?.type) {
-                HSCaution.Type.Error -> {
-                    TextImportantError(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
-                        icon = R.drawable.ic_attention_20,
-                        title = feeRateCaution.getString(),
-                        text = feeRateCaution.getDescription() ?: ""
-                    )
-                }
-                HSCaution.Type.Warning -> {
-                    TextImportantWarning(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
-                        icon = R.drawable.ic_attention_20,
-                        title = feeRateCaution.getString(),
-                        text = feeRateCaution.getDescription() ?: ""
-                    )
-                }
-                null -> {}
+            feeRateCaution?.let {
+                FeeRateCaution(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                    feeRateCaution = feeRateCaution
+                )
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -190,6 +180,28 @@ fun FeeSettingsScreen(
                 onClick = {
                     navController.popBackStack()
                 }
+            )
+        }
+    }
+}
+
+@Composable
+fun FeeRateCaution(modifier: Modifier, feeRateCaution: HSCaution) {
+    when (feeRateCaution.type) {
+        HSCaution.Type.Error -> {
+            TextImportantError(
+                modifier = modifier,
+                icon = R.drawable.ic_attention_20,
+                title = feeRateCaution.getString(),
+                text = feeRateCaution.getDescription() ?: ""
+            )
+        }
+        HSCaution.Type.Warning -> {
+            TextImportantWarning(
+                modifier = modifier,
+                icon = R.drawable.ic_attention_20,
+                title = feeRateCaution.getString(),
+                text = feeRateCaution.getDescription() ?: ""
             )
         }
     }
