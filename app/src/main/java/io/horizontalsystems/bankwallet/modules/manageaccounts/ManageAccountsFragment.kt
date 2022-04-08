@@ -113,10 +113,10 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 
                     val actions = listOf(
                         ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
-                            navController.slideFromRight(R.id.manageAccountsFragment_to_createAccountFragment)
+                            navController.slideFromRight(R.id.createAccountFragment)
                         },
                         ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
-                            navController.slideFromRight(R.id.manageAccountsFragment_to_restoreMnemonicFragment)
+                            navController.slideFromRight(R.id.restoreMnemonicFragment)
                         },
                         ActionViewItem(R.drawable.ic_eye_2_20, R.string.ManageAccounts_WatchAddress) {
                             navController.slideFromRight(R.id.watchAddressFragment)
@@ -216,7 +216,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                 modifier = Modifier
                     .clickable {
                         navController.slideFromRight(
-                            R.id.manageAccountsFragment_to_manageAccount,
+                            R.id.manageAccountFragment,
                             ManageAccountModule.prepareParams(accountViewItem.accountId)
                         )
                     }

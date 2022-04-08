@@ -79,7 +79,7 @@ class MarketOverviewFragment : BaseFragment() {
             findNavController().slideFromBottom(R.id.tvlFragment)
         } else {
             findNavController().slideFromBottom(
-                R.id.mainFragment_to_metricPageFragment,
+                R.id.metricsPageFragment,
                 MetricsPageFragment.prepareParams(metricsType)
             )
         }

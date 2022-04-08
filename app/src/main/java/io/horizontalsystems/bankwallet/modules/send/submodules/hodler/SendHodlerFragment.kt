@@ -57,7 +57,7 @@ class SendHodlerFragment(
             binding.lockTimeMenu.setText(it.stringResId())
         })
 
-        presenterView.showLockTimeIntervals.observe(this, Observer { lockTimeIntervals ->
+        presenterView.showLockTimeIntervals.observe(viewLifecycleOwner, Observer { lockTimeIntervals ->
             val selectorItems = lockTimeIntervals.map {
                 SelectorItem(getString(it.lockTimeInterval.stringResId()), it.selected)
             }

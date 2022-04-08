@@ -233,7 +233,7 @@ private fun AdvancedSearchScreen(
                     title = viewModel.buttonTitle,
                     onClick = {
                         navController.slideFromRight(
-                            R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults
+                            R.id.marketAdvancedSearchResultsFragment
                         )
                     },
                     showSpinner = viewModel.showSpinner,

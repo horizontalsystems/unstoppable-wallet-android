@@ -108,7 +108,7 @@ class SendEvmFragment : BaseFragment() {
 
         viewModel.proceedLiveEvent.observe(viewLifecycleOwner, { sendData ->
             findNavController().slideFromRight(
-                R.id.sendEvmFragment_to_sendEvmConfirmationFragment,
+                R.id.sendEvmConfirmationFragment,
                 SendEvmConfirmationModule.prepareParams(sendData)
             )
         })

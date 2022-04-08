@@ -50,7 +50,7 @@ class ShowBackupWordsFragment : BaseFragment() {
 
         viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner) { account ->
             findNavController().slideFromRight(
-                R.id.showBackupWordsFragment_to_backupConfirmationKeyFragment,
+                R.id.backupConfirmationKeyFragment,
                 BackupConfirmKeyModule.prepareParams(account)
             )
         }

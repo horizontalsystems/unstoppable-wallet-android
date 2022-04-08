@@ -69,7 +69,7 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
             MarkdownFragment.handleRelativeUrlKey to true
         )
         findNavController().slideFromRight(
-            R.id.academyFragment_to_markdownFragment,
+            R.id.markdownFragment,
             arguments
         )
     }

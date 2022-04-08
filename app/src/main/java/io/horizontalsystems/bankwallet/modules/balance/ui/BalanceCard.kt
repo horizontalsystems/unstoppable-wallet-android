@@ -113,7 +113,7 @@ fun BalanceCard(
                 if (viewItem.isWatchAccount) {
                     val coinUid = viewItem.wallet.coin.uid
                     val arguments = CoinFragment.prepareParams(coinUid)
-                    navController.slideFromRight(R.id.mainFragment_to_coinFragment, arguments)
+                    navController.slideFromRight(R.id.coinFragment, arguments)
                 } else {
                     viewModel.onItem(viewItem)
                 }
@@ -259,7 +259,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
     val onClickReceive = {
         try {
             navController.slideFromBottom(
-                R.id.mainFragment_to_receiveFragment,
+                R.id.receiveFragment,
                 bundleOf(ReceiveFragment.WALLET_KEY to viewModel.getWalletForReceive(viewItem))
             )
         } catch (e: BackupRequiredError) {
@@ -287,7 +287,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                     CoinType.BinanceSmartChain, is CoinType.Bep20,
                     CoinType.Polygon, is CoinType.Mrc20 -> {
                         navController.slideFromBottom(
-                            R.id.mainFragment_to_sendEvmFragment,
+                            R.id.sendEvmFragment,
                             bundleOf(SendEvmModule.walletKey to viewItem.wallet)
                         )
                     }
@@ -313,7 +313,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 icon = R.drawable.ic_swap_24,
                 onClick = {
                     navController.slideFromBottom(
-                        R.id.mainFragment_to_swapFragment,
+                        R.id.swapFragment,
                         SwapMainModule.prepareParams(viewItem.wallet.platformCoin)
                     )
                 },
@@ -334,7 +334,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 val coinUid = viewItem.wallet.coin.uid
                 val arguments = CoinFragment.prepareParams(coinUid)
 
-                navController.slideFromRight(R.id.mainFragment_to_coinFragment, arguments)
+                navController.slideFromRight(R.id.coinFragment, arguments)
             },
             enabled = viewItem.exchangeValue.text != null
         )

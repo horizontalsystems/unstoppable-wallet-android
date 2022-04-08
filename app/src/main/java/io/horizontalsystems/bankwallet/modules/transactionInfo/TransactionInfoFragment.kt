@@ -84,7 +84,7 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
         viewModel.openTransactionOptionsModule.observe(viewLifecycleOwner, { (optionType, txHash) ->
             val params = TransactionSpeedUpCancelFragment.prepareParams(optionType, txHash)
             findNavController().slideFromRight(
-                R.id.transactionInfoFragment_to_transactionSpeedUpCancelFragment,
+                R.id.transactionSpeedUpCancelFragment,
                 params
             )
         })

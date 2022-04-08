@@ -55,12 +55,12 @@ fun PasscodeBlock(
                     onCheckedChange = { checked ->
                         if (checked) {
                             navController.slideFromRight(
-                                R.id.securitySettingsFragment_to_pinFragment,
+                                R.id.pinFragment,
                                 PinModule.forSetPin()
                             )
                         } else {
                             navController.slideFromRight(
-                                R.id.securitySettingsFragment_to_pinFragment,
+                                R.id.pinFragment,
                                 PinModule.forUnlock()
                             )
                         }
@@ -75,7 +75,7 @@ fun PasscodeBlock(
                         .fillMaxSize()
                         .clickable {
                             navController.slideFromRight(
-                                R.id.securitySettingsFragment_to_pinFragment,
+                                R.id.pinFragment,
                                 PinModule.forEditPin()
                             )
                         }

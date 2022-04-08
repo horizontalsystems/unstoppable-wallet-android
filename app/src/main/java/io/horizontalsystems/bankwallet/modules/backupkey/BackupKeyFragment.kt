@@ -54,13 +54,13 @@ class BackupKeyFragment : BaseFragment() {
 
         viewModel.showKeyLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromRight(
-                R.id.backupKeyFragment_to_showBackupWordsFragment
+                R.id.showBackupWordsFragment
             )
         }
 
         viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromRight(
-                R.id.backupKeyFragment_to_pinFragment,
+                R.id.pinFragment,
                 PinModule.forUnlock()
             )
         }

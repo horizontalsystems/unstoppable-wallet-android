@@ -123,7 +123,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 icon = painterResource(id = R.drawable.ic_key_20)
                             ) {
                                 navController.slideFromRight(
-                                    R.id.manageAccountFragment_to_showKeyFragment,
+                                    R.id.showKeyIntroFragment,
                                     ShowKeyModule.prepareParams(viewModel.account)
                                 )
                             }
@@ -137,7 +137,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 attention = true
                             ) {
                                 navController.slideFromRight(
-                                    R.id.manageAccountFragment_to_backupKeyFragment,
+                                    R.id.backupKeyFragment,
                                     BackupKeyModule.prepareParams(viewModel.account)
                                 )
 

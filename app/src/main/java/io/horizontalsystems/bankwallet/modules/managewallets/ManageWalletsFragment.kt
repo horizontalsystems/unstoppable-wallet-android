@@ -153,7 +153,7 @@ private fun ManageWalletsScreen(
                     title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
                     icon = R.drawable.ic_add_yellow,
                     onClick = {
-                        findNavController.slideFromRight(R.id.manageWalletsFragment_to_addToken)
+                        findNavController.slideFromRight(R.id.addTokenFragment)
                     }
                 )
             ),

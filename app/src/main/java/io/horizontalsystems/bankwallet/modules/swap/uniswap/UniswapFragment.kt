@@ -151,14 +151,14 @@ class UniswapFragment : SwapBaseFragment() {
 
         uniswapViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
             findNavController().slideFromBottom(
-                R.id.swapFragment_to_swapApproveFragment,
+                R.id.swapApproveFragment,
                 SwapApproveModule.prepareParams(approveData)
             )
         })
 
         uniswapViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
             requireParentFragment().findNavController().slideFromRight(
-                R.id.swapFragment_to_uniswapConfirmationFragment,
+                R.id.uniswapConfirmationFragment,
                 UniswapConfirmationModule.prepareParams(sendEvmData)
             )
         })
