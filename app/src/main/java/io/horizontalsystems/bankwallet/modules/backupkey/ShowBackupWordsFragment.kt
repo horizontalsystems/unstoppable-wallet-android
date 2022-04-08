@@ -19,7 +19,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 
 class ShowBackupWordsFragment : BaseFragment() {
-    private val viewModel by navGraphViewModels<BackupKeyViewModel>(R.id.backupKeyFragment)
 
     private var _binding: FragmentShowBackupWordsBinding? = null
     private val binding get() = _binding!!
@@ -31,8 +30,7 @@ class ShowBackupWordsFragment : BaseFragment() {
     ): View {
         disallowScreenshot()
         _binding = FragmentShowBackupWordsBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -46,6 +44,13 @@ class ShowBackupWordsFragment : BaseFragment() {
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+
+        val viewModel = getViewModel()
+
+        if (viewModel == null) {
+            findNavController().popBackStack()
+            return
         }
 
         viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner) { account ->
@@ -71,6 +76,15 @@ class ShowBackupWordsFragment : BaseFragment() {
                     }
                 )
             }
+        }
+    }
+
+    private fun getViewModel(): BackupKeyViewModel? {
+        return try {
+            val viewModel by navGraphViewModels<BackupKeyViewModel>(R.id.backupKeyFragment)
+            viewModel
+        } catch (e: RuntimeException) {
+            null
         }
     }
 
