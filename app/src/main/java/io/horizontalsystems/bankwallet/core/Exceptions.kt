@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 
-class HSCaution(
+open class HSCaution(
     val s: TranslatableString,
     val type: Type = Type.Error,
     val description: TranslatableString? = null
