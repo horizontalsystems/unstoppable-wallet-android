@@ -24,21 +24,22 @@ class AvailableBalanceViewModel(
         private set
 
     fun refreshFormatted() {
-        val tmpAvailableBalance = availableBalance ?: return
-        val tmpAmountInputMode = amountInputType ?: return
+        val tmpAvailableBalance = availableBalance
+        val tmpAmountInputMode = amountInputType
 
-        formatted = when (tmpAmountInputMode) {
-            SendModule.InputType.COIN -> {
+        formatted = when {
+            tmpAvailableBalance == null || tmpAmountInputMode == null -> null
+            tmpAmountInputMode == SendModule.InputType.COIN -> {
                 App.numberFormatter.formatCoin(tmpAvailableBalance, coinCode, 0, coinDecimal)
-
             }
-            SendModule.InputType.CURRENCY -> {
+            tmpAmountInputMode == SendModule.InputType.CURRENCY -> {
                 xRate
                     ?.let {
                         it.copy(value = tmpAvailableBalance.times(it.value))
                     }
                     ?.getFormatted(fiatDecimal, fiatDecimal)
             }
+            else -> null
         }
     }
 }

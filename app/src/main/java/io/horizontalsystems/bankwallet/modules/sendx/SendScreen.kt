@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
+import io.horizontalsystems.bankwallet.modules.fee.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInput
 import io.horizontalsystems.bankwallet.modules.sendevm.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.sendevm.HSAmountInput
@@ -42,6 +43,7 @@ fun SendScreen(
     val fee = uiState.fee
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
+    val feeRateCaution = uiState.feeRateCaution
 
     val rate = xRateViewModel.rate
 
@@ -124,6 +126,13 @@ fun SendScreen(
                 rate = rate
             ) {
                 navController.slideFromBottom(R.id.feeSettings)
+            }
+
+            feeRateCaution?.let {
+                FeeRateCaution(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                    feeRateCaution = feeRateCaution
+                )
             }
 
             ButtonPrimaryYellow(

@@ -326,6 +326,7 @@
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %1$s (%2$s) paid in %3$s. You need %4$s.</string>
     <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
     <string name="Send_Warning_LowFee_Description">The transaction may get stuck or fail</string>
+    <string name="Send_Error_FetchFeeRateFailed">Error while fetching fee rate</string>
 
     <!-- Fee Settings -->
 

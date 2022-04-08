@@ -87,7 +87,7 @@ data class SendUiState(
     val availableBalance: BigDecimal,
     val fee: BigDecimal?,
     val feeRatePriority: FeeRatePriority,
-    val feeRate: Long,
+    val feeRate: Long?,
     val addressError: Throwable?,
     val amountCaution: HSCaution?,
     val feeRateCaution: HSCaution?,
