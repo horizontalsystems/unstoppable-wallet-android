@@ -17,7 +17,6 @@ class TorStatusInteractor(private val torManager: ITorManager) : TorStatusModule
     }
 
     override fun restartTor() {
-        torManager.setTorAsEnabled()
         torManager.start()
     }
 

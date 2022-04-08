@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
 import android.util.Log
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
@@ -22,6 +23,7 @@ class TorManager(
         fun onStatusChange(torStatus: TorStatus)
     }
 
+    private val logger = AppLogger("tor status")
     override val torObservable = BehaviorSubject.create<TorStatus>()
     override val isTorNotificationEnabled: Boolean
         get() = kit.notificationsEnabled
@@ -57,10 +59,12 @@ class TorManager(
 
     override fun setTorAsEnabled() {
         localStorage.torEnabled = true
+        logger.info("Tor enabled")
     }
 
     override fun setTorAsDisabled() {
         localStorage.torEnabled = false
+        logger.info("Tor disabled")
     }
 
     override fun setListener(listener: Listener) {

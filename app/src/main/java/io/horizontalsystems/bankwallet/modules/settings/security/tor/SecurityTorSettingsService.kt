@@ -22,16 +22,8 @@ class SecurityTorSettingsService(
     val restartAppObservable: Observable<Unit>
         get() = restartAppSubject
 
-    var torEnabled: Boolean
-        get() = torManager.isTorEnabled
-        private set(value) {
-            pinComponent.updateLastExitDateBeforeRestart()
-            if (value) {
-                torManager.setTorAsEnabled()
-            } else {
-                torManager.setTorAsDisabled()
-            }
-        }
+    var torEnabled: Boolean = torManager.isTorEnabled
+        private set
 
     val isTorNotificationEnabled: Boolean
         get() = torManager.isTorNotificationEnabled
@@ -56,14 +48,17 @@ class SecurityTorSettingsService(
 
     fun enableTor() {
         torEnabled = true
+        torManager.setTorAsEnabled()
         torManager.start()
         restartAppSubject.onNext(Unit)
     }
 
     fun disableTor() {
         torEnabled = false
+        torManager.setTorAsDisabled()
         torManager.stop()
             .subscribe({
+                pinComponent.updateLastExitDateBeforeRestart()
                 restartAppSubject.onNext(Unit)
             }, {
                 Log.e("SecurityTorSettingsService", "stopTor", it)
