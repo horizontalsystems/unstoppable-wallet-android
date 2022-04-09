@@ -16,9 +16,11 @@ object SendModule {
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendBitcoinAdapter
-            val provider = FeeRateProviderFactory.provider(wallet.coinType)
+            val provider = FeeRateProviderFactory.provider(wallet.coinType)!!
 
-            val service = SendBitcoinService(adapter, wallet, FeeServiceBitcoin(provider!!, adapter))
+            val feeService = FeeServiceBitcoin(adapter)
+            val feeRateService = FeeRateServiceBitcoin(provider)
+            val service = SendBitcoinService(adapter, wallet, feeRateService, feeService)
 
             return SendViewModel(service) as T
         }
