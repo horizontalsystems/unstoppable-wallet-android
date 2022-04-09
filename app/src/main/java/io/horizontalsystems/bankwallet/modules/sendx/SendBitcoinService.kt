@@ -7,10 +7,13 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.marketkit.models.Coin
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -19,13 +22,16 @@ import kotlin.math.min
 class SendBitcoinService(
     private val adapter: ISendBitcoinAdapter,
     val wallet: Wallet,
+    private val feeRateService: FeeRateServiceBitcoin,
     private val feeService: FeeServiceBitcoin
 ) {
     val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
-    val feeRatePriorities by feeService::feeRatePriorities
-    val feeRateRange by feeService::feeRateRange
+    val feeRatePriorities by feeRateService::feeRatePriorities
+    val feeRateRange by feeRateService::feeRateRange
+
+    private var feeRateState: FeeRateServiceBitcoin.State = feeRateService.stateFlow.value
 
     data class ServiceState(
         val availableBalance: BigDecimal,
@@ -55,8 +61,19 @@ class SendBitcoinService(
     private var amountCaution: HSCaution? = null
     private var sendResult: SendResult? = null
 
-    suspend fun start() {
+    fun start(coroutineScope: CoroutineScope) {
         adapter.balanceData
+
+        coroutineScope.launch {
+            feeRateService.stateFlow
+                .collect {
+                    handleUpdatedFeeRateState(it)
+                }
+        }
+
+        coroutineScope.launch {
+            feeRateService.start()
+        }
 
         feeService.init(amount, validAddress, pluginData)
 
@@ -72,7 +89,7 @@ class SendBitcoinService(
     private fun emitState() {
         val tmpAmount = amount
         val tmpAmountCaution = amountCaution
-        val tmpFeeRateCaution = feeService.feeRateCaution
+        val tmpFeeRateCaution = feeRateState.feeRateCaution
 
         val canBeSend =
             tmpAmount != null && tmpAmount > BigDecimal.ZERO
@@ -83,12 +100,12 @@ class SendBitcoinService(
         _stateFlow.update {
             ServiceState(
                 availableBalance = availableBalance,
-                feeRatePriority = feeService.feeRatePriority,
-                feeRate = feeService.feeRate,
+                feeRatePriority = feeRateState.feeRatePriority,
+                feeRate = feeRateState.feeRate,
                 fee = feeService.fee,
                 addressError = addressError,
                 amountCaution = amountCaution,
-                feeRateCaution = feeService.feeRateCaution,
+                feeRateCaution = feeRateState.feeRateCaution,
                 canBeSend = canBeSend,
                 sendResult = sendResult
             )
@@ -100,7 +117,7 @@ class SendBitcoinService(
     }
 
     private fun refreshAvailableBalance() {
-        availableBalance = feeService.feeRate?.let { adapter.availableBalance(it, validAddress?.hex, pluginData) } ?: adapter.balanceData.available
+        availableBalance = feeRateState.feeRate?.let { adapter.availableBalance(it, validAddress?.hex, pluginData) } ?: adapter.balanceData.available
     }
 
     private fun refreshMaximumSendAmount() {
@@ -169,7 +186,13 @@ class SendBitcoinService(
     }
 
     suspend fun setFeeRatePriority(feeRatePriority: FeeRatePriority) {
-        feeService.setFeeRatePriority(feeRatePriority)
+        feeRateService.setFeeRatePriority(feeRatePriority)
+    }
+
+    private fun handleUpdatedFeeRateState(feeRateState: FeeRateServiceBitcoin.State) {
+        this.feeRateState = feeRateState
+
+        feeService.setFeeRate(feeRateState.feeRate)
 
         refreshAvailableBalance()
         validateAmount()
@@ -196,7 +219,7 @@ class SendBitcoinService(
             val send = adapter.send(
                 amount!!,
                 validAddress!!.hex,
-                feeService.feeRate!!,
+                feeRateState.feeRate!!,
                 pluginData,
                 transactionSorting = null,
                 logger = logger
