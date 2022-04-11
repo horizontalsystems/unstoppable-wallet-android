@@ -20,12 +20,10 @@ class FeeServiceBitcoin(private val adapter: ISendBitcoinAdapter) {
 
     private var feeRate: Long? = null
 
-    fun init(amount: BigDecimal?, validAddress: Address?, pluginData: Map<Byte, IPluginData>?) {
-        this.amount = amount
-        this.validAddress = validAddress
-        this.pluginData = pluginData
-
+    fun start() {
         refreshFee()
+
+        emitState()
     }
 
     private fun refreshFee() {
@@ -37,7 +35,9 @@ class FeeServiceBitcoin(private val adapter: ISendBitcoinAdapter) {
             tmpFeeRate == null -> null
             else -> adapter.fee(tmpAmount, tmpFeeRate, validAddress?.hex, pluginData)
         }
+    }
 
+    private fun emitState() {
         _feeFlow.update { fee }
     }
 
@@ -45,24 +45,28 @@ class FeeServiceBitcoin(private val adapter: ISendBitcoinAdapter) {
         this.amount = amount
 
         refreshFee()
+        emitState()
     }
 
     fun setValidAddress(validAddress: Address?) {
         this.validAddress = validAddress
 
         refreshFee()
+        emitState()
     }
 
     fun setPluginData(pluginData: Map<Byte, IPluginData>?) {
         this.pluginData = pluginData
 
         refreshFee()
+        emitState()
     }
 
     fun setFeeRate(feeRate: Long?) {
         this.feeRate = feeRate
 
         refreshFee()
+        emitState()
     }
 
 }

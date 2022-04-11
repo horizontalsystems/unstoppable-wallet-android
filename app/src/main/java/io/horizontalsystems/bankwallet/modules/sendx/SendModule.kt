@@ -20,7 +20,8 @@ object SendModule {
 
             val feeService = FeeServiceBitcoin(adapter)
             val feeRateService = FeeRateServiceBitcoin(provider)
-            val service = SendBitcoinService(adapter, wallet, feeRateService, feeService)
+            val amountService = AmountService(adapter, wallet.coin.code)
+            val service = SendBitcoinService(adapter, wallet, feeRateService, feeService, amountService)
 
             return SendViewModel(service) as T
         }
