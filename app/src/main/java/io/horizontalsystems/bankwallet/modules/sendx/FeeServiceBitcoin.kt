@@ -3,11 +3,16 @@ package io.horizontalsystems.bankwallet.modules.sendx
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
 class FeeServiceBitcoin(private val adapter: ISendBitcoinAdapter) {
-    var fee: BigDecimal? = null
-        private set
+    private val _feeFlow = MutableStateFlow<BigDecimal?>(null)
+    val feeFlow = _feeFlow.asStateFlow()
+
+    private var fee: BigDecimal? = null
 
     private var amount: BigDecimal? = null
     private var validAddress: Address? = null
@@ -32,6 +37,8 @@ class FeeServiceBitcoin(private val adapter: ISendBitcoinAdapter) {
             tmpFeeRate == null -> null
             else -> adapter.fee(tmpAmount, tmpFeeRate, validAddress?.hex, pluginData)
         }
+
+        _feeFlow.update { fee }
     }
 
     fun setAmount(amount: BigDecimal?) {
