@@ -27,6 +27,7 @@ class FeeRateServiceBitcoin(private val feeRateProvider: IFeeRateProvider) {
             feeRate = feeRate,
             feeRateCaution = feeRateCaution,
             feeRatePriority = feeRatePriority,
+            canBeSend = false
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -56,11 +57,14 @@ class FeeRateServiceBitcoin(private val feeRateProvider: IFeeRateProvider) {
     }
 
     private fun emitState() {
+        val tmpFeeRateCaution = feeRateCaution
+
         _stateFlow.update {
             State(
                 feeRate = feeRate,
                 feeRateCaution = feeRateCaution,
                 feeRatePriority = feeRatePriority,
+                canBeSend = tmpFeeRateCaution == null || tmpFeeRateCaution.isWarning()
             )
         }
     }
@@ -90,5 +94,6 @@ class FeeRateServiceBitcoin(private val feeRateProvider: IFeeRateProvider) {
         val feeRate: Long?,
         val feeRateCaution: HSCaution?,
         val feeRatePriority: FeeRatePriority,
+        val canBeSend: Boolean,
     )
 }

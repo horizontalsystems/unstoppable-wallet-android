@@ -28,6 +28,7 @@ class AmountService(
             amount = amount,
             amountCaution = amountCaution,
             availableBalance = availableBalance,
+            canBeSend = false,
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -41,11 +42,19 @@ class AmountService(
     }
 
     private fun emitState() {
+        val tmpAmount = amount
+        val tmpAmountCaution = amountCaution
+
+        val canBeSend = tmpAmount != null
+            && tmpAmount > BigDecimal.ZERO
+            && (tmpAmountCaution == null || tmpAmountCaution.isWarning())
+
         _stateFlow.update {
             State(
                 amount = amount,
                 amountCaution = amountCaution,
                 availableBalance = availableBalance,
+                canBeSend = canBeSend
             )
         }
     }
@@ -123,6 +132,7 @@ class AmountService(
     data class State(
         val amount: BigDecimal?,
         val amountCaution: HSCaution?,
-        val availableBalance: BigDecimal
+        val availableBalance: BigDecimal,
+        val canBeSend: Boolean
     )
 }
