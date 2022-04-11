@@ -31,7 +31,8 @@ class SendBitcoinService(
     val feeRatePriorities by feeRateService::feeRatePriorities
     val feeRateRange by feeRateService::feeRateRange
 
-    private var feeRateState: FeeRateServiceBitcoin.State = feeRateService.stateFlow.value
+    private var feeRateState = feeRateService.stateFlow.value
+    private var fee = feeService.feeFlow.value
 
     data class ServiceState(
         val availableBalance: BigDecimal,
@@ -75,6 +76,13 @@ class SendBitcoinService(
             feeRateService.start()
         }
 
+        coroutineScope.launch {
+            feeService.feeFlow
+                .collect {
+                    handleUpdatedFee(it)
+                }
+        }
+
         feeService.init(amount, validAddress, pluginData)
 
         refreshMinimumSendAmount()
@@ -102,7 +110,7 @@ class SendBitcoinService(
                 availableBalance = availableBalance,
                 feeRatePriority = feeRateState.feeRatePriority,
                 feeRate = feeRateState.feeRate,
-                fee = feeService.fee,
+                fee = fee,
                 addressError = addressError,
                 amountCaution = amountCaution,
                 feeRateCaution = feeRateState.feeRateCaution,
@@ -200,10 +208,15 @@ class SendBitcoinService(
         emitState()
     }
 
+    private fun handleUpdatedFee(fee: BigDecimal?) {
+        this.fee = fee
+        emitState()
+    }
+
     fun getConfirmationData(): ConfirmationData {
         return ConfirmationData(
             amount = amount!!,
-            fee = feeService.fee!!,
+            fee = fee!!,
             address = validAddress!!,
             coin = wallet.platformCoin.coin
         )
