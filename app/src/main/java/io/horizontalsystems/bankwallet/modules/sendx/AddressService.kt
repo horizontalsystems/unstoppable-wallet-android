@@ -18,7 +18,8 @@ class AddressService(private val adapter: ISendBitcoinAdapter) {
     private val _stateFlow = MutableStateFlow(
         State(
             validAddress = validAddress,
-            addressError = addressError
+            addressError = addressError,
+            canBeSend = validAddress != null
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -67,10 +68,15 @@ class AddressService(private val adapter: ISendBitcoinAdapter) {
         _stateFlow.update {
             State(
                 validAddress = validAddress,
-                addressError = addressError
+                addressError = addressError,
+                canBeSend = validAddress != null
             )
         }
     }
 
-    data class State(val validAddress: Address?, val addressError: Throwable?)
+    data class State(
+        val validAddress: Address?,
+        val addressError: Throwable?,
+        val canBeSend: Boolean
+    )
 }

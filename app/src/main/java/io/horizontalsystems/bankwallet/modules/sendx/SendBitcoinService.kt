@@ -33,25 +33,13 @@ class SendBitcoinService(
     val feeRatePriorities by feeRateService::feeRatePriorities
     val feeRateRange by feeRateService::feeRateRange
 
+    private val _stateFlow = MutableStateFlow<ServiceState?>(null)
+    val stateFlow = _stateFlow.filterNotNull()
+
     private var feeRateState = feeRateService.stateFlow.value
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var fee = feeService.feeFlow.value
-
-    data class ServiceState(
-        val availableBalance: BigDecimal,
-        val fee: BigDecimal?,
-        val addressError: Throwable?,
-        val amountCaution: HSCaution?,
-        val feeRateCaution: HSCaution?,
-        val canBeSend: Boolean,
-        val sendResult: SendResult?,
-        val feeRatePriority: FeeRatePriority,
-        val feeRate: Long?
-    )
-
-    private var _stateFlow = MutableStateFlow<ServiceState?>(null)
-    val stateFlow = _stateFlow.filterNotNull()
 
     private val logger = AppLogger("send")
     private var pluginData: Map<Byte, IPluginData>? = null
@@ -59,8 +47,6 @@ class SendBitcoinService(
     private var sendResult: SendResult? = null
 
     fun start(coroutineScope: CoroutineScope) {
-        adapter.balanceData
-
         coroutineScope.launch {
             feeRateService.stateFlow
                 .collect {
@@ -98,20 +84,9 @@ class SendBitcoinService(
         addressService.start()
 
         emitState()
-//        adapter.send()
     }
 
     private fun emitState() {
-        val tmpAmount = amountState.amount
-        val tmpAmountCaution = amountState.amountCaution
-        val tmpFeeRateCaution = feeRateState.feeRateCaution
-
-        val canBeSend =
-            tmpAmount != null && tmpAmount > BigDecimal.ZERO
-                && (tmpAmountCaution == null || tmpAmountCaution.isWarning())
-                && addressState.validAddress != null
-                && (tmpFeeRateCaution == null || tmpFeeRateCaution.isWarning())
-
         _stateFlow.update {
             ServiceState(
                 availableBalance = amountState.availableBalance,
@@ -121,7 +96,7 @@ class SendBitcoinService(
                 addressError = addressState.addressError,
                 amountCaution = amountState.amountCaution,
                 feeRateCaution = feeRateState.feeRateCaution,
-                canBeSend = canBeSend,
+                canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
                 sendResult = sendResult
             )
         }
@@ -211,6 +186,18 @@ class SendBitcoinService(
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
+
+    data class ServiceState(
+        val availableBalance: BigDecimal,
+        val fee: BigDecimal?,
+        val addressError: Throwable?,
+        val amountCaution: HSCaution?,
+        val feeRateCaution: HSCaution?,
+        val canBeSend: Boolean,
+        val sendResult: SendResult?,
+        val feeRatePriority: FeeRatePriority,
+        val feeRate: Long?
+    )
 
     data class ConfirmationData(
         val amount: BigDecimal,
