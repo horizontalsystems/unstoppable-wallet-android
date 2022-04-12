@@ -128,10 +128,12 @@ fun SendScreen(
                         fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                         fee = fee,
                         amountInputType = amountInputType,
-                        rate = rate
-                    ) {
-                        navController.slideFromBottom(R.id.feeSettings)
-                    }
+                        rate = rate,
+                        enabled = viewModel.feeRateChangeable,
+                        onClick = {
+                            navController.slideFromBottom(R.id.feeSettings)
+                        }
+                    )
                 }
                 if (isLockTimeEnabled) {
                     add {

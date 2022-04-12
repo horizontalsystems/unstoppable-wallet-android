@@ -3,9 +3,7 @@ package io.horizontalsystems.bankwallet.modules.sendx
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
-import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -15,14 +13,34 @@ object SendModule {
     @Suppress("UNCHECKED_CAST")
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendBitcoinAdapter
+            val adapter = App.adapterManager.getAdapterForWallet(wallet)
+
+
+            when (adapter) {
+                is ISendBitcoinAdapter -> {
+                }
+                is ISendDashAdapter -> {
+                    TODO()
+                }
+                is ISendBinanceAdapter -> {
+                    TODO()
+                }
+                is ISendZcashAdapter -> {
+                    TODO()
+                }
+                else -> {
+                    throw Exception("No adapter found!")
+                }
+            }
+
+
             val provider = FeeRateProviderFactory.provider(wallet.coinType)!!
 
             val feeService = FeeServiceBitcoin(adapter)
             val feeRateService = FeeRateServiceBitcoin(provider)
             val amountService = AmountService(adapter, wallet.coin.code)
             val addressService = AddressService(adapter)
-            val pluginService = PluginService(App.localStorage)
+            val pluginService = PluginService(App.localStorage, wallet.coinType)
             val service = SendBitcoinService(adapter, wallet, feeRateService, feeService, amountService, addressService, pluginService)
 
             return SendViewModel(service) as T
