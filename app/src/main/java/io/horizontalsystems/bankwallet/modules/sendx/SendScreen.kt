@@ -172,9 +172,9 @@ fun SendScreen(
 
 @Composable
 fun HSHodlerInput(
-    lockTimeIntervals: List<LockTimeInterval?>,
+    lockTimeIntervals: List<LockTimeInterval?> = listOf(),
     lockTimeInterval: LockTimeInterval?,
-    onSelect: (LockTimeInterval?) -> Unit
+    onSelect: ((LockTimeInterval?) -> Unit)? = null
 ) {
     var showSelectorDialog by remember { mutableStateOf(false) }
     if (showSelectorDialog) {
@@ -187,21 +187,28 @@ fun HSHodlerInput(
                 showSelectorDialog = false
             },
             onSelectItem = {
-                onSelect.invoke(it)
+                onSelect?.invoke(it)
             }
         )
+    }
+
+    val selectable = lockTimeIntervals.isNotEmpty()
+    val modifierClickable = if (selectable) {
+        Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = {
+                showSelectorDialog = true
+            }
+        )
+    } else {
+        Modifier
     }
 
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = {
-                    showSelectorDialog = true
-                }
-            ),
+            .then(modifierClickable),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -216,12 +223,15 @@ fun HSHodlerInput(
             style = ComposeAppTheme.typography.subhead1,
             color = ComposeAppTheme.colors.leah,
         )
-        Icon(
-            modifier = Modifier.padding(start = 8.dp, end = 16.dp),
-            painter = painterResource(R.drawable.ic_down_arrow_20),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
-        )
+        if (selectable) {
+            Icon(
+                modifier = Modifier.padding(start = 8.dp),
+                painter = painterResource(R.drawable.ic_down_arrow_20),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey
+            )
+        }
+        Spacer(modifier = Modifier.width(16.dp))
     }
 }
 

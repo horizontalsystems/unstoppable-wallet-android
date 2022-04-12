@@ -25,7 +25,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeInput
+import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.AddressCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SectionTitleCell
@@ -73,6 +73,7 @@ fun SendConfirmationScreen(
 ) {
     val confirmationViewItem = sendViewModel.getConfirmationViewItem()
     val uiState = sendViewModel.uiState
+    val lockTimeInterval = uiState.lockTimeInterval
 
     val sendResult = uiState.sendResult
     val view = LocalView.current
@@ -168,14 +169,23 @@ fun SendConfirmationScreen(
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
-                    HSFeeInput(
-                        coinCode = confirmationViewItem.coin.code,
-                        coinDecimal = sendViewModel.coinMaxAllowedDecimals,
-                        fiatDecimal = sendViewModel.fiatMaxAllowedDecimals,
-                        fee = confirmationViewItem.fee,
-                        amountInputType = amountInputModeViewModel.inputType,
-                        rate = xRateViewModel.rate
-                    )
+                    CellSingleLineLawrenceSection2 {
+                        CellSingleLineLawrence {
+                            HSFeeInputRaw(
+                                coinCode = confirmationViewItem.coin.code,
+                                coinDecimal = sendViewModel.coinMaxAllowedDecimals,
+                                fiatDecimal = sendViewModel.fiatMaxAllowedDecimals,
+                                fee = confirmationViewItem.fee,
+                                amountInputType = amountInputModeViewModel.inputType,
+                                rate = xRateViewModel.rate
+                            )
+                        }
+                        if (lockTimeInterval != null) {
+                            CellSingleLineLawrence(borderTop = true) {
+                                HSHodlerInput(lockTimeInterval = lockTimeInterval)
+                            }
+                        }
+                    }
                 }
 
                 SendButton(
