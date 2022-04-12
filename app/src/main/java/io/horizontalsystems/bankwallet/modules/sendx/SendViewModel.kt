@@ -19,6 +19,7 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
     val fiatMaxAllowedDecimals by service::fiatMaxAllowedDecimals
     val feeRatePriorities by service::feeRatePriorities
     val feeRateRange by service::feeRateRange
+    val feeRateChangeable by service::feeRateChangeable
     val isLockTimeEnabled by service::isLockTimeEnabled
     val lockTimeIntervals by service::lockTimeIntervals
 

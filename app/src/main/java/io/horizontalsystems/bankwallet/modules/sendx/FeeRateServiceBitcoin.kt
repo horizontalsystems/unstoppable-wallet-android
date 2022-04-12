@@ -15,12 +15,15 @@ class FeeRateServiceBitcoin(private val feeRateProvider: IFeeRateProvider) {
         private set
     var feeRateRange: ClosedRange<Long>? = null
         private set
+    var feeRateChangeable: Boolean = false
+        private set
 
     private var feeRatePriority: FeeRatePriority = FeeRatePriority.RECOMMENDED
     private var feeRate: Long? = null
     private var feeRateCaution: HSCaution? = null
 
     private var lowFeeRate: Long? = null
+    private var mediumFeeRate: Long? = null
 
     private val _stateFlow = MutableStateFlow(
         State(
@@ -37,7 +40,9 @@ class FeeRateServiceBitcoin(private val feeRateProvider: IFeeRateProvider) {
             try {
                 feeRatePriorities = feeRateProvider.feeRatePriorityList
                 feeRateRange = feeRateProvider.getFeeRateRange()
+                feeRateChangeable = feeRatePriorities.isNotEmpty()
                 lowFeeRate = feeRateProvider.getFeeRate(FeeRatePriority.LOW)
+                mediumFeeRate = feeRateProvider.getFeeRate(FeeRatePriority.RECOMMENDED)
             } catch (e: Exception) {
 
             }
@@ -71,11 +76,12 @@ class FeeRateServiceBitcoin(private val feeRateProvider: IFeeRateProvider) {
 
     private fun validateFeeRate() {
         val tmpLowFeeRate = lowFeeRate
+        val tmpMediumFeeRate = mediumFeeRate
         val tmpFeeRate = feeRate
 
         feeRateCaution = if (tmpFeeRate == null) {
             SendErrorFetchFeeRateFailed
-        } else if (tmpLowFeeRate != null && tmpFeeRate <= tmpLowFeeRate) {
+        } else if (tmpLowFeeRate != null && tmpMediumFeeRate != null && tmpLowFeeRate < tmpMediumFeeRate && tmpFeeRate <= tmpLowFeeRate) {
             SendWarningLowFee
         } else {
             null

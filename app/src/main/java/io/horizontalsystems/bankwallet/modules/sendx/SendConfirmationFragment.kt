@@ -177,7 +177,9 @@ fun SendConfirmationScreen(
                                 fiatDecimal = sendViewModel.fiatMaxAllowedDecimals,
                                 fee = confirmationViewItem.fee,
                                 amountInputType = amountInputModeViewModel.inputType,
-                                rate = xRateViewModel.rate
+                                rate = xRateViewModel.rate,
+                                enabled = false,
+                                onClick = {}
                             )
                         }
                         if (lockTimeInterval != null) {

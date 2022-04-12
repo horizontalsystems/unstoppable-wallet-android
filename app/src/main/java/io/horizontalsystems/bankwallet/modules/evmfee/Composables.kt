@@ -394,7 +394,15 @@ fun EvmFeeCell(
     onClick: (() -> Unit)? = null
 ) {
     CellSingleLineLawrenceSection {
-        HSFeeCell(title, value, loading, viewState, highlightEditButton, onClick)
+        HSFeeCell(
+            title = title,
+            value = value,
+            loading = loading,
+            viewState = viewState,
+            highlightEditButton = highlightEditButton,
+            enabled = onClick != null,
+            onClick = { onClick?.invoke() }
+        )
     }
 }
 
@@ -405,12 +413,13 @@ fun HSFeeCell(
     loading: Boolean,
     viewState: ViewState?,
     highlightEditButton: Boolean = false,
-    onClick: (() -> Unit)? = null
+    enabled: Boolean = true,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .clickable(enabled = onClick != null, onClick = { onClick?.invoke() })
+            .clickable(enabled = enabled, onClick = { onClick.invoke() })
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -449,7 +458,7 @@ fun HSFeeCell(
             }
         }
 
-        onClick?.let {
+        if (enabled) {
             Box(modifier = Modifier.padding(start = 8.dp)) {
                 val tintColor = if (highlightEditButton)
                     ComposeAppTheme.colors.jacob

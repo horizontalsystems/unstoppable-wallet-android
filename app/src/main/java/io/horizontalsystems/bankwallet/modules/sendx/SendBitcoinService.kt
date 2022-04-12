@@ -33,6 +33,7 @@ class SendBitcoinService(
 
     val feeRatePriorities by feeRateService::feeRatePriorities
     val feeRateRange by feeRateService::feeRateRange
+    val feeRateChangeable by feeRateService::feeRateChangeable
     val isLockTimeEnabled by pluginService::isLockTimeEnabled
     val lockTimeIntervals by pluginService::lockTimeIntervals
 
