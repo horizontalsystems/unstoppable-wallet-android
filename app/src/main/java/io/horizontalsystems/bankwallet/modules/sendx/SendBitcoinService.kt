@@ -160,7 +160,8 @@ class SendBitcoinService(
         logger.info("click")
 
         try {
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sending
+            emitState()
 
             val send = adapter.send(
                 amountState.amount!!,
@@ -173,12 +174,12 @@ class SendBitcoinService(
 
             logger.info("success")
             sendResult = SendResult.Sent
+            emitState()
         } catch (e: Throwable) {
             logger.warning("failed", e)
             sendResult = SendResult.Failed(createCaution(e))
+            emitState()
         }
-
-        emitState()
     }
 
     private fun createCaution(error: Throwable) = when (error) {
