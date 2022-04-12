@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -325,7 +327,7 @@ fun RowScope.CategoryCard(
     Card(
         modifier = Modifier
             .padding(6.dp)
-            .height(128.dp)
+            .height(140.dp)
             .weight(1f),
         shape = RoundedCornerShape(12.dp),
         elevation = 0.dp,
@@ -336,7 +338,7 @@ fun RowScope.CategoryCard(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             when (type) {
-                DiscoveryItem.TopCoins -> {
+                is DiscoveryItem.TopCoins -> {
                     Image(
                         painter = painterResource(R.drawable.ic_top_coins),
                         contentDescription = "category image",
@@ -358,14 +360,19 @@ fun RowScope.CategoryCard(
                     }
                 }
                 is DiscoveryItem.Category -> {
-                    Image(
-                        painter = rememberImagePainter(type.coinCategory.imageUrl),
-                        contentDescription = "category image",
+                    Crossfade(
+                        targetState = type.coinCategory.imageUrl,
+                        animationSpec = tween(500),
                         modifier = Modifier
                             .height(108.dp)
                             .width(76.dp)
-                            .align(Alignment.TopEnd),
-                    )
+                            .align(Alignment.TopEnd)) { imageRes ->
+                        Image(
+                            painter = rememberImagePainter(imageRes),
+                            contentDescription = "category image",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                     Column(
                         modifier = Modifier.padding(12.dp),
                     ) {
@@ -373,9 +380,38 @@ fun RowScope.CategoryCard(
                         Text(
                             text = type.coinCategory.name,
                             style = ComposeAppTheme.typography.subhead1,
-                            color = ComposeAppTheme.colors.oz,
+                            color = ComposeAppTheme.colors.leah,
                             maxLines = 1
                         )
+                        AnimatedVisibility(
+                            visible = type.marketData != null,
+                        ) {
+                            type.marketData?.let { marketData ->
+                                Row(modifier = Modifier.padding(top = 8.dp)) {
+                                    Text(
+                                        text = marketData.marketCap ?: "",
+                                        style = ComposeAppTheme.typography.caption,
+                                        color = ComposeAppTheme.colors.grey,
+                                        maxLines = 1
+                                    )
+                                    AnimatedVisibility(
+                                        visible = marketData.diff != null,
+                                        enter = fadeIn() + expandHorizontally(),
+                                        exit = fadeOut() + shrinkHorizontally()
+                                    ) {
+                                        marketData.diff?.let { diff ->
+                                            Text(
+                                                text = RateText(diff),
+                                                color = RateColor(diff),
+                                                style = ComposeAppTheme.typography.caption,
+                                                maxLines = 1,
+                                                modifier = Modifier.padding(start = 6.dp)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
