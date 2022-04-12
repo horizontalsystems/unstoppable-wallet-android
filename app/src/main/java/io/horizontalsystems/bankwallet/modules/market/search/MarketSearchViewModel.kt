@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.reactivex.disposables.CompositeDisposable
 
 class MarketSearchViewModel(
@@ -11,15 +9,12 @@ class MarketSearchViewModel(
 
     private val disposables = CompositeDisposable()
 
-    val screenStateLiveData = MutableLiveData<MarketSearchModule.DataState>()
+    val timePeriodMenu by service::timePeriodMenu
+    val sortDescending by service::sortDescending
+    val screenState by service::screenState
 
     init {
-        service.stateObservable
-            .subscribeIO {
-                screenStateLiveData.postValue(it)
-            }.let {
-                disposables.add(it)
-            }
+        service.start()
     }
 
     override fun onCleared() {
@@ -37,6 +32,14 @@ class MarketSearchViewModel(
         } else {
             service.favorite(coinUid)
         }
+    }
+
+    fun toggleTimePeriod(timePeriod: MarketSearchModule.TimePeriod) {
+        service.setTimePeriod(timePeriod)
+    }
+
+    fun toggleSortType() {
+        service.toggleSortType()
     }
 
 }
