@@ -203,6 +203,14 @@ private fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend:
                 enabled = false
             )
         }
+        SendResult.Sent -> {
+            ButtonPrimaryYellow(
+                modifier = modifier,
+                title = stringResource(R.string.Send_Success),
+                onClick = { },
+                enabled = false
+            )
+        }
         else -> {
             ButtonPrimaryYellow(
                 modifier = modifier,
