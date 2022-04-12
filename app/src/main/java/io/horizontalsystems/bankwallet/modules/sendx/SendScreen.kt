@@ -1,31 +1,30 @@
 package io.horizontalsystems.bankwallet.modules.sendx
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.fee.FeeRateCaution
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeInput
+import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.sendevm.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.sendevm.HSAmountInput
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.hodler.LockTimeInterval
 
 @Composable
 fun SendScreen(
@@ -36,6 +35,8 @@ fun SendScreen(
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
+    val isLockTimeEnabled = viewModel.isLockTimeEnabled
+    val lockTimeIntervals = viewModel.lockTimeIntervals
 
     val availableBalance = uiState.availableBalance
     val addressError = uiState.addressError
@@ -44,6 +45,7 @@ fun SendScreen(
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
     val feeRateCaution = uiState.feeRateCaution
+    val lockTimeInterval = uiState.lockTimeInterval
 
     val rate = xRateViewModel.rate
 
@@ -117,16 +119,34 @@ fun SendScreen(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            HSFeeInput(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                fee = fee,
-                amountInputType = amountInputType,
-                rate = rate
-            ) {
-                navController.slideFromBottom(R.id.feeSettings)
+
+            val composableItems = buildList<@Composable () -> Unit> {
+                add {
+                    HSFeeInputRaw(
+                        coinCode = wallet.coin.code,
+                        coinDecimal = viewModel.coinMaxAllowedDecimals,
+                        fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+                        fee = fee,
+                        amountInputType = amountInputType,
+                        rate = rate
+                    ) {
+                        navController.slideFromBottom(R.id.feeSettings)
+                    }
+                }
+                if (isLockTimeEnabled) {
+                    add {
+                        HSHodlerInput(
+                            lockTimeIntervals = lockTimeIntervals,
+                            lockTimeInterval = lockTimeInterval,
+                            onSelect = {
+                                viewModel.onEnterLockTimeInterval(it)
+                            }
+                        )
+                    }
+                }
             }
+
+            CellSingleLineLawrenceSection(composableItems = composableItems)
 
             feeRateCaution?.let {
                 FeeRateCaution(
@@ -148,5 +168,60 @@ fun SendScreen(
         }
     }
 
+}
+
+@Composable
+fun HSHodlerInput(
+    lockTimeIntervals: List<LockTimeInterval?>,
+    lockTimeInterval: LockTimeInterval?,
+    onSelect: (LockTimeInterval?) -> Unit
+) {
+    var showSelectorDialog by remember { mutableStateOf(false) }
+    if (showSelectorDialog) {
+        SelectorDialogCompose(
+            title = stringResource(R.string.Send_DialogSpeed),
+            items = lockTimeIntervals.map {
+                TabItem(stringResource(it.stringResId()), it == lockTimeInterval, it)
+            },
+            onDismissRequest = {
+                showSelectorDialog = false
+            },
+            onSelectItem = {
+                onSelect.invoke(it)
+            }
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = {
+                    showSelectorDialog = true
+                }
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = stringResource(R.string.Send_DialogLockTime),
+            style = ComposeAppTheme.typography.subhead2,
+            color = ComposeAppTheme.colors.grey,
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = stringResource(lockTimeInterval.stringResId()),
+            style = ComposeAppTheme.typography.subhead1,
+            color = ComposeAppTheme.colors.leah,
+        )
+        Icon(
+            modifier = Modifier.padding(start = 8.dp, end = 16.dp),
+            painter = painterResource(R.drawable.ic_down_arrow_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
+    }
 }
 

@@ -6,12 +6,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
+import io.horizontalsystems.bankwallet.modules.evmfee.HSFeeCell
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import java.math.BigDecimal
 
 @Composable
 fun HSFeeInput(
+    coinCode: String,
+    coinDecimal: Int,
+    fiatDecimal: Int,
+    fee: BigDecimal?,
+    amountInputType: SendModule.InputType,
+    rate: CurrencyValue?,
+    onClick: (() -> Unit)? = null,
+) {
+    CellSingleLineLawrenceSection {
+        HSFeeInputRaw(
+            coinCode = coinCode,
+            coinDecimal = coinDecimal,
+            fiatDecimal = fiatDecimal,
+            fee = fee,
+            amountInputType = amountInputType,
+            rate = rate,
+            onClick = onClick
+        )
+    }
+}
+@Composable
+fun HSFeeInputRaw(
     coinCode: String,
     coinDecimal: Int,
     fiatDecimal: Int,
@@ -36,7 +59,7 @@ fun HSFeeInput(
         viewModel.refreshFormatted()
     }
 
-    EvmFeeCell(
+    HSFeeCell(
         title = stringResource(R.string.Send_Fee),
         value = formatted,
         loading = false,

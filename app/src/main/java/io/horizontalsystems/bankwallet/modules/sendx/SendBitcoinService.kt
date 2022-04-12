@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,13 +25,16 @@ class SendBitcoinService(
     private val feeRateService: FeeRateServiceBitcoin,
     private val feeService: FeeServiceBitcoin,
     private val amountService: AmountService,
-    private val addressService: AddressService
+    private val addressService: AddressService,
+    private val pluginService: PluginService
 ) {
     val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
     val feeRatePriorities by feeRateService::feeRatePriorities
     val feeRateRange by feeRateService::feeRateRange
+    val isLockTimeEnabled by pluginService::isLockTimeEnabled
+    val lockTimeIntervals by pluginService::lockTimeIntervals
 
     private val _stateFlow = MutableStateFlow<ServiceState?>(null)
     val stateFlow = _stateFlow.filterNotNull()
@@ -39,10 +42,10 @@ class SendBitcoinService(
     private var feeRateState = feeRateService.stateFlow.value
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
+    private var pluginState = pluginService.stateFlow.value
     private var fee = feeService.feeFlow.value
 
     private val logger = AppLogger("send")
-    private var pluginData: Map<Byte, IPluginData>? = null
 
     private var sendResult: SendResult? = null
 
@@ -65,6 +68,13 @@ class SendBitcoinService(
             addressService.stateFlow
                 .collect {
                     handleUpdatedAddressState(it)
+                }
+        }
+
+        coroutineScope.launch {
+            pluginService.stateFlow
+                .collect {
+                    handleUpdatedPluginState(it)
                 }
         }
 
@@ -93,6 +103,7 @@ class SendBitcoinService(
                 feeRatePriority = feeRateState.feeRatePriority,
                 feeRate = feeRateState.feeRate,
                 fee = fee,
+                lockTimeInterval = pluginState.lockTimeInterval,
                 addressError = addressState.addressError,
                 amountCaution = amountState.amountCaution,
                 feeRateCaution = feeRateState.feeRateCaution,
@@ -112,6 +123,10 @@ class SendBitcoinService(
 
     suspend fun setFeeRatePriority(feeRatePriority: FeeRatePriority) {
         feeRateService.setFeeRatePriority(feeRatePriority)
+    }
+
+    fun setLockTimeInterval(lockTimeInterval: LockTimeInterval?) {
+        pluginService.setLockTimeInterval(lockTimeInterval)
     }
 
     private fun handleUpdatedAmountState(amountState: AmountService.State) {
@@ -136,6 +151,16 @@ class SendBitcoinService(
 
         feeService.setFeeRate(feeRateState.feeRate)
         amountService.setFeeRate(feeRateState.feeRate)
+
+        emitState()
+    }
+
+    private fun handleUpdatedPluginState(pluginState: PluginService.State) {
+        this.pluginState = pluginState
+
+        feeService.setPluginData(pluginState.pluginData)
+        amountService.setPluginData(pluginState.pluginData)
+        addressService.setPluginData(pluginState.pluginData)
 
         emitState()
     }
@@ -167,7 +192,7 @@ class SendBitcoinService(
                 amountState.amount!!,
                 addressState.validAddress!!.hex,
                 feeRateState.feeRate!!,
-                pluginData,
+                pluginState.pluginData,
                 transactionSorting = null,
                 logger = logger
             ).blockingGet()
@@ -191,6 +216,7 @@ class SendBitcoinService(
     data class ServiceState(
         val availableBalance: BigDecimal,
         val fee: BigDecimal?,
+        val lockTimeInterval: LockTimeInterval?,
         val addressError: Throwable?,
         val amountCaution: HSCaution?,
         val feeRateCaution: HSCaution?,

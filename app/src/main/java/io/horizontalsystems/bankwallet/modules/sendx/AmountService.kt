@@ -82,10 +82,10 @@ class AmountService(
             tmpCoinAmount > availableBalance -> {
                 SendErrorInsufficientBalance(coinCode)
             }
-            tmpMinimumSendAmount != null && tmpCoinAmount < tmpMinimumSendAmount -> {
+            tmpMinimumSendAmount != null && tmpCoinAmount <= tmpMinimumSendAmount -> {
                 SendErrorMinimumSendAmount(tmpMinimumSendAmount)
             }
-            tmpMaximumSendAmount != null && tmpCoinAmount < tmpMaximumSendAmount -> {
+            tmpMaximumSendAmount != null && tmpCoinAmount > tmpMaximumSendAmount -> {
                 SendErrorMaximumSendAmount(tmpMaximumSendAmount)
             }
             else -> null
