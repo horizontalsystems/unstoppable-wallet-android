@@ -134,6 +134,7 @@ private fun RestoreSourceSettings(
     BlockchainSettingSection(
         viewModel.restoreSources,
         infoParams,
+        R.string.BtcBlockchainSettings_RestoreSource,
         R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription,
         { viewItem -> viewModel.onSelectRestoreMode(viewItem) },
         navController
@@ -152,6 +153,7 @@ private fun TransactionDataSortSettings(
     BlockchainSettingSection(
         viewModel.transactionSortModes,
         infoParams,
+        R.string.BtcBlockchainSettings_TransactionInputsOutputs,
         R.string.BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription,
         { viewItem -> viewModel.onSelectTransactionMode(viewItem) },
         navController
@@ -162,13 +164,14 @@ private fun TransactionDataSortSettings(
 private fun BlockchainSettingSection(
     restoreSources: List<BtcBlockchainSettingsModule.ViewItem>,
     restoreSourceInfoParams: Bundle,
+    settingTitleTextRes : Int,
     settingDescriptionTextRes: Int,
     onItemClick: (BtcBlockchainSettingsModule.ViewItem) -> Unit,
     navController: NavController
 ) {
     Spacer(Modifier.height(12.dp))
     CoinListHeaderWithInfoButton(
-        R.string.BtcBlockchainSettings_RestoreSource,
+      settingTitleTextRes,
     ) {
         navController.slideFromBottom(R.id.infoFragment, restoreSourceInfoParams)
     }
