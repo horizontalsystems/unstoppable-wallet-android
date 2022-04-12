@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.hodler.LockTimeInterval
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -18,13 +19,16 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
     val fiatMaxAllowedDecimals by service::fiatMaxAllowedDecimals
     val feeRatePriorities by service::feeRatePriorities
     val feeRateRange by service::feeRateRange
+    val isLockTimeEnabled by service::isLockTimeEnabled
+    val lockTimeIntervals by service::lockTimeIntervals
 
     var uiState by mutableStateOf(
         SendUiState(
             availableBalance = BigDecimal.ZERO,
             fee = null,
-            feeRatePriority = FeeRatePriority.RECOMMENDED,
             feeRate = 0,
+            feeRatePriority = FeeRatePriority.RECOMMENDED,
+            lockTimeInterval = null,
             addressError = null,
             amountCaution = null,
             feeRateCaution = null,
@@ -44,6 +48,7 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
                         fee = it.fee,
                         feeRate = it.feeRate,
                         feeRatePriority = it.feeRatePriority,
+                        lockTimeInterval = it.lockTimeInterval,
                         addressError = it.addressError,
                         amountCaution = it.amountCaution,
                         feeRateCaution = it.feeRateCaution,
@@ -70,6 +75,10 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
         }
     }
 
+    fun onEnterLockTimeInterval(lockTimeInterval: LockTimeInterval?) {
+        service.setLockTimeInterval(lockTimeInterval)
+    }
+
     fun getConfirmationViewItem(): SendBitcoinService.ConfirmationData {
         return service.getConfirmationData()
     }
@@ -84,8 +93,9 @@ class SendViewModel(private val service: SendBitcoinService) : ViewModel() {
 data class SendUiState(
     val availableBalance: BigDecimal,
     val fee: BigDecimal?,
-    val feeRatePriority: FeeRatePriority,
     val feeRate: Long?,
+    val feeRatePriority: FeeRatePriority,
+    val lockTimeInterval: LockTimeInterval?,
     val addressError: Throwable?,
     val amountCaution: HSCaution?,
     val feeRateCaution: HSCaution?,
