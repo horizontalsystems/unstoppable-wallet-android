@@ -45,7 +45,7 @@ class SendBitcoinViewModel(
     private var pluginState = pluginService.stateFlow.value
     private var fee = feeService.feeFlow.value
 
-    private val logger = AppLogger("send")
+    private val logger = AppLogger("Send-${wallet.coin.code}")
 
     private var sendResult: SendResult? = null
 
