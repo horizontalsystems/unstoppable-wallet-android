@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import java.math.BigDecimal
 
 class AvailableBalanceViewModel(
@@ -16,7 +16,7 @@ class AvailableBalanceViewModel(
     private val fiatDecimal: Int
 ) : ViewModel() {
 
-    var amountInputType: AmountInputModule.InputType? = null
+    var amountInputType: AmountInputType? = null
     var availableBalance: BigDecimal? = null
     var xRate: CurrencyValue? = null
 
@@ -29,10 +29,10 @@ class AvailableBalanceViewModel(
 
         formatted = when {
             tmpAvailableBalance == null || tmpAmountInputMode == null -> null
-            tmpAmountInputMode == AmountInputModule.InputType.COIN -> {
+            tmpAmountInputMode == AmountInputType.COIN -> {
                 App.numberFormatter.formatCoin(tmpAvailableBalance, coinCode, 0, coinDecimal)
             }
-            tmpAmountInputMode == AmountInputModule.InputType.CURRENCY -> {
+            tmpAmountInputMode == AmountInputType.CURRENCY -> {
                 xRate
                     ?.let {
                         it.copy(value = tmpAvailableBalance.times(it.value))

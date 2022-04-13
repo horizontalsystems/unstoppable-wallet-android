@@ -6,7 +6,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.evmfee.HSFeeCell
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import java.math.BigDecimal
@@ -17,7 +17,7 @@ fun HSFeeInput(
     coinDecimal: Int,
     fiatDecimal: Int,
     fee: BigDecimal?,
-    amountInputType: AmountInputModule.InputType,
+    amountInputType: AmountInputType,
     rate: CurrencyValue?,
     onClick: (() -> Unit)? = null,
 ) {
@@ -40,7 +40,7 @@ fun HSFeeInputRaw(
     coinDecimal: Int,
     fiatDecimal: Int,
     fee: BigDecimal?,
-    amountInputType: AmountInputModule.InputType,
+    amountInputType: AmountInputType,
     rate: CurrencyValue?,
     enabled: Boolean = true,
     onClick: () -> Unit,

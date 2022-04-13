@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
@@ -66,10 +66,10 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
 
     private val gson by lazy { Gson() }
 
-    override var sendInputType: AmountInputModule.InputType?
+    override var amountInputType: AmountInputType?
         get() = preferences.getString(SEND_INPUT_TYPE, null)?.let {
             try {
-                AmountInputModule.InputType.valueOf(it)
+                AmountInputType.valueOf(it)
             } catch (e: IllegalArgumentException) {
                 null
             }

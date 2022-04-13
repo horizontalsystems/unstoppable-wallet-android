@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import java.math.BigDecimal
 
 class FeeInputViewModel(
@@ -15,7 +15,7 @@ class FeeInputViewModel(
     private val fiatDecimal: Int
 ) : ViewModel() {
 
-    var amountInputType: AmountInputModule.InputType? = null
+    var amountInputType: AmountInputType? = null
     var fee: BigDecimal? = null
     var rate: CurrencyValue? = null
 
@@ -35,8 +35,8 @@ class FeeInputViewModel(
                 val currencyStr = it.copy(value = tmpFee.times(it.value)).getFormatted(fiatDecimal, fiatDecimal)
 
                 when (tmpAmountInputType) {
-                    AmountInputModule.InputType.COIN -> values.add(currencyStr)
-                    AmountInputModule.InputType.CURRENCY -> values.add(0, currencyStr)
+                    AmountInputType.COIN -> values.add(currencyStr)
+                    AmountInputType.CURRENCY -> values.add(0, currencyStr)
                 }
             }
 

@@ -14,7 +14,7 @@ class AmountInputViewModel2(
     private val coinCode: String,
     private val coinDecimal: Int,
     private val fiatDecimal: Int,
-    private var inputType: AmountInputModule.InputType
+    private var inputType: AmountInputType
 ) : ViewModel() {
 
     private var availableBalance = BigDecimal.ZERO
@@ -48,8 +48,8 @@ class AmountInputViewModel2(
         val amount = if (text.isNotBlank()) text.toBigDecimalOrNull()?.stripTrailingZeros() else null
 
         when (inputType) {
-            AmountInputModule.InputType.COIN -> updateCoinAmount(amount)
-            AmountInputModule.InputType.CURRENCY -> updateCurrencyAmount(amount)
+            AmountInputType.COIN -> updateCoinAmount(amount)
+            AmountInputType.CURRENCY -> updateCurrencyAmount(amount)
         }
 
         refreshHint()
@@ -76,8 +76,8 @@ class AmountInputViewModel2(
 
     fun getEnterAmount(): String {
         val amount = when (inputType) {
-            AmountInputModule.InputType.COIN -> coinAmount
-            AmountInputModule.InputType.CURRENCY -> currencyAmount
+            AmountInputType.COIN -> coinAmount
+            AmountInputType.CURRENCY -> currencyAmount
         }
         return amount?.toPlainString() ?: ""
     }
@@ -89,17 +89,17 @@ class AmountInputViewModel2(
             null
         } else {
             when (inputType) {
-                AmountInputModule.InputType.COIN -> {
+                AmountInputType.COIN -> {
                     App.numberFormatter.format(currencyAmount ?: BigDecimal.ZERO, fiatDecimal, fiatDecimal, prefix = tmpRate.currency.symbol)
                 }
-                AmountInputModule.InputType.CURRENCY -> {
+                AmountInputType.CURRENCY -> {
                     App.numberFormatter.formatCoin(coinAmount ?: BigDecimal.ZERO, coinCode, 0, coinDecimal)
                 }
             }
         }
     }
 
-    fun setInputType(inputType: AmountInputModule.InputType) {
+    fun setInputType(inputType: AmountInputType) {
         this.inputType = inputType
 
         refreshHint()
@@ -122,8 +122,8 @@ class AmountInputViewModel2(
 
     private fun refreshInputPrefix() {
         inputPrefix = when (inputType) {
-            AmountInputModule.InputType.COIN -> null
-            AmountInputModule.InputType.CURRENCY -> rate?.currency?.symbol
+            AmountInputType.COIN -> null
+            AmountInputType.CURRENCY -> rate?.currency?.symbol
         }
     }
 
@@ -132,8 +132,8 @@ class AmountInputViewModel2(
         if (amount == null) return true
 
         val maxAllowedScale = when (inputType) {
-            AmountInputModule.InputType.COIN -> coinDecimal
-            AmountInputModule.InputType.CURRENCY -> fiatDecimal
+            AmountInputType.COIN -> coinDecimal
+            AmountInputType.CURRENCY -> fiatDecimal
         }
 
         return amount.scale() <= maxAllowedScale
