@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.sendx
+package io.horizontalsystems.bankwallet.modules.sendx.bitcoin
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bitcoincore.core.IPluginData

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.sendx
+package io.horizontalsystems.bankwallet.modules.sendx.bitcoin
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.AddressCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SectionTitleCell
+import io.horizontalsystems.bankwallet.modules.sendx.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
