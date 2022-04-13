@@ -5,11 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 
 class AmountInputModeViewModel(private val localStorage: ILocalStorage) : ViewModel() {
 
-    var inputType by mutableStateOf(localStorage.sendInputType ?: SendModule.InputType.COIN)
+    var inputType by mutableStateOf(localStorage.sendInputType ?: AmountInputModule.InputType.COIN)
         private set
 
     fun onToggleInputType() {

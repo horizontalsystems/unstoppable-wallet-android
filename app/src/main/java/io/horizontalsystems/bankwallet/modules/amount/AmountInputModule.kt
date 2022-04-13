@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.amount
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 
 object AmountInputModule {
 
@@ -11,7 +10,7 @@ object AmountInputModule {
         private val coinCode: String,
         private val coinDecimal: Int,
         private val fiatDecimal: Int,
-        private val inputType: SendModule.InputType
+        private val inputType: InputType
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return AmountInputViewModel2(
@@ -22,5 +21,13 @@ object AmountInputModule {
             ) as T
         }
 
+    }
+
+    enum class InputType {
+        COIN, CURRENCY;
+
+        fun reversed(): InputType {
+            return if (this == COIN) CURRENCY else COIN
+        }
     }
 }

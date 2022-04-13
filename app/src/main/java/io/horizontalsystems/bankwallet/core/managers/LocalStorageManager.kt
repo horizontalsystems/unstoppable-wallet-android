@@ -7,16 +7,13 @@ import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IMarketStorage
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
-import io.horizontalsystems.bankwallet.entities.LaunchPage
-import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
@@ -69,10 +66,10 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
 
     private val gson by lazy { Gson() }
 
-    override var sendInputType: SendModule.InputType?
+    override var sendInputType: AmountInputModule.InputType?
         get() = preferences.getString(SEND_INPUT_TYPE, null)?.let {
             try {
-                SendModule.InputType.valueOf(it)
+                AmountInputModule.InputType.valueOf(it)
             } catch (e: IllegalArgumentException) {
                 null
             }

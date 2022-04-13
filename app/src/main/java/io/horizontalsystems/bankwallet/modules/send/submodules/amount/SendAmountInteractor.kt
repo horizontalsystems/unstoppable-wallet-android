@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.isCustom
-import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
@@ -38,8 +38,8 @@ class SendAmountInteractor(
         }
     }
 
-    override var defaultInputType: SendModule.InputType
-        get() = localStorage.sendInputType ?: SendModule.InputType.COIN
+    override var defaultInputType: AmountInputModule.InputType
+        get() = localStorage.sendInputType ?: AmountInputModule.InputType.COIN
         set(value) { localStorage.sendInputType = value }
 
     override fun getRate(): BigDecimal? {

@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
@@ -37,7 +38,7 @@ class SendAmountPresenter(
     override var xRate: BigDecimal? = null
     override var sendAmountInfo: SendAmountInfo = SendAmountInfo.NotEntered
 
-    override var inputType = SendModule.InputType.COIN
+    override var inputType = AmountInputModule.InputType.COIN
         private set
 
     override val coinAmount: CoinValue
@@ -66,8 +67,8 @@ class SendAmountPresenter(
 
     override fun secondaryAmountInfo(): SendModule.AmountInfo? {
         return when (inputType.reversed()) {
-            SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), validAmount()))
-            SendModule.InputType.CURRENCY -> {
+            AmountInputModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), validAmount()))
+            AmountInputModule.InputType.CURRENCY -> {
                 this.xRate?.let { xRate ->
                     CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate))
                 }
@@ -130,7 +131,7 @@ class SendAmountPresenter(
         xRate = interactor.getRate()
 
         inputType = when {
-            xRate == null -> SendModule.InputType.COIN
+            xRate == null -> AmountInputModule.InputType.COIN
             else -> interactor.defaultInputType
         }
 
@@ -144,8 +145,8 @@ class SendAmountPresenter(
 
     override fun onSwitchClick() {
         inputType = when (inputType) {
-            SendModule.InputType.CURRENCY -> SendModule.InputType.COIN
-            else -> SendModule.InputType.CURRENCY
+            AmountInputModule.InputType.CURRENCY -> AmountInputModule.InputType.COIN
+            else -> AmountInputModule.InputType.CURRENCY
         }
         interactor.defaultInputType = inputType
         moduleDelegate?.onChangeInputType(inputType)
@@ -216,7 +217,7 @@ class SendAmountPresenter(
 
         xRate = rate
         inputType = when (xRate) {
-            null -> SendModule.InputType.COIN
+            null -> AmountInputModule.InputType.COIN
             else -> interactor.defaultInputType
         }
 
@@ -285,10 +286,10 @@ class SendAmountPresenter(
 
     private fun amountInfo(coinValue: BigDecimal): SendModule.AmountInfo? {
         return when (inputType) {
-            SendModule.InputType.COIN -> {
+            AmountInputModule.InputType.COIN -> {
                 CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), coinValue))
             }
-            SendModule.InputType.CURRENCY -> {
+            AmountInputModule.InputType.CURRENCY -> {
                 xRate?.let { rate ->
                     val value = coinValue.times(rate)
                     CurrencyValueInfo(CurrencyValue(baseCurrency, value))
@@ -316,10 +317,10 @@ class SendAmountPresenter(
         view.setInputFields(inputParams)
     }
 
-    private fun getAmountType(inputType: SendModule.InputType): AmountTypeSwitchService.AmountType {
+    private fun getAmountType(inputType: AmountInputModule.InputType): AmountTypeSwitchService.AmountType {
         return when(inputType){
-            SendModule.InputType.COIN -> AmountTypeSwitchService.AmountType.Coin
-            SendModule.InputType.CURRENCY -> AmountTypeSwitchService.AmountType.Currency
+            AmountInputModule.InputType.COIN -> AmountTypeSwitchService.AmountType.Coin
+            AmountInputModule.InputType.CURRENCY -> AmountTypeSwitchService.AmountType.Currency
         }
     }
 

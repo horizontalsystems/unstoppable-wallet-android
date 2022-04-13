@@ -29,7 +29,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -47,7 +46,7 @@ fun HSAmountInput(
     fiatDecimal: Int,
     onClickHint: () -> Unit,
     onValueChange: (BigDecimal?) -> Unit,
-    inputType: SendModule.InputType,
+    inputType: AmountInputModule.InputType,
     rate: CurrencyValue?
 ) {
     val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coinCode, coinDecimal, fiatDecimal, inputType))
@@ -81,11 +80,11 @@ fun HSAmountInput(
     val hintTextColor: Color
 
     when (inputType) {
-        SendModule.InputType.COIN -> {
+        AmountInputModule.InputType.COIN -> {
             inputTextColor = ComposeAppTheme.colors.leah
             hintTextColor = ComposeAppTheme.colors.jacob
         }
-        SendModule.InputType.CURRENCY -> {
+        AmountInputModule.InputType.CURRENCY -> {
             inputTextColor = ComposeAppTheme.colors.jacob
             hintTextColor = ComposeAppTheme.colors.leah
         }

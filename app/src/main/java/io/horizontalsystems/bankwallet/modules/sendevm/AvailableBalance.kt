@@ -9,7 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AdditionalDataCell2
 import java.math.BigDecimal
@@ -20,7 +20,7 @@ fun AvailableBalance(
     coinDecimal: Int,
     fiatDecimal: Int,
     availableBalance: BigDecimal,
-    amountInputType: SendModule.InputType,
+    amountInputType: AmountInputModule.InputType,
     rate: CurrencyValue?
 ) {
     val viewModel = viewModel<AvailableBalanceViewModel>(

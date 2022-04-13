@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.FeeRateState
-import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.core.entities.Currency
@@ -47,7 +47,7 @@ class SendFeePresenter(
     var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
     private var xRate: BigDecimal? = null
-    private var inputType = SendModule.InputType.COIN
+    private var inputType = AmountInputModule.InputType.COIN
 
     private var fee: BigDecimal = BigDecimal.ZERO
     private var availableFeeBalance: BigDecimal? = null
@@ -225,7 +225,7 @@ class SendFeePresenter(
         syncError()
     }
 
-    override fun setInputType(inputType: SendModule.InputType) {
+    override fun setInputType(inputType: AmountInputModule.InputType) {
         this.inputType = inputType
         syncFees()
     }

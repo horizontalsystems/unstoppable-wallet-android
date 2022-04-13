@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.binance
 
 import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -77,7 +78,7 @@ class SendBinanceHandler(
         syncValidation()
     }
 
-    override fun onChangeInputType(inputType: SendModule.InputType) {
+    override fun onChangeInputType(inputType: AmountInputModule.InputType) {
         feeModule.setInputType(inputType)
     }
 
