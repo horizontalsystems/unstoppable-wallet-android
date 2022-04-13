@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.sendx.SendResult
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -28,7 +29,8 @@ class SendBitcoinViewModel(
     private val feeService: SendBitcoinFeeService,
     private val amountService: SendBitcoinAmountService,
     private val addressService: SendBitcoinAddressService,
-    private val pluginService: SendBitcoinPluginService
+    private val pluginService: SendBitcoinPluginService,
+    private val transactionSorting: TransactionDataSortingType?
 ) : ViewModel() {
     val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -219,8 +221,8 @@ class SendBitcoinViewModel(
                 addressState.validAddress!!.hex,
                 feeRateState.feeRate!!,
                 pluginState.pluginData,
-                transactionSorting = null,
-                logger = logger
+                transactionSorting,
+                logger
             ).blockingGet()
 
             logger.info("success")
