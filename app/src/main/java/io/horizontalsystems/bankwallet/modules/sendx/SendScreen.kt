@@ -29,7 +29,7 @@ import io.horizontalsystems.hodler.LockTimeInterval
 @Composable
 fun SendScreen(
     navController: NavController,
-    viewModel: SendViewModel,
+    viewModel: SendBitcoinViewModel,
     xRateViewModel: XRateViewModel,
     amountInputModeViewModel: AmountInputModeViewModel
 ) {

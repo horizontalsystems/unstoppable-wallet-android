@@ -10,7 +10,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.sendx.AmountInputModeViewModel
-import io.horizontalsystems.bankwallet.modules.sendx.SendViewModel
+import io.horizontalsystems.bankwallet.modules.sendx.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.XRateViewModel
 import io.horizontalsystems.core.findNavController
 
@@ -26,7 +26,7 @@ class FeeSettingsFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val viewModel by navGraphViewModels<SendViewModel>(R.id.sendXFragment)
+                val viewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
                 val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment)
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment)
 
