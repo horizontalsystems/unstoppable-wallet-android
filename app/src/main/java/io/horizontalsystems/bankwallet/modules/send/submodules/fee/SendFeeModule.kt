@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.FeeRateState
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
 import io.horizontalsystems.core.entities.Currency
@@ -31,7 +32,7 @@ object SendFeeModule {
         fun setFee(fee: BigDecimal)
         fun setError(externalError: Exception?)
         fun setAvailableFeeBalance(availableFeeBalance: BigDecimal)
-        fun setInputType(inputType: SendModule.InputType)
+        fun setInputType(inputType: AmountInputModule.InputType)
         fun fetchFeeRate()
         fun setBalance(balance: BigDecimal)
         fun setRate(rate: BigDecimal?)

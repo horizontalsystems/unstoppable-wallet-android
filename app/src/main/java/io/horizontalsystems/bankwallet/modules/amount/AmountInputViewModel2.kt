@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -15,7 +14,7 @@ class AmountInputViewModel2(
     private val coinCode: String,
     private val coinDecimal: Int,
     private val fiatDecimal: Int,
-    private var inputType: SendModule.InputType
+    private var inputType: AmountInputModule.InputType
 ) : ViewModel() {
 
     private var availableBalance = BigDecimal.ZERO
@@ -49,8 +48,8 @@ class AmountInputViewModel2(
         val amount = if (text.isNotBlank()) text.toBigDecimalOrNull()?.stripTrailingZeros() else null
 
         when (inputType) {
-            SendModule.InputType.COIN -> updateCoinAmount(amount)
-            SendModule.InputType.CURRENCY -> updateCurrencyAmount(amount)
+            AmountInputModule.InputType.COIN -> updateCoinAmount(amount)
+            AmountInputModule.InputType.CURRENCY -> updateCurrencyAmount(amount)
         }
 
         refreshHint()
@@ -77,8 +76,8 @@ class AmountInputViewModel2(
 
     fun getEnterAmount(): String {
         val amount = when (inputType) {
-            SendModule.InputType.COIN -> coinAmount
-            SendModule.InputType.CURRENCY -> currencyAmount
+            AmountInputModule.InputType.COIN -> coinAmount
+            AmountInputModule.InputType.CURRENCY -> currencyAmount
         }
         return amount?.toPlainString() ?: ""
     }
@@ -90,17 +89,17 @@ class AmountInputViewModel2(
             null
         } else {
             when (inputType) {
-                SendModule.InputType.COIN -> {
+                AmountInputModule.InputType.COIN -> {
                     App.numberFormatter.format(currencyAmount ?: BigDecimal.ZERO, fiatDecimal, fiatDecimal, prefix = tmpRate.currency.symbol)
                 }
-                SendModule.InputType.CURRENCY -> {
+                AmountInputModule.InputType.CURRENCY -> {
                     App.numberFormatter.formatCoin(coinAmount ?: BigDecimal.ZERO, coinCode, 0, coinDecimal)
                 }
             }
         }
     }
 
-    fun setInputType(inputType: SendModule.InputType) {
+    fun setInputType(inputType: AmountInputModule.InputType) {
         this.inputType = inputType
 
         refreshHint()
@@ -123,8 +122,8 @@ class AmountInputViewModel2(
 
     private fun refreshInputPrefix() {
         inputPrefix = when (inputType) {
-            SendModule.InputType.COIN -> null
-            SendModule.InputType.CURRENCY -> rate?.currency?.symbol
+            AmountInputModule.InputType.COIN -> null
+            AmountInputModule.InputType.CURRENCY -> rate?.currency?.symbol
         }
     }
 
@@ -133,8 +132,8 @@ class AmountInputViewModel2(
         if (amount == null) return true
 
         val maxAllowedScale = when (inputType) {
-            SendModule.InputType.COIN -> coinDecimal
-            SendModule.InputType.CURRENCY -> fiatDecimal
+            AmountInputModule.InputType.COIN -> coinDecimal
+            AmountInputModule.InputType.CURRENCY -> fiatDecimal
         }
 
         return amount.scale() <= maxAllowedScale

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.zcash
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.modules.address.AddressValidationException
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -88,7 +89,7 @@ class SendZcashHandler(
         syncValidation()
     }
 
-    override fun onChangeInputType(inputType: SendModule.InputType) {
+    override fun onChangeInputType(inputType: AmountInputModule.InputType) {
 
     }
     //endregion

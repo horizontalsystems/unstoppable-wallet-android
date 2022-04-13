@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
@@ -34,7 +35,7 @@ object SendAmountModule {
     }
 
     interface IInteractor {
-        var defaultInputType: SendModule.InputType
+        var defaultInputType: AmountInputModule.InputType
         fun getRate(): BigDecimal?
         fun onCleared()
     }
@@ -49,7 +50,7 @@ object SendAmountModule {
         val xRate: BigDecimal?
         val sendAmountInfo: SendAmountInfo
         val currentAmount: BigDecimal
-        val inputType: SendModule.InputType
+        val inputType: AmountInputModule.InputType
         val coinAmount: CoinValue
         val fiatAmount: CurrencyValue?
 
@@ -74,7 +75,7 @@ object SendAmountModule {
 
     interface IAmountModuleDelegate {
         fun onChangeAmount()
-        fun onChangeInputType(inputType: SendModule.InputType)
+        fun onChangeInputType(inputType: AmountInputModule.InputType)
         fun onRateUpdated(rate: BigDecimal?) {}
     }
 

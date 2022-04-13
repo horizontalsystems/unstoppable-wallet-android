@@ -167,14 +167,6 @@ object SendModule {
         }
     }
 
-    enum class InputType {
-        COIN, CURRENCY;
-
-        fun reversed(): InputType {
-            return if (this == COIN) CURRENCY else COIN
-        }
-    }
-
     sealed class Input {
         object Amount : Input()
         class Address(val editable: Boolean = false) : Input()
