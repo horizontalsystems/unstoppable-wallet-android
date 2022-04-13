@@ -1,32 +1,31 @@
 package io.horizontalsystems.bankwallet.modules.sendx
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.fee.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
+import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.sendevm.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.hodler.LockTimeInterval
 
 @Composable
 fun SendBitcoinScreen(
@@ -121,9 +120,8 @@ fun SendBitcoinScreen(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-
-            val composableItems = buildList<@Composable () -> Unit> {
-                add {
+            HSSectionRounded {
+                CellSingleLineLawrence {
                     HSFeeInputRaw(
                         coinCode = wallet.coin.code,
                         coinDecimal = viewModel.coinMaxAllowedDecimals,
@@ -138,7 +136,7 @@ fun SendBitcoinScreen(
                     )
                 }
                 if (isLockTimeEnabled) {
-                    add {
+                    CellSingleLineLawrence(borderTop = true) {
                         HSHodlerInput(
                             lockTimeIntervals = lockTimeIntervals,
                             lockTimeInterval = lockTimeInterval,
@@ -149,8 +147,6 @@ fun SendBitcoinScreen(
                     }
                 }
             }
-
-            CellSingleLineLawrenceSection(composableItems = composableItems)
 
             feeRateCaution?.let {
                 FeeRateCaution(
@@ -171,71 +167,4 @@ fun SendBitcoinScreen(
             )
         }
     }
-
 }
-
-@Composable
-fun HSHodlerInput(
-    lockTimeIntervals: List<LockTimeInterval?> = listOf(),
-    lockTimeInterval: LockTimeInterval?,
-    onSelect: ((LockTimeInterval?) -> Unit)? = null
-) {
-    var showSelectorDialog by remember { mutableStateOf(false) }
-    if (showSelectorDialog) {
-        SelectorDialogCompose(
-            title = stringResource(R.string.Send_DialogSpeed),
-            items = lockTimeIntervals.map {
-                TabItem(stringResource(it.stringResId()), it == lockTimeInterval, it)
-            },
-            onDismissRequest = {
-                showSelectorDialog = false
-            },
-            onSelectItem = {
-                onSelect?.invoke(it)
-            }
-        )
-    }
-
-    val selectable = lockTimeIntervals.isNotEmpty()
-    val modifierClickable = if (selectable) {
-        Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = {
-                showSelectorDialog = true
-            }
-        )
-    } else {
-        Modifier
-    }
-
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .then(modifierClickable),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(R.string.Send_DialogLockTime),
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey,
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = stringResource(lockTimeInterval.stringResId()),
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.leah,
-        )
-        if (selectable) {
-            Icon(
-                modifier = Modifier.padding(start = 8.dp),
-                painter = painterResource(R.drawable.ic_down_arrow_20),
-                contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
-            )
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-    }
-}
-

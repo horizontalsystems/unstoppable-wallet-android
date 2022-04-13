@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
+import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.AddressCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SectionTitleCell
@@ -144,7 +145,7 @@ fun SendBitcoinConfirmationScreen(
                         .padding(bottom = 106.dp)
                 ) {
                     Spacer(modifier = Modifier.height(12.dp))
-                    CellSingleLineLawrenceSection2 {
+                    HSSectionRounded {
                         CellSingleLineLawrence {
                             SectionTitleCell(
                                 R.string.Send_Confirmation_YouSend,
@@ -171,7 +172,7 @@ fun SendBitcoinConfirmationScreen(
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
-                    CellSingleLineLawrenceSection2 {
+                    HSSectionRounded {
                         CellSingleLineLawrence {
                             HSFeeInputRaw(
                                 coinCode = confirmationData.coin.code,

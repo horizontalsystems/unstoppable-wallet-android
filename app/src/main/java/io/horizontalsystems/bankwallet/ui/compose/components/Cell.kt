@@ -137,8 +137,8 @@ fun CellSingleLineLawrenceSection(
 }
 
 @Composable
-fun CellSingleLineLawrenceSection2(
-    content: @Composable () -> Unit
+fun HSSectionRounded(
+    content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
         modifier = Modifier
