@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.sendevm
+package io.horizontalsystems.bankwallet.modules.amount
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

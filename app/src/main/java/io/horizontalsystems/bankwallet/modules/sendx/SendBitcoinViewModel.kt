@@ -23,11 +23,11 @@ import kotlin.math.min
 class SendBitcoinViewModel(
     private val adapter: ISendBitcoinAdapter,
     val wallet: Wallet,
-    private val feeRateService: FeeRateServiceBitcoin,
-    private val feeService: FeeServiceBitcoin,
-    private val amountService: AmountService,
-    private val addressService: AddressService,
-    private val pluginService: PluginService
+    private val feeRateService: SendBitcoinFeeRateService,
+    private val feeService: SendBitcoinFeeService,
+    private val amountService: SendBitcoinAmountService,
+    private val addressService: SendBitcoinAddressService,
+    private val pluginService: SendBitcoinPluginService
 ) : ViewModel() {
     val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -148,7 +148,7 @@ class SendBitcoinViewModel(
         pluginService.setLockTimeInterval(lockTimeInterval)
     }
 
-    private fun handleUpdatedAmountState(amountState: AmountService.State) {
+    private fun handleUpdatedAmountState(amountState: SendBitcoinAmountService.State) {
         this.amountState = amountState
 
         feeService.setAmount(amountState.amount)
@@ -156,7 +156,7 @@ class SendBitcoinViewModel(
         emitState()
     }
 
-    private fun handleUpdatedAddressState(addressState: AddressService.State) {
+    private fun handleUpdatedAddressState(addressState: SendBitcoinAddressService.State) {
         this.addressState = addressState
 
         amountService.setValidAddress(addressState.validAddress)
@@ -165,7 +165,7 @@ class SendBitcoinViewModel(
         emitState()
     }
 
-    private fun handleUpdatedFeeRateState(feeRateState: FeeRateServiceBitcoin.State) {
+    private fun handleUpdatedFeeRateState(feeRateState: SendBitcoinFeeRateService.State) {
         this.feeRateState = feeRateState
 
         feeService.setFeeRate(feeRateState.feeRate)
@@ -174,7 +174,7 @@ class SendBitcoinViewModel(
         emitState()
     }
 
-    private fun handleUpdatedPluginState(pluginState: PluginService.State) {
+    private fun handleUpdatedPluginState(pluginState: SendBitcoinPluginService.State) {
         this.pluginState = pluginState
 
         feeService.setPluginData(pluginState.pluginData)

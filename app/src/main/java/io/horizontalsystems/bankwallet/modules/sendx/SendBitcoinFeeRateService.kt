@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 
-class FeeRateServiceBitcoin(private val feeRateProvider: IFeeRateProvider) {
+class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
 
     var feeRatePriorities: List<FeeRatePriority> = listOf()
         private set

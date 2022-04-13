@@ -10,7 +10,11 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.xrate.XRateModule
+import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.core.findNavController
 
 class SendXFragment : BaseFragment() {
@@ -31,7 +35,7 @@ class SendXFragment : BaseFragment() {
                 val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment) { XRateModule.Factory(wallet.coin.uid) }
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) { AmountInputModeModule.Factory() }
 
-                SendScreen(findNavController(), viewModel, xRateViewModel, amountInputModeViewModel)
+                SendBitcoinScreen(findNavController(), viewModel, xRateViewModel, amountInputModeViewModel)
             }
         }
     }

@@ -17,17 +17,19 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
+import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.fee.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.sendevm.AvailableBalance
-import io.horizontalsystems.bankwallet.modules.sendevm.HSAmountInput
+import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.hodler.LockTimeInterval
 
 @Composable
-fun SendScreen(
+fun SendBitcoinScreen(
     navController: NavController,
     viewModel: SendBitcoinViewModel,
     xRateViewModel: XRateViewModel,
@@ -163,7 +165,7 @@ fun SendScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
-                    navController.slideFromRight(R.id.sendConfirmation)
+                    navController.slideFromRight(R.id.sendBitcoinConfirmation)
                 },
                 enabled = proceedEnabled
             )

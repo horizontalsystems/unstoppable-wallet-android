@@ -1,12 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.sendx
+package io.horizontalsystems.bankwallet.modules.xrate
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.entities.Currency
@@ -42,18 +40,5 @@ class XRateViewModel(
     }
 
     private fun CoinPrice.toCurrencyValue() = CurrencyValue(currency, this.value)
-
-}
-
-object XRateModule {
-
-    class Factory(private val coinUid: String) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return XRateViewModel(coinUid, App.marketKit, App.currencyManager.baseCurrency) as T
-        }
-
-    }
 
 }

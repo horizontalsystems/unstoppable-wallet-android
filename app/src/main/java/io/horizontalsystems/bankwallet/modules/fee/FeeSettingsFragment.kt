@@ -9,9 +9,9 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.sendx.AmountInputModeViewModel
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.SendBitcoinViewModel
-import io.horizontalsystems.bankwallet.modules.sendx.XRateViewModel
+import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.core.findNavController
 
 class FeeSettingsFragment : BaseFragment() {
