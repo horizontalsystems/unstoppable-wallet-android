@@ -16,10 +16,15 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.xrate.XRateModule
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.CoinType
 
-class SendXFragment : BaseFragment() {
+class SendFragment : BaseFragment() {
 
     private val wallet by lazy { requireArguments().getParcelable<Wallet>(SendEvmModule.walletKey)!! }
+
+    private val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment) { XRateModule.Factory(wallet.coin.uid) }
+    private val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) { AmountInputModeModule.Factory() }
+    private val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) { SendBitcoinModule.Factory(wallet) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,11 +36,14 @@ class SendXFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val viewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) { SendModule.Factory(wallet) }
-                val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment) { XRateModule.Factory(wallet.coin.uid) }
-                val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) { AmountInputModeModule.Factory() }
+                when (wallet.coinType) {
+                    CoinType.Bitcoin -> {
+                        SendBitcoinScreen(findNavController(), sendBitcoinViewModel, xRateViewModel, amountInputModeViewModel)
+                    }
+                    else -> {
+                    }
+                }
 
-                SendBitcoinScreen(findNavController(), viewModel, xRateViewModel, amountInputModeViewModel)
             }
         }
     }

@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.sendx
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -11,8 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
@@ -24,8 +24,9 @@ import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.sendevm.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.HSSectionRounded
 
 @Composable
 fun SendBitcoinScreen(
@@ -58,29 +59,10 @@ fun SendBitcoinScreen(
             focusRequester.requestFocus()
         }
 
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
-                navigationIcon = {
-                    CoinImage(
-                        iconUrl = fullCoin.coin.iconUrl,
-                        placeholder = fullCoin.iconPlaceholder,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .size(24.dp)
-                    )
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    )
-                )
-            )
-
+        SendScreen(
+            navController = navController,
+            fullCoin = fullCoin
+        ) {
             AvailableBalance(
                 coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
