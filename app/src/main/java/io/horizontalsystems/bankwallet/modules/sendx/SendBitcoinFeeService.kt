@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
-class FeeServiceBitcoin(private val adapter: ISendBitcoinAdapter) {
+class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
     private val _feeFlow = MutableStateFlow<BigDecimal?>(null)
     val feeFlow = _feeFlow.asStateFlow()
 

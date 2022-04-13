@@ -25,9 +25,10 @@ import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
+import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationModule
-import io.horizontalsystems.bankwallet.modules.sendx.AmountInputModeModule
-import io.horizontalsystems.bankwallet.modules.sendx.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar

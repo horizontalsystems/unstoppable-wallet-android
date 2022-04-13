@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class PluginService(localStorage: ILocalStorage, coinType: CoinType) {
+class SendBitcoinPluginService(localStorage: ILocalStorage, coinType: CoinType) {
     val isLockTimeEnabled = localStorage.isLockTimeEnabled && coinType is CoinType.Bitcoin
     val lockTimeIntervals = listOf(null) + LockTimeInterval.values().toList()
 

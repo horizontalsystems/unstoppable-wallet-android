@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
-class AmountService(
+class SendBitcoinAmountService(
     private val adapter: ISendBitcoinAdapter,
     private val coinCode: String
 ) {

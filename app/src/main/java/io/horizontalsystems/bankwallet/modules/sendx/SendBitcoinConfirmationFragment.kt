@@ -25,10 +25,12 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.AddressCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SectionTitleCell
+import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -37,7 +39,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.coroutines.delay
 
-class SendConfirmationFragment : BaseFragment() {
+class SendBitcoinConfirmationFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +55,7 @@ class SendConfirmationFragment : BaseFragment() {
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment)
                 val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment)
 
-                SendConfirmationScreen(
+                SendBitcoinConfirmationScreen(
                     findNavController(),
                     viewModel,
                     xRateViewModel,
@@ -65,7 +67,7 @@ class SendConfirmationFragment : BaseFragment() {
 }
 
 @Composable
-fun SendConfirmationScreen(
+fun SendBitcoinConfirmationScreen(
     navController: NavController,
     sendViewModel: SendBitcoinViewModel,
     xRateViewModel: XRateViewModel,
