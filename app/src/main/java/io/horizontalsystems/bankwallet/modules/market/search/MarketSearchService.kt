@@ -95,7 +95,7 @@ class MarketSearchService(
     }
 
     private fun getDiscoveryMarketData() {
-        marketKit.categoriesMarketDataSingle(baseCurrency.code)
+        marketKit.coinCategoriesMarketDataSingle(baseCurrency.code)
             .subscribeIO {
                 processMarketData(it)
             }.let {

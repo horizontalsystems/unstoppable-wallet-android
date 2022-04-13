@@ -47,12 +47,18 @@ fun CoinList(
     onAddFavorite: (String) -> Unit,
     onRemoveFavorite: (String) -> Unit,
     onCoinClick: (String) -> Unit,
+    headerContent: (@Composable () -> Unit)? = null
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
     LazyColumn(state = listState) {
+        headerContent?.let{ topContent ->
+            item{
+                topContent()
+            }
+        }
         itemsIndexed(items, key = { _, item -> item.coinUid }) { index, item ->
             Box(
                 modifier = Modifier

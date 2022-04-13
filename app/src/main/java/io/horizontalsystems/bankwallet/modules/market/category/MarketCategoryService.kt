@@ -23,6 +23,7 @@ class MarketCategoryService(
     sortingField: SortingField = SortingField.HighestCap,
 ) {
     private var disposables = CompositeDisposable()
+    private var favoriteDisposables = CompositeDisposable()
 
     private var marketItems: List<MarketItem> = listOf()
 
@@ -82,7 +83,7 @@ class MarketCategoryService(
             .subscribeIO {
                 syncItems()
             }.let {
-                disposables.add(it)
+                favoriteDisposables.add(it)
             }
     }
 
@@ -92,6 +93,7 @@ class MarketCategoryService(
 
     fun stop() {
         disposables.clear()
+        favoriteDisposables.clear()
     }
 
     fun addFavorite(coinUid: String) {
