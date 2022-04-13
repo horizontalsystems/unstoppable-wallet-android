@@ -261,14 +261,6 @@ interface ISendBitcoinAdapter {
     ): Single<Unit>
 }
 
-interface ISendDashAdapter {
-    fun availableBalance(address: String?): BigDecimal
-    fun minimumSendAmount(address: String?): BigDecimal?
-    fun fee(amount: BigDecimal, address: String?): BigDecimal?
-    fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, logger: AppLogger): Single<Unit>
-}
-
 interface ISendEthereumAdapter {
     val evmKitWrapper: EvmKitWrapper
     val balanceData: BalanceData

@@ -1,8 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.AppLogger
-import io.horizontalsystems.bankwallet.core.ISendDashAdapter
+import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -14,7 +13,6 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.dashkit.DashKit
 import io.horizontalsystems.dashkit.DashKit.NetworkType
 import io.horizontalsystems.dashkit.models.DashTransactionInfo
-import io.reactivex.Single
 import java.math.BigDecimal
 
 class DashAdapter(
@@ -23,7 +21,7 @@ class DashAdapter(
         backgroundManager: BackgroundManager,
         wallet: Wallet,
         testMode: Boolean
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, testMode), DashKit.Listener, ISendDashAdapter {
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, testMode), DashKit.Listener, ISendBitcoinAdapter {
 
     constructor(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean, backgroundManager: BackgroundManager) :
             this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet, testMode)
@@ -78,27 +76,7 @@ class DashAdapter(
         // ignored for now
     }
 
-    // ISendDashAdapter
-
-    override fun availableBalance(address: String?): BigDecimal {
-        return availableBalance(feeRate, address, mapOf())
-    }
-
-    override fun fee(amount: BigDecimal, address: String?): BigDecimal? {
-        return fee(amount, feeRate, address, mapOf())
-    }
-
-    override fun validate(address: String) {
-        validate(address, mapOf())
-    }
-
-    override fun send(amount: BigDecimal, address: String, logger: AppLogger): Single<Unit> {
-        return send(amount, address, feeRate, mapOf(), null, logger)
-    }
-
     companion object {
-
-        private const val feeRate = 1L
 
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet

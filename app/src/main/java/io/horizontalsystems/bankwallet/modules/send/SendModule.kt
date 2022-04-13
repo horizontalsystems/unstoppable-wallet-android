@@ -11,8 +11,6 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceHandler
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceInteractor
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinHandler
-import io.horizontalsystems.bankwallet.modules.send.dash.SendDashHandler
-import io.horizontalsystems.bankwallet.modules.send.dash.SendDashInteractor
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.CustomPriorityUnit
@@ -26,20 +24,6 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 object SendModule {
-
-    interface ISendDashInteractor {
-        fun fetchAvailableBalance(address: String?)
-        fun fetchMinimumAmount(address: String?): BigDecimal?
-        fun fetchFee(amount: BigDecimal, address: String?)
-        fun validate(address: String)
-        fun send(amount: BigDecimal, address: String, logger: AppLogger): Single<Unit>
-        fun clear()
-    }
-
-    interface ISendDashInteractorDelegate {
-        fun didFetchAvailableBalance(availableBalance: BigDecimal)
-        fun didFetchFee(fee: BigDecimal)
-    }
 
     interface ISendBinanceInteractor {
         val availableBalance: BigDecimal
@@ -119,18 +103,6 @@ object SendModule {
                     presenter.feeModuleDelegate = handler
                     presenter.hodlerModuleDelegate = handler
                     presenter.customPriorityUnit = CustomPriorityUnit.Satoshi
-
-                    handler
-                }
-                is ISendDashAdapter -> {
-                    val dashInteractor = SendDashInteractor(adapter)
-                    val handler = SendDashHandler(dashInteractor)
-
-                    dashInteractor.delegate = handler
-
-                    presenter.amountModuleDelegate = handler
-                    presenter.addressModuleDelegate = handler
-                    presenter.feeModuleDelegate = handler
 
                     handler
                 }

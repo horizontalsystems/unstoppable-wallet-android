@@ -42,12 +42,10 @@ class SendFragment : BaseFragment() {
                 when (wallet.coinType) {
                     CoinType.Bitcoin,
                     CoinType.Litecoin,
-                    CoinType.BitcoinCash
+                    CoinType.BitcoinCash,
+                    CoinType.Dash,
                     -> {
                         SendBitcoinScreen(findNavController(), sendBitcoinViewModel, xRateViewModel, amountInputModeViewModel)
-                    }
-                    CoinType.Dash -> {
-                        TODO()
                     }
                     is CoinType.Bep2 -> {
                         TODO()
