@@ -153,7 +153,7 @@ class MetricsPageFragment : BaseFragment() {
         onToggleSortType: () -> Unit,
         onSelectMarketField: (MarketField) -> Unit
     ) {
-        Header(borderBottom = true) {
+        Header(borderTop = true, borderBottom = true) {
             ButtonSecondaryCircle(
                 modifier = Modifier
                     .weight(1f)

@@ -26,7 +26,6 @@ class MarketCategoryViewModel(
     val menuLiveData = MutableLiveData<MarketCategoryModule.Menu>()
     val viewStateLiveData = MutableLiveData<ViewState>()
     val viewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
-    val errorLiveData = MutableLiveData<String?>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val selectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
 
