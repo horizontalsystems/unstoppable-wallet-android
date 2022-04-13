@@ -125,7 +125,7 @@ fun FeeSettingsScreen(
 
                 var sliderValue by remember(feeRate) { mutableStateOf(feeRate) }
 
-                CellSingleLineLawrenceSection2 {
+                HSSectionRounded {
                     CellSingleLineLawrence {
                         Row(
                             modifier = Modifier
