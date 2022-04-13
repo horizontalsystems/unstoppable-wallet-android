@@ -27,7 +27,7 @@ class SendXFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val viewModel by navGraphViewModels<SendViewModel>(R.id.sendXFragment) { SendModule.Factory(wallet) }
+                val viewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) { SendModule.Factory(wallet) }
                 val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment) { XRateModule.Factory(wallet.coin.uid) }
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) { AmountInputModeModule.Factory() }
 

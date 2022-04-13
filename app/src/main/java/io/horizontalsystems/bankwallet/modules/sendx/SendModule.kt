@@ -41,9 +41,7 @@ object SendModule {
             val amountService = AmountService(adapter, wallet.coin.code)
             val addressService = AddressService(adapter)
             val pluginService = PluginService(App.localStorage, wallet.coinType)
-            val service = SendBitcoinService(adapter, wallet, feeRateService, feeService, amountService, addressService, pluginService)
-
-            return SendViewModel(service) as T
+            return SendBitcoinViewModel(adapter, wallet, feeRateService, feeService, amountService, addressService, pluginService)  as T
         }
     }
 

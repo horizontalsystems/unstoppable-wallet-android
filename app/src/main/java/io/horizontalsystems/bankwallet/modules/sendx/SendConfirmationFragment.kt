@@ -49,7 +49,7 @@ class SendConfirmationFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val viewModel by navGraphViewModels<SendViewModel>(R.id.sendXFragment)
+                val viewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment)
                 val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment)
 
@@ -67,11 +67,11 @@ class SendConfirmationFragment : BaseFragment() {
 @Composable
 fun SendConfirmationScreen(
     navController: NavController,
-    sendViewModel: SendViewModel,
+    sendViewModel: SendBitcoinViewModel,
     xRateViewModel: XRateViewModel,
     amountInputModeViewModel: AmountInputModeViewModel
 ) {
-    val confirmationViewItem = sendViewModel.getConfirmationViewItem()
+    val confirmationData = sendViewModel.getConfirmationData()
     val uiState = sendViewModel.uiState
     val lockTimeInterval = uiState.lockTimeInterval
 
@@ -146,25 +146,25 @@ fun SendConfirmationScreen(
                         CellSingleLineLawrence {
                             SectionTitleCell(
                                 R.string.Send_Confirmation_YouSend,
-                                confirmationViewItem.coin.name
+                                confirmationData.coin.name
                             )
                         }
                         CellSingleLineLawrence(borderTop = true) {
                             val coinAmount = App.numberFormatter.formatCoin(
-                                confirmationViewItem.amount,
-                                confirmationViewItem.coin.code,
+                                confirmationData.amount,
+                                confirmationData.coin.code,
                                 0,
                                 sendViewModel.coinMaxAllowedDecimals
                             )
 
                             val currencyAmount = xRateViewModel.rate?.let { rate ->
-                                rate.copy(value = confirmationViewItem.amount.times(rate.value)).getFormatted(sendViewModel.fiatMaxAllowedDecimals, sendViewModel.fiatMaxAllowedDecimals)
+                                rate.copy(value = confirmationData.amount.times(rate.value)).getFormatted(sendViewModel.fiatMaxAllowedDecimals, sendViewModel.fiatMaxAllowedDecimals)
                             }
 
                             ConfirmAmountCell(currencyAmount, coinAmount, true)
                         }
                         CellSingleLineLawrence(borderTop = true) {
-                            AddressCell(confirmationViewItem.address.hex)
+                            AddressCell(confirmationData.address.hex)
                         }
                     }
 
@@ -172,10 +172,10 @@ fun SendConfirmationScreen(
                     CellSingleLineLawrenceSection2 {
                         CellSingleLineLawrence {
                             HSFeeInputRaw(
-                                coinCode = confirmationViewItem.coin.code,
+                                coinCode = confirmationData.coin.code,
                                 coinDecimal = sendViewModel.coinMaxAllowedDecimals,
                                 fiatDecimal = sendViewModel.fiatMaxAllowedDecimals,
-                                fee = confirmationViewItem.fee,
+                                fee = confirmationData.fee,
                                 amountInputType = amountInputModeViewModel.inputType,
                                 rate = xRateViewModel.rate,
                                 enabled = false,
