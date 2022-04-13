@@ -165,7 +165,7 @@ fun SendBitcoinConfirmationScreen(
                                 rate.copy(value = confirmationData.amount.times(rate.value)).getFormatted(sendViewModel.fiatMaxAllowedDecimals, sendViewModel.fiatMaxAllowedDecimals)
                             }
 
-                            ConfirmAmountCell(currencyAmount, coinAmount, true)
+                            ConfirmAmountCell(currencyAmount, coinAmount, lockTimeInterval != null)
                         }
                         CellSingleLineLawrence(borderTop = true) {
                             AddressCell(confirmationData.address.hex)
