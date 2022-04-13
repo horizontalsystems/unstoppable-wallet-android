@@ -46,7 +46,7 @@ fun HSAmountInput(
     fiatDecimal: Int,
     onClickHint: () -> Unit,
     onValueChange: (BigDecimal?) -> Unit,
-    inputType: AmountInputModule.InputType,
+    inputType: AmountInputType,
     rate: CurrencyValue?
 ) {
     val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coinCode, coinDecimal, fiatDecimal, inputType))
@@ -80,11 +80,11 @@ fun HSAmountInput(
     val hintTextColor: Color
 
     when (inputType) {
-        AmountInputModule.InputType.COIN -> {
+        AmountInputType.COIN -> {
             inputTextColor = ComposeAppTheme.colors.leah
             hintTextColor = ComposeAppTheme.colors.jacob
         }
-        AmountInputModule.InputType.CURRENCY -> {
+        AmountInputType.CURRENCY -> {
             inputTextColor = ComposeAppTheme.colors.jacob
             hintTextColor = ComposeAppTheme.colors.leah
         }

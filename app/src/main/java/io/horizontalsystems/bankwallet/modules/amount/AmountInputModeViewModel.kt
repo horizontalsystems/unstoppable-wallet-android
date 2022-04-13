@@ -8,12 +8,12 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 
 class AmountInputModeViewModel(private val localStorage: ILocalStorage) : ViewModel() {
 
-    var inputType by mutableStateOf(localStorage.sendInputType ?: AmountInputModule.InputType.COIN)
+    var inputType by mutableStateOf(localStorage.amountInputType ?: AmountInputType.COIN)
         private set
 
     fun onToggleInputType() {
         inputType = inputType.reversed()
-        localStorage.sendInputType = inputType
+        localStorage.amountInputType = inputType
     }
 }
 

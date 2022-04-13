@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.dash
 
 import io.horizontalsystems.bankwallet.core.AppLogger
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -100,7 +100,7 @@ class SendDashHandler(
         syncValidation()
     }
 
-    override fun onChangeInputType(inputType: AmountInputModule.InputType) {
+    override fun onChangeInputType(inputType: AmountInputType) {
         feeModule.setInputType(inputType)
     }
 

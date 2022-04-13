@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.NoFeeSendTransactionError
 import io.horizontalsystems.bankwallet.entities.FeeRateState
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -179,7 +179,7 @@ class SendBitcoinHandler(
         syncCurrencyAmount()
     }
 
-    override fun onChangeInputType(inputType: AmountInputModule.InputType) {
+    override fun onChangeInputType(inputType: AmountInputType) {
         feeModule.setInputType(inputType)
     }
 

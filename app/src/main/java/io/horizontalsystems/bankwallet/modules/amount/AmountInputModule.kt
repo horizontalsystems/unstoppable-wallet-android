@@ -10,7 +10,7 @@ object AmountInputModule {
         private val coinCode: String,
         private val coinDecimal: Int,
         private val fiatDecimal: Int,
-        private val inputType: InputType
+        private val inputType: AmountInputType
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return AmountInputViewModel2(
@@ -23,11 +23,4 @@ object AmountInputModule {
 
     }
 
-    enum class InputType {
-        COIN, CURRENCY;
-
-        fun reversed(): InputType {
-            return if (this == COIN) CURRENCY else COIN
-        }
-    }
 }

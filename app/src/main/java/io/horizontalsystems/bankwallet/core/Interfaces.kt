@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModule
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
@@ -46,7 +46,7 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
-    var sendInputType: AmountInputModule.InputType?
+    var amountInputType: AmountInputType?
     var baseCurrencyCode: String?
 
     var baseBitcoinProvider: String?
