@@ -16,8 +16,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
-import io.horizontalsystems.bankwallet.modules.sendx.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.SendErrorInsufficientBalance
+import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString

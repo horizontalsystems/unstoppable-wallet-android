@@ -1,8 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.sendx
+package io.horizontalsystems.bankwallet.modules.sendx.bitcoin
 
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.modules.sendx.SendErrorInsufficientBalance
+import io.horizontalsystems.bankwallet.modules.sendx.SendErrorMaximumSendAmount
+import io.horizontalsystems.bankwallet.modules.sendx.SendErrorMinimumSendAmount
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

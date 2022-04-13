@@ -1,8 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.sendx
+package io.horizontalsystems.bankwallet.modules.sendx.bitcoin
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
+import io.horizontalsystems.bankwallet.modules.sendx.SendErrorFetchFeeRateFailed
+import io.horizontalsystems.bankwallet.modules.sendx.SendWarningLowFee
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

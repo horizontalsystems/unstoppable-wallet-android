@@ -13,6 +13,9 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinModule
+import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinScreen
+import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.xrate.XRateModule
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.core.findNavController
