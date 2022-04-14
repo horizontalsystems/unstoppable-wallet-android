@@ -8,9 +8,15 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.EvmAccountState
 import io.horizontalsystems.bankwallet.entities.EvmBlockchain
-import io.horizontalsystems.erc20kit.decorations.TransferEventDecoration
+import io.horizontalsystems.erc20kit.events.TransferEventInstance
+import io.horizontalsystems.ethereumkit.decorations.IncomingDecoration
+import io.horizontalsystems.ethereumkit.decorations.UnknownTransactionDecoration
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
+import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
+import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapDecoration
+import io.horizontalsystems.uniswapkit.decorations.SwapDecoration
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
@@ -104,26 +110,51 @@ class EvmAccountManager(
         var maxBlockNumber = 0L
 
         for (fullTransaction in fullTransactions) {
-            val blockNumber = fullTransaction.receiptWithLogs?.receipt?.blockNumber ?: 0
+            val blockNumber = fullTransaction.transaction.blockNumber ?: 0
 
             if (blockNumber <= lastBlockNumber) continue
 
             maxBlockNumber = max(maxBlockNumber, blockNumber)
 
-            if (fullTransaction.transaction.to == address) {
-                coinTypes.add(blockchain.baseCoinType)
-                continue
-            }
+            val decoration = fullTransaction.decoration
 
-            if (fullTransaction.internalTransactions.any { it.to == address }) {
-                coinTypes.add(blockchain.baseCoinType)
-                continue
-            }
+            when (decoration) {
+                is IncomingDecoration -> {
+                    coinTypes.add(blockchain.baseCoinType)
+                }
 
-            for (decoration in fullTransaction.eventDecorations) {
-                (decoration as? TransferEventDecoration)?.let {
-                    if (decoration.to == address) {
-                        coinTypes.add(blockchain.getEvm20CoinType(decoration.contractAddress.hex))
+                is SwapDecoration -> {
+                    val tokenOut = decoration.tokenOut
+                    if (tokenOut is SwapDecoration.Token.Eip20Coin) {
+                        coinTypes.add(blockchain.getEvm20CoinType(tokenOut.address.hex))
+                    }
+                }
+
+                is OneInchSwapDecoration -> {
+                    val tokenOut = decoration.tokenOut
+                    if (tokenOut is OneInchDecoration.Token.Eip20Coin) {
+                        coinTypes.add(blockchain.getEvm20CoinType(tokenOut.address.hex))
+                    }
+                }
+
+                is OneInchUnoswapDecoration -> {
+                    val tokenOut = decoration.tokenOut
+                    if (tokenOut is OneInchDecoration.Token.Eip20Coin) {
+                        coinTypes.add(blockchain.getEvm20CoinType(tokenOut.address.hex))
+                    }
+                }
+
+                is UnknownTransactionDecoration -> {
+                    if (decoration.internalTransactions.any { it.to == address }) {
+                        coinTypes.add(blockchain.baseCoinType)
+                    }
+
+                    for (eventInstance in decoration.eventInstances) {
+                        if (eventInstance !is TransferEventInstance) continue
+
+                        if (fullTransaction.transaction.to == address) {
+                            coinTypes.add(blockchain.getEvm20CoinType(eventInstance.contractAddress.hex))
+                        }
                     }
                 }
             }

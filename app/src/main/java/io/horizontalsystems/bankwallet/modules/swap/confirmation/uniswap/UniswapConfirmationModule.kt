@@ -44,7 +44,7 @@ object UniswapConfirmationModule {
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager) }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val sendService by lazy {
-            SendEvmTransactionService(sendEvmData, evmKitWrapper, feeService, App.activateCoinManager)
+            SendEvmTransactionService(sendEvmData, evmKitWrapper, feeService)
         }
 
         @Suppress("UNCHECKED_CAST")

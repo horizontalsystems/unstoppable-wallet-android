@@ -96,7 +96,6 @@ class App : CoreApp(), WorkConfiguration.Provider {
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKit
-        lateinit var activateCoinManager: ActivateCoinManager
         lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
@@ -248,8 +247,6 @@ class App : CoreApp(), WorkConfiguration.Provider {
         termsManager = TermsManager(localStorage)
 
         marketFavoritesManager = MarketFavoritesManager(appDatabase)
-
-        activateCoinManager = ActivateCoinManager(marketKit, walletManager, accountManager)
 
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
 

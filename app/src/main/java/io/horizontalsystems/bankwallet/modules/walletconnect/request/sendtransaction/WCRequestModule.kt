@@ -59,8 +59,7 @@ object WCRequestModule {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
                 evmKitWrapper,
-                feeService,
-                App.activateCoinManager
+                feeService
             )
         }
 
@@ -120,8 +119,7 @@ object WCRequestModule {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
                 service.evmKitWrapper,
-                feeService,
-                App.activateCoinManager
+                feeService
             )
         }
 

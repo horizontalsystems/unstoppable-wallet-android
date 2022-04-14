@@ -105,7 +105,9 @@ class TransactionInfoViewItemFactory(
                     middleSectionTypes.add(it)
                 }
                 middleSectionTypes.add(date)
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.value.coinUid], status))
+                transaction.fee?.let {
+                    middleSectionTypes.add(getEvmFeeItem(it, rates[transaction.value.coinUid], status))
+                }
 
                 rates[transaction.value.coinUid]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
@@ -148,7 +150,9 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(statusType)
                 middleSectionTypes.add(date)
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                transaction.fee?.let {
+                    middleSectionTypes.add(getEvmFeeItem(it, rates[transaction.fee.coinUid], status))
+                }
 
                 val valueOut = transaction.valueOut
                 val valueIn = transaction.valueIn
@@ -228,7 +232,7 @@ class TransactionInfoViewItemFactory(
                 val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
                 val transactionValue = transaction.value
 
-                if (transaction.outgoingEip20Events.isNotEmpty() || (transactionValue.value != BigDecimal.ZERO && !transaction.foreignTransaction) ) {
+                if (transaction.outgoingEip20Events.isNotEmpty() || (transactionValue.decimalValue != BigDecimal.ZERO && !transaction.foreignTransaction) ) {
                     val youPaySection = mutableListOf<TransactionInfoItemType>()
                     youPaySection.add(
                         TransactionType(
@@ -237,7 +241,7 @@ class TransactionInfoViewItemFactory(
                         )
                     )
 
-                    if (transactionValue.value != BigDecimal.ZERO && !transaction.foreignTransaction) {
+                    if (transactionValue.decimalValue != BigDecimal.ZERO && !transaction.foreignTransaction) {
                         youPaySection.add(
                             getAmount(
                                 rates[transaction.value.coinUid],
@@ -261,7 +265,7 @@ class TransactionInfoViewItemFactory(
                     items.add(null)
                 }
 
-                if (transaction.incomingEip20Events.isNotEmpty() || transaction.incomingInternalETHs.isNotEmpty()) {
+                if (transaction.incomingEip20Events.isNotEmpty() || transaction.internalTransactionEvents.isNotEmpty()) {
                     val youGotSection = mutableListOf<TransactionInfoItemType>()
                     youGotSection.add(
                         TransactionType(
@@ -270,11 +274,11 @@ class TransactionInfoViewItemFactory(
                         )
                     )
 
-                    transaction.incomingInternalETHs.firstOrNull()?.let { (_, coinValue) ->
+                    transaction.internalTransactionEvents.firstOrNull()?.let { (_, coinValue) ->
                         coinValue as TransactionValue.CoinValue
 
                         val ethSum =
-                            transaction.incomingInternalETHs.sumOf { (_, eventCoinValue) -> eventCoinValue.decimalValue ?: BigDecimal.ZERO }
+                            transaction.internalTransactionEvents.sumOf { (_, eventCoinValue) -> eventCoinValue.decimalValue ?: BigDecimal.ZERO }
 
                         youGotSection.add(
                             getAmount(
@@ -301,7 +305,9 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                transaction.fee?.let {
+                    middleSectionTypes.add(getEvmFeeItem(it, rates[transaction.fee.coinUid], status))
+                }
 
                 middleSectionTypes.add(
                     Decorated(
@@ -329,7 +335,9 @@ class TransactionInfoViewItemFactory(
                 getOptionsItem(status)?.let {
                     middleSectionTypes.add(it)
                 }
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                transaction.fee?.let {
+                    middleSectionTypes.add(getEvmFeeItem(it, rates[transaction.fee.coinUid], status))
+                }
 
                 rate?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
@@ -404,7 +412,7 @@ class TransactionInfoViewItemFactory(
                     TransactionInfoViewItem(
                         TransactionType(
                             getString(R.string.Transactions_ContractCall),
-                            getNameOrAddress(transaction.contractAddress)
+                            transaction.contractAddress?.let { getNameOrAddress(it) } ?: "---"
                         ), Single
                     )
                 )
@@ -412,7 +420,7 @@ class TransactionInfoViewItemFactory(
 
                 val transactionValue = transaction.value
 
-                if (transaction.outgoingEip20Events.isNotEmpty() || (transactionValue.value != BigDecimal.ZERO && !transaction.foreignTransaction) ) {
+                if (transactionValue != null && (transaction.outgoingEip20Events.isNotEmpty() || (transactionValue.decimalValue != BigDecimal.ZERO && !transaction.foreignTransaction))) {
                     val youPaySection = mutableListOf<TransactionInfoItemType>()
                     youPaySection.add(
                         TransactionType(
@@ -421,7 +429,7 @@ class TransactionInfoViewItemFactory(
                         )
                     )
 
-                    if (transactionValue.value != BigDecimal.ZERO && !transaction.foreignTransaction) {
+                    if (transactionValue.decimalValue != BigDecimal.ZERO && !transaction.foreignTransaction) {
                         youPaySection.add(
                             getAmount(
                                 rates[transaction.value.coinUid],
@@ -445,7 +453,7 @@ class TransactionInfoViewItemFactory(
                     items.add(null)
                 }
 
-                if (transaction.incomingEip20Events.isNotEmpty() || transaction.incomingInternalETHs.isNotEmpty()) {
+                if (transaction.incomingEip20Events.isNotEmpty() || transaction.internalTransactionEvents.isNotEmpty()) {
                     val youGotSection = mutableListOf<TransactionInfoItemType>()
                     youGotSection.add(
                         TransactionType(
@@ -454,11 +462,11 @@ class TransactionInfoViewItemFactory(
                         )
                     )
 
-                    transaction.incomingInternalETHs.firstOrNull()?.let { (_, coinValue) ->
+                    transaction.internalTransactionEvents.firstOrNull()?.let { (_, coinValue) ->
                         coinValue as TransactionValue.CoinValue
 
                         val ethSum =
-                            transaction.incomingInternalETHs.sumOf { (_, eventCoinValue) -> eventCoinValue.decimalValue ?: BigDecimal.ZERO }
+                            transaction.internalTransactionEvents.sumOf { (_, eventCoinValue) -> eventCoinValue.decimalValue ?: BigDecimal.ZERO }
 
                         youGotSection.add(
                             getAmount(
@@ -485,7 +493,9 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                transaction.fee?.let {
+                    middleSectionTypes.add(getEvmFeeItem(it, rates[transaction.fee.coinUid], status))
+                }
 
                 middleSectionTypes.add(
                     Decorated(

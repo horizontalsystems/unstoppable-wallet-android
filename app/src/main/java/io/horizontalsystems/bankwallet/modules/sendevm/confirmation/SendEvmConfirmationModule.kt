@@ -54,7 +54,7 @@ object SendEvmConfirmationModule {
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeCoin, App.marketKit, App.currencyManager) }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val sendService by lazy {
-            SendEvmTransactionService(sendEvmData, evmKitWrapper, feeService, App.activateCoinManager)
+            SendEvmTransactionService(sendEvmData, evmKitWrapper, feeService)
         }
 
         @Suppress("UNCHECKED_CAST")
