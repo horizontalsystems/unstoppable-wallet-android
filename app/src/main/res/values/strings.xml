@@ -137,6 +137,9 @@
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
 
+    <!--Market Overview-->
+    <string name="Market_Overview_TopSectors">Top Sectors</string>
+
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
