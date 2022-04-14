@@ -22,14 +22,14 @@ import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
 
 class TransactionInfoService(
-    transactionRecord: TransactionRecord,
+    private val transactionRecord: TransactionRecord,
     private val adapter: ITransactionsAdapter,
     private val marketKit: MarketKit,
     private val currencyManager: ICurrencyManager
 ) : Clearable {
 
-    val transactionHash: String get() = transactionInfoItem.record.transactionHash
-    val source: TransactionSource get() = transactionInfoItem.record.source
+    val transactionHash: String get() = transactionRecord.transactionHash
+    val source: TransactionSource get() = transactionRecord.source
 
     private val disposables = CompositeDisposable()
 
@@ -45,33 +45,33 @@ class TransactionInfoService(
 
     private val coinUidsForRates: List<String>
         get() {
-            val coinUids = mutableListOf<String>()
+            val coinUids = mutableListOf<String?>()
 
-            val txCoinTypes = when (val tx = transactionInfoItem.record) {
+            val txCoinTypes = when (val tx = transactionRecord) {
                 is EvmIncomingTransactionRecord -> listOf(tx.value.coinUid)
-                is EvmOutgoingTransactionRecord -> listOf(tx.fee.coinUid, tx.value.coinUid)
+                is EvmOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
                 is SwapTransactionRecord -> listOf(
                     tx.fee,
                     tx.valueIn,
                     tx.valueOut
-                ).mapNotNull { it?.coinUid }
+                ).map { it?.coinUid }
                 is UnknownSwapTransactionRecord -> {
                     val tempCoinUidList = mutableListOf<String>()
-                    if (tx.value.value != BigDecimal.ZERO) {
+                    if (tx.value != BigDecimal.ZERO) {
                         tempCoinUidList.add(tx.value.coinUid)
                     }
-                    tempCoinUidList.addAll(tx.incomingInternalETHs.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.internalTransactionEvents.map { it.value.coinUid })
                     tempCoinUidList.addAll(tx.incomingEip20Events.map { it.value.coinUid })
                     tempCoinUidList.addAll(tx.outgoingEip20Events.map { it.value.coinUid })
                     tempCoinUidList
                 }
-                is ApproveTransactionRecord -> listOf(tx.fee.coinUid, tx.value.coinUid)
+                is ApproveTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
                 is ContractCallTransactionRecord -> {
                     val tempCoinUidList = mutableListOf<String>()
-                    if (tx.value.value != BigDecimal.ZERO) {
+                    if (tx.value != null && tx.value.decimalValue != BigDecimal.ZERO) {
                         tempCoinUidList.add(tx.value.coinUid)
                     }
-                    tempCoinUidList.addAll(tx.incomingInternalETHs.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.internalTransactionEvents.map { it.value.coinUid })
                     tempCoinUidList.addAll(tx.incomingEip20Events.map { it.value.coinUid })
                     tempCoinUidList.addAll(tx.outgoingEip20Events.map { it.value.coinUid })
                     tempCoinUidList
@@ -80,7 +80,7 @@ class TransactionInfoService(
                 is BitcoinOutgoingTransactionRecord -> listOf(
                     tx.fee,
                     tx.value
-                ).mapNotNull { it?.coinUid }
+                ).map { it?.coinUid }
                 is BinanceChainIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is BinanceChainOutgoingTransactionRecord -> listOf(
                     tx.fee,
@@ -89,15 +89,15 @@ class TransactionInfoService(
                 else -> emptyList()
             }
 
-            (transactionInfoItem.record as? EvmTransactionRecord)?.let { transactionRecord ->
+            (transactionRecord as? EvmTransactionRecord)?.let { transactionRecord ->
                 if (!transactionRecord.foreignTransaction) {
-                    coinUids.add(transactionRecord.fee.coinUid)
+                    coinUids.add(transactionRecord.fee?.coinUid)
                 }
             }
 
             coinUids.addAll(txCoinTypes)
 
-            return coinUids.filter { it.isNotBlank() }.distinct()
+            return coinUids.filterNotNull().filter { it.isNotBlank() }.distinct()
         }
 
     init {
@@ -113,7 +113,7 @@ class TransactionInfoService(
 
         adapter.getTransactionRecordsFlowable(null, FilterTransactionType.All)
             .flatMap {
-                val record = it.find { it == transactionInfoItem.record }
+                val record = it.find { it == transactionRecord }
                 if (record != null) {
                     Flowable.just(record)
                 } else {
@@ -138,7 +138,7 @@ class TransactionInfoService(
 
     private fun fetchRates(): Single<Map<String, CurrencyValue>> {
         val coinUids = coinUidsForRates
-        val timestamp = transactionInfoItem.record.timestamp
+        val timestamp = transactionRecord.timestamp
         val flowables: List<Single<Pair<String, CurrencyValue>>> = coinUids.map { coinUid ->
             marketKit.coinHistoricalPriceSingle(coinUid, currencyManager.baseCurrency.code, timestamp)
                 .onErrorResumeNext(Single.just(BigDecimal.ZERO)) //provide default value on error
@@ -180,7 +180,7 @@ class TransactionInfoService(
     }
 
     fun getRaw(): String? {
-        return adapter.getRawTransaction(transactionInfoItem.record.transactionHash)
+        return adapter.getRawTransaction(transactionRecord.transactionHash)
     }
 
     override fun clear() {

@@ -47,4 +47,22 @@ sealed class TransactionValue {
             get() = "n/a"
 
     }
+
+    data class TokenValue(override val coinUid: String = "", val tokenName: String, val tokenCode: String, val tokenDecimals: Int, val value: BigDecimal) : TransactionValue() {
+        override val coin: Coin? = null
+        override val coinName: String
+            get() = tokenName
+        override val coinCode: String
+            get() = tokenCode
+        override val decimalValue: BigDecimal? = null
+        override val zeroValue: Boolean
+            get() = value.compareTo(BigDecimal.ZERO) == 0
+        override val isMaxValue: Boolean
+            get() = value.isMaxValue(tokenDecimals)
+        override val abs: TransactionValue
+            get() = copy(value = value.abs())
+        override val formattedString: String
+            get() = TODO("Not yet implemented")
+
+    }
 }

@@ -54,6 +54,7 @@ class TransactionViewItemFactory {
             is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             is UnknownSwapTransactionRecord -> createViewItemFromUnknownSwapTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is EvmTransactionRecord -> createViewItemFromEvmTransactionRecord(record, progress, icon)
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
     }
@@ -104,6 +105,19 @@ class TransactionViewItemFactory {
                 R.string.Transactions_From,
                 getNameOrAddressTruncated(record.exchangeAddress)
             ),
+            null,
+            null,
+            Date(record.timestamp * 1000)
+        )
+    }
+
+    private fun createViewItemFromEvmTransactionRecord(record: EvmTransactionRecord, progress: Int?, icon: Int?): TransactionViewItem {
+        return TransactionViewItem(
+            record.uid,
+            icon ?: R.drawable.ic_tx_swap_20,
+            progress,
+            Translator.getString(R.string.Transactions_Unknown),
+            Translator.getString(R.string.Transactions_Unknown_Description),
             null,
             null,
             Date(record.timestamp * 1000)
@@ -195,7 +209,7 @@ class TransactionViewItemFactory {
             record.blockchainTitle + " " + Translator.getString(R.string.Transactions_ContractCall),
             Translator.getString(
                 R.string.Transactions_From,
-                getNameOrAddressTruncated(record.contractAddress)
+                record.contractAddress?.let { getNameOrAddressTruncated(it) } ?: "---"
             ),
             null,
             null,

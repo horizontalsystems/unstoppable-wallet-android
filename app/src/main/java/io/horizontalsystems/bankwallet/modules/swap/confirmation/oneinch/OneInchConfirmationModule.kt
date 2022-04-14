@@ -51,8 +51,7 @@ object OneInchConfirmationModule {
         private val sendService by lazy {
             OneInchSendEvmTransactionService(
                 evmKitWrapper,
-                feeService,
-                App.activateCoinManager
+                feeService
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }

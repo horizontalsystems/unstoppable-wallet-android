@@ -53,7 +53,7 @@ class EvmTransactionsAdapter(
         limit: Int,
         transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
-        return evmKit.getTransactionsAsync(
+        return evmKit.getFullTransactionsAsync(
             getFilters(coin, transactionType),
             from?.transactionHash?.hexStringToByteArray(),
             limit
@@ -66,7 +66,7 @@ class EvmTransactionsAdapter(
         coin: PlatformCoin?,
         transactionType: FilterTransactionType
     ): Flowable<List<TransactionRecord>> {
-        return evmKit.getTransactionsFlowable(getFilters(coin, transactionType)).map {
+        return evmKit.getFullTransactionsFlowable(getFilters(coin, transactionType)).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
         }
     }

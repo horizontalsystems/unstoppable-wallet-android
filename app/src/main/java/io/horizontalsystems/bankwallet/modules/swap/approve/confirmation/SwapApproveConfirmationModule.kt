@@ -53,8 +53,7 @@ object SwapApproveConfirmationModule {
             SendEvmTransactionService(
                 sendEvmData,
                 evmKitWrapper,
-                feeService,
-                App.activateCoinManager
+                feeService
             )
         }
 

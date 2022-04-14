@@ -114,13 +114,10 @@ class EvmKitManager(
         )
 
         Erc20Kit.addTransactionSyncer(kit)
-        Erc20Kit.addDecorator(kit)
+        Erc20Kit.addDecorators(kit)
 
-        UniswapKit.addDecorator(kit)
-        UniswapKit.addTransactionWatcher(kit)
-
-        OneInchKit.addDecorator(kit)
-        OneInchKit.addTransactionWatcher(kit)
+        UniswapKit.addDecorators(kit)
+        OneInchKit.addDecorators(kit)
 
         kit.start()
 
@@ -145,13 +142,10 @@ class EvmKitManager(
         )
 
         Erc20Kit.addTransactionSyncer(kit)
-        Erc20Kit.addDecorator(kit)
+        Erc20Kit.addDecorators(kit)
 
-        UniswapKit.addDecorator(kit)
-        UniswapKit.addTransactionWatcher(kit)
-
-        OneInchKit.addDecorator(kit)
-        OneInchKit.addTransactionWatcher(kit)
+        UniswapKit.addDecorators(kit)
+        OneInchKit.addDecorators(kit)
 
         kit.start()
 

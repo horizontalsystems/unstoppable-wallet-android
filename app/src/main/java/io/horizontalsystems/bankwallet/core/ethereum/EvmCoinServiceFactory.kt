@@ -19,6 +19,8 @@ class EvmCoinServiceFactory(
         EvmCoinService(coin, currencyManager, marketKit)
     }
 
+    fun getCoinService(platformCoin: PlatformCoin) = EvmCoinService(platformCoin, currencyManager, marketKit)
+
     private fun getPlatformCoin(contractAddress: String) = when (basePlatformCoin.coinType) {
         CoinType.Ethereum -> marketKit.platformCoin(CoinType.Erc20(contractAddress))
         CoinType.BinanceSmartChain -> marketKit.platformCoin(CoinType.Bep20(contractAddress))

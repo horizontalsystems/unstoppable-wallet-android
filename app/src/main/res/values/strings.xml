@@ -535,6 +535,8 @@
     <string name="Transactions_Outgoing">Sent</string>
     <string name="Transactions_Swaps">Swaps</string>
     <string name="Transactions_Approvals">Approvals</string>
+    <string name="Transactions_Unknown">Unknown Transaction</string>
+    <string name="Transactions_Unknown_Description">Transaction can not be parsed</string>
 
     <!--Transaction Info-->
 

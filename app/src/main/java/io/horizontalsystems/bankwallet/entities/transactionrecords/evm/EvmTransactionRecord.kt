@@ -4,34 +4,39 @@ import io.horizontalsystems.bankwallet.core.adapters.BaseEvmAdapter
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.core.toHexString
-import io.horizontalsystems.ethereumkit.models.FullTransaction
+import io.horizontalsystems.ethereumkit.models.Transaction
 import io.horizontalsystems.marketkit.models.PlatformCoin
 
-abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: PlatformCoin, source: TransactionSource) :
+open class EvmTransactionRecord(transaction: Transaction, baseCoin: PlatformCoin, source: TransactionSource) :
     TransactionRecord(
-        uid = fullTransaction.transaction.hash.toHexString(),
-        transactionHash = "0x${fullTransaction.transaction.hash.toHexString()}",
-        transactionIndex = fullTransaction.receiptWithLogs?.receipt?.transactionIndex ?: 0,
-        blockHeight = fullTransaction.receiptWithLogs?.receipt?.blockNumber?.toInt(),
+        uid = transaction.hashString,
+        transactionHash = transaction.hashString,
+        transactionIndex = transaction.transactionIndex ?: 0,
+        blockHeight = transaction.blockNumber?.toInt(),
         confirmationsThreshold = BaseEvmAdapter.confirmationsThreshold,
-        timestamp = fullTransaction.transaction.timestamp,
-        failed = fullTransaction.isFailed(),
+        timestamp = transaction.timestamp,
+        failed = transaction.isFailed,
         source = source
     ) {
 
-    val fee: TransactionValue
+    data class TransferEvent(val address: String, val value: TransactionValue)
+
+    val fee: TransactionValue?
     open val foreignTransaction: Boolean = false
 
     init {
-        val feeAmount: Long = fullTransaction.receiptWithLogs?.receipt?.gasUsed
-            ?: fullTransaction.transaction.gasLimit
+        val feeAmount: Long? = transaction.gasUsed ?: transaction.gasLimit
+        val gasPrice = transaction.gasPrice
 
-        val feeDecimal = feeAmount.toBigDecimal()
-            .multiply(fullTransaction.transaction.gasPrice.toBigDecimal())
-            .movePointLeft(baseCoin.decimals).stripTrailingZeros()
+        fee = if (feeAmount != null && gasPrice != null) {
+            val feeDecimal = feeAmount.toBigDecimal()
+                .multiply(gasPrice.toBigDecimal())
+                .movePointLeft(baseCoin.decimals).stripTrailingZeros()
 
-        fee = TransactionValue.CoinValue(baseCoin, feeDecimal)
+            TransactionValue.CoinValue(baseCoin, feeDecimal)
+        } else {
+            null
+        }
     }
 
 }

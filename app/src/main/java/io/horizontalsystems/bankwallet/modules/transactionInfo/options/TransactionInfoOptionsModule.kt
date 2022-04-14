@@ -77,7 +77,7 @@ object TransactionInfoOptionsModule {
         private val transactionData by lazy {
             when (optionType) {
                 TransactionInfoOption.Type.SpeedUp -> {
-                    TransactionData(transaction.to!!, transaction.value, transaction.input, transaction.nonce)
+                    TransactionData(transaction.to!!, transaction.value!!, transaction.input!!, transaction.nonce)
                 }
                 TransactionInfoOption.Type.Cancel -> {
                     TransactionData(
@@ -100,8 +100,7 @@ object TransactionInfoOptionsModule {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
                 evmKitWrapper,
-                transactionService,
-                App.activateCoinManager
+                transactionService
             )
         }
 
@@ -118,7 +117,7 @@ object TransactionInfoOptionsModule {
                     TransactionSpeedUpCancelViewModel(
                         baseCoin,
                         optionType,
-                        fullTransaction.receiptWithLogs == null
+                        fullTransaction.transaction.blockNumber == null
                     ) as T
                 }
                 else -> throw IllegalArgumentException()

@@ -24,14 +24,7 @@ data class CoinValue(
     }
 
     val isMaxValue: Boolean
-        get() {
-            //biggest number in Ethereum platform
-            val max256BitsNumber = BigInteger(
-                "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-                16
-            ).toBigDecimal().movePointLeft(kind.decimal).stripTrailingZeros()
-            return value == max256BitsNumber
-        }
+        get() = value.isMaxValue(kind.decimal)
 
     val abs
         get() = CoinValue(kind, value.abs())
@@ -60,4 +53,13 @@ data class CoinValue(
         return App.numberFormatter.formatCoin(value, coin.code, 0, maximumFractionDigits)
     }
 
+}
+
+fun BigDecimal.isMaxValue(decimals: Int): Boolean {
+    //biggest number in Ethereum platform
+    val max256BitsNumber = BigInteger(
+        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        16
+    ).toBigDecimal().movePointLeft(decimals).stripTrailingZeros()
+    return this == max256BitsNumber
 }
