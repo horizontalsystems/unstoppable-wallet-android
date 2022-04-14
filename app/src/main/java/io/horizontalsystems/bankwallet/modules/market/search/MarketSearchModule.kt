@@ -1,12 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.FullCoin
 import java.math.BigDecimal
@@ -42,16 +38,6 @@ object MarketSearchModule {
 
     @Immutable
     class CoinItem(val fullCoin: FullCoin, val favourited: Boolean)
-
-    enum class TimePeriod(@StringRes val titleResId: Int): WithTranslatableTitle {
-        TimePeriod_1D(R.string.Market_Search_TimePeriodShort_1D),
-        TimePeriod_1W(R.string.Market_Search_TimePeriodShort_1W),
-        TimePeriod_1M(R.string.Market_Search_TimePeriodShort_1M);
-
-        override val title: TranslatableString
-            get() = TranslatableString.ResString(titleResId)
-
-    }
 
     data class CategoryMarketData(
         val marketCap: String? = null,

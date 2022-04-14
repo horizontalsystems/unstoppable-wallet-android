@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.CoinItem
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DataState
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DataState.Discovery
@@ -27,11 +28,7 @@ class MarketSearchService(
     private var marketData: List<CoinCategoryMarketData> = listOf()
     private var filter = ""
 
-    private val periodOptions = listOf(
-        MarketSearchModule.TimePeriod.TimePeriod_1D,
-        MarketSearchModule.TimePeriod.TimePeriod_1W,
-        MarketSearchModule.TimePeriod.TimePeriod_1M,
-    )
+    private val periodOptions = TimeDuration.values().toList()
 
     private var selectedPeriod = periodOptions[0]
 
@@ -71,9 +68,9 @@ class MarketSearchService(
             }
 
             val diff = when (selectedPeriod) {
-                MarketSearchModule.TimePeriod.TimePeriod_1D -> coinCategoryMarketData.diff24H
-                MarketSearchModule.TimePeriod.TimePeriod_1W -> coinCategoryMarketData.diff1W
-                MarketSearchModule.TimePeriod.TimePeriod_1M -> coinCategoryMarketData.diff1M
+                TimeDuration.OneDay -> coinCategoryMarketData.diff24H
+                TimeDuration.SevenDays -> coinCategoryMarketData.diff1W
+                TimeDuration.ThirtyDays -> coinCategoryMarketData.diff1M
             }
 
             if (marketCap!= null || diff != null){
@@ -139,8 +136,8 @@ class MarketSearchService(
         disposables.clear()
     }
 
-    fun setTimePeriod(timePeriod: MarketSearchModule.TimePeriod) {
-        selectedPeriod = timePeriod
+    fun setTimePeriod(timeDuration: TimeDuration) {
+        selectedPeriod = timeDuration
         syncState()
     }
 

@@ -3,17 +3,15 @@ package io.horizontalsystems.bankwallet.modules.market.overview
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.nft.collection.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import java.math.BigDecimal
 
@@ -93,14 +91,6 @@ object MarketOverviewModule {
         val timeDurationSelect: Select<TimeDuration>,
         val collections: List<TopNftCollectionViewItem>
     )
-
-    enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle {
-        OneDay(R.string.CoinPage_TimeDuration_Day),
-        SevenDay(R.string.CoinPage_TimeDuration_Week),
-        ThirtyDay(R.string.CoinPage_TimeDuration_Month);
-
-        override val title = TranslatableString.ResString(titleResId)
-    }
 
     data class TopNftCollectionViewItem(
         val uid: String,

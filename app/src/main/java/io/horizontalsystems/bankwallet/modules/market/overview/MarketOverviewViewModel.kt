@@ -119,17 +119,17 @@ class MarketOverviewViewModel(
         val volume: BigDecimal
         val volumeDiff: BigDecimal
         when (service.topNftsTimeDuration) {
-            MarketOverviewModule.TimeDuration.OneDay -> {
+            TimeDuration.OneDay -> {
                 volume = collection.oneDayVolume
                 volumeDiff = collection.oneDayVolumeDiff
             }
-            MarketOverviewModule.TimeDuration.SevenDay -> {
-                volume = collection.sevenDayVolume
-                volumeDiff = collection.sevenDayVolumeDiff
+            TimeDuration.SevenDays -> {
+                volume = collection.sevenDaysVolume
+                volumeDiff = collection.sevenDaysVolumeDiff
             }
-            MarketOverviewModule.TimeDuration.ThirtyDay -> {
-                volume = collection.thirtyDayVolume
-                volumeDiff = collection.thirtyDayVolumeDiff
+            TimeDuration.ThirtyDays -> {
+                volume = collection.thirtyDaysVolume
+                volumeDiff = collection.thirtyDaysVolumeDiff
             }
         }
         val volumeFormatted = numberFormatter.formatCoin(volume, "ETH", 0, 2)
@@ -243,7 +243,7 @@ class MarketOverviewViewModel(
         }
     }
 
-    fun onSelectTopNftsTimeDuration(timeDuration: MarketOverviewModule.TimeDuration) {
+    fun onSelectTopNftsTimeDuration(timeDuration: TimeDuration) {
         service.setTopNftsTimeDuration(timeDuration)
     }
 

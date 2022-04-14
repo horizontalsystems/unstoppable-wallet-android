@@ -265,10 +265,10 @@ class HsNftApiProvider : INftApiProvider {
                 totalVolume = it.stats.total_volume,
                 oneDayVolume = it.stats.one_day_volume,
                 oneDayVolumeDiff = it.stats.one_day_change,
-                sevenDayVolume = it.stats.seven_day_volume,
-                sevenDayVolumeDiff = it.stats.seven_day_change,
-                thirtyDayVolume = it.stats.thirty_day_volume,
-                thirtyDayVolumeDiff = it.stats.thirty_day_change,
+                sevenDaysVolume = it.stats.seven_day_volume,
+                sevenDaysVolumeDiff = it.stats.seven_day_change,
+                thirtyDaysVolume = it.stats.thirty_day_volume,
+                thirtyDaysVolumeDiff = it.stats.thirty_day_change,
             )
         }
     }

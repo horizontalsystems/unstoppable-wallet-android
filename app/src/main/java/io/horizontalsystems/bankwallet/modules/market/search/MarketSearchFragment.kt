@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.CoinItem
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -251,11 +252,11 @@ fun SearchView(
 @Composable
 fun CardsGrid(
     viewItems: List<MarketSearchModule.DiscoveryItem>,
-    timePeriodSelect: Select<MarketSearchModule.TimePeriod>,
+    timePeriodSelect: Select<TimeDuration>,
     sortDescending: Boolean,
     onToggleSortType: () -> Unit,
     onCategoryClick: (MarketSearchModule.DiscoveryItem) -> Unit,
-    onTimePeriodMenuToggle: (MarketSearchModule.TimePeriod) -> Unit
+    onTimePeriodMenuToggle: (TimeDuration) -> Unit
 ) {
 
     var timePeriodMenu by remember { mutableStateOf(timePeriodSelect) }
