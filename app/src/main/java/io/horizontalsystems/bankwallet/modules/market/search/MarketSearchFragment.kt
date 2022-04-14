@@ -285,9 +285,9 @@ fun CardsGrid(
         // Turning the list in a list of lists of two elements each
         items(viewItems.windowed(2, 2, true)) { chunk ->
             Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-                CategoryCard(chunk[0], onCategoryClick)
+                CategoryCard(chunk[0]) { onCategoryClick(chunk[0]) }
                 if (chunk.size > 1) {
-                    CategoryCard(chunk[1], onCategoryClick)
+                    CategoryCard(chunk[1]) { onCategoryClick(chunk[1]) }
                 } else {
                     Spacer(modifier = Modifier.weight(1f))
                 }

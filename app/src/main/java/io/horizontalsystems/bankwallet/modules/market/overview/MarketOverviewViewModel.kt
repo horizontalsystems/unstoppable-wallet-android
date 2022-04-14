@@ -17,6 +17,8 @@ import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewMod
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsPoint
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopNftCollectionViewItem
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopNftCollectionsBoard
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopSectorsBoard
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.nft.TopNftCollection
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -39,7 +41,8 @@ class MarketOverviewViewModel(
         val topGainers: Result<List<MarketItem>>,
         val topLosers: Result<List<MarketItem>>,
         val marketMetrics: Result<MarketMetricsItem>,
-        val topNftsCollections: Result<List<TopNftCollection>>
+        val topNftsCollections: Result<List<TopNftCollection>>,
+        val topSectors: Result<List<Category>>,
     )
 
     private val disposables = CompositeDisposable()
@@ -54,16 +57,18 @@ class MarketOverviewViewModel(
                 service.topGainersObservable,
                 service.topLosersObservable,
                 service.marketMetricsObservable,
-                service.topNftCollectionsObservable
-            ) { t1, t2, t3, t4 ->
-                OverviewItemsWrapper(t1, t2, t3, t4)
+                service.topNftCollectionsObservable,
+                service.topSectorsObservable
+            ) { t1, t2, t3, t4, t5 ->
+                OverviewItemsWrapper(t1, t2, t3, t4, t5)
             }
             .subscribeIO { overviewItems ->
                 val error = listOfNotNull(
                     overviewItems.topGainers.exceptionOrNull(),
                     overviewItems.topLosers.exceptionOrNull(),
                     overviewItems.marketMetrics.exceptionOrNull(),
-                    overviewItems.topNftsCollections.exceptionOrNull()
+                    overviewItems.topNftsCollections.exceptionOrNull(),
+                    overviewItems.topSectors.exceptionOrNull(),
                 ).firstOrNull()
 
                 if (error != null) {
@@ -73,10 +78,22 @@ class MarketOverviewViewModel(
                     val topLoserMarketItems = overviewItems.topLosers.getOrNull()
                     val marketMetrics = overviewItems.marketMetrics.getOrNull()
                     val topNftCollections = overviewItems.topNftsCollections.getOrNull()
+                    val topSectors = overviewItems.topSectors.getOrNull()
 
-                    if (topGainerMarketItems != null && topLoserMarketItems != null && marketMetrics != null && topNftCollections != null) {
-                        val viewItem =
-                            getViewItem(topGainerMarketItems, topLoserMarketItems, marketMetrics, topNftCollections)
+                    if (
+                        topGainerMarketItems != null
+                        && topLoserMarketItems != null
+                        && marketMetrics != null
+                        && topNftCollections != null
+                        && topSectors != null
+                    ) {
+                        val viewItem = getViewItem(
+                            topGainerMarketItems,
+                            topLoserMarketItems,
+                            marketMetrics,
+                            topNftCollections,
+                            topSectors,
+                        )
                         this.viewItem.postValue(viewItem)
                         viewStateLiveData.postValue(ViewState.Success)
                     }
@@ -92,7 +109,8 @@ class MarketOverviewViewModel(
         topGainerMarketItems: List<MarketItem>,
         topLoserMarketItems: List<MarketItem>,
         marketMetricsItem: MarketMetricsItem,
-        topNftCollectionsItems: List<TopNftCollection>
+        topNftCollectionsItems: List<TopNftCollection>,
+        topSectors: List<Category>
     ): MarketOverviewModule.ViewItem {
         val topGainersBoard = getBoard(ListType.TopGainers, topGainerMarketItems)
         val topLosersBoard = getBoard(ListType.TopLosers, topLoserMarketItems)
@@ -100,9 +118,17 @@ class MarketOverviewViewModel(
         val boardItems = listOf(topGainersBoard, topLosersBoard)
         val marketMetrics = getMarketMetrics(marketMetricsItem)
         val topNftsBoard = topNftCollectionsBoard(topNftCollectionsItems)
+        val topSectorsBoard = topSectorsBoard(topSectors)
 
-        return MarketOverviewModule.ViewItem(marketMetrics, boardItems, topNftsBoard)
+        return MarketOverviewModule.ViewItem(marketMetrics, boardItems, topNftsBoard, topSectorsBoard)
     }
+
+    private fun topSectorsBoard(items: List<Category>) =
+        TopSectorsBoard(
+            title = R.string.Market_Overview_TopSectors,
+            iconRes = R.drawable.ic_categories_20,
+            items = items
+        )
 
     private fun topNftCollectionsBoard(items: List<TopNftCollection>) =
         TopNftCollectionsBoard(

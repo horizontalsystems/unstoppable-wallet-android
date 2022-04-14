@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -33,10 +34,12 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
 import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopNftCollectionViewItem
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopNftCollectionsBoard
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -47,6 +50,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.CoinCategory
 
 class MarketOverviewFragment : BaseFragment() {
 
@@ -124,6 +128,19 @@ private fun MarketOverviewScreen(
                                 }
                             )
 
+                            TopSectorsBoardView(
+                                board = viewItem.topSectorsBoard,
+                                onClickSeeAll = {
+                                    navController.slideFromRight(R.id.marketSearchFragment)
+                                },
+                                onItemClick = { coinCategory ->
+                                    navController.slideFromBottom(
+                                        R.id.marketCategoryFragment,
+                                        bundleOf(MarketCategoryFragment.categoryKey to coinCategory)
+                                    )
+                                }
+                            )
+
                             TopNftCollectionsBoardView(
                                 viewItem.topNftCollectionsBoard,
                                 onSelectTimeDuration = { timeDuration ->
@@ -139,6 +156,65 @@ private fun MarketOverviewScreen(
             }
         }
     }
+}
+
+@Composable
+private fun TopSectorsBoardView(
+    board: MarketOverviewModule.TopSectorsBoard,
+    onClickSeeAll: () -> Unit,
+    onItemClick: (CoinCategory) -> Unit
+) {
+    Divider(
+        thickness = 1.dp,
+        color = ComposeAppTheme.colors.steel10
+    )
+    Row(
+        modifier = Modifier.height(42.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            painter = painterResource(board.iconRes),
+            contentDescription = null
+        )
+        Text(
+            text = stringResource(board.title),
+            color = ComposeAppTheme.colors.oz,
+            style = ComposeAppTheme.typography.body,
+            maxLines = 1,
+        )
+        Spacer(Modifier.weight(1f))
+        ButtonSecondaryDefault(
+            title = stringResource(R.string.Market_SeeAll),
+            modifier = Modifier.padding(end = 16.dp),
+            onClick = onClickSeeAll,
+        )
+    }
+
+    TopSectorsGrid(board.items, onItemClick)
+}
+
+@Composable
+fun TopSectorsGrid(
+    items: List<MarketSearchModule.DiscoveryItem.Category>,
+    onItemClick: (CoinCategory) -> Unit,
+) {
+
+    if (items.isNotEmpty() && items.size >= 2) {
+        Row(modifier = Modifier.padding(horizontal = 10.dp)) {
+            CategoryCard(items[0]) { onItemClick(items[0].coinCategory) }
+            CategoryCard(items[1]) { onItemClick(items[1].coinCategory) }
+        }
+    }
+
+    if (items.isNotEmpty() && items.size >= 4) {
+        Row(modifier = Modifier.padding(horizontal = 10.dp)) {
+            CategoryCard(items[2]) { onItemClick(items[2].coinCategory) }
+            CategoryCard(items[3]) { onItemClick(items[3].coinCategory) }
+        }
+    }
+
+    Spacer(modifier = Modifier.height(18.dp))
 }
 
 @Composable

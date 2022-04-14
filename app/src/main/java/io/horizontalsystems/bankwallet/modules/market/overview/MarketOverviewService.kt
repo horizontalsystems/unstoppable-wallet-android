@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.nft.collection.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
 import io.horizontalsystems.bankwallet.modules.nft.TopNftCollection
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
@@ -18,6 +19,7 @@ class MarketOverviewService(
     private val topMarketsRepository: TopMarketsRepository,
     private val marketMetricsRepository: MarketMetricsRepository,
     private val topNftCollectionsRepository: TopNftCollectionsRepository,
+    private val topSectorsRepository: TopSectorsRepository,
     private val backgroundManager: BackgroundManager,
     private val currencyManager: ICurrencyManager
 ) : BackgroundManager.Listener {
@@ -27,6 +29,7 @@ class MarketOverviewService(
     private var gainersDisposable: Disposable? = null
     private var losersDisposable: Disposable? = null
     private var metricsDisposable: Disposable? = null
+    private var topSectorsDisposable: Disposable? = null
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val topNftsSortingField: SortingField = SortingField.HighestVolume
     private var topNftsJob: Job? = null
@@ -44,6 +47,7 @@ class MarketOverviewService(
     val topLosersObservable: BehaviorSubject<Result<List<MarketItem>>> = BehaviorSubject.create()
     val marketMetricsObservable: BehaviorSubject<Result<MarketMetricsItem>> = BehaviorSubject.create()
     val topNftCollectionsObservable: BehaviorSubject<Result<List<TopNftCollection>>> = BehaviorSubject.create()
+    val topSectorsObservable: BehaviorSubject<Result<List<Category>>> = BehaviorSubject.create()
 
     private fun updateGainers(forceRefresh: Boolean) {
         gainersDisposable?.dispose()
@@ -92,6 +96,17 @@ class MarketOverviewService(
             .let { metricsDisposable = it }
     }
 
+    private fun updateTopSectors(forceRefresh: Boolean) {
+        topSectorsDisposable?.dispose()
+
+        topSectorsRepository.get(currencyManager.baseCurrency, forceRefresh)
+            .subscribeIO(
+                { topSectorsObservable.onNext(Result.success(it)) },
+                { topSectorsObservable.onNext(Result.failure(it)) }
+            )
+            .let { topSectorsDisposable = it }
+    }
+
     private fun updateTopNftCollections(forceRefresh: Boolean) {
         topNftsJob?.cancel()
 
@@ -117,6 +132,7 @@ class MarketOverviewService(
         updateLosers(true)
         updateMarketMetrics()
         updateTopNftCollections(true)
+        updateTopSectors(true)
     }
 
     fun start() {
@@ -133,6 +149,7 @@ class MarketOverviewService(
         gainersDisposable?.dispose()
         losersDisposable?.dispose()
         metricsDisposable?.dispose()
+        topSectorsDisposable?.dispose()
         backgroundManager.unregisterListener(this)
     }
 

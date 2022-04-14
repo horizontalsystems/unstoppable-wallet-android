@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.nft.collection.TopNftCollectionsRepository
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import java.math.BigDecimal
@@ -23,10 +24,12 @@ object MarketOverviewModule {
             val topMarketsRepository = TopMarketsRepository(App.marketKit)
             val marketMetricsRepository = MarketMetricsRepository(App.marketKit)
             val topNftCollectionsRepository = TopNftCollectionsRepository(HsNftApiProvider())
+            val topSectorsRepository = TopSectorsRepository(App.marketKit)
             val service = MarketOverviewService(
                 topMarketsRepository,
                 marketMetricsRepository,
                 topNftCollectionsRepository,
+                topSectorsRepository,
                 App.backgroundManager,
                 App.currencyManager
             )
@@ -38,7 +41,8 @@ object MarketOverviewModule {
     data class ViewItem(
         val marketMetrics: MarketMetrics,
         val boards: List<Board>,
-        val topNftCollectionsBoard: TopNftCollectionsBoard
+        val topNftCollectionsBoard: TopNftCollectionsBoard,
+        val topSectorsBoard: TopSectorsBoard,
     )
 
     data class MarketMetrics(
@@ -100,6 +104,12 @@ object MarketOverviewModule {
         val volumeDiff: BigDecimal,
         val order: Int,
         val floorPrice: String?
+    )
+
+    data class TopSectorsBoard(
+        val title: Int,
+        val iconRes: Int,
+        val items: List<Category>
     )
 
 }

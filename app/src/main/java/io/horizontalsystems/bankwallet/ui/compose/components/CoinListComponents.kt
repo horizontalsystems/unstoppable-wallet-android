@@ -328,7 +328,7 @@ fun DescriptionCard(title: String, description: String, image: ImageSource) {
 @Composable
 fun RowScope.CategoryCard(
     type: DiscoveryItem,
-    onClick: (DiscoveryItem) -> Unit
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -338,9 +338,7 @@ fun RowScope.CategoryCard(
         shape = RoundedCornerShape(12.dp),
         elevation = 0.dp,
         backgroundColor = ComposeAppTheme.colors.lawrence,
-        onClick = {
-            onClick.invoke(type)
-        }
+        onClick = onClick
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             when (type) {
