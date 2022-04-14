@@ -13,6 +13,9 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceModule
+import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceScreen
+import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinModule
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinScreen
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinViewModel
@@ -27,7 +30,6 @@ class SendFragment : BaseFragment() {
 
     private val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment) { XRateModule.Factory(wallet.coin.uid) }
     private val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) { AmountInputModeModule.Factory() }
-    private val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) { SendBitcoinModule.Factory(wallet) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,10 +47,14 @@ class SendFragment : BaseFragment() {
                     CoinType.BitcoinCash,
                     CoinType.Dash,
                     -> {
+                        val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) { SendBitcoinModule.Factory(wallet) }
+
                         SendBitcoinScreen(findNavController(), sendBitcoinViewModel, xRateViewModel, amountInputModeViewModel)
                     }
                     is CoinType.Bep2 -> {
-                        TODO()
+                        val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) { SendBinanceModule.Factory(wallet) }
+
+                        SendBinanceScreen(findNavController(), sendBinanceViewModel, amountInputModeViewModel)
                     }
                     CoinType.Zcash -> {
                         TODO()

@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.sendx.AmountValidator
 
 object SendBitcoinModule {
 
@@ -17,7 +18,7 @@ object SendBitcoinModule {
             val provider = FeeRateProviderFactory.provider(wallet.coinType)!!
             val feeService = SendBitcoinFeeService(adapter)
             val feeRateService = SendBitcoinFeeRateService(provider)
-            val amountService = SendBitcoinAmountService(adapter, wallet.coin.code)
+            val amountService = SendBitcoinAmountService(adapter, wallet.coin.code, AmountValidator())
             val addressService = SendBitcoinAddressService(adapter)
             val pluginService = SendBitcoinPluginService(App.localStorage, wallet.coinType)
             return SendBitcoinViewModel(

@@ -1,7 +1,7 @@
-package io.horizontalsystems.bankwallet.modules.sendx.bitcoin
+package io.horizontalsystems.bankwallet.modules.sendx.binance
 
 import io.horizontalsystems.bankwallet.core.HSCaution
-import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
+import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.sendx.AmountValidator
 import io.horizontalsystems.bitcoincore.core.IPluginData
@@ -10,17 +10,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
-class SendBitcoinAmountService(
-    private val adapter: ISendBitcoinAdapter,
-    private val coinCode: String,
-    private val amountValidator: AmountValidator
+class SendBinanceAmountService(
+    private val adapter: ISendBinanceAdapter,
+    private val amountValidator: AmountValidator,
+    private val coinCode: String
 ) {
     private var amount: BigDecimal? = null
     private var amountCaution: HSCaution? = null
 
     private var minimumSendAmount: BigDecimal? = null
     private var maximumSendAmount: BigDecimal? = null
-    private var availableBalance: BigDecimal = adapter.balanceData.available
+    private var availableBalance: BigDecimal = adapter.availableBalance
     private var validAddress: Address? = null
     private var feeRate: Long? = null
     private var pluginData: Map<Byte, IPluginData>? = null
@@ -36,10 +36,6 @@ class SendBitcoinAmountService(
     val stateFlow = _stateFlow.asStateFlow()
 
     fun start() {
-        refreshMinimumSendAmount()
-        refreshMaximumSendAmount()
-        refreshAvailableBalance()
-
         emitState()
     }
 
@@ -61,18 +57,6 @@ class SendBitcoinAmountService(
         }
     }
 
-    private fun refreshAvailableBalance() {
-        availableBalance = feeRate?.let { adapter.availableBalance(it, validAddress?.hex, pluginData) } ?: adapter.balanceData.available
-    }
-
-    private fun refreshMaximumSendAmount() {
-        maximumSendAmount = pluginData?.let { adapter.maximumSendAmount(it) }
-    }
-
-    private fun refreshMinimumSendAmount() {
-        minimumSendAmount = adapter.minimumSendAmount(validAddress?.hex)
-    }
-
     private fun validateAmount() {
         amountCaution = amountValidator.validate(
             amount,
@@ -86,35 +70,6 @@ class SendBitcoinAmountService(
     fun setAmount(amount: BigDecimal?) {
         this.amount = amount
 
-        validateAmount()
-
-        emitState()
-    }
-
-    fun setValidAddress(validAddress: Address?) {
-        this.validAddress = validAddress
-
-        refreshAvailableBalance()
-        refreshMinimumSendAmount()
-        validateAmount()
-
-        emitState()
-    }
-
-    fun setFeeRate(feeRate: Long?) {
-        this.feeRate = feeRate
-
-        refreshAvailableBalance()
-        validateAmount()
-
-        emitState()
-    }
-
-    fun setPluginData(pluginData: Map<Byte, IPluginData>?) {
-        this.pluginData = pluginData
-
-        refreshAvailableBalance()
-        refreshMaximumSendAmount()
         validateAmount()
 
         emitState()
