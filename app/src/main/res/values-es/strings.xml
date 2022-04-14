@@ -455,6 +455,8 @@
     <string name="Transactions_Outgoing">Enviado</string>
     <string name="Transactions_Swaps">Permutar</string>
     <string name="Transactions_Approvals">Aprobaciones</string>
+    <string name="Transactions_Unknown">Unknown Transaction</string>
+    <string name="Transactions_Unknown_Description">Transaction can not be parsed</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transacción</string>
     <string name="TransactionInfo_Title">Información de la transacción</string>
@@ -902,6 +904,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="NftAsset_Links_Discord">Discord</string>
     <string name="NftAsset_Links_Twitter">Twitter</string>
     <string name="PoweredBy_OpenSeaAPI">Desarrollado por OpenSea API</string>
+    <string name="Nft_TopCollections">Top NFT Collections</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Máximos Ganadores</string>
     <string name="RateList_TopLosers">Peores perdedores</string>
