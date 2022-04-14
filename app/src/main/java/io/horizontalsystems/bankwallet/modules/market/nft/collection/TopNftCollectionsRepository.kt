@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.nft.collection
 
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TimeDuration
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.bankwallet.modules.nft.INftApiProvider
@@ -46,15 +46,15 @@ class TopNftCollectionsRepository(
     private fun TopNftCollection.volume(timeDuration: TimeDuration) =
         when (timeDuration) {
             TimeDuration.OneDay -> oneDayVolume
-            TimeDuration.SevenDay -> sevenDayVolume
-            TimeDuration.ThirtyDay -> thirtyDayVolume
+            TimeDuration.SevenDays -> sevenDaysVolume
+            TimeDuration.ThirtyDays -> thirtyDaysVolume
         }
 
     private fun TopNftCollection.volumeDiff(timeDuration: TimeDuration) =
         when (timeDuration) {
             TimeDuration.OneDay -> oneDayVolumeDiff
-            TimeDuration.SevenDay -> sevenDayVolumeDiff
-            TimeDuration.ThirtyDay -> thirtyDayVolumeDiff
+            TimeDuration.SevenDays -> sevenDaysVolumeDiff
+            TimeDuration.ThirtyDays -> thirtyDaysVolumeDiff
         }
 
 }

@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.market.overview
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.nft.collection.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TimeDuration
 import io.horizontalsystems.bankwallet.modules.nft.TopNftCollection
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
@@ -35,7 +35,7 @@ class MarketOverviewService(
         private set
     var losersTopMarket: TopMarket = TopMarket.Top250
         private set
-    var topNftsTimeDuration: TimeDuration = TimeDuration.SevenDay
+    var topNftsTimeDuration: TimeDuration = TimeDuration.SevenDays
         private set
 
     val topMarketOptions: List<TopMarket> = TopMarket.values().toList()

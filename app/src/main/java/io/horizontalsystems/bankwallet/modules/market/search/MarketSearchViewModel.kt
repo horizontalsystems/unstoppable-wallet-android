@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.reactivex.disposables.CompositeDisposable
 
 class MarketSearchViewModel(
@@ -34,8 +35,8 @@ class MarketSearchViewModel(
         }
     }
 
-    fun toggleTimePeriod(timePeriod: MarketSearchModule.TimePeriod) {
-        service.setTimePeriod(timePeriod)
+    fun toggleTimePeriod(timeDuration: TimeDuration) {
+        service.setTimePeriod(timeDuration)
     }
 
     fun toggleSortType() {
