@@ -52,7 +52,7 @@ class SendBitcoinViewModel(
     private var sendResult: SendResult? = null
 
     var uiState by mutableStateOf(
-        SendUiState(
+        SendBitcoinUiState(
             availableBalance = amountState.availableBalance,
             feeRatePriority = feeRateState.feeRatePriority,
             feeRate = feeRateState.feeRate,
@@ -115,7 +115,7 @@ class SendBitcoinViewModel(
     }
 
     private fun emitState() {
-        val newUiState = SendUiState(
+        val newUiState = SendBitcoinUiState(
             availableBalance = amountState.availableBalance,
             feeRatePriority = feeRateState.feeRatePriority,
             feeRate = feeRateState.feeRate,
@@ -241,19 +241,6 @@ class SendBitcoinViewModel(
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 
-    data class ServiceState(
-        val availableBalance: BigDecimal,
-        val fee: BigDecimal?,
-        val lockTimeInterval: LockTimeInterval?,
-        val addressError: Throwable?,
-        val amountCaution: HSCaution?,
-        val feeRateCaution: HSCaution?,
-        val canBeSend: Boolean,
-        val sendResult: SendResult?,
-        val feeRatePriority: FeeRatePriority,
-        val feeRate: Long?
-    )
-
     data class ConfirmationData(
         val amount: BigDecimal,
         val fee: BigDecimal,
@@ -263,7 +250,7 @@ class SendBitcoinViewModel(
 
 }
 
-data class SendUiState(
+data class SendBitcoinUiState(
     val availableBalance: BigDecimal,
     val fee: BigDecimal?,
     val feeRate: Long?,
