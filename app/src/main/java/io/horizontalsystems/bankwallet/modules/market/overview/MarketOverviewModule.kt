@@ -3,12 +3,17 @@ package io.horizontalsystems.bankwallet.modules.market.overview
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
+import io.horizontalsystems.bankwallet.modules.market.nft.collection.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import java.math.BigDecimal
 
@@ -19,20 +24,23 @@ object MarketOverviewModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val topMarketsRepository = TopMarketsRepository(App.marketKit)
             val marketMetricsRepository = MarketMetricsRepository(App.marketKit)
+            val topNftCollectionsRepository = TopNftCollectionsRepository(HsNftApiProvider())
             val service = MarketOverviewService(
                 topMarketsRepository,
                 marketMetricsRepository,
+                topNftCollectionsRepository,
                 App.backgroundManager,
                 App.currencyManager
             )
-            return MarketOverviewViewModel(service) as T
+            return MarketOverviewViewModel(service, App.numberFormatter) as T
         }
     }
 
     @Immutable
     data class ViewItem(
         val marketMetrics: MarketMetrics,
-        val boards: List<Board>
+        val boards: List<Board>,
+        val topNftCollectionsBoard: TopNftCollectionsBoard
     )
 
     data class MarketMetrics(
@@ -77,6 +85,31 @@ object MarketOverviewModule {
         val title: Int,
         val iconRes: Int,
         val topMarketSelect: Select<TopMarket>
+    )
+
+    data class TopNftCollectionsBoard(
+        val title: Int,
+        val iconRes: Int,
+        val timeDurationSelect: Select<TimeDuration>,
+        val collections: List<TopNftCollectionViewItem>
+    )
+
+    enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle {
+        OneDay(R.string.CoinPage_TimeDuration_Day),
+        SevenDay(R.string.CoinPage_TimeDuration_Week),
+        ThirtyDay(R.string.CoinPage_TimeDuration_Month);
+
+        override val title = TranslatableString.ResString(titleResId)
+    }
+
+    data class TopNftCollectionViewItem(
+        val uid: String,
+        val name: String,
+        val imageUrl: String?,
+        val volume: String,
+        val volumeDiff: BigDecimal,
+        val order: Int,
+        val floorPrice: String?
     )
 
 }

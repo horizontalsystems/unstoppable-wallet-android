@@ -18,7 +18,7 @@ import java.util.*
 object HsNftModule {
     private val apiURL = App.appConfigProvider.marketApiBaseUrl + "/v1/nft/"
 
-    val apiServiceV1 = APIClient.retrofit(apiURL, 60)
+    val apiServiceV1: HsNftApiV1 = APIClient.retrofit(apiURL, 60)
         .create(HsNftApiV1::class.java)
 }
 
@@ -51,6 +51,13 @@ object HsNftApiV1Response {
             val thirty_day_average_price: BigDecimal,
             val floor_price: BigDecimal?,
             val total_supply: Int,
+            val total_volume: BigDecimal,
+            val one_day_volume: BigDecimal,
+            val one_day_change: BigDecimal,
+            val seven_day_volume: BigDecimal,
+            val seven_day_change: BigDecimal,
+            val thirty_day_volume: BigDecimal,
+            val thirty_day_change: BigDecimal,
         )
     }
 
@@ -248,6 +255,37 @@ class HsNftApiProvider : INftApiProvider {
         }
     }
 
+    override suspend fun topCollections(count: Int): List<TopNftCollection> {
+        return fetchTopCollections(count).map {
+            TopNftCollection(
+                uid = it.uid,
+                name = it.name,
+                imageUrl = it.image_data?.image_url,
+                floorPrice = it.stats.floor_price,
+                totalVolume = it.stats.total_volume,
+                oneDayVolume = it.stats.one_day_volume,
+                oneDayVolumeDiff = it.stats.one_day_change,
+                sevenDayVolume = it.stats.seven_day_volume,
+                sevenDayVolumeDiff = it.stats.seven_day_change,
+                thirtyDayVolume = it.stats.thirty_day_volume,
+                thirtyDayVolumeDiff = it.stats.thirty_day_change,
+            )
+        }
+    }
+
+    private suspend fun fetchTopCollections(count: Int): List<HsNftApiV1Response.Collection> {
+        val collections = mutableListOf<HsNftApiV1Response.Collection>()
+        var page = 1
+        val limit = 300
+        do {
+            val collectionsResponse = HsNftModule.apiServiceV1.collections(page = page, limit = limit)
+            collections.addAll(collectionsResponse)
+            page++
+        } while (collectionsResponse.size >= limit && collections.size < count)
+
+        return collections
+    }
+
     private suspend fun fetchAssets(address: Address): List<HsNftApiV1Response.Asset> {
         val assets = mutableListOf<HsNftApiV1Response.Asset>()
         var cursor: String? = null
@@ -287,7 +325,7 @@ interface HsNftApiV1 {
 
     @GET("collections")
     suspend fun collections(
-        @Query("asset_owner") assetOwner: String,
+        @Query("asset_owner") assetOwner: String? = null,
         @Query("page") page: Int,
         @Query("limit") limit: Int
     ): List<HsNftApiV1Response.Collection>
