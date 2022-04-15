@@ -14,21 +14,19 @@ import kotlinx.coroutines.flow.update
 class SendBinanceAddressService(private val adapter: ISendBinanceAdapter) {
 
     private var address: Address? = null
-    private var validAddress: Address? = null
     private var addressError: Throwable? = null
 
     private val _stateFlow = MutableStateFlow(
         State(
-            validAddress = validAddress,
+            address = address,
             addressError = addressError,
-            canBeSend = validAddress != null
+            canBeSend = addressError == null
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
 
     fun start() {
         validateAddress()
-        refreshValidAddress()
 
         emitState()
     }
@@ -37,13 +35,8 @@ class SendBinanceAddressService(private val adapter: ISendBinanceAdapter) {
         this.address = address
 
         validateAddress()
-        refreshValidAddress()
 
         emitState()
-    }
-
-    private fun refreshValidAddress() {
-        validAddress = if (addressError == null) address else null
     }
 
     private fun validateAddress() {
@@ -72,15 +65,15 @@ class SendBinanceAddressService(private val adapter: ISendBinanceAdapter) {
     private fun emitState() {
         _stateFlow.update {
             State(
-                validAddress = validAddress,
+                address = address,
                 addressError = addressError,
-                canBeSend = validAddress != null
+                canBeSend = addressError == null
             )
         }
     }
 
     data class State(
-        val validAddress: Address?,
+        val address: Address?,
         val addressError: Throwable?,
         val canBeSend: Boolean
     )

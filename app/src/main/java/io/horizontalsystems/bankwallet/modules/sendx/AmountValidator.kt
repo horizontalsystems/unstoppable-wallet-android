@@ -8,19 +8,19 @@ class AmountValidator {
         coinAmount: BigDecimal?,
         coinCode: String,
         availableBalance: BigDecimal,
-        tmpMinimumSendAmount: BigDecimal? = null,
-        tmpMaximumSendAmount: BigDecimal? = null
+        minimumSendAmount: BigDecimal? = null,
+        maximumSendAmount: BigDecimal? = null
     ) = when {
         coinAmount == null -> null
         coinAmount == BigDecimal.ZERO -> null
         coinAmount > availableBalance -> {
             SendErrorInsufficientBalance(coinCode)
         }
-        tmpMinimumSendAmount != null && coinAmount <= tmpMinimumSendAmount -> {
-            SendErrorMinimumSendAmount(tmpMinimumSendAmount)
+        minimumSendAmount != null && coinAmount <= minimumSendAmount -> {
+            SendErrorMinimumSendAmount(minimumSendAmount)
         }
-        tmpMaximumSendAmount != null && coinAmount > tmpMaximumSendAmount -> {
-            SendErrorMaximumSendAmount(tmpMaximumSendAmount)
+        maximumSendAmount != null && coinAmount > maximumSendAmount -> {
+            SendErrorMaximumSendAmount(maximumSendAmount)
         }
         else -> null
     }
