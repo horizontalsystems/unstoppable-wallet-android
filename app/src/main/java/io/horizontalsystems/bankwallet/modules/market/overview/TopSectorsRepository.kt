@@ -13,9 +13,9 @@ class TopSectorsRepository(
     private val itemsCount = 4
     private var itemsCache: List<Category>? = null
 
-    suspend fun get(baseCurrency: Currency, forceRefresh: Boolean): List<Category> =
+    fun get(baseCurrency: Currency, forceRefresh: Boolean): List<Category> =
         if (forceRefresh || itemsCache == null) {
-            val coinCategoryData = marketKit.coinCategoriesMarketData(baseCurrency.code)
+            val coinCategoryData = marketKit.coinCategoriesMarketDataSingle(baseCurrency.code).blockingGet()
             val discoveryItems = getDiscoveryItems(coinCategoryData)
             itemsCache = discoveryItems
             itemsCache ?: emptyList()
