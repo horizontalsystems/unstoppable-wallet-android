@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCa
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -77,6 +78,10 @@ fun CoinList(
                                         onRemoveFavorite(item.coinUid)
                                     } else {
                                         onAddFavorite(item.coinUid)
+                                    }
+                                    coroutineScope.launch {
+                                        delay(200)
+                                        revealedCardId = null
                                     }
                                 },
                             contentAlignment = Alignment.Center
