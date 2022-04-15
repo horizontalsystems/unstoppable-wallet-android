@@ -194,6 +194,7 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             intentIntegrator.setPrompt("")
             intentIntegrator.setBeepEnabled(false)
             intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+            intentIntegrator.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN)
             val intent = intentIntegrator.createScanIntent()
             intent.putExtra(SHOW_PASTE_BUTTON, showPasteButton)
             return intent
@@ -208,6 +209,7 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
             val intent = options.createScanIntent(context)
             intent.putExtra(SHOW_PASTE_BUTTON, showPasteButton)
+            intent.putExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN)
             return intent
         }
     }
