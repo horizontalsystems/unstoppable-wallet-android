@@ -18,13 +18,20 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinCategoryMarketData
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class MarketSearchService(
     private val marketKit: MarketKit,
     private val marketFavoritesManager: MarketFavoritesManager,
     private val baseCurrency: Currency,
 ) {
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val disposables = CompositeDisposable()
+    private var topSectorsJob: Job? = null
+
     private var marketData: List<CoinCategoryMarketData> = listOf()
     private var filter = ""
 
@@ -92,17 +99,11 @@ class MarketSearchService(
     }
 
     private fun getDiscoveryMarketData() {
-        marketKit.coinCategoriesMarketDataSingle(baseCurrency.code)
-            .subscribeIO {
-                processMarketData(it)
-            }.let {
-                disposables.add(it)
-            }
-    }
-
-    private fun processMarketData(marketData: List<CoinCategoryMarketData>) {
-        this.marketData = marketData
-        syncState()
+        topSectorsJob = coroutineScope.launch {
+            val coinCategoryMarketData = marketKit.coinCategoriesMarketData(baseCurrency.code)
+            marketData = coinCategoryMarketData
+            syncState()
+        }
     }
 
     private fun syncState() {

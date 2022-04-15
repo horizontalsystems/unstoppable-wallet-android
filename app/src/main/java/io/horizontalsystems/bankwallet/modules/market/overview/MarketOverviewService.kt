@@ -29,10 +29,10 @@ class MarketOverviewService(
     private var gainersDisposable: Disposable? = null
     private var losersDisposable: Disposable? = null
     private var metricsDisposable: Disposable? = null
-    private var topSectorsDisposable: Disposable? = null
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val topNftsSortingField: SortingField = SortingField.HighestVolume
     private var topNftsJob: Job? = null
+    private var topSectorsJob: Job? = null
 
     var gainersTopMarket: TopMarket = TopMarket.Top250
         private set
@@ -96,15 +96,19 @@ class MarketOverviewService(
             .let { metricsDisposable = it }
     }
 
-    private fun updateTopSectors(forceRefresh: Boolean) {
-        topSectorsDisposable?.dispose()
+    private fun updateTopSectors() {
+        topSectorsJob?.cancel()
 
-        topSectorsRepository.get(currencyManager.baseCurrency, forceRefresh)
-            .subscribeIO(
-                { topSectorsObservable.onNext(Result.success(it)) },
-                { topSectorsObservable.onNext(Result.failure(it)) }
-            )
-            .let { topSectorsDisposable = it }
+        topSectorsJob = coroutineScope.launch {
+            try {
+                val topSectors = topSectorsRepository.get(currencyManager.baseCurrency, true)
+                topSectorsObservable.onNext(Result.success(topSectors))
+            } catch (cancellation: CancellationException) {
+                // do nothing
+            } catch (error: Exception) {
+                topSectorsObservable.onNext(Result.failure(error))
+            }
+        }
     }
 
     private fun updateTopNftCollections(forceRefresh: Boolean) {
@@ -132,7 +136,7 @@ class MarketOverviewService(
         updateLosers(true)
         updateMarketMetrics()
         updateTopNftCollections(true)
-        updateTopSectors(true)
+        updateTopSectors()
     }
 
     fun start() {
@@ -149,7 +153,6 @@ class MarketOverviewService(
         gainersDisposable?.dispose()
         losersDisposable?.dispose()
         metricsDisposable?.dispose()
-        topSectorsDisposable?.dispose()
         backgroundManager.unregisterListener(this)
     }
 
