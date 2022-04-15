@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfo
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -265,10 +266,12 @@ fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
     TimePeriod.TimePeriod_1Y -> priceChange1y
 }
 
-enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle {
+@Parcelize
+enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle, Parcelable {
     OneDay(R.string.CoinPage_TimeDuration_Day),
     SevenDay(R.string.CoinPage_TimeDuration_Week),
     ThirtyDay(R.string.CoinPage_TimeDuration_Month);
 
+    @IgnoredOnParcel
     override val title = TranslatableString.ResString(titleResId)
 }

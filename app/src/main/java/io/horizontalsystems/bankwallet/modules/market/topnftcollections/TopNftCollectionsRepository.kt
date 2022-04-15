@@ -6,6 +6,8 @@ import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.bankwallet.modules.nft.INftApiProvider
 import io.horizontalsystems.bankwallet.modules.nft.TopNftCollection
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class TopNftCollectionsRepository(
     private val nftApiProvider: INftApiProvider
@@ -15,11 +17,11 @@ class TopNftCollectionsRepository(
 
 
     suspend fun get(
-        limit: Int,
         sortingField: SortingField,
         timeDuration: TimeDuration,
-        forceRefresh: Boolean
-    ): List<TopNftCollection> {
+        forceRefresh: Boolean,
+        limit: Int? = null,
+    ) = withContext(Dispatchers.IO) {
         val currentCache = itemsCache
 
         val items = if (forceRefresh || currentCache == null) {
@@ -30,7 +32,9 @@ class TopNftCollectionsRepository(
 
         itemsCache = items
 
-        return items.sort(sortingField, timeDuration).take(limit)
+         items.sort(sortingField, timeDuration).let { sortedList ->
+            limit?.let { sortedList.take(it) } ?: sortedList
+        }
     }
 
     private fun List<TopNftCollection>.sort(sortingField: SortingField, timeDuration: TimeDuration) =

@@ -180,8 +180,8 @@ fun ButtonSecondaryToggle(
 
 @Composable
 fun <T : WithTranslatableTitle> ButtonSecondaryToggle(
-    select: Select<T>,
     modifier: Modifier = Modifier,
+    select: Select<T>,
     onSelect: (T) -> Unit,
     enabled: Boolean = true
 ) {

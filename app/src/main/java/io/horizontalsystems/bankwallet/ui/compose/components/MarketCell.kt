@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
@@ -125,13 +126,14 @@ fun MarketCoinFirstRow(coinName: String, rate: String?) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
+            modifier = Modifier.weight(1f).padding(end = 16.dp),
             text = coinName,
             color = ComposeAppTheme.colors.oz,
             style = ComposeAppTheme.typography.body,
             maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         rate?.let {
-            Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = rate,
                 color = ComposeAppTheme.colors.leah,

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.*
@@ -15,10 +14,10 @@ import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewMod
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsPoint
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopNftCollectionViewItem
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopNftCollectionsBoard
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopSectorsBoard
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
+import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.nft.TopNftCollection
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -34,7 +33,7 @@ import java.math.BigDecimal
 
 class MarketOverviewViewModel(
     private val service: MarketOverviewService,
-    private val numberFormatter: IAppNumberFormatter
+    private val topNftCollectionsViewItemFactory: TopNftCollectionsViewItemFactory
 ) : ViewModel() {
 
     private data class OverviewItemsWrapper(
@@ -50,6 +49,9 @@ class MarketOverviewViewModel(
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val viewItem = MutableLiveData<MarketOverviewModule.ViewItem>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
+
+    val topNftCollectionsParams: Pair<SortingField, TimeDuration>
+        get() = Pair(service.topNftsSortingField, service.topNftsTimeDuration)
 
     init {
         Observable
@@ -135,44 +137,10 @@ class MarketOverviewViewModel(
             title = R.string.Nft_TopCollections,
             iconRes = R.drawable.ic_circle_up_20,
             timeDurationSelect = Select(service.topNftsTimeDuration, service.topNftsTimeDurationOptions),
-            collections = items.mapIndexed { index, collection -> topNftCollectionViewItem(collection, index) }
+            collections = items.mapIndexed { index, collection ->
+                topNftCollectionsViewItemFactory.viewItem(collection, service.topNftsTimeDuration, index + 1)
+            }
         )
-
-    private fun topNftCollectionViewItem(
-        collection: TopNftCollection,
-        index: Int
-    ): TopNftCollectionViewItem {
-        val volume: BigDecimal
-        val volumeDiff: BigDecimal
-        when (service.topNftsTimeDuration) {
-            TimeDuration.OneDay -> {
-                volume = collection.oneDayVolume
-                volumeDiff = collection.oneDayVolumeDiff
-            }
-            TimeDuration.SevenDay -> {
-                volume = collection.sevenDayVolume
-                volumeDiff = collection.sevenDayVolumeDiff
-            }
-            TimeDuration.ThirtyDay -> {
-                volume = collection.thirtyDayVolume
-                volumeDiff = collection.thirtyDayVolumeDiff
-            }
-        }
-        val volumeFormatted = numberFormatter.formatCoin(volume, "ETH", 0, 2)
-        val floorPriceFormatted = collection.floorPrice?.let {
-            numberFormatter.format(it, 0, 2, prefix = "Floor: ", suffix = " ETH")
-        }
-
-        return TopNftCollectionViewItem(
-            uid = collection.uid,
-            name = collection.name,
-            imageUrl = collection.imageUrl,
-            volume = volumeFormatted,
-            volumeDiff = volumeDiff * BigDecimal.valueOf(100),
-            order = index + 1,
-            floorPrice = floorPriceFormatted
-        )
-    }
 
     private fun getBoard(type: ListType, marketItems: List<MarketItem>): Board {
         val topMarket = when (type) {
