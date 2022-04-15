@@ -149,11 +149,11 @@ class MarketOverviewViewModel(
                 volume = collection.oneDayVolume
                 volumeDiff = collection.oneDayVolumeDiff
             }
-            TimeDuration.SevenDays -> {
+            TimeDuration.SevenDay -> {
                 volume = collection.sevenDaysVolume
                 volumeDiff = collection.sevenDaysVolumeDiff
             }
-            TimeDuration.ThirtyDays -> {
+            TimeDuration.ThirtyDay -> {
                 volume = collection.thirtyDaysVolume
                 volumeDiff = collection.thirtyDaysVolumeDiff
             }

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.market.overview.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -38,13 +39,21 @@ fun BoardsView(
             onSelect = { topMarket -> onSelectTopMarket(topMarket, boardItem.type) }
         )
 
-        boardItem.marketViewItems.forEachIndexed { index, coin ->
-            MarketCoinWithBackground(coin, index == 0, navController)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(ComposeAppTheme.colors.lawrence)
+        ){
+            boardItem.marketViewItems.forEach { coin ->
+                MarketCoinWithBackground(coin, navController)
+            }
+
+            SeeAllButton { onClickSeeAll(boardItem.type) }
         }
 
-        SeeAllButton {
-            onClickSeeAll(boardItem.type)
-        }
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
@@ -89,25 +98,17 @@ fun <T : WithTranslatableTitle> TopBoardHeader(
 @Composable
 private fun MarketCoinWithBackground(
     marketViewItem: MarketViewItem,
-    firstItem: Boolean,
     navController: NavController
 ) {
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(getRoundedCornerShape(firstItem))
-            .background(ComposeAppTheme.colors.lawrence)
+    MarketCoinClear(
+        marketViewItem.coinName,
+        marketViewItem.coinCode,
+        marketViewItem.iconUrl,
+        marketViewItem.iconPlaceHolder,
+        marketViewItem.coinRate,
+        marketViewItem.marketDataValue,
+        marketViewItem.rank
     ) {
-        MarketCoinClear(
-            marketViewItem.coinName,
-            marketViewItem.coinCode,
-            marketViewItem.iconUrl,
-            marketViewItem.iconPlaceHolder,
-            marketViewItem.coinRate,
-            marketViewItem.marketDataValue,
-            marketViewItem.rank
-        ) {
-            onItemClick(marketViewItem, navController)
-        }
+        onItemClick(marketViewItem, navController)
     }
 }

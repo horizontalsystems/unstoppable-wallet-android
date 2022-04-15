@@ -38,7 +38,7 @@ class MarketOverviewService(
         private set
     var losersTopMarket: TopMarket = TopMarket.Top250
         private set
-    var topNftsTimeDuration: TimeDuration = TimeDuration.SevenDays
+    var topNftsTimeDuration: TimeDuration = TimeDuration.SevenDay
         private set
 
     val topMarketOptions: List<TopMarket> = TopMarket.values().toList()

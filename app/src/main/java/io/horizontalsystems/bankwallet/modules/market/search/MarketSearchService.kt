@@ -69,8 +69,8 @@ class MarketSearchService(
 
             val diff = when (selectedPeriod) {
                 TimeDuration.OneDay -> coinCategoryMarketData.diff24H
-                TimeDuration.SevenDays -> coinCategoryMarketData.diff1W
-                TimeDuration.ThirtyDays -> coinCategoryMarketData.diff1M
+                TimeDuration.SevenDay -> coinCategoryMarketData.diff1W
+                TimeDuration.ThirtyDay -> coinCategoryMarketData.diff1M
             }
 
             if (marketCap!= null || diff != null){
