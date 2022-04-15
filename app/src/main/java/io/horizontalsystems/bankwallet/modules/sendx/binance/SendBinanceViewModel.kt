@@ -135,7 +135,7 @@ class SendBinanceViewModel(
         return SendConfirmationData(
             amount = amountState.amount!!,
             fee = feeState.fee,
-            address = addressState.validAddress!!,
+            address = addressState.address!!,
             coin = wallet.coin,
             feeCoin = feeCoin.coin,
             lockTimeInterval = null
@@ -157,7 +157,7 @@ class SendBinanceViewModel(
 
             val send = adapter.send(
                 amountState.amount!!,
-                addressState.validAddress!!.hex,
+                addressState.address!!.hex,
                 "memo",
                 logger
             ).blockingGet()
