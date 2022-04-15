@@ -5,23 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -31,26 +27,17 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
-import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
-import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopNftCollectionViewItem
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopNftCollectionsBoard
-import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule
+import io.horizontalsystems.bankwallet.modules.market.overview.ui.BoardsView
+import io.horizontalsystems.bankwallet.modules.market.overview.ui.MetricChartsView
+import io.horizontalsystems.bankwallet.modules.market.overview.ui.TopNftCollectionsBoardView
+import io.horizontalsystems.bankwallet.modules.market.overview.ui.TopSectorsBoardView
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
-import io.horizontalsystems.bankwallet.ui.extensions.MetricData
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.CoinCategory
 
 class MarketOverviewFragment : BaseFragment() {
 
@@ -70,7 +57,6 @@ class MarketOverviewFragment : BaseFragment() {
             }
         }
     }
-
 }
 
 @Composable
@@ -155,300 +141,5 @@ private fun MarketOverviewScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun TopSectorsBoardView(
-    board: MarketOverviewModule.TopSectorsBoard,
-    onClickSeeAll: () -> Unit,
-    onItemClick: (CoinCategory) -> Unit
-) {
-    Divider(
-        thickness = 1.dp,
-        color = ComposeAppTheme.colors.steel10
-    )
-    Row(
-        modifier = Modifier.height(42.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            painter = painterResource(board.iconRes),
-            contentDescription = null
-        )
-        Text(
-            text = stringResource(board.title),
-            color = ComposeAppTheme.colors.oz,
-            style = ComposeAppTheme.typography.body,
-            maxLines = 1,
-        )
-        Spacer(Modifier.weight(1f))
-        ButtonSecondaryDefault(
-            title = stringResource(R.string.Market_SeeAll),
-            modifier = Modifier.padding(end = 16.dp),
-            onClick = onClickSeeAll,
-        )
-    }
-
-    TopSectorsGrid(board.items, onItemClick)
-}
-
-@Composable
-fun TopSectorsGrid(
-    items: List<MarketSearchModule.DiscoveryItem.Category>,
-    onItemClick: (CoinCategory) -> Unit,
-) {
-
-    if (items.isNotEmpty() && items.size >= 2) {
-        Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-            CategoryCard(items[0]) { onItemClick(items[0].coinCategory) }
-            CategoryCard(items[1]) { onItemClick(items[1].coinCategory) }
-        }
-    }
-
-    if (items.isNotEmpty() && items.size >= 4) {
-        Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-            CategoryCard(items[2]) { onItemClick(items[2].coinCategory) }
-            CategoryCard(items[3]) { onItemClick(items[3].coinCategory) }
-        }
-    }
-
-    Spacer(modifier = Modifier.height(18.dp))
-}
-
-@Composable
-private fun TopNftCollectionsBoardView(
-    board: TopNftCollectionsBoard,
-    onSelectTimeDuration: (TimeDuration) -> Unit,
-    onClickSeeAll: () -> Unit
-) {
-    TopBoardHeader(
-        title = board.title,
-        iconRes = board.iconRes,
-        select = board.timeDurationSelect,
-        onSelect = onSelectTimeDuration
-    )
-
-    board.collections.forEachIndexed { index, collection ->
-        TopNftCollectionView(collection, firstItem = index == 0)
-    }
-
-    SeeAllButton(onClickSeeAll)
-}
-
-@Composable
-private fun TopNftCollectionView(
-    collection: TopNftCollectionViewItem,
-    firstItem: Boolean
-) {
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(getRoundedCornerShape(firstItem))
-            .background(ComposeAppTheme.colors.lawrence)
-    ) {
-        MultilineClear(
-            onClick = { },
-            borderBottom = true
-        ) {
-            CoinImage(
-                iconUrl = collection.imageUrl ?: "",
-                placeholder = R.drawable.coin_placeholder,
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(24.dp)
-            )
-            Column(modifier = Modifier.fillMaxWidth()) {
-                MarketCoinFirstRow(collection.name, collection.volume)
-                Spacer(modifier = Modifier.height(3.dp))
-                MarketCoinSecondRow(
-                    collection.floorPrice ?: "",
-                    MarketDataValue.Diff(collection.volumeDiff),
-                    "${collection.order}"
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun BoardsView(
-    boards: List<MarketOverviewModule.Board>,
-    navController: NavController,
-    onClickSeeAll: (MarketModule.ListType) -> Unit,
-    onSelectTopMarket: (TopMarket, MarketModule.ListType) -> Unit
-) {
-    boards.forEach { boardItem ->
-        TopBoardHeader(
-            title = boardItem.boardHeader.title,
-            iconRes = boardItem.boardHeader.iconRes,
-            select = boardItem.boardHeader.topMarketSelect,
-            onSelect = { topMarket -> onSelectTopMarket(topMarket, boardItem.type) }
-        )
-
-        boardItem.marketViewItems.forEachIndexed { index, coin ->
-            MarketCoinWithBackground(coin, index == 0, navController)
-        }
-
-        SeeAllButton {
-            onClickSeeAll(boardItem.type)
-        }
-    }
-}
-
-@Composable
-private fun <T : WithTranslatableTitle> TopBoardHeader(
-    title: Int,
-    iconRes: Int,
-    select: Select<T>,
-    onSelect: (T) -> Unit
-) {
-    Column {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
-        Row(
-            modifier = Modifier.height(42.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                painter = painterResource(iconRes),
-                contentDescription = "Section Header Icon"
-            )
-            Text(
-                text = stringResource(title),
-                color = ComposeAppTheme.colors.oz,
-                style = ComposeAppTheme.typography.body,
-                maxLines = 1,
-            )
-            Spacer(Modifier.weight(1f))
-            ButtonSecondaryToggle(
-                modifier = Modifier.padding(end = 16.dp),
-                select = select,
-                onSelect = onSelect
-            )
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-    }
-}
-
-@Composable
-private fun MarketCoinWithBackground(
-    marketViewItem: MarketViewItem,
-    firstItem: Boolean,
-    navController: NavController
-) {
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(getRoundedCornerShape(firstItem))
-            .background(ComposeAppTheme.colors.lawrence)
-    ) {
-        MarketCoinClear(
-            marketViewItem.coinName,
-            marketViewItem.coinCode,
-            marketViewItem.iconUrl,
-            marketViewItem.iconPlaceHolder,
-            marketViewItem.coinRate,
-            marketViewItem.marketDataValue,
-            marketViewItem.rank
-        ) {
-            onItemClick(marketViewItem, navController)
-        }
-    }
-}
-
-@Composable
-private fun SeeAllButton(onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
-            .height(48.dp)
-            .clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable(onClick = onClick)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(R.string.Market_SeeAll),
-                color = ComposeAppTheme.colors.oz,
-                style = ComposeAppTheme.typography.body,
-                maxLines = 1,
-            )
-            Spacer(Modifier.weight(1f))
-            Image(
-                painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = "right arrow icon",
-            )
-        }
-    }
-}
-
-@Composable
-private fun RowScope.ChartView(metricsData: MetricData, navController: NavController) {
-    AndroidView(
-        modifier = Modifier.Companion
-            .weight(1f)
-            .height(104.dp)
-            .clickable {
-                openMetricsPage(metricsData.type, navController)
-            },
-        factory = { context ->
-            MarketMetricSmallView(context).apply {
-                setMetricData(metricsData)
-            }
-        },
-        update = { it.setMetricData(metricsData) }
-    )
-}
-
-@Composable
-private fun MetricChartsView(marketMetrics: MarketMetrics, navController: NavController) {
-    Column(
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
-    ) {
-        Row {
-            ChartView(marketMetrics.totalMarketCap, navController)
-            Spacer(Modifier.width(8.dp))
-            ChartView(marketMetrics.volume24h, navController)
-        }
-        Spacer(Modifier.height(8.dp))
-        Row {
-            ChartView(marketMetrics.defiCap, navController)
-            Spacer(Modifier.width(8.dp))
-            ChartView(marketMetrics.defiTvl, navController)
-        }
-    }
-}
-
-private fun onItemClick(marketViewItem: MarketViewItem, navController: NavController) {
-    val arguments = CoinFragment.prepareParams(marketViewItem.coinUid)
-    navController.slideFromRight(R.id.coinFragment, arguments)
-}
-
-private fun openMetricsPage(metricsType: MetricsType, navController: NavController) {
-    if (metricsType == MetricsType.TvlInDefi) {
-        navController.slideFromBottom(R.id.tvlFragment)
-    } else {
-        navController.slideFromBottom(
-            R.id.metricsPageFragment,
-            MetricsPageFragment.prepareParams(metricsType)
-        )
-    }
-}
-
-private fun getRoundedCornerShape(firstItem: Boolean): RoundedCornerShape {
-    return if (firstItem) {
-        RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-    } else {
-        RoundedCornerShape(0.dp)
     }
 }
