@@ -154,6 +154,7 @@ class MarketOverviewService(
         losersDisposable?.dispose()
         metricsDisposable?.dispose()
         backgroundManager.unregisterListener(this)
+        coroutineScope.cancel()
     }
 
     override fun willEnterForeground() {
