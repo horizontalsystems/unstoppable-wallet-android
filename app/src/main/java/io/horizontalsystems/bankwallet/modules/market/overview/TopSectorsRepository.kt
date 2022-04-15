@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinCategoryMarketData
-import io.reactivex.Single
 
 class TopSectorsRepository(
     private val marketKit: MarketKit,
@@ -14,19 +13,14 @@ class TopSectorsRepository(
     private val itemsCount = 4
     private var itemsCache: List<Category>? = null
 
-    fun get(
-        baseCurrency: Currency,
-        forceRefresh: Boolean
-    ): Single<List<Category>> =
+    suspend fun get(baseCurrency: Currency, forceRefresh: Boolean): List<Category> =
         if (forceRefresh || itemsCache == null) {
-            marketKit.coinCategoriesMarketDataSingle(baseCurrency.code)
-                .map {
-                    val items = getDiscoveryItems(it)
-                    itemsCache = items
-                    itemsCache
-                }
+            val coinCategoryData = marketKit.coinCategoriesMarketData(baseCurrency.code)
+            val discoveryItems = getDiscoveryItems(coinCategoryData)
+            itemsCache = discoveryItems
+            itemsCache ?: emptyList()
         } else {
-            Single.just(itemsCache)
+            itemsCache ?: emptyList()
         }
 
     private fun getDiscoveryItems(marketData: List<CoinCategoryMarketData>): List<Category> {
