@@ -900,6 +900,7 @@
     <string name="NftAsset_Links_Twitter">Twitter</string>
     <string name="PoweredBy_OpenSeaAPI">OpenSea API 제공</string>
     <string name="Nft_TopCollections">Top NFT Collections</string>
+    <string name="Nft_TopCollections_Description">The top NFTs on OpenSea, ranked by volume, floor price and other statistics.</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
