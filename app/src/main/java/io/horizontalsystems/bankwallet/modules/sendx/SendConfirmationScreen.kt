@@ -1,9 +1,5 @@
-package io.horizontalsystems.bankwallet.modules.sendx.bitcoin
+package io.horizontalsystems.bankwallet.modules.sendx
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -14,74 +10,50 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
+import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.AddressCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SectionTitleCell
-import io.horizontalsystems.bankwallet.modules.sendx.SendResult
-import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.hodler.LockTimeInterval
+import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.coroutines.delay
-
-class SendBitcoinConfirmationFragment : BaseFragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val viewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
-                val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment)
-                val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment)
-
-                SendBitcoinConfirmationScreen(
-                    findNavController(),
-                    viewModel,
-                    xRateViewModel,
-                    amountInputModeViewModel
-                )
-            }
-        }
-    }
-}
+import java.math.BigDecimal
 
 @Composable
-fun SendBitcoinConfirmationScreen(
+fun SendConfirmationScreen(
     navController: NavController,
-    sendViewModel: SendBitcoinViewModel,
-    xRateViewModel: XRateViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel
+    coinMaxAllowedDecimals: Int,
+    feeCoinMaxAllowedDecimals: Int,
+    fiatMaxAllowedDecimals: Int,
+    amountInputType: AmountInputType,
+    rate: CurrencyValue?,
+    feeCoinRate: CurrencyValue?,
+    sendResult: SendResult?,
+    coin: Coin,
+    feeCoin: Coin,
+    amount: BigDecimal,
+    address: Address,
+    fee: BigDecimal,
+    lockTimeInterval: LockTimeInterval?,
+    onClickSend: () -> Unit
 ) {
-    val confirmationData = sendViewModel.getConfirmationData()
-    val uiState = sendViewModel.uiState
-    val lockTimeInterval = uiState.lockTimeInterval
-
-    val sendResult = uiState.sendResult
     val view = LocalView.current
-
     when (sendResult) {
         SendResult.Sending -> {
             HudHelper.showInProcessMessage(
@@ -150,25 +122,29 @@ fun SendBitcoinConfirmationScreen(
                         CellSingleLineLawrence {
                             SectionTitleCell(
                                 R.string.Send_Confirmation_YouSend,
-                                confirmationData.coin.name
+                                coin.name
                             )
                         }
                         CellSingleLineLawrence(borderTop = true) {
                             val coinAmount = App.numberFormatter.formatCoin(
-                                confirmationData.amount,
-                                confirmationData.coin.code,
+                                amount,
+                                coin.code,
                                 0,
-                                sendViewModel.coinMaxAllowedDecimals
+                                coinMaxAllowedDecimals
                             )
 
-                            val currencyAmount = xRateViewModel.rate?.let { rate ->
-                                rate.copy(value = confirmationData.amount.times(rate.value)).getFormatted(sendViewModel.fiatMaxAllowedDecimals, sendViewModel.fiatMaxAllowedDecimals)
+                            val currencyAmount = rate?.let { rate ->
+                                rate.copy(value = amount.times(rate.value))
+                                    .getFormatted(
+                                        fiatMaxAllowedDecimals,
+                                        fiatMaxAllowedDecimals
+                                    )
                             }
 
                             ConfirmAmountCell(currencyAmount, coinAmount, lockTimeInterval != null)
                         }
                         CellSingleLineLawrence(borderTop = true) {
-                            AddressCell(confirmationData.address.hex)
+                            AddressCell(address.hex)
                         }
                     }
 
@@ -176,12 +152,12 @@ fun SendBitcoinConfirmationScreen(
                     HSSectionRounded {
                         CellSingleLineLawrence {
                             HSFeeInputRaw(
-                                coinCode = confirmationData.coin.code,
-                                coinDecimal = sendViewModel.coinMaxAllowedDecimals,
-                                fiatDecimal = sendViewModel.fiatMaxAllowedDecimals,
-                                fee = confirmationData.fee,
-                                amountInputType = amountInputModeViewModel.inputType,
-                                rate = xRateViewModel.rate,
+                                coinCode = feeCoin.code,
+                                coinDecimal = feeCoinMaxAllowedDecimals,
+                                fiatDecimal = fiatMaxAllowedDecimals,
+                                fee = fee,
+                                amountInputType = amountInputType,
+                                rate = feeCoinRate,
                                 enabled = false,
                                 onClick = {}
                             )
@@ -199,10 +175,9 @@ fun SendBitcoinConfirmationScreen(
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
                         .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                    sendResult = sendResult
-                ) {
-                    sendViewModel.onClickSend()
-                }
+                    sendResult = sendResult,
+                    onClickSend = onClickSend
+                )
             }
         }
     }

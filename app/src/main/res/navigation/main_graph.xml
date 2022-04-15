@@ -245,8 +245,8 @@
         android:id="@+id/sendXFragment"
         android:name="io.horizontalsystems.bankwallet.modules.sendx.SendFragment" />
     <fragment
-        android:id="@+id/sendBitcoinConfirmation"
-        android:name="io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinConfirmationFragment" />
+        android:id="@+id/sendConfirmation"
+        android:name="io.horizontalsystems.bankwallet.modules.sendx.SendConfirmationFragment" />
 
     <fragment
         android:id="@+id/feeSettings"

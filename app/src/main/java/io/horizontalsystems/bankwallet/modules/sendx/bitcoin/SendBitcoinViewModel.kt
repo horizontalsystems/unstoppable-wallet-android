@@ -10,12 +10,11 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.sendx.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.sendx.SendResult
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.hodler.LockTimeInterval
-import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -49,7 +48,7 @@ class SendBitcoinViewModel(
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
-    private var sendResult: SendResult? = null
+    var sendResult by mutableStateOf<SendResult?>( null)
 
     var uiState by mutableStateOf(
         SendBitcoinUiState(
@@ -62,7 +61,6 @@ class SendBitcoinViewModel(
             amountCaution = amountState.amountCaution,
             feeRateCaution = feeRateState.feeRateCaution,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
-            sendResult = sendResult
         )
     )
         private set
@@ -125,7 +123,6 @@ class SendBitcoinViewModel(
             amountCaution = amountState.amountCaution,
             feeRateCaution = feeRateState.feeRateCaution,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
-            sendResult = sendResult
         )
 
         viewModelScope.launch {
@@ -193,12 +190,14 @@ class SendBitcoinViewModel(
         emitState()
     }
 
-    fun getConfirmationData(): ConfirmationData {
-        return ConfirmationData(
+    fun getConfirmationData(): SendConfirmationData {
+        return SendConfirmationData(
             amount = amountState.amount!!,
             fee = fee!!,
             address = addressState.validAddress!!,
-            coin = wallet.platformCoin.coin
+            coin = wallet.platformCoin.coin,
+            feeCoin = wallet.platformCoin.coin,
+            lockTimeInterval = pluginState.lockTimeInterval
         )
     }
 
@@ -214,7 +213,6 @@ class SendBitcoinViewModel(
 
         try {
             sendResult = SendResult.Sending
-            emitState()
 
             val send = adapter.send(
                 amountState.amount!!,
@@ -227,11 +225,9 @@ class SendBitcoinViewModel(
 
             logger.info("success")
             sendResult = SendResult.Sent
-            emitState()
         } catch (e: Throwable) {
             logger.warning("failed", e)
             sendResult = SendResult.Failed(createCaution(e))
-            emitState()
         }
     }
 
@@ -240,13 +236,6 @@ class SendBitcoinViewModel(
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
-
-    data class ConfirmationData(
-        val amount: BigDecimal,
-        val fee: BigDecimal,
-        val address: Address,
-        val coin: Coin
-    )
 
 }
 
@@ -260,5 +249,4 @@ data class SendBitcoinUiState(
     val amountCaution: HSCaution?,
     val feeRateCaution: HSCaution?,
     val canBeSend: Boolean,
-    val sendResult: SendResult?,
 )
