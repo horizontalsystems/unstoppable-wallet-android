@@ -28,6 +28,7 @@ fun SendBinanceConfirmationScreen(
         address = confirmationData.address,
         fee = confirmationData.fee,
         lockTimeInterval = confirmationData.lockTimeInterval,
+        memo = confirmationData.memo,
         onClickSend = sendViewModel::onClickSend
     )
 }

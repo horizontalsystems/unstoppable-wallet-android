@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.AddressCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmAmountCell
+import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.MemoCell
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SectionTitleCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -51,6 +52,7 @@ fun SendConfirmationScreen(
     address: Address,
     fee: BigDecimal,
     lockTimeInterval: LockTimeInterval?,
+    memo: String?,
     onClickSend: () -> Unit
 ) {
     val view = LocalView.current
@@ -165,6 +167,11 @@ fun SendConfirmationScreen(
                         if (lockTimeInterval != null) {
                             CellSingleLineLawrence(borderTop = true) {
                                 HSHodlerInput(lockTimeInterval = lockTimeInterval)
+                            }
+                        }
+                        if (!memo.isNullOrBlank()) {
+                            CellSingleLineLawrence(borderTop = true) {
+                                MemoCell(memo)
                             }
                         }
                     }

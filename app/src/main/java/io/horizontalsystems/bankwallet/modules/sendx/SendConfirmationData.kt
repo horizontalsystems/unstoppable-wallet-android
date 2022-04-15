@@ -11,5 +11,6 @@ data class SendConfirmationData(
     val address: Address,
     val coin: Coin,
     val feeCoin: Coin,
-    val lockTimeInterval: LockTimeInterval?
+    val lockTimeInterval: LockTimeInterval? = null,
+    val memo: String? = null,
 )
