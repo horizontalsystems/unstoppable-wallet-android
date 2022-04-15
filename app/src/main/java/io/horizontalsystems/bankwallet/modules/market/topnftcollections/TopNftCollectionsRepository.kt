@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.nft.collection
+package io.horizontalsystems.bankwallet.modules.market.topnftcollections
 
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
