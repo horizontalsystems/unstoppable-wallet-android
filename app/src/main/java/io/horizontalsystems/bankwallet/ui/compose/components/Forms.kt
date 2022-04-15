@@ -21,12 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -43,8 +45,14 @@ fun FormsInput(
     enabled: Boolean = true,
     initial: String? = null,
     hint: String,
+    textColor: Color = ComposeAppTheme.colors.oz,
+    textStyle: TextStyle = ComposeAppTheme.typography.body,
+    hintColor: Color = ComposeAppTheme.colors.grey50,
+    hintStyle: TextStyle = ComposeAppTheme.typography.body,
     state: DataState<Any>? = null,
     qrScannerEnabled: Boolean = false,
+    pasteEnabled: Boolean = true,
+    maxLength: Int? = null,
     onChangeFocus: ((Boolean) -> Unit)? = null,
     onValueChange: (String) -> Unit
 ) {
@@ -90,13 +98,20 @@ fun FormsInput(
                     .weight(1f),
                 enabled = enabled,
                 value = textState,
-                onValueChange = {
-                    textState = it
-                    onValueChange.invoke(it.text)
+                onValueChange = { textFieldValue ->
+                    val text = textFieldValue.text
+                    if (maxLength == null || text.length <= maxLength) {
+                        textState = textFieldValue
+                        onValueChange.invoke(text)
+                    } else {
+                        // Need to set textState to new instance of TextFieldValue with the same values
+                        // Otherwise it getting set to empty string
+                        textState = TextFieldValue(text = textState.text, selection = textState.selection)
+                    }
                 },
                 textStyle = ColoredTextStyle(
-                    color = ComposeAppTheme.colors.oz,
-                    textStyle = ComposeAppTheme.typography.body
+                    color = textColor,
+                    textStyle = textStyle
                 ),
                 cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
                 decorationBox = { innerTextField ->
@@ -105,8 +120,8 @@ fun FormsInput(
                             hint,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
-                            color = ComposeAppTheme.colors.grey50,
-                            style = ComposeAppTheme.typography.body
+                            color = hintColor,
+                            style = hintStyle
                         )
                     }
                     innerTextField()
@@ -146,8 +161,6 @@ fun FormsInput(
                 }
             }
 
-            val clipboardManager = LocalClipboardManager.current
-
             if (textState.text.isNotEmpty()) {
                 ButtonSecondaryCircle(
                     modifier = Modifier.padding(end = 8.dp),
@@ -177,18 +190,22 @@ fun FormsInput(
                     )
                 }
 
-                val textInClipboard = clipboardManager.getText()?.text
-                ButtonSecondaryDefault(
-                    modifier = Modifier.padding(end = 8.dp),
-                    title = stringResource(id = R.string.Send_Button_Paste),
-                    onClick = {
-                        textInClipboard?.let {
-                            textState = textState.copy(text = textInClipboard, selection = TextRange(textInClipboard.length))
-                            onValueChange.invoke(textInClipboard)
-                        }
-                    },
-                    enabled = textInClipboard != null
-                )
+                if (pasteEnabled) {
+                    val clipboardManager = LocalClipboardManager.current
+
+                    val textInClipboard = clipboardManager.getText()?.text
+                    ButtonSecondaryDefault(
+                        modifier = Modifier.padding(end = 8.dp),
+                        title = stringResource(id = R.string.Send_Button_Paste),
+                        onClick = {
+                            textInClipboard?.let {
+                                textState = textState.copy(text = textInClipboard, selection = TextRange(textInClipboard.length))
+                                onValueChange.invoke(textInClipboard)
+                            }
+                        },
+                        enabled = textInClipboard != null
+                    )
+                }
             }
         }
 

@@ -33,10 +33,12 @@ class SendBinanceViewModel(
 
     val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
+    val memoMaxLength = 120
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var feeState = feeService.stateFlow.value
+    private var memo: String? = null
 
     var uiState by mutableStateOf(
         SendBinanceUiState(
@@ -102,6 +104,10 @@ class SendBinanceViewModel(
         addressService.setAddress(address)
     }
 
+    fun onEnterMemo(memo: String) {
+        this.memo = memo
+    }
+
     private fun handleUpdatedAddressState(addressState: SendBinanceAddressService.State) {
         this.addressState = addressState
 
@@ -138,7 +144,7 @@ class SendBinanceViewModel(
             address = addressState.address!!,
             coin = wallet.coin,
             feeCoin = feeCoin.coin,
-            lockTimeInterval = null
+            memo = memo
         )
     }
 
@@ -158,7 +164,7 @@ class SendBinanceViewModel(
             val send = adapter.send(
                 amountState.amount!!,
                 addressState.address!!.hex,
-                "memo",
+                memo,
                 logger
             ).blockingGet()
 

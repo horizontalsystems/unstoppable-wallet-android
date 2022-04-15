@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendx.SendScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 
 @Composable
 fun SendBinanceScreen(
@@ -90,6 +91,20 @@ fun SendBinanceScreen(
                 error = addressError
             ) {
                 viewModel.onEnterAddress(it)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+            FormsInput(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                hint = stringResource(R.string.Send_DialogMemoHint),
+                hintColor = ComposeAppTheme.colors.grey50,
+                hintStyle = ComposeAppTheme.typography.bodyItalic,
+                textColor = ComposeAppTheme.colors.light,
+                textStyle = ComposeAppTheme.typography.bodyItalic,
+                pasteEnabled = false,
+                maxLength = viewModel.memoMaxLength
+            ) {
+                viewModel.onEnterMemo(it)
             }
 
             Spacer(modifier = Modifier.height(12.dp))
