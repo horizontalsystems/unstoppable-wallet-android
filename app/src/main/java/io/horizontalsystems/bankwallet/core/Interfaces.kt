@@ -366,8 +366,8 @@ interface IAppNumberFormatter {
 interface IFeeRateProvider {
     val feeRatePriorityList: List<FeeRatePriority>
         get() = listOf()
+    fun getFeeRateRange(): ClosedRange<Long>? = null
     suspend fun getFeeRate(feeRatePriority: FeeRatePriority): Long
-    suspend fun getFeeRateRange(): ClosedRange<Long>? = null
 }
 
 interface IAddressParser {

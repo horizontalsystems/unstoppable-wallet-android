@@ -52,9 +52,7 @@ class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFe
     private val mediumPriorityBlockCount = 8
     private val highPriorityBlockCount = 2
 
-    override suspend fun getFeeRateRange() = withContext(Dispatchers.IO) {
-        1..(getFeeRate(FeeRatePriority.HIGH) * 1.5).toLong()
-    }
+    override fun getFeeRateRange() = 1..200.toLong() // the max fee rate 200 has been chosen in the result of research
 
     override val feeRatePriorityList: List<FeeRatePriority> = listOf(
         FeeRatePriority.LOW,
