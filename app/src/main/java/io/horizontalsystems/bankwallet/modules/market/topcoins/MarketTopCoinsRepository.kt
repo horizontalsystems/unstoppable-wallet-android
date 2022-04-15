@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.overview
+package io.horizontalsystems.bankwallet.modules.market.topcoins
 
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
@@ -9,7 +9,7 @@ import io.horizontalsystems.marketkit.MarketKit
 import io.reactivex.Single
 import kotlin.math.min
 
-class TopMarketsRepository(
+class MarketTopCoinsRepository(
     private val marketKit: MarketKit
 ) {
     @Volatile

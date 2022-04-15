@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.nft.collection.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
+import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsRepository
 import io.horizontalsystems.bankwallet.modules.nft.TopNftCollection
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
@@ -16,7 +17,7 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.*
 
 class MarketOverviewService(
-    private val topMarketsRepository: TopMarketsRepository,
+    private val marketTopCoinsRepository: MarketTopCoinsRepository,
     private val marketMetricsRepository: MarketMetricsRepository,
     private val topNftCollectionsRepository: TopNftCollectionsRepository,
     private val topSectorsRepository: TopSectorsRepository,
@@ -52,7 +53,7 @@ class MarketOverviewService(
     private fun updateGainers(forceRefresh: Boolean) {
         gainersDisposable?.dispose()
 
-        topMarketsRepository
+        marketTopCoinsRepository
             .get(
                 gainersTopMarket.value,
                 SortingField.TopGainers,
@@ -70,7 +71,7 @@ class MarketOverviewService(
     private fun updateLosers(forceRefresh: Boolean) {
         losersDisposable?.dispose()
 
-        topMarketsRepository
+        marketTopCoinsRepository
             .get(
                 losersTopMarket.value,
                 SortingField.TopLosers,

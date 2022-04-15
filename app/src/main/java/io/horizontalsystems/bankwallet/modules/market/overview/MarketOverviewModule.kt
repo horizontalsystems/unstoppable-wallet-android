@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.nft.collection.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
+import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsRepository
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import java.math.BigDecimal
@@ -21,7 +22,7 @@ object MarketOverviewModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val topMarketsRepository = TopMarketsRepository(App.marketKit)
+            val topMarketsRepository = MarketTopCoinsRepository(App.marketKit)
             val marketMetricsRepository = MarketMetricsRepository(App.marketKit)
             val topNftCollectionsRepository = TopNftCollectionsRepository(HsNftApiProvider())
             val topSectorsRepository = TopSectorsRepository(App.marketKit)

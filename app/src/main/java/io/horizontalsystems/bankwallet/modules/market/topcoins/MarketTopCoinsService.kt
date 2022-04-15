@@ -7,13 +7,12 @@ import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
-import io.horizontalsystems.bankwallet.modules.market.overview.TopMarketsRepository
 import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketTopCoinsService(
-    private val topMarketsRepository: TopMarketsRepository,
+    private val marketTopCoinsRepository: MarketTopCoinsRepository,
     private val currencyManager: ICurrencyManager,
     private val favoritesManager: MarketFavoritesManager,
     topMarket: TopMarket = TopMarket.Top250,
@@ -47,7 +46,7 @@ class MarketTopCoinsService(
     private fun sync(forceRefresh: Boolean) {
         disposables.clear()
 
-        topMarketsRepository
+        marketTopCoinsRepository
             .get(
                 topMarket.value,
                 sortingField,
