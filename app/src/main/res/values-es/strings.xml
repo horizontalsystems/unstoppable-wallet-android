@@ -904,6 +904,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="NftAsset_Links_Twitter">Twitter</string>
     <string name="PoweredBy_OpenSeaAPI">Desarrollado por OpenSea API</string>
     <string name="Nft_TopCollections">Top NFT Collections</string>
+    <string name="Nft_TopCollections_Description">The top NFTs on OpenSea, ranked by volume, floor price and other statistics.</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Máximos Ganadores</string>
     <string name="RateList_TopLosers">Peores perdedores</string>
