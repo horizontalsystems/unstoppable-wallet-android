@@ -31,7 +31,6 @@ class MarketOverviewService(
     private var losersDisposable: Disposable? = null
     private var metricsDisposable: Disposable? = null
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private val topNftsSortingField: SortingField = SortingField.HighestVolume
     private var topNftsJob: Job? = null
     private var topSectorsJob: Job? = null
 
@@ -41,6 +40,7 @@ class MarketOverviewService(
         private set
     var topNftsTimeDuration: TimeDuration = TimeDuration.SevenDay
         private set
+    val topNftsSortingField: SortingField = SortingField.HighestVolume
 
     val topMarketOptions: List<TopMarket> = TopMarket.values().toList()
     val topNftsTimeDurationOptions: List<TimeDuration> = TimeDuration.values().toList()
@@ -118,10 +118,10 @@ class MarketOverviewService(
         topNftsJob = coroutineScope.launch {
             try {
                 val topNftCollections = topNftCollectionsRepository.get(
-                    limit = topListSize,
                     sortingField = topNftsSortingField,
                     timeDuration = topNftsTimeDuration,
-                    forceRefresh = forceRefresh
+                    forceRefresh = forceRefresh,
+                    limit = topListSize
                 )
                 topNftCollectionsObservable.onNext(Result.success(topNftCollections))
             } catch (cancellation: CancellationException) {

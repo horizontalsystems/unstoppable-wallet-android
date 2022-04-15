@@ -29,7 +29,6 @@ class MarketTopCoinsViewModel(
     val menuLiveData = MutableLiveData<Menu>()
     val viewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
-    val errorLiveData = MutableLiveData<String?>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val selectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
 
@@ -87,10 +86,6 @@ class MarketTopCoinsViewModel(
                 MarketViewItem.create(it.marketItem, marketField, it.favorited)
             }
         )
-    }
-
-    private fun convertErrorMessage(it: Throwable): String {
-        return it.message ?: it.javaClass.simpleName
     }
 
     private fun refreshWithMinLoadingSpinnerPeriod() {

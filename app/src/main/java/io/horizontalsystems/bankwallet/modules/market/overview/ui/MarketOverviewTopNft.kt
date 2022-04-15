@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule
+import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
@@ -49,7 +50,7 @@ fun TopNftCollectionsBoardView(
 
 @Composable
 private fun TopNftCollectionView(
-    collection: MarketOverviewModule.TopNftCollectionViewItem,
+    collection: TopNftCollectionViewItem,
 ) {
     MultilineClear(
         onClick = { },

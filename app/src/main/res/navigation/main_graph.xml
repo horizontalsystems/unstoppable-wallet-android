@@ -199,6 +199,9 @@
         android:id="@+id/marketTopCoinsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment"/>
     <fragment
+        android:id="@+id/marketTopNftCollectionsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsFragment"/>
+    <fragment
         android:id="@+id/marketCategoryFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment"/>
     <fragment
