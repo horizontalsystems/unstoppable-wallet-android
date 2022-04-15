@@ -10,24 +10,21 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceModule
-import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceScreen
+import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceViewModel
-import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinModule
-import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinScreen
+import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinViewModel
-import io.horizontalsystems.bankwallet.modules.xrate.XRateModule
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.CoinType
 
-class SendFragment : BaseFragment() {
+class SendConfirmationFragment : BaseFragment() {
 
     private val wallet by lazy { requireArguments().getParcelable<Wallet>(SendEvmModule.walletKey)!! }
-    private val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) { AmountInputModeModule.Factory() }
+
+    val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,21 +36,31 @@ class SendFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
+
                 when (wallet.coinType) {
                     CoinType.Bitcoin,
                     CoinType.Litecoin,
                     CoinType.BitcoinCash,
                     CoinType.Dash,
                     -> {
-                        val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) { SendBitcoinModule.Factory(wallet) }
-                        val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment) { XRateModule.Factory(wallet.coin.uid) }
+                        val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
+                        val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment)
 
-                        SendBitcoinScreen(findNavController(), sendBitcoinViewModel, xRateViewModel, amountInputModeViewModel)
+                        SendBitcoinConfirmationScreen(
+                            findNavController(),
+                            sendBitcoinViewModel,
+                            xRateViewModel,
+                            amountInputModeViewModel
+                        )
                     }
                     is CoinType.Bep2 -> {
-                        val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) { SendBinanceModule.Factory(wallet) }
+                        val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment)
 
-                        SendBinanceScreen(findNavController(), sendBinanceViewModel, amountInputModeViewModel)
+                        SendBinanceConfirmationScreen(
+                            findNavController(),
+                            sendBinanceViewModel,
+                            amountInputModeViewModel
+                        )
                     }
                     CoinType.Zcash -> {
                         TODO()
@@ -62,6 +69,7 @@ class SendFragment : BaseFragment() {
 
                     }
                 }
+
 
             }
         }
