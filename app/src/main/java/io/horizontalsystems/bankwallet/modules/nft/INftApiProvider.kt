@@ -23,8 +23,8 @@ data class TopNftCollection(
     val totalVolume: BigDecimal,
     val oneDayVolume: BigDecimal,
     val oneDayVolumeDiff: BigDecimal,
-    val sevenDaysVolume: BigDecimal,
-    val sevenDaysVolumeDiff: BigDecimal,
-    val thirtyDaysVolume: BigDecimal,
-    val thirtyDaysVolumeDiff: BigDecimal
+    val sevenDayVolume: BigDecimal,
+    val sevenDayVolumeDiff: BigDecimal,
+    val thirtyDayVolume: BigDecimal,
+    val thirtyDayVolumeDiff: BigDecimal
 )

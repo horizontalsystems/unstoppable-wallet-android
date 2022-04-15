@@ -100,7 +100,7 @@ class MarketSearchService(
 
     private fun getDiscoveryMarketData() {
         topSectorsJob = coroutineScope.launch {
-            val coinCategoryMarketData = marketKit.coinCategoriesMarketData(baseCurrency.code)
+            val coinCategoryMarketData = marketKit.coinCategoriesMarketDataSingle(baseCurrency.code).blockingGet()
             marketData = coinCategoryMarketData
             syncState()
         }

@@ -150,12 +150,12 @@ class MarketOverviewViewModel(
                 volumeDiff = collection.oneDayVolumeDiff
             }
             TimeDuration.SevenDay -> {
-                volume = collection.sevenDaysVolume
-                volumeDiff = collection.sevenDaysVolumeDiff
+                volume = collection.sevenDayVolume
+                volumeDiff = collection.sevenDayVolumeDiff
             }
             TimeDuration.ThirtyDay -> {
-                volume = collection.thirtyDaysVolume
-                volumeDiff = collection.thirtyDaysVolumeDiff
+                volume = collection.thirtyDayVolume
+                volumeDiff = collection.thirtyDayVolumeDiff
             }
         }
         val volumeFormatted = numberFormatter.formatCoin(volume, "ETH", 0, 2)
