@@ -267,8 +267,8 @@ fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
 
 enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle {
     OneDay(R.string.CoinPage_TimeDuration_Day),
-    SevenDays(R.string.CoinPage_TimeDuration_Week),
-    ThirtyDays(R.string.CoinPage_TimeDuration_Month);
+    SevenDay(R.string.CoinPage_TimeDuration_Week),
+    ThirtyDay(R.string.CoinPage_TimeDuration_Month);
 
     override val title = TranslatableString.ResString(titleResId)
 }

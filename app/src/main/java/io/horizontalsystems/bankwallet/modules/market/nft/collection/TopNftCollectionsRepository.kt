@@ -46,15 +46,15 @@ class TopNftCollectionsRepository(
     private fun TopNftCollection.volume(timeDuration: TimeDuration) =
         when (timeDuration) {
             TimeDuration.OneDay -> oneDayVolume
-            TimeDuration.SevenDays -> sevenDaysVolume
-            TimeDuration.ThirtyDays -> thirtyDaysVolume
+            TimeDuration.SevenDay -> sevenDaysVolume
+            TimeDuration.ThirtyDay -> thirtyDaysVolume
         }
 
     private fun TopNftCollection.volumeDiff(timeDuration: TimeDuration) =
         when (timeDuration) {
             TimeDuration.OneDay -> oneDayVolumeDiff
-            TimeDuration.SevenDays -> sevenDaysVolumeDiff
-            TimeDuration.ThirtyDays -> thirtyDaysVolumeDiff
+            TimeDuration.SevenDay -> sevenDaysVolumeDiff
+            TimeDuration.ThirtyDay -> thirtyDaysVolumeDiff
         }
 
 }

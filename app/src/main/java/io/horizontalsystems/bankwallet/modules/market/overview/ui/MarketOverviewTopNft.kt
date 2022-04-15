@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.overview.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,44 +30,47 @@ fun TopNftCollectionsBoardView(
         onSelect = onSelectTimeDuration
     )
 
-    board.collections.forEachIndexed { index, collection ->
-        TopNftCollectionView(collection, firstItem = index == 0)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+    ) {
+        board.collections.forEach { collection ->
+            TopNftCollectionView(collection)
+        }
+
+        SeeAllButton(onClickSeeAll)
     }
 
-    SeeAllButton(onClickSeeAll)
+    Spacer(modifier = Modifier.height(24.dp))
 }
 
 @Composable
 private fun TopNftCollectionView(
     collection: MarketOverviewModule.TopNftCollectionViewItem,
-    firstItem: Boolean
 ) {
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(getRoundedCornerShape(firstItem))
-            .background(ComposeAppTheme.colors.lawrence)
+    MultilineClear(
+        onClick = { },
+        borderBottom = true
     ) {
-        MultilineClear(
-            onClick = { },
-            borderBottom = true
-        ) {
-            CoinImage(
-                iconUrl = collection.imageUrl ?: "",
-                placeholder = R.drawable.coin_placeholder,
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(24.dp)
+        CoinImage(
+            iconUrl = collection.imageUrl ?: "",
+            placeholder = R.drawable.coin_placeholder,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp)
+        )
+        Column(modifier = Modifier.fillMaxWidth()) {
+            MarketCoinFirstRow(collection.name, collection.volume)
+            Spacer(modifier = Modifier.height(3.dp))
+            MarketCoinSecondRow(
+                collection.floorPrice ?: "",
+                MarketDataValue.Diff(collection.volumeDiff),
+                "${collection.order}"
             )
-            Column(modifier = Modifier.fillMaxWidth()) {
-                MarketCoinFirstRow(collection.name, collection.volume)
-                Spacer(modifier = Modifier.height(3.dp))
-                MarketCoinSecondRow(
-                    collection.floorPrice ?: "",
-                    MarketDataValue.Diff(collection.volumeDiff),
-                    "${collection.order}"
-                )
-            }
         }
+
     }
 }
