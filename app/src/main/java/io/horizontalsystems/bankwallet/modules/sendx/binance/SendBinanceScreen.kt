@@ -102,6 +102,7 @@ fun SendBinanceScreen(
                 textColor = ComposeAppTheme.colors.light,
                 textStyle = ComposeAppTheme.typography.bodyItalic,
                 pasteEnabled = false,
+                singleLine = true,
                 maxLength = viewModel.memoMaxLength
             ) {
                 viewModel.onEnterMemo(it)

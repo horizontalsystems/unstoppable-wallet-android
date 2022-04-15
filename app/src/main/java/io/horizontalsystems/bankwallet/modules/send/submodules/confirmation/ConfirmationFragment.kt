@@ -308,6 +308,7 @@ fun MemoCell(value: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
+            modifier = Modifier.padding(end = 16.dp),
             text = stringResource(R.string.Send_Confirmation_HintMemo),
             style = ComposeAppTheme.typography.subhead2,
             color = ComposeAppTheme.colors.grey
@@ -316,7 +317,9 @@ fun MemoCell(value: String) {
         Text(
             text = value,
             style = ComposeAppTheme.typography.subheadItalic,
-            color = ComposeAppTheme.colors.leah
+            color = ComposeAppTheme.colors.leah,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }

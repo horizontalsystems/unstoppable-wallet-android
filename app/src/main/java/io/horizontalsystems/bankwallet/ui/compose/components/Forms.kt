@@ -49,6 +49,7 @@ fun FormsInput(
     textStyle: TextStyle = ComposeAppTheme.typography.body,
     hintColor: Color = ComposeAppTheme.colors.grey50,
     hintStyle: TextStyle = ComposeAppTheme.typography.body,
+    singleLine: Boolean = false,
     state: DataState<Any>? = null,
     qrScannerEnabled: Boolean = false,
     pasteEnabled: Boolean = true,
@@ -113,6 +114,7 @@ fun FormsInput(
                     color = textColor,
                     textStyle = textStyle
                 ),
+                singleLine = singleLine,
                 cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
                 decorationBox = { innerTextField ->
                     if (textState.text.isEmpty()) {
