@@ -107,6 +107,8 @@
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top des coins par cap de marché</string>
+    <!--Market Overview-->
+    <string name="Market_Overview_TopSectors">Top Sectors</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Graphique</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Cap totale</string>
@@ -140,9 +142,6 @@
     <string name="Market_Filter_OutperformedBnb">A surpassé BNB</string>
     <string name="Market_Filter_PriceCloseToAth">Prix proche d\'ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Prix proche d\'ATL</string>
-    <string name="Market_Search_TimePeriodShort_1D">24H</string>
-    <string name="Market_Search_TimePeriodShort_1W">1W</string>
-    <string name="Market_Search_TimePeriodShort_1M">1M</string>
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_250">Top 250</string>
     <string name="Market_Filter_Top_500">Top 500</string>
