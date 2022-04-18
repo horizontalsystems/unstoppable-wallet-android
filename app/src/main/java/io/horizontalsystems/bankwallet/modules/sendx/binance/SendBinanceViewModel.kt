@@ -94,8 +94,6 @@ class SendBinanceViewModel(
                 }
         }
 
-        amountService.start()
-        addressService.start()
         feeService.start()
     }
 

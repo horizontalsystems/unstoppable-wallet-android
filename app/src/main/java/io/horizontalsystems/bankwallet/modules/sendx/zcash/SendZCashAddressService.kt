@@ -24,12 +24,6 @@ class SendZCashAddressService(private val adapter: ISendZcashAdapter) {
     )
     val stateFlow = _stateFlow.asStateFlow()
 
-    suspend fun start() {
-        validateAddress()
-
-        emitState()
-    }
-
     suspend fun setAddress(address: Address?) {
         this.address = address
 

@@ -24,10 +24,6 @@ class SendAmountService(
     )
     val stateFlow = _stateFlow.asStateFlow()
 
-    fun start() {
-        emitState()
-    }
-
     private fun emitState() {
         val tmpAmount = amount
         val tmpAmountCaution = amountCaution
