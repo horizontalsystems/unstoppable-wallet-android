@@ -31,7 +31,7 @@
     <string name="Button_Understand">Ich stimme zu</string>
     <string name="Button_Switch">Wechseln</string>
     <string name="Button_Remove">Entfernen</string>
-    <string name="Button_Save">Save</string>
+    <string name="Button_Save">Speichern</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">k. A.</string>
     <string name="Any">Beliebig</string>
@@ -81,19 +81,19 @@
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <!--Market-->
     <string name="Market_Field_MarketCap">MCap</string>
-    <string name="Market_Field_Volume">Vol</string>
-    <string name="Market_Field_PriceDiff">Price</string>
-    <string name="Market_Title">Markets</string>
-    <string name="Market_Search">Search</string>
+    <string name="Market_Field_Volume">Lautstärke</string>
+    <string name="Market_Field_PriceDiff">Preis</string>
+    <string name="Market_Title">Märkte</string>
+    <string name="Market_Search">Suchen</string>
     <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
     <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
     <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
-    <string name="Market_Field_HighestCap">Highest Cap</string>
-    <string name="Market_Field_LowestCap">Lowest Cap</string>
-    <string name="Market_Field_HighestVolume">Highest Volume</string>
-    <string name="Market_Field_LowestVolume">Lowest Volume</string>
-    <string name="Market_Field_HighestPrice">Highest Price</string>
-    <string name="Market_Field_LowestPrice">Lowest Price</string>
+    <string name="Market_Field_HighestCap">Höchste Obergrenze</string>
+    <string name="Market_Field_LowestCap">Niedrigste Obergrenze</string>
+    <string name="Market_Field_HighestVolume">Höchste Lautstärke</string>
+    <string name="Market_Field_LowestVolume">Geringste Lautstärke</string>
+    <string name="Market_Field_HighestPrice">Höchster Preis</string>
+    <string name="Market_Field_LowestPrice">Niedrigster Preis</string>
     <string name="Market_Sort_PopupTitle">Sortieren nach</string>
     <string name="Market_TotalMarketCap">Total Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
@@ -123,13 +123,13 @@
     <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in cumulative market value of tokens in Decentralized Finance sector.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in cumulative value of all cryptocurrency managed by decentralized protocols.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
-    <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
+    <string name="MarketGlobalMetrics_ChainSelectorAll">Alle</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
-    <string name="Market_Filters">Filters</string>
-    <string name="Market_AdvancedSearch_Results">Results</string>
-    <string name="Market_Search_Hint">Search</string>
+    <string name="Market_Filters">Filter</string>
+    <string name="Market_AdvancedSearch_Results">Ergebnisse</string>
+    <string name="Market_Search_Hint">Suchen</string>
     <string name="Market_Search_BrowseCategories">Browse categories</string>
     <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
