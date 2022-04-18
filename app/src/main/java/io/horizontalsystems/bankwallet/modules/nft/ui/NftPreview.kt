@@ -18,7 +18,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItemPricedWithCurrency
+import io.horizontalsystems.bankwallet.modules.nft.collections.NftAssetItemPricedWithCurrency
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeRatingD
 

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft.collection
+package io.horizontalsystems.bankwallet.modules.nft.collections
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
