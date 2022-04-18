@@ -1,22 +1,18 @@
-package io.horizontalsystems.bankwallet.modules.sendx.binance
+package io.horizontalsystems.bankwallet.modules.sendx
 
 import io.horizontalsystems.bankwallet.core.HSCaution
-import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
-import io.horizontalsystems.bankwallet.modules.sendx.AmountValidator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
-class SendBinanceAmountService(
-    private val adapter: ISendBinanceAdapter,
+class SendAmountService(
     private val amountValidator: AmountValidator,
-    private val coinCode: String
+    private val coinCode: String,
+    private var availableBalance: BigDecimal
 ) {
     private var amount: BigDecimal? = null
     private var amountCaution: HSCaution? = null
-
-    private var availableBalance: BigDecimal = adapter.availableBalance
 
     private val _stateFlow = MutableStateFlow(
         State(

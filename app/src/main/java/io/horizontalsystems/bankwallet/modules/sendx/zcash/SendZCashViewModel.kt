@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.sendx.SendAmountService
 import io.horizontalsystems.bankwallet.modules.sendx.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.sendx.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
@@ -24,7 +25,7 @@ class SendZCashViewModel(
     private val adapter: ISendZcashAdapter,
     val wallet: Wallet,
     private val xRateService: XRateService,
-    private val amountService: SendZCashAmountService,
+    private val amountService: SendAmountService,
     private val addressService: SendZCashAddressService,
     private val memoService: SendZCashMemoService
 ) : ViewModel() {
@@ -104,7 +105,7 @@ class SendZCashViewModel(
         memoService.setMemo(memo)
     }
 
-    private fun handleUpdatedAmountState(amountState: SendZCashAmountService.State) {
+    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
 
         emitState()

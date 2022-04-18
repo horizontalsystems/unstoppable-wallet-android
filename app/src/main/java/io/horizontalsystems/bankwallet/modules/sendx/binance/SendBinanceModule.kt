@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.sendx.AmountValidator
+import io.horizontalsystems.bankwallet.modules.sendx.SendAmountService
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 
 object SendBinanceModule {
@@ -17,7 +18,7 @@ object SendBinanceModule {
 
             val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendBinanceAdapter
             val amountValidator = AmountValidator()
-            val amountService = SendBinanceAmountService(adapter, amountValidator, wallet.coin.code)
+            val amountService = SendAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
             val addressService = SendBinanceAddressService(adapter)
             val feeService = SendBinanceFeeService(adapter, wallet.platformCoin, App.feeCoinProvider)
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)

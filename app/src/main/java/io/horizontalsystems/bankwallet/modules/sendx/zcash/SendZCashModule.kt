@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.sendx.AmountValidator
+import io.horizontalsystems.bankwallet.modules.sendx.SendAmountService
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 
 object SendZCashModule {
@@ -15,7 +16,11 @@ object SendZCashModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendZcashAdapter
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
-            val amountService = SendZCashAmountService(adapter, AmountValidator(), wallet.coin.code)
+            val amountService = SendAmountService(
+                AmountValidator(),
+                wallet.coin.code,
+                adapter.availableBalance
+            )
             val addressService = SendZCashAddressService(adapter)
             val memoService = SendZCashMemoService()
 
