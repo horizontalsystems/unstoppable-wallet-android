@@ -38,7 +38,7 @@
     <string name="SyncError">Sync-Fehler. Versuchen Sie es erneut</string>
     <string name="PercentTitle">Prozent</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
+    <string name="Intro_Wallet_Screen1Description">Sei unaufhaltsam</string>
     <string name="Intro_Wallet_Screen2Title">Assets lösen</string>
     <string name="Intro_Wallet_Screen2Description">Sperren Sie sich nicht ein und lassen Sie nicht zu, dass andere das mit Ihnen tun.</string>
     <string name="Intro_Wallet_Screen3Title">Jetzt loslegen</string>
@@ -112,7 +112,7 @@
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
-    <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
+    <string name="MarketGlobalMetrics_BtcDominance">Bitcoin-Dominanz</string>
     <string name="MarketGlobalMetrics_Volume">24h Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
@@ -137,9 +137,9 @@
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
-    <string name="Market_Filter_OutperformedBtc">Outperformed BTC</string>
-    <string name="Market_Filter_OutperformedEth">Outperformed ETH</string>
-    <string name="Market_Filter_OutperformedBnb">Outperformed BNB</string>
+    <string name="Market_Filter_OutperformedBtc">Übertraf BTC</string>
+    <string name="Market_Filter_OutperformedEth">Übertraf ETH</string>
+    <string name="Market_Filter_OutperformedBnb">Übertraf BNB</string>
     <string name="Market_Filter_PriceCloseToAth">Price Close To ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Price Close To ATL</string>
     <string name="Market_Filter_Top_100">Top 100</string>
@@ -147,8 +147,8 @@
     <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
-    <string name="Market_Filter_ShowResults">Show Results</string>
-    <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
+    <string name="Market_Filter_ShowResults">Ergebnisse anzeigen</string>
+    <string name="Market_Filter_ShowResults_Counter">Ergebnisse anzeigen: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
     <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
     <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
