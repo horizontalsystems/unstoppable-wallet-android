@@ -18,7 +18,7 @@ class SendZcashInteractor(
         get() = adapter.fee
 
     override fun validate(address: String): ZcashAdapter.ZCashAddressType {
-        return adapter.validate(address)
+        TODO()
     }
 
     override fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit> {
