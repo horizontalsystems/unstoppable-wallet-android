@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.sendx.SendAmountService
 import io.horizontalsystems.bankwallet.modules.sendx.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.sendx.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
@@ -23,7 +24,7 @@ import kotlin.math.min
 class SendBinanceViewModel(
     val wallet: Wallet,
     private val adapter: ISendBinanceAdapter,
-    private val amountService: SendBinanceAmountService,
+    private val amountService: SendAmountService,
     private val addressService: SendBinanceAddressService,
     private val feeService: SendBinanceFeeService,
     private val xRateService: XRateService,
@@ -116,7 +117,7 @@ class SendBinanceViewModel(
         emitState()
     }
 
-    private fun handleUpdatedAmountState(amountState: SendBinanceAmountService.State) {
+    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
 
         emitState()
