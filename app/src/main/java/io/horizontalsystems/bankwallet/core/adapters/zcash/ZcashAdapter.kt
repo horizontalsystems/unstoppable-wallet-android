@@ -32,7 +32,6 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.runBlocking
 import java.lang.Integer.max
 import java.math.BigDecimal
 import java.util.*
@@ -211,18 +210,12 @@ class ZcashAdapter(
     override val fee: BigDecimal
         get() = defaultFee().convertZatoshiToZec(decimalCount)
 
-    override fun validate(address: String): ZCashAddressType {
-        return runBlocking {
-            when (synchronizer.validateAddress(address)) {
-                is AddressType.Invalid -> throw ZcashError.InvalidAddress
-                is AddressType.Transparent -> ZCashAddressType.Transparent
-                is AddressType.Shielded -> {
-                    if (address == receiveAddress) {
-                        throw ZcashError.SendToSelfNotAllowed
-                    }
-                    ZCashAddressType.Shielded
-                }
-            }
+    override suspend fun validate(address: String): ZCashAddressType {
+        if (address == receiveAddress) throw ZcashError.SendToSelfNotAllowed
+        return when (synchronizer.validateAddress(address)) {
+            is AddressType.Invalid -> throw ZcashError.InvalidAddress
+            is AddressType.Transparent -> ZCashAddressType.Transparent
+            is AddressType.Shielded -> ZCashAddressType.Shielded
         }
     }
 
@@ -370,7 +363,6 @@ class ZcashAdapter(
 
     sealed class ZcashError : Exception() {
         object InvalidAddress : ZcashError()
-        object TransparentAddressNotAllowed : ZcashError()
         object SendToSelfNotAllowed : ZcashError()
     }
 

@@ -1,5 +1,6 @@
-package io.horizontalsystems.bankwallet.modules.sendx.binance
+package io.horizontalsystems.bankwallet.modules.sendx.zcash
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,7 +19,6 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
-import io.horizontalsystems.bankwallet.modules.fee.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInput
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.sendevm.AvailableBalance
@@ -28,9 +28,9 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 
 @Composable
-fun SendBinanceScreen(
+fun SendZCashScreen(
     navController: NavController,
-    viewModel: SendBinanceViewModel,
+    viewModel: SendZCashViewModel,
     amountInputModeViewModel: AmountInputModeViewModel
 ) {
     val wallet = viewModel.wallet
@@ -41,6 +41,7 @@ fun SendBinanceScreen(
     val amountCaution = uiState.amountCaution
     val fee = uiState.fee
     val proceedEnabled = uiState.canBeSend
+    val memoIsAllowed = uiState.memoIsAllowed
     val amountInputType = amountInputModeViewModel.inputType
 
     ComposeAppTheme {
@@ -93,29 +94,24 @@ fun SendBinanceScreen(
                 viewModel.onEnterAddress(it)
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-            HSMemoInput(
-                maxLength = viewModel.memoMaxLength
-            ) {
-                viewModel.onEnterMemo(it)
+            AnimatedVisibility (memoIsAllowed) {
+                Spacer(modifier = Modifier.height(12.dp))
+                HSMemoInput(
+                    maxLength = viewModel.memoMaxLength
+                ) {
+                    viewModel.onEnterMemo(it)
+                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
             HSFeeInput(
-                coinCode = viewModel.feeCoin.code,
-                coinDecimal = viewModel.feeCoinMaxAllowedDecimals,
+                coinCode = wallet.coin.code,
+                coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 fee = fee,
                 amountInputType = amountInputType,
-                rate = viewModel.feeCoinRate,
+                rate = viewModel.coinRate,
             )
-
-            uiState.feeCaution?.let { caution ->
-                FeeRateCaution(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
-                    feeRateCaution = caution
-                )
-            }
 
             ButtonPrimaryYellow(
                 modifier = Modifier

@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.sendx.bitcoin
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
-import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bitcoincore.core.IPluginData
@@ -73,8 +72,6 @@ class SendBitcoinAddressService(private val adapter: ISendBitcoinAdapter) {
         val message = when (error) {
             is HodlerPlugin.UnsupportedAddressType -> Translator.getString(R.string.Send_Error_UnsupportedAddress)
             is AddressFormatException -> Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
-            is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> Translator.getString(R.string.Send_Error_TransparentAddress)
-            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> Translator.getString(R.string.Send_Error_SendToSelf)
             else -> error.message ?: error.javaClass.simpleName
         }
 

@@ -19,6 +19,9 @@ import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceViewMode
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinModule
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinScreen
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinViewModel
+import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashModule
+import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashScreen
+import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashViewModel
 import io.horizontalsystems.bankwallet.modules.xrate.XRateModule
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.core.findNavController
@@ -56,7 +59,9 @@ class SendFragment : BaseFragment() {
                         SendBinanceScreen(findNavController(), sendBinanceViewModel, amountInputModeViewModel)
                     }
                     CoinType.Zcash -> {
-                        TODO()
+                        val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment) { SendZCashModule.Factory(wallet) }
+
+                        SendZCashScreen(findNavController(), sendZCashViewModel, amountInputModeViewModel)
                     }
                     else -> {
 

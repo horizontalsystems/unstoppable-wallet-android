@@ -53,9 +53,11 @@ class SendBinanceViewModel(
         private set
 
     var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
+        private set
     var feeCoinRate by mutableStateOf(xRateService.getRate(feeCoin.coin.uid))
-
+        private set
     var sendResult by mutableStateOf<SendResult?>( null)
+        private set
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
