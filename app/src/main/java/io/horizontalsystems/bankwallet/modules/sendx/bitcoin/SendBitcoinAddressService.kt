@@ -28,13 +28,6 @@ class SendBitcoinAddressService(private val adapter: ISendBitcoinAdapter) {
     )
     val stateFlow = _stateFlow.asStateFlow()
 
-    fun start() {
-        validateAddress()
-        refreshValidAddress()
-
-        emitState()
-    }
-
     fun setAddress(address: Address?) {
         this.address = address
 

@@ -20,12 +20,6 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
 
     private var feeRate: Long? = null
 
-    fun start() {
-        refreshFee()
-
-        emitState()
-    }
-
     private fun refreshFee() {
         val tmpAmount = amount
         val tmpFeeRate = feeRate

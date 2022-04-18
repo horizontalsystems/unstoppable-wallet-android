@@ -35,14 +35,6 @@ class SendBitcoinAmountService(
     )
     val stateFlow = _stateFlow.asStateFlow()
 
-    fun start() {
-        refreshMinimumSendAmount()
-        refreshMaximumSendAmount()
-        refreshAvailableBalance()
-
-        emitState()
-    }
-
     private fun emitState() {
         val tmpAmount = amount
         val tmpAmountCaution = amountCaution

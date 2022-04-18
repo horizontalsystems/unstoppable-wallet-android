@@ -83,12 +83,6 @@ class SendZCashViewModel(
                     handleUpdatedMemoState(it)
                 }
         }
-
-        amountService.start()
-
-        viewModelScope.launch {
-            addressService.start()
-        }
     }
 
     fun onEnterAmount(amount: BigDecimal?) {

@@ -20,12 +20,6 @@ class SendBinanceAddressService(private val adapter: ISendBinanceAdapter) {
     )
     val stateFlow = _stateFlow.asStateFlow()
 
-    fun start() {
-        validateAddress()
-
-        emitState()
-    }
-
     fun setAddress(address: Address?) {
         this.address = address
 

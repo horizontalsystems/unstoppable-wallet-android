@@ -105,10 +105,6 @@ class SendBitcoinViewModel(
             feeRateService.start()
         }
 
-        feeService.start()
-        amountService.start()
-        addressService.start()
-
         emitState()
     }
 
