@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.update
 class SendZCashMemoService {
     val memoMaxLength = 120
 
-    private var memo: String? = null
+    private var memo: String = ""
     private var addressType: ZcashAdapter.ZCashAddressType? = null
     private var memoIsAllowed = addressType == ZcashAdapter.ZCashAddressType.Shielded
 
     private val _stateFlow = MutableStateFlow(
         State(
-            memo = memo,
+            memo = if (memoIsAllowed) memo else "",
             memoIsAllowed = memoIsAllowed
         )
     )
@@ -29,7 +29,7 @@ class SendZCashMemoService {
     private fun emitState() {
         _stateFlow.update {
             State(
-                memo = memo,
+                memo = if (memoIsAllowed) memo else "",
                 memoIsAllowed = memoIsAllowed
             )
         }
@@ -48,7 +48,7 @@ class SendZCashMemoService {
     }
 
     data class State(
-        val memo: String?,
+        val memo: String,
         val memoIsAllowed: Boolean
     )
 }

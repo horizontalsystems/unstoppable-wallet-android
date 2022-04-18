@@ -16,6 +16,8 @@ import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceConfirma
 import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinViewModel
+import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashConfirmationScreen
+import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashViewModel
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.CoinType
@@ -63,7 +65,13 @@ class SendConfirmationFragment : BaseFragment() {
                         )
                     }
                     CoinType.Zcash -> {
-                        TODO()
+                        val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment)
+
+                        SendZCashConfirmationScreen(
+                            findNavController(),
+                            sendZCashViewModel,
+                            amountInputModeViewModel
+                        )
                     }
                     else -> {
 

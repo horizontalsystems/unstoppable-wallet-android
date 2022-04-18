@@ -5,14 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
-import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.sendx.SendConfirmationData
+import io.horizontalsystems.bankwallet.modules.sendx.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
+import java.net.UnknownHostException
 import kotlin.math.min
 
 class SendZCashViewModel(
@@ -47,6 +52,10 @@ class SendZCashViewModel(
 
     var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
         private set
+    var sendResult by mutableStateOf<SendResult?>( null)
+        private set
+
+    private val logger = AppLogger("Send-${wallet.coin.code}")
 
     init {
         viewModelScope.launch {
@@ -115,7 +124,6 @@ class SendZCashViewModel(
         emitState()
     }
 
-
     private fun emitState() {
         uiState = SendZCashUiState(
             availableBalance = amountState.availableBalance,
@@ -125,6 +133,51 @@ class SendZCashViewModel(
             memoIsAllowed = memoState.memoIsAllowed,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
         )
+    }
+
+    fun getConfirmationData(): SendConfirmationData {
+        return SendConfirmationData(
+            amount = amountState.amount!!,
+            fee = fee,
+            address = addressState.address!!,
+            coin = wallet.coin,
+            feeCoin = wallet.coin,
+            memo = memoState.memo
+        )
+    }
+
+    fun onClickSend() {
+        viewModelScope.launch {
+            send()
+        }
+    }
+
+    private suspend fun send() = withContext(Dispatchers.IO) {
+        val logger = logger.getScopedUnique()
+        logger.info("click")
+
+        try {
+            sendResult = SendResult.Sending
+
+            val send = adapter.send(
+                amountState.amount!!,
+                addressState.address!!.hex,
+                memoState.memo,
+                logger
+            ).blockingGet()
+
+            logger.info("success")
+            sendResult = SendResult.Sent
+        } catch (e: Throwable) {
+            logger.warning("failed", e)
+            sendResult = SendResult.Failed(createCaution(e))
+        }
+    }
+
+    private fun createCaution(error: Throwable) = when (error) {
+        is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
+        is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
+        else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 }
 
