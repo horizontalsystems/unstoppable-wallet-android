@@ -16,9 +16,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItemPricedWithCurrency
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionViewItem
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionsViewModel
+import io.horizontalsystems.bankwallet.modules.nft.collections.NftAssetItemPricedWithCurrency
+import io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionViewItem
+import io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 

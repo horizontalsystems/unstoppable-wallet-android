@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft.collection
+package io.horizontalsystems.bankwallet.modules.nft.collections
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

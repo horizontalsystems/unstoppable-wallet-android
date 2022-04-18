@@ -233,7 +233,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment" />
     <fragment
         android:id="@+id/nftsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionsFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionsFragment" />
     <fragment
         android:id="@+id/nftAssetFragment"
         android:name="io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetFragment" />

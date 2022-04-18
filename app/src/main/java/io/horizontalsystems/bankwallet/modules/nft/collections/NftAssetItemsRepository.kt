@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft.collection
+package io.horizontalsystems.bankwallet.modules.nft.collections
 
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
