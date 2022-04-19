@@ -8,12 +8,15 @@ import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.sendx.AmountValidator
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
+import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
+import kotlin.math.min
 
 
 data class SendEvmData(
@@ -96,9 +99,22 @@ object SendEvmModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendEthereumAdapter
-            val service = SendEvmService(wallet.platformCoin, adapter)
+            val amountValidator = AmountValidator()
+            val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
 
-            return SendEvmViewModel(service) as T
+            val amountService = SendEvmAmountService(adapter, wallet.platformCoin, amountValidator, coinMaxAllowedDecimals)
+            val addressService = SendEvmAddressService()
+            val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
+
+
+            return SendEvmViewModel2(
+                wallet.platformCoin,
+                adapter,
+                xRateService,
+                amountService,
+                addressService,
+                coinMaxAllowedDecimals
+            ) as T
         }
     }
 

@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSendEvmBi
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmViewModel
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmViewModel2
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -34,11 +34,11 @@ import io.horizontalsystems.snackbar.SnackbarDuration
 class SendEvmConfirmationFragment : BaseFragment() {
 
     private val logger = AppLogger("send-evm")
-    private val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment)
+    private val sendEvmViewModel by navGraphViewModels<SendEvmViewModel2>(R.id.sendXFragment)
 
     private val vmFactory by lazy {
         SendEvmConfirmationModule.Factory(
-            sendEvmViewModel.service.adapter.evmKitWrapper,
+            sendEvmViewModel.adapter.evmKitWrapper,
             SendEvmData(transactionData, additionalInfo)
         )
     }
