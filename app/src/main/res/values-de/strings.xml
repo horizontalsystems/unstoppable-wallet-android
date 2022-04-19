@@ -713,6 +713,7 @@
     <string name="ManageKeys_Delete_Title">Wallet löschen</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Damit wird das %s Wallet von Ihrem Gerät gelöscht.</string>
     <string name="ManageKeys_Delete_FromPhone">Von Telefon löschen</string>
+    <string name="ManageKeys_StopWatching">Stop Watching</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Description">Sie müssen das %1$s Wallet einrichten, um %2$s senden oder empfangen zu können.\n\nTippen Sie auf den Button „Erstellen“, um ein neues %3$s Wallet zu erstellen. Sie können auch auf den Button „Wiederherstellen“ tippen, um ein bereits bestehendes Wallet zu importieren.\n\nSie können dieses Wallet benutzen für: %4$s.</string>
     <string name="AddCoin_CreateKey">Erstellen</string>
