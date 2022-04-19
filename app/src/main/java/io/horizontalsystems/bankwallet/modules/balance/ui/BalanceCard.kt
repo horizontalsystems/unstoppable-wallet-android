@@ -36,7 +36,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
-import io.horizontalsystems.bankwallet.modules.sendx.SendFragment
+import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
