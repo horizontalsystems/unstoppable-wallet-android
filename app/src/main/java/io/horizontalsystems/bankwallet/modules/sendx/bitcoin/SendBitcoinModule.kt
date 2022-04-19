@@ -29,7 +29,7 @@ object SendBitcoinModule {
                 amountService,
                 addressService,
                 pluginService,
-                App.localStorage.transactionSortingType
+                App.btcBlockchainManager
             )  as T
         }
     }
