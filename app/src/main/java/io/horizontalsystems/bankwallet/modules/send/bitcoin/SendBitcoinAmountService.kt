@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.bitcoin
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.send.AmountValidator
+import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

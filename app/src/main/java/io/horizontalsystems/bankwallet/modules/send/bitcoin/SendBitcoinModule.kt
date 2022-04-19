@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.send.AmountValidator
+import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 
 object SendBitcoinModule {
 

@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.send.SendAmountService
+import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService

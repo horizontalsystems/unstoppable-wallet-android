@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.send.AmountValidator
-import io.horizontalsystems.bankwallet.modules.send.SendAmountService
+import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
+import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 
 object SendBinanceModule {
