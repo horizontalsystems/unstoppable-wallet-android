@@ -22,7 +22,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCDisplayTypedMessageFragment"/>
     <fragment
         android:id="@+id/sendEvmConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.sendx.evm.confirmation.SendEvmConfirmationFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment"
         tools:layout="@layout/fragment_confirmation_send_evm" />
     <fragment
         android:id="@+id/sendEvmFeeSettingsFragment"
@@ -239,10 +239,10 @@
         android:name="io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetFragment" />
     <fragment
         android:id="@+id/sendXFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.sendx.SendFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.send.SendFragment" />
     <fragment
         android:id="@+id/sendConfirmation"
-        android:name="io.horizontalsystems.bankwallet.modules.sendx.SendConfirmationFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment" />
     <fragment
         android:id="@+id/feeSettings"
         android:name="io.horizontalsystems.bankwallet.modules.fee.FeeSettingsFragment" />

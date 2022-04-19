@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve.confirmation
+package io.horizontalsystems.bankwallet.modules.send.evm.confirmation
 
 import android.os.Bundle
 import android.os.Handler
@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -20,46 +20,45 @@ import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSendEvmBi
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.additionalInfoKey
-import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.transactionDataKey
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
 
-class SwapApproveConfirmationFragment : BaseFragment() {
-    private val logger = AppLogger("swap-approve")
-    private val mainViewModel by navGraphViewModels<SwapApproveViewModel>(R.id.swapApproveFragment)
+class SendEvmConfirmationFragment : BaseFragment() {
+
+    private val logger = AppLogger("send-evm")
+    private val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment)
+
     private val vmFactory by lazy {
-        SwapApproveConfirmationModule.Factory(
-            SendEvmData(transactionData, additionalItems),
-            mainViewModel.dex.blockchain
+        SendEvmConfirmationModule.Factory(
+            sendEvmViewModel.adapter.evmKitWrapper,
+            SendEvmData(transactionData, additionalInfo)
         )
     }
     private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
-    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.swapApproveConfirmationFragment) { vmFactory }
+    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.sendEvmConfirmationFragment) { vmFactory }
+
+    private var snackbarInProcess: CustomSnackbar? = null
+
     private val transactionData: TransactionData
         get() {
             val transactionDataParcelable =
-                arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(transactionDataKey)!!
+                arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(SendEvmModule.transactionDataKey)!!
             return TransactionData(
                 Address(transactionDataParcelable.toAddress),
                 transactionDataParcelable.value,
                 transactionDataParcelable.input
             )
         }
-    private val additionalItems: SendEvmData.AdditionalInfo?
-        get() = arguments?.getParcelable(additionalInfoKey)
-
-    private var snackbarInProcess: CustomSnackbar? = null
+    private val additionalInfo: SendEvmData.AdditionalInfo?
+        get() = arguments?.getParcelable(SendEvmModule.additionalInfoKey)
 
     private var _binding: FragmentConfirmationSendEvmBinding? = null
     private val binding get() = _binding!!
@@ -84,7 +83,7 @@ class SwapApproveConfirmationFragment : BaseFragment() {
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
-                    findNavController().popBackStack(R.id.swapApproveFragment, true)
+                    findNavController().popBackStack(R.id.sendXFragment, true)
                     true
                 }
                 else -> false
@@ -95,13 +94,13 @@ class SwapApproveConfirmationFragment : BaseFragment() {
         }
 
         sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
-            setButton(enabled)
+            setSendButton(enabled)
         }
 
         sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner) {
             snackbarInProcess = HudHelper.showInProcessMessage(
                 requireView(),
-                R.string.Swap_Approving,
+                R.string.Send_Sending,
                 SnackbarDuration.INDEFINITE
             )
         }
@@ -112,11 +111,7 @@ class SwapApproveConfirmationFragment : BaseFragment() {
                 R.string.Hud_Text_Done
             )
             Handler(Looper.getMainLooper()).postDelayed({
-                setNavigationResult(
-                    SwapApproveModule.requestKey,
-                    bundleOf(SwapApproveModule.resultKey to true)
-                )
-                findNavController().popBackStack(R.id.swapApproveFragment, false)
+                findNavController().popBackStack(R.id.sendXFragment, true)
             }, 1200)
         }
 
@@ -131,24 +126,25 @@ class SwapApproveConfirmationFragment : BaseFragment() {
             feeViewModel,
             viewLifecycleOwner,
             findNavController(),
-            R.id.swapApproveConfirmationFragment
+            R.id.sendEvmConfirmationFragment
         )
 
         binding.buttonSendCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        setButton()
+        setSendButton()
     }
 
-    private fun setButton(enabled: Boolean = false) {
+    private fun setSendButton(enabled: Boolean = false) {
         binding.buttonSendCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                    title = getString(R.string.Swap_Approve),
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                    title = stringResource(R.string.Send_Confirmation_Send_Button),
                     onClick = {
-                        logger.info("click approve button")
+                        logger.info("click send button")
                         sendEvmTransactionViewModel.send(logger)
                     },
                     enabled = enabled
