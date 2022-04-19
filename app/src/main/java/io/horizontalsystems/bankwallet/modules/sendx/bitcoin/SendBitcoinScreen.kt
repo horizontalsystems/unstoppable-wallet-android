@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -23,8 +22,8 @@ import io.horizontalsystems.bankwallet.modules.fee.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.sendx.AvailableBalance
+import io.horizontalsystems.bankwallet.modules.sendx.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.sendx.SendScreen
-import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -148,7 +147,7 @@ fun SendBitcoinScreen(
                 onClick = {
                     navController.slideFromRight(
                         R.id.sendConfirmation,
-                        bundleOf(SendEvmModule.walletKey to wallet)
+                        SendConfirmationFragment.prepareParams(SendConfirmationFragment.Type.Bitcoin)
                     )
                 },
                 enabled = proceedEnabled

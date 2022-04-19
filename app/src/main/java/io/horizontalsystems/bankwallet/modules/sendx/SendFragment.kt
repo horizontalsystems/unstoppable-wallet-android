@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.os.bundleOf
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -31,7 +32,7 @@ import io.horizontalsystems.marketkit.models.CoinType
 
 class SendFragment : BaseFragment() {
 
-    private val wallet by lazy { requireArguments().getParcelable<Wallet>(SendEvmModule.walletKey)!! }
+    private val wallet by lazy { requireArguments().getParcelable<Wallet>(walletKey)!! }
     private val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) { AmountInputModeModule.Factory() }
 
     override fun onCreateView(
@@ -79,5 +80,13 @@ class SendFragment : BaseFragment() {
 
             }
         }
+    }
+
+    companion object {
+        private const val walletKey = "walletKey"
+
+        fun prepareParams(wallet: Wallet) = bundleOf(
+            walletKey to wallet
+        )
     }
 }
