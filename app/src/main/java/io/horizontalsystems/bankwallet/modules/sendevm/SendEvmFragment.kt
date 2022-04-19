@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -32,17 +32,19 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 fun SendEvmScreen(
     navController: NavController,
     wallet: Wallet,
-    viewModel: SendEvmViewModel
+    viewModel: SendEvmViewModel2
 ) {
     ComposeAppTheme {
         val amountInputModeViewModel = viewModel<AmountInputModeViewModel>(factory = AmountInputModeModule.Factory())
 
+        val uiState = viewModel.uiState
+
         val fullCoin = wallet.platformCoin.fullCoin
-        val proceedEnabled = viewModel.proceedEnabled
+        val proceedEnabled = uiState.canBeSend
         val focusRequester = remember { FocusRequester() }
         val amountInputType = amountInputModeViewModel.inputType
 
-        SideEffect {
+        LaunchedEffect(Unit) {
             focusRequester.requestFocus()
         }
 
@@ -73,16 +75,17 @@ fun SendEvmScreen(
                 coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                availableBalance = viewModel.availableBalance,
+                availableBalance = uiState.availableBalance,
                 amountInputType = amountInputType,
-                rate = null
+                rate = viewModel.coinRate
             )
 
             Spacer(modifier = Modifier.height(12.dp))
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 focusRequester = focusRequester,
-                availableBalance = viewModel.availableBalance,
+                availableBalance = uiState.availableBalance,
+                caution = uiState.amountCaution,
                 coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
@@ -93,14 +96,15 @@ fun SendEvmScreen(
                     viewModel.onEnterAmount(it)
                 },
                 inputType = amountInputType,
-                rate = null
+                rate = viewModel.coinRate
             )
 
             Spacer(modifier = Modifier.height(12.dp))
             HSAddressInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 coinType = wallet.coinType,
-                coinCode = wallet.coin.code
+                coinCode = wallet.coin.code,
+                error = uiState.addressError
             ) {
                 viewModel.onEnterAddress(it)
             }
@@ -110,7 +114,7 @@ fun SendEvmScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
-                    viewModel.sendData?.let {
+                    viewModel.getSendData()?.let {
                         navController.slideFromRight(
                             R.id.sendEvmConfirmationFragment,
                             SendEvmConfirmationModule.prepareParams(it)
