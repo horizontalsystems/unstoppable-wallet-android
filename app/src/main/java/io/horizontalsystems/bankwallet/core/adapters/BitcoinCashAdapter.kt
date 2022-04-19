@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
+import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bitcoincash.BitcoinCashKit
@@ -78,6 +79,9 @@ class BitcoinCashAdapter(
     override fun onTransactionsDelete(hashes: List<String>) {
         // ignored for now
     }
+
+    override val blockchain = BtcBlockchain.BitcoinCash
+
 
     companion object {
 
