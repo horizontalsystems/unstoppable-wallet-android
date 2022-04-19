@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
-import android.content.Intent
 import android.view.View
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
@@ -37,7 +36,6 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
-import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
@@ -292,10 +290,10 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                         )
                     }
                     else -> {
-                        val intent = Intent(context, SendActivity::class.java)
-                        intent.putExtra(SendActivity.WALLET, viewItem.wallet)
-
-                        context.startActivity(intent)
+                        navController.slideFromBottom(
+                            R.id.sendXFragment,
+                            bundleOf(SendEvmModule.walletKey to viewItem.wallet)
+                        )
                     }
                 }
             },

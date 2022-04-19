@@ -19,7 +19,7 @@ class SendZCashAddressService(private val adapter: ISendZcashAdapter) {
             address = address,
             addressType = addressType,
             addressError = addressError,
-            canBeSend = addressError == null
+            canBeSend = address != null && addressError == null
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -60,7 +60,7 @@ class SendZCashAddressService(private val adapter: ISendZcashAdapter) {
                 address = address,
                 addressType = addressType,
                 addressError = addressError,
-                canBeSend = addressError == null
+                canBeSend = address != null && addressError == null
             )
         }
     }

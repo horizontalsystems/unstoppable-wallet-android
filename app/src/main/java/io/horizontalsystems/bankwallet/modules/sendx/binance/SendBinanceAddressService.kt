@@ -15,7 +15,7 @@ class SendBinanceAddressService(private val adapter: ISendBinanceAdapter) {
         State(
             address = address,
             addressError = addressError,
-            canBeSend = addressError == null
+            canBeSend = address != null && addressError == null
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -44,7 +44,7 @@ class SendBinanceAddressService(private val adapter: ISendBinanceAdapter) {
             State(
                 address = address,
                 addressError = addressError,
-                canBeSend = addressError == null
+                canBeSend = address != null && addressError == null
             )
         }
     }
