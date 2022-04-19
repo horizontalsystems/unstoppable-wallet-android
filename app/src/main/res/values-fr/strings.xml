@@ -713,6 +713,7 @@
     <string name="ManageKeys_Delete_Title">Supprimer le portefeuille</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Cette action supprimera le portefeuille %s de cet appareil.</string>
     <string name="ManageKeys_Delete_FromPhone">Supprimer de l\'appareil</string>
+    <string name="ManageKeys_StopWatching">Stop Watching</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Description">Vous devez créer un portefeuille%1$s pour envoyer ou recevoir des %2$s.\n\nUtilisez le bouton Créer ci-dessous pour créer un nouveau portefeuille%3$s , ou le bouton Restaurer pour importer le portefeuille existant.\n\nVous pourrez utiliser ce portefeuille pour : %4$s.</string>
     <string name="AddCoin_CreateKey">Créer</string>
