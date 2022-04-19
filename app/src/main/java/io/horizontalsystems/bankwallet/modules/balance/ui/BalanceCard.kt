@@ -45,7 +45,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.CoinType
 
 @Composable
 fun BalanceCardSwipable(
@@ -280,22 +279,10 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             modifier = Modifier.weight(1f),
             title = stringResource(R.string.Balance_Send),
             onClick = {
-                when (viewItem.wallet.coinType) {
-                    CoinType.Ethereum, is CoinType.Erc20,
-                    CoinType.BinanceSmartChain, is CoinType.Bep20,
-                    CoinType.Polygon, is CoinType.Mrc20 -> {
-                        navController.slideFromBottom(
-                            R.id.sendEvmFragment,
-                            bundleOf(SendEvmModule.walletKey to viewItem.wallet)
-                        )
-                    }
-                    else -> {
-                        navController.slideFromBottom(
-                            R.id.sendXFragment,
-                            bundleOf(SendEvmModule.walletKey to viewItem.wallet)
-                        )
-                    }
-                }
+                navController.slideFromBottom(
+                    R.id.sendXFragment,
+                    bundleOf(SendEvmModule.walletKey to viewItem.wallet)
+                )
             },
             enabled = viewItem.sendEnabled
         )

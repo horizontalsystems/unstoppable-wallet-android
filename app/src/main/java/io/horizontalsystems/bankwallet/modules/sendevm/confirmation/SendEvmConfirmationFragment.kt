@@ -34,7 +34,7 @@ import io.horizontalsystems.snackbar.SnackbarDuration
 class SendEvmConfirmationFragment : BaseFragment() {
 
     private val logger = AppLogger("send-evm")
-    private val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment)
+    private val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment)
 
     private val vmFactory by lazy {
         SendEvmConfirmationModule.Factory(
@@ -83,7 +83,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
-                    findNavController().popBackStack(R.id.sendEvmFragment, true)
+                    findNavController().popBackStack(R.id.sendXFragment, true)
                     true
                 }
                 else -> false
@@ -111,7 +111,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
                 R.string.Hud_Text_Done
             )
             Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().popBackStack(R.id.sendEvmFragment, true)
+                findNavController().popBackStack(R.id.sendXFragment, true)
             }, 1200)
         }
 
