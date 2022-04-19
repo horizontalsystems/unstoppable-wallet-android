@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.sendevm
+package io.horizontalsystems.bankwallet.modules.sendx.evm
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution

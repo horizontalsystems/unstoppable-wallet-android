@@ -22,7 +22,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCDisplayTypedMessageFragment"/>
     <fragment
         android:id="@+id/sendEvmConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.sendx.evm.confirmation.SendEvmConfirmationFragment"
         tools:layout="@layout/fragment_confirmation_send_evm" />
     <fragment
         android:id="@+id/sendEvmFeeSettingsFragment"

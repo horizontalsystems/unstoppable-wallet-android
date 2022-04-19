@@ -11,11 +11,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinViewModel
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashViewModel
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel

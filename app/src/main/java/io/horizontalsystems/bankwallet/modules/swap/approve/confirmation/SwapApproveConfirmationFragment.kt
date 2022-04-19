@@ -18,11 +18,11 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSendEvmBinding
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalInfoKey
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmModule.additionalInfoKey
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme

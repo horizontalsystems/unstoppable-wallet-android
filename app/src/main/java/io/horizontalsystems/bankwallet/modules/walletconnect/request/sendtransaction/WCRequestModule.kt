@@ -10,9 +10,9 @@ import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v1.WCSendEthereumTransactionRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SendEthereumTransactionRequest

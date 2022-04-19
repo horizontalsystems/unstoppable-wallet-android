@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.sendevm
+package io.horizontalsystems.bankwallet.modules.sendx
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.Text

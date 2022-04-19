@@ -12,15 +12,15 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmScreen
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmViewModel2
 import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceModule
 import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceScreen
 import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinModule
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinScreen
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinViewModel
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmScreen
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashViewModel
@@ -68,7 +68,7 @@ class SendFragment : BaseFragment() {
                     CoinType.Ethereum, is CoinType.Erc20,
                     CoinType.BinanceSmartChain, is CoinType.Bep20,
                     CoinType.Polygon, is CoinType.Mrc20 -> {
-                        val sendEvmViewModel by navGraphViewModels<SendEvmViewModel2>(R.id.sendXFragment) { SendEvmModule.Factory(wallet) }
+                        val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment) { SendEvmModule.Factory(wallet) }
 
                         SendEvmScreen(findNavController(), sendEvmViewModel, amountInputModeViewModel)
                     }
