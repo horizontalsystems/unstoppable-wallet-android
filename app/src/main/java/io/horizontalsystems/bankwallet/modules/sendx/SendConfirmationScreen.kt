@@ -6,13 +6,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -22,10 +27,6 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
-import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.AddressCell
-import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmAmountCell
-import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.MemoCell
-import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SectionTitleCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -217,5 +218,123 @@ private fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend:
                 enabled = true
             )
         }
+    }
+}
+
+@Composable
+fun SectionTitleCell(title: Int, value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(title),
+            style = ComposeAppTheme.typography.body,
+            color = ComposeAppTheme.colors.leah
+        )
+
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp),
+            text = value,
+            style = ComposeAppTheme.typography.subhead1,
+            color = ComposeAppTheme.colors.grey,
+            textAlign = TextAlign.End,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, locked: Boolean) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = fiatAmount ?: "",
+            style = ComposeAppTheme.typography.subhead2,
+            color = ComposeAppTheme.colors.grey
+        )
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp),
+            text = coinAmount,
+            style = ComposeAppTheme.typography.subhead1,
+            color = ComposeAppTheme.colors.jacob,
+            textAlign = TextAlign.End,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        if (locked) {
+            Icon(
+                modifier = Modifier.padding(start = 8.dp),
+                painter = painterResource(id = R.drawable.ic_lock_20),
+                tint = ComposeAppTheme.colors.grey,
+                contentDescription = "lock icon",
+            )
+        }
+    }
+}
+
+@Composable
+fun AddressCell(address: String) {
+    val clipboardManager = LocalClipboardManager.current
+    val view = LocalView.current
+
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(R.string.Send_Confirmation_To),
+            style = ComposeAppTheme.typography.subhead2,
+            color = ComposeAppTheme.colors.grey
+        )
+        Spacer(Modifier.weight(1f))
+        ButtonSecondaryDefault(
+            modifier = Modifier
+                .padding(start = 8.dp),
+            title = address,
+            onClick = {
+                clipboardManager.setText(AnnotatedString(address))
+                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+            },
+            ellipsis = Ellipsis.Middle(10)
+        )
+    }
+}
+
+@Composable
+fun MemoCell(value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier.padding(end = 16.dp),
+            text = stringResource(R.string.Send_Confirmation_HintMemo),
+            style = ComposeAppTheme.typography.subhead2,
+            color = ComposeAppTheme.colors.grey
+        )
+        Spacer(Modifier.weight(1f))
+        Text(
+            text = value,
+            style = ComposeAppTheme.typography.subheadItalic,
+            color = ComposeAppTheme.colors.leah,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }

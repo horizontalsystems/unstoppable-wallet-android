@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send.submodules.fee
+package io.horizontalsystems.bankwallet.modules.fee
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.databinding.FragmentFeeInfoBinding
 
-class SendFeeInfoFragment : BaseFragment() {
+class FeePriorityInfoFragment : BaseFragment() {
 
     private var _binding: FragmentFeeInfoBinding? = null
     private val binding get() = _binding!!

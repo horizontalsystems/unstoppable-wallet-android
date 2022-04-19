@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.sendx.zcash
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -94,7 +93,7 @@ fun SendZCashScreen(
                 viewModel.onEnterAddress(it)
             }
 
-            AnimatedVisibility (memoIsAllowed) {
+            if (memoIsAllowed) {
                 Spacer(modifier = Modifier.height(12.dp))
                 HSMemoInput(
                     maxLength = viewModel.memoMaxLength
