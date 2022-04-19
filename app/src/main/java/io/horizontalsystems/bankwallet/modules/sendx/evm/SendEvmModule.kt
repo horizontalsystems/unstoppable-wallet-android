@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.sendevm
+package io.horizontalsystems.bankwallet.modules.sendx.evm
 
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
@@ -106,7 +106,7 @@ object SendEvmModule {
             val addressService = SendEvmAddressService()
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
-            return SendEvmViewModel2(
+            return SendEvmViewModel(
                 wallet,
                 wallet.platformCoin,
                 adapter,

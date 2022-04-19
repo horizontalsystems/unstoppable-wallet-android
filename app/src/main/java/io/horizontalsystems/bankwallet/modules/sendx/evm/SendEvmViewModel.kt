@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.sendevm
+package io.horizontalsystems.bankwallet.modules.sendx.evm
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 
-class SendEvmViewModel2(
+class SendEvmViewModel(
     val wallet: Wallet,
     val sendCoin: PlatformCoin,
     val adapter: ISendEthereumAdapter,

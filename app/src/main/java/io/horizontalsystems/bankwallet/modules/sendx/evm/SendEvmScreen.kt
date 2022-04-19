@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.sendevm
+package io.horizontalsystems.bankwallet.modules.sendx.evm
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,15 +17,16 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
-import io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationModule
+import io.horizontalsystems.bankwallet.modules.sendx.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.sendx.SendScreen
+import io.horizontalsystems.bankwallet.modules.sendx.evm.confirmation.SendEvmConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 
 @Composable
 fun SendEvmScreen(
     navController: NavController,
-    viewModel: SendEvmViewModel2,
+    viewModel: SendEvmViewModel,
     amountInputModeViewModel: AmountInputModeViewModel
 ) {
     val wallet = viewModel.wallet

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.sendevm.confirmation
+package io.horizontalsystems.bankwallet.modules.sendx.evm.confirmation
 
 import android.os.Bundle
 import android.os.Handler
@@ -18,10 +18,10 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSendEvmBinding
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmViewModel2
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
@@ -34,7 +34,7 @@ import io.horizontalsystems.snackbar.SnackbarDuration
 class SendEvmConfirmationFragment : BaseFragment() {
 
     private val logger = AppLogger("send-evm")
-    private val sendEvmViewModel by navGraphViewModels<SendEvmViewModel2>(R.id.sendXFragment)
+    private val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment)
 
     private val vmFactory by lazy {
         SendEvmConfirmationModule.Factory(
