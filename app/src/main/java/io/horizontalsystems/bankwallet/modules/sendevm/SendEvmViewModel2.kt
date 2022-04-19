@@ -10,11 +10,13 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 
 class SendEvmViewModel2(
+    val wallet: Wallet,
     val sendCoin: PlatformCoin,
     val adapter: ISendEthereumAdapter,
     private val xRateService: XRateService,

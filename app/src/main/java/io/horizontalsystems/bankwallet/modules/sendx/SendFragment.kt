@@ -70,7 +70,7 @@ class SendFragment : BaseFragment() {
                     CoinType.Polygon, is CoinType.Mrc20 -> {
                         val sendEvmViewModel by navGraphViewModels<SendEvmViewModel2>(R.id.sendXFragment) { SendEvmModule.Factory(wallet) }
 
-                        SendEvmScreen(findNavController(), wallet, sendEvmViewModel)
+                        SendEvmScreen(findNavController(), sendEvmViewModel, amountInputModeViewModel)
                     }
                     else -> {
 
