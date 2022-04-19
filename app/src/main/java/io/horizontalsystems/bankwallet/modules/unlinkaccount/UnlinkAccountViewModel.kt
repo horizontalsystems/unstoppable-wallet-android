@@ -22,6 +22,11 @@ class UnlinkAccountViewModel(
     var showDeleteWarning by mutableStateOf(false)
         private set
 
+    val deleteButtonText = when {
+            account.isWatchAccount -> R.string.ManageKeys_StopWatching
+            else -> R.string.ManageKeys_Delete_FromPhone
+        }
+
     init {
         if (account.isWatchAccount) {
             showDeleteWarning = true

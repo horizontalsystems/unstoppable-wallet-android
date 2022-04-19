@@ -117,7 +117,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            title = stringResource(R.string.ManageKeys_Delete_FromPhone),
+            title = stringResource(viewModel.deleteButtonText),
             onClick = {
                 viewModel.onUnlink()
                 HudHelper.showSuccessMessage(view, doneConfirmationMessage)

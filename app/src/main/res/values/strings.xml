@@ -863,6 +863,7 @@
     <string name="ManageKeys_Delete_Title">Delete Wallet</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s Wallet from the device.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
+    <string name="ManageKeys_StopWatching">Stop Watching</string>
 
     <!-- Manage Keys Alert -->
 
