@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.send.AmountValidator
+import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData

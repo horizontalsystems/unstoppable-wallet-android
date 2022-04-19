@@ -1,5 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.send
+package io.horizontalsystems.bankwallet.modules.amount
 
+import io.horizontalsystems.bankwallet.modules.send.SendErrorInsufficientBalance
+import io.horizontalsystems.bankwallet.modules.send.SendErrorMaximumSendAmount
+import io.horizontalsystems.bankwallet.modules.send.SendErrorMinimumSendAmount
 import java.math.BigDecimal
 
 class AmountValidator {

@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.evm
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
-import io.horizontalsystems.bankwallet.modules.send.AmountValidator
+import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin

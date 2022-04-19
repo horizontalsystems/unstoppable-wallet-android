@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send
+package io.horizontalsystems.bankwallet.modules.amount
 
 import io.horizontalsystems.bankwallet.core.HSCaution
 import kotlinx.coroutines.flow.MutableStateFlow

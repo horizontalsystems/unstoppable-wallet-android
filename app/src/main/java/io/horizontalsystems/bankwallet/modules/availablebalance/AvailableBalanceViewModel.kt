@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send
+package io.horizontalsystems.bankwallet.modules.availablebalance
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
