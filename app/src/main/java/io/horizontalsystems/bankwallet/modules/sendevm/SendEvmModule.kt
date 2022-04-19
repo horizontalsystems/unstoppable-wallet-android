@@ -106,8 +106,8 @@ object SendEvmModule {
             val addressService = SendEvmAddressService()
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
-
             return SendEvmViewModel2(
+                wallet,
                 wallet.platformCoin,
                 adapter,
                 xRateService,
