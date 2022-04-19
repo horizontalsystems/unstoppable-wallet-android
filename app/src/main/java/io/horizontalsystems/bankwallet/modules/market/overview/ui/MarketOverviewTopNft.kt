@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MultilineClear
 fun TopNftCollectionsBoardView(
     board: MarketOverviewModule.TopNftCollectionsBoard,
     onSelectTimeDuration: (TimeDuration) -> Unit,
+    onClickCollection: (String) -> Unit,
     onClickSeeAll: () -> Unit
 ) {
     TopBoardHeader(
@@ -39,7 +40,9 @@ fun TopNftCollectionsBoardView(
             .background(ComposeAppTheme.colors.lawrence)
     ) {
         board.collections.forEach { collection ->
-            TopNftCollectionView(collection)
+            TopNftCollectionView(collection) {
+                onClickCollection(collection.uid)
+            }
         }
 
         SeeAllButton(onClickSeeAll)
@@ -51,9 +54,10 @@ fun TopNftCollectionsBoardView(
 @Composable
 private fun TopNftCollectionView(
     collection: TopNftCollectionViewItem,
+    onClick: () -> Unit
 ) {
     MultilineClear(
-        onClick = { },
+        onClick = onClick,
         borderBottom = true
     ) {
         CoinImage(

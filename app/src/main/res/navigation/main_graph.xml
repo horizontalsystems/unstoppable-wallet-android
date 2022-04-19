@@ -238,6 +238,9 @@
         android:id="@+id/nftAssetFragment"
         android:name="io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetFragment" />
     <fragment
+        android:id="@+id/nftCollectionFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment"/>
+    <fragment
         android:id="@+id/sendXFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.SendFragment" />
     <fragment
@@ -249,7 +252,7 @@
     <fragment
         android:id="@+id/feePriorityInfo"
         android:name="io.horizontalsystems.bankwallet.modules.fee.FeePriorityInfoFragment" />
-    <dialog
+     <dialog
         android:id="@+id/explainerFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.ExplainerFragment"
         tools:layout="@layout/fragment_info" />
