@@ -1,31 +1,28 @@
 package io.horizontalsystems.bankwallet.modules.sendx
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.os.bundleOf
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.sendx.binance.SendBinanceViewModel
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.sendx.bitcoin.SendBitcoinViewModel
-import io.horizontalsystems.bankwallet.modules.sendx.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.sendx.zcash.SendZCashViewModel
 import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.CoinType
+import kotlinx.parcelize.Parcelize
 
 class SendConfirmationFragment : BaseFragment() {
-
-    private val wallet by lazy { requireArguments().getParcelable<Wallet>(SendEvmModule.walletKey)!! }
-
     val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment)
 
     override fun onCreateView(
@@ -38,13 +35,8 @@ class SendConfirmationFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-
-                when (wallet.coinType) {
-                    CoinType.Bitcoin,
-                    CoinType.Litecoin,
-                    CoinType.BitcoinCash,
-                    CoinType.Dash,
-                    -> {
+                when (requireArguments().getParcelable<Type>(typeKey)) {
+                    Type.Bitcoin -> {
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
                         val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment)
 
@@ -55,7 +47,7 @@ class SendConfirmationFragment : BaseFragment() {
                             amountInputModeViewModel
                         )
                     }
-                    is CoinType.Bep2 -> {
+                    Type.Bep2 -> {
                         val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment)
 
                         SendBinanceConfirmationScreen(
@@ -64,7 +56,7 @@ class SendConfirmationFragment : BaseFragment() {
                             amountInputModeViewModel
                         )
                     }
-                    CoinType.Zcash -> {
+                    Type.ZCash -> {
                         val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment)
 
                         SendZCashConfirmationScreen(
@@ -73,13 +65,22 @@ class SendConfirmationFragment : BaseFragment() {
                             amountInputModeViewModel
                         )
                     }
-                    else -> {
-
-                    }
+                    null -> Unit
                 }
-
-
             }
         }
+    }
+
+    @Parcelize
+    enum class Type : Parcelable {
+        Bitcoin, Bep2, ZCash
+    }
+
+    companion object {
+        private const val typeKey = "typeKey"
+
+        fun prepareParams(type: Type) = bundleOf(
+            typeKey to type
+        )
     }
 }

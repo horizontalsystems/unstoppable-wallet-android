@@ -74,7 +74,6 @@ data class SendEvmData(
 
 object SendEvmModule {
 
-    const val walletKey = "walletKey"
     const val transactionDataKey = "transactionData"
     const val additionalInfoKey = "additionalInfo"
 
