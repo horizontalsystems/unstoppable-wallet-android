@@ -264,8 +264,11 @@
     <string name="Send_LockTime_HalfYear">6개월</string>
     <string name="Send_LockTime_Year">1 년</string>
     <string name="Send_Sending">전송중</string>
+    <string name="Send_FeeRate">Fee Rate</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <string name="Send_Warning_LowFee">경고! 갇힐 위험</string>
+    <string name="Send_Warning_LowFee_Description">The transaction may get stuck or fail</string>
+    <string name="Send_Error_FetchFeeRateFailed">Error while fetching fee rate</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">수수료 설정</string>
     <string name="FeeSettings_Reset">초기화</string>
