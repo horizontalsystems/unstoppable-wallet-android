@@ -13,6 +13,7 @@ interface INftApiProvider {
     suspend fun assetOrders(contractAddress: String, tokenId: String): List<AssetOrder>
 
     suspend fun topCollections(count: Int): List<TopNftCollection>
+    suspend fun collection(uid: String): NftCollection
 }
 
 data class TopNftCollection(
@@ -28,3 +29,27 @@ data class TopNftCollection(
     val thirtyDayVolume: BigDecimal,
     val thirtyDayVolumeDiff: BigDecimal
 )
+
+data class NftCollection(
+    val uid: String,
+    val name: String,
+    val imageUrl: String?,
+    val description: String?,
+    val ownersCount: Int,
+    val totalSupply: Int,
+    val oneDayVolume: BigDecimal,
+    val oneDayVolumeChange: BigDecimal,
+    val oneDaySales: Int,
+    val oneDayAveragePrice: BigDecimal,
+    val averagePrice: BigDecimal,
+    val floorPrice: BigDecimal?,
+    val chartPoints: List<ChartPoint>
+) {
+    data class ChartPoint(
+        val timestamp: Long,
+        val oneDayVolume: BigDecimal,
+        val averagePrice: BigDecimal,
+        val floorPrice: BigDecimal?,
+        val oneDaySales: Int
+    )
+}

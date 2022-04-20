@@ -31,6 +31,7 @@ object HsNftApiV1Response {
         val image_data: ImageData?,
         val links: Links?,
         val stats: Stats,
+        val stats_chart: List<ChartPoint>
     ) {
         data class ImageData(
             val image_url: String?,
@@ -50,14 +51,26 @@ object HsNftApiV1Response {
             val seven_day_average_price: BigDecimal,
             val thirty_day_average_price: BigDecimal,
             val floor_price: BigDecimal?,
+            val average_price: BigDecimal,
+            val num_owners: Int,
             val total_supply: Int,
             val total_volume: BigDecimal,
             val one_day_volume: BigDecimal,
             val one_day_change: BigDecimal,
+            val one_day_sales: Int,
+            val one_day_average_price: BigDecimal,
             val seven_day_volume: BigDecimal,
             val seven_day_change: BigDecimal,
             val thirty_day_volume: BigDecimal,
             val thirty_day_change: BigDecimal,
+        )
+
+        data class ChartPoint(
+            val timestamp: Long,
+            val one_day_volume: BigDecimal,
+            val average_price: BigDecimal,
+            val floor_price: BigDecimal?,
+            val one_day_sales: Int
         )
     }
 
@@ -273,6 +286,34 @@ class HsNftApiProvider : INftApiProvider {
         }
     }
 
+    override suspend fun collection(uid: String): NftCollection {
+        return HsNftModule.apiServiceV1.collection(uid, includeStatsChart = true).let {
+            NftCollection(
+                uid = it.uid,
+                name = it.name,
+                imageUrl = it.image_data?.image_url,
+                description = it.description,
+                ownersCount = it.stats.num_owners,
+                totalSupply = it.stats.total_supply,
+                oneDayVolume = it.stats.one_day_volume,
+                oneDayVolumeChange = it.stats.one_day_change,
+                oneDaySales = it.stats.one_day_sales,
+                oneDayAveragePrice = it.stats.one_day_average_price,
+                averagePrice = it.stats.average_price,
+                floorPrice = it.stats.floor_price,
+                chartPoints = it.stats_chart.map { chartPoint ->
+                    NftCollection.ChartPoint(
+                        timestamp = chartPoint.timestamp,
+                        oneDayVolume = chartPoint.one_day_volume,
+                        averagePrice = chartPoint.average_price,
+                        floorPrice = chartPoint.floor_price,
+                        oneDaySales = chartPoint.one_day_sales
+                    )
+                }
+            )
+        }
+    }
+
     private suspend fun fetchTopCollections(count: Int): List<HsNftApiV1Response.Collection> {
         val collections = mutableListOf<HsNftApiV1Response.Collection>()
         var page = 1
@@ -329,6 +370,12 @@ interface HsNftApiV1 {
         @Query("page") page: Int,
         @Query("limit") limit: Int
     ): List<HsNftApiV1Response.Collection>
+
+    @GET("collection/{uid}")
+    suspend fun collection(
+        @Path("uid") uid: String,
+        @Query("include_stats_chart") includeStatsChart: Boolean
+    ): HsNftApiV1Response.Collection
 
     @GET("assets")
     suspend fun assets(

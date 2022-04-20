@@ -4,6 +4,8 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 
 object NftCollectionModule {
 
@@ -11,15 +13,16 @@ object NftCollectionModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return NftCollectionViewModel() as T
+            val service = NftCollectionService(collectionUid, HsNftApiProvider())
+            return NftCollectionViewModel(service, App.numberFormatter) as T
         }
 
     }
 
     enum class Tab(@StringRes val titleResId: Int) {
-        Overview(R.string.NftCollection_Tab_Overview),
-        Items(R.string.NftCollection_Tab_Items),
-        Activity(R.string.NftCollection_Tab_Activity)
+        Overview(R.string.NftCollection_Overview),
+        Items(R.string.NftCollection_Items),
+        Activity(R.string.NftCollection_Activity)
     }
 
 }
