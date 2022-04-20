@@ -31,7 +31,7 @@ import io.horizontalsystems.marketkit.models.CoinType
 class SendFragment : BaseFragment() {
 
     private val wallet by lazy { requireArguments().getParcelable<Wallet>(walletKey)!! }
-    private val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) { AmountInputModeModule.Factory() }
+    private val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) { AmountInputModeModule.Factory(wallet) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -48,29 +48,38 @@ class AmountInputViewModel2(
         val amount = if (text.isNotBlank()) text.toBigDecimalOrNull()?.stripTrailingZeros() else null
 
         when (inputType) {
-            AmountInputType.COIN -> updateCoinAmount(amount)
-            AmountInputType.CURRENCY -> updateCurrencyAmount(amount)
+            AmountInputType.COIN -> setCoinAmount(amount)
+            AmountInputType.CURRENCY -> setCurrencyAmount(amount)
         }
 
         refreshHint()
     }
 
     fun onClickMax() {
-        updateCoinAmount(availableBalance)
+        setCoinAmount(availableBalance)
         refreshHint()
     }
 
-    private fun updateCurrencyAmount(amount: BigDecimal?) {
-        coinAmount = rate?.let { rate ->
-            amount?.divide(rate.value, coinDecimal, RoundingMode.CEILING)?.stripTrailingZeros()
-        }
+    private fun setCurrencyAmount(amount: BigDecimal?) {
         currencyAmount = amount
+        calculateCoinAmount()
     }
 
-    private fun updateCoinAmount(amount: BigDecimal?) {
+    private fun setCoinAmount(amount: BigDecimal?) {
         coinAmount = amount
+        calculateCurrencyAmount()
+    }
+
+    private fun calculateCurrencyAmount() {
         currencyAmount = rate?.let { rate ->
-            amount?.times(rate.value)?.setScale(fiatDecimal, RoundingMode.DOWN)?.stripTrailingZeros()
+            coinAmount?.times(rate.value)?.setScale(fiatDecimal, RoundingMode.DOWN)?.stripTrailingZeros()
+        }
+    }
+
+    private fun calculateCoinAmount() {
+        coinAmount = rate?.let { rate ->
+            currencyAmount?.divide(rate.value, coinDecimal, RoundingMode.CEILING)
+                ?.stripTrailingZeros()
         }
     }
 
@@ -113,6 +122,12 @@ class AmountInputViewModel2(
 
     fun setRate(rate: CurrencyValue?) {
         this.rate = rate
+
+        when (inputType) {
+            AmountInputType.COIN -> calculateCurrencyAmount()
+            AmountInputType.CURRENCY -> calculateCoinAmount()
+        }
+
         refreshHint()
     }
 
