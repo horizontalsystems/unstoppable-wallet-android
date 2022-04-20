@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
@@ -50,7 +51,7 @@ class SendBitcoinViewModel(
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
-    var sendResult by mutableStateOf<SendResult?>( null)
+    var sendResult by mutableStateOf<SendResult?>(null)
 
     var uiState by mutableStateOf(
         SendBitcoinUiState(
@@ -71,46 +72,23 @@ class SendBitcoinViewModel(
         private set
 
     init {
-        viewModelScope.launch {
-            feeRateService.stateFlow
-                .collect {
-                    handleUpdatedFeeRateState(it)
-                }
+        feeRateService.stateFlow.collectWith(viewModelScope) {
+            handleUpdatedFeeRateState(it)
         }
-
-        viewModelScope.launch {
-            amountService.stateFlow
-                .collect {
-                    handleUpdatedAmountState(it)
-                }
+        amountService.stateFlow.collectWith(viewModelScope) {
+            handleUpdatedAmountState(it)
         }
-
-        viewModelScope.launch {
-            addressService.stateFlow
-                .collect {
-                    handleUpdatedAddressState(it)
-                }
+        addressService.stateFlow.collectWith(viewModelScope) {
+            handleUpdatedAddressState(it)
         }
-
-        viewModelScope.launch {
-            pluginService.stateFlow
-                .collect {
-                    handleUpdatedPluginState(it)
-                }
+        pluginService.stateFlow.collectWith(viewModelScope) {
+            handleUpdatedPluginState(it)
         }
-
-        viewModelScope.launch {
-            feeService.feeFlow
-                .collect {
-                    handleUpdatedFee(it)
-                }
+        feeService.feeFlow.collectWith(viewModelScope) {
+            handleUpdatedFee(it)
         }
-
-        viewModelScope.launch {
-            xRateService.getRateFlow(wallet.coin.uid)
-                .collect {
-                    coinRate = it
-                }
+        xRateService.getRateFlow(wallet.coin.uid).collectWith(viewModelScope) {
+            coinRate = it
         }
 
         viewModelScope.launch {
