@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.fee
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -15,6 +16,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.send.SendErrorInsufficientBalance
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
@@ -70,7 +72,11 @@ fun FeeSettingsScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        modifier = Modifier.padding(start = 16.dp),
+                        modifier = Modifier
+                            .padding(start = 16.dp)
+                            .clickable {
+                                navController.slideFromBottom(R.id.feePriorityInfo)
+                            },
                         painter = painterResource(R.drawable.ic_info_20),
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.grey

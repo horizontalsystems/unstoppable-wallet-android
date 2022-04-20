@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.databinding.FragmentFeeInfoBinding
+import io.horizontalsystems.core.findNavController
 
 class FeePriorityInfoFragment : BaseFragment() {
 
@@ -33,7 +34,7 @@ class FeePriorityInfoFragment : BaseFragment() {
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
-                    parentFragmentManager.popBackStack()
+                    findNavController().popBackStack()
                     true
                 }
                 else -> false
