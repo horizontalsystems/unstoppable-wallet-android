@@ -264,8 +264,11 @@
     <string name="Send_LockTime_HalfYear">6 mois</string>
     <string name="Send_LockTime_Year">1 an</string>
     <string name="Send_Sending">En attente</string>
+    <string name="Send_FeeRate">Fee Rate</string>
     <string name="Send_Token_InsufficientFeeAlert">Frais de transaction pour %1$s (%2$s) payé en %3$s. Il est nécessaire %4$s.</string>
     <string name="Send_Warning_LowFee">Attention ! Risque de blocage</string>
+    <string name="Send_Warning_LowFee_Description">The transaction may get stuck or fail</string>
+    <string name="Send_Error_FetchFeeRateFailed">Error while fetching fee rate</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Paramètres des frais</string>
     <string name="FeeSettings_Reset">Réinitialiser</string>
