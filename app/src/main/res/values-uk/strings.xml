@@ -48,17 +48,17 @@
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">I Understand</string>
     <!--Welcome-->
-    <string name="Welcome_PrivacySettings">Privacy Settings</string>
+    <string name="Welcome_PrivacySettings">Налаштування приватності</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">New Wallet</string>
+    <string name="CreateWallet_Title">Новий гаманець</string>
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
-    <string name="Passphrase">Passphrase</string>
+    <string name="Passphrase">Парольна фраза</string>
     <string name="CreateWallet_N_Words">%s слів</string>
     <string name="CreateWallet_PassphraseConfirm">Підтвердити</string>
-    <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
-    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
-    <string name="EnterPassphrase">Passphrase</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">Парольна фраза не може бути порожньою</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Будь ласка, використовуйте тільки латинські букви та цифри для парольної фрази</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Підтвердження парольної фрази не збігається</string>
+    <string name="EnterPassphrase">Введіть парольну фразу</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases add an additional security layer to the wallets, enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase, but associated with different passwords. \n\nTo restore these wallets, a user will require a mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
@@ -66,11 +66,11 @@
     <string name="RateApp_Button_RateIt">Rate It</string>
     <string name="RateApp_Button_NotNow">Not now</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Enter Key</string>
-    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words need to be entered in the correct order and separated by spaces.</string>
+    <string name="Restore_Enter_Key_Title">Введіть ключ</string>
+    <string name="Restore_Mnemonic_Description">Введіть мнемоніку, що складається з 12 або 24 слів. Слова потрібно вводити в правильному порядку, відокремлюючи їх пробілами.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 or 24 words. You entered: %d</string>
-    <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
+    <string name="Restore_Error_EmptyPassphrase">Парольна фраза не може бути порожньою</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
     <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase.</string>
     <string name="Restore_Title">Choose Blockchains</string>
@@ -95,7 +95,7 @@
     <string name="Market_Field_HighestPrice">Highest Price</string>
     <string name="Market_Field_LowestPrice">Lowest Price</string>
     <string name="Market_Sort_PopupTitle">Sort by</string>
-    <string name="Market_TotalMarketCap">Total Cap</string>
+    <string name="Market_TotalMarketCap">Загальна капіталізація</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
     <string name="Market_Volume24h">24h Volume</string>
     <string name="Market_TvlDeFi">TVL in DeFi</string>
@@ -202,7 +202,7 @@
     <string name="TvlRank_Field_Mat">Polygon</string>
     <string name="TvlRank_Filters_PopupTitle">Filters</string>
     <!--Balance-->
-    <string name="Balance_Title">Balance</string>
+    <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Send</string>
     <string name="Balance_Receive">Receive</string>
     <string name="Balance_RatePerCoin">%1$s per %2$s</string>
@@ -216,7 +216,7 @@
     <string name="Balance_CoinDisabled">Disabled coin %s</string>
     <string name="Balance_Sort_Balance">Баланс</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
-    <string name="Balance_Sort_Az">Name</string>
+    <string name="Balance_Sort_Az">Назві</string>
     <string name="Balance_Sort_24hPriceChange">Price Change</string>
     <string name="Balance_Hidden">hidden</string>
     <string name="Balance_Backup_Alert">You need to backup the %1$s Wallet before you may receive %2$s.</string>
@@ -243,7 +243,7 @@
     <string name="ScanQr_NoCameraPermission">No camera permission</string>
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
     <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
-    <string name="Send_Error_BalanceAmount">Balance %s</string>
+    <string name="Send_Error_BalanceAmount">Баланс %s</string>
     <string name="Send_Error_MinimumAmount">Min. amount %s</string>
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
     <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
@@ -568,11 +568,11 @@
     <string name="Info_Title">Info</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Privacy</string>
-    <string name="SettingsSecurity_Biometric_Authentication">Biometric Authentication</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Біометрична автентифікація</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
-    <string name="SettingsSecurity_EnablePin">Passcode</string>
-    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
-    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
+    <string name="SettingsSecurity_EnablePin">Код доступу</string>
+    <string name="SettingsSecurity_EditPin">Змінити код доступу</string>
+    <string name="SettingsSecurity_ManageKeys">Керування гаманцями</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet while using this app. Note, in some cases WalletConnect feature for DeFi apps may be very slow or not work at all.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for the Unstoppable Wallet app are disabled. You need to turn on Notifications and allow background app refresh in order to be able to receive price change alerts.</string>
@@ -647,7 +647,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">Token code or name</string>
-    <string name="ManageCoins_AddToken">Add Token</string>
+    <string name="ManageCoins_AddToken">Додати токен</string>
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Experimental</string>
@@ -668,7 +668,7 @@
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Показати фразу</string>
     <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Unlink</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
@@ -691,36 +691,36 @@
     <string name="ShowKey_Title">Key</string>
     <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken, etc.\n\nMake sure no one is watching your screen.</string>
     <string name="ShowKey_ButtonShow">Show</string>
-    <string name="ShowKey_Passphrase">Passphrase</string>
+    <string name="ShowKey_Passphrase">Парольна фраза</string>
     <string name="ShowKey_ButtonClose">Close</string>
     <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
-    <string name="ShowKey_TabPrivateKey">Private Key</string>
+    <string name="ShowKey_TabPrivateKey">Приватний ключ</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Warning</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risk of Private Key copy</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">As a security measure we recommend not to use copy action on private key.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">I will risk it</string>
     <!-- Backup Key -->
-    <string name="BackupKey_Title">Backup</string>
+    <string name="BackupKey_Title">Резервна копія</string>
     <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken, etc.\n\nMake sure no one is watching your screen.</string>
     <string name="BackupKey_ButtonBackup">Backup</string>
     <string name="BackupConfirmKey_Description">Enter the recovery phrases in the correct order to confirm</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
     <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
     <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
-    <string name="BackupConfirmKey_Error_EmptyPassphrase">Empty passphrase</string>
-    <string name="BackupConfirmKey_Error_InvalidPassphrase">Invalid passphrase</string>
+    <string name="BackupConfirmKey_Error_EmptyPassphrase">Порожня парольна фраза</string>
+    <string name="BackupConfirmKey_Error_InvalidPassphrase">Хибна парольна фраза</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">Delete Wallet</string>
+    <string name="ManageKeys_Delete_Title">Видалити гаманець</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s Wallet from the device.</string>
-    <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
-    <string name="ManageKeys_StopWatching">Stop Watching</string>
+    <string name="ManageKeys_Delete_FromPhone">Видалити з телефону</string>
+    <string name="ManageKeys_StopWatching">Припинити відстеження</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or the Restore button to import an existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
-    <string name="AddCoin_CreateKey">Create</string>
-    <string name="AddCoin_RestoreKey">Restore</string>
+    <string name="AddCoin_CreateKey">Створити</string>
+    <string name="AddCoin_RestoreKey">Відновити</string>
     <!-- Add Token Dialog-->
     <string name="AddTokenDialog_Title">Choose Blockchain</string>
-    <string name="AddTokenDialog_Subtitle">Adding Token</string>
+    <string name="AddTokenDialog_Subtitle">Додавання токену</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 Tokens</string>
     <string name="AddTokenDialog_Bep20Tokens">BEP20 Tokens</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 Tokens</string>
@@ -733,9 +733,9 @@
     <string name="EnalbeToken_EnableKey">Enable</string>
     <!-- Add Token -->
     <string name="AddToken_Title">Add Token</string>
-    <string name="AddToken_CoinName">Coin Name</string>
-    <string name="AddToken_Symbol">Symbol</string>
-    <string name="AddToken_Decimals">Decimals</string>
+    <string name="AddToken_CoinName">Назва монети</string>
+    <string name="AddToken_Symbol">Символ</string>
+    <string name="AddToken_Decimals">Знаків після коми</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Coin Type(s)</string>
     <string name="AddToken_AddressOrSymbol">Contract Address</string>
@@ -748,7 +748,7 @@
     <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Native</string>
-    <string name="CoinPlatformsSelector_Title">Coin Type</string>
+    <string name="CoinPlatformsSelector_Title">Тип монети</string>
     <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains. Select version(s) you would like to use.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
@@ -781,9 +781,9 @@
     <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
     <string name="CoinPage_TimeDuration_Month3">3M</string>
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
-    <string name="CoinPage_TimeDuration_Year">1Y</string>
-    <string name="CoinPage_TimeDuration_Year2">2Y</string>
-    <string name="CoinPage_Markets">Markets</string>
+    <string name="CoinPage_TimeDuration_Year">1р</string>
+    <string name="CoinPage_TimeDuration_Year2">2р</string>
+    <string name="CoinPage_Markets">Ринки</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_Audits">Audits</string>
@@ -794,7 +794,7 @@
     <string name="CoinPage_Treasuries">Treasuries</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
     <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
-    <string name="CoinPage_Reports">Reports</string>
+    <string name="CoinPage_Reports">Звіти</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_TokenDistribution">Token Distribution</string>
     <string name="CoinPage_TokenLiquidity">Token Liquidity</string>
@@ -825,7 +825,7 @@
     <string name="CoinPage_SecurityParams_CensorshipResistance_No">The token holder can be censored from transacting.</string>
     <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited from external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk free and not doesn\'t have any exploits risks.</string>
     <string name="CoinPage_SecurityParams_Audited_No">There are no publicly announced audits for the code powering the project behind the token. Non audited projects are more likely to have security issues in the code.</string>
-    <string name="CoinPage_SecurityParams_Info">Info</string>
+    <string name="CoinPage_SecurityParams_Info">Інформація</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
@@ -854,12 +854,12 @@
     <string name="CoinPage_NoDataAvailable">No data available</string>
     <string name="CoinPage_AddToWallet">Add To Wallet</string>
     <string name="CoinPage_InWallet">In Wallet</string>
-    <string name="CoinPage_Favorite">Favorite</string>
-    <string name="CoinPage_Unfavorite">Unfavorite</string>
-    <string name="CoinPage_Performance_Week">1 Week</string>
-    <string name="CoinPage_Performance_Month">1 Month</string>
-    <string name="CoinPage_ReadMore">Read More</string>
-    <string name="CoinPage_ReadLess">Read Less</string>
+    <string name="CoinPage_Favorite">Уподобати</string>
+    <string name="CoinPage_Unfavorite">Видалити вподобання</string>
+    <string name="CoinPage_Performance_Week">1 тиждень</string>
+    <string name="CoinPage_Performance_Month">1 місяць</string>
+    <string name="CoinPage_ReadMore">Детальніше</string>
+    <string name="CoinPage_ReadLess">Приховати деталі</string>
     <string name="CoinPage_LaunchDate">Inception Date</string>
     <string name="CoinPage_Tvl">Total Value Locked</string>
     <string name="CoinPage_TvlRank">TVL Rank</string>
