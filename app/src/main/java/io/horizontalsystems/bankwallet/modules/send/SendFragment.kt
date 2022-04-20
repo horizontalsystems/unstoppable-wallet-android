@@ -51,11 +51,7 @@ class SendFragment : BaseFragment() {
                     -> {
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) { SendBitcoinModule.Factory(wallet) }
 
-                        SendBitcoinScreen(
-                            findNavController(),
-                            sendBitcoinViewModel,
-                            amountInputModeViewModel
-                        )
+                        SendBitcoinScreen(findNavController(), sendBitcoinViewModel, amountInputModeViewModel)
                     }
                     is CoinType.Bep2 -> {
                         val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) { SendBinanceModule.Factory(wallet) }
