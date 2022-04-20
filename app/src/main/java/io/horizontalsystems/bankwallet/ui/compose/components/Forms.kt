@@ -9,7 +9,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -132,15 +131,7 @@ fun FormsInput(
 
             when (state) {
                 is DataState.Loading -> {
-                    // Todo: Need to find better solution
-                    // CircularProgressIndicator doesn't allow to change its size.
-                    // Resized it using modifier size with padding.
-                    // The ordering of modifiers is important.
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(28.dp).padding(top = 4.dp, end = 8.dp),
-                        color = ComposeAppTheme.colors.grey,
-                        strokeWidth = 2.dp
-                    )
+                    HSCircularProgressIndicator()
                 }
                 is DataState.Error -> {
                     Icon(

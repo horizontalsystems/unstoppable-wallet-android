@@ -246,7 +246,7 @@ class SendBitcoinViewModel(
 }
 
 data class SendBitcoinUiState(
-    val availableBalance: BigDecimal,
+    val availableBalance: BigDecimal?,
     val fee: BigDecimal?,
     val feeRate: Long?,
     val feeRatePriority: FeeRatePriority,

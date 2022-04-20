@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AdditionalDataCell2
+import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
 import java.math.BigDecimal
 
 @Composable
@@ -19,7 +20,7 @@ fun AvailableBalance(
     coinCode: String,
     coinDecimal: Int,
     fiatDecimal: Int,
-    availableBalance: BigDecimal,
+    availableBalance: BigDecimal?,
     amountInputType: AmountInputType,
     rate: CurrencyValue?
 ) {
@@ -55,7 +56,7 @@ fun AvailableBalance(
                 color = ComposeAppTheme.colors.leah
             )
         } else {
-            // TODO("Circle progress")
+            HSCircularProgressIndicator()
         }
     }
 }
