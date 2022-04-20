@@ -233,9 +233,6 @@ interface IReceiveAdapter: IBaseAdapter {
 }
 
 interface ISendBitcoinAdapter {
-    val blockchain: BtcBlockchain
-        get() = BtcBlockchain.Bitcoin
-
     val balanceData: BalanceData
     val blockchain: BtcBlockchain
     fun availableBalance(
