@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
-import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrence
@@ -34,7 +33,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSSectionRounded
 fun SendBitcoinScreen(
     navController: NavController,
     viewModel: SendBitcoinViewModel,
-    xRateViewModel: XRateViewModel,
     amountInputModeViewModel: AmountInputModeViewModel
 ) {
     val wallet = viewModel.wallet
@@ -51,7 +49,7 @@ fun SendBitcoinScreen(
     val feeRateCaution = uiState.feeRateCaution
     val lockTimeInterval = uiState.lockTimeInterval
 
-    val rate = xRateViewModel.rate
+    val rate = viewModel.coinRate
 
     ComposeAppTheme {
         val fullCoin = wallet.platformCoin.fullCoin

@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.send.SendErrorInsufficientBalance
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
-import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -27,7 +26,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 fun FeeSettingsScreen(
     navController: NavController,
     sendViewModel: SendBitcoinViewModel,
-    xRateViewModel: XRateViewModel,
     amountInputModeViewModel: AmountInputModeViewModel
 ) {
     val uiState = sendViewModel.uiState
@@ -61,7 +59,7 @@ fun FeeSettingsScreen(
                 fiatDecimal = sendViewModel.fiatMaxAllowedDecimals,
                 fee = fee,
                 amountInputType = amountInputModeViewModel.inputType,
-                rate = xRateViewModel.rate
+                rate = sendViewModel.coinRate
             )
 
             Spacer(modifier = Modifier.height(8.dp))

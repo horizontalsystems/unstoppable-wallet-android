@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinConfirmat
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
-import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
@@ -38,12 +37,10 @@ class SendConfirmationFragment : BaseFragment() {
                 when (requireArguments().getParcelable<Type>(typeKey)) {
                     Type.Bitcoin -> {
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
-                        val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment)
 
                         SendBitcoinConfirmationScreen(
                             findNavController(),
                             sendBitcoinViewModel,
-                            xRateViewModel,
                             amountInputModeViewModel
                         )
                     }

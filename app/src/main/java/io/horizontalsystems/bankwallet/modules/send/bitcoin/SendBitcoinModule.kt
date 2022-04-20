@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
+import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 
 object SendBitcoinModule {
 
@@ -29,6 +30,7 @@ object SendBitcoinModule {
                 amountService,
                 addressService,
                 pluginService,
+                XRateService(App.marketKit, App.currencyManager.baseCurrency),
                 App.btcBlockchainManager
             )  as T
         }
