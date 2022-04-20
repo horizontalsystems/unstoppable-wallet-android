@@ -36,7 +36,7 @@
     <string name="NotAvailable">N/A</string>
     <string name="Any">Any</string>
     <string name="SyncError">Sync error. Try Again</string>
-    <string name="PercentTitle">Percent</string>
+    <string name="PercentTitle">Відсоток</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
@@ -51,7 +51,7 @@
     <string name="Welcome_PrivacySettings">Налаштування приватності</string>
     <!--Create Wallet-->
     <string name="CreateWallet_Title">Новий гаманець</string>
-    <string name="CreateWallet_Mnemonic">Mnemonic</string>
+    <string name="CreateWallet_Mnemonic">Мнемоніка</string>
     <string name="Passphrase">Парольна фраза</string>
     <string name="CreateWallet_N_Words">%s слів</string>
     <string name="CreateWallet_PassphraseConfirm">Підтвердити</string>
