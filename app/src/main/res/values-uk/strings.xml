@@ -20,7 +20,7 @@
     <string name="Button_Approve">Схвалити</string>
     <string name="Button_Confirm">Підтвердити</string>
     <string name="Button_Connect">Підключитися</string>
-    <string name="Button_Reject">Reject</string>
+    <string name="Button_Reject">Відхилити</string>
     <string name="Button_Disconnect">Відключитись</string>
     <string name="Button_Start">Start</string>
     <string name="Button_Create">Створити</string>
@@ -30,7 +30,7 @@
     <string name="Button_Reconnect">Reconnect</string>
     <string name="Button_Understand">I Understand</string>
     <string name="Button_Switch">Switch</string>
-    <string name="Button_Remove">Remove</string>
+    <string name="Button_Remove">Видалити</string>
     <string name="Button_Save">Зберегти</string>
     <string name="Error">Помилка</string>
     <string name="NotAvailable">N/A</string>
