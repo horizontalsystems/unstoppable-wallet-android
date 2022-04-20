@@ -102,7 +102,7 @@
     <string name="Market_DeFiCap">DeFi Cap</string>
     <string name="Market_SeeAll">See All</string>
     <string name="Market_Tab_Overview">Overview</string>
-    <string name="Market_Tab_Posts">News</string>
+    <string name="Market_Tab_Posts">Новини</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
@@ -172,12 +172,12 @@
     <string name="Market_Filter_Range_10B_100B">10B - 100B</string>
     <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
     <string name="Market_Filter_Range_500B_More">&gt; 500BN</string>
-    <string name="Market_Filter_TimePeriod_1D">1 Day</string>
-    <string name="Market_Filter_TimePeriod_1W">1 Week</string>
-    <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
-    <string name="Market_Filter_TimePeriod_1M">1 Month</string>
-    <string name="Market_Filter_TimePeriod_6M">6 Months</string>
-    <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
+    <string name="Market_Filter_TimePeriod_1D">1 день</string>
+    <string name="Market_Filter_TimePeriod_1W">1 тиждень</string>
+    <string name="Market_Filter_TimePeriod_2W">2 тижні</string>
+    <string name="Market_Filter_TimePeriod_1M">1 місяць</string>
+    <string name="Market_Filter_TimePeriod_6M">6 місяців</string>
+    <string name="Market_Filter_TimePeriod_1Y">1 рік</string>
     <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
     <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
     <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
@@ -186,7 +186,7 @@
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
     <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
-    <string name="TimePeriod_24h">24h</string>
+    <string name="TimePeriod_24h">24 год.</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Markets</string>
     <!--TVL Rank-->
@@ -207,14 +207,14 @@
     <string name="Balance_Receive">Receive</string>
     <string name="Balance_RatePerCoin">%1$s per %2$s</string>
     <string name="Balance_SyncedUntil">until %s</string>
-    <string name="Balance_Syncing">Syncing…</string>
+    <string name="Balance_Syncing">Синхронізація…</string>
     <string name="Balance_SearchingTransactions">Searching transactions…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
     <string name="Balance_AddCoins">Add Coins</string>
-    <string name="Balance_AddCoin">Add Coin</string>
+    <string name="Balance_AddCoin">Додати монету</string>
     <string name="Balance_CoinDisabled">Disabled coin %s</string>
-    <string name="Balance_Sort_Balance">Balance</string>
+    <string name="Balance_Sort_Balance">Баланс</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">Price Change</string>
@@ -226,19 +226,19 @@
     <!--Send-->
     <string name="Send_Title">Send %s</string>
     <string name="Send_Hint_Address">Address or Domain</string>
-    <string name="Send_Fee">Fee</string>
+    <string name="Send_Fee">Комісія</string>
     <string name="Send_Button_Paste">Paste</string>
     <string name="Send_Button_Max">Max</string>
-    <string name="Send_Confirmation_Title">Confirm</string>
+    <string name="Send_Confirmation_Title">Підтвердити</string>
     <string name="Send_Confirmation_Domain">Domain</string>
     <string name="Send_Confirmation_YouSend">You Send</string>
-    <string name="Send_Confirmation_Amount">Amount</string>
+    <string name="Send_Confirmation_Amount">Сума</string>
     <string name="Send_Confirmation_To">To</string>
-    <string name="Send_Confirmation_Method">Method</string>
-    <string name="Send_Confirmation_Receiver">Receiver</string>
-    <string name="Send_Confirmation_EstimateTime">Duration</string>
-    <string name="Send_Confirmation_Send_Button">Send</string>
-    <string name="Send_Success">\u2713 Sent</string>
+    <string name="Send_Confirmation_Method">Метод</string>
+    <string name="Send_Confirmation_Receiver">Одержувач</string>
+    <string name="Send_Confirmation_EstimateTime">Тривалість</string>
+    <string name="Send_Confirmation_Send_Button">Відправити</string>
+    <string name="Send_Success">\u2713 Відправлено</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
     <string name="ScanQr_NoCameraPermission">No camera permission</string>
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
@@ -253,10 +253,10 @@
     <string name="Send_DialogSpeed">Transaction Speed</string>
     <string name="Send_TxSpeed_Low">Low</string>
     <string name="Send_TxSpeed_High">High</string>
-    <string name="Send_TxSpeed_Recommended">Recommended</string>
-    <string name="Send_TxSpeed_Custom">Custom</string>
+    <string name="Send_TxSpeed_Recommended">Рекомендовано</string>
+    <string name="Send_TxSpeed_Custom">Власна</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogFee">Fee</string>
+    <string name="Send_DialogFee">Комісія</string>
     <string name="Send_DialogProceed">Next</string>
     <string name="Send_LockTime_Off">Off</string>
     <string name="Send_LockTime_Hour">1 hour</string>
@@ -271,10 +271,10 @@
     <string name="Send_Error_FetchFeeRateFailed">Error while fetching fee rate</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">Fee Settings</string>
-    <string name="FeeSettings_Reset">Reset</string>
-    <string name="FeeSettings_MaxFee">Max Fee</string>
+    <string name="FeeSettings_Reset">Скинути</string>
+    <string name="FeeSettings_MaxFee">Макс. комісія</string>
     <string name="FeeSettings_MaxFee_Info">The maximum expected total fee for the given transaction. Typically, the actual transaction fee is going to be lower.</string>
-    <string name="FeeSettings_Fee">Fee</string>
+    <string name="FeeSettings_Fee">Комісія</string>
     <string name="FeeSettings_GasLimit">Gas Limit</string>
     <string name="FeeSettings_GasLimit_Info">The gas limit is the maximum amount of gas units a user is willing to spend when sending a given transaction. Complex transactions require more gas units than simpler ones. The gas limit is estimated and set automatically for each transaction.</string>
     <string name="FeeSettings_GasPrice">Gas Price</string>
@@ -334,12 +334,12 @@
     <string name="WalletConnect_PendingRequests">Pending Requests</string>
     <string name="WalletConnect_ActiveWallet">Active Wallet</string>
     <string name="WalletConnect_Input">Input</string>
-    <string name="WalletConnect_Version1">Version 1.0</string>
-    <string name="WalletConnect_Version2">Version 2.0</string>
+    <string name="WalletConnect_Version1">Версія 1.0</string>
+    <string name="WalletConnect_Version2">Версія 2.0</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>
-    <string name="EthereumTransaction_Error_Title">Error</string>
-    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
+    <string name="EthereumTransaction_Error_Title">Помилка</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Недостатньо коштів</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">The transaction requires %s for sending</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">The current %s balance is below the amount required to process this transaction, including the transaction fee.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Low Fee</string>
@@ -432,10 +432,10 @@
     <string name="SwapInfo_Site">%s Site</string>
     <!--Deposit-->
     <string name="Deposit_Title">Receive %s</string>
-    <string name="Deposit_Share">Share</string>
-    <string name="Deposit_Your_Address">Your Address</string>
+    <string name="Deposit_Share">Поділитись</string>
+    <string name="Deposit_Your_Address">Ваша адреса</string>
     <!--Transactions-->
-    <string name="Transactions_Title">Transactions</string>
+    <string name="Transactions_Title">Транзакції</string>
     <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_WaitForSync">Please wait for the sync to finish.</string>
@@ -452,7 +452,7 @@
     <string name="Transactions_To">to %s</string>
     <string name="Transactions_From">from %s</string>
     <string name="Transaction_Unlimited">unlimited %s</string>
-    <string name="Transactions_All">All</string>
+    <string name="Transactions_All">Всі</string>
     <string name="Transactions_Incoming">Received</string>
     <string name="Transactions_Outgoing">Sent</string>
     <string name="Transactions_Swaps">Swaps</string>
@@ -465,7 +465,7 @@
     <string name="TransactionInfo_Approval">Swap Approval</string>
     <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
-    <string name="TransactionInfo_Date">Date</string>
+    <string name="TransactionInfo_Date">Дата</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
@@ -473,7 +473,7 @@
     <string name="TransactionInfo_From">From</string>
     <string name="TransactionInfo_LockedUntil">Locked until %s</string>
     <string name="TransactionInfo_UnlockedAt">Unlocked at %s</string>
-    <string name="TransactionInfo_RecipientHash">Recipient</string>
+    <string name="TransactionInfo_RecipientHash">Отримувач</string>
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <string name="TransactionInfo_Fee">Fee</string>
     <string name="TransactionInfo_FeeEstimated">Fee (est.)</string>
@@ -529,15 +529,15 @@
     <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Мова</string>
-    <string name="Settings_Theme">Theme</string>
-    <string name="Settings_Terms">Terms</string>
+    <string name="Settings_Theme">Тема</string>
+    <string name="Settings_Terms">Умови використання</string>
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_AppStatus">App Status</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
-    <string name="SettingsAboutApp_Title">About App</string>
-    <string name="SettingsAboutApp_Site">Website</string>
+    <string name="SettingsAboutApp_Title">Про додаток</string>
+    <string name="SettingsAboutApp_Site">Вебсайт</string>
     <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN SETTINGS</string>
@@ -598,7 +598,7 @@
     <string name="Settings_TermsPin"> I understand that only I myself am responsible for the safety of my funds, and no other entity.</string>
     <string name="SettingsTerms_BottomThankYou">Thank you \nfor choosing \nthis wallet!</string>
     <!--Setting_Tell Friends-->
-    <string name="SettingsShare_Title">Share</string>
+    <string name="SettingsShare_Title">Поділитись з друзями</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contact</string>
@@ -626,10 +626,10 @@
     <string name="SettingsLaunchScreen_MarketOverview">Market Overview</string>
     <string name="SettingsLaunchScreen_Watchlist">Watchlist</string>
     <!--Settings-->
-    <string name="SettingsTheme_Title">Theme</string>
-    <string name="SettingsTheme_Dark">Dark</string>
-    <string name="SettingsTheme_Light">Light</string>
-    <string name="SettingsTheme_System">System</string>
+    <string name="SettingsTheme_Title">Тема</string>
+    <string name="SettingsTheme_Dark">Темна</string>
+    <string name="SettingsTheme_Light">Світла</string>
+    <string name="SettingsTheme_System">Як у системі</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
     <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
