@@ -15,12 +15,12 @@
     <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Passcode</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock your wallet</string>
+    <string name="SetPin_Info">Ваш код доступу буде використовуватися для розблокування гаманця</string>
     <string name="SetPin_ConfirmInfo">Confirm</string>
     <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_Title">Змінити код доступу</string>
     <string name="EditPin_UnlockInfo">Current Passcode</string>
-    <string name="EditPin_NewPinInfo">New Passcode</string>
+    <string name="EditPin_NewPinInfo">Новий код доступу</string>
 </resources>
