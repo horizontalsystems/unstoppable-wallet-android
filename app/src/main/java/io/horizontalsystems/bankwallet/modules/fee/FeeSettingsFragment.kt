@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
-import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.core.findNavController
 
 class FeeSettingsFragment : BaseFragment() {
@@ -27,13 +26,11 @@ class FeeSettingsFragment : BaseFragment() {
             )
             setContent {
                 val viewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
-                val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment)
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment)
 
                 FeeSettingsScreen(
                     findNavController(),
                     viewModel,
-                    xRateViewModel,
                     amountInputModeViewModel
                 )
             }

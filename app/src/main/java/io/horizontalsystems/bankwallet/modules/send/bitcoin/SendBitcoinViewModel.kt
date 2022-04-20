@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
+import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.hodler.LockTimeInterval
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +30,7 @@ class SendBitcoinViewModel(
     private val amountService: SendBitcoinAmountService,
     private val addressService: SendBitcoinAddressService,
     private val pluginService: SendBitcoinPluginService,
+    private val xRateService: XRateService,
     private val btcBlockchainManager: BtcBlockchainManager
 ) : ViewModel() {
     val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
@@ -63,6 +65,9 @@ class SendBitcoinViewModel(
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
         )
     )
+        private set
+
+    var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
         private set
 
     init {
@@ -102,10 +107,15 @@ class SendBitcoinViewModel(
         }
 
         viewModelScope.launch {
-            feeRateService.start()
+            xRateService.getRateFlow(wallet.coin.uid)
+                .collect {
+                    coinRate = it
+                }
         }
 
-        emitState()
+        viewModelScope.launch {
+            feeRateService.start()
+        }
     }
 
     private fun emitState() {

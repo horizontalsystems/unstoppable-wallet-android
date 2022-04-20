@@ -25,8 +25,6 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
-import io.horizontalsystems.bankwallet.modules.xrate.XRateModule
-import io.horizontalsystems.bankwallet.modules.xrate.XRateViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.CoinType
 
@@ -52,9 +50,12 @@ class SendFragment : BaseFragment() {
                     CoinType.Dash,
                     -> {
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) { SendBitcoinModule.Factory(wallet) }
-                        val xRateViewModel by navGraphViewModels<XRateViewModel>(R.id.sendXFragment) { XRateModule.Factory(wallet.coin.uid) }
 
-                        SendBitcoinScreen(findNavController(), sendBitcoinViewModel, xRateViewModel, amountInputModeViewModel)
+                        SendBitcoinScreen(
+                            findNavController(),
+                            sendBitcoinViewModel,
+                            amountInputModeViewModel
+                        )
                     }
                     is CoinType.Bep2 -> {
                         val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) { SendBinanceModule.Factory(wallet) }
