@@ -20,7 +20,7 @@ class SendBitcoinAmountService(
 
     private var minimumSendAmount: BigDecimal? = null
     private var maximumSendAmount: BigDecimal? = null
-    private var availableBalance: BigDecimal = adapter.balanceData.available
+    private var availableBalance: BigDecimal? = null
     private var validAddress: Address? = null
     private var feeRate: Long? = null
     private var pluginData: Map<Byte, IPluginData>? = null
@@ -54,7 +54,7 @@ class SendBitcoinAmountService(
     }
 
     private fun refreshAvailableBalance() {
-        availableBalance = feeRate?.let { adapter.availableBalance(it, validAddress?.hex, pluginData) } ?: adapter.balanceData.available
+        availableBalance = feeRate?.let { adapter.availableBalance(it, validAddress?.hex, pluginData) }
     }
 
     private fun refreshMaximumSendAmount() {
@@ -69,7 +69,7 @@ class SendBitcoinAmountService(
         amountCaution = amountValidator.validate(
             amount,
             coinCode,
-            availableBalance,
+            availableBalance ?: BigDecimal.ZERO,
             minimumSendAmount,
             maximumSendAmount
         )
@@ -115,7 +115,7 @@ class SendBitcoinAmountService(
     data class State(
         val amount: BigDecimal?,
         val amountCaution: HSCaution?,
-        val availableBalance: BigDecimal,
+        val availableBalance: BigDecimal?,
         val canBeSend: Boolean
     )
 }

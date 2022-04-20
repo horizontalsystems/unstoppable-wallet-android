@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.HSSectionRounded
+import java.math.BigDecimal
 
 @Composable
 fun SendBitcoinScreen(
@@ -76,7 +77,7 @@ fun SendBitcoinScreen(
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 focusRequester = focusRequester,
-                availableBalance = availableBalance,
+                availableBalance = availableBalance ?: BigDecimal.ZERO,
                 caution = amountCaution,
                 coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
