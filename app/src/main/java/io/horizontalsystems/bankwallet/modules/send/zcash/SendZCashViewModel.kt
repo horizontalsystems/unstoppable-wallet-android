@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Address
@@ -53,35 +54,23 @@ class SendZCashViewModel(
 
     var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
         private set
-    var sendResult by mutableStateOf<SendResult?>( null)
+    var sendResult by mutableStateOf<SendResult?>(null)
         private set
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
     init {
-        viewModelScope.launch {
-            xRateService.getRateFlow(wallet.coin.uid)
-                .collect {
-                    coinRate = it
-                }
+        xRateService.getRateFlow(wallet.coin.uid).collectWith(viewModelScope) {
+            coinRate = it
         }
-        viewModelScope.launch {
-            amountService.stateFlow
-                .collect {
-                    handleUpdatedAmountState(it)
-                }
+        amountService.stateFlow.collectWith(viewModelScope) {
+            handleUpdatedAmountState(it)
         }
-        viewModelScope.launch {
-            addressService.stateFlow
-                .collect {
-                    handleUpdatedAddressState(it)
-                }
+        addressService.stateFlow.collectWith(viewModelScope) {
+            handleUpdatedAddressState(it)
         }
-        viewModelScope.launch {
-            memoService.stateFlow
-                .collect {
-                    handleUpdatedMemoState(it)
-                }
+        memoService.stateFlow.collectWith(viewModelScope) {
+            handleUpdatedMemoState(it)
         }
     }
 
