@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class MarketSearchViewModel(
     private val service: MarketSearchService
@@ -15,7 +17,9 @@ class MarketSearchViewModel(
     val screenState by service::screenState
 
     init {
-        service.start()
+        viewModelScope.launch {
+            service.start()
+        }
     }
 
     override fun onCleared() {
