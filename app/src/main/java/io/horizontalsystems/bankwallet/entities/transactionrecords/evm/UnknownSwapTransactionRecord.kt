@@ -9,9 +9,7 @@ class UnknownSwapTransactionRecord(
     transaction: Transaction,
     baseCoin: PlatformCoin,
     source: TransactionSource,
-    val value: TransactionValue,
     val exchangeAddress: String,
-    val internalTransactionEvents: List<TransferEvent>,
-    val incomingEip20Events: List<TransferEvent>,
-    val outgoingEip20Events: List<TransferEvent>
+    val valueIn: TransactionValue?,
+    val valueOut: TransactionValue?,
 ) : EvmTransactionRecord(transaction, baseCoin, source)

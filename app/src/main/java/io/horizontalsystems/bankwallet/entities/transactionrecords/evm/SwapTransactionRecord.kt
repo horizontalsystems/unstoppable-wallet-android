@@ -12,7 +12,7 @@ class SwapTransactionRecord(
     val exchangeAddress: String,
     val amountIn: Amount,
     val amountOut: Amount?,
-    val foreignRecipient: Boolean
+    val recipient: String?
 ) : EvmTransactionRecord(transaction, baseCoin, source) {
 
     sealed class Amount(val value: TransactionValue) {

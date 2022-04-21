@@ -5,46 +5,46 @@ import io.horizontalsystems.bankwallet.R
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
-sealed class TransactionInfoItemType {
-    class TransactionType(val leftValue: String, val rightValue: String?) :
-        TransactionInfoItemType()
+sealed class TransactionInfoViewItem {
+    class Transaction(val leftValue: String, val rightValue: String?) :
+        TransactionInfoViewItem()
 
-    class Amount(val leftValue: String, val rightValue: ColoredValue) : TransactionInfoItemType()
-    class Value(val title: String, val value: String) : TransactionInfoItemType()
+    class Amount(val leftValue: String, val rightValue: ColoredValue) : TransactionInfoViewItem()
+    class Value(val title: String, val value: String) : TransactionInfoViewItem()
     class Decorated(
         val title: String,
         val value: String,
         val actionButton: TransactionInfoActionButton? = null
     ) :
-        TransactionInfoItemType()
+        TransactionInfoViewItem()
 
-    class Explorer(val title: String, val url: String?) : TransactionInfoItemType()
+    class Explorer(val title: String, val url: String?) : TransactionInfoViewItem()
 
     class Status(val title: String, val leftIcon: Int, val status: TransactionStatusViewItem) :
-        TransactionInfoItemType()
+        TransactionInfoViewItem()
 
     class RawTransaction(val title: String, val actionButton: TransactionInfoActionButton? = null) :
-        TransactionInfoItemType()
+        TransactionInfoViewItem()
 
     class LockState(
         val title: String,
         val leftIcon: Int,
         val date: Date,
         val showLockInfo: Boolean
-    ) : TransactionInfoItemType()
+    ) : TransactionInfoViewItem()
 
     class DoubleSpend(
         val title: String,
         val leftIcon: Int,
         val transactionHash: String,
         val conflictingHash: String
-    ) : TransactionInfoItemType()
+    ) : TransactionInfoViewItem()
 
     class Options(
         val title: String,
         val optionButtonOne: TransactionInfoOption,
         val optionButtonTwo: TransactionInfoOption,
-    ) : TransactionInfoItemType()
+    ) : TransactionInfoViewItem()
 }
 
 data class TransactionInfoOption(

@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.erc20kit.decorations.ApproveEip20Decoration
 import io.horizontalsystems.erc20kit.decorations.OutgoingEip20Decoration
+import io.horizontalsystems.erc20kit.events.TokenInfo
 import io.horizontalsystems.erc20kit.events.TransferEventInstance
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.decorations.ContractCreationDecoration
@@ -16,6 +17,7 @@ import io.horizontalsystems.ethereumkit.decorations.UnknownTransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.ethereumkit.models.InternalTransaction
+import io.horizontalsystems.ethereumkit.models.Transaction
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
@@ -52,7 +54,7 @@ class EvmTransactionConverter(
             }
 
             is OutgoingEip20Decoration -> {
-                EvmOutgoingTransactionRecord(transaction, baseCoin, source, decoration.to.eip55, getEip20Value(decoration.contractAddress, decoration.value, true), decoration.sentToSelf)
+                EvmOutgoingTransactionRecord(transaction, baseCoin, source, decoration.to.eip55, getEip20Value(decoration.contractAddress, decoration.value, true, decoration.tokenInfo), decoration.sentToSelf)
             }
 
             is ApproveEip20Decoration -> {
@@ -65,7 +67,7 @@ class EvmTransactionConverter(
                     decoration.contractAddress.eip55,
                     convertToAmount(decoration.tokenIn, decoration.amountIn, true),
                     convertToAmount(decoration.tokenOut, decoration.amountOut, false),
-                    decoration.recipient != null
+                    decoration.recipient?.eip55
                 )
             }
 
@@ -75,7 +77,7 @@ class EvmTransactionConverter(
                     decoration.contractAddress.eip55,
                     SwapTransactionRecord.Amount.Exact(convertToTransactionValue(decoration.tokenIn, decoration.amountIn, true)),
                     convertToAmount(decoration.tokenOut, decoration.amountOut, false),
-                    decoration.recipient != null
+                    decoration.recipient?.eip55
                 )
             }
 
@@ -85,26 +87,16 @@ class EvmTransactionConverter(
                     decoration.contractAddress.eip55,
                     SwapTransactionRecord.Amount.Exact(convertToTransactionValue(decoration.tokenIn, decoration.amountIn, true)),
                     decoration.tokenOut?.let { convertToAmount(it, decoration.amountOut, false) },
-                    false
+                    null
                 )
             }
 
             is OneInchUnknownDecoration -> {
-                val address = evmKit.receiveAddress
-
-                val internalTransactions = decoration.internalTransactions.filter { it.to == address }
-
-                val transferEventInstances = decoration.eventInstances.mapNotNull { it as TransferEventInstance }
-                val incomingTransfers = transferEventInstances.filter { it.to == address && it.from != address }
-                val outgoingTransfers = transferEventInstances.filter { it.from == address }
-
                 return UnknownSwapTransactionRecord(
                     transaction, baseCoin, source,
-                    baseCoinValue(decoration.value, true),
                     decoration.contractAddress.eip55,
-                    getTransferEvents(internalTransactions),
-                    getIncomingEip20Events(incomingTransfers),
-                    getOutgoingEip20Events(outgoingTransfers)
+                    decoration.tokenAmountIn?.let { convertToTransactionValue(it.token, it.value, true) },
+                    decoration.tokenAmountOut?.let { convertToTransactionValue(it.token, it.value, true) }
                 )
             }
 
@@ -112,54 +104,27 @@ class EvmTransactionConverter(
                 val address = evmKit.receiveAddress
 
                 val internalTransactions = decoration.internalTransactions.filter { it.to == address }
-
                 val transferEventInstances = decoration.eventInstances.mapNotNull { it as TransferEventInstance }
                 val incomingTransfers = transferEventInstances.filter { it.to == address && it.from != address }
                 val outgoingTransfers = transferEventInstances.filter { it.from == address }
 
-                when {
-                    (transaction.from != address && internalTransactions.size == 1 && transferEventInstances.isEmpty()) -> {
-                        val internalTransaction = internalTransactions.first()
+                val contractAddress = transaction.to
+                val value = transaction.value
 
-                        return EvmIncomingTransactionRecord(
-                            transaction, baseCoin, source,
-                            internalTransaction.from.eip55,
-                            baseCoinValue(internalTransaction.value, false),
-                            true
-                        )
-                    }
-
-                    (transaction.from != address && incomingTransfers.size == 1 && internalTransactions.isEmpty() && outgoingTransfers.isEmpty()) -> {
-                        val transfer = incomingTransfers.first()
-
-                        return EvmIncomingTransactionRecord(
-                            transaction, baseCoin, source,
-                            transfer.from.eip55,
-                            getEip20Value(transfer.contractAddress, transfer.value, false)
-                        )
-                    }
-
-                    (transaction.from != address && outgoingTransfers.size == 1 && internalTransactions.isEmpty() && incomingTransfers.isEmpty()) -> {
-                        val transfer = outgoingTransfers.first()
-
-                        return EvmOutgoingTransactionRecord(
-                            transaction, baseCoin, source,
-                            transfer.to.eip55,
-                            getEip20Value(transfer.contractAddress, transfer.value, true),
-                            transfer.to == address
-                        )
-                    }
-
-                    else ->
-                        return ContractCallTransactionRecord(
-                            transaction, baseCoin, source,
-                            transaction.to?.eip55,
-                            null,
-                            transaction.value?.let { baseCoinValue(it, true) },
-                            getTransferEvents(internalTransactions),
-                            getIncomingEip20Events(incomingTransfers),
-                            getOutgoingEip20Events(outgoingTransfers)
-                        )
+                return if (transaction.from == address && contractAddress != null && value != null) {
+                    ContractCallTransactionRecord(
+                        transaction, baseCoin, source,
+                        contractAddress.eip55,
+                        null,
+                        getInternalEvents(internalTransactions) + getIncomingEvents(incomingTransfers),
+                        getTransactionValueEvents(transaction) + getOutgoingEvents(outgoingTransfers)
+                    )
+                } else {
+                    ExternalContractCallTransactionRecord(
+                        transaction, baseCoin, source,
+                        getInternalEvents(internalTransactions) + getIncomingEvents(incomingTransfers),
+                        getOutgoingEvents(outgoingTransfers)
+                    )
                 }
 
             }
@@ -185,14 +150,20 @@ class EvmTransactionConverter(
         return significandAmount
     }
 
-    private fun getEip20Value(tokenAddress: Address, amount: BigInteger, negative: Boolean): TransactionValue {
+    private fun getEip20Value(tokenAddress: Address, amount: BigInteger, negative: Boolean, tokenInfo: TokenInfo? = null): TransactionValue {
         val coinType = evmKitWrapper.blockchain.getEvm20CoinType(tokenAddress.hex)
         val platformCoin = coinManager.getPlatformCoin(coinType)
 
-        return if (platformCoin != null) {
-            TransactionValue.CoinValue(platformCoin, convertAmount(amount, platformCoin.decimals, negative))
-        } else {
-            TransactionValue.RawValue(value = amount)
+        return when {
+            platformCoin != null -> {
+                TransactionValue.CoinValue(platformCoin, convertAmount(amount, platformCoin.decimals, negative))
+            }
+            tokenInfo != null -> {
+                TransactionValue.TokenValue("", tokenInfo.tokenName, tokenInfo.tokenSymbol, tokenInfo.tokenDecimal, convertAmount(amount, tokenInfo.tokenDecimal, negative))
+            }
+            else -> {
+                TransactionValue.RawValue(value = amount)
+            }
         }
     }
 
@@ -202,7 +173,7 @@ class EvmTransactionConverter(
                 baseCoinValue(amount, negative)
             }
             is SwapDecoration.Token.Eip20Coin -> {
-                getEip20Value(token.address, amount, negative)
+                getEip20Value(token.address, amount, negative, token.tokenInfo)
             }
         }
     }
@@ -213,7 +184,7 @@ class EvmTransactionConverter(
                 baseCoinValue(amount, negative)
             }
             is OneInchDecoration.Token.Eip20Coin -> {
-                getEip20Value(token.address, amount, negative)
+                getEip20Value(token.address, amount, negative, token.tokenInfo)
             }
         }
     }
@@ -238,22 +209,50 @@ class EvmTransactionConverter(
         }
     }
 
-    private fun getTransferEvents(internalTransactions: List<InternalTransaction>): List<EvmTransactionRecord.TransferEvent> {
-        return internalTransactions.map { internalTransaction ->
-            EvmTransactionRecord.TransferEvent(internalTransaction.from.eip55, baseCoinValue(internalTransaction.value, false))
+
+    private fun getInternalEvents(internalTransactions: List<InternalTransaction>): List<EvmTransactionRecord.TransferEvent> {
+        val events: MutableList<EvmTransactionRecord.TransferEvent> = mutableListOf()
+
+        for (transaction in internalTransactions) {
+            events.add(
+                EvmTransactionRecord.TransferEvent(transaction.from.eip55, baseCoinValue(transaction.value, false))
+            )
         }
+
+        return events
     }
 
-    private fun getIncomingEip20Events(incomingTransfers: List<TransferEventInstance>): List<EvmTransactionRecord.TransferEvent> {
-        return incomingTransfers.map { transfer ->
-            EvmTransactionRecord.TransferEvent(transfer.from.eip55, getEip20Value(transfer.contractAddress, transfer.value, false))
-        }
+    private fun getTransactionValueEvents(transaction: Transaction): List<EvmTransactionRecord.TransferEvent> {
+        val value = transaction.value
+        if (value == null || value <= BigInteger.ZERO) return listOf()
+
+        return listOf(
+            EvmTransactionRecord.TransferEvent(transaction.to?.eip55, baseCoinValue(value, false))
+        )
     }
 
-    private fun getOutgoingEip20Events(outgoingTransfers: List<TransferEventInstance>): List<EvmTransactionRecord.TransferEvent> {
-        return outgoingTransfers.map { transfer ->
-            EvmTransactionRecord.TransferEvent(transfer.to.eip55, getEip20Value(transfer.contractAddress, transfer.value, true))
+    private fun getIncomingEvents(incomingTransfers: List<TransferEventInstance>): List<EvmTransactionRecord.TransferEvent> {
+        val events: MutableList<EvmTransactionRecord.TransferEvent> = mutableListOf()
+
+        for (transfer in incomingTransfers) {
+            events.add(
+                EvmTransactionRecord.TransferEvent(transfer.from.eip55, getEip20Value(transfer.contractAddress, transfer.value, false, transfer.tokenInfo))
+            )
         }
+
+        return events
+    }
+
+    private fun getOutgoingEvents(outgoingTransfers: List<TransferEventInstance>): List<EvmTransactionRecord.TransferEvent> {
+        val events: MutableList<EvmTransactionRecord.TransferEvent> = mutableListOf()
+
+        for (transfer in outgoingTransfers) {
+            events.add(
+                EvmTransactionRecord.TransferEvent(transfer.to.eip55, getEip20Value(transfer.contractAddress, transfer.value, true, transfer.tokenInfo))
+            )
+        }
+
+        return events
     }
 
 }

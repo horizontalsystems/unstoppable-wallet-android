@@ -49,6 +49,7 @@ class TransactionViewItemFactory {
             is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             is ContractCallTransactionRecord -> createViewItemFromContractCallTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is ExternalContractCallTransactionRecord -> createViewItemFromExternalContractCallTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             is EvmIncomingTransactionRecord -> createViewItemFromEvmIncomingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
@@ -70,7 +71,7 @@ class TransactionViewItemFactory {
         val secondaryValue = record.valueOut?.let {
             ColoredValueNew(
                 getCoinString(it),
-                if (record.foreignRecipient) ColorName.Grey else ColorName.Remus
+                if (record.recipient != null) ColorName.Grey else ColorName.Remus
             )
         }
 
@@ -96,6 +97,9 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: Int?
     ): TransactionViewItem {
+        val primaryValue = record.valueIn?.let { ColoredValueNew(getCoinString(it), ColorName.Jacob) }
+        val secondaryValue = record.valueOut?.let { ColoredValueNew(getCoinString(it), ColorName.Remus) }
+
         return TransactionViewItem(
             record.uid,
             icon ?: R.drawable.ic_tx_swap_20,
@@ -105,8 +109,8 @@ class TransactionViewItemFactory {
                 R.string.Transactions_From,
                 getNameOrAddressTruncated(record.exchangeAddress)
             ),
-            null,
-            null,
+            primaryValue,
+            secondaryValue,
             Date(record.timestamp * 1000)
         )
     }
@@ -202,6 +206,11 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: Int?
     ): TransactionViewItem {
+        val incomingEvents = combinedEvents(record.incomingEvents)
+        val outgoingEvents = combinedEvents(record.outgoingEvents)
+
+        val (primaryValue: ColoredValueNew?, secondaryValue: ColoredValueNew?) = getValuesFromEvents(incomingEvents, outgoingEvents, currencyValue)
+
         return TransactionViewItem(
             record.uid,
             icon ?: R.drawable.ic_tx_unordered,
@@ -209,10 +218,50 @@ class TransactionViewItemFactory {
             record.blockchainTitle + " " + Translator.getString(R.string.Transactions_ContractCall),
             Translator.getString(
                 R.string.Transactions_From,
-                record.contractAddress?.let { getNameOrAddressTruncated(it) } ?: "---"
+                getNameOrAddressTruncated(record.contractAddress)
             ),
-            null,
-            null,
+            primaryValue,
+            secondaryValue,
+            Date(record.timestamp * 1000)
+        )
+    }
+
+    private fun createViewItemFromExternalContractCallTransactionRecord(
+        record: ExternalContractCallTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Int?,
+        lastBlockTimestamp: Long?,
+        icon: Int?
+    ): TransactionViewItem {
+        val incomingEvents = combinedEvents(record.incomingEvents)
+        val outgoingEvents = combinedEvents(record.outgoingEvents)
+
+        val (primaryValue: ColoredValueNew?, secondaryValue: ColoredValueNew?) = getValuesFromEvents(incomingEvents, outgoingEvents, currencyValue)
+
+        val transactionTypeIcon = if (outgoingEvents.isNotEmpty()) R.drawable.ic_tx_unordered else R.drawable.ic_incoming_20
+        val title: String
+        val subTitle: String
+        if (outgoingEvents.isEmpty()) {
+            title = Translator.getString(R.string.Transactions_Receive)
+            val addresses = record.incomingEvents.mapNotNull { it.address }.toSet().toList()
+
+            subTitle = if (addresses.size == 1) Translator.getString(
+                R.string.Transactions_From,
+                getNameOrAddressTruncated(addresses.first())
+            ) else Translator.getString(R.string.Transactions_Multiple)
+        } else {
+            title = record.blockchainTitle + " " + Translator.getString(R.string.Transactions_ExternalContractCall)
+            subTitle = "---"
+        }
+
+        return TransactionViewItem(
+            record.uid,
+            icon ?: transactionTypeIcon,
+            progress,
+            title,
+            subTitle,
+            primaryValue,
+            secondaryValue,
             Date(record.timestamp * 1000)
         )
     }
@@ -363,9 +412,7 @@ class TransactionViewItemFactory {
 
         if (record.value.isMaxValue) {
             primaryValueText = "∞"
-            secondaryValueText = record.value.coin?.let {
-                Translator.getString(R.string.Transaction_Unlimited, it.code)
-            } ?: ""
+            secondaryValueText = if (record.value.coinCode.isEmpty()) "" else Translator.getString(R.string.Transaction_Unlimited, record.value.coinCode)
         } else {
             primaryValueText = currencyValue?.let { getCurrencyString(it) }
             secondaryValueText = getCoinString(record.value)
@@ -389,6 +436,96 @@ class TransactionViewItemFactory {
         )
     }
 
+    private fun combinedEvent(event1: EvmTransactionRecord.TransferEvent, event2: EvmTransactionRecord.TransferEvent): EvmTransactionRecord.TransferEvent? {
+        val value1 = event1.value
+        val value2 = event2.value
+
+        if (value1 is TransactionValue.CoinValue && value2 is TransactionValue.CoinValue) {
+            if (value2 is TransactionValue.CoinValue && value1.platformCoin == value2.platformCoin) {
+                return EvmTransactionRecord.TransferEvent(
+                    event1.address,
+                    TransactionValue.CoinValue(value1.platformCoin, value1.value + value2.value)
+                )
+            }
+        }
+        if (value1 is TransactionValue.TokenValue && value2 is TransactionValue.TokenValue) {
+            if (value2 is TransactionValue.TokenValue &&
+                value1.tokenName == value2.tokenName &&
+                value1.tokenCode == value2.tokenCode &&
+                value1.tokenDecimals == value2.tokenDecimals) {
+                return EvmTransactionRecord.TransferEvent(
+                    event1.address,
+                    TransactionValue.TokenValue("", value1.tokenName, value1.tokenCode, value1.tokenDecimals, value1.value + value2.value)
+                )
+            }
+        }
+
+        return null
+    }
+
+    private fun combinedEvents(events: List<EvmTransactionRecord.TransferEvent>): List<EvmTransactionRecord.TransferEvent> {
+        val results: MutableList<EvmTransactionRecord.TransferEvent> = mutableListOf()
+
+        events.forEachIndexed { index, event1 ->
+            if (!results.any { combinedEvent(event1, it) != null }) {
+                var sum = event1
+
+                events.subList(index + 1, events.size).forEach { event2 ->
+                    sum = combinedEvent(sum, event2) ?: sum
+                }
+
+                results.add(sum)
+            }
+        }
+
+        return results
+    }
+
+    private fun getValuesFromEvents(incomingEvents: List<EvmTransactionRecord.TransferEvent>, outgoingEvents: List<EvmTransactionRecord.TransferEvent>, currencyValue: CurrencyValue?): Pair<ColoredValueNew?, ColoredValueNew?> {
+        val primaryValue: ColoredValueNew?
+        val secondaryValue: ColoredValueNew?
+
+        val incomingValues = incomingEvents.map { it.value }
+        val outgoingValues = outgoingEvents.map { it.value }
+
+        when {
+            (incomingValues.size == 1 && outgoingValues.isEmpty()) -> {
+                primaryValue = currencyValue?.let {
+                    ColoredValueNew(getCurrencyString(it), ColorName.Remus)
+                }
+                secondaryValue = ColoredValueNew(getCoinString(incomingValues.first()), ColorName.Grey)
+            }
+
+            (incomingValues.isEmpty() && outgoingValues.size == 1) -> {
+                primaryValue = currencyValue?.let {
+                    ColoredValueNew(getCurrencyString(it), ColorName.Jacob)
+                }
+                secondaryValue = ColoredValueNew(getCoinString(outgoingValues.first()), ColorName.Grey)
+            }
+
+            (incomingValues.size == 1 && outgoingValues.size == 1) -> {
+                secondaryValue = ColoredValueNew(getCoinString(outgoingValues.first()), ColorName.Jacob)
+                primaryValue = ColoredValueNew(getCoinString(incomingValues.first()), ColorName.Remus)
+            }
+
+            (incomingValues.isEmpty() && outgoingValues.isNotEmpty()) -> {
+                primaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Jacob)
+                secondaryValue = ColoredValueNew(Translator.getString(R.string.Transactions_Multiple), ColorName.Grey)
+            }
+
+            (incomingValues.isNotEmpty() && outgoingValues.isEmpty()) -> {
+                primaryValue = ColoredValueNew(incomingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Remus)
+                secondaryValue = ColoredValueNew(Translator.getString(R.string.Transactions_Multiple), ColorName.Grey)
+            }
+
+            else -> {
+                primaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Jacob)
+                secondaryValue = ColoredValueNew(incomingValues.joinToString(", ") { it.coinCode }, ColorName.Remus)
+            }
+        }
+        return Pair(primaryValue, secondaryValue)
+    }
+
     private fun getCurrencyString(currencyValue: CurrencyValue): String {
         return App.numberFormatter.formatFiat(currencyValue.value.abs(), currencyValue.currency.symbol, 0, 2)
     }
@@ -398,7 +535,7 @@ class TransactionViewItemFactory {
             val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(decimalValue)
             App.numberFormatter.formatCoin(
                 decimalValue.abs(),
-                transactionValue.coin?.code ?: "",
+                transactionValue.coinCode,
                 0,
                 significantDecimal
             )

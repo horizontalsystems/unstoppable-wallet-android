@@ -10,9 +10,8 @@ class EvmIncomingTransactionRecord(
     baseCoin: PlatformCoin,
     source: TransactionSource,
     val from: String,
-    val value: TransactionValue,
-    override val foreignTransaction: Boolean = false
-) : EvmTransactionRecord(transaction, baseCoin, source) {
+    val value: TransactionValue
+) : EvmTransactionRecord(transaction, baseCoin, source, true) {
 
     override val mainValue = value
 

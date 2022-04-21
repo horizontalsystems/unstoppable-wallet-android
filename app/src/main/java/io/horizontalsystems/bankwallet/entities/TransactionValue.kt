@@ -11,6 +11,7 @@ sealed class TransactionValue {
     abstract val coinCode: String
     abstract val coin: Coin?
     abstract val decimalValue: BigDecimal?
+    abstract val decimals: Int?
     abstract val zeroValue: Boolean
     abstract val isMaxValue: Boolean
     abstract val abs: TransactionValue
@@ -22,6 +23,7 @@ sealed class TransactionValue {
         override val coinName: String = coin.name
         override val coinCode: String = coin.code
         override val decimalValue: BigDecimal = value
+        override val decimals: Int = platformCoin.decimals
         override val zeroValue: Boolean
             get() = value.compareTo(BigDecimal.ZERO) == 0
         override val isMaxValue: Boolean
@@ -29,7 +31,7 @@ sealed class TransactionValue {
         override val abs: TransactionValue
             get() = copy(value = value.abs())
         override val formattedString: String
-            get() = TODO("Not yet implemented")
+            get() = "n/a"
 
     }
 
@@ -38,6 +40,7 @@ sealed class TransactionValue {
         override val coinName: String = ""
         override val coinCode: String = ""
         override val decimalValue: BigDecimal? = null
+        override val decimals: Int? = null
         override val zeroValue: Boolean
             get() = value.compareTo(BigInteger.ZERO) == 0
         override val isMaxValue: Boolean = false
@@ -54,7 +57,8 @@ sealed class TransactionValue {
             get() = tokenName
         override val coinCode: String
             get() = tokenCode
-        override val decimalValue: BigDecimal? = null
+        override val decimalValue: BigDecimal = value
+        override val decimals: Int = tokenDecimals
         override val zeroValue: Boolean
             get() = value.compareTo(BigDecimal.ZERO) == 0
         override val isMaxValue: Boolean
@@ -62,7 +66,7 @@ sealed class TransactionValue {
         override val abs: TransactionValue
             get() = copy(value = value.abs())
         override val formattedString: String
-            get() = TODO("Not yet implemented")
+            get() = "n/a"
 
     }
 }
