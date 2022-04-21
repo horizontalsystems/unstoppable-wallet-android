@@ -45,6 +45,7 @@ fun CoinOverviewScreen(
         state = rememberSwipeRefreshState(refreshing),
         onRefresh = {
             viewModel.refresh()
+            chartViewModel.refresh()
         },
         content = {
             Crossfade(viewState) { viewState ->
@@ -114,6 +115,7 @@ fun CoinOverviewScreen(
                     is ViewState.Error -> {
                         ListErrorView(stringResource(id = R.string.BalanceSyncError_Title)) {
                             viewModel.retry()
+                            chartViewModel.refresh()
                         }
                     }
                 }
