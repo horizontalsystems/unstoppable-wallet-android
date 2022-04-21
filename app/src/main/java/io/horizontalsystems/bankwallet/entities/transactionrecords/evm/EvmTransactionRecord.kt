@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
 import io.horizontalsystems.marketkit.models.PlatformCoin
 
-open class EvmTransactionRecord(transaction: Transaction, baseCoin: PlatformCoin, source: TransactionSource) :
+open class EvmTransactionRecord(transaction: Transaction, baseCoin: PlatformCoin, source: TransactionSource, val foreignTransaction: Boolean = false) :
     TransactionRecord(
         uid = transaction.hashString,
         transactionHash = transaction.hashString,
@@ -19,10 +19,9 @@ open class EvmTransactionRecord(transaction: Transaction, baseCoin: PlatformCoin
         source = source
     ) {
 
-    data class TransferEvent(val address: String, val value: TransactionValue)
+    data class TransferEvent(val address: String?, val value: TransactionValue)
 
     val fee: TransactionValue?
-    open val foreignTransaction: Boolean = false
 
     init {
         val feeAmount: Long? = transaction.gasUsed ?: transaction.gasLimit

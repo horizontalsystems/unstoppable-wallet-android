@@ -55,25 +55,22 @@ class TransactionInfoService(
                     tx.valueIn,
                     tx.valueOut
                 ).map { it?.coinUid }
-                is UnknownSwapTransactionRecord -> {
-                    val tempCoinUidList = mutableListOf<String>()
-                    if (tx.value != BigDecimal.ZERO) {
-                        tempCoinUidList.add(tx.value.coinUid)
-                    }
-                    tempCoinUidList.addAll(tx.internalTransactionEvents.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.incomingEip20Events.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.outgoingEip20Events.map { it.value.coinUid })
-                    tempCoinUidList
-                }
+                is UnknownSwapTransactionRecord -> listOf(
+                    tx.fee,
+                    tx.valueIn,
+                    tx.valueOut
+                ).map { it?.coinUid }
                 is ApproveTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
                 is ContractCallTransactionRecord -> {
                     val tempCoinUidList = mutableListOf<String>()
-                    if (tx.value != null && tx.value.decimalValue != BigDecimal.ZERO) {
-                        tempCoinUidList.add(tx.value.coinUid)
-                    }
-                    tempCoinUidList.addAll(tx.internalTransactionEvents.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.incomingEip20Events.map { it.value.coinUid })
-                    tempCoinUidList.addAll(tx.outgoingEip20Events.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
+                    tempCoinUidList
+                }
+                is ExternalContractCallTransactionRecord -> {
+                    val tempCoinUidList = mutableListOf<String>()
+                    tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
                     tempCoinUidList
                 }
                 is BitcoinIncomingTransactionRecord -> listOf(tx.value.coinUid)

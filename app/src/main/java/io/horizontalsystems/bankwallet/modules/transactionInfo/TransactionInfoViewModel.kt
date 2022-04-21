@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoViewItem
+import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoPositionedViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -20,7 +20,7 @@ class TransactionInfoViewModel(
     val copyRawTransactionLiveEvent = SingleLiveEvent<String>()
     val openTransactionOptionsModule = SingleLiveEvent<Pair<TransactionInfoOption.Type, String>>()
 
-    val viewItemsLiveData = MutableLiveData<List<TransactionInfoViewItem?>>()
+    val viewItemsLiveData = MutableLiveData<List<TransactionInfoPositionedViewItem?>>()
 
     private val disposables = CompositeDisposable()
 
@@ -35,7 +35,7 @@ class TransactionInfoViewModel(
     }
 
     private fun updateViewItems(transactionItem: TransactionInfoItem) {
-        val viewItems = factory.getMiddleSectionItems(transactionItem.record, transactionItem.rates, transactionItem.lastBlockInfo, transactionItem.explorerData)
+        val viewItems = factory.getViewItemSections(transactionItem)
         viewItemsLiveData.postValue(viewItems)
     }
 
