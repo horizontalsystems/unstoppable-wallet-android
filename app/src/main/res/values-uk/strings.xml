@@ -186,7 +186,7 @@
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
     <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
-    <string name="TimePeriod_24h">24 год.</string>
+    <string name="TimePeriod_24h">24 год</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Markets</string>
     <!--TVL Rank-->
@@ -433,10 +433,10 @@
     <!--Deposit-->
     <string name="Deposit_Title">Receive %s</string>
     <string name="Deposit_Share">Поділитись</string>
-    <string name="Deposit_Your_Address">Ваша адреса</string>
+    <string name="Deposit_Your_Address">Ваша Адреса</string>
     <!--Transactions-->
     <string name="Transactions_Title">Транзакції</string>
-    <string name="Transactions_FilterAll">ALL</string>
+    <string name="Transactions_FilterAll">ВСІ</string>
     <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_WaitForSync">Please wait for the sync to finish.</string>
     <string name="Transactions_Pending">Pending</string>
@@ -598,7 +598,7 @@
     <string name="Settings_TermsPin"> I understand that only I myself am responsible for the safety of my funds, and no other entity.</string>
     <string name="SettingsTerms_BottomThankYou">Thank you \nfor choosing \nthis wallet!</string>
     <!--Setting_Tell Friends-->
-    <string name="SettingsShare_Title">Поділитись з друзями</string>
+    <string name="SettingsShare_Title">Поділитись</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contact</string>
@@ -781,8 +781,8 @@
     <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
     <string name="CoinPage_TimeDuration_Month3">3M</string>
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
-    <string name="CoinPage_TimeDuration_Year">1р</string>
-    <string name="CoinPage_TimeDuration_Year2">2р</string>
+    <string name="CoinPage_TimeDuration_Year">1Р</string>
+    <string name="CoinPage_TimeDuration_Year2">2P</string>
     <string name="CoinPage_Markets">Ринки</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
