@@ -18,19 +18,16 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinCategoryMarketData
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.withContext
 
 class MarketSearchService(
     private val marketKit: MarketKit,
     private val marketFavoritesManager: MarketFavoritesManager,
     private val baseCurrency: Currency,
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val disposables = CompositeDisposable()
-    private var topSectorsJob: Job? = null
 
     private var marketData: List<CoinCategoryMarketData> = listOf()
     private var filter = ""
@@ -80,14 +77,14 @@ class MarketSearchService(
                 TimeDuration.ThirtyDay -> coinCategoryMarketData.diff1M
             }
 
-            if (marketCap!= null || diff != null){
+            if (marketCap != null || diff != null) {
                 return MarketSearchModule.CategoryMarketData(marketCap, diff)
             }
         }
         return null
     }
 
-    fun start() {
+    suspend fun start() {
         marketFavoritesManager.dataUpdatedAsync
             .subscribeIO {
                 syncState()
@@ -98,11 +95,11 @@ class MarketSearchService(
         getDiscoveryMarketData()
     }
 
-    private fun getDiscoveryMarketData() {
-        topSectorsJob = coroutineScope.launch {
-            val coinCategoryMarketData = marketKit.coinCategoriesMarketDataSingle(baseCurrency.code).blockingGet()
-            marketData = coinCategoryMarketData
+    private suspend fun getDiscoveryMarketData() = withContext(Dispatchers.IO) {
+        try {
+            marketData = marketKit.coinCategoriesMarketDataSingle(baseCurrency.code).await()
             syncState()
+        } catch (e: Exception) {
         }
     }
 
