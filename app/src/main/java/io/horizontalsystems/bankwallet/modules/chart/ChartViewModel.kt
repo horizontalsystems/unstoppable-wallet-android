@@ -100,6 +100,11 @@ open class ChartViewModel(
         service.updateIndicator(chartIndicator)
     }
 
+    fun refresh() {
+        loadingLiveData.postValue(true)
+        service.refresh()
+    }
+
     private fun syncChartItems(chartPointsWrapper: ChartPointsWrapper) {
         val chartItems = chartPointsWrapper.items
         if (chartItems.isEmpty()) return
