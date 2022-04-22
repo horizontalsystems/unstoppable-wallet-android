@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection.overview
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,6 +33,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.About
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Contracts
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionOverviewItemUiState
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionViewModel
 import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
@@ -42,7 +41,9 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.ChartMinimal
+import io.horizontalsystems.core.helpers.HudHelper
 
 class NftCollectionOverviewFragment : BaseFragment() {
 
@@ -58,7 +59,15 @@ class NftCollectionOverviewFragment : BaseFragment() {
 
             setContent {
                 ComposeAppTheme {
-                    NftCollectionOverviewScreen(viewModel)
+                    NftCollectionOverviewScreen(viewModel,
+                        onCopyText = {
+                            TextHelper.copyText(it)
+                            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
+                        },
+                        onOpenUrl = {
+                            LinkHelper.openLinkInAppBrowser(requireContext(), it)
+                        }
+                    )
                 }
             }
         }
@@ -69,9 +78,10 @@ class NftCollectionOverviewFragment : BaseFragment() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NftCollectionOverviewScreen(
-    viewModel: NftCollectionViewModel
+    viewModel: NftCollectionViewModel,
+    onCopyText: (String) -> Unit,
+    onOpenUrl: (String) -> Unit
 ) {
-    val context = LocalContext.current
     val uiState = viewModel.nftCollectionOverviewUiState
 
     HSSwipeRefresh(
@@ -103,9 +113,19 @@ fun NftCollectionOverviewScreen(
                                 About(collection.description)
                             }
                         }
+                        if (collection.contracts.isNotEmpty()) {
+                            item {
+                                Spacer(modifier = Modifier.height(24.dp))
+                                Contracts(
+                                    contracts = collection.contracts,
+                                    onClickCopy = { onCopyText(it.rawValue) },
+                                    onClickExplorer = { onOpenUrl(it.explorerUrl) }
+                                )
+                            }
+                        }
                         if (collection.links.isNotEmpty()) {
                             item {
-                                Links(collection.links, context)
+                                Links(collection.links, onOpenUrl)
                             }
                         }
                         item {
@@ -120,9 +140,9 @@ fun NftCollectionOverviewScreen(
 }
 
 @Composable
-private fun Links(links: List<NftCollectionOverviewItemUiState.Link>, context: Context) {
+private fun Links(links: List<NftCollectionOverviewItemUiState.Link>, onClick: (String) -> Unit) {
     Column {
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         CellSingleLineClear(borderTop = true) {
             Text(
                 text = stringResource(id = R.string.NftAsset_Links),
@@ -130,7 +150,6 @@ private fun Links(links: List<NftCollectionOverviewItemUiState.Link>, context: C
                 color = ComposeAppTheme.colors.leah
             )
         }
-
         CellSingleLineLawrenceSection(
             buildList {
                 links.forEach { link ->
@@ -138,9 +157,7 @@ private fun Links(links: List<NftCollectionOverviewItemUiState.Link>, context: C
                         CellLink(
                             icon = painterResource(link.icon),
                             title = stringResource(link.title),
-                            onClick = {
-                                LinkHelper.openLinkInAppBrowser(context, link.url)
-                            }
+                            onClick = { onClick(link.url) }
                         )
                     }
                 }
@@ -150,10 +167,7 @@ private fun Links(links: List<NftCollectionOverviewItemUiState.Link>, context: C
 }
 
 @Composable
-private fun Header(
-    name: String,
-    imageUrl: String?
-) {
+private fun Header(name: String, imageUrl: String?) {
     Row(modifier = Modifier.padding(start = 24.dp, top = 24.dp, bottom = 24.dp, end = 16.dp)) {
         Image(
             modifier = Modifier
@@ -162,7 +176,6 @@ private fun Header(
             painter = rememberImagePainter(imageUrl),
             contentDescription = null
         )
-
         Text(
             modifier = Modifier
                 .weight(1f)
@@ -242,17 +255,20 @@ private fun Stats(collection: NftCollectionOverviewItemUiState) {
     for (row in rows) {
         Spacer(modifier = Modifier.height(8.dp))
         Row(Modifier.padding(horizontal = 16.dp)) {
-            ChartCard(row.first())
+            ChartCard(row[0])
             Spacer(modifier = Modifier.width(8.dp))
-            row.lastOrNull()?.let { ChartCard(it) }
+            val secondChart = row.getOrNull(1)
+            if (secondChart != null) {
+                ChartCard(secondChart)
+            } else {
+                Box(modifier = Modifier.weight(1f))
+            }
         }
     }
 }
 
 @Composable
-private fun RowScope.ChartCard(
-    chartDataWrapper: NftCollectionOverviewItemUiState.ChartDataWrapper
-) {
+private fun RowScope.ChartCard(chartDataWrapper: NftCollectionOverviewItemUiState.ChartDataWrapper) {
     Column(
         modifier = Modifier
             .weight(1f)
@@ -265,13 +281,11 @@ private fun RowScope.ChartCard(
             style = ComposeAppTheme.typography.caption,
             color = ComposeAppTheme.colors.grey
         )
-
         Divider(
             modifier = Modifier.padding(top = 10.dp),
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10
         )
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -290,14 +304,12 @@ private fun RowScope.ChartCard(
                 color = diffColor(chartDataWrapper.diff.raw())
             )
         }
-
         Text(
             modifier = Modifier.padding(top = 8.dp),
             text = chartDataWrapper.secondaryValue,
             style = ComposeAppTheme.typography.micro,
             color = ComposeAppTheme.colors.grey
         )
-
         AndroidView(
             modifier = Modifier
                 .fillMaxWidth()

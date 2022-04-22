@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.nft.NftCollection
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionModule.Tab
@@ -95,42 +96,8 @@ class NftCollectionViewModel(
                 averagePriceChartDataWrapper = averagePriceChartDataWrapper,
                 salesChartDataWrapper = salesChartDataWrapper,
                 floorPriceChartDataWrapper = floorPriceChartDataWrapper,
-                links = buildList {
-                    collection.links?.externalUrl?.let {
-                        add(
-                            NftCollectionOverviewItemUiState.Link(
-                                url = it,
-                                title = R.string.NftAsset_Links_Website,
-                                icon = R.drawable.ic_globe_20
-                            )
-                        )
-                    }
-                    add(
-                        NftCollectionOverviewItemUiState.Link(
-                            url = "https://opensea.io/collection/${collection.uid}",
-                            title = R.string.NftAsset_Links_OpenSea,
-                            icon = R.drawable.ic_opensea_20
-                        )
-                    )
-                    collection.links?.discordUrl?.let {
-                        add(
-                            NftCollectionOverviewItemUiState.Link(
-                                url = it,
-                                title = R.string.NftAsset_Links_Discord,
-                                icon = R.drawable.ic_discord_20
-                            )
-                        )
-                    }
-                    collection.links?.twitterUsername?.let {
-                        add(
-                            NftCollectionOverviewItemUiState.Link(
-                                url = "https://twitter.com/$it",
-                                title = R.string.NftAsset_Links_Twitter,
-                                icon = R.drawable.ic_twitter_20
-                            )
-                        )
-                    }
-                }
+                links = links(collection),
+                contracts = contracts(collection)
             )
         }
 
@@ -144,6 +111,52 @@ class NftCollectionViewModel(
             errorMessages = errorMessages,
             item = itemUiState
         )
+    }
+
+    private fun contracts(collection: NftCollection) =
+        collection.contracts.map {
+            ContractInfo(
+                it.address,
+                R.drawable.logo_ethereum_24,
+                "https://etherscan.io/token/${it.address}"
+            )
+        }
+
+    private fun links(collection: NftCollection) = buildList {
+        collection.links?.externalUrl?.let {
+            add(
+                NftCollectionOverviewItemUiState.Link(
+                    url = it,
+                    title = R.string.NftAsset_Links_Website,
+                    icon = R.drawable.ic_globe_20
+                )
+            )
+        }
+        add(
+            NftCollectionOverviewItemUiState.Link(
+                url = "https://opensea.io/collection/${collection.uid}",
+                title = R.string.NftAsset_Links_OpenSea,
+                icon = R.drawable.ic_opensea_20
+            )
+        )
+        collection.links?.discordUrl?.let {
+            add(
+                NftCollectionOverviewItemUiState.Link(
+                    url = it,
+                    title = R.string.NftAsset_Links_Discord,
+                    icon = R.drawable.ic_discord_20
+                )
+            )
+        }
+        collection.links?.twitterUsername?.let {
+            add(
+                NftCollectionOverviewItemUiState.Link(
+                    url = "https://twitter.com/$it",
+                    title = R.string.NftAsset_Links_Twitter,
+                    icon = R.drawable.ic_twitter_20
+                )
+            )
+        }
     }
 
     private fun chartDataWrapper(
@@ -201,7 +214,8 @@ data class NftCollectionOverviewItemUiState(
     val averagePriceChartDataWrapper: ChartDataWrapper?,
     val salesChartDataWrapper: ChartDataWrapper?,
     val floorPriceChartDataWrapper: ChartDataWrapper?,
-    val links: List<Link>
+    val links: List<Link>,
+    val contracts: List<ContractInfo>
 ) {
     data class ChartDataWrapper(
         val title: String,
