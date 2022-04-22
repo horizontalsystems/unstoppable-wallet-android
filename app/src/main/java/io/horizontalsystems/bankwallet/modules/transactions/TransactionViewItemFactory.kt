@@ -80,10 +80,7 @@ class TransactionViewItemFactory {
             icon ?: R.drawable.ic_tx_swap_20,
             progress,
             Translator.getString(R.string.Transactions_Swap),
-            Translator.getString(
-                R.string.Transactions_From,
-                getNameOrAddressTruncated(record.exchangeAddress)
-            ),
+            getNameOrAddressTruncated(record.exchangeAddress),
             primaryValue,
             secondaryValue,
             Date(record.timestamp * 1000)
@@ -105,10 +102,7 @@ class TransactionViewItemFactory {
             icon ?: R.drawable.ic_tx_swap_20,
             progress,
             Translator.getString(R.string.Transactions_Swap),
-            Translator.getString(
-                R.string.Transactions_From,
-                getNameOrAddressTruncated(record.exchangeAddress)
-            ),
+            getNameOrAddressTruncated(record.exchangeAddress),
             primaryValue,
             secondaryValue,
             Date(record.timestamp * 1000)
@@ -210,16 +204,14 @@ class TransactionViewItemFactory {
         val outgoingEvents = combinedEvents(record.outgoingEvents)
 
         val (primaryValue: ColoredValueNew?, secondaryValue: ColoredValueNew?) = getValuesFromEvents(incomingEvents, outgoingEvents, currencyValue)
+        val title = record.method ?: record.blockchainTitle + " " + Translator.getString(R.string.Transactions_ContractCall)
 
         return TransactionViewItem(
             record.uid,
             icon ?: R.drawable.ic_tx_unordered,
             progress,
-            record.blockchainTitle + " " + Translator.getString(R.string.Transactions_ContractCall),
-            Translator.getString(
-                R.string.Transactions_From,
-                getNameOrAddressTruncated(record.contractAddress)
-            ),
+            title,
+            getNameOrAddressTruncated(record.contractAddress),
             primaryValue,
             secondaryValue,
             Date(record.timestamp * 1000)
@@ -245,10 +237,7 @@ class TransactionViewItemFactory {
             title = Translator.getString(R.string.Transactions_Receive)
             val addresses = record.incomingEvents.mapNotNull { it.address }.toSet().toList()
 
-            subTitle = if (addresses.size == 1) Translator.getString(
-                R.string.Transactions_From,
-                getNameOrAddressTruncated(addresses.first())
-            ) else Translator.getString(R.string.Transactions_Multiple)
+            subTitle = if (addresses.size == 1) getNameOrAddressTruncated(addresses.first()) else Translator.getString(R.string.Transactions_Multiple)
         } else {
             title = record.blockchainTitle + " " + Translator.getString(R.string.Transactions_ExternalContractCall)
             subTitle = "---"
@@ -426,10 +415,7 @@ class TransactionViewItemFactory {
             icon ?: R.drawable.ic_tx_checkmark_20,
             progress,
             Translator.getString(R.string.Transactions_Approve),
-            Translator.getString(
-                R.string.Transactions_From,
-                getNameOrAddressTruncated(record.spender)
-            ),
+            getNameOrAddressTruncated(record.spender),
             primaryValue,
             secondaryValue,
             Date(record.timestamp * 1000)

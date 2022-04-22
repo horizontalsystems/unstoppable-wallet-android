@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.Warning
+import io.horizontalsystems.bankwallet.core.adapters.EvmContractMethodParser
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -30,6 +31,7 @@ interface ISendEvmTransactionService {
     val ownAddress: Address
 
     fun send(logger: AppLogger)
+    fun methodName(input: ByteArray): String?
 }
 
 class SendEvmTransactionService(
@@ -39,6 +41,7 @@ class SendEvmTransactionService(
 ) : Clearable, ISendEvmTransactionService {
     private val disposable = CompositeDisposable()
 
+    private val contractMethodParser = EvmContractMethodParser()
     private val evmKit = evmKitWrapper.evmKit
     private val stateSubject = PublishSubject.create<State>()
 
@@ -119,6 +122,9 @@ class SendEvmTransactionService(
             })
             .let { disposable.add(it) }
     }
+
+    override fun methodName(input: ByteArray): String? =
+        contractMethodParser.parse(input)
 
     override fun clear() {
         disposable.clear()

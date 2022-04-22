@@ -304,7 +304,7 @@ class TransactionInfoViewItemFactory(
     private fun getContractMethodSectionItems(transaction: ContractCallTransactionRecord) =
         listOf(
             Transaction(
-                getString(R.string.Transactions_ContractCall),
+                transaction.method ?: getString(R.string.Transactions_ContractCall),
                 transaction.contractAddress?.let { getNameOrAddress(it) } ?: "---"
             )
         )
