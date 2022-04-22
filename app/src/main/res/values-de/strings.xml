@@ -448,6 +448,7 @@
     <string name="Transactions_Swap">Swap</string>
     <string name="Transactions_Failed">Failed</string>
     <string name="Transactions_ContractCall">Contract Call</string>
+    <string name="Transactions_ExternalContractCall">External Call</string>
     <string name="Transactions_ContractCreation">Contract Creation</string>
     <string name="Transactions_To">to %s</string>
     <string name="Transactions_From">from %s</string>
@@ -459,6 +460,7 @@
     <string name="Transactions_Approvals">Approvals</string>
     <string name="Transactions_Unknown">Unknown Transaction</string>
     <string name="Transactions_Unknown_Description">Transaction can not be parsed</string>
+    <string name="Transactions_Multiple">Multiple</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transaction</string>
     <string name="TransactionInfo_Title">Transaction Info</string>
@@ -471,6 +473,7 @@
     <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
     <string name="TransactionInfo_To">To</string>
     <string name="TransactionInfo_From">From</string>
+    <string name="TransactionInfo_Spender">Spender</string>
     <string name="TransactionInfo_LockedUntil">Locked until %s</string>
     <string name="TransactionInfo_UnlockedAt">Unlocked at %s</string>
     <string name="TransactionInfo_RecipientHash">Recipient</string>
