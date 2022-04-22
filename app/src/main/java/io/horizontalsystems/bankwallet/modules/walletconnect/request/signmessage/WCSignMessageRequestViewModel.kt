@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.core.SingleLiveEvent
 
@@ -8,8 +11,12 @@ class WCSignMessageRequestViewModel(
 ) : ViewModel() {
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val message = service.message
-    val signEnabled by service::signButtonEnabled
-    val trustCheckmarkChecked by service::trustCheckmarkChecked
+
+    var trustCheckmarkChecked: Boolean by mutableStateOf(false)
+        private set
+
+    var signEnabled: Boolean by mutableStateOf(signButtonEnabled())
+        private set
 
     fun sign() {
         service.sign()
@@ -22,7 +29,12 @@ class WCSignMessageRequestViewModel(
     }
 
     fun onTrustChecked(checked: Boolean){
-        service.onTrustChecked(checked)
+        trustCheckmarkChecked = checked
+        signEnabled = signButtonEnabled()
+    }
+
+    private fun signButtonEnabled(): Boolean {
+        return !service.isLegacySignRequest || trustCheckmarkChecked
     }
 
 }

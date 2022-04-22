@@ -1,8 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v1
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage.WCSignType
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
@@ -19,14 +16,8 @@ class WC1SignMessageRequestService(
     private val signer: Signer
 ) : WCSignMessageRequestModule.RequestAction {
 
-    private val isLegacySignRequest =
+    override val isLegacySignRequest =
         request.message.type == WCSignType.MESSAGE && request.message.data.hexStringToByteArray().size == 32
-
-    override var trustCheckmarkChecked: Boolean = false
-        private set
-
-    override var signButtonEnabled: Boolean by mutableStateOf(signButtonEnabled())
-        private set
 
     override val message: SignMessage by lazy {
         val messageData = request.message.data
@@ -60,15 +51,6 @@ class WC1SignMessageRequestService(
 
     override fun stop() {}
 
-    override fun onTrustChecked(checked: Boolean) {
-        trustCheckmarkChecked = checked
-        signButtonEnabled = signButtonEnabled()
-    }
-
-    private fun signButtonEnabled(): Boolean {
-        return !isLegacySignRequest || trustCheckmarkChecked
-    }
-
     private fun hexStringToUtf8String(hexString: String) = try {
         String(hexString.hexStringToByteArray())
     } catch (_: Throwable) {
@@ -91,7 +73,6 @@ class WC1SignMessageRequestService(
                 signer.signTypedData(rawJsonMessage = message.data)
             }
         }
-
     }
 
 }
