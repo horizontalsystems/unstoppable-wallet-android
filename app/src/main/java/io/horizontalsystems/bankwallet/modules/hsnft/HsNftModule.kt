@@ -318,7 +318,13 @@ class HsNftApiProvider : INftApiProvider {
                     twitterUsername = it.links?.twitter_username,
                     instagramUsername = it.links?.instagram_username,
                     wikiUrl = it.links?.wiki_url
-                )
+                ),
+                contracts = it.asset_contracts.map { contract ->
+                    NftCollection.Contract(
+                        address = contract.address,
+                        type = contract.type
+                    )
+                }
             )
         }
     }
