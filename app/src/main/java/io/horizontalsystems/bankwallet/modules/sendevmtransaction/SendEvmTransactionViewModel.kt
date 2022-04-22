@@ -78,8 +78,6 @@ class SendEvmTransactionViewModel(
             }
         }
 
-//        val dataState = service.txDataState
-//        transactionTitleLiveData.postValue(getTransactionTitle(dataState.decoration, dataState.transactionData))
         viewItemsLiveData.postValue(getItems(service.txDataState))
     }
 
@@ -99,7 +97,7 @@ class SendEvmTransactionViewModel(
         }
 
         if (dataState.transactionData != null) {
-            return getUnknownMethodItems(dataState.transactionData)
+            return getUnknownMethodItems(dataState.transactionData, service.methodName(dataState.transactionData.input))
         }
 
         return listOf()
@@ -514,7 +512,7 @@ class SendEvmTransactionViewModel(
         return listOf(SectionViewItem(viewItems))
     }
 
-    private fun getUnknownMethodItems(transactionData: TransactionData): List<SectionViewItem> {
+    private fun getUnknownMethodItems(transactionData: TransactionData, methodName: String?): List<SectionViewItem> {
         val toValue = transactionData.to.eip55
 
         val viewItems = mutableListOf(
@@ -537,6 +535,10 @@ class SendEvmTransactionViewModel(
                     ValueType.Regular
                 ),
             )
+        }
+
+        methodName?.let {
+            viewItems.add(ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Method), it, ValueType.Regular))
         }
 
         viewItems.add(ViewItem.Input(transactionData.input.toHexString()))

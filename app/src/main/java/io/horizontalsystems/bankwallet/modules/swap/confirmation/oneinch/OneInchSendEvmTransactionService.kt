@@ -131,6 +131,8 @@ class OneInchSendEvmTransactionService(
             .let { disposable.add(it) }
     }
 
+    override fun methodName(input: ByteArray): String? = null
+
     override fun clear() {
         disposable.clear()
     }

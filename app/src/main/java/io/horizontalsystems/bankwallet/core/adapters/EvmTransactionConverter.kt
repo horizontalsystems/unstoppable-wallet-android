@@ -34,6 +34,7 @@ class EvmTransactionConverter(
     private val baseCoin: PlatformCoin
 ) {
 
+    private val contractMethodParser = EvmContractMethodParser()
     private val evmKit: EthereumKit
         get() = evmKitWrapper.evmKit
 
@@ -115,7 +116,7 @@ class EvmTransactionConverter(
                     ContractCallTransactionRecord(
                         transaction, baseCoin, source,
                         contractAddress.eip55,
-                        null,
+                        transaction.input?.let { contractMethodParser.parse(it) },
                         getInternalEvents(internalTransactions) + getIncomingEvents(incomingTransfers),
                         getTransactionValueEvents(transaction) + getOutgoingEvents(outgoingTransfers)
                     )
