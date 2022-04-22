@@ -43,7 +43,8 @@ data class NftCollection(
     val oneDayAveragePrice: BigDecimal,
     val averagePrice: BigDecimal,
     val floorPrice: BigDecimal?,
-    val chartPoints: List<ChartPoint>
+    val chartPoints: List<ChartPoint>,
+    val links: Links?
 ) {
     data class ChartPoint(
         val timestamp: Long,
@@ -51,5 +52,14 @@ data class NftCollection(
         val averagePrice: BigDecimal,
         val floorPrice: BigDecimal?,
         val oneDaySales: Int
+    )
+
+    data class Links(
+        val externalUrl: String?,
+        val discordUrl: String?,
+        val telegramUrl: String?,
+        val twitterUsername: String?,
+        val instagramUsername: String?,
+        val wikiUrl: String?,
     )
 }
