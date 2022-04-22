@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Request
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule.WCRequestWrapper
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -24,7 +24,7 @@ class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
     val errorLiveData = MutableLiveData<String?>()
     val statusLiveData = MutableLiveData<Status?>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
-    val openRequestLiveEvent = SingleLiveEvent<WC1Request>()
+    val openRequestLiveEvent = SingleLiveEvent<WCRequestWrapper>()
 
     var invalidUrlError by mutableStateOf(false)
         private set

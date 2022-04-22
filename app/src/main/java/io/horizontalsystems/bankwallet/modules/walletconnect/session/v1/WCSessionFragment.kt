@@ -83,17 +83,19 @@ class WCSessionFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        viewModel.openRequestLiveEvent.observe(viewLifecycleOwner) {
-            when (it) {
+        viewModel.openRequestLiveEvent.observe(viewLifecycleOwner) { requestWrapper ->
+            when (requestWrapper.wC1Request) {
                 is WC1SendEthereumTransactionRequest -> {
-                    baseViewModel.sharedSendEthereumTransactionRequest = it
+                    baseViewModel.sharedSendEthereumTransactionRequest = requestWrapper.wC1Request
+                    baseViewModel.dAppName = requestWrapper.dAppName
 
                     findNavController().slideFromBottom(
                         R.id.wcSendEthereumTransactionRequestFragment
                     )
                 }
                 is WC1SignMessageRequest -> {
-                    baseViewModel.sharedSignMessageRequest = it
+                    baseViewModel.sharedSignMessageRequest = requestWrapper.wC1Request
+                    baseViewModel.dAppName = requestWrapper.dAppName
 
                     findNavController().slideFromBottom(
                         R.id.wcSignMessageRequestFragment

@@ -78,8 +78,7 @@ object WC2Parser {
                             transaction
                         )
                     }
-                    "personal_sign",
-                    "eth_sign" -> {
+                    "personal_sign" -> {
                         val dataString = requestNode.get("params").asJsonArray
                             .firstOrNull { it.asString != address }?.asString ?: ""
                         val data = hexStringToUtf8String(dataString)
@@ -88,6 +87,17 @@ object WC2Parser {
                             request.topic,
                             dataString,
                             SignMessage.PersonalMessage(data)
+                        )
+                    }
+                    "eth_sign" -> {
+                        val dataString = requestNode.get("params").asJsonArray
+                            .firstOrNull { it.asString != address }?.asString ?: ""
+                        val data = hexStringToUtf8String(dataString)
+                        return WC2SignMessageRequest(
+                            request.requestId,
+                            request.topic,
+                            dataString,
+                            SignMessage.Message(data, dAppName)
                         )
                     }
                     "eth_signTypedData" -> {

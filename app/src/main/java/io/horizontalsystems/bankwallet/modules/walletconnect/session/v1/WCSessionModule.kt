@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.session.v1
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Request
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
 
 object WCSessionModule {
@@ -28,6 +29,11 @@ object WCSessionModule {
         val description: String?,
         val icon: String?,
         val editable: Boolean,
+    )
+
+    data class WCRequestWrapper(
+        val wC1Request: WC1Request,
+        val dAppName: String?
     )
 
 }

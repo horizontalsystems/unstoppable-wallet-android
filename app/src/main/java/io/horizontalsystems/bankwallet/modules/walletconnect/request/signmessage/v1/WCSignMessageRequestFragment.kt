@@ -19,20 +19,37 @@ import io.horizontalsystems.core.findNavController
 
 class WCSignMessageRequestFragment : BaseFragment() {
 
-    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.wcSessionFragment)
-    val vmFactory by lazy {
-        WCSignMessageRequestModule.Factory(
-            baseViewModel.sharedSignMessageRequest!!,
-            baseViewModel.service
-        )
-    }
-    private val viewModel by viewModels<WCSignMessageRequestViewModel> { vmFactory }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        val baseViewModel = getBaseViewModel()
+
+        if (baseViewModel == null) {
+            findNavController().popBackStack()
+            return View(requireContext())
+        }
+
+        val vmFactory by lazy {
+            WCSignMessageRequestModule.Factory(
+                baseViewModel.sharedSignMessageRequest!!,
+                baseViewModel.dAppName,
+                baseViewModel.service
+            )
+        }
+        val viewModel by viewModels<WCSignMessageRequestViewModel> { vmFactory }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            viewModel.reject()
+        }
+
+        viewModel.closeLiveEvent.observe(viewLifecycleOwner) {
+            baseViewModel.sharedSignMessageRequest = null
+            findNavController().popBackStack()
+        }
+
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -46,16 +63,12 @@ class WCSignMessageRequestFragment : BaseFragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            viewModel.reject()
-        }
-
-        viewModel.closeLiveEvent.observe(viewLifecycleOwner) {
-            baseViewModel.sharedSignMessageRequest = null
-            findNavController().popBackStack()
+    private fun getBaseViewModel(): WalletConnectViewModel? {
+        return try {
+            val viewModel by navGraphViewModels<WalletConnectViewModel>(R.id.wcSessionFragment)
+            viewModel
+        } catch (e: RuntimeException) {
+            null
         }
     }
 
