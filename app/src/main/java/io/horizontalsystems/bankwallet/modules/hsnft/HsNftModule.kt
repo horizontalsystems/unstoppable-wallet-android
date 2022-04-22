@@ -78,6 +78,7 @@ object HsNftApiV1Response {
         val cursor: Cursor,
         val assets: List<Asset>
     )
+
     data class Cursor(val next: String?, val previous: String)
     data class Asset(
         val token_id: String,
@@ -309,7 +310,15 @@ class HsNftApiProvider : INftApiProvider {
                         floorPrice = chartPoint.floor_price,
                         oneDaySales = chartPoint.one_day_sales
                     )
-                }
+                },
+                links = NftCollection.Links(
+                    externalUrl = it.links?.external_url,
+                    discordUrl = it.links?.discord_url,
+                    telegramUrl = it.links?.telegram_url,
+                    twitterUsername = it.links?.twitter_username,
+                    instagramUsername = it.links?.instagram_username,
+                    wikiUrl = it.links?.wiki_url
+                )
             )
         }
     }

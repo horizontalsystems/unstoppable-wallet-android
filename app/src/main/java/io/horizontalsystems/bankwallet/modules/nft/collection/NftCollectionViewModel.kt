@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -92,7 +94,43 @@ class NftCollectionViewModel(
                 volumeChartDataWrapper = volumeChartDataWrapper,
                 averagePriceChartDataWrapper = averagePriceChartDataWrapper,
                 salesChartDataWrapper = salesChartDataWrapper,
-                floorPriceChartDataWrapper = floorPriceChartDataWrapper
+                floorPriceChartDataWrapper = floorPriceChartDataWrapper,
+                links = buildList {
+                    collection.links?.externalUrl?.let {
+                        add(
+                            NftCollectionOverviewItemUiState.Link(
+                                url = it,
+                                title = R.string.NftAsset_Links_Website,
+                                icon = R.drawable.ic_globe_20
+                            )
+                        )
+                    }
+                    add(
+                        NftCollectionOverviewItemUiState.Link(
+                            url = "https://opensea.io/collection/${collection.uid}",
+                            title = R.string.NftAsset_Links_OpenSea,
+                            icon = R.drawable.ic_opensea_20
+                        )
+                    )
+                    collection.links?.discordUrl?.let {
+                        add(
+                            NftCollectionOverviewItemUiState.Link(
+                                url = it,
+                                title = R.string.NftAsset_Links_Discord,
+                                icon = R.drawable.ic_discord_20
+                            )
+                        )
+                    }
+                    collection.links?.twitterUsername?.let {
+                        add(
+                            NftCollectionOverviewItemUiState.Link(
+                                url = "https://twitter.com/$it",
+                                title = R.string.NftAsset_Links_Twitter,
+                                icon = R.drawable.ic_twitter_20
+                            )
+                        )
+                    }
+                }
             )
         }
 
@@ -162,7 +200,8 @@ data class NftCollectionOverviewItemUiState(
     val volumeChartDataWrapper: ChartDataWrapper?,
     val averagePriceChartDataWrapper: ChartDataWrapper?,
     val salesChartDataWrapper: ChartDataWrapper?,
-    val floorPriceChartDataWrapper: ChartDataWrapper?
+    val floorPriceChartDataWrapper: ChartDataWrapper?,
+    val links: List<Link>
 ) {
     data class ChartDataWrapper(
         val title: String,
@@ -170,5 +209,10 @@ data class NftCollectionOverviewItemUiState(
         val primaryValue: String,
         val secondaryValue: String,
         val diff: Value
+    )
+    data class Link(
+        val url: String,
+        @StringRes val title: Int,
+        @DrawableRes val icon: Int
     )
 }

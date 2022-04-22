@@ -17,13 +17,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.*
@@ -50,6 +48,7 @@ import io.horizontalsystems.bankwallet.core.shortenedAddress
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.*
+import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -612,36 +611,6 @@ private fun NftAssetSale(sale: Sale) {
     }
 
     CellMultilineLawrenceSection(saleComposables)
-}
-
-@Composable
-private fun CellLink(icon: Painter, title: String, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Icon(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            painter = icon,
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
-        )
-        Text(
-            modifier = Modifier.weight(1f),
-            text = title,
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
-        )
-        Icon(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
-        )
-    }
 }
 
 @Composable

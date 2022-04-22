@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection.overview
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -34,11 +37,11 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.About
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionOverviewItemUiState
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionViewModel
+import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
-import io.horizontalsystems.bankwallet.ui.compose.components.formatValueAsDiff
+import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.chartview.ChartMinimal
 
 class NftCollectionOverviewFragment : BaseFragment() {
@@ -68,6 +71,7 @@ class NftCollectionOverviewFragment : BaseFragment() {
 fun NftCollectionOverviewScreen(
     viewModel: NftCollectionViewModel
 ) {
+    val context = LocalContext.current
     val uiState = viewModel.nftCollectionOverviewUiState
 
     HSSwipeRefresh(
@@ -86,20 +90,27 @@ fun NftCollectionOverviewScreen(
                 }
                 state.item != null -> {
                     val collection = state.item
-                    LazyColumn(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                    ) {
+                    LazyColumn {
                         item {
                             Header(collection.name, collection.imageUrl)
                         }
                         item {
                             Stats(collection)
                         }
-                        item {
-                            if (collection.description?.isNotBlank() == true) {
+                        if (collection.description?.isNotBlank() == true) {
+                            item {
                                 Spacer(modifier = Modifier.height(24.dp))
                                 About(collection.description)
                             }
+                        }
+                        if (collection.links.isNotEmpty()) {
+                            item {
+                                Links(collection.links, context)
+                            }
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(32.dp))
+                            CellFooter(text = stringResource(id = R.string.PoweredBy_OpenSeaAPI))
                         }
                     }
                 }
@@ -109,11 +120,41 @@ fun NftCollectionOverviewScreen(
 }
 
 @Composable
+private fun Links(links: List<NftCollectionOverviewItemUiState.Link>, context: Context) {
+    Column {
+        Spacer(modifier = Modifier.height(12.dp))
+        CellSingleLineClear(borderTop = true) {
+            Text(
+                text = stringResource(id = R.string.NftAsset_Links),
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.leah
+            )
+        }
+
+        CellSingleLineLawrenceSection(
+            buildList {
+                links.forEach { link ->
+                    add {
+                        CellLink(
+                            icon = painterResource(link.icon),
+                            title = stringResource(link.title),
+                            onClick = {
+                                LinkHelper.openLinkInAppBrowser(context, link.url)
+                            }
+                        )
+                    }
+                }
+            }
+        )
+    }
+}
+
+@Composable
 private fun Header(
     name: String,
     imageUrl: String?
 ) {
-    Row(modifier = Modifier.padding(start = 8.dp, top = 24.dp, bottom = 24.dp)) {
+    Row(modifier = Modifier.padding(start = 24.dp, top = 24.dp, bottom = 24.dp, end = 16.dp)) {
         Image(
             modifier = Modifier
                 .size(72.dp)
@@ -138,7 +179,7 @@ private fun Header(
 
 @Composable
 private fun Stats(collection: NftCollectionOverviewItemUiState) {
-    Row {
+    Row(Modifier.padding(horizontal = 16.dp)) {
         Card(
             modifier = Modifier
                 .height(64.dp)
@@ -200,7 +241,7 @@ private fun Stats(collection: NftCollectionOverviewItemUiState) {
     val rows = chartCards.chunked(2)
     for (row in rows) {
         Spacer(modifier = Modifier.height(8.dp))
-        Row {
+        Row(Modifier.padding(horizontal = 16.dp)) {
             ChartCard(row.first())
             Spacer(modifier = Modifier.width(8.dp))
             row.lastOrNull()?.let { ChartCard(it) }
