@@ -52,9 +52,7 @@ object WCSignMessageRequestModule {
 
     interface RequestAction {
         val message: SignMessage
-        val signButtonEnabled: Boolean
-        val trustCheckmarkChecked: Boolean
-        fun onTrustChecked(checked: Boolean)
+        val isLegacySignRequest: Boolean
         fun sign()
         fun reject()
         fun stop()
