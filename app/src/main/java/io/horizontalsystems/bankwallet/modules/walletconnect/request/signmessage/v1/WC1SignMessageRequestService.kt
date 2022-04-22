@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v1
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage.WCSignType
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
@@ -11,18 +14,28 @@ import io.horizontalsystems.ethereumkit.core.signer.Signer
 
 class WC1SignMessageRequestService(
     private val request: WC1SignMessageRequest,
+    private val dAppName: String?,
     private val baseService: WC1Service,
     private val signer: Signer
 ) : WCSignMessageRequestModule.RequestAction {
+
+    private val isLegacySignRequest =
+        request.message.type == WCSignType.MESSAGE && request.message.data.hexStringToByteArray().size == 32
+
+    override var trustCheckmarkChecked: Boolean = false
+        private set
+
+    override var signButtonEnabled: Boolean by mutableStateOf(signButtonEnabled())
+        private set
 
     override val message: SignMessage by lazy {
         val messageData = request.message.data
         when (request.message.type) {
             WCSignType.MESSAGE -> {
-                if (isLegacySignRequest(request.message)) {
-                    SignMessage.Message(messageData)
+                if (isLegacySignRequest) {
+                    SignMessage.Message(messageData, dAppName, true)
                 } else {
-                    SignMessage.Message(hexStringToUtf8String(messageData))
+                    SignMessage.Message(hexStringToUtf8String(messageData), dAppName)
                 }
             }
             WCSignType.PERSONAL_MESSAGE -> SignMessage.PersonalMessage(
@@ -31,7 +44,7 @@ class WC1SignMessageRequestService(
             WCSignType.TYPED_MESSAGE -> {
                 val typeData = signer.parseTypedData(messageData)
                 val domain = typeData?.domain?.get("name")?.toString()
-                SignMessage.TypedMessage(messageData, domain ?: "", null)
+                SignMessage.TypedMessage(messageData, dAppName, domain)
             }
         }
     }
@@ -47,6 +60,15 @@ class WC1SignMessageRequestService(
 
     override fun stop() {}
 
+    override fun onTrustChecked(checked: Boolean) {
+        trustCheckmarkChecked = checked
+        signButtonEnabled = signButtonEnabled()
+    }
+
+    private fun signButtonEnabled(): Boolean {
+        return !isLegacySignRequest || trustCheckmarkChecked
+    }
+
     private fun hexStringToUtf8String(hexString: String) = try {
         String(hexString.hexStringToByteArray())
     } catch (_: Throwable) {
@@ -56,7 +78,7 @@ class WC1SignMessageRequestService(
     private fun signMessage(message: WCEthereumSignMessage): ByteArray {
         return when (message.type) {
             WCSignType.MESSAGE -> {
-                if (isLegacySignRequest(message)) {
+                if (isLegacySignRequest) {
                     signer.signByteArrayLegacy(message = message.data.hexStringToByteArray())
                 } else {
                     signer.signByteArray(message = message.data.hexStringToByteArray())
@@ -70,10 +92,6 @@ class WC1SignMessageRequestService(
             }
         }
 
-    }
-
-    private fun isLegacySignRequest(message: WCEthereumSignMessage): Boolean {
-        return message.type == WCSignType.MESSAGE && message.data.hexStringToByteArray().size == 32
     }
 
 }

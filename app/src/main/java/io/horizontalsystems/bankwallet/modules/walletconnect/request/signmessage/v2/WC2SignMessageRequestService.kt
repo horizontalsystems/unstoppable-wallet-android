@@ -12,6 +12,9 @@ class WC2SignMessageRequestService(
     private val sessionManager: WC2SessionManager,
 ) : WCSignMessageRequestModule.RequestAction {
 
+    override val signButtonEnabled = true
+    override val trustCheckmarkChecked = false
+
     private val requestData by lazy {
         sessionManager.pendingRequestDataToOpen[requestId]!!
     }
@@ -24,13 +27,15 @@ class WC2SignMessageRequestService(
         requestData.pendingRequest as WC2SignMessageRequest
     }
 
-    override val message: SignMessage? by lazy {
+    override val message: SignMessage by lazy {
         pendingRequest.message
     }
 
     override fun stop() {
         sessionManager.pendingRequestDataToOpen.remove(requestId)
     }
+
+    override fun onTrustChecked(checked: Boolean) {}
 
     private fun signMessage(request: WC2SignMessageRequest): ByteArray? {
         return when (request.message) {

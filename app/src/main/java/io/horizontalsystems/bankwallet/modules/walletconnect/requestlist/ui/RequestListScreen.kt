@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.walletconnect.RequestType
 import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.WC2RequestListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.WC2RequestListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -185,8 +184,8 @@ private fun RequestCell(
 @Composable
 fun PreviewRequestList() {
     val items1 = listOf(
-        WC2RequestListModule.RequestViewItem(2L, RequestType.PersonalSign, "Title 2", "Subtitle"),
-        WC2RequestListModule.RequestViewItem(3L, RequestType.PersonalSign, "Title 3", "Subtitle"),
+        WC2RequestListModule.RequestViewItem(2L, "Title 2", "Subtitle"),
+        WC2RequestListModule.RequestViewItem(3L, "Title 3", "Subtitle"),
     )
     val sections = listOf(
         WC2RequestListModule.SectionViewItem("1", "Wallet 1", true, items1),
