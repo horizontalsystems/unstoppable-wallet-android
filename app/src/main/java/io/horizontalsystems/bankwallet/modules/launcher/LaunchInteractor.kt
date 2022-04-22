@@ -17,8 +17,8 @@ class LaunchInteractor(
 
     var delegate: LaunchModule.IInteractorDelegate? = null
 
-    override val isPinNotSet: Boolean
-        get() = !pinComponent.isPinSet
+    override val isLocked: Boolean
+        get() = pinComponent.isLocked
 
     override val isAccountsEmpty: Boolean
         get() = accountManager.isAccountsEmpty
