@@ -338,7 +338,7 @@ fun RowScope.CategoryCard(
     Card(
         modifier = Modifier
             .padding(6.dp)
-            .height(140.dp)
+            .height(128.dp)
             .weight(1f),
         shape = RoundedCornerShape(12.dp),
         elevation = 0.dp,
