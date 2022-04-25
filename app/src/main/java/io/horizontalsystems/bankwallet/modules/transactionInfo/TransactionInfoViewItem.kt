@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import android.os.Parcelable
+import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
@@ -74,5 +76,13 @@ data class ColoredValue(val value: String, val color: Int)
 data class ColoredValueNew(val value: String, val color: ColorName)
 
 enum class ColorName{
-    Remus, Jacob, Grey, Leah
+    Remus, Jacob, Grey, Leah;
+
+    @Composable
+    fun compose() = when (this) {
+        Remus -> ComposeAppTheme.colors.remus
+        Jacob -> ComposeAppTheme.colors.jacob
+        Leah -> ComposeAppTheme.colors.leah
+        Grey -> ComposeAppTheme.colors.grey
+    }
 }
