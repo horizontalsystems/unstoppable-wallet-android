@@ -242,13 +242,12 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                     )
                     Spacer(Modifier.weight(1f))
                     item.primaryValue?.let { coloredValue ->
-                        ContentColored(colorName = coloredValue.color) {
-                            Text(
-                                text = coloredValue.value,
-                                style = ComposeAppTheme.typography.headline2,
-                                maxLines = 1,
-                            )
-                        }
+                        Text(
+                            text = coloredValue.value,
+                            style = ComposeAppTheme.typography.headline2,
+                            color = coloredValue.color.compose(),
+                            maxLines = 1,
+                        )
                     }
                     if (item.doubleSpend) {
                         Image(
@@ -282,13 +281,12 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                     )
                     Spacer(Modifier.weight(1f))
                     item.secondaryValue?.let { coloredValue ->
-                        ContentColored(colorName = coloredValue.color) {
-                            Text(
-                                text = coloredValue.value,
-                                style = ComposeAppTheme.typography.subhead2,
-                                maxLines = 1,
-                            )
-                        }
+                        Text(
+                            text = coloredValue.value,
+                            style = ComposeAppTheme.typography.subhead2,
+                            color = coloredValue.color.compose(),
+                            maxLines = 1,
+                        )
                     }
                 }
             }
