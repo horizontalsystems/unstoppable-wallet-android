@@ -244,7 +244,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                     item.primaryValue?.let { coloredValue ->
                         Text(
                             text = coloredValue.value,
-                            style = ComposeAppTheme.typography.headline2,
+                            style = ComposeAppTheme.typography.body,
                             color = coloredValue.color.compose(),
                             maxLines = 1,
                         )
@@ -266,7 +266,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                     if (item.sentToSelf) {
                         Image(
                             modifier = Modifier.padding(start = 6.dp),
-                            painter = painterResource(R.drawable.ic_incoming_20),
+                            painter = painterResource(R.drawable.ic_arrow_return_20),
                             contentDescription = null
                         )
                     }
