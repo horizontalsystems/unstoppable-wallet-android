@@ -298,11 +298,13 @@ private fun RowScope.ChartCard(chartDataWrapper: NftCollectionOverviewItemUiStat
                 style = ComposeAppTheme.typography.subhead1,
                 color = ComposeAppTheme.colors.bran
             )
-            Text(
-                text = formatValueAsDiff(chartDataWrapper.diff),
-                style = ComposeAppTheme.typography.subhead1,
-                color = diffColor(chartDataWrapper.diff.raw())
-            )
+            chartDataWrapper.diff?.let { diff ->
+                Text(
+                    text = formatValueAsDiff(diff),
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = diffColor(diff.raw())
+                )
+            }
         }
         Text(
             modifier = Modifier.padding(top = 8.dp),
