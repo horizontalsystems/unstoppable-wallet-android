@@ -345,7 +345,8 @@ interface IAppNumberFormatter {
         value: Number,
         code: String,
         minimumFractionDigits: Int,
-        maximumFractionDigits: Int
+        maximumFractionDigits: Int,
+        prefix: String = ""
     ): String
 
     fun formatFiat(

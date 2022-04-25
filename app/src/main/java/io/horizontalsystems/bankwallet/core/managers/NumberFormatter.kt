@@ -39,8 +39,8 @@ class NumberFormatter(
         }
     }
 
-    override fun formatCoin(value: Number, code: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
-        return format(value, minimumFractionDigits, maximumFractionDigits, suffix = " $code")
+    override fun formatCoin(value: Number, code: String, minimumFractionDigits: Int, maximumFractionDigits: Int, prefix: String): String {
+        return format(value, minimumFractionDigits, maximumFractionDigits, prefix = prefix, suffix = " $code")
     }
 
     override fun formatFiat(value: Number, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
