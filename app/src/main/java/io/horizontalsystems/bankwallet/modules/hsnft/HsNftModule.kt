@@ -297,7 +297,6 @@ class HsNftApiProvider : INftApiProvider {
                 ownersCount = it.stats.num_owners,
                 totalSupply = it.stats.total_supply,
                 oneDayVolume = it.stats.one_day_volume,
-                oneDayVolumeChange = it.stats.one_day_change,
                 oneDaySales = it.stats.one_day_sales,
                 oneDayAveragePrice = it.stats.one_day_average_price,
                 averagePrice = it.stats.average_price,

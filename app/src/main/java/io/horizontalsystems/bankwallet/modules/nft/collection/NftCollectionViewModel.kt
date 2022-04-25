@@ -65,14 +65,14 @@ class NftCollectionViewModel(
                 chartPoints = collection.chartPoints.map { Pair(it.averagePrice.toFloat(), it.timestamp) },
                 primaryValue = numberFormatter.formatCoinValueAsShortened(collection.oneDayAveragePrice, "ETH"),
                 secondaryValue = "N/A", // TODO
-                change = BigDecimal.ZERO // TODO
+                change = collection.oneDayAveragePriceChange
             )
             val salesChartDataWrapper = chartDataWrapper(
                 title = Translator.getString(R.string.NftCollection_TodaysSales),
                 chartPoints = collection.chartPoints.map { Pair(it.oneDaySales.toFloat(), it.timestamp) },
                 primaryValue = Translator.getString(R.string.NftCollection_ItemsCount, collection.oneDaySales),
                 secondaryValue = "N/A", // TODO
-                change = BigDecimal.ZERO // TODO
+                change = collection.oneDaySalesChange
             )
 
             val floorPriceChartDataWrapper = chartDataWrapper(
@@ -83,7 +83,7 @@ class NftCollectionViewModel(
                 primaryValue = collection.floorPrice?.let { numberFormatter.formatCoinValueAsShortened(it, "ETH") }
                     ?: Translator.getString(R.string.NotAvailable),
                 secondaryValue = "N/A", // TODO
-                change = BigDecimal.ZERO // TODO
+                change = collection.oneDayFloorPriceChange
             )
 
             NftCollectionOverviewItemUiState(
@@ -164,7 +164,7 @@ class NftCollectionViewModel(
         chartPoints: List<Pair<Float, Long>>,
         primaryValue: String,
         secondaryValue: String,
-        change: BigDecimal
+        change: BigDecimal?
     ): NftCollectionOverviewItemUiState.ChartDataWrapper? {
         if (chartPoints.isEmpty()) return null
 
@@ -176,7 +176,7 @@ class NftCollectionViewModel(
             chartData = chartData,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
-            diff = Value.Percent(change.multiply(BigDecimal(100)))
+            diff = change?.let { Value.Percent(it.multiply(BigDecimal(100))) }
         )
     }
 
@@ -222,7 +222,7 @@ data class NftCollectionOverviewItemUiState(
         val chartData: ChartData,
         val primaryValue: String,
         val secondaryValue: String,
-        val diff: Value
+        val diff: Value?
     )
     data class Link(
         val url: String,

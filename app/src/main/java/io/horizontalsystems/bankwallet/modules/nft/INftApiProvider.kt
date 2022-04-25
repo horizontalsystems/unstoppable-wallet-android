@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
 import io.horizontalsystems.bankwallet.modules.hsnft.CollectionStats
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 interface INftApiProvider {
     suspend fun getCollectionRecords(address: Address, account: Account): List<NftCollectionRecord>
@@ -38,7 +39,6 @@ data class NftCollection(
     val ownersCount: Int,
     val totalSupply: Int,
     val oneDayVolume: BigDecimal,
-    val oneDayVolumeChange: BigDecimal,
     val oneDaySales: Int,
     val oneDayAveragePrice: BigDecimal,
     val averagePrice: BigDecimal,
@@ -47,6 +47,45 @@ data class NftCollection(
     val links: Links?,
     val contracts: List<Contract>
 ) {
+    val oneDayVolumeChange: BigDecimal?
+        get() {
+            val firstValue = chartPoints.firstOrNull()?.oneDayVolume
+            val lastValue = chartPoints.lastOrNull()?.oneDayVolume
+
+            return diff(firstValue, lastValue)
+        }
+
+    val oneDayAveragePriceChange: BigDecimal?
+        get() {
+            val firstValue = chartPoints.firstOrNull()?.averagePrice
+            val lastValue = chartPoints.lastOrNull()?.averagePrice
+
+            return diff(firstValue, lastValue)
+        }
+
+    val oneDaySalesChange: BigDecimal?
+        get() {
+            val firstValue = chartPoints.firstOrNull()?.oneDaySales?.toBigDecimal()
+            val lastValue = chartPoints.lastOrNull()?.oneDaySales?.toBigDecimal()
+
+            return diff(firstValue, lastValue)
+        }
+
+    val oneDayFloorPriceChange: BigDecimal?
+        get() {
+            val firstValue = chartPoints.firstOrNull()?.floorPrice
+            val lastValue = chartPoints.lastOrNull()?.floorPrice
+
+            return diff(firstValue, lastValue)
+        }
+
+    private fun diff(firstValue: BigDecimal?, lastValue: BigDecimal?) =
+        if (firstValue != null && lastValue != null) {
+            lastValue.subtract(firstValue).divide(firstValue, 4, RoundingMode.HALF_UP)
+        } else {
+            null
+        }
+
     data class ChartPoint(
         val timestamp: Long,
         val oneDayVolume: BigDecimal,
@@ -54,6 +93,7 @@ data class NftCollection(
         val floorPrice: BigDecimal?,
         val oneDaySales: Int
     )
+
     data class Links(
         val externalUrl: String?,
         val discordUrl: String?,
@@ -62,6 +102,7 @@ data class NftCollection(
         val instagramUsername: String?,
         val wikiUrl: String?,
     )
+
     data class Contract(
         val address: String,
         val type: String,
