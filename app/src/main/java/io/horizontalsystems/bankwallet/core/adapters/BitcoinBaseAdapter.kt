@@ -307,7 +307,7 @@ abstract class BitcoinBaseAdapter(
                         lockInfo = transactionLockInfo,
                         conflictingHash = transaction.conflictingTxHash,
                         showRawTransaction = transaction.status == TransactionStatus.NEW || transaction.status == TransactionStatus.INVALID,
-                        amount = satoshiToBTC(transaction.amount),
+                        amount = satoshiToBTC(transaction.amount).negate(),
                         to = to,
                         sentToSelf = false
                 )
@@ -327,7 +327,7 @@ abstract class BitcoinBaseAdapter(
                         lockInfo = transactionLockInfo,
                         conflictingHash = transaction.conflictingTxHash,
                         showRawTransaction = transaction.status == TransactionStatus.NEW || transaction.status == TransactionStatus.INVALID,
-                        amount = satoshiToBTC(transaction.amount),
+                        amount = satoshiToBTC(transaction.amount).negate(),
                         to = to,
                         sentToSelf = true
                 )

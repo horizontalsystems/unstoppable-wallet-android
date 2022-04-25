@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValueNew
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
+import java.math.BigDecimal
 import java.util.*
 
 class TransactionViewItemFactory {
@@ -67,13 +68,13 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: Int?
     ): TransactionViewItem {
-        val primaryValue = ColoredValueNew(getCoinString(record.valueIn), ColorName.Jacob)
-        val secondaryValue = record.valueOut?.let {
+        val primaryValue = record.valueOut?.let {
             ColoredValueNew(
                 getCoinString(it),
                 if (record.recipient != null) ColorName.Grey else ColorName.Remus
             )
         }
+        val secondaryValue = ColoredValueNew(getCoinString(record.valueIn), ColorName.Jacob)
 
         return TransactionViewItem(
             record.uid,
@@ -94,8 +95,8 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: Int?
     ): TransactionViewItem {
-        val primaryValue = record.valueIn?.let { ColoredValueNew(getCoinString(it), ColorName.Jacob) }
-        val secondaryValue = record.valueOut?.let { ColoredValueNew(getCoinString(it), ColorName.Remus) }
+        val primaryValue = record.valueOut?.let { ColoredValueNew(getCoinString(it), ColorName.Remus) }
+        val secondaryValue = record.valueIn?.let { ColoredValueNew(getCoinString(it), ColorName.Jacob) }
 
         return TransactionViewItem(
             record.uid,
@@ -129,10 +130,10 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: Int?
     ): TransactionViewItem {
-        val primaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Jacob)
+        val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
+        val secondaryValue = currencyValue?.let {
+            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
         }
-        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
 
         return TransactionViewItem(
             record.uid,
@@ -154,10 +155,10 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: Int?
     ): TransactionViewItem {
-        val primaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Remus)
+        val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Remus)
+        val secondaryValue = currencyValue?.let {
+            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
         }
-        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
 
         return TransactionViewItem(
             record.uid,
@@ -269,10 +270,15 @@ class TransactionViewItemFactory {
             )
         } ?: "---"
 
-        val primaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Jacob)
+        val primaryValue = if (record.sentToSelf) {
+            ColoredValueNew(getCoinString(record.value, true), ColorName.Leah)
+        } else {
+            ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
         }
-        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
+
+        val secondaryValue = currencyValue?.let {
+            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
+        }
 
         val lockState = record.lockState(lastBlockTimestamp)
         val locked = when {
@@ -310,10 +316,10 @@ class TransactionViewItemFactory {
             )
         } ?: "---"
 
-        val primaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Remus)
+        val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Remus)
+        val secondaryValue = currencyValue?.let {
+            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
         }
-        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
 
         val lockState = record.lockState(lastBlockTimestamp)
         val locked = when {
@@ -344,10 +350,10 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: Int?
     ): TransactionViewItem {
-        val primaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Jacob)
+        val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
+        val secondaryValue = currencyValue?.let {
+            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
         }
-        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
 
         return TransactionViewItem(
             record.uid,
@@ -369,10 +375,10 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: Int?
     ): TransactionViewItem {
-        val primaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Remus)
+        val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Remus)
+        val secondaryValue = currencyValue?.let {
+            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
         }
-        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
 
         return TransactionViewItem(
             record.uid,
@@ -396,19 +402,19 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: Int?
     ): TransactionViewItem {
-        val primaryValueText: String?
-        val secondaryValueText: String
+        val primaryValueText: String
+        val secondaryValueText: String?
 
         if (record.value.isMaxValue) {
             primaryValueText = "∞"
             secondaryValueText = if (record.value.coinCode.isEmpty()) "" else Translator.getString(R.string.Transaction_Unlimited, record.value.coinCode)
         } else {
-            primaryValueText = currencyValue?.let { getCurrencyString(it) }
-            secondaryValueText = getCoinString(record.value)
+            primaryValueText = getCoinString(record.value, hideSign = true)
+            secondaryValueText = currencyValue?.let { getCurrencyString(it) }
         }
 
-        val primaryValue = primaryValueText?.let { ColoredValueNew(it, ColorName.Leah) }
-        val secondaryValue = ColoredValueNew(secondaryValueText, ColorName.Grey)
+        val primaryValue = ColoredValueNew(primaryValueText, ColorName.Leah)
+        val secondaryValue = secondaryValueText?.let { ColoredValueNew(it, ColorName.Grey) }
 
         return TransactionViewItem(
             record.uid,
@@ -475,38 +481,43 @@ class TransactionViewItemFactory {
         val outgoingValues = outgoingEvents.map { it.value }
 
         when {
+            // incoming
             (incomingValues.size == 1 && outgoingValues.isEmpty()) -> {
-                primaryValue = currencyValue?.let {
-                    ColoredValueNew(getCurrencyString(it), ColorName.Remus)
-                }
-                secondaryValue = ColoredValueNew(getCoinString(incomingValues.first()), ColorName.Grey)
-            }
-
-            (incomingValues.isEmpty() && outgoingValues.size == 1) -> {
-                primaryValue = currencyValue?.let {
-                    ColoredValueNew(getCurrencyString(it), ColorName.Jacob)
-                }
-                secondaryValue = ColoredValueNew(getCoinString(outgoingValues.first()), ColorName.Grey)
-            }
-
-            (incomingValues.size == 1 && outgoingValues.size == 1) -> {
-                secondaryValue = ColoredValueNew(getCoinString(outgoingValues.first()), ColorName.Jacob)
                 primaryValue = ColoredValueNew(getCoinString(incomingValues.first()), ColorName.Remus)
+                secondaryValue = currencyValue?.let {
+                    ColoredValueNew(getCurrencyString(it), ColorName.Grey)
+                }
             }
 
+            // outgoing
+            (incomingValues.isEmpty() && outgoingValues.size == 1) -> {
+                primaryValue = ColoredValueNew(getCoinString(outgoingValues.first()), ColorName.Jacob)
+                secondaryValue = currencyValue?.let {
+                    ColoredValueNew(getCurrencyString(it), ColorName.Grey)
+                }
+            }
+
+            // swap
+            (incomingValues.size == 1 && outgoingValues.size == 1) -> {
+                primaryValue = ColoredValueNew(getCoinString(incomingValues.first()), ColorName.Remus)
+                secondaryValue = ColoredValueNew(getCoinString(outgoingValues.first()), ColorName.Jacob)
+            }
+
+            // outgoing multiple
             (incomingValues.isEmpty() && outgoingValues.isNotEmpty()) -> {
                 primaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Jacob)
                 secondaryValue = ColoredValueNew(Translator.getString(R.string.Transactions_Multiple), ColorName.Grey)
             }
 
+            // incoming multiple
             (incomingValues.isNotEmpty() && outgoingValues.isEmpty()) -> {
                 primaryValue = ColoredValueNew(incomingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Remus)
                 secondaryValue = ColoredValueNew(Translator.getString(R.string.Transactions_Multiple), ColorName.Grey)
             }
 
             else -> {
-                primaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Jacob)
-                secondaryValue = ColoredValueNew(incomingValues.joinToString(", ") { it.coinCode }, ColorName.Remus)
+                primaryValue = ColoredValueNew(incomingValues.joinToString(", ") { it.coinCode }, ColorName.Remus)
+                secondaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Jacob)
             }
         }
         return Pair(primaryValue, secondaryValue)
@@ -516,14 +527,21 @@ class TransactionViewItemFactory {
         return App.numberFormatter.formatFiat(currencyValue.value.abs(), currencyValue.currency.symbol, 0, 2)
     }
 
-    private fun getCoinString(transactionValue: TransactionValue): String {
+    private fun getCoinString(transactionValue: TransactionValue, hideSign: Boolean = false): String {
         return transactionValue.decimalValue?.let { decimalValue ->
+            val sign = when {
+                hideSign -> ""
+                decimalValue < BigDecimal.ZERO -> "-"
+                decimalValue > BigDecimal.ZERO -> "+"
+                else -> ""
+            }
             val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(decimalValue)
             App.numberFormatter.formatCoin(
                 decimalValue.abs(),
                 transactionValue.coinCode,
                 0,
-                significantDecimal
+                significantDecimal,
+                prefix = sign
             )
         } ?: ""
     }
