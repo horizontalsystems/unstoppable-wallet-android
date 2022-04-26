@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="Alert_Cancel">Cancel</string>
-    <string name="Alert_Copy">Copy</string>
-    <string name="Alert_Close">Close</string>
-    <string name="Alert_Loading">Loading...</string>
-    <string name="Alert_Restart">Restart</string>
+    <string name="Alert_Cancel">Cancelar</string>
+    <string name="Alert_Copy">Copiar</string>
+    <string name="Alert_Close">Fechar or Encerrar</string>
+    <string name="Alert_Loading">A Carregar...</string>
+    <string name="Alert_Restart">Reiniciar</string>
     <string name="Action_Undo">UNDO</string>
-    <string name="Button_Cancel">Cancel</string>
-    <string name="Button_Next">Next</string>
+    <string name="Button_Cancel">Cancelar</string>
+    <string name="Button_Next">Próximo</string>
     <string name="Button_Enable">Enable</string>
-    <string name="Button_Disable">Disable</string>
+    <string name="Button_Disable">Desativar</string>
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Done">Done</string>
