@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -41,20 +42,29 @@ fun RateText(diff: BigDecimal?): String {
 
 @Composable
 fun CoinImage(
-    iconUrl: String,
+    iconUrl: String?,
     placeholder: Int? = null,
     modifier: Modifier,
     colorFilter: ColorFilter? = null
 ) {
-    Image(
-        painter = rememberImagePainter(
-            data = iconUrl,
-            builder = {
-                error(placeholder ?: R.drawable.coin_placeholder)
-            }
-        ),
-        contentDescription = "coin icon",
-        modifier = modifier,
-        colorFilter = colorFilter
-    )
+    val fallback = placeholder ?: R.drawable.coin_placeholder
+    when {
+        iconUrl != null -> Image(
+            painter = rememberImagePainter(
+                data = iconUrl,
+                builder = {
+                    error(fallback)
+                }
+            ),
+            contentDescription = null,
+            modifier = modifier,
+            colorFilter = colorFilter
+        )
+        else -> Image(
+            painter = painterResource(fallback),
+            contentDescription = null,
+            modifier = modifier,
+            colorFilter = colorFilter
+        )
+    }
 }
