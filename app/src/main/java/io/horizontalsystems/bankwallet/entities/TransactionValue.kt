@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.entities
 
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
@@ -10,6 +12,8 @@ sealed class TransactionValue {
     abstract val coinUid: String
     abstract val coinCode: String
     abstract val coin: Coin?
+    abstract val coinIconUrl: String?
+    abstract val coinIconPlaceholder: Int?
     abstract val decimalValue: BigDecimal?
     abstract val decimals: Int?
     abstract val zeroValue: Boolean
@@ -19,6 +23,8 @@ sealed class TransactionValue {
 
     data class CoinValue(val platformCoin: PlatformCoin, val value: BigDecimal) : TransactionValue() {
         override val coin: Coin = platformCoin.coin
+        override val coinIconUrl = platformCoin.coin.iconUrl
+        override val coinIconPlaceholder = platformCoin.fullCoin.iconPlaceholder
         override val coinUid: String = coin.uid
         override val coinName: String = coin.name
         override val coinCode: String = coin.code
@@ -37,6 +43,8 @@ sealed class TransactionValue {
 
     data class RawValue(override val coinUid: String = "", val value: BigInteger) : TransactionValue() {
         override val coin: Coin? = null
+        override val coinIconUrl = null
+        override val coinIconPlaceholder = null
         override val coinName: String = ""
         override val coinCode: String = ""
         override val decimalValue: BigDecimal? = null
@@ -53,6 +61,8 @@ sealed class TransactionValue {
 
     data class TokenValue(override val coinUid: String = "", val tokenName: String, val tokenCode: String, val tokenDecimals: Int, val value: BigDecimal) : TransactionValue() {
         override val coin: Coin? = null
+        override val coinIconUrl = null
+        override val coinIconPlaceholder = null
         override val coinName: String
             get() = tokenName
         override val coinCode: String

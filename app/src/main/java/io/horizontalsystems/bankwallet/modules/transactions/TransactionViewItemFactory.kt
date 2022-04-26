@@ -39,7 +39,7 @@ class TransactionViewItemFactory {
             is TransactionStatus.Processing -> (status.progress * 100).toInt()
             else -> null
         }
-        val icon = if (status is TransactionStatus.Failed) R.drawable.ic_attention_red_20 else null
+        val icon = if (status is TransactionStatus.Failed) TransactionViewItem.Icon.Failed else null
 
         val lastBlockTimestamp = transactionItem.lastBlockInfo?.timestamp
 
@@ -66,7 +66,7 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = record.valueOut?.let {
             ColoredValueNew(
@@ -77,14 +77,17 @@ class TransactionViewItemFactory {
         val secondaryValue = ColoredValueNew(getCoinString(record.valueIn), ColorName.Jacob)
 
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_tx_swap_20,
-            progress,
-            Translator.getString(R.string.Transactions_Swap),
-            getNameOrAddressTruncated(record.exchangeAddress),
-            primaryValue,
-            secondaryValue,
-            Date(record.timestamp * 1000)
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Swap),
+            subtitle = getNameOrAddressTruncated(record.exchangeAddress),
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: TransactionViewItem.Icon.Swap(
+                iconIn = TransactionViewItem.Icon.Regular(record.valueIn.coinIconUrl, record.valueIn.coinIconPlaceholder),
+                iconOut = TransactionViewItem.Icon.Regular(record.valueOut?.coinIconUrl, record.valueOut?.coinIconPlaceholder),
+            )
         )
     }
 
@@ -93,33 +96,36 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = record.valueOut?.let { ColoredValueNew(getCoinString(it), ColorName.Remus) }
         val secondaryValue = record.valueIn?.let { ColoredValueNew(getCoinString(it), ColorName.Jacob) }
 
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_tx_swap_20,
-            progress,
-            Translator.getString(R.string.Transactions_Swap),
-            getNameOrAddressTruncated(record.exchangeAddress),
-            primaryValue,
-            secondaryValue,
-            Date(record.timestamp * 1000)
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Swap),
+            subtitle = getNameOrAddressTruncated(record.exchangeAddress),
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: TransactionViewItem.Icon.Swap(
+                iconIn = TransactionViewItem.Icon.Regular(record.valueIn?.coinIconUrl, record.valueIn?.coinIconPlaceholder),
+                iconOut = TransactionViewItem.Icon.Regular(record.valueOut?.coinIconUrl, record.valueOut?.coinIconPlaceholder),
+            )
         )
     }
 
-    private fun createViewItemFromEvmTransactionRecord(record: EvmTransactionRecord, progress: Int?, icon: Int?): TransactionViewItem {
+    private fun createViewItemFromEvmTransactionRecord(record: EvmTransactionRecord, progress: Int?, icon: TransactionViewItem.Icon?): TransactionViewItem {
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_tx_swap_20,
-            progress,
-            Translator.getString(R.string.Transactions_Unknown),
-            Translator.getString(R.string.Transactions_Unknown_Description),
-            null,
-            null,
-            Date(record.timestamp * 1000)
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Unknown),
+            subtitle = Translator.getString(R.string.Transactions_Unknown_Description),
+            primaryValue = null,
+            secondaryValue = null,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: TransactionViewItem.Icon.Platform(record.source)
         )
     }
 
@@ -128,7 +134,7 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
         val secondaryValue = currencyValue?.let {
@@ -136,15 +142,15 @@ class TransactionViewItemFactory {
         }
 
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_outgoing_20,
-            progress,
-            Translator.getString(R.string.Transactions_Send),
-            Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
-            primaryValue,
-            secondaryValue,
-            Date(record.timestamp * 1000),
-            record.sentToSelf
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Send),
+            subtitle = Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp * 1000),
+            sentToSelf = record.sentToSelf,
+            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
         )
     }
 
@@ -153,7 +159,7 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Remus)
         val secondaryValue = currencyValue?.let {
@@ -161,17 +167,17 @@ class TransactionViewItemFactory {
         }
 
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_incoming_20,
-            progress,
-            Translator.getString(R.string.Transactions_Receive),
-            Translator.getString(
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Receive),
+            subtitle = Translator.getString(
                 R.string.Transactions_From,
                 getNameOrAddressTruncated(record.from)
             ),
-            primaryValue,
-            secondaryValue,
-            Date(record.timestamp * 1000)
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
         )
     }
 
@@ -180,17 +186,17 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_tx_unordered,
-            progress,
-            Translator.getString(R.string.Transactions_ContractCreation),
-            "---",
-            null,
-            null,
-            Date(record.timestamp * 1000)
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_ContractCreation),
+            subtitle = "---",
+            primaryValue = null,
+            secondaryValue = null,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: TransactionViewItem.Icon.Platform(record.source)
         )
     }
 
@@ -199,7 +205,7 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val incomingEvents = combinedEvents(record.incomingEvents)
         val outgoingEvents = combinedEvents(record.outgoingEvents)
@@ -208,14 +214,14 @@ class TransactionViewItemFactory {
         val title = record.method ?: record.blockchainTitle + " " + Translator.getString(R.string.Transactions_ContractCall)
 
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_tx_unordered,
-            progress,
-            title,
-            getNameOrAddressTruncated(record.contractAddress),
-            primaryValue,
-            secondaryValue,
-            Date(record.timestamp * 1000)
+            uid = record.uid,
+            progress = progress,
+            title = title,
+            subtitle = getNameOrAddressTruncated(record.contractAddress),
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: TransactionViewItem.Icon.Platform(record.source)
         )
     }
 
@@ -224,7 +230,7 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val incomingEvents = combinedEvents(record.incomingEvents)
         val outgoingEvents = combinedEvents(record.outgoingEvents)
@@ -245,14 +251,14 @@ class TransactionViewItemFactory {
         }
 
         return TransactionViewItem(
-            record.uid,
-            icon ?: transactionTypeIcon,
-            progress,
-            title,
-            subTitle,
-            primaryValue,
-            secondaryValue,
-            Date(record.timestamp * 1000)
+            uid = record.uid,
+            progress = progress,
+            title = title,
+            subtitle = subTitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: TransactionViewItem.Icon.Platform(record.source)
         )
     }
 
@@ -261,7 +267,7 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val subtitle = record.to?.let {
             Translator.getString(
@@ -288,17 +294,17 @@ class TransactionViewItemFactory {
         }
 
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_outgoing_20,
-            progress,
-            Translator.getString(R.string.Transactions_Send),
-            subtitle,
-            primaryValue,
-            secondaryValue,
-            Date(record.timestamp * 1000),
-            record.sentToSelf,
-            record.conflictingHash != null,
-            locked
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Send),
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp * 1000),
+            sentToSelf = record.sentToSelf,
+            doubleSpend = record.conflictingHash != null,
+            locked = locked,
+            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
         )
     }
 
@@ -307,7 +313,7 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val subtitle = record.from?.let {
             Translator.getString(
@@ -329,17 +335,17 @@ class TransactionViewItemFactory {
         }
 
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_incoming_20,
-            progress,
-            Translator.getString(R.string.Transactions_Receive),
-            subtitle,
-            primaryValue,
-            secondaryValue,
-            Date(record.timestamp * 1000),
-            false,
-            record.conflictingHash != null,
-            locked
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Receive),
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp * 1000),
+            sentToSelf = false,
+            doubleSpend = record.conflictingHash != null,
+            locked = locked,
+            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
         )
     }
 
@@ -348,7 +354,7 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
         val secondaryValue = currencyValue?.let {
@@ -356,15 +362,15 @@ class TransactionViewItemFactory {
         }
 
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_outgoing_20,
-            progress,
-            Translator.getString(R.string.Transactions_Send),
-            Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
-            primaryValue,
-            secondaryValue,
-            Date(record.timestamp * 1000),
-            record.sentToSelf
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Send),
+            subtitle = Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp * 1000),
+            sentToSelf = record.sentToSelf,
+            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
         )
     }
 
@@ -373,7 +379,7 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Remus)
         val secondaryValue = currencyValue?.let {
@@ -381,17 +387,17 @@ class TransactionViewItemFactory {
         }
 
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_incoming_20,
-            progress,
-            Translator.getString(R.string.Transactions_Receive),
-            Translator.getString(
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Receive),
+            subtitle = Translator.getString(
                 R.string.Transactions_From,
                 getNameOrAddressTruncated(record.from)
             ),
-            primaryValue,
-            secondaryValue,
-            Date(record.timestamp * 1000)
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
         )
     }
 
@@ -400,7 +406,7 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         progress: Int?,
         lastBlockTimestamp: Long?,
-        icon: Int?
+        icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValueText: String
         val secondaryValueText: String?
@@ -417,14 +423,14 @@ class TransactionViewItemFactory {
         val secondaryValue = secondaryValueText?.let { ColoredValueNew(it, ColorName.Grey) }
 
         return TransactionViewItem(
-            record.uid,
-            icon ?: R.drawable.ic_tx_checkmark_20,
-            progress,
-            Translator.getString(R.string.Transactions_Approve),
-            getNameOrAddressTruncated(record.spender),
-            primaryValue,
-            secondaryValue,
-            Date(record.timestamp * 1000)
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Approve),
+            subtitle = getNameOrAddressTruncated(record.spender),
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
         )
     }
 

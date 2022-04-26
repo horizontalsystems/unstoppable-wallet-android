@@ -7,10 +7,14 @@ import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -18,12 +22,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -36,7 +40,6 @@ import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.launch
 
@@ -206,31 +209,77 @@ fun DateHeader(dateHeader: String) {
 fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
     CellMultilineClear(borderBottom = true, onClick = onClick) {
         Row(
+            modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Box(Modifier.width(52.dp).fillMaxHeight()) {
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .size(40.dp)
+            ) {
                 item.progress?.let { progress ->
-                    AndroidView(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(41.dp),
-                        factory = { context ->
-                            RotatingCircleProgressView(context)
-                        },
-                        update = { view ->
-                            view.setProgressColored(
-                                progress,
-                                view.context.getColor(R.color.grey_50),
-                                true
-                            )
-                        }
+                    CircularProgressIndicator(
+//                        progress = progress / 100f,
+                        color = ComposeAppTheme.colors.grey50,
+                        strokeWidth = 2.dp
                     )
                 }
-                Image(
-                    modifier = Modifier.align(Alignment.Center),
-                    painter = painterResource(item.typeIcon),
-                    contentDescription = null
-                )
+                val icon = item.icon
+                when (icon) {
+                    TransactionViewItem.Icon.Failed -> {
+                        Icon(
+                            modifier = Modifier.align(Alignment.Center),
+                            painter = painterResource(R.drawable.ic_attention_24),
+                            tint = ComposeAppTheme.colors.lucian,
+                            contentDescription = null
+                        )
+                    }
+                    is TransactionViewItem.Icon.Platform -> {
+                        Icon(
+                            modifier = Modifier.align(Alignment.Center),
+                            painter = painterResource(icon.iconRes ?: R.drawable.coin_placeholder),
+                            tint = ComposeAppTheme.colors.leah,
+                            contentDescription = null
+                        )
+                    }
+                    is TransactionViewItem.Icon.Regular -> {
+                        CoinImage(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .size(24.dp),
+                            iconUrl = icon.url,
+                            placeholder = icon.placeholder
+                        )
+                    }
+                    is TransactionViewItem.Icon.Swap -> {
+                        CoinImage(
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .padding(top = 6.dp, start = 6.dp)
+                                .size(20.dp),
+                            iconUrl = icon.iconIn.url,
+                            placeholder = icon.iconIn.placeholder,
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(bottom = 6.5.dp, end = 6.5.dp)
+                                .size(20.dp)
+                                .clip(CircleShape)
+                                .background(ComposeAppTheme.colors.tyler)
+                        )
+
+                        CoinImage(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(bottom = 6.dp, end = 6.dp)
+                                .size(20.dp),
+                            iconUrl = icon.iconOut.url,
+                            placeholder = icon.iconOut.placeholder,
+                        )
+                    }
+                }
             }
             Column(modifier = Modifier.padding(end = 16.dp)) {
                 Row {
