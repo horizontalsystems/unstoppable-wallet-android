@@ -9,9 +9,12 @@ import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewMod
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsRepository
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformItem
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
 import io.horizontalsystems.bankwallet.modules.nft.TopNftCollection
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.core.entities.Currency
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.*
@@ -21,6 +24,7 @@ class MarketOverviewService(
     private val marketMetricsRepository: MarketMetricsRepository,
     private val topNftCollectionsRepository: TopNftCollectionsRepository,
     private val topSectorsRepository: TopSectorsRepository,
+    private val topPlatformsRepository: TopPlatformsRepository,
     private val backgroundManager: BackgroundManager,
     private val currencyManager: ICurrencyManager
 ) : BackgroundManager.Listener {
@@ -33,6 +37,7 @@ class MarketOverviewService(
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var topNftsJob: Job? = null
     private var topSectorsJob: Job? = null
+    private var topPlatformsJob: Job? = null
 
     var gainersTopMarket: TopMarket = TopMarket.Top250
         private set
@@ -41,14 +46,21 @@ class MarketOverviewService(
     var topNftsTimeDuration: TimeDuration = TimeDuration.SevenDay
         private set
     val topNftsSortingField: SortingField = SortingField.HighestVolume
+    var topPlatformsTimeDuration: TimeDuration = TimeDuration.OneDay
+        private set
+    private val topPlatformsSortingField: SortingField = SortingField.HighestVolume
 
     val topMarketOptions: List<TopMarket> = TopMarket.values().toList()
-    val topNftsTimeDurationOptions: List<TimeDuration> = TimeDuration.values().toList()
+    val timeDurationOptions: List<TimeDuration> = TimeDuration.values().toList()
     val topGainersObservable: BehaviorSubject<Result<List<MarketItem>>> = BehaviorSubject.create()
     val topLosersObservable: BehaviorSubject<Result<List<MarketItem>>> = BehaviorSubject.create()
     val marketMetricsObservable: BehaviorSubject<Result<MarketMetricsItem>> = BehaviorSubject.create()
     val topNftCollectionsObservable: BehaviorSubject<Result<List<TopNftCollection>>> = BehaviorSubject.create()
     val topSectorsObservable: BehaviorSubject<Result<List<Category>>> = BehaviorSubject.create()
+    val topPlatformsObservable: BehaviorSubject<Result<List<TopPlatformItem>>> = BehaviorSubject.create()
+
+    val baseCurrency: Currency
+        get() = currencyManager.baseCurrency
 
     private fun updateGainers(forceRefresh: Boolean) {
         gainersDisposable?.dispose()
@@ -132,12 +144,33 @@ class MarketOverviewService(
         }
     }
 
+    private fun updateTopPlatforms(forceRefresh: Boolean) {
+        topPlatformsJob?.cancel()
+
+        topPlatformsJob = coroutineScope.launch {
+            try {
+                val topPlatforms = topPlatformsRepository.get(
+                    sortingField = topPlatformsSortingField,
+                    timeDuration = topPlatformsTimeDuration,
+                    forceRefresh = forceRefresh,
+                    limit = topListSize
+                )
+                topPlatformsObservable.onNext(Result.success(topPlatforms))
+            } catch (cancellation: CancellationException) {
+                // do nothing
+            } catch (error: Exception) {
+                topPlatformsObservable.onNext(Result.failure(error))
+            }
+        }
+    }
+
     private fun forceRefresh() {
         updateGainers(true)
         updateLosers(true)
         updateMarketMetrics()
         updateTopNftCollections(true)
         updateTopSectors()
+        updateTopPlatforms(true)
     }
 
     fun start() {
@@ -179,6 +212,11 @@ class MarketOverviewService(
     fun setTopNftsTimeDuration(timeDuration: TimeDuration) {
         topNftsTimeDuration = timeDuration
         updateTopNftCollections(false)
+    }
+
+    fun setTopPlatformsTimeDuration(timeDuration: TimeDuration) {
+        topPlatformsTimeDuration = timeDuration
+        updateTopPlatforms(false)
     }
 
 }

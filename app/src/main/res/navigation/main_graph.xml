@@ -189,6 +189,9 @@
         android:id="@+id/marketSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"/>
     <fragment
+        android:id="@+id/marketTopPlatformsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsFragment"/>
+    <fragment
         android:id="@+id/marketAdvancedSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersFragment"/>
     <fragment

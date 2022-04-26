@@ -9,6 +9,7 @@ import coil.load
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.label
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.*
@@ -25,6 +26,9 @@ val <T> Optional<T>.orNull: T?
         isPresent -> get()
         else -> null
     }
+
+val Platform.iconUrl: String
+    get() = "https://markets.nyc3.digitaloceanspaces.com/platform-icons/$uid@3x.png"
 
 val Coin.iconUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/$uid@3x.png"
