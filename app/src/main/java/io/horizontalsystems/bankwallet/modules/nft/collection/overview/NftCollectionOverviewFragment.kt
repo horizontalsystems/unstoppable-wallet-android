@@ -31,10 +31,11 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.About
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Contracts
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionOverviewItemUiState
+import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionOverviewViewItem
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionViewModel
 import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -82,55 +83,56 @@ fun NftCollectionOverviewScreen(
     onCopyText: (String) -> Unit,
     onOpenUrl: (String) -> Unit
 ) {
-    val uiState = viewModel.nftCollectionOverviewUiState
+    val collection = viewModel.overviewViewItem
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(uiState.isRefreshing),
+        state = rememberSwipeRefreshState(viewModel.isRefreshing),
         onRefresh = {
             viewModel.refresh()
         }
     ) {
-        Crossfade(uiState) { state ->
-            when {
-                state.isLoading -> {
+        Crossfade(viewModel.viewState) { viewState ->
+            when (viewState) {
+                ViewState.Loading -> {
                     Loading()
                 }
-                state.errorMessages.isNotEmpty() -> {
+                is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
-                state.item != null -> {
-                    val collection = state.item
-                    LazyColumn {
-                        item {
-                            Header(collection.name, collection.imageUrl)
-                        }
-                        item {
-                            Stats(collection)
-                        }
-                        if (collection.description?.isNotBlank() == true) {
+                ViewState.Success -> {
+                    collection?.let { collection ->
+                        LazyColumn {
                             item {
-                                Spacer(modifier = Modifier.height(24.dp))
-                                About(collection.description)
+                                Header(collection.name, collection.imageUrl)
                             }
-                        }
-                        if (collection.contracts.isNotEmpty()) {
                             item {
-                                Spacer(modifier = Modifier.height(24.dp))
-                                Contracts(
-                                    contracts = collection.contracts,
-                                    onClickCopy = { onCopyText(it.rawValue) },
-                                    onClickExplorer = { onOpenUrl(it.explorerUrl) }
-                                )
+                                Stats(collection)
                             }
-                        }
-                        if (collection.links.isNotEmpty()) {
+                            if (collection.description?.isNotBlank() == true) {
+                                item {
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                    About(collection.description)
+                                }
+                            }
+                            if (collection.contracts.isNotEmpty()) {
+                                item {
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                    Contracts(
+                                        contracts = collection.contracts,
+                                        onClickCopy = { onCopyText(it.rawValue) },
+                                        onClickExplorer = { onOpenUrl(it.explorerUrl) }
+                                    )
+                                }
+                            }
+                            if (collection.links.isNotEmpty()) {
+                                item {
+                                    Links(collection.links, onOpenUrl)
+                                }
+                            }
                             item {
-                                Links(collection.links, onOpenUrl)
+                                Spacer(modifier = Modifier.height(32.dp))
+                                CellFooter(text = stringResource(id = R.string.PoweredBy_OpenSeaAPI))
                             }
-                        }
-                        item {
-                            Spacer(modifier = Modifier.height(32.dp))
-                            CellFooter(text = stringResource(id = R.string.PoweredBy_OpenSeaAPI))
                         }
                     }
                 }
@@ -140,7 +142,7 @@ fun NftCollectionOverviewScreen(
 }
 
 @Composable
-private fun Links(links: List<NftCollectionOverviewItemUiState.Link>, onClick: (String) -> Unit) {
+private fun Links(links: List<NftCollectionOverviewViewItem.Link>, onClick: (String) -> Unit) {
     Column {
         Spacer(modifier = Modifier.height(24.dp))
         CellSingleLineClear(borderTop = true) {
@@ -191,7 +193,7 @@ private fun Header(name: String, imageUrl: String?) {
 }
 
 @Composable
-private fun Stats(collection: NftCollectionOverviewItemUiState) {
+private fun Stats(collection: NftCollectionOverviewViewItem) {
     Row(Modifier.padding(horizontal = 16.dp)) {
         Card(
             modifier = Modifier
@@ -246,9 +248,9 @@ private fun Stats(collection: NftCollectionOverviewItemUiState) {
 
     val chartCards = buildList {
         collection.volumeChartDataWrapper?.let { add(it) }
-        collection.averagePriceChartDataWrapper?.let { add(it) }
         collection.salesChartDataWrapper?.let { add(it) }
         collection.floorPriceChartDataWrapper?.let { add(it) }
+        collection.averagePriceChartDataWrapper?.let { add(it) }
     }
 
     val rows = chartCards.chunked(2)
@@ -268,7 +270,7 @@ private fun Stats(collection: NftCollectionOverviewItemUiState) {
 }
 
 @Composable
-private fun RowScope.ChartCard(chartDataWrapper: NftCollectionOverviewItemUiState.ChartDataWrapper) {
+private fun RowScope.ChartCard(chartDataWrapper: NftCollectionOverviewViewItem.ChartDataWrapper) {
     Column(
         modifier = Modifier
             .weight(1f)
@@ -308,7 +310,7 @@ private fun RowScope.ChartCard(chartDataWrapper: NftCollectionOverviewItemUiStat
         }
         Text(
             modifier = Modifier.padding(top = 8.dp),
-            text = chartDataWrapper.secondaryValue,
+            text = chartDataWrapper.secondaryValue ?: "",
             style = ComposeAppTheme.typography.micro,
             color = ComposeAppTheme.colors.grey
         )
