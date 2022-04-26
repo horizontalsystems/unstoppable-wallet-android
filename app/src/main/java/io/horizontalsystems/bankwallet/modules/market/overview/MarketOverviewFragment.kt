@@ -29,12 +29,10 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
-import io.horizontalsystems.bankwallet.modules.market.overview.ui.BoardsView
-import io.horizontalsystems.bankwallet.modules.market.overview.ui.MetricChartsView
-import io.horizontalsystems.bankwallet.modules.market.overview.ui.TopNftCollectionsBoardView
-import io.horizontalsystems.bankwallet.modules.market.overview.ui.TopSectorsBoardView
+import io.horizontalsystems.bankwallet.modules.market.overview.ui.*
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsFragment
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsFragment
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -143,6 +141,19 @@ private fun MarketOverviewScreen(
                                     val args = TopNftCollectionsFragment.prepareParams(sortingField, timeDuration)
 
                                     navController.slideFromBottom(R.id.marketTopNftCollectionsFragment, args)
+                                }
+                            )
+
+                            TopPlatformsBoardView(
+                                viewItem.topPlatformsBoard,
+                                onSelectTimeDuration = { timeDuration ->
+                                    viewModel.onSelectTopPlatformsTimeDuration(timeDuration)
+                                },
+                                onClickSeeAll = {
+                                    val timeDuration = viewModel.topPlatformsTimeDuration
+                                    val args = TopPlatformsFragment.prepareParams(timeDuration)
+
+                                    navController.slideFromBottom(R.id.marketTopPlatformsFragment, args)
                                 }
                             )
                         }

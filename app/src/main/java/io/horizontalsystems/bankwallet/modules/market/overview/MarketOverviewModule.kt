@@ -15,6 +15,8 @@ import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsRep
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionViewItem
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformViewItem
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import java.math.BigDecimal
@@ -28,11 +30,16 @@ object MarketOverviewModule {
             val marketMetricsRepository = MarketMetricsRepository(App.marketKit)
             val topNftCollectionsRepository = TopNftCollectionsRepository(HsNftApiProvider())
             val topSectorsRepository = TopSectorsRepository(App.marketKit)
+            val topPlatformsRepository = TopPlatformsRepository(
+                App.marketKit,
+                App.currencyManager
+            )
             val service = MarketOverviewService(
                 topMarketsRepository,
                 marketMetricsRepository,
                 topNftCollectionsRepository,
                 topSectorsRepository,
+                topPlatformsRepository,
                 App.backgroundManager,
                 App.currencyManager
             )
@@ -47,6 +54,7 @@ object MarketOverviewModule {
         val boards: List<Board>,
         val topNftCollectionsBoard: TopNftCollectionsBoard,
         val topSectorsBoard: TopSectorsBoard,
+        val topPlatformsBoard: TopPlatformsBoard,
     )
 
     data class MarketMetrics(
@@ -104,6 +112,13 @@ object MarketOverviewModule {
         val title: Int,
         val iconRes: Int,
         val items: List<Category>
+    )
+
+    data class TopPlatformsBoard(
+        val title: Int,
+        val iconRes: Int,
+        val timeDurationSelect: Select<TimeDuration>,
+        val items: List<TopPlatformViewItem>
     )
 
 }
