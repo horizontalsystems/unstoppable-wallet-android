@@ -1107,9 +1107,10 @@
     <string name="NftCollection_Items">Items</string>
     <string name="NftCollection_Activity">Activity</string>
     <string name="NftCollection_Owners">Owners</string>
-    <string name="NftCollection_AveragePrice">Average Price</string>
+    <string name="NftCollection_AveragePrice">All-time Average</string>
     <string name="NftCollection_ItemsCount">%d Items</string>
     <string name="NftCollection_TodaysSales">Today\'s Sales</string>
+    <string name="NftCollection_AveragePriceDescription">~%s / Item</string>
 
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
