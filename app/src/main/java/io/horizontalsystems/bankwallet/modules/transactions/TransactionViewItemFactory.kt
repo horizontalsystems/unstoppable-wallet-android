@@ -210,8 +210,8 @@ class TransactionViewItemFactory {
         val incomingEvents = combinedEvents(record.incomingEvents)
         val outgoingEvents = combinedEvents(record.outgoingEvents)
 
-        val (primaryValue: ColoredValueNew?, secondaryValue: ColoredValueNew?) = getValuesFromEvents(incomingEvents, outgoingEvents, currencyValue)
-        val title = record.method ?: record.blockchainTitle + " " + Translator.getString(R.string.Transactions_ContractCall)
+        val (primaryValue: ColoredValueNew?, secondaryValue: ColoredValueNew?, eventIcon) = getValuesFromEvents(incomingEvents, outgoingEvents, currencyValue)
+        val title = record.method ?: Translator.getString(R.string.Transactions_ContractCall)
 
         return TransactionViewItem(
             uid = record.uid,
@@ -221,7 +221,7 @@ class TransactionViewItemFactory {
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: TransactionViewItem.Icon.Platform(record.source)
+            icon = icon ?: eventIcon ?: TransactionViewItem.Icon.Platform(record.source)
         )
     }
 
@@ -235,9 +235,8 @@ class TransactionViewItemFactory {
         val incomingEvents = combinedEvents(record.incomingEvents)
         val outgoingEvents = combinedEvents(record.outgoingEvents)
 
-        val (primaryValue: ColoredValueNew?, secondaryValue: ColoredValueNew?) = getValuesFromEvents(incomingEvents, outgoingEvents, currencyValue)
+        val (primaryValue: ColoredValueNew?, secondaryValue: ColoredValueNew?, eventIcon) = getValuesFromEvents(incomingEvents, outgoingEvents, currencyValue)
 
-        val transactionTypeIcon = if (outgoingEvents.isNotEmpty()) R.drawable.ic_tx_unordered else R.drawable.ic_incoming_20
         val title: String
         val subTitle: String
         if (outgoingEvents.isEmpty()) {
@@ -246,7 +245,7 @@ class TransactionViewItemFactory {
 
             subTitle = if (addresses.size == 1) getNameOrAddressTruncated(addresses.first()) else Translator.getString(R.string.Transactions_Multiple)
         } else {
-            title = record.blockchainTitle + " " + Translator.getString(R.string.Transactions_ExternalContractCall)
+            title = Translator.getString(R.string.Transactions_ExternalContractCall)
             subTitle = "---"
         }
 
@@ -258,7 +257,7 @@ class TransactionViewItemFactory {
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: TransactionViewItem.Icon.Platform(record.source)
+            icon = icon ?: eventIcon ?: TransactionViewItem.Icon.Platform(record.source)
         )
     }
 
@@ -479,9 +478,10 @@ class TransactionViewItemFactory {
         return results
     }
 
-    private fun getValuesFromEvents(incomingEvents: List<EvmTransactionRecord.TransferEvent>, outgoingEvents: List<EvmTransactionRecord.TransferEvent>, currencyValue: CurrencyValue?): Pair<ColoredValueNew?, ColoredValueNew?> {
+    private fun getValuesFromEvents(incomingEvents: List<EvmTransactionRecord.TransferEvent>, outgoingEvents: List<EvmTransactionRecord.TransferEvent>, currencyValue: CurrencyValue?): Triple<ColoredValueNew, ColoredValueNew?, TransactionViewItem.Icon?> {
         val primaryValue: ColoredValueNew?
         val secondaryValue: ColoredValueNew?
+        var icon: TransactionViewItem.Icon? = null
 
         val incomingValues = incomingEvents.map { it.value }
         val outgoingValues = outgoingEvents.map { it.value }
@@ -489,24 +489,46 @@ class TransactionViewItemFactory {
         when {
             // incoming
             (incomingValues.size == 1 && outgoingValues.isEmpty()) -> {
-                primaryValue = ColoredValueNew(getCoinString(incomingValues.first()), ColorName.Remus)
+                val transactionValue = incomingValues.first()
+                primaryValue = ColoredValueNew(getCoinString(transactionValue), ColorName.Remus)
                 secondaryValue = currencyValue?.let {
                     ColoredValueNew(getCurrencyString(it), ColorName.Grey)
                 }
+                icon = TransactionViewItem.Icon.Regular(
+                    url = transactionValue.coinIconUrl,
+                    placeholder = transactionValue.coinIconPlaceholder
+                )
             }
 
             // outgoing
             (incomingValues.isEmpty() && outgoingValues.size == 1) -> {
-                primaryValue = ColoredValueNew(getCoinString(outgoingValues.first()), ColorName.Jacob)
+                val transactionValue = outgoingValues.first()
+                primaryValue = ColoredValueNew(getCoinString(transactionValue), ColorName.Jacob)
                 secondaryValue = currencyValue?.let {
                     ColoredValueNew(getCurrencyString(it), ColorName.Grey)
                 }
+                icon = TransactionViewItem.Icon.Regular(
+                    url = transactionValue.coinIconUrl,
+                    placeholder = transactionValue.coinIconPlaceholder
+                )
             }
 
             // swap
             (incomingValues.size == 1 && outgoingValues.size == 1) -> {
-                primaryValue = ColoredValueNew(getCoinString(incomingValues.first()), ColorName.Remus)
-                secondaryValue = ColoredValueNew(getCoinString(outgoingValues.first()), ColorName.Jacob)
+                val inTransactionValue = incomingValues.first()
+                val outTransactionValue = outgoingValues.first()
+                primaryValue = ColoredValueNew(getCoinString(inTransactionValue), ColorName.Remus)
+                secondaryValue = ColoredValueNew(getCoinString(outTransactionValue), ColorName.Jacob)
+                icon = TransactionViewItem.Icon.Swap(
+                    iconIn = TransactionViewItem.Icon.Regular(
+                        url = inTransactionValue.coinIconUrl,
+                        placeholder = inTransactionValue.coinIconPlaceholder
+                    ),
+                    iconOut = TransactionViewItem.Icon.Regular(
+                        url = outTransactionValue.coinIconUrl,
+                        placeholder = outTransactionValue.coinIconPlaceholder
+                    ),
+                )
             }
 
             // outgoing multiple
@@ -526,7 +548,7 @@ class TransactionViewItemFactory {
                 secondaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Jacob)
             }
         }
-        return Pair(primaryValue, secondaryValue)
+        return Triple(primaryValue, secondaryValue, icon)
     }
 
     private fun getCurrencyString(currencyValue: CurrencyValue): String {

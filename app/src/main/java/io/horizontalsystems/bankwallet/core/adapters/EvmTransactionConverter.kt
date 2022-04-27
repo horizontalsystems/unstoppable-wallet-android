@@ -228,7 +228,7 @@ class EvmTransactionConverter(
         if (value == null || value <= BigInteger.ZERO) return listOf()
 
         return listOf(
-            EvmTransactionRecord.TransferEvent(transaction.to?.eip55, baseCoinValue(value, false))
+            EvmTransactionRecord.TransferEvent(transaction.to?.eip55, baseCoinValue(value, true))
         )
     }
 
