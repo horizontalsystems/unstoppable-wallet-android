@@ -35,8 +35,8 @@ class TransactionViewItemFactory {
         val record = transactionItem.record
         val status = record.status(transactionItem.lastBlockInfo?.height)
         val progress = when (status) {
-            is TransactionStatus.Pending -> 15
-            is TransactionStatus.Processing -> (status.progress * 100).toInt()
+            is TransactionStatus.Pending -> 0.15f
+            is TransactionStatus.Processing -> status.progress
             else -> null
         }
         val icon = if (status is TransactionStatus.Failed) TransactionViewItem.Icon.Failed else null
@@ -64,7 +64,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromSwapTransactionRecord(
         record: SwapTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -94,7 +94,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromUnknownSwapTransactionRecord(
         record: UnknownSwapTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -116,7 +116,7 @@ class TransactionViewItemFactory {
         )
     }
 
-    private fun createViewItemFromEvmTransactionRecord(record: EvmTransactionRecord, progress: Int?, icon: TransactionViewItem.Icon?): TransactionViewItem {
+    private fun createViewItemFromEvmTransactionRecord(record: EvmTransactionRecord, progress: Float?, icon: TransactionViewItem.Icon?): TransactionViewItem {
         return TransactionViewItem(
             uid = record.uid,
             progress = progress,
@@ -132,7 +132,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromEvmOutgoingTransactionRecord(
         record: EvmOutgoingTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -157,7 +157,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromEvmIncomingTransactionRecord(
         record: EvmIncomingTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -184,7 +184,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromContractCreationTransactionRecord(
         record: ContractCreationTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -203,7 +203,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromContractCallTransactionRecord(
         record: ContractCallTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -228,7 +228,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromExternalContractCallTransactionRecord(
         record: ExternalContractCallTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -265,7 +265,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromBitcoinOutgoingTransactionRecord(
         record: BitcoinOutgoingTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -311,7 +311,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromBitcoinIncomingTransactionRecord(
         record: BitcoinIncomingTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -352,7 +352,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromBinanceChainOutgoingTransactionRecord(
         record: BinanceChainOutgoingTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -377,7 +377,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromBinanceChainIncomingTransactionRecord(
         record: BinanceChainIncomingTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
@@ -404,7 +404,7 @@ class TransactionViewItemFactory {
     private fun createViewItemFromApproveTransactionRecord(
         record: ApproveTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Int?,
+        progress: Float?,
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {

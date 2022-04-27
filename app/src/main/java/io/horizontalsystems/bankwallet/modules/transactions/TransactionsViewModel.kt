@@ -108,7 +108,7 @@ data class TransactionItem(
 
 data class TransactionViewItem(
     val uid: String,
-    val progress: Int?,
+    val progress: Float?,
     val title: String,
     val subtitle: String,
     val primaryValue: ColoredValueNew?,

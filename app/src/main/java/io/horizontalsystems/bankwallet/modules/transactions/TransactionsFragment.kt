@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -218,11 +217,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                     .size(40.dp)
             ) {
                 item.progress?.let { progress ->
-                    CircularProgressIndicator(
-//                        progress = progress / 100f,
-                        color = ComposeAppTheme.colors.grey50,
-                        strokeWidth = 2.dp
-                    )
+                    HSCircularProgressIndicator(progress)
                 }
                 val icon = item.icon
                 when (icon) {

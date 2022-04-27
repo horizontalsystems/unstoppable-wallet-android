@@ -53,7 +53,7 @@ abstract class TransactionRecord(
             if (confirmations >= threshold) {
                 return TransactionStatus.Completed
             } else {
-                return TransactionStatus.Processing(confirmations.toDouble() / threshold.toDouble())
+                return TransactionStatus.Processing(confirmations.toFloat() / threshold.toFloat())
             }
         }
 
