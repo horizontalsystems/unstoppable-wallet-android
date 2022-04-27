@@ -38,7 +38,7 @@ data class TransactionLockInfo(
 
 sealed class TransactionStatus {
     object Pending : TransactionStatus()
-    class Processing(val progress: Double) : TransactionStatus() //progress in 0.0 .. 1.0
+    class Processing(val progress: Float) : TransactionStatus() //progress in 0.0 .. 1.0
     object Completed : TransactionStatus()
     object Failed : TransactionStatus()
 }
