@@ -76,6 +76,7 @@ interface ILocalStorage {
     var launchPage: LaunchPage?
     var mainTab: MainModule.MainTab?
     var favoriteCoinIdsMigrated: Boolean
+    var fillWalletInfoDone: Boolean
     var marketFavoritesSortingField: SortingField?
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
