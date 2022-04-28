@@ -349,6 +349,10 @@ class App : CoreApp(), WorkConfiguration.Provider {
                 val request = OneTimeWorkRequestBuilder<MigrateFavoriteCoinIdsWorker>().build()
                 WorkManager.getInstance(instance).enqueue(request)
             }
+            if (!localStorage.fillWalletInfoDone) {
+                val request = OneTimeWorkRequestBuilder<FillWalletInfoWorker>().build()
+                WorkManager.getInstance(instance).enqueue(request)
+            }
 
         }.start()
     }
