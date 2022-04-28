@@ -3,7 +3,7 @@ package io.horizontalsystems.pin
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
-import io.horizontalsystems.bankwallet.core.IPinManager
+import io.horizontalsystems.core.IPinComponent
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -13,8 +13,8 @@ import org.mockito.Mockito
 class PinInteractorTest {
 
     private val delegate = Mockito.mock(PinModule.IInteractorDelegate::class.java)
-    private val pinManager = Mockito.mock(IPinManager::class.java)
-    private var interactor = PinInteractor(pinManager)
+    private val pinComponent = Mockito.mock(IPinComponent::class.java)
+    private var interactor = PinInteractor(pinComponent)
 
 
     @Before
@@ -47,14 +47,14 @@ class PinInteractorTest {
         val pin = "0000"
         interactor.save(pin)
 
-        verify(pinManager).store(pin)
+        verify(pinComponent).store(pin)
         verify(delegate).didSavePin()
     }
 
     @Test
     fun unlock_success() {
         val pin = "0000"
-        whenever(pinManager.validate(pin)).thenReturn(true)
+        whenever(pinComponent.validate(pin)).thenReturn(true)
         val isValid = interactor.unlock(pin)
         Assert.assertTrue(isValid)
     }
@@ -63,7 +63,7 @@ class PinInteractorTest {
     fun unlock_failure() {
         val pin = "0000"
 
-        whenever(pinManager.validate(pin)).thenReturn(false)
+        whenever(pinComponent.validate(pin)).thenReturn(false)
 
         interactor.unlock(pin)
 
