@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.databinding.FragmentCollectionBinding
 import io.horizontalsystems.bankwallet.modules.nft.collection.activity.NftCollectionActivityFragment
-import io.horizontalsystems.bankwallet.modules.nft.collection.items.NftCollectionAssetsFragment
+import io.horizontalsystems.bankwallet.modules.nft.collection.assets.NftCollectionAssetsFragment
 import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionOverviewFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
