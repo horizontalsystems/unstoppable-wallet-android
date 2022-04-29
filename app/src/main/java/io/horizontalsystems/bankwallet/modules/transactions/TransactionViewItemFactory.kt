@@ -563,13 +563,16 @@ class TransactionViewItemFactory {
                 decimalValue > BigDecimal.ZERO -> "+"
                 else -> ""
             }
-            val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(decimalValue)
-            App.numberFormatter.formatCoin(
-                decimalValue.abs(),
-                transactionValue.coinCode,
-                0,
-                significantDecimal,
-                prefix = sign
+            val roundedForTxs = App.numberFormatter.getShortenedForTxs(decimalValue.abs())
+            val suffix = roundedForTxs.suffix.titleResId?.let {
+                Translator.getString(it)
+            } ?: ""
+            App.numberFormatter.format(
+                value = roundedForTxs.value,
+                minimumFractionDigits = 0,
+                maximumFractionDigits = roundedForTxs.value.scale(),
+                prefix = sign,
+                suffix = "$suffix ${transactionValue.coinCode}",
             )
         } ?: ""
     }
