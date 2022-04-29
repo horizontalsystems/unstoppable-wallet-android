@@ -14,9 +14,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class NftAssetService(
-    private val accountId: String,
-    private val tokenId: String,
-    private val contractAddress: String,
+    private val asset: NftAssetModuleAssetItem,
     private val nftManager: NftManager,
     private val repository: NftAssetRepository
 ) {
@@ -45,34 +43,15 @@ class NftAssetService(
     }
 
     private suspend fun loadAsset() {
-        val assetRecord =
-            nftManager.getAssetRecord(accountId, tokenId, contractAddress) ?: throw NftNotFoundException()
-        val collectionRecord =
-            nftManager.getCollectionRecord(accountId, assetRecord.collectionUid) ?: throw NftNotFoundException()
-
-        val asset = nftManager.assetItem(
-            assetRecord = assetRecord,
-            collectionName = collectionRecord.name,
-            collectionLinks = collectionRecord.links,
-            averagePrice7d = collectionRecord.averagePrice7d,
-            averagePrice30d = collectionRecord.averagePrice30d,
-            totalSupply = collectionRecord.totalSupply
-        )
-
         repository.set(DataWithError(asset, null))
 
-        syncStats(asset, tokenId, contractAddress, assetRecord.collectionUid)
+        syncStats(asset)
     }
 
-    private suspend fun syncStats(
-        asset: NftAssetModuleAssetItem,
-        tokenId: String,
-        contractAddress: String,
-        collectionUid: String
-    ) {
+    private suspend fun syncStats(asset: NftAssetModuleAssetItem) {
         try {
-            val assetOrders = nftManager.assetOrders(contractAddress, tokenId)
-            val collectionStats = nftManager.collectionStats(collectionUid)
+            val assetOrders = nftManager.assetOrders(asset.contract.address, asset.tokenId)
+            val collectionStats = nftManager.collectionStats(asset.collectionUid)
 
             val (bestOffer, sale) = getOrderStats(assetOrders)
             val newStatsItem = Stats(
@@ -137,5 +116,3 @@ class NftAssetService(
         return Pair(bestOffer, sale)
     }
 }
-
-class NftNotFoundException : Exception()

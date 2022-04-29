@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
+import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +16,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -28,7 +28,7 @@ class NftCollectionsService(
     val priceType by itemsPricedRepository::priceType
 
     private val _serviceItemDataFlow =
-        MutableSharedFlow<DataWithError<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>?>>(
+        MutableSharedFlow<DataWithError<Pair<Map<NftCollectionRecord, List<CollectionAsset>>, CurrencyValue>?>>(
             replay = 1,
             onBufferOverflow = BufferOverflow.DROP_OLDEST
         )
@@ -44,7 +44,7 @@ class NftCollectionsService(
                     val itemsWithTotalValue = data.value?.let { assetItemsPriced ->
                         val totalValue = assetItemsPriced.map { (_, assets) ->
                             assets.sumOf {
-                                it.currencyPrice?.value ?: BigDecimal.ZERO
+                                it.price?.currencyValue?.value ?: BigDecimal.ZERO
                             }
                         }.sumOf { it }
                         Pair(

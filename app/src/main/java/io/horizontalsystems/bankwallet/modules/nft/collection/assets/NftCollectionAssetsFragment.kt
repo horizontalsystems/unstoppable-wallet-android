@@ -20,9 +20,11 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.nft.NftCollection
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionViewModel
 import io.horizontalsystems.bankwallet.modules.nft.ui.NftAssetPreview
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -66,14 +68,18 @@ fun NftCollectionAssetsScreen(navController: NavController, collection: NftColle
                 ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
             }
             ViewState.Success -> {
-                NftAssets(viewModel.assets, viewModel::onBottomReached, viewModel.loadingMore)
+                NftAssets(navController, viewModel.assets, viewModel::onBottomReached, viewModel.loadingMore)
             }
         }
     }
 }
 
 @Composable
-private fun NftAssets(assets: List<CollectionAsset>?, onBottomReached: () -> Unit, loadingMore: Boolean) {
+private fun NftAssets(
+    navController: NavController,
+    assets: List<CollectionAsset>?,
+    onBottomReached: () -> Unit, loadingMore: Boolean
+) {
     val listState = rememberLazyListState()
 
     LazyColumn(state = listState) {
@@ -90,12 +96,15 @@ private fun NftAssets(assets: List<CollectionAsset>?, onBottomReached: () -> Uni
                             NftAssetPreview(
                                 name = asset.name,
                                 imageUrl = asset.imageUrl,
-                                onSale = false,
+                                onSale = asset.onSale,
                                 tokenId = asset.tokenId,
                                 coinPrice = price?.coinValue,
                                 currencyPrice = price?.currencyValue
                             ) {
-                                // TODO open nft asset page
+                                NftAssetModule.setParams(collectionAsset.asset)
+                                navController.slideFromBottom(
+                                    R.id.nftAssetFragment
+                                )
                             }
                         }
                     }
