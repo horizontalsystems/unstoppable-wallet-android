@@ -6,9 +6,12 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
 import io.horizontalsystems.bankwallet.modules.hsnft.CollectionStats
+import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.math.roundToInt
 
 class NftManager(
     private val nftDao: NftDao,
@@ -73,4 +76,53 @@ class NftManager(
     suspend fun assetOrders(contractAddress: String, tokenId: String): List<AssetOrder> {
         return apiProvider.assetOrders(contractAddress, tokenId)
     }
+
+    fun assetItem(
+        assetRecord: NftAssetRecord,
+        collectionName: String,
+        collectionLinks: HsNftApiV1Response.Collection.Links?,
+        averagePrice7d: NftAssetPrice?,
+        averagePrice30d: NftAssetPrice?,
+        totalSupply: Int
+    ) = NftAssetModuleAssetItem(
+        name = assetRecord.name,
+        imageUrl = assetRecord.imageUrl,
+        collectionName = collectionName,
+        description = assetRecord.description,
+        contract = assetRecord.contract,
+        tokenId = assetRecord.tokenId,
+        assetLinks = assetRecord.links,
+        collectionLinks = collectionLinks,
+        stats = NftAssetModuleAssetItem.Stats(
+            lastSale = nftAssetPriceToCoinValue(assetRecord.lastSale)?.let { NftAssetModuleAssetItem.Price(it) },
+            average7d = nftAssetPriceToCoinValue(averagePrice7d)?.let { NftAssetModuleAssetItem.Price(it) },
+            average30d = nftAssetPriceToCoinValue(averagePrice30d)?.let { NftAssetModuleAssetItem.Price(it) },
+        ),
+        attributes = assetRecord.attributes.map { attribute ->
+            NftAssetModuleAssetItem.Attribute(
+                attribute.type,
+                attribute.value,
+                getAttributePercentage(attribute, totalSupply)?.let { "$it%" },
+                getAttributeSearchUrl(attribute, assetRecord.collectionUid)
+            )
+        }
+    )
+
+    private fun getAttributeSearchUrl(attribute: NftAssetAttribute, collectionUid: String): String {
+        return "https://opensea.io/assets/${collectionUid}?search[stringTraits][0][name]=${attribute.type}" +
+                "&search[stringTraits][0][values][0]=${attribute.value}" +
+                "&search[sortAscending]=true&search[sortBy]=PRICE"
+    }
+
+    private fun getAttributePercentage(attribute: NftAssetAttribute, totalSupply: Int): Number? =
+        if (attribute.count > 0 && totalSupply > 0) {
+            val percent = (attribute.count * 100f / totalSupply)
+            when {
+                percent >= 10 -> percent.roundToInt()
+                percent >= 1 -> (percent * 10).roundToInt() / 10f
+                else -> (percent * 100).roundToInt() / 100f
+            }
+        } else {
+            null
+        }
 }

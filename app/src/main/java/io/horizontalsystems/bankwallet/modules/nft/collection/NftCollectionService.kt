@@ -13,10 +13,15 @@ class NftCollectionService(
     private val _nftCollection = MutableStateFlow<Result<NftCollection>?>(null)
     val nftCollection = _nftCollection.filterNotNull()
 
+    var collection: NftCollection? = null
+        private set
 
     suspend fun start() {
         val nftCollectionFetchResult = try {
-            Result.success(nftApiProvider.collection(collectionUid))
+            val collection = nftApiProvider.collection(collectionUid)
+            this.collection = collection
+
+            Result.success(collection)
         } catch (error: Exception) {
             Result.failure(error)
         }

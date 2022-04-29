@@ -52,6 +52,9 @@ class NftCollectionViewModel(
     var isRefreshing by mutableStateOf(false)
         private set
 
+    val collection: NftCollection?
+        get() = service.collection
+
     init {
         service.nftCollection.collectWith(viewModelScope) { result ->
             this.result = result

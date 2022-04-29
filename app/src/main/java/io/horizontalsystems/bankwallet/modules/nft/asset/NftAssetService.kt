@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.nft.asset
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
 import io.horizontalsystems.bankwallet.modules.nft.DataWithError
-import io.horizontalsystems.bankwallet.modules.nft.NftAssetAttribute
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.*
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale.PriceType
@@ -12,9 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 class NftAssetService(
     private val accountId: String,
@@ -53,54 +50,19 @@ class NftAssetService(
         val collectionRecord =
             nftManager.getCollectionRecord(accountId, assetRecord.collectionUid) ?: throw NftNotFoundException()
 
-        val asset = NftAssetModuleAssetItem(
-            name = assetRecord.name,
-            imageUrl = assetRecord.imageUrl,
+        val asset = nftManager.assetItem(
+            assetRecord = assetRecord,
             collectionName = collectionRecord.name,
-            description = assetRecord.description,
-            contract = assetRecord.contract,
-            tokenId = assetRecord.tokenId,
-            assetLinks = assetRecord.links,
             collectionLinks = collectionRecord.links,
-            stats = Stats(
-                lastSale = nftManager.nftAssetPriceToCoinValue(assetRecord.lastSale)?.let { Price(it) },
-                average7d = nftManager.nftAssetPriceToCoinValue(collectionRecord.averagePrice7d)
-                    ?.let { Price(it) },
-                average30d = nftManager.nftAssetPriceToCoinValue(collectionRecord.averagePrice30d)
-                    ?.let { Price(it) },
-            ),
-            attributes = assetRecord.attributes.map { attribute ->
-                Attribute(
-                    attribute.type,
-                    attribute.value,
-                    getAttributePercentage(attribute, collectionRecord.totalSupply)?.let { "$it%" },
-                    getAttributeSearchUrl(attribute, collectionRecord.uid)
-                )
-            }
+            averagePrice7d = collectionRecord.averagePrice7d,
+            averagePrice30d = collectionRecord.averagePrice30d,
+            totalSupply = collectionRecord.totalSupply
         )
 
         repository.set(DataWithError(asset, null))
 
         syncStats(asset, tokenId, contractAddress, assetRecord.collectionUid)
     }
-
-    private fun getAttributeSearchUrl(attribute: NftAssetAttribute, collectionUid: String): String {
-        return "https://opensea.io/assets/${collectionUid}?search[stringTraits][0][name]=${attribute.type}" +
-                "&search[stringTraits][0][values][0]=${attribute.value}" +
-                "&search[sortAscending]=true&search[sortBy]=PRICE"
-    }
-
-    private fun getAttributePercentage(attribute: NftAssetAttribute, totalSupply: Int): Number? =
-        if (attribute.count > 0 && totalSupply > 0) {
-            val percent = (attribute.count * 100f / totalSupply)
-            when {
-                percent >= 10 -> percent.roundToInt()
-                percent >= 1 -> (percent * 10).roundToInt() / 10f
-                else -> (percent * 100).roundToInt() / 100f
-            }
-        } else {
-            null
-        }
 
     private suspend fun syncStats(
         asset: NftAssetModuleAssetItem,

@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
 import io.horizontalsystems.bankwallet.modules.hsnft.CollectionStats
+import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -15,6 +16,7 @@ interface INftApiProvider {
 
     suspend fun topCollections(count: Int): List<TopNftCollection>
     suspend fun collection(uid: String): NftCollection
+    suspend fun collectionAssets(uid: String, cursor: String? = null): Pair<List<NftAssetRecord>, HsNftApiV1Response.Cursor>
 }
 
 data class TopNftCollection(
