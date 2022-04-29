@@ -25,7 +25,6 @@ class NftCollectionAssetsViewModel(
     init {
         service.nftCollectionAssets.collectWith(viewModelScope) { result ->
             result.getOrNull()?.let { list ->
-
                 assets = list
                 loadingMore = false
             }

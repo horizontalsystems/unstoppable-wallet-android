@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
 import androidx.annotation.StringRes
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -14,41 +13,38 @@ import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
 import java.util.*
 
 object NftAssetModule {
+
+    var assetItem: NftAssetModuleAssetItem? = null
+        private set
+
     @Suppress("UNCHECKED_CAST")
     class Factory(
-        private val accountId: String,
-        private val tokenId: String,
-        private val contractAddress: String
-    ) :
-        ViewModelProvider.Factory {
+        private val asset: NftAssetModuleAssetItem
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val repository = NftAssetRepository(BalanceXRateRepository(App.currencyManager, App.marketKit))
-            val service = NftAssetService(accountId, tokenId, contractAddress, App.nftManager, repository)
+            val service = NftAssetService(asset, App.nftManager, repository)
             return NftAssetViewModel(service) as T
         }
     }
 
-    internal const val accountIdKey = "accountIdKey"
-    internal const val tokenIdKey = "tokenIdKey"
-    internal const val contractAddressKey = "contractAddressKey"
-
-    fun prepareParams(accountId: String, tokenId: String, contractAddress: String) = bundleOf(
-        accountIdKey to accountId,
-        tokenIdKey to tokenId,
-        contractAddressKey to contractAddress,
-    )
+    fun setParams(asset: NftAssetModuleAssetItem) {
+        assetItem = asset
+    }
 }
 
 data class NftAssetModuleAssetItem(
     val name: String?,
     val imageUrl: String?,
     val collectionName: String,
+    val collectionUid: String,
     val description: String?,
     val contract: NftAssetContract,
     val tokenId: String,
     val assetLinks: HsNftApiV1Response.Asset.Links?,
     val collectionLinks: HsNftApiV1Response.Collection.Links?,
     val stats: Stats,
+    val onSale: Boolean,
     val attributes: List<Attribute>
 ) {
     data class Price(

@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Chain
 import kotlinx.coroutines.Dispatchers
@@ -16,15 +17,14 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.withContext
 
 class NftAssetItemsRepository(
-    private val nftManager: NftManager,
-    private val nftItemFactory: NftItemFactory
+    private val nftManager: NftManager
 ) {
     private var account: Account? = null
 
-    private val _itemsDataFlow = MutableSharedFlow<DataWithError<Map<NftCollectionRecord, List<NftAssetItem>>?>>(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    private val _itemsDataFlow = MutableSharedFlow<DataWithError<Map<NftCollectionRecord, List<NftAssetModuleAssetItem>>?>>(
+            replay = 1,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST
+        )
     val itemsDataFlow = _itemsDataFlow.asSharedFlow()
 
     suspend fun refresh() {
@@ -48,7 +48,10 @@ class NftAssetItemsRepository(
         }
     }
 
-    private suspend fun refresh(account: Account, cachedItems: Map<NftCollectionRecord, List<NftAssetItem>>?) =
+    private suspend fun refresh(
+        account: Account,
+        cachedItems: Map<NftCollectionRecord, List<NftAssetModuleAssetItem>>?
+    ) =
         withContext(Dispatchers.IO) {
             try {
                 val collectionAndAssets = nftManager.getCollectionAndAssetsFromApi(account, getAddress(account))
@@ -58,10 +61,17 @@ class NftAssetItemsRepository(
             }
         }
 
-    private fun convertToItem(collectionAssets: Map<NftCollectionRecord, List<NftAssetRecord>>) =
+    private fun convertToItem(collectionAssets: Map<NftCollectionRecord, List<NftAssetRecord>>): Map<NftCollectionRecord, List<NftAssetModuleAssetItem>> =
         collectionAssets.map { (collection, assets) ->
             val assetItems = assets.map { asset ->
-                nftItemFactory.createNftAssetItem(asset, collection)
+                nftManager.assetItem(
+                    assetRecord = asset,
+                    collectionName = collection.name,
+                    collectionLinks = collection.links,
+                    averagePrice7d = collection.averagePrice7d,
+                    averagePrice30d = collection.averagePrice30d,
+                    totalSupply = collection.totalSupply
+                )
             }
             collection to assetItems
         }.toMap()

@@ -71,16 +71,12 @@ class NftAssetFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val accountId = requireArguments().getString(NftAssetModule.accountIdKey)
-        val tokenId = requireArguments().getString(NftAssetModule.tokenIdKey)
-        val contractAddress = requireArguments().getString(NftAssetModule.contractAddressKey)
-
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                NftAssetScreen(findNavController(), accountId, tokenId, contractAddress)
+                NftAssetScreen(findNavController(), NftAssetModule.assetItem)
             }
         }
     }
@@ -89,14 +85,11 @@ class NftAssetFragment : BaseFragment() {
 @Composable
 fun NftAssetScreen(
     navController: NavController,
-    accountId: String?,
-    tokenId: String?,
-    contractAddress: String?
+    assetItem: NftAssetModuleAssetItem?
 ) {
-    if (accountId == null || tokenId == null || contractAddress == null) return
+    if (assetItem == null) return
 
-    val viewModel =
-        viewModel<NftAssetViewModel>(factory = NftAssetModule.Factory(accountId, tokenId, contractAddress))
+    val viewModel = viewModel<NftAssetViewModel>(factory = NftAssetModule.Factory(assetItem))
     val viewState = viewModel.viewState
     val errorMessage = viewModel.errorMessage
 

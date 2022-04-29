@@ -88,6 +88,7 @@ class NftManager(
         name = assetRecord.name,
         imageUrl = assetRecord.imageUrl,
         collectionName = collectionName,
+        collectionUid = assetRecord.collectionUid,
         description = assetRecord.description,
         contract = assetRecord.contract,
         tokenId = assetRecord.tokenId,
@@ -98,6 +99,7 @@ class NftManager(
             average7d = nftAssetPriceToCoinValue(averagePrice7d)?.let { NftAssetModuleAssetItem.Price(it) },
             average30d = nftAssetPriceToCoinValue(averagePrice30d)?.let { NftAssetModuleAssetItem.Price(it) },
         ),
+        onSale = assetRecord.onSale,
         attributes = assetRecord.attributes.map { attribute ->
             NftAssetModuleAssetItem.Attribute(
                 attribute.type,

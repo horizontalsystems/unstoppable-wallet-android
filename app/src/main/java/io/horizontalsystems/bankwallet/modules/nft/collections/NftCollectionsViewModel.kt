@@ -10,9 +10,9 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
+import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
 import io.horizontalsystems.bankwallet.modules.nft.viewState
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
@@ -42,7 +42,7 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         }
     }
 
-    private fun handleNftCollections(dataWithError: DataWithError<Pair<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>, CurrencyValue>?>) {
+    private fun handleNftCollections(dataWithError: DataWithError<Pair<Map<NftCollectionRecord, List<CollectionAsset>>, CurrencyValue>?>) {
         val data = dataWithError.value
         val error = dataWithError.error
 
@@ -65,7 +65,7 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
     }
 
     private fun syncItems(
-        collectionItems: Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>,
+        collectionItems: Map<NftCollectionRecord, List<CollectionAsset>>,
         totalCurrencyPrice: CurrencyValue
     ) {
         val expandedStates = collectionViewItems.associate { it.slug to it.expanded }

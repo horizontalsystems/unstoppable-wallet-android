@@ -5,6 +5,8 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
+import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.channels.BufferOverflow
@@ -15,7 +17,7 @@ class NftAssetItemsPricedWithCurrencyRepository(
     private val xRateRepository: BalanceXRateRepository
 ) {
     private val _itemsDataFlow =
-        MutableSharedFlow<DataWithError<Map<NftCollectionRecord, List<NftAssetItemPricedWithCurrency>>?>>(
+        MutableSharedFlow<DataWithError<Map<NftCollectionRecord, List<CollectionAsset>>?>>(
             replay = 1,
             onBufferOverflow = BufferOverflow.DROP_OLDEST
         )
@@ -38,18 +40,16 @@ class NftAssetItemsPricedWithCurrencyRepository(
     private fun handleUpdatedRates(latestRates: Map<String, CoinPrice?>) {
         val currentData = _itemsDataFlow.replayCache.lastOrNull() ?: return
         val updatedValue = currentData.value?.map { (collectionRecord, items) ->
-            collectionRecord to items.map { item ->
-                val coinPrice = item.coinPrice
+            collectionRecord to items.map { asset ->
+                val coinPrice = asset.price?.coinValue
                 val itemCoinUid = coinPrice?.coin?.uid
-                if (latestRates.containsKey(itemCoinUid)) {
+                if (itemCoinUid != null && latestRates.containsKey(itemCoinUid)) {
                     val currencyPrice = latestRates[itemCoinUid]?.let { latestRate ->
-                        coinPrice?.let {
-                            CurrencyValue(xRateRepository.baseCurrency, coinPrice.value.multiply(latestRate.value))
-                        }
+                        CurrencyValue(xRateRepository.baseCurrency, coinPrice.value.multiply(latestRate.value))
                     }
-                    item.copy(currencyPrice = currencyPrice)
+                    asset.copy(price = NftAssetModuleAssetItem.Price(coinPrice, currencyPrice))
                 } else {
-                    item
+                    asset
                 }
             }
         }?.toMap()
@@ -57,30 +57,24 @@ class NftAssetItemsPricedWithCurrencyRepository(
         _itemsDataFlow.tryEmit(currentData.copy(value = updatedValue))
     }
 
-    fun setItems(data: DataWithError<Map<NftCollectionRecord, List<NftAssetItemPriced>>?>) {
+    fun setItems(data: DataWithError<Map<NftCollectionRecord, List<CollectionAsset>>?>) {
         val items = data.value?.let { value ->
             val coinUids = value.map { (_, items) ->
-                items.mapNotNull {
-                    it.coinPrice?.coin?.uid
-                }
+                items.mapNotNull { it.price?.coinValue?.coin?.uid }
             }.flatten()
 
             xRateRepository.setCoinUids(coinUids)
             val latestRates = xRateRepository.getLatestRates()
 
-            value.map { (collectionRecord, assetItemsPriced) ->
-                collectionRecord to assetItemsPriced.map {
-                    val currencyPrice = it.coinPrice?.let { coinPrice ->
+            value.map { (collectionRecord, assets) ->
+                collectionRecord to assets.map { asset ->
+                    val coinPrice = asset.price?.coinValue
+                    val currencyPrice = coinPrice?.let {
                         latestRates[coinPrice.coin.uid]?.let { latestRate ->
                             CurrencyValue(xRateRepository.baseCurrency, coinPrice.value.multiply(latestRate.value))
                         }
                     }
-
-                    NftAssetItemPricedWithCurrency(
-                        assetItem = it.assetItem,
-                        coinPrice = it.coinPrice,
-                        currencyPrice = currencyPrice
-                    )
+                    asset.copy(price = coinPrice?.let { NftAssetModuleAssetItem.Price(coinPrice, currencyPrice) })
                 }
             }.toMap()
         }

@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nft.collections.NftAssetItemPricedWithCurrency
+import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
 import io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionViewItem
 import io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 fun LazyListScope.nftsCollectionSection(
     collection: NftCollectionViewItem,
     viewModel: NftCollectionsViewModel,
-    onClickAsset: (NftAssetItemPricedWithCurrency) -> Unit
+    onClickAsset: (CollectionAsset) -> Unit
 ) {
     item(key = "${collection.slug}-header") {
         CellSingleLineClear(
@@ -83,17 +83,19 @@ fun LazyListScope.nftsCollectionSection(
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    assets.forEach { asset ->
+                    assets.forEach { collectionAsset ->
+                        val asset = collectionAsset.asset
+                        val price = collectionAsset.price
                         Box(modifier = Modifier.weight(1f)) {
                             NftAssetPreview(
-                                name = asset.assetItem.name,
-                                imageUrl = asset.assetItem.imageUrl,
-                                onSale = asset.assetItem.onSale,
-                                tokenId = asset.assetItem.tokenId,
-                                coinPrice = asset.coinPrice,
-                                currencyPrice = asset.currencyPrice,
+                                name = asset.name,
+                                imageUrl = asset.imageUrl,
+                                onSale = asset.onSale,
+                                tokenId = asset.tokenId,
+                                coinPrice = price?.coinValue,
+                                currencyPrice = price?.currencyValue,
                                 onClick = {
-                                    onClickAsset.invoke(asset)
+                                    onClickAsset.invoke(collectionAsset)
                                 }
                             )
                         }

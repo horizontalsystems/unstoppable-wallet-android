@@ -123,14 +123,10 @@ fun NftCollectionsScreen(navController: NavController) {
 
                                     LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
                                         collections.forEach { collection ->
-                                            nftsCollectionSection(collection, viewModel) {
+                                            nftsCollectionSection(collection, viewModel) { collectionAsset ->
+                                                NftAssetModule.setParams(collectionAsset.asset)
                                                 navController.slideFromBottom(
-                                                    R.id.nftAssetFragment,
-                                                    NftAssetModule.prepareParams(
-                                                        it.assetItem.accountId,
-                                                        it.assetItem.tokenId,
-                                                        it.assetItem.contract.address
-                                                    )
+                                                    R.id.nftAssetFragment
                                                 )
                                             }
                                         }
