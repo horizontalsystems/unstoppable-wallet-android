@@ -328,6 +328,41 @@ class HsNftApiProvider : INftApiProvider {
         }
     }
 
+    override suspend fun collectionAssets(uid: String, cursor: String?): Pair<List<NftAssetRecord>, HsNftApiV1Response.Cursor> {
+        val response = HsNftModule.apiServiceV1.assets(collectionUid = uid, cursor = cursor, limit = 50)
+        val assetRecords = response.assets.map { assetResponse ->
+            NftAssetRecord(
+                accountId = "",
+                collectionUid = assetResponse.collection_uid,
+                tokenId = assetResponse.token_id,
+                name = assetResponse.name,
+                imageUrl = assetResponse.image_data?.image_url,
+                imagePreviewUrl = assetResponse.image_data?.image_preview_url,
+                description = assetResponse.description,
+                onSale = assetResponse.markets_data.sell_orders?.isNotEmpty() ?: false,
+                lastSale = assetResponse.markets_data.last_sale?.let { last_sale ->
+                    NftAssetPrice(
+                        getCoinTypeId(last_sale.payment_token.address),
+                        BigDecimal(last_sale.total_price).movePointLeft(last_sale.payment_token.decimals)
+                    )
+                },
+                contract = NftAssetContract(
+                    assetResponse.contract.address,
+                    assetResponse.contract.type
+                ),
+                links = assetResponse.links,
+                attributes = assetResponse.attributes.map {
+                    NftAssetAttribute(
+                        it.trait_type,
+                        it.value,
+                        it.trait_count
+                    )
+                }
+            )
+        }
+        return Pair(assetRecords, response.cursor)
+    }
+
     private suspend fun fetchTopCollections(count: Int): List<HsNftApiV1Response.Collection> {
         val collections = mutableListOf<HsNftApiV1Response.Collection>()
         var page = 1
@@ -346,7 +381,7 @@ class HsNftApiProvider : INftApiProvider {
         var cursor: String? = null
         val limit = 50
         do {
-            val response = HsNftModule.apiServiceV1.assets(address.hex, cursor, limit)
+            val response = HsNftModule.apiServiceV1.assets(owner = address.hex, cursor = cursor, limit = limit)
             assets.addAll(response.assets)
             cursor = response.cursor.next
         } while (response.assets.size >= limit)
@@ -393,9 +428,10 @@ interface HsNftApiV1 {
 
     @GET("assets")
     suspend fun assets(
-        @Query("owner") owner: String,
-        @Query("cursor") cursor: String?,
-        @Query("limit") limit: Int,
+        @Query("owner") owner: String? = null,
+        @Query("collection_uid") collectionUid: String? = null,
+        @Query("cursor") cursor: String? = null,
+        @Query("limit") limit: Int? = null,
         @Query("include_orders") includeOrders: Boolean = true
     ): HsNftApiV1Response.Assets
 

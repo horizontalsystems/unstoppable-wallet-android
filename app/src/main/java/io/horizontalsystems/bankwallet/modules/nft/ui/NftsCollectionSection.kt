@@ -85,9 +85,17 @@ fun LazyListScope.nftsCollectionSection(
                 ) {
                     assets.forEach { asset ->
                         Box(modifier = Modifier.weight(1f)) {
-                            NftPreview(asset) {
-                                onClickAsset.invoke(asset)
-                            }
+                            NftAssetPreview(
+                                name = asset.assetItem.name,
+                                imageUrl = asset.assetItem.imageUrl,
+                                onSale = asset.assetItem.onSale,
+                                tokenId = asset.assetItem.tokenId,
+                                coinPrice = asset.coinPrice,
+                                currencyPrice = asset.currencyPrice,
+                                onClick = {
+                                    onClickAsset.invoke(asset)
+                                }
+                            )
                         }
                     }
 

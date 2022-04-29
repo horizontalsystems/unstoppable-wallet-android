@@ -58,8 +58,8 @@ data class NftAssetModuleAssetItem(
 
     data class Stats(
         val lastSale: Price?,
-        val average7d: Price?,
-        val average30d: Price?,
+        val average7d: Price? = null,
+        val average30d: Price? = null,
         val collectionFloor: Price? = null,
         val sale: Sale? = null,
         val bestOffer: Price? = null
