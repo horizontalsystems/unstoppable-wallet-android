@@ -24,8 +24,11 @@ class PinInteractor(private val pinComponent: IPinComponent) : PinModule.IIntera
         }
     }
 
-    override fun unlock(pin: String): Boolean {
+    override fun correctPin(pin: String): Boolean {
         return pinComponent.validate(pin)
     }
 
+    override fun unlock() {
+        pinComponent.onUnlock()
+    }
 }
