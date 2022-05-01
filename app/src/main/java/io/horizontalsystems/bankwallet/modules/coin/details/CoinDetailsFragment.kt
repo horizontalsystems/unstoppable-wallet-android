@@ -142,12 +142,12 @@ class CoinDetailsFragment : BaseFragment() {
                         val detailBlocks: MutableList<@Composable (borderTop: Boolean) -> Unit> = mutableListOf()
 
                         viewItem?.let { viewItem ->
-                            viewItem.volumeChart?.let { volumeChart ->
-                                detailBlocks.add { borderTop -> TokenVolume(volumeChart, borderTop, onClickVolumeChart) }
+                            viewItem.tokenLiquidityViewItem?.let {
+                                detailBlocks.add { borderTop -> TokenLiquidity(it, borderTop) }
                             }
 
-                            if (viewItem.hasMajorHolders) {
-                                detailBlocks.add { borderTop -> TokenDistribution(viewItem, borderTop) }
+                            viewItem.tokenDistributionViewItem?.let {
+                                detailBlocks.add { borderTop -> TokenDistribution(it, borderTop) }
                             }
 
                             if (viewItem.treasuries != null || viewItem.fundsInvested != null || viewItem.reportsCount != null) {
@@ -313,10 +313,72 @@ class CoinDetailsFragment : BaseFragment() {
     }
 
     @Composable
-    private fun TokenDistribution(
-        viewItem: ViewItem,
+    private fun TokenLiquidity(
+        viewItem: CoinDetailsModule.TokenLiquidityViewItem,
         borderTop: Boolean
     ) {
+        if (viewItem.liquidity == null && viewItem.volume == null) return
+
+        if (borderTop) {
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+
+        CellSingleLineClear(borderTop = borderTop) {
+            Text(
+                text = stringResource(R.string.CoinPage_TokenLiquidity),
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.oz,
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(PaddingValues(start = 10.dp, end = 10.dp))
+        ) {
+            viewItem.volume?.let {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(if (viewItem.liquidity != null) 0.5F else 1F)
+                        .clickable {
+//                            onClick.invoke()
+                        }
+                ) {
+                    MiniChartCard(
+                        title = stringResource(id = R.string.CoinPage_DetailsDexVolume),
+                        chartViewItem = it,
+                        PaddingValues(start = 6.dp, end = 6.dp)
+                    )
+                }
+            }
+
+            viewItem.liquidity?.let {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+//                            onClick.invoke()
+                        }
+                ) {
+                    MiniChartCard(
+                        title = stringResource(id = R.string.CoinPage_DetailsDexLiquidity),
+                        chartViewItem = it,
+                        PaddingValues(start = 6.dp, end = 6.dp)
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun TokenDistribution(
+        viewItem: CoinDetailsModule.TokenDistributionViewItem,
+        borderTop: Boolean
+    ) {
+        if (!viewItem.hasMajorHolders && viewItem.txCount == null && viewItem.txVolume == null && viewItem.activeAddresses == null) return
+
         if (borderTop) {
             Spacer(modifier = Modifier.height(24.dp))
         }
@@ -329,19 +391,76 @@ class CoinDetailsFragment : BaseFragment() {
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        if (viewItem.txCount != null || viewItem.txVolume != null) {
+            Spacer(modifier = Modifier.height(12.dp))
 
-        val distributionItems = mutableListOf<@Composable () -> Unit>()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(PaddingValues(start = 10.dp, end = 10.dp))
+            ) {
+                viewItem.txCount?.let {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(if (viewItem.txVolume != null) 0.5F else 1F)
+                            .clickable {
+    //                            onClick.invoke()
+                            }
+                    ) {
+                        MiniChartCard(
+                            title = stringResource(id = R.string.CoinPage_DetailsDexVolume),
+                            chartViewItem = it,
+                            PaddingValues(start = 6.dp, end = 6.dp)
+                        )
+                    }
+                }
 
-        distributionItems.add {
-            CoinDetailsCell(
-                title = stringResource(R.string.CoinPage_MajorHolders),
-                value = null,
-                onClick = this::openMajorHolders
-            )
+                viewItem.txVolume?.let {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+    //                            onClick.invoke()
+                            }
+                    ) {
+                        MiniChartCard(
+                            title = stringResource(id = R.string.CoinPage_DetailsDexLiquidity),
+                            chartViewItem = it,
+                            PaddingValues(start = 6.dp, end = 6.dp)
+                        )
+                    }
+                }
+            }
         }
 
-        CellSingleLineLawrenceSection(distributionItems)
+        viewItem.activeAddresses?.let {
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+//                            onClick.invoke()
+                    }
+            ) {
+                MiniChartCard(
+                    title = stringResource(id = R.string.CoinPage_DetailsActiveAddresses),
+                    chartViewItem = it
+                )
+            }
+        }
+
+        if (viewItem.hasMajorHolders) {
+            Spacer(modifier = Modifier.height(12.dp))
+
+            CellSingleLineLawrenceSection {
+                CoinDetailsCell(
+                    title = stringResource(R.string.CoinPage_MajorHolders),
+                    value = null,
+                    onClick = this::openMajorHolders
+                )
+            }
+        }
     }
 
     @Composable

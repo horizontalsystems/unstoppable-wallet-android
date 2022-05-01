@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
-import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -33,7 +32,8 @@ object CoinDetailsModule {
 
     @Immutable
     data class ViewItem(
-        val hasMajorHolders: Boolean,
+        val tokenLiquidityViewItem: TokenLiquidityViewItem?,
+        val tokenDistributionViewItem: TokenDistributionViewItem?,
         val volumeChart: ChartViewItem?,
         val tvlChart: ChartViewItem?,
         val tvlRank: String?,
@@ -49,8 +49,29 @@ object CoinDetailsModule {
     data class ChartViewItem(
         val badge: String?,
         val value: String,
-        val diff: Value,
-        val chartData: ChartData
+        val diff: String,
+        val chartData: ChartData,
+        val movementTrend: ChartMovementTrend
+    )
+
+    enum class ChartMovementTrend {
+        Neutral,
+        Down,
+        Up,
+    }
+
+    @Immutable
+    data class TokenLiquidityViewItem(
+        val volume: ChartViewItem?,
+        val liquidity: ChartViewItem?
+    )
+
+    @Immutable
+    data class TokenDistributionViewItem(
+        val txCount: ChartViewItem?,
+        val txVolume: ChartViewItem?,
+        val activeAddresses: ChartViewItem?,
+        val hasMajorHolders: Boolean
     )
 
     @Immutable

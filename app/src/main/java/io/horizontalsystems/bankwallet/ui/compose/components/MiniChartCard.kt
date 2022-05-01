@@ -19,10 +19,11 @@ import io.horizontalsystems.chartview.ChartMinimal
 fun MiniChartCard(
     title: String,
     chartViewItem: CoinDetailsModule.ChartViewItem,
+    paddingValues: PaddingValues? = null,
 ) {
     Column(
         modifier = Modifier
-            .padding(horizontal = 16.dp)
+            .padding(paddingValues = paddingValues ?: PaddingValues(horizontal = 16.dp))
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence)
@@ -54,9 +55,9 @@ fun MiniChartCard(
                 color = ComposeAppTheme.colors.bran
             )
             Text(
-                text = formatValueAsDiff(chartViewItem.diff),
+                text = chartViewItem.diff,
                 style = ComposeAppTheme.typography.subhead1,
-                color = diffColor(chartViewItem.diff.raw())
+                color = diffColor(chartViewItem.movementTrend)
             )
         }
         Row {

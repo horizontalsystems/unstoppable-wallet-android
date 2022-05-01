@@ -1150,5 +1150,11 @@
     <!--Release notes-->
 
     <string name="ReleaseNotes_FollowUs">Follow Us</string>
+    <string name="CoinPage_Chart_Locked">Locked</string>
+    <string name="CoinPage_DetailsDexVolume">Dex Volume</string>
+    <string name="CoinPage_DetailsDexLiquidity">Dex Liquidity</string>
+    <string name="CoinPage_DetailsTxCount">Tx Count</string>
+    <string name="CoinPage_DetailsTxVolume">Tx Volume</string>
+    <string name="CoinPage_DetailsActiveAddresses">Active Addresses</string>
 
 </resources>

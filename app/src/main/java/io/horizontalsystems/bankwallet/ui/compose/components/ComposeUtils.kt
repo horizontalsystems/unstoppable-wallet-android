@@ -9,6 +9,7 @@ import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import java.math.BigDecimal
@@ -23,6 +24,14 @@ fun diffColor(value: BigDecimal) =
         ComposeAppTheme.colors.remus
     } else {
         ComposeAppTheme.colors.lucian
+    }
+
+@Composable
+fun diffColor(trend: CoinDetailsModule.ChartMovementTrend) =
+    when (trend) {
+        CoinDetailsModule.ChartMovementTrend.Up -> ComposeAppTheme.colors.remus
+        CoinDetailsModule.ChartMovementTrend.Down -> ComposeAppTheme.colors.lucian
+        CoinDetailsModule.ChartMovementTrend.Neutral -> ComposeAppTheme.colors.grey
     }
 
 @Composable
