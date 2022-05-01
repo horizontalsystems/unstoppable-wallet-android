@@ -63,12 +63,14 @@ class CoinDetailsService(
                     }
             }
 
+        val proFeaturesSingle = Single.just(ProCharts.forbidden)
+
         return Single.zip(
             tvlsSingle.onErrorReturn { listOf() },
             volumeSingle.onErrorReturn { listOf() },
-            { t1, t2 -> Pair(t1, t2) }
-        ).map { (tvls, totalVolumes) ->
-            Item(details, tvls, totalVolumes)
+            proFeaturesSingle.onErrorReturn { ProCharts.forbidden }
+        ) { t1, t2, t3 -> Triple(t1, t2, t3) }.map { (tvls, totalVolumes, proFeatures) ->
+            Item(details, tvls, totalVolumes, proFeatures)
         }
     }
 
@@ -101,7 +103,26 @@ class CoinDetailsService(
     data class Item(
         val marketInfoDetails: MarketInfoDetails,
         val tvls: List<ChartPoint>?,
-        val totalVolumes: List<ChartPoint>?
+        val totalVolumes: List<ChartPoint>?,
+        val proCharts: ProCharts
     )
+
+    sealed class ProData {
+        object Empty: ProData()
+        object Forbidden: ProData()
+        class Completed(val chartPoints: List<ChartPoint>): ProData()
+    }
+
+    data class ProCharts(
+        val dexVolumes: ProData,
+        val dexLiquidity: ProData,
+        val txCount: ProData,
+        val txVolume: ProData,
+        val activeAddresses: ProData
+    ) {
+        companion object {
+            val forbidden = ProCharts(ProData.Forbidden, ProData.Forbidden, ProData.Forbidden, ProData.Forbidden, ProData.Forbidden)
+        }
+    }
 
 }

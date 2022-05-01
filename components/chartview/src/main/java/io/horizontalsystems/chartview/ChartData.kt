@@ -63,6 +63,20 @@ class ChartDataBuilder private constructor(
 ) {
 
     companion object {
+        val placeholder = ChartDataBuilder(
+            listOf(
+                ChartPoint(2.toFloat(), 100, mapOf()),
+                ChartPoint(2.toFloat(), 200, mapOf()),
+                ChartPoint(1.toFloat(), 300, mapOf()),
+                ChartPoint(3.toFloat(), 400, mapOf()),
+                ChartPoint(2.toFloat(), 500, mapOf()),
+                ChartPoint(2.toFloat(), 600, mapOf())
+            ),
+            100,
+            600,
+            true
+        ).build()
+
         fun buildFromPoints(
             points: List<ChartPoint>,
             startTimestamp: Long? = null,
