@@ -51,11 +51,29 @@ data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
 
 class BalanceViewItemFactory {
 
-    private fun coinValue(state: AdapterState?, balance: BigDecimal?, visible: Boolean): DeemedValue {
+    private fun coinValue(
+        state: AdapterState?,
+        balance: BigDecimal?,
+        visible: Boolean,
+        expanded: Boolean
+    ): DeemedValue {
         val dimmed = state !is AdapterState.Synced
         val value = balance?.let {
-            val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(it)
-            App.numberFormatter.format(balance, 0, significantDecimal)
+            if (expanded) {
+                val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(it)
+                App.numberFormatter.format(balance, 0, significantDecimal)
+            } else {
+                val roundedForTxs = App.numberFormatter.getShortenedForTxs(it)
+                val suffix = roundedForTxs.suffix.titleResId?.let {
+                    Translator.getString(it)
+                } ?: ""
+                App.numberFormatter.format(
+                    value = roundedForTxs.value,
+                    minimumFractionDigits = 0,
+                    maximumFractionDigits = roundedForTxs.value.scale(),
+                    suffix = suffix,
+                )
+            }
         }
 
         return DeemedValue(value, dimmed, visible)
@@ -185,7 +203,7 @@ class BalanceViewItemFactory {
                 coinTitle = coin.name,
                 coinIconUrl = coin.iconUrl,
                 coinIconPlaceholder = wallet.coinType.iconPlaceholder,
-                coinValue = coinValue(state, item.balanceData.total, balanceTotalVisibility),
+                coinValue = coinValue(state, item.balanceData.total, balanceTotalVisibility, expanded),
                 fiatValue = currencyValue(state, item.balanceData.total, currency, latestRate, balanceTotalVisibility),
                 coinValueLocked = lockedCoinValue(state, item.balanceData.locked, coin.code, hideBalance),
                 fiatValueLocked = currencyValue(state, item.balanceData.locked, currency, latestRate, fiatLockedVisibility),
