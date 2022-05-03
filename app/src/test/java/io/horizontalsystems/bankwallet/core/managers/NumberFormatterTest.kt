@@ -112,6 +112,7 @@ class NumberFormatterTest {
         assertShortenedForTxs("333333.3333333333333333", "333", BigDecimalShortened.Suffix.Thousand)
         assertShortenedForTxs("555555.5555555555555555", "556", BigDecimalShortened.Suffix.Thousand)
         assertShortenedForTxs("999999.9999999999999999", "1", BigDecimalShortened.Suffix.Million)
+        assertShortenedForTxs("999966", "1", BigDecimalShortened.Suffix.Million)
 
         assertShortenedForTxs("1000000", "1", BigDecimalShortened.Suffix.Million)
         assertShortenedForTxs("1000000.0000000000000001", "1", BigDecimalShortened.Suffix.Million)
