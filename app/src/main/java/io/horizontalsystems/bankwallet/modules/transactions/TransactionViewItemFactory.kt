@@ -136,7 +136,12 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
-        val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
+        val primaryValue = if (record.sentToSelf) {
+            ColoredValueNew(getCoinString(record.value, true), ColorName.Leah)
+        } else {
+            ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
+        }
+
         val secondaryValue = currencyValue?.let {
             ColoredValueNew(getCurrencyString(it), ColorName.Grey)
         }
@@ -355,7 +360,12 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
-        val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
+        val primaryValue = if (record.sentToSelf) {
+            ColoredValueNew(getCoinString(record.value, true), ColorName.Leah)
+        } else {
+            ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
+        }
+
         val secondaryValue = currencyValue?.let {
             ColoredValueNew(getCurrencyString(it), ColorName.Grey)
         }
