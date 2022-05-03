@@ -231,9 +231,9 @@ data class BigDecimalShortened(
     enum class Suffix(val groupCount: Int, val titleResId: Int?) {
         Blank(0, null),
         Thousand(1, R.string.CoinPage_MarketCap_Thousand),
-        Million(2, R.string.CoinPage_MarketCap_Thousand),
-        Billion(3, R.string.CoinPage_MarketCap_Thousand),
-        Trillion(4, R.string.CoinPage_MarketCap_Thousand);
+        Million(2, R.string.CoinPage_MarketCap_Million),
+        Billion(3, R.string.CoinPage_MarketCap_Billion),
+        Trillion(4, R.string.CoinPage_MarketCap_Trillion);
 
         companion object {
             private val valuesByGroupCount = values().associateBy(Suffix::groupCount)
