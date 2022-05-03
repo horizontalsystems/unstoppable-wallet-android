@@ -62,12 +62,23 @@ class NumberFormatter(
         val base = log10(value.toDouble()).toInt() + 1
         val groupCount = (base - 1) / 3
 
+        return shortByGroupCount(groupCount, value)
+    }
+
+    private fun shortByGroupCount(
+        groupCount: Int,
+        value: BigDecimal
+    ): BigDecimalShortened {
         return when (val suffix = BigDecimalShortened.Suffix.getByGroupCount(groupCount)) {
             null -> BigDecimalShortened(value, BigDecimalShortened.Suffix.Blank)
             else -> {
                 val t = groupCount * 3
                 val shortened = value.divide(BigDecimal(10.0.pow(t.toDouble())))
-                BigDecimalShortened(shortened, suffix)
+                if (shortened >= BigDecimal("999")) {
+                    shortByGroupCount(groupCount + 1, value)
+                } else {
+                    BigDecimalShortened(shortened, suffix)
+                }
             }
         }
     }
