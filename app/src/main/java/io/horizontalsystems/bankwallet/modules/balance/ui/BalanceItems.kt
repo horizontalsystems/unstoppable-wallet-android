@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -15,7 +13,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -26,7 +23,6 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.*
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
@@ -49,25 +45,12 @@ fun BalanceItems(
 
     Column {
         val context = LocalContext.current
-        TabBalance(
-            modifier = Modifier
-                .clickable {
-                    viewModel.onBalanceClick()
-                    HudHelper.vibrate(context)
-                }
+        DoubleText(
+            title = headerViewItem.xBalanceText,
+            dimmed = !headerViewItem.upToDate,
         ) {
-            val color = if (headerViewItem.upToDate) {
-                ComposeAppTheme.colors.jacob
-            } else {
-                ComposeAppTheme.colors.yellow50
-            }
-            Text(
-                text = headerViewItem.xBalanceText,
-                style = ComposeAppTheme.typography.headline1,
-                color = color,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            viewModel.onBalanceClick()
+            HudHelper.vibrate(context)
         }
 
         Header(borderTop = true) {
