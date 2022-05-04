@@ -85,7 +85,7 @@ class NumberFormatter(
 
     private fun getRounded(value: BigDecimal): BigDecimal {
         val converted = when {
-            value == BigDecimal.ZERO -> value
+            value.compareTo(BigDecimal.ZERO) == 0  -> value
             value < BigDecimal("0.00000001") -> BigDecimal("0.00000001")
             value < BigDecimal("0.0001") -> value.setScale(8, RoundingMode.HALF_EVEN)
             value < BigDecimal("1") -> value.setScale(4, RoundingMode.HALF_EVEN)

@@ -59,6 +59,7 @@ class NumberFormatterTest {
     @Test
     fun testShortenedForTxs() {
         assertShortenedForTxs("0", "0", BigDecimalShortened.Suffix.Blank)
+        assertShortenedForTxs("0.00000000", "0", BigDecimalShortened.Suffix.Blank)
 
         assertShortenedForTxs("0.0000000000000001", "0.00000001", BigDecimalShortened.Suffix.Blank)
         assertShortenedForTxs("0.0000000033333333", "0.00000001", BigDecimalShortened.Suffix.Blank)
