@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.CoinPrice
 
 object BalanceModule {
@@ -29,7 +30,7 @@ object BalanceModule {
                 App.accountManager
             )
 
-            return BalanceViewModel(balanceService, BalanceViewItemFactory()) as T
+            return BalanceViewModel(balanceService, BalanceViewItemFactory(), XRateService(App.marketKit, App.currencyManager.baseCurrency)) as T
         }
     }
 

@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.swappable
 import io.horizontalsystems.core.entities.Currency
@@ -44,7 +45,7 @@ data class BalanceViewItem(
     val isWatchAccount: Boolean
 )
 
-data class BalanceHeaderViewItem(val xBalanceText: String, val upToDate: Boolean)
+data class BalanceHeaderViewItem(val fiatBalanceText: String, val coinBalanceText: String?, val upToDate: Boolean)
 
 data class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
 data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
@@ -226,20 +227,28 @@ class BalanceViewItemFactory {
         )
     }
 
-    fun headerViewItem(items: List<BalanceModule.BalanceItem>, currency: Currency, balanceHidden: Boolean): BalanceHeaderViewItem = when {
-        balanceHidden -> BalanceHeaderViewItem("*****", true)
+    fun headerViewItem(
+        items: List<BalanceModule.BalanceItem>,
+        currency: Currency,
+        balanceHidden: Boolean,
+        bitcoinPrice: CurrencyValue?
+    ): BalanceHeaderViewItem = when {
+        balanceHidden -> BalanceHeaderViewItem("*****", "*****", true)
         else -> {
-            val total = items.mapNotNull { item ->
+            val fiatTotal = items.mapNotNull { item ->
                 item.coinPrice?.let { item.balanceData.total.multiply(it.value) }
             }.fold(BigDecimal.ZERO, BigDecimal::add)
 
-            val balanceText = App.numberFormatter.formatFiat(total, currency.symbol, 2, 2)
+            val coinTotal = bitcoinPrice?.let { fiatTotal / it.value }
+
+            val fiatBalanceText = App.numberFormatter.formatFiat(fiatTotal, currency.symbol, 2, 2)
+            val coinBalanceText = coinTotal?.let { App.numberFormatter.formatCoinValueAsShortened(it, "BTC") }
 
             val upToDate = !items.any {
                 it.state !is AdapterState.Synced || (it.coinPrice != null && it.coinPrice.expired)
             }
 
-            BalanceHeaderViewItem(balanceText, upToDate)
+            BalanceHeaderViewItem(fiatBalanceText, coinBalanceText, upToDate)
         }
     }
 
