@@ -62,10 +62,7 @@ class NftManager(
 
         return coinManager.getPlatformCoin(CoinType.fromId(nftAssetPrice.coinTypeId))
             ?.let { platformCoin ->
-                CoinValue(
-                    CoinValue.Kind.PlatformCoin(platformCoin),
-                    nftAssetPrice.value
-                )
+                CoinValue(platformCoin, nftAssetPrice.value)
             }
     }
 

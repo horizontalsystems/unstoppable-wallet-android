@@ -1,50 +1,24 @@
 package io.horizontalsystems.bankwallet.entities
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 import java.math.BigInteger
 
-data class CoinValue(
-    val kind: Kind,
-    val value: BigDecimal,
-) {
-
-    sealed class Kind {
-        abstract val decimal: Int
-        abstract val coin: io.horizontalsystems.marketkit.models.Coin
-
-        data class PlatformCoin(val platformCoin: io.horizontalsystems.marketkit.models.PlatformCoin) : Kind() {
-            override val decimal: Int
-                get() = platformCoin.platform.decimals
-            override val coin: io.horizontalsystems.marketkit.models.Coin
-                get() = platformCoin.coin
-        }
-
-        data class Coin(override val coin: io.horizontalsystems.marketkit.models.Coin, override val decimal: Int) : Kind()
-    }
-
-    val isMaxValue: Boolean
-        get() = value.isMaxValue(kind.decimal)
-
-    val abs
-        get() = CoinValue(kind, value.abs())
-
-    val coin
-        get() = kind.coin
-
-    val decimal
-        get() = kind.decimal
+data class CoinValue(val platformCoin: PlatformCoin, val value: BigDecimal) {
+    val coin = platformCoin.coin
+    val decimal = platformCoin.decimals
 
     override fun equals(other: Any?): Boolean {
         if (other is CoinValue) {
-            return kind == other.kind && value == other.value
+            return platformCoin.coin.uid == other.platformCoin.coin.uid && value == other.value
         }
 
         return super.equals(other)
     }
 
     override fun hashCode(): Int {
-        var result = kind.hashCode()
+        var result = platformCoin.coin.uid.hashCode()
         result = 31 * result + value.hashCode()
         return result
     }
@@ -52,7 +26,6 @@ data class CoinValue(
     fun getFormatted(maximumFractionDigits: Int = 8): String {
         return App.numberFormatter.formatCoin(value, coin.code, 0, maximumFractionDigits)
     }
-
 }
 
 fun BigDecimal.isMaxValue(decimals: Int): Boolean {

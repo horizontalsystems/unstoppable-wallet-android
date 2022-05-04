@@ -97,7 +97,7 @@ class SwapAllowanceService(
         allowanceDisposable = adapter.allowance(spenderAddress, DefaultBlockParameter.Latest)
             .subscribeOn(Schedulers.io())
             .subscribe({ allowance ->
-                state = State.Ready(CoinValue(CoinValue.Kind.PlatformCoin(coin), allowance))
+                state = State.Ready(CoinValue(coin, allowance))
             }, { error ->
                 state = State.NotReady(error)
             })

@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountT
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CoinValue.Kind
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -206,10 +205,7 @@ class SwapCoinCardViewModel(
         AmountType.Currency -> {
             val amountInfo = coinCardService.coin?.let {
                 AmountInfo.CoinValueInfo(
-                    CoinValue(
-                        Kind.PlatformCoin(it),
-                        BigDecimal.ZERO
-                    )
+                    CoinValue(it, BigDecimal.ZERO)
                 )
             }
             amountInfo?.getFormatted()

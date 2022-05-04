@@ -96,7 +96,7 @@ class FiatService(
 
         return when (switchService.amountType) {
             AmountType.Coin -> {
-                val primary = CoinValue(CoinValue.Kind.PlatformCoin(coin), coinAmount)
+                val primary = CoinValue(coin, coinAmount)
                 val secondary = currencyAmount?.let { CurrencyValue(currency, it) }
                 FullAmountInfo(
                         primaryInfo = AmountInfo.CoinValueInfo(primary),
@@ -108,7 +108,7 @@ class FiatService(
                 val currencyAmount = currencyAmount ?: return null
 
                 val primary = CurrencyValue(currency, currencyAmount)
-                val secondary = CoinValue(CoinValue.Kind.PlatformCoin(coin), coinAmount)
+                val secondary = CoinValue(coin, coinAmount)
                 FullAmountInfo(
                         primaryInfo = AmountInfo.CurrencyValueInfo(primary),
                         secondaryInfo = AmountInfo.CoinValueInfo(secondary),
