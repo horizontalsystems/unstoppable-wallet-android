@@ -102,7 +102,7 @@ class FiatServiceSendEvm(
     private fun sync() {
         val coin = coin
         if (coin != null) {
-            val coinAmountInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), coinAmount))
+            val coinAmountInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(coin, coinAmount))
             val currencyAmountInfo = currencyAmount?.let { SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currency, it)) }
 
             when (switchService.amountType) {

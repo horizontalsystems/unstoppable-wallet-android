@@ -26,7 +26,7 @@ class EvmCoinService(
 
     fun amountData(value: BigInteger): SendModule.AmountData {
         val decimalValue = BigDecimal(value, platformCoin.decimals)
-        val coinValue = CoinValue(CoinValue.Kind.PlatformCoin(platformCoin), decimalValue)
+        val coinValue = CoinValue(platformCoin, decimalValue)
 
         val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
         val secondaryAmountInfo = rate?.let {
@@ -41,7 +41,7 @@ class EvmCoinService(
     }
 
     fun coinValue(value: BigInteger): CoinValue {
-        return CoinValue(CoinValue.Kind.PlatformCoin(platformCoin), convertToMonetaryValue(value))
+        return CoinValue(platformCoin, convertToMonetaryValue(value))
     }
 
     fun convertToMonetaryValue(value: BigInteger): BigDecimal {
