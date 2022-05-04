@@ -46,7 +46,8 @@ fun BalanceItems(
     Column {
         val context = LocalContext.current
         DoubleText(
-            title = headerViewItem.xBalanceText,
+            title = headerViewItem.fiatBalanceText,
+            body = headerViewItem.coinBalanceText,
             dimmed = !headerViewItem.upToDate,
         ) {
             viewModel.onBalanceClick()

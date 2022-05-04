@@ -8,13 +8,14 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class BalanceViewModel(
     private val service: BalanceService,
-    private val balanceViewItemFactory: BalanceViewItemFactory
+    private val balanceViewItemFactory: BalanceViewItemFactory,
+    private val xRateService: XRateService
 ) : ViewModel() {
 
     var viewState by mutableStateOf<ViewState>(ViewState.Loading)
@@ -30,11 +31,21 @@ class BalanceViewModel(
 
     private var expandedWallet: Wallet? = null
 
+    private var bitcoinPrice = xRateService.getRate("bitcoin")
+
     init {
         viewModelScope.launch {
             service.balanceItemsFlow
                 .collect { items ->
                     items?.let { refreshViewItems(it) }
+                }
+        }
+        viewModelScope.launch {
+            xRateService.getRateFlow("bitcoin")
+                .collect {
+                    bitcoinPrice = it
+
+                    service.balanceItemsFlow.value?.let { refreshViewItems(it) }
                 }
         }
 
@@ -55,7 +66,8 @@ class BalanceViewModel(
         val headerViewItem = balanceViewItemFactory.headerViewItem(
             balanceItems,
             service.baseCurrency,
-            service.balanceHidden
+            service.balanceHidden,
+            bitcoinPrice
         )
 
         viewModelScope.launch {
