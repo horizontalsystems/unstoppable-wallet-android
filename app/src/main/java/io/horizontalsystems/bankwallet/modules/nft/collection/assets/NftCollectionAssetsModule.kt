@@ -5,15 +5,14 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
-import io.horizontalsystems.bankwallet.modules.nft.NftCollection
 
 object NftCollectionAssetsModule {
 
-    class Factory(private val collection: NftCollection) : ViewModelProvider.Factory {
+    class Factory(private val collectionUid: String) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = NftCollectionAssetsService(
-                collection,
+                collectionUid,
                 HsNftApiProvider(),
                 App.nftManager,
                 BalanceXRateRepository(App.currencyManager, App.marketKit)

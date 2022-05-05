@@ -26,6 +26,7 @@ import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -52,8 +53,8 @@ class NftCollectionViewModel(
     var isRefreshing by mutableStateOf(false)
         private set
 
-    val collection: NftCollection?
-        get() = service.collection
+    val collectionUid: String
+        get() = service.collectionUid
 
     init {
         service.nftCollection.collectWith(viewModelScope) { result ->
@@ -68,6 +69,29 @@ class NftCollectionViewModel(
 
         viewModelScope.launch {
             service.start()
+        }
+    }
+
+    fun onSelect(tab: Tab) {
+        selectedTabLiveData.postValue(tab)
+    }
+
+    fun refresh() {
+        refreshWithMinLoadingSpinnerPeriod()
+    }
+
+    fun onErrorClick() {
+        refreshWithMinLoadingSpinnerPeriod()
+    }
+
+    private fun refreshWithMinLoadingSpinnerPeriod() {
+        viewModelScope.launch {
+            isRefreshing = true
+
+            service.refresh()
+
+            delay(1000)
+            isRefreshing = false
         }
     }
 
@@ -221,18 +245,6 @@ class NftCollectionViewModel(
             secondaryValue = secondaryValue,
             diff = change?.let { Value.Percent(it.multiply(BigDecimal(100))) }
         )
-    }
-
-    fun onSelect(tab: Tab) {
-        selectedTabLiveData.postValue(tab)
-    }
-
-    fun refresh() {
-        //TODO("not implemented")
-    }
-
-    fun onErrorClick() {
-        //TODO("not implemented")
     }
 
 }
