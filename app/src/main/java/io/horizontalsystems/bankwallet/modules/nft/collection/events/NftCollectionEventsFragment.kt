@@ -25,9 +25,11 @@ import androidx.navigation.navGraphViewModels
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.nft.NftCollection
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.OnBottomReached
@@ -87,7 +89,7 @@ private fun NftEvents(
     val viewItem = viewModel.viewItem ?: return
 
     Column {
-        Header(borderTop = true, borderBottom = true) {
+        Header(borderBottom = true) {
             Box(modifier = Modifier.weight(1f)) {
                 SortMenu(viewItem.eventTypeSelect.selected.title) {
                     viewModel.onClickEventType()
@@ -103,7 +105,17 @@ private fun NftEvents(
                         iconUrl = event.asset.imageUrl ?: "",
                         coinValue = event.amount?.coinValue?.getFormatted(),
                         currencyValue = event.amount?.currencyValue?.getFormatted()
-                    )
+                    ) {
+                        val asset = event.asset
+                        navController.slideFromBottom(
+                            R.id.nftAssetFragment,
+                            NftAssetModule.prepareParams(
+                                asset.collectionUid,
+                                asset.contract.address,
+                                asset.tokenId
+                            )
+                        )
+                    }
                 }
             }
 
@@ -148,10 +160,12 @@ private fun NftEvent(
     subtitle: String,
     iconUrl: String,
     coinValue: String?,
-    currencyValue: String?
+    currencyValue: String?,
+    onClick: () -> Unit
 ) {
     MultilineClear(
-        borderBottom = true
+        borderBottom = true,
+        onClick = onClick
     ) {
         Image(
             painter = rememberImagePainter(

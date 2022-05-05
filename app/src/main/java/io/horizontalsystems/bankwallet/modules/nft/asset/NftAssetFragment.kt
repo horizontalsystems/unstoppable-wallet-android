@@ -70,13 +70,16 @@ class NftAssetFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val collectionUid = requireArguments().getString(NftAssetModule.collectionUidKey)
+        val contractAddress = requireArguments().getString(NftAssetModule.contractAddressKey)
+        val tokenId = requireArguments().getString(NftAssetModule.tokenIdKey)
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                NftAssetScreen(findNavController(), NftAssetModule.assetItem)
+                NftAssetScreen(findNavController(), collectionUid, contractAddress, tokenId)
             }
         }
     }
@@ -85,11 +88,14 @@ class NftAssetFragment : BaseFragment() {
 @Composable
 fun NftAssetScreen(
     navController: NavController,
-    assetItem: NftAssetModuleAssetItem?
+    collectionUid: String?,
+    contractAddress: String?,
+    tokenId: String?
 ) {
-    if (assetItem == null) return
+    if (collectionUid == null || contractAddress == null || tokenId == null) return
 
-    val viewModel = viewModel<NftAssetViewModel>(factory = NftAssetModule.Factory(assetItem))
+    val viewModel =
+        viewModel<NftAssetViewModel>(factory = NftAssetModule.Factory(collectionUid, contractAddress, tokenId))
     val viewState = viewModel.viewState
     val errorMessage = viewModel.errorMessage
 
@@ -368,7 +374,6 @@ private fun NftAsset(
                                 val contractAddress = asset.contract.address
 
                                 val clipboardManager = LocalClipboardManager.current
-                                val view = LocalView.current
                                 ButtonSecondaryCircle(
                                     icon = R.drawable.ic_copy_20,
                                     onClick = {
@@ -377,7 +382,6 @@ private fun NftAsset(
                                     }
                                 )
                                 Spacer(modifier = Modifier.width(16.dp))
-                                val context = LocalContext.current
                                 ButtonSecondaryCircle(
                                     icon = R.drawable.ic_share_20,
                                     onClick = {
@@ -514,7 +518,7 @@ private fun ChipVerticalGrid(
 }
 
 @Composable
-private fun NftAssetAttribute(context: Context, attribute: NftAssetModuleAssetItem.Attribute) {
+private fun NftAssetAttribute(context: Context, attribute: Attribute) {
     Box(
         modifier = Modifier
             .height(60.dp)

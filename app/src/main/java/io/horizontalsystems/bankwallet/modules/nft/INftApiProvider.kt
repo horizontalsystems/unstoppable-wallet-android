@@ -142,7 +142,8 @@ enum class EventType(
     BidWithdrawn("bid_withdrawn", R.string.NftCollection_EventType_BidWithdrawn),
     Transfer("transfer", R.string.NftCollection_EventType_Transfer),
     OfferEntered("offer_entered", R.string.NftCollection_EventType_OfferEntered),
-    Approve("approve", R.string.NftCollection_EventType_Approve);
+    Approve("approve", R.string.NftCollection_EventType_Approve),
+    Bid("bid", R.string.NotAvailable);
 
     override val title: TranslatableString
         get() = TranslatableString.ResString(titleResId)

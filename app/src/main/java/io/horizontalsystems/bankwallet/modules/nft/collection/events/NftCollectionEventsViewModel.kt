@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.ui.compose.Select
 import kotlinx.coroutines.launch
 
 class NftCollectionEventsViewModel(
-    private val service: NftCollectionActivityService
+    private val service: NftCollectionEventsService
 ) : ViewModel() {
 
     var viewItem by mutableStateOf<ViewItem?>(null)

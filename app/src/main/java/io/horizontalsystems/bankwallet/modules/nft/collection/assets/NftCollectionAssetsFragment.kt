@@ -101,9 +101,13 @@ private fun NftAssets(
                                 coinPrice = price?.coinValue,
                                 currencyPrice = price?.currencyValue
                             ) {
-                                NftAssetModule.setParams(collectionAsset.asset)
                                 navController.slideFromBottom(
-                                    R.id.nftAssetFragment
+                                    R.id.nftAssetFragment,
+                                    NftAssetModule.prepareParams(
+                                        asset.collectionUid,
+                                        asset.contract.address,
+                                        asset.tokenId
+                                    )
                                 )
                             }
                         }
