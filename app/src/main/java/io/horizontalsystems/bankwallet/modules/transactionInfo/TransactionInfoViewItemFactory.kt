@@ -436,7 +436,7 @@ class TransactionInfoViewItemFactory(
     private fun getAmountColor(incoming: Boolean?): Int {
         return when (incoming) {
             true -> R.color.remus
-            false -> R.color.jacob
+            false -> R.color.lucian
             else -> R.color.oz
         }
     }
@@ -453,12 +453,18 @@ class TransactionInfoViewItemFactory(
     ): TransactionInfoViewItem {
         val valueInFiat = rate?.let {
             transactionValue.decimalValue?.let { decimalValue ->
-                numberFormatter.formatFiat(
+                val sign = when {
+                    decimalValue < BigDecimal.ZERO -> "-"
+                    decimalValue > BigDecimal.ZERO -> "+"
+                    else -> ""
+                }
+                val value = numberFormatter.formatFiat(
                     (it.value * decimalValue).abs(),
                     it.currency.symbol,
                     0,
                     2
                 )
+                "$sign$value"
             }
         } ?: "---"
         val fiatValueColored = ColoredValue(valueInFiat, getAmountColor(incoming))
