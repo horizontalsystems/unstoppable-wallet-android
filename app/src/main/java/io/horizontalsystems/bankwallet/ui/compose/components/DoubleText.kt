@@ -14,9 +14,10 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 @Composable
 fun DoubleText(
     title: String,
-    body: String?,
+    body: String,
     dimmed: Boolean,
-    onClick: () -> Unit
+    onClickTitle: () -> Unit,
+    onClickBody: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -30,7 +31,7 @@ fun DoubleText(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
-                    onClick = onClick
+                    onClick = onClickTitle
                 ),
             text = title,
             style = ComposeAppTheme.typography.title2R,
@@ -39,7 +40,13 @@ fun DoubleText(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = body ?: "---",
+            modifier = Modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onClickBody
+                ),
+            text = body,
             style = ComposeAppTheme.typography.body,
             color = if (dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
             maxLines = 1
