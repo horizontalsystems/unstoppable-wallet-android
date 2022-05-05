@@ -74,7 +74,7 @@ class TransactionViewItemFactory {
                 if (record.recipient != null) ColorName.Grey else ColorName.Remus
             )
         }
-        val secondaryValue = ColoredValueNew(getCoinString(record.valueIn), ColorName.Jacob)
+        val secondaryValue = ColoredValueNew(getCoinString(record.valueIn), ColorName.Lucian)
 
         return TransactionViewItem(
             uid = record.uid,
@@ -99,7 +99,7 @@ class TransactionViewItemFactory {
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = record.valueOut?.let { ColoredValueNew(getCoinString(it), ColorName.Remus) }
-        val secondaryValue = record.valueIn?.let { ColoredValueNew(getCoinString(it), ColorName.Jacob) }
+        val secondaryValue = record.valueIn?.let { ColoredValueNew(getCoinString(it), ColorName.Lucian) }
 
         return TransactionViewItem(
             uid = record.uid,
@@ -139,7 +139,7 @@ class TransactionViewItemFactory {
         val primaryValue = if (record.sentToSelf) {
             ColoredValueNew(getCoinString(record.value, true), ColorName.Leah)
         } else {
-            ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
+            ColoredValueNew(getCoinString(record.value), ColorName.Lucian)
         }
 
         val secondaryValue = currencyValue?.let {
@@ -283,7 +283,7 @@ class TransactionViewItemFactory {
         val primaryValue = if (record.sentToSelf) {
             ColoredValueNew(getCoinString(record.value, true), ColorName.Leah)
         } else {
-            ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
+            ColoredValueNew(getCoinString(record.value), ColorName.Lucian)
         }
 
         val secondaryValue = currencyValue?.let {
@@ -363,7 +363,7 @@ class TransactionViewItemFactory {
         val primaryValue = if (record.sentToSelf) {
             ColoredValueNew(getCoinString(record.value, true), ColorName.Leah)
         } else {
-            ColoredValueNew(getCoinString(record.value), ColorName.Jacob)
+            ColoredValueNew(getCoinString(record.value), ColorName.Lucian)
         }
 
         val secondaryValue = currencyValue?.let {
@@ -513,7 +513,7 @@ class TransactionViewItemFactory {
             // outgoing
             (incomingValues.isEmpty() && outgoingValues.size == 1) -> {
                 val transactionValue = outgoingValues.first()
-                primaryValue = ColoredValueNew(getCoinString(transactionValue), ColorName.Jacob)
+                primaryValue = ColoredValueNew(getCoinString(transactionValue), ColorName.Lucian)
                 secondaryValue = currencyValue?.let {
                     ColoredValueNew(getCurrencyString(it), ColorName.Grey)
                 }
@@ -528,7 +528,7 @@ class TransactionViewItemFactory {
                 val inTransactionValue = incomingValues.first()
                 val outTransactionValue = outgoingValues.first()
                 primaryValue = ColoredValueNew(getCoinString(inTransactionValue), ColorName.Remus)
-                secondaryValue = ColoredValueNew(getCoinString(outTransactionValue), ColorName.Jacob)
+                secondaryValue = ColoredValueNew(getCoinString(outTransactionValue), ColorName.Lucian)
                 icon = TransactionViewItem.Icon.Swap(
                     iconIn = TransactionViewItem.Icon.Regular(
                         url = inTransactionValue.coinIconUrl,
@@ -543,7 +543,7 @@ class TransactionViewItemFactory {
 
             // outgoing multiple
             (incomingValues.isEmpty() && outgoingValues.isNotEmpty()) -> {
-                primaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Jacob)
+                primaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Lucian)
                 secondaryValue = ColoredValueNew(Translator.getString(R.string.Transactions_Multiple), ColorName.Grey)
             }
 
@@ -555,7 +555,7 @@ class TransactionViewItemFactory {
 
             else -> {
                 primaryValue = ColoredValueNew(incomingValues.joinToString(", ") { it.coinCode }, ColorName.Remus)
-                secondaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Jacob)
+                secondaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Lucian)
             }
         }
         return Triple(primaryValue, secondaryValue, icon)

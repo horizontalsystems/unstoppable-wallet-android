@@ -76,12 +76,12 @@ data class ColoredValue(val value: String, val color: Int)
 data class ColoredValueNew(val value: String, val color: ColorName)
 
 enum class ColorName{
-    Remus, Jacob, Grey, Leah;
+    Remus, Lucian, Grey, Leah;
 
     @Composable
     fun compose() = when (this) {
         Remus -> ComposeAppTheme.colors.remus
-        Jacob -> ComposeAppTheme.colors.jacob
+        Lucian -> ComposeAppTheme.colors.lucian
         Leah -> ComposeAppTheme.colors.leah
         Grey -> ComposeAppTheme.colors.grey
     }
