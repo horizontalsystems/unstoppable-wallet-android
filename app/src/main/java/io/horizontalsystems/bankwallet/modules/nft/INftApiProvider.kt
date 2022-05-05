@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
-import io.horizontalsystems.bankwallet.modules.hsnft.CollectionStats
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
@@ -16,8 +15,7 @@ import java.util.*
 interface INftApiProvider {
     suspend fun getCollectionRecords(address: Address, account: Account): List<NftCollectionRecord>
     suspend fun getAssetRecords(address: Address, account: Account): List<NftAssetRecord>
-    suspend fun collectionStats(collectionUid: String): CollectionStats
-    suspend fun assetOrders(contractAddress: String, tokenId: String): List<AssetOrder>
+    suspend fun assetWithOrders(contractAddress: String, tokenId: String): Pair<NftAssetRecord, List<AssetOrder>>
 
     suspend fun topCollections(count: Int): List<TopNftCollection>
     suspend fun collection(uid: String): NftCollection
@@ -28,7 +26,7 @@ interface INftApiProvider {
 
     suspend fun collectionEvents(
         uid: String,
-        eventType: String?,
+        type: String?,
         cursor: String? = null
     ): Pair<List<NftCollectionEvent>, HsNftApiV1Response.Cursor>
 }
@@ -61,7 +59,8 @@ data class NftCollection(
     val floorPrice: BigDecimal?,
     val chartPoints: List<ChartPoint>,
     val links: Links?,
-    val contracts: List<Contract>
+    val contracts: List<Contract>,
+    val stats: CollectionStats
 ) {
     val oneDayVolumeChange: BigDecimal?
         get() {
@@ -122,6 +121,12 @@ data class NftCollection(
     data class Contract(
         val address: String,
         val type: String,
+    )
+
+    data class CollectionStats(
+        val averagePrice7d: NftAssetPrice?,
+        val averagePrice30d: NftAssetPrice?,
+        val floorPrice: NftAssetPrice?,
     )
 }
 

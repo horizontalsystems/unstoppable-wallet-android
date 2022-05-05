@@ -274,7 +274,6 @@ private fun NftAsset(
 
                                                 pickerLauncher.launch(intent)
                                             } catch (e: Exception) {
-                                                e.printStackTrace()
                                                 HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                                             }
                                         }
