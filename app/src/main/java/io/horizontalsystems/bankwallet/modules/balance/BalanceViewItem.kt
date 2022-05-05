@@ -44,8 +44,6 @@ data class BalanceViewItem(
     val isWatchAccount: Boolean
 )
 
-data class BalanceHeaderViewItem(val fiatBalanceText: String, val upToDate: Boolean)
-
 data class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
 data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
 
@@ -225,26 +223,4 @@ class BalanceViewItemFactory {
                 isWatchAccount = watchAccount
         )
     }
-
-    fun headerViewItem(
-        items: List<BalanceModule.BalanceItem>,
-        currency: Currency,
-        balanceHidden: Boolean
-    ): BalanceHeaderViewItem = when {
-        balanceHidden -> BalanceHeaderViewItem("*****", true)
-        else -> {
-            val fiatTotal = items.mapNotNull { item ->
-                item.coinPrice?.let { item.balanceData.total.multiply(it.value) }
-            }.fold(BigDecimal.ZERO, BigDecimal::add)
-
-            val fiatBalanceText = App.numberFormatter.formatFiat(fiatTotal, currency.symbol, 2, 2)
-
-            val upToDate = !items.any {
-                it.state !is AdapterState.Synced || (it.coinPrice != null && it.coinPrice.expired)
-            }
-
-            BalanceHeaderViewItem(fiatBalanceText, upToDate)
-        }
-    }
-
 }

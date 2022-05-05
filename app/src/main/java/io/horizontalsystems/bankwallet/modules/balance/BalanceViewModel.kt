@@ -25,11 +25,12 @@ class BalanceViewModel(
             totalDimmed = totalState.dimmed,
         )
     )
+        private set
 
     var viewState by mutableStateOf<ViewState>(ViewState.Loading)
         private set
     val sortTypes = listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
-    var balanceViewItemsWrapper by mutableStateOf<Pair<BalanceHeaderViewItem, List<BalanceViewItem>>?>(null)
+    var balanceViewItems by mutableStateOf<List<BalanceViewItem>?>(null)
         private set
 
     var isRefreshing by mutableStateOf(false)
@@ -87,15 +88,9 @@ class BalanceViewModel(
             )
         }
 
-        val headerViewItem = balanceViewItemFactory.headerViewItem(
-            balanceItems,
-            service.baseCurrency,
-            service.balanceHidden
-        )
-
         viewModelScope.launch {
             viewState = ViewState.Success
-            balanceViewItemsWrapper = Pair(headerViewItem, balanceViewItems)
+            this@BalanceViewModel.balanceViewItems = balanceViewItems
         }
     }
 
