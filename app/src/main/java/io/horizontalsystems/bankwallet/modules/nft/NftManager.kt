@@ -49,14 +49,6 @@ class NftManager(
         }.toSortedMap { o1, o2 -> o1.name.compareTo(o2.name, ignoreCase = true) }
     }
 
-    suspend fun getAssetRecord(accountId: String, tokenId: String, contractAddress: String): NftAssetRecord? {
-        return nftDao.getAsset(accountId, tokenId, contractAddress)
-    }
-
-    fun getCollectionRecord(accountId: String, collectionSlug: String): NftCollectionRecord? {
-        return nftDao.getCollection(accountId, collectionSlug)
-    }
-
     fun nftAssetPriceToCoinValue(nftAssetPrice: NftAssetPrice?): CoinValue? {
         if (nftAssetPrice == null) return null
 
