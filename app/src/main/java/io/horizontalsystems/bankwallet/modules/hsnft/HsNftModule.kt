@@ -198,12 +198,6 @@ object HsNftApiV1Response {
     }
 }
 
-data class CollectionStats(
-    val averagePrice7d: NftAssetPrice?,
-    val averagePrice30d: NftAssetPrice?,
-    val floorPrice: NftAssetPrice?,
-)
-
 data class AssetOrder(
     val closingDate: Date?,
     val price: NftAssetPrice?,
@@ -269,49 +263,50 @@ class HsNftApiProvider : INftApiProvider {
         )
     }
 
-    override suspend fun collectionStats(collectionUid: String): CollectionStats {
-        return HsNftModule.apiServiceV1.collectionStats(collectionUid).let { stats ->
-            CollectionStats(
-                averagePrice7d = NftAssetPrice(
-                    getCoinTypeId(zeroAddress),
-                    stats.seven_day_average_price
-                ),
-                averagePrice30d = NftAssetPrice(
-                    getCoinTypeId(zeroAddress),
-                    stats.thirty_day_average_price
-                ),
-                floorPrice = stats.floor_price?.let {
-                    NftAssetPrice(getCoinTypeId(zeroAddress), it)
-                }
-            )
-        }
-    }
+    override suspend fun assetWithOrders(
+        contractAddress: String,
+        tokenId: String
+    ): Pair<NftAssetRecord, List<AssetOrder>> {
+        val assetResponse = HsNftModule.apiServiceV1.asset(contractAddress, tokenId)
 
-    override suspend fun assetOrders(contractAddress: String, tokenId: String): List<AssetOrder> {
-        return HsNftModule.apiServiceV1.asset(contractAddress, tokenId).let { asset ->
-            asset.markets_data.orders?.let { orders ->
-                orders.map { order ->
-                    val price = order.current_price.movePointLeft(order.payment_token_contract.decimals)
+        val orders = assetResponse.markets_data.orders?.let { orders ->
+            orders.map { order ->
+                val price = order.current_price.movePointLeft(order.payment_token_contract.decimals)
+                AssetOrder(
+                    closingDate = stringToDate(order.closing_date),
+                    price = NftAssetPrice(getCoinTypeId(order.payment_token_contract.address), price),
+                    emptyTaker = order.taker.address == zeroAddress,
+                    side = order.side,
+                    v = order.v,
+                    ethValue = price.divide(order.payment_token_contract.eth_price, RoundingMode.HALF_EVEN)
+                )
+            }
+        } ?: listOf()
 
-                    val closingDate = try {
-                        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).apply {
-                            timeZone = TimeZone.getTimeZone("GMT")
-                        }
-                        sdf.parse(order.closing_date)
-                    } catch (ex: Exception) {
-                        null
-                    }
-                    AssetOrder(
-                        closingDate = closingDate,
-                        price = NftAssetPrice(getCoinTypeId(order.payment_token_contract.address), price),
-                        emptyTaker = order.taker.address == zeroAddress,
-                        side = order.side,
-                        v = order.v,
-                        ethValue = price.divide(order.payment_token_contract.eth_price, RoundingMode.HALF_EVEN)
-                    )
-                }
-            } ?: listOf()
-        }
+        val assetRecord = NftAssetRecord(
+            accountId = "",
+            collectionUid = assetResponse.collection_uid,
+            tokenId = assetResponse.token_id,
+            name = assetResponse.name,
+            imageUrl = assetResponse.image_data?.image_url,
+            imagePreviewUrl = assetResponse.image_data?.image_preview_url,
+            description = assetResponse.description,
+            onSale = assetResponse.markets_data.sell_orders?.isNotEmpty() ?: false,
+            lastSale = assetResponse.markets_data.last_sale?.let { last_sale ->
+                NftAssetPrice(
+                    getCoinTypeId(last_sale.payment_token.address),
+                    BigDecimal(last_sale.total_price).movePointLeft(last_sale.payment_token.decimals)
+                )
+            },
+            contract = NftAssetContract(
+                assetResponse.contract.address,
+                assetResponse.contract.type
+            ),
+            links = assetResponse.links,
+            attributes = assetResponse.attributes.map { NftAssetAttribute(it.trait_type, it.value, it.trait_count) }
+        )
+
+        return Pair(assetRecord, orders)
     }
 
     override suspend fun topCollections(count: Int): List<TopNftCollection> {
@@ -368,7 +363,20 @@ class HsNftApiProvider : INftApiProvider {
                         address = contract.address,
                         type = contract.type
                     )
-                }
+                },
+                stats = NftCollection.CollectionStats(
+                    averagePrice7d = NftAssetPrice(
+                        getCoinTypeId(zeroAddress),
+                        it.stats.seven_day_average_price
+                    ),
+                    averagePrice30d = NftAssetPrice(
+                        getCoinTypeId(zeroAddress),
+                        it.stats.thirty_day_average_price
+                    ),
+                    floorPrice = it.stats.floor_price?.let { floorPrice ->
+                        NftAssetPrice(getCoinTypeId(zeroAddress), floorPrice)
+                    }
+                )
             )
         }
     }
@@ -424,15 +432,6 @@ class HsNftApiProvider : INftApiProvider {
             val eventType = EventType.fromString(type ?: event.type)
             eventType?.let {
                 try {
-                    val date = try {
-                        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US).apply {
-                            timeZone = TimeZone.getTimeZone("GMT")
-                        }
-                        sdf.parse(event.date)
-                    } catch (ex: Exception) {
-                        null
-                    }
-
                     val amount = event.markets_data.payment_token?.let {
                         NftAssetPrice(
                             getCoinTypeId(it.address),
@@ -459,17 +458,25 @@ class HsNftApiProvider : INftApiProvider {
                             links = assetResponse.links,
                             attributes = listOf()
                         ),
-                        date = date,
+                        date = stringToDate(event.date),
                         amount = amount
                     )
                 } catch (e: Exception) {
-                    e.printStackTrace()
                     null
                 }
             }
         }
 
         return Pair(events, response.cursor)
+    }
+
+    private fun stringToDate(date: String) = try {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).apply {
+            timeZone = TimeZone.getTimeZone("GMT")
+        }
+        sdf.parse(date)
+    } catch (ex: Exception) {
+        null
     }
 
     private suspend fun fetchTopCollections(count: Int): List<HsNftApiV1Response.Collection> {

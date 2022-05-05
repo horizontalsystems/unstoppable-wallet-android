@@ -4,8 +4,6 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
-import io.horizontalsystems.bankwallet.modules.hsnft.CollectionStats
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.marketkit.models.CoinType
@@ -58,21 +56,16 @@ class NftManager(
             }
     }
 
-    suspend fun collectionStats(collectionUid: String): CollectionStats {
-        return apiProvider.collectionStats(collectionUid)
-    }
-
-    suspend fun assetOrders(contractAddress: String, tokenId: String): List<AssetOrder> {
-        return apiProvider.assetOrders(contractAddress, tokenId)
-    }
-
     fun assetItem(
         assetRecord: NftAssetRecord,
         collectionName: String,
         collectionLinks: HsNftApiV1Response.Collection.Links?,
-        averagePrice7d: NftAssetPrice?,
-        averagePrice30d: NftAssetPrice?,
-        totalSupply: Int
+        totalSupply: Int,
+        averagePrice7d: NftAssetPrice? = null,
+        averagePrice30d: NftAssetPrice? = null,
+        floorPrice: NftAssetPrice? = null,
+        bestOffer: NftAssetPrice? = null,
+        sale: NftAssetModuleAssetItem.Sale? = null
     ) = NftAssetModuleAssetItem(
         name = assetRecord.name,
         imageUrl = assetRecord.imageUrl,
@@ -84,9 +77,12 @@ class NftManager(
         assetLinks = assetRecord.links,
         collectionLinks = collectionLinks,
         stats = NftAssetModuleAssetItem.Stats(
-            lastSale = nftAssetPriceToCoinValue(assetRecord.lastSale)?.let { NftAssetModuleAssetItem.Price(it) },
-            average7d = nftAssetPriceToCoinValue(averagePrice7d)?.let { NftAssetModuleAssetItem.Price(it) },
-            average30d = nftAssetPriceToCoinValue(averagePrice30d)?.let { NftAssetModuleAssetItem.Price(it) },
+            lastSale = priceItem(assetRecord.lastSale),
+            average7d = priceItem(averagePrice7d),
+            average30d = priceItem(averagePrice30d),
+            collectionFloor = priceItem(floorPrice),
+            bestOffer = priceItem(bestOffer),
+            sale = sale
         ),
         onSale = assetRecord.onSale,
         attributes = assetRecord.attributes.map { attribute ->
@@ -98,6 +94,9 @@ class NftManager(
             )
         }
     )
+
+    private fun priceItem(price: NftAssetPrice?) =
+        nftAssetPriceToCoinValue(price)?.let { NftAssetModuleAssetItem.Price(it) }
 
     private fun getAttributeSearchUrl(attribute: NftAssetAttribute, collectionUid: String): String {
         return "https://opensea.io/assets/${collectionUid}?search[stringTraits][0][name]=${attribute.type}" +

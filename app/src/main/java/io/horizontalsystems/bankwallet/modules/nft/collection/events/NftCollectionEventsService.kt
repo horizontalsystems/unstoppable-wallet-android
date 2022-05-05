@@ -85,7 +85,6 @@ class NftCollectionActivityService(
             } catch (cancellation: CancellationException) {
                 //ignore
             } catch (error: Throwable) {
-                error.printStackTrace()
                 _items.update { Result.failure(error) }
             }
         }
