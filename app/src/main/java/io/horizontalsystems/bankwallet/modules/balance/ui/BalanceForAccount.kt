@@ -88,21 +88,23 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
             elevation = 0.dp
         )
 
-        Crossfade(viewModel.viewState) { viewState ->
+        val uiState = viewModel.uiState
+
+        Crossfade(uiState.viewState) { viewState ->
             when (viewState) {
                 is ViewState.Success -> {
-                    viewModel.balanceViewItems?.let { balanceViewItems ->
-                        if (balanceViewItems.isNotEmpty()) {
-                            BalanceItems(
-                                balanceViewItems,
-                                viewModel,
-                                accountViewItem,
-                                navController,
-                                viewModel.uiState
-                            )
-                        } else {
-                            BalanceItemsEmpty(navController, accountViewItem)
-                        }
+                    val balanceViewItems = uiState.balanceViewItems
+
+                    if (balanceViewItems.isNotEmpty()) {
+                        BalanceItems(
+                            balanceViewItems,
+                            viewModel,
+                            accountViewItem,
+                            navController,
+                            uiState
+                        )
+                    } else {
+                        BalanceItemsEmpty(navController, accountViewItem)
                     }
                 }
             }

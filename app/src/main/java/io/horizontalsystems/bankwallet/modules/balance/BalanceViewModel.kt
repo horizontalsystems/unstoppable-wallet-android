@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.entities.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -15,27 +14,24 @@ class BalanceViewModel(
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val totalService: TotalService
 ) : ViewModel() {
-
     private var totalState = totalService.stateFlow.value
+    private var viewState: ViewState = ViewState.Loading
+    private var balanceViewItems = listOf<BalanceViewItem>()
+    private var isRefreshing = false
 
     var uiState by mutableStateOf(
         BalanceUiState(
             totalCurrencyValue = totalState.currencyValue,
             totalCoinValue = totalState.coinValue,
             totalDimmed = totalState.dimmed,
+            balanceViewItems = balanceViewItems,
+            viewState = viewState,
+            isRefreshing = isRefreshing
         )
     )
         private set
 
-    var viewState by mutableStateOf<ViewState>(ViewState.Loading)
-        private set
     val sortTypes = listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
-    var balanceViewItems by mutableStateOf<List<BalanceViewItem>?>(null)
-        private set
-
-    var isRefreshing by mutableStateOf(false)
-        private set
-
     var sortType by service::sortType
 
     private var expandedWallet: Wallet? = null
@@ -48,9 +44,13 @@ class BalanceViewModel(
                     items?.let { refreshViewItems(it) }
                 }
         }
-        totalService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedTotalState(it)
+
+        viewModelScope.launch {
+            totalService.stateFlow.collect {
+                handleUpdatedTotalState(it)
+            }
         }
+
         viewModelScope.launch {
             totalService.start()
         }
@@ -69,6 +69,9 @@ class BalanceViewModel(
             totalCurrencyValue = totalState.currencyValue,
             totalCoinValue = totalState.coinValue,
             totalDimmed = totalState.dimmed,
+            balanceViewItems = balanceViewItems,
+            viewState = viewState,
+            isRefreshing = isRefreshing,
         )
 
         viewModelScope.launch {
@@ -78,7 +81,9 @@ class BalanceViewModel(
 
 
     private fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>) {
-        val balanceViewItems = balanceItems.map { balanceItem ->
+        viewState = ViewState.Success
+
+        balanceViewItems = balanceItems.map { balanceItem ->
             balanceViewItemFactory.viewItem(
                 balanceItem,
                 service.baseCurrency,
@@ -88,10 +93,7 @@ class BalanceViewModel(
             )
         }
 
-        viewModelScope.launch {
-            viewState = ViewState.Success
-            this@BalanceViewModel.balanceViewItems = balanceViewItems
-        }
+        emitState()
     }
 
 
@@ -130,10 +132,14 @@ class BalanceViewModel(
 
         viewModelScope.launch {
             isRefreshing = true
+            emitState()
+
             service.refresh()
             // A fake 2 seconds 'refresh'
             delay(2300)
+
             isRefreshing = false
+            emitState()
         }
     }
 
@@ -157,5 +163,8 @@ class BackupRequiredError(val account: Account, val coinTitle: String) : Error("
 data class BalanceUiState(
     val totalCurrencyValue: CurrencyValue?,
     val totalCoinValue: CoinValue?,
-    val totalDimmed: Boolean
+    val totalDimmed: Boolean,
+    val balanceViewItems: List<BalanceViewItem>,
+    val viewState: ViewState,
+    val isRefreshing: Boolean
 )

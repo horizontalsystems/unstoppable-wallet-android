@@ -109,7 +109,7 @@ fun BalanceItems(
             Spacer(modifier = Modifier.width(16.dp))
         }
 
-        Wallets(balanceViewItems, viewModel, navController, accountViewItem.id, viewModel.sortType)
+        Wallets(balanceViewItems, viewModel, navController, accountViewItem.id, viewModel.sortType, uiState)
     }
 }
 
@@ -121,7 +121,8 @@ fun Wallets(
     viewModel: BalanceViewModel,
     navController: NavController,
     accountId: String,
-    sortType: BalanceSortType
+    sortType: BalanceSortType,
+    uiState: BalanceUiState
 ) {
     var revealedCardId by remember { mutableStateOf<Int?>(null) }
 
@@ -134,7 +135,7 @@ fun Wallets(
     }
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(viewModel.isRefreshing),
+        state = rememberSwipeRefreshState(uiState.isRefreshing),
         onRefresh = {
             viewModel.onRefresh()
         }
