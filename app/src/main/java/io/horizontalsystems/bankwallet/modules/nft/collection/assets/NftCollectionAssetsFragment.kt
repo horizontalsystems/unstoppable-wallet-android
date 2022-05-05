@@ -54,7 +54,7 @@ class NftCollectionAssetsFragment : BaseFragment() {
 }
 
 @Composable
-fun NftCollectionAssetsScreen(navController: NavController, collection: NftCollection?) {
+private fun NftCollectionAssetsScreen(navController: NavController, collection: NftCollection?) {
     if (collection == null) return
 
     val viewModel = viewModel<NftCollectionAssetsViewModel>(factory = NftCollectionAssetsModule.Factory(collection))

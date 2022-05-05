@@ -74,6 +74,51 @@ object HsNftApiV1Response {
         )
     }
 
+    data class Events(
+        val cursor: Cursor,
+        val events: List<Event>
+    )
+
+    data class Event(
+        val asset: Asset,
+        val date: String,
+        val type: String,
+        val amount: BigInteger,
+        val quantity: String,
+        val transaction: Transaction,
+        val markets_data: MarketsData
+    )
+
+    data class Transaction(
+        val id: Long,
+        val block_hash: String,
+        val block_number: Long,
+        val timestamp: String,
+        val from_account: Account,
+        val to_account: Account,
+        val transaction_hash: String,
+        val transaction_index: String
+    ) {
+        data class Account(
+            val profile_img_url: String,
+            val address: String
+        )
+    }
+
+    data class MarketsData(
+        val payment_token: PaymentToken?
+    ) {
+        data class PaymentToken(
+            val symbol: String,
+            val address: String,
+            val image_url: String?,
+            val name: String,
+            val decimals: Int,
+            val eth_price: BigDecimal,
+            val usd_price: BigDecimal
+        )
+    }
+
     data class Assets(
         val cursor: Cursor,
         val assets: List<Asset>
@@ -328,7 +373,10 @@ class HsNftApiProvider : INftApiProvider {
         }
     }
 
-    override suspend fun collectionAssets(uid: String, cursor: String?): Pair<List<NftAssetRecord>, HsNftApiV1Response.Cursor> {
+    override suspend fun collectionAssets(
+        uid: String,
+        cursor: String?
+    ): Pair<List<NftAssetRecord>, HsNftApiV1Response.Cursor> {
         val response = HsNftModule.apiServiceV1.assets(collectionUid = uid, cursor = cursor, limit = 50)
         val assetRecords = response.assets.map { assetResponse ->
             NftAssetRecord(
@@ -361,6 +409,67 @@ class HsNftApiProvider : INftApiProvider {
             )
         }
         return Pair(assetRecords, response.cursor)
+    }
+
+    override suspend fun collectionEvents(
+        uid: String,
+        type: String?,
+        cursor: String?
+    ): Pair<List<NftCollectionEvent>, HsNftApiV1Response.Cursor> {
+        val response = HsNftModule.apiServiceV1.events(uid, type, cursor)
+
+        val events = response.events.mapNotNull { event ->
+            val assetResponse = event.asset
+
+            val eventType = EventType.fromString(type ?: event.type)
+            eventType?.let {
+                try {
+                    val date = try {
+                        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US).apply {
+                            timeZone = TimeZone.getTimeZone("GMT")
+                        }
+                        sdf.parse(event.date)
+                    } catch (ex: Exception) {
+                        null
+                    }
+
+                    val amount = event.markets_data.payment_token?.let {
+                        NftAssetPrice(
+                            getCoinTypeId(it.address),
+                            BigDecimal(event.amount).movePointLeft(it.decimals)
+                        )
+                    }
+
+                    NftCollectionEvent(
+                        eventType = eventType,
+                        asset = NftAssetRecord(
+                            accountId = "",
+                            collectionUid = assetResponse.collection_uid,
+                            tokenId = assetResponse.token_id,
+                            name = assetResponse.name,
+                            imageUrl = assetResponse.image_data?.image_url,
+                            imagePreviewUrl = assetResponse.image_data?.image_preview_url,
+                            description = assetResponse.description,
+                            onSale = assetResponse.markets_data.sell_orders?.isNotEmpty() ?: false,
+                            lastSale = null,
+                            contract = NftAssetContract(
+                                assetResponse.contract.address,
+                                assetResponse.contract.type
+                            ),
+                            links = assetResponse.links,
+                            attributes = listOf()
+                        ),
+                        date = date,
+                        amount = amount
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
+        }
+
+        return Pair(events, response.cursor)
     }
 
     private suspend fun fetchTopCollections(count: Int): List<HsNftApiV1Response.Collection> {
@@ -446,5 +555,12 @@ interface HsNftApiV1 {
         @Path("tokenId") tokenId: String,
         @Query("include_orders") includeOrders: Boolean = true
     ): HsNftApiV1Response.Asset
+
+    @GET("events")
+    suspend fun events(
+        @Query("collection_uid") collectionUid: String,
+        @Query("event_type") eventType: String?,
+        @Query("cursor") cursor: String? = null
+    ): HsNftApiV1Response.Events
 
 }

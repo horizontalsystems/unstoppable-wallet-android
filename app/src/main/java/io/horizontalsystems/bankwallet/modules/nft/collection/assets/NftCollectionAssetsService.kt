@@ -91,7 +91,7 @@ class NftCollectionAssetsService(
 
         val xRatesMap = xRateRepository.getLatestRates()
 
-        val wholeList = (_nftCollectionAssets.value?.getOrNull() ?: listOf()) + assets.map { collectionAsset(it) }
+        val wholeList = (_nftCollectionAssets.value?.getOrNull() ?: listOf()) + assetItems
 
         return Result.success(updateCurrencyValues(wholeList, xRatesMap))
     }

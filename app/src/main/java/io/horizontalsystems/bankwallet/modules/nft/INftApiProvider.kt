@@ -1,12 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.nft
 
+import androidx.annotation.StringRes
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
 import io.horizontalsystems.bankwallet.modules.hsnft.CollectionStats
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.*
 
 interface INftApiProvider {
     suspend fun getCollectionRecords(address: Address, account: Account): List<NftCollectionRecord>
@@ -16,7 +21,16 @@ interface INftApiProvider {
 
     suspend fun topCollections(count: Int): List<TopNftCollection>
     suspend fun collection(uid: String): NftCollection
-    suspend fun collectionAssets(uid: String, cursor: String? = null): Pair<List<NftAssetRecord>, HsNftApiV1Response.Cursor>
+    suspend fun collectionAssets(
+        uid: String,
+        cursor: String? = null
+    ): Pair<List<NftAssetRecord>, HsNftApiV1Response.Cursor>
+
+    suspend fun collectionEvents(
+        uid: String,
+        eventType: String?,
+        cursor: String? = null
+    ): Pair<List<NftCollectionEvent>, HsNftApiV1Response.Cursor>
 }
 
 data class TopNftCollection(
@@ -110,3 +124,34 @@ data class NftCollection(
         val type: String,
     )
 }
+
+enum class EventType(
+    val value: String,
+    @StringRes val titleResId: Int
+) : WithTranslatableTitle {
+    All("all", R.string.NftCollection_EventType_All),
+    AuctionCreated("created", R.string.NftCollection_EventType_AuctionCreated),
+    Sale("sale", R.string.NftCollection_EventType_Sale),
+    Cancelled("cancelled", R.string.NftCollection_EventType_Cancelled),
+    BidEntered("bid_entered", R.string.NftCollection_EventType_BidEntered),
+    BidWithdrawn("bid_withdrawn", R.string.NftCollection_EventType_BidWithdrawn),
+    Transfer("transfer", R.string.NftCollection_EventType_Transfer),
+    OfferEntered("offer_entered", R.string.NftCollection_EventType_OfferEntered),
+    Approve("approve", R.string.NftCollection_EventType_Approve);
+
+    override val title: TranslatableString
+        get() = TranslatableString.ResString(titleResId)
+
+    companion object {
+        private val map = values().associateBy(EventType::value)
+
+        fun fromString(value: String?): EventType? = map[value]
+    }
+}
+
+data class NftCollectionEvent(
+    val asset: NftAssetRecord,
+    val eventType: EventType,
+    val date: Date?,
+    val amount: NftAssetPrice?
+)
