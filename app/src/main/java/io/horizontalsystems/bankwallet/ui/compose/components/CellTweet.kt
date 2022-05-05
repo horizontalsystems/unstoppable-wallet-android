@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -98,7 +97,8 @@ private fun TweetDate(tweet: TweetViewItem) {
 private fun TweetReferencedTweet(referencedTweet: ReferencedTweetViewItem) {
     Column(Modifier
         .fillMaxWidth()
-        .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(8.dp))
+        .clip(RoundedCornerShape(8.dp))
+        .background(ComposeAppTheme.colors.steel10)
         .padding(12.dp)
     ) {
         Text(
@@ -215,9 +215,14 @@ private fun AttachmentPoll(attachment: Tweet.Attachment.Poll) {
         attachment.options.forEach { option ->
             val proportion = option.votes / totalVotes.toFloat()
             val color = if (option.votes == maxVotes) {
-                ComposeAppTheme.colors.issykBlue
+                ComposeAppTheme.colors.laguna
             } else {
                 ComposeAppTheme.colors.steel20
+            }
+            val textColor = if (option.votes == maxVotes) {
+                ComposeAppTheme.colors.claude
+            } else {
+                ComposeAppTheme.colors.leah
             }
             Box(
                 modifier = Modifier
@@ -242,7 +247,7 @@ private fun AttachmentPoll(attachment: Tweet.Attachment.Poll) {
                             .padding(horizontal = 12.dp)
                             .weight(1f),
                         text = option.label,
-                        color = ComposeAppTheme.colors.leah,
+                        color = textColor,
                         style = ComposeAppTheme.typography.caption
                     )
                     Text(
