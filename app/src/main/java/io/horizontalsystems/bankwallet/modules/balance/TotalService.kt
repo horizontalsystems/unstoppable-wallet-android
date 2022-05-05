@@ -10,13 +10,10 @@ import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class TotalService(
@@ -24,12 +21,13 @@ class TotalService(
     private val coinManager: ICoinManager,
     private val marketKit: MarketKit
 ) {
+    private var balanceHidden = false
     private var totalCurrencyValue: CurrencyValue? = null
     private var totalCoinValue: CoinValue? = null
     private var dimmed = false
 
-    private val _stateFlow = MutableStateFlow(
-        State(
+    private val _stateFlow: MutableStateFlow<State> = MutableStateFlow(
+        State.Visible(
             currencyValue = totalCurrencyValue,
             coinValue = totalCoinValue,
             dimmed = dimmed
@@ -53,11 +51,11 @@ class TotalService(
         handleUpdatedPlatformCoin(platformCoins.firstOrNull())
     }
 
-    suspend fun start() = withContext(Dispatchers.IO) {
-        launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
-                handleUpdatedCurrency(currencyManager.baseCurrency)
-            }
+    suspend fun start(balanceHidden: Boolean) {
+        this.balanceHidden = balanceHidden
+
+        currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+            handleUpdatedCurrency(currencyManager.baseCurrency)
         }
     }
 
@@ -67,6 +65,12 @@ class TotalService(
         refreshTotalCurrencyValue()
         refreshTotalCoinValue()
         refreshDimmed()
+
+        emitState()
+    }
+
+    fun setBalanceHidden(balanceHidden: Boolean) {
+        this.balanceHidden = balanceHidden
 
         emitState()
     }
@@ -139,17 +143,25 @@ class TotalService(
 
     private fun emitState() {
         _stateFlow.update {
-            State(
-                currencyValue = totalCurrencyValue,
-                coinValue = totalCoinValue,
-                dimmed = dimmed
-            )
+            if (balanceHidden) {
+                State.Hidden
+            } else {
+                State.Visible(
+                    currencyValue = totalCurrencyValue,
+                    coinValue = totalCoinValue,
+                    dimmed = dimmed
+                )
+            }
         }
     }
 
-    data class State(
-        val currencyValue: CurrencyValue?,
-        val coinValue: CoinValue?,
-        val dimmed: Boolean
-    )
+    sealed class State {
+        data class Visible(
+            val currencyValue: CurrencyValue?,
+            val coinValue: CoinValue?,
+            val dimmed: Boolean
+        ) : State()
+
+        object Hidden : State()
+    }
 }

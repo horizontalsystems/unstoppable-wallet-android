@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.entities.Wallet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -21,12 +23,10 @@ class BalanceViewModel(
 
     var uiState by mutableStateOf(
         BalanceUiState(
-            totalCurrencyValue = totalState.currencyValue,
-            totalCoinValue = totalState.coinValue,
-            totalDimmed = totalState.dimmed,
             balanceViewItems = balanceViewItems,
             viewState = viewState,
-            isRefreshing = isRefreshing
+            isRefreshing = isRefreshing,
+            totalState = totalState
         )
     )
         private set
@@ -52,7 +52,7 @@ class BalanceViewModel(
         }
 
         viewModelScope.launch {
-            totalService.start()
+            totalService.start(service.balanceHidden)
         }
 
         service.start()
@@ -66,12 +66,10 @@ class BalanceViewModel(
 
     private fun emitState() {
         val newUiState = BalanceUiState(
-            totalCurrencyValue = totalState.currencyValue,
-            totalCoinValue = totalState.coinValue,
-            totalDimmed = totalState.dimmed,
             balanceViewItems = balanceViewItems,
             viewState = viewState,
             isRefreshing = isRefreshing,
+            totalState = totalState
         )
 
         viewModelScope.launch {
@@ -103,6 +101,8 @@ class BalanceViewModel(
 
     fun onBalanceClick() {
         service.balanceHidden = !service.balanceHidden
+
+        totalService.setBalanceHidden(service.balanceHidden)
 
         service.balanceItemsFlow.value?.let { refreshViewItems(it) }
     }
@@ -161,10 +161,8 @@ class BalanceViewModel(
 class BackupRequiredError(val account: Account, val coinTitle: String) : Error("Backup Required")
 
 data class BalanceUiState(
-    val totalCurrencyValue: CurrencyValue?,
-    val totalCoinValue: CoinValue?,
-    val totalDimmed: Boolean,
     val balanceViewItems: List<BalanceViewItem>,
     val viewState: ViewState,
-    val isRefreshing: Boolean
+    val isRefreshing: Boolean,
+    val totalState: TotalService.State
 )
