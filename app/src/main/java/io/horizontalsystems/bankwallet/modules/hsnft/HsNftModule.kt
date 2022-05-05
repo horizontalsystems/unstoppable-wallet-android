@@ -11,7 +11,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -278,7 +277,7 @@ class HsNftApiProvider : INftApiProvider {
                     emptyTaker = order.taker.address == zeroAddress,
                     side = order.side,
                     v = order.v,
-                    ethValue = price.divide(order.payment_token_contract.eth_price, RoundingMode.HALF_EVEN)
+                    ethValue = price.multiply(order.payment_token_contract.eth_price)
                 )
             }
         } ?: listOf()

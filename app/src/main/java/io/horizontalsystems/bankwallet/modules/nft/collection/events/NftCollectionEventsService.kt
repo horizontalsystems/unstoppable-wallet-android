@@ -15,7 +15,7 @@ import kotlinx.coroutines.rx2.asFlow
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-class NftCollectionActivityService(
+class NftCollectionEventsService(
     private val collection: NftCollection,
     private val nftApiProvider: INftApiProvider,
     private val nftManager: NftManager,
@@ -76,7 +76,8 @@ class NftCollectionActivityService(
                 if (!initialLoad && cursor == null) {
                     _items.update { it }
                 } else {
-                    val (events, cursor) = nftApiProvider.collectionEvents(collection.uid, eventType.value, cursor)
+                    val type = if (eventType == EventType.All) null else eventType.value
+                    val (events, cursor) = nftApiProvider.collectionEvents(collection.uid, type, cursor)
 
                     _items.update { handleEvents(events, cursor) }
                 }

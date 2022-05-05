@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionViewItem
 import io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 fun LazyListScope.nftsCollectionSection(
     collection: NftCollectionViewItem,
     viewModel: NftCollectionsViewModel,
-    onClickAsset: (CollectionAsset) -> Unit
+    onClickAsset: (NftAssetModuleAssetItem) -> Unit
 ) {
     item(key = "${collection.slug}-header") {
         CellSingleLineClear(
@@ -95,7 +95,7 @@ fun LazyListScope.nftsCollectionSection(
                                 coinPrice = price?.coinValue,
                                 currencyPrice = price?.currencyValue,
                                 onClick = {
-                                    onClickAsset.invoke(collectionAsset)
+                                    onClickAsset.invoke(asset)
                                 }
                             )
                         }

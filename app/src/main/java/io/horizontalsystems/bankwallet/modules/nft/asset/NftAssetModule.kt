@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
 import androidx.annotation.StringRes
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -15,19 +16,18 @@ import java.util.*
 
 object NftAssetModule {
 
-    var assetItem: NftAssetModuleAssetItem? = null
-        private set
-
     @Suppress("UNCHECKED_CAST")
     class Factory(
-        private val asset: NftAssetModuleAssetItem
+        private val collectionUid: String,
+        private val contractAddress: String,
+        private val tokenId: String
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val repository = NftAssetRepository(BalanceXRateRepository(App.currencyManager, App.marketKit))
             val service = NftAssetService(
-                asset.collectionUid,
-                asset.contract.address,
-                asset.tokenId,
+                collectionUid,
+                contractAddress,
+                tokenId,
                 HsNftApiProvider(),
                 App.nftManager,
                 repository
@@ -36,9 +36,16 @@ object NftAssetModule {
         }
     }
 
-    fun setParams(asset: NftAssetModuleAssetItem) {
-        assetItem = asset
-    }
+    const val collectionUidKey = "collectionUidKey"
+    const val contractAddressKey = "contractAddressKey"
+    const val tokenIdKey = "tokenIdKey"
+
+    fun prepareParams(collectionUid: String, contractAddress: String, tokenId: String) = bundleOf(
+        collectionUidKey to collectionUid,
+        contractAddressKey to contractAddress,
+        tokenIdKey to tokenId,
+    )
+
 }
 
 data class NftAssetModuleAssetItem(

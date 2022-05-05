@@ -14,7 +14,7 @@ class NftCollectionEventsModule {
     class Factory(private val collection: NftCollection) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = NftCollectionActivityService(
+            val service = NftCollectionEventsService(
                 collection,
                 HsNftApiProvider(),
                 App.nftManager,
