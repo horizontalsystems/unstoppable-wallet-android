@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.entities.ViewState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class NftCollectionAssetsViewModel(
@@ -22,8 +23,11 @@ class NftCollectionAssetsViewModel(
     var loadingMore by mutableStateOf(false)
         private set
 
+    var isRefreshing by mutableStateOf(false)
+        private set
+
     init {
-        service.nftCollectionAssets.collectWith(viewModelScope) { result ->
+        service.items.collectWith(viewModelScope) { result ->
             result.getOrNull()?.let { list ->
                 assets = list
                 loadingMore = false
@@ -38,7 +42,7 @@ class NftCollectionAssetsViewModel(
     }
 
     fun onBottomReached() {
-        loadingMore = true
+        loadingMore = !isRefreshing
 
         viewModelScope.launch {
             service.loadMore()
@@ -46,6 +50,22 @@ class NftCollectionAssetsViewModel(
     }
 
     fun onErrorClick() {
-        // TODO("not implemented")
+        refreshWithMinLoadingSpinnerPeriod()
     }
+
+    fun refresh() {
+        refreshWithMinLoadingSpinnerPeriod()
+    }
+
+    private fun refreshWithMinLoadingSpinnerPeriod() {
+        viewModelScope.launch {
+            isRefreshing = true
+
+            service.refresh()
+
+            delay(1000)
+            isRefreshing = false
+        }
+    }
+
 }

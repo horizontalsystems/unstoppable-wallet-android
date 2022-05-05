@@ -9,6 +9,7 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.nft.EventType
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class NftCollectionEventsViewModel(
@@ -25,6 +26,9 @@ class NftCollectionEventsViewModel(
         private set
 
     var loadingMore by mutableStateOf(false)
+        private set
+
+    var isRefreshing by mutableStateOf(false)
         private set
 
     var eventTypeSelectorState by mutableStateOf<SelectorDialogState>(SelectorDialogState.Closed)
@@ -59,7 +63,7 @@ class NftCollectionEventsViewModel(
     }
 
     fun onBottomReached() {
-        loadingMore = true
+        loadingMore = !isRefreshing
 
         viewModelScope.launch {
             service.loadMore()
@@ -67,7 +71,22 @@ class NftCollectionEventsViewModel(
     }
 
     fun onErrorClick() {
-        // TODO("not implemented")
+        refreshWithMinLoadingSpinnerPeriod()
+    }
+
+    fun refresh() {
+        refreshWithMinLoadingSpinnerPeriod()
+    }
+
+    private fun refreshWithMinLoadingSpinnerPeriod() {
+        viewModelScope.launch {
+            isRefreshing = true
+
+            service.refresh()
+
+            delay(1000)
+            isRefreshing = false
+        }
     }
 
     fun onClickEventType() {

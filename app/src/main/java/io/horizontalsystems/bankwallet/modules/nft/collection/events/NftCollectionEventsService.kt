@@ -16,7 +16,7 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 class NftCollectionEventsService(
-    private val collection: NftCollection,
+    private val collectionUid: String,
     private val nftApiProvider: INftApiProvider,
     private val nftManager: NftManager,
     private val xRateRepository: BalanceXRateRepository
@@ -56,6 +56,10 @@ class NftCollectionEventsService(
         restart()
     }
 
+    suspend fun refresh() {
+       restart()
+    }
+
     private suspend fun restart() {
         _items.update { Result.success(listOf()) }
 
@@ -77,7 +81,7 @@ class NftCollectionEventsService(
                     _items.update { it }
                 } else {
                     val type = if (eventType == EventType.All) null else eventType.value
-                    val (events, cursor) = nftApiProvider.collectionEvents(collection.uid, type, cursor)
+                    val (events, cursor) = nftApiProvider.collectionEvents(collectionUid, type, cursor)
 
                     _items.update { handleEvents(events, cursor) }
                 }
@@ -143,20 +147,11 @@ class NftCollectionEventsService(
     private fun assetItem(assetRecord: NftAssetRecord) =
         nftManager.assetItem(
             assetRecord = assetRecord,
-            collectionName = collection.name,
-            collectionLinks = collection.links?.let {
-                HsNftApiV1Response.Collection.Links(
-                    it.externalUrl,
-                    it.discordUrl,
-                    it.telegramUrl,
-                    it.twitterUsername,
-                    it.instagramUsername,
-                    it.wikiUrl
-                )
-            },
+            collectionName = "",
+            collectionLinks = null,
             averagePrice7d = null,
             averagePrice30d = null,
-            totalSupply = collection.totalSupply
+            totalSupply = 0
         )
 
 }

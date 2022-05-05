@@ -6,31 +6,30 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
 import io.horizontalsystems.bankwallet.modules.nft.INftApiProvider
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetRecord
-import io.horizontalsystems.bankwallet.modules.nft.NftCollection
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.marketkit.models.CoinPrice
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicBoolean
 
 class NftCollectionAssetsService(
-    private val collection: NftCollection,
+    private val collectionUid: String,
     private val nftApiProvider: INftApiProvider,
     private val nftManager: NftManager,
     private val xRateRepository: BalanceXRateRepository
 ) {
-    private val _nftCollectionAssets = MutableStateFlow<Result<List<CollectionAsset>>?>(null)
-    val nftCollectionAssets = _nftCollectionAssets.filterNotNull()
+    private val _items = MutableStateFlow<Result<List<CollectionAsset>>?>(null)
+    val items = _items.filterNotNull()
 
     private var cursor: String? = null
     private val loading = AtomicBoolean(false)
     private val started = AtomicBoolean(false)
     private val coinUidsSet = mutableSetOf<String>()
+    private var loadingJob: Job? = null
 
     private val baseCurrency by xRateRepository::baseCurrency
 
@@ -48,8 +47,19 @@ class NftCollectionAssetsService(
         load()
     }
 
+    suspend fun refresh() {
+        _items.update { Result.success(listOf()) }
+
+        loadingJob?.cancel()
+        loading.set(false)
+
+        cursor = null
+
+        load(true)
+    }
+
     private fun handleCoinPriceUpdate(xRatesMap: Map<String, CoinPrice?>) {
-        _nftCollectionAssets.update { result ->
+        _items.update { result ->
             result?.getOrNull()?.let {
                 Result.success(
                     updateCurrencyValues(it, xRatesMap)
@@ -58,22 +68,26 @@ class NftCollectionAssetsService(
         }
     }
 
-    private suspend fun load(initialLoad: Boolean = false) {
-        if (loading.getAndSet(true)) return
+    private suspend fun load(initialLoad: Boolean = false) = withContext(Dispatchers.IO) {
+        if (loading.getAndSet(true)) return@withContext
 
-        if (!initialLoad && cursor == null) {
-            _nftCollectionAssets.update { it }
-        } else {
+        loadingJob = launch {
             try {
-                val (assets, cursor) = nftApiProvider.collectionAssets(collection.uid, cursor)
+                if (!initialLoad && cursor == null) {
+                    _items.update { it }
+                } else {
+                    val (assets, cursor) = nftApiProvider.collectionAssets(collectionUid, cursor)
 
-                _nftCollectionAssets.update { handleAssets(assets, cursor) }
+                    _items.update { handleAssets(assets, cursor) }
+                }
+
+                loading.set(false)
+            } catch (cancellation: CancellationException) {
+                //ignore
             } catch (error: Throwable) {
-                _nftCollectionAssets.update { Result.failure(error) }
+                _items.update { Result.failure(error) }
             }
         }
-
-        loading.set(false)
     }
 
     private fun handleAssets(
@@ -91,7 +105,7 @@ class NftCollectionAssetsService(
 
         val xRatesMap = xRateRepository.getLatestRates()
 
-        val wholeList = (_nftCollectionAssets.value?.getOrNull() ?: listOf()) + assetItems
+        val wholeList = (_items.value?.getOrNull() ?: listOf()) + assetItems
 
         return Result.success(updateCurrencyValues(wholeList, xRatesMap))
     }
@@ -111,20 +125,11 @@ class NftCollectionAssetsService(
     private fun collectionAsset(assetRecord: NftAssetRecord) =
         nftManager.assetItem(
             assetRecord = assetRecord,
-            collectionName = collection.name,
-            collectionLinks = collection.links?.let {
-                HsNftApiV1Response.Collection.Links(
-                    it.externalUrl,
-                    it.discordUrl,
-                    it.telegramUrl,
-                    it.twitterUsername,
-                    it.instagramUsername,
-                    it.wikiUrl
-                )
-            },
+            collectionName = "",
+            collectionLinks = null,
             averagePrice7d = null,
             averagePrice30d = null,
-            totalSupply = collection.totalSupply
+            totalSupply = 0
         ).let {
             CollectionAsset(it, it.stats.lastSale)
         }

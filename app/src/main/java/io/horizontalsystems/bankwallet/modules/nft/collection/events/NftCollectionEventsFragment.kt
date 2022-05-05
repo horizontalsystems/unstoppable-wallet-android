@@ -23,15 +23,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import coil.compose.rememberImagePainter
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
-import io.horizontalsystems.bankwallet.modules.nft.NftCollection
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.OnBottomReached
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
@@ -52,7 +53,7 @@ class NftCollectionEventsFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    NftCollectionEventsScreen(findNavController(), viewModel.collection)
+                    NftCollectionEventsScreen(findNavController(), viewModel.collectionUid)
                 }
             }
         }
@@ -60,21 +61,26 @@ class NftCollectionEventsFragment : BaseFragment() {
 }
 
 @Composable
-private fun NftCollectionEventsScreen(navController: NavController, collection: NftCollection?) {
-    if (collection == null) return
+private fun NftCollectionEventsScreen(navController: NavController, collectionUid: String) {
+    val viewModel = viewModel<NftCollectionEventsViewModel>(factory = NftCollectionEventsModule.Factory(collectionUid))
 
-    val viewModel = viewModel<NftCollectionEventsViewModel>(factory = NftCollectionEventsModule.Factory(collection))
-
-    Crossfade(viewModel.viewState) { viewState ->
-        when (viewState) {
-            ViewState.Loading -> {
-                Loading()
-            }
-            is ViewState.Error -> {
-                ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
-            }
-            ViewState.Success -> {
-                NftEvents(navController, viewModel)
+    HSSwipeRefresh(
+        state = rememberSwipeRefreshState(viewModel.isRefreshing),
+        onRefresh = {
+            viewModel.refresh()
+        }
+    ) {
+        Crossfade(viewModel.viewState) { viewState ->
+            when (viewState) {
+                ViewState.Loading -> {
+                    Loading()
+                }
+                is ViewState.Error -> {
+                    ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                }
+                ViewState.Success -> {
+                    NftEvents(navController, viewModel)
+                }
             }
         }
     }

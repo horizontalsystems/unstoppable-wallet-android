@@ -60,7 +60,8 @@ class NftCollectionOverviewFragment : BaseFragment() {
 
             setContent {
                 ComposeAppTheme {
-                    NftCollectionOverviewScreen(viewModel,
+                    NftCollectionOverviewScreen(
+                        viewModel,
                         onCopyText = {
                             TextHelper.copyText(it)
                             HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
