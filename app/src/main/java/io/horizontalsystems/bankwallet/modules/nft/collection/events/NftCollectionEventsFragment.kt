@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft.collection.activity
+package io.horizontalsystems.bankwallet.modules.nft.collection.events
 
 import android.os.Bundle
 import android.view.LayoutInflater
