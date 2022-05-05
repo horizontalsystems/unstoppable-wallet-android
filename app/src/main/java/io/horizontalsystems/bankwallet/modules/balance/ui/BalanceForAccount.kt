@@ -91,14 +91,14 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
         Crossfade(viewModel.viewState) { viewState ->
             when (viewState) {
                 is ViewState.Success -> {
-                    viewModel.balanceViewItemsWrapper?.let { (headerViewItem, balanceViewItems) ->
+                    viewModel.balanceViewItemsWrapper?.let { (_, balanceViewItems) ->
                         if (balanceViewItems.isNotEmpty()) {
                             BalanceItems(
-                                headerViewItem,
                                 balanceViewItems,
                                 viewModel,
                                 accountViewItem,
-                                navController
+                                navController,
+                                viewModel.uiState
                             )
                         } else {
                             BalanceItemsEmpty(navController, accountViewItem)

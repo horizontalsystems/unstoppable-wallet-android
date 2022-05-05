@@ -29,11 +29,11 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun BalanceItems(
-    headerViewItem: BalanceHeaderViewItem,
     balanceViewItems: List<BalanceViewItem>,
     viewModel: BalanceViewModel,
     accountViewItem: AccountViewItem,
-    navController: NavController
+    navController: NavController,
+    uiState: BalanceUiState
 ) {
     val rateAppViewModel = viewModel<RateAppViewModel>(factory = RateAppModule.Factory())
     DisposableEffect(true) {
@@ -46,13 +46,17 @@ fun BalanceItems(
     Column {
         val context = LocalContext.current
         DoubleText(
-            title = headerViewItem.fiatBalanceText,
-            body = headerViewItem.coinBalanceText,
-            dimmed = !headerViewItem.upToDate,
-        ) {
-            viewModel.onBalanceClick()
-            HudHelper.vibrate(context)
-        }
+            title = uiState.totalCurrencyValue?.getFormatted(2) ?: "---",
+            body = uiState.totalCoinValue?.getFormatted() ?: "---",
+            dimmed = uiState.totalDimmed,
+            onClickTitle = {
+                viewModel.onBalanceClick()
+                HudHelper.vibrate(context)
+            },
+            onClickBody = {
+                viewModel.toggleTotalType()
+            }
+        )
 
         Header(borderTop = true) {
             var showSortTypeSelectorDialog by remember { mutableStateOf(false) }

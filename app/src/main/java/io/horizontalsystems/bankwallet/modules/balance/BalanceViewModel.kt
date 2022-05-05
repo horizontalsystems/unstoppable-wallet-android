@@ -5,18 +5,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.xrate.XRateService
+import cash.z.ecc.android.sdk.ext.collectWith
+import io.horizontalsystems.bankwallet.entities.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class BalanceViewModel(
     private val service: BalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
-    private val xRateService: XRateService
+    private val totalService: TotalService
 ) : ViewModel() {
+
+    private var totalState = totalService.stateFlow.value
+
+    var uiState by mutableStateOf(
+        BalanceUiState(
+            totalCurrencyValue = totalState.currencyValue,
+            totalCoinValue = totalState.coinValue,
+            totalDimmed = totalState.dimmed,
+        )
+    )
 
     var viewState by mutableStateOf<ViewState>(ViewState.Loading)
         private set
@@ -31,26 +39,42 @@ class BalanceViewModel(
 
     private var expandedWallet: Wallet? = null
 
-    private var bitcoinPrice = xRateService.getRate("bitcoin")
-
     init {
         viewModelScope.launch {
             service.balanceItemsFlow
                 .collect { items ->
+                    totalService.setBalanceItems(items)
                     items?.let { refreshViewItems(it) }
                 }
         }
+        totalService.stateFlow.collectWith(viewModelScope) {
+            handleUpdatedTotalState(it)
+        }
         viewModelScope.launch {
-            xRateService.getRateFlow("bitcoin")
-                .collect {
-                    bitcoinPrice = it
-
-                    service.balanceItemsFlow.value?.let { refreshViewItems(it) }
-                }
+            totalService.start()
         }
 
         service.start()
     }
+
+    private fun handleUpdatedTotalState(totalState: TotalService.State) {
+        this.totalState = totalState
+
+        emitState()
+    }
+
+    private fun emitState() {
+        val newUiState = BalanceUiState(
+            totalCurrencyValue = totalState.currencyValue,
+            totalCoinValue = totalState.coinValue,
+            totalDimmed = totalState.dimmed,
+        )
+
+        viewModelScope.launch {
+            uiState = newUiState
+        }
+    }
+
 
     private fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>) {
         val balanceViewItems = balanceItems.map { balanceItem ->
@@ -66,8 +90,7 @@ class BalanceViewModel(
         val headerViewItem = balanceViewItemFactory.headerViewItem(
             balanceItems,
             service.baseCurrency,
-            service.balanceHidden,
-            bitcoinPrice
+            service.balanceHidden
         )
 
         viewModelScope.launch {
@@ -85,6 +108,10 @@ class BalanceViewModel(
         service.balanceHidden = !service.balanceHidden
 
         service.balanceItemsFlow.value?.let { refreshViewItems(it) }
+    }
+
+    fun toggleTotalType() {
+        totalService.toggleType()
     }
 
     fun onItem(viewItem: BalanceViewItem) {
@@ -131,3 +158,9 @@ class BalanceViewModel(
 }
 
 class BackupRequiredError(val account: Account, val coinTitle: String) : Error("Backup Required")
+
+data class BalanceUiState(
+    val totalCurrencyValue: CurrencyValue?,
+    val totalCoinValue: CoinValue?,
+    val totalDimmed: Boolean
+)
