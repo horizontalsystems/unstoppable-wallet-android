@@ -45,18 +45,38 @@ fun BalanceItems(
 
     Column {
         val context = LocalContext.current
-        DoubleText(
-            title = uiState.totalCurrencyValue?.getFormatted(2) ?: "---",
-            body = uiState.totalCoinValue?.getFormatted() ?: "---",
-            dimmed = uiState.totalDimmed,
-            onClickTitle = {
-                viewModel.onBalanceClick()
-                HudHelper.vibrate(context)
-            },
-            onClickBody = {
-                viewModel.toggleTotalType()
+
+        when (val totalState = uiState.totalState) {
+            TotalService.State.Hidden -> {
+                DoubleText(
+                    title = "*****",
+                    body = "*****",
+                    dimmed = false,
+                    onClickTitle = {
+                        viewModel.onBalanceClick()
+                        HudHelper.vibrate(context)
+                    },
+                    onClickBody = {
+
+                    }
+                )
             }
-        )
+            is TotalService.State.Visible -> {
+                DoubleText(
+                    title = totalState.currencyValue?.getFormatted(2) ?: "---",
+                    body = totalState.coinValue?.getFormatted()?.let { "~$it" } ?: "---",
+                    dimmed = totalState.dimmed,
+                    onClickTitle = {
+                        viewModel.onBalanceClick()
+                        HudHelper.vibrate(context)
+                    },
+                    onClickBody = {
+                        viewModel.toggleTotalType()
+                        HudHelper.vibrate(context)
+                    }
+                )
+            }
+        }
 
         Header(borderTop = true) {
             var showSortTypeSelectorDialog by remember { mutableStateOf(false) }
