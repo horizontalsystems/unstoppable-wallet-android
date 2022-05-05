@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft.collection.activity
+package io.horizontalsystems.bankwallet.modules.nft.collection.events
 
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
