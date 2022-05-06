@@ -108,7 +108,9 @@ class BalanceViewModel(
     }
 
     fun toggleTotalType() {
-        totalService.toggleType()
+        viewModelScope.launch {
+            totalService.toggleType()
+        }
     }
 
     fun onItem(viewItem: BalanceViewItem) {
