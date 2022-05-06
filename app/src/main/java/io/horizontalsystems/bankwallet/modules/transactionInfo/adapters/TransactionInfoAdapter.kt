@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
 import io.horizontalsystems.views.ListPosition
 import java.util.*
@@ -127,8 +129,9 @@ class TransactionInfoAdapter(
             setButtons(item)
             binding.transactionStatusView.isVisible = false
             binding.valueText.isVisible = false
-            binding.statusInfoIcon.isVisible = false
+            binding.leftIcon.isVisible = false
             binding.rightInfoIcon.isVisible = false
+            binding.coinIconCompose.isVisible = false
 
             binding.txViewBackground.setBackgroundResource(item.listPosition.getBackground())
 
@@ -141,11 +144,28 @@ class TransactionInfoAdapter(
                     binding.valueText.setTextColor(greyColor)
                     binding.valueText.text = type.rightValue
                     binding.valueText.isVisible = true
+
+                    type.icon?.let {
+                        binding.leftIcon.setImageResource(it)
+                        binding.leftIcon.isVisible = true
+                    }
                 }
                 is Amount -> {
                     setDefaultStyle()
+                    binding.coinIconCompose.setContent {
+                        ComposeAppTheme {
+                            CoinImage(
+                                modifier = Modifier.size(24.dp),
+                                iconUrl = type.iconUrl,
+                                placeholder = type.iconPlaceholder
+                            )
+                        }
+                    }
+                    binding.coinIconCompose.isVisible = true
 
-                    binding.txtTitle.text = type.leftValue
+                    binding.txtTitle.text = type.leftValue.value
+                    binding.txtTitle.setTextColor(getColor(type.leftValue.color))
+
                     binding.valueText.text = type.rightValue.value
                     binding.valueText.setTextColor(getColor(type.rightValue.color))
                     binding.valueText.isVisible = true
@@ -164,11 +184,10 @@ class TransactionInfoAdapter(
                 is Status -> {
                     setDefaultStyle()
                     binding.txtTitle.text = type.title
-                    binding.statusInfoIcon.setImageResource(type.leftIcon)
-                    binding.statusInfoIcon.isVisible =
-                        type.status !is TransactionStatusViewItem.Completed
+                    binding.leftIcon.setImageResource(type.leftIcon)
+                    binding.leftIcon.isVisible = type.status !is TransactionStatusViewItem.Completed
                     if (type.status !is TransactionStatusViewItem.Completed) {
-                        binding.statusInfoIcon.setOnClickListener { listener.onClickStatusInfo() }
+                        binding.leftIcon.setOnClickListener { listener.onClickStatusInfo() }
                     }
                     binding.transactionStatusView.isVisible = true
                     binding.transactionStatusView.bind(type.status)
@@ -181,8 +200,8 @@ class TransactionInfoAdapter(
                     setDefaultStyle()
 
                     binding.txtTitle.text = type.title
-                    binding.statusInfoIcon.setImageResource(type.leftIcon)
-                    binding.statusInfoIcon.isVisible = true
+                    binding.leftIcon.setImageResource(type.leftIcon)
+                    binding.leftIcon.isVisible = true
 
                     if (type.showLockInfo) {
                         binding.rightInfoIcon.isVisible = true
@@ -193,8 +212,8 @@ class TransactionInfoAdapter(
                 }
                 is DoubleSpend -> {
                     binding.txtTitle.text = type.title
-                    binding.statusInfoIcon.setImageResource(type.leftIcon)
-                    binding.statusInfoIcon.isVisible = true
+                    binding.leftIcon.setImageResource(type.leftIcon)
+                    binding.leftIcon.isVisible = true
                     binding.rightInfoIcon.isVisible = true
                     binding.wrapper.setOnClickListener {
                         listener.onDoubleSpendInfoClick(type.transactionHash, type.conflictingHash)
