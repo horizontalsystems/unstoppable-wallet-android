@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoVi
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatusViewItem.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoPositionedViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.ListPosition.Companion
 import java.math.BigDecimal
@@ -155,7 +156,7 @@ class TransactionInfoViewItemFactory(
 
     private fun getReceiveSectionItems(coinName: String, value: TransactionValue, fromAddress: String?, coinPrice: CurrencyValue?, memo: String? = null): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
-            Transaction(getString(R.string.Transactions_Receive), coinName),
+            Transaction(getString(R.string.Transactions_Receive), coinName, R.drawable.ic_arrow_down_left_12),
             getAmount(coinPrice, value, true)
         )
 
@@ -183,7 +184,7 @@ class TransactionInfoViewItemFactory(
 
     private fun getSendSectionItems(coinName: String, value: TransactionValue, toAddress: String?, coinPrice: CurrencyValue?, memo: String? = null): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
-            Transaction(getString(R.string.Transactions_Send), coinName),
+            Transaction(getString(R.string.Transactions_Send), coinName, R.drawable.ic_arrow_up_right_12),
             getAmount(coinPrice, value, false)
         )
 
@@ -209,9 +210,16 @@ class TransactionInfoViewItemFactory(
         return items
     }
 
-    private fun getSwapEventSectionItems(title: String, value: TransactionValue, amount: SwapTransactionRecord.Amount?, rate: CurrencyValue?, incoming: Boolean?): List<TransactionInfoViewItem> =
+    private fun getSwapEventSectionItems(title: String, value: TransactionValue, amount: SwapTransactionRecord.Amount?, rate: CurrencyValue?, incoming: Boolean): List<TransactionInfoViewItem> =
         listOf(
-            Transaction(title, value.coinName),
+            Transaction(
+                title,
+                value.coinName,
+                icon = if (incoming)
+                    R.drawable.ic_arrow_down_left_12
+                else
+                    R.drawable.ic_arrow_up_right_12
+            ),
             getAmount(rate, value, incoming, amount)
         )
 
@@ -289,14 +297,15 @@ class TransactionInfoViewItemFactory(
             value.coinCode
         ) else coinAmountFormatted
 
+        val coinAmountColoredValue = ColoredValue(coinAmountString,  getAmountColor(null))
         val fiatAmountColoredValue = ColoredValue(
             if (value.isMaxValue) "∞" else fiatAmountFormatted,
-            getAmountColor(null)
+            R.color.grey
         )
 
         return listOf(
-            Transaction(getString(R.string.Transactions_Approve), value.coinName),
-            Amount(coinAmountString, fiatAmountColoredValue),
+            Transaction(getString(R.string.Transactions_Approve), value.coinName, R.drawable.ic_checkmark_24),
+            Amount(value.coinIconUrl, value.coinIconPlaceholder, coinAmountColoredValue, fiatAmountColoredValue),
             Decorated(getString(R.string.TransactionInfo_Spender), spenderAddress)
         )
     }
@@ -305,7 +314,8 @@ class TransactionInfoViewItemFactory(
         listOf(
             Transaction(
                 transaction.method ?: getString(R.string.Transactions_ContractCall),
-                transaction.contractAddress?.let { getNameOrAddress(it) } ?: "---"
+                getNameOrAddress(transaction.contractAddress),
+                TransactionViewItem.Icon.Platform(transaction.source).iconRes
             )
         )
 
@@ -437,7 +447,7 @@ class TransactionInfoViewItemFactory(
         return when (incoming) {
             true -> R.color.remus
             false -> R.color.lucian
-            else -> R.color.oz
+            else -> R.color.leah
         }
     }
 
@@ -447,39 +457,38 @@ class TransactionInfoViewItemFactory(
 
     private fun getAmount(
         rate: CurrencyValue?,
-        transactionValue: TransactionValue,
+        value: TransactionValue,
         incoming: Boolean?,
         amount: SwapTransactionRecord.Amount? = null
     ): TransactionInfoViewItem {
         val valueInFiat = rate?.let {
-            transactionValue.decimalValue?.let { decimalValue ->
-                val sign = when {
-                    decimalValue < BigDecimal.ZERO -> "-"
-                    decimalValue > BigDecimal.ZERO -> "+"
-                    else -> ""
-                }
-                val value = numberFormatter.formatFiat(
+            value.decimalValue?.let { decimalValue ->
+                numberFormatter.formatFiat(
                     (it.value * decimalValue).abs(),
                     it.currency.symbol,
                     0,
                     2
                 )
-                "$sign$value"
             }
         } ?: "---"
-        val fiatValueColored = ColoredValue(valueInFiat, getAmountColor(incoming))
-        val coinValueFormatted = transactionValue.decimalValue?.let { decimalValue ->
-            val valueWithCoinCode = numberFormatter.formatCoin(decimalValue.abs(), transactionValue.coinCode, 0, 8)
+        val fiatValueColored = ColoredValue(valueInFiat, R.color.grey)
+        val coinValueFormatted = value.decimalValue?.let { decimalValue ->
+            val sign = when {
+                decimalValue < BigDecimal.ZERO -> "-"
+                decimalValue > BigDecimal.ZERO -> "+"
+                else -> ""
+            }
+            val valueWithCoinCode = numberFormatter.formatCoin(decimalValue.abs(), value.coinCode, 0, 8)
             if (amount is SwapTransactionRecord.Amount.Extremum && incoming != null) {
-                val extremumSuffix = if (incoming) getString(R.string.Swap_AmountMin) else getString(R.string.Swap_AmountMax)
-
-                "$valueWithCoinCode $extremumSuffix"
+                val suffix = if (incoming) getString(R.string.Swap_AmountMin) else getString(R.string.Swap_AmountMax)
+                "$sign$valueWithCoinCode $suffix"
             } else {
-                valueWithCoinCode
+                "$sign$valueWithCoinCode"
             }
         } ?: "---"
 
-        return Amount(coinValueFormatted, fiatValueColored)
+        val coinValueColored = ColoredValue(coinValueFormatted, getAmountColor(incoming))
+        return Amount(value.coinIconUrl, value.coinIconPlaceholder, coinValueColored, fiatValueColored)
     }
 
     private fun getHistoricalRate(

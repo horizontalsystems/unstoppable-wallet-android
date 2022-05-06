@@ -137,25 +137,25 @@ class TransactionInfoFragment : BaseFragment() {
 
         binding.recyclerView.adapter = ConcatAdapter(itemsAdapter)
 
-        viewModel.showShareLiveEvent.observe(viewLifecycleOwner, { value ->
+        viewModel.showShareLiveEvent.observe(viewLifecycleOwner) { value ->
             context?.startActivity(Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, value)
                 type = "text/plain"
             })
-        })
+        }
 
-        viewModel.copyRawTransactionLiveEvent.observe(viewLifecycleOwner, { rawTransaction ->
+        viewModel.copyRawTransactionLiveEvent.observe(viewLifecycleOwner) { rawTransaction ->
             copyText(rawTransaction)
-        })
+        }
 
-        viewModel.openTransactionOptionsModule.observe(viewLifecycleOwner, { (optionType, txHash) ->
+        viewModel.openTransactionOptionsModule.observe(viewLifecycleOwner) { (optionType, txHash) ->
             val params = TransactionSpeedUpCancelFragment.prepareParams(optionType, txHash)
             findNavController().slideFromRight(
                 R.id.transactionSpeedUpCancelFragment,
                 params
             )
-        })
+        }
 
         binding.buttonCloseCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
