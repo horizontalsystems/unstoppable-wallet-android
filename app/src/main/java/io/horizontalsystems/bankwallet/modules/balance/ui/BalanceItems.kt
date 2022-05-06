@@ -64,7 +64,7 @@ fun BalanceItems(
             is TotalService.State.Visible -> {
                 DoubleText(
                     title = totalState.currencyValue?.getFormatted(2) ?: "---",
-                    body = totalState.coinValue?.getFormatted()?.let { "~$it" } ?: "---",
+                    body = totalState.coinValue?.getShortenedFormatted()?.let { "~$it" } ?: "---",
                     dimmed = totalState.dimmed,
                     onClickTitle = {
                         viewModel.onBalanceClick()
