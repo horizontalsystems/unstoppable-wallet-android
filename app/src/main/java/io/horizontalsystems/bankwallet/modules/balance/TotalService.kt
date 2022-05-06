@@ -10,10 +10,14 @@ import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class TotalService(
@@ -35,28 +39,26 @@ class TotalService(
     )
     val stateFlow = _stateFlow.asStateFlow()
 
-    private val platformCoins: List<PlatformCoin>
+    private val platformCoins = listOf(CoinType.Bitcoin, CoinType.Ethereum)
+        .mapNotNull {
+            coinManager.getPlatformCoin(it)
+        }
     private var platformCoin: PlatformCoin? = null
     private var coinPrice: CoinPrice? = null
     private var currency = currencyManager.baseCurrency
     private var items: List<BalanceModule.BalanceItem>? = null
+    private var coinPriceUpdatesJob: Job? = null
 
-    init {
-        platformCoins = listOf(
-            CoinType.Bitcoin, CoinType.Ethereum
-        ).mapNotNull {
-            coinManager.getPlatformCoin(it)
+    suspend fun start(balanceHidden: Boolean) = withContext(Dispatchers.IO) {
+        this@TotalService.balanceHidden = balanceHidden
+
+        launch {
+            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+                handleUpdatedCurrency(currencyManager.baseCurrency)
+            }
         }
 
         handleUpdatedPlatformCoin(platformCoins.firstOrNull())
-    }
-
-    suspend fun start(balanceHidden: Boolean) {
-        this.balanceHidden = balanceHidden
-
-        currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
-            handleUpdatedCurrency(currencyManager.baseCurrency)
-        }
     }
 
     fun setBalanceItems(items: List<BalanceModule.BalanceItem>?) {
@@ -75,7 +77,7 @@ class TotalService(
         emitState()
     }
 
-    fun toggleType() {
+    suspend fun toggleType() {
         val indexOf = platformCoins.indexOf(platformCoin)
         val platformCoin = (platformCoins.getOrNull(indexOf + 1)
             ?: platformCoins.firstOrNull())
@@ -87,24 +89,45 @@ class TotalService(
         emitState()
     }
 
-    private fun handleUpdatedCurrency(currency: Currency) {
+    private suspend fun handleUpdatedCurrency(currency: Currency) {
         this.currency = currency
 
         refreshCoinPrice()
+        resubscribeForCoinPrice()
         refreshTotalCurrencyValue()
+        refreshTotalCoinValue()
 
         emitState()
     }
 
-    private fun handleUpdatedPlatformCoin(platformCoin: PlatformCoin?) {
+    private suspend fun handleUpdatedPlatformCoin(platformCoin: PlatformCoin?) {
         this.platformCoin = platformCoin
 
         refreshCoinPrice()
+        resubscribeForCoinPrice()
     }
 
     private fun refreshCoinPrice() {
         coinPrice = platformCoin?.let {
             marketKit.coinPrice(it.coin.uid, currency.code)
+        }
+    }
+
+    private suspend fun resubscribeForCoinPrice() = withContext(Dispatchers.IO) {
+        coinPriceUpdatesJob?.cancel()
+
+        platformCoin?.let { platformCoin ->
+            coinPriceUpdatesJob = launch {
+                marketKit.coinPriceObservable(platformCoin.coin.uid, currency.code)
+                    .asFlow()
+                    .collect {
+                        coinPrice = it
+
+                        refreshTotalCoinValue()
+
+                        emitState()
+                    }
+            }
         }
     }
 
