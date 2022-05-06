@@ -920,6 +920,17 @@
     <string name="NftCollection_ItemsCount">%d Items</string>
     <string name="NftCollection_TodaysSales">Today\'s Sales</string>
     <string name="NftCollection_AveragePriceDescription">~%s / Item</string>
+    <!-- NFT Collection Events -->
+    <string name="NftCollection_EventType_SelectorTitle">Select Event Type</string>
+    <string name="NftCollection_EventType_All">All</string>
+    <string name="NftCollection_EventType_AuctionCreated">Auction Created</string>
+    <string name="NftCollection_EventType_Sale">Sale</string>
+    <string name="NftCollection_EventType_Cancelled">Cancelled</string>
+    <string name="NftCollection_EventType_BidEntered">Bid Entered</string>
+    <string name="NftCollection_EventType_BidWithdrawn">Bid Withdrawn</string>
+    <string name="NftCollection_EventType_Transfer">Transfer</string>
+    <string name="NftCollection_EventType_OfferEntered">Offer Entered</string>
+    <string name="NftCollection_EventType_Approve">Offer Entered</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
