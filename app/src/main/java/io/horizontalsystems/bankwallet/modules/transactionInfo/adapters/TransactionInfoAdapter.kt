@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -13,6 +12,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setRemoteImage
 import io.horizontalsystems.bankwallet.databinding.ViewHolderSectionDividerBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderTransactionInfoExplorerBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderTransactionInfoItemBinding
@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
 import io.horizontalsystems.views.ListPosition
 import java.util.*
@@ -131,7 +130,7 @@ class TransactionInfoAdapter(
             binding.valueText.isVisible = false
             binding.leftIcon.isVisible = false
             binding.rightInfoIcon.isVisible = false
-            binding.coinIconCompose.isVisible = false
+            binding.coinIcon.isVisible = false
 
             binding.txViewBackground.setBackgroundResource(item.listPosition.getBackground())
 
@@ -152,16 +151,9 @@ class TransactionInfoAdapter(
                 }
                 is Amount -> {
                     setDefaultStyle()
-                    binding.coinIconCompose.setContent {
-                        ComposeAppTheme {
-                            CoinImage(
-                                modifier = Modifier.size(24.dp),
-                                iconUrl = type.iconUrl,
-                                placeholder = type.iconPlaceholder
-                            )
-                        }
-                    }
-                    binding.coinIconCompose.isVisible = true
+                    type.iconPlaceholder?.let { binding.coinIcon.setImageResource(it) }
+                    type.iconUrl?.let { binding.coinIcon.setRemoteImage(it, type.iconPlaceholder) }
+                    binding.coinIcon.isVisible = true
 
                     binding.txtTitle.text = type.leftValue.value
                     binding.txtTitle.setTextColor(getColor(type.leftValue.color))
@@ -221,6 +213,13 @@ class TransactionInfoAdapter(
                 }
                 is Options -> {
                     binding.txtTitle.text = type.title
+                }
+                is SentToSelf -> {
+                    binding.txtTitle.text = type.title
+                    binding.leftIcon.apply {
+                        setImageResource(type.icon)
+                        isVisible = true
+                    }
                 }
             }
         }

@@ -41,13 +41,16 @@ class TransactionInfoViewItemFactory(
 
         val status = transaction.status(transactionItem.lastBlockInfo?.height)
         val itemSections = mutableListOf<List<TransactionInfoViewItem>>()
+        var sentToSelf = false
 
         when (transaction) {
             is EvmIncomingTransactionRecord ->
                 itemSections.add(getReceiveSectionItems(transaction.value.coinName, transaction.value, transaction.from, rates[transaction.value.coinUid]))
 
-            is EvmOutgoingTransactionRecord ->
-                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid]))
+            is EvmOutgoingTransactionRecord -> {
+                sentToSelf = transaction.sentToSelf
+                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf))
+            }
 
             is SwapTransactionRecord -> {
                 val valueIn = transaction.valueIn
@@ -116,7 +119,8 @@ class TransactionInfoViewItemFactory(
             }
 
             is BitcoinOutgoingTransactionRecord -> {
-                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.memo))
+                sentToSelf = transaction.sentToSelf
+                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf, transaction.memo))
                 itemSections.add(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
             }
 
@@ -125,10 +129,17 @@ class TransactionInfoViewItemFactory(
             }
 
             is BinanceChainOutgoingTransactionRecord -> {
-                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.memo))
+                sentToSelf = transaction.sentToSelf
+                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf, transaction.memo))
             }
 
             else -> {}
+        }
+
+        if (sentToSelf) {
+            itemSections.add(
+                listOf(SentToSelf(getString(R.string.TransactionInfo_SentToSelfNote), R.drawable.ic_arrow_return_20))
+            )
         }
 
         itemSections.add(getStatusSectionItems(transaction, status, rates))
@@ -182,10 +193,10 @@ class TransactionInfoViewItemFactory(
         return items
     }
 
-    private fun getSendSectionItems(coinName: String, value: TransactionValue, toAddress: String?, coinPrice: CurrencyValue?, memo: String? = null): List<TransactionInfoViewItem> {
+    private fun getSendSectionItems(coinName: String, value: TransactionValue, toAddress: String?, coinPrice: CurrencyValue?, sentToSelf: Boolean = false, memo: String? = null): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
             Transaction(getString(R.string.Transactions_Send), coinName, R.drawable.ic_arrow_up_right_12),
-            getAmount(coinPrice, value, false)
+            getAmount(coinPrice, value, if (sentToSelf) null else false)
         )
 
         coinPrice?.let {
@@ -474,6 +485,7 @@ class TransactionInfoViewItemFactory(
         val fiatValueColored = ColoredValue(valueInFiat, R.color.grey)
         val coinValueFormatted = value.decimalValue?.let { decimalValue ->
             val sign = when {
+                incoming == null -> ""
                 decimalValue < BigDecimal.ZERO -> "-"
                 decimalValue > BigDecimal.ZERO -> "+"
                 else -> ""

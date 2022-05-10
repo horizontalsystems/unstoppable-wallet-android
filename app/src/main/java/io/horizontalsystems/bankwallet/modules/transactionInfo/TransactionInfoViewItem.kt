@@ -45,6 +45,11 @@ sealed class TransactionInfoViewItem {
         val conflictingHash: String
     ) : TransactionInfoViewItem()
 
+    class SentToSelf(
+        val title: String,
+        val icon: Int
+    ): TransactionInfoViewItem()
+
     class Options(
         val title: String,
         val optionButtonOne: TransactionInfoOption,
