@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.core.security.KeyStoreValidationResult
 
 class LaunchViewModel(
@@ -14,73 +13,31 @@ class LaunchViewModel(
     private val pinComponent: IPinComponent,
     private val systemInfoManager: ISystemInfoManager,
     private val keyStoreManager: IKeyStoreManager,
-    localStorage: ILocalStorage
+    private val localStorage: ILocalStorage
 ) : ViewModel() {
-    val openWelcomeModule = SingleLiveEvent<Void>()
-    val openMainModule = SingleLiveEvent<Void>()
-    val openUnlockModule = SingleLiveEvent<Void>()
-    val openNoSystemLockModule = SingleLiveEvent<Void>()
-    val openKeyInvalidatedModule = SingleLiveEvent<Void>()
-    val openUserAuthenticationModule = SingleLiveEvent<Void>()
-    val closeApplication = SingleLiveEvent<Void>()
+    val torEnabled by localStorage::torEnabled
 
     private val mainShowedOnce = localStorage.mainShowedOnce
 
-    init {
-        if (systemInfoManager.isSystemLockOff) {
-            openNoSystemLockModule()
-        } else {
-            when (keyStoreManager.validateKeyStore()) {
-                KeyStoreValidationResult.UserNotAuthenticated -> {
-                    openUserAuthenticationModule()
-                }
-                KeyStoreValidationResult.KeyIsInvalid -> {
-                    openKeyInvalidatedModule()
-                }
-                KeyStoreValidationResult.KeyIsValid -> {
-                    when {
-                        accountManager.isAccountsEmpty && !mainShowedOnce -> openWelcomeModule()
-                        pinComponent.isLocked -> openUnlockModule()
-                        else -> openMainModule()
-                    }
-                }
+    fun getPage() = when {
+        systemInfoManager.isSystemLockOff -> Page.NoSystemLock
+        else -> when (keyStoreManager.validateKeyStore()) {
+            KeyStoreValidationResult.UserNotAuthenticated -> Page.UserAuthentication
+            KeyStoreValidationResult.KeyIsInvalid -> Page.KeyInvalidated
+            KeyStoreValidationResult.KeyIsValid -> when {
+                accountManager.isAccountsEmpty && !mainShowedOnce -> Page.Welcome
+                pinComponent.isLocked -> Page.Unlock
+                else -> Page.Main
             }
         }
     }
 
-    private fun openWelcomeModule() {
-        openWelcomeModule.call()
-    }
-
-    private fun openMainModule() {
-        openMainModule.call()
-    }
-
-    private fun openUnlockModule() {
-        openUnlockModule.call()
-    }
-
-    private fun openNoSystemLockModule() {
-        openNoSystemLockModule.call()
-    }
-
-    private fun openKeyInvalidatedModule() {
-        openKeyInvalidatedModule.call()
-    }
-
-    private fun openUserAuthenticationModule() {
-        openUserAuthenticationModule.call()
-    }
-
-    private fun closeApplication() {
-        closeApplication.call()
-    }
-
-    fun didUnlock() {
-        openMainModule()
-    }
-
-    fun didCancelUnlock() {
-        closeApplication()
+    enum class Page {
+        Welcome,
+        Main,
+        Unlock,
+        NoSystemLock,
+        KeyInvalidated,
+        UserAuthentication
     }
 }
