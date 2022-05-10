@@ -41,6 +41,8 @@ class TransactionInfoViewItemFactory(
 
         val status = transaction.status(transactionItem.lastBlockInfo?.height)
         val itemSections = mutableListOf<List<TransactionInfoViewItem>>()
+        val miscItemsSection = mutableListOf<TransactionInfoViewItem>()
+
         var sentToSelf = false
 
         when (transaction) {
@@ -114,38 +116,60 @@ class TransactionInfoViewItemFactory(
             }
 
             is BitcoinIncomingTransactionRecord -> {
-                itemSections.add(getReceiveSectionItems(transaction.value.coinName, transaction.value, transaction.from, rates[transaction.value.coinUid], transaction.memo))
-                itemSections.add(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
+                itemSections.add(getReceiveSectionItems(transaction.value.coinName, transaction.value, transaction.from, rates[transaction.value.coinUid]))
+
+                miscItemsSection.addAll(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
+                addMemoItem(transaction.memo, miscItemsSection)
             }
 
             is BitcoinOutgoingTransactionRecord -> {
                 sentToSelf = transaction.sentToSelf
-                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf, transaction.memo))
-                itemSections.add(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
+                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf))
+
+                miscItemsSection.addAll(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
+                addMemoItem(transaction.memo, miscItemsSection)
             }
 
             is BinanceChainIncomingTransactionRecord -> {
-                itemSections.add(getReceiveSectionItems(transaction.value.coinName, transaction.value, transaction.from, rates[transaction.value.coinUid], transaction.memo))
+                itemSections.add(getReceiveSectionItems(transaction.value.coinName, transaction.value, transaction.from, rates[transaction.value.coinUid]))
+
+                addMemoItem(transaction.memo, miscItemsSection)
             }
 
             is BinanceChainOutgoingTransactionRecord -> {
                 sentToSelf = transaction.sentToSelf
-                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf, transaction.memo))
+                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf))
+
+                addMemoItem(transaction.memo, miscItemsSection)
             }
 
             else -> {}
         }
 
         if (sentToSelf) {
-            itemSections.add(
-                listOf(SentToSelf(getString(R.string.TransactionInfo_SentToSelfNote), R.drawable.ic_arrow_return_20))
+            miscItemsSection.add(
+                SentToSelf(getString(R.string.TransactionInfo_SentToSelfNote), R.drawable.ic_arrow_return_20)
             )
+        }
+        if (miscItemsSection.isNotEmpty()) {
+            itemSections.add(miscItemsSection)
         }
 
         itemSections.add(getStatusSectionItems(transaction, status, rates))
         itemSections.add(getExplorerSectionItems(transactionItem.explorerData))
 
         return convertToViewItems(itemSections)
+    }
+
+    private fun addMemoItem(
+        memo: String?,
+        miscItemsSection: MutableList<TransactionInfoViewItem>
+    ) {
+        if (!memo.isNullOrBlank()) {
+            miscItemsSection.add(
+                Value(getString(R.string.TransactionInfo_Memo), memo)
+            )
+        }
     }
 
     private fun convertToViewItems(viewItemGroups: List<List<TransactionInfoViewItem>>): List<TransactionInfoPositionedViewItem?> {
@@ -165,7 +189,7 @@ class TransactionInfoViewItemFactory(
         return viewItems
     }
 
-    private fun getReceiveSectionItems(coinName: String, value: TransactionValue, fromAddress: String?, coinPrice: CurrencyValue?, memo: String? = null): List<TransactionInfoViewItem> {
+    private fun getReceiveSectionItems(coinName: String, value: TransactionValue, fromAddress: String?, coinPrice: CurrencyValue?): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
             Transaction(getString(R.string.Transactions_Receive), coinName, R.drawable.ic_arrow_down_left_12),
             getAmount(coinPrice, value, true)
@@ -184,16 +208,10 @@ class TransactionInfoViewItemFactory(
             )
         }
 
-        if (!memo.isNullOrBlank()) {
-            items.add(
-                Value(getString(R.string.TransactionInfo_Memo), memo)
-            )
-        }
-
         return items
     }
 
-    private fun getSendSectionItems(coinName: String, value: TransactionValue, toAddress: String?, coinPrice: CurrencyValue?, sentToSelf: Boolean = false, memo: String? = null): List<TransactionInfoViewItem> {
+    private fun getSendSectionItems(coinName: String, value: TransactionValue, toAddress: String?, coinPrice: CurrencyValue?, sentToSelf: Boolean = false): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
             Transaction(getString(R.string.Transactions_Send), coinName, R.drawable.ic_arrow_up_right_12),
             getAmount(coinPrice, value, if (sentToSelf) null else false)
@@ -209,12 +227,6 @@ class TransactionInfoViewItemFactory(
                     getString(R.string.TransactionInfo_To),
                     toAddress
                 )
-            )
-        }
-
-        if (!memo.isNullOrBlank()) {
-            items.add(
-                Value(getString(R.string.TransactionInfo_Memo), memo)
             )
         }
 
@@ -330,7 +342,7 @@ class TransactionInfoViewItemFactory(
             )
         )
 
-    private fun getBitcoinSectionItems(transaction: BitcoinTransactionRecord, lastBlockInfo: LastBlockInfo?): MutableList<TransactionInfoViewItem> {
+    private fun getBitcoinSectionItems(transaction: BitcoinTransactionRecord, lastBlockInfo: LastBlockInfo?): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf()
 
         transaction.conflictingHash?.let { conflictingHash ->
