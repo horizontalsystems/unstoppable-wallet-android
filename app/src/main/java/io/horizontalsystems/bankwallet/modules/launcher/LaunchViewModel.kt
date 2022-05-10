@@ -24,26 +24,13 @@ class LaunchViewModel(
     val openUserAuthenticationModule = SingleLiveEvent<Void>()
     val closeApplication = SingleLiveEvent<Void>()
 
-    private val isLocked: Boolean
-        get() = pinComponent.isLocked
-
-    private val isAccountsEmpty: Boolean
-        get() = accountManager.isAccountsEmpty
-
-    private val isSystemLockOff: Boolean
-        get() = systemInfoManager.isSystemLockOff
-
-    private fun validateKeyStore(): KeyStoreValidationResult {
-        return keyStoreManager.validateKeyStore()
-    }
-
-    private val mainShowedOnce: Boolean = localStorage.mainShowedOnce
+    private val mainShowedOnce = localStorage.mainShowedOnce
 
     init {
-        if (isSystemLockOff) {
+        if (systemInfoManager.isSystemLockOff) {
             openNoSystemLockModule()
         } else {
-            when (validateKeyStore()) {
+            when (keyStoreManager.validateKeyStore()) {
                 KeyStoreValidationResult.UserNotAuthenticated -> {
                     openUserAuthenticationModule()
                 }
@@ -52,8 +39,8 @@ class LaunchViewModel(
                 }
                 KeyStoreValidationResult.KeyIsValid -> {
                     when {
-                        isAccountsEmpty && !mainShowedOnce -> openWelcomeModule()
-                        isLocked -> openUnlockModule()
+                        accountManager.isAccountsEmpty && !mainShowedOnce -> openWelcomeModule()
+                        pinComponent.isLocked -> openUnlockModule()
                         else -> openMainModule()
                     }
                 }
