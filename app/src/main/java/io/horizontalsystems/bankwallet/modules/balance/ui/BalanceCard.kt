@@ -155,7 +155,7 @@ fun BalanceCard(
                         if (viewItem.coinValue.visible) {
                             Text(
                                 text = viewItem.coinValue.text ?: "",
-                                color = if (viewItem.coinValue.dimmed) ComposeAppTheme.colors.yellow50 else ComposeAppTheme.colors.jacob,
+                                color = if (viewItem.coinValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
                                 style = ComposeAppTheme.typography.headline2,
                                 maxLines = 1,
                             )
