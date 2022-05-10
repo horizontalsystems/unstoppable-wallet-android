@@ -110,9 +110,11 @@ val CoinType.blockchainLogo: Int
 
 // ImageView
 
-fun ImageView.setRemoteImage(url: String, placeholder: Int = R.drawable.ic_placeholder) {
+fun ImageView.setRemoteImage(url: String, placeholder: Int? = R.drawable.ic_placeholder) {
     load(url) {
-        error(placeholder)
+        if (placeholder != null) {
+            error(placeholder)
+        }
     }
 }
 

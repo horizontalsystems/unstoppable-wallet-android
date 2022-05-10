@@ -28,11 +28,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/coinIconCompose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/coinIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="16dp"
+        android:src="@drawable/logo_chain_ethereum_trx_24"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="end"
-        app:constraint_referenced_ids="leftIcon,coinIconCompose" />
+        app:constraint_referenced_ids="leftIcon,coinIcon" />
 
     <TextView
         android:id="@+id/txtTitle"

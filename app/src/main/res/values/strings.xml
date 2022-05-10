@@ -573,7 +573,7 @@
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <string name="TransactionInfo_Fee">Fee</string>
     <string name="TransactionInfo_FeeEstimated">Fee (est.)</string>
-    <string name="TransactionInfo_SentToSelfNote">The transaction sent to own address</string>
+    <string name="TransactionInfo_SentToSelfNote">The transaction is sent to own address</string>
     <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="TransactionInfo_Price">Price</string>
