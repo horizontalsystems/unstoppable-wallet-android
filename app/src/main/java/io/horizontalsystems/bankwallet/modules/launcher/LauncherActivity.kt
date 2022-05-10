@@ -6,8 +6,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Observer
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
@@ -18,54 +16,51 @@ import io.horizontalsystems.pin.PinModule
 class LauncherActivity : AppCompatActivity() {
     private val viewModel by viewModels<LaunchViewModel> { LaunchModule.Factory() }
 
-    private val unlockResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        when (result.resultCode) {
-            PinModule.RESULT_OK -> viewModel.didUnlock()
-            PinModule.RESULT_CANCELLED -> viewModel.didCancelUnlock()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         installSplashScreen()
 
-        viewModel.openWelcomeModule.observe(this, Observer {
-            IntroActivity.start(this)
-            finish()
-        })
-
-        viewModel.openMainModule.observe(this, Observer {
-            MainModule.start(this, intent.data)
-            intent.data = null
-
-            if(App.localStorage.torEnabled) {
-                val intent = Intent(this, TorConnectionActivity::class.java)
-                startActivity(intent)
+        when (viewModel.getPage()) {
+            LaunchViewModel.Page.Welcome -> {
+                IntroActivity.start(this)
+                finish()
             }
-            finish()
-        })
+            LaunchViewModel.Page.Main -> {
+                openMain()
+            }
+            LaunchViewModel.Page.Unlock -> {
+                val unlockResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                    when (result.resultCode) {
+                        PinModule.RESULT_OK -> openMain()
+                        PinModule.RESULT_CANCELLED -> finishAffinity()
+                    }
+                }
 
-        viewModel.openUnlockModule.observe(this, Observer {
-            val intent = Intent(this, LockScreenActivity::class.java)
-            unlockResultLauncher.launch(intent)
-        })
+                val intent = Intent(this, LockScreenActivity::class.java)
+                unlockResultLauncher.launch(intent)
+            }
+            LaunchViewModel.Page.NoSystemLock -> {
+                KeyStoreActivity.startForNoSystemLock(this)
+            }
+            LaunchViewModel.Page.KeyInvalidated -> {
+                KeyStoreActivity.startForInvalidKey(this)
+            }
+            LaunchViewModel.Page.UserAuthentication -> {
+                KeyStoreActivity.startForUserAuthentication(this)
+            }
+        }
+    }
 
-        viewModel.openNoSystemLockModule.observe(this, Observer {
-            KeyStoreActivity.startForNoSystemLock(this)
-        })
+    private fun openMain() {
+        MainModule.start(this, intent.data)
+        intent.data = null
 
-        viewModel.openKeyInvalidatedModule.observe(this, Observer {
-            KeyStoreActivity.startForInvalidKey(this)
-        })
-
-        viewModel.openUserAuthenticationModule.observe(this, Observer {
-            KeyStoreActivity.startForUserAuthentication(this)
-        })
-
-        viewModel.closeApplication.observe(this, Observer {
-            finishAffinity()
-        })
+        if (viewModel.torEnabled) {
+            val intent = Intent(this, TorConnectionActivity::class.java)
+            startActivity(intent)
+        }
+        finish()
     }
 
 }
