@@ -2,10 +2,11 @@ package io.horizontalsystems.bankwallet.modules.launcher
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.core.security.KeyStoreValidationResult
 
-class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
-
-    lateinit var delegate: LaunchModule.IViewDelegate
+class LaunchViewModel(
+    private val interactor: LaunchInteractor,
+) : ViewModel() {
 
     val openWelcomeModule = SingleLiveEvent<Void>()
     val openMainModule = SingleLiveEvent<Void>()
@@ -16,37 +17,72 @@ class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
     val closeApplication = SingleLiveEvent<Void>()
 
     fun init() {
-        LaunchModule.init(this, this)
-        delegate.viewDidLoad()
+        viewDidLoad()
     }
 
     // IRouter
 
-    override fun openWelcomeModule() {
+    private fun openWelcomeModule() {
         openWelcomeModule.call()
     }
 
-    override fun openMainModule() {
+    private fun openMainModule() {
         openMainModule.call()
     }
 
-    override fun openUnlockModule() {
+    private fun openUnlockModule() {
         openUnlockModule.call()
     }
 
-    override fun openNoSystemLockModule() {
+    private fun openNoSystemLockModule() {
         openNoSystemLockModule.call()
     }
 
-    override fun openKeyInvalidatedModule() {
+    private fun openKeyInvalidatedModule() {
         openKeyInvalidatedModule.call()
     }
 
-    override fun openUserAuthenticationModule() {
+    private fun openUserAuthenticationModule() {
         openUserAuthenticationModule.call()
     }
 
-    override fun closeApplication() {
+    private fun closeApplication() {
         closeApplication.call()
+    }
+
+
+
+
+    private fun viewDidLoad() {
+        if (interactor.isSystemLockOff) {
+            openNoSystemLockModule()
+            return
+        }
+
+        when (interactor.validateKeyStore()) {
+            KeyStoreValidationResult.UserNotAuthenticated -> {
+                openUserAuthenticationModule()
+                return
+            }
+            KeyStoreValidationResult.KeyIsInvalid -> {
+                openKeyInvalidatedModule()
+                return
+            }
+            KeyStoreValidationResult.KeyIsValid -> { /* Do nothing */}
+        }
+
+        when {
+            interactor.isAccountsEmpty && !interactor.mainShowedOnce -> openWelcomeModule()
+            interactor.isLocked -> openUnlockModule()
+            else -> openMainModule()
+        }
+    }
+
+    fun didUnlock() {
+        openMainModule()
+    }
+
+    fun didCancelUnlock() {
+        closeApplication()
     }
 }

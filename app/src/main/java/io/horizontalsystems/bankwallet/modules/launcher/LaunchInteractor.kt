@@ -8,27 +8,25 @@ import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.security.KeyStoreValidationResult
 
 class LaunchInteractor(
-        private val accountManager: IAccountManager,
-        private val pinComponent: IPinComponent,
-        private val systemInfoManager: ISystemInfoManager,
-        private val keyStoreManager: IKeyStoreManager,
-        localStorage: ILocalStorage)
-    : LaunchModule.IInteractor {
+    private val accountManager: IAccountManager,
+    private val pinComponent: IPinComponent,
+    private val systemInfoManager: ISystemInfoManager,
+    private val keyStoreManager: IKeyStoreManager,
+    localStorage: ILocalStorage
+) {
 
-    var delegate: LaunchModule.IInteractorDelegate? = null
-
-    override val isLocked: Boolean
+    val isLocked: Boolean
         get() = pinComponent.isLocked
 
-    override val isAccountsEmpty: Boolean
+    val isAccountsEmpty: Boolean
         get() = accountManager.isAccountsEmpty
 
-    override val isSystemLockOff: Boolean
+    val isSystemLockOff: Boolean
         get() = systemInfoManager.isSystemLockOff
 
-    override fun validateKeyStore(): KeyStoreValidationResult {
+    fun validateKeyStore(): KeyStoreValidationResult {
         return keyStoreManager.validateKeyStore()
     }
 
-    override val mainShowedOnce: Boolean = localStorage.mainShowedOnce
+    val mainShowedOnce: Boolean = localStorage.mainShowedOnce
 }

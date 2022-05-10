@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.launcher
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
@@ -16,13 +16,12 @@ import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.pin.PinModule
 
 class LauncherActivity : AppCompatActivity() {
-
-    private lateinit var viewModel: LaunchViewModel
+    private val viewModel by viewModels<LaunchViewModel> { LaunchModule.Factory() }
 
     private val unlockResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         when (result.resultCode) {
-            PinModule.RESULT_OK -> viewModel.delegate.didUnlock()
-            PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlock()
+            PinModule.RESULT_OK -> viewModel.didUnlock()
+            PinModule.RESULT_CANCELLED -> viewModel.didCancelUnlock()
         }
     }
 
@@ -31,7 +30,6 @@ class LauncherActivity : AppCompatActivity() {
 
         installSplashScreen()
 
-        viewModel = ViewModelProvider(this).get(LaunchViewModel::class.java)
         viewModel.init()
 
         viewModel.openWelcomeModule.observe(this, Observer {
