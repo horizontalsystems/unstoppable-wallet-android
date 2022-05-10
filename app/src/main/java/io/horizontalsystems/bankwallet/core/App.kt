@@ -25,6 +25,8 @@ import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
+import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
+import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionStorage
@@ -74,6 +76,7 @@ class App : CoreApp(), WorkConfiguration.Provider {
         lateinit var accountManager: IAccountManager
         lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
+        lateinit var proFeatureAuthorizationManager: ProFeaturesAuthorizationManager
 
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
@@ -153,6 +156,9 @@ class App : CoreApp(), WorkConfiguration.Provider {
 
         accountCleaner = AccountCleaner(testMode)
         accountManager = AccountManager(accountsStorage, accountCleaner)
+
+        val proFeaturesStorage = ProFeaturesStorage(appDatabase)
+        proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         walletStorage = WalletStorage(marketKit, enabledWalletsStorage)

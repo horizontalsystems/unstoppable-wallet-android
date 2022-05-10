@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.coin.details
 
+import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
+import io.horizontalsystems.bankwallet.modules.profeatures.ProNft
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
@@ -10,13 +13,17 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class CoinDetailsService(
     private val fullCoin: FullCoin,
     private val marketKit: MarketKit,
-    private val currencyManager: ICurrencyManager
+    private val currencyManager: ICurrencyManager,
+    private val proFeaturesAuthorizationManager: ProFeaturesAuthorizationManager
 ) {
     private val disposables = CompositeDisposable()
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     private val stateSubject = BehaviorSubject.create<DataState<Item>>()
     val stateObservable: Observable<DataState<Item>>
@@ -63,7 +70,13 @@ class CoinDetailsService(
                     }
             }
 
-        val proFeaturesSingle = Single.just(ProCharts.forbidden)
+        val sessionKey = proFeaturesAuthorizationManager.getSessionKey(ProNft.YAK)
+
+        val proFeaturesSingle = if (sessionKey == null)
+            Single.just(ProCharts.forbidden)
+        else
+            // TODO: marketKit.getProCharts(sessionKey.key)
+            Single.just(ProCharts(true, ProData.Empty, ProData.Empty, ProData.Empty, ProData.Empty, ProData.Empty))
 
         return Single.zip(
             tvlsSingle.onErrorReturn { listOf() },
@@ -90,6 +103,10 @@ class CoinDetailsService(
 
     fun start() {
         fetch()
+
+        proFeaturesAuthorizationManager.sessionKeyFlow.collectWith(scope) { sessionKey ->
+            if (sessionKey?.nftName == ProNft.YAK.keyName) fetch()
+        }
     }
 
     fun refresh() {
@@ -114,6 +131,7 @@ class CoinDetailsService(
     }
 
     data class ProCharts(
+        val activated: Boolean,
         val dexVolumes: ProData,
         val dexLiquidity: ProData,
         val txCount: ProData,
@@ -121,7 +139,7 @@ class CoinDetailsService(
         val activeAddresses: ProData
     ) {
         companion object {
-            val forbidden = ProCharts(ProData.Forbidden, ProData.Forbidden, ProData.Forbidden, ProData.Forbidden, ProData.Forbidden)
+            val forbidden = ProCharts(false, ProData.Forbidden, ProData.Forbidden, ProData.Forbidden, ProData.Forbidden, ProData.Forbidden)
         }
     }
 

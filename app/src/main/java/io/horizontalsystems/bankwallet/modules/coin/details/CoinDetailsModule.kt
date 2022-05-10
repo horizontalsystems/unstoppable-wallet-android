@@ -20,7 +20,7 @@ object CoinDetailsModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = CoinDetailsService(fullCoin, App.marketKit, App.currencyManager)
+            val service = CoinDetailsService(fullCoin, App.marketKit, App.currencyManager, App.proFeatureAuthorizationManager)
 
             return CoinDetailsViewModel(
                 service,
@@ -32,6 +32,7 @@ object CoinDetailsModule {
 
     @Immutable
     data class ViewItem(
+        val proChartsActivated: Boolean,
         val tokenLiquidityViewItem: TokenLiquidityViewItem?,
         val tokenDistributionViewItem: TokenDistributionViewItem?,
         val volumeChart: ChartViewItem?,
