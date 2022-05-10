@@ -109,6 +109,11 @@
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
     <!--Market Overview-->
     <string name="Market_Overview_TopSectors">Top Sectors</string>
+    <!--Market Top Platforms-->
+    <string name="MarketTopPlatforms_Title">Top Platforms</string>
+    <string name="MarketTopPlatforms_PlatofrmsRank">Platforms Rank</string>
+    <string name="MarketTopPlatforms_Description">Top ecosystem platforms by market cap</string>
+    <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Загальна капіталізація</string>
