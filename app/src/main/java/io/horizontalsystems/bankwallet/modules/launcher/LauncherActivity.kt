@@ -30,8 +30,6 @@ class LauncherActivity : AppCompatActivity() {
 
         installSplashScreen()
 
-        viewModel.init()
-
         viewModel.openWelcomeModule.observe(this, Observer {
             IntroActivity.start(this)
             finish()
