@@ -285,4 +285,10 @@
     <dialog
         android:id="@+id/feeSettingsInfoDialog"
         android:name="io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog" />
+    <dialog
+        android:id="@+id/proUsersInfoDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.ProUsersInfoDialog" />
+    <dialog
+        android:id="@+id/proUsersActivateDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.ProUsersActivateDialog" />
 </navigation>

@@ -42,6 +42,10 @@ import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartTvlFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartVolumeFragment
+import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.ProFeaturesBanner
+import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationModule
+import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationService
+import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
@@ -49,16 +53,64 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawre
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MiniChartCard
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.snackbar.CustomSnackbar
+import io.horizontalsystems.snackbar.SnackbarDuration
 
 class CoinDetailsFragment : BaseFragment() {
     private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
     private val viewModel by viewModels<CoinDetailsViewModel> { CoinDetailsModule.Factory(coinViewModel.fullCoin) }
+    private val authorizationViewModel by navGraphViewModels<YakAuthorizationViewModel>(R.id.coinFragment) { YakAuthorizationModule.Factory() }
+
+    private var snackbarInProcess: CustomSnackbar? = null
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        snackbarInProcess?.dismiss()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        authorizationViewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                YakAuthorizationService.State.Idle ->
+                    snackbarInProcess?.dismiss()
+
+                YakAuthorizationService.State.Loading ->
+                    snackbarInProcess = HudHelper.showInProcessMessage(
+                        requireView(),
+                        R.string.ProUsersInfo_Features_Authenticating,
+                        SnackbarDuration.INDEFINITE
+                    )
+
+                YakAuthorizationService.State.NoYakNft -> {
+                    snackbarInProcess?.dismiss()
+                    findNavController().slideFromBottom(
+                        R.id.proUsersInfoDialog
+                    )
+                }
+
+                YakAuthorizationService.State.SessionKeyReceived ->
+                    snackbarInProcess?.dismiss()
+
+                is YakAuthorizationService.State.MessageReceived -> {
+                    snackbarInProcess?.dismiss()
+                    findNavController().slideFromBottom(
+                        R.id.proUsersActivateDialog
+                    )
+                }
+
+                is YakAuthorizationService.State.Failed ->
+                    snackbarInProcess = HudHelper.showErrorMessage(
+                        requireView(),
+                        state.exception.toString()
+                    )
+            }
+        }
+
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
@@ -142,6 +194,16 @@ class CoinDetailsFragment : BaseFragment() {
                         val detailBlocks: MutableList<@Composable (borderTop: Boolean) -> Unit> = mutableListOf()
 
                         viewItem?.let { viewItem ->
+                            if (!viewItem.proChartsActivated) {
+                                detailBlocks.add { borderTop ->
+                                    ProFeaturesBanner(
+                                        stringResource(R.string.CoinPage_NftBannerTitle),
+                                        stringResource(R.string.CoinPage_NftBannerDescription),
+                                        borderTop
+                                    ) { authorizationViewModel.onBannerClick() }
+                                }
+                            }
+
                             viewItem.tokenLiquidityViewItem?.let {
                                 detailBlocks.add { borderTop -> TokenLiquidity(it, borderTop) }
                             }
@@ -343,7 +405,7 @@ class CoinDetailsFragment : BaseFragment() {
                     modifier = Modifier
                         .fillMaxWidth(if (viewItem.liquidity != null) 0.5F else 1F)
                         .clickable {
-//                            onClick.invoke()
+                            authorizationViewModel.onBannerClick()
                         }
                 ) {
                     MiniChartCard(
@@ -359,7 +421,7 @@ class CoinDetailsFragment : BaseFragment() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-//                            onClick.invoke()
+                            authorizationViewModel.onBannerClick()
                         }
                 ) {
                     MiniChartCard(
@@ -404,7 +466,7 @@ class CoinDetailsFragment : BaseFragment() {
                         modifier = Modifier
                             .fillMaxWidth(if (viewItem.txVolume != null) 0.5F else 1F)
                             .clickable {
-    //                            onClick.invoke()
+                                authorizationViewModel.onBannerClick()
                             }
                     ) {
                         MiniChartCard(
@@ -420,7 +482,7 @@ class CoinDetailsFragment : BaseFragment() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-    //                            onClick.invoke()
+                                authorizationViewModel.onBannerClick()
                             }
                     ) {
                         MiniChartCard(
@@ -440,7 +502,7 @@ class CoinDetailsFragment : BaseFragment() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-//                            onClick.invoke()
+                        authorizationViewModel.onBannerClick()
                     }
             ) {
                 MiniChartCard(

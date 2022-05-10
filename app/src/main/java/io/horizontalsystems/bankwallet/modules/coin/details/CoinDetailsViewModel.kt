@@ -101,6 +101,7 @@ class CoinDetailsViewModel(
 
     private fun viewItem(item: CoinDetailsService.Item): ViewItem {
         return ViewItem(
+            item.proCharts.activated,
             getTokenLiquidityViewItem(item.proCharts),
             getTokenDistributionViewItem(item.proCharts, service.hasMajorHolders),
             volumeChart = chart(values = item.totalVolumes, badge = service.coin.marketCapRank?.let { "#$it" }),
@@ -123,19 +124,24 @@ class CoinDetailsViewModel(
         )
     }
 
-    private fun getTokenLiquidityViewItem(proCharts: CoinDetailsService.ProCharts): CoinDetailsModule.TokenLiquidityViewItem =
-        CoinDetailsModule.TokenLiquidityViewItem(
-            chart(proCharts.dexVolumes),
-            chart(proCharts.dexLiquidity)
-        )
+    private fun getTokenLiquidityViewItem(proCharts: CoinDetailsService.ProCharts): CoinDetailsModule.TokenLiquidityViewItem? {
+        val volume = chart(proCharts.dexVolumes)
+        val liquidity = chart(proCharts.dexLiquidity)
 
-    private fun getTokenDistributionViewItem(proCharts: CoinDetailsService.ProCharts, hasMajorHolders: Boolean): CoinDetailsModule.TokenDistributionViewItem =
-        CoinDetailsModule.TokenDistributionViewItem(
-            chart(proCharts.txCount),
-            chart(proCharts.txVolume),
-            chart(proCharts.activeAddresses),
-            hasMajorHolders
-        )
+        if (volume == null && liquidity == null) return null
+
+        return CoinDetailsModule.TokenLiquidityViewItem(volume, liquidity)
+    }
+
+    private fun getTokenDistributionViewItem(proCharts: CoinDetailsService.ProCharts, hasMajorHolders: Boolean): CoinDetailsModule.TokenDistributionViewItem? {
+        val txCount = chart(proCharts.txCount)
+        val txVolume = chart(proCharts.txVolume)
+        val activeAddresses = chart(proCharts.activeAddresses)
+
+        if (txCount == null && txVolume == null && activeAddresses == null && !hasMajorHolders) return null
+
+        return CoinDetailsModule.TokenDistributionViewItem(txCount, txVolume, activeAddresses, hasMajorHolders)
+    }
 
     private fun chart(values: List<ChartPoint>?, badge: String? = null): CoinDetailsModule.ChartViewItem? {
         if (values.isNullOrEmpty()) return null
