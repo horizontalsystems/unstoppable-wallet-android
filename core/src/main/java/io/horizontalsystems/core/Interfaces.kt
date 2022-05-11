@@ -2,7 +2,6 @@ package io.horizontalsystems.core
 
 import android.app.Activity
 import android.content.SharedPreferences
-import androidx.biometric.BiometricPrompt
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.security.KeyStoreValidationResult
 import io.reactivex.Flowable
@@ -28,7 +27,6 @@ interface ICoreApp {
 interface IEncryptionManager {
     fun encrypt(data: String): String
     fun decrypt(data: String): String
-    fun getCryptoObject(): BiometricPrompt.CryptoObject?
 }
 
 interface ISystemInfoManager {
