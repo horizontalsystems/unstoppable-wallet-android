@@ -31,11 +31,14 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.runBlocking
 import java.lang.Integer.max
 import java.math.BigDecimal
-import java.util.*
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ZcashAdapter(
         context: Context,
         private val wallet: Wallet,
@@ -51,7 +54,6 @@ class ZcashAdapter(
     private val lightWalletDPort = 9067
 
     private val synchronizer: Synchronizer
-    private val seed: ByteArray
     private val transactionsProvider: ZcashTransactionsProvider
 
     private val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -60,18 +62,15 @@ class ZcashAdapter(
 
     private var scanProgress: Int = 0
     private var downloadProgress: Int = 0
-    private val today: Date = Date()
 
-    //region IReceiveAdapter
-    override val receiveAddress: String
-    //endregion
+    private val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
+    private val seed = accountType.seed
+
+    override val receiveAddress: String = runBlocking {
+        DerivationTool.deriveShieldedAddress(seed, network)
+    }
 
     init {
-        val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
-        seed = accountType.seed
-        receiveAddress = DerivationTool.deriveShieldedAddress(seed, network)
-
-        val isRestored = wallet.account.origin == AccountOrigin.Restored
         val birthdayHeight = when (wallet.account.origin) {
             AccountOrigin.Created -> null
             AccountOrigin.Restored -> restoreSettings.birthdayHeight?.let {
@@ -79,15 +78,24 @@ class ZcashAdapter(
             }
         }
 
-        val config = Initializer.Config { config ->
-            config.setNetwork(network, lightWalletDHost, lightWalletDPort)
-            config.setBirthdayHeight(birthdayHeight, isRestored)
-            config.alias = getValidAliasFromAccountId(wallet.account.id)
-            config.setSeed(seed, network)
+        val initializer = runBlocking {
+            val viewingKey = DerivationTool.deriveUnifiedViewingKeys(seed, network).first()
+
+            Initializer.new(context, Initializer.Config {
+                it.importWallet(
+                    viewingKey = viewingKey,
+                    birthdayHeight = birthdayHeight,
+                    network = network,
+                    host = lightWalletDHost,
+                    port = lightWalletDPort,
+                    alias = getValidAliasFromAccountId(wallet.account.id)
+                )
+            })
         }
 
+        synchronizer = Synchronizer.newBlocking(initializer)
+
         transactionsProvider = ZcashTransactionsProvider(receiveAddress)
-        synchronizer = Synchronizer(Initializer(context, config))
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
     }
@@ -104,7 +112,7 @@ class ZcashAdapter(
             }
         }
 
-    //region IAdapter
+    @OptIn(FlowPreview::class)
     override fun start() {
         synchronizer.start()
         subscribe(synchronizer as SdkSynchronizer)
@@ -121,9 +129,7 @@ class ZcashAdapter(
 
     override val debugInfo: String
         get() = ""
-    //endregion
 
-    //region IBalanceAdapter
     override val balanceState: AdapterState
         get() = syncState
 
@@ -154,9 +160,6 @@ class ZcashAdapter(
 
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
-    //endregion
-
-    //region ITransactionsAdapter
 
     override val explorerTitle: String
         get() = "blockchair.com"
@@ -185,11 +188,11 @@ class ZcashAdapter(
         }
 
         return transactionsProvider.getTransactions(fromParams, transactionType, limit)
-                .map { transactions ->
-                    transactions.map {
-                        getTransactionRecord(it)
-                    }
+            .map { transactions ->
+                transactions.map {
+                    getTransactionRecord(it)
                 }
+            }
     }
 
     override fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
@@ -201,9 +204,6 @@ class ZcashAdapter(
     override fun getTransactionUrl(transactionHash: String): String? =
         if (testMode) null else "https://blockchair.com/zcash/transaction/$transactionHash"
 
-    //endregion
-
-    //region ISendZcashAdapter
     override val availableBalance: BigDecimal
         get() = (synchronizer.saplingBalances.value.availableZatoshi - defaultFee()).coerceAtLeast(0).convertZatoshiToZec(decimalCount)
 
@@ -219,10 +219,13 @@ class ZcashAdapter(
         }
     }
 
+    @OptIn(FlowPreview::class)
     override fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Single<Unit> =
             Single.create { emitter ->
                 try {
-                    val spendingKey = DerivationTool.deriveSpendingKeys(seed, network).first()
+                    val spendingKey = runBlocking {
+                            DerivationTool.deriveSpendingKeys(seed, network).first()
+                        }
                     logger.info("call synchronizer.sendToAddress")
                     // use a scope that automatically cancels when the synchronizer stops
                     val scope = (synchronizer as SdkSynchronizer).coroutineScope
@@ -251,9 +254,9 @@ class ZcashAdapter(
                     emitter.onError(error)
                 }
             }
-    //endregion
 
     // Subscribe to a synchronizer on its own scope and begin responding to events
+    @OptIn(FlowPreview::class)
     private fun subscribe(synchronizer: SdkSynchronizer) {
         // Note: If any of these callback functions directly touch the UI, then the scope used here
         //       should not live longer than that UI or else the context and view tree will be
@@ -375,7 +378,9 @@ class ZcashAdapter(
 
         fun clear(accountId: String, testMode: Boolean) {
             val network = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
-            Initializer.erase(App.instance, network, getValidAliasFromAccountId(accountId))
+            runBlocking {
+                Initializer.erase(App.instance, network, getValidAliasFromAccountId(accountId))
+            }
         }
     }
 }
