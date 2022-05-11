@@ -398,7 +398,7 @@ class CoinDetailsFragment : BaseFragment() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(PaddingValues(start = 10.dp, end = 10.dp))
+                .padding(start = 10.dp, end = 10.dp)
         ) {
             viewItem.volume?.let {
                 Box(
@@ -459,7 +459,7 @@ class CoinDetailsFragment : BaseFragment() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(PaddingValues(start = 10.dp, end = 10.dp))
+                    .padding(start = 10.dp, end = 10.dp)
             ) {
                 viewItem.txCount?.let {
                     Box(

@@ -19,10 +19,12 @@ import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.withContext
 import java.math.BigInteger
 import java.util.*
 
@@ -91,11 +93,11 @@ class ProFeaturesAuthorizationManager(
         _sessionKeyFlow.update { sessionKey }
     }
 
-    suspend fun getNFTHolderAccountData(nftType: ProNft): AccountData? {
+    suspend fun getNFTHolderAccountData(nftType: ProNft): AccountData? = withContext(Dispatchers.IO) {
         val accounts = getAllAccountData
         val provider = Eip1155Provider.instance(RpcSource.ethereumInfuraHttp(appConfigProvider.infuraProjectId, appConfigProvider.infuraProjectSecret))
 
-        return first1155TokenHolder(provider, nftType.tokenId, accounts).await().orNull
+        return@withContext first1155TokenHolder(provider, nftType.tokenId, accounts).await().orNull
     }
 
     fun signMessage(accountData: AccountData, message: String): ByteArray {
