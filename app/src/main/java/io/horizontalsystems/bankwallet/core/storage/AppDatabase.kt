@@ -21,7 +21,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnec
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 42, exportSchema = false, entities = [
+@Database(version = 43, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -106,6 +106,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_39_40,
                             Migration_40_41,
                             Migration_41_42,
+                            Migration_42_43,
                     )
                     .build()
         }
