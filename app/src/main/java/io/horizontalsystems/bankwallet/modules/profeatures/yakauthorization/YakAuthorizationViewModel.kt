@@ -18,11 +18,15 @@ class YakAuthorizationViewModel(val service: YakAuthorizationService) : ViewMode
     }
 
     fun onBannerClick() {
-        service.authenticate()
+        viewModelScope.launch {
+            service.authenticate()
+        }
     }
 
     fun onActivateClick() {
-        service.signConfirmed()
+        viewModelScope.launch {
+            service.signConfirmed()
+        }
     }
 
     fun reset() {
