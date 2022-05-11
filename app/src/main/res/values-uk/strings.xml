@@ -951,4 +951,25 @@
     <string name="BalanceSyncError_ReportButtonExplanation">The error text will be copied to your clipboard should you decide to report it.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">Follow Us</string>
+    <string name="CoinPage_Chart_Locked">Locked</string>
+    <string name="CoinPage_DetailsDexVolume">Dex Volume</string>
+    <string name="CoinPage_DetailsDexLiquidity">Dex Liquidity</string>
+    <string name="CoinPage_DetailsTxCount">Tx Count</string>
+    <string name="CoinPage_DetailsTxVolume">Tx Volume</string>
+    <string name="CoinPage_DetailsActiveAddresses">Active Addresses</string>
+    <string name="CoinPage_NftBannerTitle">Unstoppable Wallet Passes</string>
+    <string name="CoinPage_NftBannerDescription">Get advanced features by holding our NFTs</string>
+    <string name="ProUsersInfo_Title">Pro Users</string>
+    <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
+    <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
+    <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
+    <string name="ProUsersInfo_Features_DesLiquidity">DEX Liquidity and Rank</string>
+    <string name="ProUsersInfo_Features_ActiveAddresses">Active Addresses</string>
+    <string name="ProUsersInfo_Features_TxCount">Transaction Count</string>
+    <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
+    <string name="ProUsersInfo_Features_Authenticating">Authenticating...</string>
+    <string name="Hud_Text_LearnMore">Coming So Soon</string>
+    <string name="Hud_Text_Activate">Activate</string>
+    <string name="ProUsersActivate_Title">Activate the Pass</string>
+    <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, useful charts based on on-chain data that will help give you a clear view of projects</string>
 </resources>
