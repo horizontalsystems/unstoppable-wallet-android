@@ -428,41 +428,39 @@ class HsNftApiProvider : INftApiProvider {
         val events = response.events.mapNotNull { event ->
             val assetResponse = event.asset
 
-            val eventType = EventType.fromString(type ?: event.type)
-            eventType?.let {
-                try {
-                    val amount = event.markets_data.payment_token?.let {
-                        NftAssetPrice(
-                            getCoinTypeId(it.address),
-                            BigDecimal(event.amount).movePointLeft(it.decimals)
-                        )
-                    }
-
-                    NftCollectionEvent(
-                        eventType = eventType,
-                        asset = NftAssetRecord(
-                            accountId = "",
-                            collectionUid = assetResponse.collection_uid,
-                            tokenId = assetResponse.token_id,
-                            name = assetResponse.name,
-                            imageUrl = assetResponse.image_data?.image_url,
-                            imagePreviewUrl = assetResponse.image_data?.image_preview_url,
-                            description = assetResponse.description,
-                            onSale = assetResponse.markets_data.sell_orders?.isNotEmpty() ?: false,
-                            lastSale = null,
-                            contract = NftAssetContract(
-                                assetResponse.contract.address,
-                                assetResponse.contract.type
-                            ),
-                            links = assetResponse.links,
-                            attributes = listOf()
-                        ),
-                        date = stringToDate(event.date),
-                        amount = amount
+            val eventType = EventType.fromString(type) ?: EventType.Unknown
+            try {
+                val amount = event.markets_data.payment_token?.let {
+                    NftAssetPrice(
+                        getCoinTypeId(it.address),
+                        BigDecimal(event.amount).movePointLeft(it.decimals)
                     )
-                } catch (e: Exception) {
-                    null
                 }
+
+                NftCollectionEvent(
+                    eventType = eventType,
+                    asset = NftAssetRecord(
+                        accountId = "",
+                        collectionUid = assetResponse.collection_uid,
+                        tokenId = assetResponse.token_id,
+                        name = assetResponse.name,
+                        imageUrl = assetResponse.image_data?.image_url,
+                        imagePreviewUrl = assetResponse.image_data?.image_preview_url,
+                        description = assetResponse.description,
+                        onSale = assetResponse.markets_data.sell_orders?.isNotEmpty() ?: false,
+                        lastSale = null,
+                        contract = NftAssetContract(
+                            assetResponse.contract.address,
+                            assetResponse.contract.type
+                        ),
+                        links = assetResponse.links,
+                        attributes = listOf()
+                    ),
+                    date = stringToDate(event.date),
+                    amount = amount
+                )
+            } catch (e: Exception) {
+                null
             }
         }
 

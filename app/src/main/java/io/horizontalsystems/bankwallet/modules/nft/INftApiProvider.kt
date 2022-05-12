@@ -135,15 +135,18 @@ enum class EventType(
     @StringRes val titleResId: Int
 ) : WithTranslatableTitle {
     All("all", R.string.NftCollection_EventType_All),
-    AuctionCreated("created", R.string.NftCollection_EventType_AuctionCreated),
+    List("list", R.string.NftCollection_EventType_List),
     Sale("sale", R.string.NftCollection_EventType_Sale),
-    Cancelled("cancelled", R.string.NftCollection_EventType_Cancelled),
-    BidEntered("bid_entered", R.string.NftCollection_EventType_BidEntered),
-    BidWithdrawn("bid_withdrawn", R.string.NftCollection_EventType_BidWithdrawn),
+    OfferEntered("offer", R.string.NftCollection_EventType_OfferEntered),
+    BidEntered("bid", R.string.NftCollection_EventType_BidEntered),
+    BidWithdrawn("bid_cancel", R.string.NftCollection_EventType_BidWithdrawn),
     Transfer("transfer", R.string.NftCollection_EventType_Transfer),
-    OfferEntered("offer_entered", R.string.NftCollection_EventType_OfferEntered),
     Approve("approve", R.string.NftCollection_EventType_Approve),
-    Bid("bid", R.string.NotAvailable);
+    Custom("custom", R.string.NftCollection_EventType_Custom),
+    Payout("payout", R.string.NftCollection_EventType_Payout),
+    Cancel("cancel", R.string.NftCollection_EventType_Cancelled),
+    BulkCancel("bulk_cancel", R.string.NftCollection_EventType_Payout),
+    Unknown("unknown", R.string.NftCollection_EventType_Unknown);
 
     override val title: TranslatableString
         get() = TranslatableString.ResString(titleResId)

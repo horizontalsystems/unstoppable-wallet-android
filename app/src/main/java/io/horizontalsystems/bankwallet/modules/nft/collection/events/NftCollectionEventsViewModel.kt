@@ -40,8 +40,9 @@ class NftCollectionEventsViewModel(
             listOf(
                 EventType.All,
                 EventType.Sale,
-                EventType.BidEntered,
+                EventType.List,
                 EventType.OfferEntered,
+                EventType.BidEntered,
                 EventType.Transfer
             )
         )

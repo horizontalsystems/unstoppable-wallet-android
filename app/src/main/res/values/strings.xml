@@ -1121,14 +1121,18 @@
     <!-- NFT Collection Events -->
     <string name="NftCollection_EventType_SelectorTitle">Select Event Type</string>
     <string name="NftCollection_EventType_All">All</string>
-    <string name="NftCollection_EventType_AuctionCreated">Auction Created</string>
+    <string name="NftCollection_EventType_List">List</string>
     <string name="NftCollection_EventType_Sale">Sale</string>
-    <string name="NftCollection_EventType_Cancelled">Cancelled</string>
+    <string name="NftCollection_EventType_Cancelled">Cancel</string>
     <string name="NftCollection_EventType_BidEntered">Bid Entered</string>
     <string name="NftCollection_EventType_BidWithdrawn">Bid Withdrawn</string>
     <string name="NftCollection_EventType_Transfer">Transfer</string>
     <string name="NftCollection_EventType_OfferEntered">Offer Entered</string>
-    <string name="NftCollection_EventType_Approve">Offer Entered</string>
+    <string name="NftCollection_EventType_Approve">Approve</string>
+    <string name="NftCollection_EventType_Custom">Custom</string>
+    <string name="NftCollection_EventType_Payout">Payout</string>
+    <string name="NftCollection_EventType_BulkCancel">Bulk Cancel</string>
+    <string name="NftCollection_EventType_Unknown">Unknown</string>
 
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
