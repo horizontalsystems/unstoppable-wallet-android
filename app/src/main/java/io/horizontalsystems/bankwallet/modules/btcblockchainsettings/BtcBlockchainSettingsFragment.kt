@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.info.InfoBlock
 import io.horizontalsystems.bankwallet.modules.info.InfoFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -128,8 +129,10 @@ private fun RestoreSourceSettings(
     navController: NavController
 ) {
     val infoParams = InfoFragment.prepareParams(
-        stringResource(R.string.BtcBlockchainSettings_RestoreSource),
-        stringResource(R.string.BtcBlockchainSettings_RestoreSourceDescription)
+        listOf(
+            InfoBlock.SubHeader(R.string.BtcBlockchainSettings_RestoreSource),
+            InfoBlock.Body(R.string.BtcBlockchainSettings_RestoreSourceDescription)
+        )
     )
     BlockchainSettingSection(
         viewModel.restoreSources,
@@ -147,9 +150,12 @@ private fun TransactionDataSortSettings(
     navController: NavController
 ) {
     val infoParams = InfoFragment.prepareParams(
-        stringResource(R.string.BtcBlockchainSettings_TransactionInputsOutputs),
-        stringResource(R.string.BtcBlockchainSettings_TransactionInputsOutputsDescription)
+        listOf(
+            InfoBlock.SubHeader(R.string.BtcBlockchainSettings_TransactionInputsOutputs),
+            InfoBlock.Body(R.string.BtcBlockchainSettings_TransactionInputsOutputsDescription)
+        )
     )
+
     BlockchainSettingSection(
         viewModel.transactionSortModes,
         infoParams,
