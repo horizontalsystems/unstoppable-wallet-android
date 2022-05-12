@@ -44,14 +44,14 @@ object UniswapConfirmationModule {
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager) }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val sendService by lazy {
-            SendEvmTransactionService(sendEvmData, evmKitWrapper, feeService)
+            SendEvmTransactionService(sendEvmData, evmKitWrapper, feeService, App.evmLabelManager)
         }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory, App.evmLabelManager) as T
                 }
                 EvmFeeCellViewModel::class.java -> {
                     EvmFeeCellViewModel(feeService, gasPriceService, coinServiceFactory.baseCoinService) as T

@@ -24,7 +24,7 @@ object TransactionsModule {
                     App.walletManager,
                     TransactionFilterService()
                 ),
-                TransactionViewItemFactory()
+                TransactionViewItemFactory(App.evmLabelManager)
             ) as T
         }
     }

@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -19,7 +20,6 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.scaleUp
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.erc20kit.decorations.ApproveEip20Decoration
 import io.horizontalsystems.erc20kit.decorations.OutgoingEip20Decoration
@@ -39,7 +39,8 @@ import java.math.BigInteger
 class SendEvmTransactionViewModel(
     private val service: ISendEvmTransactionService,
     private val coinServiceFactory: EvmCoinServiceFactory,
-    private val cautionViewItemFactory: CautionViewItemFactory
+    private val cautionViewItemFactory: CautionViewItemFactory,
+    private val evmLabelManager: EvmLabelManager
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
@@ -245,8 +246,7 @@ class SendEvmTransactionViewModel(
         }
         if (recipient != null) {
             val addressValue = recipient.eip55
-            val addressTitle = uniswapInfo?.recipientDomain
-                ?: TransactionInfoAddressMapper.map(addressValue)
+            val addressTitle = uniswapInfo?.recipientDomain ?: evmLabelManager.mapped(addressValue)
             otherViewItems.add(
                 ViewItem.Address(
                     Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
@@ -363,7 +363,7 @@ class SendEvmTransactionViewModel(
         if (recipient != null) {
             val addressValue = recipient.eip55
             val addressTitle =
-                oneInchSwapInfo.recipient?.domain ?: TransactionInfoAddressMapper.map(addressValue)
+                oneInchSwapInfo.recipient?.domain ?: evmLabelManager.mapped(addressValue)
             viewItems.add(
                 ViewItem.Address(
                     Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
@@ -455,7 +455,7 @@ class SendEvmTransactionViewModel(
         )
         val addressValue = to.eip55
         val addressTitle =
-            sendInfo?.domain ?: TransactionInfoAddressMapper.map(addressValue)
+            sendInfo?.domain ?: evmLabelManager.mapped(addressValue)
         viewItems.add(
             ViewItem.Address(
                 Translator.getString(R.string.Send_Confirmation_To),
@@ -485,7 +485,7 @@ class SendEvmTransactionViewModel(
         val coinService = coinServiceFactory.getCoinService(contractAddress) ?: return null
 
         val addressValue = spender.eip55
-        val addressTitle = TransactionInfoAddressMapper.map(addressValue)
+        val addressTitle = evmLabelManager.mapped(addressValue)
 
         val viewItems = mutableListOf(
             ViewItem.Subhead(
@@ -522,7 +522,7 @@ class SendEvmTransactionViewModel(
             ),
             ViewItem.Address(
                 Translator.getString(R.string.Send_Confirmation_To),
-                TransactionInfoAddressMapper.map(toValue),
+                evmLabelManager.mapped(toValue),
                 toValue
             )
         )
@@ -556,7 +556,7 @@ class SendEvmTransactionViewModel(
             listOf(
                 ViewItem.Subhead(Translator.getString(R.string.Send_Confirmation_YouSend), baseCoinService.platformCoin.coin.name),
                 getAmount(baseCoinService.amountData(value), ValueType.Outgoing),
-                ViewItem.Address(Translator.getString(R.string.Send_Confirmation_To), sendInfo?.domain ?: TransactionInfoAddressMapper.map(toValue), toValue)
+                ViewItem.Address(Translator.getString(R.string.Send_Confirmation_To), sendInfo?.domain ?: evmLabelManager.mapped(toValue), toValue)
             )
         ))
     }

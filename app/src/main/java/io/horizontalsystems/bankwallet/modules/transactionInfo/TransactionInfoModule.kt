@@ -29,7 +29,7 @@ object TransactionInfoModule {
                 App.numberFormatter,
                 Translator,
                 DateHelper,
-                TransactionInfoAddressMapper
+                App.evmLabelManager
             )
             return TransactionInfoViewModel(
                 service,

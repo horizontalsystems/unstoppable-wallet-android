@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionValue
@@ -12,11 +13,12 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValueNew
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
 import java.math.BigDecimal
 import java.util.*
 
-class TransactionViewItemFactory {
+class TransactionViewItemFactory(
+    private val evmLabelManager: EvmLabelManager
+) {
 
     private val cache = mutableMapOf<String, Map<Long, TransactionViewItem>>()
 
@@ -80,7 +82,7 @@ class TransactionViewItemFactory {
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Swap),
-            subtitle = getNameOrAddressTruncated(record.exchangeAddress),
+            subtitle = evmLabelManager.mapped(record.exchangeAddress),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -105,7 +107,7 @@ class TransactionViewItemFactory {
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Swap),
-            subtitle = getNameOrAddressTruncated(record.exchangeAddress),
+            subtitle = evmLabelManager.mapped(record.exchangeAddress),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -150,7 +152,7 @@ class TransactionViewItemFactory {
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Send),
-            subtitle = Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
+            subtitle = Translator.getString(R.string.Transactions_To, evmLabelManager.mapped(record.to)),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -177,7 +179,7 @@ class TransactionViewItemFactory {
             title = Translator.getString(R.string.Transactions_Receive),
             subtitle = Translator.getString(
                 R.string.Transactions_From,
-                getNameOrAddressTruncated(record.from)
+                evmLabelManager.mapped(record.from)
             ),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
@@ -222,7 +224,7 @@ class TransactionViewItemFactory {
             uid = record.uid,
             progress = progress,
             title = title,
-            subtitle = getNameOrAddressTruncated(record.contractAddress),
+            subtitle = evmLabelManager.mapped(record.contractAddress),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -248,7 +250,7 @@ class TransactionViewItemFactory {
             title = Translator.getString(R.string.Transactions_Receive)
             val addresses = record.incomingEvents.mapNotNull { it.address }.toSet().toList()
 
-            subTitle = if (addresses.size == 1) getNameOrAddressTruncated(addresses.first()) else Translator.getString(R.string.Transactions_Multiple)
+            subTitle = if (addresses.size == 1) evmLabelManager.mapped(addresses.first()) else Translator.getString(R.string.Transactions_Multiple)
         } else {
             title = Translator.getString(R.string.Transactions_ExternalContractCall)
             subTitle = "---"
@@ -276,7 +278,7 @@ class TransactionViewItemFactory {
         val subtitle = record.to?.let {
             Translator.getString(
                 R.string.Transactions_To,
-                getNameOrAddressTruncated(it)
+                evmLabelManager.mapped(it)
             )
         } ?: "---"
 
@@ -322,7 +324,7 @@ class TransactionViewItemFactory {
         val subtitle = record.from?.let {
             Translator.getString(
                 R.string.Transactions_From,
-                getNameOrAddressTruncated(it)
+                evmLabelManager.mapped(it)
             )
         } ?: "---"
 
@@ -374,7 +376,7 @@ class TransactionViewItemFactory {
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Send),
-            subtitle = Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
+            subtitle = Translator.getString(R.string.Transactions_To, evmLabelManager.mapped(record.to)),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -401,7 +403,7 @@ class TransactionViewItemFactory {
             title = Translator.getString(R.string.Transactions_Receive),
             subtitle = Translator.getString(
                 R.string.Transactions_From,
-                getNameOrAddressTruncated(record.from)
+                evmLabelManager.mapped(record.from)
             ),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
@@ -435,7 +437,7 @@ class TransactionViewItemFactory {
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Approve),
-            subtitle = getNameOrAddressTruncated(record.spender),
+            subtitle = evmLabelManager.mapped(record.spender),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
@@ -448,7 +450,7 @@ class TransactionViewItemFactory {
         val value2 = event2.value
 
         if (value1 is TransactionValue.CoinValue && value2 is TransactionValue.CoinValue) {
-            if (value2 is TransactionValue.CoinValue && value1.platformCoin == value2.platformCoin) {
+            if (value1.platformCoin == value2.platformCoin) {
                 return EvmTransactionRecord.TransferEvent(
                     event1.address,
                     TransactionValue.CoinValue(value1.platformCoin, value1.value + value2.value)
@@ -456,10 +458,7 @@ class TransactionViewItemFactory {
             }
         }
         if (value1 is TransactionValue.TokenValue && value2 is TransactionValue.TokenValue) {
-            if (value2 is TransactionValue.TokenValue &&
-                value1.tokenName == value2.tokenName &&
-                value1.tokenCode == value2.tokenCode &&
-                value1.tokenDecimals == value2.tokenDecimals) {
+            if (value1.tokenName == value2.tokenName && value1.tokenCode == value2.tokenCode && value1.tokenDecimals == value2.tokenDecimals) {
                 return EvmTransactionRecord.TransferEvent(
                     event1.address,
                     TransactionValue.TokenValue("", value1.tokenName, value1.tokenCode, value1.tokenDecimals, value1.value + value2.value)
@@ -587,7 +586,4 @@ class TransactionViewItemFactory {
         } ?: ""
     }
 
-    private fun getNameOrAddressTruncated(address: String): String {
-        return TransactionInfoAddressMapper.title(address) ?: "${address.take(5)}...${address.takeLast(5)}"
-    }
 }

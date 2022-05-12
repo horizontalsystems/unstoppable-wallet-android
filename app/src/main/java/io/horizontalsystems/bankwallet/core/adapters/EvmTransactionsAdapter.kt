@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
@@ -23,11 +24,12 @@ class EvmTransactionsAdapter(
     baseCoin: PlatformCoin,
     coinManager: ICoinManager,
     source: TransactionSource,
-    private val evmTransactionSource: io.horizontalsystems.ethereumkit.models.TransactionSource
+    private val evmTransactionSource: io.horizontalsystems.ethereumkit.models.TransactionSource,
+    evmLabelManager: EvmLabelManager
 ) : ITransactionsAdapter {
 
     private val evmKit = evmKitWrapper.evmKit
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, baseCoin)
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, baseCoin, evmLabelManager)
 
     override val explorerTitle: String
         get() = evmTransactionSource.name

@@ -60,7 +60,7 @@ object OneInchConfirmationModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory, App.evmLabelManager) as T
                 }
                 EvmFeeCellViewModel::class.java -> {
                     EvmFeeCellViewModel(feeService, gasPriceService, coinServiceFactory.baseCoinService) as T

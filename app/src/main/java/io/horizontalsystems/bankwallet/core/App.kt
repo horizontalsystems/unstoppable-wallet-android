@@ -15,10 +15,7 @@ import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.*
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
-import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
-import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
-import io.horizontalsystems.bankwallet.core.providers.TokenBalanceProvider
+import io.horizontalsystems.bankwallet.core.providers.*
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
@@ -104,6 +101,7 @@ class App : CoreApp(), WorkConfiguration.Provider {
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
         lateinit var evmBlockchainManager: EvmBlockchainManager
         lateinit var nftManager: NftManager
+        lateinit var evmLabelManager: EvmLabelManager
     }
 
     override val testMode = BuildConfig.testMode
@@ -219,7 +217,14 @@ class App : CoreApp(), WorkConfiguration.Provider {
         val zcashBirthdayProvider = ZcashBirthdayProvider(this, testMode)
         restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
 
-        val adapterFactory = AdapterFactory(instance, testMode, btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager)
+        evmLabelManager = EvmLabelManager(
+            EvmLabelProvider(),
+            appDatabase.evmAddressLabelDao(),
+            appDatabase.evmMethodLabelDao(),
+            appDatabase.syncerStateDao()
+        )
+
+        val adapterFactory = AdapterFactory(instance, testMode, btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager, evmLabelManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
@@ -359,6 +364,8 @@ class App : CoreApp(), WorkConfiguration.Provider {
                 val request = OneTimeWorkRequestBuilder<FillWalletInfoWorker>().build()
                 WorkManager.getInstance(instance).enqueue(request)
             }
+
+            evmLabelManager.sync()
 
         }.start()
     }
