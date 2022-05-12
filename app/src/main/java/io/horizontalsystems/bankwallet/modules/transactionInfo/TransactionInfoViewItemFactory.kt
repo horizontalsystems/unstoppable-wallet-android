@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
@@ -32,7 +33,7 @@ class TransactionInfoViewItemFactory(
     private val numberFormatter: IAppNumberFormatter,
     private val translator: Translator,
     private val dateHelper: DateHelper,
-    private val transactionInfoAddressMapper: TransactionInfoAddressMapper
+    private val evmLabelManager: EvmLabelManager
 ) {
 
     fun getViewItemSections(transactionItem: TransactionInfoItem): List<TransactionInfoPositionedViewItem?> {
@@ -65,7 +66,7 @@ class TransactionInfoViewItemFactory(
 
                     if (transaction.recipient != null) {
                         youGetSectionItems.add(
-                            Decorated(getString(R.string.TransactionInfo_RecipientHash), TransactionInfoAddressMapper.map(transaction.recipient))
+                            Decorated(getString(R.string.TransactionInfo_RecipientHash), transaction.recipient, evmLabelManager.mapped(transaction.recipient))
                         )
                     }
 
@@ -203,7 +204,8 @@ class TransactionInfoViewItemFactory(
             items.add(
                 Decorated(
                     getString(R.string.TransactionInfo_From),
-                    it
+                    it,
+                    evmLabelManager.mapped(it)
                 )
             )
         }
@@ -225,7 +227,8 @@ class TransactionInfoViewItemFactory(
             items.add(
                 Decorated(
                     getString(R.string.TransactionInfo_To),
-                    toAddress
+                    toAddress,
+                    evmLabelManager.mapped(toAddress)
                 )
             )
         }
@@ -250,7 +253,7 @@ class TransactionInfoViewItemFactory(
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
             Value(
                 getString(R.string.TransactionInfo_Service),
-                TransactionInfoAddressMapper.map(exchangeAddress)
+                evmLabelManager.mapped(exchangeAddress)
             )
         )
 
@@ -329,7 +332,7 @@ class TransactionInfoViewItemFactory(
         return listOf(
             Transaction(getString(R.string.Transactions_Approve), value.coinName, R.drawable.ic_checkmark_24),
             Amount(value.coinIconUrl, value.coinIconPlaceholder, coinAmountColoredValue, fiatAmountColoredValue),
-            Decorated(getString(R.string.TransactionInfo_Spender), spenderAddress)
+            Decorated(getString(R.string.TransactionInfo_Spender), spenderAddress, evmLabelManager.mapped(spenderAddress))
         )
     }
 
@@ -337,7 +340,7 @@ class TransactionInfoViewItemFactory(
         listOf(
             Transaction(
                 transaction.method ?: getString(R.string.Transactions_ContractCall),
-                getNameOrAddress(transaction.contractAddress),
+                evmLabelManager.mapped(transaction.contractAddress),
                 TransactionViewItem.Icon.Platform(transaction.source).iconRes
             )
         )
@@ -411,6 +414,7 @@ class TransactionInfoViewItemFactory(
             Decorated(
                 getString(R.string.TransactionInfo_Id),
                 transaction.transactionHash,
+                transaction.transactionHash,
                 ShareButton(transaction.transactionHash)
             )
         )
@@ -459,11 +463,6 @@ class TransactionInfoViewItemFactory(
             )
             LockState(title, leftIcon, it.date, it.locked)
         }
-    }
-
-    private fun getNameOrAddress(address: String): String {
-        return transactionInfoAddressMapper.title(address)
-            ?: "${address.take(5)}...${address.takeLast(5)}"
     }
 
     private fun getAmountColor(incoming: Boolean?): Int {

@@ -24,6 +24,7 @@ class AdapterFactory(
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
+    private val evmLabelManager: EvmLabelManager,
 ) {
 
     private fun getEvmAdapter(wallet: Wallet): IAdapter? {
@@ -38,7 +39,7 @@ class AdapterFactory(
         val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchain).getEvmKitWrapper(wallet.account, blockchain)
         val baseCoin = evmBlockchainManager.getBasePlatformCoin(blockchain) ?: return null
 
-        return Eip20Adapter(context, evmKitWrapper, address, baseCoin, coinManager, wallet)
+        return Eip20Adapter(context, evmKitWrapper, address, baseCoin, coinManager, wallet, evmLabelManager)
     }
 
     fun getAdapter(wallet: Wallet): IAdapter? {
@@ -92,7 +93,7 @@ class AdapterFactory(
         val baseCoin = evmBlockchainManager.getBasePlatformCoin(blockchain) ?: return null
         val syncSource = evmSyncSourceManager.getSyncSource(blockchain)
 
-        return EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source, syncSource.transactionSource)
+        return EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source, syncSource.transactionSource, evmLabelManager)
     }
 
     fun unlinkAdapter(wallet: Wallet) {

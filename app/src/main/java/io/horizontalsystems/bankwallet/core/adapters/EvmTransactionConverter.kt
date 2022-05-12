@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -31,10 +32,9 @@ class EvmTransactionConverter(
     private val coinManager: ICoinManager,
     private val evmKitWrapper: EvmKitWrapper,
     private val source: TransactionSource,
-    private val baseCoin: PlatformCoin
+    private val baseCoin: PlatformCoin,
+    private val evmLabelManager: EvmLabelManager
 ) {
-
-    private val contractMethodParser = EvmContractMethodParser()
     private val evmKit: EthereumKit
         get() = evmKitWrapper.evmKit
 
@@ -116,7 +116,7 @@ class EvmTransactionConverter(
                     ContractCallTransactionRecord(
                         transaction, baseCoin, source,
                         contractAddress.eip55,
-                        transaction.input?.let { contractMethodParser.parse(it) },
+                        transaction.input?.let { evmLabelManager.methodLabel(it) },
                         getInternalEvents(internalTransactions) + getIncomingEvents(incomingTransfers),
                         getTransactionValueEvents(transaction) + getOutgoingEvents(outgoingTransfers)
                     )

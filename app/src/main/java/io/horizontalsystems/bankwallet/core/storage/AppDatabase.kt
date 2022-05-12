@@ -21,7 +21,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnec
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 43, exportSchema = false, entities = [
+@Database(version = 44, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -37,6 +37,9 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionD
     NftCollectionRecord::class,
     NftAssetRecord::class,
     ProFeaturesSessionKey::class,
+    EvmAddressLabel::class,
+    EvmMethodLabel::class,
+    SyncerState::class
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -55,6 +58,9 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun evmAccountStateDao(): EvmAccountStateDao
     abstract fun nftCollectionDao(): NftDao
     abstract fun proFeaturesDao(): ProFeaturesDao
+    abstract fun evmAddressLabelDao(): EvmAddressLabelDao
+    abstract fun evmMethodLabelDao(): EvmMethodLabelDao
+    abstract fun syncerStateDao(): SyncerStateDao
 
     companion object {
 
@@ -107,6 +113,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_40_41,
                             Migration_41_42,
                             Migration_42_43,
+                            Migration_43_44,
                     )
                     .build()
         }

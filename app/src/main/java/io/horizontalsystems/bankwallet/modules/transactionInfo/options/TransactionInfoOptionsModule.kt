@@ -100,7 +100,8 @@ object TransactionInfoOptionsModule {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
                 evmKitWrapper,
-                transactionService
+                transactionService,
+                App.evmLabelManager
             )
         }
 
@@ -108,7 +109,7 @@ object TransactionInfoOptionsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory, App.evmLabelManager) as T
                 }
                 EvmFeeCellViewModel::class.java -> {
                     EvmFeeCellViewModel(transactionService, gasPriceService, coinServiceFactory.baseCoinService) as T

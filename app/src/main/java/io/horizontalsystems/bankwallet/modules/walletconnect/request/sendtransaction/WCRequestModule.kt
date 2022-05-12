@@ -59,7 +59,8 @@ object WCRequestModule {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
                 evmKitWrapper,
-                feeService
+                feeService,
+                App.evmLabelManager
             )
         }
 
@@ -80,7 +81,8 @@ object WCRequestModule {
                     SendEvmTransactionViewModel(
                         sendService,
                         coinServiceFactory,
-                        cautionViewItemFactory
+                        cautionViewItemFactory,
+                        App.evmLabelManager
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
@@ -119,7 +121,8 @@ object WCRequestModule {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
                 service.evmKitWrapper,
-                feeService
+                feeService,
+                App.evmLabelManager
             )
         }
 
@@ -140,7 +143,8 @@ object WCRequestModule {
                     SendEvmTransactionViewModel(
                         sendService,
                         coinServiceFactory,
-                        cautionViewItemFactory
+                        cautionViewItemFactory,
+                        App.evmLabelManager
                     ) as T
                 }
                 else -> throw IllegalArgumentException()

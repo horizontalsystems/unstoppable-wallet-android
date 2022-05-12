@@ -235,7 +235,7 @@ class TransactionInfoAdapter(
                             val endPadding = if (item.viewItem.actionButton != null) 8.dp else 0.dp
                             ButtonSecondaryDefault(
                                 modifier = Modifier.padding(end = endPadding),
-                                title = item.viewItem.value,
+                                title = item.viewItem.valueTitle,
                                 onClick = {
                                     listener.onAddressClick(item.viewItem.value)
                                 },

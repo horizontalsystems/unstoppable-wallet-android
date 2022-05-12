@@ -19,6 +19,7 @@ sealed class TransactionInfoViewItem {
     class Decorated(
         val title: String,
         val value: String,
+        val valueTitle: String,
         val actionButton: TransactionInfoActionButton? = null
     ) :
         TransactionInfoViewItem()

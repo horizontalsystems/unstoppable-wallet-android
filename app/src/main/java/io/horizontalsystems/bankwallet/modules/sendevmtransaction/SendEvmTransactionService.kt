@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.Warning
-import io.horizontalsystems.bankwallet.core.adapters.EvmContractMethodParser
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmFeeService
@@ -37,11 +37,11 @@ interface ISendEvmTransactionService {
 class SendEvmTransactionService(
     private val sendEvmData: SendEvmData,
     private val evmKitWrapper: EvmKitWrapper,
-    private val feeService: IEvmFeeService
+    private val feeService: IEvmFeeService,
+    private val evmLabelManager: EvmLabelManager
 ) : Clearable, ISendEvmTransactionService {
     private val disposable = CompositeDisposable()
 
-    private val contractMethodParser = EvmContractMethodParser()
     private val evmKit = evmKitWrapper.evmKit
     private val stateSubject = PublishSubject.create<State>()
 
@@ -124,7 +124,7 @@ class SendEvmTransactionService(
     }
 
     override fun methodName(input: ByteArray): String? =
-        contractMethodParser.parse(input)
+        evmLabelManager.methodLabel(input)
 
     override fun clear() {
         disposable.clear()
