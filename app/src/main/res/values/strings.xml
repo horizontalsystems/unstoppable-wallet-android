@@ -194,7 +194,7 @@
     <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
     <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
     <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
-    <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
 
     <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
     <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
@@ -208,13 +208,13 @@
     <string name="Market_Filter_Range_200M_1B">200M - 1B</string>
     <string name="Market_Filter_Range_1B_10B">1B - 10B</string>
     <string name="Market_Filter_Range_10B_50B">10B - 50B</string>
-    <string name="Market_Filter_Range_50B_More">&gt; 50BN</string>
+    <string name="Market_Filter_Range_50B_More">&gt; 50B</string>
 
     <string name="Market_Filter_Range_0_500M">&lt; 500M</string>
     <string name="Market_Filter_Range_500M_2B">500M - 2B</string>
     <string name="Market_Filter_Range_10B_100B">10B - 100B</string>
     <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
-    <string name="Market_Filter_Range_500B_More">&gt; 500BN</string>
+    <string name="Market_Filter_Range_500B_More">&gt; 500B</string>
 
     <string name="Market_Filter_TimePeriod_1D">1 Day</string>
     <string name="Market_Filter_TimePeriod_1W">1 Week</string>
@@ -501,7 +501,7 @@
     <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on the %s blockchain. \n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="SwapInfo_DexRelated">%s Related</string>
     <string name="SwapInfo_AllowanceTitle">Allowance</string>
-    <string name="SwapInfo_AllowanceDescription">Token swaps on Unstoppable are powered by decentralized token exchanges i.e. Uniswap, 1inch, PancakeSwap, Quickswap etc. These services are fully automated and facilitate token exchanges in a reliable manner without any means to cheat. \n\nAllowance refers to the amount of token an exchange service has a permission to spend on user\'s behalf. Typically, allowance amount is set using \'approval\' transaction before a trade. A sufficient allowance is required before a swap action can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">Token swaps on Unstoppable are powered by decentralized token exchanges i.e. Uniswap, 1inch, PancakeSwap, Quickswap etc. These services are fully automated and facilitate token exchanges in a reliable manner without any means to cheat. \n\nAllowance refers to the amount of token an exchange service has a permission to spend on user\'s behalf. Typically, the allowance amount is set using \'approval\' transaction before a trade. A sufficient allowance is required before a swap action can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">Price Impact</string>
     <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown spot price. The higher is the amount of tokens being swapped the higher is the deviation.</string>
     <string name="SwapInfo_SwapFeeTitle">Swap Fee</string>
@@ -512,7 +512,7 @@
     <string name="SwapInfo_MaxSpendDescription">The maximum amount a user swapping tokens is expected to spend as a result of a swap action.</string>
     <string name="SwapInfo_Other">Other</string>
     <string name="SwapInfo_TransactionFeeTitle">Transaction Fee</string>
-    <string name="SwapInfo_TransactionFeeDescription">The maximum cost of executing a transaction on the blockchain. Note that, transaction fee is the cost of executing a transaction on the blockchain itself and doesn\'t include service fees charged by decentralized token exchange protocols. \n\nDecentralized token exchange protocols typically charge a swap fee equivalent to 0.3% (or 0.6%) of the amount traded. This fee is applied within the swap order.</string>
+    <string name="SwapInfo_TransactionFeeDescription">The maximum cost of executing a transaction on the blockchain. Note that, the transaction fee is the cost of executing a transaction on the blockchain itself and doesn\'t include service fees charged by decentralized token exchange protocols. \n\nDecentralized token exchange protocols typically charge a swap fee equivalent to 0.3% (or 0.6%) of the amount traded. This fee is applied within the swap order.</string>
     <string name="SwapInfo_TransactionSpeedTitle">Transaction Speed</string>
     <string name="SwapInfo_TransactionSpeedDescription">Transactions with a higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
     <string name="SwapInfo_Site">%s Site</string>
@@ -1008,7 +1008,7 @@
     <string name="CoinPage_SecurityParams_Privacy_Medium">Transactions with this token are semi-anonymous. A 3rd party service is able to see the amounts transacted and partially link different transactions to the same entity.</string>
     <string name="CoinPage_SecurityParams_Privacy_High">Transactions with this token are anonymous by default or provide such capabilities. No entiyt is able to link different transactions to the same individual or see the amounts transacted.</string>
     <string name="CoinPage_SecurityParams_Issuance_Centralized">The amount of tokens in circulation can potentially be increased or decreased by a centralized entity at will.</string>
-    <string name="CoinPage_SecurityParams_Issuance_Decentralized">The amount of tokens in circulation controlled by an algorithm and works in a deterministic manner outside of centralized influence.</string>
+    <string name="CoinPage_SecurityParams_Issuance_Decentralized">The number of tokens in circulation controlled by an algorithm and works in a deterministic manner outside of centralized influence.</string>
     <string name="CoinPage_SecurityParams_ConfiscationResistance_Yes">The tokens can\'t be confiscated when kept in a non-custodial wallet.</string>
     <string name="CoinPage_SecurityParams_ConfiscationResistance_No">The tokens can be confiscated or tampered with by an issuing entity.</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">The token holder can\'t be censored from transacting.</string>
