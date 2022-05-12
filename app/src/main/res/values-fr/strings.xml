@@ -207,7 +207,7 @@
     <string name="TvlRank_Field_Mat">Polygon</string>
     <string name="TvlRank_Filters_PopupTitle">Filters</string>
     <!--Balance-->
-    <string name="Balance_Title">Balance</string>
+    <string name="Balance_Title">Solde</string>
     <string name="Balance_Send">Send</string>
     <string name="Balance_Receive">Receive</string>
     <string name="Balance_RatePerCoin">%1$s per %2$s</string>
