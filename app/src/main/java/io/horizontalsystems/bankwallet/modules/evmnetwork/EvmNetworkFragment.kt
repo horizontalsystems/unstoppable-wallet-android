@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -25,6 +24,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.info.InfoBlock
 import io.horizontalsystems.bankwallet.modules.info.InfoFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -73,8 +73,10 @@ private fun EvmNetworkScreen(
     }
 
     val infoParams = InfoFragment.prepareParams(
-        stringResource(R.string.EvmNetwork_SyncMode),
-        stringResource(R.string.EvmNetwork_SyncModeDescription)
+        listOf(
+            InfoBlock.SubHeader(R.string.EvmNetwork_SyncMode),
+            InfoBlock.Body(R.string.EvmNetwork_SyncModeDescription)
+        )
     )
 
     Surface(color = ComposeAppTheme.colors.tyler) {

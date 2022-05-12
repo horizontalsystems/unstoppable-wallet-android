@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentTransactionInfoBinding
+import io.horizontalsystems.bankwallet.modules.info.InfoBlock
 import io.horizontalsystems.bankwallet.modules.info.InfoFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoAdapter
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
@@ -98,16 +99,19 @@ class TransactionInfoFragment : BaseFragment() {
 
                     override fun onLockInfoClick(lockDate: Date) {
                         context?.let {
-                            val title = it.getString(R.string.Info_LockTime_Title)
                             val description = it.getString(
                                 R.string.Info_LockTime_Description,
                                 DateHelper.getFullDate(lockDate)
                             )
 
-                            findNavController().slideFromBottom(
-                                R.id.infoFragment,
-                                InfoFragment.prepareParams(title, description)
+                            val infoParams = InfoFragment.prepareParams(
+                                listOf(
+                                    InfoBlock.SubHeader(R.string.Info_LockTime_Title),
+                                    InfoBlock.BodyString(description)
+                                )
                             )
+
+                            findNavController().slideFromBottom(R.id.infoFragment, infoParams)
                         }
                     }
 
@@ -116,13 +120,14 @@ class TransactionInfoFragment : BaseFragment() {
                         conflictingHash: String
                     ) {
                         context?.let {
-                            val title = it.getString(R.string.Info_DoubleSpend_Title)
-                            val description = it.getString(R.string.Info_DoubleSpend_Description)
-
-                            findNavController().slideFromBottom(
-                                R.id.infoFragment,
-                                InfoFragment.prepareParams(title, description)
+                            val infoParams = InfoFragment.prepareParams(
+                                listOf(
+                                    InfoBlock.SubHeader(R.string.Info_DoubleSpend_Title),
+                                    InfoBlock.Body(R.string.Info_DoubleSpend_Description)
+                                )
                             )
+
+                            findNavController().slideFromBottom(R.id.infoFragment, infoParams)
                         }
                     }
 
