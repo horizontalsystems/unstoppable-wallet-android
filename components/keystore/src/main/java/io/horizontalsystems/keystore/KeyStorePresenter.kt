@@ -13,11 +13,11 @@ class KeyStorePresenter(
     override fun viewDidLoad() {
         when (mode) {
             ModeType.NoSystemLock -> {
-                interactor.resetApp()
+                interactor.resetApp("NoSystemLock")
                 view?.showNoSystemLockWarning()
             }
             ModeType.InvalidKey -> {
-                interactor.resetApp()
+                interactor.resetApp("InvalidKey")
                 view?.showInvalidKeyWarning()
             }
             ModeType.UserAuthentication -> {

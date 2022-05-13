@@ -86,7 +86,7 @@ interface IThirdKeyboard {
 interface IKeyStoreManager {
     fun validateKeyStore(): KeyStoreValidationResult
     fun removeKey()
-    fun resetApp()
+    fun resetApp(reason: String)
 }
 
 interface IKeyStoreCleaner {

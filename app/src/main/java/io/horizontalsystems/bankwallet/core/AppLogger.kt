@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.core.security.KeyStoreManager
 import java.util.*
 
-class AppLogger(private val scope: List<String> = listOf()) {
+class AppLogger(private val scope: List<String> = listOf()) : KeyStoreManager.Logger {
 
     constructor(group: String) : this(listOf(group))
 
@@ -17,11 +18,11 @@ class AppLogger(private val scope: List<String> = listOf()) {
         return AppLogger(this.scope + scope)
     }
 
-    fun info(message: String) {
+    override fun info(message: String) {
         AppLog.info(actionId, message)
     }
 
-    fun warning(message: String, e: Throwable) {
+    override fun warning(message: String, e: Throwable) {
         AppLog.warning(actionId, message, e)
     }
 }

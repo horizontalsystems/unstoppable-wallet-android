@@ -183,7 +183,11 @@ class App : CoreApp(), WorkConfiguration.Provider {
         backupManager = BackupManager(accountManager)
 
 
-        KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {
+        KeyStoreManager(
+            keyAlias = "MASTER_KEY",
+            keyStoreCleaner = KeyStoreCleaner(localStorage, accountManager, walletManager),
+            logger = AppLogger("key-store")
+        ).apply {
             keyStoreManager = this
             keyProvider = this
         }
