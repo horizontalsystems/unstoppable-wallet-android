@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -38,7 +40,6 @@ class TransactionInfoAdapter(
         fun onAddressClick(address: String)
         fun onActionButtonClick(actionButton: TransactionInfoActionButton)
         fun onUrlClick(url: String)
-        fun closeClick()
         fun onClickStatusInfo()
         fun onLockInfoClick(lockDate: Date)
         fun onDoubleSpendInfoClick(transactionHash: String, conflictingHash: String)
@@ -125,6 +126,8 @@ class TransactionInfoAdapter(
         private val ozColor = getColor(R.color.oz)
 
         fun bind(item: TransactionInfoPositionedViewItem) {
+            setIsRecyclable(false)
+
             setButtons(item)
             binding.transactionStatusView.isVisible = false
             binding.valueText.isVisible = false
@@ -232,9 +235,7 @@ class TransactionInfoAdapter(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         if (item.viewItem is Decorated) {
-                            val endPadding = if (item.viewItem.actionButton != null) 8.dp else 0.dp
                             ButtonSecondaryDefault(
-                                modifier = Modifier.padding(end = endPadding),
                                 title = item.viewItem.valueTitle,
                                 onClick = {
                                     listener.onAddressClick(item.viewItem.value)
@@ -242,6 +243,7 @@ class TransactionInfoAdapter(
                                 ellipsis = Ellipsis.Middle(if (item.viewItem.actionButton != null) 5 else 10)
                             )
                             item.viewItem.actionButton?.let { button ->
+                                Spacer(modifier = Modifier.width(8.dp))
                                 ButtonSecondaryCircle(
                                     icon = button.getIcon(),
                                     onClick = {
