@@ -124,11 +124,12 @@ fun infoSubHeader(text: Int) {
         style = ComposeAppTheme.typography.headline2,
         color = ComposeAppTheme.colors.jacob
     )
-    Spacer(Modifier.height(24.dp))
+    Spacer(Modifier.height(12.dp))
 }
 
 @Composable
 fun infoBodyString(text: String) {
+    Spacer(Modifier.height(12.dp))
     Text(
         text = text,
         style = ComposeAppTheme.typography.body,
@@ -155,5 +156,5 @@ fun infoHeader(text: Int) {
         thickness = 1.dp,
         color = ComposeAppTheme.colors.grey50
     )
-    Spacer(Modifier.height(12.dp))
+    Spacer(Modifier.height(5.dp))
 }
