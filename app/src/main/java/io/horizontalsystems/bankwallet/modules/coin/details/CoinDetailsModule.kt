@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.details
 
-import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -12,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.marketkit.models.FullCoin
-import kotlinx.parcelize.Parcelize
 
 object CoinDetailsModule {
 
@@ -83,69 +81,49 @@ object CoinDetailsModule {
         val grade: SecurityGrade
     )
 
-    @Parcelize
-    @Immutable
-    data class SecurityInfoViewItem(
-        val grade: SecurityGrade,
-        @StringRes
-        val title: Int,
-        @StringRes
-        val description: Int
-    ) : Parcelable
-
     enum class PrivacyLevel(
         @StringRes val title: Int,
         val grade: SecurityGrade,
-        @StringRes val description: Int
     ) {
         High(
             R.string.CoinPage_SecurityParams_High,
             SecurityGrade.High,
-            R.string.CoinPage_SecurityParams_Privacy_High
         ),
         Medium(
             R.string.CoinPage_SecurityParams_Medium,
             SecurityGrade.Medium,
-            R.string.CoinPage_SecurityParams_Privacy_Medium
         ),
         Low(
             R.string.CoinPage_SecurityParams_Low,
             SecurityGrade.Low,
-            R.string.CoinPage_SecurityParams_Privacy_Low
         ),
     }
 
     enum class IssuanceLevel(
         @StringRes val title: Int,
         val grade: SecurityGrade,
-        @StringRes val description: Int
     ) {
         Decentralized(
             R.string.CoinPage_SecurityParams_Decentralized,
             SecurityGrade.High,
-            R.string.CoinPage_SecurityParams_Issuance_Decentralized
         ),
         Centralized(
             R.string.CoinPage_SecurityParams_Centralized,
             SecurityGrade.Low,
-            R.string.CoinPage_SecurityParams_Issuance_Centralized
         )
     }
 
     enum class CensorshipResistanceLevel(
         @StringRes val title: Int,
         val grade: SecurityGrade,
-        @StringRes val description: Int
     ) {
         Yes(
             R.string.CoinPage_SecurityParams_Yes,
             SecurityGrade.High,
-            R.string.CoinPage_SecurityParams_CensorshipResistance_Yes
         ),
         No(
             R.string.CoinPage_SecurityParams_No,
             SecurityGrade.Low,
-            R.string.CoinPage_SecurityParams_CensorshipResistance_No
         )
     }
 
@@ -153,17 +131,14 @@ object CoinDetailsModule {
     enum class ConfiscationResistanceLevel(
         @StringRes val title: Int,
         val grade: SecurityGrade,
-        @StringRes val description: Int
     ) {
         Yes(
             R.string.CoinPage_SecurityParams_Yes,
             SecurityGrade.High,
-            R.string.CoinPage_SecurityParams_ConfiscationResistance_Yes
         ),
         No(
             R.string.CoinPage_SecurityParams_No,
             SecurityGrade.Low,
-            R.string.CoinPage_SecurityParams_ConfiscationResistance_No
         )
     }
 
