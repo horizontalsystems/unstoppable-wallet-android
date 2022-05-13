@@ -274,6 +274,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                             placeholder = icon.iconOut.placeholder,
                         )
                     }
+                    is TransactionViewItem.Icon.ImageResource -> {}
                 }
             }
             Column(modifier = Modifier.padding(end = 16.dp)) {

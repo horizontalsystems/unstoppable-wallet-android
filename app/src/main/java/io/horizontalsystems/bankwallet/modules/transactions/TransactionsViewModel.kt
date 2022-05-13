@@ -121,6 +121,7 @@ data class TransactionViewItem(
 ) {
 
     sealed class Icon {
+        class ImageResource(val resourceId: Int) : Icon()
         class Regular(val url: String?, val placeholder: Int?) : Icon()
         class Swap(val iconIn: Regular, val iconOut: Regular) : Icon()
         object Failed : Icon()

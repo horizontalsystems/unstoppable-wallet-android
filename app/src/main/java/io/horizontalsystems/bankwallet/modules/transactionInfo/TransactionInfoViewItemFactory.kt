@@ -47,6 +47,10 @@ class TransactionInfoViewItemFactory(
         var sentToSelf = false
 
         when (transaction) {
+            is ContractCreationTransactionRecord -> {
+                itemSections.add(getContractCreationItems(transaction))
+            }
+
             is EvmIncomingTransactionRecord ->
                 itemSections.add(getReceiveSectionItems(transaction.value.coinName, transaction.value, transaction.from, rates[transaction.value.coinUid]))
 
@@ -192,7 +196,7 @@ class TransactionInfoViewItemFactory(
 
     private fun getReceiveSectionItems(coinName: String, value: TransactionValue, fromAddress: String?, coinPrice: CurrencyValue?): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
-            Transaction(getString(R.string.Transactions_Receive), coinName, R.drawable.ic_arrow_down_left_12),
+            Transaction(getString(R.string.Transactions_Receive), coinName, TransactionViewItem.Icon.ImageResource(R.drawable.ic_arrow_down_left_12)),
             getAmount(coinPrice, value, true)
         )
 
@@ -213,7 +217,7 @@ class TransactionInfoViewItemFactory(
 
     private fun getSendSectionItems(coinName: String, value: TransactionValue, toAddress: String?, coinPrice: CurrencyValue?, sentToSelf: Boolean = false): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
-            Transaction(getString(R.string.Transactions_Send), coinName, R.drawable.ic_arrow_up_right_12),
+            Transaction(getString(R.string.Transactions_Send), coinName, TransactionViewItem.Icon.ImageResource(R.drawable.ic_arrow_up_right_12)),
             getAmount(coinPrice, value, if (sentToSelf) null else false)
         )
 
@@ -237,10 +241,12 @@ class TransactionInfoViewItemFactory(
             Transaction(
                 title,
                 value.coinName,
-                icon = if (incoming)
-                    R.drawable.ic_arrow_down_left_12
-                else
-                    R.drawable.ic_arrow_up_right_12
+                icon = TransactionViewItem.Icon.ImageResource(
+                    if (incoming)
+                        R.drawable.ic_arrow_down_left_12
+                    else
+                        R.drawable.ic_arrow_up_right_12
+                )
             ),
             getAmount(rate, value, incoming, amount)
         )
@@ -293,6 +299,15 @@ class TransactionInfoViewItemFactory(
         return items
     }
 
+    private fun getContractCreationItems(transaction: ContractCreationTransactionRecord): List<TransactionInfoViewItem> =
+        listOf(
+            Transaction(
+                getString(R.string.Transactions_ContractCreation),
+                "",
+                TransactionViewItem.Icon.Platform(transaction.source)
+            )
+        )
+
     private fun getApproveSectionItems(value: TransactionValue, coinPrice: CurrencyValue?, spenderAddress: String): List<TransactionInfoViewItem> {
         val fiatAmountFormatted = coinPrice?.let {
             value.decimalValue?.let { decimalValue ->
@@ -326,7 +341,7 @@ class TransactionInfoViewItemFactory(
         )
 
         return listOf(
-            Transaction(getString(R.string.Transactions_Approve), value.coinName, R.drawable.ic_checkmark_24),
+            Transaction(getString(R.string.Transactions_Approve), value.coinName, TransactionViewItem.Icon.ImageResource(R.drawable.ic_checkmark_24)),
             Amount(value.coinIconUrl, value.coinIconPlaceholder, coinAmountColoredValue, fiatAmountColoredValue),
             Decorated(getString(R.string.TransactionInfo_Spender), spenderAddress, evmLabelManager.mapped(spenderAddress))
         )
@@ -337,7 +352,7 @@ class TransactionInfoViewItemFactory(
             Transaction(
                 transaction.method ?: getString(R.string.Transactions_ContractCall),
                 evmLabelManager.mapped(transaction.contractAddress),
-                TransactionViewItem.Icon.Platform(transaction.source).iconRes
+                TransactionViewItem.Icon.Platform(transaction.source)
             )
         )
 
