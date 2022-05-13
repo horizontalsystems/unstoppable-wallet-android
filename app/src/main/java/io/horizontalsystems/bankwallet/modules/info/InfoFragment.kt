@@ -87,8 +87,6 @@ private fun InfoScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.PlainString(stringResource(R.string.Info_Title)),
-
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
@@ -115,7 +113,6 @@ private fun InfoScreen(
                 Spacer(Modifier.height(44.dp))
             }
         }
-
     }
 }
 

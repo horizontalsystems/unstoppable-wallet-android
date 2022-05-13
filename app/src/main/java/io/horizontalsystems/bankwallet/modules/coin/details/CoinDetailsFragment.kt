@@ -9,6 +9,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +34,6 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
-import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityType
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityViewItem
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
@@ -40,6 +41,8 @@ import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHolder
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
+import io.horizontalsystems.bankwallet.modules.info.InfoBlock
+import io.horizontalsystems.bankwallet.modules.info.InfoFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartTvlFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartVolumeFragment
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.ProFeaturesBanner
@@ -63,6 +66,65 @@ class CoinDetailsFragment : BaseFragment() {
     private val authorizationViewModel by navGraphViewModels<YakAuthorizationViewModel>(R.id.coinFragment) { YakAuthorizationModule.Factory() }
 
     private var snackbarInProcess: CustomSnackbar? = null
+
+    private val securityParamsInfo = listOf(
+        InfoBlock.Header(R.string.CoinPage_SecurityParams),
+        InfoBlock.SubHeader(R.string.CoinPage_SecurityParams_Privacy),
+        InfoBlock.Body(R.string.CoinPage_SecurityParams_Privacy_High),
+        InfoBlock.Body(R.string.CoinPage_SecurityParams_Privacy_Medium),
+        InfoBlock.Body(R.string.CoinPage_SecurityParams_Privacy_Low),
+        InfoBlock.SubHeader(R.string.CoinPage_SecurityParams_Issuance),
+        InfoBlock.Body(R.string.CoinPage_SecurityParams_Issuance_Decentralized),
+        InfoBlock.Body(R.string.CoinPage_SecurityParams_Issuance_Centralized),
+        InfoBlock.SubHeader(R.string.CoinPage_SecurityParams_ConfiscationResistance),
+        InfoBlock.Body(R.string.CoinPage_SecurityParams_ConfiscationResistance_Yes),
+        InfoBlock.Body(R.string.CoinPage_SecurityParams_ConfiscationResistance_No),
+        InfoBlock.SubHeader(R.string.CoinPage_SecurityParams_CensorshipResistance),
+        InfoBlock.Body(R.string.CoinPage_SecurityParams_CensorshipResistance_Yes),
+        InfoBlock.Body(R.string.CoinPage_SecurityParams_CensorshipResistance_No),
+    )
+
+    private val tokenTvlInfo = listOf(
+        InfoBlock.Header(R.string.CoinPage_TokenTvl),
+        InfoBlock.Body(R.string.CoinPage_TokenTvl_Description),
+        InfoBlock.SubHeader(R.string.CoinPage_TvlRank),
+        InfoBlock.Body(R.string.CoinPage_TvlRank_Description),
+        InfoBlock.SubHeader(R.string.CoinPage_TvlMCapRatio),
+        InfoBlock.Body(R.string.CoinPage_TvlMCapRatio_Description),
+    )
+
+    private val tokenLiquidityInfo = listOf(
+        InfoBlock.Header(R.string.CoinPage_TokenLiquidity),
+        InfoBlock.Body(R.string.CoinPage_TokenLiquidity_Description),
+        InfoBlock.SubHeader(R.string.CoinPage_DetailsDexVolume),
+        InfoBlock.Body(R.string.CoinPage_DetailsDexVolume_Description),
+        InfoBlock.SubHeader(R.string.CoinPage_DetailsDexLiquidity),
+        InfoBlock.Body(R.string.CoinPage_DetailsDexLiquidity_Description),
+    )
+
+    private val investorDataInfo = listOf(
+        InfoBlock.Header(R.string.CoinPage_InvestorData),
+        InfoBlock.Body(R.string.CoinPage_InvestorData_Description),
+        InfoBlock.SubHeader(R.string.CoinPage_Treasuries),
+        InfoBlock.Body(R.string.CoinPage_Treasuries_Description),
+        InfoBlock.SubHeader(R.string.CoinPage_FundsInvested),
+        InfoBlock.Body(R.string.CoinPage_FundsInvested_Description),
+        InfoBlock.SubHeader(R.string.CoinPage_Reports),
+        InfoBlock.Body(R.string.CoinPage_Reports_Description),
+    )
+
+    private val tokenDistributionInfo = listOf(
+        InfoBlock.Header(R.string.CoinPage_TokenDistribution),
+        InfoBlock.Body(R.string.CoinPage_TokenDistribution_Description),
+        InfoBlock.SubHeader(R.string.CoinPage_DetailsTxCount),
+        InfoBlock.Body(R.string.CoinPage_DetailsTxCount_Description),
+        InfoBlock.SubHeader(R.string.CoinPage_DetailsTxVolume),
+        InfoBlock.Body(R.string.CoinPage_DetailsTxVolume_Description),
+        InfoBlock.SubHeader(R.string.CoinPage_DetailsActiveAddresses),
+        InfoBlock.Body(R.string.CoinPage_DetailsActiveAddresses_Description),
+        InfoBlock.SubHeader(R.string.CoinPage_MajorHolders),
+        InfoBlock.Body(R.string.CoinPage_MajorHolders_InfoDescription),
+    )
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -164,11 +226,6 @@ class CoinDetailsFragment : BaseFragment() {
     private fun openCoinAudits(addresses: List<String>) {
         val arguments = CoinAuditsFragment.prepareParams(addresses)
         findNavController().slideFromRight(R.id.coinAuditsFragment, arguments)
-    }
-
-    private fun openSecurityInfo(type: SecurityType) {
-        val arguments = CoinSecurityInfoFragment.prepareParams(type.title, viewModel.securityInfoViewItems(type))
-        findNavController().slideFromBottom(R.id.coinSecurityInfoFragment, arguments)
     }
 
     @Composable
@@ -294,6 +351,8 @@ class CoinDetailsFragment : BaseFragment() {
                 style = ComposeAppTheme.typography.body,
                 color = ComposeAppTheme.colors.oz,
             )
+            Spacer(Modifier.weight(1f))
+            InfoButton(tokenTvlInfo)
         }
 
         viewItem.tvlChart?.let { tvlChart ->
@@ -349,6 +408,8 @@ class CoinDetailsFragment : BaseFragment() {
                 style = ComposeAppTheme.typography.body,
                 color = ComposeAppTheme.colors.oz,
             )
+            Spacer(Modifier.weight(1f))
+            InfoButton(securityParamsInfo)
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -356,11 +417,7 @@ class CoinDetailsFragment : BaseFragment() {
         val securityParams = mutableListOf<@Composable () -> Unit>()
 
         viewItem.securityViewItems.forEach {
-            securityParams.add {
-                SecurityParamsCell(it) {
-                    openSecurityInfo(it.type)
-                }
-            }
+            securityParams.add { SecurityParamsCell(it) }
         }
 
         if (viewItem.auditAddresses.isNotEmpty()) {
@@ -391,6 +448,8 @@ class CoinDetailsFragment : BaseFragment() {
                 style = ComposeAppTheme.typography.body,
                 color = ComposeAppTheme.colors.oz,
             )
+            Spacer(Modifier.weight(1f))
+            InfoButton(tokenLiquidityInfo)
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -451,6 +510,8 @@ class CoinDetailsFragment : BaseFragment() {
                 style = ComposeAppTheme.typography.body,
                 color = ComposeAppTheme.colors.oz,
             )
+            Spacer(Modifier.weight(1f))
+            InfoButton(tokenDistributionInfo)
         }
 
         if (viewItem.txCount != null || viewItem.txVolume != null) {
@@ -540,6 +601,8 @@ class CoinDetailsFragment : BaseFragment() {
                 style = ComposeAppTheme.typography.body,
                 color = ComposeAppTheme.colors.oz,
             )
+            Spacer(Modifier.weight(1f))
+            InfoButton(investorDataInfo)
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -569,6 +632,20 @@ class CoinDetailsFragment : BaseFragment() {
         }
 
         CellSingleLineLawrenceSection(investorDataList)
+    }
+
+    @Composable
+    private fun InfoButton(infoBlocks: List<InfoBlock>) {
+        IconButton(onClick = {
+            val infoParams = InfoFragment.prepareParams(infoBlocks)
+            findNavController().slideFromBottom(R.id.infoFragment, infoParams)
+        }) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_info_20),
+                contentDescription = "info button",
+                tint = ComposeAppTheme.colors.grey
+            )
+        }
     }
 
     @Composable
@@ -605,11 +682,10 @@ class CoinDetailsFragment : BaseFragment() {
     }
 
     @Composable
-    private fun SecurityParamsCell(viewItem: SecurityViewItem, onClick: (() -> Unit)) {
+    private fun SecurityParamsCell(viewItem: SecurityViewItem) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable(onClick = onClick)
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -630,8 +706,6 @@ class CoinDetailsFragment : BaseFragment() {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-
-            Image(painter = painterResource(id = R.drawable.ic_info_20), contentDescription = "")
         }
     }
 }

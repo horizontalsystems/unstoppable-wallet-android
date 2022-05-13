@@ -16,7 +16,6 @@ import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.Ce
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ConfiscationResistanceLevel
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.IssuanceLevel
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.PrivacyLevel
-import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityInfoViewItem
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityType
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityViewItem
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
@@ -73,31 +72,6 @@ class CoinDetailsViewModel(
             isRefreshingLiveData.postValue(false)
         }
     }
-
-    fun securityInfoViewItems(type: SecurityType): List<SecurityInfoViewItem> =
-        when (type) {
-            SecurityType.Privacy -> {
-                PrivacyLevel.values().map {
-                    SecurityInfoViewItem(it.grade, it.title, it.description)
-                }
-            }
-            SecurityType.Issuance -> {
-                IssuanceLevel.values().map {
-                    SecurityInfoViewItem(it.grade, it.title, it.description)
-                }
-            }
-            SecurityType.ConfiscationResistance -> {
-                ConfiscationResistanceLevel.values().map {
-                    SecurityInfoViewItem(it.grade, it.title, it.description)
-                }
-            }
-            SecurityType.CensorshipResistance -> {
-                CensorshipResistanceLevel.values().map {
-                    SecurityInfoViewItem(it.grade, it.title, it.description)
-                }
-            }
-        }
-
 
     private fun viewItem(item: CoinDetailsService.Item): ViewItem {
         return ViewItem(
