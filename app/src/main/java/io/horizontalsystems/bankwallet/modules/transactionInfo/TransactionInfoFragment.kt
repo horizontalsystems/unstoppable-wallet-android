@@ -92,10 +92,6 @@ class TransactionInfoFragment : BaseFragment() {
                         }
                     }
 
-                    override fun closeClick() {
-                        findNavController().popBackStack()
-                    }
-
                     override fun onClickStatusInfo() {
                         findNavController().slideFromBottom(R.id.statusInfoDialog)
                     }

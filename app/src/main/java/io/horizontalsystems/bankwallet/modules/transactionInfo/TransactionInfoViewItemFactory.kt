@@ -196,9 +196,7 @@ class TransactionInfoViewItemFactory(
             getAmount(coinPrice, value, true)
         )
 
-        coinPrice?.let {
-            items.add(getHistoricalRate(it, value))
-        }
+        items.add(getHistoricalRate(coinPrice, value))
 
         fromAddress?.let {
             items.add(
@@ -219,9 +217,7 @@ class TransactionInfoViewItemFactory(
             getAmount(coinPrice, value, if (sentToSelf) null else false)
         )
 
-        coinPrice?.let {
-            items.add(getHistoricalRate(it, value))
-        }
+        items.add(getHistoricalRate(coinPrice, value))
 
         toAddress?.let {
             items.add(
@@ -515,16 +511,19 @@ class TransactionInfoViewItemFactory(
     }
 
     private fun getHistoricalRate(
-        rate: CurrencyValue,
+        rate: CurrencyValue?,
         transactionValue: TransactionValue,
     ): TransactionInfoViewItem {
-        val rateFormatted =
-            numberFormatter.formatFiat(rate.value, rate.currency.symbol, 2, 4)
-        val rateValue = translator.getString(
-            R.string.Balance_RatePerCoin,
-            rateFormatted,
-            transactionValue.coinCode
-        )
+        val rateValue = if (rate == null) {
+            "---"
+        } else {
+            val rateFormatted = numberFormatter.formatFiat(rate.value, rate.currency.symbol, 2, 4)
+            translator.getString(
+                R.string.Balance_RatePerCoin,
+                rateFormatted,
+                transactionValue.coinCode
+            )
+        }
         return Value(getString(R.string.TransactionInfo_HistoricalRate), rateValue)
     }
 
