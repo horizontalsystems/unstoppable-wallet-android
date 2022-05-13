@@ -44,7 +44,6 @@ import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFra
 import io.horizontalsystems.bankwallet.modules.info.InfoBlock
 import io.horizontalsystems.bankwallet.modules.info.InfoFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartTvlFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartVolumeFragment
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.ProFeaturesBanner
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationModule
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationService
@@ -179,13 +178,6 @@ class CoinDetailsFragment : BaseFragment() {
                 ComposeAppTheme {
                     CoinDetailsScreen(
                         viewModel,
-                        onClickVolumeChart = {
-                            MetricChartVolumeFragment.show(
-                                childFragmentManager,
-                                viewModel.coin.uid,
-                                viewModel.coin.name
-                            )
-                        },
                         onClickTvlChart = {
                             MetricChartTvlFragment.show(
                                 childFragmentManager,
@@ -231,7 +223,6 @@ class CoinDetailsFragment : BaseFragment() {
     @Composable
     private fun CoinDetailsScreen(
         viewModel: CoinDetailsViewModel,
-        onClickVolumeChart: () -> Unit,
         onClickTvlChart: () -> Unit,
     ) {
         val viewState by viewModel.viewStateLiveData.observeAsState()
@@ -298,40 +289,6 @@ class CoinDetailsFragment : BaseFragment() {
                     }
                 }
             }
-        }
-    }
-
-    @Composable
-    private fun TokenVolume(
-        volumeChart: CoinDetailsModule.ChartViewItem,
-        borderTop: Boolean,
-        onClick: () -> Unit
-    ) {
-        if (borderTop) {
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-
-        CellSingleLineClear(borderTop = borderTop) {
-            Text(
-                text = stringResource(R.string.CoinPage_TokenLiquidity),
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.oz,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onClick.invoke()
-                }
-        ) {
-            MiniChartCard(
-                title = stringResource(id = R.string.CoinPage_TotalVolume),
-                chartViewItem = volumeChart
-            )
         }
     }
 

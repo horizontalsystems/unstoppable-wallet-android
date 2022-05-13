@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -22,7 +21,6 @@ object CoinDetailsModule {
 
             return CoinDetailsViewModel(
                 service,
-                CoinViewFactory(App.currencyManager.baseCurrency, App.numberFormatter),
                 App.numberFormatter
             ) as T
         }

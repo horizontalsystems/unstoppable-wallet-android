@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.CensorshipResistanceLevel
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ConfiscationResistanceLevel
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.IssuanceLevel
@@ -30,7 +29,6 @@ import kotlinx.coroutines.launch
 
 class CoinDetailsViewModel(
     private val service: CoinDetailsService,
-    private val coinViewFactory: CoinViewFactory,
     private val numberFormatter: IAppNumberFormatter
 ) : ViewModel() {
 
@@ -212,36 +210,3 @@ class CoinDetailsViewModel(
         return securityViewItems
     }
 }
-//    private fun chartViewItem(values: List<ChartPoint>?, title: String, badge: String? = null): ChartViewItem? {
-//        if (values == null) return null
-//
-//        val first = values.firstOrNull() ?: return null
-//        val last = values.lastOrNull() ?: return null
-//
-//        val chartItems = values.map { ChartItem() }
-//
-//        coinViewFactory.createChartInfoData(
-//            ChartType.MONTHLY_BY_DAY,
-//
-//        )
-//
-//        val chartViewItem = chartFactory.convert(
-//            values,
-//            service.chartType,
-//            MetricChartModule.ValueType.CompactCurrencyValue,
-//            service.baseCurrency
-//        )
-//        val chartInfoData = ChartInfoData(
-//            chartViewItem.chartData,
-//            chartViewItem.chartType,
-//            chartViewItem.maxValue,
-//            chartViewItem.minValue
-//        )
-//
-//        return ChartViewItem(
-//            title = title,
-//            subtitle = ChartInfoHeaderItem()
-//        )
-//
-//    }
-
