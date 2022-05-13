@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOp
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatusViewItem
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -148,8 +149,23 @@ class TransactionInfoAdapter(
                     binding.valueText.isVisible = true
 
                     type.icon?.let {
-                        binding.leftIcon.setImageResource(it)
-                        binding.leftIcon.isVisible = true
+                        when (it) {
+                            is TransactionViewItem.Icon.ImageResource -> {
+                                binding.leftIcon.setImageResource(it.resourceId)
+                                binding.leftIcon.isVisible = true
+                            }
+
+                            is TransactionViewItem.Icon.Platform -> {
+                                it.iconRes?.let { iconRes ->
+                                    binding.leftIcon.apply {
+                                        setImageResource(iconRes)
+                                        setColorFilter(getColor(R.color.leah))
+                                        isVisible = true
+                                    }
+                                }
+                            }
+                            else -> {}
+                        }
                     }
                 }
                 is Amount -> {

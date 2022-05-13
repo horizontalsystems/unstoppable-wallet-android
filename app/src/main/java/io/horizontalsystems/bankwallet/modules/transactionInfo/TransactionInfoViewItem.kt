@@ -3,12 +3,13 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
 sealed class TransactionInfoViewItem {
-    class Transaction(val leftValue: String, val rightValue: String, val icon: Int?) : TransactionInfoViewItem()
+    class Transaction(val leftValue: String, val rightValue: String, val icon: TransactionViewItem.Icon?) : TransactionInfoViewItem()
     class Amount(
         val iconUrl: String?,
         val iconPlaceholder: Int?,
