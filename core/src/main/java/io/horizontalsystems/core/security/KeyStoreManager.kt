@@ -4,7 +4,6 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.security.keystore.UserNotAuthenticatedException
-import android.util.Log
 import io.horizontalsystems.core.IKeyProvider
 import io.horizontalsystems.core.IKeyStoreCleaner
 import io.horizontalsystems.core.IKeyStoreManager
@@ -12,13 +11,15 @@ import java.security.InvalidKeyException
 import java.security.KeyStore
 import java.security.KeyStoreException
 import java.security.UnrecoverableKeyException
-import java.util.logging.Logger
 import javax.crypto.BadPaddingException
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
-class KeyStoreManager(private val keyAlias: String, private val keyStoreCleaner: IKeyStoreCleaner)
-    : IKeyStoreManager, IKeyProvider {
+class KeyStoreManager(
+    private val keyAlias: String,
+    private val keyStoreCleaner: IKeyStoreCleaner,
+    private val logger: Logger,
+) : IKeyStoreManager, IKeyProvider {
 
     private val ANDROID_KEY_STORE = "AndroidKeyStore"
     private val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
@@ -27,7 +28,10 @@ class KeyStoreManager(private val keyAlias: String, private val keyStoreCleaner:
 
     private val keyStore: KeyStore
 
-    private val logger = Logger.getLogger("KeyStoreManager")
+    interface Logger {
+        fun warning(message: String, e: Throwable)
+        fun info(message: String)
+    }
 
     init {
         keyStore = KeyStore.getInstance(ANDROID_KEY_STORE)
@@ -49,11 +53,13 @@ class KeyStoreManager(private val keyAlias: String, private val keyStoreCleaner:
         try {
             keyStore.deleteEntry(keyAlias)
         } catch (ex: KeyStoreException) {
-            logger.warning("removeKey: \n ${Log.getStackTraceString(ex)}")
+            logger.warning("remove key failed", ex)
         }
     }
 
-    override fun resetApp() {
+    override fun resetApp(reason: String) {
+        logger.info("resetting app, reason: $reason")
+
         keyStoreCleaner.cleanApp()
     }
 
@@ -62,19 +68,19 @@ class KeyStoreManager(private val keyAlias: String, private val keyStoreCleaner:
             validateKey()
             KeyStoreValidationResult.KeyIsValid
         } catch (ex: UserNotAuthenticatedException) {
-            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
+            logger.warning("invalid key", ex)
             KeyStoreValidationResult.UserNotAuthenticated
         } catch (ex: KeyPermanentlyInvalidatedException) {
-            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
+            logger.warning("invalid key", ex)
             KeyStoreValidationResult.KeyIsInvalid
         } catch (ex: UnrecoverableKeyException) {
-            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
+            logger.warning("invalid key", ex)
             KeyStoreValidationResult.KeyIsInvalid
         } catch (ex: InvalidKeyException) {
-            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
+            logger.warning("invalid key", ex)
             KeyStoreValidationResult.KeyIsInvalid
         } catch (ex: BadPaddingException) {
-            logger.warning("isKeyInvalidated: \n ${Log.getStackTraceString(ex)}")
+            logger.warning("invalid key", ex)
             KeyStoreValidationResult.KeyIsInvalid
         }
     }

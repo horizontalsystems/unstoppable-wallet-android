@@ -7,8 +7,8 @@ class KeyStoreInteractor(private val keyStoreManager: IKeyStoreManager)
 
     var delegate: KeyStoreModule.IInteractorDelegate? = null
 
-    override fun resetApp() {
-        keyStoreManager.resetApp()
+    override fun resetApp(reason: String) {
+        keyStoreManager.resetApp(reason)
     }
 
     override fun removeKey() {
