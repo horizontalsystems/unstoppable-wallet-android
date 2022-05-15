@@ -49,7 +49,7 @@ class EvmNetworkService(
         val currentNetworkId = currentNetwork.id
 
         items = networks.map { network ->
-            Item(network, network.networkType.isMainNet, network.id == currentNetworkId)
+            Item(network, network.chain.isMainNet, network.id == currentNetworkId)
         }
     }
 

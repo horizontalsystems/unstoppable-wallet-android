@@ -1,13 +1,17 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BalanceData
+import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.erc20kit.core.Erc20Kit
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -18,15 +22,12 @@ import java.math.BigInteger
 
 class Eip20Adapter(
     context: Context,
-    evmKit: EthereumKit,
+    evmKitWrapper: EvmKitWrapper,
     contractAddress: String,
     baseCoin: PlatformCoin,
     coinManager: ICoinManager,
-    wallet: Wallet,
-    private val fee: BigDecimal = BigDecimal.ZERO,
-    override val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO,
-    override val minimumSendAmount: BigDecimal = BigDecimal.ZERO
-) : BaseEvmAdapter(evmKit, wallet.decimal, coinManager) {
+    wallet: Wallet
+) : BaseEvmAdapter(evmKitWrapper, wallet.decimal, coinManager) {
 
     private val transactionConverter = EvmTransactionConverter(coinManager, evmKit, wallet.transactionSource, baseCoin)
 
@@ -66,33 +67,6 @@ class Eip20Adapter(
 
     // ISendEthereumAdapter
 
-    override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit> {
-        logger.info("call erc20Kit.buildTransferTransactionData")
-        val transactionData = eip20Kit.buildTransferTransactionData(address, amount)
-
-        return evmKit.send(transactionData, gasPrice, gasLimit)
-                .doOnSubscribe {
-                    logger.info("call ethereumKit.send")
-                }
-                .map {}
-    }
-
-    override fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long> {
-        if (toAddress == null) {
-            return Single.just(evmKit.defaultGasLimit)
-        }
-        val transactionData = eip20Kit.buildTransferTransactionData(toAddress, value)
-
-        return evmKit.estimateGas(transactionData, gasPrice)
-    }
-
-    override fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal {
-        return BigDecimal.ZERO.max(balanceData.available - fee)
-    }
-
-    override val ethereumBalance: BigDecimal
-        get() = balanceInBigDecimal(evmKit.accountState?.balance, EvmAdapter.decimal)
-
     override fun getTransactionData(amount: BigInteger, address: Address): TransactionData {
         return eip20Kit.buildTransferTransactionData(address, amount)
     }
@@ -113,8 +87,8 @@ class Eip20Adapter(
     companion object {
         fun clear(walletId: String, testMode: Boolean) {
             val networkTypes = when {
-                testMode -> listOf(EthereumKit.NetworkType.EthRopsten)
-                else -> listOf(EthereumKit.NetworkType.EthMainNet, EthereumKit.NetworkType.BscMainNet)
+                testMode -> listOf(Chain.EthereumRopsten)
+                else -> listOf(Chain.Ethereum, Chain.BinanceSmartChain)
             }
 
             networkTypes.forEach {

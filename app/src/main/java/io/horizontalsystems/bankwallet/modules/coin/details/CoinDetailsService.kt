@@ -47,18 +47,20 @@ class CoinDetailsService(
 
     private fun fetchCharts(details: MarketInfoDetails): Single<Item> {
         val tvlsSingle: Single<List<ChartPoint>> = if (details.tvl != null) {
-            marketKit.marketInfoTvlSingle(fullCoin.coin.uid, currency.code, TimePeriod.Day30)
+            marketKit.marketInfoTvlSingle(fullCoin.coin.uid, currency.code, HsTimePeriod.Month1)
         } else {
             Single.just(listOf())
         }
 
-        val volumeSingle = marketKit.chartInfoSingle(fullCoin.coin.uid, currency.code, ChartType.MONTHLY_BY_DAY)
+        val volumeSingle = marketKit.chartInfoSingle(fullCoin.coin.uid, currency.code, HsTimePeriod.Month1)
             .map { chartInfo ->
-                chartInfo.points.mapNotNull { point ->
-                    point.volume?.let {
-                        ChartPoint(it, it, point.timestamp)
+                chartInfo.points
+                    .filter { it.timestamp >= chartInfo.startTimestamp }
+                    .mapNotNull { point ->
+                        point.extra[ChartPointType.Volume]?.let { volume ->
+                            ChartPoint(volume, point.timestamp, emptyMap())
+                        }
                     }
-                }
             }
 
         return Single.zip(
@@ -72,7 +74,6 @@ class CoinDetailsService(
 
     private fun fetch() {
         marketKit.marketInfoDetailsSingle(fullCoin.coin.uid, currency.code)
-            .doOnSubscribe { stateSubject.onNext(DataState.Loading) }
             .flatMap { details ->
                 fetchCharts(details)
             }

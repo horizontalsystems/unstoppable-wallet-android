@@ -4,211 +4,228 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.views.ListPosition
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_manage_accounts.*
-import kotlinx.android.synthetic.main.view_holder_manage_account_action.*
-import kotlinx.android.synthetic.main.view_holder_manage_account_action.backgroundView
-import kotlinx.android.synthetic.main.view_holder_manage_account_action.title
-import kotlinx.android.synthetic.main.view_holder_manage_account_item.*
 
-class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
-    private val viewModel by viewModels<ManageAccountsViewModel> { ManageAccountsModule.Factory(arguments?.getParcelable(ManageAccountsModule.MODE)!!) }
+class ManageAccountsFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_manage_accounts, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        toolbar.menu.findItem(R.id.menuCancel)?.isVisible = viewModel.isCloseButtonVisible
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuClose -> {
-                    findNavController().popBackStack()
-                    true
-                }
-                else -> false
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ManageAccountsScreen(findNavController(), arguments?.getParcelable(ManageAccountsModule.MODE)!!)
             }
         }
-
-        if (viewModel.isCloseButtonVisible) {
-            toolbar.navigationIcon = null
-        }
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        val accountsAdapter = AccountsAdapter(this)
-        val actionsAdapter = ActionsAdapter(listOf(
-                ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet, ::onClickCreateWallet),
-                ActionViewItem(R.drawable.ic_download, R.string.ManageAccounts_ImportWallet, ::onClickRestoreWallet)
-        ))
-
-        val concatAdapter = ConcatAdapter(accountsAdapter, actionsAdapter, ManageAccountsHintAdapter())
-        recyclerView.adapter = concatAdapter
-
-        viewModel.viewItemsLiveData.observe(viewLifecycleOwner, { items ->
-            accountsAdapter.items = items
-            accountsAdapter.notifyDataSetChanged()
-        })
-
-        viewModel.finishLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().popBackStack()
-        })
-    }
-
-    private fun onClickCreateWallet() {
-        findNavController().navigate(R.id.manageAccountsFragment_to_createAccountFragment, null, navOptions())
-    }
-
-    private fun onClickRestoreWallet() {
-        findNavController().navigate(R.id.manageAccountsFragment_to_restoreMnemonicFragment, null, navOptions())
-    }
-
-    override fun onSelect(accountViewItem: AccountViewItem) {
-        viewModel.onSelect(accountViewItem)
-    }
-
-    override fun onEdit(accountViewItem: AccountViewItem) {
-        ManageAccountModule.start(this, R.id.manageAccountsFragment_to_manageAccount, navOptions(), accountViewItem.accountId)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        recyclerView.adapter = null
-    }
-
-}
-
-class AccountsAdapter(private val listener: AccountViewHolder.Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var items: List<AccountViewItem> = listOf()
-
-    private val itemView = 0
-    private val bottomMarginView = 1
-
-    override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            itemCount - 1 -> bottomMarginView
-            else -> itemView
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            bottomMarginView -> MarginViewHolder.create(parent)
-            else -> AccountViewHolder.create(parent, listener)
-        }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as? AccountViewHolder)?.bind(items[position], ListPosition.getListPosition(items.size, position))
-    }
-
-    override fun getItemCount(): Int {
-        return if (items.isEmpty()) 0 else items.size + 1
     }
 }
 
-class AccountViewHolder(override val containerView: View, val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+@Composable
+fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModule.Mode) {
+    val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
 
-    interface Listener {
-        fun onSelect(accountViewItem: AccountViewItem)
-        fun onEdit(accountViewItem: AccountViewItem)
+    val viewItems by viewModel.viewItemsLiveData.observeAsState()
+    val finish by viewModel.finishLiveEvent.observeAsState()
+    val isCloseButtonVisible = viewModel.isCloseButtonVisible
+
+    if (finish != null) {
+        navController.popBackStack()
     }
 
-    fun bind(account: AccountViewItem, position: ListPosition) {
-        title.text = account.title
-        subtitle.text = account.subtitle
+    ComposeAppTheme {
+        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            var menuItems: List<MenuItem> = listOf()
+            var navigationIcon: @Composable (() -> Unit)? = null
 
-        backgroundView.setBackgroundResource(position.getBackground())
-        radioImage.setImageResource(if (account.selected) R.drawable.ic_radion else R.drawable.ic_radioff)
-        attentionIcon.isVisible = account.alert
-        editIcon.setOnClickListener {
-            listener.onEdit(account)
-        }
+            if (isCloseButtonVisible) {
+                menuItems = listOf(MenuItem(
+                    title = TranslatableString.ResString(R.string.Button_Close),
+                    icon = R.drawable.ic_close,
+                    onClick = { navController.popBackStack() }
+                ))
+            } else {
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = "back",
+                            tint = ComposeAppTheme.colors.jacob
+                        )
+                    }
+                }
+            }
+            AppBar(
+                title = TranslatableString.ResString(R.string.ManageAccounts_Title),
+                navigationIcon = navigationIcon,
+                menuItems = menuItems
+            )
 
-        backgroundView.setOnClickListener {
-            listener.onSelect(account)
-        }
-    }
+            LazyColumn(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+                item {
+                    Spacer(modifier = Modifier.height(12.dp))
 
-    companion object {
-        fun create(parent: ViewGroup, listener: Listener): AccountViewHolder {
-            return AccountViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_manage_account_item, parent, false), listener)
+                    viewItems?.let { (regularAccounts, watchAccounts) ->
+                        if (regularAccounts.isNotEmpty()) {
+                            AccountsSection(regularAccounts, viewModel, navController)
+                            Spacer(modifier = Modifier.height(32.dp))
+                        }
+
+                        if (watchAccounts.isNotEmpty()) {
+                            AccountsSection(watchAccounts, viewModel, navController)
+                            Spacer(modifier = Modifier.height(32.dp))
+                        }
+                    }
+
+                    val actions = listOf(
+                        ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
+                            navController.slideFromRight(R.id.manageAccountsFragment_to_createAccountFragment)
+                        },
+                        ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
+                            navController.slideFromRight(R.id.manageAccountsFragment_to_restoreMnemonicFragment)
+                        },
+                        ActionViewItem(R.drawable.ic_eye_2_20, R.string.ManageAccounts_WatchAddress) {
+                            navController.slideFromRight(R.id.watchAddressFragment)
+                        }
+                    )
+                    CellSingleLineLawrenceSection(actions) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clickable(onClick = it.callback),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                painter = painterResource(id = it.icon),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.jacob
+                            )
+                            Text(
+                                text = stringResource(id = it.title),
+                                style = ComposeAppTheme.typography.body,
+                                color = ComposeAppTheme.colors.jacob
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    Text(
+                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+                        text = stringResource(id = R.string.ManageAccounts_Hint),
+                        style = ComposeAppTheme.typography.subhead2,
+                        color = ComposeAppTheme.colors.grey
+                    )
+                }
+            }
         }
     }
 }
 
-class MarginViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    companion object {
-        fun create(parent: ViewGroup): MarginViewHolder {
-            return MarginViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_settings_item_space, parent, false))
-        }
-    }
-}
-
-class ActionsAdapter(
-        private val items: List<ActionViewItem>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ActionViewHolder.create(parent)
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as? ActionViewHolder)?.bind(items[position], ListPosition.Companion.getListPosition(items.size, position))
-    }
-
-    override fun getItemCount(): Int {
-        return items.size
-    }
-}
-
-class ActionViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    fun bind(action: ActionViewItem, position: ListPosition) {
-        icon.setImageResource(action.icon)
-        title.setText(action.title)
-        backgroundView.setBackgroundResource(position.getBackground())
-        backgroundView.setOnSingleClickListener { action.callback() }
-    }
-
-    companion object {
-        fun create(parent: ViewGroup): ActionViewHolder {
-            return ActionViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_manage_account_action, parent, false))
-        }
-    }
-}
-
-class ManageAccountsHintAdapter : RecyclerView.Adapter<ManageAccountHintViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ManageAccountHintViewHolder {
-        return ManageAccountHintViewHolder.create(parent)
-    }
-
-    override fun onBindViewHolder(holder: ManageAccountHintViewHolder, position: Int) {}
-
-    override fun getItemCount(): Int {
-        return 1
-    }
-}
-
-class ManageAccountHintViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    companion object {
-        fun create(parent: ViewGroup): ManageAccountHintViewHolder {
-            return ManageAccountHintViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_manage_accounts_hint, parent, false))
+@Composable
+private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAccountsViewModel, navController: NavController) {
+    CellMultilineLawrenceSection(items = accounts) { accountViewItem ->
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable {
+                    viewModel.onSelect(accountViewItem)
+                },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (accountViewItem.selected) {
+                Icon(
+                    modifier = Modifier.padding(horizontal = 18.dp),
+                    painter = painterResource(id = R.drawable.ic_radion),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.jacob
+                )
+            } else {
+                Icon(
+                    modifier = Modifier.padding(horizontal = 18.dp),
+                    painter = painterResource(id = R.drawable.ic_radioff),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = accountViewItem.title,
+                    style = ComposeAppTheme.typography.body,
+                    color = ComposeAppTheme.colors.leah
+                )
+                Text(
+                    text = accountViewItem.subtitle,
+                    style = ComposeAppTheme.typography.subhead2,
+                    color = ComposeAppTheme.colors.grey
+                )
+            }
+            if (accountViewItem.alert) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_attention_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.lucian
+                )
+            }
+            if (accountViewItem.alert && accountViewItem.isWatchAccount) {
+                Spacer(modifier = Modifier.width(12.dp))
+            }
+            if (accountViewItem.isWatchAccount) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_eye_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
+            Icon(
+                modifier = Modifier
+                    .clickable {
+                        navController.slideFromRight(
+                            R.id.manageAccountsFragment_to_manageAccount,
+                            ManageAccountModule.prepareParams(accountViewItem.accountId)
+                        )
+                    }
+                    .padding(12.dp),
+                painter = painterResource(id = R.drawable.ic_more2_20),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey
+            )
+            Spacer(modifier = Modifier.width(4.dp))
         }
     }
 }

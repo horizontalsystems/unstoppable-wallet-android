@@ -11,46 +11,70 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.databinding.FragmentBackupKeyBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
-import kotlinx.android.synthetic.main.fragment_backup_key.*
 
 class BackupKeyFragment : BaseFragment() {
-    private val viewModel by navGraphViewModels<BackupKeyViewModel>(R.id.backupKeyFragment) { BackupKeyModule.Factory(arguments?.getParcelable(BackupKeyModule.ACCOUNT)!!) }
+    private val viewModel by navGraphViewModels<BackupKeyViewModel>(R.id.backupKeyFragment) {
+        BackupKeyModule.Factory(
+            arguments?.getParcelable(BackupKeyModule.ACCOUNT)!!
+        )
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_backup_key, container, false)
+    private var _binding: FragmentBackupKeyBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentBackupKeyBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        viewModel.showKeyLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.backupKeyFragment_to_showBackupWordsFragment, null, navOptions())
-        })
+        viewModel.showKeyLiveEvent.observe(viewLifecycleOwner) {
+            findNavController().slideFromRight(
+                R.id.backupKeyFragment_to_showBackupWordsFragment
+            )
+        }
 
-        viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.backupKeyFragment_to_pinFragment, PinModule.forUnlock(), navOptions())
-        })
+        viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner) {
+            findNavController().slideFromRight(
+                R.id.backupKeyFragment_to_pinFragment,
+                PinModule.forUnlock()
+            )
+        }
 
         subscribeFragmentResults()
 
-        buttonShowCompose.setViewCompositionStrategy(
+        binding.buttonShowCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        buttonShowCompose.setContent {
+        binding.buttonShowCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 38.dp),
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                     title = getString(R.string.BackupKey_ButtonBackup),
                     onClick = {
                         viewModel.onClickShow()

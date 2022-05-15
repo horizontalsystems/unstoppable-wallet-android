@@ -1,6 +1,6 @@
 package io.horizontalsystems.chartview
 
-open class Indicator(val name: String) {
+sealed class Indicator(val name: String) {
     object Candle : Indicator("candle")
     object Volume : Indicator("volume")
     object Dominance : Indicator("dominance")

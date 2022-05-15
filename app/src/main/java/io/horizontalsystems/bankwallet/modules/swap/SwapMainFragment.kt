@@ -12,27 +12,42 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.databinding.FragmentSwapBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ISwapProvider
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
-import io.horizontalsystems.bankwallet.ui.selector.*
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSwapProviderSelectDialog
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_swap.*
 
 class SwapMainFragment : BaseFragment() {
 
     private val vmFactory by lazy { SwapMainModule.Factory(requireArguments()) }
     private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment) { vmFactory }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_swap, container, false)
+    private var _binding: FragmentSwapBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSwapBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuCancel -> {
                     findNavController().popBackStack()
@@ -48,7 +63,7 @@ class SwapMainFragment : BaseFragment() {
             setProviderView(provider)
         })
 
-        topMenuCompose.setViewCompositionStrategy(
+        binding.topMenuCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
     }
@@ -63,7 +78,7 @@ class SwapMainFragment : BaseFragment() {
     }
 
     private fun setTopMenu(provider: ISwapProvider) {
-        topMenuCompose.setContent {
+        binding.topMenuCompose.setContent {
             ComposeAppTheme {
                 Row(
                     modifier = Modifier
@@ -83,7 +98,7 @@ class SwapMainFragment : BaseFragment() {
                     ButtonSecondaryCircle(
                         icon = R.drawable.ic_manage_2,
                         onClick = {
-                            findNavController().navigate(R.id.swapFragment_to_swapSettingsMainFragment)
+                            findNavController().slideFromBottom(R.id.swapFragment_to_swapSettingsMainFragment)
                         }
                     )
                 }
@@ -92,14 +107,11 @@ class SwapMainFragment : BaseFragment() {
     }
 
     private fun showSwapProviderSelectorDialog() {
-        val dialog = SelectorBottomSheetDialog<ViewItemWithIconWrapper<ISwapProvider>>()
-        dialog.titleText = getString(R.string.Swap_SelectSwapProvider_Title)
-        dialog.subtitleText = getString(R.string.Swap_SelectSwapProvider_Subtitle)
-        dialog.headerIconResourceId = R.drawable.ic_swap_24
+        val dialog = BottomSheetSwapProviderSelectDialog()
+        dialog.subtitle = mainViewModel.blockchainTitle
         dialog.items = mainViewModel.providerItems
         dialog.selectedItem = mainViewModel.selectedProviderItem
-        dialog.onSelectListener = { providerWrapper -> mainViewModel.setProvider(providerWrapper.item) }
-        dialog.itemViewHolderFactory = SelectorItemWithIconViewHolderFactory()
+        dialog.onSelectListener = { mainViewModel.setProvider(it) }
 
         dialog.show(childFragmentManager, "selector_dialog")
     }

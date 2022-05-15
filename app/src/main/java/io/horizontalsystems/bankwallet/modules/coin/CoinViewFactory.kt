@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.annotation.DrawableRes
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -10,21 +9,17 @@ import io.horizontalsystems.bankwallet.entities.order
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.ChartDataFactory
-import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.*
 import io.horizontalsystems.views.ListPosition
-import java.lang.Long.max
 import java.math.BigDecimal
 import java.net.URI
 
 data class ChartInfoData(
     val chartData: ChartData,
-    val chartType: ChartView.ChartType,
+    val chartInterval: HsTimePeriod,
     val maxValue: String?,
     val minValue: String?
 )
@@ -57,7 +52,7 @@ sealed class RoiViewItem {
     abstract var listPosition: ListPosition?
     class HeaderRowViewItem(
         val title: String,
-        val periods: List<TimePeriod>,
+        val periods: List<HsTimePeriod>,
         override var listPosition: ListPosition? = null
     ) : RoiViewItem()
 
@@ -131,31 +126,8 @@ class CoinViewFactory(
     private val currency: Currency,
     private val numberFormatter: IAppNumberFormatter
 ) {
-    fun createChartInfoData(
-        type: ChartType,
-        chartInfo: ChartInfo,
-        lastPoint: LastPoint?
-    ): ChartInfoData {
-        val chartType = when (type) {
-            ChartType.TODAY -> ChartView.ChartType.TODAY
-            ChartType.DAILY -> ChartView.ChartType.DAILY
-            ChartType.WEEKLY -> ChartView.ChartType.WEEKLY
-            ChartType.WEEKLY2 -> ChartView.ChartType.WEEKLY2
-            ChartType.MONTHLY -> ChartView.ChartType.MONTHLY
-            ChartType.MONTHLY_BY_DAY -> ChartView.ChartType.MONTHLY_BY_DAY
-            ChartType.MONTHLY3 -> ChartView.ChartType.MONTHLY3
-            ChartType.MONTHLY6 -> ChartView.ChartType.MONTHLY6
-            ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY12
-            ChartType.MONTHLY24 -> ChartView.ChartType.MONTHLY24
-        }
-        val chartData = createChartData(chartInfo, lastPoint, chartType)
-        val maxValue = numberFormatter.formatFiat(chartData.valueRange.upper, currency.symbol, 0, 2)
-        val minValue = numberFormatter.formatFiat(chartData.valueRange.lower, currency.symbol, 0, 2)
 
-        return ChartInfoData(chartData, chartType, maxValue, minValue)
-    }
-
-    fun getRoi(performance: Map<String, Map<TimePeriod, BigDecimal>>): List<RoiViewItem> {
+    fun getRoi(performance: Map<String, Map<HsTimePeriod, BigDecimal>>): List<RoiViewItem> {
         val rows = mutableListOf<RoiViewItem>()
 
         val timePeriods = performance.map { it.value.keys }.flatten().distinct()
@@ -171,7 +143,7 @@ class CoinViewFactory(
         return rows
     }
 
-    fun getOverviewViewItem(item: CoinOverviewItem, fullCoin: FullCoin): CoinOverviewViewItem {
+    fun getOverviewViewItem(item: CoinOverviewItem): CoinOverviewViewItem {
         val overview = item.marketInfoOverview
 
         return CoinOverviewViewItem(
@@ -270,8 +242,10 @@ class CoinViewFactory(
         when (coinType) {
             is CoinType.Erc20 -> ContractInfo(coinType.address, R.drawable.logo_ethereum_24,"https://etherscan.io/token/${coinType.address}")
             is CoinType.Bep20 -> ContractInfo(coinType.address, R.drawable.logo_binancesmartchain_24,"https://bscscan.com/token/${coinType.address}")
+            is CoinType.Mrc20 -> ContractInfo(coinType.address, R.drawable.logo_polygon_24, "https://polygonscan.com/token/${coinType.address}")
+            is CoinType.OptimismErc20 -> ContractInfo(coinType.address, R.drawable.logo_optimism_24, "https://optimistic.etherscan.io/token/${coinType.address}")
+            is CoinType.ArbitrumOneErc20 -> ContractInfo(coinType.address, R.drawable.logo_arbitrum_24, "https://arbiscan.io/token/${coinType.address}")
             is CoinType.Bep2 -> ContractInfo(coinType.symbol, R.drawable.logo_bep2_24,"https://explorer.binance.org/asset/${coinType.symbol}")
-            is CoinType.ArbitrumOne -> ContractInfo(coinType.address, R.drawable.logo_arbitrum_24, "https://arbiscan.io/token/${coinType.address}")
             is CoinType.Avalanche -> ContractInfo(coinType.address, R.drawable.logo_avalanche_24, "https://avascan.info/blockchain/c/token/${coinType.address}")
             is CoinType.Fantom -> ContractInfo(coinType.address, R.drawable.logo_fantom_24, "https://ftmscan.com/token/${coinType.address}")
             is CoinType.HarmonyShard0 -> ContractInfo(coinType.address, R.drawable.logo_harmony_24, "https://explorer.harmony.one/address/${coinType.address}")
@@ -279,7 +253,6 @@ class CoinViewFactory(
             is CoinType.Iotex -> ContractInfo(coinType.address, R.drawable.logo_iotex_24, "https://iotexscan.io/token/${coinType.address}")
             is CoinType.Moonriver -> ContractInfo(coinType.address, R.drawable.logo_moonriver_24, "https://blockscout.moonriver.moonbeam.network/address/${coinType.address}")
             is CoinType.OkexChain -> ContractInfo(coinType.address, R.drawable.logo_okex_24, "https://www.oklink.com/oec/address/${coinType.address}")
-            is CoinType.PolygonPos -> ContractInfo(coinType.address, R.drawable.logo_polygon_24, "https://polygonscan.com/token/${coinType.address}")
             is CoinType.Solana -> ContractInfo(coinType.address, R.drawable.logo_solana_24, "https://explorer.solana.com/address/${coinType.address}")
             is CoinType.Sora -> ContractInfo(coinType.address, R.drawable.logo_sora_24, "https://sorascan.com/sora-mainnet/asset/${coinType.address}")
             is CoinType.Tomochain -> ContractInfo(coinType.address, R.drawable.logo_tomochain_24, "https://scan.tomochain.com/tokens/${coinType.address}")
@@ -323,11 +296,6 @@ class CoinViewFactory(
         return links
     }
 
-    fun getFormattedLatestRate(currencyValue: CurrencyValue): String {
-        val significantDecimal = App.numberFormatter.getSignificantDecimalFiat(currencyValue.value)
-        return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, significantDecimal)
-    }
-
     private fun getIcon(linkType: LinkType): Int {
         return when (linkType) {
             LinkType.Guide -> R.drawable.ic_academy_20
@@ -359,44 +327,6 @@ class CoinViewFactory(
         }
     }
 
-    private fun createChartData(
-        chartInfo: ChartInfo,
-        lastPoint: LastPoint?,
-        chartType: ChartView.ChartType
-    ): ChartData {
-        val points = chartInfo.points.map {
-            ChartPoint(
-                it.value.toFloat(),
-                it.volume?.toFloat(),
-                it.timestamp
-            )
-        }.toMutableList()
-        val chartInfoLastPoint = chartInfo.points.lastOrNull()
-        var endTimestamp = chartInfo.endTimestamp
-
-        if (lastPoint != null && chartInfoLastPoint?.timestamp != null && lastPoint.timestamp > chartInfoLastPoint.timestamp) {
-            endTimestamp = max(lastPoint.timestamp, endTimestamp)
-            points.add(ChartPoint(lastPoint.rate.toFloat(), null, lastPoint.timestamp))
-
-            if (chartType == ChartView.ChartType.DAILY) {
-                val startTimestamp = lastPoint.timestamp - 24 * 60 * 60
-                val startValue =
-                    lastPoint.rate.multiply(100.toBigDecimal()) / lastPoint.rateDiff24h.add(100.toBigDecimal())
-                val startPoint = ChartPoint(startValue.toFloat(), null, startTimestamp)
-
-                points.removeIf { it.timestamp <= startTimestamp }
-                points.add(0, startPoint)
-            }
-        }
-
-        return ChartDataFactory.build(
-            points,
-            chartInfo.startTimestamp,
-            endTimestamp,
-            chartInfo.isExpired
-        )
-    }
-
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
         val shortCapValue = numberFormatter.shortenValue(value)
         return numberFormatter.formatFiat(
@@ -408,14 +338,3 @@ class CoinViewFactory(
     }
 
 }
-
-data class MarketDataViewItem(
-    val marketCap: String?,
-    val marketCapRank: String?,
-    val volume24h: String?,
-    val tvl: String?,
-    val genesisDate: String?,
-    val circulatingSupply: String?,
-    val totalSupply: String?,
-    val dilutedMarketCap: String?,
-)

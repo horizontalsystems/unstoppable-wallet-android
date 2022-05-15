@@ -5,8 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.convertedError
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
+import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.evmfee.GasDataError
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ApproveStep
@@ -82,13 +83,18 @@ class UniswapViewModel(
                     tradeService.coinFrom,
                     tradeService.coinTo
                 ),
-                priceImpact = trade?.let { formatter.priceImpactViewItem(it)},
-                priceImpactWarning = trade?.priceImpactLevel == UniswapTradeService.PriceImpactLevel.Forbidden
+                priceImpact = trade?.let { formatter.priceImpactViewItem(it) }
             )
+            val warnings: List<Warning> = if (trade?.priceImpactLevel == UniswapTradeService.PriceImpactLevel.Forbidden)
+                listOf(UniswapModule.UniswapWarnings.PriceImpactWarning)
+            else
+                listOf()
+
             openConfirmationLiveEvent.postValue(
                 SendEvmData(
                     serviceState.transactionData,
-                    SendEvmData.AdditionalInfo.Uniswap(swapInfo)
+                    SendEvmData.AdditionalInfo.Uniswap(swapInfo),
+                    warnings
                 )
             )
         }
@@ -171,7 +177,7 @@ class UniswapViewModel(
 
     private fun sync(errors: List<Throwable>) {
         val filtered =
-            errors.filter { it !is EvmTransactionFeeService.GasDataError && it !is SwapError }
+            errors.filter { it !is GasDataError && it !is SwapError }
         swapErrorLiveData.postValue(filtered.firstOrNull()?.let { convert(it) })
 
         syncState()

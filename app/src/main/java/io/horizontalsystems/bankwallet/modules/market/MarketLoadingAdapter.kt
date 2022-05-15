@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
@@ -11,14 +10,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_market_loading.*
+import io.horizontalsystems.bankwallet.databinding.ViewHolderMarketLoadingBinding
 
 class MarketLoadingAdapter(
-        loadingLiveData: LiveData<Boolean>,
-        errorLiveData: LiveData<String?>,
-        private val onErrorClick: () -> Unit,
-        viewLifecycleOwner: LifecycleOwner
+    loadingLiveData: LiveData<Boolean>,
+    errorLiveData: LiveData<String?>,
+    private val onErrorClick: () -> Unit,
+    viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<MarketLoadingState, ViewHolderMarketLoading>(marketStateDiff) {
 
     private var loading = false
@@ -36,7 +34,11 @@ class MarketLoadingAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMarketLoading {
-        return ViewHolderMarketLoading.create(parent, onErrorClick)
+        return ViewHolderMarketLoading(
+            ViewHolderMarketLoadingBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ), onErrorClick
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolderMarketLoading, position: Int) {
@@ -55,15 +57,24 @@ class MarketLoadingAdapter(
 
     companion object {
         private val marketStateDiff = object : DiffUtil.ItemCallback<MarketLoadingState>() {
-            override fun areItemsTheSame(oldItem: MarketLoadingState, newItem: MarketLoadingState): Boolean {
+            override fun areItemsTheSame(
+                oldItem: MarketLoadingState,
+                newItem: MarketLoadingState
+            ): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: MarketLoadingState, newItem: MarketLoadingState): Boolean {
+            override fun areContentsTheSame(
+                oldItem: MarketLoadingState,
+                newItem: MarketLoadingState
+            ): Boolean {
                 return oldItem == newItem
             }
 
-            override fun getChangePayload(oldItem: MarketLoadingState, newItem: MarketLoadingState): Any? {
+            override fun getChangePayload(
+                oldItem: MarketLoadingState,
+                newItem: MarketLoadingState
+            ): Any? {
                 return oldItem
             }
         }
@@ -92,12 +103,15 @@ sealed class MarketLoadingState {
     }
 }
 
-class ViewHolderMarketLoading(override val containerView: View, onErrorClick: () -> Unit) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderMarketLoading(
+    private val binding: ViewHolderMarketLoadingBinding,
+    onErrorClick: () -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
 
     private var marketLoadingState: MarketLoadingState? = null
 
     init {
-        containerView.setOnClickListener {
+        binding.wrapper.setOnClickListener {
             if (marketLoadingState is MarketLoadingState.Error) {
                 onErrorClick()
             }
@@ -109,21 +123,15 @@ class ViewHolderMarketLoading(override val containerView: View, onErrorClick: ()
 
         when (item) {
             MarketLoadingState.Loading -> {
-                progressBar.isVisible = true
-                error.isVisible = false
+                binding.progressBar.isVisible = true
+                binding.error.isVisible = false
             }
             is MarketLoadingState.Error -> {
-                progressBar.isVisible = false
+                binding.progressBar.isVisible = false
 
-                error.isVisible = true
-                error.setText(item.message)
+                binding.error.isVisible = true
+                binding.error.setText(item.message)
             }
-        }
-    }
-
-    companion object {
-        fun create(parent: ViewGroup, onErrorClick: () -> Unit): ViewHolderMarketLoading {
-            return ViewHolderMarketLoading(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_loading, parent, false), onErrorClick)
         }
     }
 

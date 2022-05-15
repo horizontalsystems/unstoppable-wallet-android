@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +31,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -80,7 +82,6 @@ private fun CoinAuditsScreen(
     onClickReportUrl: (url: String) -> Unit
 ) {
     val viewState by viewModel.viewStateLiveData.observeAsState()
-    val loading by viewModel.loadingLiveData.observeAsState(false)
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val viewItems by viewModel.viewItemsLiveData.observeAsState()
 
@@ -98,33 +99,41 @@ private fun CoinAuditsScreen(
             }
         )
         HSSwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing || loading),
+            state = rememberSwipeRefreshState(isRefreshing),
             onRefresh = viewModel::refresh
         ) {
-            when (viewState) {
-                is ViewState.Error -> {
-                    ListErrorView(stringResource(R.string.Market_SyncError)) { viewModel.onErrorClick() }
-                }
-                ViewState.Success -> {
-                    if (viewItems?.isEmpty() == true) {
-                        NoAudits()
-                    } else {
-                        LazyColumn {
-                            viewItems?.forEach { viewItem ->
-                                item {
-                                    CoinAuditHeader(viewItem.name, viewItem.logoUrl)
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                }
-                                item {
-                                    CellMultilineLawrenceSection(viewItem.auditViewItems) { auditViewItem ->
-                                        CoinAudit(auditViewItem) { auditViewItem.reportUrl?.let { onClickReportUrl(it)} }
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    is ViewState.Loading -> {
+                        Loading()
+                    }
+                    is ViewState.Error -> {
+                        ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                    }
+                    ViewState.Success -> {
+                        if (viewItems?.isEmpty() == true) {
+                            ListEmptyView(
+                                text = stringResource(R.string.CoinPage_Audits_Empty),
+                                icon = R.drawable.ic_not_available
+                            )
+                        } else {
+                            LazyColumn {
+                                viewItems?.forEach { viewItem ->
+                                    item {
+                                        CoinAuditHeader(viewItem.name, viewItem.logoUrl)
+                                        Spacer(modifier = Modifier.height(8.dp))
                                     }
-                                    Spacer(modifier = Modifier.height(24.dp))
+                                    item {
+                                        CellMultilineLawrenceSection(viewItem.auditViewItems) { auditViewItem ->
+                                            CoinAudit(auditViewItem) { auditViewItem.reportUrl?.let { onClickReportUrl(it)} }
+                                        }
+                                        Spacer(modifier = Modifier.height(24.dp))
+                                    }
                                 }
-                            }
-                            item {
-                                Spacer(modifier = Modifier.height(32.dp))
-                                CellFooter(text = stringResource(id = R.string.CoinPage_Audits_PoweredBy))
+                                item {
+                                    Spacer(modifier = Modifier.height(32.dp))
+                                    CellFooter(text = stringResource(id = R.string.CoinPage_Audits_PoweredBy))
+                                }
                             }
                         }
                     }

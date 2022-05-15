@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ListType
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.Board
@@ -14,12 +14,11 @@ import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewMod
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsPoint
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.ChartDataFactory
+import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -33,52 +32,43 @@ class MarketOverviewViewModel(
 
     private val disposables = CompositeDisposable()
 
-    val loadingLiveData = MutableLiveData<Boolean>()
-    val viewItemStateLiveData = MutableLiveData<ViewItemState>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
+    val viewItem = MutableLiveData<MarketOverviewModule.ViewItem>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
 
     init {
-        Observable.combineLatest(
-            listOf(
-                service.topGainersObservable.map { it is DataState.Loading },
-                service.topLosersObservable.map { it is DataState.Loading },
-                service.marketMetricsObservable.map { it is DataState.Loading }
-            )
-        ) { array -> array.map { it as Boolean } }
-            .map { loadingArray ->
-                loadingArray.any { it }
-            }
-            .subscribeIO { loading ->
-                loadingLiveData.postValue(loading)
-            }
-            .let { disposables.add(it) }
-
-        Observable.combineLatest(
-            listOf(
+        Observable
+            .combineLatest(
                 service.topGainersObservable,
                 service.topLosersObservable,
                 service.marketMetricsObservable
-            )
-        ) { it }.subscribeIO { array ->
-            val errorDataState = array.firstOrNull { it is DataState.Error } as? DataState.Error
+            ) { t1, t2, t3 ->
+                Triple(t1, t2, t3)
+            }
+            .subscribeIO { (t1, t2, t3) ->
+                val error = listOfNotNull(
+                    t1.exceptionOrNull(),
+                    t2.exceptionOrNull(),
+                    t3.exceptionOrNull(),
+                ).firstOrNull()
 
-            val viewItemState: ViewItemState? = if (errorDataState != null) {
-                ViewItemState.Error(errorDataState.error.message ?: errorDataState.error.javaClass.simpleName)
-            } else {
-                val topGainerMarketItems = (array[0] as DataState<List<MarketItem>>).dataOrNull
-                val topLoserMarketItems = (array[1] as DataState<List<MarketItem>>).dataOrNull
-                val marketMetrics = (array[2] as DataState<MarketMetricsItem>).dataOrNull
-
-                if (topGainerMarketItems != null && topLoserMarketItems != null && marketMetrics != null) {
-                    ViewItemState.Loaded(getViewItem(topGainerMarketItems, topLoserMarketItems, marketMetrics))
+                if (error != null) {
+                    viewStateLiveData.postValue(ViewState.Error(error))
                 } else {
-                    null
+                    val topGainerMarketItems = t1.getOrNull()
+                    val topLoserMarketItems = t2.getOrNull()
+                    val marketMetrics = t3.getOrNull()
+
+                    if (topGainerMarketItems != null && topLoserMarketItems != null && marketMetrics != null) {
+                        val viewItem = getViewItem(topGainerMarketItems, topLoserMarketItems, marketMetrics)
+                        this.viewItem.postValue(viewItem)
+                        viewStateLiveData.postValue(ViewState.Success)
+                    }
                 }
             }
-            viewItemState?.let {
-                viewItemStateLiveData.postValue(it)
+            .let {
+                disposables.add(it)
             }
-        }.let { disposables.add(it) }
 
         service.start()
     }
@@ -154,10 +144,8 @@ class MarketOverviewViewModel(
     }
 
     private fun getChartData(marketMetricsPoints: List<MarketMetricsPoint>): ChartData {
-        val startTimestamp = marketMetricsPoints.first().timestamp
-        val endTimestamp = marketMetricsPoints.last().timestamp
-        val points = marketMetricsPoints.map { ChartPoint(it.value.toFloat(), null, it.timestamp) }
-        return ChartDataFactory.build(points, startTimestamp, endTimestamp, false)
+        val points = marketMetricsPoints.map { ChartPoint(it.value.toFloat(), it.timestamp) }
+        return ChartDataBuilder.buildFromPoints(points)
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {

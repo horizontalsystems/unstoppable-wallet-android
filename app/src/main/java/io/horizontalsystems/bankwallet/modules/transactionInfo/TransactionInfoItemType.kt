@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 sealed class TransactionInfoItemType {
@@ -70,3 +70,9 @@ sealed class TransactionInfoActionButton {
 }
 
 data class ColoredValue(val value: String, val color: Int)
+
+data class ColoredValueNew(val value: String, val color: ColorName)
+
+enum class ColorName{
+    Remus, Jacob, Grey, Leah
+}

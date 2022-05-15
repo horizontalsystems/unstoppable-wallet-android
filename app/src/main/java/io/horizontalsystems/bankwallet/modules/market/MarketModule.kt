@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -22,7 +21,7 @@ import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfo
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 object MarketModule {
@@ -30,7 +29,7 @@ object MarketModule {
     class Factory : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MarketService(App.marketStorage, App.localStorage)
             return MarketViewModel(service) as T
         }
@@ -59,12 +58,6 @@ object MarketModule {
         val description: String,
         val icon: ImageSource,
     )
-
-    sealed class ViewItemState {
-        class Error(val error: String) : ViewItemState()
-        class Data(val items: List<MarketViewItem>) : ViewItemState()
-    }
-
 }
 
 data class MarketItem(
@@ -146,7 +139,6 @@ sealed class ImageSource {
     class Local(@DrawableRes val resId: Int) : ImageSource()
     class Remote(val url: String, @DrawableRes val placeholder: Int = R.drawable.ic_placeholder) : ImageSource()
 
-    @ExperimentalCoilApi
     @Composable
     fun painter(): Painter = when (this) {
         is Local -> painterResource(resId)
@@ -177,6 +169,7 @@ data class MarketViewItem(
     val coinRate: String,
     val marketDataValue: MarketDataValue,
     val rank: String?,
+    val favorited: Boolean,
 ) {
 
     val coinUid: String
@@ -205,7 +198,8 @@ data class MarketViewItem(
     companion object {
         fun create(
             marketItem: MarketItem,
-            marketField: MarketField
+            marketField: MarketField,
+            favorited: Boolean = false
         ): MarketViewItem {
             val marketDataValue = when (marketField) {
                 MarketField.MarketCap -> {
@@ -247,7 +241,8 @@ data class MarketViewItem(
                     6
                 ),
                 marketDataValue,
-                marketItem.fullCoin.coin.marketCapRank?.toString()
+                marketItem.fullCoin.coin.marketCapRank?.toString(),
+                favorited
             )
         }
     }

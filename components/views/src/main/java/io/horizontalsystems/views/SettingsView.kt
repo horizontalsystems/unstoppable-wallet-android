@@ -2,37 +2,44 @@ package io.horizontalsystems.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.core.view.isVisible
-import kotlinx.android.synthetic.main.view_settings_item.view.*
-import kotlinx.android.synthetic.main.view_settings_value_text.view.*
 
-class SettingsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : SettingsViewBase(context, attrs, defStyleAttr) {
+class SettingsView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : SettingsViewBase(context, attrs, defStyleAttr) {
 
-    fun showValue(text: String?) {
-        settingsValueRight.text = text
-        settingsValueRight.isVisible = text != null
+    fun showValue(value: String?) {
+        findViewById<TextView>(R.id.settingsValueRight)?.apply {
+            text = value
+            isVisible = value != null
+        }
     }
 
-    fun showValueWithColor(text: String?, @ColorRes color: Int? = null) {
-        settingsValueRight.text = text
-        settingsValueRight.isVisible = text != null
-        color?.let { settingsValueRight.setTextColor(context.getColor(it)) }
+    fun showValueWithColor(value: String?, @ColorRes color: Int? = null) {
+        findViewById<TextView>(R.id.settingsValueRight)?.apply {
+            text = value
+            isVisible = value != null
+            color?.let { setTextColor(context.getColor(it)) }
+        }
     }
 
     fun showAttention(show: Boolean) {
-        attentionIcon.isVisible = show
+        findViewById<ImageView>(R.id.attentionIcon)?.isVisible = show
     }
 
     private fun showArrow(visible: Boolean) {
-        arrowIcon.isVisible = visible
+        findViewById<ImageView>(R.id.arrowIcon)?.isVisible = visible
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        if (!settingsSubtitle.text.isNullOrBlank()) {
+        if (!findViewById<TextView>(R.id.settingsSubtitle)?.text.isNullOrBlank()) {
             setAsDoubleLine()
         }
     }

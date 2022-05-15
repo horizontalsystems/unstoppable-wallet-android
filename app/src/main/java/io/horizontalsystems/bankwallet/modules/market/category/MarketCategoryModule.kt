@@ -4,29 +4,30 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.marketkit.models.CoinCategory
 
 object MarketCategoryModule {
 
     class Factory(
-        private val categoryUid: String,
-        private val categoryName: String,
-        private val categoryDescription: String,
-        private val categoryImageUrl: String,
+        private val coinCategory: CoinCategory
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val marketCategoryRepository = MarketCategoryRepository(App.marketKit)
             val service = MarketCategoryService(
                 marketCategoryRepository,
                 App.currencyManager,
-                categoryUid,
+                App.languageManager,
+                App.marketFavoritesManager,
+                coinCategory,
                 defaultTopMarket,
                 defaultSortingField
             )
-            return MarketCategoryViewModel(service, categoryName, categoryDescription, categoryImageUrl) as T
+            return MarketCategoryViewModel(service) as T
         }
 
         companion object {
@@ -41,3 +42,8 @@ object MarketCategoryModule {
     )
 
 }
+
+data class MarketItemWrapper(
+    val marketItem: MarketItem,
+    val favorited: Boolean,
+)

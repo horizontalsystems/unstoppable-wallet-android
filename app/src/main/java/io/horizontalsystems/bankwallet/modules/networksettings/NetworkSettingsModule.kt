@@ -11,7 +11,7 @@ object NetworkSettingsModule {
 
     private const val ACCOUNT = "account"
 
-    fun args(account: Account) = bundleOf(ACCOUNT to account)
+    fun prepareParams(account: Account) = bundleOf(ACCOUNT to account)
 
     class Factory(arguments: Bundle) : ViewModelProvider.Factory {
         val account: Account = arguments.getParcelable(ACCOUNT)!!

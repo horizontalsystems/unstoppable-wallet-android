@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.restoreSettingTypes
-import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.subjects.PublishSubject
@@ -15,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 class RestoreSettingsService(private val manager: RestoreSettingsManager) : Clearable {
 
     val approveSettingsObservable = PublishSubject.create<CoinWithSettings>()
-    val rejectApproveSettingsObservable = PublishSubject.create<Coin>()
+    val rejectApproveSettingsObservable = PublishSubject.create<PlatformCoin>()
     val requestObservable = PublishSubject.create<Request>()
 
     fun approveSettings(platformCoin: PlatformCoin, account: Account? = null) {
@@ -56,8 +55,8 @@ class RestoreSettingsService(private val manager: RestoreSettingsManager) : Clea
         approveSettingsObservable.onNext(coinWithSettings)
     }
 
-    fun cancel(coin: Coin) {
-        rejectApproveSettingsObservable.onNext(coin)
+    fun cancel(platformCoin: PlatformCoin) {
+        rejectApproveSettingsObservable.onNext(platformCoin)
     }
 
     override fun clear() = Unit

@@ -4,13 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_item_selector.*
+import io.horizontalsystems.bankwallet.databinding.FragmentAlertDialogSingleSelectBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderItemSelectorBinding
 
 class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
 
@@ -18,24 +17,34 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
     private var items = listOf<SelectorItem>()
     private var title: String? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    private var _binding: FragmentAlertDialogSingleSelectBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentAlertDialogSingleSelectBinding.inflate(inflater, container, false)
+        val view = binding.root
+
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         dialog?.window?.setBackgroundDrawableResource(R.drawable.alert_background_themed)
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED)
 
-        val view = inflater.inflate(R.layout.fragment_alert_dialog_single_select, container, false)
+        binding.dialogRecyclerView.adapter = SelectorAdapter(items, this, title != null)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.dialogRecyclerView)
-        val dialogTitle = view.findViewById<TextView>(R.id.dialogTitle)
-
-        recyclerView.adapter = SelectorAdapter(items, this, title != null)
-
-        dialogTitle.isVisible = title != null
-        dialogTitle.text = title
+        binding.dialogTitle.isVisible = title != null
+        binding.dialogTitle.text = title
 
         hideKeyBoard()
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onClick(position: Int) {
@@ -44,11 +53,18 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
     }
 
     private fun hideKeyBoard() {
-        (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
+        (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)?.hideSoftInputFromWindow(
+            activity?.currentFocus?.windowToken,
+            0
+        )
     }
 
     companion object {
-        fun newInstance(items: List<SelectorItem>, title: String? = null, onSelectItem: ((Int) -> Unit)? = null): SelectorDialog {
+        fun newInstance(
+            items: List<SelectorItem>,
+            title: String? = null,
+            onSelectItem: ((Int) -> Unit)? = null
+        ): SelectorDialog {
             val dialog = SelectorDialog()
             dialog.onSelectItem = onSelectItem
             dialog.items = items
@@ -59,16 +75,22 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
 
 }
 
-class SelectorAdapter(private val list: List<SelectorItem>,
-                      private val listener: Listener,
-                      private val hasTitle: Boolean) : RecyclerView.Adapter<SelectorOptionViewHolder>() {
+class SelectorAdapter(
+    private val list: List<SelectorItem>,
+    private val listener: Listener,
+    private val hasTitle: Boolean
+) : RecyclerView.Adapter<SelectorOptionViewHolder>() {
 
     interface Listener {
         fun onClick(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            SelectorOptionViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_item_selector, parent, false), listener)
+        SelectorOptionViewHolder(
+            ViewHolderItemSelectorBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ), listener
+        )
 
     override fun onBindViewHolder(holder: SelectorOptionViewHolder, position: Int) {
         holder.bind(list[position], hasTitle || position > 0)
@@ -77,16 +99,19 @@ class SelectorAdapter(private val list: List<SelectorItem>,
     override fun getItemCount() = list.size
 }
 
-class SelectorOptionViewHolder(override val containerView: View, private val listener: SelectorAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class SelectorOptionViewHolder(
+    private val binding: ViewHolderItemSelectorBinding,
+    private val listener: SelectorAdapter.Listener
+) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        containerView.setOnClickListener { listener.onClick(bindingAdapterPosition) }
+        binding.wrapper.setOnClickListener { listener.onClick(bindingAdapterPosition) }
     }
 
     fun bind(item: SelectorItem, showTopDivider: Boolean) {
-        itemTitle.text = item.caption
-        itemTitle.isSelected = item.selected
-        topDivider.isVisible = showTopDivider
+        binding.itemTitle.text = item.caption
+        binding.itemTitle.isSelected = item.selected
+        binding.topDivider.isVisible = showTopDivider
     }
 }
 

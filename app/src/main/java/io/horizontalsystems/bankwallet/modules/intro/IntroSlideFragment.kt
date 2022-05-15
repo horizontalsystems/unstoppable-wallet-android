@@ -4,41 +4,48 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.fragment_slide_intro.*
+import io.horizontalsystems.bankwallet.databinding.FragmentSlideIntroBinding
 
 class IntroSlideFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_slide_intro, container, false)
+    private var _binding: FragmentSlideIntroBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSlideIntroBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val titleResId = requireArguments().getInt(TITLE_KEY)
-        val descriptionResId = requireArguments().getInt(DESCRIPTION_KEY)
+        val imageResId = requireArguments().getInt(IMAGE_KEY)
 
-        title.isVisible = titleResId != 0
-        if (titleResId != 0) {
-            title.text = getString(titleResId)
+        if (imageResId != 0) {
+            binding.imageView.setImageResource(imageResId)
         }
-        description.text = getString(descriptionResId)
     }
 
     companion object {
-        const val TITLE_KEY = "title_key"
-        const val DESCRIPTION_KEY = "description_key"
+        const val IMAGE_KEY = "image_key"
 
         @JvmStatic
-        fun newInstance(titleResId: Int?, descriptionResId: Int) =
-                IntroSlideFragment().apply {
-                    arguments = Bundle(2).apply {
-                        titleResId?.let { putInt(TITLE_KEY, it) }
-                        putInt(DESCRIPTION_KEY, descriptionResId)
-                    }
+        fun newInstance(imageResId: Int) =
+            IntroSlideFragment().apply {
+                arguments = Bundle(1).apply {
+                    putInt(IMAGE_KEY, imageResId)
                 }
+            }
     }
 }

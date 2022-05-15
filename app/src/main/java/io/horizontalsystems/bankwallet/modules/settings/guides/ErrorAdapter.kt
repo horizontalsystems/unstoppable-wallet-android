@@ -1,13 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.settings.guides
 
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.LocalizedException
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_error.*
+import io.horizontalsystems.bankwallet.databinding.ViewHolderErrorBinding
 import java.net.UnknownHostException
 
 class ErrorAdapter : RecyclerView.Adapter<ErrorViewHolder>() {
@@ -18,7 +16,11 @@ class ErrorAdapter : RecyclerView.Adapter<ErrorViewHolder>() {
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ErrorViewHolder {
-        return ErrorViewHolder(inflate(parent, R.layout.view_holder_error))
+        return ErrorViewHolder(
+            ViewHolderErrorBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
     }
 
     override fun getItemCount(): Int {
@@ -33,12 +35,13 @@ class ErrorAdapter : RecyclerView.Adapter<ErrorViewHolder>() {
 
 }
 
-class ErrorViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ErrorViewHolder(private val binding: ViewHolderErrorBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     fun bind(error: Throwable) {
-        message.text =  when (error) {
-            is UnknownHostException -> containerView.context.getString(R.string.Hud_Text_NoInternet)
-            is LocalizedException -> containerView.context.getString(error.errorTextRes)
-            else -> containerView.context.getString(R.string.Hud_UnknownError, error)
+        binding.message.text = when (error) {
+            is UnknownHostException -> binding.message.context.getString(R.string.Hud_Text_NoInternet)
+            is LocalizedException -> binding.message.context.getString(error.errorTextRes)
+            else -> binding.message.context.getString(R.string.Hud_UnknownError, error)
         }
     }
 }

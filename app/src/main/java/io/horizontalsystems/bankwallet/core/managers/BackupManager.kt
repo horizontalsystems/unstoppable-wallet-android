@@ -13,11 +13,4 @@ class BackupManager(private val accountManager: IAccountManager) : IBackupManage
         get() = accountManager.accountsFlowable.map { accounts ->
             accounts.all { it.isBackedUp }
         }
-
-    override fun setIsBackedUp(id: String) {
-        accountManager.accounts.find { it.id == id }?.let { account ->
-            account.isBackedUp = true
-            accountManager.update(account)
-        }
-    }
 }

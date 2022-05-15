@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.databinding.ActivitySendBinding
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter.ActionState
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
@@ -34,18 +35,21 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.activity_send.*
 
 class SendActivity : BaseActivity() {
 
     private lateinit var mainPresenter: SendPresenter
+    private lateinit var binding: ActivitySendBinding
 
     private var proceedButtonView: ProceedButtonView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // prevent fragment recreations by passing null to onCreate
         super.onCreate(null)
-        setContentView(R.layout.activity_send)
+
+        binding = ActivitySendBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top)
 
@@ -53,7 +57,8 @@ class SendActivity : BaseActivity() {
 
         setToolbar(wallet.platformCoin.fullCoin)
 
-        mainPresenter = ViewModelProvider(this, SendModule.Factory(wallet)).get(SendPresenter::class.java)
+        mainPresenter =
+            ViewModelProvider(this, SendModule.Factory(wallet)).get(SendPresenter::class.java)
 
         subscribeToViewEvents(mainPresenter.view as SendView, wallet)
         subscribeToRouterEvents(mainPresenter.router as SendRouter)
@@ -62,10 +67,10 @@ class SendActivity : BaseActivity() {
     }
 
     private fun setToolbar(fullCoin: FullCoin) {
-        toolbarCompose.setViewCompositionStrategy(
+        binding.toolbarCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(this)
         )
-        toolbarCompose.setContent {
+        binding.toolbarCompose.setContent {
             ComposeAppTheme {
                 AppBar(
                     title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
@@ -92,7 +97,11 @@ class SendActivity : BaseActivity() {
 
     private fun subscribeToRouterEvents(router: SendRouter) {
         router.closeWithSuccess.observe(this, Observer {
-            HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Send_Success, SnackbarDuration.LONG)
+            HudHelper.showSuccessMessage(
+                findViewById(android.R.id.content),
+                R.string.Send_Success,
+                SnackbarDuration.LONG
+            )
 
             //Delay 1200 millis to properly show message
             Handler(Looper.getMainLooper()).postDelayed({ finish() }, 1200)
@@ -109,7 +118,12 @@ class SendActivity : BaseActivity() {
             hideSoftKeyboard()
 
             supportFragmentManager.commit {
-                setCustomAnimations(R.anim.slide_from_right, R.anim.slide_to_left, R.anim.slide_from_left, R.anim.slide_to_right)
+                setCustomAnimations(
+                    R.anim.slide_from_right,
+                    R.anim.slide_to_left,
+                    R.anim.slide_from_left,
+                    R.anim.slide_to_right
+                )
                 add(R.id.rootView, ConfirmationFragment(mainPresenter))
                 addToBackStack(null)
             }
@@ -135,7 +149,12 @@ class SendActivity : BaseActivity() {
         hideSoftKeyboard()
 
         supportFragmentManager.commit {
-            setCustomAnimations(R.anim.slide_from_right, R.anim.slide_to_left, R.anim.slide_from_left, R.anim.slide_to_right)
+            setCustomAnimations(
+                R.anim.slide_from_right,
+                R.anim.slide_to_left,
+                R.anim.slide_from_left,
+                R.anim.slide_to_right
+            )
             add(R.id.rootView, SendFeeInfoFragment())
             addToBackStack(null)
         }
@@ -149,48 +168,61 @@ class SendActivity : BaseActivity() {
                 SendModule.Input.Amount -> {
                     //add amount view
                     mainPresenter.amountModuleDelegate?.let {
-                        val sendAmountFragment = SendAmountFragment(wallet, it, mainPresenter.handler)
+                        val sendAmountFragment =
+                            SendAmountFragment(wallet, it, mainPresenter.handler)
                         fragments.add(sendAmountFragment)
-                        supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAmountFragment).commitNow()
+                        supportFragmentManager.beginTransaction()
+                            .add(R.id.sendLinearLayout, sendAmountFragment).commitNow()
                     }
                 }
                 is SendModule.Input.Address -> {
                     //add address view
                     mainPresenter.addressModuleDelegate?.let {
-                        val sendAddressFragment = SendAddressFragment(wallet.platformCoin, it, mainPresenter.handler)
+                        val sendAddressFragment =
+                            SendAddressFragment(wallet.platformCoin, it, mainPresenter.handler)
                         fragments.add(sendAddressFragment)
-                        supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
-                                .commitNow()
+                        supportFragmentManager.beginTransaction()
+                            .add(R.id.sendLinearLayout, sendAddressFragment)
+                            .commitNow()
                     }
                 }
                 SendModule.Input.Hodler -> {
                     mainPresenter.hodlerModuleDelegate?.let {
                         val sendAddressFragment = SendHodlerFragment(it, mainPresenter.handler)
                         fragments.add(sendAddressFragment)
-                        supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
-                                .commitNow()
+                        supportFragmentManager.beginTransaction()
+                            .add(R.id.sendLinearLayout, sendAddressFragment)
+                            .commitNow()
                     }
                 }
                 is SendModule.Input.Fee -> {
                     //add fee view
                     mainPresenter.feeModuleDelegate?.let {
-                        val sendFeeFragment = SendFeeFragment(wallet.platformCoin, it, mainPresenter.handler, mainPresenter.customPriorityUnit)
+                        val sendFeeFragment = SendFeeFragment(
+                            wallet.platformCoin,
+                            it,
+                            mainPresenter.handler,
+                            mainPresenter.customPriorityUnit
+                        )
                         fragments.add(sendFeeFragment)
-                        supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendFeeFragment)
-                                .commitNow()
+                        supportFragmentManager.beginTransaction()
+                            .add(R.id.sendLinearLayout, sendFeeFragment)
+                            .commitNow()
                     }
                 }
                 is SendModule.Input.Memo -> {
                     //add memo view
-                    val sendMemoFragment = SendMemoFragment(input.maxLength, input.hidden, mainPresenter.handler)
+                    val sendMemoFragment =
+                        SendMemoFragment(input.maxLength, input.hidden, mainPresenter.handler)
                     fragments.add(sendMemoFragment)
-                    supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendMemoFragment).commitNow()
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.sendLinearLayout, sendMemoFragment).commitNow()
                 }
                 SendModule.Input.ProceedButton -> {
                     //add send button
                     proceedButtonView = ProceedButtonView(this)
                     proceedButtonView?.bind { mainPresenter.onProceedClicked() }
-                    sendLinearLayout.addView(proceedButtonView)
+                    binding.sendLinearLayout.addView(proceedButtonView)
                 }
             }
         }

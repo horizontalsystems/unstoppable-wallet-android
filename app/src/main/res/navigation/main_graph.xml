@@ -56,11 +56,7 @@
             app:destination="@id/metricsPageFragment" />
         <action
             android:id="@+id/mainFragment_to_swapFragment"
-            app:destination="@id/swapFragment"
-            app:enterAnim="@anim/slide_from_bottom_long"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_to_bottom_long" />
+            app:destination="@id/swapFragment" />
         <action
             android:id="@+id/mainFragment_to_walletConnect"
             app:destination="@id/wallet_connect_graph" />
@@ -79,7 +75,26 @@
         <action
             android:id="@+id/mainFragment_to_releaseNotesFragment"
             app:destination="@id/releaseNotesFragment" />
+        <action
+            android:id="@+id/mainFragment_to_wc2SendEthereumTransactionRequestFragment"
+            app:destination="@id/wc2SendEthereumTransactionRequestFragment" />
+        <action
+            android:id="@+id/mainFragment_to_wc2SignMessageRequestFragment"
+            app:destination="@id/wc2SignMessageRequestFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/wc2SignMessageRequestFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestFragment">
+        <action
+            android:id="@+id/wcSignMessageRequestFragment_to_wcDisplayTypedMessageFragment"
+            app:destination="@id/wcDisplayTypedMessageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/wc2SendEthereumTransactionRequestFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestFragment"/>
+    <fragment
+        android:id="@+id/wcDisplayTypedMessageFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCDisplayTypedMessageFragment"/>
     <fragment
         android:id="@+id/sendEvmFragment"
         android:name="io.horizontalsystems.bankwallet.modules.sendevm.SendEvmFragment"
@@ -91,11 +106,12 @@
     <fragment
         android:id="@+id/sendEvmConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_send_evm">
-        <action
-            android:id="@+id/sendEvmConfirmationFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_confirmation_send_evm" />
+
+    <fragment
+        android:id="@+id/sendEvmFeeSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment" />
+
     <fragment
         android:id="@+id/transactionInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"
@@ -107,11 +123,7 @@
     <fragment
         android:id="@+id/transactionSpeedUpCancelFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"
-        tools:layout="@layout/fragment_transaction_speedup_cancel">
-        <action
-            android:id="@+id/transactionSpeedUpCancelFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_confirmation_send_evm" />
     <fragment
         android:id="@+id/manageWalletsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment"
@@ -347,11 +359,7 @@
         tools:layout="@layout/fragment_swap">
         <action
             android:id="@+id/swapFragment_to_swapApproveFragment"
-            app:destination="@id/swapApproveFragment"
-            app:enterAnim="@anim/slide_from_bottom_long"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_to_bottom_long" />
+            app:destination="@id/swapApproveFragment" />
         <action
             android:id="@+id/swapFragment_to_uniswapConfirmationFragment"
             app:destination="@id/uniswapConfirmationFragment" />
@@ -360,11 +368,7 @@
             app:destination="@id/oneInchConfirmationFragment" />
         <action
             android:id="@+id/swapFragment_to_swapSettingsMainFragment"
-            app:destination="@id/swapSettingsMainFragment"
-            app:enterAnim="@anim/slide_from_bottom_long"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@anim/slide_to_bottom_long" />
+            app:destination="@id/swapSettingsMainFragment" />
     </fragment>
     <fragment
         android:id="@+id/swapApproveFragment"
@@ -377,28 +381,16 @@
     <fragment
         android:id="@+id/uniswapConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_swap">
-        <action
-            android:id="@+id/uniswapConfirmationFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_confirmation_send_evm" />
     <fragment
         android:id="@+id/oneInchConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_swap">
-        <action
-            android:id="@+id/oneInchConfirmationFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_confirmation_send_evm" />
 
     <fragment
         android:id="@+id/swapApproveConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_approve_swap">
-        <action
-            android:id="@+id/swapApproveConfirmationFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_confirmation_send_evm" />
 
     <fragment
         android:id="@+id/swapInfoFragment"
@@ -407,11 +399,7 @@
     <fragment
         android:id="@+id/swapSettingsMainFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsMainFragment"
-        android:label="SwapTradeOptionsFragment"
-        app:enterAnim="@anim/slide_from_bottom"
-        app:exitAnim="@android:anim/fade_out"
-        app:popEnterAnim="@android:anim/fade_in"
-        app:popExitAnim="@anim/slide_to_bottom">
+        android:label="SwapTradeOptionsFragment">
         <action
             android:id="@+id/swapSettingsMainFragment_to_swapInfoFragment"
             app:destination="@id/swapInfoFragment" />
@@ -445,10 +433,6 @@
         android:name="io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchResultsFragment"
         tools:layout="@layout/fragment_market_advanced_search_results" />
     <fragment
-        android:id="@+id/feeSpeedInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.ui.FeeInfoFragment"
-        tools:layout="@layout/fragment_fee_info" />
-    <fragment
         android:id="@+id/createAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment"
         tools:layout="@layout/fragment_create_account" />
@@ -457,8 +441,11 @@
         android:name="io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.RestoreMnemonicFragment"
         tools:layout="@layout/fragment_restore_mnemonic" />
     <fragment
+        android:id="@+id/watchAddressFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment" />
+    <fragment
         android:id="@+id/restoreSelectCoinsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment"
         tools:layout="@layout/fragment_manage_wallets" />
     <fragment
         android:id="@+id/receiveFragment"
@@ -480,6 +467,14 @@
         android:id="@+id/tvlFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment" />
 
+    <fragment
+        android:id="@+id/nftsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionsFragment" />
+
+    <fragment
+        android:id="@+id/nftAssetFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetFragment" />
+
     <!--  Dialogs/BottomSheets  -->
     <!--    <dialog-->
     <!--        android:id="@+id/transactionInfoDialog"-->
@@ -498,4 +493,28 @@
         android:id="@+id/selectSwapCoinDialog"
         android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment"
         tools:layout="@layout/fragment_swap_select_token" />
+
+    <dialog
+        android:id="@+id/wcErrorNoAccountFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment" />
+
+    <dialog
+        android:id="@+id/wcErrorWatchAccountFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorWatchAccountFragment" />
+
+    <dialog
+        android:id="@+id/backupRequiredDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />
+
+    <dialog
+        android:id="@+id/syncErrorDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog" />
+
+    <dialog
+        android:id="@+id/unlinkConfirmationDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog" />
+
+    <dialog
+        android:id="@+id/feeSettingsInfoDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog" />
 </navigation>

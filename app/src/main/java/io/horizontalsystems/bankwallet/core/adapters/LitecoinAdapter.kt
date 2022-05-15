@@ -37,14 +37,6 @@ class LitecoinAdapter(
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
-    // ITransactionsAdapter
-
-    override val explorerTitle: String = "blockchair.com"
-
-    override fun explorerUrl(transactionHash: String): String? {
-        return if (testMode) null else "https://blockchair.com/litecoin/transaction/$transactionHash"
-    }
-
     //
     // LitecoinKit Listener
     //

@@ -13,6 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.databinding.Fragment1inchBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ApproveStep
@@ -25,8 +28,8 @@ import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
-import kotlinx.android.synthetic.main.fragment_1inch.*
 
 class OneInchFragment : SwapBaseFragment() {
 
@@ -55,12 +58,22 @@ class OneInchFragment : SwapBaseFragment() {
         return oneInchViewModel.getProviderState()
     }
 
+    private var _binding: Fragment1inchBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_1inch, container, false)
+        _binding = Fragment1inchBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onStart() {
@@ -82,7 +95,7 @@ class OneInchFragment : SwapBaseFragment() {
             SwapMainModule.coinCardTypeFrom,
             SwapCoinCardViewModel::class.java
         )
-        fromCoinCard.initialize(
+        binding.fromCoinCard.initialize(
             getString(R.string.Swap_FromAmountTitle),
             fromCoinCardViewModel,
             this,
@@ -93,10 +106,15 @@ class OneInchFragment : SwapBaseFragment() {
             SwapMainModule.coinCardTypeTo,
             SwapCoinCardViewModel::class.java
         )
-        toCoinCard.initialize(getString(R.string.Swap_ToAmountTitle), toCoinCardViewModel, this, viewLifecycleOwner)
-        toCoinCard.setAmountEnabled(false)
+        binding.toCoinCard.initialize(
+            getString(R.string.Swap_ToAmountTitle),
+            toCoinCardViewModel,
+            this,
+            viewLifecycleOwner
+        )
+        binding.toCoinCard.setAmountEnabled(false)
 
-        allowanceView.initialize(allowanceViewModel, viewLifecycleOwner)
+        binding.allowanceView.initialize(allowanceViewModel, viewLifecycleOwner)
 
         observeViewModel()
 
@@ -106,23 +124,23 @@ class OneInchFragment : SwapBaseFragment() {
             }
         }
 
-        switchButton.setOnClickListener {
+        binding.switchButton.setOnClickListener {
             oneInchViewModel.onTapSwitch()
         }
 
-        buttonsCompose.setViewCompositionStrategy(
+        binding.buttonsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
     }
 
     private fun observeViewModel() {
         oneInchViewModel.isLoadingLiveData().observe(viewLifecycleOwner, { isLoading ->
-            progressBar.isVisible = isLoading
+            binding.progressBar.isVisible = isLoading
         })
 
         oneInchViewModel.swapErrorLiveData().observe(viewLifecycleOwner, { error ->
-            commonError.text = error
-            commonError.isVisible = error != null
+            binding.commonError.text = error
+            binding.commonError.isVisible = error != null
         })
 
         oneInchViewModel.buttonsLiveData().observe(viewLifecycleOwner, { buttons ->
@@ -130,33 +148,30 @@ class OneInchFragment : SwapBaseFragment() {
         })
 
         oneInchViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
-            SwapApproveModule.start(
-                this,
+            findNavController().slideFromBottom(
                 R.id.swapFragment_to_swapApproveFragment,
-                approveData
+                SwapApproveModule.prepareParams(approveData)
             )
         })
 
         oneInchViewModel.openConfirmationLiveEvent()
             .observe(viewLifecycleOwner, { oneInchSwapParameters ->
-                OneInchConfirmationModule.start(
-                    this,
+                findNavController().slideFromRight(
                     R.id.swapFragment_to_oneInchConfirmationFragment,
-                    navOptions(),
-                    oneInchSwapParameters
+                    OneInchConfirmationModule.prepareParams(oneInchSwapParameters)
                 )
             })
 
         oneInchViewModel.approveStepLiveData().observe(viewLifecycleOwner, { approveStep ->
             when (approveStep) {
                 ApproveStep.ApproveRequired, ApproveStep.Approving -> {
-                    approveStepsView.setStepOne()
+                    binding.approveStepsView.setStepOne()
                 }
                 ApproveStep.Approved -> {
-                    approveStepsView.setStepTwo()
+                    binding.approveStepsView.setStepTwo()
                 }
                 ApproveStep.NA, null -> {
-                    approveStepsView.hide()
+                    binding.approveStepsView.hide()
                 }
             }
         })
@@ -164,7 +179,7 @@ class OneInchFragment : SwapBaseFragment() {
 
     private fun setButtons(buttons: Buttons) {
         val approveButtonVisible = buttons.approve != ActionState.Hidden
-        buttonsCompose.setContent {
+        binding.buttonsCompose.setContent {
             ComposeAppTheme {
                 Row(
                     modifier = Modifier

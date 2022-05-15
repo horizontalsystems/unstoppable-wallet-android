@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,12 +27,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.typeLabel
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
@@ -47,7 +48,6 @@ class MarketSearchFragment : BaseFragment() {
 
     private val viewModel by viewModels<MarketSearchViewModel> { MarketSearchModule.Factory() }
 
-    @ExperimentalMaterialApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,32 +65,25 @@ class MarketSearchFragment : BaseFragment() {
                     screenState = screenState,
                     onBackButtonClick = { findNavController().popBackStack() },
                     onFilterButtonClick = {
-                        findNavController().navigate(
-                            R.id.marketSearchFragment_to_marketAdvancedSearchFragment,
-                            null,
-                            navOptions()
+                        findNavController().slideFromRight(
+                            R.id.marketSearchFragment_to_marketAdvancedSearchFragment
                         )
                     },
                     onCoinClick = { coin ->
                         val arguments = CoinFragment.prepareParams(coin.uid)
-                        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+                        findNavController().slideFromRight(R.id.coinFragment, arguments)
                     },
                     onCategoryClick = { viewItemType ->
                         when (viewItemType) {
                             MarketSearchModule.DiscoveryItem.TopCoins -> {
-                                findNavController().navigate(
-                                    R.id.marketSearchFragment_to_marketTopCoinsFragment,
-                                    null,
-                                    navOptionsFromBottom()
+                                findNavController().slideFromBottom(
+                                    R.id.marketSearchFragment_to_marketTopCoinsFragment
                                 )
                             }
                             is MarketSearchModule.DiscoveryItem.Category -> {
-                                val args =
-                                    MarketCategoryFragment.prepareParams(viewItemType.coinCategory)
-                                findNavController().navigate(
+                                findNavController().slideFromBottom(
                                     R.id.marketCategoryFragment,
-                                    args,
-                                    navOptionsFromBottom()
+                                    bundleOf(MarketCategoryFragment.categoryKey to viewItemType.coinCategory)
                                 )
                             }
                         }
@@ -106,7 +99,6 @@ class MarketSearchFragment : BaseFragment() {
 
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun MarketSearchScreen(
     screenState: MarketSearchModule.DataState?,
@@ -119,7 +111,7 @@ fun MarketSearchScreen(
 ) {
 
     ComposeAppTheme {
-        Column {
+        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             SearchView(
                 onSearchTextChange = {
                     onSearchQueryChange.invoke(it)
@@ -134,7 +126,10 @@ fun MarketSearchScreen(
                 }
                 is MarketSearchModule.DataState.SearchResult -> {
                     if (screenState.coinItems.isEmpty()) {
-                        NoResults()
+                        ListEmptyView(
+                            text = stringResource(R.string.EmptyResults),
+                            icon = R.drawable.ic_not_found
+                        )
                     } else {
                         MarketSearchResults(
                             screenState.coinItems,
@@ -145,20 +140,6 @@ fun MarketSearchScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun NoResults() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        Text(
-            text = stringResource(R.string.EmptyResults),
-            modifier = Modifier.padding(horizontal = 16.dp).align(Alignment.Center),
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey,
-        )
     }
 }
 
@@ -276,8 +257,6 @@ fun SearchView(
 
 }
 
-@ExperimentalMaterialApi
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CardsGrid(
     viewItems: List<MarketSearchModule.DiscoveryItem>,

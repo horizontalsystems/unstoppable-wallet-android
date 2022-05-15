@@ -9,30 +9,47 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.databinding.FragmentExperimentalFeaturesBinding
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_experimental_features.*
 
 class ExperimentalFeaturesFragment : BaseFragment() {
 
     private val presenter by viewModels<ExperimentalFeaturesPresenter> { ExperimentalFeaturesModule.Factory() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_experimental_features, container, false)
+    private var _binding: FragmentExperimentalFeaturesBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentExperimentalFeaturesBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
         val router = presenter.router as ExperimentalFeaturesRouter
 
         router.showBitcoinHodlingLiveEvent.observe(this, Observer {
-            findNavController().navigate(R.id.experimentalFeaturesFragment_to_bitcoinHodlingFragment, null, navOptions())
+            findNavController().slideFromRight(
+                R.id.experimentalFeaturesFragment_to_bitcoinHodlingFragment
+            )
         })
 
-        bitcoinHodling.setOnSingleClickListener {
+        binding.bitcoinHodling.setOnSingleClickListener {
             presenter.didTapBitcoinHodling()
         }
     }

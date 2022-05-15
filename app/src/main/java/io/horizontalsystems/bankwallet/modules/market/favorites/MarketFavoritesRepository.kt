@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
-import io.reactivex.Observable
 import io.reactivex.Single
 
 class MarketFavoritesRepository(
@@ -15,8 +14,7 @@ class MarketFavoritesRepository(
 ) {
     private var cache: List<MarketItem> = listOf()
 
-    val dataUpdatedObservable: Observable<Unit>
-        get() = manager.dataUpdatedAsync
+    val dataUpdatedObservable by manager::dataUpdatedAsync
 
     private fun getFavorites(
         forceRefresh: Boolean,
@@ -53,4 +51,8 @@ class MarketFavoritesRepository(
                 emitter.onError(error)
             }
         }
+
+    fun removeFavorite(uid: String) {
+        manager.remove(uid)
+    }
 }

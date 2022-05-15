@@ -19,14 +19,13 @@ import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.Se
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityViewItem
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
 import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.chartview.ChartDataFactory
+import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.marketkit.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.MarketInfoDetails
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 class CoinDetailsViewModel(
     private val service: CoinDetailsService,
@@ -39,15 +38,13 @@ class CoinDetailsViewModel(
     val coin: Coin
         get() = service.coin
 
-    val viewStateLiveData = MutableLiveData<ViewState>()
-    val loadingLiveData = MutableLiveData<Boolean>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val viewItemLiveData = MutableLiveData<ViewItem>()
 
     init {
         service.stateObservable
             .subscribeIO { state ->
-                loadingLiveData.postValue(state == DataState.Loading)
                 when (state) {
                     is DataState.Success -> {
                         viewStateLiveData.postValue(ViewState.Success)
@@ -130,14 +127,17 @@ class CoinDetailsViewModel(
         val last = values.last()
 
         val points = values.map {
-            io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(),
-                null,
-                it.timestamp)
+            io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(), it.timestamp)
         }
 
-        val diff = (last.value / first.value - BigDecimal.ONE) * BigDecimal(100)
-        val chartData = ChartDataFactory.build(points, first.timestamp, last.timestamp, false)
-        val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, last.value))
+        val lastItemValue = last.value
+        val firstItemValue = first.value
+
+        val diff = (lastItemValue - firstItemValue) / firstItemValue * 100.toBigDecimal()
+        val chartData = ChartDataBuilder.buildFromPoints(points)
+        val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency,
+            lastItemValue
+        ))
 
         return CoinDetailsModule.ChartViewItem(
             badge = badge,

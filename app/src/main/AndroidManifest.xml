@@ -27,18 +27,12 @@
             android:name=".modules.launcher.LauncherActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/LauncherTheme">
+            android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".modules.main.MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -47,6 +41,11 @@
 
                 <data android:scheme="wc" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".modules.main.MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
         </activity>
         <activity
             android:name=".modules.send.SendActivity"
@@ -60,8 +59,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.intro.IntroActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/OnboardingTheme" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".modules.keystore.KeyStoreActivity"
             android:screenOrientation="portrait" />

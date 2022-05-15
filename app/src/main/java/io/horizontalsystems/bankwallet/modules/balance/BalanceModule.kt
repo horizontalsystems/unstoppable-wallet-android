@@ -9,13 +9,17 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
 
 object BalanceModule {
+    class AccountsFactory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return BalanceAccountsViewModel(App.accountManager) as T
+        }
+    }
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val activeAccountService = ActiveAccountService(App.accountManager)
-
-            val balanceService2 = BalanceService2(
+            val balanceService = BalanceService(
                 BalanceActiveWalletRepository(App.walletManager, App.accountSettingManager),
                 BalanceXRateRepository(App.currencyManager, App.marketKit),
                 BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
@@ -23,17 +27,10 @@ object BalanceModule {
                 App.localStorage,
                 App.connectivityManager,
                 BalanceSorter(),
+                App.accountManager
             )
 
-            val rateAppService = RateAppService(App.rateAppManager)
-
-            return BalanceViewModel(
-                balanceService2,
-                rateAppService,
-                activeAccountService,
-                BalanceViewItemFactory(),
-                App.appConfigProvider.reportEmail
-            ) as T
+            return BalanceViewModel(balanceService, BalanceViewItemFactory()) as T
         }
     }
 

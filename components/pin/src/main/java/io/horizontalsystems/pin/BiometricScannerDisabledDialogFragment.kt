@@ -2,25 +2,30 @@ package io.horizontalsystems.pin
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import io.horizontalsystems.pin.databinding.BiometricScannerDisabledDialogBinding
 
 class BiometricScannerDisabledDialogFragment : DialogFragment() {
 
-    override fun onCreateDialog(bundle: Bundle?): Dialog {
-        val rootView = View.inflate(context, R.layout.biometric_scanner_disabled_dialog, null) as ViewGroup
+    private var _binding: BiometricScannerDisabledDialogBinding? = null
+    private val binding get() = _binding!!
 
-        rootView.findViewById<TextView>(R.id.actionButtonTextView)?.let { btn ->
-            btn.setOnClickListener {
-                dismiss()
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onCreateDialog(bundle: Bundle?): Dialog {
+        _binding = BiometricScannerDisabledDialogBinding.inflate(LayoutInflater.from(context))
+
+        binding.actionButtonTextView.setOnClickListener {
+            dismiss()
         }
 
         val builder = activity?.let { AlertDialog.Builder(it, R.style.AlertDialog) }
-        builder?.setView(rootView)
+        builder?.setView(binding.root)
         val mDialog = builder?.create()
         mDialog?.setCanceledOnTouchOutside(true)
 

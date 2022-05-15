@@ -1,74 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/introLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:windowBackground"
+    android:background="?SplashScreenBackground"
     android:clickable="true"
     >
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/verticalCenter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <ImageSwitcher
-        android:id="@+id/imageSwitcher"
-        android:layout_width="280dp"
-        android:layout_height="280dp"
-        android:inAnimation="@android:anim/fade_in"
-        android:outAnimation="@android:anim/fade_out"
-        android:transitionName="welcome_wallet_logo"
-        app:layout_constraintBottom_toTopOf="@+id/verticalCenter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/navigationStartGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.82" />
-
-    <me.relex.circleindicator.CircleIndicator
-        android:id="@+id/circleIndicator"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        app:ci_animator="@anim/pager_indicator_animation"
-        app:ci_drawable="@drawable/pin_pager_circle_selected"
-        app:ci_drawable_unselected="@drawable/pin_pager_circle"
-        app:ci_height="4dp"
-        app:ci_margin="4dp"
-        app:ci_width="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/navigationStartGuideline" />
-
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/buttonNextCompose"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/circleIndicator"
-        app:layout_constraintVertical_bias="0.27"
-        tools:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
+        <View
+            android:id="@+id/spacer1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            />
+
+        <View
+            android:id="@+id/imageSwitcherSpace"
+            android:layout_width="match_parent"
+            android:layout_height="326dp"
+            />
+
+        <View
+            android:id="@+id/spacer2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/circleIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            app:ci_animator="@anim/pager_indicator_animation"
+            app:ci_drawable="@drawable/pin_pager_circle_selected"
+            app:ci_drawable_unselected="@drawable/pin_pager_circle"
+            app:ci_height="4dp"
+            app:ci_margin="4dp"
+            app:ci_width="20dp"
+            />
+
+        <View
+            android:id="@+id/spacer3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <LinearLayout
+            android:id="@+id/textWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:orientation="vertical"
+            >
+
+            <TextSwitcher
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inAnimation="@android:anim/fade_in"
+                android:outAnimation="@android:anim/fade_out"
+                >
+
+                <TextView
+                    style="@style/Title3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:textAlignment="center"
+                    tools:text="@string/Intro_Wallet_Screen2Title"
+                    />
+
+                <TextView
+                    style="@style/Title3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:textAlignment="center"
+                    />
+            </TextSwitcher>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                />
+
+            <TextSwitcher
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inAnimation="@anim/fade_in_anim"
+                android:outAnimation="@anim/fade_out_anim"
+                >
+
+                <TextView
+                    style="@style/Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="48dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey"
+                    tools:text="@string/Intro_Wallet_Screen2Description"
+                    />
+
+                <TextView
+                    style="@style/Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="48dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey"
+                    />
+            </TextSwitcher>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/spacer4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            />
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/buttonNextCompose"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="60dp"
+            />
+    </LinearLayout>
+
+</FrameLayout>

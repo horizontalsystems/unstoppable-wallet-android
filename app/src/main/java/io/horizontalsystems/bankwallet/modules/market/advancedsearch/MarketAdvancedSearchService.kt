@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.market.priceChangeValue
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -19,8 +20,8 @@ import java.math.BigDecimal
 
 
 class MarketAdvancedSearchService(
-        private val marketKit: MarketKit,
-        private val currencyManager: ICurrencyManager
+    private val marketKit: MarketKit,
+    private val currencyManager: ICurrencyManager
 ) : Clearable, IMarketListFetcher {
 
     val currencyCode: String
@@ -60,6 +61,12 @@ class MarketAdvancedSearchService(
             refreshCounter()
         }
     var filterPriceChange: Pair<Long?, Long?>? = null
+        set(value) {
+            field = value
+
+            refreshCounter()
+        }
+    var filterBlockchains: List<MarketAdvancedSearchModule.Blockchain> = listOf()
         set(value) {
             field = value
 
@@ -108,13 +115,13 @@ class MarketAdvancedSearchService(
         refreshCounter()
 
         currencyManager.baseCurrencyUpdatedSignal
-                .subscribeIO {
-                    cache = null
-                    refreshCounter()
-                }
-                .let {
-                    disposables.add(it)
-                }
+            .subscribeIO {
+                cache = null
+                refreshCounter()
+            }
+            .let {
+                disposables.add(it)
+            }
     }
 
     private fun refreshCounter() {
@@ -122,24 +129,24 @@ class MarketAdvancedSearchService(
 
         numberOfItemsAsync.onNext(DataState.Loading)
         topItemsDisposable = getTopMarketList(currencyManager.baseCurrency)
-                .map { it.size }
-                .subscribeIO({
-                    numberOfItemsAsync.onNext(DataState.Success(it))
-                }, {
-                    numberOfItemsAsync.onNext(DataState.Error(it))
-                })
+            .map { it.size }
+            .subscribeIO({
+                numberOfItemsAsync.onNext(DataState.Success(it))
+            }, {
+                numberOfItemsAsync.onNext(DataState.Error(it))
+            })
 
     }
 
     override fun fetchAsync(currency: Currency): Single<List<MarketItem>> {
         return getTopMarketList(currency)
-                .map { coinMarkets ->
-                    coinMarkets.map {
-                        val coinMarket = it.value
+            .map { coinMarkets ->
+                coinMarkets.map {
+                    val coinMarket = it.value
 
-                        MarketItem.createFromCoinMarket(coinMarket, currency, filterPeriod)
-                    }
+                    MarketItem.createFromCoinMarket(coinMarket, currency, filterPeriod)
                 }
+            }
     }
 
     private fun getTopMarketList(currency: Currency): Single<Map<Int, MarketInfo>> {
@@ -147,19 +154,19 @@ class MarketAdvancedSearchService(
             Single.just(cache)
         } else {
             marketKit.advancedMarketInfosSingle(coinCount, currencyManager.baseCurrency.code)
-                    .doOnSuccess {
-                        cache = it
-                    }
+                .doOnSuccess {
+                    cache = it
+                }
         }
 
         return topMarketListAsync
-                .map {
-                    it.mapIndexed { index, coinMarket ->
-                        index to coinMarket
-                    }.filter {
-                        filterCoinMarket(it.second)
-                    }.toMap()
-                }
+            .map {
+                it.mapIndexed { index, coinMarket ->
+                    index to coinMarket
+                }.filter {
+                    filterCoinMarket(it.second)
+                }.toMap()
+            }
     }
 
     private fun filterCoinMarket(marketInfo: MarketInfo): Boolean {
@@ -169,6 +176,7 @@ class MarketAdvancedSearchService(
 
         return filterByRange(filterMarketCap, marketCap.toLong())
                 && filterByRange(filterVolume, totalVolume.toLong())
+                && inBlockchain(marketInfo.coinTypes)
                 && filterByRange(filterPriceChange, priceChangeValue.toLong())
                 && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage))
                 && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage))
@@ -195,7 +203,8 @@ class MarketAdvancedSearchService(
         return true
     }
 
-    private fun marketInfo(coinUid: String): MarketInfo? = cache?.firstOrNull { it.fullCoin.coin.uid == coinUid }
+    private fun marketInfo(coinUid: String): MarketInfo? =
+        cache?.firstOrNull { it.fullCoin.coin.uid == coinUid }
 
     private fun outperformed(value: BigDecimal?, coinUid: String): Boolean {
         if (value == null) return false
@@ -209,6 +218,19 @@ class MarketAdvancedSearchService(
 
         return value.abs() < allTimeDeltaPercent
     }
+
+    private fun inBlockchain(coinTypes: List<CoinType>?): Boolean {
+        if (filterBlockchains.isEmpty()) return true
+
+        coinTypes?.forEach { coinType ->
+            if (filterBlockchains.any { it.contains(coinType) }) {
+                return true
+            }
+        }
+
+        return false
+    }
+
 
     override fun clear() {
         topItemsDisposable?.dispose()

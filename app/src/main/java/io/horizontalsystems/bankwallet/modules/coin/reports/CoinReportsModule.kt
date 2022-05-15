@@ -8,7 +8,7 @@ import javax.annotation.concurrent.Immutable
 object CoinReportsModule {
     @Suppress("UNCHECKED_CAST")
     class Factory(private val coinUid: String) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = CoinReportsService(coinUid, App.marketKit)
             return CoinReportsViewModel(service) as T
         }

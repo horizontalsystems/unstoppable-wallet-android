@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.twitter.twittertext.Extractor
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
@@ -17,16 +16,16 @@ class CoinTweetsViewModel(
 ) : ViewModel() {
     val twitterPageUrl get() = "https://twitter.com/${service.username}"
 
-    val isRefreshingLiveData = MutableLiveData<Boolean>(false)
+    val isRefreshingLiveData = MutableLiveData(false)
     val itemsLiveData = MutableLiveData<List<TweetViewItem>>()
-    val viewStateLiveData = MutableLiveData<ViewState>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
 
     private val disposables = CompositeDisposable()
 
     init {
         service.stateObservable
             .subscribeIO { state ->
-                isRefreshingLiveData.postValue(state == DataState.Loading)
+                isRefreshingLiveData.postValue(false)
 
                 state.dataOrNull?.let {
                     itemsLiveData.postValue(it.map { getTweetViewItem(it) })

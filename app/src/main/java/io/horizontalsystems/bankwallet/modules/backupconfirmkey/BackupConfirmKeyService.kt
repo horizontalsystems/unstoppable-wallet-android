@@ -81,8 +81,7 @@ class BackupConfirmKeyService(
             throw BackupError(validationErrors)
         }
 
-        account.isBackedUp = true
-        accountManager.update(account)
+        accountManager.update(account.copy(isBackedUp = true))
     }
 
     data class IndexItem(val first: Int, val second: Int)

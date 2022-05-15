@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.content.Context
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
@@ -41,17 +40,11 @@ data class BalanceViewItem(
     val swapVisible: Boolean,
     val swapEnabled: Boolean = false,
     val mainNet: Boolean,
-    val errorMessage: String?
+    val errorMessage: String?,
+    val isWatchAccount: Boolean
 )
 
-data class BalanceHeaderViewItem(val xBalanceText: String, val upToDate: Boolean) {
-
-    fun getBalanceTextColor(context: Context): Int {
-        val color = if (upToDate) R.color.jacob else R.color.yellow_50
-        return context.getColor(color)
-    }
-
-}
+data class BalanceHeaderViewItem(val xBalanceText: String, val upToDate: Boolean)
 
 data class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
 data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
@@ -100,7 +93,6 @@ class BalanceViewItemFactory {
         return when (coinType) {
             CoinType.Bitcoin, CoinType.Litecoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Zcash -> 10
             CoinType.Ethereum, CoinType.BinanceSmartChain, is CoinType.Erc20, is CoinType.Bep2, is CoinType.Bep20 -> 50
-            is CoinType.ArbitrumOne,
             is CoinType.Avalanche,
             is CoinType.Fantom,
             is CoinType.HarmonyShard0,
@@ -108,7 +100,11 @@ class BalanceViewItemFactory {
             is CoinType.Iotex,
             is CoinType.Moonriver,
             is CoinType.OkexChain,
-            is CoinType.PolygonPos,
+            CoinType.EthereumOptimism,
+            CoinType.EthereumArbitrumOne,
+            is CoinType.OptimismErc20,
+            is CoinType.ArbitrumOneErc20,
+            is CoinType.Polygon, is CoinType.Mrc20, //todo add new types support
             is CoinType.Solana,
             is CoinType.Sora,
             is CoinType.Tomochain,
@@ -164,20 +160,16 @@ class BalanceViewItemFactory {
     }
 
     private fun lockedCoinValue(state: AdapterState?, balance: BigDecimal, coinCode: String, hideBalance: Boolean): DeemedValue {
-        val visible = balance > BigDecimal.ZERO
+        val visible = !hideBalance && balance > BigDecimal.ZERO
         val deemed = state !is AdapterState.Synced
 
-        val value = if (hideBalance) {
-            Translator.getString(R.string.Balance_Hidden)
-        } else {
-            val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(balance)
-            App.numberFormatter.formatCoin(balance, coinCode, 0, significantDecimal)
-        }
+        val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(balance)
+        val value = App.numberFormatter.formatCoin(balance, coinCode, 0, significantDecimal)
 
         return DeemedValue(value, deemed, visible)
     }
 
-    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean): BalanceViewItem {
+    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean, watchAccount: Boolean): BalanceViewItem {
         val wallet = item.wallet
         val coin = wallet.coin
         val state = item.state
@@ -211,7 +203,8 @@ class BalanceViewItemFactory {
                 swapVisible = item.wallet.coinType.swappable,
                 swapEnabled = state is AdapterState.Synced,
                 mainNet = item.mainNet,
-                errorMessage = (state as? AdapterState.NotSynced)?.error?.message
+                errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
+                isWatchAccount = watchAccount
         )
     }
 

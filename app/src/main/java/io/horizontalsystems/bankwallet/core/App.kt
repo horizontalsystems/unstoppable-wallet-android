@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.walletconnect.walletconnectv2.client.WalletConnect
+import com.walletconnect.walletconnectv2.client.WalletConnectClient
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
@@ -16,14 +18,22 @@ import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.storage.*
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsEip20Provider
+import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
+import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectRequestManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionStorage
+import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionStorage
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1RequestManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -56,6 +66,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var adapterManager: IAdapterManager
         lateinit var transactionAdapterManager: TransactionAdapterManager
         lateinit var walletManager: IWalletManager
+        lateinit var walletActivator: WalletActivator
         lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
         lateinit var accountFactory: IAccountFactory
@@ -76,10 +87,13 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
-        lateinit var walletConnectSessionStorage: WalletConnectSessionStorage
-        lateinit var walletConnectSessionManager: WalletConnectSessionManager
-        lateinit var walletConnectRequestManager: WalletConnectRequestManager
-        lateinit var walletConnectManager: WalletConnectManager
+        lateinit var wc1SessionStorage: WC1SessionStorage
+        lateinit var wc1SessionManager: WC1SessionManager
+        lateinit var wc1RequestManager: WC1RequestManager
+        lateinit var wc2Service: WC2Service
+        lateinit var wc2SessionManager: WC2SessionManager
+        lateinit var wc1Manager: WC1Manager
+        lateinit var wc2Manager: WC2Manager
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKit
@@ -88,6 +102,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmNetworkManager: EvmNetworkManager
         lateinit var accountSettingManager: AccountSettingManager
+        lateinit var nftManager: NftManager
     }
 
     override val testMode = BuildConfig.testMode
@@ -112,7 +127,13 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         val appConfig = AppConfigProvider()
         appConfigProvider = appConfig
 
-        marketKit = MarketKit.getInstance(this, appConfig.marketApiBaseUrl, appConfig.marketApiKey, appConfig.cryptoCompareApiKey, appConfig.defiyieldProviderApiKey)
+        marketKit = MarketKit.getInstance(
+            this,
+            appConfig.marketApiBaseUrl,
+            appConfig.marketApiKey,
+            cryptoCompareApiKey = appConfig.cryptoCompareApiKey,
+            defiYieldApiKey = appConfig.defiyieldProviderApiKey
+        )
         marketKit.sync()
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
@@ -202,10 +223,12 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         }
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
-        walletConnectSessionStorage = WalletConnectSessionStorage(appDatabase)
-        walletConnectSessionManager = WalletConnectSessionManager(walletConnectSessionStorage, accountManager, accountSettingManager)
-        walletConnectRequestManager = WalletConnectRequestManager()
-        walletConnectManager = WalletConnectManager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
+
+        wc1SessionStorage = WC1SessionStorage(appDatabase)
+        wc1SessionManager = WC1SessionManager(wc1SessionStorage, accountManager, accountSettingManager)
+        wc1RequestManager = WC1RequestManager()
+        wc1Manager = WC1Manager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
+        wc2Manager = WC2Manager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
 
         termsManager = TermsManager(localStorage)
 
@@ -215,11 +238,54 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
 
+        walletActivator = WalletActivator(walletManager, marketKit, walletStorage)
+
+        val enableCoinsErc20Provider = EnableCoinsEip20Provider(
+            networkManager,
+            EnableCoinsEip20Provider.EnableCoinMode.Erc20,
+            appConfig.etherscanApiKey
+        )
+
+        val enableCoinsBep20Provider = EnableCoinsEip20Provider(
+            networkManager,
+            EnableCoinsEip20Provider.EnableCoinMode.Bep20,
+            appConfig.bscscanApiKey
+        )
+
+        val evmAccountStateDao = appDatabase.evmAccountStateDao()
+        AutoEnableTokensService(ethereumKitManager, walletActivator, enableCoinsErc20Provider, evmAccountStateDao).start()
+        AutoEnableTokensService(binanceSmartChainKitManager, walletActivator, enableCoinsBep20Provider, evmAccountStateDao).start()
+
         setAppTheme()
 
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
 
         startTasks()
+
+        nftManager = NftManager(appDatabase.nftCollectionDao(), HsNftApiProvider(), coinManager)
+
+        initializeWalletConnectV2(appConfig)
+
+        wc2Service = WC2Service()
+        wc2SessionManager = WC2SessionManager(accountManager, WC2SessionStorage(appDatabase), wc2Service, wc2Manager)
+    }
+
+    private fun initializeWalletConnectV2(appConfig: AppConfigProvider) {
+        val initWallet = WalletConnect.Params.Init(
+            application = this,
+            relayServerUrl = "wss://${appConfig.walletConnectUrl}?projectId=${appConfig.walletConnectProjectId}",
+            isController = true,
+            metadata = WalletConnect.Model.AppMetaData(
+                name = "Unstoppable Wallet",
+                description = "Wallet description",
+                url = "example.wallet",
+                icons = listOf("https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media")
+            )
+        )
+
+        WalletConnectClient.initialize(initWallet) {
+            AppLog.warning("WalletConnect V2 initialization","error", it)
+        }
     }
 
     private fun setAppTheme() {

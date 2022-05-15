@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.oneinch
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.oneinchkit.OneInchKit
@@ -31,7 +32,7 @@ class OneInchKitHelper(
     }
 
     val smartContractAddress: Address
-        get() = oneInchKit.smartContractAddress
+        get() = oneInchKit.getRouterAddress
 
     fun getQuoteAsync(
         fromCoin: PlatformCoin,
@@ -53,7 +54,7 @@ class OneInchKitHelper(
         fromAmount: BigDecimal,
         slippagePercentage: Float,
         recipient: String? = null,
-        gasPrice: Long? = null
+        gasPrice: GasPrice? = null
     ): Single<Swap> {
         return oneInchKit.getSwapAsync(
             fromToken = getCoinAddress(fromCoin),

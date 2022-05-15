@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ViewHolderSwapCoinSelectBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
-import io.horizontalsystems.views.inflate
 
 class SelectSwapCoinAdapter(
-        private val onClickItem: (CoinBalanceItem) -> Unit
+    private val onClickItem: (CoinBalanceItem) -> Unit
 ) : RecyclerView.Adapter<SelectSwapCoinViewHolder>() {
 
     var items = listOf<CoinBalanceItem>()
@@ -17,7 +17,11 @@ class SelectSwapCoinAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectSwapCoinViewHolder {
-        return SelectSwapCoinViewHolder(inflate(parent, R.layout.view_holder_swap_coin_select), onClickItem)
+        return SelectSwapCoinViewHolder(
+            ViewHolderSwapCoinSelectBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ), onClickItem
+        )
     }
 
     override fun onBindViewHolder(holder: SelectSwapCoinViewHolder, position: Int) {

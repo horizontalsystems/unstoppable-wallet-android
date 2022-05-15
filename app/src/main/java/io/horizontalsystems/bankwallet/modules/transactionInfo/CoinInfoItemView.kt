@@ -2,50 +2,52 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ViewCoinInfoItemBinding
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
 import io.horizontalsystems.views.ListPosition
-import kotlinx.android.synthetic.main.view_coin_info_item.view.*
 
 class CoinInfoItemView : ConstraintLayout {
-    init {
-        inflate(context, R.layout.view_coin_info_item, this)
-    }
+    private val binding = ViewCoinInfoItemBinding.inflate(LayoutInflater.from(context), this)
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     fun bind(
-            title: String,
-            value: String? = null,
-            valueLabeled: String? = null,
-            icon: Int? = null,
-            rank: String? = null,
-            listPosition: ListPosition
+        title: String,
+        value: String? = null,
+        valueLabeled: String? = null,
+        icon: Int? = null,
+        rank: String? = null,
+        listPosition: ListPosition
     ) {
-        txtTitle.text = title
+        binding.txtTitle.text = title
 
-        txtRank.isVisible = rank != null
-        txtRank.text = rank
+        binding.txtRank.isVisible = rank != null
+        binding.txtRank.text = rank
 
         if (value != null) {
-            valueText.isVisible = true
-            valueText.text = value
+            binding.valueText.isVisible = true
+            binding.valueText.text = value
         } else if (valueLabeled != null) {
-            labeledText.isVisible = true
-            labeledText.text = valueLabeled
+            binding.labeledText.isVisible = true
+            binding.labeledText.text = valueLabeled
         }
 
-        iconView.isVisible = icon != null
+        binding.iconView.isVisible = icon != null
 
         icon?.let {
-            iconView.setImageResource(it)
+            binding.iconView.setImageResource(it)
         }
 
-        viewBackground.setBackgroundResource(listPosition.getBackground())
+        binding.viewBackground.setBackgroundResource(listPosition.getBackground())
 
         invalidate()
     }
@@ -61,7 +63,7 @@ class CoinInfoItemView : ConstraintLayout {
         )
 
         item.valueLabeledBackground?.let { color ->
-            labeledText.setBackgroundResource(color)
+            binding.labeledText.setBackgroundResource(color)
         }
     }
 }

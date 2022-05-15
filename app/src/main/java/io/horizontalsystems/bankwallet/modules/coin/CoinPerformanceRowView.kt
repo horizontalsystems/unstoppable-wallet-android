@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.marketkit.models.TimePeriod
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.helpers.LayoutHelper
 import java.math.BigDecimal
@@ -30,7 +30,7 @@ class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: 
         }
     }
 
-    private fun bindHeader(title: String, periods: List<TimePeriod>, listPosition: ListPosition?) {
+    private fun bindHeader(title: String, periods: List<HsTimePeriod>, listPosition: ListPosition?) {
         val titleTextView = getHeaderTextView(title).apply {
             setTextAppearance(R.style.Subhead1)
             setTextColor(context.getColor(R.color.oz))
@@ -107,10 +107,10 @@ class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: 
         }
     }
 
-    private fun getPeriodName(period: TimePeriod): String {
+    private fun getPeriodName(period: HsTimePeriod): String {
         return when (period) {
-            TimePeriod.Day7 -> context.getString(R.string.CoinPage_Performance_Week)
-            TimePeriod.Day30 -> context.getString(R.string.CoinPage_Performance_Month)
+            HsTimePeriod.Week1 -> context.getString(R.string.CoinPage_Performance_Week)
+            HsTimePeriod.Month1 -> context.getString(R.string.CoinPage_Performance_Month)
             else -> ""
         }
     }

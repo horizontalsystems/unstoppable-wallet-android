@@ -7,7 +7,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsModule.Menu
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.reactivex.disposables.CompositeDisposable
@@ -21,12 +23,12 @@ class MarketTopCoinsViewModel(
 
     private val disposables = CompositeDisposable()
     private val marketFields = MarketField.values().toList()
-    private var marketItems: List<MarketItem> = listOf()
+    private var marketItems: List<MarketItemWrapper> = listOf()
 
     val headerLiveData = MutableLiveData<MarketModule.Header>()
     val menuLiveData = MutableLiveData<Menu>()
-    val viewStateLiveData = MutableLiveData<MarketModule.ViewItemState>()
-    val loadingLiveData = MutableLiveData<Boolean>()
+    val viewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val errorLiveData = MutableLiveData<String?>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val selectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
@@ -45,15 +47,15 @@ class MarketTopCoinsViewModel(
         service.start()
     }
 
-    private fun syncState(state: DataState<List<MarketItem>>) {
-        loadingLiveData.postValue(state is DataState.Loading)
+    private fun syncState(state: DataState<List<MarketItemWrapper>>) {
+        state.viewState?.let {
+            viewStateLiveData.postValue(it)
+        }
 
-        if (state is DataState.Success) {
-            marketItems = state.data
+        state.dataOrNull?.let {
+            marketItems = it
 
             syncMarketViewItems()
-        } else if (state is DataState.Error) {
-            viewStateLiveData.postValue(MarketModule.ViewItemState.Error(convertErrorMessage(state.error)))
         }
 
         syncMenu()
@@ -80,12 +82,10 @@ class MarketTopCoinsViewModel(
     }
 
     private fun syncMarketViewItems() {
-        viewStateLiveData.postValue(
-            MarketModule.ViewItemState.Data(
-                marketItems.map {
-                    MarketViewItem.create(it, marketField)
-                }
-            )
+        viewItemsLiveData.postValue(
+            marketItems.map {
+                MarketViewItem.create(it.marketItem, marketField, it.favorited)
+            }
         )
     }
 
@@ -139,5 +139,13 @@ class MarketTopCoinsViewModel(
         selectorDialogStateLiveData.postValue(
             SelectorDialogState.Opened(Select(service.sortingField, service.sortingFields))
         )
+    }
+
+    fun onAddFavorite(coinUid: String) {
+        service.addFavorite(coinUid)
+    }
+
+    fun onRemoveFavorite(coinUid: String) {
+        service.removeFavorite(coinUid)
     }
 }

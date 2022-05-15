@@ -56,6 +56,10 @@ class PinComponent(
         appLockManager.onUnlock()
     }
 
+    override fun lock() {
+        appLockManager.lock()
+    }
+
     override fun updateLastExitDateBeforeRestart() {
         appLockManager.updateLastExitDate()
     }

@@ -168,8 +168,7 @@ class TransactionRecordRepository(
         val recordsObservable = when {
             sources.isEmpty() -> Single.just(listOf())
             else -> Single.zip(sources) {
-                it as Array<List<TransactionRecord>>
-                it.toList().flatten()
+                it.filterIsInstance<List<TransactionRecord>>().toList().flatten()
             }
         }
 

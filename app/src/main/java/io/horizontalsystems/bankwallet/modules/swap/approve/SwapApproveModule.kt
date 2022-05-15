@@ -1,14 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.ethereumkit.models.Address
 
 object SwapApproveModule {
@@ -49,8 +47,6 @@ object SwapApproveModule {
         }
     }
 
-    fun start(fragment: Fragment, navigateTo: Int, approveData: SwapAllowanceService.ApproveData) {
-        fragment.findNavController().navigate(navigateTo, bundleOf(dataKey to approveData))
-    }
+    fun prepareParams(approveData: SwapAllowanceService.ApproveData) = bundleOf(dataKey to approveData)
 
 }

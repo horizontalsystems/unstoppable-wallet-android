@@ -4,11 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.FragmentAlertDialogSingleSelectBinding
 
 class SelectorPopupDialog<ItemClass> : DialogFragment() {
 
@@ -20,17 +19,24 @@ class SelectorPopupDialog<ItemClass> : DialogFragment() {
 
     lateinit var itemViewHolderFactory: ItemViewHolderFactory<ItemViewHolder<ItemClass>>
 
+    private var _binding: FragmentAlertDialogSingleSelectBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         dialog?.window?.setBackgroundDrawableResource(R.drawable.alert_background_themed)
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED)
 
-        val view = inflater.inflate(R.layout.fragment_alert_dialog_single_select, container, false)
+        _binding = FragmentAlertDialogSingleSelectBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        val dialogTitle = view.findViewById<TextView>(R.id.dialogTitle)
-
-        dialogTitle.isVisible = titleText.isNotBlank()
-        dialogTitle.text = titleText
+        binding.dialogTitle.isVisible = titleText.isNotBlank()
+        binding.dialogTitle.text = titleText
 
         items?.let {
             val itemsAdapter = SelectorAdapter(it, selectedItem, itemViewHolderFactory, {
@@ -38,8 +44,7 @@ class SelectorPopupDialog<ItemClass> : DialogFragment() {
                 dismiss()
             })
 
-            val recyclerView = view.findViewById<RecyclerView>(R.id.dialogRecyclerView)
-            recyclerView.adapter = itemsAdapter
+            binding.dialogRecyclerView.adapter = itemsAdapter
         }
 
         hideKeyBoard()

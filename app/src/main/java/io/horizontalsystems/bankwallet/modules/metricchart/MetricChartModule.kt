@@ -1,62 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
 import android.os.Parcelable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.ChartView
-import kotlinx.android.parcel.Parcelize
-import java.math.BigDecimal
-
-object MetricChartModule {
-
-    interface IMetricChartConfiguration {
-        val title: Int
-        val description: Int?
-        val valueType: ValueType
-    }
-
-    data class Item(val value: BigDecimal, val dominance: BigDecimal?, val timestamp: Long)
-
-    enum class ValueType {
-        Percent, CompactCurrencyValue, CurrencyValue
-    }
-
-    @Parcelize
-    enum class MetricChartType : Parcelable {
-        TradingVolume, Tvl
-    }
-
-    class Factory(
-        private val coinUid: String,
-        private val coinName: String,
-        private val metricChartType: MetricChartType
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val fetcher = when (metricChartType) {
-                MetricChartType.TradingVolume -> CoinTradingVolumeFetcher(App.marketKit, coinUid, coinName)
-                MetricChartType.Tvl -> CoinTvlFetcher(App.marketKit, coinUid)
-            }
-            val metricChartService = MetricChartService(App.currencyManager.baseCurrency, fetcher)
-            val factory = MetricChartFactory(App.numberFormatter)
-
-            return MetricChartViewModel(metricChartService, factory) as T
-        }
-    }
-}
-
-data class SelectedPoint(val value: String, val date: String)
-data class LastValueWithDiff(val value: String, val diff: BigDecimal)
-data class ChartViewItem(
-    val lastValueWithDiff: LastValueWithDiff,
-    val chartData: ChartData,
-    val maxValue: String?,
-    val minValue: String?,
-    val chartType: ChartView.ChartType
-)
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class MetricsType : Parcelable {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,10 +24,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
-import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
@@ -35,10 +37,11 @@ import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.Se
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartTvlFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartVolumeFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
@@ -47,7 +50,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MiniChartCard
 import io.horizontalsystems.core.findNavController
 
-@ExperimentalCoilApi
 class CoinDetailsFragment : BaseFragment() {
     private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
     private val viewModel by viewModels<CoinDetailsViewModel> { CoinDetailsModule.Factory(coinViewModel.fullCoin) }
@@ -64,19 +66,17 @@ class CoinDetailsFragment : BaseFragment() {
                     CoinDetailsScreen(
                         viewModel,
                         onClickVolumeChart = {
-                            MetricChartFragment.show(
+                            MetricChartVolumeFragment.show(
                                 childFragmentManager,
                                 viewModel.coin.uid,
-                                viewModel.coin.name,
-                                MetricChartModule.MetricChartType.TradingVolume
+                                viewModel.coin.name
                             )
                         },
                         onClickTvlChart = {
-                            MetricChartFragment.show(
+                            MetricChartTvlFragment.show(
                                 childFragmentManager,
                                 viewModel.coin.uid,
-                                viewModel.coin.name,
-                                MetricChartModule.MetricChartType.Tvl
+                                viewModel.coin.name
                             )
                         }
                     )
@@ -87,36 +87,36 @@ class CoinDetailsFragment : BaseFragment() {
 
     private fun openMajorHolders() {
         val arguments = CoinMajorHoldersFragment.prepareParams(viewModel.coin.uid)
-        findNavController().navigate(R.id.coinMajorHoldersFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinMajorHoldersFragment, arguments)
     }
 
     private fun openTvlInDefi() {
-        findNavController().navigate(R.id.tvlFragment, null, navOptionsFromBottom())
+        findNavController().slideFromBottom(R.id.tvlFragment)
     }
 
     private fun openCoinTreasuries() {
         val arguments = CoinTreasuriesFragment.prepareParams(viewModel.coin)
-        findNavController().navigate(R.id.coinTreasuriesFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinTreasuriesFragment, arguments)
     }
 
     private fun openCoinInvestments() {
         val arguments = CoinInvestmentsFragment.prepareParams(viewModel.coin.uid)
-        findNavController().navigate(R.id.coinInvestmentsFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinInvestmentsFragment, arguments)
     }
 
     private fun openCoinReports() {
         val arguments = CoinReportsFragment.prepareParams(viewModel.coin.uid)
-        findNavController().navigate(R.id.coinReportsFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinReportsFragment, arguments)
     }
 
     private fun openCoinAudits(addresses: List<String>) {
         val arguments = CoinAuditsFragment.prepareParams(addresses)
-        findNavController().navigate(R.id.coinAuditsFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinAuditsFragment, arguments)
     }
 
     private fun openSecurityInfo(type: SecurityType) {
         val arguments = CoinSecurityInfoFragment.prepareParams(type.title, viewModel.securityInfoViewItems(type))
-        findNavController().navigate(R.id.coinSecurityInfoFragment, arguments, navOptionsFromBottom())
+        findNavController().slideFromBottom(R.id.coinSecurityInfoFragment, arguments)
     }
 
     @Composable
@@ -125,57 +125,57 @@ class CoinDetailsFragment : BaseFragment() {
         onClickVolumeChart: () -> Unit,
         onClickTvlChart: () -> Unit,
     ) {
-        val viewState by viewModel.viewStateLiveData.observeAsState(ViewState.Success)
+        val viewState by viewModel.viewStateLiveData.observeAsState()
         val viewItem by viewModel.viewItemLiveData.observeAsState()
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
-        val loading by viewModel.loadingLiveData.observeAsState(false)
 
         HSSwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing || loading),
+            state = rememberSwipeRefreshState(isRefreshing),
             onRefresh = { viewModel.refresh() },
         ) {
-            when (viewState) {
-                ViewState.Success -> {
-                    val detailBlocks: MutableList<@Composable (borderTop: Boolean) -> Unit> = mutableListOf()
-
-                    viewItem?.let { viewItem ->
-                        viewItem.volumeChart?.let { volumeChart ->
-                            detailBlocks.add { borderTop -> TokenVolume(volumeChart, borderTop, onClickVolumeChart) }
-                        }
-
-                        if (viewItem.hasMajorHolders) {
-                            detailBlocks.add { borderTop -> TokenDistribution(viewItem, borderTop) }
-                        }
-
-                        if (viewItem.treasuries != null || viewItem.fundsInvested != null || viewItem.reportsCount != null) {
-                            detailBlocks.add { borderTop -> InvestorData(viewItem, borderTop) }
-                        }
-
-                        if (viewItem.tvlChart != null || viewItem.tvlRank != null || viewItem.tvlRatio != null) {
-                            detailBlocks.add { borderTop -> TokenTvl(viewItem, borderTop, onClickTvlChart) }
-                        }
-
-                        if (viewItem.securityViewItems.isNotEmpty() || viewItem.auditAddresses.isNotEmpty()) {
-                            detailBlocks.add { borderTop -> SecurityParameters(viewItem, borderTop) }
-                        }
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    is ViewState.Loading -> {
+                        Loading()
                     }
+                    ViewState.Success -> {
+                        val detailBlocks: MutableList<@Composable (borderTop: Boolean) -> Unit> = mutableListOf()
 
-                    if (detailBlocks.size > 0) {
-                        LazyColumn {
-                            items(detailBlocks.size) { index ->
-                                detailBlocks[index].invoke(index != 0)
+                        viewItem?.let { viewItem ->
+                            viewItem.volumeChart?.let { volumeChart ->
+                                detailBlocks.add { borderTop -> TokenVolume(volumeChart, borderTop, onClickVolumeChart) }
                             }
-                            item {
-                                Spacer(modifier = Modifier.height(32.dp))
+
+                            if (viewItem.hasMajorHolders) {
+                                detailBlocks.add { borderTop -> TokenDistribution(viewItem, borderTop) }
+                            }
+
+                            if (viewItem.treasuries != null || viewItem.fundsInvested != null || viewItem.reportsCount != null) {
+                                detailBlocks.add { borderTop -> InvestorData(viewItem, borderTop) }
+                            }
+
+                            if (viewItem.tvlChart != null || viewItem.tvlRank != null || viewItem.tvlRatio != null) {
+                                detailBlocks.add { borderTop -> TokenTvl(viewItem, borderTop, onClickTvlChart) }
+                            }
+
+                            if (viewItem.securityViewItems.isNotEmpty() || viewItem.auditAddresses.isNotEmpty()) {
+                                detailBlocks.add { borderTop -> SecurityParameters(viewItem, borderTop) }
                             }
                         }
+
+                        if (detailBlocks.size > 0) {
+                            LazyColumn {
+                                items(detailBlocks.size) { index ->
+                                    detailBlocks[index].invoke(index != 0)
+                                }
+                                item {
+                                    Spacer(modifier = Modifier.height(32.dp))
+                                }
+                            }
+                        }
                     }
-                }
-                is ViewState.Error -> {
-                    ListErrorView(
-                        stringResource(R.string.Market_SyncError)
-                    ) {
-                        viewModel.refresh()
+                    is ViewState.Error -> {
+                        ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                     }
                 }
             }

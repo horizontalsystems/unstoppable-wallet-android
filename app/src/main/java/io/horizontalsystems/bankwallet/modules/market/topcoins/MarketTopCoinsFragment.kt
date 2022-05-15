@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Surface
@@ -15,13 +16,14 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.market.MarketModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -45,7 +47,6 @@ class MarketTopCoinsFragment : BaseFragment() {
         MarketTopCoinsModule.Factory(topMarket, sortingField, marketField)
     }
 
-    @ExperimentalCoilApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -70,7 +71,7 @@ class MarketTopCoinsFragment : BaseFragment() {
     private fun onCoinClick(coinUid: String) {
         val arguments = CoinFragment.prepareParams(coinUid)
 
-        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinFragment, arguments)
     }
 
     companion object {
@@ -93,7 +94,6 @@ class MarketTopCoinsFragment : BaseFragment() {
 
 }
 
-@ExperimentalCoilApi
 @Composable
 fun TopCoinsScreen(
     viewModel: MarketTopCoinsViewModel,
@@ -101,11 +101,11 @@ fun TopCoinsScreen(
     onCoinClick: (String) -> Unit,
 ) {
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
-    val viewItemState by viewModel.viewStateLiveData.observeAsState()
+    val viewState by viewModel.viewStateLiveData.observeAsState()
+    val viewItems by viewModel.viewItemsLiveData.observeAsState()
     val header by viewModel.headerLiveData.observeAsState()
     val menu by viewModel.menuLiveData.observeAsState()
-    val loading by viewModel.loadingLiveData.observeAsState()
-    val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
+    val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val selectorDialogState by viewModel.selectorDialogStateLiveData.observeAsState()
 
     val interactionSource = remember { MutableInteractionSource() }
@@ -116,38 +116,49 @@ fun TopCoinsScreen(
             header?.let { header ->
                 DescriptionCard(header.title, header.description, header.icon)
             }
-            menu?.let { menu ->
-                HeaderWithSorting(
-                    menu.sortingFieldSelect.selected.titleResId,
-                    menu.topMarketSelect,
-                    { topMarket ->
-                        scrollToTopAfterUpdate = true
-                        viewModel.onSelectTopMarket(topMarket)
-                    },
-                    menu.marketFieldSelect,
-                    viewModel::onSelectMarketField,
-                    viewModel::showSelectorMenu
-                )
-            }
 
             HSSwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
+                state = rememberSwipeRefreshState(isRefreshing),
                 onRefresh = {
                     viewModel.refresh()
                 }
             ) {
-                when (val state = viewItemState) {
-                    is ViewItemState.Error -> {
-                        ListErrorView(
-                            stringResource(R.string.Market_SyncError)
-                        ) {
-                            viewModel.onErrorClick()
+                Crossfade(viewState) { state ->
+                    when (state) {
+                        is ViewState.Loading -> {
+                            Loading()
                         }
-                    }
-                    is ViewItemState.Data -> {
-                        CoinList(state.items, scrollToTopAfterUpdate, onCoinClick)
-                        if (scrollToTopAfterUpdate) {
-                            scrollToTopAfterUpdate = false
+                        is ViewState.Error -> {
+                            ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                        }
+                        is ViewState.Success -> {
+                            Column {
+                                menu?.let { menu ->
+                                    HeaderWithSorting(
+                                        menu.sortingFieldSelect.selected.titleResId,
+                                        menu.topMarketSelect,
+                                        { topMarket ->
+                                            scrollToTopAfterUpdate = true
+                                            viewModel.onSelectTopMarket(topMarket)
+                                        },
+                                        menu.marketFieldSelect,
+                                        viewModel::onSelectMarketField,
+                                        viewModel::showSelectorMenu
+                                    )
+                                }
+                                viewItems?.let {
+                                    CoinList(
+                                        items = it,
+                                        scrollToTop = scrollToTopAfterUpdate,
+                                        onAddFavorite = { uid -> viewModel.onAddFavorite(uid) },
+                                        onRemoveFavorite = { uid -> viewModel.onRemoveFavorite(uid) },
+                                        onCoinClick = onCoinClick
+                                    )
+                                    if (scrollToTopAfterUpdate) {
+                                        scrollToTopAfterUpdate = false
+                                    }
+                                }
+                            }
                         }
                     }
                 }

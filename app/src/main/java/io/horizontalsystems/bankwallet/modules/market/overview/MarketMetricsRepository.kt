@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewMod
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.GlobalMarketPoint
-import io.horizontalsystems.marketkit.models.TimePeriod
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import java.math.BigDecimal
 
@@ -17,7 +17,7 @@ class MarketMetricsRepository(
 
     fun get(baseCurrency: Currency, forceRefresh: Boolean): Single<MarketMetricsItem> =
         if (forceRefresh || marketMetricsItemCache == null) {
-            marketKit.globalMarketPointsSingle(baseCurrency.code, TimePeriod.Hour24)
+            marketKit.globalMarketPointsSingle(baseCurrency.code, HsTimePeriod.Day1)
                 .map {
                     marketMetricsItemCache = marketMetricsItem(it, baseCurrency)
                     marketMetricsItemCache

@@ -50,8 +50,8 @@ class ManageWalletsService(
             }
 
         enableCoinService.cancelEnableCoinObservable
-            .subscribeIO { coin ->
-                handleCancelEnable(coin)
+            .subscribeIO { fullCoin ->
+                handleCancelEnable(fullCoin)
             }.let { disposables.add(it) }
 
 
@@ -88,10 +88,7 @@ class ManageWalletsService(
     }
 
     private fun item(fullCoin: FullCoin): Item {
-        val supportedPlatforms = fullCoin.platforms.filter { it.coinType.isSupported }
-        val fullCoin = FullCoin(fullCoin.coin, supportedPlatforms)
-
-        val itemState = if (fullCoin.platforms.isEmpty()) {
+        val itemState = if (fullCoin.supportedPlatforms.isEmpty()) {
             ItemState.Unsupported
         } else {
             val enabled = isEnabled(fullCoin.coin)
@@ -104,13 +101,16 @@ class ManageWalletsService(
         return Item(fullCoin, itemState)
     }
 
-    private fun hasSettingsOrPlatforms(fullCoin: FullCoin) =
-        if (fullCoin.platforms.size == 1) {
-            val platform = fullCoin.platforms[0]
+    private fun hasSettingsOrPlatforms(fullCoin: FullCoin): Boolean {
+        val supportedPlatforms = fullCoin.supportedPlatforms
+
+        return if (supportedPlatforms.size == 1) {
+            val platform = supportedPlatforms[0]
             platform.coinType.coinSettingTypes.isNotEmpty()
         } else {
             true
         }
+    }
 
     private fun syncState() {
         items = fullCoins.map { item(it) }
@@ -149,9 +149,9 @@ class ManageWalletsService(
         }
     }
 
-    private fun handleCancelEnable(coin: Coin) {
-        if (!isEnabled(coin)) {
-            cancelEnableCoinObservable.onNext(coin)
+    private fun handleCancelEnable(fullCoin: FullCoin) {
+        if (!isEnabled(fullCoin.coin)) {
+            cancelEnableCoinObservable.onNext(fullCoin.coin)
         }
     }
 
@@ -163,16 +163,22 @@ class ManageWalletsService(
         syncState()
     }
 
+    fun enable(uid: String) {
+        val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid } ?: return
+        enable(fullCoin)
+    }
+
     fun enable(fullCoin: FullCoin) {
         enableCoinService.enable(fullCoin, account)
     }
 
-    fun disable(fullCoin: FullCoin) {
-        val walletsToDelete = wallets.filter { it.coin == fullCoin.coin }
+    fun disable(uid: String) {
+        val walletsToDelete = wallets.filter { it.coin.uid == uid }
         walletManager.delete(walletsToDelete)
     }
 
-    fun configure(fullCoin: FullCoin) {
+    fun configure(uid: String) {
+        val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid } ?: return
         val coinWallets = wallets.filter { it.coin == fullCoin.coin }
         enableCoinService.configure(fullCoin, coinWallets.map { it.configuredPlatformCoin })
     }

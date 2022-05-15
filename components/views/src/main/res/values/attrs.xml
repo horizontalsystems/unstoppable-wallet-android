@@ -13,12 +13,6 @@
             <enum name="last" value="3" />
         </attr>
     </declare-styleable>
-    <declare-styleable name="SettingsViewRating">
-        <attr name="icon" />
-        <attr name="value" />
-        <attr name="color" format="color" />
-        <attr name="position" />
-    </declare-styleable>
     <declare-styleable name="SettingsViewDropdown">
         <attr name="icon" />
         <attr name="title" />
@@ -83,6 +77,7 @@
     <attr name="SecondaryButtonStartGradient" format="reference|color" />
     <attr name="SecondaryButtonEndGradient" format="reference|color" />
     <attr name="MarketCircleGradient" format="reference" />
+    <attr name="SplashScreenBackground" format="reference" />
 
     <!--  New themed gradient colors -->
     <attr name="ColorGradientWhite" format="reference" />

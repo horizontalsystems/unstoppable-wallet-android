@@ -4,31 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -60,7 +59,7 @@ class MarketFavoritesFragment : BaseFragment() {
 
     private fun onCoinClick(coinUid: String) {
         val arguments = CoinFragment.prepareParams(coinUid)
-        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+        findNavController().slideFromRight(R.id.coinFragment, arguments)
     }
 }
 
@@ -70,41 +69,53 @@ fun MarketFavoritesScreen(
     onCoinClick: (String) -> Unit
 ) {
     val viewState by viewModel.viewStateLiveData.observeAsState()
-    val loading by viewModel.loadingLiveData.observeAsState(false)
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val marketFavoritesData by viewModel.viewItemLiveData.observeAsState()
     val sortingFieldDialogState by viewModel.sortingFieldSelectorStateLiveData.observeAsState()
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
 
     HSSwipeRefresh(
-        state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
+        state = rememberSwipeRefreshState(isRefreshing),
         onRefresh = {
             viewModel.refresh()
         }
     ) {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        Crossfade(
+            targetState = viewState,
+            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+        ) { viewState ->
             when (viewState) {
+                is ViewState.Loading -> {
+                    Loading()
+                }
                 is ViewState.Error -> {
-                    ListErrorView(
-                        stringResource(R.string.Market_SyncError)
-                    ) {
-                        viewModel.onErrorClick()
-                    }
+                    ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
                 ViewState.Success -> {
                     marketFavoritesData?.let { data ->
                         if (data.marketItems.isEmpty()) {
-                            NoFavorites()
-                        } else {
-                            MarketFavoritesMenu(
-                                data.sortingFieldSelect,
-                                data.marketFieldSelect,
-                                viewModel::onClickSortingField,
-                                viewModel::onSelectMarketField
+                            ListEmptyView(
+                                text = stringResource(R.string.Market_Tab_Watchlist_EmptyList),
+                                icon = R.drawable.ic_rate_24
                             )
-                            CoinList(data.marketItems, scrollToTopAfterUpdate, onCoinClick)
-                            if (scrollToTopAfterUpdate) {
-                                scrollToTopAfterUpdate = false
+                        } else {
+                            Column {
+                                MarketFavoritesMenu(
+                                    data.sortingFieldSelect,
+                                    data.marketFieldSelect,
+                                    viewModel::onClickSortingField,
+                                    viewModel::onSelectMarketField
+                                )
+                                CoinList(
+                                    items = data.marketItems,
+                                    scrollToTop = scrollToTopAfterUpdate,
+                                    onAddFavorite = { /*not used */ },
+                                    onRemoveFavorite = { uid -> viewModel.removeFromFavorites(uid) },
+                                    onCoinClick = onCoinClick
+                                )
+                                if (scrollToTopAfterUpdate) {
+                                    scrollToTopAfterUpdate = false
+                                }
                             }
                         }
                     }
@@ -144,32 +155,6 @@ fun MarketFavoritesMenu(
             modifier = Modifier.padding(end = 16.dp),
             select = marketFieldSelect,
             onSelect = onSelectMarketField
-        )
-    }
-}
-
-@Composable
-fun NoFavorites() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            modifier = Modifier
-                .size(48.dp),
-            painter = painterResource(id = R.drawable.ic_rate_24),
-            contentDescription = stringResource(id = R.string.Market_Tab_Watchlist_EmptyList),
-            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-        )
-        Spacer(Modifier.height(24.dp))
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 48.dp),
-            text = stringResource(id = R.string.Market_Tab_Watchlist_EmptyList),
-            textAlign = TextAlign.Center,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2,
         )
     }
 }

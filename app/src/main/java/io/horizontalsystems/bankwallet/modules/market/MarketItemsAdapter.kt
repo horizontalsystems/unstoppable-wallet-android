@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
@@ -12,8 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setRemoteImage
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_market_item.*
+import io.horizontalsystems.bankwallet.databinding.ViewHolderMarketItemBinding
 import java.math.BigDecimal
 
 class MarketItemsAdapter(
@@ -51,22 +49,39 @@ class MarketItemsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMarketItem {
-        return ViewHolderMarketItem.create(parent, listener)
+        return ViewHolderMarketItem(
+            ViewHolderMarketItemBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ), listener
+        )
     }
 
-    override fun onBindViewHolder(holder: ViewHolderMarketItem, position: Int, payloads: MutableList<Any>) {
-        holder.bind(getItem(position), payloads.firstOrNull { it is MarketViewItem } as? MarketViewItem, position == itemCount - 1)
+    override fun onBindViewHolder(
+        holder: ViewHolderMarketItem,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        holder.bind(
+            getItem(position),
+            payloads.firstOrNull { it is MarketViewItem } as? MarketViewItem,
+            position == itemCount - 1)
     }
 
     override fun onBindViewHolder(holder: ViewHolderMarketItem, position: Int) = Unit
 
     companion object {
         private val coinRateDiff = object : DiffUtil.ItemCallback<MarketViewItem>() {
-            override fun areItemsTheSame(oldItem: MarketViewItem, newItem: MarketViewItem): Boolean {
+            override fun areItemsTheSame(
+                oldItem: MarketViewItem,
+                newItem: MarketViewItem
+            ): Boolean {
                 return oldItem.areItemsTheSame(newItem)
             }
 
-            override fun areContentsTheSame(oldItem: MarketViewItem, newItem: MarketViewItem): Boolean {
+            override fun areContentsTheSame(
+                oldItem: MarketViewItem,
+                newItem: MarketViewItem
+            ): Boolean {
                 return oldItem.areContentsTheSame(newItem)
             }
 
@@ -77,8 +92,10 @@ class MarketItemsAdapter(
     }
 }
 
-class ViewHolderMarketItem(override val containerView: View, private val listener: Listener) :
-    RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderMarketItem(
+    private val binding: ViewHolderMarketItemBinding,
+    private val listener: Listener
+) : RecyclerView.ViewHolder(binding.root) {
     private var item: MarketViewItem? = null
 
     interface Listener {
@@ -86,7 +103,7 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
     }
 
     init {
-        containerView.setOnClickListener {
+        binding.wrapper.setOnClickListener {
             item?.let {
                 listener.onItemClick(it)
             }
@@ -96,37 +113,37 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
     fun bind(item: MarketViewItem, prev: MarketViewItem?, lastItem: Boolean) {
         this.item = item
 
-        bottomBorder.isVisible = lastItem
+        binding.bottomBorder.isVisible = lastItem
 
         if (item.coinUid != prev?.coinUid) {
-            icon.setRemoteImage(item.iconUrl, item.iconPlaceHolder)
+            binding.icon.setRemoteImage(item.iconUrl, item.iconPlaceHolder)
         }
 
         if (prev == null || item.rank != prev.rank) {
             if (item.rank == null) {
-                rank.isVisible = false
+                binding.rank.isVisible = false
             } else {
-                rank.text = item.rank
-                rank.isVisible = true
+                binding.rank.text = item.rank
+                binding.rank.isVisible = true
             }
         }
 
         if (item.coinName != prev?.coinName) {
-            title.text = item.coinName
+            binding.title.text = item.coinName
         }
 
         if (item.coinCode != prev?.coinCode) {
-            subtitle.text = item.coinCode
+            binding.subtitle.text = item.coinCode
         }
 
         if (item.coinRate != prev?.coinRate) {
-            rate.text = item.coinRate
+            binding.rate.text = item.coinRate
         }
 
         if (item.marketDataValue != prev?.marketDataValue) {
             val marketField = item.marketDataValue
 
-            marketFieldCaption.text = when (marketField) {
+            binding.marketFieldCaption.text = when (marketField) {
                 is MarketDataValue.MarketCap -> "MCap"
                 is MarketDataValue.Volume -> "Vol"
                 is MarketDataValue.Diff, is MarketDataValue.DiffNew -> ""
@@ -134,20 +151,20 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
 
             when (marketField) {
                 is MarketDataValue.MarketCap -> {
-                    marketFieldValue.text = marketField.value
-                    marketFieldValue.setTextColor(
-                        containerView.resources.getColor(
+                    binding.marketFieldValue.text = marketField.value
+                    binding.marketFieldValue.setTextColor(
+                        binding.wrapper.resources.getColor(
                             R.color.grey,
-                            containerView.context.theme
+                            binding.wrapper.context.theme
                         )
                     )
                 }
                 is MarketDataValue.Volume -> {
-                    marketFieldValue.text = marketField.value
-                    marketFieldValue.setTextColor(
-                        containerView.resources.getColor(
+                    binding.marketFieldValue.text = marketField.value
+                    binding.marketFieldValue.setTextColor(
+                        binding.wrapper.resources.getColor(
                             R.color.grey,
-                            containerView.context.theme
+                            binding.wrapper.context.theme
                         )
                     )
                 }
@@ -155,13 +172,14 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
                     val v = marketField.value
                     if (v != null) {
                         val sign = if (v >= BigDecimal.ZERO) "+" else "-"
-                        marketFieldValue.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
+                        binding.marketFieldValue.text =
+                            App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
 
                         val color = if (v >= BigDecimal.ZERO) R.color.remus else R.color.lucian
-                        marketFieldValue.setTextColor(containerView.context.getColor(color))
+                        binding.marketFieldValue.setTextColor(binding.wrapper.context.getColor(color))
                     } else {
-                        marketFieldValue.text = "----"
-                        marketFieldValue.setTextColor(containerView.context.getColor(R.color.grey_50))
+                        binding.marketFieldValue.text = "----"
+                        binding.marketFieldValue.setTextColor(binding.wrapper.context.getColor(R.color.grey_50))
                     }
 
                 }
@@ -170,11 +188,4 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
 
     }
 
-    companion object {
-        fun create(parent: ViewGroup, listener: Listener): ViewHolderMarketItem {
-            return ViewHolderMarketItem(
-                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_item, parent, false), listener
-            )
-        }
-    }
 }

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
+import android.util.Log
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.MutableLiveData
@@ -8,17 +9,17 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.convertedError
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.scaleUp
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
-import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.erc20kit.decorations.ApproveMethodDecoration
@@ -41,27 +42,26 @@ import java.math.BigInteger
 
 class SendEvmTransactionViewModel(
     private val service: ISendEvmTransactionService,
-    private val coinServiceFactory: EvmCoinServiceFactory
+    private val coinServiceFactory: EvmCoinServiceFactory,
+    private val cautionViewItemFactory: CautionViewItemFactory
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
     val sendEnabledLiveData = MutableLiveData(false)
-    val errorLiveData = MutableLiveData<String?>()
 
     val sendingLiveData = MutableLiveData<Unit>()
     val sendSuccessLiveData = MutableLiveData<ByteArray>()
     val sendFailedLiveData = MutableLiveData<String>()
+    val cautionsLiveData = MutableLiveData<List<CautionViewItem>>()
 
     val viewItemsLiveData = MutableLiveData<List<SectionViewItem>>()
     val transactionTitleLiveData = MutableLiveData<String>()
 
     init {
         service.stateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
-        service.txDataStateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
         service.sendStateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
 
         sync(service.state)
-        sync(service.txDataState)
         sync(service.sendState)
     }
 
@@ -69,33 +69,37 @@ class SendEvmTransactionViewModel(
         service.send(logger)
     }
 
-    private fun sync(state: SendEvmTransactionService.State) =
+    private fun sync(state: SendEvmTransactionService.State) {
+        Log.e("SendEvmTransactionViewModel", "sync: ${state}", )
         when (state) {
-            SendEvmTransactionService.State.Ready -> {
+            is SendEvmTransactionService.State.Ready -> {
                 sendEnabledLiveData.postValue(true)
-                errorLiveData.postValue(null)
+                cautionsLiveData.postValue(cautionViewItemFactory.cautionViewItems(state.warnings, errors = listOf()))
             }
             is SendEvmTransactionService.State.NotReady -> {
                 sendEnabledLiveData.postValue(false)
-                errorLiveData.postValue(state.errors.firstOrNull()?.let { convertError(it) })
+                cautionsLiveData.postValue(cautionViewItemFactory.cautionViewItems(state.warnings, state.errors))
             }
         }
 
-    private fun sync(txDataState: DataState<SendEvmTransactionService.TxDataState>) {
-        val decoration = txDataState.dataOrNull?.decoration
-        val transactionData = txDataState.dataOrNull?.transactionData
+        sync(service.txDataState)
+    }
+
+    private fun sync(txDataState: SendEvmTransactionService.TxDataState) {
+        val decoration = txDataState.decoration
+        val transactionData = txDataState.transactionData
 
         transactionTitleLiveData.postValue(getTransactionTitle(decoration, transactionData))
 
         var viewItems = when {
             decoration is SwapMethodDecoration || decoration is OneInchMethodDecoration -> {
-                getSwapViewItems(decoration, txDataState.dataOrNull?.additionalInfo)
+                getSwapViewItems(decoration, txDataState.additionalInfo)
             }
             decoration != null && transactionData != null -> {
-                getViewItems(decoration, transactionData, txDataState.dataOrNull?.additionalInfo)
+                getViewItems(decoration, transactionData, txDataState.additionalInfo)
             }
             decoration == null && transactionData != null -> {
-                getSendEvmCoinViewItems(transactionData, txDataState.dataOrNull?.additionalInfo)
+                getSendEvmCoinViewItems(transactionData, txDataState.additionalInfo)
             }
             else -> null
         }
@@ -248,10 +252,6 @@ class SendEvmTransactionViewModel(
                     ViewItem.Subhead(
                         Translator.getString(R.string.Swap_ToAmountTitle),
                         toCoinService.platformCoin.name
-                    ),
-                    getEstimatedAmount(
-                        info?.let { toCoinService.amountData(it.estimatedAmountTo) },
-                        ValueType.Incoming
                     ),
                     getGuaranteedAmount(toAmountMin)
                 )
@@ -408,10 +408,6 @@ class SendEvmTransactionViewModel(
                                 Translator.getString(R.string.Swap_ToAmountTitle),
                                 coinServiceOut.platformCoin.name
                             ),
-                            getEstimatedAmount(
-                                info?.let { coinServiceOut.amountData(it.estimatedOut) },
-                                ValueType.Incoming
-                            ),
                             getGuaranteedAmount(coinServiceOut.amountData(trade.amountOutMin))
                         )
                     )
@@ -425,10 +421,6 @@ class SendEvmTransactionViewModel(
                                 Translator.getString(R.string.Swap_FromAmountTitle),
                                 coinServiceIn.platformCoin.name
                             ),
-                            getEstimatedAmount(
-                                info?.let { coinServiceOut.amountData(it.estimatedIn) },
-                                ValueType.Outgoing
-                            ),
                             getMaxAmount(coinServiceIn.amountData(trade.amountInMax))
                         )
                     )
@@ -440,7 +432,7 @@ class SendEvmTransactionViewModel(
                                 Translator.getString(R.string.Swap_ToAmountTitle),
                                 coinServiceOut.platformCoin.name
                             ),
-                            getGuaranteedAmount(coinServiceOut.amountData(trade.amountOut))
+                            getAmount(coinServiceOut.amountData(trade.amountOut),  ValueType.Incoming)
                         )
                     )
                 )
@@ -505,20 +497,6 @@ class SendEvmTransactionViewModel(
         }
         if (otherViewItems.isNotEmpty()) {
             sections.add(SectionViewItem(otherViewItems))
-        }
-
-        if (info?.priceImpactWarning == true) {
-            sections.add(
-                SectionViewItem(
-                    listOf(
-                        ViewItem.Warning(
-                            Translator.getString(R.string.Swap_PriceImpact),
-                            Translator.getString(R.string.Swap_PriceImpactTooHigh),
-                            R.drawable.ic_attention_20
-                        )
-                    )
-                )
-            )
         }
 
         return sections
@@ -650,48 +628,23 @@ class SendEvmTransactionViewModel(
     private fun getAmount(amountData: SendModule.AmountData, valueType: ValueType) =
         ViewItem.Amount(
             amountData.secondary?.getFormatted(),
-            ColoredValue(
-                amountData.primary.getFormatted(),
-                getAmountColor(valueType)
-            )
+            amountData.primary.getFormatted(),
+            valueType
         )
 
     private fun getGuaranteedAmount(amountData: SendModule.AmountData): ViewItem.Amount {
         return ViewItem.Amount(
             amountData.secondary?.getFormatted(),
-            ColoredValue(
-                "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMin)}",
-                getAmountColor(ValueType.Regular)
-            )
+            "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMin)}",
+            ValueType.Incoming
         )
     }
 
     private fun getMaxAmount(amountData: SendModule.AmountData): ViewItem.Amount {
         return ViewItem.Amount(
             amountData.secondary?.getFormatted(),
-            ColoredValue(
-                "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMax)}",
-                getAmountColor(ValueType.Regular)
-            )
-        )
-    }
-
-    private fun getEstimatedAmount(
-        amountData: SendModule.AmountData?,
-        type: ValueType
-    ): ViewItem {
-        val coinAmount = amountData?.primary?.getFormatted()
-
-        val coinAmountString = if (coinAmount != null) {
-            "$coinAmount" + " " + Translator.getString(R.string.Swap_AmountEstimated)
-        } else {
-            "---"
-        }
-        val amountColor = getAmountColor(if (coinAmount != null) type else ValueType.Disabled)
-
-        return ViewItem.Amount(
-            amountData?.secondary?.getFormatted() ?: "---",
-            ColoredValue(coinAmountString, amountColor)
+            "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMax)}",
+            ValueType.Outgoing
         )
     }
 
@@ -722,14 +675,6 @@ class SendEvmTransactionViewModel(
             else -> convertedError.message ?: convertedError.javaClass.simpleName
         }
 
-    private fun getAmountColor(type: ValueType): Int {
-        return when (type) {
-            ValueType.Regular -> R.color.bran
-            ValueType.Disabled -> R.color.grey
-            ValueType.Outgoing -> R.color.jacob
-            ValueType.Incoming -> R.color.remus
-        }
-    }
 }
 
 data class SectionViewItem(
@@ -745,7 +690,7 @@ sealed class ViewItem {
         @ColorRes val color: Int? = null
     ) : ViewItem()
 
-    class Amount(val fiatAmount: String?, val coinAmount: ColoredValue) : ViewItem()
+    class Amount(val fiatAmount: String?, val coinAmount: String, val type: ValueType) : ViewItem()
     class Address(val title: String, val valueTitle: String, val value: String) : ViewItem()
     class Input(val value: String) : ViewItem()
     class Warning(val title: String, val description: String, @DrawableRes val icon: Int) :

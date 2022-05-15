@@ -2,27 +2,31 @@ package io.horizontalsystems.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.isVisible
-import kotlinx.android.synthetic.main.view_settings_dropdown.view.*
-import kotlinx.android.synthetic.main.view_settings_dropdown.view.settingsSubtitle
-import kotlinx.android.synthetic.main.view_settings_dropdown_text.view.*
 
-class SettingsViewDropdown @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : SettingsViewBase(context, attrs, defStyleAttr) {
+class SettingsViewDropdown @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : SettingsViewBase(context, attrs, defStyleAttr) {
 
-    fun showDropdownValue(text: String?) {
-        dropdownValue.text = text
-        dropdownValue.isVisible = text != null
+    fun showDropdownValue(value: String?) {
+        findViewById<TextView>(R.id.dropdownValue)?.apply {
+            text = value
+            isVisible = value != null
+        }
     }
 
     fun showDropdownIcon(show: Boolean) {
-        dropdownIcon.isVisible = show
+        findViewById<ImageView>(R.id.dropdownIcon)?.isVisible = show
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        if (!settingsSubtitle.text.isNullOrBlank()) {
+        if (!findViewById<TextView>(R.id.settingsSubtitle)?.text.isNullOrBlank()) {
             setAsDoubleLine()
         }
     }

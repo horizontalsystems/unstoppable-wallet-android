@@ -1,37 +1,25 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.address
 
-import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.address.AddressValidationException
 import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
-import io.horizontalsystems.ethereumkit.core.AddressValidator
+import io.horizontalsystems.bitcoincore.exceptions.AddressFormatException
 import io.horizontalsystems.hodler.HodlerPlugin
-import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
-import java.util.*
 
 class SendAddressPresenter(
-        private val moduleDelegate: SendAddressModule.IAddressModuleDelegate
-) : ViewModel(), IRecipientAddressService, SendAddressModule.IAddressModule, SendAddressModule.IInteractorDelegate, SendAddressModule.IViewDelegate {
-
-    private val errorsObservable = BehaviorSubject.createDefault<Optional<Throwable>>(Optional.empty())
+    private val moduleDelegate: SendAddressModule.IAddressModuleDelegate
+) : IRecipientAddressService, SendAddressModule.IAddressModule {
 
     //  IRecipientAddressService
 
     override val initialAddress: Address? = null
-
-    override var recipientAddressError: Throwable? = null
-        private set(value) {
-            errorsObservable.onNext(Optional.ofNullable(value))
-            field = value
-        }
-
-    override val recipientAddressErrorObservable: Observable<Unit> = errorsObservable.map {
-        Unit
-    }
+    override val recipientAddressState = BehaviorSubject.create<DataState<Unit>>()
 
     override fun setRecipientAddress(address: Address?) {
         onSetAddress(address)
@@ -43,7 +31,7 @@ class SendAddressPresenter(
 
     private fun onSetAddress(address: Address?) {
         if (address == null || address.hex.isEmpty()) {
-            recipientAddressError = null
+            recipientAddressState.onNext(DataState.Success(Unit))
             currentAddress = null
             enteredAddress = null
             moduleDelegate.onUpdateAddress()
@@ -61,23 +49,23 @@ class SendAddressPresenter(
     override var currentAddress: Address? = null
 
     override fun validAddress(): Address {
-        return currentAddress ?: throw SendAddressModule.ValidationError.EmptyValue()
+        return currentAddress ?: throw AddressValidationException.Blank()
     }
 
     override fun validateAddress() {
         val address = enteredAddress
         if (address == null) {
             currentAddress = null
-            throw SendAddressModule.ValidationError.EmptyValue()
+            throw AddressValidationException.Blank()
         }
 
         try {
             moduleDelegate.validate(address.hex)
             currentAddress = address
-            recipientAddressError = null
+            recipientAddressState.onNext(DataState.Success(Unit))
         } catch (err: Exception) {
             currentAddress = null
-            recipientAddressError = getError(err)
+            recipientAddressState.onNext(DataState.Error(getError(err)))
             throw err
         }
     }
@@ -85,7 +73,7 @@ class SendAddressPresenter(
     private fun getError(error: Throwable): Throwable {
         val message = when (error) {
             is HodlerPlugin.UnsupportedAddressType -> Translator.getString(R.string.Send_Error_UnsupportedAddress)
-            is AddressValidator.AddressValidationException -> Translator.getString(R.string.Send_Error_IncorrectAddress)
+            is AddressFormatException -> Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
             is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> Translator.getString(R.string.Send_Error_TransparentAddress)
             is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> Translator.getString(R.string.Send_Error_SendToSelf)
             else -> error.message ?: error.javaClass.simpleName
@@ -95,14 +83,6 @@ class SendAddressPresenter(
     }
 
     // SendAddressModule.IViewDelegate
-
-    override fun onViewDidLoad() {
-    }
-
-    override fun onAddressDeleteClicked() {
-        enteredAddress = null
-        moduleDelegate.onUpdateAddress()
-    }
 
     private fun onAddressEnter(address: Address) {
         enteredAddress = address

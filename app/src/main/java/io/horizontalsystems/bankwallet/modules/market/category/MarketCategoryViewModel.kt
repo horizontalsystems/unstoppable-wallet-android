@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -14,20 +15,17 @@ import kotlinx.coroutines.launch
 
 class MarketCategoryViewModel(
     private val service: MarketCategoryService,
-    private val categoryName: String,
-    private val categoryDescription: String,
-    private val categoryImageUrl: String
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
     private val marketFields = MarketField.values().toList()
-    private var marketItems: List<MarketItem> = listOf()
+    private var marketItems: List<MarketItemWrapper> = listOf()
     private var marketField = MarketField.PriceDiff
 
     val headerLiveData = MutableLiveData<MarketModule.Header>()
     val menuLiveData = MutableLiveData<MarketCategoryModule.Menu>()
-    val viewStateLiveData = MutableLiveData<MarketModule.ViewItemState>()
-    val loadingLiveData = MutableLiveData<Boolean>()
+    val viewStateLiveData = MutableLiveData<ViewState>()
+    val viewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
     val errorLiveData = MutableLiveData<String?>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val selectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
@@ -46,15 +44,13 @@ class MarketCategoryViewModel(
         service.start()
     }
 
-    private fun syncState(state: DataState<List<MarketItem>>) {
-        loadingLiveData.postValue(state is DataState.Loading)
+    private fun syncState(state: DataState<List<MarketItemWrapper>>) {
+        viewStateLiveData.postValue(state.viewState)
 
-        if (state is DataState.Success) {
-            marketItems = state.data
+        state.dataOrNull?.let {
+            marketItems = it
 
             syncMarketViewItems()
-        } else if (state is DataState.Error) {
-            viewStateLiveData.postValue(MarketModule.ViewItemState.Error(convertErrorMessage(state.error)))
         }
 
         syncMenu()
@@ -63,9 +59,9 @@ class MarketCategoryViewModel(
     private fun syncHeader() {
         headerLiveData.postValue(
             MarketModule.Header(
-                categoryName,
-                categoryDescription,
-                ImageSource.Remote(categoryImageUrl)
+                service.coinCategoryName,
+                service.coinCategoryDescription,
+                ImageSource.Remote(service.coinCategoryImageUrl)
             )
         )
     }
@@ -80,17 +76,11 @@ class MarketCategoryViewModel(
     }
 
     private fun syncMarketViewItems() {
-        viewStateLiveData.postValue(
-            MarketModule.ViewItemState.Data(
-                marketItems.map {
-                    MarketViewItem.create(it, marketField)
-                }
-            )
+        viewItemsLiveData.postValue(
+            marketItems.map {
+                MarketViewItem.create(it.marketItem, marketField, it.favorited)
+            }
         )
-    }
-
-    private fun convertErrorMessage(it: Throwable): String {
-        return it.message ?: it.javaClass.simpleName
     }
 
     private fun refreshWithMinLoadingSpinnerPeriod() {
@@ -135,5 +125,13 @@ class MarketCategoryViewModel(
     override fun onCleared() {
         service.stop()
         disposables.clear()
+    }
+
+    fun onAddFavorite(uid: String) {
+        service.addFavorite(uid)
+    }
+
+    fun onRemoveFavorite(uid: String) {
+        service.removeFavorite(uid)
     }
 }

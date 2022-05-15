@@ -11,45 +11,67 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.databinding.FragmentShowKeyIntroBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
-import kotlinx.android.synthetic.main.fragment_show_key_intro.*
-import kotlinx.android.synthetic.main.fragment_show_key_intro.toolbar
 
 class ShowKeyIntroFragment : BaseFragment() {
-    private val viewModel by navGraphViewModels<ShowKeyViewModel>(R.id.showKeyIntroFragment) { ShowKeyModule.Factory(arguments?.getParcelable(ShowKeyModule.ACCOUNT)!!) }
+    private val viewModel by navGraphViewModels<ShowKeyViewModel>(R.id.showKeyIntroFragment) {
+        ShowKeyModule.Factory(
+            arguments?.getParcelable(ShowKeyModule.ACCOUNT)!!
+        )
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_show_key_intro, container, false)
+    private var _binding: FragmentShowKeyIntroBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentShowKeyIntroBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        viewModel.showKeyLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.showKeyIntroFragment_to_showKeyMainFragment, null, navOptions())
-        })
+        viewModel.showKeyLiveEvent.observe(viewLifecycleOwner) {
+            findNavController().slideFromRight(
+                R.id.showKeyIntroFragment_to_showKeyMainFragment
+            )
+        }
 
-        viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.showKeyIntroFragment_to_pinFragment, PinModule.forUnlock(), navOptions())
-        })
+        viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner) {
+            findNavController().slideFromRight(
+                R.id.showKeyIntroFragment_to_pinFragment,
+                PinModule.forUnlock()
+            )
+        }
 
-        buttonShowCompose.setViewCompositionStrategy(
+        binding.buttonShowCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        buttonShowCompose.setContent {
+        binding.buttonShowCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 38.dp),
+                    modifier = Modifier.padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 32.dp),
                     title = getString(R.string.ShowKey_ButtonShow),
                     onClick = {
                         viewModel.onClickShow()

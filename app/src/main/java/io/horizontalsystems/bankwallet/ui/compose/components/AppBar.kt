@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,7 +17,8 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
 data class MenuItem(
     val title: TranslatableString,
-    @DrawableRes val icon: Int,
+    @DrawableRes val icon: Int? = null,
+    val enabled: Boolean = true,
     val onClick: () -> Unit,
 )
 
@@ -25,6 +26,7 @@ data class MenuItem(
 fun AppBarMenuButton(
     @DrawableRes icon: Int,
     onClick: () -> Unit,
+    description: String? = null,
     enabled: Boolean = true,
     tint: Color = ComposeAppTheme.colors.jacob,
 ) {
@@ -34,7 +36,7 @@ fun AppBarMenuButton(
     ) {
         Icon(
             painter = painterResource(id = icon),
-            contentDescription = null,
+            contentDescription = description,
             tint = tint
         )
     }
@@ -42,20 +44,23 @@ fun AppBarMenuButton(
 
 @Composable
 fun AppBar(
-    title: TranslatableString,
+    title: TranslatableString? = null,
     navigationIcon: @Composable (() -> Unit)? = null,
-    menuItems: List<MenuItem> = listOf()
+    menuItems: List<MenuItem> = listOf(),
+    showSpinner: Boolean = false
 ) {
     TopAppBar(
         modifier = Modifier.height(56.dp),
         title = {
-            Text(
-                text = title.getString(),
-                style = ComposeAppTheme.typography.title3,
-                color = ComposeAppTheme.colors.oz,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            title?.let {
+                Text(
+                    text = title.getString(),
+                    style = ComposeAppTheme.typography.title3,
+                    color = ComposeAppTheme.colors.oz,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
         navigationIcon = navigationIcon?.let {
@@ -64,11 +69,41 @@ fun AppBar(
             }
         },
         actions = {
-            menuItems.forEach { menuItem ->
-                AppBarMenuButton(
-                    icon = menuItem.icon,
-                    onClick = menuItem.onClick
+            if (showSpinner){
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .padding(start = 24.dp, end = 16.dp)
+                        .size(24.dp),
+                    color = ComposeAppTheme.colors.grey,
+                    strokeWidth = 2.dp
                 )
+            }
+            menuItems.forEach { menuItem ->
+                if (menuItem.icon != null) {
+                    AppBarMenuButton(
+                        icon = menuItem.icon,
+                        onClick = menuItem.onClick,
+                        enabled = menuItem.enabled
+                    )
+                } else {
+                    val color = if (menuItem.enabled) {
+                        ComposeAppTheme.colors.jacob
+                    } else {
+                        ComposeAppTheme.colors.grey50
+                    }
+
+                    Text(
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .clickable(
+                                enabled = menuItem.enabled,
+                                onClick = menuItem.onClick
+                            ),
+                        text = menuItem.title.getString(),
+                        style = ComposeAppTheme.typography.headline2,
+                        color = color
+                    )
+                }
             }
         },
         elevation = 0.dp

@@ -25,12 +25,17 @@
     <string name="Button_Start">시작</string>
     <string name="Button_Create">생성하기</string>
     <string name="Button_Restore">복구</string>
+    <string name="Button_WatchAddress">주소 관찰</string>
     <string name="Button_Reset">초기화</string>
     <string name="Button_Reconnect">재연결</string>
+    <string name="Button_Understand">이해합니다</string>
+    <string name="Button_Switch">전환</string>
+    <string name="Button_Remove">삭제</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Any">어떤</string>
-    <string name="PercentTitle">Percent</string>
+    <string name="SyncError">동기화 오류입니다. 다시 시도하십시오</string>
+    <string name="PercentTitle">퍼센트율</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">풀린 자산</string>
@@ -55,8 +60,8 @@
     <string name="EnterPassphrase">암호문구</string>
     <string name="CreateWallet_PassphraseDescription">암호 문구는 사용자가 하나의 연상 기호 복구 문구를 사용하여 여러 개의 독립적인 멀티코인 지갑을 만들 수 있도록 지갑에 보안 계층을 추가합니다.\n\n이러한 지갑을 복원하려면 사용자가 복원하기 위해 각 지갑에 대한 비밀번호와 연상 기호 복구 문구가 필요합니다.</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">이 앱 평가하기</string>
-    <string name="RateApp_Description_Rate_This_App">Unstoppable Wallet 을 즐기고 계신가요? 잠시 시간을 내어 이 앱을 평가해주세요</string>
+    <string name="RateApp_Title_Rate_This_App">GM!</string>
+    <string name="RateApp_Description_Rate_This_App">Unstoppable을 즐기고 계십니까? 더 발전하기 위해 피드백과 아이디어를 공유해 주세요.</string>
     <string name="RateApp_Button_RateIt">평가 하기</string>
     <string name="RateApp_Button_NotNow">다음에 확인</string>
     <!--Restore-->
@@ -67,6 +72,7 @@
     <string name="Restore_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
     <string name="Restore_InvalidChecksum">유효하지 않은 체크섬</string>
     <string name="Restore_PassphraseDescription">이 연상 부호를 만들 때 사용한 암호 문구 입력.</string>
+    <string name="Restore_Title">블록체인 선택</string>
     <string name="Select_Coins">코인 선택하기</string>
     <string name="Restore_ZCash_BirthdayHeight">생일 신장</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">지갑의 생일 높이를 알고 있다면 빠른 동기화를 위해 입력하십시오.</string>
@@ -80,6 +86,7 @@
     <string name="Market_Search">Search</string>
     <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
     <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
+    <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
@@ -87,7 +94,7 @@
     <string name="Market_Field_HighestPrice">Highest Price</string>
     <string name="Market_Field_LowestPrice">Lowest Price</string>
     <string name="Market_Sort_PopupTitle">Sort by</string>
-    <string name="Market_TotalMarketCap">Total Market Cap</string>
+    <string name="Market_TotalMarketCap">Total Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
     <string name="Market_Volume24h">24h Volume</string>
     <string name="Market_TvlDeFi">TVL in DeFi</string>
@@ -97,60 +104,11 @@
     <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
-    <string name="Market_Category_Rated">Rated</string>
-    <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
-    <string name="Market_Category_Blockchains">Blockchains</string>
-    <string name="Market_Category_Blockchains_Description">Native cryptocurrencies on major blockchains. </string>
-    <string name="Market_Category_Dexes">DEXes</string>
-    <string name="Market_Category_Dexes_Description">Decentralized cryptocurrency exchanges.</string>
-    <string name="Market_Category_Lending">Lending</string>
-    <string name="Market_Category_Lending_Description">Protocols for lending and borrowing.</string>
-    <string name="Market_Category_Privacy">Privacy</string>
-    <string name="Market_Category_Privacy_Description">Projects working on privacy solutions.</string>
-    <string name="Market_Category_Scaling">Scaling</string>
-    <string name="Market_Category_Scaling_Description">Solutions for faster blockchain transactions.</string>
-    <string name="Market_Category_Oracles">Oracles</string>
-    <string name="Market_Category_Oracles_Description">Connecting real world data to smart contracts.</string>
-    <string name="Market_Category_Prediction">Predictions</string>
-    <string name="Market_Category_Prediction_Description">Markets to bet on events in the future.</string>
-    <string name="Market_Category_YieldAggregators">Yield Aggregators</string>
-    <string name="Market_Category_YieldAggregators_Description">Solutions for earning from idle crypto assets.</string>
-    <string name="Market_Category_FiatStableCoins">Stablecoins</string>
-    <string name="Market_Category_FiatStableCoins_Description">Crypto tokens pegged 1–1 to fiat currency.</string>
-    <string name="Market_Category_TokenizedBitcoin">Tokenized Bitcoin</string>
-    <string name="Market_Category_TokenizedBitcoin_Description">Crypto tokens pegged 1–1 to Bitcoin price.</string>
-    <string name="Market_Category_ExchangeTokens">Exchange Tokens</string>
-    <string name="Market_Category_ExchangeTokens_Description">Tokens issued by centralized exchanges.</string>
-    <string name="Market_Category_RiskManagement">Risk Management</string>
-    <string name="Market_Category_RiskManagement_Description">Risk assessment, insurance and hedging.</string>
-    <string name="Market_Category_Wallets">Wallets</string>
-    <string name="Market_Category_Wallets_Description">Tokens issued by cryptocurrency wallets.</string>
-    <string name="Market_Category_Synthetics">Synthetics</string>
-    <string name="Market_Category_Synthetics_Description">Platforms for creating decentralized synthetic assets.</string>
-    <string name="Market_Category_IndexFunds">Index Funds</string>
-    <string name="Market_Category_IndexFunds_Description">Assets that pegged in price to a set of tokens.</string>
-    <string name="Market_Category_NFT">NFT</string>
-    <string name="Market_Category_NFT_Description">NFT projects.</string>
-    <string name="Market_Category_Fundraising">Fundraising</string>
-    <string name="Market_Category_Fundraising_Description">Fundraising and token sale platforms.</string>
-    <string name="Market_Category_Gaming">Gaming</string>
-    <string name="Market_Category_Gaming_Description">Crypto projects in gaming and VR sector.</string>
-    <string name="Market_Category_Infrastructure">Infrastructure</string>
-    <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
-    <string name="Market_Category_Analytics">Analytics</string>
-    <string name="Market_Category_Analytics_Description">Token-powered analytics and investment instruments.</string>
-    <string name="Market_Category_Storage">Storage</string>
-    <string name="Market_Category_Storage_Description">Decentralized data-storage.</string>
-    <string name="Market_Category_Identity">Identity</string>
-    <string name="Market_Category_Identity_Description">Decentralized identity.</string>
-    <string name="Market_Category_YieldTokens">Yield Tokens</string>
-    <string name="Market_Category_YieldTokens_Description">Interesting Bearing Tokens.</string>
-    <string name="Market_SyncError">동기화 오류</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total Market Cap</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
     <string name="MarketGlobalMetrics_Volume">24h Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
@@ -160,7 +118,7 @@
     <string name="MarketGlobalMetrics_VolumeDescription">The historical change in daily aggregate trading market volume for all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">The historical change in daily aggregate trading volume for %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in cumulative market value of tokens in Decentralized Finance sector.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in cumulative value of all cryptocurrency managed by decentralized protocols.</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in the cumulative value of all cryptocurrency managed by decentralized protocols.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
@@ -175,6 +133,7 @@
     <string name="Market_Filter_Volume">Trading Volume</string>
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
+    <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">Outperformed BTC</string>
     <string name="Market_Filter_OutperformedEth">Outperformed ETH</string>
     <string name="Market_Filter_OutperformedBnb">Outperformed BNB</string>
@@ -258,8 +217,9 @@
     <string name="Balance_Sort_24hPriceChange">가격 변경</string>
     <string name="Balance_Hidden">숨겨짐</string>
     <string name="Balance_Backup_Alert">귀하께서 %s를 받기전에 %s 지갑의 백업이 필요합니다.</string>
-    <string name="Balance_NoWalletAlert">귀하께서는 아직 지갑이 없습니다. 새 생성 또는 기존 복원 해주십시오 </string>
-    <string name="Balance_NoCoinsAlert">이 지갑에 코인을 넣지 않았습니다</string>
+    <string name="Balance_NoWalletAlert">아직 지갑이 없습니다</string>
+    <string name="Balance_NoCoinsAlert">추가된 코인이 없습니다.\n사용할 코인을 추가하세요.</string>
+    <string name="Balance_WatchAccount_NoBalance">이 지갑 주소에는 잔액이 없습니다</string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
@@ -272,7 +232,6 @@
     <string name="Send_Confirmation_Amount">양</string>
     <string name="Send_Confirmation_To">에게</string>
     <string name="Send_Confirmation_Method">메소드</string>
-    <string name="Send_Confirmation_Nonce">Nonce</string>
     <string name="Send_Confirmation_Receiver">받는 사람</string>
     <string name="Send_Confirmation_EstimateTime">예상 소요시간:</string>
     <string name="Send_Confirmation_Send_Button">전송</string>
@@ -304,6 +263,26 @@
     <string name="Send_Sending">전송중</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <string name="Send_Warning_LowFee">경고! 갇힐 위험</string>
+    <!-- Fee Settings -->
+    <string name="FeeSettings_Title">수수료 설정</string>
+    <string name="FeeSettings_Reset">초기화</string>
+    <string name="FeeSettings_MaxFee">최대 수수료</string>
+    <string name="FeeSettings_MaxFee_Info">주어진 거래에 대한 최대 예상 총 수수료입니다. 일반적으로 실제 거래 수수료는 더 낮습니다.</string>
+    <string name="FeeSettings_Fee">수수료</string>
+    <string name="FeeSettings_GasLimit">Gas Limit</string>
+    <string name="FeeSettings_GasLimit_Info">가스 한도는 사용자가 주어진 거래를 보낼 때 기꺼이 지출할 가스 단위의 최대량입니다. 복잡한 거래에는 단순한 거래보다 더 많은 가스 단위가 필요합니다. 가스 한도는 각 거래에 대해 자동으로 추정 및 설정됩니다.</string>
+    <string name="FeeSettings_GasPrice">Gas Used</string>
+    <string name="FeeSettings_GasPrice_Info">네트워크 거래 수수료는 가스 단위로 측정됩니다. 가스 가격은 사용자가 가스 단위당 지출할 의향이 있는 금액입니다. 네트워크가 사용 중일 때는 가스 가격이 높고 유휴 상태일 때는 가스 가격이 낮습니다. 가스 가격이 충분하지 않아 거래가 장기간 보류 상태로 남아 있는 경우가 많습니다.</string>
+    <string name="FeeSettings_CurrentBaseFee">현재 기본 수수료</string>
+    <string name="FeeSettings_MaxBaseFee">최대 기본 수수료</string>
+    <string name="FeeSettings_MaxBaseFee_Info">이더리움의 각 트랜잭션은 사용자가 해당 트랜잭션을 처리하기 위해 일정량의 가스 단위를 소비해야 합니다. 단일 가스 장치의 가격은 네트워크 상태에 따라 실시간으로 변경되며 단일 개체에 의해 제어되지 않습니다. 최대 옵션 채굴자 팁(아래 참조)과 결합된 기본 수수료율은 사용자가 거래를 보내기 위해 지불할 용의가 있는 가스 단위의 최고 가격을 나타냅니다.</string>
+    <string name="FeeSettings_MaxMinerTips">최대 채굴자 팁</string>
+    <string name="FeeSettings_MaxMinerTips_Info">채굴자 수수료(일명 광부 팁)는 네트워크 참가자가 거래의 우선 순위를 정하도록 장려하기 위해 사용자가 포함할 수 있는 선택적 수수료를 나타냅니다.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">위험</string>
+    <string name="FeeSettings_RiskOfGettingStuck">트랜잭션이 잠시 동안 보류 상태로 유지되거나 완전히 실패할 수 있습니다.</string>
+    <string name="FeeSettings_Overpricing_Title">수수료가 너무 높음</string>
+    <string name="FeeSettings_Overpricing">설정된 거래 수수료가 지금 이 거래를 처리하는 데 필요한 것보다 높습니다.</string>
+    <string name="FeeSettings_Info_IUnderstand">이해합니다</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">거래 속도</string>
     <string name="FeeInfo_Description">비트코인과 이더리움 블록체인 모두 사용자가 거래를 보낼 때 네트워크 수수료를 지불해야 합니다. 수수료는 네트워크에서 많은 거래가 발생할 때 더 높고 블록체인이 적으면 더 낮습니다.</string>
@@ -314,13 +293,11 @@
     <string name="FeeInfo_Fast">빠르게</string>
     <string name="FeeInfo_FastDescription">우선 순위가 중요한 거래의 경우 높은 수수료 값을 사용하는 것이 좋습니다. 비트코인의 경우 10분 이내, 이더리움의 경우 1~2분 이내에 거래가 완료될 것으로 예상됩니다.</string>
     <!--Wallet Connect-->
-    <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">요청</string>
     <string name="WalletConnect_SendRequest_Title">전송</string>
     <string name="WalletConnect_ApproveRequest_Title">승인</string>
     <string name="WalletConnect_SwapRequest_Title">스왑</string>
     <string name="WalletConnect_UnknownRequest_Title">요청</string>
-    <string name="WalletConnect_Url">URL 주소</string>
     <string name="WalletConnect_Status">상태</string>
     <string name="WalletConnect_SignedTransactions">서명한 트랜잭션</string>
     <string name="WalletConnect_Approve_Hint">승인을 눌러 이 앱이 귀하의 공공 주소를 볼 수 있도록 허용하십시오. 이것은 잠재적인 피싱 위험으로부터 데이터를 보호하기 위한 중요한 보안 단계 입니다.</string>
@@ -328,6 +305,7 @@
     <string name="WalletConnect_Reconnect_Hint">연결을 설정하지 못했습니다. 다시 연결해 보세요.</string>
     <string name="WalletConnect_Error_InvalidUrl">잘못된 주소</string>
     <string name="WalletConnect_Requirement">요구 사항</string>
+    <string name="WalletConnect_Alert">알림</string>
     <string name="WalletConnect_Status_Offline">오프라인</string>
     <string name="WalletConnect_Status_Online">온라인</string>
     <string name="WalletConnect_Status_Connecting">연결중...</string>
@@ -335,20 +313,40 @@
     <string name="WalletConnect_Disconnecting">연결을 끊는 중...</string>
     <string name="WalletConnect_SignMessageRequest_Title">서명 요청</string>
     <string name="WalletConnect_SignMessageRequest_Domain">도메인</string>
+    <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">서명할 메시지</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">인증을 위해 메시지에 서명하십시오</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">가입</string>
+    <string name="WalletConnect_Error_NoWallet">적합한 지갑이 없습니다. 기존 지갑을 생성하거나 복원해야 합니다.</string>
+    <string name="WalletConnect_Error_WatchAccount">이 기능은 시계 전용 지갑에서는 작동하지 않으므로 복원 또는 생성된 지갑으로 전환해야 합니다 </string>
+    <string name="WalletConnect_Error_UnsupportedChainId">지원되지 않는 체인 ID</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">적합한 계정이 없습니다.</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">적합한 evm 키트가 없습니다.</string>
+    <string name="WalletConnect_Error_DataParsingError">데이터 파싱 오류</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">요청을 찾을 수 없음 오류</string>
+    <string name="WalletConnect_NoConnection">연결된 dapp이 없습니다.</string>
+    <string name="WalletConnect_PendingRequests">보류 중인 요청</string>
+    <string name="WalletConnect_ActiveWallet">지갑 활성화</string>
+    <string name="WalletConnect_Input">입력</string>
+    <string name="WalletConnect_Version1">버전 1.0</string>
+    <string name="WalletConnect_Version2">버전 2.0</string>
     <!--EthereumTransaction-->
+    <string name="EthereumTransaction_Warning_Title">경고</string>
+    <string name="EthereumTransaction_Error_Title">오류</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">잔액 부족</string>
     <string name="EthereumTransaction_Error_InsufficientBalance">거래에서 전송하려면 %s가 필요합니다</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">현재 %s 잔액은 거래 수수료를 포함하여이 거래를 처리하는 데 필요한 금액보다 적습니다.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">선택한 수수료 값이 너무 낮아 거부됩니다!</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Insufficient Liquidity</string>
-    <string name="EthereumTransaction_Error_CannotEstimate">오류! 잔액을 확인하고 수수료를 충당하기에 충분한 %s이 있는지 확인하십시오. 또는 가격 슬리피지 양을 늘리고 다시 시도하십시오. 3초 후에 다시 시도합니다...</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">적은 수수료</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">설정된 거래 수수료 금액이 현재 이 거래를 처리하기에 충분하지 않습니다.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">유동성 부족</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">이 거래를 처리할 수 있는 유동성이 충분하지 않을 수 있습니다. 금액을 낮추십시오.</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">추정 오류</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">잔액을 확인하여 수수료를 충당하기에 충분한 %s이 있는지 확인하십시오. 또는 가격 슬리피지 금액을 늘리고 다시 시도하십시오. 3초 후에 자동 재시도합니다</string>
+    <string name="EthereumTransaction_Warning_CoinNeededForFee">향후 거래에 대해 지불할 수 있도록 일부 %s를 잔액으로 남겨두는 것이 좋습니다.</string>
     <!--Swap-->
     <string name="Swap">스왑</string>
     <string name="Swap_FromAmountTitle">지불하기</string>
     <string name="Swap_ToAmountTitle">얻기</string>
-    <string name="Swap_Percent">%s%%</string>
     <string name="Swap_Estimated">예상</string>
     <string name="Swap_TokenSelectorTitle">선택</string>
     <string name="Swap_Balance">잔액</string>
@@ -372,9 +370,8 @@
     <string name="Swap_MaximumPaid">최대 지불액</string>
     <string name="Swap_MinimumGot">보증 금액</string>
     <string name="Swap_PoweredBy">제공</string>
-    <string name="Swap_SelectSwapProvider_Title">공급자 스왑</string>
-    <string name="Swap_SelectSwapProvider_Subtitle">스위처</string>
-    <string name="Swap_AmountEstimated">(est)</string>
+    <string name="Swap_SelectSwapProvider_Title">스왑 서비스</string>
+    <string name="Swap_AmountEstimated">(추정)</string>
     <string name="Swap_AmountMin">(분)</string>
     <string name="Swap_AmountMax">(최대)</string>
     <!-- Swap Settings -->
@@ -435,6 +432,7 @@
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">전부</string>
     <string name="Transactions_EmptyList">당신은 아직 보류 중 또는 과거에 완료된 거래가 없습니다</string>
+    <string name="Transactions_WaitForSync">동기화가 끝날 때까지 기다려 주십시오.</string>
     <string name="Transactions_Pending">보류 중</string>
     <string name="Transactions_Receive">수신</string>
     <string name="Transactions_Completed">완료</string>
@@ -448,6 +446,11 @@
     <string name="Transactions_To">%s에게</string>
     <string name="Transactions_From">%s부터</string>
     <string name="Transaction_Unlimited">무제한 %s</string>
+    <string name="Transactions_All">모든</string>
+    <string name="Transactions_Incoming">수령됨</string>
+    <string name="Transactions_Outgoing">전송됨</string>
+    <string name="Transactions_Swaps">스왑</string>
+    <string name="Transactions_Approvals">승인</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">거래기록</string>
     <string name="TransactionInfo_Title">거래 정보</string>
@@ -460,7 +463,6 @@
     <string name="TransactionInfo_RawTransaction">로우 트랜잭션</string>
     <string name="TransactionInfo_To">에게</string>
     <string name="TransactionInfo_From">로 부터</string>
-    <string name="TransactionInfo_Memo">Memo</string>
     <string name="TransactionInfo_LockedUntil">까지 잠그기 %s</string>
     <string name="TransactionInfo_UnlockedAt">%s에서 잠금 해제됨</string>
     <string name="TransactionInfo_RecipientHash">수령인</string>
@@ -484,10 +486,10 @@
     <string name="StatusInfo_Processing">처리 중</string>
     <string name="StatusInfo_Confirmed">완료</string>
     <string name="StatusInfo_Failed">실패</string>
-    <string name="StatusInfo_PendingDescription">아직 블록체인에서 거래가 확인되지 않았습니다. 권장 또는 더 높은 수수료 설정으로 전송된 거래는 일반적으로 10분 이내에 처리됩니다. 낮은 수수료로 전송된 거래는 몇 시간 또는 며칠 동안 보류 상태로 남아 있을 수 있으며 완전히 거부될 수도 있습니다.</string>
+    <string name="StatusInfo_PendingDescription">거래는 아직 블록체인에서 확인되지 않았습니다. 권장 또는 더 높은 수수료 설정으로 전송된 거래는 일반적으로 분 이내에 처리됩니다. 낮은 수수료로 전송된 거래는 몇 시간 또는 며칠 동안 보류 상태로 남아 있을 수 있으며 거부될 수도 있습니다. 또한 Unstoppable 지갑 인터페이스에 표시되는 개별 트랜잭션의 상태는 일반적으로 짧은 지연으로 업데이트됩니다.</string>
     <string name="StatusInfo_ProcessingDescription">거래는 이미 블록체인에 포함되었지만 영구적인 완결성에 도달하지 않았습니다. 이 시점에서 소액 결제를 위해 완료된 거래로 간주하는 것이 안전합니다. 더 큰 지불의 경우 거래 상태가 완료로 변경될 때까지 기다리는 것이 좋습니다.</string>
     <string name="StatusInfo_ConfirmedDescription">거래가 완료되고 영구적이고 되돌릴 수 없는 것으로 간주됩니다.</string>
-    <string name="StatusInfo_FailedDescription">거래가 처리되지 않았으며 가치 이전이 발생하지 않았습니다. 실패 상태의 거래는 여전히 블록체인에 기록되고 거래 수수료가 소비됩니다. Unstoppable 앱은 이러한 거래에 대한 실패 이유를 표시할 수 없지만 사용자는 etherscan.io와 같은 공개 블록 탐색기에서 직접 찾을 수 있습니다.</string>
+    <string name="StatusInfo_FailedDescription">거래가 처리되지 않았으며 가치 이전이 발생하지 않았습니다. 실패 원인에 따라 일부 실패한 거래는 거래 수수료를 소모할 수 있습니다. 다른 거래로 대체되거나 취소된 거래는 거래 수수료를 소비하지 않으며 실패한 것으로 표시됩니다. Unstoppable 앱은 거래 실패의 원인을 표시할 수 없지만 사용자는 etherscan.io와 같은 공개 블록 탐색기에서 직접 찾을 수 있습니다.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">가속</string>
     <string name="TransactionInfoOptions_SpeedUp_Description">이 작업은 이전 거래를 더 높은 수수료로 다시 보내서 무효화하려고 시도합니다. 새 트랜잭션이 전송되었을 때 원래 트랜잭션이 보류 상태로 남아 있으면 해당 트랜잭션이 무효화되고 교체될 가능성이 높습니다(보장되지 않음). 이 두 트랜잭션 중 하나만 블록체인에 포함됩니다.</string>
@@ -495,9 +497,8 @@
     <string name="TransactionInfoOptions_Cancel_Title">취소</string>
     <string name="TransactionInfoOptions_Cancel_Description">이 작업은 자신에게 새로운 0 %s 트랜잭션으로 재전송하여 이전 트랜잭션을 무효화하려고 시도합니다. 새 트랜잭션이 전송될 때 원래 트랜잭션이 보류 상태로 남아 있으면 해당 트랜잭션이 무효화되고 교체될 가능성이 높습니다(보장되지 않음). 이 두 트랜잭션 중 하나만 블록체인에 포함됩니다.</string>
     <string name="TransactionInfoOptions_Cancel_Button">트랜잭션 취소</string>
-    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">이미 차단된 거래</string>
     <!-- Info -->
-    <string name="Info_LockTime_Title">시간 자물쇠</string>
     <string name="Info_LockTime_Description">발송자께서 이 자금을 %s에 만료되는 지출 잠금으로 보냈습니다. \n\n걱정하지 마십시오, 수신된 비트코인은 이미 귀하의 것 이지만 잠금 기간이 만료될 때까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
     <string name="Info_DoubleSpend_Title">이중 지출</string>
     <string name="Info_DoubleSpend_Description">이중 지출 위험! 블록 체인에 있는 거래에 지출된 정보를 사용하려는 또 다른 거래가 있습니다. 네트워크는 하나의 거래만 수용합니다</string>
@@ -523,7 +524,6 @@
     <string name="Settings_Theme">테마</string>
     <string name="Settings_Terms">약관</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
-    <string name="Settings_Faq">FAQ</string>
     <string name="Settings_AppStatus">앱 상태</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">앱 평가</string>
@@ -543,8 +543,8 @@
     <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
         \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
         \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
-        \n\n1. Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
-        \n\n2. Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
+        \n\n1. Shuffle: The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
+        \n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains when sending or receiving transactions.
         \n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.
@@ -568,7 +568,6 @@
     <string name="SettingsSecurity_SortingShuffleDescription">랜덤 인덱싱</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
-    <string name="SettingsSecurity_SyncModeAPI">API</string>
     <string name="SettingsSecurity_SyncModeAPIDescription">권장</string>
     <string name="SettingsSecurity_SyncModeBlockchain">블록체인으로 부터</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">더 개인</string>
@@ -635,7 +634,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">코인 매니저</string>
-    <string name="ManageCoins_Search">검색</string>
+    <string name="ManageCoins_Search">토큰 코드 또는 이름</string>
     <string name="ManageCoins_AddToken">토큰 추가</string>
     <string name="ManageCoins_NoResults">검색 결과가 없습니다. 스마트 계약 주소를 알고 있는 경우 토큰을 수동으로 추가해 보십시오.</string>
     <!-- Experimental Feature -->
@@ -643,13 +642,16 @@
     <string name="ExperimentalFeatures_Description">아래 기능은 실험용이므로 주의해서 사용해 주세요. 자체 암호화된 자금을 사용하여 이러한 기능을 철저히 실험하였지만 가능한 모든 경우에 예상대로 작독한다고 보장 드릴 수는 없습니다.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">시간 자물쇠</string>
     <!-- Bitcoin Hodling -->
-    <string name="BitcoinHodling_Title">시간 자물쇠</string>
     <string name="BitcoinHodling_Description">명시된 날짜까지 사용할수 없는 비트코인을 보낼 수 있습니다.\n\n이러한 거래의 수진자는 비트코인 사용에 대해 언스탑퍼플 지갑 앱 버젼 0.10 또는 더 새로운 BIP44 주소 형식을 사용해야 합니다.\n\n언스탑퍼블 지갑만이 비트코인 네트워크에서 이런 거래들을 올바르게 확인할 수 있고 또 수신자가 잠금 기간 만료 후에도 비트코인을 사용할 수 있게 할 수 있습니다.\n\n귀하께서 호들러 이시면, 이 기능을 사용하여 귀하에게 이러한 거래를 보냄으로써 호들링할 수 있습니다.\n\n실험적인 기능으로 거래당 최대 0.5 BTC로 제한이 되있습니다.</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">지갑 관리하기</string>
     <string name="ManageAccounts_CreateNewWallet">만들기</string>
     <string name="ManageAccounts_ImportWallet">다음에서 복원하기</string>
+    <string name="ManageAccounts_WatchAddress">주소 관찰</string>
     <string name="ManageAccounts_Hint">중요! 기존 지갑을 복원하지만 새로운 암호를 사용하면 완전히 새로운 지갑이 생성됩니다. 여러 지갑에 대해 단일 12-24 단어 니모닉 복구 구문을 사용하려는 경우 편리합니다.</string>
+    <string name="Watch_Address_Title">주소</string>
+    <string name="Watch_Address_Hint">주소 또는 도메인</string>
+    <string name="Watch_Address_Watch">관찰</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">이름</string>
     <string name="ManageAccount_Save">저장</string>
@@ -658,7 +660,7 @@
     <string name="ManageAccount_NetworkSettings">네트워크 설정</string>
     <string name="ManageAccount_Unlink">연결되지 않은</string>
     <string name="ManageAccount_BackupRequired_Title">백업이 필요합니다</string>
-    <string name="ManageAccount_BackupRequired_Description">개인 암호가 휴대폰에서 지워질 수 있기 전에 귀하께서는 개인 암호를 백업 하셔야 합니다.</string>
+    <string name="ManageAccount_BackupRequired_Description">%2$s를 받기 전에 %1$s를 백업해야 합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">장치에서 이 지갑을 삭제합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">이 지갑에 속한 모든 코인은 잔액 탭에서 비활성화됩니다.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">이 지갑의 개인 암호를 백업하지 않으면 귀하께서는 자금 접근을 하지 못합니다.</string>
@@ -667,8 +669,11 @@
     <string name="ManageAccount_NWordsWithPassphrase">암호 문구로 이루어진 %s 단어</string>
     <string name="ManageAccount_SwitchWallet_Title">지갑 변경</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">빠른 전환을 위한 지갑 선택</string>
+    <string name="ManageAccount_DeleteWarning">이 지갑을 삭제하시겠습니까?</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">네트워크 설정</string>
+    <string name="NetworkSettings_SwithesAutomatically">자동으로 전환</string>
+    <string name="NetworkSettings_SwithesAutomatically_Description">메인넷 HTTP 네트워크는 아래 나열된 링크를 사용하고 자동으로 전환됩니다.</string>
     <string name="NetworkSettings_TestNetDisclaimer">그것이 무엇이며 어떻게 작동하는지 이해하지 못하는 한 테스트넷 옵션을 선택하지 마십시오.\n\n테스트넷은 자체 통화로 테스트 목적을 위한 병렬 블록체인입니다. 누군가가 귀하의 Testnet 주소로 정기 결제를 보내면 손실됩니다.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">키</string>
@@ -720,9 +725,10 @@
     <string name="AddToken_Decimals">소수점</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">코인 유형</string>
+    <string name="AddToken_AddressOrSymbol">계약 주소</string>
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
     <string name="AddToken_InvalidAddressError">잘못된 계약 주소 또는 BEP2 기호</string>
-    <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
+    <string name="AddToken_ApiLimitExceeded">API 한도를 초과했습니다. 나중에 다시 시도하세요.</string>
     <string name="AddEvmToken_TokenNotFound">토큰 찾을 수 없음</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
@@ -735,12 +741,10 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">통신</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">현금주소(권장)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018년 이전 공통</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018년 이후 공통</string>
     <!-- Tor -->
-    <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">연결로</string>
     <string name="Tor_Status_Starting">토르 시작중...</string>
     <string name="Tor_Status_Error">토르 시작 오류 !</string>
@@ -750,13 +754,12 @@
     <string name="TorPage_ConnectionClosed">연결 해제</string>
     <string name="Tor_PrerequisitesAlert_Content">토르를 활성화하면 Infura의 이더리움 블록체인 연결이 초기화됩니다.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip44_Title">Legacy</string>
     <string name="CoinOption_bip49_Title">최신(권장)</string>
     <string name="CoinOption_bip84_Title">최신</string>
     <!--Coin Page-->
-    <string name="Coin_Tab_Overview">Overview</string>
-    <string name="Coin_Tab_Market">Market</string>
-    <string name="Coin_Tab_Details">Details</string>
+    <string name="Coin_Tab_Overview">Price</string>
+    <string name="Coin_Tab_Market">Markets</string>
+    <string name="Coin_Tab_Details">Analytics</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
@@ -819,15 +822,12 @@
     <string name="CoinPage_Guide">Guide</string>
     <string name="CoinPage_Website">Website</string>
     <string name="CoinPage_Whitepaper">Whitepaper</string>
-    <string name="CoinPage_Reddit">Reddit</string>
-    <string name="CoinPage_Twitter">Twitter</string>
     <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
+    <string name="CoinPage_Twitter_NoTweets">아직 트윗이 없습니다</string>
     <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
     <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
     <string name="CoinPage_Twitter_Replied">Replying to %s</string>
     <string name="CoinPage_Twitter_SeeOnTwitter">See on Twitter</string>
-    <string name="CoinPage_Telegram">Telegram</string>
-    <string name="CoinPage_Github">Github</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
     <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
@@ -838,6 +838,7 @@
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_NoData">No Data</string>
+    <string name="CoinPage_NoDataAvailable">No data available</string>
     <string name="CoinPage_AddToWallet">지갑에 추가됨</string>
     <string name="CoinPage_InWallet">지갑에서</string>
     <string name="CoinPage_Favorite">Favorite</string>
@@ -857,6 +858,38 @@
     <string name="CoinPage_MajorHolders_Description">위의 차트는 상위 10개 지갑이 보유한 전체 토큰의 %를 보여줍니다. %가 낮을수록 코인이 더 많이 분배됩니다.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">상위 10위 이더리움 지갑</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
+    <string name="Nfts_Title">NFT</string>
+    <string name="Nfts_PriceType_Days_7">평균 7일</string>
+    <string name="Nfts_PriceType_Days_30">평균 30일</string>
+    <string name="Nfts_PriceType_LastSale">마지막 판매</string>
+    <string name="Nfts_Asset_OnSale">할인 중</string>
+    <string name="Nfts_Asset_OnSaleUntil">%s 까지</string>
+    <string name="Nfts_Empty">지갑에 NFT가 없습니다.</string>
+    <string name="NftAsset_OpenSea">OpenSea</string>
+    <string name="NftAsset_Action_Share">공유</string>
+    <string name="NftAsset_Action_Save">저장</string>
+    <string name="NftAsset_OwnedCount">가진 갯수</string>
+    <string name="NftAsset_Price_Purchase">구매 가격</string>
+    <string name="NftAsset_Price_Average7d">평균 7일</string>
+    <string name="NftAsset_Price_Average30d">평균 30일</string>
+    <string name="NftAsset_Price_Floor">바닥 가격</string>
+    <string name="NftAsset_Price_BuyNow">지금 구매</string>
+    <string name="NftAsset_Price_TopBid">최고 매수가</string>
+    <string name="NftAsset_Price_MinimumBid">최저 매수가</string>
+    <string name="NftAsset_Price_BestOffer">최고 제안</string>
+    <string name="NftAsset_Properties">속성</string>
+    <string name="NftAsset_Description">설명</string>
+    <string name="NftAsset_Details">상세 정보</string>
+    <string name="NftAsset_Links">링크</string>
+    <string name="NftAsset_ContractAddress">계약 주소</string>
+    <string name="NftAsset_TokenId">토큰 ID</string>
+    <string name="NftAsset_TokenStandard">토큰 표준</string>
+    <string name="NftAsset_Blockchain">블록 체인</string>
+    <string name="NftAsset_Links_Website">웹사이트</string>
+    <string name="NftAsset_Links_OpenSea">OpenSea</string>
+    <string name="NftAsset_Links_Discord">Discord</string>
+    <string name="NftAsset_Links_Twitter">Twitter</string>
+    <string name="PoweredBy_OpenSeaAPI">OpenSea API 제공</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
@@ -869,6 +902,7 @@
     <string name="BalanceSyncError_ButtonRetry">재시도</string>
     <string name="BalanceSyncError_ButtonChangeSource">출처를 변경하다</string>
     <string name="BalanceSyncError_ButtonReport">보고</string>
+    <string name="BalanceSyncError_ReportButtonExplanation">나중에 보고할 수 있도록 에러 텍스트가 클립보드에 복사됩니다.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">팔로우</string>
 </resources>

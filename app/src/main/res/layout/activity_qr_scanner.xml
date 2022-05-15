@@ -121,7 +121,7 @@
         app:layout_constraintStart_toEndOf="@+id/leftBox" />
 
     <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/buttonCancelCompose"
+        android:id="@+id/buttonsCompose"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

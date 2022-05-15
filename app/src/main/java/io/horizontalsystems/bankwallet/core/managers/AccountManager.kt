@@ -32,7 +32,7 @@ class AccountManager(
         get() = storage.isAccountsEmpty
 
     override val accounts: List<Account>
-        get() = cache.accountsSet.toList()
+        get() = cache.accountsMap.map { it.value }
 
     override val accountsFlowable: Flowable<List<Account>>
         get() = accountsSubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -41,9 +41,9 @@ class AccountManager(
         get() = accountsDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override fun setActiveAccountId(activeAccountId: String?) {
-        if (cache.activeAccount?.id != activeAccountId) {
+        if (cache.activeAccountId != activeAccountId) {
             storage.activeAccountId = activeAccountId
-            cache.setActiveAccountId(activeAccountId)
+            cache.activeAccountId = activeAccountId
             activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
         }
     }
@@ -54,13 +54,13 @@ class AccountManager(
 
     override fun loadAccounts() {
         cache.set(storage.allAccounts())
-        cache.setActiveAccountId(storage.activeAccountId)
+        cache.activeAccountId = storage.activeAccountId
     }
 
     override fun save(account: Account) {
         storage.save(account)
 
-        cache.insert(account)
+        cache.set(account)
         accountsSubject.onNext(accounts)
 
         setActiveAccountId(account.id)
@@ -69,8 +69,14 @@ class AccountManager(
     override fun update(account: Account) {
         storage.update(account)
 
-        cache.update(account)
+        cache.set(account)
         accountsSubject.onNext(accounts)
+
+        activeAccount?.id?.let {
+            if (account.id == it) {
+                activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
+            }
+        }
     }
 
     override fun delete(id: String) {
@@ -80,7 +86,7 @@ class AccountManager(
         accountsSubject.onNext(accounts)
         accountsDeletedSubject.onNext(Unit)
 
-        if (id == activeAccount?.id) {
+        if (id == cache.activeAccountId) {
             setActiveAccountId(accounts.firstOrNull()?.id)
         }
     }
@@ -106,34 +112,26 @@ class AccountManager(
     }
 
     private class AccountsCache {
-        var accountsSet = mutableSetOf<Account>()
+        var activeAccountId: String? = null
+
+        var accountsMap = mutableMapOf<String, Account>()
             private set
 
-        var activeAccount: Account? = null
-            private set
+        val activeAccount: Account?
+            get() = activeAccountId?.let { accountsMap[it] }
 
-        fun insert(account: Account) {
-            accountsSet.add(account)
-        }
-
-        fun update(account: Account) {
-            accountsSet.add(account)
+        fun set(account: Account) {
+            accountsMap[account.id] = account
         }
 
         fun set(accounts: List<Account>) {
-            accountsSet = accounts.toMutableSet()
+            accountsMap = accounts.associateBy { it.id }.toMutableMap()
         }
 
         fun delete(id: String) {
-            accountsSet.removeAll { it.id == id }
-        }
-
-        fun setActiveAccountId(activeAccountId: String?) {
-            activeAccount = if (activeAccountId != null) {
-                accountsSet.find { it.id == activeAccountId}
-            } else {
-                null
-            }
+            accountsMap.remove(id)
         }
     }
 }
+
+class NoActiveAccount : Exception()

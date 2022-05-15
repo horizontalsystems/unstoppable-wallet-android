@@ -14,6 +14,8 @@ import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentShowPrivateKeyTabBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderPrivateKeyBinding
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonDefaults
@@ -21,14 +23,24 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_show_private_key_tab.*
-import kotlinx.android.synthetic.main.view_holder_private_key.*
 
 class ShowPrivateKeyFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_show_private_key_tab, container, false)
+    private var _binding: FragmentShowPrivateKeyTabBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentShowPrivateKeyTabBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,7 +49,7 @@ class ShowPrivateKeyFragment : BaseFragment() {
         val privateKeys = arguments?.getParcelableArrayList<ShowKeyModule.PrivateKey>(PRIVATE_KEYS)
             ?: listOf()
 
-        recyclerView.adapter = PrivateKeysAdapter(privateKeys, onClick = { key ->
+        binding.recyclerView.adapter = PrivateKeysAdapter(privateKeys, onClick = { key ->
             showPrivateKeyCopyWarning(key)
         })
     }
@@ -80,7 +92,10 @@ class PrivateKeysAdapter(
 ) : RecyclerView.Adapter<PrivateKeyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrivateKeyViewHolder {
-        return PrivateKeyViewHolder.create(parent, onClick)
+        return PrivateKeyViewHolder(
+            ViewHolderPrivateKeyBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ), onClick)
     }
 
     override fun onBindViewHolder(holder: PrivateKeyViewHolder, position: Int) {
@@ -93,14 +108,14 @@ class PrivateKeysAdapter(
 }
 
 class PrivateKeyViewHolder(
-    override val containerView: View,
+    private val binding: ViewHolderPrivateKeyBinding,
     private val onClick: (ShowKeyModule.PrivateKey) -> Unit
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(key: ShowKeyModule.PrivateKey) {
-        blockchain.text = key.blockchain
+        binding.blockchain.text = key.blockchain
 
-        valueCompose.setContent {
+        binding.valueCompose.setContent {
             ComposeAppTheme {
                 ButtonSecondary(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -108,7 +123,7 @@ class PrivateKeyViewHolder(
                         backgroundColor = ComposeAppTheme.colors.steel20,
                         contentColor = ComposeAppTheme.colors.oz
                     ),
-                    content = { Text(key.value, textAlign = TextAlign.Center) },
+                    content = { Text(key.value, textAlign = TextAlign.Center, maxLines = 2) },
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                     onClick = {
                         onClick(key)
@@ -118,12 +133,4 @@ class PrivateKeyViewHolder(
         }
     }
 
-    companion object {
-        fun create(parent: ViewGroup, onClick: (ShowKeyModule.PrivateKey) -> Unit): PrivateKeyViewHolder {
-            return PrivateKeyViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_private_key, parent, false),
-                onClick
-            )
-        }
-    }
 }

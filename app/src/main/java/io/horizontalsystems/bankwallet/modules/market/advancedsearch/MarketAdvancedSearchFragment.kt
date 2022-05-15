@@ -12,15 +12,15 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.databinding.FragmentMarketSearchFilterBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
-import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolder
-import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolderFactory
-import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
-import io.horizontalsystems.bankwallet.ui.selector.SelectorItemViewHolderFactory
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetMarketSearchFilterSelectDialog
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetMarketSearchFilterSelectMultipleDialog
+import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_market_search_filter.*
 
 class MarketAdvancedSearchFragment : BaseFragment() {
 
@@ -28,15 +28,29 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         MarketAdvancedSearchModule.Factory()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_market_search_filter, container, false)
+    private var _binding: FragmentMarketSearchFilterBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMarketSearchFilterBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuReset -> {
                     marketAdvancedSearchViewModel.reset()
@@ -47,132 +61,147 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         }
 
         marketAdvancedSearchViewModel.coinListViewItemLiveData.observe(viewLifecycleOwner) {
-            filterCoinList.setValueColored(it.title, it.color)
+            binding.filterCoinList.setValueColored(it.title, it.color)
         }
-        filterCoinList.setOnSingleClickListener {
+        binding.filterCoinList.setOnSingleClickListener {
             showSelectorDialog(
-                    title = R.string.Market_Filter_ChooseSet,
-                    subtitleText = "---------",
-                    headerIcon = R.drawable.ic_circle_coin_24,
-                    items = marketAdvancedSearchViewModel.coinListsViewItemOptions,
-                    selectedItem = marketAdvancedSearchViewModel.coinListViewItem,
-                    itemViewHolderFactory = SelectorItemViewHolderFactory()
+                title = R.string.Market_Filter_ChooseSet,
+                headerIcon = R.drawable.ic_circle_coin_24,
+                items = marketAdvancedSearchViewModel.coinListsViewItemOptions,
+                selectedItem = marketAdvancedSearchViewModel.coinListViewItem,
             ) {
                 marketAdvancedSearchViewModel.coinListViewItem = it
             }
         }
 
         marketAdvancedSearchViewModel.marketCapViewItemLiveData.observe(viewLifecycleOwner) {
-            filterMarketCap.setValueColored(it.title, it.color)
+            binding.filterMarketCap.setValueColored(it.title, it.color)
         }
-        filterMarketCap.setOnSingleClickListener {
+        binding.filterMarketCap.setOnSingleClickListener {
             showSelectorDialog(
-                    title = R.string.Market_Filter_MarketCap,
-                    subtitleText = "---------",
-                    headerIcon = R.drawable.ic_usd_24,
-                    items = marketAdvancedSearchViewModel.marketCapViewItemOptions,
-                    selectedItem = marketAdvancedSearchViewModel.marketCapViewItem,
-                    itemViewHolderFactory = SelectorItemViewHolderFactory()
+                title = R.string.Market_Filter_MarketCap,
+                headerIcon = R.drawable.ic_usd_24,
+                items = marketAdvancedSearchViewModel.marketCapViewItemOptions,
+                selectedItem = marketAdvancedSearchViewModel.marketCapViewItem,
             ) {
                 marketAdvancedSearchViewModel.marketCapViewItem = it
             }
         }
 
         marketAdvancedSearchViewModel.volumeViewItemLiveData.observe(viewLifecycleOwner) {
-            filterVolume.setValueColored(it.title, it.color)
+            binding.filterVolume.setValueColored(it.title, it.color)
         }
-        filterVolume.setOnSingleClickListener {
+        binding.filterVolume.setOnSingleClickListener {
             showSelectorDialog(
-                    title = R.string.Market_Filter_Volume,
-                    subtitleText = getString(R.string.TimePeriod_24h),
-                    headerIcon = R.drawable.ic_chart_24,
-                    items = marketAdvancedSearchViewModel.volumeViewItemOptions,
-                    selectedItem = marketAdvancedSearchViewModel.volumeViewItem,
-                    itemViewHolderFactory = SelectorItemViewHolderFactory()
+                title = R.string.Market_Filter_Volume,
+                subtitleText = getString(R.string.TimePeriod_24h),
+                headerIcon = R.drawable.ic_chart_24,
+                items = marketAdvancedSearchViewModel.volumeViewItemOptions,
+                selectedItem = marketAdvancedSearchViewModel.volumeViewItem,
             ) {
                 marketAdvancedSearchViewModel.volumeViewItem = it
             }
         }
 
         marketAdvancedSearchViewModel.periodViewItemLiveData.observe(viewLifecycleOwner) {
-            filterPeriod.setValueColored(it.title, it.color)
+            binding.filterPeriod.setValueColored(it.title, it.color)
         }
-        filterPeriod.setOnSingleClickListener {
+        binding.filterPeriod.setOnSingleClickListener {
             showSelectorDialog(
-                    title = R.string.Market_Filter_PricePeriod,
-                    subtitleText = "---------",
-                    headerIcon = R.drawable.ic_circle_clock_24,
-                    items = marketAdvancedSearchViewModel.periodViewItemOptions,
-                    selectedItem = marketAdvancedSearchViewModel.periodViewItem,
-                    itemViewHolderFactory = SelectorItemViewHolderFactory()
+                title = R.string.Market_Filter_PricePeriod,
+                headerIcon = R.drawable.ic_circle_clock_24,
+                items = marketAdvancedSearchViewModel.periodViewItemOptions,
+                selectedItem = marketAdvancedSearchViewModel.periodViewItem,
             ) {
                 marketAdvancedSearchViewModel.periodViewItem = it
             }
         }
 
         marketAdvancedSearchViewModel.priceChangeViewItemLiveData.observe(viewLifecycleOwner) {
-            filterPriceChange.setValueColored(it.title, it.color)
+            binding.filterPriceChange.setValueColored(it.title, it.color)
         }
-        filterPriceChange.setOnSingleClickListener {
+
+        binding.filterBlockchains.setOnSingleClickListener {
+            showMultipleSelectorDialog(
+                title = R.string.Market_Filter_Blockchains,
+                headerIcon = R.drawable.ic_blocks_24,
+                items = marketAdvancedSearchViewModel.blockchainOptions,
+                selectedIndexes = marketAdvancedSearchViewModel.selectedBlockchainIndexes,
+            ) { selectedIndexes ->
+                marketAdvancedSearchViewModel.selectedBlockchainIndexes = selectedIndexes
+            }
+        }
+
+        marketAdvancedSearchViewModel.blockchainsViewItemLiveData.observe(viewLifecycleOwner) {
+            binding.filterBlockchains.setValueColored(it.title, it.color)
+        }
+
+        binding.filterPriceChange.setOnSingleClickListener {
             showSelectorDialog(
-                    title = R.string.Market_Filter_PriceChange,
-                    subtitleText = "---------",
-                    headerIcon = R.drawable.ic_market_24,
-                    items = marketAdvancedSearchViewModel.priceChangeViewItemOptions,
-                    selectedItem = marketAdvancedSearchViewModel.priceChangeViewItem,
-                    itemViewHolderFactory = SelectorItemViewHolderFactory()
+                title = R.string.Market_Filter_PriceChange,
+                headerIcon = R.drawable.ic_market_24,
+                items = marketAdvancedSearchViewModel.priceChangeViewItemOptions,
+                selectedItem = marketAdvancedSearchViewModel.priceChangeViewItem,
             ) {
                 marketAdvancedSearchViewModel.priceChangeViewItem = it
             }
         }
 
-        marketAdvancedSearchViewModel.outperformedBtcOnFilter.observe(viewLifecycleOwner, { checked ->
-            filterOutperformedBtc.setChecked(checked)
-        })
-        filterOutperformedBtc.onCheckedChange { checked->
+        marketAdvancedSearchViewModel.outperformedBtcOnFilter.observe(
+            viewLifecycleOwner,
+            { checked ->
+                binding.filterOutperformedBtc.setChecked(checked)
+            })
+        binding.filterOutperformedBtc.onCheckedChange { checked ->
             marketAdvancedSearchViewModel.outperformedBtcOn = checked
         }
 
-        marketAdvancedSearchViewModel.outperformedEthOnFilter.observe(viewLifecycleOwner, { checked ->
-            filterOutperformedEth.setChecked(checked)
-        })
-        filterOutperformedEth.onCheckedChange { checked->
+        marketAdvancedSearchViewModel.outperformedEthOnFilter.observe(
+            viewLifecycleOwner,
+            { checked ->
+                binding.filterOutperformedEth.setChecked(checked)
+            })
+        binding.filterOutperformedEth.onCheckedChange { checked ->
             marketAdvancedSearchViewModel.outperformedEthOn = checked
         }
 
-        marketAdvancedSearchViewModel.outperformedBnbOnFilter.observe(viewLifecycleOwner, { checked ->
-            filterOutperformedBnb.setChecked(checked)
-        })
-        filterOutperformedBnb.onCheckedChange { checked->
+        marketAdvancedSearchViewModel.outperformedBnbOnFilter.observe(
+            viewLifecycleOwner,
+            { checked ->
+                binding.filterOutperformedBnb.setChecked(checked)
+            })
+        binding.filterOutperformedBnb.onCheckedChange { checked ->
             marketAdvancedSearchViewModel.outperformedBnbOn = checked
         }
 
         marketAdvancedSearchViewModel.priceCloseToAthFilter.observe(viewLifecycleOwner, { checked ->
-            filterPriceCloseToAth.setChecked(checked)
+            binding.filterPriceCloseToAth.setChecked(checked)
         })
-        filterPriceCloseToAth.onCheckedChange { checked->
+        binding.filterPriceCloseToAth.onCheckedChange { checked ->
             marketAdvancedSearchViewModel.priceCloseToAth = checked
         }
 
         marketAdvancedSearchViewModel.priceCloseToAtlFilter.observe(viewLifecycleOwner, { checked ->
-            filterPriceCloseToAtl.setChecked(checked)
+            binding.filterPriceCloseToAtl.setChecked(checked)
         })
-        filterPriceCloseToAtl.onCheckedChange { checked->
+        binding.filterPriceCloseToAtl.onCheckedChange { checked ->
             marketAdvancedSearchViewModel.priceCloseToAtl = checked
         }
 
-        marketAdvancedSearchViewModel.updateResultButton.observe(viewLifecycleOwner, { (title, showSpinner, enabled) ->
-            setButton(title, showSpinner, enabled)
-        })
+        marketAdvancedSearchViewModel.updateResultButton.observe(
+            viewLifecycleOwner,
+            { (title, showSpinner, enabled) ->
+                setButton(title, showSpinner, enabled)
+            })
 
         marketAdvancedSearchViewModel.errorLiveEvent.observe(viewLifecycleOwner) {
             HudHelper.showErrorMessage(requireView(), it)
         }
 
         // Dispose the Composition when viewLifecycleOwner is destroyed
-        submitButtonCompose.setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
+        binding.submitButtonCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
 
         setButton()
     }
@@ -182,16 +211,14 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         showSpinner: Boolean = false,
         enabled: Boolean = false
     ) {
-        submitButtonCompose.setContent {
+        binding.submitButtonCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellowWithSpinner(
                     modifier = Modifier.padding(start = 16.dp, bottom = 24.dp, end = 16.dp),
                     title = title,
                     onClick = {
-                        findNavController().navigate(
-                            R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults,
-                            null,
-                            navOptions()
+                        findNavController().slideFromRight(
+                            R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults
                         )
                     },
                     showSpinner = showSpinner,
@@ -202,18 +229,42 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         }
     }
 
-    private fun <ItemClass> showSelectorDialog(title: Int, subtitleText: String, headerIcon: Int, items: List<ItemClass>, selectedItem: ItemClass, itemViewHolderFactory: ItemViewHolderFactory<ItemViewHolder<ItemClass>>, onSelectListener: (ItemClass) -> Unit) {
-        val dialog = SelectorBottomSheetDialog<ItemClass>()
+    private fun <ItemClass> showSelectorDialog(
+        title: Int,
+        subtitleText: String = "---------",
+        headerIcon: Int,
+        items: List<ViewItemWrapper<ItemClass>>,
+        selectedItem: ViewItemWrapper<ItemClass>,
+        onSelectListener: (ViewItemWrapper<ItemClass>) -> Unit
+    ) {
+        val dialog = BottomSheetMarketSearchFilterSelectDialog<ItemClass>()
         dialog.titleText = getString(title)
         dialog.subtitleText = subtitleText
         dialog.headerIconResourceId = headerIcon
         dialog.items = items
         dialog.selectedItem = selectedItem
         dialog.onSelectListener = onSelectListener
-        dialog.itemViewHolderFactory = itemViewHolderFactory
+
+        dialog.show(childFragmentManager, "selector_dialog")
+    }
+
+    private fun <ItemClass> showMultipleSelectorDialog(
+        title: Int,
+        subtitleText: String = "---------",
+        headerIcon: Int,
+        items: List<ViewItemWrapper<ItemClass>>,
+        selectedIndexes: List<Int>,
+        onSelectListener: (List<Int>) -> Unit
+    ) {
+        val dialog = BottomSheetMarketSearchFilterSelectMultipleDialog(
+            titleText = getString(title),
+            subtitleText = subtitleText,
+            headerIcon = headerIcon,
+            items = items,
+            selectedIndexes = selectedIndexes,
+            onCloseListener = onSelectListener
+        )
 
         dialog.show(childFragmentManager, "selector_dialog")
     }
 }
-
-

@@ -7,9 +7,9 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.ViewItem
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -26,7 +26,7 @@ class MarketFavoritesViewModel(
 
     private val marketFieldTypes = MarketField.values().toList()
     private var marketField: MarketField by menuService::marketField
-    private var marketItems: List<MarketItem> = listOf()
+    private var marketItemsWrapper: List<MarketItemWrapper> = listOf()
 
     private val marketFieldSelect: Select<MarketField>
         get() = Select(marketField, marketFieldTypes)
@@ -34,8 +34,7 @@ class MarketFavoritesViewModel(
     private val sortingFieldSelect: Select<SortingField>
         get() = Select(service.sortingField, service.sortingFieldTypes)
 
-    val viewStateLiveData = MutableLiveData<ViewState>()
-    val loadingLiveData = MutableLiveData<Boolean>()
+    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val viewItemLiveData = MutableLiveData<ViewItem>()
     val sortingFieldSelectorStateLiveData = MutableLiveData<SelectorDialogState>()
@@ -43,12 +42,10 @@ class MarketFavoritesViewModel(
     init {
         service.marketItemsObservable
             .subscribeIO { state ->
-                loadingLiveData.postValue(state == DataState.Loading)
-
                 when (state) {
                     is DataState.Success -> {
                         viewStateLiveData.postValue(ViewState.Success)
-                        marketItems = state.data
+                        marketItemsWrapper = state.data
                         syncViewItem()
                     }
                     is DataState.Error -> {
@@ -74,8 +71,8 @@ class MarketFavoritesViewModel(
             ViewItem(
                 sortingFieldSelect,
                 marketFieldSelect,
-                marketItems.map {
-                    MarketViewItem.create(it, marketField)
+                marketItemsWrapper.map {
+                    MarketViewItem.create(it.marketItem, marketField, true)
                 }
             )
         )
@@ -111,5 +108,9 @@ class MarketFavoritesViewModel(
     override fun onCleared() {
         disposables.clear()
         service.stop()
+    }
+
+    fun removeFromFavorites(uid: String) {
+        service.removeFavorite(uid)
     }
 }

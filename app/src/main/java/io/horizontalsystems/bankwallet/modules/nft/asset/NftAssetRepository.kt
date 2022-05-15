@@ -1,0 +1,79 @@
+package io.horizontalsystems.bankwallet.modules.nft.asset
+
+import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
+import io.horizontalsystems.bankwallet.modules.nft.DataWithError
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Price
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Stats
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+
+class NftAssetRepository(
+    private val xRateRepository: BalanceXRateRepository
+) {
+    private val _dataFlow =
+        MutableSharedFlow<DataWithError<NftAssetModuleAssetItem>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val dataFlow = _dataFlow.asSharedFlow()
+
+    private val disposables = CompositeDisposable()
+
+    fun start() {
+        xRateRepository.itemObservable
+            .subscribeIO { latestRates ->
+                handleUpdatedRates(latestRates)
+            }
+            .let {
+                disposables.add(it)
+            }
+    }
+
+    private fun handleUpdatedRates(latestRates: Map<String, CoinPrice?>) {
+        val currentData = _dataFlow.replayCache.firstOrNull() ?: return
+        sync(currentData, latestRates)
+    }
+
+    fun set(data: DataWithError<NftAssetModuleAssetItem>) {
+        val stats = data.value.stats
+        val priceItems = listOf(
+            stats.lastSale,
+            stats.average7d,
+            stats.average30d,
+            stats.collectionFloor,
+            stats.bestOffer,
+            stats.sale?.price,
+        )
+        val coinUids = priceItems.mapNotNull { it?.coinValue?.coin?.uid }.distinct()
+        xRateRepository.setCoinUids(coinUids)
+
+        val latestRates = xRateRepository.getLatestRates()
+
+        sync(data, latestRates)
+    }
+
+    private fun sync(data: DataWithError<NftAssetModuleAssetItem>, latestRates: Map<String, CoinPrice?>) {
+        val stats = data.value.stats
+
+        val updatedStats = Stats(
+            lastSale = stats.lastSale?.setCurrencyValue(latestRates),
+            average7d = stats.average7d?.setCurrencyValue(latestRates),
+            average30d = stats.average30d?.setCurrencyValue(latestRates),
+            collectionFloor = stats.collectionFloor?.setCurrencyValue(latestRates),
+            bestOffer = stats.bestOffer?.setCurrencyValue(latestRates),
+            sale = stats.sale?.copy(price = stats.sale.price?.setCurrencyValue(latestRates))
+        )
+
+        val updatedItem = DataWithError(data.value.copy(stats = updatedStats), data.error)
+
+        _dataFlow.tryEmit(updatedItem)
+    }
+
+    private fun Price.setCurrencyValue(latestRates: Map<String, CoinPrice?>): Price {
+        return copy(currencyValue = latestRates[coinValue.coin.uid]?.let { latestRate ->
+            CurrencyValue(xRateRepository.baseCurrency, coinValue.value.multiply(latestRate.value))
+        })
+    }
+}

@@ -1,21 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.blockchainLogo
+import io.horizontalsystems.bankwallet.databinding.ViewHolderPrivacySettingsSectionDescriptionBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderPrivacySettingsSectionTitleBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderSettingWithDropdownBinding
 import io.horizontalsystems.bankwallet.entities.title
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule.IPrivacySettingsViewDelegate
-import io.horizontalsystems.views.SettingsViewDropdown
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
 
 class PrivacySettingsAdapter(
-        private val delegate: IPrivacySettingsViewDelegate,
-        private val title: String,
-        private val description: String
+    private val delegate: IPrivacySettingsViewDelegate,
+    private val title: String,
+    private val description: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_ITEM = 1
@@ -34,9 +32,21 @@ class PrivacySettingsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_ITEM -> PrivacySettingsItemViewHolder(inflate(parent, R.layout.view_holder_setting_with_dropdown, false), delegate)
-            VIEW_TYPE_TITLE -> TitleViewHolder.create(parent)
-            VIEW_TYPE_DESCRIPTION -> DescriptionViewHolder.create(parent)
+            VIEW_TYPE_ITEM -> PrivacySettingsItemViewHolder(
+                ViewHolderSettingWithDropdownBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                ), delegate
+            )
+            VIEW_TYPE_TITLE -> TitleViewHolder(
+                ViewHolderPrivacySettingsSectionTitleBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+            VIEW_TYPE_DESCRIPTION -> DescriptionViewHolder(
+                ViewHolderPrivacySettingsSectionDescriptionBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
             else -> throw IllegalStateException("No such view type")
         }
     }
@@ -56,41 +66,27 @@ class PrivacySettingsAdapter(
         }
     }
 
-    class TitleViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-
+    class TitleViewHolder(private val binding: ViewHolderPrivacySettingsSectionTitleBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(text: String) {
-            containerView.findViewById<TextView>(R.id.titleText)?.text = text
+            binding.titleText.text = text
         }
-
-        companion object {
-            const val layout = R.layout.view_holder_privacy_settings_section_title
-
-            fun create(parent: ViewGroup) = TitleViewHolder(inflate(parent, layout, false))
-        }
-
     }
 
-    class DescriptionViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-
+    class DescriptionViewHolder(private val binding: ViewHolderPrivacySettingsSectionDescriptionBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(text: String) {
-            containerView.findViewById<TextView>(R.id.descriptionText)?.text = text
+            binding.descriptionText.text = text
         }
-
-        companion object {
-            const val layout = R.layout.view_holder_privacy_settings_section_description
-
-            fun create(parent: ViewGroup) = DescriptionViewHolder(inflate(parent, layout, false))
-        }
-
     }
 
-    class PrivacySettingsItemViewHolder(override val containerView: View, private val viewDelegate: IPrivacySettingsViewDelegate)
-        : RecyclerView.ViewHolder(containerView), LayoutContainer {
-
-        private val dropdownView = containerView.findViewById<SettingsViewDropdown>(R.id.dropdownView)
+    class PrivacySettingsItemViewHolder(
+        private val binding: ViewHolderSettingWithDropdownBinding,
+        private val viewDelegate: IPrivacySettingsViewDelegate
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(viewItem: PrivacySettingsViewItem) {
-            dropdownView.apply {
+            binding.dropdownView.apply {
                 showIcon(viewItem.initialSyncSetting.coinType.blockchainLogo)
                 showTitle(viewItem.initialSyncSetting.coinType.title)
                 showDropdownValue(viewItem.initialSyncSetting.syncMode.title)
@@ -98,12 +94,11 @@ class PrivacySettingsAdapter(
                 setListPosition(viewItem.listPosition)
             }
 
-            containerView.isEnabled = viewItem.enabled
+            binding.dropdownView.isEnabled = viewItem.enabled
 
-            containerView.setOnClickListener {
+            binding.dropdownView.setOnClickListener {
                 viewDelegate.onItemTap(viewItem)
             }
         }
     }
 }
-
