@@ -182,11 +182,10 @@ class CoinDetailsFragment : BaseFragment() {
 
                         viewItem?.let { viewItem ->
                             if (!viewItem.proChartsActivated) {
-                                detailBlocks.add { borderTop ->
+                                detailBlocks.add {
                                     ProFeaturesBanner(
                                         stringResource(R.string.CoinPage_NftBannerTitle),
-                                        stringResource(R.string.CoinPage_NftBannerDescription),
-                                        borderTop
+                                        stringResource(R.string.CoinPage_NftBannerDescription)
                                     ) { authorizationViewModel.onBannerClick() }
                                 }
                             }
@@ -237,10 +236,6 @@ class CoinDetailsFragment : BaseFragment() {
         borderTop: Boolean,
         onClick: () -> Unit
     ) {
-        if (borderTop) {
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-
         CellSingleLineClear(borderTop = borderTop) {
             Text(
                 text = stringResource(R.string.CoinPage_TokenTvl),
@@ -297,15 +292,11 @@ class CoinDetailsFragment : BaseFragment() {
         }
 
         CellSingleLineLawrenceSection(tokenTvls)
+        Spacer(modifier = Modifier.height(24.dp))
     }
 
     @Composable
     private fun SecurityParameters(viewItem: ViewItem, borderTop: Boolean) {
-
-        if (borderTop) {
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-
         CellSingleLineClear(borderTop = borderTop) {
             Text(
                 text = stringResource(R.string.CoinPage_SecurityParams),
@@ -341,6 +332,7 @@ class CoinDetailsFragment : BaseFragment() {
         }
 
         CellSingleLineLawrenceSection(securityParams)
+        Spacer(modifier = Modifier.height(24.dp))
     }
 
     @Composable
@@ -349,10 +341,6 @@ class CoinDetailsFragment : BaseFragment() {
         borderTop: Boolean
     ) {
         if (viewItem.liquidity == null && viewItem.volume == null) return
-
-        if (borderTop) {
-            Spacer(modifier = Modifier.height(24.dp))
-        }
 
         CellSingleLineClear(borderTop = borderTop) {
             Text(
@@ -411,6 +399,8 @@ class CoinDetailsFragment : BaseFragment() {
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
     }
 
     @Composable
@@ -419,10 +409,6 @@ class CoinDetailsFragment : BaseFragment() {
         borderTop: Boolean
     ) {
         if (!viewItem.hasMajorHolders && viewItem.txCount == null && viewItem.txVolume == null && viewItem.activeAddresses == null) return
-
-        if (borderTop) {
-            Spacer(modifier = Modifier.height(24.dp))
-        }
 
         CellSingleLineClear(borderTop = borderTop) {
             Text(
@@ -512,6 +498,8 @@ class CoinDetailsFragment : BaseFragment() {
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
     }
 
     @Composable
@@ -519,10 +507,6 @@ class CoinDetailsFragment : BaseFragment() {
         viewItem: ViewItem,
         borderTop: Boolean
     ) {
-        if (borderTop) {
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-
         CellSingleLineClear(borderTop = borderTop) {
             Text(
                 text = stringResource(R.string.CoinPage_InvestorData),
@@ -568,6 +552,7 @@ class CoinDetailsFragment : BaseFragment() {
         }
 
         CellSingleLineLawrenceSection(investorDataList)
+        Spacer(modifier = Modifier.height(24.dp))
     }
 
     @Composable

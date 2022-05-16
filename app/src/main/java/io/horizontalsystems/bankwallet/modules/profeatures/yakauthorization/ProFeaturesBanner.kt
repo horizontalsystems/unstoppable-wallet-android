@@ -1,38 +1,42 @@
 package io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun ProFeaturesBanner(
     title: String,
     description: String,
-    borderTop: Boolean,
     onClick: () -> Unit
 ) {
-    if (borderTop) {
-        Spacer(modifier = Modifier.height(24.dp))
-    }
-
     Box(
         modifier = Modifier
-            .padding(16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color.Yellow)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
             .fillMaxWidth()
             .clickable {
                 onClick.invoke()
             }
     ) {
+        Image(
+            modifier = Modifier.fillMaxWidth(),
+            painter = painterResource(R.drawable.ic_pro_nft_banner),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
+
         Column {
             Text(
                 modifier = Modifier.padding(12.dp),
@@ -41,8 +45,6 @@ fun ProFeaturesBanner(
                 style = ComposeAppTheme.typography.headline2,
                 maxLines = 1
             )
-
-            Spacer(modifier = Modifier.height(11.dp))
 
             Text(
                 modifier = Modifier.padding(12.dp),
