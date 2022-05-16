@@ -13,6 +13,8 @@ import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DataState.SearchResult
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.TopCoins
+import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
+import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
@@ -51,9 +53,9 @@ class MarketSearchService(
         }
 
         val sortedItems = if (sortDescending) {
-            items.sortedByDescending { it.marketData?.diff }
+            items.sortedByDescendingNullLast { it.marketData?.diff }
         } else {
-            items.sortedBy { it.marketData?.diff }
+            items.sortedByNullLast { it.marketData?.diff }
         }
 
         val discoveryItems: MutableList<MarketSearchModule.DiscoveryItem> =
