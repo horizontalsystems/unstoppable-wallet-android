@@ -1,17 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.info
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -22,14 +18,15 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.info.ui.InfoBodyString
+import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
-import kotlinx.parcelize.Parcelize
 
-class InfoFragment : BaseFragment() {
+class TransactionLockTimeInfoFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +42,7 @@ class InfoFragment : BaseFragment() {
             setContent {
                 ComposeAppTheme {
                     InfoScreen(
-                        requireArguments().getParcelable(INFO_DATA)!!,
+                        requireArguments().getString(LOCK_TIME)!!,
                         findNavController()
                     )
                 }
@@ -54,35 +51,20 @@ class InfoFragment : BaseFragment() {
     }
 
     companion object {
-        private const val INFO_DATA = "info_data"
+        private const val LOCK_TIME = "lock_time"
 
-        fun prepareParams(infoData: List<InfoBlock>) = bundleOf(INFO_DATA to InfoData(infoData))
+        fun prepareParams(lockTime: String) = bundleOf(LOCK_TIME to lockTime)
     }
 
 }
 
-@Parcelize
-data class InfoData(val items: List<InfoBlock>) : Parcelable
-
-sealed class InfoBlock : Parcelable {
-    @Parcelize
-    class Header(@StringRes val text: Int) : InfoBlock()
-
-    @Parcelize
-    class SubHeader(@StringRes val text: Int) : InfoBlock()
-
-    @Parcelize
-    class Body(@StringRes val text: Int) : InfoBlock()
-
-    @Parcelize
-    class BodyString(val text: String) : InfoBlock()
-}
-
 @Composable
 private fun InfoScreen(
-    infoData: InfoData,
+    lockDate: String,
     navController: NavController
 ) {
+
+    val description = stringResource(R.string.Info_LockTime_Description, lockDate)
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -102,59 +84,10 @@ private fun InfoScreen(
                     .padding(horizontal = 24.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                infoData.items.forEach { block ->
-                    when (block) {
-                        is InfoBlock.Header -> infoHeader(block.text)
-                        is InfoBlock.SubHeader -> infoSubHeader(block.text)
-                        is InfoBlock.Body -> infoBody(block.text)
-                        is InfoBlock.BodyString -> infoBodyString(block.text)
-                    }
-                }
-                Spacer(Modifier.height(44.dp))
+                InfoHeader(R.string.Info_LockTime_Title)
+                InfoBodyString(description)
+                Spacer(Modifier.height(20.dp))
             }
         }
     }
-}
-
-@Composable
-fun infoSubHeader(text: Int) {
-    Spacer(Modifier.height(12.dp))
-    Text(
-        text = stringResource(text),
-        style = ComposeAppTheme.typography.headline2,
-        color = ComposeAppTheme.colors.jacob
-    )
-    Spacer(Modifier.height(12.dp))
-}
-
-@Composable
-fun infoBodyString(text: String) {
-    Spacer(Modifier.height(12.dp))
-    Text(
-        text = text,
-        style = ComposeAppTheme.typography.body,
-        color = ComposeAppTheme.colors.bran
-    )
-    Spacer(Modifier.height(24.dp))
-}
-
-@Composable
-fun infoBody(text: Int) {
-    infoBodyString(stringResource(text))
-}
-
-@Composable
-fun infoHeader(text: Int) {
-    Spacer(Modifier.height(5.dp))
-    Text(
-        text = stringResource(text),
-        style = ComposeAppTheme.typography.title2,
-        color = ComposeAppTheme.colors.leah
-    )
-    Spacer(Modifier.height(8.dp))
-    Divider(
-        thickness = 1.dp,
-        color = ComposeAppTheme.colors.grey50
-    )
-    Spacer(Modifier.height(5.dp))
 }

@@ -66,8 +66,35 @@
         android:name="io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyFragment"
         tools:layout="@layout/fragment_backup_words_confirm" />
     <fragment
-        android:id="@+id/infoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.InfoFragment"/>
+        android:id="@+id/securityParamsInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.SecurityParamsInfoFragment"/>
+    <fragment
+        android:id="@+id/investorDataInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.InvestorDataInfoFragment"/>
+    <fragment
+        android:id="@+id/tokenTvlInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.TokenTvlInfoFragment"/>
+    <fragment
+        android:id="@+id/tokenDistributionInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.TokenDistributionInfoFragment"/>
+    <fragment
+        android:id="@+id/tokenLiquidityInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.TokenLiquidityInfoFragment"/>
+    <fragment
+        android:id="@+id/btcBlockchainTransactionInputOutputsInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.BtcBlockchainTransactionInputsOutputsInfoFragment"/>
+    <fragment
+        android:id="@+id/btcBlockchainRestoreSourceInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.BtcBlockchainRestoreSourceInfoFragment"/>
+    <fragment
+        android:id="@+id/evmBlockchainSyncModeInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.EvmBlockchainSyncModeInfoFragment"/>
+     <fragment
+        android:id="@+id/transactionLockTimeInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment"/>
+    <fragment
+        android:id="@+id/transactionDoubleSpendInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment"/>
     <fragment
         android:id="@+id/securitySettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsFragment"/>
@@ -252,10 +279,6 @@
     <fragment
         android:id="@+id/feePriorityInfo"
         android:name="io.horizontalsystems.bankwallet.modules.fee.FeePriorityInfoFragment" />
-     <dialog
-        android:id="@+id/explainerFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.ExplainerFragment"
-        tools:layout="@layout/fragment_info" />
     <dialog
         android:id="@+id/statusInfoDialog"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.StatusInfoFragment"

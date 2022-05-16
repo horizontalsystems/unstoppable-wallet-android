@@ -41,8 +41,6 @@ import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHolder
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
-import io.horizontalsystems.bankwallet.modules.info.InfoBlock
-import io.horizontalsystems.bankwallet.modules.info.InfoFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartTvlFragment
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.ProFeaturesBanner
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationModule
@@ -65,65 +63,6 @@ class CoinDetailsFragment : BaseFragment() {
     private val authorizationViewModel by navGraphViewModels<YakAuthorizationViewModel>(R.id.coinFragment) { YakAuthorizationModule.Factory() }
 
     private var snackbarInProcess: CustomSnackbar? = null
-
-    private val securityParamsInfo = listOf(
-        InfoBlock.Header(R.string.CoinPage_SecurityParams),
-        InfoBlock.SubHeader(R.string.CoinPage_SecurityParams_Privacy),
-        InfoBlock.Body(R.string.CoinPage_SecurityParams_Privacy_High),
-        InfoBlock.Body(R.string.CoinPage_SecurityParams_Privacy_Medium),
-        InfoBlock.Body(R.string.CoinPage_SecurityParams_Privacy_Low),
-        InfoBlock.SubHeader(R.string.CoinPage_SecurityParams_Issuance),
-        InfoBlock.Body(R.string.CoinPage_SecurityParams_Issuance_Decentralized),
-        InfoBlock.Body(R.string.CoinPage_SecurityParams_Issuance_Centralized),
-        InfoBlock.SubHeader(R.string.CoinPage_SecurityParams_ConfiscationResistance),
-        InfoBlock.Body(R.string.CoinPage_SecurityParams_ConfiscationResistance_Yes),
-        InfoBlock.Body(R.string.CoinPage_SecurityParams_ConfiscationResistance_No),
-        InfoBlock.SubHeader(R.string.CoinPage_SecurityParams_CensorshipResistance),
-        InfoBlock.Body(R.string.CoinPage_SecurityParams_CensorshipResistance_Yes),
-        InfoBlock.Body(R.string.CoinPage_SecurityParams_CensorshipResistance_No),
-    )
-
-    private val tokenTvlInfo = listOf(
-        InfoBlock.Header(R.string.CoinPage_TokenTvl),
-        InfoBlock.Body(R.string.CoinPage_TokenTvl_Description),
-        InfoBlock.SubHeader(R.string.CoinPage_TvlRank),
-        InfoBlock.Body(R.string.CoinPage_TvlRank_Description),
-        InfoBlock.SubHeader(R.string.CoinPage_TvlMCapRatio),
-        InfoBlock.Body(R.string.CoinPage_TvlMCapRatio_Description),
-    )
-
-    private val tokenLiquidityInfo = listOf(
-        InfoBlock.Header(R.string.CoinPage_TokenLiquidity),
-        InfoBlock.Body(R.string.CoinPage_TokenLiquidity_Description),
-        InfoBlock.SubHeader(R.string.CoinPage_DetailsDexVolume),
-        InfoBlock.Body(R.string.CoinPage_DetailsDexVolume_Description),
-        InfoBlock.SubHeader(R.string.CoinPage_DetailsDexLiquidity),
-        InfoBlock.Body(R.string.CoinPage_DetailsDexLiquidity_Description),
-    )
-
-    private val investorDataInfo = listOf(
-        InfoBlock.Header(R.string.CoinPage_InvestorData),
-        InfoBlock.Body(R.string.CoinPage_InvestorData_Description),
-        InfoBlock.SubHeader(R.string.CoinPage_Treasuries),
-        InfoBlock.Body(R.string.CoinPage_Treasuries_Description),
-        InfoBlock.SubHeader(R.string.CoinPage_FundsInvested),
-        InfoBlock.Body(R.string.CoinPage_FundsInvested_Description),
-        InfoBlock.SubHeader(R.string.CoinPage_Reports),
-        InfoBlock.Body(R.string.CoinPage_Reports_Description),
-    )
-
-    private val tokenDistributionInfo = listOf(
-        InfoBlock.Header(R.string.CoinPage_TokenDistribution),
-        InfoBlock.Body(R.string.CoinPage_TokenDistribution_Description),
-        InfoBlock.SubHeader(R.string.CoinPage_DetailsTxCount),
-        InfoBlock.Body(R.string.CoinPage_DetailsTxCount_Description),
-        InfoBlock.SubHeader(R.string.CoinPage_DetailsTxVolume),
-        InfoBlock.Body(R.string.CoinPage_DetailsTxVolume_Description),
-        InfoBlock.SubHeader(R.string.CoinPage_DetailsActiveAddresses),
-        InfoBlock.Body(R.string.CoinPage_DetailsActiveAddresses_Description),
-        InfoBlock.SubHeader(R.string.CoinPage_MajorHolders),
-        InfoBlock.Body(R.string.CoinPage_MajorHolders_InfoDescription),
-    )
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -309,7 +248,15 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            InfoButton(tokenTvlInfo)
+            IconButton(onClick = {
+                findNavController().slideFromBottom(R.id.tokenTvlInfoFragment)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = "info button",
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
         }
 
         viewItem.tvlChart?.let { tvlChart ->
@@ -366,7 +313,15 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            InfoButton(securityParamsInfo)
+            IconButton(onClick = {
+                findNavController().slideFromBottom(R.id.securityParamsInfoFragment)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = "info button",
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -406,7 +361,15 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            InfoButton(tokenLiquidityInfo)
+            IconButton(onClick = {
+                findNavController().slideFromBottom(R.id.tokenLiquidityInfoFragment)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = "info button",
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -468,7 +431,15 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            InfoButton(tokenDistributionInfo)
+            IconButton(onClick = {
+                findNavController().slideFromBottom(R.id.tokenDistributionInfoFragment)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = "info button",
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
         }
 
         if (viewItem.txCount != null || viewItem.txVolume != null) {
@@ -559,7 +530,15 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            InfoButton(investorDataInfo)
+            IconButton(onClick = {
+                findNavController().slideFromBottom(R.id.investorDataInfoFragment)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = "info button",
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -589,20 +568,6 @@ class CoinDetailsFragment : BaseFragment() {
         }
 
         CellSingleLineLawrenceSection(investorDataList)
-    }
-
-    @Composable
-    private fun InfoButton(infoBlocks: List<InfoBlock>) {
-        IconButton(onClick = {
-            val infoParams = InfoFragment.prepareParams(infoBlocks)
-            findNavController().slideFromBottom(R.id.infoFragment, infoParams)
-        }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = "info button",
-                tint = ComposeAppTheme.colors.grey
-            )
-        }
     }
 
     @Composable
