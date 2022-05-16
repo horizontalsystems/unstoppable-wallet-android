@@ -57,7 +57,10 @@ fun MultilineClear(
     Box(
         modifier = modifier
             .height(60.dp)
-            .clickable { onClick?.invoke() }
+            .clickable(
+                enabled = onClick != null,
+                onClick = { onClick?.invoke() }
+            )
     ) {
         if (borderBottom) {
             Divider(
