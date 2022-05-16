@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
@@ -280,6 +281,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
             Column(modifier = Modifier.padding(end = 16.dp)) {
                 Row {
                     Text(
+                        modifier = Modifier.padding(end = 32.dp),
                         text = item.title,
                         color = ComposeAppTheme.colors.leah,
                         style = ComposeAppTheme.typography.body,
@@ -291,6 +293,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                             text = coloredValue.value,
                             style = ComposeAppTheme.typography.body,
                             color = coloredValue.color.compose(),
+                            overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
                         )
                     }
