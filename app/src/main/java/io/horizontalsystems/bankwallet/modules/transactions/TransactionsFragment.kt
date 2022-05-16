@@ -10,13 +10,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -41,7 +43,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
-import kotlinx.coroutines.launch
 
 class TransactionsFragment : BaseFragment() {
 
@@ -73,7 +74,6 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
     val transactions by viewModel.transactionList.observeAsState()
     val viewState by viewModel.viewState.observeAsState()
     val syncing by viewModel.syncingLiveData.observeAsState(false)
-    var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -83,15 +83,15 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
             )
             filterTypes?.let { filterTypes ->
                 FilterTypeTabs(
-                    filterTypes,
-                    { viewModel.setFilterTransactionType(it) },
-                    { scrollToTopAfterUpdate = true })
+                    filterTypes = filterTypes,
+                    onTransactionTypeClick = viewModel::setFilterTransactionType
+                )
             }
             filterCoins?.let { filterCoins ->
                 FilterCoinTabs(
-                    filterCoins,
-                    { viewModel.setFilterCoin(it) },
-                    { scrollToTopAfterUpdate = true })
+                    filterCoins = filterCoins,
+                    onCoinFilterClick = viewModel::setFilterCoin
+                )
             }
 
             Crossfade(viewState) { viewState ->
@@ -111,16 +111,24 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
                                     )
                                 }
                             } else {
-                                TransactionList(
-                                    transactionItems,
-                                    scrollToTopAfterUpdate,
-                                    { viewModel.willShow(it) },
-                                    { onTransactionClick(it, viewModel, navController) },
-                                    { viewModel.onBottomReached() }
-                                )
-                                if (scrollToTopAfterUpdate) {
-                                    scrollToTopAfterUpdate = false
+                                val filterCoin = filterCoins?.find { it.selected }?.item
+                                val filterType = filterTypes?.find { it.selected }?.item
+
+                                val listState = rememberSaveable(
+                                    filterCoin,
+                                    filterType,
+                                    saver = LazyListState.Saver
+                                ) {
+                                    LazyListState(0, 0)
                                 }
+
+                                TransactionList(
+                                    listState = listState,
+                                    transactionsMap = transactionItems,
+                                    willShow = { viewModel.willShow(it) },
+                                    onClick = { onTransactionClick(it, viewModel, navController) },
+                                    onBottomReached = { viewModel.onBottomReached() }
+                                )
                             }
                         }
                     }
@@ -145,14 +153,12 @@ private fun onTransactionClick(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TransactionList(
+    listState: LazyListState = rememberLazyListState(),
     transactionsMap: Map<String, List<TransactionViewItem>>,
-    scrollToTop: Boolean,
     willShow: (TransactionViewItem) -> Unit,
     onClick: (TransactionViewItem) -> Unit,
     onBottomReached: () -> Unit
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val listState = rememberLazyListState()
     val bottomReachedUid = getBottomReachedUid(transactionsMap)
 
     LazyColumn(state = listState) {
@@ -174,12 +180,6 @@ fun TransactionList(
 
         item {
             Spacer(modifier = Modifier.height(32.dp))
-        }
-
-        if (scrollToTop) {
-            coroutineScope.launch {
-                listState.scrollToItem(0)
-            }
         }
     }
 }
@@ -345,8 +345,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
 @Composable
 private fun FilterTypeTabs(
     filterTypes: List<Filter<FilterTransactionType>>,
-    onTransactionTypeClick: (FilterTransactionType) -> Unit,
-    scrollToTopAfterUpdate: () -> Unit
+    onTransactionTypeClick: (FilterTransactionType) -> Unit
 ) {
     val tabItems = filterTypes.map {
         TabItem(stringResource(it.item.title), it.selected, it.item)
@@ -354,15 +353,13 @@ private fun FilterTypeTabs(
 
     ScrollableTabs(tabItems) { transactionType ->
         onTransactionTypeClick.invoke(transactionType)
-        scrollToTopAfterUpdate.invoke()
     }
 }
 
 @Composable
 private fun FilterCoinTabs(
     filterCoins: List<Filter<TransactionWallet>>,
-    onCoinFilterClick: (TransactionWallet?) -> Unit,
-    scrollToTopAfterUpdate: () -> Unit
+    onCoinFilterClick: (TransactionWallet?) -> Unit
 ) {
     val tabItems = filterCoins.mapNotNull {
         it.item.platformCoin?.let { platformCoin ->
@@ -381,7 +378,6 @@ private fun FilterCoinTabs(
 
     CardTabs(tabItems = tabItems, edgePadding = 16.dp) {
         onCoinFilterClick.invoke(it)
-        scrollToTopAfterUpdate.invoke()
     }
 }
 
