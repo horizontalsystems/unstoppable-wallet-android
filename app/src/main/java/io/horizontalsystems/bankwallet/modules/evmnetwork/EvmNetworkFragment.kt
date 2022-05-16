@@ -24,8 +24,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.info.InfoBlock
-import io.horizontalsystems.bankwallet.modules.info.InfoFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -72,13 +70,6 @@ private fun EvmNetworkScreen(
         navController.popBackStack()
     }
 
-    val infoParams = InfoFragment.prepareParams(
-        listOf(
-            InfoBlock.SubHeader(R.string.EvmNetwork_SyncMode),
-            InfoBlock.Body(R.string.EvmNetwork_SyncModeDescription)
-        )
-    )
-
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
@@ -103,7 +94,7 @@ private fun EvmNetworkScreen(
                     CoinListHeaderWithInfoButton(
                         R.string.EvmNetwork_SyncMode,
                     ) {
-                        navController.slideFromBottom(R.id.infoFragment, infoParams)
+                        navController.slideFromBottom(R.id.evmBlockchainSyncModeInfoFragment)
                     }
                 }
 

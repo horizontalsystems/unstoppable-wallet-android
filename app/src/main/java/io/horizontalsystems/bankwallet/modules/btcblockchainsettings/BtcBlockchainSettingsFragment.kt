@@ -27,8 +27,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.info.InfoBlock
-import io.horizontalsystems.bankwallet.modules.info.InfoFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -128,15 +126,9 @@ private fun RestoreSourceSettings(
     viewModel: BtcBlockchainSettingsViewModel,
     navController: NavController
 ) {
-    val infoParams = InfoFragment.prepareParams(
-        listOf(
-            InfoBlock.SubHeader(R.string.BtcBlockchainSettings_RestoreSource),
-            InfoBlock.Body(R.string.BtcBlockchainSettings_RestoreSourceDescription)
-        )
-    )
     BlockchainSettingSection(
         viewModel.restoreSources,
-        infoParams,
+        R.id.btcBlockchainRestoreSourceInfoFragment,
         R.string.BtcBlockchainSettings_RestoreSource,
         R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription,
         { viewItem -> viewModel.onSelectRestoreMode(viewItem) },
@@ -149,27 +141,20 @@ private fun TransactionDataSortSettings(
     viewModel: BtcBlockchainSettingsViewModel,
     navController: NavController
 ) {
-    val infoParams = InfoFragment.prepareParams(
-        listOf(
-            InfoBlock.SubHeader(R.string.BtcBlockchainSettings_TransactionInputsOutputs),
-            InfoBlock.Body(R.string.BtcBlockchainSettings_TransactionInputsOutputsDescription)
-        )
-    )
-
     BlockchainSettingSection(
-        viewModel.transactionSortModes,
-        infoParams,
-        R.string.BtcBlockchainSettings_TransactionInputsOutputs,
-        R.string.BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription,
-        { viewItem -> viewModel.onSelectTransactionMode(viewItem) },
-        navController
+        restoreSources = viewModel.transactionSortModes,
+        infoScreenId = R.id.btcBlockchainTransactionInputOutputsInfoFragment,
+        settingTitleTextRes = R.string.BtcBlockchainSettings_TransactionInputsOutputs,
+        settingDescriptionTextRes = R.string.BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription,
+        onItemClick = { viewItem -> viewModel.onSelectTransactionMode(viewItem) },
+        navController = navController
     )
 }
 
 @Composable
 private fun BlockchainSettingSection(
     restoreSources: List<BtcBlockchainSettingsModule.ViewItem>,
-    restoreSourceInfoParams: Bundle,
+    infoScreenId: Int,
     settingTitleTextRes : Int,
     settingDescriptionTextRes: Int,
     onItemClick: (BtcBlockchainSettingsModule.ViewItem) -> Unit,
@@ -179,7 +164,7 @@ private fun BlockchainSettingSection(
     CoinListHeaderWithInfoButton(
       settingTitleTextRes,
     ) {
-        navController.slideFromBottom(R.id.infoFragment, restoreSourceInfoParams)
+        navController.slideFromBottom(infoScreenId)
     }
     CellMultilineLawrenceSection(restoreSources) { item ->
         SettingCell(item.title, item.subtitle, item.selected) {

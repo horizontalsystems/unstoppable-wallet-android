@@ -16,8 +16,8 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentTransactionInfoBinding
-import io.horizontalsystems.bankwallet.modules.info.InfoBlock
-import io.horizontalsystems.bankwallet.modules.info.InfoFragment
+import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
+import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoAdapter
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
@@ -99,19 +99,13 @@ class TransactionInfoFragment : BaseFragment() {
 
                     override fun onLockInfoClick(lockDate: Date) {
                         context?.let {
-                            val description = it.getString(
-                                R.string.Info_LockTime_Description,
-                                DateHelper.getFullDate(lockDate)
-                            )
+                            val lockTime = DateHelper.getFullDate(lockDate)
+                            val params = TransactionLockTimeInfoFragment.prepareParams(lockTime)
 
-                            val infoParams = InfoFragment.prepareParams(
-                                listOf(
-                                    InfoBlock.SubHeader(R.string.Info_LockTime_Title),
-                                    InfoBlock.BodyString(description)
-                                )
+                            findNavController().slideFromBottom(
+                                R.id.transactionLockTimeInfoFragment,
+                                params
                             )
-
-                            findNavController().slideFromBottom(R.id.infoFragment, infoParams)
                         }
                     }
 
@@ -119,16 +113,14 @@ class TransactionInfoFragment : BaseFragment() {
                         transactionHash: String,
                         conflictingHash: String
                     ) {
-                        context?.let {
-                            val infoParams = InfoFragment.prepareParams(
-                                listOf(
-                                    InfoBlock.SubHeader(R.string.Info_DoubleSpend_Title),
-                                    InfoBlock.Body(R.string.Info_DoubleSpend_Description)
-                                )
-                            )
-
-                            findNavController().slideFromBottom(R.id.infoFragment, infoParams)
-                        }
+                        val params = TransactionDoubleSpendInfoFragment.prepareParams(
+                            transactionHash,
+                            conflictingHash
+                        )
+                        findNavController().slideFromBottom(
+                            R.id.transactionDoubleSpendInfoFragment,
+                            params
+                        )
                     }
 
                     override fun onOptionButtonClick(optionType: TransactionInfoOption.Type) {
