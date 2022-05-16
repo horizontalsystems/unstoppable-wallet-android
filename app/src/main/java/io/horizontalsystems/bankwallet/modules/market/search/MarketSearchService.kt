@@ -79,9 +79,7 @@ class MarketSearchService(
                 TimeDuration.ThirtyDay -> coinCategoryMarketData.diff1M
             }
 
-            if (marketCap != null || diff != null) {
-                return MarketSearchModule.CategoryMarketData(marketCap, diff)
-            }
+            return MarketSearchModule.CategoryMarketData(marketCap ?: "----", diff)
         }
         return null
     }
