@@ -513,16 +513,6 @@ class CoinDetailsFragment : BaseFragment() {
                 style = ComposeAppTheme.typography.body,
                 color = ComposeAppTheme.colors.oz,
             )
-            Spacer(Modifier.weight(1f))
-            IconButton(onClick = {
-                findNavController().slideFromBottom(R.id.investorDataInfoFragment)
-            }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_info_20),
-                    contentDescription = "info button",
-                    tint = ComposeAppTheme.colors.grey
-                )
-            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))

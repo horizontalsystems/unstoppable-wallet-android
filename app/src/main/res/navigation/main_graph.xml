@@ -69,9 +69,6 @@
         android:id="@+id/securityParamsInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.SecurityParamsInfoFragment"/>
     <fragment
-        android:id="@+id/investorDataInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.info.InvestorDataInfoFragment"/>
-    <fragment
         android:id="@+id/tokenTvlInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.TokenTvlInfoFragment"/>
     <fragment

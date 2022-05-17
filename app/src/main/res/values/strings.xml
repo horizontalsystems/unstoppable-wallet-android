@@ -979,15 +979,11 @@
     <string name="CoinPage_Audits_PoweredBy">Powered by Defiyield.app</string>
     <string name="CoinPage_Audits_Issues">Issues: %d</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
-    <string name="CoinPage_InvestorData_Description">The data is for investors who want to know about treasuries and which funds have invested in the token project.</string>
     <string name="CoinPage_Treasuries">Treasuries</string>
-    <string name="CoinPage_Treasuries_Description">The ranking among other protocols is based on the TVL value in USD terms.</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
     <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Reports</string>
-    <string name="CoinPage_Reports_Description">The ratio of the project token\'s market cap over its TVL.</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
-    <string name="CoinPage_FundsInvested_Description">The ratio of the project token\'s market cap over its TVL.</string>
     <string name="CoinPage_TokenDistribution">Token Distribution</string>
     <string name="CoinPage_TokenDistribution_Description">Onchain token parameters. Typically, healthy projects have an active on-chain user base and well-distributed token.</string>
     <string name="CoinPage_TokenLiquidity">Token Liquidity</string>
