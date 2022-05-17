@@ -84,4 +84,8 @@ class CoinMajorHoldersViewModel(
         disposables.clear()
         service.stop()
     }
+
+    fun errorShown() {
+        errorMessage = null
+    }
 }

@@ -16,7 +16,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,7 +36,6 @@ import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
 
 class NftCollectionsFragment : BaseFragment() {
 
@@ -144,12 +142,8 @@ fun NftCollectionsScreen(navController: NavController) {
         }
     }
 
-    ErrorMessageHud(errorMessage)
-}
-
-@Composable
-private fun ErrorMessageHud(errorMessage: TranslatableString?) {
     errorMessage?.let {
-        HudHelper.showErrorMessage(LocalView.current, it.getString())
+        SnackbarError(it.getString())
+        viewModel.errorShown()
     }
 }

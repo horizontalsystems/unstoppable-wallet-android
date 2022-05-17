@@ -50,4 +50,8 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
             else -> TranslatableString.PlainString(error.message ?: error.javaClass.simpleName)
         }
     }
+
+    fun errorShown() {
+        errorMessage = null
+    }
 }

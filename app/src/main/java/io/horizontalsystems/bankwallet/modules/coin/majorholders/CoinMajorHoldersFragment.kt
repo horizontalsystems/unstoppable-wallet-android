@@ -118,7 +118,10 @@ private fun CoinMajorHoldersScreen(
 
         }
 
-        ErrorMessageHud(errorMessage)
+        errorMessage?.let {
+            SnackbarError(it.getString())
+            viewModel.errorShown()
+        }
     }
 }
 
@@ -232,11 +235,4 @@ private fun SemiCircleChartBlock(share: Float) {
         color = ComposeAppTheme.colors.grey,
         style = ComposeAppTheme.typography.subhead2
     )
-}
-
-@Composable
-private fun ErrorMessageHud(errorMessage: TranslatableString?) {
-    errorMessage?.let {
-        HudHelper.showErrorMessage(LocalView.current, it.getString())
-    }
 }
