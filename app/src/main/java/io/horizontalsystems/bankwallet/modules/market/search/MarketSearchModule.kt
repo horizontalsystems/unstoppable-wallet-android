@@ -22,9 +22,9 @@ object MarketSearchModule {
         }
     }
 
-    sealed class DataState {
-        class Discovery(val discoveryItems: List<DiscoveryItem>) : DataState()
-        class SearchResult(val coinItems: List<CoinItem>) : DataState()
+    sealed class Data {
+        class DiscoveryItems(val discoveryItems: List<DiscoveryItem>) : Data()
+        class SearchResult(val coinItems: List<CoinItem>) : Data()
     }
 
     sealed class DiscoveryItem {
