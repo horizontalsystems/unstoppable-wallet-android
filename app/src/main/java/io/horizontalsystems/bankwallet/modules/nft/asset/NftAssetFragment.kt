@@ -132,7 +132,10 @@ fun NftAssetScreen(
             }
         }
 
-        ErrorMessageHud(errorMessage)
+        errorMessage?.let {
+            SnackbarError(it.getString())
+            viewModel.errorShown()
+        }
     }
 }
 
@@ -469,13 +472,6 @@ private fun NftAsset(
                 CellFooter(text = stringResource(id = R.string.PoweredBy_OpenSeaAPI))
             }
         }
-    }
-}
-
-@Composable
-private fun ErrorMessageHud(errorMessage: TranslatableString?) {
-    errorMessage?.let {
-        HudHelper.showErrorMessage(LocalView.current, it.getString())
     }
 }
 

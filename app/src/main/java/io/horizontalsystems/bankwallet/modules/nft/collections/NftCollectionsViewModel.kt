@@ -108,4 +108,8 @@ class NftCollectionsViewModel(private val service: NftCollectionsService) : View
         service.updatePriceType(priceType)
     }
 
+    fun errorShown() {
+        errorMessage = null
+    }
+
 }
