@@ -1,16 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.CoinItem
-import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DataState
-import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DataState.Discovery
-import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DataState.SearchResult
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.Data.DiscoveryItems
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.Data.SearchResult
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.TopCoins
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
@@ -19,8 +14,10 @@ import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinCategoryMarketData
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 
@@ -29,42 +26,56 @@ class MarketSearchService(
     private val marketFavoritesManager: MarketFavoritesManager,
     private val baseCurrency: Currency,
 ) {
-    private val disposables = CompositeDisposable()
 
     private var marketData: List<CoinCategoryMarketData> = listOf()
+
     private var filter = ""
 
     private val periodOptions = TimeDuration.values().toList()
 
     private var selectedPeriod = periodOptions[0]
 
+    private val _serviceDataFlow =
+        MutableSharedFlow<Result<MarketSearchModule.Data>>(
+            replay = 1,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST
+        )
+
+    val serviceDataFlow = _serviceDataFlow.asSharedFlow()
+
+    val favoriteDataUpdated by marketFavoritesManager::dataUpdatedAsync
+
     val timePeriodMenu = Select(selectedPeriod, periodOptions)
 
     var sortDescending = true
         private set
 
-    var screenState by mutableStateOf<DataState>(Discovery(getDiscoveryItems()))
-        private set
+    private val discoveryItems: List<MarketSearchModule.DiscoveryItem>
+        get() {
+            val items = marketKit.coinCategories().map { category ->
+                Category(category, getCategoryMarketData(category.uid))
+            }
 
-    private fun getDiscoveryItems(): List<MarketSearchModule.DiscoveryItem> {
+            val sortedItems = if (sortDescending) {
+                items.sortedByDescendingNullLast { it.marketData?.diff }
+            } else {
+                items.sortedByNullLast { it.marketData?.diff }
+            }
 
-        val items = marketKit.coinCategories().map { category ->
-            Category(category, getCategoryMarketData(category.uid))
+            val discoveryItems: MutableList<MarketSearchModule.DiscoveryItem> =
+                mutableListOf(TopCoins)
+
+            discoveryItems.addAll(sortedItems)
+
+            return discoveryItems
         }
 
-        val sortedItems = if (sortDescending) {
-            items.sortedByDescendingNullLast { it.marketData?.diff }
-        } else {
-            items.sortedByNullLast { it.marketData?.diff }
+    private val coinItems: List<CoinItem>
+        get() {
+            return marketKit.fullCoins(filter).map {
+                CoinItem(it, marketFavoritesManager.isCoinInFavorites(it.coin.uid))
+            }
         }
-
-        val discoveryItems: MutableList<MarketSearchModule.DiscoveryItem> =
-            mutableListOf(TopCoins)
-
-        discoveryItems.addAll(sortedItems)
-
-        return discoveryItems
-    }
 
     private fun getCategoryMarketData(categoryUid: String): MarketSearchModule.CategoryMarketData? {
         marketData.firstOrNull { it.uid == categoryUid }?.let { coinCategoryMarketData ->
@@ -84,36 +95,19 @@ class MarketSearchService(
         return null
     }
 
-    suspend fun start() {
-        marketFavoritesManager.dataUpdatedAsync
-            .subscribeIO {
-                syncState()
-            }.let {
-                disposables.add(it)
-            }
-
-        getDiscoveryMarketData()
-    }
-
-    private suspend fun getDiscoveryMarketData() = withContext(Dispatchers.IO) {
+    suspend fun updateState() = withContext(Dispatchers.IO) {
         try {
-            marketData = marketKit.coinCategoriesMarketDataSingle(baseCurrency.code).await()
-            syncState()
+            if (filter.isBlank()) {
+                if (marketData.isEmpty()) {
+                    marketData =
+                            marketKit.coinCategoriesMarketDataSingle(baseCurrency.code).await()
+                }
+                _serviceDataFlow.tryEmit(Result.success((DiscoveryItems(discoveryItems))))
+            } else {
+                _serviceDataFlow.tryEmit(Result.success((SearchResult(coinItems))))
+            }
         } catch (e: Exception) {
-        }
-    }
-
-    private fun syncState() {
-        if (filter.isBlank()) {
-            screenState = Discovery(getDiscoveryItems())
-        } else {
-            screenState = SearchResult(getCoinItems(filter))
-        }
-    }
-
-    private fun getCoinItems(filter: String): List<CoinItem> {
-        return marketKit.fullCoins(filter).map {
-            CoinItem(it, marketFavoritesManager.isCoinInFavorites(it.coin.uid))
+            _serviceDataFlow.tryEmit(Result.failure(e))
         }
     }
 
@@ -125,23 +119,19 @@ class MarketSearchService(
         marketFavoritesManager.add(coinUid)
     }
 
-    fun setFilter(filter: String) {
+    suspend fun setFilter(filter: String) {
         this.filter = filter
-        syncState()
+        updateState()
     }
 
-    fun stop() {
-        disposables.clear()
-    }
-
-    fun setTimePeriod(timeDuration: TimeDuration) {
+    suspend fun setTimePeriod(timeDuration: TimeDuration) {
         selectedPeriod = timeDuration
-        syncState()
+        updateState()
     }
 
-    fun toggleSortType() {
+    suspend fun toggleSortType() {
         sortDescending = !sortDescending
-        syncState()
+        updateState()
     }
 
 }
