@@ -71,30 +71,42 @@ class ZcashAdapter(
     }
 
     init {
-        val birthdayHeight = when (wallet.account.origin) {
-            AccountOrigin.Created -> null
-            AccountOrigin.Restored -> restoreSettings.birthdayHeight?.let {
-                max(network.saplingActivationHeight, it)
+        val viewingKey = runBlocking {
+            DerivationTool.deriveUnifiedViewingKeys(seed, network).first()
+        }
+
+        val initializerConfig = when (wallet.account.origin) {
+            AccountOrigin.Created -> {
+                Initializer.Config { config ->
+                    config.newWallet(
+                        viewingKey = viewingKey,
+                        network = network,
+                        host = lightWalletDHost,
+                        port = lightWalletDPort,
+                        alias = getValidAliasFromAccountId(wallet.account.id)
+                    )
+                }
+            }
+            AccountOrigin.Restored -> {
+                val birthdayHeight = restoreSettings.birthdayHeight?.let { height ->
+                    max(network.saplingActivationHeight, height)
+                }
+                Initializer.Config { config ->
+                    config.importWallet(
+                        viewingKey = viewingKey,
+                        birthdayHeight = birthdayHeight,
+                        network = network,
+                        host = lightWalletDHost,
+                        port = lightWalletDPort,
+                        alias = getValidAliasFromAccountId(wallet.account.id)
+                    )
+                }
             }
         }
 
-        val initializer = runBlocking {
-            val viewingKey = DerivationTool.deriveUnifiedViewingKeys(seed, network).first()
-
-            Initializer.new(context, Initializer.Config {
-                it.importWallet(
-                    viewingKey = viewingKey,
-                    birthdayHeight = birthdayHeight,
-                    network = network,
-                    host = lightWalletDHost,
-                    port = lightWalletDPort,
-                    alias = getValidAliasFromAccountId(wallet.account.id)
-                )
-            })
-        }
+        val initializer = Initializer.newBlocking(context, initializerConfig)
 
         synchronizer = Synchronizer.newBlocking(initializer)
-
         transactionsProvider = ZcashTransactionsProvider(receiveAddress)
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
