@@ -156,7 +156,7 @@ class MarketOverviewViewModel(
     private fun topNftCollectionsBoard(items: List<TopNftCollection>) =
         TopNftCollectionsBoard(
             title = R.string.Nft_TopCollections,
-            iconRes = R.drawable.ic_circle_up_20,
+            iconRes = R.drawable.ic_top_nft_collections_20,
             timeDurationSelect = Select(service.topNftsTimeDuration, service.timeDurationOptions),
             collections = items.mapIndexed { index, collection ->
                 topNftCollectionsViewItemFactory.viewItem(collection, service.topNftsTimeDuration, index + 1)
@@ -166,7 +166,7 @@ class MarketOverviewViewModel(
     private fun topPlatformsBoard(items: List<TopPlatformItem>) =
         TopPlatformsBoard(
             title = R.string.MarketTopPlatforms_Title,
-            iconRes = R.drawable.ic_circle_up_20,
+            iconRes = R.drawable.ic_blocks_20,
             timeDurationSelect = Select(
                 service.topPlatformsTimeDuration,
                 service.timeDurationOptions
