@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -38,6 +39,8 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.balance.BalanceAccountsViewModel
+import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -69,6 +72,8 @@ class TransactionsFragment : BaseFragment() {
 
 @Composable
 private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: NavController) {
+    val accountsViewModel = viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
+
     val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
     val filterTypes by viewModel.filterTypesLiveData.observeAsState()
     val transactions by viewModel.transactionList.observeAsState()
@@ -117,6 +122,7 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
                                 val listState = rememberSaveable(
                                     filterCoin,
                                     filterType,
+                                    accountsViewModel.accountViewItem?.id,
                                     saver = LazyListState.Saver
                                 ) {
                                     LazyListState(0, 0)
