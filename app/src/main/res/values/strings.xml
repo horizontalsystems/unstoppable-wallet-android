@@ -142,8 +142,8 @@
 
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">Top Platforms</string>
-    <string name="MarketTopPlatforms_PlatofrmsRank">Platforms Rank</string>
-    <string name="MarketTopPlatforms_Description">Top ecosystem platforms by market cap</string>
+    <string name="MarketTopPlatforms_PlatofrmsRank">Top Blockchain Platforms</string>
+    <string name="MarketTopPlatforms_Description">Leading blockchain platforms by cumulative market of projects built on top.</string>
     <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
 
     <!--Market Global Metrics-->
@@ -957,7 +957,7 @@
 
     <string name="Coin_Tab_Overview">Price</string>
     <string name="Coin_Tab_Market">Markets</string>
-    <string name="Coin_Tab_Details">Details</string>
+    <string name="Coin_Tab_Details">Analytics</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
 
     <string name="CoinPage_TimeDuration_Today">TDY</string>
@@ -1123,7 +1123,7 @@
     <string name="PoweredBy_OpenSeaAPI">Powered by OpenSea API</string>
 
     <string name="Nft_TopCollections">Top NFT Collections</string>
-    <string name="Nft_TopCollections_Description">The top NFTs on OpenSea, ranked by volume, floor price and other statistics.</string>
+    <string name="Nft_TopCollections_Description">Leading NFT collections by trading volume.</string>
 
     <!-- NFT Collection -->
     <string name="NftCollection_Overview">Overview</string>
