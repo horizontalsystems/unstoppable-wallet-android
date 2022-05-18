@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.os.Handler
+import android.os.Looper
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -174,14 +176,14 @@ class EvmKitManager(
     //
 
     override fun willEnterForeground() {
-        super.willEnterForeground()
-        this.evmKitWrapper?.evmKit?.onEnterForeground()
+        this.evmKitWrapper?.evmKit?.let { kit ->
+            Handler(Looper.getMainLooper()).postDelayed({
+                kit.refresh()
+            }, 1000)
+        }
     }
 
-    override fun didEnterBackground() {
-        super.didEnterBackground()
-        this.evmKitWrapper?.evmKit?.onEnterBackground()
-    }
+    override fun didEnterBackground() = Unit
 }
 
 val RpcSource.urls: List<URL>
