@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.providers.EvmLabelProvider
 import io.horizontalsystems.bankwallet.core.storage.EvmAddressLabelDao
 import io.horizontalsystems.bankwallet.core.storage.EvmMethodLabelDao
@@ -27,9 +28,13 @@ class EvmLabelManager(
 
     fun sync() {
         coroutineScope.launch {
-            val updatesStatus = provider.updatesStatus()
-            syncMethodLabels(updatesStatus.evmMethodLabels)
-            syncAddressLabels(updatesStatus.addressLabels)
+            try {
+                val updatesStatus = provider.updatesStatus()
+                syncMethodLabels(updatesStatus.evmMethodLabels)
+                syncAddressLabels(updatesStatus.addressLabels)
+            } catch (e: Exception) {
+                Log.e("EvmLabelManager", "sync() error: ${e.message}", e)
+            }
         }
     }
 
