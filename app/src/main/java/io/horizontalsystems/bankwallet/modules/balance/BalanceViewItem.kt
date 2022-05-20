@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.balance
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.managers.BigDecimalRounded
@@ -20,16 +19,17 @@ import java.math.BigDecimal
 @Immutable
 data class BalanceViewItem(
     val wallet: Wallet,
+    val currencySymbol: String,
     val coinCode: String,
     val coinTitle: String,
     val coinIconUrl: String,
     val coinIconPlaceholder: Int,
     val coinValue: DeemedValue<BigDecimalRounded>,
-    val exchangeValue: DeemedValue<String?>,
+    val exchangeValue: DeemedValue<BigDecimalRounded?>,
     val diff: BigDecimal?,
-    val fiatValue: DeemedValue<String?>,
+    val fiatValue: DeemedValue<BigDecimalRounded?>,
     val coinValueLocked: DeemedValue<BigDecimalRounded>,
-    val fiatValueLocked: DeemedValue<String?>,
+    val fiatValueLocked: DeemedValue<BigDecimalRounded?>,
     val expanded: Boolean,
     val sendEnabled: Boolean = false,
     val receiveEnabled: Boolean = false,
@@ -51,6 +51,8 @@ data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
 
 class BalanceViewItemFactory {
 
+    private val numberRounding = NumberRounding()
+
     private fun coinValue(
         state: AdapterState?,
         balance: BigDecimal,
@@ -68,24 +70,32 @@ class BalanceViewItemFactory {
         return DeemedValue(rounded, dimmed, visible)
     }
 
-    private fun currencyValue(state: AdapterState?, balance: BigDecimal, currency: Currency, coinPrice: CoinPrice?, visible: Boolean): DeemedValue<String?> {
+    private fun currencyValue(
+        state: AdapterState?,
+        balance: BigDecimal,
+        coinPrice: CoinPrice?,
+        visible: Boolean,
+        fullFormat: Boolean
+    ): DeemedValue<BigDecimalRounded?> {
         val dimmed = state !is AdapterState.Synced || coinPrice?.expired ?: false
         val value = coinPrice?.value?.let { rate ->
-            App.numberFormatter.formatFiat(balance * rate, currency.symbol, 0, 2)
+            val balanceFiat = balance * rate
+            if (fullFormat) {
+                numberRounding.getRoundedCurrencyFull(balanceFiat)
+            } else {
+                numberRounding.getRoundedCurrencyShort(balanceFiat, 8)
+            }
         }
 
         return DeemedValue(value, dimmed, visible)
     }
 
-    private fun rateValue(currency: Currency, coinPrice: CoinPrice?, showSyncing: Boolean): DeemedValue<String?> {
-        var dimmed = false
+    private fun rateValue(coinPrice: CoinPrice?, showSyncing: Boolean): DeemedValue<BigDecimalRounded?> {
         val value = coinPrice?.let {
-            dimmed = coinPrice.expired
-            val significantDecimal = App.numberFormatter.getSignificantDecimalFiat(coinPrice.value)
-            App.numberFormatter.formatFiat(coinPrice.value, currency.symbol, 2, significantDecimal)
+            numberRounding.getRoundedCurrencyFull(coinPrice.value)
         }
 
-        return DeemedValue(value, dimmed = dimmed, visible = !showSyncing)
+        return DeemedValue(value, dimmed = coinPrice?.expired ?: false, visible = !showSyncing)
     }
 
     private fun getSyncingProgress(state: AdapterState?, coinType: CoinType): SyncingProgress {
@@ -180,8 +190,6 @@ class BalanceViewItemFactory {
         return DeemedValue(value, deemed, visible)
     }
 
-    val numberRounding = NumberRounding()
-
     fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean, watchAccount: Boolean): BalanceViewItem {
         val wallet = item.wallet
         val coin = wallet.coin
@@ -194,20 +202,33 @@ class BalanceViewItemFactory {
 
         return BalanceViewItem(
                 wallet = item.wallet,
+                currencySymbol = currency.symbol,
                 coinCode = coin.code,
                 coinTitle = coin.name,
                 coinIconUrl = coin.iconUrl,
                 coinIconPlaceholder = wallet.coinType.iconPlaceholder,
                 coinValue = coinValue(state, item.balanceData.total, balanceTotalVisibility, expanded, wallet.decimal),
-                fiatValue = currencyValue(state, item.balanceData.total, currency, latestRate, balanceTotalVisibility),
+                fiatValue = currencyValue(
+                    state,
+                    item.balanceData.total,
+                    latestRate,
+                    balanceTotalVisibility,
+                    expanded
+                ),
                 coinValueLocked = lockedCoinValue(
                     state,
                     item.balanceData.locked,
                     hideBalance,
                     wallet.decimal
                 ),
-                fiatValueLocked = currencyValue(state, item.balanceData.locked, currency, latestRate, fiatLockedVisibility),
-                exchangeValue = rateValue(currency, latestRate, showSyncing),
+                fiatValueLocked = currencyValue(
+                    state,
+                    item.balanceData.locked,
+                    latestRate,
+                    fiatLockedVisibility,
+                    true
+                ),
+                exchangeValue = rateValue(latestRate, showSyncing),
                 diff = item.coinPrice?.diff,
                 expanded = expanded,
                 sendEnabled = state is AdapterState.Synced,

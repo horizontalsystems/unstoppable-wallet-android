@@ -42,7 +42,8 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.compose.formatNumber
+import io.horizontalsystems.bankwallet.ui.compose.formatNumberCoin
+import io.horizontalsystems.bankwallet.ui.compose.formatNumberFiat
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -154,7 +155,7 @@ fun BalanceCard(
                         Spacer(modifier = Modifier.weight(1f))
                         if (viewItem.coinValue.visible) {
                             Text(
-                                text = formatNumber(number = viewItem.coinValue.value),
+                                text = formatNumberCoin(number = viewItem.coinValue.value),
                                 color = if (viewItem.coinValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
                                 style = ComposeAppTheme.typography.headline2,
                                 maxLines = 1,
@@ -180,8 +181,11 @@ fun BalanceCard(
                             }
                             if (viewItem.exchangeValue.visible) {
                                 Row {
+                                    val exchangeStr = viewItem.exchangeValue.value?.let {
+                                        formatNumberFiat(number = it, currencySymbol = viewItem.currencySymbol)
+                                    } ?: ""
                                     Text(
-                                        text = viewItem.exchangeValue.value ?: "",
+                                        text = exchangeStr,
                                         color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                                         style = ComposeAppTheme.typography.subhead2,
                                         maxLines = 1,
@@ -208,8 +212,11 @@ fun BalanceCard(
                                 )
                             }
                             if (viewItem.fiatValue.visible) {
+                                val fiatValueStr = viewItem.fiatValue.value?.let {
+                                    formatNumberFiat(number = it, currencySymbol = viewItem.currencySymbol)
+                                } ?: ""
                                 Text(
-                                    text = viewItem.fiatValue.value ?: "",
+                                    text = fiatValueStr,
                                     color = if (viewItem.fiatValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                                     style = ComposeAppTheme.typography.subhead2,
                                     maxLines = 1,
@@ -350,7 +357,7 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
             )
             Text(
                 modifier = Modifier.padding(start = 6.dp),
-                text = formatNumber(
+                text = formatNumberCoin(
                     number = viewItem.coinValueLocked.value,
                     coinCode = viewItem.coinCode
                 ),
@@ -359,8 +366,11 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
                 maxLines = 1,
             )
             Spacer(modifier = Modifier.weight(1f))
+            val fiatValueLockedStr = viewItem.fiatValueLocked.value?.let {
+                formatNumberFiat(number = it, currencySymbol = viewItem.currencySymbol)
+            } ?: ""
             Text(
-                text = viewItem.fiatValueLocked.value ?: "",
+                text = fiatValueLockedStr,
                 color = if (viewItem.fiatValueLocked.dimmed) ComposeAppTheme.colors.yellow50 else ComposeAppTheme.colors.jacob,
                 style = ComposeAppTheme.typography.subhead2,
                 maxLines = 1,
