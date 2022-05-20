@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +41,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.formatNumber
 import io.horizontalsystems.bankwallet.ui.compose.formatNumberCoin
 import io.horizontalsystems.bankwallet.ui.compose.formatNumberFiat
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
@@ -155,7 +155,7 @@ fun BalanceCard(
                         Spacer(modifier = Modifier.weight(1f))
                         if (viewItem.coinValue.visible) {
                             Text(
-                                text = formatNumberCoin(number = viewItem.coinValue.value),
+                                text = formatNumber(number = viewItem.coinValue.value.value),
                                 color = if (viewItem.coinValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
                                 style = ComposeAppTheme.typography.headline2,
                                 maxLines = 1,
@@ -182,7 +182,7 @@ fun BalanceCard(
                             if (viewItem.exchangeValue.visible) {
                                 Row {
                                     val exchangeStr = viewItem.exchangeValue.value?.let {
-                                        formatNumberFiat(number = it, currencySymbol = viewItem.currencySymbol)
+                                        formatNumberFiat(currencyValueRounded = it)
                                     } ?: ""
                                     Text(
                                         text = exchangeStr,
@@ -213,7 +213,7 @@ fun BalanceCard(
                             }
                             if (viewItem.fiatValue.visible) {
                                 val fiatValueStr = viewItem.fiatValue.value?.let {
-                                    formatNumberFiat(number = it, currencySymbol = viewItem.currencySymbol)
+                                    formatNumberFiat(currencyValueRounded = it)
                                 } ?: ""
                                 Text(
                                     text = fiatValueStr,
@@ -280,8 +280,6 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             .height(70.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val context = LocalContext.current
-
         ButtonPrimaryYellow(
             modifier = Modifier.weight(1f),
             title = stringResource(R.string.Balance_Send),
@@ -357,17 +355,14 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
             )
             Text(
                 modifier = Modifier.padding(start = 6.dp),
-                text = formatNumberCoin(
-                    number = viewItem.coinValueLocked.value,
-                    coinCode = viewItem.coinCode
-                ),
+                text = formatNumberCoin(coinValueRounded = viewItem.coinValueLocked.value),
                 color = if (viewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                 style = ComposeAppTheme.typography.subhead2,
                 maxLines = 1,
             )
             Spacer(modifier = Modifier.weight(1f))
             val fiatValueLockedStr = viewItem.fiatValueLocked.value?.let {
-                formatNumberFiat(number = it, currencySymbol = viewItem.currencySymbol)
+                formatNumberFiat(currencyValueRounded = it)
             } ?: ""
             Text(
                 text = fiatValueLockedStr,
