@@ -20,8 +20,7 @@ object CoinDetailsModule {
             val service = CoinDetailsService(fullCoin, App.marketKit, App.currencyManager, App.proFeatureAuthorizationManager)
 
             return CoinDetailsViewModel(
-                service,
-                App.numberFormatter
+                service
             ) as T
         }
     }

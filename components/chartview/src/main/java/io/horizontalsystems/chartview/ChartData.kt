@@ -4,6 +4,7 @@ import android.util.Range
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.ChartPointF
+import java.lang.Exception
 import java.math.BigDecimal
 import kotlin.math.abs
 
@@ -42,7 +43,11 @@ data class ChartData(
             return BigDecimal.ZERO
         }
 
-        return ((lastValue - firstValue) / firstValue * 100).toBigDecimal()
+        return try {
+            ((lastValue - firstValue) / firstValue * 100).toBigDecimal()
+        } catch(e: Exception) {
+            BigDecimal.ZERO
+        }
     }
 }
 

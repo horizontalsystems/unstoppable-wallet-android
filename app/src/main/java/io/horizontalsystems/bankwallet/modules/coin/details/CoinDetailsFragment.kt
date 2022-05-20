@@ -42,6 +42,8 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartTvlFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.ProFeaturesBanner
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationModule
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationService
@@ -79,7 +81,7 @@ class CoinDetailsFragment : BaseFragment() {
                 YakAuthorizationService.State.Idle ->
                     snackbarInProcess?.dismiss()
 
-                YakAuthorizationService.State.Loading ->
+                YakAuthorizationService.State.Authenticating ->
                     snackbarInProcess = HudHelper.showInProcessMessage(
                         requireView(),
                         R.string.ProUsersInfo_Features_Authenticating,
@@ -93,10 +95,9 @@ class CoinDetailsFragment : BaseFragment() {
                     )
                 }
 
-                YakAuthorizationService.State.SessionKeyReceived ->
-                    snackbarInProcess?.dismiss()
+                YakAuthorizationService.State.Authenticated -> {}
 
-                is YakAuthorizationService.State.MessageReceived -> {
+                is YakAuthorizationService.State.SignMessageReceived -> {
                     snackbarInProcess?.dismiss()
                     findNavController().slideFromBottom(
                         R.id.proUsersActivateDialog
@@ -191,11 +192,11 @@ class CoinDetailsFragment : BaseFragment() {
                             }
 
                             viewItem.tokenLiquidityViewItem?.let {
-                                detailBlocks.add { borderTop -> TokenLiquidity(it, borderTop) }
+                                detailBlocks.add { borderTop -> TokenLiquidity(viewItem, it, borderTop) }
                             }
 
                             viewItem.tokenDistributionViewItem?.let {
-                                detailBlocks.add { borderTop -> TokenDistribution(it, borderTop) }
+                                detailBlocks.add { borderTop -> TokenDistribution(viewItem, it, borderTop) }
                             }
 
                             if (viewItem.treasuries != null || viewItem.fundsInvested != null || viewItem.reportsCount != null) {
@@ -337,10 +338,11 @@ class CoinDetailsFragment : BaseFragment() {
 
     @Composable
     private fun TokenLiquidity(
-        viewItem: CoinDetailsModule.TokenLiquidityViewItem,
+        viewItem: ViewItem,
+        tokenLiquidityViewItem: CoinDetailsModule.TokenLiquidityViewItem,
         borderTop: Boolean
     ) {
-        if (viewItem.liquidity == null && viewItem.volume == null) return
+        if (tokenLiquidityViewItem.liquidity == null && tokenLiquidityViewItem.volume == null) return
 
         CellSingleLineClear(borderTop = borderTop) {
             Text(
@@ -367,36 +369,26 @@ class CoinDetailsFragment : BaseFragment() {
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp)
         ) {
-            viewItem.volume?.let {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(if (viewItem.liquidity != null) 0.5F else 1F)
-                        .clickable {
-                            authorizationViewModel.onBannerClick()
-                        }
-                ) {
-                    MiniChartCard(
-                        title = stringResource(id = R.string.CoinPage_DetailsDexVolume),
-                        chartViewItem = it,
-                        PaddingValues(start = 6.dp, end = 6.dp)
-                    )
-                }
+            tokenLiquidityViewItem.volume?.let {
+                miniProChartCard(
+                    ProChartModule.ChartType.DexVolume,
+                    tokenLiquidityViewItem.liquidity != null,
+                    viewItem.proChartsActivated,
+                    it,
+                    stringResource(id = R.string.CoinPage_DetailsDexVolume),
+                    stringResource(id = R.string.CoinPage_DetailsDexVolume_Description)
+                )
             }
 
-            viewItem.liquidity?.let {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            authorizationViewModel.onBannerClick()
-                        }
-                ) {
-                    MiniChartCard(
-                        title = stringResource(id = R.string.CoinPage_DetailsDexLiquidity),
-                        chartViewItem = it,
-                        PaddingValues(start = 6.dp, end = 6.dp)
-                    )
-                }
+            tokenLiquidityViewItem.liquidity?.let {
+                miniProChartCard(
+                    ProChartModule.ChartType.DexLiquidity,
+                    false,
+                    viewItem.proChartsActivated,
+                    it,
+                    stringResource(id = R.string.CoinPage_DetailsDexLiquidity),
+                    stringResource(id = R.string.CoinPage_DetailsDexLiquidity_Description)
+                )
             }
         }
 
@@ -405,10 +397,11 @@ class CoinDetailsFragment : BaseFragment() {
 
     @Composable
     private fun TokenDistribution(
-        viewItem: CoinDetailsModule.TokenDistributionViewItem,
+        viewItem: ViewItem,
+        tokenDistributionViewItem: CoinDetailsModule.TokenDistributionViewItem,
         borderTop: Boolean
     ) {
-        if (!viewItem.hasMajorHolders && viewItem.txCount == null && viewItem.txVolume == null && viewItem.activeAddresses == null) return
+        if (!tokenDistributionViewItem.hasMajorHolders && tokenDistributionViewItem.txCount == null && tokenDistributionViewItem.txVolume == null && tokenDistributionViewItem.activeAddresses == null) return
 
         CellSingleLineClear(borderTop = borderTop) {
             Text(
@@ -428,7 +421,7 @@ class CoinDetailsFragment : BaseFragment() {
             }
         }
 
-        if (viewItem.txCount != null || viewItem.txVolume != null) {
+        if (tokenDistributionViewItem.txCount != null || tokenDistributionViewItem.txVolume != null) {
             Spacer(modifier = Modifier.height(12.dp))
 
             Row(
@@ -436,58 +429,50 @@ class CoinDetailsFragment : BaseFragment() {
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp)
             ) {
-                viewItem.txCount?.let {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(if (viewItem.txVolume != null) 0.5F else 1F)
-                            .clickable {
-                                authorizationViewModel.onBannerClick()
-                            }
-                    ) {
-                        MiniChartCard(
-                            title = stringResource(id = R.string.CoinPage_DetailsDexVolume),
-                            chartViewItem = it,
-                            PaddingValues(start = 6.dp, end = 6.dp)
-                        )
-                    }
+                tokenDistributionViewItem.txCount?.let {
+                    miniProChartCard(
+                        ProChartModule.ChartType.TxCount,
+                        tokenDistributionViewItem.txVolume != null,
+                        viewItem.proChartsActivated,
+                        it,
+                        stringResource(id = R.string.CoinPage_DetailsTxCount),
+                        stringResource(id = R.string.CoinPage_DetailsTxCount_Description)
+                    )
                 }
 
-                viewItem.txVolume?.let {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                authorizationViewModel.onBannerClick()
-                            }
-                    ) {
-                        MiniChartCard(
-                            title = stringResource(id = R.string.CoinPage_DetailsDexLiquidity),
-                            chartViewItem = it,
-                            PaddingValues(start = 6.dp, end = 6.dp)
-                        )
-                    }
+                tokenDistributionViewItem.txVolume?.let {
+                    miniProChartCard(
+                        ProChartModule.ChartType.TxVolume,
+                        false,
+                        viewItem.proChartsActivated,
+                        it,
+                        stringResource(id = R.string.CoinPage_DetailsTxVolume),
+                        stringResource(id = R.string.CoinPage_DetailsTxVolume_Description)
+                    )
                 }
             }
         }
 
-        viewItem.activeAddresses?.let {
+        tokenDistributionViewItem.activeAddresses?.let {
             Spacer(modifier = Modifier.height(12.dp))
 
-            Box(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
-                        authorizationViewModel.onBannerClick()
-                    }
+                    .padding(start = 10.dp, end = 10.dp)
             ) {
-                MiniChartCard(
-                    title = stringResource(id = R.string.CoinPage_DetailsActiveAddresses),
-                    chartViewItem = it
+                miniProChartCard(
+                    ProChartModule.ChartType.AddressesCount,
+                    false,
+                    viewItem.proChartsActivated,
+                    it,
+                    stringResource(id = R.string.CoinPage_DetailsActiveAddresses),
+                    stringResource(id = R.string.CoinPage_DetailsActiveAddresses_Description)
                 )
             }
         }
 
-        if (viewItem.hasMajorHolders) {
+        if (tokenDistributionViewItem.hasMajorHolders) {
             Spacer(modifier = Modifier.height(12.dp))
 
             CellSingleLineLawrenceSection {
@@ -605,4 +590,33 @@ class CoinDetailsFragment : BaseFragment() {
             )
         }
     }
+
+    @Composable
+    private fun miniProChartCard(chartType: ProChartModule.ChartType, halfWidth: Boolean, proChartsActivated: Boolean,
+                                 chartViewItem: CoinDetailsModule.ChartViewItem, title: String, description: String) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(if (halfWidth) 0.5F else 1F)
+                .clickable {
+                    if (proChartsActivated) {
+                        ProChartFragment.show(
+                            childFragmentManager,
+                            viewModel.coin.uid,
+                            chartType,
+                            title,
+                            description
+                        )
+                    } else {
+                        authorizationViewModel.onBannerClick()
+                    }
+                }
+        ) {
+            MiniChartCard(
+                title = title,
+                chartViewItem = chartViewItem,
+                PaddingValues(start = 6.dp, end = 6.dp)
+            )
+        }
+    }
+
 }

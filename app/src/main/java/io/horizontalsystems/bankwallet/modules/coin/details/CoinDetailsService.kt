@@ -70,20 +70,51 @@ class CoinDetailsService(
                     }
             }
 
-        val sessionKey = proFeaturesAuthorizationManager.getSessionKey(ProNft.YAK)
-
-        val proFeaturesSingle = if (sessionKey == null)
-            Single.just(ProCharts.forbidden)
-        else
-            // TODO: marketKit.getProCharts(sessionKey.key)
-            Single.just(ProCharts(true, ProData.Empty, ProData.Empty, ProData.Empty, ProData.Empty, ProData.Empty))
-
         return Single.zip(
             tvlsSingle.onErrorReturn { listOf() },
             volumeSingle.onErrorReturn { listOf() },
-            proFeaturesSingle.onErrorReturn { ProCharts.forbidden }
+            proFeatures(fullCoin.coin.uid, currency.code).onErrorReturn { ProCharts.forbidden }
         ) { t1, t2, t3 -> Triple(t1, t2, t3) }.map { (tvls, totalVolumes, proFeatures) ->
             Item(details, tvls, totalVolumes, proFeatures)
+        }
+    }
+
+    private fun proFeatures(coinUid: String, currencyCode: String): Single<ProCharts> {
+        val sessionKey = proFeaturesAuthorizationManager.getSessionKey(ProNft.YAK) ?: return Single.just(ProCharts.forbidden)
+
+        val dexVolumeSingle = marketKit
+            .dexVolumesSingle(coinUid, currencyCode, HsTimePeriod.Month1, sessionKey.key.value)
+            .onErrorReturn { DexVolumesResponse(listOf(), listOf()) }
+
+        val dexLiquiditySingle = marketKit
+            .dexLiquiditySingle(coinUid, currencyCode, HsTimePeriod.Month1, sessionKey.key.value)
+            .onErrorReturn { DexLiquiditiesResponse(listOf(), listOf()) }
+
+        val transactionDataSingle = marketKit
+            .transactionDataSingle(coinUid, currencyCode, HsTimePeriod.Month1, null, sessionKey.key.value)
+            .onErrorReturn { TransactionsDataResponse(listOf(), listOf()) }
+
+        val activeAddressesSingle = marketKit
+            .activeAddressesSingle(coinUid, currencyCode, HsTimePeriod.Month1, sessionKey.key.value)
+            .onErrorReturn { ActiveAddressesDataResponse(listOf(), listOf()) }
+
+        return Single.zip(
+            dexVolumeSingle, dexLiquiditySingle, transactionDataSingle, activeAddressesSingle
+        ) { dexVolumeResponse, dexLiquidityResponse, transactionDataResponse, activeAddressesResponse ->
+            val dexVolumeChartPoints = dexVolumeResponse.volumePoints
+            val dexLiquidityChartPoints = dexLiquidityResponse.volumePoints
+            val txCountChartPoints = transactionDataResponse.countPoints
+            val txVolumeChartPoints = transactionDataResponse.volumePoints
+            val activeAddresses = activeAddressesResponse.countPoints
+
+            return@zip ProCharts(
+                true,
+                if (dexVolumeChartPoints.isEmpty()) ProData.Empty else ProData.Completed(dexVolumeChartPoints),
+                if (dexLiquidityChartPoints.isEmpty()) ProData.Empty else ProData.Completed(dexLiquidityChartPoints),
+                if (txCountChartPoints.isEmpty()) ProData.Empty else ProData.Completed(txCountChartPoints),
+                if (txVolumeChartPoints.isEmpty()) ProData.Empty else ProData.Completed(txVolumeChartPoints),
+                if (activeAddresses.isEmpty()) ProData.Empty else ProData.Completed(activeAddresses),
+            )
         }
     }
 
@@ -105,7 +136,10 @@ class CoinDetailsService(
         fetch()
 
         proFeaturesAuthorizationManager.sessionKeyFlow.collectWith(scope) { sessionKey ->
-            if (sessionKey?.nftName == ProNft.YAK.keyName) fetch()
+            if (sessionKey?.nftName == ProNft.YAK.keyName) {
+                stateSubject.onNext(DataState.Loading)
+                fetch()
+            }
         }
     }
 

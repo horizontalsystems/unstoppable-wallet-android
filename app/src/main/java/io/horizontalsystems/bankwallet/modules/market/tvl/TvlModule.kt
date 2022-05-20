@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.chart.ChartNumberFormatterShortened
+import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
@@ -31,7 +31,7 @@ object TvlModule {
                 }
                 TvlChartViewModel::class.java -> {
                     val chartService = TvlChartService(App.currencyManager, globalMarketRepository)
-                    val chartNumberFormatter = ChartNumberFormatterShortened()
+                    val chartNumberFormatter = ChartCurrencyValueFormatterShortened()
                     TvlChartViewModel(chartService, chartNumberFormatter) as T
                 }
                 else -> throw IllegalArgumentException()
