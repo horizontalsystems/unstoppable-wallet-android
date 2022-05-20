@@ -26,7 +26,7 @@ import java.util.*
 
 open class ChartViewModel(
     private val service: AbstractChartService,
-    private val chartNumberFormatter: ChartModule.ChartNumberFormatter
+    private val valueFormatter: ChartModule.ChartNumberFormatter
 ) : ViewModel() {
     val tabItemsLiveData = MutableLiveData<List<TabItem<HsTimePeriod>>>()
     val indicatorsLiveData = MutableLiveData<List<TabItem<ChartIndicator>>>()
@@ -110,9 +110,7 @@ open class ChartViewModel(
         if (chartItems.isEmpty()) return
 
         val lastItemValue = chartItems.last().value
-        val currentValue = chartNumberFormatter.formatValue(
-            CurrencyValue(service.currency, lastItemValue.toBigDecimal())
-        )
+        val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
 
         val firstItemValue = chartItems.first().value
         val currentValueDiff = Value.Percent(((lastItemValue - firstItemValue) / firstItemValue * 100).toBigDecimal())
@@ -153,7 +151,7 @@ open class ChartViewModel(
     }
 
     private fun getFormattedValue(value: Float, currency: Currency): String {
-        return App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency,  value.toBigDecimal()))
+        return valueFormatter.formatValue(currency,  value.toBigDecimal())
     }
 
     override fun onCleared() {
@@ -163,9 +161,7 @@ open class ChartViewModel(
 
     fun getSelectedPoint(item: ChartDataItemImmutable): SelectedPoint? {
         return item.values[Indicator.Candle]?.let { candle ->
-            val value = chartNumberFormatter.formatValue(
-                CurrencyValue(service.currency, candle.value.toBigDecimal())
-            )
+            val value = valueFormatter.formatValue(service.currency, candle.value.toBigDecimal())
             val dayAndTime = DateHelper.getDayAndTime(Date(item.timestamp * 1000))
 
             SelectedPoint(

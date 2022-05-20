@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
-import io.horizontalsystems.bankwallet.modules.chart.ChartNumberFormatterSignificant
+import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterSignificant
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.*
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -31,7 +31,7 @@ object CoinOverviewModule {
                 }
                 ChartViewModel::class.java -> {
                     val chartService = CoinOverviewChartService(App.marketKit, App.currencyManager, App.chartTypeStorage, fullCoin.coin.uid)
-                    val chartNumberFormatter = ChartNumberFormatterSignificant()
+                    val chartNumberFormatter = ChartCurrencyValueFormatterSignificant()
                     ChartModule.createViewModel(chartService, chartNumberFormatter) as T
                 }
                 else -> throw IllegalArgumentException()
