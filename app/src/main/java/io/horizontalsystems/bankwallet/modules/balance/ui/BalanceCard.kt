@@ -42,6 +42,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.formatNumber
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -153,7 +154,7 @@ fun BalanceCard(
                         Spacer(modifier = Modifier.weight(1f))
                         if (viewItem.coinValue.visible) {
                             Text(
-                                text = viewItem.coinValue.text ?: "",
+                                text = formatNumber(number = viewItem.coinValue.value),
                                 color = if (viewItem.coinValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
                                 style = ComposeAppTheme.typography.headline2,
                                 maxLines = 1,
@@ -171,7 +172,7 @@ fun BalanceCard(
                         ) {
                             if (viewItem.syncingTextValue.visible) {
                                 Text(
-                                    text = viewItem.syncingTextValue.text ?: "",
+                                    text = viewItem.syncingTextValue.value ?: "",
                                     color = ComposeAppTheme.colors.grey,
                                     style = ComposeAppTheme.typography.subhead2,
                                     maxLines = 1,
@@ -180,7 +181,7 @@ fun BalanceCard(
                             if (viewItem.exchangeValue.visible) {
                                 Row {
                                     Text(
-                                        text = viewItem.exchangeValue.text ?: "",
+                                        text = viewItem.exchangeValue.value ?: "",
                                         color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                                         style = ComposeAppTheme.typography.subhead2,
                                         maxLines = 1,
@@ -200,7 +201,7 @@ fun BalanceCard(
                         ) {
                             if (viewItem.syncedUntilTextValue.visible) {
                                 Text(
-                                    text = viewItem.syncedUntilTextValue.text ?: "",
+                                    text = viewItem.syncedUntilTextValue.value ?: "",
                                     color = ComposeAppTheme.colors.grey,
                                     style = ComposeAppTheme.typography.subhead2,
                                     maxLines = 1,
@@ -208,7 +209,7 @@ fun BalanceCard(
                             }
                             if (viewItem.fiatValue.visible) {
                                 Text(
-                                    text = viewItem.fiatValue.text ?: "",
+                                    text = viewItem.fiatValue.value ?: "",
                                     color = if (viewItem.fiatValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                                     style = ComposeAppTheme.typography.subhead2,
                                     maxLines = 1,
@@ -320,7 +321,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
 
                 navController.slideFromRight(R.id.coinFragment, arguments)
             },
-            enabled = viewItem.exchangeValue.text != null
+            enabled = viewItem.exchangeValue.value != null
         )
     }
 }
@@ -349,14 +350,17 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
             )
             Text(
                 modifier = Modifier.padding(start = 6.dp),
-                text = viewItem.coinValueLocked.text ?: "",
+                text = formatNumber(
+                    number = viewItem.coinValueLocked.value,
+                    coinCode = viewItem.coinCode
+                ),
                 color = if (viewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                 style = ComposeAppTheme.typography.subhead2,
                 maxLines = 1,
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = viewItem.fiatValueLocked.text ?: "",
+                text = viewItem.fiatValueLocked.value ?: "",
                 color = if (viewItem.fiatValueLocked.dimmed) ComposeAppTheme.colors.yellow50 else ComposeAppTheme.colors.jacob,
                 style = ComposeAppTheme.typography.subhead2,
                 maxLines = 1,
