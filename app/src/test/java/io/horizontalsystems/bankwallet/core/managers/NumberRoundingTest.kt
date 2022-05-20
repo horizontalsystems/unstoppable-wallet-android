@@ -8,6 +8,11 @@ class NumberRoundingTest {
     private val numberRounding = NumberRounding()
 
     @Test
+    fun getShort_zero() {
+        assertShortRegular("0", "0")
+    }
+
+    @Test
     fun getShort_lessThenMinimum_lessThenSign() {
         assertLessThen("0.000000001", "0.00000001")
     }

@@ -11,10 +11,16 @@ class NumberRounding {
     fun getRoundedFull(value: BigDecimal, minimumFractionDigits: Int, maximumFractionDigits: Int): BigDecimalRounded {
         val mostLowValue = BigDecimal(BigInteger.ONE, maximumFractionDigits)
 
-        return if (value < mostLowValue) {
-            BigDecimalRounded.LessThen(mostLowValue)
-        } else {
-            simpleRoundingStrategy(value, minimumFractionDigits, maximumFractionDigits)
+        return when {
+            value.compareTo(BigDecimal.ZERO) == 0 -> {
+                BigDecimalRounded.Regular(BigDecimal.ZERO)
+            }
+            value < mostLowValue -> {
+                BigDecimalRounded.LessThen(mostLowValue)
+            }
+            else -> {
+                simpleRoundingStrategy(value, minimumFractionDigits, maximumFractionDigits)
+            }
         }
     }
 
@@ -23,6 +29,9 @@ class NumberRounding {
         val mostLowValue = BigDecimal(BigInteger.ONE, maximumFractionDigitsCoerced)
 
         return when {
+            value.compareTo(BigDecimal.ZERO) == 0 -> {
+                BigDecimalRounded.Regular(BigDecimal.ZERO)
+            }
             value < mostLowValue -> {
                 BigDecimalRounded.LessThen(mostLowValue)
             }
@@ -33,6 +42,26 @@ class NumberRounding {
                 largeNumberStrategy(value)
             }
         }
+    }
+
+    fun getRoundedShort(value: BigDecimal): BigDecimalRounded {
+        return getRoundedShort(value, 8)
+    }
+
+    fun getRoundedCoinShort(value: BigDecimal, coinDecimals: Int): BigDecimalRounded {
+        return getRoundedShort(value, coinDecimals)
+    }
+
+    fun getRoundedCoinFull(value: BigDecimal, coinDecimals: Int): BigDecimalRounded {
+        return getRoundedFull(value, 4.coerceAtMost(coinDecimals), coinDecimals)
+    }
+
+    fun getRoundedCurrencyShort(value: BigDecimal, currencyDecimals: Int): BigDecimalRounded {
+        return getRoundedShort(value, currencyDecimals)
+    }
+
+    fun getRoundedCurrencyFull(value: BigDecimal): BigDecimalRounded {
+        return getRoundedFull(value, 0, 8)
     }
 
     private fun largeNumberStrategy(value: BigDecimal): BigDecimalRounded.Large {
@@ -113,9 +142,11 @@ class NumberRounding {
 }
 
 sealed class BigDecimalRounded {
-    data class LessThen(val value: BigDecimal) : BigDecimalRounded()
-    data class Regular(val value: BigDecimal) : BigDecimalRounded()
-    data class Large(val value: BigDecimal, val suffix: NumberSuffix) : BigDecimalRounded()
+    abstract val value: BigDecimal
+
+    data class LessThen(override val value: BigDecimal) : BigDecimalRounded()
+    data class Regular(override val value: BigDecimal) : BigDecimalRounded()
+    data class Large(override val value: BigDecimal, val suffix: NumberSuffix) : BigDecimalRounded()
 }
 
 enum class NumberSuffix {
