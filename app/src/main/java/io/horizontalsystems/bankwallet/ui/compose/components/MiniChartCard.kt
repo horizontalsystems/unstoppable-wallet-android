@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -20,12 +21,14 @@ fun MiniChartCard(
     title: String,
     chartViewItem: CoinDetailsModule.ChartViewItem,
     paddingValues: PaddingValues? = null,
+    onClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .padding(paddingValues = paddingValues ?: PaddingValues(horizontal = 16.dp))
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
+            .clickable { onClick() }
             .background(ComposeAppTheme.colors.lawrence)
             .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),

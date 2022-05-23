@@ -240,9 +240,11 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            HsIconButton(onClick = {
-                findNavController().slideFromBottom(R.id.tokenTvlInfoFragment)
-            }) {
+            HsIconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = {
+                    findNavController().slideFromBottom(R.id.tokenTvlInfoFragment)
+                }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_info_20),
                     contentDescription = "info button",
@@ -257,13 +259,11 @@ class CoinDetailsFragment : BaseFragment() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
-                        onClick.invoke()
-                    }
             ) {
                 MiniChartCard(
                     title = stringResource(id = R.string.CoinPage_DetailsTvl),
-                    chartViewItem = tvlChart
+                    chartViewItem = tvlChart,
+                    onClick = onClick
                 )
             }
         }
@@ -301,9 +301,11 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            HsIconButton(onClick = {
-                findNavController().slideFromBottom(R.id.securityParamsInfoFragment)
-            }) {
+            HsIconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = {
+                    findNavController().slideFromBottom(R.id.securityParamsInfoFragment)
+                }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_info_20),
                     contentDescription = "info button",
@@ -347,9 +349,11 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            HsIconButton(onClick = {
-                findNavController().slideFromBottom(R.id.tokenLiquidityInfoFragment)
-            }) {
+            HsIconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = {
+                    findNavController().slideFromBottom(R.id.tokenLiquidityInfoFragment)
+                }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_info_20),
                     contentDescription = "info button",
@@ -406,9 +410,11 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            HsIconButton(onClick = {
-                findNavController().slideFromBottom(R.id.tokenDistributionInfoFragment)
-            }) {
+            HsIconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = {
+                    findNavController().slideFromBottom(R.id.tokenDistributionInfoFragment)
+                }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_info_20),
                     contentDescription = "info button",
@@ -593,7 +599,12 @@ class CoinDetailsFragment : BaseFragment() {
         Box(
             modifier = Modifier
                 .fillMaxWidth(if (halfWidth) 0.5F else 1F)
-                .clickable {
+        ) {
+            MiniChartCard(
+                title = title,
+                chartViewItem = chartViewItem,
+                paddingValues = PaddingValues(start = 6.dp, end = 6.dp),
+                onClick = {
                     if (proChartsActivated) {
                         ProChartFragment.show(
                             childFragmentManager,
@@ -606,11 +617,6 @@ class CoinDetailsFragment : BaseFragment() {
                         authorizationViewModel.onBannerClick()
                     }
                 }
-        ) {
-            MiniChartCard(
-                title = title,
-                chartViewItem = chartViewItem,
-                PaddingValues(start = 6.dp, end = 6.dp)
             )
         }
     }
