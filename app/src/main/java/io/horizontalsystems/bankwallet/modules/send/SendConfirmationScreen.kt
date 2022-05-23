@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -90,7 +89,7 @@ fun SendConfirmationScreen(
             AppBar(
                 title = TranslatableString.ResString(R.string.Send_Confirmation_Title),
                 navigationIcon = {
-                    IconButton(
+                    HsIconButton(
                         onClick = {
                             navController.popBackStack()
                         }

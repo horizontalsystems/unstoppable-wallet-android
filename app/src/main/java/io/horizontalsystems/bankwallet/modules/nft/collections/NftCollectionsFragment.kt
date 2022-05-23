@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -71,7 +70,7 @@ fun NftCollectionsScreen(navController: NavController) {
             AppBar(
                 title = TranslatableString.ResString(R.string.Nfts_Title),
                 navigationIcon = {
-                    IconButton(onClick = navController::popBackStack) {
+                    HsIconButton(onClick = navController::popBackStack) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = "back button",

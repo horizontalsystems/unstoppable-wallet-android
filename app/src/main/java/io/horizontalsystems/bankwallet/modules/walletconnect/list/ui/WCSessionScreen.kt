@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,10 +29,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConne
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
 fun WCSessionsScreen(
@@ -77,7 +73,7 @@ fun WCSessionsContent(
             AppBar(
                 TranslatableString.ResString(R.string.WalletConnect_Title),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             tint = ComposeAppTheme.colors.jacob,

@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectL
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 
 @Composable
 fun WCSessionList(
@@ -100,7 +101,7 @@ private fun LazyListScope.WCSection(
         ) {
             ActionsRow(
                 content = {
-                    IconButton(
+                    HsIconButton(
                         modifier = Modifier
                             .fillMaxHeight()
                             .width(88.dp),

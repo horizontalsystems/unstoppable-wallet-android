@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -293,11 +292,11 @@ fun CardsGrid(
             Header(borderTop = true) {
                 ButtonSecondaryCircle(
                     modifier = Modifier
-                        .padding(start = 16.dp)
-                        .weight(1f),
+                        .padding(start = 16.dp),
                     icon = if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
                     onClick = { onToggleSortType() }
                 )
+                Spacer(Modifier.weight(1f))
                 ButtonSecondaryToggle(
                     modifier = Modifier.padding(end = 16.dp),
                     select = timePeriodMenu,
@@ -360,7 +359,7 @@ private fun MarketCoin(
             MarketCoinSecondRow(coinCode, marketDataValue, label)
         }
 
-        IconButton(onClick = onFavoriteClick) {
+        HsIconButton(onClick = onFavoriteClick) {
             Icon(
                 painter = painterResource(if (favorited) R.drawable.ic_star_filled_20 else R.drawable.ic_star_20),
                 contentDescription = "coin icon",

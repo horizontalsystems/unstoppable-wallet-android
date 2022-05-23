@@ -123,7 +123,6 @@ fun CoinMarketsMenu(
     Header(borderTop = true, borderBottom = true) {
         ButtonSecondaryCircle(
             modifier = Modifier
-                .weight(1f)
                 .padding(start = 16.dp),
             icon = if (sortingType == SortType.HighestVolume) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
             onClick = {
@@ -132,6 +131,7 @@ fun CoinMarketsMenu(
                 sortingType = next
             }
         )
+        Spacer(Modifier.weight(1f))
         ButtonSecondaryToggle(
             modifier = Modifier.padding(end = 16.dp),
             select = volumeType,

@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
@@ -185,7 +186,7 @@ private fun SecurityCenterScreen(
             AppBar(
                 TranslatableString.ResString(R.string.Settings_SecurityCenter),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = "back button",

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -201,7 +200,7 @@ private fun AdvancedSearchScreen(
             AppBar(
                 TranslatableString.ResString(R.string.Market_Filters),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = "back button",

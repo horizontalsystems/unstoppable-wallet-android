@@ -89,8 +89,11 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
                                 overflow = TextOverflow.Ellipsis
                             )
                         },
-                        colors = ButtonDefaults.textButtonColors(
+                        buttonColors = ButtonDefaults.textButtonColors(
                             backgroundColor = SteelLight,
+                            contentColor = ComposeAppTheme.colors.dark,
+                            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+                            disabledContentColor = ComposeAppTheme.colors.grey50,
                         ),
                         onClick = { onBackPressed() }
                     )

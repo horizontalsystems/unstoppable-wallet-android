@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -90,7 +89,7 @@ private fun SearchResultsScreen(
             AppBar(
                 TranslatableString.ResString(R.string.Market_AdvancedSearch_Results),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = "back button",

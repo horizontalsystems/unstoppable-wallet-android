@@ -2,18 +2,14 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults.buttonColors
 
 @Composable
 fun ButtonSecondaryDefault(
@@ -40,10 +37,6 @@ fun ButtonSecondaryDefault(
     ButtonSecondary(
         modifier = modifier,
         onClick = onClick,
-        colors = ButtonDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.steel20,
-            contentColor = ComposeAppTheme.colors.oz
-        ),
         content = {
             when (ellipsis) {
                 Ellipsis.End -> Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -69,11 +62,12 @@ fun ButtonSecondaryWithIcon(
     ButtonSecondary(
         modifier = modifier,
         onClick = onClick,
-        colors = ButtonDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.steel20,
-            contentColor = ComposeAppTheme.colors.oz
+        contentPadding = PaddingValues(
+            start = 16.dp,
+            top = 6.dp,
+            end = 12.dp,
+            bottom = 6.dp
         ),
-        contentPadding = PaddingValues(start = 16.dp, end = 12.dp),
         content = {
             Row {
                 Text(
@@ -103,15 +97,15 @@ fun ButtonSecondaryTransparent(
     onClick: () -> Unit,
     enabled: Boolean = true
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-    val textColor = if (isPressed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.oz
 
     ButtonSecondary(
         modifier = modifier,
         onClick = onClick,
-        colors = ButtonDefaults.textButtonColors(
-            contentColor = textColor
+        buttonColors = buttonColors(
+            backgroundColor = ComposeAppTheme.colors.transparent,
+            contentColor = ComposeAppTheme.colors.leah,
+            disabledBackgroundColor= ComposeAppTheme.colors.transparent,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = {
             if (iconRight != null) {
@@ -133,54 +127,9 @@ fun ButtonSecondaryTransparent(
                 Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         },
-        interactionSource = interactionSource,
-        indication = null,
         enabled = enabled
     )
 }
-
-@Composable
-fun ButtonSecondaryToggle(
-    toggleIndicators: List<ToggleIndicator>,
-    modifier: Modifier = Modifier,
-    title: String,
-    onClick: () -> Unit,
-    enabled: Boolean = true
-) {
-    ButtonSecondary(
-        modifier = modifier,
-        onClick = onClick,
-        colors = ButtonDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.steel20,
-            contentColor = ComposeAppTheme.colors.oz
-        ),
-        content = {
-            Row(
-                modifier = Modifier.height(IntrinsicSize.Max),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Column(
-                    modifier = Modifier
-                        .height(16.dp)
-                        .padding(start = 12.dp),
-                    verticalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    toggleIndicators.forEach { indicator ->
-                        Box(
-                            modifier = Modifier
-                                .size(3.dp)
-                                .clip(CircleShape)
-                                .background(if (indicator.enabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey)
-                        )
-                    }
-                }
-            }
-        },
-        enabled = enabled
-    )
-}
-
 
 @Composable
 fun <T : WithTranslatableTitle> ButtonSecondaryToggle(
@@ -198,10 +147,6 @@ fun <T : WithTranslatableTitle> ButtonSecondaryToggle(
 
             onSelect(options[nextSelectedItemIndex])
         },
-        colors = ButtonDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.steel20,
-            contentColor = ComposeAppTheme.colors.oz
-        ),
         content = {
             Row(
                 modifier = Modifier.height(IntrinsicSize.Max),
@@ -236,44 +181,38 @@ fun ButtonSecondary(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    indication: Indication? = rememberRipple(),
     shape: Shape = RoundedCornerShape(14.dp),
     border: BorderStroke? = null,
-    colors: ButtonColors = SecondaryButtonDefaults.textButtonColors(),
+    buttonColors: ButtonColors = buttonColors(),
     contentPadding: PaddingValues = SecondaryButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
 ) {
-    val contentColor by colors.contentColor(enabled)
     Surface(
         modifier = modifier,
         shape = shape,
-        color = colors.backgroundColor(enabled).value,
-        contentColor = contentColor.copy(alpha = 1f),
+        color = buttonColors.backgroundColor(enabled).value,
+        contentColor = buttonColors.contentColor(enabled).value,
         border = border,
-        elevation = 0.dp,
         onClick = onClick,
         enabled = enabled,
         role = Role.Button,
-        interactionSource = interactionSource,
-        indication = indication
+        interactionSource = remember { MutableInteractionSource() },
+        indication = rememberRipple()
     ) {
-        CompositionLocalProvider(LocalContentAlpha provides contentColor.alpha) {
-            ProvideTextStyle(
-                value = ComposeAppTheme.typography.subhead1
-            ) {
-                Row(
-                    Modifier
-                        .defaultMinSize(
-                            minWidth = SecondaryButtonDefaults.MinWidth,
-                            minHeight = SecondaryButtonDefaults.MinHeight
-                        )
-                        .padding(contentPadding),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    content = content
-                )
-            }
+        ProvideTextStyle(
+            value = ComposeAppTheme.typography.subhead1
+        ) {
+            Row(
+                Modifier
+                    .defaultMinSize(
+                        minWidth = SecondaryButtonDefaults.MinWidth,
+                        minHeight = SecondaryButtonDefaults.MinHeight
+                    )
+                    .padding(contentPadding),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                content = content
+            )
         }
     }
 }
@@ -288,10 +227,13 @@ private fun truncateIfNeeded(title: String, characterCount: Int): String {
 
 object SecondaryButtonDefaults {
     private val ButtonHorizontalPadding = 16.dp
+    private val ButtonVerticalPadding = 6.dp
 
     val ContentPadding = PaddingValues(
         start = ButtonHorizontalPadding,
-        end = ButtonHorizontalPadding
+        top = ButtonVerticalPadding,
+        end = ButtonHorizontalPadding,
+        bottom = ButtonVerticalPadding,
     )
 
 
@@ -308,20 +250,18 @@ object SecondaryButtonDefaults {
     val MinHeight = 28.dp
 
     @Composable
-    fun textButtonColors(
-        backgroundColor: Color = ComposeAppTheme.colors.transparent,
-        contentColor: Color = ComposeAppTheme.colors.claude,
+    fun buttonColors(
+        backgroundColor: Color = ComposeAppTheme.colors.steel20,
+        contentColor: Color = ComposeAppTheme.colors.leah,
         disabledBackgroundColor: Color = ComposeAppTheme.colors.steel20,
         disabledContentColor: Color = ComposeAppTheme.colors.grey50,
-    ): ButtonColors = DefaultButtonColors(
+    ): ButtonColors = HsButtonColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,
         disabledBackgroundColor = disabledBackgroundColor,
-        disabledContentColor = disabledContentColor
+        disabledContentColor = disabledContentColor,
     )
 }
-
-class ToggleIndicator(val enabled: Boolean)
 
 sealed class Ellipsis {
     object End : Ellipsis()

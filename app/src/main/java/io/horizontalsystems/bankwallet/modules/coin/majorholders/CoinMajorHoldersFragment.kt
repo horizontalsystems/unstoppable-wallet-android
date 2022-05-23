@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -92,7 +91,7 @@ private fun CoinMajorHoldersScreen(
             AppBar(
                 TranslatableString.ResString(R.string.CoinPage_MajorHolders),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = "back button",
