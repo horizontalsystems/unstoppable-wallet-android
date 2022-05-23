@@ -109,7 +109,7 @@ class CoinTreasuriesViewModel(
             fund = coinTreasury.fund,
             fundLogoUrl = coinTreasury.logoUrl,
             country = coinTreasury.countryCode,
-            amount = numberFormatter.formatCoinValueAsShortened(coinTreasury.amount, service.coin.code),
+            amount = numberFormatter.formatCoinShort(coinTreasury.amount, service.coin.code, 8),
             amountInCurrency = numberFormatter.formatCurrencyValueAsShortened(
                 CurrencyValue(
                     service.currency,

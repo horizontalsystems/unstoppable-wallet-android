@@ -7,8 +7,7 @@ import java.math.BigDecimal
 class ChartNumberFormatterShortened : ChartModule.ChartNumberFormatter {
 
     override fun formatValue(currency: Currency, value: BigDecimal): String {
-        val (shortValue, suffix) = App.numberFormatter.shortenValue(value)
-        return App.numberFormatter.format(shortValue, 0, 2) + " $suffix"
+        return App.numberFormatter.formatNumberShort(value, 2)
     }
 
 }

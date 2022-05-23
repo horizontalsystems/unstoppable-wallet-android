@@ -96,7 +96,7 @@ class NftCollectionViewModel(
     }
 
     private fun coinValue(value: BigDecimal) =
-        numberFormatter.formatCoinValueAsShortened(value, basePlatformCoin.code)
+        numberFormatter.formatCoinShort(value, basePlatformCoin.code, basePlatformCoin.decimals)
 
     private fun currencyValue(value: BigDecimal?, rate: CurrencyValue?) =
         rate?.let {
@@ -177,7 +177,9 @@ class NftCollectionViewModel(
         viewState = result?.exceptionOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
     }
 
-    private fun shortenValue(value: BigDecimal) = numberFormatter.shortenValue(value).let { "${it.first} ${it.second}" }
+    private fun shortenValue(value: BigDecimal): String {
+        return numberFormatter.formatNumberShort(value, 0)
+    }
 
     private fun contracts(collection: NftCollection) =
         collection.contracts.map {

@@ -204,28 +204,20 @@ data class MarketViewItem(
         ): MarketViewItem {
             val marketDataValue = when (marketField) {
                 MarketField.MarketCap -> {
-                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(
-                        marketItem.marketCap.value
-                    )
-                    val marketCapFormatted = App.numberFormatter.formatFiat(
-                        shortenValue,
+                    val marketCapFormatted = App.numberFormatter.formatFiatShort(
+                        marketItem.marketCap.value,
                         marketItem.marketCap.currency.symbol,
-                        0,
                         2
-                    ) + " $suffix"
+                    )
 
                     MarketDataValue.MarketCap(marketCapFormatted)
                 }
                 MarketField.Volume -> {
-                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(
-                        marketItem.volume.value
-                    )
-                    val volumeFormatted = App.numberFormatter.formatFiat(
-                        shortenValue,
+                    val volumeFormatted = App.numberFormatter.formatFiatShort(
+                        marketItem.volume.value,
                         marketItem.volume.currency.symbol,
-                        0,
                         2
-                    ) + " $suffix"
+                    )
 
                     MarketDataValue.Volume(volumeFormatted)
                 }

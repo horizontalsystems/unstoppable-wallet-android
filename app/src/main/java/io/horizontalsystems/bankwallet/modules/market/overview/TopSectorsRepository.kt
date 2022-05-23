@@ -20,7 +20,7 @@ class TopSectorsRepository(
             if (forceRefresh || itemsCache == null) {
                 val coinCategoryData =
                     marketKit.coinCategoriesMarketDataSingle(baseCurrency.code).blockingGet()
-                val discoveryItems = getDiscoveryItems(coinCategoryData)
+                val discoveryItems = getDiscoveryItems(coinCategoryData, baseCurrency)
                 itemsCache = discoveryItems
                 itemsCache ?: emptyList()
             } else {
@@ -28,11 +28,11 @@ class TopSectorsRepository(
             }
         }
 
-    private fun getDiscoveryItems(marketData: List<CoinCategoryMarketData>): List<Category> {
+    private fun getDiscoveryItems(marketData: List<CoinCategoryMarketData>, baseCurrency: Currency): List<Category> {
         val items = marketKit.coinCategories().map { category ->
             Category(
                 category,
-                getCategoryMarketData(marketData, category.uid)
+                getCategoryMarketData(marketData, category.uid, baseCurrency)
             )
         }
 
@@ -43,12 +43,12 @@ class TopSectorsRepository(
 
     private fun getCategoryMarketData(
         marketData: List<CoinCategoryMarketData>,
-        categoryUid: String
+        categoryUid: String,
+        baseCurrency: Currency
     ): MarketSearchModule.CategoryMarketData? {
         marketData.firstOrNull { it.uid == categoryUid }?.let { coinCategoryMarketData ->
             val marketCap = coinCategoryMarketData.marketCap?.let { marketCap ->
-                val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap)
-                "$shortenValue$suffix"
+                App.numberFormatter.formatFiatShort(marketCap, baseCurrency.symbol, 2)
             }
 
             if (marketCap != null) {
