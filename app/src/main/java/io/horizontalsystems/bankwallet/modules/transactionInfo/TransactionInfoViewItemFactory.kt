@@ -280,7 +280,7 @@ class TransactionInfoViewItemFactory(
                 min(valueOutDecimals, valueInDecimals),
                 RoundingMode.HALF_EVEN
             ).abs()
-            val formattedPrice = numberFormatter.formatCoin(price, valueIn.coinCode, 0, 8)
+            val formattedPrice = numberFormatter.formatCoinFull(price, valueIn.coinCode, 8)
             val formattedFiatPrice = rates[valueIn.coinUid]?.let { rate ->
                 numberFormatter.formatFiat(price * rate.value, rate.currency.symbol, 0, 2).let {
                     " ($it)"
@@ -321,10 +321,9 @@ class TransactionInfoViewItemFactory(
         } ?: "---"
 
         val coinAmountFormatted = value.decimalValue?.let { decimalValue ->
-            numberFormatter.formatCoin(
+            numberFormatter.formatCoinFull(
                 decimalValue,
                 value.coinCode,
-                0,
                 8
             )
         } ?: ""
@@ -512,7 +511,7 @@ class TransactionInfoViewItemFactory(
                 decimalValue > BigDecimal.ZERO -> "+"
                 else -> ""
             }
-            val valueWithCoinCode = numberFormatter.formatCoin(decimalValue.abs(), value.coinCode, 0, 8)
+            val valueWithCoinCode = numberFormatter.formatCoinFull(decimalValue.abs(), value.coinCode, 8)
             if (amount is SwapTransactionRecord.Amount.Extremum && incoming != null) {
                 val suffix = if (incoming) getString(R.string.Swap_AmountMin) else getString(R.string.Swap_AmountMax)
                 "$sign$valueWithCoinCode $suffix"
@@ -576,7 +575,7 @@ class TransactionInfoViewItemFactory(
             }
         }
         val feeInCoin = transactionValue.decimalValue?.let { decimalValue ->
-            numberFormatter.formatCoin(decimalValue, transactionValue.coinCode, 0, 8)
+            numberFormatter.formatCoinFull(decimalValue, transactionValue.coinCode, 8)
         } ?: ""
 
         return feeInCoin + (if (feeInFiat != null) " | $feeInFiat" else "")

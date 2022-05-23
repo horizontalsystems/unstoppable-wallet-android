@@ -128,10 +128,9 @@ fun SendConfirmationScreen(
                             )
                         }
                         CellSingleLineLawrence(borderTop = true) {
-                            val coinAmount = App.numberFormatter.formatCoin(
+                            val coinAmount = App.numberFormatter.formatCoinFull(
                                 amount,
                                 coin.code,
-                                0,
                                 coinMaxAllowedDecimals
                             )
 

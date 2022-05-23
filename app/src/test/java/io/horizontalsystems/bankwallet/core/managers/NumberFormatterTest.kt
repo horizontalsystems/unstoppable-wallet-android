@@ -19,44 +19,6 @@ class NumberFormatterTest {
     }
 
     @Test
-    fun testFormatCoin() {
-        assertFormattedCoin(BigDecimal("0.000012345678"), 0, 4, "< 0.0001 BTC")
-
-        assertFormattedCoin(BigDecimal("0.0000012345678"), 0, 8, "0.00000123 BTC")
-        assertFormattedCoin(BigDecimal("0.000012345678"), 0, 8, "0.00001234 BTC")
-        assertFormattedCoin(BigDecimal("0.00012345678"), 0, 8, "0.00012345 BTC")
-        assertFormattedCoin(BigDecimal("0.0012345678"), 0, 8, "0.00123456 BTC")
-        assertFormattedCoin(BigDecimal("0.012345678"), 0, 8, "0.01234567 BTC")
-        assertFormattedCoin(BigDecimal("0.12345678"), 0, 8, "0.12345678 BTC")
-
-        assertFormattedCoin(BigDecimal("1.0000012345678"), 0, 8, "1.00000123 BTC")
-        assertFormattedCoin(BigDecimal("1.000012345678"), 0, 8, "1.00001234 BTC")
-        assertFormattedCoin(BigDecimal("1.00012345678"), 0, 8, "1.00012345 BTC")
-        assertFormattedCoin(BigDecimal("1.0012345678"), 0, 8, "1.00123456 BTC")
-        assertFormattedCoin(BigDecimal("1.012345678"), 0, 8, "1.01234567 BTC")
-        assertFormattedCoin(BigDecimal("1.12345678"), 0, 8, "1.12345678 BTC")
-
-        assertFormattedCoin(BigDecimal("123.0000012345678"), 0, 8, "123.00000123 BTC")
-        assertFormattedCoin(BigDecimal("123.000012345678"), 0, 8, "123.00001234 BTC")
-        assertFormattedCoin(BigDecimal("123.00012345678"), 0, 8, "123.00012345 BTC")
-        assertFormattedCoin(BigDecimal("123.0012345678"), 0, 8, "123.00123456 BTC")
-        assertFormattedCoin(BigDecimal("123.012345678"), 0, 8, "123.01234567 BTC")
-        assertFormattedCoin(BigDecimal("123.12345678"), 0, 8, "123.12345678 BTC")
-
-        assertFormattedCoin(BigDecimal("1234.0000012345678"), 0, 8, "1,234.00000123 BTC")
-        assertFormattedCoin(BigDecimal("1234.000012345678"), 0, 8, "1,234.00001234 BTC")
-        assertFormattedCoin(BigDecimal("1234.00012345678"), 0, 8, "1,234.00012345 BTC")
-        assertFormattedCoin(BigDecimal("1234.0012345678"), 0, 8, "1,234.00123456 BTC")
-        assertFormattedCoin(BigDecimal("1234.012345678"), 0, 8, "1,234.01234567 BTC")
-        assertFormattedCoin(BigDecimal("1234.12345678"), 0, 8, "1,234.12345678 BTC")
-    }
-
-    private fun assertFormattedCoin(value: BigDecimal, minimumFractionDigits: Int, maximumFractionDigits: Int, expected: String) {
-        val formatted = numberFormatter.formatCoin(value, "BTC", minimumFractionDigits, maximumFractionDigits)
-        assertEquals(expected, formatted)
-    }
-
-    @Test
     fun testShortenedForTxs() {
         assertShortenedForTxs("0", "0", BigDecimalShortened.Suffix.Blank)
         assertShortenedForTxs("0.00000000", "0", BigDecimalShortened.Suffix.Blank)
@@ -151,59 +113,6 @@ class NumberFormatterTest {
 
         assertEquals(expectedValue, actual.value.toPlainString())
         assertEquals(expectedSuffix, actual.suffix)
-    }
-
-    @Test
-    fun testFormatCoinSignificant() {
-        assertFormattedCoinSignificant(BigDecimal("0.0000000000001000"), "< 0.00000001 BTC")
-
-        assertFormattedCoinSignificant(BigDecimal("0.00000123"), "0.00000123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("0.00001234"), "0.00001234 BTC")
-        assertFormattedCoinSignificant(BigDecimal("0.00012345"), "0.00012345 BTC")
-        assertFormattedCoinSignificant(BigDecimal("0.00123456"), "0.00123456 BTC")
-        assertFormattedCoinSignificant(BigDecimal("0.01234567"), "0.01234567 BTC")
-        assertFormattedCoinSignificant(BigDecimal("0.12345678"), "0.12345678 BTC")
-
-        assertFormattedCoinSignificant(BigDecimal("1.00000123"), "1.00000123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("5.00000123"), "5.00000123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1.00001234"), "1.00001234 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1.00012345"), "1.0001 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1.00123456"), "1.0012 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1.01234567"), "1.0123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1.12345678"), "1.1234 BTC")
-
-        assertFormattedCoinSignificant(BigDecimal("12.00000123"), "12 BTC")
-        assertFormattedCoinSignificant(BigDecimal("12.00001234"), "12 BTC")
-        assertFormattedCoinSignificant(BigDecimal("12.00012345"), "12.0001 BTC")
-        assertFormattedCoinSignificant(BigDecimal("12.00123456"), "12.0012 BTC")
-        assertFormattedCoinSignificant(BigDecimal("12.01234567"), "12.0123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("12.12345678"), "12.1234 BTC")
-
-        assertFormattedCoinSignificant(BigDecimal("123.00000123"), "123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("123.00001234"), "123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("123.00012345"), "123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("123.00123456"), "123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("123.01234567"), "123.01 BTC")
-        assertFormattedCoinSignificant(BigDecimal("123.12345678"), "123.12 BTC")
-
-        assertFormattedCoinSignificant(BigDecimal("1234.00000123"), "1,234 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1234.00001234"), "1,234 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1234.00012345"), "1,234 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1234.00123456"), "1,234 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1234.01234567"), "1,234.01 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1234.12345678"), "1,234.12 BTC")
-
-        assertFormattedCoinSignificant(BigDecimal("0.00000123"), "0.00000123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1.00000123"), "1.00000123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("1.00012345"), "1.0001 BTC")
-
-        assertFormattedCoinSignificant(BigDecimal("-5.00000123"), "-5.00000123 BTC")
-    }
-
-    private fun assertFormattedCoinSignificant(value: BigDecimal, expected: String) {
-        val formatted = numberFormatter.formatCoin(value, "BTC", 0, numberFormatter.getSignificantDecimalCoin(value))
-
-        assertEquals(expected, formatted)
     }
 
     @Test

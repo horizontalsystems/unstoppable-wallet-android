@@ -43,7 +43,7 @@ class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel(
             item.market,
             item.marketImageUrl,
             "${item.baseCoinCode}/${item.targetCoinCode}",
-            App.numberFormatter.formatCoin(item.rate, item.targetCoinCode, 0, 8),
+            App.numberFormatter.formatCoinFull(item.rate, item.targetCoinCode, 8),
             getVolume(item)
         )
     }

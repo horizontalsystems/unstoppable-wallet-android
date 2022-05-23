@@ -109,7 +109,7 @@ private fun NftEvents(
                         name = event.eventType.title.getString(),
                         subtitle = event.date?.let { DateHelper.getFullDate(it) } ?: "",
                         iconUrl = event.asset.imageUrl ?: "",
-                        coinValue = event.amount?.coinValue?.getFormatted(),
+                        coinValue = event.amount?.coinValue?.getFormattedFull(),
                         currencyValue = event.amount?.currencyValue?.getFormatted()
                     ) {
                         val asset = event.asset

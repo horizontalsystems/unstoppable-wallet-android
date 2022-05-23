@@ -102,7 +102,7 @@ class AmountInputViewModel2(
                     App.numberFormatter.format(currencyAmount ?: BigDecimal.ZERO, fiatDecimal, fiatDecimal, prefix = tmpRate.currency.symbol)
                 }
                 AmountInputType.CURRENCY -> {
-                    App.numberFormatter.formatCoin(coinAmount ?: BigDecimal.ZERO, coinCode, 0, coinDecimal)
+                    App.numberFormatter.formatCoinFull(coinAmount ?: BigDecimal.ZERO, coinCode, coinDecimal)
                 }
             }
         }

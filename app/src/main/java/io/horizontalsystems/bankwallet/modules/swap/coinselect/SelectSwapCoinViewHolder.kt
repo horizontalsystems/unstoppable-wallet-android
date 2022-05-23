@@ -34,7 +34,7 @@ class SelectSwapCoinViewHolder(
             binding.coinSubtitle.text = platformCoin.code
 
             binding.coinBalance.text = balance?.let {
-                App.numberFormatter.formatCoin(it, platformCoin.code, 0, 8)
+                App.numberFormatter.formatCoinFull(it, platformCoin.code, 8)
             }
 
             binding.fiatBalance.text = fiatBalanceValue?.let {

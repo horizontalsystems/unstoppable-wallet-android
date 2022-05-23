@@ -342,12 +342,16 @@ interface IAppNumberFormatter {
         suffix: String = ""
     ): String
 
-    fun formatCoin(
-        value: Number,
+    fun formatCoinFull(
+        value: BigDecimal,
         code: String,
-        minimumFractionDigits: Int,
-        maximumFractionDigits: Int,
-        prefix: String = ""
+        coinDecimals: Int,
+    ): String
+
+    fun formatCoinShort(
+        value: BigDecimal,
+        code: String,
+        coinDecimals: Int
     ): String
 
     fun formatFiat(

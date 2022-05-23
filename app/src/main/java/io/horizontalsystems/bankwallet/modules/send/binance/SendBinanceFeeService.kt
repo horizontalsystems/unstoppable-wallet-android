@@ -44,7 +44,7 @@ class SendBinanceFeeService(
             if (fee > adapter.availableBinanceBalance) {
                 val feeCoinName = feeCoin.name
                 val feeCoinCode = feeCoin.code
-                val formattedFee = App.numberFormatter.formatCoin(fee, feeCoinCode, 0, 8)
+                val formattedFee = App.numberFormatter.formatCoinFull(fee, feeCoinCode,8)
 
                 HSCaution(
                     s = TranslatableString.ResString(R.string.Swap_ErrorInsufficientBalance),
