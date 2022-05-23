@@ -48,21 +48,13 @@ class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel(
         )
     }
 
-    private fun getVolume(item: MarketTickerItem): String {
-        val (shortenValue, suffix) = App.numberFormatter.shortenValue(item.volume)
-
-        return when (item.volumeType) {
-            is VolumeMenuType.Coin -> {
-                "$shortenValue $suffix ${item.baseCoinCode}"
-            }
-            is VolumeMenuType.Currency -> {
-                App.numberFormatter.formatFiat(
-                    shortenValue,
-                    service.currency.symbol,
-                    0,
-                    2
-                ) + " " + suffix
-            }
+    private fun getVolume(item: MarketTickerItem) = when (item.volumeType) {
+        is VolumeMenuType.Coin -> {
+            App.numberFormatter.formatCoinShort(item.volume, item.baseCoinCode, 8)
+        }
+        is VolumeMenuType.Currency -> {
+            val currency = service.currency
+            App.numberFormatter.formatFiatShort(item.volume, currency.symbol, currency.decimal)
         }
     }
 

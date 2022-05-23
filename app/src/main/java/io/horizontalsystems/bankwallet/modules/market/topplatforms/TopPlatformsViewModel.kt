@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogSta
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 class TopPlatformsViewModel(
     private val service: TopPlatformsService,
@@ -82,17 +81,16 @@ class TopPlatformsViewModel(
                     R.string.MarketTopPlatforms_Protocols,
                     item.protocols
                 ),
-                marketCap = formatShortened(item.marketCap, service.baseCurrency.symbol),
+                marketCap = App.numberFormatter.formatFiatShort(
+                    item.marketCap,
+                    service.baseCurrency.symbol,
+                    2
+                ),
                 marketCapDiff = item.changeDiff,
                 rank = item.rank.toString(),
                 rankDiff = item.rankDiff,
             )
         }
-    }
-
-    private fun formatShortened(value: BigDecimal, symbol: String): String {
-        val (shortenValue, suffix) = App.numberFormatter.shortenValue(value)
-        return App.numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + " $suffix"
     }
 
     private fun refreshWithMinLoadingSpinnerPeriod() {

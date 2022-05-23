@@ -247,8 +247,7 @@ class MarketOverviewViewModel(
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
-        val (shortenValue, suffix) = App.numberFormatter.shortenValue(value)
-        return App.numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + " $suffix"
+        return App.numberFormatter.formatFiatShort(value, symbol, 2)
     }
 
     private fun getSectionTitle(type: ListType): Int {

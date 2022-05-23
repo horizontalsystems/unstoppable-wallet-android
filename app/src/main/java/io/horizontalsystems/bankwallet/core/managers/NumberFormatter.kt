@@ -11,7 +11,6 @@ import java.math.BigInteger
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
-import kotlin.math.floor
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -99,6 +98,33 @@ class NumberFormatter(
         return "$res $code"
     }
 
+    override fun formatNumberShort(value: BigDecimal, maximumFractionDigits: Int): String {
+        val rounded = numberRounding.getRoundedShort(value, maximumFractionDigits)
+        val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE)
+
+        return when (rounded) {
+            is BigDecimalRounded.Large -> {
+                val suffixResId = when (rounded.suffix) {
+                    NumberSuffix.Blank -> null
+                    NumberSuffix.Thousand -> R.string.CoinPage_MarketCap_Thousand
+                    NumberSuffix.Million -> R.string.CoinPage_MarketCap_Million
+                    NumberSuffix.Billion -> R.string.CoinPage_MarketCap_Billion
+                    NumberSuffix.Trillion -> R.string.CoinPage_MarketCap_Trillion
+                }
+
+                formattedNumber + suffixResId?.let {
+                    " " + Translator.getString(it)
+                }
+            }
+            is BigDecimalRounded.LessThen -> {
+                "<$formattedNumber"
+            }
+            is BigDecimalRounded.Regular -> {
+                formattedNumber
+            }
+        }
+    }
+
     override fun getShortenedForTxs(value: BigDecimal): BigDecimalShortened {
         val integralPart = value.setScale(0, RoundingMode.HALF_UP)
         return when {
@@ -167,6 +193,38 @@ class NumberFormatter(
         return format(value, finalMinimumFractionDigits, finalMaximimFractionDigits, prefix = symbol)
     }
 
+    override fun formatFiatShort(
+        value: BigDecimal,
+        symbol: String,
+        currencyDecimals: Int
+    ): String {
+        val rounded = numberRounding.getRoundedCurrencyShort(value, currencyDecimals)
+
+        val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE, prefix = symbol)
+
+        return when (rounded) {
+            is BigDecimalRounded.Large -> {
+                val suffixResId = when (rounded.suffix) {
+                    NumberSuffix.Blank -> null
+                    NumberSuffix.Thousand -> R.string.CoinPage_MarketCap_Thousand
+                    NumberSuffix.Million -> R.string.CoinPage_MarketCap_Million
+                    NumberSuffix.Billion -> R.string.CoinPage_MarketCap_Billion
+                    NumberSuffix.Trillion -> R.string.CoinPage_MarketCap_Trillion
+                }
+
+                formattedNumber + suffixResId?.let {
+                    " " + Translator.getString(it)
+                }
+            }
+            is BigDecimalRounded.LessThen -> {
+                "<$formattedNumber"
+            }
+            is BigDecimalRounded.Regular -> {
+                formattedNumber
+            }
+        }
+    }
+
     override fun getSignificantDecimalFiat(value: BigDecimal): Int {
         if (value == BigDecimal.ZERO || value >= BigDecimal(1)) {
             return 2
@@ -209,60 +267,15 @@ class NumberFormatter(
         return formatters[formatterId] ?: throw Exception("No formatter")
     }
 
-    override fun shortenValue(number: BigDecimal): Pair<BigDecimal, String> {
-        if (number <= BigDecimal("100")) {
-            val roundedNumber = if (number < BigDecimal.TEN) {
-                number.setScale(2, RoundingMode.HALF_EVEN)
-            } else {
-                number.setScale(1, RoundingMode.HALF_EVEN)
-            }
-
-            return Pair(roundedNumber, "")
-        }
-
-        val suffix = arrayOf(
-                " ",
-                Translator.getString(R.string.CoinPage_MarketCap_Thousand),
-                Translator.getString(R.string.CoinPage_MarketCap_Million),
-                Translator.getString(R.string.CoinPage_MarketCap_Billion),
-                Translator.getString(R.string.CoinPage_MarketCap_Trillion))
-
-        val valueLong = number.toLong()
-        val value = floor(log10(valueLong.toDouble())).toInt()
-        val base = value / 3
-
-        var returnSuffix = ""
-        var valueDecimal = valueLong.toBigDecimal()
-        if (value >= 3 && base < suffix.size) {
-            valueDecimal = (valueLong / Math.pow(10.0, (base * 3).toDouble())).toBigDecimal()
-            returnSuffix = suffix[base]
-        }
-
-        return Pair(valueDecimal.setScale(1, RoundingMode.HALF_EVEN), returnSuffix)
-    }
-
     override fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String {
-        val (shortenValue, suffix) = shortenValue(currencyValue.value)
-        return formatFiat(shortenValue, currencyValue.currency.symbol, 0, 2) + " $suffix"
-    }
-
-   override fun formatCoinValueAsShortened(number: BigDecimal, code: String): String {
-        val (shortValue, suffix) = shortenValue(number)
-        return format(shortValue, 0, 2) + " $suffix $code"
+        return formatFiatShort(currencyValue.value, currencyValue.currency.symbol, 2)
     }
 
     override fun formatValueAsDiff(value: Value): String =
         when (value) {
             is Value.Currency -> {
                 val currencyValue = value.currencyValue
-                val (shortValue, suffix) = shortenValue(currencyValue.value.abs())
-                format(
-                    shortValue.abs(),
-                    0,
-                    2,
-                    "${sign(currencyValue.value)}${currencyValue.currency.symbol}",
-                    " $suffix"
-                )
+                formatFiatShort(currencyValue.value, currencyValue.currency.symbol, currencyValue.currency.decimal)
             }
             is Value.Percent -> {
                 format(value.percent.abs(), 0, 2, sign(value.percent), "%")

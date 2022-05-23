@@ -80,8 +80,7 @@ class MarketSearchService(
     private fun getCategoryMarketData(categoryUid: String): MarketSearchModule.CategoryMarketData? {
         marketData.firstOrNull { it.uid == categoryUid }?.let { coinCategoryMarketData ->
             val marketCap = coinCategoryMarketData.marketCap?.let { marketCap ->
-                val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap)
-                "$shortenValue$suffix"
+                App.numberFormatter.formatFiatShort(marketCap, baseCurrency.symbol, 2)
             }
 
             val diff = when (selectedPeriod) {

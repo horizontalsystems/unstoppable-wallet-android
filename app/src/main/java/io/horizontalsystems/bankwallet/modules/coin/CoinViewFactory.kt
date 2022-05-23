@@ -321,13 +321,7 @@ class CoinViewFactory(
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
-        val shortCapValue = numberFormatter.shortenValue(value)
-        return numberFormatter.formatFiat(
-            shortCapValue.first,
-            symbol,
-            0,
-            2
-        ) + " " + shortCapValue.second
+        return numberFormatter.formatFiatShort(value, symbol, 2)
     }
 
 }
