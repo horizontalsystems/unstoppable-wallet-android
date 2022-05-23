@@ -48,7 +48,7 @@ object SendModule {
                 coinValue.getFormattedFull()
             }
             is CurrencyValueInfo -> {
-                App.numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 2)
+                App.numberFormatter.formatFiatFull(currencyValue.value, currencyValue.currency.symbol)
             }
         }
 
@@ -57,7 +57,7 @@ object SendModule {
                 App.numberFormatter.format(value, 0, 8)
             }
             is CurrencyValueInfo -> {
-                App.numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 2)
+                App.numberFormatter.formatFiatFull(currencyValue.value, currencyValue.currency.symbol)
             }
         }
 

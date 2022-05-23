@@ -361,11 +361,9 @@ interface IAppNumberFormatter {
         maximumFractionDigits: Int
     ): String
 
-    fun formatFiat(
-        value: Number,
-        symbol: String,
-        minimumFractionDigits: Int,
-        maximumFractionDigits: Int
+    fun formatFiatFull(
+        value: BigDecimal,
+        symbol: String
     ): String
 
     fun formatFiatShort(
@@ -374,8 +372,6 @@ interface IAppNumberFormatter {
         currencyDecimals: Int
     ): String
 
-    fun getSignificantDecimalFiat(value: BigDecimal): Int
-    fun getSignificantDecimalCoin(value: BigDecimal): Int
     fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String
     fun formatValueAsDiff(value: Value): String
     fun getShortenedForTxs(value: BigDecimal): BigDecimalShortened

@@ -551,7 +551,7 @@ class TransactionViewItemFactory(
     }
 
     private fun getCurrencyString(currencyValue: CurrencyValue): String {
-        return App.numberFormatter.formatFiat(currencyValue.value.abs(), currencyValue.currency.symbol, 0, 2)
+        return App.numberFormatter.formatFiatFull(currencyValue.value.abs(), currencyValue.currency.symbol)
     }
 
     private fun getCoinString(transactionValue: TransactionValue, hideSign: Boolean = false): String {

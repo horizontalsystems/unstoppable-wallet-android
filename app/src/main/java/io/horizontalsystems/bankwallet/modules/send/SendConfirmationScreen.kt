@@ -136,10 +136,7 @@ fun SendConfirmationScreen(
 
                             val currencyAmount = rate?.let { rate ->
                                 rate.copy(value = amount.times(rate.value))
-                                    .getFormatted(
-                                        fiatMaxAllowedDecimals,
-                                        fiatMaxAllowedDecimals
-                                    )
+                                    .getFormattedFull()
                             }
 
                             ConfirmAmountCell(currencyAmount, coinAmount, lockTimeInterval != null)

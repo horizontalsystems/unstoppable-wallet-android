@@ -282,7 +282,7 @@ class TransactionInfoViewItemFactory(
             ).abs()
             val formattedPrice = numberFormatter.formatCoinFull(price, valueIn.coinCode, 8)
             val formattedFiatPrice = rates[valueIn.coinUid]?.let { rate ->
-                numberFormatter.formatFiat(price * rate.value, rate.currency.symbol, 0, 2).let {
+                numberFormatter.formatFiatFull(price * rate.value, rate.currency.symbol).let {
                     " ($it)"
                 }
             } ?: ""
@@ -311,11 +311,9 @@ class TransactionInfoViewItemFactory(
     private fun getApproveSectionItems(value: TransactionValue, coinPrice: CurrencyValue?, spenderAddress: String): List<TransactionInfoViewItem> {
         val fiatAmountFormatted = coinPrice?.let {
             value.decimalValue?.let { decimalValue ->
-                numberFormatter.formatFiat(
+                numberFormatter.formatFiatFull(
                     (it.value * decimalValue).abs(),
-                    it.currency.symbol,
-                    0,
-                    2
+                    it.currency.symbol
                 )
             }
         } ?: "---"
@@ -495,11 +493,9 @@ class TransactionInfoViewItemFactory(
     ): TransactionInfoViewItem {
         val valueInFiat = rate?.let {
             value.decimalValue?.let { decimalValue ->
-                numberFormatter.formatFiat(
+                numberFormatter.formatFiatFull(
                     (it.value * decimalValue).abs(),
-                    it.currency.symbol,
-                    0,
-                    2
+                    it.currency.symbol
                 )
             }
         } ?: "---"
@@ -531,7 +527,7 @@ class TransactionInfoViewItemFactory(
         val rateValue = if (rate == null) {
             "---"
         } else {
-            val rateFormatted = numberFormatter.formatFiat(rate.value, rate.currency.symbol, 2, 4)
+            val rateFormatted = numberFormatter.formatFiatFull(rate.value, rate.currency.symbol)
             translator.getString(
                 R.string.Balance_RatePerCoin,
                 rateFormatted,
@@ -566,11 +562,9 @@ class TransactionInfoViewItemFactory(
     private fun getFeeAmountString(rate: CurrencyValue?, transactionValue: TransactionValue): String {
         val feeInFiat = rate?.let {
             transactionValue.decimalValue?.let { decimalValue ->
-                numberFormatter.formatFiat(
+                numberFormatter.formatFiatFull(
                     it.value * decimalValue,
-                    it.currency.symbol,
-                    2,
-                    4
+                    it.currency.symbol
                 )
             }
         }

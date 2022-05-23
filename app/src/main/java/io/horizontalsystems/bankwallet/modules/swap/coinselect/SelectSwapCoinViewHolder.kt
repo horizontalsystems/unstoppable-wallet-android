@@ -38,11 +38,9 @@ class SelectSwapCoinViewHolder(
             }
 
             binding.fiatBalance.text = fiatBalanceValue?.let {
-                App.numberFormatter.formatFiat(
+                App.numberFormatter.formatFiatFull(
                     fiatBalanceValue.value,
-                    fiatBalanceValue.currency.symbol,
-                    0,
-                    2
+                    fiatBalanceValue.currency.symbol
                 )
             }
         }

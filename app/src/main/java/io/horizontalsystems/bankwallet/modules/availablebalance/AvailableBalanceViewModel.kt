@@ -37,7 +37,7 @@ class AvailableBalanceViewModel(
                     ?.let {
                         it.copy(value = tmpAvailableBalance.times(it.value))
                     }
-                    ?.getFormatted(fiatDecimal, fiatDecimal)
+                    ?.getFormattedFull()
             }
             else -> null
         }
