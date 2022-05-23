@@ -143,8 +143,15 @@ fun ListErrorView(
     ScreenMessageWithAction(
         text = errorText,
         icon = R.drawable.ic_sync_error,
-        action = Pair(stringResource(id = R.string.Button_Retry), onClick)
-    )
+    ) {
+        ButtonPrimaryYellow(
+            modifier = Modifier
+                .padding(horizontal = 48.dp)
+                .fillMaxWidth(),
+            title = stringResource(R.string.Button_Retry),
+            onClick = onClick
+        )
+    }
 }
 
 @Composable
@@ -152,17 +159,17 @@ fun ListEmptyView(
     text: String,
     @DrawableRes icon: Int
 ) {
-    ScreenMessageWithAction(text = text, icon = icon, action = null)
+    ScreenMessageWithAction(text = text, icon = icon)
 }
 
 @Composable
 fun ScreenMessageWithAction(
     text: String,
     @DrawableRes icon: Int,
-    action: Pair<String, (() -> Unit)>?
+    actionsComposable: (@Composable () -> Unit)? = null
 ) {
     Column {
-        Row(Modifier.weight(22f)) {}
+        Spacer(Modifier.weight(22f))
 
         Row(modifier = Modifier.weight(78f), verticalAlignment = Alignment.Top) {
             Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -189,17 +196,8 @@ fun ScreenMessageWithAction(
                     color = ComposeAppTheme.colors.grey,
                     style = ComposeAppTheme.typography.subhead2
                 )
-                action?.let { (name, onClick) ->
-                    Spacer(Modifier.height(32.dp))
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(horizontal = 48.dp)
-                            .fillMaxWidth()
-                            .height(50.dp),
-                        title = name,
-                        onClick = onClick
-                    )
-                }
+                Spacer(Modifier.height(32.dp))
+                actionsComposable?.let { it() }
             }
         }
     }

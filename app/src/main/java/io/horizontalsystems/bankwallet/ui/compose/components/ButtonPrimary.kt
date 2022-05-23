@@ -2,11 +2,13 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +38,51 @@ fun ButtonPrimaryDefault(
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
     )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ButtonPrimaryTransparent(
+    modifier: Modifier = Modifier,
+    title: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val contentColor = when {
+        !enabled -> ComposeAppTheme.colors.steel20
+        isPressed -> ComposeAppTheme.colors.grey
+        else -> ComposeAppTheme.colors.leah
+    }
+
+    Surface(
+        modifier = modifier,
+        color = ComposeAppTheme.colors.transparent,
+        contentColor = contentColor,
+        onClick = onClick,
+        enabled = enabled,
+        role = Role.Button,
+        interactionSource = interactionSource,
+        indication = null
+    ) {
+        ProvideTextStyle(
+            value = ComposeAppTheme.typography.headline2
+        ) {
+            Row(
+                Modifier
+                    .defaultMinSize(
+                        minWidth = ButtonDefaults.MinWidth,
+                        minHeight = ButtonDefaults.MinHeight
+                    )
+                    .padding(ButtonDefaults.ContentPadding),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+            )
+        }
+    }
 }
 
 @Composable
