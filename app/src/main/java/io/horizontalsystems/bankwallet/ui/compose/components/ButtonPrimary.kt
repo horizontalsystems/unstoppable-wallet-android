@@ -29,7 +29,7 @@ fun ButtonPrimaryDefault(
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = ButtonDefaults.textButtonColors(
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.leah,
             contentColor = ComposeAppTheme.colors.claude,
             disabledBackgroundColor = ComposeAppTheme.colors.leah,
@@ -73,10 +73,10 @@ fun ButtonPrimaryTransparent(
             Row(
                 Modifier
                     .defaultMinSize(
-                        minWidth = ButtonDefaults.MinWidth,
-                        minHeight = ButtonDefaults.MinHeight
+                        minWidth = ButtonPrimaryDefaults.MinWidth,
+                        minHeight = ButtonPrimaryDefaults.MinHeight
                     )
-                    .padding(ButtonDefaults.ContentPadding),
+                    .padding(ButtonPrimaryDefaults.ContentPadding),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
                 content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) }
@@ -95,7 +95,7 @@ fun ButtonPrimaryYellow(
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = ButtonDefaults.textButtonColors(
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
             contentColor = ComposeAppTheme.colors.dark,
             disabledBackgroundColor = ComposeAppTheme.colors.yellowD,
@@ -122,7 +122,7 @@ fun ButtonPrimaryRed(
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = ButtonDefaults.textButtonColors(
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.redD,
             contentColor = ComposeAppTheme.colors.claude,
             disabledBackgroundColor = ComposeAppTheme.colors.redD,
@@ -145,7 +145,7 @@ fun ButtonPrimaryYellowWithSpinner(
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        buttonColors = ButtonDefaults.textButtonColors(
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
             contentColor = ComposeAppTheme.colors.dark,
             disabledBackgroundColor = ComposeAppTheme.colors.yellowD,
@@ -175,7 +175,7 @@ fun ButtonPrimary(
     enabled: Boolean = true,
     shape: Shape = RoundedCornerShape(25.dp),
     border: BorderStroke? = null,
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    contentPadding: PaddingValues = ButtonPrimaryDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
 ) {
 
@@ -197,8 +197,8 @@ fun ButtonPrimary(
             Row(
                 Modifier
                     .defaultMinSize(
-                        minWidth = ButtonDefaults.MinWidth,
-                        minHeight = ButtonDefaults.MinHeight
+                        minWidth = ButtonPrimaryDefaults.MinWidth,
+                        minHeight = ButtonPrimaryDefaults.MinHeight
                     )
                     .padding(contentPadding),
                 horizontalArrangement = Arrangement.Center,
@@ -209,7 +209,7 @@ fun ButtonPrimary(
     }
 }
 
-object ButtonDefaults {
+object ButtonPrimaryDefaults {
     private val ButtonHorizontalPadding = 16.dp
 
     val ContentPadding = PaddingValues(
