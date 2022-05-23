@@ -12,8 +12,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.getEnum
-import io.horizontalsystems.bankwallet.core.putEnum
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -26,7 +24,8 @@ class ProChartFragment : BaseComposableBottomSheetFragment() {
     }
 
     private val chartType by lazy {
-        requireArguments().getEnum(chartTypeKey, ProChartModule.ChartType.DexVolume)
+        val enumOrdinal = requireArguments().getInt(chartTypeKey, 0)
+        enumValues<ProChartModule.ChartType>()[enumOrdinal]
     }
 
     private val title by lazy {
@@ -79,9 +78,8 @@ class ProChartFragment : BaseComposableBottomSheetFragment() {
 
         fun show(fragmentManager: FragmentManager, coinUid: String, chartType: ProChartModule.ChartType, title: String, description: String) {
             val fragment = ProChartFragment()
-            fragment.arguments = bundleOf(coinUidKey to coinUid, titleKey to title, descriptionKey to description)
-            fragment.arguments?.putEnum(chartTypeKey, chartType)
-            fragment.show(fragmentManager, "metric_chart_dialog")
+            fragment.arguments = bundleOf(coinUidKey to coinUid, titleKey to title, descriptionKey to description, chartTypeKey to chartType.ordinal)
+            fragment.show(fragmentManager, "pro_chart_dialog")
         }
     }
 }
