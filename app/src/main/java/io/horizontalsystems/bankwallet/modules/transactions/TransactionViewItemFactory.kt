@@ -528,16 +528,6 @@ class TransactionViewItemFactory(
                 val outTransactionValue = outgoingValues.first()
                 primaryValue = ColoredValueNew(getCoinString(inTransactionValue), ColorName.Remus)
                 secondaryValue = ColoredValueNew(getCoinString(outTransactionValue), ColorName.Lucian)
-                icon = TransactionViewItem.Icon.Swap(
-                    iconIn = TransactionViewItem.Icon.Regular(
-                        url = inTransactionValue.coinIconUrl,
-                        placeholder = inTransactionValue.coinIconPlaceholder
-                    ),
-                    iconOut = TransactionViewItem.Icon.Regular(
-                        url = outTransactionValue.coinIconUrl,
-                        placeholder = outTransactionValue.coinIconPlaceholder
-                    ),
-                )
             }
 
             // outgoing multiple
