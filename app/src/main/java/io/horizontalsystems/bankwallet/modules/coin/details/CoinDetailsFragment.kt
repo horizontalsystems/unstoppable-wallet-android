@@ -10,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,10 +49,7 @@ import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakA
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MiniChartCard
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.CustomSnackbar
@@ -244,7 +240,7 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            IconButton(onClick = {
+            HsIconButton(onClick = {
                 findNavController().slideFromBottom(R.id.tokenTvlInfoFragment)
             }) {
                 Icon(
@@ -305,7 +301,7 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            IconButton(onClick = {
+            HsIconButton(onClick = {
                 findNavController().slideFromBottom(R.id.securityParamsInfoFragment)
             }) {
                 Icon(
@@ -351,7 +347,7 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            IconButton(onClick = {
+            HsIconButton(onClick = {
                 findNavController().slideFromBottom(R.id.tokenLiquidityInfoFragment)
             }) {
                 Icon(
@@ -410,7 +406,7 @@ class CoinDetailsFragment : BaseFragment() {
                 color = ComposeAppTheme.colors.oz,
             )
             Spacer(Modifier.weight(1f))
-            IconButton(onClick = {
+            HsIconButton(onClick = {
                 findNavController().slideFromBottom(R.id.tokenDistributionInfoFragment)
             }) {
                 Icon(

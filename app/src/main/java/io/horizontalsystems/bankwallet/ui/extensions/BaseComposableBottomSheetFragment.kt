@@ -25,6 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.views.helpers.LayoutHelper
 
 open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
@@ -100,7 +101,7 @@ fun BottomSheetHeader(
                     )
                 }
             }
-            IconButton(onClick = onCloseClick) {
+            HsIconButton(onClick = onCloseClick) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_close),
                     tint = ComposeAppTheme.colors.grey,

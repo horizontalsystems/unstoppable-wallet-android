@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
@@ -101,7 +102,7 @@ private fun ProUsersInfoScreen(navController: NavController, features: List<Stri
                     color = ComposeAppTheme.colors.grey,
                 )
                 //IconButton has own padding, that's pushes 16.dp from end
-                IconButton(
+                HsIconButton(
                     onClick = {}
                 ) {
                     Icon(

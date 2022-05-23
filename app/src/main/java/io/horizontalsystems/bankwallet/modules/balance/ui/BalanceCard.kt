@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -62,7 +61,7 @@ fun BalanceCardSwipable(
     ) {
         ActionsRow(
             content = {
-                IconButton(
+                HsIconButton(
                     modifier = Modifier
                         .fillMaxHeight()
                         .width(88.dp),

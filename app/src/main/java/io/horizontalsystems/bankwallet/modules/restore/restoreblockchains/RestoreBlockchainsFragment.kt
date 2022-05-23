@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,10 +30,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSetti
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
-import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.core.findNavController
@@ -149,7 +145,7 @@ private fun ManageWalletsScreen(
         AppBar(
             title = TranslatableString.ResString(R.string.Restore_Title),
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                HsIconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_back),
                         contentDescription = "back",
@@ -211,7 +207,7 @@ private fun ManageWalletsScreen(
                             if (viewItem.state is CoinViewItemState.ToggleVisible) {
                                 Spacer(Modifier.width(12.dp))
                                 if (viewItem.state.hasSettings) {
-                                    IconButton(
+                                    HsIconButton(
                                         onClick = { viewModel.onClickSettings(viewItem.uid) }
                                     ) {
                                         Icon(

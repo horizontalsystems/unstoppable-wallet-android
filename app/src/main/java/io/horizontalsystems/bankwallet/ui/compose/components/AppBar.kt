@@ -5,7 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,9 +33,9 @@ fun AppBarMenuButton(
     enabled: Boolean = true,
     tint: Color = ComposeAppTheme.colors.jacob,
 ) {
-    IconButton(
-        onClick = { onClick() },
-        enabled = enabled
+    HsIconButton(
+        onClick = onClick,
+        enabled = enabled,
     ) {
         Icon(
             painter = painterResource(id = icon),
@@ -69,7 +72,7 @@ fun AppBar(
             }
         },
         actions = {
-            if (showSpinner){
+            if (showSpinner) {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(start = 24.dp, end = 16.dp)
