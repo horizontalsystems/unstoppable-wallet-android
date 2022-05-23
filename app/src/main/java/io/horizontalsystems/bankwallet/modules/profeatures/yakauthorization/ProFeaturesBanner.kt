@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -25,13 +27,14 @@ fun ProFeaturesBanner(
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 12.dp)
-            .fillMaxWidth()
-            .clickable {
-                onClick.invoke()
-            }
     ) {
         Image(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .clickable {
+                    onClick.invoke()
+                },
             painter = painterResource(R.drawable.ic_pro_nft_banner),
             contentDescription = null,
             contentScale = ContentScale.Crop

@@ -273,8 +273,8 @@ fun HsSettingCell(
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .clickable(onClick = { onClick.invoke() }),
+            .clickable(onClick = { onClick.invoke() })
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
