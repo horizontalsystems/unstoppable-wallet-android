@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.entities
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
@@ -25,24 +23,9 @@ data class CoinValue(val platformCoin: PlatformCoin, val value: BigDecimal) {
         return result
     }
 
-    fun getFormatted(maximumFractionDigits: Int = 8): String {
-        return App.numberFormatter.formatCoin(value, coin.code, 0, maximumFractionDigits)
+    fun getFormattedFull(): String {
+        return App.numberFormatter.formatCoinFull(value, coin.code, 8)
     }
-
-    @Composable
-    fun getShortenedFormatted(): String {
-        val roundedForTxs = App.numberFormatter.getShortenedForTxs(value)
-        val suffix = roundedForTxs.suffix.titleResId?.let {
-            stringResource(it)
-        } ?: ""
-        return App.numberFormatter.format(
-            value = roundedForTxs.value,
-            minimumFractionDigits = 0,
-            maximumFractionDigits = roundedForTxs.value.scale(),
-            suffix = "$suffix ${coin.code}",
-        )
-    }
-
 }
 
 fun BigDecimal.isMaxValue(decimals: Int): Boolean {

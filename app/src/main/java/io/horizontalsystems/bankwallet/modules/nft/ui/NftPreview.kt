@@ -91,7 +91,7 @@ fun NftAssetPreview(
         ) {
             Text(
                 modifier = Modifier.padding(end = 4.dp),
-                text = coinPrice?.getFormatted(4) ?: "---",
+                text = coinPrice?.getFormattedFull() ?: "---",
                 style = ComposeAppTheme.typography.captionSB,
                 color = ComposeAppTheme.colors.leah
             )

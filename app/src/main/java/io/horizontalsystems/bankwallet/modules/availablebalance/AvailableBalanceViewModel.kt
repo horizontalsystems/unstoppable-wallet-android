@@ -30,7 +30,7 @@ class AvailableBalanceViewModel(
         formatted = when {
             tmpAvailableBalance == null || tmpAmountInputMode == null -> null
             tmpAmountInputMode == AmountInputType.COIN -> {
-                App.numberFormatter.formatCoin(tmpAvailableBalance, coinCode, 0, coinDecimal)
+                App.numberFormatter.formatCoinFull(tmpAvailableBalance, coinCode, coinDecimal)
             }
             tmpAmountInputMode == AmountInputType.CURRENCY -> {
                 xRate

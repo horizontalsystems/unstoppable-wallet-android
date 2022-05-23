@@ -20,6 +20,7 @@ class NumberFormatter(
         ) : IAppNumberFormatter {
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
+    private val numberRounding = NumberRounding()
 
     override fun format(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int, prefix: String, suffix: String): String {
         val bigDecimalValue = when (value) {
@@ -40,8 +41,62 @@ class NumberFormatter(
         }
     }
 
-    override fun formatCoin(value: Number, code: String, minimumFractionDigits: Int, maximumFractionDigits: Int, prefix: String): String {
-        return format(value, minimumFractionDigits, maximumFractionDigits, prefix = prefix, suffix = " $code")
+    override fun formatCoinFull(value: BigDecimal, code: String, coinDecimals: Int): String {
+        val rounded = numberRounding.getRoundedCoinFull(value, coinDecimals)
+
+        val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE)
+        val res = when (rounded) {
+            is BigDecimalRounded.Large -> {
+                val suffixResId = when (rounded.suffix) {
+                    NumberSuffix.Blank -> null
+                    NumberSuffix.Thousand -> R.string.CoinPage_MarketCap_Thousand
+                    NumberSuffix.Million -> R.string.CoinPage_MarketCap_Million
+                    NumberSuffix.Billion -> R.string.CoinPage_MarketCap_Billion
+                    NumberSuffix.Trillion -> R.string.CoinPage_MarketCap_Trillion
+                }
+
+                formattedNumber + suffixResId?.let {
+                    " " + Translator.getString(it)
+                }
+            }
+            is BigDecimalRounded.LessThen -> {
+                "<$formattedNumber"
+            }
+            is BigDecimalRounded.Regular -> {
+                formattedNumber
+            }
+        }
+
+        return "$res $code"
+    }
+
+    override fun formatCoinShort(value: BigDecimal, code: String, coinDecimals: Int): String {
+        val rounded = numberRounding.getRoundedCoinShort(value, coinDecimals)
+
+        val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE)
+        val res = when (rounded) {
+            is BigDecimalRounded.Large -> {
+                val suffixResId = when (rounded.suffix) {
+                    NumberSuffix.Blank -> null
+                    NumberSuffix.Thousand -> R.string.CoinPage_MarketCap_Thousand
+                    NumberSuffix.Million -> R.string.CoinPage_MarketCap_Million
+                    NumberSuffix.Billion -> R.string.CoinPage_MarketCap_Billion
+                    NumberSuffix.Trillion -> R.string.CoinPage_MarketCap_Trillion
+                }
+
+                formattedNumber + suffixResId?.let {
+                    " " + Translator.getString(it)
+                }
+            }
+            is BigDecimalRounded.LessThen -> {
+                "<$formattedNumber"
+            }
+            is BigDecimalRounded.Regular -> {
+                formattedNumber
+            }
+        }
+
+        return "$res $code"
     }
 
     override fun getShortenedForTxs(value: BigDecimal): BigDecimalShortened {

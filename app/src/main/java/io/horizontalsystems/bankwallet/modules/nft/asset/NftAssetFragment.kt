@@ -662,7 +662,7 @@ private fun NftAssetPriceCell(
         Column {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = price?.coinValue?.getFormatted(4) ?: "---",
+                text = price?.coinValue?.getFormattedFull() ?: "---",
                 color = ComposeAppTheme.colors.jacob,
                 style = ComposeAppTheme.typography.body,
                 textAlign = TextAlign.End,

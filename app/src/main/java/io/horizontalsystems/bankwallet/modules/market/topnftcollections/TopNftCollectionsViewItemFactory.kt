@@ -30,9 +30,9 @@ class TopNftCollectionsViewItemFactory(
                 volumeDiff = collection.thirtyDayVolumeDiff
             }
         }
-        val volumeFormatted = numberFormatter.formatCoin(volume, "ETH", 0, 2)
+        val volumeFormatted = numberFormatter.formatCoinShort(volume, "ETH", 2)
         val floorPriceFormatted = collection.floorPrice?.let {
-            numberFormatter.format(it, 0, 2, prefix = "Floor: ", suffix = " ETH")
+            "Floor: " + numberFormatter.formatCoinShort(it, "ETH", 2)
         }
 
         return TopNftCollectionViewItem(

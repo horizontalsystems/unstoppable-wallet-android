@@ -83,7 +83,7 @@ class CautionViewItemFactory(
                     Translator.getString(R.string.EthereumTransaction_Error_Title),
                     Translator.getString(
                         R.string.EthereumTransaction_Error_InsufficientBalance,
-                        baseCoinService.coinValue(convertedError.requiredBalance).getFormatted()
+                        baseCoinService.coinValue(convertedError.requiredBalance).getFormattedFull()
                     )
                 )
             }

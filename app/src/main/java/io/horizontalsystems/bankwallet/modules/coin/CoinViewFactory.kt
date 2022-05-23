@@ -206,19 +206,17 @@ class CoinViewFactory(
         }
 
         overview.totalSupply?.let {
-            val totalSupplyString = numberFormatter.formatCoin(it,
+            val totalSupplyString = numberFormatter.formatCoinShort(it,
                 item.coinCode,
-                0,
-                numberFormatter.getSignificantDecimalCoin(it))
+                8)
             items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TotalSupply),
                 totalSupplyString))
         }
 
         overview.circulatingSupply?.let {
-            val supplyString = numberFormatter.formatCoin(it,
+            val supplyString = numberFormatter.formatCoinShort(it,
                 item.coinCode,
-                0,
-                numberFormatter.getSignificantDecimalCoin(it))
+                8)
             items.add(CoinDataItem(Translator.getString(R.string.CoinPage_inCirculation),
                 supplyString))
         }

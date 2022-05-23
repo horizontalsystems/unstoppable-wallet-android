@@ -610,7 +610,7 @@ class SendEvmTransactionViewModel(
                 Translator.getString(
                     R.string.EthereumTransaction_Error_InsufficientBalance,
                     coinServiceFactory.baseCoinService.coinValue(convertedError.requiredBalance)
-                        .getFormatted()
+                        .getFormattedFull()
                 )
             }
             is EvmError.InsufficientBalanceWithFee,

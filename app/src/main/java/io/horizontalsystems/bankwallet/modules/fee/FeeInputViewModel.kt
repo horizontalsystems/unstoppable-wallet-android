@@ -28,7 +28,7 @@ class FeeInputViewModel(
 
         if (tmpFee != null) {
             val values = mutableListOf(
-                App.numberFormatter.formatCoin(tmpFee, coinCode, 0, coinDecimal)
+                App.numberFormatter.formatCoinFull(tmpFee, coinCode, coinDecimal)
             )
 
             rate?.let {
