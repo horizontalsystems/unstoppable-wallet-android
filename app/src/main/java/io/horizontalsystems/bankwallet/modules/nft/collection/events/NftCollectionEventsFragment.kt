@@ -110,7 +110,7 @@ private fun NftEvents(
                         subtitle = event.date?.let { DateHelper.getFullDate(it) } ?: "",
                         iconUrl = event.asset.imageUrl ?: "",
                         coinValue = event.amount?.coinValue?.getFormattedFull(),
-                        currencyValue = event.amount?.currencyValue?.getFormatted()
+                        currencyValue = event.amount?.currencyValue?.getFormattedFull()
                     ) {
                         val asset = event.asset
                         navController.slideFromBottom(

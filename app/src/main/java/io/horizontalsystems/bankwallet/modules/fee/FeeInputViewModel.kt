@@ -32,7 +32,7 @@ class FeeInputViewModel(
             )
 
             rate?.let {
-                val currencyStr = it.copy(value = tmpFee.times(it.value)).getFormatted(fiatDecimal, fiatDecimal)
+                val currencyStr = it.copy(value = tmpFee.times(it.value)).getFormattedFull()
 
                 when (tmpAmountInputType) {
                     AmountInputType.COIN -> values.add(currencyStr)

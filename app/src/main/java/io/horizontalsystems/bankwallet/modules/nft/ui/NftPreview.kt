@@ -97,7 +97,7 @@ fun NftAssetPreview(
             )
             currencyPrice?.let { currencyPrice ->
                 Text(
-                    text = currencyPrice.getFormatted(),
+                    text = currencyPrice.getFormattedFull(),
                     style = ComposeAppTheme.typography.micro,
                     color = ComposeAppTheme.colors.grey
                 )

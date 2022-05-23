@@ -178,19 +178,32 @@ class NumberFormatter(
         return converted.stripTrailingZeros()
     }
 
-    override fun formatFiat(value: Number, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String {
-        val finalMinimumFractionDigits: Int
-        val finalMaximimFractionDigits: Int
+    override fun formatFiatFull(value: BigDecimal, symbol: String): String {
+        val rounded = numberRounding.getRoundedCurrencyFull(value)
 
-        if (value.toInt() >= 1000) {
-            finalMinimumFractionDigits = 0
-            finalMaximimFractionDigits = 0
-        } else {
-            finalMinimumFractionDigits = minimumFractionDigits
-            finalMaximimFractionDigits = maximumFractionDigits
+        val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE, prefix = symbol)
+
+        return when (rounded) {
+            is BigDecimalRounded.Large -> {
+                val suffixResId = when (rounded.suffix) {
+                    NumberSuffix.Blank -> null
+                    NumberSuffix.Thousand -> R.string.CoinPage_MarketCap_Thousand
+                    NumberSuffix.Million -> R.string.CoinPage_MarketCap_Million
+                    NumberSuffix.Billion -> R.string.CoinPage_MarketCap_Billion
+                    NumberSuffix.Trillion -> R.string.CoinPage_MarketCap_Trillion
+                }
+
+                formattedNumber + suffixResId?.let {
+                    " " + Translator.getString(it)
+                }
+            }
+            is BigDecimalRounded.LessThen -> {
+                "<$formattedNumber"
+            }
+            is BigDecimalRounded.Regular -> {
+                formattedNumber
+            }
         }
-
-        return format(value, finalMinimumFractionDigits, finalMaximimFractionDigits, prefix = symbol)
     }
 
     override fun formatFiatShort(
@@ -222,33 +235,6 @@ class NumberFormatter(
             is BigDecimalRounded.Regular -> {
                 formattedNumber
             }
-        }
-    }
-
-    override fun getSignificantDecimalFiat(value: BigDecimal): Int {
-        if (value == BigDecimal.ZERO || value >= BigDecimal(1)) {
-            return 2
-        }
-
-        val numberOfZerosAfterDot = value.scale() - value.precision()
-
-        return if (numberOfZerosAfterDot >= 4) {
-            numberOfZerosAfterDot + 4
-        } else {
-            4
-        }
-    }
-
-    override fun getSignificantDecimalCoin(value: BigDecimal): Int {
-        val absValue = value.abs()
-        val valueBeforeDot = absValue.setScale(0, RoundingMode.FLOOR)
-        val valueAfterDot = absValue - valueBeforeDot
-
-        return when {
-            valueBeforeDot < BigDecimal("1") -> 8
-            valueBeforeDot < BigDecimal("10") && valueAfterDot < BigDecimal("0.0001") -> 8
-            valueBeforeDot < BigDecimal("100") -> 4
-            else -> 2
         }
     }
 

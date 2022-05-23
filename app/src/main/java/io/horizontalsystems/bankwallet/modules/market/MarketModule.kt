@@ -227,11 +227,9 @@ data class MarketViewItem(
             }
             return MarketViewItem(
                 marketItem.fullCoin,
-                App.numberFormatter.formatFiat(
+                App.numberFormatter.formatFiatFull(
                     marketItem.rate.value,
-                    marketItem.rate.currency.symbol,
-                    0,
-                    6
+                    marketItem.rate.currency.symbol
                 ),
                 marketDataValue,
                 marketItem.fullCoin.coin.marketCapRank?.toString(),

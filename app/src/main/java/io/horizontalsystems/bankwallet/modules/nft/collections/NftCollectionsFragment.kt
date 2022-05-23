@@ -102,7 +102,7 @@ fun NftCollectionsScreen(navController: NavController) {
                                 Column {
                                     CellSingleLineClear(borderTop = true) {
                                         Text(
-                                            text = totalCurrencyValue?.getFormatted() ?: "",
+                                            text = totalCurrencyValue?.getFormattedFull() ?: "",
                                             style = ComposeAppTheme.typography.headline2,
                                             color = ComposeAppTheme.colors.jacob,
                                         )
