@@ -196,7 +196,6 @@ fun FormsInput(
                                 onValueChange.invoke(textInClipboard)
                             }
                         },
-                        enabled = textInClipboard != null
                     )
                 }
             }
