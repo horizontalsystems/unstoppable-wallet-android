@@ -227,13 +227,10 @@ private fun truncateIfNeeded(title: String, characterCount: Int): String {
 
 object SecondaryButtonDefaults {
     private val ButtonHorizontalPadding = 16.dp
-    private val ButtonVerticalPadding = 6.dp
 
     val ContentPadding = PaddingValues(
         start = ButtonHorizontalPadding,
-        top = ButtonVerticalPadding,
         end = ButtonHorizontalPadding,
-        bottom = ButtonVerticalPadding,
     )
 
 
