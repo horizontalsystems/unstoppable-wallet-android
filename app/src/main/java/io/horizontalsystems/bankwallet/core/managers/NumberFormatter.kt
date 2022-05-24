@@ -11,8 +11,6 @@ import java.math.BigInteger
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
-import kotlin.math.log10
-import kotlin.math.pow
 
 class NumberFormatter(
         private val languageManager: ILanguageManager
@@ -125,59 +123,6 @@ class NumberFormatter(
         }
     }
 
-    override fun getShortenedForTxs(value: BigDecimal): BigDecimalShortened {
-        val integralPart = value.setScale(0, RoundingMode.HALF_UP)
-        return when {
-            integralPart >= BigDecimal(10_000) -> {
-                val shortened = getShortened(integralPart)
-
-                BigDecimalShortened(getRounded(shortened.value), shortened.suffix)
-            }
-            else -> {
-                BigDecimalShortened(getRounded(value), BigDecimalShortened.Suffix.Blank)
-            }
-        }
-    }
-
-    private fun getShortened(value: BigDecimal): BigDecimalShortened {
-        val base = log10(value.toDouble()).toInt() + 1
-        val groupCount = (base - 1) / 3
-
-        return shortByGroupCount(groupCount, value)
-    }
-
-    private fun shortByGroupCount(
-        groupCount: Int,
-        value: BigDecimal
-    ): BigDecimalShortened {
-        return when (val suffix = BigDecimalShortened.Suffix.getByGroupCount(groupCount)) {
-            null -> BigDecimalShortened(value, BigDecimalShortened.Suffix.Blank)
-            else -> {
-                val t = groupCount * 3
-                val shortened = value.divide(BigDecimal(10.0.pow(t.toDouble())))
-                if (shortened >= BigDecimal("999")) {
-                    shortByGroupCount(groupCount + 1, value)
-                } else {
-                    BigDecimalShortened(shortened, suffix)
-                }
-            }
-        }
-    }
-
-    private fun getRounded(value: BigDecimal): BigDecimal {
-        val converted = when {
-            value.compareTo(BigDecimal.ZERO) == 0  -> value
-            value < BigDecimal("0.00000001") -> BigDecimal("0.00000001")
-            value < BigDecimal("0.0001") -> value.setScale(8, RoundingMode.HALF_EVEN)
-            value < BigDecimal("1") -> value.setScale(4, RoundingMode.HALF_EVEN)
-            value < BigDecimal("10") -> value.setScale(2, RoundingMode.HALF_EVEN)
-            value < BigDecimal("100") -> value.setScale(1, RoundingMode.HALF_EVEN)
-            else -> value.setScale(0, RoundingMode.HALF_EVEN)
-        }
-
-        return converted.stripTrailingZeros()
-    }
-
     override fun formatFiatFull(value: BigDecimal, symbol: String): String {
         val rounded = numberRounding.getRoundedCurrencyFull(value)
 
@@ -273,28 +218,6 @@ class NumberFormatter(
             1 -> "+"
             -1 -> "-"
             else -> ""
-        }
-    }
-
-}
-
-data class BigDecimalShortened(
-    val value: BigDecimal,
-    val suffix: Suffix
-) {
-    enum class Suffix(val groupCount: Int, val titleResId: Int?) {
-        Blank(0, null),
-        Thousand(1, R.string.CoinPage_MarketCap_Thousand),
-        Million(2, R.string.CoinPage_MarketCap_Million),
-        Billion(3, R.string.CoinPage_MarketCap_Billion),
-        Trillion(4, R.string.CoinPage_MarketCap_Trillion);
-
-        companion object {
-            private val valuesByGroupCount = values().associateBy(Suffix::groupCount)
-
-            fun getByGroupCount(groupCount: Int): Suffix? {
-                return valuesByGroupCount[groupCount]
-            }
         }
     }
 }

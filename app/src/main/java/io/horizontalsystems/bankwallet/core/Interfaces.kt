@@ -372,7 +372,6 @@ interface IAppNumberFormatter {
 
     fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String
     fun formatValueAsDiff(value: Value): String
-    fun getShortenedForTxs(value: BigDecimal): BigDecimalShortened
 }
 
 interface IFeeRateProvider {
