@@ -83,6 +83,7 @@ class NumberFormatter(
             LargeNumberName.Million -> R.string.CoinPage_MarketCap_Million
             LargeNumberName.Billion -> R.string.CoinPage_MarketCap_Billion
             LargeNumberName.Trillion -> R.string.CoinPage_MarketCap_Trillion
+            LargeNumberName.Quadrillion -> R.string.CoinPage_MarketCap_Quadrillion
             else -> null
         }?.let {
             formattedNumber = Translator.getString(R.string.LargeNumberFormat, formattedNumber, Translator.getString(it))
