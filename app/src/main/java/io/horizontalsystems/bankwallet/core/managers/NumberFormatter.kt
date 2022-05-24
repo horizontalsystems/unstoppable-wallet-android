@@ -39,115 +39,22 @@ class NumberFormatter(
 
     override fun formatCoinFull(value: BigDecimal, code: String?, coinDecimals: Int): String {
         val rounded = numberRounding.getRoundedCoinFull(value, coinDecimals)
-
-        val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE)
-        val res = when (rounded) {
-            is BigDecimalRounded.Large -> {
-                val suffixResId = when (rounded.suffix) {
-                    NumberSuffix.Blank -> null
-                    NumberSuffix.Thousand -> R.string.CoinPage_MarketCap_Thousand
-                    NumberSuffix.Million -> R.string.CoinPage_MarketCap_Million
-                    NumberSuffix.Billion -> R.string.CoinPage_MarketCap_Billion
-                    NumberSuffix.Trillion -> R.string.CoinPage_MarketCap_Trillion
-                }
-
-                formattedNumber + suffixResId?.let {
-                    " " + Translator.getString(it)
-                }
-            }
-            is BigDecimalRounded.LessThen -> {
-                "<$formattedNumber"
-            }
-            is BigDecimalRounded.Regular -> {
-                formattedNumber
-            }
-        }
-
-        return res + (code?.let { " $it" } ?: "")
+        return formatRounded(rounded = rounded, prefix = null, suffix = code?.let { " $it" })
     }
 
     override fun formatCoinShort(value: BigDecimal, code: String?, coinDecimals: Int): String {
         val rounded = numberRounding.getRoundedCoinShort(value, coinDecimals)
-
-        val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE)
-        val res = when (rounded) {
-            is BigDecimalRounded.Large -> {
-                val suffixResId = when (rounded.suffix) {
-                    NumberSuffix.Blank -> null
-                    NumberSuffix.Thousand -> R.string.CoinPage_MarketCap_Thousand
-                    NumberSuffix.Million -> R.string.CoinPage_MarketCap_Million
-                    NumberSuffix.Billion -> R.string.CoinPage_MarketCap_Billion
-                    NumberSuffix.Trillion -> R.string.CoinPage_MarketCap_Trillion
-                }
-
-                formattedNumber + suffixResId?.let {
-                    " " + Translator.getString(it)
-                }
-            }
-            is BigDecimalRounded.LessThen -> {
-                "<$formattedNumber"
-            }
-            is BigDecimalRounded.Regular -> {
-                formattedNumber
-            }
-        }
-
-        return res + (code?.let { " $it" } ?: "")
+        return formatRounded(rounded = rounded, prefix = null, suffix = code?.let { " $it" })
     }
 
     override fun formatNumberShort(value: BigDecimal, maximumFractionDigits: Int): String {
         val rounded = numberRounding.getRoundedShort(value, maximumFractionDigits)
-        val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE)
-
-        return when (rounded) {
-            is BigDecimalRounded.Large -> {
-                val suffixResId = when (rounded.suffix) {
-                    NumberSuffix.Blank -> null
-                    NumberSuffix.Thousand -> R.string.CoinPage_MarketCap_Thousand
-                    NumberSuffix.Million -> R.string.CoinPage_MarketCap_Million
-                    NumberSuffix.Billion -> R.string.CoinPage_MarketCap_Billion
-                    NumberSuffix.Trillion -> R.string.CoinPage_MarketCap_Trillion
-                }
-
-                formattedNumber + suffixResId?.let {
-                    " " + Translator.getString(it)
-                }
-            }
-            is BigDecimalRounded.LessThen -> {
-                "<$formattedNumber"
-            }
-            is BigDecimalRounded.Regular -> {
-                formattedNumber
-            }
-        }
+        return formatRounded(rounded = rounded, prefix = null, suffix = null)
     }
 
     override fun formatFiatFull(value: BigDecimal, symbol: String): String {
         val rounded = numberRounding.getRoundedCurrencyFull(value)
-
-        val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE, prefix = symbol)
-
-        return when (rounded) {
-            is BigDecimalRounded.Large -> {
-                val suffixResId = when (rounded.suffix) {
-                    NumberSuffix.Blank -> null
-                    NumberSuffix.Thousand -> R.string.CoinPage_MarketCap_Thousand
-                    NumberSuffix.Million -> R.string.CoinPage_MarketCap_Million
-                    NumberSuffix.Billion -> R.string.CoinPage_MarketCap_Billion
-                    NumberSuffix.Trillion -> R.string.CoinPage_MarketCap_Trillion
-                }
-
-                formattedNumber + suffixResId?.let {
-                    " " + Translator.getString(it)
-                }
-            }
-            is BigDecimalRounded.LessThen -> {
-                "<$formattedNumber"
-            }
-            is BigDecimalRounded.Regular -> {
-                formattedNumber
-            }
-        }
+        return formatRounded(rounded = rounded, prefix = symbol, suffix = null)
     }
 
     override fun formatFiatShort(
@@ -156,30 +63,36 @@ class NumberFormatter(
         currencyDecimals: Int
     ): String {
         val rounded = numberRounding.getRoundedCurrencyShort(value, currencyDecimals)
+        return formatRounded(rounded = rounded, prefix = symbol, suffix = null)
+    }
 
-        val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE, prefix = symbol)
+    private fun formatRounded(rounded: BigDecimalRounded, prefix: String?, suffix: String?): String {
+        val formatter = getFormatter(languageManager.currentLocale, 0, Int.MAX_VALUE)
+        var formattedNumber = formatter.format(rounded.value)
 
-        return when (rounded) {
-            is BigDecimalRounded.Large -> {
-                val suffixResId = when (rounded.suffix) {
-                    NumberSuffix.Blank -> null
-                    NumberSuffix.Thousand -> R.string.CoinPage_MarketCap_Thousand
-                    NumberSuffix.Million -> R.string.CoinPage_MarketCap_Million
-                    NumberSuffix.Billion -> R.string.CoinPage_MarketCap_Billion
-                    NumberSuffix.Trillion -> R.string.CoinPage_MarketCap_Trillion
-                }
-
-                formattedNumber + suffixResId?.let {
-                    " " + Translator.getString(it)
-                }
-            }
-            is BigDecimalRounded.LessThen -> {
-                "<$formattedNumber"
-            }
-            is BigDecimalRounded.Regular -> {
-                formattedNumber
-            }
+        prefix?.let {
+            formattedNumber = "$prefix$formattedNumber"
         }
+
+        if (rounded is BigDecimalRounded.LessThen) {
+            formattedNumber = "< $formattedNumber"
+        }
+
+        when ((rounded as? BigDecimalRounded.Large)?.name) {
+            LargeNumberName.Thousand -> R.string.CoinPage_MarketCap_Thousand
+            LargeNumberName.Million -> R.string.CoinPage_MarketCap_Million
+            LargeNumberName.Billion -> R.string.CoinPage_MarketCap_Billion
+            LargeNumberName.Trillion -> R.string.CoinPage_MarketCap_Trillion
+            else -> null
+        }?.let {
+            formattedNumber = Translator.getString(R.string.LargeNumberFormat, formattedNumber, Translator.getString(it))
+        }
+
+        suffix?.let {
+            formattedNumber = "$formattedNumber$suffix"
+        }
+
+        return formattedNumber
     }
 
     private fun getFormatter(locale: Locale, minimumFractionDigits: Int, maximumFractionDigits: Int): NumberFormat {
