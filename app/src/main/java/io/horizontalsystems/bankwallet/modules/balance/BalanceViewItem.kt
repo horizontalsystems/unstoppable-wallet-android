@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.balance
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.managers.NumberRounding
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.CoinValueRounded
 import io.horizontalsystems.bankwallet.entities.CurrencyValueRounded
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.swappable
@@ -26,11 +26,11 @@ data class BalanceViewItem(
     val coinTitle: String,
     val coinIconUrl: String,
     val coinIconPlaceholder: Int,
-    val coinValue: DeemedValue<CoinValueRounded>,
+    val coinValue: DeemedValue<String>,
     val exchangeValue: DeemedValue<CurrencyValueRounded?>,
     val diff: BigDecimal?,
     val fiatValue: DeemedValue<CurrencyValueRounded?>,
-    val coinValueLocked: DeemedValue<CoinValueRounded>,
+    val coinValueLocked: DeemedValue<String>,
     val fiatValueLocked: DeemedValue<CurrencyValueRounded?>,
     val expanded: Boolean,
     val sendEnabled: Boolean = false,
@@ -62,15 +62,15 @@ class BalanceViewItemFactory {
         full: Boolean,
         coinDecimals: Int,
         platformCoin: PlatformCoin
-    ): DeemedValue<CoinValueRounded> {
+    ): DeemedValue<String> {
         val dimmed = state !is AdapterState.Synced
-        val rounded = if (full) {
-            numberRounding.getRoundedCoinFull(balance, coinDecimals)
+        val formatted = if (full) {
+            App.numberFormatter.formatCoinFull(balance, platformCoin.code, coinDecimals)
         } else {
-            numberRounding.getRoundedCoinShort(balance, coinDecimals)
+            App.numberFormatter.formatCoinShort(balance, platformCoin.code, coinDecimals)
         }
 
-        return DeemedValue(CoinValueRounded(platformCoin, rounded), dimmed, visible)
+        return DeemedValue(formatted, dimmed, visible)
     }
 
     private fun currencyValue(
@@ -187,13 +187,13 @@ class BalanceViewItemFactory {
         hideBalance: Boolean,
         coinDecimals: Int,
         platformCoin: PlatformCoin
-    ): DeemedValue<CoinValueRounded> {
+    ): DeemedValue<String> {
         val visible = !hideBalance && balance > BigDecimal.ZERO
         val deemed = state !is AdapterState.Synced
 
-        val value = numberRounding.getRoundedCoinFull(balance, coinDecimals)
+        val value = App.numberFormatter.formatCoinFull(balance, platformCoin.code, coinDecimals)
 
-        return DeemedValue(CoinValueRounded(platformCoin, value), deemed, visible)
+        return DeemedValue(value, deemed, visible)
     }
 
     fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean, watchAccount: Boolean): BalanceViewItem {

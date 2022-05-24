@@ -41,8 +41,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.compose.formatNumber
-import io.horizontalsystems.bankwallet.ui.compose.formatNumberCoin
 import io.horizontalsystems.bankwallet.ui.compose.formatNumberFiat
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
@@ -155,7 +153,7 @@ fun BalanceCard(
                         Spacer(modifier = Modifier.weight(1f))
                         if (viewItem.coinValue.visible) {
                             Text(
-                                text = formatNumber(number = viewItem.coinValue.value.value),
+                                text = viewItem.coinValue.value,
                                 color = if (viewItem.coinValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
                                 style = ComposeAppTheme.typography.headline2,
                                 maxLines = 1,
@@ -355,7 +353,7 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
             )
             Text(
                 modifier = Modifier.padding(start = 6.dp),
-                text = formatNumberCoin(coinValueRounded = viewItem.coinValueLocked.value),
+                text = viewItem.coinValueLocked.value,
                 color = if (viewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                 style = ComposeAppTheme.typography.subhead2,
                 maxLines = 1,
