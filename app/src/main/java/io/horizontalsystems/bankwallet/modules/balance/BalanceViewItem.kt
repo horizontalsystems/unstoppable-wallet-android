@@ -56,14 +56,13 @@ class BalanceViewItemFactory {
         balance: BigDecimal,
         visible: Boolean,
         full: Boolean,
-        coinDecimals: Int,
-        platformCoin: PlatformCoin
+        coinDecimals: Int
     ): DeemedValue<String> {
         val dimmed = state !is AdapterState.Synced
         val formatted = if (full) {
-            App.numberFormatter.formatCoinFull(balance, platformCoin.code, coinDecimals)
+            App.numberFormatter.formatCoinFull(balance, null, coinDecimals)
         } else {
-            App.numberFormatter.formatCoinShort(balance, platformCoin.code, coinDecimals)
+            App.numberFormatter.formatCoinShort(balance, null, coinDecimals)
         }
 
         return DeemedValue(formatted, dimmed, visible)
@@ -209,7 +208,7 @@ class BalanceViewItemFactory {
                 coinTitle = coin.name,
                 coinIconUrl = coin.iconUrl,
                 coinIconPlaceholder = wallet.coinType.iconPlaceholder,
-                coinValue = coinValue(state, item.balanceData.total, balanceTotalVisibility, expanded, wallet.decimal, wallet.platformCoin),
+                coinValue = coinValue(state, item.balanceData.total, balanceTotalVisibility, expanded, wallet.decimal),
                 fiatValue = currencyValue(
                     state,
                     item.balanceData.total,
