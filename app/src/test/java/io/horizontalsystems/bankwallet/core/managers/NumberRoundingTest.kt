@@ -81,37 +81,37 @@ class NumberRoundingTest {
         assertShortRegular("200.5", "201")
 
         assertShortRegular("19999.1", "19999")
-        assertShortLarge("19999.5", "20", NumberSuffix.Thousand)
+        assertShortLarge("19999.5", "20", LargeNumberName.Thousand)
     }
 
     @Test
     fun getShort_largeNumber_range_show1Decimals() {
         // 20k until 200k show 1 decimals
 
-        assertShortLarge("20000", "20", NumberSuffix.Thousand)
-        assertShortLarge("20123", "20.1", NumberSuffix.Thousand)
-        assertShortLarge("20350", "20.4", NumberSuffix.Thousand)
-        assertShortLarge("199555", "199.6", NumberSuffix.Thousand)
-        assertShortLarge("199950", "200", NumberSuffix.Thousand)
+        assertShortLarge("20000", "20", LargeNumberName.Thousand)
+        assertShortLarge("20123", "20.1", LargeNumberName.Thousand)
+        assertShortLarge("20350", "20.4", LargeNumberName.Thousand)
+        assertShortLarge("199555", "199.6", LargeNumberName.Thousand)
+        assertShortLarge("199950", "200", LargeNumberName.Thousand)
     }
 
     @Test
     fun getShort_largeNumber_range_showNoDecimals() {
         // 200k until 1M show 0 decimals
 
-        assertShortLarge("200000", "200", NumberSuffix.Thousand)
-        assertShortLarge("998500", "999", NumberSuffix.Thousand)
-        assertShortLarge("999499", "999", NumberSuffix.Thousand)
-        assertShortLarge("999500", "1", NumberSuffix.Million)
+        assertShortLarge("200000", "200", LargeNumberName.Thousand)
+        assertShortLarge("998500", "999", LargeNumberName.Thousand)
+        assertShortLarge("999499", "999", LargeNumberName.Thousand)
+        assertShortLarge("999500", "1", LargeNumberName.Million)
     }
 
     @Test
     fun getShort_largeNumber_range_show2Decimals() {
         // 1M until 20M show 2 decimals
 
-        assertShortLarge("1234567", "1.23", NumberSuffix.Million)
-        assertShortLarge("19123456", "19.12", NumberSuffix.Million)
-        assertShortLarge("19995000", "20", NumberSuffix.Million)
+        assertShortLarge("1234567", "1.23", LargeNumberName.Million)
+        assertShortLarge("19123456", "19.12", LargeNumberName.Million)
+        assertShortLarge("19995000", "20", LargeNumberName.Million)
     }
 
     private fun assertLessThen(value: String, expectedValue: String, ) {
@@ -122,12 +122,12 @@ class NumberRoundingTest {
     private fun assertShortLarge(
         value: String,
         expectedValue: String,
-        expectedSuffix: NumberSuffix
+        expectedSuffix: LargeNumberName
     ) {
         val actual = numberRounding.getRoundedShort(BigDecimal(value), 8) as BigDecimalRounded.Large
 
         assertEquals(expectedValue, actual.value.toPlainString())
-        assertEquals(expectedSuffix, actual.suffix)
+        assertEquals(expectedSuffix, actual.name)
     }
 
     private fun assertShortRegular(

@@ -115,15 +115,15 @@ class NumberRounding {
         value: BigDecimal
     ): BigDecimalRounded.Large {
         val suffix = when (groupCount) {
-            1 -> NumberSuffix.Thousand
-            2 -> NumberSuffix.Million
-            3 -> NumberSuffix.Billion
-            4 -> NumberSuffix.Trillion
+            1 -> LargeNumberName.Thousand
+            2 -> LargeNumberName.Million
+            3 -> LargeNumberName.Billion
+            4 -> LargeNumberName.Trillion
             else -> null
         }
 
         return when (suffix) {
-            null -> BigDecimalRounded.Large(value, NumberSuffix.Blank)
+            null -> BigDecimalRounded.Large(value, LargeNumberName.None)
             else -> {
                 val t = groupCount * 3
                 val shortened = value.divide(BigDecimal(10.0.pow(t.toDouble())))
@@ -142,11 +142,11 @@ sealed class BigDecimalRounded {
 
     data class LessThen(override val value: BigDecimal) : BigDecimalRounded()
     data class Regular(override val value: BigDecimal) : BigDecimalRounded()
-    data class Large(override val value: BigDecimal, val suffix: NumberSuffix) : BigDecimalRounded()
+    data class Large(override val value: BigDecimal, val name: LargeNumberName) : BigDecimalRounded()
 }
 
-enum class NumberSuffix {
-    Blank,
+enum class LargeNumberName {
+    None,
     Thousand,
     Million,
     Billion,

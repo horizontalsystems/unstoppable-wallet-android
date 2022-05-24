@@ -3,6 +3,8 @@
 
     <!--Common-->
 
+    <string name="LargeNumberFormat">%s%s</string>
+
     <string name="Alert_Cancel">Cancel</string>
     <string name="Alert_Copy">Copy</string>
     <string name="Alert_Close">Close</string>
