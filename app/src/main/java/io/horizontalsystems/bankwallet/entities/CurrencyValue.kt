@@ -11,4 +11,8 @@ data class CurrencyValue(val currency: Currency, val value: BigDecimal) : Parcel
     fun getFormattedFull(): String {
         return App.numberFormatter.formatFiatFull(value, currency.symbol)
     }
+
+    fun getFormattedShort(): String {
+        return App.numberFormatter.formatFiatShort(value, currency.symbol, 2)
+    }
 }

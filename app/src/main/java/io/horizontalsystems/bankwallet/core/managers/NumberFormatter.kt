@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.core.ILanguageManager
 import java.math.BigDecimal
@@ -196,10 +195,6 @@ class NumberFormatter(
         }
 
         return formatters[formatterId] ?: throw Exception("No formatter")
-    }
-
-    override fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String {
-        return formatFiatShort(currencyValue.value, currencyValue.currency.symbol, 2)
     }
 
     override fun formatValueAsDiff(value: Value): String =

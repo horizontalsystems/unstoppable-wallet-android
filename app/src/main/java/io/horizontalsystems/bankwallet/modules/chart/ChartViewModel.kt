@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.viewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
@@ -195,12 +194,7 @@ open class ChartViewModel(
                 App.numberFormatter.format(dominance.value, 0, 2, suffix = "%")
             )
             volume != null -> SelectedPoint.ExtraData.Volume(
-                App.numberFormatter.formatCurrencyValueAsShortened(
-                    CurrencyValue(
-                        service.currency,
-                        volume.value.toBigDecimal()
-                    )
-                )
+                App.numberFormatter.formatFiatShort(volume.value.toBigDecimal(), service.currency.symbol, 2)
             )
             else -> null
         }

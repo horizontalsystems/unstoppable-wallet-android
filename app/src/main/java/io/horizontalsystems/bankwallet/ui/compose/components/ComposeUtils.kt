@@ -8,7 +8,6 @@ import androidx.compose.ui.res.painterResource
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -37,10 +36,6 @@ fun diffColor(trend: CoinDetailsModule.ChartMovementTrend) =
 @Composable
 fun formatValueAsDiff(value: Value): String =
     App.numberFormatter.formatValueAsDiff(value)
-
-@Composable
-fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String =
-    App.numberFormatter.formatCurrencyValueAsShortened(currencyValue)
 
 @Composable
 fun RateText(diff: BigDecimal?): String {
