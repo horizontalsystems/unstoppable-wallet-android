@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
 import io.horizontalsystems.marketkit.models.PlatformCoin
 
-open class EvmTransactionRecord(transaction: Transaction, baseCoin: PlatformCoin, source: TransactionSource, val foreignTransaction: Boolean = false) :
+open class EvmTransactionRecord(transaction: Transaction, baseCoin: PlatformCoin, source: TransactionSource, val foreignTransaction: Boolean = false, spam: Boolean = false) :
     TransactionRecord(
         uid = transaction.hashString,
         transactionHash = transaction.hashString,
@@ -16,6 +16,7 @@ open class EvmTransactionRecord(transaction: Transaction, baseCoin: PlatformCoin
         confirmationsThreshold = BaseEvmAdapter.confirmationsThreshold,
         timestamp = transaction.timestamp,
         failed = transaction.isFailed,
+        spam = spam,
         source = source
     ) {
 
