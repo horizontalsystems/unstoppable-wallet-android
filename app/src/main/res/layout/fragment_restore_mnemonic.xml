@@ -26,14 +26,53 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/accountNameTitle"
+                style="@style/Subhead1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/Restore_Name"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                />
+
+            <EditText
+                android:id="@+id/accountNameInput"
+                style="@style/Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="13dp"
+                android:background="@drawable/input_background_themed"
+                android:gravity="top"
+                android:maxLines="1"
+                android:paddingStart="12dp"
+                android:paddingTop="11dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="11dp"
+                />
+
+            <TextView
+                android:id="@+id/keyInputTitle"
+                style="@style/Subhead1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="44dp"
+                android:text="@string/Restore_Key"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                />
+
             <EditText
                 android:id="@+id/wordsInput"
                 style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
                 android:autofillHints=""
                 android:background="@drawable/input_background_themed"
                 android:gravity="top"
@@ -43,7 +82,8 @@
                 android:paddingStart="12dp"
                 android:paddingTop="11dp"
                 android:paddingEnd="12dp"
-                android:paddingBottom="11dp" />
+                android:paddingBottom="11dp"
+                />
 
             <TextView
                 android:id="@+id/description"

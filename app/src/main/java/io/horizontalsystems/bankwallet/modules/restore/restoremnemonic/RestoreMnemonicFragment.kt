@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.databinding.FragmentRestoreMnemonicBinding
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment.Companion.ACCOUNT_NAME_KEY
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment.Companion.ACCOUNT_TYPE_KEY
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.findNavController
@@ -29,6 +30,20 @@ import io.horizontalsystems.hdwalletkit.Mnemonic
 
 class RestoreMnemonicFragment : BaseFragment() {
     private val viewModel by viewModels<RestoreMnemonicViewModel> { RestoreMnemonicModule.Factory() }
+
+    private val accountNameTextWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable) {
+            if (s.isNotEmpty()) {
+                viewModel.onNameChange(s.toString())
+            }
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        }
+    }
 
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable) {
@@ -85,13 +100,16 @@ class RestoreMnemonicFragment : BaseFragment() {
     }
 
     private fun observeEvents() {
-        viewModel.proceedLiveEvent.observe(viewLifecycleOwner, Observer { accountType ->
+        viewModel.proceedLiveEvent.observe(viewLifecycleOwner) { (accountName, accountType) ->
             hideKeyboard()
             findNavController().slideFromRight(
                 R.id.restoreSelectCoinsFragment,
-                bundleOf(ACCOUNT_TYPE_KEY to accountType)
+                bundleOf(
+                    ACCOUNT_NAME_KEY to accountName,
+                    ACCOUNT_TYPE_KEY to accountType
+                )
             )
-        })
+        }
 
         viewModel.invalidRangesLiveData.observe(viewLifecycleOwner, Observer { invalidRanges ->
             binding.wordsInput.removeTextChangedListener(textWatcher)
@@ -142,10 +160,15 @@ class RestoreMnemonicFragment : BaseFragment() {
         viewModel.clearInputsLiveEvent.observe(viewLifecycleOwner) {
             binding.passphrase.setText(null)
         }
+
+        viewModel.placeholderLiveData.observe(viewLifecycleOwner) {
+            binding.accountNameInput.hint = it
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun bindListeners() {
+        binding.accountNameInput.addTextChangedListener(accountNameTextWatcher)
         binding.wordsInput.addTextChangedListener(textWatcher)
 
         //fixes scrolling in EditText when it's inside NestedScrollView

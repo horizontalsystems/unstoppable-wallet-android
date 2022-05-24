@@ -85,7 +85,7 @@ fun FormsInput(
                 .background(ComposeAppTheme.colors.lawrence),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+            var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
                 mutableStateOf(TextFieldValue(initial ?: ""))
             }
 

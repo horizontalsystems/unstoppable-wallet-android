@@ -22,8 +22,10 @@ class RestoreMnemonicViewModel(private val service: RestoreMnemonicService, priv
     val clearInputsLiveEvent = SingleLiveEvent<Unit>()
 
     val invalidRangesLiveData = MutableLiveData<List<IntRange>>()
-    val proceedLiveEvent = SingleLiveEvent<AccountType>()
+    val proceedLiveEvent = SingleLiveEvent<Pair<String, AccountType>>()
     val errorLiveData = MutableLiveData<Throwable>()
+
+    val placeholderLiveData = MutableLiveData(service.defaultName)
 
     private val regex = Regex("\\S+")
     private var state = State(listOf(), listOf())
@@ -59,6 +61,10 @@ class RestoreMnemonicViewModel(private val service: RestoreMnemonicService, priv
         if (passphraseCautionLiveData.value != null) {
             passphraseCautionLiveData.postValue(null)
         }
+    }
+
+    fun onNameChange(name: String) {
+        service.name = name
     }
 
     fun onTextChange(text: String, cursorPosition: Int) {
@@ -102,7 +108,7 @@ class RestoreMnemonicViewModel(private val service: RestoreMnemonicService, priv
         try {
             val accountType = service.accountType(state.allItems.map { it.word })
 
-            proceedLiveEvent.postValue(accountType)
+            proceedLiveEvent.postValue(Pair(service.resolvedName, accountType))
         } catch (t: RestoreMnemonicService.RestoreError.EmptyPassphrase) {
             passphraseCautionLiveData.postValue(Caution(Translator.getString(R.string.Restore_Error_EmptyPassphrase), Caution.Type.Error))
         } catch (error: Throwable) {
