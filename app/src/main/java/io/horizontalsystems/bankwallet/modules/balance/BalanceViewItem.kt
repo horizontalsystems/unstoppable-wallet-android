@@ -6,9 +6,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.managers.NumberRounding
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.CurrencyValueRounded
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.swappable
 import io.horizontalsystems.core.entities.Currency
@@ -27,11 +25,11 @@ data class BalanceViewItem(
     val coinIconUrl: String,
     val coinIconPlaceholder: Int,
     val coinValue: DeemedValue<String>,
-    val exchangeValue: DeemedValue<CurrencyValueRounded?>,
+    val exchangeValue: DeemedValue<String>,
     val diff: BigDecimal?,
-    val fiatValue: DeemedValue<CurrencyValueRounded?>,
+    val fiatValue: DeemedValue<String>,
     val coinValueLocked: DeemedValue<String>,
-    val fiatValueLocked: DeemedValue<CurrencyValueRounded?>,
+    val fiatValueLocked: DeemedValue<String>,
     val expanded: Boolean,
     val sendEnabled: Boolean = false,
     val receiveEnabled: Boolean = false,
@@ -52,8 +50,6 @@ data class DeemedValue<T>(val value: T, val dimmed: Boolean = false, val visible
 data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
 
 class BalanceViewItemFactory {
-
-    private val numberRounding = NumberRounding()
 
     private fun coinValue(
         state: AdapterState?,
@@ -80,25 +76,25 @@ class BalanceViewItemFactory {
         visible: Boolean,
         fullFormat: Boolean,
         currency: Currency
-    ): DeemedValue<CurrencyValueRounded?> {
+    ): DeemedValue<String> {
         val dimmed = state !is AdapterState.Synced || coinPrice?.expired ?: false
-        val value = coinPrice?.value?.let { rate ->
+        val formatted = coinPrice?.value?.let { rate ->
             val balanceFiat = balance.multiply(rate)
-            val rounded = if (fullFormat) {
-                numberRounding.getRoundedCurrencyFull(balanceFiat)
-            } else {
-                numberRounding.getRoundedCurrencyShort(balanceFiat, 8)
-            }
-            CurrencyValueRounded(currency, rounded)
-        }
 
-        return DeemedValue(value, dimmed, visible)
+            if (fullFormat) {
+                App.numberFormatter.formatFiatFull(balanceFiat, currency.symbol)
+            } else {
+                App.numberFormatter.formatFiatShort(balanceFiat, currency.symbol, 8)
+            }
+        } ?: ""
+
+        return DeemedValue(formatted, dimmed, visible)
     }
 
-    private fun rateValue(coinPrice: CoinPrice?, showSyncing: Boolean, currency: Currency): DeemedValue<CurrencyValueRounded?> {
+    private fun rateValue(coinPrice: CoinPrice?, showSyncing: Boolean, currency: Currency): DeemedValue<String> {
         val value = coinPrice?.let {
-            CurrencyValueRounded(currency, numberRounding.getRoundedCurrencyFull(coinPrice.value))
-        }
+            App.numberFormatter.formatFiatFull(coinPrice.value, currency.symbol)
+        } ?: ""
 
         return DeemedValue(value, dimmed = coinPrice?.expired ?: false, visible = !showSyncing)
     }

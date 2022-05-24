@@ -41,7 +41,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.compose.formatNumberFiat
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -179,11 +178,8 @@ fun BalanceCard(
                             }
                             if (viewItem.exchangeValue.visible) {
                                 Row {
-                                    val exchangeStr = viewItem.exchangeValue.value?.let {
-                                        formatNumberFiat(currencyValueRounded = it)
-                                    } ?: ""
                                     Text(
-                                        text = exchangeStr,
+                                        text = viewItem.exchangeValue.value,
                                         color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                                         style = ComposeAppTheme.typography.subhead2,
                                         maxLines = 1,
@@ -210,11 +206,8 @@ fun BalanceCard(
                                 )
                             }
                             if (viewItem.fiatValue.visible) {
-                                val fiatValueStr = viewItem.fiatValue.value?.let {
-                                    formatNumberFiat(currencyValueRounded = it)
-                                } ?: ""
                                 Text(
-                                    text = fiatValueStr,
+                                    text = viewItem.fiatValue.value,
                                     color = if (viewItem.fiatValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                                     style = ComposeAppTheme.typography.subhead2,
                                     maxLines = 1,
@@ -359,11 +352,8 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
                 maxLines = 1,
             )
             Spacer(modifier = Modifier.weight(1f))
-            val fiatValueLockedStr = viewItem.fiatValueLocked.value?.let {
-                formatNumberFiat(currencyValueRounded = it)
-            } ?: ""
             Text(
-                text = fiatValueLockedStr,
+                text = viewItem.fiatValueLocked.value,
                 color = if (viewItem.fiatValueLocked.dimmed) ComposeAppTheme.colors.yellow50 else ComposeAppTheme.colors.jacob,
                 style = ComposeAppTheme.typography.subhead2,
                 maxLines = 1,
