@@ -363,7 +363,7 @@ class ZcashAdapter(
                 lockInfo = null,
                 conflictingHash = null,
                 showRawTransaction = false,
-                amount = transaction.value.convertZatoshiToZec(decimalCount),
+                amount = transaction.value.convertZatoshiToZec(decimalCount).negate(),
                 to = transaction.toAddress,
                 sentToSelf = false,
                 memo = transaction.memo,
