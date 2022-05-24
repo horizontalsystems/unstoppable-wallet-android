@@ -58,7 +58,7 @@ class NumberRounding {
     }
 
     fun getRoundedCurrencyFull(value: BigDecimal): BigDecimalRounded {
-        return getRoundedFull(value, 0, 8)
+        return getRoundedFull(value, 0, 18)
     }
 
     private fun largeNumberStrategy(value: BigDecimal): BigDecimalRounded.Large {
