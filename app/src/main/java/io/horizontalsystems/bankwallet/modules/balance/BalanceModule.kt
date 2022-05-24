@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
-import io.horizontalsystems.bankwallet.core.managers.NumberRounding
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
 
@@ -33,7 +32,7 @@ object BalanceModule {
             return BalanceViewModel(
                 balanceService,
                 BalanceViewItemFactory(),
-                TotalService(App.currencyManager, App.coinManager, App.marketKit, NumberRounding())
+                TotalService(App.currencyManager, App.coinManager, App.marketKit)
             ) as T
         }
     }

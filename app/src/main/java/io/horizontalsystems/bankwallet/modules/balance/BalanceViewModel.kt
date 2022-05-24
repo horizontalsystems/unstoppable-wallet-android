@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -16,7 +17,7 @@ class BalanceViewModel(
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val totalService: TotalService
 ) : ViewModel() {
-    private var totalState = totalService.stateFlow.value
+    private var totalState = createTotalUIState(totalService.stateFlow.value)
     private var viewState: ViewState = ViewState.Loading
     private var balanceViewItems = listOf<BalanceViewItem>()
     private var isRefreshing = false
@@ -59,7 +60,7 @@ class BalanceViewModel(
     }
 
     private fun handleUpdatedTotalState(totalState: TotalService.State) {
-        this.totalState = totalState
+        this.totalState = createTotalUIState(totalState)
 
         emitState()
     }
@@ -154,6 +155,19 @@ class BalanceViewModel(
         else -> SyncError.NetworkNotAvailable()
     }
 
+    private fun createTotalUIState(totalState: TotalService.State) = when (totalState) {
+        TotalService.State.Hidden -> TotalUIState.Hidden
+        is TotalService.State.Visible -> TotalUIState.Visible(
+            currencyValueStr = totalState.currencyValue?.let {
+                App.numberFormatter.formatFiatFull(it.value, it.currency.symbol)
+            } ?: "---",
+            coinValueStr = totalState.coinValue?.let {
+                "~" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.platformCoin.decimals)
+            } ?: "---",
+            dimmed = totalState.dimmed
+        )
+    }
+
     sealed class SyncError {
         class NetworkNotAvailable : SyncError()
         class Dialog(val wallet: Wallet, val errorMessage: String?) : SyncError()
@@ -166,5 +180,16 @@ data class BalanceUiState(
     val balanceViewItems: List<BalanceViewItem>,
     val viewState: ViewState,
     val isRefreshing: Boolean,
-    val totalState: TotalService.State
+    val totalState: TotalUIState
 )
+
+sealed class TotalUIState {
+    data class Visible(
+        val currencyValueStr: String,
+        val coinValueStr: String,
+        val dimmed: Boolean
+    ) : TotalUIState()
+
+    object Hidden : TotalUIState()
+
+}

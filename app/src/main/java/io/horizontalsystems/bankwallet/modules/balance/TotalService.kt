@@ -2,9 +2,8 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.managers.NumberRounding
-import io.horizontalsystems.bankwallet.entities.CoinValueRounded
-import io.horizontalsystems.bankwallet.entities.CurrencyValueRounded
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
@@ -20,17 +19,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 class TotalService(
     private val currencyManager: ICurrencyManager,
     private val coinManager: ICoinManager,
-    private val marketKit: MarketKit,
-    private val numberRounding: NumberRounding
+    private val marketKit: MarketKit
 ) {
     private var balanceHidden = false
-    private var totalCurrencyValue: CurrencyValueRounded? = null
-    private var totalCoinValue: CoinValueRounded? = null
+    private var totalCurrencyValue: CurrencyValue? = null
+    private var totalCoinValue: CoinValue? = null
     private var dimmed = false
 
     private val _stateFlow: MutableStateFlow<State> = MutableStateFlow(
@@ -141,12 +138,12 @@ class TotalService(
                 total = total.add(item.balanceFiatTotal ?: BigDecimal.ZERO)
             }
 
-            CurrencyValueRounded(currency, numberRounding.getRoundedCurrencyShort(total, 8))
+            CurrencyValue(currency, total)
         }
     }
 
     private fun refreshTotalCoinValue() {
-        val tmpTotalCurrencyValue = totalCurrencyValue?.value
+        val tmpTotalCurrencyValue = totalCurrencyValue
         val tmpCoinPrice = coinPrice
         val tmpPlatformCoin = platformCoin
 
@@ -155,9 +152,8 @@ class TotalService(
             tmpCoinPrice == null -> null
             tmpPlatformCoin == null -> null
             else -> {
-                val value = tmpTotalCurrencyValue.value.divide(tmpCoinPrice.value, tmpPlatformCoin.decimals, RoundingMode.HALF_UP)
-                val rounded = numberRounding.getRoundedCoinShort(value, tmpPlatformCoin.decimals)
-                CoinValueRounded(tmpPlatformCoin, rounded)
+                val value = tmpTotalCurrencyValue.value / tmpCoinPrice.value
+                CoinValue(tmpPlatformCoin, value)
             }
         }
     }
@@ -184,8 +180,8 @@ class TotalService(
 
     sealed class State {
         data class Visible(
-            val currencyValue: CurrencyValueRounded?,
-            val coinValue: CoinValueRounded?,
+            val currencyValue: CurrencyValue?,
+            val coinValue: CoinValue?,
             val dimmed: Boolean
         ) : State()
 
