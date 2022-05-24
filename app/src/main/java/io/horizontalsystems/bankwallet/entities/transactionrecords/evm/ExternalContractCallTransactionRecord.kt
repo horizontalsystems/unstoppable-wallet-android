@@ -11,7 +11,10 @@ class ExternalContractCallTransactionRecord(
     source: TransactionSource,
     val incomingEvents: List<TransferEvent>,
     val outgoingEvents: List<TransferEvent>
-) : EvmTransactionRecord(transaction, baseCoin, source, true) {
+) : EvmTransactionRecord(
+    transaction, baseCoin, source, true,
+    !incomingEvents.any { it.value is TransactionValue.CoinValue } && !outgoingEvents.any { it.value is TransactionValue.CoinValue }
+) {
 
     override val mainValue: TransactionValue? =
         when {

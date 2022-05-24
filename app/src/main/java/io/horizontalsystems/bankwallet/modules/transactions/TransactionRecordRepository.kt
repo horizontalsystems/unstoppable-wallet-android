@@ -20,8 +20,8 @@ class TransactionRecordRepository(
 
     private var selectedWallet: TransactionWallet? = null
 
-    private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
-    override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
+    private val itemsSubject = PublishSubject.create<Pair<List<TransactionRecord>, Int>>()
+    override val itemsObservable: Observable<Pair<List<TransactionRecord>, Int>> get() = itemsSubject
 
     private var loadedPageNumber = 0
     private val items = CopyOnWriteArrayList<TransactionRecord>()
@@ -206,14 +206,14 @@ class TransactionRecordRepository(
 
                 items.clear()
                 items.addAll(it)
-                itemsSubject.onNext(items)
+                itemsSubject.onNext(Pair(items, page))
 
                 loadedPageNumber = page
             }
     }
 
     companion object {
-        const val itemsPerPage = 10
+        const val itemsPerPage = 20
     }
 
 }

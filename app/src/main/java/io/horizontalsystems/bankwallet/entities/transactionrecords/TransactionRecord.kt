@@ -13,6 +13,7 @@ abstract class TransactionRecord(
     val confirmationsThreshold: Int?,
     val timestamp: Long,
     val failed: Boolean = false,
+    val spam: Boolean = false,
     val source: TransactionSource
 ) : Comparable<TransactionRecord> {
 

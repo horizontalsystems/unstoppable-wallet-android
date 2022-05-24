@@ -50,7 +50,7 @@ class TransactionsService(
 
         transactionRecordRepository.itemsObservable
             .subscribeIO {
-                handleUpdatedRecords(it)
+                handleUpdatedRecords(it.first, it.second)
             }
             .let {
                 disposables.add(it)
@@ -132,10 +132,11 @@ class TransactionsService(
     }
 
     @Synchronized
-    private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
+    private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>, pageNumber: Int) {
         val tmpList = mutableListOf<TransactionItem>()
 
         transactionRecords.forEach { record ->
+            if (record.spam) return@forEach
             var transactionItem = transactionItems.find { it.record == record }
 
             if (transactionItem == null) {
@@ -148,9 +149,13 @@ class TransactionsService(
             tmpList.add(transactionItem)
         }
 
-        transactionItems.clear()
-        transactionItems.addAll(tmpList)
-        itemsSubject.onNext(transactionItems)
+        if (tmpList.size > transactionItems.size || pageNumber == 1) {
+            transactionItems.clear()
+            transactionItems.addAll(tmpList)
+            itemsSubject.onNext(transactionItems)
+        } else {
+            loadNext()
+        }
     }
 
     private fun getCurrencyValue(record: TransactionRecord): CurrencyValue? {
