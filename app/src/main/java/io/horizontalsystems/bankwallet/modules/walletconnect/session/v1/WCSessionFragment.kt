@@ -199,7 +199,8 @@ private fun ColumnScope.WCSessionListContent(
                 },
                 {
                     TitleValueCell(
-                        stringResource(R.string.WalletConnect_ActiveWallet), "Wallet1"
+                        stringResource(R.string.WalletConnect_ActiveWallet),
+                        peerMeta?.activeWallet ?: ""
                     )
                 },
             )
