@@ -1,14 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.restore.restoremnemonic
 
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.reactivex.subjects.BehaviorSubject
 
 class RestoreMnemonicService(
-        private val wordsManager: WordsManager,
-        private val passphraseValidator: PassphraseValidator
+    accountFactory: IAccountFactory,
+    private val wordsManager: WordsManager,
+    private val passphraseValidator: PassphraseValidator
 ) : Clearable {
 
     var passphraseEnabled: Boolean = false
@@ -19,6 +21,13 @@ class RestoreMnemonicService(
     val passphraseEnabledObservable = BehaviorSubject.createDefault(passphraseEnabled)
 
     var passphrase = ""
+
+    val defaultName = accountFactory.getNextAccountName()
+
+    var name = ""
+
+    val resolvedName: String
+        get() = name.ifBlank { defaultName }
 
     override fun clear() = Unit
 

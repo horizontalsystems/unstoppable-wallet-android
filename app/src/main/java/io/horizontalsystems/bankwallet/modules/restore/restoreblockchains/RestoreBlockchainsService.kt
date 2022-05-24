@@ -15,6 +15,7 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 class RestoreBlockchainsService(
+    private val accountName: String,
     private val accountType: AccountType,
     private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
@@ -145,7 +146,7 @@ class RestoreBlockchainsService(
     }
 
     fun restore() {
-        val account = accountFactory.account(accountType, AccountOrigin.Restored, true)
+        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, true)
         accountManager.save(account)
 
         restoreSettingsMap.forEach { (platformCoin, settings) ->

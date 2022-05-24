@@ -126,8 +126,10 @@ interface IBackupManager {
 }
 
 interface IAccountFactory {
-    fun account(type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
-    fun watchAccount(address: String, domain: String?): Account
+    fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
+    fun watchAccount(name: String, address: String, domain: String?): Account
+    fun getNextWatchAccountName(): String
+    fun getNextAccountName(): String
 }
 
 interface IWalletStorage {

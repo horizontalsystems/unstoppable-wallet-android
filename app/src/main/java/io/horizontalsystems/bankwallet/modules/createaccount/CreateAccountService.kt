@@ -52,7 +52,7 @@ class CreateAccountService(
         }
 
         val accountType = resolveAccountType()
-        val account = accountFactory.account(accountType, AccountOrigin.Created, false)
+        val account = accountFactory.account(accountFactory.getNextAccountName(), accountType, AccountOrigin.Created, false)
 
         accountManager.save(account)
         activateDefaultWallets(account)

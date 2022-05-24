@@ -38,7 +38,10 @@ import io.horizontalsystems.core.findNavController
 class RestoreBlockchainsFragment : BaseFragment() {
 
     val vmFactory by lazy {
-        RestoreBlockchainsModule.Factory(arguments?.getParcelable(ACCOUNT_TYPE_KEY)!!)
+        RestoreBlockchainsModule.Factory(
+            arguments?.getString(ACCOUNT_NAME_KEY)!!,
+            arguments?.getParcelable(ACCOUNT_TYPE_KEY)!!
+        )
     }
 
     private val viewModel by viewModels<RestoreBlockchainsViewModel> { vmFactory }
@@ -127,6 +130,7 @@ class RestoreBlockchainsFragment : BaseFragment() {
     }
 
     companion object {
+        const val ACCOUNT_NAME_KEY = "account_name_key"
         const val ACCOUNT_TYPE_KEY = "account_type_key"
     }
 }

@@ -19,7 +19,10 @@ import io.horizontalsystems.marketkit.models.PlatformCoin
 
 object RestoreBlockchainsModule {
 
-    class Factory(private val accountType: AccountType) : ViewModelProvider.Factory {
+    class Factory(
+        private val accountName: String,
+        private val accountType: AccountType
+        ) : ViewModelProvider.Factory {
 
         private val restoreSettingsService by lazy {
             RestoreSettingsService(App.restoreSettingsManager)
@@ -36,6 +39,7 @@ object RestoreBlockchainsModule {
 
         private val restoreSelectCoinsService by lazy {
             RestoreBlockchainsService(
+                accountName,
                 accountType,
                 App.accountFactory,
                 App.accountManager,

@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.watchaddress
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
@@ -12,15 +15,29 @@ class WatchAddressService(
     private val walletActivator: WalletActivator,
     private val evmBlockchainManager: EvmBlockchainManager
 ) {
+    val defaultName = accountFactory.getNextWatchAccountName()
+
+    var nameState by mutableStateOf("")
+
+    var name: String = ""
+
     var address: Address? = null
+        set(value) {
+            field = value
+            if (value?.domain != null && name.isBlank()) {
+                name = value.domain
+                nameState = value.domain
+            }
+        }
 
     val isCreatable
         get() = address != null
 
     fun createAccount() {
         val tmpAddress = address ?: throw EmptyAddressException()
+        val accountName = name.ifBlank { defaultName }
+        val account = accountFactory.watchAccount(accountName, tmpAddress.hex, tmpAddress.domain)
 
-        val account = accountFactory.watchAccount(tmpAddress.hex, tmpAddress.domain)
         accountManager.save(account)
 
         val allBlockchains = evmBlockchainManager.allBlockchains
