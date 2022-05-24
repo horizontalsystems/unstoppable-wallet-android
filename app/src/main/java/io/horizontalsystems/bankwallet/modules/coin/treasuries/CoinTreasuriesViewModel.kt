@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.logoUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesModule.CoinTreasuriesData
@@ -110,11 +109,10 @@ class CoinTreasuriesViewModel(
             fundLogoUrl = coinTreasury.logoUrl,
             country = coinTreasury.countryCode,
             amount = numberFormatter.formatCoinShort(coinTreasury.amount, service.coin.code, 8),
-            amountInCurrency = numberFormatter.formatCurrencyValueAsShortened(
-                CurrencyValue(
-                    service.currency,
-                    coinTreasury.amountInCurrency
-                )
+            amountInCurrency = numberFormatter.formatFiatShort(
+                coinTreasury.amountInCurrency,
+                service.currency.symbol,
+                2
             )
         )
 }

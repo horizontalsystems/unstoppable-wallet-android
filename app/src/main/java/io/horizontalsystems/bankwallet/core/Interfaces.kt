@@ -372,7 +372,6 @@ interface IAppNumberFormatter {
         currencyDecimals: Int
     ): String
 
-    fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String
     fun formatValueAsDiff(value: Value): String
 }
 

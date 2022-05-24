@@ -98,13 +98,11 @@ class NftCollectionViewModel(
     private fun coinValue(value: BigDecimal) =
         numberFormatter.formatCoinShort(value, basePlatformCoin.code, basePlatformCoin.decimals)
 
-    private fun currencyValue(value: BigDecimal?, rate: CurrencyValue?) =
-        rate?.let {
-            value?.let {
-                val fiatValue = CurrencyValue(rate.currency, value = value * rate.value)
-                App.numberFormatter.formatCurrencyValueAsShortened(fiatValue)
-            }
-        }
+    private fun currencyValue(value: BigDecimal?, rate: CurrencyValue?): String? {
+        if (value == null || rate == null) return null
+
+        return App.numberFormatter.formatFiatShort(value * rate.value, rate.currency.symbol, 2)
+    }
 
     private fun syncRate() {
         val collection = result?.getOrNull() ?: return
