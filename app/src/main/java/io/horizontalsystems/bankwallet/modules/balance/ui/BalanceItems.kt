@@ -25,8 +25,6 @@ import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.compose.formatNumberCoin
-import io.horizontalsystems.bankwallet.ui.compose.formatNumberFiat
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -49,7 +47,7 @@ fun BalanceItems(
         val context = LocalContext.current
 
         when (val totalState = uiState.totalState) {
-            TotalService.State.Hidden -> {
+            TotalUIState.Hidden -> {
                 DoubleText(
                     title = "*****",
                     body = "*****",
@@ -63,16 +61,10 @@ fun BalanceItems(
                     }
                 )
             }
-            is TotalService.State.Visible -> {
-                val currencyValueStr = totalState.currencyValue?.let {
-                    formatNumberFiat(currencyValueRounded = it)
-                }
-                val coinValueStr = totalState.coinValue?.let {
-                    "~" + formatNumberCoin(coinValueRounded = it)
-                }
+            is TotalUIState.Visible -> {
                 DoubleText(
-                    title = currencyValueStr ?: "---",
-                    body = coinValueStr ?: "---",
+                    title = totalState.currencyValueStr,
+                    body = totalState.coinValueStr,
                     dimmed = totalState.dimmed,
                     onClickTitle = {
                         viewModel.onBalanceClick()
