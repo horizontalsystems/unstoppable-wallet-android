@@ -119,6 +119,7 @@ class NumberRounding {
             2 -> LargeNumberName.Million
             3 -> LargeNumberName.Billion
             4 -> LargeNumberName.Trillion
+            5 -> LargeNumberName.Quadrillion
             else -> null
         }
 
@@ -150,5 +151,6 @@ enum class LargeNumberName {
     Thousand,
     Million,
     Billion,
-    Trillion;
+    Trillion,
+    Quadrillion;
 }
