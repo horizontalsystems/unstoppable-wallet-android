@@ -127,7 +127,7 @@ class NumberRounding {
             else -> {
                 val t = groupCount * 3
                 val shortened = value.divide(BigDecimal(10.0.pow(t.toDouble())))
-                if (shortened >= BigDecimal("999")) {
+                if (shortened >= BigDecimal("999.5")) {
                     shortByGroupCount(groupCount + 1, value)
                 } else {
                     BigDecimalRounded.Large(shortened, suffix)

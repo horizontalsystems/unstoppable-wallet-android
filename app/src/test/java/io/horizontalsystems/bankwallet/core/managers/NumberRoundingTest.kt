@@ -101,7 +101,7 @@ class NumberRoundingTest {
 
         assertShortLarge("200000", "200", NumberSuffix.Thousand)
         assertShortLarge("998500", "999", NumberSuffix.Thousand)
-        assertShortLarge("999000", "1", NumberSuffix.Million) // ??? should be equal to 999k
+        assertShortLarge("999499", "999", NumberSuffix.Thousand)
         assertShortLarge("999500", "1", NumberSuffix.Million)
     }
 
