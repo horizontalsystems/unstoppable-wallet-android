@@ -37,7 +37,7 @@ class NumberFormatter(
         }
     }
 
-    override fun formatCoinFull(value: BigDecimal, code: String, coinDecimals: Int): String {
+    override fun formatCoinFull(value: BigDecimal, code: String?, coinDecimals: Int): String {
         val rounded = numberRounding.getRoundedCoinFull(value, coinDecimals)
 
         val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE)
@@ -63,10 +63,10 @@ class NumberFormatter(
             }
         }
 
-        return "$res $code"
+        return res + (code?.let { " $it" } ?: "")
     }
 
-    override fun formatCoinShort(value: BigDecimal, code: String, coinDecimals: Int): String {
+    override fun formatCoinShort(value: BigDecimal, code: String?, coinDecimals: Int): String {
         val rounded = numberRounding.getRoundedCoinShort(value, coinDecimals)
 
         val formattedNumber = format(rounded.value, 0, Int.MAX_VALUE)
@@ -92,7 +92,7 @@ class NumberFormatter(
             }
         }
 
-        return "$res $code"
+        return res + (code?.let { " $it" } ?: "")
     }
 
     override fun formatNumberShort(value: BigDecimal, maximumFractionDigits: Int): String {

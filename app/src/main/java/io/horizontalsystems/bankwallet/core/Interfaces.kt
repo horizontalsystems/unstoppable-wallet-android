@@ -344,13 +344,13 @@ interface IAppNumberFormatter {
 
     fun formatCoinFull(
         value: BigDecimal,
-        code: String,
+        code: String?,
         coinDecimals: Int,
     ): String
 
     fun formatCoinShort(
         value: BigDecimal,
-        code: String,
+        code: String?,
         coinDecimals: Int
     ): String
 
