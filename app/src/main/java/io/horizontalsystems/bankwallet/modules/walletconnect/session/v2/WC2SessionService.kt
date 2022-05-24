@@ -62,6 +62,7 @@ class WC2SessionService(
                     it.url,
                     it.description,
                     it.icons.last(),
+                    accountManager.activeAccount?.name,
                     false
                 )
             }
@@ -71,6 +72,7 @@ class WC2SessionService(
                     it.url,
                     it.description,
                     it.icons.lastOrNull()?.toString(),
+                    accountManager.activeAccount?.name,
                     true
                 )
             }
