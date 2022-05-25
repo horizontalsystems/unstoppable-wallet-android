@@ -18,7 +18,8 @@ class Colors(
     claude: Color,
     lawrence: Color,
     jeremy: Color,
-    laguna: Color
+    laguna: Color,
+    raina: Color,
 ) {
 
     //base colors
@@ -71,6 +72,8 @@ class Colors(
         private set
     var laguna by mutableStateOf(laguna)
         private set
+    var raina by mutableStateOf(raina)
+        private set
 
     fun update(other: Colors) {
         jacob = other.jacob
@@ -84,6 +87,7 @@ class Colors(
         lawrence = other.lawrence
         jeremy = other.jeremy
         laguna = other.laguna
+        raina = other.raina
     }
 
     fun copy(): Colors = Colors(
@@ -98,5 +102,6 @@ class Colors(
         lawrence = lawrence,
         jeremy = jeremy,
         laguna = laguna,
+        raina = raina,
     )
 }

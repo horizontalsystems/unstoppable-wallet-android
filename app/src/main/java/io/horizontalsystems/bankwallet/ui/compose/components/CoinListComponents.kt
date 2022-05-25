@@ -211,7 +211,10 @@ private fun MessageWithActionContent(
         Box(
             modifier = Modifier
                 .size(100.dp)
-                .background(ComposeAppTheme.colors.steel20, shape = CircleShape),
+                .background(
+                    color = ComposeAppTheme.colors.raina,
+                    shape = CircleShape
+                ),
             contentAlignment = Alignment.Center
         ) {
             Icon(
