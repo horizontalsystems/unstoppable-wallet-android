@@ -16,7 +16,6 @@ import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
-import kotlin.math.min
 
 
 data class SendEvmData(
@@ -99,7 +98,7 @@ object SendEvmModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendEthereumAdapter
             val amountValidator = AmountValidator()
-            val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
+            val coinMaxAllowedDecimals = wallet.platformCoin.decimals
 
             val amountService = SendEvmAmountService(adapter, wallet.platformCoin, amountValidator, coinMaxAllowedDecimals)
             val addressService = SendEvmAddressService()

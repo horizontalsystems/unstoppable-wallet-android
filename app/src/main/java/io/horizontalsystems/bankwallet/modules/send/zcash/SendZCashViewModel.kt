@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
-import kotlin.math.min
 
 class SendZCashViewModel(
     private val adapter: ISendZcashAdapter,
@@ -31,7 +30,7 @@ class SendZCashViewModel(
     private val memoService: SendZCashMemoService
 ) : ViewModel() {
 
-    val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
+    val coinMaxAllowedDecimals = wallet.platformCoin.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
     val memoMaxLength by memoService::memoMaxLength
 

@@ -65,7 +65,6 @@ class AppConfigProvider {
     }
 
      val fiatDecimal: Int = 2
-     val maxDecimal: Int = 8
      val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
      val currencies: List<Currency> = listOf(
