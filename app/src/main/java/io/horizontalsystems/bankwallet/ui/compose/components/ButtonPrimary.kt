@@ -32,8 +32,8 @@ fun ButtonPrimaryDefault(
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.leah,
             contentColor = ComposeAppTheme.colors.claude,
-            disabledBackgroundColor = ComposeAppTheme.colors.leah,
-            disabledContentColor = ComposeAppTheme.colors.claude,
+            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
@@ -52,7 +52,7 @@ fun ButtonPrimaryTransparent(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val contentColor = when {
-        !enabled -> ComposeAppTheme.colors.steel20
+        !enabled -> ComposeAppTheme.colors.grey50
         isPressed -> ComposeAppTheme.colors.grey
         else -> ComposeAppTheme.colors.leah
     }
@@ -98,8 +98,8 @@ fun ButtonPrimaryYellow(
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
             contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.yellowD,
-            disabledContentColor = ComposeAppTheme.colors.dark,
+            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = {
             Text(
@@ -123,10 +123,10 @@ fun ButtonPrimaryRed(
         modifier = modifier,
         onClick = onClick,
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.redD,
+            backgroundColor = ComposeAppTheme.colors.lucian,
             contentColor = ComposeAppTheme.colors.claude,
-            disabledBackgroundColor = ComposeAppTheme.colors.redD,
-            disabledContentColor = ComposeAppTheme.colors.claude,
+            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
@@ -148,8 +148,8 @@ fun ButtonPrimaryYellowWithSpinner(
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
             contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.yellowD,
-            disabledContentColor = ComposeAppTheme.colors.dark,
+            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = {
             if (showSpinner) {
