@@ -37,8 +37,9 @@ class EvmSyncSourceManager(
             ),
 
             EvmBlockchain.BinanceSmartChain to listOf(
-                getSyncSource(EvmBlockchain.BinanceSmartChain, "MainNet HTTP", RpcSource.binanceSmartChainHttp(), TransactionSource.bscscan(appConfigProvider.bscscanApiKey)),
-                getSyncSource(EvmBlockchain.BinanceSmartChain, "MainNet Websocket", RpcSource.binanceSmartChainWebSocket(), TransactionSource.bscscan(appConfigProvider.bscscanApiKey))
+                getSyncSource(EvmBlockchain.BinanceSmartChain, "Default HTTP", RpcSource.binanceSmartChainHttp(), TransactionSource.bscscan(appConfigProvider.bscscanApiKey)),
+                getSyncSource(EvmBlockchain.BinanceSmartChain, "BSC-RPC HTTP", RpcSource.bscRpcHttp(), TransactionSource.bscscan(appConfigProvider.bscscanApiKey)),
+                getSyncSource(EvmBlockchain.BinanceSmartChain, "Default WebSocket", RpcSource.binanceSmartChainWebSocket(), TransactionSource.bscscan(appConfigProvider.bscscanApiKey))
             ),
 
             EvmBlockchain.Polygon to listOf(
