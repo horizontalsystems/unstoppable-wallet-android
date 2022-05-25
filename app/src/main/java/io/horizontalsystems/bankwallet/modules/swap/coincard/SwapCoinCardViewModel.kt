@@ -20,7 +20,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.math.RoundingMode
-import kotlin.math.min
 
 class SwapCoinCardViewModel(
     private val coinCardService: ISwapCoinCardService,
@@ -40,7 +39,7 @@ class SwapCoinCardViewModel(
                 AmountType.Coin -> coinCardService.coin?.decimals ?: maxValidDecimals
                 AmountType.Currency -> fiatService.currency.decimal
             }
-            return min(decimals, maxValidDecimals)
+            return decimals
         }
 
     private val amountLiveData = MutableLiveData<String?>(null)
@@ -227,7 +226,7 @@ class SwapCoinCardViewModel(
 
             setCoinValueToService(inputAmount, force)
         } else {
-            val decimals = min(fullAmountInfo.primaryDecimal, maxValidDecimals)
+            val decimals = fullAmountInfo.primaryDecimal
             val amountString = fullAmountInfo.primaryValue.setScale(decimals, RoundingMode.FLOOR)?.stripTrailingZeros()
                 ?.toPlainString()
             amountLiveData.postValue(amountString)
