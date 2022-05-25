@@ -171,35 +171,68 @@ fun ScreenMessageWithAction(
     Column {
         Spacer(Modifier.weight(22f))
 
-        Row(modifier = Modifier.weight(78f), verticalAlignment = Alignment.Top) {
-            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .background(ComposeAppTheme.colors.steel20, shape = CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        modifier = Modifier.size(48.dp),
-                        painter = painterResource(icon),
-                        contentDescription = text,
-                        tint = ComposeAppTheme.colors.grey
-                    )
-                }
-                Text(
-                    modifier = Modifier
-                        .padding(top = 32.dp)
-                        .padding(horizontal = 48.dp),
-                    text = text,
-                    textAlign = TextAlign.Center,
-                    overflow = TextOverflow.Ellipsis,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2
-                )
-                Spacer(Modifier.height(32.dp))
-                actionsComposable?.let { it() }
-            }
+        Row(
+            modifier = Modifier.weight(78f),
+            verticalAlignment = Alignment.Top
+        ) {
+            MessageWithActionContent(icon, text, actionsComposable)
         }
+    }
+}
+
+@Composable
+fun ScreenMessageNoAccount(
+    text: String,
+    @DrawableRes icon: Int,
+    actionsComposable: (@Composable () -> Unit)? = null
+) {
+    Column {
+        Spacer(Modifier.weight(30f))
+
+        Row(
+            modifier = Modifier.weight(70f),
+            verticalAlignment = Alignment.Top
+        ) {
+            MessageWithActionContent(icon, text, actionsComposable)
+        }
+    }
+}
+
+@Composable
+private fun MessageWithActionContent(
+    icon: Int,
+    text: String,
+    actionsComposable: @Composable() (() -> Unit)?
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .background(ComposeAppTheme.colors.steel20, shape = CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                modifier = Modifier.size(48.dp),
+                painter = painterResource(icon),
+                contentDescription = text,
+                tint = ComposeAppTheme.colors.grey
+            )
+        }
+        Text(
+            modifier = Modifier
+                .padding(top = 32.dp)
+                .padding(horizontal = 48.dp),
+            text = text,
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
+            color = ComposeAppTheme.colors.grey,
+            style = ComposeAppTheme.typography.subhead2
+        )
+        Spacer(Modifier.height(32.dp))
+        actionsComposable?.let { it() }
     }
 }
 
