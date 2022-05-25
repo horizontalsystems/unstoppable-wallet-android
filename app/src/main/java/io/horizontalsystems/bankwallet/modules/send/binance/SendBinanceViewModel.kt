@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
-import kotlin.math.min
 
 class SendBinanceViewModel(
     val wallet: Wallet,
@@ -31,9 +30,9 @@ class SendBinanceViewModel(
     private val xRateService: XRateService,
 ) : ViewModel() {
     val feeCoin by feeService::feeCoin
-    val feeCoinMaxAllowedDecimals = min(feeCoin.decimals, App.appConfigProvider.maxDecimal)
+    val feeCoinMaxAllowedDecimals = feeCoin.decimals
 
-    val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
+    val coinMaxAllowedDecimals = wallet.platformCoin.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
     val memoMaxLength = 120
 

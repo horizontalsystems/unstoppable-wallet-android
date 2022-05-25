@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
-import kotlin.math.min
 
 class SendBitcoinViewModel(
     private val adapter: ISendBitcoinAdapter,
@@ -34,7 +33,7 @@ class SendBitcoinViewModel(
     private val xRateService: XRateService,
     private val btcBlockchainManager: BtcBlockchainManager
 ) : ViewModel() {
-    val coinMaxAllowedDecimals = min(wallet.platformCoin.decimals, App.appConfigProvider.maxDecimal)
+    val coinMaxAllowedDecimals = wallet.platformCoin.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
     val feeRatePriorities by feeRateService::feeRatePriorities
