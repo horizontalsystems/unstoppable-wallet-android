@@ -28,6 +28,7 @@ val lightPalette = Colors(
     lawrence = Color.White,
     jeremy = SteelLight,
     laguna = LagunaL,
+    raina = White50,
 )
 
 val darkPalette = Colors(
@@ -42,6 +43,7 @@ val darkPalette = Colors(
     lawrence = SteelDark,
     jeremy = Steel20,
     laguna = LagunaD,
+    raina = Steel10,
 )
 
 @Composable
