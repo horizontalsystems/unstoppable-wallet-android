@@ -61,8 +61,8 @@ class EvmBlockchainManager(
         EvmBlockchain.Ethereum,
         EvmBlockchain.BinanceSmartChain,
         EvmBlockchain.Polygon,
-        EvmBlockchain.Optimism,
-        EvmBlockchain.ArbitrumOne,
+//        EvmBlockchain.Optimism,
+//        EvmBlockchain.ArbitrumOne,
     )
 
 }
