@@ -40,7 +40,7 @@ class TopNftCollectionsViewItemFactory(
             name = collection.name,
             imageUrl = collection.imageUrl,
             volume = volumeFormatted,
-            volumeDiff = volumeDiff * BigDecimal.valueOf(100),
+            volumeDiff = volumeDiff,
             order = order,
             floorPrice = floorPriceFormatted
         )
