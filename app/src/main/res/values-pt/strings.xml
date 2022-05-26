@@ -169,7 +169,7 @@
     <string name="Market_Filter_Range_40M_200M">40M - 200M</string>
     <string name="Market_Filter_Range_200M_2B">200M - 2B</string>
     <string name="Market_Filter_Range_2B_10B">2B - 10B</string>
-    <string name="Market_Filter_Range_10B_More">&gt; 10BN</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10B</string>
     <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
     <string name="Market_Filter_Range_50M_200M">50M - 200M</string>
     <string name="Market_Filter_Range_200M_1B">200M - 1B</string>
@@ -229,7 +229,7 @@
     <string name="Balance_Sort_24hPriceChange">Price Change</string>
     <string name="Balance_Hidden">hidden</string>
     <string name="Balance_Backup_Alert">You need to backup the %1$s Wallet before you may receive %2$s.</string>
-    <string name="Balance_NoWalletAlert">You don\’t have an installed wallet yet. \nCreate or restore an existing wallet </string>
+    <string name="Balance_NoWalletAlert">You don\'t have any installed wallets yet.\nCreate a new wallet or restore an existing one </string>
     <string name="Balance_NoCoinsAlert">You don\'t have an added coins.\nAdd the coins you will be using</string>
     <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
     <!--Send-->
@@ -902,8 +902,8 @@
     <string name="CoinPage_DetailsTxVolume_Description">The aggregate token transaction volume is recorded on-chain. The volume is measured in the actual tokens (not USD).</string>
     <string name="CoinPage_DetailsActiveAddresses">Active Addresses</string>
     <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
-    <string name="CoinPage_NftBannerTitle">Unstoppable Wallet Passes</string>
-    <string name="CoinPage_NftBannerDescription">Get advanced features by holding our NFTs</string>
+    <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
+    <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">7D avg.</string>
     <string name="Nfts_PriceType_Days_30">30D avg.</string>
