@@ -367,7 +367,7 @@ class CoinDetailsFragment : BaseFragment() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 10.dp, end = 10.dp)
+                .padding(start = 12.dp, end = 12.dp)
         ) {
             tokenLiquidityViewItem.volume?.let {
                 miniProChartCard(
@@ -429,7 +429,7 @@ class CoinDetailsFragment : BaseFragment() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp)
+                    .padding(start = 12.dp, end = 12.dp)
             ) {
                 tokenDistributionViewItem.txCount?.let {
                     miniProChartCard(
@@ -456,12 +456,12 @@ class CoinDetailsFragment : BaseFragment() {
         }
 
         tokenDistributionViewItem.activeAddresses?.let {
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp)
+                    .padding(start = 12.dp, end = 12.dp)
             ) {
                 miniProChartCard(
                     ProChartModule.ChartType.AddressesCount,
@@ -603,7 +603,7 @@ class CoinDetailsFragment : BaseFragment() {
             MiniChartCard(
                 title = title,
                 chartViewItem = chartViewItem,
-                paddingValues = PaddingValues(start = 6.dp, end = 6.dp),
+                paddingValues = PaddingValues(start = 4.dp, end = 4.dp),
                 onClick = {
                     if (proChartsActivated) {
                         ProChartFragment.show(
