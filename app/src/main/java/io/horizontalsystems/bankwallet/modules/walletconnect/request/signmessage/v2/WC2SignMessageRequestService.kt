@@ -18,6 +18,9 @@ class WC2SignMessageRequestService(
         sessionManager.pendingRequestDataToOpen[requestId]!!
     }
 
+    override val dAppName: String?
+        get() = pendingRequest.dAppName
+
     val evmKitWrapper by lazy {
         requestData.evmKitWrapper
     }

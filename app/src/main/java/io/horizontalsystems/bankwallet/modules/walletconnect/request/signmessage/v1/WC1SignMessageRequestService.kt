@@ -11,7 +11,7 @@ import io.horizontalsystems.ethereumkit.core.signer.Signer
 
 class WC1SignMessageRequestService(
     private val request: WC1SignMessageRequest,
-    private val dAppName: String?,
+    override val dAppName: String?,
     private val baseService: WC1Service,
     private val signer: Signer
 ) : WCSignMessageRequestModule.RequestAction {
@@ -24,9 +24,9 @@ class WC1SignMessageRequestService(
         when (request.message.type) {
             WCSignType.MESSAGE -> {
                 if (isLegacySignRequest) {
-                    SignMessage.Message(messageData, dAppName, true)
+                    SignMessage.Message(messageData, true)
                 } else {
-                    SignMessage.Message(hexStringToUtf8String(messageData), dAppName)
+                    SignMessage.Message(hexStringToUtf8String(messageData))
                 }
             }
             WCSignType.PERSONAL_MESSAGE -> SignMessage.PersonalMessage(
@@ -35,7 +35,7 @@ class WC1SignMessageRequestService(
             WCSignType.TYPED_MESSAGE -> {
                 val typeData = signer.parseTypedData(messageData)
                 val domain = typeData?.domain?.get("name")?.toString()
-                SignMessage.TypedMessage(messageData, dAppName, domain)
+                SignMessage.TypedMessage(messageData, domain)
             }
         }
     }

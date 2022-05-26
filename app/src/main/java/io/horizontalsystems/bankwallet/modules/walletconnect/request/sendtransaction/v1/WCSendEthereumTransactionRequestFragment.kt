@@ -26,7 +26,9 @@ class WCSendEthereumTransactionRequestFragment : BaseFragment() {
     private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.wcSessionFragment)
     val vmFactory by lazy {
         WCRequestModule.Factory(
-            baseViewModel.sharedSendEthereumTransactionRequest!!, baseViewModel.service
+            baseViewModel.sharedSendEthereumTransactionRequest!!,
+            baseViewModel.service,
+            baseViewModel.dAppName
         )
     }
     private val viewModel by viewModels<WCSendEthereumTransactionRequestViewModel> { vmFactory }

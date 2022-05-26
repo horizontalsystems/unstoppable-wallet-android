@@ -75,6 +75,7 @@ object WC2Parser {
                         return WC2SendEthereumTransactionRequest(
                             request.requestId,
                             request.topic,
+                            dAppName,
                             transaction
                         )
                     }
@@ -85,6 +86,7 @@ object WC2Parser {
                         return WC2SignMessageRequest(
                             request.requestId,
                             request.topic,
+                            dAppName,
                             dataString,
                             SignMessage.PersonalMessage(data)
                         )
@@ -96,8 +98,9 @@ object WC2Parser {
                         return WC2SignMessageRequest(
                             request.requestId,
                             request.topic,
+                            dAppName,
                             dataString,
-                            SignMessage.Message(data, dAppName)
+                            SignMessage.Message(data)
                         )
                     }
                     "eth_signTypedData" -> {
@@ -105,10 +108,11 @@ object WC2Parser {
                             .firstOrNull { it.asString != address }?.asString ?: ""
                         val data = hexStringToUtf8String(dataString)
                         val domain = getSessionRequestDomainName(data) ?: ""
-                        val message = SignMessage.TypedMessage(data, domain, dAppName)
+                        val message = SignMessage.TypedMessage(data, domain)
                         return WC2SignMessageRequest(
                             request.requestId,
                             request.topic,
+                            dAppName,
                             dataString,
                             message
                         )

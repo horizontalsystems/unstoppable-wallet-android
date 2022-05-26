@@ -12,6 +12,8 @@ class WCSignMessageRequestViewModel(
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val message = service.message
 
+    val dAppName by service::dAppName
+
     var trustCheckmarkChecked: Boolean by mutableStateOf(false)
         private set
 

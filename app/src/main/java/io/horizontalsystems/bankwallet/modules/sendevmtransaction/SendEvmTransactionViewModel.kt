@@ -52,7 +52,6 @@ class SendEvmTransactionViewModel(
     val cautionsLiveData = MutableLiveData<List<CautionViewItem>>()
 
     val viewItemsLiveData = MutableLiveData<List<SectionViewItem>>()
-    val transactionTitleLiveData = MutableLiveData<String>()
 
     init {
         service.stateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
@@ -98,7 +97,11 @@ class SendEvmTransactionViewModel(
         }
 
         if (dataState.transactionData != null) {
-            return getUnknownMethodItems(dataState.transactionData, service.methodName(dataState.transactionData.input))
+            return getUnknownMethodItems(
+                dataState.transactionData,
+                service.methodName(dataState.transactionData.input),
+                additionalInfo?.walletConnectInfo?.dAppName
+            )
         }
 
         return listOf()
@@ -512,7 +515,11 @@ class SendEvmTransactionViewModel(
         return listOf(SectionViewItem(viewItems))
     }
 
-    private fun getUnknownMethodItems(transactionData: TransactionData, methodName: String?): List<SectionViewItem> {
+    private fun getUnknownMethodItems(
+        transactionData: TransactionData,
+        methodName: String?,
+        dAppName: String?
+    ): List<SectionViewItem> {
         val toValue = transactionData.to.eip55
 
         val viewItems = mutableListOf(
@@ -543,7 +550,15 @@ class SendEvmTransactionViewModel(
 
         viewItems.add(ViewItem.Input(transactionData.input.toHexString()))
 
-        // TODO: Add dAppName from additionalInfo
+        dAppName?.let {
+            viewItems.add(
+                ViewItem.Value(
+                    Translator.getString(R.string.WalletConnect_SignMessageRequest_dApp),
+                    it,
+                    ValueType.Regular
+                )
+            )
+        }
 
         return listOf(SectionViewItem(viewItems))
     }
