@@ -46,7 +46,8 @@ class TopNftCollectionsService(
                 val topNfts = topNftCollectionsRepository.get(
                     sortingField = sortingField,
                     timeDuration = timeDuration,
-                    forceRefresh = forceRefresh
+                    forceRefresh = forceRefresh,
+                    limit = 100
                 )
                 _topNftCollections.emit(Result.success(topNfts))
             } catch (cancellation: CancellationException) {
