@@ -64,6 +64,10 @@ class Eip1559FeeSettingsViewModel(
         gasPriceService.setRecommended()
     }
 
+    override fun onCleared() {
+        disposable.clear()
+    }
+
     private fun sync(state: DataState<GasPriceInfo>) {
         sync(gasPriceService.currentBaseFee)
 

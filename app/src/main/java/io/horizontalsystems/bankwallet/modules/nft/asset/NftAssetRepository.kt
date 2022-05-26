@@ -75,4 +75,8 @@ class NftAssetRepository(
             CurrencyValue(xRateRepository.baseCurrency, coinValue.value.multiply(latestRate.value))
         })
     }
+
+    fun stop() {
+        disposables.clear()
+    }
 }

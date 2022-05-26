@@ -93,6 +93,7 @@ class TransactionsViewModel(
 
     override fun onCleared() {
         service.clear()
+        disposables.clear()
     }
 
     fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)

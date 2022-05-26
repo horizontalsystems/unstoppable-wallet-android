@@ -82,6 +82,9 @@ class SwapDeadlineViewModel(
         return floor(seconds / 60.0).toLong().toString()
     }
 
+    override fun onCleared() {
+        disposable.clear()
+    }
 }
 
 

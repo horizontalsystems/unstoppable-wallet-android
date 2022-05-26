@@ -41,6 +41,7 @@ class TransactionInfoViewModel(
 
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
+        disposables.clear()
     }
 
     fun onActionButtonClick(actionButton: TransactionInfoActionButton) {

@@ -65,6 +65,10 @@ class SendEvmTransactionViewModel(
         service.send(logger)
     }
 
+    override fun onCleared() {
+        disposable.clear()
+    }
+
     private fun sync(state: SendEvmTransactionService.State) {
         Log.e("SendEvmTransactionViewModel", "sync: ${state}")
         when (state) {
