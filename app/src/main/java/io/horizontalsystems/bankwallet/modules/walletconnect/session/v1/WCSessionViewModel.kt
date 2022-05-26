@@ -85,6 +85,7 @@ class WCSessionViewModel(
 
     override fun onCleared() {
         service.stop()
+        disposables.clear()
     }
 
     fun cancel() {

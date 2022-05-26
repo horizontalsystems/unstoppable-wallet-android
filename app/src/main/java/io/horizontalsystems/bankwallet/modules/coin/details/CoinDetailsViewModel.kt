@@ -76,6 +76,10 @@ class CoinDetailsViewModel(
         }
     }
 
+    override fun onCleared() {
+        disposables.clear()
+    }
+
     private fun viewItem(item: CoinDetailsService.Item): ViewItem {
         return ViewItem(
             item.proCharts.activated,

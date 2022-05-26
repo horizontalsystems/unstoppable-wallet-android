@@ -35,6 +35,7 @@ class NftAssetService(
         }
 
         loadAsset()
+        repository.start()
     }
 
     suspend fun refresh() = withContext(Dispatchers.IO) {
@@ -120,5 +121,9 @@ class NftAssetService(
         }
 
         return Pair(bestOffer, sale)
+    }
+
+    fun stop() {
+        repository.stop()
     }
 }

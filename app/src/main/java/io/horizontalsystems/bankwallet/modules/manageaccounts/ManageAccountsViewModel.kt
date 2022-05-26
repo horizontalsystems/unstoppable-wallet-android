@@ -50,6 +50,7 @@ class ManageAccountsViewModel(
 
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
+        disposable.clear()
     }
 
 }

@@ -38,6 +38,10 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
         }
     }
 
+    override fun onCleared() {
+        service.stop()
+    }
+
     fun refresh() {
         viewModelScope.launch {
             service.refresh()
