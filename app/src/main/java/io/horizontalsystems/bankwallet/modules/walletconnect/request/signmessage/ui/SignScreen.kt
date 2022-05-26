@@ -60,10 +60,10 @@ fun SignMessageRequestScreen(
                         )
                     }
                     is SignMessage.Message -> {
-                        MessageContent(message, navController, viewModel)
+                        MessageContent(message, viewModel.dAppName, navController, viewModel)
                     }
                     is SignMessage.TypedMessage -> {
-                        TypedMessageContent(message, navController)
+                        TypedMessageContent(message, viewModel.dAppName, navController)
                     }
                 }
 
@@ -91,6 +91,7 @@ fun SignMessageRequestScreen(
 @Composable
 private fun TypedMessageContent(
     message: SignMessage.TypedMessage,
+    dAppName: String?,
     navController: NavController
 ) {
     val composableItems: MutableList<@Composable () -> Unit> = mutableListOf()
@@ -109,7 +110,7 @@ private fun TypedMessageContent(
             navController
         )
     }
-    message.dAppName?.let { dAppName ->
+    dAppName?.let { dAppName ->
         composableItems.add {
             TitleTypedValueCell(
                 stringResource(R.string.WalletConnect_SignMessageRequest_dApp),
@@ -126,6 +127,7 @@ private fun TypedMessageContent(
 @Composable
 private fun MessageContent(
     message: SignMessage.Message,
+    dAppName: String?,
     navController: NavController,
     viewModel: WCSignMessageRequestViewModel
 ) {
@@ -136,13 +138,8 @@ private fun MessageContent(
             navController
         )
     })
-    message.dAppName?.let { dAppName ->
-        composableItems.add {
-            TitleTypedValueCell(
-                stringResource(R.string.WalletConnect_SignMessageRequest_dApp),
-                dAppName
-            )
-        }
+    dAppName?.let { dApp ->
+        composableItems.add { TitleTypedValueCell(stringResource(R.string.WalletConnect_SignMessageRequest_dApp), dApp) }
     }
 
     CellSingleLineLawrenceSection(

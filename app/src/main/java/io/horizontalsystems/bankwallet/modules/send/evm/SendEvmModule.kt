@@ -33,6 +33,9 @@ data class SendEvmData(
         @Parcelize
         class OneInchSwap(val info: OneInchSwapInfo) : AdditionalInfo()
 
+        @Parcelize
+        class WalletConnectRequest(val info: WalletConnectInfo) : AdditionalInfo()
+
         val sendInfo: SendInfo?
             get() = (this as? Send)?.info
 
@@ -41,11 +44,19 @@ data class SendEvmData(
 
         val oneInchSwapInfo: OneInchSwapInfo?
             get() = (this as? OneInchSwap)?.info
+
+        val walletConnectInfo: WalletConnectInfo?
+            get() = (this as? WalletConnectRequest)?.info
     }
 
     @Parcelize
     data class SendInfo(
         val domain: String?
+    ) : Parcelable
+
+    @Parcelize
+    data class WalletConnectInfo(
+        val dAppName: String?
     ) : Parcelable
 
     @Parcelize

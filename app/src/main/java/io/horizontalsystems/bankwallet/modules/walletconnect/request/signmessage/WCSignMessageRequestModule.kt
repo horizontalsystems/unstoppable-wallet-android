@@ -51,6 +51,7 @@ object WCSignMessageRequestModule {
     }
 
     interface RequestAction {
+        val dAppName: String?
         val message: SignMessage
         val isLegacySignRequest: Boolean
         fun sign()
@@ -61,7 +62,7 @@ object WCSignMessageRequestModule {
 }
 
 sealed class SignMessage(val data: String) {
-    class Message(data: String, val dAppName: String?, val showLegacySignWarning: Boolean = false) : SignMessage(data)
+    class Message(data: String, val showLegacySignWarning: Boolean = false) : SignMessage(data)
     class PersonalMessage(data: String) : SignMessage(data)
-    class TypedMessage(data: String, val dAppName: String?, val domain: String? = null) : SignMessage(data)
+    class TypedMessage(data: String, val domain: String? = null) : SignMessage(data)
 }

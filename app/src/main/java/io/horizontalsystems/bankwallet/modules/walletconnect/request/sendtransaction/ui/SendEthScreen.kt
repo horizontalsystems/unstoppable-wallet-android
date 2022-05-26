@@ -41,7 +41,6 @@ fun SendEthRequestScreen(
     close: () -> Unit,
 ) {
 
-    val title by sendEvmTransactionViewModel.transactionTitleLiveData.observeAsState("")
     val transactionInfoItems by sendEvmTransactionViewModel.viewItemsLiveData.observeAsState()
     val approveEnabled by sendEvmTransactionViewModel.sendEnabledLiveData.observeAsState(false)
     val cautions by sendEvmTransactionViewModel.cautionsLiveData.observeAsState()
@@ -54,7 +53,7 @@ fun SendEthRequestScreen(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
-                title = TranslatableString.PlainString(title),
+                title = TranslatableString.ResString(R.string.WalletConnect_UnknownRequest_Title),
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),

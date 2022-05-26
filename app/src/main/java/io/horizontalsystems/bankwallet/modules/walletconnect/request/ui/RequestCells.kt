@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
@@ -111,6 +112,7 @@ fun TitleTypedValueCell(title: String, value: String, type: ValueType = ValueTyp
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
+            modifier = Modifier.padding(end = 36.dp),
             text = title,
             color = ComposeAppTheme.colors.grey,
             style = ComposeAppTheme.typography.subhead2
@@ -119,7 +121,9 @@ fun TitleTypedValueCell(title: String, value: String, type: ValueType = ValueTyp
         Text(
             text = value,
             color = valueColor,
-            style = ComposeAppTheme.typography.subhead1
+            style = ComposeAppTheme.typography.subhead1,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
