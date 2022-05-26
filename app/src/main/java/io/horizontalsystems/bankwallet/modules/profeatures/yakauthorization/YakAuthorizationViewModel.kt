@@ -18,9 +18,12 @@ class YakAuthorizationViewModel(val service: YakAuthorizationService) : ViewMode
     }
 
     fun onBannerClick() {
-        viewModelScope.launch {
-            service.authenticate()
-        }
+        stateLiveData.postValue(YakAuthorizationService.State.Authenticating)
+        stateLiveData.postValue(YakAuthorizationService.State.NoYakNft)
+
+//        viewModelScope.launch {
+//            service.authenticate()
+//        }
     }
 
     fun onActivateClick() {

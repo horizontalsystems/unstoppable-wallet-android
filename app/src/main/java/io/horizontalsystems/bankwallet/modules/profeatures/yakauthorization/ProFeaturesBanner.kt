@@ -27,14 +27,14 @@ fun ProFeaturesBanner(
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 12.dp)
+            .clickable {
+                onClick.invoke()
+            }
     ) {
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .clickable {
-                    onClick.invoke()
-                },
+                .clip(RoundedCornerShape(12.dp)),
             painter = painterResource(R.drawable.ic_pro_nft_banner),
             contentDescription = null,
             contentScale = ContentScale.Crop

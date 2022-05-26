@@ -73,7 +73,7 @@ class CoinDetailsService(
         return Single.zip(
             tvlsSingle.onErrorReturn { listOf() },
             volumeSingle.onErrorReturn { listOf() },
-            proFeatures(fullCoin.coin.uid, currency.code).onErrorReturn { ProCharts.forbidden }
+            Single.just(ProCharts.forbidden)
         ) { t1, t2, t3 -> Triple(t1, t2, t3) }.map { (tvls, totalVolumes, proFeatures) ->
             Item(details, tvls, totalVolumes, proFeatures)
         }
