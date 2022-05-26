@@ -17,6 +17,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -45,9 +46,11 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.shortenedAddress
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.*
+import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
 import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -124,7 +127,7 @@ fun NftAssetScreen(
                         }
                         ViewState.Success -> {
                             viewModel.nftAssetItem?.let { asset ->
-                                NftAsset(asset, viewModel.viewModelScope)
+                                NftAsset(asset, viewModel.viewModelScope, navController)
                             }
                         }
                     }
@@ -143,7 +146,8 @@ fun NftAssetScreen(
 @Composable
 private fun NftAsset(
     asset: NftAssetModuleAssetItem,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    navController: NavController
 ) {
     val context = LocalContext.current
     val view = LocalView.current
@@ -199,14 +203,33 @@ private fun NftAsset(
                     style = ComposeAppTheme.typography.headline1
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = asset.collectionName,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead1
-                )
+                CellSingleLine {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                navController.slideFromRight(
+                                    R.id.nftCollectionFragment,
+                                    NftCollectionFragment.prepareParams(asset.collectionUid)
+                                )
+                            },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = asset.collectionName,
+                            color = ComposeAppTheme.colors.jacob,
+                            style = ComposeAppTheme.typography.subhead1
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_arrow_right),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                    }
+                }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 Row {
                     var showActionSelectorDialog by remember { mutableStateOf(false) }
 
