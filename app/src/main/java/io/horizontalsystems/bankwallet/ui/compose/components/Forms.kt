@@ -185,13 +185,11 @@ fun FormsInput(
 
                 if (pasteEnabled) {
                     val clipboardManager = LocalClipboardManager.current
-
-                    val textInClipboard = clipboardManager.getText()?.text
                     ButtonSecondaryDefault(
                         modifier = Modifier.padding(end = 8.dp),
                         title = stringResource(id = R.string.Send_Button_Paste),
                         onClick = {
-                            textInClipboard?.let {
+                            clipboardManager.getText()?.text?.let { textInClipboard ->
                                 textState = textState.copy(text = textInClipboard, selection = TextRange(textInClipboard.length))
                                 onValueChange.invoke(textInClipboard)
                             }
