@@ -71,7 +71,7 @@ private fun TopNftCollectionView(
             MarketCoinFirstRow(collection.name, collection.volume)
             Spacer(modifier = Modifier.height(3.dp))
             MarketCoinSecondRow(
-                collection.floorPrice ?: "",
+                collection.floorPrice,
                 MarketDataValue.Diff(collection.volumeDiff),
                 "${collection.order}"
             )

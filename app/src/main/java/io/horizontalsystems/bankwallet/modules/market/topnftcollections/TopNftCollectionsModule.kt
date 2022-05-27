@@ -35,5 +35,5 @@ data class TopNftCollectionViewItem(
     val volume: String,
     val volumeDiff: BigDecimal,
     val order: Int,
-    val floorPrice: String?
+    val floorPrice: String
 )
