@@ -291,6 +291,12 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
             preferences.edit().putBoolean(BALANCE_HIDDEN, value).apply()
         }
 
+    override var balanceTotalCoinUid: String?
+        get() = preferences.getString("balanceTotalCoinUid", null)
+        set(value) {
+            preferences.edit().putString("balanceTotalCoinUid", value).apply()
+        }
+
     override var checkedTerms: List<Term>
         get() {
             val termsString = preferences.getString(CHECKED_TERMS, null) ?: return listOf()
