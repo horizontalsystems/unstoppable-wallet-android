@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.ICurrencyManager
@@ -20,7 +21,8 @@ import java.math.BigDecimal
 class TotalService(
     private val currencyManager: ICurrencyManager,
     private val coinManager: ICoinManager,
-    private val marketKit: MarketKit
+    private val marketKit: MarketKit,
+    private val localStorage: ILocalStorage
 ) {
     private var balanceHidden = false
     private var totalCurrencyValue: CurrencyValue? = null
@@ -49,7 +51,7 @@ class TotalService(
     private var coroutineScope = CoroutineScope(Dispatchers.IO)
 
     fun start(balanceHidden: Boolean) {
-        this@TotalService.balanceHidden = balanceHidden
+        this.balanceHidden = balanceHidden
 
         coroutineScope.launch {
             currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
@@ -57,7 +59,11 @@ class TotalService(
             }
         }
 
-        handleUpdatedPlatformCoin(platformCoins.firstOrNull())
+        val coin = localStorage.balanceTotalCoinUid?.let { balanceTotalCoinUid ->
+            platformCoins.find { it.coin.uid == balanceTotalCoinUid }
+        } ?: platformCoins.firstOrNull()
+
+        handleUpdatedPlatformCoin(coin)
     }
 
     fun stop() {
@@ -84,6 +90,8 @@ class TotalService(
         val indexOf = platformCoins.indexOf(platformCoin)
         val platformCoin = (platformCoins.getOrNull(indexOf + 1)
             ?: platformCoins.firstOrNull())
+
+        localStorage.balanceTotalCoinUid = platformCoin?.coin?.uid
 
         handleUpdatedPlatformCoin(platformCoin)
 

@@ -66,6 +66,7 @@ interface ILocalStorage {
     var appLaunchCount: Int
     var rateAppLastRequestTime: Long
     var balanceHidden: Boolean
+    var balanceTotalCoinUid: String?
     var checkedTerms: List<Term>
     var mainShowedOnce: Boolean
     var notificationId: String?
