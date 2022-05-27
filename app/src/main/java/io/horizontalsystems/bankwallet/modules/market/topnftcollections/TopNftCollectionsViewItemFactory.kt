@@ -33,7 +33,7 @@ class TopNftCollectionsViewItemFactory(
         val volumeFormatted = numberFormatter.formatCoinShort(volume, "ETH", 2)
         val floorPriceFormatted = collection.floorPrice?.let {
             "Floor: " + numberFormatter.formatCoinShort(it, "ETH", 2)
-        }
+        } ?: "---"
 
         return TopNftCollectionViewItem(
             uid = collection.uid,
