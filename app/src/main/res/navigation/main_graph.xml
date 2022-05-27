@@ -175,8 +175,7 @@
         tools:layout="@layout/fragment_markdown"/>
     <fragment
         android:id="@+id/addTokenFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment"
-        tools:layout="@layout/fragment_add_token" />
+        android:name="io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment"/>
     <fragment
         android:id="@+id/swapFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.SwapMainFragment"

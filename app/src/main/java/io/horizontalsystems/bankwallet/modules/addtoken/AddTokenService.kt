@@ -10,11 +10,12 @@ import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddToken
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.Platform
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import java.util.*
 
 class AddTokenService(
@@ -23,16 +24,18 @@ class AddTokenService(
     private val walletManager: IWalletManager,
     private val accountManager: IAccountManager
 ) {
-    private val stateSubject = PublishSubject.create<AddTokenModule.State>()
+
+    private val _stateFlow =
+        MutableSharedFlow<Result<AddTokenModule.State>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    val stateFlow = _stateFlow.asSharedFlow()
 
     private var disposable: Disposable? = null
-
-    val stateObservable: Observable<AddTokenModule.State> = stateSubject
 
     var state: AddTokenModule.State = AddTokenModule.State.Idle
         private set(value) {
             field = value
-            stateSubject.onNext(value)
+            _stateFlow.tryEmit(Result.success(value))
         }
 
     fun set(reference: String?) {

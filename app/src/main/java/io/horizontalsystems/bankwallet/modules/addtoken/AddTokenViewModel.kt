@@ -1,36 +1,50 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.blockchainType
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.CustomCoin
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewModel() {
 
-    val loadingLiveData = MutableLiveData<Boolean>()
-    val cautionLiveData = MutableLiveData<Caution?>()
-    val viewItemLiveData = MutableLiveData<AddTokenModule.ViewItem?>()
-    val buttonEnabledLiveData = MutableLiveData<Boolean>()
-    val showSuccess = SingleLiveEvent<Unit>()
+    var buttonEnabled by mutableStateOf(false)
+        private set
 
-    private var disposables = CompositeDisposable()
+    var loading by mutableStateOf(false)
+        private set
+
+    var closeScreen by mutableStateOf(false)
+        private set
+
+    var showSuccessMessage by mutableStateOf(false)
+        private set
+
+    var viewItem by mutableStateOf<AddTokenModule.ViewItem?>(null)
+        private set
+
+    var caution by mutableStateOf<Caution?>(null)
+        private set
 
     init {
         observeState()
     }
 
     private fun observeState() {
-        addTokenService.stateObservable
-            .subscribe {
-                sync(it)
-            }.let {
-                disposables.add(it)
+        addTokenService.stateFlow
+            .collectWith(viewModelScope) { result ->
+                result.getOrNull()?.let{
+                    sync(it)
+                }
             }
     }
 
@@ -41,33 +55,42 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
     override fun onCleared() {
         addTokenService.onCleared()
-        disposables.clear()
         super.onCleared()
     }
 
     fun onAddClick() {
-        addTokenService.save()
-        showSuccess.call()
+        viewModelScope.launch {
+            addTokenService.save()
+            showSuccessMessage = true
+            delay(1500)
+            closeScreen = true
+        }
     }
 
     private fun sync(state: AddTokenModule.State) {
-        loadingLiveData.postValue(state == AddTokenModule.State.Loading)
+        loading = state == AddTokenModule.State.Loading
 
-        viewItemLiveData.postValue(getViewItemByState(state))
+        viewItem = getViewItemByState(state)
 
-        buttonEnabledLiveData.postValue(state is AddTokenModule.State.Fetched)
+        buttonEnabled = state is AddTokenModule.State.Fetched
 
+        caution = getCaution(state)
+    }
+
+    private fun getCaution(state: AddTokenModule.State): Caution? {
         val caution = when (state) {
             is AddTokenModule.State.Failed -> {
                 Caution(getErrorText(state.error), Caution.Type.Error)
             }
             is AddTokenModule.State.AlreadyExists -> {
-                Caution(Translator.getString(R.string.AddToken_CoinAlreadyInListWarning), Caution.Type.Warning)
+                Caution(
+                    Translator.getString(R.string.AddToken_CoinAlreadyInListWarning),
+                    Caution.Type.Warning
+                )
             }
             else -> null
         }
-
-        cautionLiveData.postValue(caution)
+        return caution
     }
 
     private fun getViewItemByState(state: AddTokenModule.State): AddTokenModule.ViewItem? {
