@@ -12,7 +12,7 @@ class BinanceChainOutgoingTransactionRecord(
     val sentToSelf: Boolean,
     source: TransactionSource
 ) : BinanceChainTransactionRecord(transaction, feeCoin, source) {
-    val value = TransactionValue.CoinValue(coin, transaction.amount.toBigDecimal())
+    val value = TransactionValue.CoinValue(coin, transaction.amount.toBigDecimal().negate())
     val to = transaction.to
 
     override val mainValue = value
