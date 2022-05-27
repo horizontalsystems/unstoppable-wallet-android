@@ -10,14 +10,11 @@ import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class TotalService(
@@ -49,16 +46,22 @@ class TotalService(
     private var items: List<BalanceModule.BalanceItem>? = null
     private var coinPriceUpdatesJob: Job? = null
 
-    suspend fun start(balanceHidden: Boolean) = withContext(Dispatchers.IO) {
+    private var coroutineScope = CoroutineScope(Dispatchers.IO)
+
+    fun start(balanceHidden: Boolean) {
         this@TotalService.balanceHidden = balanceHidden
 
-        launch {
+        coroutineScope.launch {
             currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
                 handleUpdatedCurrency(currencyManager.baseCurrency)
             }
         }
 
         handleUpdatedPlatformCoin(platformCoins.firstOrNull())
+    }
+
+    fun stop() {
+        coroutineScope.cancel()
     }
 
     fun setBalanceItems(items: List<BalanceModule.BalanceItem>?) {
@@ -77,7 +80,7 @@ class TotalService(
         emitState()
     }
 
-    suspend fun toggleType() {
+    fun toggleType() {
         val indexOf = platformCoins.indexOf(platformCoin)
         val platformCoin = (platformCoins.getOrNull(indexOf + 1)
             ?: platformCoins.firstOrNull())
@@ -89,7 +92,7 @@ class TotalService(
         emitState()
     }
 
-    private suspend fun handleUpdatedCurrency(currency: Currency) {
+    private fun handleUpdatedCurrency(currency: Currency) {
         this.currency = currency
 
         refreshCoinPrice()
@@ -100,7 +103,7 @@ class TotalService(
         emitState()
     }
 
-    private suspend fun handleUpdatedPlatformCoin(platformCoin: PlatformCoin?) {
+    private fun handleUpdatedPlatformCoin(platformCoin: PlatformCoin?) {
         this.platformCoin = platformCoin
 
         refreshCoinPrice()
@@ -113,11 +116,11 @@ class TotalService(
         }
     }
 
-    private suspend fun resubscribeForCoinPrice() = withContext(Dispatchers.IO) {
+    private fun resubscribeForCoinPrice() {
         coinPriceUpdatesJob?.cancel()
 
         platformCoin?.let { platformCoin ->
-            coinPriceUpdatesJob = launch {
+            coinPriceUpdatesJob = coroutineScope.launch {
                 marketKit.coinPriceObservable(platformCoin.coin.uid, currency.code)
                     .asFlow()
                     .collect {

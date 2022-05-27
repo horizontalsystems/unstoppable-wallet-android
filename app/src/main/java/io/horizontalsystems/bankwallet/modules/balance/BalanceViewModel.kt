@@ -52,9 +52,7 @@ class BalanceViewModel(
             }
         }
 
-        viewModelScope.launch {
-            totalService.start(service.balanceHidden)
-        }
+        totalService.start(service.balanceHidden)
 
         service.start()
     }
@@ -97,6 +95,7 @@ class BalanceViewModel(
 
 
     override fun onCleared() {
+        totalService.stop()
         service.clear()
     }
 
@@ -109,9 +108,7 @@ class BalanceViewModel(
     }
 
     fun toggleTotalType() {
-        viewModelScope.launch {
-            totalService.toggleType()
-        }
+        totalService.toggleType()
     }
 
     fun onItem(viewItem: BalanceViewItem) {
