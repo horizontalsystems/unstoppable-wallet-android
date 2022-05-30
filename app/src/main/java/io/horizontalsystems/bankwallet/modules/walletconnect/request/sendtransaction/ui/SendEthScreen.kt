@@ -22,10 +22,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.AmountCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.SubheadCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleHexValueCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleTypedValueCell
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -92,7 +89,13 @@ fun SendEthRequestScreen(
                                 is ViewItem.Amount -> AmountCell(
                                     item.fiatAmount,
                                     item.coinAmount,
-                                    item.type
+                                    item.type,
+                                    item.platformCoin
+                                )
+                                is ViewItem.AmountMulti -> AmountMultiCell(
+                                    item.amounts,
+                                    item.type,
+                                    item.platformCoin
                                 )
                                 is ViewItem.Warning -> TextImportantWarning(
                                     text = item.description,

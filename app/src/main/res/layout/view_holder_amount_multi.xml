@@ -5,7 +5,8 @@
     android:id="@+id/wrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="48dp">
+    android:minHeight="60dp"
+    >
 
     <View
         android:id="@+id/backgroundView"
@@ -16,7 +17,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_height="48dp" />
+        tools:layout_height="60dp"
+        />
 
     <ImageView
         android:id="@+id/coinIcon"
@@ -26,7 +28,8 @@
         app:layout_constraintBottom_toBottomOf="@id/backgroundView"
         app:layout_constraintStart_toStartOf="@id/backgroundView"
         app:layout_constraintTop_toTopOf="@id/backgroundView"
-        tools:src="@drawable/logo_ethereum_24"/>
+        tools:src="@drawable/logo_ethereum_24"
+        />
 
     <TextView
         android:id="@+id/coinTextView"
@@ -34,14 +37,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@id/coinSecondaryTextView"
+        app:layout_constraintStart_toEndOf="@+id/coinIcon"
+        app:layout_constraintTop_toTopOf="@id/backgroundView"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="23.453 BTC(est)"
+        />
+
+    <TextView
+        android:id="@+id/coinSecondaryTextView"
+        style="@style/Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
         android:includeFontPadding="false"
         android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="@id/backgroundView"
-        app:layout_constraintStart_toEndOf="@+id/coinIcon"
-        app:layout_constraintTop_toTopOf="@id/backgroundView"
-        tools:text="23.453 BTC"
+        app:layout_constraintStart_toStartOf="@+id/coinTextView"
+        app:layout_constraintTop_toBottomOf="@id/coinTextView"
+        tools:text="23.451 BTC(min)"
         />
 
     <TextView
@@ -55,10 +71,26 @@
         android:singleLine="true"
         android:textAlignment="textEnd"
         android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@id/backgroundView"
+        app:layout_constraintBottom_toBottomOf="@id/coinTextView"
         app:layout_constraintEnd_toEndOf="@id/backgroundView"
         app:layout_constraintStart_toEndOf="@id/coinTextView"
-        app:layout_constraintTop_toTopOf="@id/backgroundView"
+        tools:text="$ 35000"
+        />
+
+    <TextView
+        android:id="@+id/fiatSecondaryTextView"
+        style="@style/Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:maxWidth="157dp"
+        android:singleLine="true"
+        android:textAlignment="textEnd"
+        android:textColor="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@id/coinSecondaryTextView"
+        app:layout_constraintEnd_toEndOf="@id/backgroundView"
+        app:layout_constraintStart_toEndOf="@id/coinSecondaryTextView"
         tools:text="$ 35000"
         />
 

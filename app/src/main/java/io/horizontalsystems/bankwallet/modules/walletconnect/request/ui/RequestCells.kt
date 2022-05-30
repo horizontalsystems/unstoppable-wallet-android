@@ -9,12 +9,17 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.AmountValues
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.PlatformCoin
 
 @Composable
 fun TitleHexValueCell(title: String, valueVisible: String, value: String) {
@@ -45,11 +50,16 @@ fun TitleHexValueCell(title: String, valueVisible: String, value: String) {
 }
 
 @Composable
-fun AmountCell(fiatAmount: String?, coinAmount: String, type: ValueType) {
+fun AmountCell(
+    fiatAmount: String?,
+    coinAmount: String,
+    type: ValueType,
+    platformCoin: PlatformCoin
+) {
     val coinAmountColor = when (type) {
         ValueType.Regular -> ComposeAppTheme.colors.bran
         ValueType.Disabled -> ComposeAppTheme.colors.grey
-        ValueType.Outgoing -> ComposeAppTheme.colors.jacob
+        ValueType.Outgoing -> ComposeAppTheme.colors.lucian
         ValueType.Incoming -> ComposeAppTheme.colors.remus
     }
     Row(
@@ -57,19 +67,85 @@ fun AmountCell(fiatAmount: String?, coinAmount: String, type: ValueType) {
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .height(48.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            text = fiatAmount ?: "",
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
+        CoinImage(
+            iconUrl = platformCoin.coin.iconUrl,
+            placeholder = platformCoin.coinType.iconPlaceholder,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp)
         )
-        Spacer(Modifier.weight(1f))
         Text(
             text = coinAmount,
             color = coinAmountColor,
             style = ComposeAppTheme.typography.subhead1
         )
+        Spacer(Modifier.weight(1f))
+        Text(
+            text = fiatAmount ?: "",
+            color = ComposeAppTheme.colors.grey,
+            style = ComposeAppTheme.typography.subhead2
+        )
+    }
+}
+
+@Composable
+fun AmountMultiCell(amounts: List<AmountValues>, type: ValueType, platformCoin: PlatformCoin) {
+    val coinAmountColor = when (type) {
+        ValueType.Regular -> ComposeAppTheme.colors.bran
+        ValueType.Disabled -> ComposeAppTheme.colors.grey
+        ValueType.Outgoing -> ComposeAppTheme.colors.lucian
+        ValueType.Incoming -> ComposeAppTheme.colors.remus
+    }
+    val height = if (amounts.size == 2) 60.dp else 48.dp
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .height(height),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        CoinImage(
+            iconUrl = platformCoin.coin.iconUrl,
+            placeholder = platformCoin.coinType.iconPlaceholder,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp)
+        )
+        Column(
+            verticalArrangement = Arrangement.Center
+        ) {
+            Row {
+                Text(
+                    text = amounts[0].coinAmount,
+                    color = coinAmountColor,
+                    style = ComposeAppTheme.typography.subhead2
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = amounts[0].fiatAmount ?: "",
+                    color = ComposeAppTheme.colors.grey,
+                    style = ComposeAppTheme.typography.subhead1
+                )
+            }
+            if (amounts.size > 1) {
+                Spacer(Modifier.height(3.dp))
+                Row {
+                    Text(
+                        text = amounts[1].coinAmount,
+                        color = ComposeAppTheme.colors.grey,
+                        style = ComposeAppTheme.typography.caption
+                    )
+                    Spacer(Modifier.weight(1f))
+                    Text(
+                        text = amounts[1].fiatAmount ?: "",
+                        color = ComposeAppTheme.colors.grey,
+                        style = ComposeAppTheme.typography.caption
+                    )
+                }
+            }
+        }
     }
 }
 

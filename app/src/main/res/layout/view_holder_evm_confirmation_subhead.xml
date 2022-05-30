@@ -17,6 +17,16 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_height="48dp" />
 
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/backgroundView"
+        app:layout_constraintStart_toStartOf="@id/backgroundView"
+        app:layout_constraintTop_toTopOf="@id/backgroundView"
+        tools:src="@drawable/ic_arrow_up_right_12"/>
+
     <TextView
         android:id="@+id/titleTextView"
         style="@style/Headline2"
@@ -28,7 +38,7 @@
         android:includeFontPadding="false"
         android:textColor="@color/oz"
         app:layout_constraintBottom_toBottomOf="@id/backgroundView"
-        app:layout_constraintStart_toStartOf="@id/backgroundView"
+        app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintTop_toTopOf="@id/backgroundView"
         tools:text="You Pay" />
 
