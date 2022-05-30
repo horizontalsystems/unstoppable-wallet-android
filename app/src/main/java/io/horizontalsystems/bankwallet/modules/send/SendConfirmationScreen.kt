@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -139,10 +140,15 @@ fun SendConfirmationScreen(
                                     .getFormattedFull()
                             }
 
-                            ConfirmAmountCell(currencyAmount, coinAmount, lockTimeInterval != null)
+                            ConfirmAmountCell(currencyAmount, "-$coinAmount", coin)
                         }
                         CellSingleLineLawrence(borderTop = true) {
                             AddressCell(address.hex)
+                        }
+                        if (lockTimeInterval != null) {
+                            CellSingleLineLawrence(borderTop = true) {
+                                HSHodlerInput(lockTimeInterval = lockTimeInterval)
+                            }
                         }
                     }
 
@@ -159,11 +165,6 @@ fun SendConfirmationScreen(
                                 enabled = false,
                                 onClick = {}
                             )
-                        }
-                        if (lockTimeInterval != null) {
-                            CellSingleLineLawrence(borderTop = true) {
-                                HSHodlerInput(lockTimeInterval = lockTimeInterval)
-                            }
                         }
                         if (!memo.isNullOrBlank()) {
                             CellSingleLineLawrence(borderTop = true) {
@@ -224,6 +225,13 @@ fun SectionTitleCell(title: Int, value: String) {
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Icon(
+            modifier = Modifier.padding(end = 16.dp),
+            painter = painterResource(id = R.drawable.ic_arrow_up_right_12),
+            tint = ComposeAppTheme.colors.grey,
+            contentDescription = null,
+        )
+
         Text(
             text = stringResource(title),
             style = ComposeAppTheme.typography.body,
@@ -245,37 +253,32 @@ fun SectionTitleCell(title: Int, value: String) {
 }
 
 @Composable
-fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, locked: Boolean) {
+fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, coin: Coin) {
     Row(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = fiatAmount ?: "",
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey
+        CoinImage(
+            iconUrl = coin.iconUrl,
+            placeholder = R.drawable.coin_placeholder,
+            modifier = Modifier.size(24.dp)
         )
         Text(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp),
+            modifier = Modifier.padding(start = 16.dp),
             text = coinAmount,
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.jacob,
-            textAlign = TextAlign.End,
+            style = ComposeAppTheme.typography.subhead2,
+            color = ComposeAppTheme.colors.lucian,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        if (locked) {
-            Icon(
-                modifier = Modifier.padding(start = 8.dp),
-                painter = painterResource(id = R.drawable.ic_lock_20),
-                tint = ComposeAppTheme.colors.grey,
-                contentDescription = "lock icon",
-            )
-        }
+        Spacer(Modifier.weight(1f))
+        Text(
+            text = fiatAmount ?: "",
+            style = ComposeAppTheme.typography.subhead1,
+            color = ComposeAppTheme.colors.grey
+        )
     }
 }
 

@@ -59,8 +59,14 @@ fun HSHodlerInput(
             .then(modifierClickable),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
+        Icon(
             modifier = Modifier.padding(horizontal = 16.dp),
+            painter = painterResource(id = R.drawable.ic_lock_20),
+            tint = ComposeAppTheme.colors.grey,
+            contentDescription = "lock icon",
+        )
+        Text(
+            modifier = Modifier.padding(end = 16.dp),
             text = stringResource(R.string.Send_DialogLockTime),
             style = ComposeAppTheme.typography.subhead2,
             color = ComposeAppTheme.colors.grey,
