@@ -38,28 +38,17 @@ data class MarketTickerViewItem(
     val pair: String,
     val rate: String,
     val volume: String,
-) {
-    fun areItemsTheSame(other: MarketTickerViewItem): Boolean {
-        return market == other.market && pair == other.pair
-    }
-
-    fun areContentsTheSame(other: MarketTickerViewItem): Boolean {
-        return rate == other.rate && volume == other.volume && marketImageUrl == other.marketImageUrl
-    }
-}
+)
 
 sealed class RoiViewItem {
-    abstract var listPosition: ListPosition?
     class HeaderRowViewItem(
         val title: String,
         val periods: List<HsTimePeriod>,
-        override var listPosition: ListPosition? = null
     ) : RoiViewItem()
 
     class RowViewItem(
         val title: String,
         val values: List<BigDecimal?>,
-        override var listPosition: ListPosition? = null
     ) : RoiViewItem()
 }
 open class ContractInfo(
@@ -127,14 +116,13 @@ class CoinViewFactory(
         val rows = mutableListOf<RoiViewItem>()
 
         val timePeriods = performance.map { it.value.keys }.flatten().distinct()
-        rows.add(RoiViewItem.HeaderRowViewItem("ROI", timePeriods, ListPosition.First))
+        rows.add(RoiViewItem.HeaderRowViewItem("ROI", timePeriods))
         performance.forEach { (vsCurrency, performanceVsCurrency) ->
             if (performanceVsCurrency.isNotEmpty()) {
                 val values = timePeriods.map { performanceVsCurrency[it] }
-                rows.add(RoiViewItem.RowViewItem("vs ${vsCurrency.uppercase()}", values, ListPosition.Middle))
+                rows.add(RoiViewItem.RowViewItem("vs ${vsCurrency.uppercase()}", values))
             }
         }
-        rows.lastOrNull()?.listPosition = ListPosition.Last
 
         return rows
     }
