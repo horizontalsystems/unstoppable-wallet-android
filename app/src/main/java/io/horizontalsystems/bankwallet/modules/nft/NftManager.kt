@@ -4,11 +4,12 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
-import io.horizontalsystems.bankwallet.modules.hsnft.CollectionStats
+import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.math.roundToInt
 
 class NftManager(
     private val nftDao: NftDao,
@@ -46,31 +47,72 @@ class NftManager(
         }.toSortedMap { o1, o2 -> o1.name.compareTo(o2.name, ignoreCase = true) }
     }
 
-    suspend fun getAssetRecord(accountId: String, tokenId: String, contractAddress: String): NftAssetRecord? {
-        return nftDao.getAsset(accountId, tokenId, contractAddress)
-    }
-
-    fun getCollectionRecord(accountId: String, collectionSlug: String): NftCollectionRecord? {
-        return nftDao.getCollection(accountId, collectionSlug)
-    }
-
     fun nftAssetPriceToCoinValue(nftAssetPrice: NftAssetPrice?): CoinValue? {
         if (nftAssetPrice == null) return null
 
         return coinManager.getPlatformCoin(CoinType.fromId(nftAssetPrice.coinTypeId))
             ?.let { platformCoin ->
-                CoinValue(
-                    CoinValue.Kind.PlatformCoin(platformCoin),
-                    nftAssetPrice.value
-                )
+                CoinValue(platformCoin, nftAssetPrice.value)
             }
     }
 
-    suspend fun collectionStats(collectionUid: String): CollectionStats {
-        return apiProvider.collectionStats(collectionUid)
+    fun assetItem(
+        assetRecord: NftAssetRecord,
+        collectionName: String,
+        collectionLinks: HsNftApiV1Response.Collection.Links?,
+        totalSupply: Int,
+        averagePrice7d: NftAssetPrice? = null,
+        averagePrice30d: NftAssetPrice? = null,
+        floorPrice: NftAssetPrice? = null,
+        bestOffer: NftAssetPrice? = null,
+        sale: NftAssetModuleAssetItem.Sale? = null
+    ) = NftAssetModuleAssetItem(
+        name = assetRecord.name,
+        imageUrl = assetRecord.imageUrl,
+        collectionName = collectionName,
+        collectionUid = assetRecord.collectionUid,
+        description = assetRecord.description,
+        contract = assetRecord.contract,
+        tokenId = assetRecord.tokenId,
+        assetLinks = assetRecord.links,
+        collectionLinks = collectionLinks,
+        stats = NftAssetModuleAssetItem.Stats(
+            lastSale = priceItem(assetRecord.lastSale),
+            average7d = priceItem(averagePrice7d),
+            average30d = priceItem(averagePrice30d),
+            collectionFloor = priceItem(floorPrice),
+            bestOffer = priceItem(bestOffer),
+            sale = sale
+        ),
+        onSale = assetRecord.onSale,
+        attributes = assetRecord.attributes.map { attribute ->
+            NftAssetModuleAssetItem.Attribute(
+                attribute.type,
+                attribute.value,
+                getAttributePercentage(attribute, totalSupply)?.let { "$it%" },
+                getAttributeSearchUrl(attribute, assetRecord.collectionUid)
+            )
+        }
+    )
+
+    private fun priceItem(price: NftAssetPrice?) =
+        nftAssetPriceToCoinValue(price)?.let { NftAssetModuleAssetItem.Price(it) }
+
+    private fun getAttributeSearchUrl(attribute: NftAssetAttribute, collectionUid: String): String {
+        return "https://opensea.io/assets/${collectionUid}?search[stringTraits][0][name]=${attribute.type}" +
+                "&search[stringTraits][0][values][0]=${attribute.value}" +
+                "&search[sortAscending]=true&search[sortBy]=PRICE"
     }
 
-    suspend fun assetOrders(contractAddress: String, tokenId: String): List<AssetOrder> {
-        return apiProvider.assetOrders(contractAddress, tokenId)
-    }
+    private fun getAttributePercentage(attribute: NftAssetAttribute, totalSupply: Int): Number? =
+        if (attribute.count > 0 && totalSupply > 0) {
+            val percent = (attribute.count * 100f / totalSupply)
+            when {
+                percent >= 10 -> percent.roundToInt()
+                percent >= 1 -> (percent * 10).roundToInt() / 10f
+                else -> (percent * 100).roundToInt() / 100f
+            }
+        } else {
+            null
+        }
 }

@@ -11,15 +11,22 @@ import java.math.BigInteger
 interface WC2Request {
     val id: Long
     val topic: String
+    val dAppName: String?
 }
 
 class WC2SendEthereumTransactionRequest(
         override val id: Long,
         override val topic: String,
+        override val dAppName: String?,
         val transaction: WalletConnectTransaction
 ) : WC2Request {
 
-    constructor(id: Long, topic: String, transaction: WC2EthereumTransaction) : this(id, topic, convertTx(transaction))
+    constructor(
+        id: Long,
+        topic: String,
+        dAppName: String?,
+        transaction: WC2EthereumTransaction
+    ) : this(id, topic, dAppName, convertTx(transaction))
 
     sealed class TransactionError : Exception() {
         class NoRecipient : TransactionError()
@@ -29,6 +36,7 @@ class WC2SendEthereumTransactionRequest(
 class WC2SignMessageRequest(
         override val id: Long,
         override val topic: String,
+        override val dAppName: String?,
         val rawData: String,
         val message: SignMessage
 ) : WC2Request

@@ -387,61 +387,90 @@ fun FeeInfoCell(
 @Composable
 fun EvmFeeCell(
     title: String,
-    value: String,
+    value: String?,
     loading: Boolean,
     viewState: ViewState?,
     highlightEditButton: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
     CellSingleLineLawrenceSection {
+        HSFeeCell(
+            title = title,
+            value = value,
+            loading = loading,
+            viewState = viewState,
+            highlightEditButton = highlightEditButton,
+            enabled = onClick != null,
+            onClick = { onClick?.invoke() }
+        )
+    }
+}
+
+@Composable
+fun HSFeeCell(
+    title: String,
+    value: String?,
+    loading: Boolean,
+    viewState: ViewState?,
+    highlightEditButton: Boolean = false,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(enabled = enabled, onClick = { onClick.invoke() })
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style = ComposeAppTheme.typography.subhead2,
+            color = ComposeAppTheme.colors.grey
+        )
+
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable(enabled = onClick != null, onClick = { onClick?.invoke() })
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.End
         ) {
-            Text(
-                text = title,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey
-            )
-
-            Row(
-                modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.End
-            ) {
-                if (loading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(16.dp),
-                        color = ComposeAppTheme.colors.grey,
-                        strokeWidth = 1.5.dp
-                    )
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    color = ComposeAppTheme.colors.grey,
+                    strokeWidth = 1.5.dp
+                )
+            } else {
+                val color = if (viewState is ViewState.Error) {
+                    ComposeAppTheme.colors.lucian
+                } else if (value == null) {
+                    ComposeAppTheme.colors.grey50
                 } else {
-                    Text(
-                        text = value,
-                        style = ComposeAppTheme.typography.subhead1,
-                        color = if (viewState is ViewState.Error) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    ComposeAppTheme.colors.leah
                 }
+
+                Text(
+                    text = value ?: stringResource(R.string.NotAvailable),
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = color,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
+        }
 
-            onClick?.let {
-                Box(modifier = Modifier.padding(start = 8.dp)) {
-                    val tintColor = if (highlightEditButton)
-                        ComposeAppTheme.colors.jacob
-                    else
-                        ComposeAppTheme.colors.grey
+        if (enabled) {
+            Box(modifier = Modifier.padding(start = 8.dp)) {
+                val tintColor = if (highlightEditButton)
+                    ComposeAppTheme.colors.jacob
+                else
+                    ComposeAppTheme.colors.grey
 
-                    Image(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(id = R.drawable.ic_edit_20),
-                        colorFilter = ColorFilter.tint(tintColor),
-                        contentDescription = ""
-                    )
-                }
+                Image(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.ic_edit_20),
+                    colorFilter = ColorFilter.tint(tintColor),
+                    contentDescription = ""
+                )
             }
         }
     }

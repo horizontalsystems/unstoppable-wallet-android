@@ -7,9 +7,9 @@ import android.widget.ImageView
 import androidx.annotation.CheckResult
 import coil.load
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.bankwallet.entities.label
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.*
@@ -27,7 +27,8 @@ val <T> Optional<T>.orNull: T?
         else -> null
     }
 
-val Coin.isCustom: Boolean get() = uid.startsWith(CustomToken.uidPrefix)
+val Platform.iconUrl: String
+    get() = "https://markets.nyc3.digitaloceanspaces.com/platform-icons/$uid@3x.png"
 
 val Coin.iconUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/$uid@3x.png"
@@ -98,6 +99,9 @@ val CoinType.blockchainLogo: Int
         CoinType.BitcoinCash -> R.drawable.logo_bitcoincash_24
         CoinType.Dash -> R.drawable.logo_dash_24
         CoinType.BinanceSmartChain -> R.drawable.logo_binancesmartchain_24
+        CoinType.Polygon -> R.drawable.logo_polygon_24
+        CoinType.EthereumOptimism -> R.drawable.logo_optimism_24
+        CoinType.EthereumArbitrumOne -> R.drawable.logo_arbitrum_24
         is CoinType.Bep2 -> R.drawable.logo_bep2_24
         CoinType.Litecoin -> R.drawable.logo_litecoin_24
         CoinType.Zcash -> R.drawable.logo_zcash_24
@@ -106,9 +110,11 @@ val CoinType.blockchainLogo: Int
 
 // ImageView
 
-fun ImageView.setRemoteImage(url: String, placeholder: Int = R.drawable.ic_placeholder) {
+fun ImageView.setRemoteImage(url: String, placeholder: Int? = R.drawable.ic_placeholder) {
     load(url) {
-        error(placeholder)
+        if (placeholder != null) {
+            error(placeholder)
+        }
     }
 }
 

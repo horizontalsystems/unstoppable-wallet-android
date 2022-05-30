@@ -66,7 +66,7 @@ class CoinOverviewFragment : BaseFragment() {
                     MarkdownFragment.handleRelativeUrlKey to true
                 )
                 findNavController().slideFromRight(
-                    R.id.coinFragment_to_markdownFragment,
+                    R.id.markdownFragment,
                     arguments
                 )
             }

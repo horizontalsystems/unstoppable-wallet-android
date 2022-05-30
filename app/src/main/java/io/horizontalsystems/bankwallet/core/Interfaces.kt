@@ -1,26 +1,29 @@
 package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -43,7 +46,7 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
-    var sendInputType: SendModule.InputType?
+    var amountInputType: AmountInputType?
     var baseCurrencyCode: String?
 
     var baseBitcoinProvider: String?
@@ -62,8 +65,8 @@ interface ILocalStorage {
     var torEnabled: Boolean
     var appLaunchCount: Int
     var rateAppLastRequestTime: Long
-    var transactionSortingType: TransactionDataSortingType
     var balanceHidden: Boolean
+    var balanceTotalCoinUid: String?
     var checkedTerms: List<Term>
     var mainShowedOnce: Boolean
     var notificationId: String?
@@ -73,14 +76,14 @@ interface ILocalStorage {
     var ignoreRootedDeviceWarning: Boolean
     var launchPage: LaunchPage?
     var mainTab: MainModule.MainTab?
-    var customTokensRestoreCompleted: Boolean
     var favoriteCoinIdsMigrated: Boolean
+    var fillWalletInfoDone: Boolean
     var marketFavoritesSortingField: SortingField?
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
 
-    fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String?
-    fun setSwapProviderId(blockchain: SwapMainModule.Blockchain, providerId: String)
+    fun getSwapProviderId(blockchain: EvmBlockchain): String?
+    fun setSwapProviderId(blockchain: EvmBlockchain, providerId: String)
 
     fun clear()
 }
@@ -124,8 +127,10 @@ interface IBackupManager {
 }
 
 interface IAccountFactory {
-    fun account(type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
-    fun watchAccount(address: String, domain: String?): Account
+    fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
+    fun watchAccount(name: String, address: String, domain: String?): Account
+    fun getNextWatchAccountName(): String
+    fun getNextAccountName(): String
 }
 
 interface IWalletStorage {
@@ -153,7 +158,7 @@ interface INetworkManager {
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
     fun getBep2TokeInfo(symbol: String): Single<TokenInfoService.Bep2TokenInfo>
-    fun getEvmTokeInfo(tokenType: String, address: String): Single<TokenInfoService.EvmTokenInfo>
+    fun getEvmTokeInfo(apiPath: String, address: String): Single<TokenInfoService.EvmTokenInfo>
 
     suspend fun subscribe(host: String, path: String, body: String): JsonObject
     suspend fun unsubscribe(host: String, path: String, body: String): JsonObject
@@ -189,6 +194,7 @@ interface IBinanceKitManager {
 }
 
 interface ITransactionsAdapter {
+    val explorerTitle: String
     val transactionsState: AdapterState
     val transactionsStateUpdatedFlowable: Flowable<Unit>
 
@@ -208,11 +214,13 @@ interface ITransactionsAdapter {
         coin: PlatformCoin?,
         transactionType: FilterTransactionType
     ): Flowable<List<TransactionRecord>>
+
+    fun getTransactionUrl(transactionHash: String): String?
 }
 
 class UnsupportedFilterException : Exception()
 
-interface IBalanceAdapter {
+interface IBalanceAdapter: IBaseAdapter {
     val balanceState: AdapterState
     val balanceStateUpdatedFlowable: Flowable<Unit>
 
@@ -224,26 +232,27 @@ data class BalanceData(val available: BigDecimal, val locked: BigDecimal = BigDe
     val total get() = available + locked
 }
 
-interface IReceiveAdapter {
+interface IReceiveAdapter: IBaseAdapter {
     val receiveAddress: String
 }
 
 interface ISendBitcoinAdapter {
     val balanceData: BalanceData
+    val blockchain: BtcBlockchain
     fun availableBalance(
         feeRate: Long,
         address: String?,
         pluginData: Map<Byte, IPluginData>?
     ): BigDecimal
 
-    fun minimumSendAmount(address: String?): BigDecimal
+    fun minimumSendAmount(address: String?): BigDecimal?
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
     fun fee(
         amount: BigDecimal,
         feeRate: Long,
         address: String?,
         pluginData: Map<Byte, IPluginData>?
-    ): BigDecimal
+    ): BigDecimal?
 
     fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
     fun send(
@@ -251,17 +260,9 @@ interface ISendBitcoinAdapter {
         address: String,
         feeRate: Long,
         pluginData: Map<Byte, IPluginData>?,
-        transactionSorting: TransactionDataSortingType?,
+        transactionSorting: TransactionDataSortMode?,
         logger: AppLogger
     ): Single<Unit>
-}
-
-interface ISendDashAdapter {
-    fun availableBalance(address: String?): BigDecimal
-    fun minimumSendAmount(address: String?): BigDecimal
-    fun fee(amount: BigDecimal, address: String?): BigDecimal
-    fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, logger: AppLogger): Single<Unit>
 }
 
 interface ISendEthereumAdapter {
@@ -284,7 +285,7 @@ interface ISendZcashAdapter {
     val availableBalance: BigDecimal
     val fee: BigDecimal
 
-    fun validate(address: String): ZcashAdapter.ZCashAddressType
+    suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
     fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Single<Unit>
 }
 
@@ -294,6 +295,10 @@ interface IAdapter {
     fun refresh()
 
     val debugInfo: String
+}
+
+interface IBaseAdapter {
+    val isMainnet: Boolean
 }
 
 interface IAccountsStorage {
@@ -319,25 +324,6 @@ interface IEnabledWalletStorage {
     fun isEnabled(accountId: String, coinId: String): Boolean
 }
 
-interface IBlockchainSettingsStorage {
-    var bitcoinCashCoinType: BitcoinCashCoinType?
-    fun derivationSetting(coinType: CoinType): DerivationSetting?
-    fun saveDerivationSetting(derivationSetting: DerivationSetting)
-    fun deleteDerivationSettings()
-    fun initialSyncSetting(coinType: CoinType): InitialSyncSetting?
-    fun saveInitialSyncSetting(initialSyncSetting: InitialSyncSetting)
-    fun ethereumRpcModeSetting(coinType: CoinType): EthereumRpcMode?
-    fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode)
-}
-
-interface ICustomTokenStorage {
-    fun customTokens(platformType: PlatformType, filter: String): List<CustomToken>
-    fun customTokens(filter: String): List<CustomToken>
-    fun customTokens(coinTypeIds: List<String>): List<CustomToken>
-    fun customToken(coinType: CoinType): CustomToken?
-    fun save(customTokens: List<CustomToken>)
-}
-
 interface IWalletManager {
     val activeWallets: List<Wallet>
     val activeWalletsUpdatedObservable: Observable<List<Wallet>>
@@ -359,54 +345,46 @@ interface IAppNumberFormatter {
         suffix: String = ""
     ): String
 
-    fun formatCoin(
-        value: Number,
-        code: String,
-        minimumFractionDigits: Int,
+    fun formatCoinFull(
+        value: BigDecimal,
+        code: String?,
+        coinDecimals: Int,
+    ): String
+
+    fun formatCoinShort(
+        value: BigDecimal,
+        code: String?,
+        coinDecimals: Int
+    ): String
+
+    fun formatNumberShort(
+        value: BigDecimal,
         maximumFractionDigits: Int
     ): String
 
-    fun formatFiat(
-        value: Number,
+    fun formatFiatFull(
+        value: BigDecimal,
+        symbol: String
+    ): String
+
+    fun formatFiatShort(
+        value: BigDecimal,
         symbol: String,
-        minimumFractionDigits: Int,
-        maximumFractionDigits: Int
+        currencyDecimals: Int
     ): String
 
-    fun getSignificantDecimalFiat(value: BigDecimal): Int
-    fun getSignificantDecimalCoin(value: BigDecimal): Int
-    fun shortenValue(number: BigDecimal): Pair<BigDecimal, String>
-    fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String
-    fun formatCoinValueAsShortened(number: BigDecimal, code: String): String
     fun formatValueAsDiff(value: Value): String
 }
 
 interface IFeeRateProvider {
     val feeRatePriorityList: List<FeeRatePriority>
-    val recommendedFeeRate: Single<BigInteger>
-    val defaultFeeRatePriority: FeeRatePriority
-        get() = FeeRatePriority.RECOMMENDED
-
-    fun feeRate(feeRatePriority: FeeRatePriority): Single<BigInteger> {
-        if (feeRatePriority is FeeRatePriority.Custom) {
-            return Single.just(feeRatePriority.value.toBigInteger())
-        }
-        return recommendedFeeRate
-    }
-}
-
-interface ICustomRangedFeeProvider : IFeeRateProvider {
-    val customFeeRange: LongRange
+        get() = listOf()
+    fun getFeeRateRange(): ClosedRange<Long>? = null
+    suspend fun getFeeRate(feeRatePriority: FeeRatePriority): Long
 }
 
 interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
-}
-
-interface IInitialSyncModeSettingsManager {
-    fun allSettings(): List<Pair<InitialSyncSetting, Boolean>>
-    fun setting(coinType: CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
-    fun save(setting: InitialSyncSetting)
 }
 
 interface IAccountCleaner {
@@ -416,8 +394,8 @@ interface IAccountCleaner {
 interface ITorManager {
     fun start()
     fun stop(): Single<Boolean>
-    fun enableTor()
-    fun disableTor()
+    fun setTorAsEnabled()
+    fun setTorAsDisabled()
     fun setListener(listener: TorManager.Listener)
     val isTorEnabled: Boolean
     val isTorNotificationEnabled: Boolean
@@ -434,20 +412,7 @@ interface IRateAppManager {
 }
 
 interface ICoinManager {
-    fun save(customTokens: List<CustomToken>)
     fun getPlatformCoin(coinType: CoinType): PlatformCoin?
-    fun getPlatformCoinsByCoinTypeIds(coinTypeIds: List<String>): List<PlatformCoin>
-    fun getPlatformCoins(platformType: PlatformType, filter: String, limit: Int = 20): List<PlatformCoin>
-    fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin>
-    fun featuredFullCoins(enabledPlatformCoins: List<PlatformCoin>): List<FullCoin>
-    fun fullCoins(filter: String = "", limit: Int = 20): List<FullCoin>
-    fun getFullCoin(coinUid: String): FullCoin?
-}
-
-interface IAddTokenBlockchainService {
-    fun isValid(reference: String): Boolean
-    fun coinType(reference: String): CoinType
-    fun customTokenAsync(reference: String): Single<CustomToken>
 }
 
 interface ITermsManager {
@@ -457,12 +422,12 @@ interface ITermsManager {
     fun update(term: Term)
 }
 
-sealed class FeeRatePriority {
-    object LOW : FeeRatePriority()
-    object RECOMMENDED : FeeRatePriority()
-    object HIGH : FeeRatePriority()
+sealed class FeeRatePriority(val titleRes: Int) {
+    object LOW : FeeRatePriority(R.string.Send_TxSpeed_Low)
+    object RECOMMENDED : FeeRatePriority(R.string.Send_TxSpeed_Recommended)
+    object HIGH : FeeRatePriority(R.string.Send_TxSpeed_High)
 
-    class Custom(val value: Long, val range: LongRange) : FeeRatePriority()
+    class Custom(val value: Long) : FeeRatePriority(R.string.Send_TxSpeed_Custom)
 }
 
 interface Clearable {

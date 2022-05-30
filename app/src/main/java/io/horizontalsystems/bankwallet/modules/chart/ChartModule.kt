@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.core.entities.Currency
+import java.math.BigDecimal
 
 object ChartModule {
 
@@ -12,7 +13,7 @@ object ChartModule {
     }
 
     interface ChartNumberFormatter {
-        fun formatValue(currencyValue: CurrencyValue): String
+        fun formatValue(currency: Currency, value: BigDecimal): String
     }
 
 }

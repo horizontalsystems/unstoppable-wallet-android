@@ -40,6 +40,9 @@ class AppConfigProvider {
      val bscscanApiKey by lazy {
         Translator.getString(R.string.bscscanKey)
     }
+     val polygonscanApiKey by lazy {
+        Translator.getString(R.string.polygonscanKey)
+    }
      val guidesUrl by lazy {
         Translator.getString(R.string.guidesUrl)
     }
@@ -62,7 +65,6 @@ class AppConfigProvider {
     }
 
      val fiatDecimal: Int = 2
-     val maxDecimal: Int = 8
      val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
      val currencies: List<Currency> = listOf(

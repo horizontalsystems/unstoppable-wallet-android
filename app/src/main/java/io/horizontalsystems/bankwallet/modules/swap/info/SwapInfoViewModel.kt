@@ -11,7 +11,7 @@ class SwapInfoViewModel(
 
     private val dexName = dex.provider.title
 
-    private val blockchain = dex.blockchain.title
+    private val blockchain = dex.blockchain.name
 
     val title = dex.provider.title
 
@@ -21,7 +21,7 @@ class SwapInfoViewModel(
 
     val dexRelated = Translator.getString(R.string.SwapInfo_DexRelated, dexName)
 
-    val transactionFeeDescription = Translator.getString(R.string.SwapInfo_TransactionFeeDescription, blockchain, dexName)
+    val transactionFeeDescription = Translator.getString(R.string.SwapInfo_TransactionFeeDescription)
 
     val linkText = Translator.getString(R.string.SwapInfo_Site, dexName)
 

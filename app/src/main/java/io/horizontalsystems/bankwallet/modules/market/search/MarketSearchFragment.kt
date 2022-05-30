@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,10 +14,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,14 +28,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.CoinItem
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Coin
@@ -59,39 +63,9 @@ class MarketSearchFragment : BaseFragment() {
             )
 
             setContent {
-                val screenState by viewModel.screenStateLiveData.observeAsState()
-
                 MarketSearchScreen(
-                    screenState = screenState,
-                    onBackButtonClick = { findNavController().popBackStack() },
-                    onFilterButtonClick = {
-                        findNavController().slideFromRight(
-                            R.id.marketSearchFragment_to_marketAdvancedSearchFragment
-                        )
-                    },
-                    onCoinClick = { coin ->
-                        val arguments = CoinFragment.prepareParams(coin.uid)
-                        findNavController().slideFromRight(R.id.coinFragment, arguments)
-                    },
-                    onCategoryClick = { viewItemType ->
-                        when (viewItemType) {
-                            MarketSearchModule.DiscoveryItem.TopCoins -> {
-                                findNavController().slideFromBottom(
-                                    R.id.marketSearchFragment_to_marketTopCoinsFragment
-                                )
-                            }
-                            is MarketSearchModule.DiscoveryItem.Category -> {
-                                findNavController().slideFromBottom(
-                                    R.id.marketCategoryFragment,
-                                    bundleOf(MarketCategoryFragment.categoryKey to viewItemType.coinCategory)
-                                )
-                            }
-                        }
-                    },
-                    onSearchQueryChange = { query -> viewModel.searchByQuery(query) },
-                    onFavoriteClick = { favorited, coinUid ->
-                        viewModel.onFavoriteClick(favorited, coinUid)
-                    }
+                    viewModel,
+                    findNavController(),
                 )
             }
         }
@@ -101,44 +75,89 @@ class MarketSearchFragment : BaseFragment() {
 
 @Composable
 fun MarketSearchScreen(
-    screenState: MarketSearchModule.DataState?,
-    onBackButtonClick: () -> Unit,
-    onFilterButtonClick: () -> Unit,
-    onCoinClick: (Coin) -> Unit,
-    onFavoriteClick: (Boolean, String) -> Unit,
-    onCategoryClick: (MarketSearchModule.DiscoveryItem) -> Unit,
-    onSearchQueryChange: (String) -> Unit
+    viewModel: MarketSearchViewModel,
+    navController: NavController,
 ) {
+
+    val viewState = viewModel.viewState
+    val errorMessage = viewModel.errorMessage
 
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             SearchView(
-                onSearchTextChange = {
-                    onSearchQueryChange.invoke(it)
+                onSearchTextChange = { query -> viewModel.searchByQuery(query) },
+                onRightTextButtonClick = {
+                    navController.slideFromRight(R.id.marketAdvancedSearchFragment)
                 },
-                onRightTextButtonClick = onFilterButtonClick,
                 leftIcon = R.drawable.ic_back,
-                onBackButtonClick = onBackButtonClick
+                onBackButtonClick = { navController.popBackStack() }
             )
-            when (screenState) {
-                is MarketSearchModule.DataState.Discovery -> {
-                    CardsGrid(screenState.discoveryItems, onCategoryClick)
-                }
-                is MarketSearchModule.DataState.SearchResult -> {
-                    if (screenState.coinItems.isEmpty()) {
-                        ListEmptyView(
-                            text = stringResource(R.string.EmptyResults),
-                            icon = R.drawable.ic_not_found
-                        )
-                    } else {
-                        MarketSearchResults(
-                            screenState.coinItems,
-                            onCoinClick,
-                            onFavoriteClick
-                        )
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    is ViewState.Loading -> {
+                        Loading()
+                    }
+                    is ViewState.Error -> {
+                        ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
+                    }
+                    ViewState.Success -> {
+                        when (val itemsData = viewModel.itemsData) {
+                            is MarketSearchModule.Data.DiscoveryItems -> {
+                                CardsGrid(
+                                    viewItems = itemsData.discoveryItems,
+                                    timePeriodSelect = viewModel.timePeriodMenu,
+                                    sortDescending = viewModel.sortDescending,
+                                    onToggleSortType = {
+                                        viewModel.toggleSortType()
+                                    },
+                                    onCategoryClick = { viewItemType ->
+                                        when (viewItemType) {
+                                            MarketSearchModule.DiscoveryItem.TopCoins -> {
+                                                navController.slideFromBottom(
+                                                    R.id.marketTopCoinsFragment
+                                                )
+                                            }
+                                            is MarketSearchModule.DiscoveryItem.Category -> {
+                                                navController.slideFromBottom(
+                                                    R.id.marketCategoryFragment,
+                                                    bundleOf(MarketCategoryFragment.categoryKey to viewItemType.coinCategory)
+                                                )
+                                            }
+                                        }
+                                    }
+                                ) { viewModel.toggleTimePeriod(it) }
+                            }
+                            is MarketSearchModule.Data.SearchResult -> {
+                                if (itemsData.coinItems.isEmpty()) {
+                                    ListEmptyView(
+                                        text = stringResource(R.string.EmptyResults),
+                                        icon = R.drawable.ic_not_found
+                                    )
+                                } else {
+                                    MarketSearchResults(
+                                        coinResult = itemsData.coinItems,
+                                        onCoinClick = { coin ->
+                                            val arguments = CoinFragment.prepareParams(coin.uid)
+                                            navController.slideFromRight(
+                                                R.id.coinFragment,
+                                                arguments
+                                            )
+                                        }
+                                    ) { favorited, coinUid ->
+                                        viewModel.onFavoriteClick(favorited, coinUid)
+                                    }
+                                }
+                            }
+                            else -> {}
+                        }
                     }
                 }
             }
+        }
+
+        errorMessage?.let {
+            SnackbarError(it.getString())
+            viewModel.errorShown()
         }
     }
 }
@@ -152,7 +171,6 @@ fun MarketSearchResults(
     LazyColumn {
         item {
             Divider(
-                modifier = Modifier.padding(top = 12.dp),
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
             )
@@ -260,31 +278,42 @@ fun SearchView(
 @Composable
 fun CardsGrid(
     viewItems: List<MarketSearchModule.DiscoveryItem>,
-    onCategoryClick: (MarketSearchModule.DiscoveryItem) -> Unit
+    timePeriodSelect: Select<TimeDuration>,
+    sortDescending: Boolean,
+    onToggleSortType: () -> Unit,
+    onCategoryClick: (MarketSearchModule.DiscoveryItem) -> Unit,
+    onTimePeriodMenuToggle: (TimeDuration) -> Unit
 ) {
+
+    var timePeriodMenu by remember { mutableStateOf(timePeriodSelect) }
+
     LazyColumn {
         item {
-            Divider(
-                modifier = Modifier.padding(vertical = 12.dp),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
-            )
-        }
-        item {
-            Text(
-                text = stringResource(R.string.Market_Search_BrowseCategories),
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.oz,
-                maxLines = 1,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 18.dp)
-            )
+            Header(borderTop = true) {
+                ButtonSecondaryCircle(
+                    modifier = Modifier
+                        .padding(start = 16.dp),
+                    icon = if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
+                    onClick = { onToggleSortType() }
+                )
+                Spacer(Modifier.weight(1f))
+                ButtonSecondaryToggle(
+                    modifier = Modifier.padding(end = 16.dp),
+                    select = timePeriodMenu,
+                    onSelect = {
+                        onTimePeriodMenuToggle.invoke(it)
+                        timePeriodMenu = Select(it, timePeriodSelect.options)
+                    }
+                )
+            }
+            Spacer(Modifier.height(4.dp))
         }
         // Turning the list in a list of lists of two elements each
         items(viewItems.windowed(2, 2, true)) { chunk ->
             Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-                CategoryCard(chunk[0], onCategoryClick)
+                CategoryCard(chunk[0]) { onCategoryClick(chunk[0]) }
                 if (chunk.size > 1) {
-                    CategoryCard(chunk[1], onCategoryClick)
+                    CategoryCard(chunk[1]) { onCategoryClick(chunk[1]) }
                 } else {
                     Spacer(modifier = Modifier.weight(1f))
                 }
@@ -330,7 +359,7 @@ private fun MarketCoin(
             MarketCoinSecondRow(coinCode, marketDataValue, label)
         }
 
-        IconButton(onClick = onFavoriteClick) {
+        HsIconButton(onClick = onFavoriteClick) {
             Icon(
                 painter = painterResource(if (favorited) R.drawable.ic_star_filled_20 else R.drawable.ic_star_20),
                 contentDescription = "coin icon",

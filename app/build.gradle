@@ -10,8 +10,8 @@ android {
         applicationId "io.horizontalsystems.bankwallet"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 61
-        versionName "0.24.2"
+        versionCode 62
+        versionName "0.25.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
@@ -54,6 +54,7 @@ android {
             resValue "string", "infuraSecretKey", "fc479a9290b64a84a15fa6544a130218"
             resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
             resValue "string", "bscscanKey", "5ZGSHWYHZVA8XZHB8PF6UUTRNNB4KT43ZZ"
+            resValue "string", "polygonscanKey", "TNQ44BCF1MS3S75Y6A2B6SN88I8UYFJFRM"
             resValue "string", "defiyieldProviderApiKey", "87e8671e-8267-427c-92c3-4627833445ae"
             resValue "string", "is_release", "false"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/develop/index.json"
@@ -92,6 +93,7 @@ android {
             resValue "string", "infuraSecretKey", "7b81c992c98d4e60aaa8a0ef9acff2be"
             resValue "string", "etherscanKey", "TTH1114D5VD5ZMCJZ4B74SGIDRCGSKWGX9"
             resValue "string", "bscscanKey", "HBQQN4GTKCHYSRZCKFVQJ3FWGPY4T8237Y"
+            resValue "string", "polygonscanKey", "2JM7USE5YRI59RWFZQI2RECAZSNI5QEQGV"
             resValue "string", "defiyieldProviderApiKey", "87e8671e-8267-427c-92c3-4627833445ae"
             resValue "string", "is_release", "true"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json"
@@ -119,7 +121,9 @@ android {
     }
 
     packagingOptions {
-        pickFirst("META-INF/atomicfu.kotlin_module")
+        resources {
+            pickFirsts += ['META-INF/atomicfu.kotlin_module']
+        }
     }
 
     kotlinOptions {
@@ -214,13 +218,13 @@ dependencies {
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:eb33b43'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:fe01dfa'
-    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:b4ebb16'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:7b11b8c'
+    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:501cf1e'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:fe2a3be'
-    implementation 'com.github.horizontalsystems:market-kit-android:13d91b9c'
+    implementation 'com.github.horizontalsystems:market-kit-android:2a92510'
 
     // Zcash SDK
-    implementation "cash.z.ecc.android:zcash-android-sdk:1.3.0-beta16"
+    implementation "cash.z.ecc.android:zcash-android-sdk:1.4.0-beta01"
 
     // WalletConnect
     implementation 'com.github.horizontalsystems:wallet-connect-kotlin:b9a50b8'
@@ -234,6 +238,9 @@ dependencies {
     // in case native file tor.so not loading, do full gradle clean and build.
     implementation 'com.github.horizontalsystems:tor-kit-android:6c775c1'
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.6.1'
 
     // UI modules
 

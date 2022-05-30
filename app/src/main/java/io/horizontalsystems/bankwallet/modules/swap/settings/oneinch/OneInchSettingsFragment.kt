@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.databinding.FragmentSwapSettings1inchBinding
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchModule
@@ -32,16 +33,11 @@ import io.horizontalsystems.core.helpers.HudHelper
 class OneInchSettingsFragment : SwapSettingsBaseFragment() {
 
     private val oneInchViewModel by navGraphViewModels<OneInchSwapViewModel>(R.id.swapFragment) {
-        OneInchModule.Factory(
-            dex
-        )
+        OneInchModule.Factory(dex)
     }
 
     private val vmFactory by lazy {
-        OneInchSwapSettingsModule.Factory(
-            oneInchViewModel.tradeService,
-            dex.blockchain
-        )
+        OneInchSwapSettingsModule.Factory(oneInchViewModel.tradeService)
     }
     private val oneInchSettingsViewModel by viewModels<OneInchSettingsViewModel> { vmFactory }
     private val recipientAddressViewModel by viewModels<RecipientAddressViewModel> { vmFactory }
@@ -56,8 +52,7 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSwapSettings1inchBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -95,7 +90,7 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
     private fun setRecipientAddressCompose() {
         binding.recipientAddressCompose.setContent {
             ComposeAppTheme {
-                dex.blockchain.coin?.let { platformCoin ->
+                App.marketKit.platformCoin(dex.blockchain.baseCoinType)?.let { platformCoin ->
                     Column {
                         Spacer(modifier = Modifier.height(12.dp))
                         Header {

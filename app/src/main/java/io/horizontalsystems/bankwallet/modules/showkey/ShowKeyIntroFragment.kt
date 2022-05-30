@@ -8,11 +8,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
-import androidx.navigation.navGraphViewModels
+import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentShowKeyIntroBinding
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
@@ -21,10 +22,12 @@ import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
 
 class ShowKeyIntroFragment : BaseFragment() {
-    private val viewModel by navGraphViewModels<ShowKeyViewModel>(R.id.showKeyIntroFragment) {
-        ShowKeyModule.Factory(
-            arguments?.getParcelable(ShowKeyModule.ACCOUNT)!!
-        )
+    private val account by lazy {
+        arguments?.getParcelable<Account>(ShowKeyModule.ACCOUNT)!!
+    }
+
+    private val viewModel by viewModels<ShowKeyViewModel> {
+        ShowKeyModule.Factory(account)
     }
 
     private var _binding: FragmentShowKeyIntroBinding? = null
@@ -53,13 +56,14 @@ class ShowKeyIntroFragment : BaseFragment() {
 
         viewModel.showKeyLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromRight(
-                R.id.showKeyIntroFragment_to_showKeyMainFragment
+                R.id.showKeyMainFragment,
+                ShowKeyModule.prepareParams(account)
             )
         }
 
         viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromRight(
-                R.id.showKeyIntroFragment_to_pinFragment,
+                R.id.pinFragment,
                 PinModule.forUnlock()
             )
         }

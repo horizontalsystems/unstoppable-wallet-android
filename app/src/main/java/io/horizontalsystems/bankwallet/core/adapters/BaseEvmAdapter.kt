@@ -2,12 +2,6 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
-import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.ethereumkit.core.AddressValidator
-import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.ethereumkit.models.GasPrice
-import io.reactivex.Flowable
-import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -18,6 +12,9 @@ abstract class BaseEvmAdapter(
 ) : IAdapter, ISendEthereumAdapter, IBalanceAdapter, IReceiveAdapter {
 
     val evmKit = evmKitWrapper.evmKit
+
+    override val isMainnet: Boolean
+        get() = evmKit.chain.isMainNet
 
     override val debugInfo: String
         get() = evmKit.debugInfo()

@@ -24,14 +24,12 @@ object TransactionInfoModule {
                 adapter,
                 App.marketKit,
                 App.currencyManager,
-                App.instance.testMode,
-                App.accountSettingManager
             )
             val factory = TransactionInfoViewItemFactory(
                 App.numberFormatter,
                 Translator,
                 DateHelper,
-                TransactionInfoAddressMapper
+                App.evmLabelManager
             )
             return TransactionInfoViewModel(
                 service,
@@ -49,7 +47,7 @@ sealed class TransactionStatusViewItem {
     class Pending(val name: String) : TransactionStatusViewItem()
 
     //progress in 0.0 .. 1.0
-    class Processing(val progress: Double, val name: String) : TransactionStatusViewItem()
+    class Processing(val progress: Float, val name: String) : TransactionStatusViewItem()
     class Completed(val name: String) : TransactionStatusViewItem()
     object Failed : TransactionStatusViewItem()
 }

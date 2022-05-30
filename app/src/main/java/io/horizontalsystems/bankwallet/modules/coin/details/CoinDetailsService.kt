@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.coin.details
 
+import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
+import io.horizontalsystems.bankwallet.modules.profeatures.ProNft
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
@@ -10,13 +13,17 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class CoinDetailsService(
     private val fullCoin: FullCoin,
     private val marketKit: MarketKit,
-    private val currencyManager: ICurrencyManager
+    private val currencyManager: ICurrencyManager,
+    private val proFeaturesAuthorizationManager: ProFeaturesAuthorizationManager
 ) {
     private val disposables = CompositeDisposable()
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     private val stateSubject = BehaviorSubject.create<DataState<Item>>()
     val stateObservable: Observable<DataState<Item>>
@@ -66,9 +73,48 @@ class CoinDetailsService(
         return Single.zip(
             tvlsSingle.onErrorReturn { listOf() },
             volumeSingle.onErrorReturn { listOf() },
-            { t1, t2 -> Pair(t1, t2) }
-        ).map { (tvls, totalVolumes) ->
-            Item(details, tvls, totalVolumes)
+            Single.just(ProCharts.forbidden)
+        ) { t1, t2, t3 -> Triple(t1, t2, t3) }.map { (tvls, totalVolumes, proFeatures) ->
+            Item(details, tvls, totalVolumes, proFeatures)
+        }
+    }
+
+    private fun proFeatures(coinUid: String, currencyCode: String): Single<ProCharts> {
+        val sessionKey = proFeaturesAuthorizationManager.getSessionKey(ProNft.YAK) ?: return Single.just(ProCharts.forbidden)
+
+        val dexVolumeSingle = marketKit
+            .dexVolumesSingle(coinUid, currencyCode, HsTimePeriod.Month1, sessionKey.key.value)
+            .onErrorReturn { DexVolumesResponse(listOf(), listOf()) }
+
+        val dexLiquiditySingle = marketKit
+            .dexLiquiditySingle(coinUid, currencyCode, HsTimePeriod.Month1, sessionKey.key.value)
+            .onErrorReturn { DexLiquiditiesResponse(listOf(), listOf()) }
+
+        val transactionDataSingle = marketKit
+            .transactionDataSingle(coinUid, currencyCode, HsTimePeriod.Month1, null, sessionKey.key.value)
+            .onErrorReturn { TransactionsDataResponse(listOf(), listOf()) }
+
+        val activeAddressesSingle = marketKit
+            .activeAddressesSingle(coinUid, currencyCode, HsTimePeriod.Month1, sessionKey.key.value)
+            .onErrorReturn { ActiveAddressesDataResponse(listOf(), listOf()) }
+
+        return Single.zip(
+            dexVolumeSingle, dexLiquiditySingle, transactionDataSingle, activeAddressesSingle
+        ) { dexVolumeResponse, dexLiquidityResponse, transactionDataResponse, activeAddressesResponse ->
+            val dexVolumeChartPoints = dexVolumeResponse.volumePoints
+            val dexLiquidityChartPoints = dexLiquidityResponse.volumePoints
+            val txCountChartPoints = transactionDataResponse.countPoints
+            val txVolumeChartPoints = transactionDataResponse.volumePoints
+            val activeAddresses = activeAddressesResponse.countPoints
+
+            return@zip ProCharts(
+                true,
+                if (dexVolumeChartPoints.isEmpty()) ProData.Empty else ProData.Completed(dexVolumeChartPoints),
+                if (dexLiquidityChartPoints.isEmpty()) ProData.Empty else ProData.Completed(dexLiquidityChartPoints),
+                if (txCountChartPoints.isEmpty()) ProData.Empty else ProData.Completed(txCountChartPoints),
+                if (txVolumeChartPoints.isEmpty()) ProData.Empty else ProData.Completed(txVolumeChartPoints),
+                if (activeAddresses.isEmpty()) ProData.Empty else ProData.Completed(activeAddresses),
+            )
         }
     }
 
@@ -88,6 +134,13 @@ class CoinDetailsService(
 
     fun start() {
         fetch()
+
+        proFeaturesAuthorizationManager.sessionKeyFlow.collectWith(scope) { sessionKey ->
+            if (sessionKey?.nftName == ProNft.YAK.keyName) {
+                stateSubject.onNext(DataState.Loading)
+                fetch()
+            }
+        }
     }
 
     fun refresh() {
@@ -101,7 +154,27 @@ class CoinDetailsService(
     data class Item(
         val marketInfoDetails: MarketInfoDetails,
         val tvls: List<ChartPoint>?,
-        val totalVolumes: List<ChartPoint>?
+        val totalVolumes: List<ChartPoint>?,
+        val proCharts: ProCharts
     )
+
+    sealed class ProData {
+        object Empty: ProData()
+        object Forbidden: ProData()
+        class Completed(val chartPoints: List<ChartPoint>): ProData()
+    }
+
+    data class ProCharts(
+        val activated: Boolean,
+        val dexVolumes: ProData,
+        val dexLiquidity: ProData,
+        val txCount: ProData,
+        val txVolume: ProData,
+        val activeAddresses: ProData
+    ) {
+        companion object {
+            val forbidden = ProCharts(false, ProData.Forbidden, ProData.Forbidden, ProData.Forbidden, ProData.Forbidden, ProData.Forbidden)
+        }
+    }
 
 }

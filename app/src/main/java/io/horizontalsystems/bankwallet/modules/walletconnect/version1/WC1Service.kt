@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule.WCRequestWrapper
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -75,8 +76,8 @@ class WC1Service(
     val connectionState: WalletConnectInteractor.State
         get() = interactor?.state ?: WalletConnectInteractor.State.Idle
 
-    private val requestSubject = PublishSubject.create<WC1Request>()
-    val requestObservable: Flowable<WC1Request>
+    private val requestSubject = PublishSubject.create<WCRequestWrapper>()
+    val requestObservable: Flowable<WCRequestWrapper>
         get() = requestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     fun start() {
@@ -126,7 +127,7 @@ class WC1Service(
 
     private fun initSession(peerId: String, peerMeta: WCPeerMeta, chainId: Int) {
         val account = manager.activeAccount ?: throw SessionError.NoSuitableAccount
-        val evmKitWrapper = manager.evmKitWrapper(chainId, account) ?: throw SessionError.UnsupportedChainId
+        val evmKitWrapper = manager.getEvmKitWrapper(chainId, account) ?: throw SessionError.UnsupportedChainId
 
         sessionData = SessionData(peerId, peerMeta, account, evmKitWrapper)
     }
@@ -268,7 +269,7 @@ class WC1Service(
 
         peerId?.let { peerId ->
             requestManager.getNextRequest(peerId)?.let { request ->
-                requestSubject.onNext(request)
+                requestSubject.onNext(WCRequestWrapper(request,remotePeerMeta?.name))
                 requestIsProcessing = true
             }
         }

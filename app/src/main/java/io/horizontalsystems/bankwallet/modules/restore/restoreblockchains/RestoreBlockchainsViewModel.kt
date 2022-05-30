@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsService.ItemState.Supported
-import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsService.ItemState.Unsupported
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.BackpressureStrategy
 import io.reactivex.disposables.CompositeDisposable
@@ -33,7 +31,7 @@ class RestoreBlockchainsViewModel(
             .let { disposables.add(it) }
 
         service.cancelEnableBlockchainObservable
-            .subscribeIO { disableBlockchainLiveData.postValue(it.name) }
+            .subscribeIO { disableBlockchainLiveData.postValue(it.uid) }
             .let { disposables.add(it) }
 
         sync(service.items)
@@ -46,36 +44,26 @@ class RestoreBlockchainsViewModel(
 
     private fun viewItem(
         item: RestoreBlockchainsService.Item,
-    ): CoinViewItem {
-        val state = when (item.state) {
-            is Supported -> CoinViewItemState.ToggleVisible(
-                item.state.enabled,
-                item.state.hasSettings
-            )
-            is Unsupported -> CoinViewItemState.ToggleHidden
-        }
-
-        return CoinViewItem(
-            item.blockchain.name,
-            item.blockchain.icon,
-            item.blockchain.title,
-            item.blockchain.description,
-            state,
-        )
-    }
+    ) = CoinViewItem(
+        item.blockchain.uid,
+        item.blockchain.icon,
+        item.blockchain.title,
+        item.blockchain.description,
+        state = CoinViewItemState.ToggleVisible(item.enabled, item.hasSettings)
+    )
 
     fun enable(uid: String) {
-        val blockchain = RestoreBlockchainsModule.Blockchain.valueOf(uid)
+        val blockchain = RestoreBlockchainsModule.Blockchain.getBlockchainByUid(uid) ?: return
         service.enable(blockchain)
     }
 
     fun disable(uid: String) {
-        val blockchain = RestoreBlockchainsModule.Blockchain.valueOf(uid)
+        val blockchain = RestoreBlockchainsModule.Blockchain.getBlockchainByUid(uid) ?: return
         service.disable(blockchain)
     }
 
     fun onClickSettings(uid: String) {
-        val blockchain = RestoreBlockchainsModule.Blockchain.valueOf(uid)
+        val blockchain = RestoreBlockchainsModule.Blockchain.getBlockchainByUid(uid) ?: return
         service.configure(blockchain)
     }
 

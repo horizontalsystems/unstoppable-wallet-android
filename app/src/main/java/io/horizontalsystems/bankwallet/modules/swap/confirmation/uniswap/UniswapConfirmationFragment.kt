@@ -5,8 +5,8 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.BaseSwapConfirmationFragment
 import io.horizontalsystems.ethereumkit.models.Address

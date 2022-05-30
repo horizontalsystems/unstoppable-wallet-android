@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import android.content.Context
-import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
@@ -15,28 +14,32 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftDao
+import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesDao
+import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSessionKey
 import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession
 import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectV2Session
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
-import io.horizontalsystems.marketkit.models.CoinType
 
-@Database(version = 39, exportSchema = false, entities = [
+@Database(version = 44, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
-    BlockchainSetting::class,
+    BlockchainSettingRecord::class,
     LogEntry::class,
     FavoriteCoin::class,
     WalletConnectSession::class,
     WalletConnectV2Session::class,
     RestoreSettingRecord::class,
     ActiveAccount::class,
-    AccountSettingRecord::class,
     CustomToken::class,
     EvmAccountState::class,
     NftCollectionRecord::class,
     NftAssetRecord::class,
+    ProFeaturesSessionKey::class,
+    EvmAddressLabel::class,
+    EvmMethodLabel::class,
+    SyncerState::class
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -51,10 +54,13 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun marketFavoritesDao(): MarketFavoritesDao
     abstract fun wc1SessionDao(): WC1SessionDao
     abstract fun wc2SessionDao(): WC2SessionDao
-    abstract fun accountSettingDao(): AccountSettingDao
     abstract fun customTokenDao(): CustomTokenDao
     abstract fun evmAccountStateDao(): EvmAccountStateDao
     abstract fun nftCollectionDao(): NftDao
+    abstract fun proFeaturesDao(): ProFeaturesDao
+    abstract fun evmAddressLabelDao(): EvmAddressLabelDao
+    abstract fun evmMethodLabelDao(): EvmMethodLabelDao
+    abstract fun syncerStateDao(): SyncerStateDao
 
     companion object {
 
@@ -103,6 +109,11 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_36_37,
                             Migration_37_38,
                             Migration_38_39,
+                            Migration_39_40,
+                            Migration_40_41,
+                            Migration_41_42,
+                            Migration_42_43,
+                            Migration_43_44,
                     )
                     .build()
         }
@@ -282,82 +293,6 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val addBlockchainSettingsTable: Migration = object : Migration(14, 15) {
             override fun migrate(database: SupportSQLiteDatabase) {
-
-                //remove unused field from EnabledWallet
-                database.execSQL("ALTER TABLE EnabledWallet RENAME TO TempEnabledWallet")
-                database.execSQL("CREATE TABLE IF NOT EXISTS `EnabledWallet` (`coinId` TEXT NOT NULL, `accountId` TEXT NOT NULL, `walletOrder` INTEGER, PRIMARY KEY(`coinId`, `accountId`), FOREIGN KEY(`accountId`) REFERENCES `AccountRecord`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)")
-                database.execSQL("INSERT INTO EnabledWallet (`coinId`,`accountId`,`walletOrder`) SELECT `coinId`,`accountId`,`walletOrder` FROM TempEnabledWallet")
-                database.execSQL("DROP TABLE TempEnabledWallet")
-
-                //add new table
-                database.execSQL("CREATE TABLE IF NOT EXISTS `BlockchainSetting` (`coinType` TEXT NOT NULL, `key` TEXT NOT NULL, `value` TEXT NOT NULL, PRIMARY KEY(`coinType`, `key`))")
-
-                //write settings from SharedPreferences to new table
-                val dbConverter = DatabaseConverters()
-                val walletsCursor = database.query("SELECT * FROM EnabledWallet")
-                while (walletsCursor.moveToNext()) {
-                    val coinIdColumnIndex = walletsCursor.getColumnIndex("coinId")
-                    if (coinIdColumnIndex >= 0) {
-                        val coinId = walletsCursor.getString(coinIdColumnIndex)
-                        val syncMode = App.localStorage.syncMode ?: SyncMode.Fast
-                        var syncModeStr: String? = syncMode.value
-                        var coinTypeStr: String? = null
-                        var derivationStr: String? = null
-                        var communicationStr: String? = null
-
-                        when (coinId) {
-                            "BTC" -> {
-                                coinTypeStr = dbConverter.fromCoinType(CoinType.Bitcoin)
-                                derivationStr = (App.localStorage.bitcoinDerivation
-                                        ?: AccountType.Derivation.bip49).value
-
-                            }
-                            "BCH" -> {
-                                coinTypeStr = dbConverter.fromCoinType(CoinType.BitcoinCash)
-                            }
-                            "DASH" -> {
-                                coinTypeStr = dbConverter.fromCoinType(CoinType.Dash)
-                            }
-
-                            "ETH" -> {
-                                coinTypeStr = dbConverter.fromCoinType(CoinType.Ethereum)
-                                syncModeStr = null
-                                communicationStr = CommunicationMode.Infura.value
-                            }
-                        }
-
-                        coinTypeStr?.let { saveSettings(database, it, derivationStr, syncModeStr, communicationStr) }
-                    }
-                }
-            }
-
-            private fun saveSettings(database: SupportSQLiteDatabase, coinType: String, derivation: String?, syncMode: String?, communication: String?) {
-                derivation?.let {
-                    insertIntoBlockchainSetting(database, coinType, BlockchainSettingsStorage.derivationSettingKey, it)
-                }
-
-                syncMode?.let {
-                    insertIntoBlockchainSetting(database, coinType, BlockchainSettingsStorage.syncModeSettingKey, it)
-                }
-
-                communication?.let {
-                    insertIntoBlockchainSetting(database, coinType, BlockchainSettingsStorage.ethereumRpcModeSettingKey, it)
-                }
-
-            }
-
-            private fun insertIntoBlockchainSetting(database: SupportSQLiteDatabase, coinType: String, key: String, value: String) {
-                try {
-                    database.execSQL("""
-                                                INSERT INTO BlockchainSetting (`coinType`,`key`,`value`) 
-                                                VALUES ('$coinType', '$key', '$value')
-                                                """.trimIndent())
-                } catch (ex: SQLiteConstraintException) {
-                    // Primary key violation exception can occur, because settings are inserted for each coin in EnabledWallet for specific Account.
-                    // But since wallets in EnabledWallet are deleted asynchronously on next application start by AccountCleaner, there can be more than one wallet for the same coinId.
-                    // We should ignore such exceptions.
-                }
-
             }
         }
 

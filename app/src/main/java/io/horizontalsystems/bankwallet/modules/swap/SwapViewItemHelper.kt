@@ -85,9 +85,8 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
         }
     }
 
-    fun coinAmount(amount: BigDecimal, coinCode: String, maxFraction: Int? = null): String {
-        val fraction = maxFraction ?: numberFormatter.getSignificantDecimalCoin(amount)
-        return numberFormatter.formatCoin(amount, coinCode, 0, fraction)
+    fun coinAmount(amount: BigDecimal, coinCode: String): String {
+        return numberFormatter.formatCoinFull(amount, coinCode, 8)
     }
 
 }

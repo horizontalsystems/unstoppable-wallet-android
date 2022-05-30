@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountT
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CoinValue.Kind
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -21,7 +20,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.math.RoundingMode
-import kotlin.math.min
 
 class SwapCoinCardViewModel(
     private val coinCardService: ISwapCoinCardService,
@@ -41,7 +39,7 @@ class SwapCoinCardViewModel(
                 AmountType.Coin -> coinCardService.coin?.decimals ?: maxValidDecimals
                 AmountType.Currency -> fiatService.currency.decimal
             }
-            return min(decimals, maxValidDecimals)
+            return decimals
         }
 
     private val amountLiveData = MutableLiveData<String?>(null)
@@ -206,10 +204,7 @@ class SwapCoinCardViewModel(
         AmountType.Currency -> {
             val amountInfo = coinCardService.coin?.let {
                 AmountInfo.CoinValueInfo(
-                    CoinValue(
-                        Kind.PlatformCoin(it),
-                        BigDecimal.ZERO
-                    )
+                    CoinValue(it, BigDecimal.ZERO)
                 )
             }
             amountInfo?.getFormatted()
@@ -231,7 +226,7 @@ class SwapCoinCardViewModel(
 
             setCoinValueToService(inputAmount, force)
         } else {
-            val decimals = min(fullAmountInfo.primaryDecimal, maxValidDecimals)
+            val decimals = fullAmountInfo.primaryDecimal
             val amountString = fullAmountInfo.primaryValue.setScale(decimals, RoundingMode.FLOOR)?.stripTrailingZeros()
                 ?.toPlainString()
             amountLiveData.postValue(amountString)

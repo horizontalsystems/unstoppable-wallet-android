@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,13 +20,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.walletconnect.RequestType
 import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.WC2RequestListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.WC2RequestListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsRadioButton
 
 @Composable
@@ -42,7 +41,7 @@ fun RequestListPage(viewModel: WC2RequestListViewModel, navController: NavContro
             AppBar(
                 TranslatableString.ResString(R.string.WalletConnect_PendingRequests),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = "back button",
@@ -185,8 +184,8 @@ private fun RequestCell(
 @Composable
 fun PreviewRequestList() {
     val items1 = listOf(
-        WC2RequestListModule.RequestViewItem(2L, RequestType.PersonalSign, "Title 2", "Subtitle"),
-        WC2RequestListModule.RequestViewItem(3L, RequestType.PersonalSign, "Title 3", "Subtitle"),
+        WC2RequestListModule.RequestViewItem(2L, "Title 2", "Subtitle"),
+        WC2RequestListModule.RequestViewItem(3L, "Title 3", "Subtitle"),
     )
     val sections = listOf(
         WC2RequestListModule.SectionViewItem("1", "Wallet 1", true, items1),

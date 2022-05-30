@@ -7,6 +7,7 @@ import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.Platform
 import io.horizontalsystems.marketkit.models.PlatformCoin
 
+@Deprecated("Use CustomCoin")
 @Entity
 data class CustomToken(
     val coinName: String,

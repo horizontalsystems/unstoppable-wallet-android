@@ -16,16 +16,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItemPricedWithCurrency
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionViewItem
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionsViewModel
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
+import io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionViewItem
+import io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 
 fun LazyListScope.nftsCollectionSection(
     collection: NftCollectionViewItem,
     viewModel: NftCollectionsViewModel,
-    onClickAsset: (NftAssetItemPricedWithCurrency) -> Unit
+    onClickAsset: (NftAssetModuleAssetItem) -> Unit
 ) {
     item(key = "${collection.slug}-header") {
         CellSingleLineClear(
@@ -83,11 +83,21 @@ fun LazyListScope.nftsCollectionSection(
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    assets.forEach { asset ->
+                    assets.forEach { collectionAsset ->
+                        val asset = collectionAsset.asset
+                        val price = collectionAsset.price
                         Box(modifier = Modifier.weight(1f)) {
-                            NftPreview(asset) {
-                                onClickAsset.invoke(asset)
-                            }
+                            NftAssetPreview(
+                                name = asset.name,
+                                imageUrl = asset.imageUrl,
+                                onSale = asset.onSale,
+                                tokenId = asset.tokenId,
+                                coinPrice = price?.coinValue,
+                                currencyPrice = price?.currencyValue,
+                                onClick = {
+                                    onClickAsset.invoke(asset)
+                                }
+                            )
                         }
                     }
 

@@ -12,9 +12,14 @@ class WC2SignMessageRequestService(
     private val sessionManager: WC2SessionManager,
 ) : WCSignMessageRequestModule.RequestAction {
 
+    override val isLegacySignRequest = false
+
     private val requestData by lazy {
         sessionManager.pendingRequestDataToOpen[requestId]!!
     }
+
+    override val dAppName: String?
+        get() = pendingRequest.dAppName
 
     val evmKitWrapper by lazy {
         requestData.evmKitWrapper
@@ -24,7 +29,7 @@ class WC2SignMessageRequestService(
         requestData.pendingRequest as WC2SignMessageRequest
     }
 
-    override val message: SignMessage? by lazy {
+    override val message: SignMessage by lazy {
         pendingRequest.message
     }
 

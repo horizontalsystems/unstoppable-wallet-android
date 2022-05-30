@@ -52,14 +52,14 @@ class CreateAccountService(
         }
 
         val accountType = resolveAccountType()
-        val account = accountFactory.account(accountType, AccountOrigin.Created, false)
+        val account = accountFactory.account(accountFactory.getNextAccountName(), accountType, AccountOrigin.Created, false)
 
         accountManager.save(account)
         activateDefaultWallets(account)
     }
 
     private fun activateDefaultWallets(account: Account) {
-        walletActivator.activateWallets(account, listOf(CoinType.Bitcoin, CoinType.Ethereum, CoinType.BinanceSmartChain))
+        walletActivator.activateWallets(account, listOf(CoinType.Bitcoin, CoinType.Ethereum, CoinType.BinanceSmartChain, CoinType.Polygon, CoinType.Zcash))
     }
 
     private fun resolveAccountType() = when (kind) {

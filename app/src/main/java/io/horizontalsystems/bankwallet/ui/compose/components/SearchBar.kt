@@ -56,7 +56,7 @@ fun SearchBar(
         backgroundColor = ComposeAppTheme.colors.tyler,
         elevation = 0.dp,
         navigationIcon = {
-            IconButton(onClick = {
+            HsIconButton(onClick = {
                 if (searchMode) {
                     searchText = ""
                     onSearchTextChanged.invoke("")
@@ -113,7 +113,7 @@ fun SearchBar(
                             enter = fadeIn(),
                             exit = fadeOut()
                         ) {
-                            IconButton(onClick = {
+                            HsIconButton(onClick = {
                                 searchText = ""
                                 onSearchTextChanged.invoke("")
                                 showClearButton = false

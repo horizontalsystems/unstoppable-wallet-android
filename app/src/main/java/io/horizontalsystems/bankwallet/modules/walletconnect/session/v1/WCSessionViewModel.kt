@@ -6,15 +6,19 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Request
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule.WCRequestWrapper
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 
-class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
+class WCSessionViewModel(
+    private val service: WC1Service,
+    private val accountManager: IAccountManager
+    ) : ViewModel() {
 
     val connectingLiveData = MutableLiveData<Boolean>()
     val peerMetaLiveData = MutableLiveData<PeerMetaViewItem?>()
@@ -24,7 +28,7 @@ class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
     val errorLiveData = MutableLiveData<String?>()
     val statusLiveData = MutableLiveData<Status?>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
-    val openRequestLiveEvent = SingleLiveEvent<WC1Request>()
+    val openRequestLiveEvent = SingleLiveEvent<WCRequestWrapper>()
 
     var invalidUrlError by mutableStateOf(false)
         private set
@@ -81,6 +85,7 @@ class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
 
     override fun onCleared() {
         service.stop()
+        disposables.clear()
     }
 
     fun cancel() {
@@ -113,7 +118,13 @@ class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
         }
 
         val peerMetaViewItem = service.remotePeerMeta?.let { peerMeta ->
-            PeerMetaViewItem(peerMeta.name, peerMeta.url, peerMeta.description, peerMeta.icons.lastOrNull())
+            PeerMetaViewItem(
+                peerMeta.name,
+                peerMeta.url,
+                peerMeta.description,
+                accountManager.activeAccount?.name,
+                peerMeta.icons.lastOrNull()
+            )
         }
         peerMetaLiveData.postValue(peerMetaViewItem)
 
@@ -197,4 +208,10 @@ class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
 
 }
 
-data class PeerMetaViewItem(val name: String, val url: String, val description: String?, val icon: String?)
+data class PeerMetaViewItem(
+    val name: String,
+    val url: String,
+    val description: String?,
+    val activeWallet: String?,
+    val icon: String?
+    )

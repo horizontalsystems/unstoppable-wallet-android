@@ -1,22 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.swap.coincard
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Blockchain
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Dex
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.horizontalsystems.marketkit.models.PlatformType
 import java.math.BigDecimal
 
 class SwapCoinProvider(
     private val dex: Dex,
-    private val coinManager: ICoinManager,
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
     private val currencyManager: ICurrencyManager,
@@ -24,7 +21,7 @@ class SwapCoinProvider(
 ) {
 
     private fun getCoinItems(filter: String): List<CoinBalanceItem> {
-        val platformCoins = coinManager.getPlatformCoins(platformType(), filter)
+        val platformCoins = marketKit.platformCoins(dex.blockchain.platformType, filter)
 
         return platformCoins.map { CoinBalanceItem(it, null, null) }
     }
@@ -48,8 +45,11 @@ class SwapCoinProvider(
     }
 
     private fun dexSupportsCoin(coin: PlatformCoin) = when (coin.coinType) {
-        CoinType.Ethereum, is CoinType.Erc20 -> dex.blockchain == Blockchain.Ethereum
-        CoinType.BinanceSmartChain, is CoinType.Bep20 -> dex.blockchain == Blockchain.BinanceSmartChain
+        CoinType.Ethereum, is CoinType.Erc20 -> dex.blockchain == EvmBlockchain.Ethereum
+        CoinType.BinanceSmartChain, is CoinType.Bep20 -> dex.blockchain == EvmBlockchain.BinanceSmartChain
+        CoinType.Polygon, is CoinType.Mrc20 -> dex.blockchain == EvmBlockchain.Polygon
+        CoinType.EthereumOptimism, is CoinType.OptimismErc20 -> dex.blockchain == EvmBlockchain.Optimism
+        CoinType.EthereumArbitrumOne, is CoinType.ArbitrumOneErc20 -> dex.blockchain == EvmBlockchain.ArbitrumOne
         else -> false
     }
 
@@ -70,11 +70,6 @@ class SwapCoinProvider(
                 it.value
             }
         }
-    }
-
-    private fun platformType(): PlatformType = when (dex.blockchain) {
-        Blockchain.Ethereum -> PlatformType.Ethereum
-        Blockchain.BinanceSmartChain -> PlatformType.BinanceSmartChain
     }
 
     fun getCoins(filter: String): List<CoinBalanceItem> {

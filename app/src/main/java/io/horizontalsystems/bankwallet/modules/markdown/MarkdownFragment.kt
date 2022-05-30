@@ -87,7 +87,7 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
     override fun onClick(url: String) {
         findNavController().slideFromRight(
-            R.id.markdownFragment_markdownFragment,
+            R.id.markdownFragment,
             bundleOf(markdownUrlKey to url)
         )
     }

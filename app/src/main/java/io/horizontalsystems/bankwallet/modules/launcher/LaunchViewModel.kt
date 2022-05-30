@@ -1,52 +1,43 @@
 package io.horizontalsystems.bankwallet.modules.launcher
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.core.IKeyStoreManager
+import io.horizontalsystems.core.IPinComponent
+import io.horizontalsystems.core.ISystemInfoManager
+import io.horizontalsystems.core.security.KeyStoreValidationResult
 
-class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
+class LaunchViewModel(
+    private val accountManager: IAccountManager,
+    private val pinComponent: IPinComponent,
+    private val systemInfoManager: ISystemInfoManager,
+    private val keyStoreManager: IKeyStoreManager,
+    private val localStorage: ILocalStorage
+) : ViewModel() {
+    val torEnabled by localStorage::torEnabled
 
-    lateinit var delegate: LaunchModule.IViewDelegate
+    private val mainShowedOnce = localStorage.mainShowedOnce
 
-    val openWelcomeModule = SingleLiveEvent<Void>()
-    val openMainModule = SingleLiveEvent<Void>()
-    val openUnlockModule = SingleLiveEvent<Void>()
-    val openNoSystemLockModule = SingleLiveEvent<Void>()
-    val openKeyInvalidatedModule = SingleLiveEvent<Void>()
-    val openUserAuthenticationModule = SingleLiveEvent<Void>()
-    val closeApplication = SingleLiveEvent<Void>()
-
-    fun init() {
-        LaunchModule.init(this, this)
-        delegate.viewDidLoad()
+    fun getPage() = when {
+        systemInfoManager.isSystemLockOff -> Page.NoSystemLock
+        else -> when (keyStoreManager.validateKeyStore()) {
+            KeyStoreValidationResult.UserNotAuthenticated -> Page.UserAuthentication
+            KeyStoreValidationResult.KeyIsInvalid -> Page.KeyInvalidated
+            KeyStoreValidationResult.KeyIsValid -> when {
+                accountManager.isAccountsEmpty && !mainShowedOnce -> Page.Welcome
+                pinComponent.isLocked -> Page.Unlock
+                else -> Page.Main
+            }
+        }
     }
 
-    // IRouter
-
-    override fun openWelcomeModule() {
-        openWelcomeModule.call()
-    }
-
-    override fun openMainModule() {
-        openMainModule.call()
-    }
-
-    override fun openUnlockModule() {
-        openUnlockModule.call()
-    }
-
-    override fun openNoSystemLockModule() {
-        openNoSystemLockModule.call()
-    }
-
-    override fun openKeyInvalidatedModule() {
-        openKeyInvalidatedModule.call()
-    }
-
-    override fun openUserAuthenticationModule() {
-        openUserAuthenticationModule.call()
-    }
-
-    override fun closeApplication() {
-        closeApplication.call()
+    enum class Page {
+        Welcome,
+        Main,
+        Unlock,
+        NoSystemLock,
+        KeyInvalidated,
+        UserAuthentication
     }
 }

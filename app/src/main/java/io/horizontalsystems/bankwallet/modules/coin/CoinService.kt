@@ -1,20 +1,24 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.supportedPlatforms
+import io.horizontalsystems.marketkit.MarketKit
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class CoinService(
     private val coinUid: String,
-    private val coinManager: ICoinManager,
+    private val marketKit: MarketKit,
     private val marketFavoritesManager: MarketFavoritesManager,
     private val walletManager: IWalletManager,
     private val accountManager: IAccountManager,
 ) : Clearable {
-    val fullCoin = coinManager.getFullCoin(coinUid)!!
+    val fullCoin = marketKit.fullCoins(coinUids = listOf(coinUid)).first()
 
     private val _isFavorite = BehaviorSubject.create<Boolean>()
     val isFavorite: Observable<Boolean>

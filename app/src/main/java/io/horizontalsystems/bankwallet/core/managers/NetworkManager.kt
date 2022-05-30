@@ -56,8 +56,8 @@ class NetworkManager : INetworkManager {
         return TokenInfoService.service().getBep2TokenInfo(symbol)
     }
 
-    override fun getEvmTokeInfo(tokenType: String, address: String): Single<TokenInfoService.EvmTokenInfo> {
-        return TokenInfoService.service().getTokenInfo(tokenType, address)
+    override fun getEvmTokeInfo(apiPath: String, address: String): Single<TokenInfoService.EvmTokenInfo> {
+        return TokenInfoService.service().getTokenInfo(apiPath, address)
     }
 
     override suspend fun subscribe(host: String, path: String, body: String): JsonObject {
@@ -142,9 +142,9 @@ object TokenInfoService {
         @GET("bep2")
         fun getBep2TokenInfo(@Query("symbol") symbol: String): Single<Bep2TokenInfo>
 
-        @GET("{tokenType}")
+        @GET("{apiPath}")
         fun getTokenInfo(
-            @Path("tokenType") tokenType: String,
+            @Path("apiPath") apiPath: String,
             @Query("address") address: String
         ): Single<EvmTokenInfo>
     }

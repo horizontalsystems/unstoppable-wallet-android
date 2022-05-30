@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
@@ -22,7 +22,7 @@ object OneInchConfirmationModule {
     private const val oneInchSwapParametersKey = "oneInchSwapParametersKey"
 
     class Factory(
-        private val blockchain: SwapMainModule.Blockchain,
+        private val blockchain: EvmBlockchain,
         private val arguments: Bundle
     ) : ViewModelProvider.Factory {
 
@@ -31,9 +31,9 @@ object OneInchConfirmationModule {
                 oneInchSwapParametersKey
             )!!
         }
-        private val evmKitWrapper by lazy { blockchain.evmKitWrapper!! }
+        private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchain).evmKitWrapper!! }
         private val oneInchKitHelper by lazy { OneInchKitHelper(evmKitWrapper.evmKit) }
-        private val coin by lazy { blockchain.coin!! }
+        private val coin by lazy { App.marketKit.platformCoin(blockchain.baseCoinType)!! }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
             if (evmKit.chain.isEIP1559Supported) {
@@ -51,8 +51,7 @@ object OneInchConfirmationModule {
         private val sendService by lazy {
             OneInchSendEvmTransactionService(
                 evmKitWrapper,
-                feeService,
-                App.activateCoinManager
+                feeService
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
@@ -61,7 +60,7 @@ object OneInchConfirmationModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory, App.evmLabelManager) as T
                 }
                 EvmFeeCellViewModel::class.java -> {
                     EvmFeeCellViewModel(feeService, gasPriceService, coinServiceFactory.baseCoinService) as T

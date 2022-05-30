@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
@@ -92,6 +93,7 @@ class TransactionsViewModel(
 
     override fun onCleared() {
         service.clear()
+        disposables.clear()
     }
 
     fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)
@@ -107,8 +109,7 @@ data class TransactionItem(
 
 data class TransactionViewItem(
     val uid: String,
-    val typeIcon: Int,
-    val progress: Int?,
+    val progress: Float?,
     val title: String,
     val subtitle: String,
     val primaryValue: ColoredValueNew?,
@@ -116,8 +117,25 @@ data class TransactionViewItem(
     val date: Date,
     val sentToSelf: Boolean = false,
     val doubleSpend: Boolean = false,
-    val locked: Boolean? = null
+    val locked: Boolean? = null,
+    val icon: Icon
 ) {
+
+    sealed class Icon {
+        class ImageResource(val resourceId: Int) : Icon()
+        class Regular(val url: String?, val placeholder: Int?) : Icon()
+        class Swap(val iconIn: Regular, val iconOut: Regular) : Icon()
+        object Failed : Icon()
+        class Platform(source: TransactionSource) : Icon() {
+            val iconRes = when ((source.blockchain as? TransactionSource.Blockchain.Evm)?.evmBlockchain) {
+                EvmBlockchain.BinanceSmartChain -> R.drawable.logo_chain_bsc_trx_24
+                EvmBlockchain.Ethereum -> R.drawable.logo_chain_ethereum_trx_24
+                EvmBlockchain.Polygon -> R.drawable.logo_chain_polygon_trx_24
+                else -> null
+            }
+        }
+    }
+
     val formattedDate = formatDate(date).uppercase()
 
     private fun formatDate(date: Date): String {

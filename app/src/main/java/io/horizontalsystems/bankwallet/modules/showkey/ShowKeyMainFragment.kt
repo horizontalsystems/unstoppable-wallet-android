@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
-import androidx.navigation.navGraphViewModels
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -22,7 +22,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.core.findNavController
 
 class ShowKeyMainFragment : BaseFragment() {
-    private val viewModel by navGraphViewModels<ShowKeyViewModel>(R.id.showKeyIntroFragment)
+    private val viewModel by viewModels<ShowKeyViewModel> {
+        ShowKeyModule.Factory(
+            arguments?.getParcelable(ShowKeyModule.ACCOUNT)!!
+        )
+    }
 
     private var _binding: FragmentShowKeyMainBinding? = null
     private val binding get() = _binding!!

@@ -15,12 +15,13 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.market.advancedsearch.TimePeriod
+import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfo
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -203,28 +204,20 @@ data class MarketViewItem(
         ): MarketViewItem {
             val marketDataValue = when (marketField) {
                 MarketField.MarketCap -> {
-                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(
-                        marketItem.marketCap.value
-                    )
-                    val marketCapFormatted = App.numberFormatter.formatFiat(
-                        shortenValue,
+                    val marketCapFormatted = App.numberFormatter.formatFiatShort(
+                        marketItem.marketCap.value,
                         marketItem.marketCap.currency.symbol,
-                        0,
                         2
-                    ) + " $suffix"
+                    )
 
                     MarketDataValue.MarketCap(marketCapFormatted)
                 }
                 MarketField.Volume -> {
-                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(
-                        marketItem.volume.value
-                    )
-                    val volumeFormatted = App.numberFormatter.formatFiat(
-                        shortenValue,
+                    val volumeFormatted = App.numberFormatter.formatFiatShort(
+                        marketItem.volume.value,
                         marketItem.volume.currency.symbol,
-                        0,
                         2
-                    ) + " $suffix"
+                    )
 
                     MarketDataValue.Volume(volumeFormatted)
                 }
@@ -234,11 +227,9 @@ data class MarketViewItem(
             }
             return MarketViewItem(
                 marketItem.fullCoin,
-                App.numberFormatter.formatFiat(
+                App.numberFormatter.formatFiatFull(
                     marketItem.rate.value,
-                    marketItem.rate.currency.symbol,
-                    0,
-                    6
+                    marketItem.rate.currency.symbol
                 ),
                 marketDataValue,
                 marketItem.fullCoin.coin.marketCapRank?.toString(),
@@ -263,4 +254,14 @@ fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
     TimePeriod.TimePeriod_1M -> priceChange30d
     TimePeriod.TimePeriod_6M -> priceChange200d
     TimePeriod.TimePeriod_1Y -> priceChange1y
+}
+
+@Parcelize
+enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle, Parcelable {
+    OneDay(R.string.CoinPage_TimeDuration_Day),
+    SevenDay(R.string.CoinPage_TimeDuration_Week),
+    ThirtyDay(R.string.CoinPage_TimeDuration_Month);
+
+    @IgnoredOnParcel
+    override val title = TranslatableString.ResString(titleResId)
 }

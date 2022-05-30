@@ -107,7 +107,7 @@ class SwapApproveFragment : BaseFragment() {
 
         viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner, { sendEvmData ->
             findNavController().slideFromRight(
-                R.id.swapApproveFragment_to_swapApproveConfirmationFragment,
+                R.id.swapApproveConfirmationFragment,
                 SwapApproveConfirmationModule.prepareParams(sendEvmData)
             )
         })

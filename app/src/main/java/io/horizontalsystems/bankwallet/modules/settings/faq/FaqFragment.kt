@@ -77,7 +77,7 @@ class FaqListFragment : BaseFragment(), FaqListAdapter.Listener {
 
     override fun onItemClicked(faqItem: FaqItem) {
         val arguments = bundleOf(MarkdownFragment.markdownUrlKey to faqItem.faq.markdown)
-        findNavController().slideFromRight(R.id.faqFragment_to_markdownFragment, arguments)
+        findNavController().slideFromRight(R.id.markdownFragment, arguments)
     }
 }
 

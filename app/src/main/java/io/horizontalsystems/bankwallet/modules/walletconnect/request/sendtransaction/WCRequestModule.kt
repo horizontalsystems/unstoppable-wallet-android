@@ -10,7 +10,9 @@ import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData.AdditionalInfo
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData.WalletConnectInfo
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v1.WCSendEthereumTransactionRequestService
@@ -31,7 +33,8 @@ object WCRequestModule {
 
     class Factory(
         private val request: WC1SendEthereumTransactionRequest,
-        private val baseService: WC1Service
+        private val baseService: WC1Service,
+        dAppName: String?
     ) : ViewModelProvider.Factory {
         private val evmKitWrapper by lazy { baseService.evmKitWrapper!! }
         private val coin by lazy { platformCoin(evmKitWrapper.evmKit.chain) }
@@ -55,12 +58,13 @@ object WCRequestModule {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, transactionData, 10)
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
+        private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(dAppName))
         private val sendService by lazy {
             SendEvmTransactionService(
-                SendEvmData(transactionData),
+                SendEvmData(transactionData, additionalInfo),
                 evmKitWrapper,
                 feeService,
-                App.activateCoinManager
+                App.evmLabelManager
             )
         }
 
@@ -81,7 +85,8 @@ object WCRequestModule {
                     SendEvmTransactionViewModel(
                         sendService,
                         coinServiceFactory,
-                        cautionViewItemFactory
+                        cautionViewItemFactory,
+                        App.evmLabelManager
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
@@ -116,12 +121,14 @@ object WCRequestModule {
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
+        private val additionalInfo =
+            AdditionalInfo.WalletConnectRequest(WalletConnectInfo(service.transactionRequest.dAppName))
         private val sendService by lazy {
             SendEvmTransactionService(
-                SendEvmData(transactionData),
+                SendEvmData(transactionData, additionalInfo),
                 service.evmKitWrapper,
                 feeService,
-                App.activateCoinManager
+                App.evmLabelManager
             )
         }
 
@@ -142,7 +149,8 @@ object WCRequestModule {
                     SendEvmTransactionViewModel(
                         sendService,
                         coinServiceFactory,
-                        cautionViewItemFactory
+                        cautionViewItemFactory,
+                        App.evmLabelManager
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
@@ -153,6 +161,9 @@ object WCRequestModule {
     private fun platformCoin(chain: Chain) =
         when (chain) {
             Chain.BinanceSmartChain -> App.coinManager.getPlatformCoin(CoinType.BinanceSmartChain)!!
+            Chain.Polygon -> App.coinManager.getPlatformCoin(CoinType.Polygon)!!
+            Chain.Optimism -> App.coinManager.getPlatformCoin(CoinType.EthereumOptimism)!!
+            Chain.ArbitrumOne -> App.coinManager.getPlatformCoin(CoinType.EthereumArbitrumOne)!!
             else -> App.coinManager.getPlatformCoin(CoinType.Ethereum)!!
         }
 

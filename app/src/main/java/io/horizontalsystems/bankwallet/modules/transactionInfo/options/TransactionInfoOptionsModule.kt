@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
@@ -44,6 +44,9 @@ object TransactionInfoOptionsModule {
         private val baseCoin by lazy {
             when (evmKitWrapper.evmKit.chain) {
                 Chain.BinanceSmartChain -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)!!
+                Chain.Polygon -> App.marketKit.platformCoin(CoinType.Polygon)!!
+                Chain.Optimism -> App.marketKit.platformCoin(CoinType.EthereumOptimism)!!
+                Chain.ArbitrumOne -> App.marketKit.platformCoin(CoinType.EthereumArbitrumOne)!!
                 else -> App.marketKit.platformCoin(CoinType.Ethereum)!!
             }
         }
@@ -74,7 +77,7 @@ object TransactionInfoOptionsModule {
         private val transactionData by lazy {
             when (optionType) {
                 TransactionInfoOption.Type.SpeedUp -> {
-                    TransactionData(transaction.to!!, transaction.value, transaction.input, transaction.nonce)
+                    TransactionData(transaction.to!!, transaction.value!!, transaction.input!!, transaction.nonce)
                 }
                 TransactionInfoOption.Type.Cancel -> {
                     TransactionData(
@@ -98,7 +101,7 @@ object TransactionInfoOptionsModule {
                 SendEvmData(transactionData),
                 evmKitWrapper,
                 transactionService,
-                App.activateCoinManager
+                App.evmLabelManager
             )
         }
 
@@ -106,7 +109,7 @@ object TransactionInfoOptionsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, cautionViewItemFactory, App.evmLabelManager) as T
                 }
                 EvmFeeCellViewModel::class.java -> {
                     EvmFeeCellViewModel(transactionService, gasPriceService, coinServiceFactory.baseCoinService) as T
@@ -115,7 +118,7 @@ object TransactionInfoOptionsModule {
                     TransactionSpeedUpCancelViewModel(
                         baseCoin,
                         optionType,
-                        fullTransaction.receiptWithLogs == null
+                        fullTransaction.transaction.blockNumber == null
                     ) as T
                 }
                 else -> throw IllegalArgumentException()

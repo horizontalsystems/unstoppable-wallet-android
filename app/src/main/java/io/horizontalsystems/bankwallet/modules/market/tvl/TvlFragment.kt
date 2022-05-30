@@ -230,7 +230,7 @@ class TvlFragment : BaseFragment() {
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                MarketCoinFirstRow(name, formatCurrencyValueAsShortened(tvl))
+                MarketCoinFirstRow(name, tvl.getFormattedShort())
                 Spacer(modifier = Modifier.height(3.dp))
                 MarketCoinSecondRow(chain.getString(), marketDataValue, label)
             }

@@ -1,137 +1,87 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
+import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.hsnft.AssetOrder
-import io.horizontalsystems.bankwallet.modules.nft.DataWithError
-import io.horizontalsystems.bankwallet.modules.nft.NftAssetAttribute
+import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
+import io.horizontalsystems.bankwallet.modules.nft.INftApiProvider
+import io.horizontalsystems.bankwallet.modules.nft.NftAssetPrice
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.*
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Price
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale.PriceType
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
+import kotlinx.coroutines.withContext
 
 class NftAssetService(
-    private val accountId: String,
-    private val tokenId: String,
+    private val collectionUid: String,
     private val contractAddress: String,
+    private val tokenId: String,
+    private val nftApiProvider: INftApiProvider,
     private val nftManager: NftManager,
     private val repository: NftAssetRepository
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private val _serviceDataFlow = MutableSharedFlow<DataWithError<NftAssetModuleAssetItem>>(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    private val _serviceDataFlow =
+        MutableSharedFlow<Result<NftAssetModuleAssetItem>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     val serviceDataFlow = _serviceDataFlow.asSharedFlow()
 
-    fun start() {
-        coroutineScope.launch {
-            repository.dataFlow.collect { assetData ->
-                _serviceDataFlow.tryEmit(assetData)
-            }
+    suspend fun start() = withContext(Dispatchers.IO) {
+        repository.dataFlow.collectWith(this) { assetData ->
+            _serviceDataFlow.tryEmit(Result.success(assetData))
         }
 
-        coroutineScope.launch {
-            loadAsset()
-        }
+        loadAsset()
+        repository.start()
     }
 
-    suspend fun refresh() {
+    suspend fun refresh() = withContext(Dispatchers.IO) {
         loadAsset()
     }
 
     private suspend fun loadAsset() {
-        val assetRecord =
-            nftManager.getAssetRecord(accountId, tokenId, contractAddress) ?: throw NftNotFoundException()
-        val collectionRecord =
-            nftManager.getCollectionRecord(accountId, assetRecord.collectionUid) ?: throw NftNotFoundException()
-
-        val asset = NftAssetModuleAssetItem(
-            name = assetRecord.name,
-            imageUrl = assetRecord.imageUrl,
-            collectionName = collectionRecord.name,
-            description = assetRecord.description,
-            contract = assetRecord.contract,
-            tokenId = assetRecord.tokenId,
-            assetLinks = assetRecord.links,
-            collectionLinks = collectionRecord.links,
-            stats = Stats(
-                lastSale = nftManager.nftAssetPriceToCoinValue(assetRecord.lastSale)?.let { Price(it) },
-                average7d = nftManager.nftAssetPriceToCoinValue(collectionRecord.averagePrice7d)
-                    ?.let { Price(it) },
-                average30d = nftManager.nftAssetPriceToCoinValue(collectionRecord.averagePrice30d)
-                    ?.let { Price(it) },
-            ),
-            attributes = assetRecord.attributes.map { attribute ->
-                Attribute(
-                    attribute.type,
-                    attribute.value,
-                    getAttributePercentage(attribute, collectionRecord.totalSupply)?.let { "$it%" },
-                    getAttributeSearchUrl(attribute, collectionRecord.uid)
-                )
-            }
-        )
-
-        repository.set(DataWithError(asset, null))
-
-        syncStats(asset, tokenId, contractAddress, assetRecord.collectionUid)
-    }
-
-    private fun getAttributeSearchUrl(attribute: NftAssetAttribute, collectionUid: String): String {
-        return "https://opensea.io/assets/${collectionUid}?search[stringTraits][0][name]=${attribute.type}" +
-                "&search[stringTraits][0][values][0]=${attribute.value}" +
-                "&search[sortAscending]=true&search[sortBy]=PRICE"
-    }
-
-    private fun getAttributePercentage(attribute: NftAssetAttribute, totalSupply: Int): Number? =
-        if (attribute.count > 0 && totalSupply > 0) {
-            val percent = (attribute.count * 100f / totalSupply)
-            when {
-                percent >= 10 -> percent.roundToInt()
-                percent >= 1 -> (percent * 10).roundToInt() / 10f
-                else -> (percent * 100).roundToInt() / 100f
-            }
-        } else {
-            null
-        }
-
-    private suspend fun syncStats(
-        asset: NftAssetModuleAssetItem,
-        tokenId: String,
-        contractAddress: String,
-        collectionUid: String
-    ) {
         try {
-            val assetOrders = nftManager.assetOrders(contractAddress, tokenId)
-            val collectionStats = nftManager.collectionStats(collectionUid)
+            val collection = nftApiProvider.collection(collectionUid)
+            val (assetRecord, assetOrders) = nftApiProvider.assetWithOrders(contractAddress, tokenId)
 
             val (bestOffer, sale) = getOrderStats(assetOrders)
-            val newStatsItem = Stats(
-                lastSale = asset.stats.lastSale,
-                average7d = nftManager.nftAssetPriceToCoinValue(collectionStats.averagePrice7d)?.let { Price(it) },
-                average30d = nftManager.nftAssetPriceToCoinValue(collectionStats.averagePrice30d)?.let { Price(it) },
-                collectionFloor = nftManager.nftAssetPriceToCoinValue(collectionStats.floorPrice)?.let { Price(it) },
+
+            val asset = nftManager.assetItem(
+                assetRecord = assetRecord,
+                collectionName = collection.name,
+                collectionLinks = collection.links?.let {
+                    HsNftApiV1Response.Collection.Links(
+                        it.externalUrl,
+                        it.discordUrl,
+                        it.telegramUrl,
+                        it.twitterUsername,
+                        it.instagramUsername,
+                        it.wikiUrl
+                    )
+                },
+                totalSupply = collection.totalSupply,
+                averagePrice7d = collection.stats.averagePrice7d,
+                averagePrice30d = collection.stats.averagePrice30d,
+                floorPrice = collection.stats.floorPrice,
                 bestOffer = bestOffer,
                 sale = sale
             )
 
-            repository.set(DataWithError(asset.copy(stats = newStatsItem), null))
+            repository.set(asset)
         } catch (error: Exception) {
-            repository.set(DataWithError(asset, error))
+            _serviceDataFlow.tryEmit(
+                Result.failure(error)
+            )
         }
     }
 
-    private fun getOrderStats(orders: List<AssetOrder>): Pair<Price?, Sale?> {
+    private fun getOrderStats(orders: List<AssetOrder>): Pair<NftAssetPrice?, Sale?> {
         var hasTopBid = false
         val sale: Sale?
-        var bestOffer: Price? = null
+        var bestOffer: NftAssetPrice? = null
 
         val auctionOrders = orders.filter { it.side == 1 && it.v == null }.sortedBy { it.ethValue }
         val auctionOrder = auctionOrders.firstOrNull()
@@ -167,13 +117,13 @@ class NftAssetService(
         if (!hasTopBid) {
             val offerOrders = orders.filter { it.side == 0 }.sortedByDescending { it.ethValue }
 
-            bestOffer = offerOrders.firstOrNull()?.let { offerOrder ->
-                offerOrder.price?.let { nftManager.nftAssetPriceToCoinValue(it) }?.let { Price(it) }
-            }
+            bestOffer = offerOrders.firstOrNull()?.price
         }
 
         return Pair(bestOffer, sale)
     }
-}
 
-class NftNotFoundException : Exception()
+    fun stop() {
+        repository.stop()
+    }
+}

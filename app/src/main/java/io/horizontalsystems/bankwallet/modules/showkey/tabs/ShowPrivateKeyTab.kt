@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
@@ -18,8 +17,8 @@ import io.horizontalsystems.bankwallet.databinding.FragmentShowPrivateKeyTabBind
 import io.horizontalsystems.bankwallet.databinding.ViewHolderPrivateKeyBinding
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
+import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
@@ -119,12 +118,11 @@ class PrivateKeyViewHolder(
             ComposeAppTheme {
                 ButtonSecondary(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                    colors = ButtonDefaults.textButtonColors(
+                    buttonColors = SecondaryButtonDefaults.buttonColors(
                         backgroundColor = ComposeAppTheme.colors.steel20,
-                        contentColor = ComposeAppTheme.colors.oz
+                        contentColor = ComposeAppTheme.colors.oz,
                     ),
                     content = { Text(key.value, textAlign = TextAlign.Center, maxLines = 2) },
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                     onClick = {
                         onClick(key)
                     }

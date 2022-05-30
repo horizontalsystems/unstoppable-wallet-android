@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -12,14 +14,16 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setRemoteImage
 import io.horizontalsystems.bankwallet.databinding.ViewHolderSectionDividerBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderTransactionInfoExplorerBinding
 import io.horizontalsystems.bankwallet.databinding.ViewHolderTransactionInfoItemBinding
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatusViewItem
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -28,7 +32,7 @@ import io.horizontalsystems.views.ListPosition
 import java.util.*
 
 class TransactionInfoAdapter(
-    viewItems: MutableLiveData<List<TransactionInfoViewItem?>>,
+    viewItems: MutableLiveData<List<TransactionInfoPositionedViewItem?>>,
     viewLifecycleOwner: LifecycleOwner,
     private val listener: Listener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -37,14 +41,13 @@ class TransactionInfoAdapter(
         fun onAddressClick(address: String)
         fun onActionButtonClick(actionButton: TransactionInfoActionButton)
         fun onUrlClick(url: String)
-        fun closeClick()
         fun onClickStatusInfo()
         fun onLockInfoClick(lockDate: Date)
         fun onDoubleSpendInfoClick(transactionHash: String, conflictingHash: String)
         fun onOptionButtonClick(optionType: TransactionInfoOption.Type)
     }
 
-    private var items = listOf<TransactionInfoViewItem?>()
+    private var items = listOf<TransactionInfoPositionedViewItem?>()
     private val viewTypeItem = 0
     private val viewTypeDivider = 1
     private val viewTypeExplorer = 2
@@ -67,7 +70,7 @@ class TransactionInfoAdapter(
     override fun getItemViewType(position: Int): Int {
         return when {
             items[position] == null -> viewTypeDivider
-            items[position]?.type is Explorer -> viewTypeExplorer
+            items[position]?.viewItem is Explorer -> viewTypeExplorer
             else -> viewTypeItem
         }
     }
@@ -98,7 +101,7 @@ class TransactionInfoAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ItemViewHolder -> items[position]?.let { holder.bind(it) }
-            is ExplorerViewHolder -> (items[position]?.type as? Explorer)?.let { holder.bind(it) }
+            is ExplorerViewHolder -> (items[position]?.viewItem as? Explorer)?.let { holder.bind(it) }
         }
     }
 
@@ -123,17 +126,20 @@ class TransactionInfoAdapter(
         private val greyColor = getColor(R.color.grey)
         private val ozColor = getColor(R.color.oz)
 
-        fun bind(item: TransactionInfoViewItem) {
+        fun bind(item: TransactionInfoPositionedViewItem) {
+            setIsRecyclable(false)
+
             setButtons(item)
             binding.transactionStatusView.isVisible = false
             binding.valueText.isVisible = false
-            binding.statusInfoIcon.isVisible = false
+            binding.leftIcon.isVisible = false
             binding.rightInfoIcon.isVisible = false
+            binding.coinIcon.isVisible = false
 
             binding.txViewBackground.setBackgroundResource(item.listPosition.getBackground())
 
-            when (val type = item.type) {
-                is TransactionType -> {
+            when (val type = item.viewItem) {
+                is Transaction -> {
                     binding.txtTitle.textSize = bodyTextSize
                     binding.txtTitle.setTextColor(ozColor)
                     binding.txtTitle.text = type.leftValue
@@ -141,11 +147,36 @@ class TransactionInfoAdapter(
                     binding.valueText.setTextColor(greyColor)
                     binding.valueText.text = type.rightValue
                     binding.valueText.isVisible = true
+
+                    type.icon?.let {
+                        when (it) {
+                            is TransactionViewItem.Icon.ImageResource -> {
+                                binding.leftIcon.setImageResource(it.resourceId)
+                                binding.leftIcon.isVisible = true
+                            }
+
+                            is TransactionViewItem.Icon.Platform -> {
+                                it.iconRes?.let { iconRes ->
+                                    binding.leftIcon.apply {
+                                        setImageResource(iconRes)
+                                        setColorFilter(getColor(R.color.leah))
+                                        isVisible = true
+                                    }
+                                }
+                            }
+                            else -> {}
+                        }
+                    }
                 }
                 is Amount -> {
                     setDefaultStyle()
+                    type.iconPlaceholder?.let { binding.coinIcon.setImageResource(it) }
+                    type.iconUrl?.let { binding.coinIcon.setRemoteImage(it, type.iconPlaceholder) }
+                    binding.coinIcon.isVisible = true
 
-                    binding.txtTitle.text = type.leftValue
+                    binding.txtTitle.text = type.leftValue.value
+                    binding.txtTitle.setTextColor(getColor(type.leftValue.color))
+
                     binding.valueText.text = type.rightValue.value
                     binding.valueText.setTextColor(getColor(type.rightValue.color))
                     binding.valueText.isVisible = true
@@ -164,11 +195,10 @@ class TransactionInfoAdapter(
                 is Status -> {
                     setDefaultStyle()
                     binding.txtTitle.text = type.title
-                    binding.statusInfoIcon.setImageResource(type.leftIcon)
-                    binding.statusInfoIcon.isVisible =
-                        type.status !is TransactionStatusViewItem.Completed
+                    binding.leftIcon.setImageResource(type.leftIcon)
+                    binding.leftIcon.isVisible = type.status !is TransactionStatusViewItem.Completed
                     if (type.status !is TransactionStatusViewItem.Completed) {
-                        binding.statusInfoIcon.setOnClickListener { listener.onClickStatusInfo() }
+                        binding.leftIcon.setOnClickListener { listener.onClickStatusInfo() }
                     }
                     binding.transactionStatusView.isVisible = true
                     binding.transactionStatusView.bind(type.status)
@@ -181,8 +211,8 @@ class TransactionInfoAdapter(
                     setDefaultStyle()
 
                     binding.txtTitle.text = type.title
-                    binding.statusInfoIcon.setImageResource(type.leftIcon)
-                    binding.statusInfoIcon.isVisible = true
+                    binding.leftIcon.setImageResource(type.leftIcon)
+                    binding.leftIcon.isVisible = true
 
                     if (type.showLockInfo) {
                         binding.rightInfoIcon.isVisible = true
@@ -193,8 +223,8 @@ class TransactionInfoAdapter(
                 }
                 is DoubleSpend -> {
                     binding.txtTitle.text = type.title
-                    binding.statusInfoIcon.setImageResource(type.leftIcon)
-                    binding.statusInfoIcon.isVisible = true
+                    binding.leftIcon.setImageResource(type.leftIcon)
+                    binding.leftIcon.isVisible = true
                     binding.rightInfoIcon.isVisible = true
                     binding.wrapper.setOnClickListener {
                         listener.onDoubleSpendInfoClick(type.transactionHash, type.conflictingHash)
@@ -203,27 +233,33 @@ class TransactionInfoAdapter(
                 is Options -> {
                     binding.txtTitle.text = type.title
                 }
+                is SentToSelf -> {
+                    binding.txtTitle.text = type.title
+                    binding.leftIcon.apply {
+                        setImageResource(type.icon)
+                        isVisible = true
+                    }
+                }
             }
         }
 
-        private fun setButtons(item: TransactionInfoViewItem) {
+        private fun setButtons(item: TransactionInfoPositionedViewItem) {
             binding.buttonsCompose.setContent {
                 ComposeAppTheme {
                     Row(
                         modifier = Modifier.padding(start = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (item.type is Decorated) {
-                            val endPadding = if (item.type.actionButton != null) 8.dp else 0.dp
+                        if (item.viewItem is Decorated) {
                             ButtonSecondaryDefault(
-                                modifier = Modifier.padding(end = endPadding),
-                                title = item.type.value,
+                                title = item.viewItem.valueTitle,
                                 onClick = {
-                                    listener.onAddressClick(item.type.value)
+                                    listener.onAddressClick(item.viewItem.value)
                                 },
-                                ellipsis = Ellipsis.Middle(if (item.type.actionButton != null) 5 else 10)
+                                ellipsis = Ellipsis.Middle(if (item.viewItem.actionButton != null) 5 else 10)
                             )
-                            item.type.actionButton?.let { button ->
+                            item.viewItem.actionButton?.let { button ->
+                                Spacer(modifier = Modifier.width(8.dp))
                                 ButtonSecondaryCircle(
                                     icon = button.getIcon(),
                                     onClick = {
@@ -232,8 +268,8 @@ class TransactionInfoAdapter(
                                 )
                             }
                         }
-                        if (item.type is RawTransaction) {
-                            item.type.actionButton?.let { button ->
+                        if (item.viewItem is RawTransaction) {
+                            item.viewItem.actionButton?.let { button ->
                                 ButtonSecondaryCircle(
                                     icon = button.getIcon(),
                                     onClick = {
@@ -242,19 +278,19 @@ class TransactionInfoAdapter(
                                 )
                             }
                         }
-                        if (item.type is Options) {
+                        if (item.viewItem is Options) {
                             ButtonSecondaryDefault(
                                 modifier = Modifier.padding(end = 8.dp),
-                                title = item.type.optionButtonOne.title,
+                                title = item.viewItem.optionButtonOne.title,
                                 onClick = {
-                                    listener.onOptionButtonClick(item.type.optionButtonOne.type)
+                                    listener.onOptionButtonClick(item.viewItem.optionButtonOne.type)
                                 },
                                 ellipsis = Ellipsis.End
                             )
                             ButtonSecondaryDefault(
-                                title = item.type.optionButtonTwo.title,
+                                title = item.viewItem.optionButtonTwo.title,
                                 onClick = {
-                                    listener.onOptionButtonClick(item.type.optionButtonTwo.type)
+                                    listener.onOptionButtonClick(item.viewItem.optionButtonTwo.type)
                                 },
                                 ellipsis = Ellipsis.End
                             )
@@ -280,7 +316,7 @@ class TransactionInfoAdapter(
 }
 
 
-data class TransactionInfoViewItem(
-    val type: TransactionInfoItemType,
+data class TransactionInfoPositionedViewItem(
+    val viewItem: TransactionInfoViewItem,
     var listPosition: ListPosition = ListPosition.Middle
 )

@@ -130,7 +130,7 @@ private fun SettingSections(
                 showAlert = showAlertManageWallet,
                 onClick = {
                     navController.slideFromRight(
-                        R.id.mainFragment_to_manageKeysFragment,
+                        R.id.manageAccountsFragment,
                         bundleOf(ManageAccountsModule.MODE to ManageAccountsModule.Mode.Manage)
                     )
                 }
@@ -141,7 +141,7 @@ private fun SettingSections(
                 R.drawable.ic_security,
                 showAlert = showAlertSecurityCenter,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_securitySettingsFragment)
+                    navController.slideFromRight(R.id.securitySettingsFragment)
                 }
             )
         })
@@ -158,7 +158,7 @@ private fun SettingSections(
                 onClick = {
                     when (viewModel.getWalletConnectSupportState()) {
                         WC1Manager.SupportState.Supported -> {
-                            navController.slideFromRight(R.id.mainFragment_to_walletConnect)
+                            navController.slideFromRight(R.id.wallet_connect_graph)
                         }
                         WC1Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
@@ -190,7 +190,7 @@ private fun SettingSections(
                 R.drawable.ic_currency,
                 value = baseCurrency?.code,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_baseCurrencySettingsFragment)
+                    navController.slideFromRight(R.id.baseCurrencySettingsFragment)
                 }
             )
         }, {
@@ -199,7 +199,7 @@ private fun SettingSections(
                 R.drawable.ic_language,
                 value = language,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_languageSettingsFragment)
+                    navController.slideFromRight(R.id.languageSettingsFragment)
                 }
             )
         }, {
@@ -208,7 +208,7 @@ private fun SettingSections(
                 R.drawable.ic_light_mode,
                 value = theme?.let { Translator.getString(it) },
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_themeSwitchFragment)
+                    navController.slideFromRight(R.id.themeSwitchFragment)
                 }
             )
         }, {
@@ -216,7 +216,7 @@ private fun SettingSections(
                 R.string.Settings_ExperimentalFeatures,
                 R.drawable.ic_experimental,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_experimentalFeaturesFragment)
+                    navController.slideFromRight(R.id.experimentalFeaturesFragment)
                 }
             )
         })
@@ -230,7 +230,7 @@ private fun SettingSections(
                 R.string.Settings_Faq,
                 R.drawable.ic_faq_20,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_faqListFragment)
+                    navController.slideFromRight(R.id.faqListFragment)
                 }
             )
         }, {
@@ -238,7 +238,7 @@ private fun SettingSections(
                 R.string.Guides_Title,
                 R.drawable.ic_academy_20,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_academyFragment)
+                    navController.slideFromRight(R.id.academyFragment)
                 }
             )
         })
@@ -253,7 +253,7 @@ private fun SettingSections(
                 R.drawable.ic_about_app_20,
                 showAlert = showAlertAboutApp,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_aboutAppFragment)
+                    navController.slideFromRight(R.id.aboutAppFragment)
                 }
             )
         }
@@ -273,8 +273,8 @@ fun HsSettingCell(
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .clickable(onClick = { onClick.invoke() }),
+            .clickable(onClick = { onClick.invoke() })
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(

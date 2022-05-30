@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
@@ -22,11 +23,19 @@ class EvmTransactionsAdapter(
     val evmKitWrapper: EvmKitWrapper,
     baseCoin: PlatformCoin,
     coinManager: ICoinManager,
-    source: TransactionSource
+    source: TransactionSource,
+    private val evmTransactionSource: io.horizontalsystems.ethereumkit.models.TransactionSource,
+    evmLabelManager: EvmLabelManager
 ) : ITransactionsAdapter {
 
     private val evmKit = evmKitWrapper.evmKit
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKit, source, baseCoin)
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, baseCoin, evmLabelManager)
+
+    override val explorerTitle: String
+        get() = evmTransactionSource.name
+
+    override fun getTransactionUrl(transactionHash: String): String? =
+        evmTransactionSource.transactionUrl(transactionHash)
 
     override val lastBlockInfo: LastBlockInfo?
         get() = evmKit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
@@ -46,7 +55,7 @@ class EvmTransactionsAdapter(
         limit: Int,
         transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
-        return evmKit.getTransactionsAsync(
+        return evmKit.getFullTransactionsAsync(
             getFilters(coin, transactionType),
             from?.transactionHash?.hexStringToByteArray(),
             limit
@@ -59,7 +68,7 @@ class EvmTransactionsAdapter(
         coin: PlatformCoin?,
         transactionType: FilterTransactionType
     ): Flowable<List<TransactionRecord>> {
-        return evmKit.getTransactionsFlowable(getFilters(coin, transactionType)).map {
+        return evmKit.getFullTransactionsFlowable(getFilters(coin, transactionType)).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
         }
     }
@@ -72,9 +81,12 @@ class EvmTransactionsAdapter(
         }
 
     private fun coinTagName(coin: PlatformCoin) = when (val type = coin.coinType) {
-        CoinType.Ethereum, CoinType.BinanceSmartChain -> TransactionTag.EVM_COIN
+        CoinType.Ethereum, CoinType.BinanceSmartChain, CoinType.Polygon, CoinType.EthereumOptimism, CoinType.EthereumArbitrumOne -> TransactionTag.EVM_COIN
         is CoinType.Erc20 -> type.address
         is CoinType.Bep20 -> type.address
+        is CoinType.Mrc20 -> type.address
+        is CoinType.OptimismErc20 -> type.address
+        is CoinType.ArbitrumOneErc20 -> type.address
         else -> throw IllegalArgumentException()
     }
 
@@ -108,7 +120,10 @@ class EvmTransactionsAdapter(
                 testMode -> listOf(Chain.EthereumRopsten)
                 else -> listOf(
                     Chain.Ethereum,
-                    Chain.BinanceSmartChain
+                    Chain.BinanceSmartChain,
+                    Chain.Polygon,
+                    Chain.Optimism,
+                    Chain.ArbitrumOne
                 )
             }
             networkTypes.forEach {

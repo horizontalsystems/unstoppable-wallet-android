@@ -18,13 +18,22 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftAssetItemPricedWithCurrency
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeRatingD
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
+fun NftAssetPreview(
+    name: String?,
+    imageUrl: String?,
+    onSale: Boolean,
+    tokenId: String,
+    coinPrice: CoinValue?,
+    currencyPrice: CurrencyValue?,
+    onClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,9 +49,9 @@ fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
                 .clip(RoundedCornerShape(8.dp))
                 .background(ComposeAppTheme.colors.steel20)
         ) {
-            val painter = rememberImagePainter(asset.assetItem.imageUrl)
+            val painter = rememberImagePainter(imageUrl)
             if (painter.state !is ImagePainter.State.Success) {
-                asset.assetItem.name?.let {
+                name?.let {
                     Text(
                         modifier = Modifier
                             .padding(start = 12.dp, end = 12.dp)
@@ -59,7 +68,7 @@ fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
-            if (asset.assetItem.onSale) {
+            if (onSale) {
                 BadgeRatingD(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -70,7 +79,7 @@ fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
         }
         Text(
             modifier = Modifier.padding(start = 12.dp, top = 12.dp, end = 12.dp),
-            text = asset.assetItem.name ?: "#${asset.assetItem.tokenId}",
+            text = name ?: "#$tokenId",
             style = ComposeAppTheme.typography.microSB,
             color = ComposeAppTheme.colors.grey,
             maxLines = 1,
@@ -82,13 +91,13 @@ fun NftPreview(asset: NftAssetItemPricedWithCurrency, onClick: () -> Unit) {
         ) {
             Text(
                 modifier = Modifier.padding(end = 4.dp),
-                text = asset.coinPrice?.getFormatted(4) ?: "---",
+                text = coinPrice?.getFormattedFull() ?: "---",
                 style = ComposeAppTheme.typography.captionSB,
                 color = ComposeAppTheme.colors.leah
             )
-            asset.currencyPrice?.let { currencyPrice ->
+            currencyPrice?.let { currencyPrice ->
                 Text(
-                    text = currencyPrice.getFormatted(),
+                    text = currencyPrice.getFormattedFull(),
                     style = ComposeAppTheme.typography.micro,
                     color = ComposeAppTheme.colors.grey
                 )

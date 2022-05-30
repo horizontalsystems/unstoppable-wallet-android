@@ -164,7 +164,8 @@ private fun ColumnScope.WCSessionListContent(
             }
             add {
                 TitleValueCell(
-                    stringResource(R.string.WalletConnect_ActiveWallet), "Wallet1"
+                    stringResource(R.string.WalletConnect_ActiveWallet),
+                    viewModel.peerMeta?.accountName ?: ""
                 )
             }
             viewModel.blockchains.forEach {

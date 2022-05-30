@@ -18,17 +18,18 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.market.filters.FilterViewItemWrapper
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrence
-import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 
 class BottomSheetMarketSearchFilterSelectMultipleDialog<ItemClass>(
     val titleText: String,
     val subtitleText: String = "",
     val headerIcon: Int,
-    val items: List<ViewItemWrapper<ItemClass>>,
+    val items: List<FilterViewItemWrapper<ItemClass>>,
     val selectedIndexes: List<Int> = listOf(),
     val onCloseListener: ((List<Int>) -> Unit)
 ) : BaseComposableBottomSheetFragment() {
@@ -88,7 +89,7 @@ class BottomSheetMarketSearchFilterSelectMultipleDialog<ItemClass>(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = item.title,
+                            text = item.title ?: stringResource(R.string.Any),
                             style = ComposeAppTheme.typography.body,
                             color = ComposeAppTheme.colors.leah
                         )

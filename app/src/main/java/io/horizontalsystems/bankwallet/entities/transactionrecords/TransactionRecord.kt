@@ -13,6 +13,7 @@ abstract class TransactionRecord(
     val confirmationsThreshold: Int?,
     val timestamp: Long,
     val failed: Boolean = false,
+    val spam: Boolean = false,
     val source: TransactionSource
 ) : Comparable<TransactionRecord> {
 
@@ -53,7 +54,7 @@ abstract class TransactionRecord(
             if (confirmations >= threshold) {
                 return TransactionStatus.Completed
             } else {
-                return TransactionStatus.Processing(confirmations.toDouble() / threshold.toDouble())
+                return TransactionStatus.Processing(confirmations.toFloat() / threshold.toFloat())
             }
         }
 

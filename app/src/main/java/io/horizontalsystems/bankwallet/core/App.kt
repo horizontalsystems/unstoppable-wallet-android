@@ -13,17 +13,17 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
+import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.*
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
-import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
-import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
+import io.horizontalsystems.bankwallet.core.providers.*
 import io.horizontalsystems.bankwallet.core.storage.*
-import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsEip20Provider
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
+import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
+import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionStorage
@@ -48,7 +48,7 @@ import java.util.logging.Logger
 import kotlin.system.exitProcess
 import androidx.work.Configuration as WorkConfiguration
 
-class App : CoreApp(), WorkConfiguration.Provider  {
+class App : CoreApp(), WorkConfiguration.Provider {
 
     companion object : ICoreApp by CoreApp {
 
@@ -59,6 +59,8 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var chartTypeStorage: IChartTypeStorage
         lateinit var restoreSettingsStorage: IRestoreSettingsStorage
 
+        lateinit var blockchainSettingsStorage: BlockchainSettingsStorage
+        lateinit var btcBlockchainManager: BtcBlockchainManager
         lateinit var wordsManager: WordsManager
         lateinit var networkManager: INetworkManager
         lateinit var backgroundStateChangeListener: BackgroundStateChangeListener
@@ -71,19 +73,16 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var accountManager: IAccountManager
         lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
+        lateinit var proFeatureAuthorizationManager: ProFeaturesAuthorizationManager
 
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
         lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
-        lateinit var blockchainSettingsStorage: IBlockchainSettingsStorage
-        lateinit var ethereumKitManager: EvmKitManager
-        lateinit var binanceSmartChainKitManager: EvmKitManager
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeCoinProvider
-        lateinit var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
@@ -97,12 +96,12 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKit
-        lateinit var activateCoinManager: ActivateCoinManager
         lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
-        lateinit var evmNetworkManager: EvmNetworkManager
-        lateinit var accountSettingManager: AccountSettingManager
+        lateinit var evmSyncSourceManager: EvmSyncSourceManager
+        lateinit var evmBlockchainManager: EvmBlockchainManager
         lateinit var nftManager: NftManager
+        lateinit var evmLabelManager: EvmLabelManager
     }
 
     override val testMode = BuildConfig.testMode
@@ -141,11 +140,11 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         appDatabase = AppDatabase.getInstance(this)
 
-        evmNetworkManager = EvmNetworkManager(appConfigProvider)
-        accountSettingManager = AccountSettingManager(AccountSettingRecordStorage(appDatabase), evmNetworkManager)
+        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
+        evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage)
 
-        ethereumKitManager = EvmKitManager(appConfig.etherscanApiKey, backgroundManager, EvmNetworkProviderEth(accountSettingManager))
-        binanceSmartChainKitManager = EvmKitManager(appConfig.bscscanApiKey, backgroundManager, EvmNetworkProviderBsc(accountSettingManager))
+        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage)
+
         binanceKitManager = BinanceKitManager(testMode)
 
         accountsStorage = AccountsStorage(appDatabase)
@@ -153,11 +152,20 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         AppLog.logsDao = appDatabase.logsDao()
 
-        coinManager = CoinManager(marketKit, CustomTokenStorage(appDatabase))
+        accountCleaner = AccountCleaner(testMode)
+        accountManager = AccountManager(accountsStorage, accountCleaner)
+
+        val proFeaturesStorage = ProFeaturesStorage(appDatabase)
+        proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
+        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
+
+        walletManager = WalletManager(accountManager, walletStorage)
+        coinManager = CoinManager(marketKit, walletManager)
+
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-        walletStorage = WalletStorage(coinManager, enabledWalletsStorage)
+        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
         LocalStorageManager(preferences).apply {
             localStorage = this
@@ -171,18 +179,36 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         wordsManager = WordsManager()
         networkManager = NetworkManager()
-        accountCleaner = AccountCleaner(testMode)
-        accountManager = AccountManager(accountsStorage, accountCleaner)
         accountFactory = AccountFactory(accountManager)
         backupManager = BackupManager(accountManager)
-        walletManager = WalletManager(accountManager, walletStorage)
 
-        KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {
+
+        KeyStoreManager(
+            keyAlias = "MASTER_KEY",
+            keyStoreCleaner = KeyStoreCleaner(localStorage, accountManager, walletManager),
+            logger = AppLogger("key-store")
+        ).apply {
             keyStoreManager = this
             keyProvider = this
         }
 
         encryptionManager = EncryptionManager(keyProvider)
+
+        walletActivator = WalletActivator(walletManager, marketKit, walletStorage)
+
+        val tokenBalanceProvider = TokenBalanceProvider()
+        val evmAccountManagerFactory = EvmAccountManagerFactory(
+            accountManager,
+            tokenBalanceProvider,
+            walletActivator,
+            appDatabase.evmAccountStateDao()
+        )
+        evmBlockchainManager = EvmBlockchainManager(
+            backgroundManager,
+            evmSyncSourceManager,
+            marketKit,
+            evmAccountManagerFactory
+        )
 
         systemInfoManager = SystemInfoManager()
 
@@ -195,13 +221,16 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         val zcashBirthdayProvider = ZcashBirthdayProvider(this, testMode)
         restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
 
-        val adapterFactory = AdapterFactory(instance, testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager)
-        adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
+        evmLabelManager = EvmLabelManager(
+            EvmLabelProvider(),
+            appDatabase.evmAddressLabelDao(),
+            appDatabase.evmMethodLabelDao(),
+            appDatabase.syncerStateDao()
+        )
+
+        val adapterFactory = AdapterFactory(instance, testMode, btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager, evmLabelManager)
+        adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
-
-        initialSyncModeSettingsManager = InitialSyncSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
-
-        adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
 
         feeCoinProvider = FeeCoinProvider(marketKit)
 
@@ -225,36 +254,16 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
 
         wc1SessionStorage = WC1SessionStorage(appDatabase)
-        wc1SessionManager = WC1SessionManager(wc1SessionStorage, accountManager, accountSettingManager)
+        wc1SessionManager = WC1SessionManager(wc1SessionStorage, accountManager, evmSyncSourceManager)
         wc1RequestManager = WC1RequestManager()
-        wc1Manager = WC1Manager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
-        wc2Manager = WC2Manager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
+        wc1Manager = WC1Manager(accountManager, evmBlockchainManager)
+        wc2Manager = WC2Manager(accountManager, evmBlockchainManager)
 
         termsManager = TermsManager(localStorage)
 
         marketFavoritesManager = MarketFavoritesManager(appDatabase)
 
-        activateCoinManager = ActivateCoinManager(marketKit, walletManager, accountManager)
-
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
-
-        walletActivator = WalletActivator(walletManager, marketKit, walletStorage)
-
-        val enableCoinsErc20Provider = EnableCoinsEip20Provider(
-            networkManager,
-            EnableCoinsEip20Provider.EnableCoinMode.Erc20,
-            appConfig.etherscanApiKey
-        )
-
-        val enableCoinsBep20Provider = EnableCoinsEip20Provider(
-            networkManager,
-            EnableCoinsEip20Provider.EnableCoinMode.Bep20,
-            appConfig.bscscanApiKey
-        )
-
-        val evmAccountStateDao = appDatabase.evmAccountStateDao()
-        AutoEnableTokensService(ethereumKitManager, walletActivator, enableCoinsErc20Provider, evmAccountStateDao).start()
-        AutoEnableTokensService(binanceSmartChainKitManager, walletActivator, enableCoinsBep20Provider, evmAccountStateDao).start()
 
         setAppTheme()
 
@@ -283,9 +292,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
             )
         )
 
-        WalletConnectClient.initialize(initWallet) {
-            AppLog.warning("WalletConnect V2 initialization","error", it)
-        }
+        WalletConnectClient.initialize(initWallet)
     }
 
     private fun setAppTheme() {
@@ -353,15 +360,16 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 
-            if (!localStorage.customTokensRestoreCompleted) {
-                val request = OneTimeWorkRequestBuilder<RestoreCustomTokenWorker>().build()
-                WorkManager.getInstance(instance).enqueue(request)
-            }
-
-            if (!localStorage.favoriteCoinIdsMigrated){
+            if (!localStorage.favoriteCoinIdsMigrated) {
                 val request = OneTimeWorkRequestBuilder<MigrateFavoriteCoinIdsWorker>().build()
                 WorkManager.getInstance(instance).enqueue(request)
             }
+            if (!localStorage.fillWalletInfoDone) {
+                val request = OneTimeWorkRequestBuilder<FillWalletInfoWorker>().build()
+                WorkManager.getInstance(instance).enqueue(request)
+            }
+
+            evmLabelManager.sync()
 
         }.start()
     }

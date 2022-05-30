@@ -6,9 +6,10 @@ import android.widget.FrameLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.views.helpers.LayoutHelper
 
 open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
@@ -66,6 +68,7 @@ fun BottomSheetHeader(
             .padding(horizontal = 8.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
+            .verticalScroll(rememberScrollState())
             .background(color = ComposeAppTheme.colors.lawrence)
     ) {
         Row(Modifier.height(64.dp)) {
@@ -97,7 +100,12 @@ fun BottomSheetHeader(
                     )
                 }
             }
-            IconButton(onClick = onCloseClick) {
+            HsIconButton(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(24.dp),
+                onClick = onCloseClick
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_close),
                     tint = ComposeAppTheme.colors.grey,

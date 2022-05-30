@@ -41,7 +41,7 @@ class SwapSettingsMainFragment : BaseFragment() {
             when (item.itemId) {
                 R.id.menuInfo -> {
                     findNavController().slideFromRight(
-                        R.id.swapSettingsMainFragment_to_swapInfoFragment,
+                        R.id.swapInfoFragment,
                         SwapInfoModule.prepareParams(mainViewModel.dex)
                     )
                     true

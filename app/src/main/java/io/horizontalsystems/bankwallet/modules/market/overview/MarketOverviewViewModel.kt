@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.*
@@ -14,7 +15,15 @@ import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewMod
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsPoint
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopNftCollectionsBoard
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopPlatformsBoard
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopSectorsBoard
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
+import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformItem
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformViewItem
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
+import io.horizontalsystems.bankwallet.modules.nft.TopNftCollection
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartData
@@ -28,7 +37,17 @@ import java.math.BigDecimal
 
 class MarketOverviewViewModel(
     private val service: MarketOverviewService,
+    private val topNftCollectionsViewItemFactory: TopNftCollectionsViewItemFactory
 ) : ViewModel() {
+
+    private data class OverviewItemsWrapper(
+        val topGainers: Result<List<MarketItem>>,
+        val topLosers: Result<List<MarketItem>>,
+        val marketMetrics: Result<MarketMetricsItem>,
+        val topNftsCollections: Result<List<TopNftCollection>>,
+        val topSectors: Result<List<Category>>,
+        val topPlatforms: Result<List<TopPlatformItem>>
+    )
 
     private val disposables = CompositeDisposable()
 
@@ -36,37 +55,65 @@ class MarketOverviewViewModel(
     val viewItem = MutableLiveData<MarketOverviewModule.ViewItem>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
 
+    val topNftCollectionsParams: Pair<SortingField, TimeDuration>
+        get() = Pair(service.topNftsSortingField, service.topNftsTimeDuration)
+
+    val topPlatformsTimeDuration: TimeDuration
+        get() = service.topPlatformsTimeDuration
+
     init {
         Observable
             .combineLatest(
                 service.topGainersObservable,
                 service.topLosersObservable,
-                service.marketMetricsObservable
-            ) { t1, t2, t3 ->
-                Triple(t1, t2, t3)
+                service.marketMetricsObservable,
+                service.topNftCollectionsObservable,
+                service.topSectorsObservable,
+                service.topPlatformsObservable,
+            ) { t1, t2, t3, t4, t5, t6 ->
+                OverviewItemsWrapper(t1, t2, t3, t4, t5, t6)
             }
-            .subscribeIO { (t1, t2, t3) ->
+            .subscribeIO { overviewItems ->
                 val error = listOfNotNull(
-                    t1.exceptionOrNull(),
-                    t2.exceptionOrNull(),
-                    t3.exceptionOrNull(),
+                    overviewItems.topGainers.exceptionOrNull(),
+                    overviewItems.topLosers.exceptionOrNull(),
+                    overviewItems.marketMetrics.exceptionOrNull(),
+                    overviewItems.topNftsCollections.exceptionOrNull(),
+                    overviewItems.topSectors.exceptionOrNull(),
+                    overviewItems.topPlatforms.exceptionOrNull()
                 ).firstOrNull()
 
                 if (error != null) {
                     viewStateLiveData.postValue(ViewState.Error(error))
                 } else {
-                    val topGainerMarketItems = t1.getOrNull()
-                    val topLoserMarketItems = t2.getOrNull()
-                    val marketMetrics = t3.getOrNull()
+                    val topGainerMarketItems = overviewItems.topGainers.getOrNull()
+                    val topLoserMarketItems = overviewItems.topLosers.getOrNull()
+                    val marketMetrics = overviewItems.marketMetrics.getOrNull()
+                    val topNftCollections = overviewItems.topNftsCollections.getOrNull()
+                    val topSectors = overviewItems.topSectors.getOrNull()
+                    val topPlatforms = overviewItems.topPlatforms.getOrNull()
 
-                    if (topGainerMarketItems != null && topLoserMarketItems != null && marketMetrics != null) {
-                        val viewItem = getViewItem(topGainerMarketItems, topLoserMarketItems, marketMetrics)
+                    if (
+                        topGainerMarketItems != null
+                        && topLoserMarketItems != null
+                        && marketMetrics != null
+                        && topNftCollections != null
+                        && topSectors != null
+                        && topPlatforms != null
+                    ) {
+                        val viewItem = getViewItem(
+                            topGainerMarketItems,
+                            topLoserMarketItems,
+                            marketMetrics,
+                            topNftCollections,
+                            topSectors,
+                            topPlatforms
+                        )
                         this.viewItem.postValue(viewItem)
                         viewStateLiveData.postValue(ViewState.Success)
                     }
                 }
-            }
-            .let {
+            }.let {
                 disposables.add(it)
             }
 
@@ -76,24 +123,75 @@ class MarketOverviewViewModel(
     private fun getViewItem(
         topGainerMarketItems: List<MarketItem>,
         topLoserMarketItems: List<MarketItem>,
-        marketMetricsItem: MarketMetricsItem
+        marketMetricsItem: MarketMetricsItem,
+        topNftCollectionsItems: List<TopNftCollection>,
+        topSectors: List<Category>,
+        topPlatforms: List<TopPlatformItem>,
     ): MarketOverviewModule.ViewItem {
         val topGainersBoard = getBoard(ListType.TopGainers, topGainerMarketItems)
         val topLosersBoard = getBoard(ListType.TopLosers, topLoserMarketItems)
 
         val boardItems = listOf(topGainersBoard, topLosersBoard)
         val marketMetrics = getMarketMetrics(marketMetricsItem)
+        val topNftsBoard = topNftCollectionsBoard(topNftCollectionsItems)
+        val topSectorsBoard = topSectorsBoard(topSectors)
+        val topPlatformsBoard = topPlatformsBoard(topPlatforms)
 
-        return MarketOverviewModule.ViewItem(marketMetrics, boardItems)
+        return MarketOverviewModule.ViewItem(
+            marketMetrics,
+            boardItems,
+            topNftsBoard,
+            topSectorsBoard,
+            topPlatformsBoard
+        )
     }
+
+    private fun topSectorsBoard(items: List<Category>) =
+        TopSectorsBoard(
+            title = R.string.Market_Overview_TopSectors,
+            iconRes = R.drawable.ic_categories_20,
+            items = items
+        )
+
+    private fun topNftCollectionsBoard(items: List<TopNftCollection>) =
+        TopNftCollectionsBoard(
+            title = R.string.Nft_TopCollections,
+            iconRes = R.drawable.ic_top_nft_collections_20,
+            timeDurationSelect = Select(service.topNftsTimeDuration, service.timeDurationOptions),
+            collections = items.mapIndexed { index, collection ->
+                topNftCollectionsViewItemFactory.viewItem(collection, service.topNftsTimeDuration, index + 1)
+            }
+        )
+
+    private fun topPlatformsBoard(items: List<TopPlatformItem>) =
+        TopPlatformsBoard(
+            title = R.string.MarketTopPlatforms_Title,
+            iconRes = R.drawable.ic_blocks_20,
+            timeDurationSelect = Select(
+                service.topPlatformsTimeDuration,
+                service.timeDurationOptions
+            ),
+            items = items.map { item ->
+                TopPlatformViewItem(
+                    platform = item.platform,
+                    subtitle = Translator.getString(
+                        R.string.MarketTopPlatforms_Protocols,
+                        item.protocols
+                    ),
+                    marketCap = formatFiatShortened(item.marketCap, service.baseCurrency.symbol),
+                    marketCapDiff = item.changeDiff,
+                    rank = item.rank.toString(),
+                    rankDiff = item.rankDiff,
+                )
+            }
+        )
 
     private fun getBoard(type: ListType, marketItems: List<MarketItem>): Board {
         val topMarket = when (type) {
             ListType.TopGainers -> service.gainersTopMarket
             ListType.TopLosers -> service.losersTopMarket
         }
-        val topList = marketItems
-            .map { MarketViewItem.create(it, type.marketField) }
+        val topList = marketItems.map { MarketViewItem.create(it, type.marketField) }
 
         val boardHeader = BoardHeader(
             getSectionTitle(type),
@@ -149,8 +247,7 @@ class MarketOverviewViewModel(
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
-        val (shortenValue, suffix) = App.numberFormatter.shortenValue(value)
-        return App.numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + " $suffix"
+        return App.numberFormatter.formatFiatShort(value, symbol, 2)
     }
 
     private fun getSectionTitle(type: ListType): Int {
@@ -177,10 +274,18 @@ class MarketOverviewViewModel(
     }
 
     fun onSelectTopMarket(topMarket: TopMarket, listType: ListType) {
-        when(listType) {
+        when (listType) {
             ListType.TopGainers -> service.setGainersTopMarket(topMarket)
             ListType.TopLosers -> service.setLosersTopMarket(topMarket)
         }
+    }
+
+    fun onSelectTopNftsTimeDuration(timeDuration: TimeDuration) {
+        service.setTopNftsTimeDuration(timeDuration)
+    }
+
+    fun onSelectTopPlatformsTimeDuration(timeDuration: TimeDuration) {
+        service.setTopPlatformsTimeDuration(timeDuration)
     }
 
     fun onErrorClick() {

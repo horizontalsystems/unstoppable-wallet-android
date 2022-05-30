@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 
@@ -32,7 +32,7 @@ object ManageWalletsModule {
         }
 
         private val manageWalletsService by lazy {
-            ManageWalletsService(App.coinManager, App.walletManager, App.accountManager, enableCoinService)
+            ManageWalletsService(App.marketKit, App.walletManager, App.accountManager, enableCoinService)
         }
 
         @Suppress("UNCHECKED_CAST")

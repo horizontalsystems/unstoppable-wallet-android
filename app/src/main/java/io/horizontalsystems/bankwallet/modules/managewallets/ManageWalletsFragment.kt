@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -153,7 +152,7 @@ private fun ManageWalletsScreen(
                     title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
                     icon = R.drawable.ic_add_yellow,
                     onClick = {
-                        findNavController.slideFromRight(R.id.manageWalletsFragment_to_addToken)
+                        findNavController.slideFromRight(R.id.addTokenFragment)
                     }
                 )
             ),
@@ -255,7 +254,7 @@ private fun CoinCell(
             if (viewItem.state is CoinViewItemState.ToggleVisible) {
                 Spacer(Modifier.width(12.dp))
                 if (viewItem.state.hasSettings) {
-                    IconButton(
+                    HsIconButton(
                         onClick = onSettingClick
                     ) {
                         Icon(

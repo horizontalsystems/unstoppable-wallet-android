@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.core.fiat
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm.AmountType
-import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.isCustom
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
@@ -102,7 +102,7 @@ class FiatServiceSendEvm(
     private fun sync() {
         val coin = coin
         if (coin != null) {
-            val coinAmountInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), coinAmount))
+            val coinAmountInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(coin, coinAmount))
             val currencyAmountInfo = currencyAmount?.let { SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currency, it)) }
 
             when (switchService.amountType) {
@@ -147,7 +147,7 @@ class FiatServiceSendEvm(
         if (platformCoin != null) {
             syncLatestRate(marketKit.coinPrice(platformCoin.coin.uid, currency.code))
 
-            if (!platformCoin.coin.isCustom) {
+            if (!platformCoin.isCustom) {
                 marketKit.coinPriceObservable(platformCoin.coin.uid, currency.code)
                     .subscribeIO { latestRate ->
                         syncLatestRate(latestRate)

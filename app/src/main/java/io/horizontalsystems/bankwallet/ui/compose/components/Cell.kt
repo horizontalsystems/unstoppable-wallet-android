@@ -137,6 +137,26 @@ fun CellSingleLineLawrenceSection(
 }
 
 @Composable
+fun HSSectionRounded(
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp)),
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun Item(content: @Composable () -> Unit) {
+    CellSingleLineLawrence(
+        content = content
+    )
+}
+
+@Composable
 fun CellSingleLineLawrence(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,

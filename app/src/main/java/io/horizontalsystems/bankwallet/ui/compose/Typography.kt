@@ -66,7 +66,7 @@ class Typography internal constructor(
             letterSpacing = 0.sp,
         ),
         bodyItalic: TextStyle = TextStyle(
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
             fontStyle = FontStyle.Italic,
             letterSpacing = 0.sp,

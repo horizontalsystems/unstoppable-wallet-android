@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.core.fiat
 
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountType
-import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.isCustom
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
@@ -69,7 +69,7 @@ class FiatService(
 
         syncLatestRate(marketKit.coinPrice(coin.coin.uid, currency.code))
 
-        if (!coin.coin.isCustom) {
+        if (!coin.isCustom) {
             latestRateDisposable = marketKit.coinPriceObservable(coin.coin.uid, currency.code)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
@@ -96,7 +96,7 @@ class FiatService(
 
         return when (switchService.amountType) {
             AmountType.Coin -> {
-                val primary = CoinValue(CoinValue.Kind.PlatformCoin(coin), coinAmount)
+                val primary = CoinValue(coin, coinAmount)
                 val secondary = currencyAmount?.let { CurrencyValue(currency, it) }
                 FullAmountInfo(
                         primaryInfo = AmountInfo.CoinValueInfo(primary),
@@ -108,7 +108,7 @@ class FiatService(
                 val currencyAmount = currencyAmount ?: return null
 
                 val primary = CurrencyValue(currency, currencyAmount)
-                val secondary = CoinValue(CoinValue.Kind.PlatformCoin(coin), coinAmount)
+                val secondary = CoinValue(coin, coinAmount)
                 FullAmountInfo(
                         primaryInfo = AmountInfo.CurrencyValueInfo(primary),
                         secondaryInfo = AmountInfo.CoinValueInfo(secondary),

@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.entities.CustomToken
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.CustomCoin
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
 
@@ -20,10 +20,10 @@ class AddBep2TokenBlockchainService(
         return CoinType.Bep2(reference)
     }
 
-    override fun customTokenAsync(reference: String): Single<CustomToken> {
+    override fun customCoinsSingle(reference: String): Single<CustomCoin> {
         return networkManager.getBep2TokeInfo(reference)
             .map { tokenInfo ->
-                CustomToken(tokenInfo.name, tokenInfo.originalSymbol, CoinType.Bep2(reference), tokenInfo.decimals)
+                CustomCoin(CoinType.Bep2(reference), tokenInfo.name, tokenInfo.originalSymbol, tokenInfo.decimals)
             }
     }
 

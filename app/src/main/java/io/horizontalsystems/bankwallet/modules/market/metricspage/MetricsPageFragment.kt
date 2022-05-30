@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -153,14 +154,14 @@ class MetricsPageFragment : BaseFragment() {
         onToggleSortType: () -> Unit,
         onSelectMarketField: (MarketField) -> Unit
     ) {
-        Header(borderBottom = true) {
+        Header(borderTop = true, borderBottom = true) {
             ButtonSecondaryCircle(
                 modifier = Modifier
-                    .weight(1f)
                     .padding(start = 16.dp),
                 icon = if (menu.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
                 onClick = { onToggleSortType() }
             )
+            Spacer(Modifier.weight(1f))
             ButtonSecondaryToggle(
                 modifier = Modifier.padding(end = 16.dp),
                 select = menu.marketFieldSelect,

@@ -46,7 +46,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                 indication = null,
                             ) {
                                 navController.slideFromBottom(
-                                    R.id.mainFragment_to_manageKeysFragment,
+                                    R.id.manageAccountsFragment,
                                     ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
                                 )
                             },
@@ -88,21 +88,23 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
             elevation = 0.dp
         )
 
-        Crossfade(viewModel.viewState) { viewState ->
+        val uiState = viewModel.uiState
+
+        Crossfade(uiState.viewState) { viewState ->
             when (viewState) {
                 is ViewState.Success -> {
-                    viewModel.balanceViewItemsWrapper?.let { (headerViewItem, balanceViewItems) ->
-                        if (balanceViewItems.isNotEmpty()) {
-                            BalanceItems(
-                                headerViewItem,
-                                balanceViewItems,
-                                viewModel,
-                                accountViewItem,
-                                navController
-                            )
-                        } else {
-                            BalanceItemsEmpty(navController, accountViewItem)
-                        }
+                    val balanceViewItems = uiState.balanceViewItems
+
+                    if (balanceViewItems.isNotEmpty()) {
+                        BalanceItems(
+                            balanceViewItems,
+                            viewModel,
+                            accountViewItem,
+                            navController,
+                            uiState
+                        )
+                    } else {
+                        BalanceItemsEmpty(navController, accountViewItem)
                     }
                 }
             }

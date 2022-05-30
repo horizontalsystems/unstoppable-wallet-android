@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -36,26 +35,6 @@ class TransactionAdapterManager(
 
     fun getAdapter(source: TransactionSource): ITransactionsAdapter? = adaptersMap[source]
 
-    private fun evmTransactionAdapter(wallet: Wallet, blockchain: TransactionSource.Blockchain) =
-        when (wallet.coinType) {
-            CoinType.Ethereum, is CoinType.Erc20 -> {
-                if (blockchain == TransactionSource.Blockchain.Ethereum) {
-                    adapterFactory.ethereumTransactionsAdapter(wallet.transactionSource)
-                } else {
-                    null
-                }
-            }
-            CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
-                if (blockchain == TransactionSource.Blockchain.BinanceSmartChain) {
-                    adapterFactory.bscTransactionsAdapter(wallet.transactionSource)
-                } else {
-                    null
-                }
-            }
-            else -> null
-        }
-
-
     private fun initAdapters(adaptersMap: Map<Wallet, IAdapter>) {
         val newAdapterMap = mutableMapOf<TransactionSource, ITransactionsAdapter>()
 
@@ -64,9 +43,8 @@ class TransactionAdapterManager(
             if (newAdapterMap.containsKey(source)) continue
 
             val transactionsAdapter = when (source.blockchain) {
-                TransactionSource.Blockchain.Ethereum,
-                TransactionSource.Blockchain.BinanceSmartChain -> {
-                    evmTransactionAdapter(wallet, source.blockchain)
+                is TransactionSource.Blockchain.Evm -> {
+                    adapterFactory.evmTransactionsAdapter(wallet.transactionSource, source.blockchain.evmBlockchain)
                 }
                 else -> adapter as? ITransactionsAdapter
             }

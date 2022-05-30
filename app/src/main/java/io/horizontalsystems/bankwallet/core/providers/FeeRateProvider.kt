@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.feeratekit.FeeRateKit
 import io.horizontalsystems.feeratekit.model.FeeProviderConfig
 import io.reactivex.Single
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.math.BigInteger
-import kotlin.math.ceil
 
 class FeeRateProvider(appConfig: AppConfigProvider) {
 
@@ -48,48 +48,45 @@ class FeeRateProvider(appConfig: AppConfigProvider) {
 }
 
 class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-
     private val lowPriorityBlockCount = 40
     private val mediumPriorityBlockCount = 8
     private val highPriorityBlockCount = 2
 
+    override fun getFeeRateRange() = 1..200.toLong() // the max fee rate 200 has been chosen in the result of research
+
     override val feeRatePriorityList: List<FeeRatePriority> = listOf(
-            FeeRatePriority.LOW,
-            FeeRatePriority.RECOMMENDED,
-            FeeRatePriority.HIGH,
-            FeeRatePriority.Custom(1, LongRange(1, 200))
+        FeeRatePriority.LOW,
+        FeeRatePriority.RECOMMENDED,
+        FeeRatePriority.HIGH,
+        FeeRatePriority.Custom(0),
     )
 
-    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.bitcoinFeeRate(mediumPriorityBlockCount)
+    override suspend fun getFeeRate(feeRatePriority: FeeRatePriority) = when (feeRatePriority) {
+        is FeeRatePriority.Custom -> feeRatePriority.value
+        FeeRatePriority.LOW -> fetchFeeRate(lowPriorityBlockCount)
+        FeeRatePriority.RECOMMENDED -> fetchFeeRate(mediumPriorityBlockCount)
+        FeeRatePriority.HIGH -> fetchFeeRate(highPriorityBlockCount)
+    }
 
-    override var defaultFeeRatePriority: FeeRatePriority = FeeRatePriority.RECOMMENDED
-
-    override fun feeRate(feeRatePriority: FeeRatePriority): Single<BigInteger> {
-        return when (feeRatePriority) {
-            FeeRatePriority.LOW -> feeRateProvider.bitcoinFeeRate(lowPriorityBlockCount)
-            FeeRatePriority.HIGH -> feeRateProvider.bitcoinFeeRate(highPriorityBlockCount)
-            FeeRatePriority.RECOMMENDED -> feeRateProvider.bitcoinFeeRate(mediumPriorityBlockCount)
-            is FeeRatePriority.Custom -> Single.just(feeRatePriority.value.toBigInteger())
-        }
+    private suspend fun fetchFeeRate(blockCount: Int) = withContext(Dispatchers.IO) {
+        feeRateProvider.bitcoinFeeRate(blockCount).blockingGet().toLong()
     }
 }
 
-class LitecoinFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override val feeRatePriorityList: List<FeeRatePriority> = listOf()
-    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.litecoinFeeRate()
+class LitecoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override suspend fun getFeeRate(feeRatePriority: FeeRatePriority) = withContext(Dispatchers.IO) {
+        feeRateProvider.litecoinFeeRate().blockingGet().toLong()
+    }
 }
 
-class BitcoinCashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override val feeRatePriorityList: List<FeeRatePriority> = listOf()
-    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.bitcoinCashFeeRate()
+class BitcoinCashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override suspend fun getFeeRate(feeRatePriority: FeeRatePriority) = withContext(Dispatchers.IO) {
+        feeRateProvider.bitcoinCashFeeRate().blockingGet().toLong()
+    }
 }
 
-class DashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override val feeRatePriorityList: List<FeeRatePriority> = listOf()
-    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.dashFeeRate()
-}
-
-private fun getAdjustedGasPrice(recommendedGasPrice: Long, multiply: Double?): BigInteger {
-    val adjustedGasPrice = recommendedGasPrice.toDouble() * (multiply ?: 1.0)
-    return ceil(adjustedGasPrice).toBigDecimal().toBigInteger()
+class DashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override suspend fun getFeeRate(feeRatePriority: FeeRatePriority) = withContext(Dispatchers.IO) {
+        feeRateProvider.dashFeeRate().blockingGet().toLong()
+    }
 }

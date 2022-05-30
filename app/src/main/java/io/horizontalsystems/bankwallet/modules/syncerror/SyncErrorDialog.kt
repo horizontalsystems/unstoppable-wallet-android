@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule
 import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
@@ -114,7 +115,7 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                     navController.popBackStack()
                 }
             )
-            viewModel.sourceType?.let { sourceType ->
+            if (viewModel.sourceChangeable) {
                 Spacer(Modifier.height(16.dp))
                 ButtonPrimaryDefault(
                     modifier = Modifier
@@ -124,18 +125,16 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                     onClick = {
                         navController.popBackStack()
 
-                        when (sourceType) {
-                            is SyncErrorViewModel.SourceType.EvmNetworkSettings -> {
-                                navController.slideFromRight(
-                                    R.id.evmNetworkFragment,
-                                    EvmNetworkModule.args(sourceType.blockchain, sourceType.account)
-                                )
+                        when (val blockchainItem = viewModel.blockchain) {
+                            is SyncErrorModule.Blockchain.Btc -> {
+                                val params = BtcBlockchainSettingsModule.args(blockchainItem.blockchain)
+                                navController.slideFromRight(R.id.btcBlockchainSettingsFragment, params)
                             }
-                            SyncErrorViewModel.SourceType.PrivacySettings -> {
-                                navController.slideFromRight(
-                                    R.id.mainFragment_to_privacySettingsFragment
-                                )
+                            is SyncErrorModule.Blockchain.Evm -> {
+                                val params = EvmNetworkModule.args(blockchainItem.blockchain)
+                                navController.slideFromRight(R.id.evmNetworkFragment, params)
                             }
+                            else -> { }
                         }
                     }
                 )

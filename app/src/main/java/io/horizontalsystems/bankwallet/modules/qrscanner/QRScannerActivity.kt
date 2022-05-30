@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.databinding.ActivityQrScannerBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Dark
 import io.horizontalsystems.bankwallet.ui.compose.SteelLight
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonDefaults
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimary
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -89,8 +89,11 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
                                 overflow = TextOverflow.Ellipsis
                             )
                         },
-                        colors = ButtonDefaults.textButtonColors(
+                        buttonColors = ButtonPrimaryDefaults.textButtonColors(
                             backgroundColor = SteelLight,
+                            contentColor = ComposeAppTheme.colors.dark,
+                            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+                            disabledContentColor = ComposeAppTheme.colors.grey50,
                         ),
                         onClick = { onBackPressed() }
                     )
@@ -194,6 +197,7 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             intentIntegrator.setPrompt("")
             intentIntegrator.setBeepEnabled(false)
             intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+            intentIntegrator.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN)
             val intent = intentIntegrator.createScanIntent()
             intent.putExtra(SHOW_PASTE_BUTTON, showPasteButton)
             return intent
@@ -208,6 +212,7 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
             options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
             val intent = options.createScanIntent(context)
             intent.putExtra(SHOW_PASTE_BUTTON, showPasteButton)
+            intent.putExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN)
             return intent
         }
     }

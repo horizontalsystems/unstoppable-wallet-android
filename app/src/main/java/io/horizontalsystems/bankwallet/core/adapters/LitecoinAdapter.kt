@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bitcoincore.BitcoinCore
@@ -19,13 +19,13 @@ import java.math.BigDecimal
 
 class LitecoinAdapter(
         override val kit: LitecoinKit,
-        syncMode: SyncMode?,
+        syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         wallet: Wallet,
         testMode: Boolean
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, testMode), LitecoinKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) : this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet, testMode)
+    constructor(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean, backgroundManager: BackgroundManager) : this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet, testMode)
 
     init {
         kit.listener = this
@@ -40,6 +40,13 @@ class LitecoinAdapter(
     //
     // LitecoinKit Listener
     //
+
+    override val explorerTitle: String
+        get() = "blockchair.com"
+
+
+    override fun getTransactionUrl(transactionHash: String): String? =
+        if (testMode) null else "https://blockchair.com/litecoin/transaction/$transactionHash"
 
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
@@ -71,12 +78,15 @@ class LitecoinAdapter(
         // ignored for now
     }
 
+    override val blockchain = BtcBlockchain.Litecoin
+
+
     companion object {
 
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean): LitecoinKit {
+        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean): LitecoinKit {
             val account = wallet.account
             val accountType = (account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
             val derivation = wallet.coinSettings.derivation ?: throw AdapterErrorWrongParameters("Derivation not set")
@@ -85,7 +95,7 @@ class LitecoinAdapter(
                     words = accountType.words,
                     passphrase = accountType.passphrase,
                     walletId = account.id,
-                    syncMode = getSyncMode(syncMode),
+                    syncMode = syncMode,
                     networkType = getNetworkType(testMode),
                     confirmationsThreshold = confirmationsThreshold,
                     bip = getBip(derivation))

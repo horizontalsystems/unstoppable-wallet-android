@@ -5,9 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
+import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsRepository
+import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionViewItem
+import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
+import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformViewItem
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import java.math.BigDecimal
@@ -17,22 +26,35 @@ object MarketOverviewModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val topMarketsRepository = TopMarketsRepository(App.marketKit)
+            val topMarketsRepository = MarketTopCoinsRepository(App.marketKit)
             val marketMetricsRepository = MarketMetricsRepository(App.marketKit)
+            val topNftCollectionsRepository = TopNftCollectionsRepository(HsNftApiProvider())
+            val topSectorsRepository = TopSectorsRepository(App.marketKit)
+            val topPlatformsRepository = TopPlatformsRepository(
+                App.marketKit,
+                App.currencyManager
+            )
             val service = MarketOverviewService(
                 topMarketsRepository,
                 marketMetricsRepository,
+                topNftCollectionsRepository,
+                topSectorsRepository,
+                topPlatformsRepository,
                 App.backgroundManager,
                 App.currencyManager
             )
-            return MarketOverviewViewModel(service) as T
+            val topNftCollectionsViewItemFactory = TopNftCollectionsViewItemFactory(App.numberFormatter)
+            return MarketOverviewViewModel(service, topNftCollectionsViewItemFactory) as T
         }
     }
 
     @Immutable
     data class ViewItem(
         val marketMetrics: MarketMetrics,
-        val boards: List<Board>
+        val boards: List<Board>,
+        val topNftCollectionsBoard: TopNftCollectionsBoard,
+        val topSectorsBoard: TopSectorsBoard,
+        val topPlatformsBoard: TopPlatformsBoard,
     )
 
     data class MarketMetrics(
@@ -77,6 +99,26 @@ object MarketOverviewModule {
         val title: Int,
         val iconRes: Int,
         val topMarketSelect: Select<TopMarket>
+    )
+
+    data class TopNftCollectionsBoard(
+        val title: Int,
+        val iconRes: Int,
+        val timeDurationSelect: Select<TimeDuration>,
+        val collections: List<TopNftCollectionViewItem>
+    )
+
+    data class TopSectorsBoard(
+        val title: Int,
+        val iconRes: Int,
+        val items: List<Category>
+    )
+
+    data class TopPlatformsBoard(
+        val title: Int,
+        val iconRes: Int,
+        val timeDurationSelect: Select<TimeDuration>,
+        val items: List<TopPlatformViewItem>
     )
 
 }

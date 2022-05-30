@@ -1,14 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.entities.CustomToken
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.CustomCoin
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
 
 class AddEvmTokenBlockchainService(
-    private val blockchain: Blockchain,
+    private val blockchain: EvmBlockchain,
     private val networkManager: INetworkManager
 ) : IAddTokenBlockchainService {
 
@@ -22,22 +23,22 @@ class AddEvmTokenBlockchainService(
     }
 
     override fun coinType(reference: String): CoinType {
-        val address = reference.lowercase()
-        return when (blockchain) {
-            Blockchain.Ethereum -> CoinType.Erc20(address)
-            Blockchain.BinanceSmartChain -> CoinType.Bep20(address)
-        }
+        return blockchain.getEvm20CoinType(reference.lowercase())
     }
 
-    override fun customTokenAsync(reference: String): Single<CustomToken> {
-        return networkManager.getEvmTokeInfo(blockchain.tokenType, reference)
+    override fun customCoinsSingle(reference: String): Single<CustomCoin> {
+        return networkManager.getEvmTokeInfo(apiPath(blockchain), reference)
             .map { tokenInfo ->
-                CustomToken(tokenInfo.name, tokenInfo.symbol, coinType(reference), tokenInfo.decimals)
+                CustomCoin(coinType(reference), tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals)
             }
     }
 
-    enum class Blockchain(val tokenType: String) {
-        Ethereum("erc20"), BinanceSmartChain("bep20");
+    private fun apiPath(blockchain: EvmBlockchain): String = when (blockchain) {
+        EvmBlockchain.ArbitrumOne -> "arbitrum-one"
+        EvmBlockchain.BinanceSmartChain -> "bep20"
+        EvmBlockchain.Ethereum -> "erc20"
+        EvmBlockchain.Optimism -> "optimism"
+        EvmBlockchain.Polygon -> "mrc20"
     }
 
 }

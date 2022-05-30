@@ -4,149 +4,157 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isInvisible
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Icon
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.NavController
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.databinding.FragmentEvmNetworkBinding
-import io.horizontalsystems.bankwallet.databinding.ViewHolderDescriptionBinding
-import io.horizontalsystems.bankwallet.databinding.ViewHolderMultilineLawrenceBinding
-import io.horizontalsystems.bankwallet.modules.basecurrency.RVAdapterSectionHeader
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinListHeaderWithInfoButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.views.ListPosition
 
 class EvmNetworkFragment : BaseFragment() {
 
     private val viewModel by viewModels<EvmNetworkViewModel> {
-        EvmNetworkModule.Factory(
-            requireArguments()
-        )
+        EvmNetworkModule.Factory(requireArguments())
     }
-
-    private var _binding: FragmentEvmNetworkBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentEvmNetworkBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.toolbar.title = viewModel.title
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        viewModel.sectionViewItemsLiveData.observe(viewLifecycleOwner) { sectionViewItems ->
-            val adapters = mutableListOf<RecyclerView.Adapter<out RecyclerView.ViewHolder>>()
-            sectionViewItems.forEach { section ->
-                adapters.add(RVAdapterSectionHeader(section.title))
-                adapters.add(SectionItemsAdapter(section.viewItems) {
-                    viewModel.onSelectViewItem(it)
-                })
-                section.description?.let {
-                    adapters.add(DescriptionAdapter(section.description))
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    EvmNetworkScreen(
+                        viewModel,
+                        findNavController()
+                    )
                 }
             }
-
-            binding.rvItems.adapter = ConcatAdapter(adapters)
-        }
-
-        viewModel.confirmLiveEvent.observe(viewLifecycleOwner) {
-            val dialog = TestnetDisclaimerDialog()
-            dialog.onConfirm = {
-                viewModel.confirmSelection()
-            }
-            dialog.show(childFragmentManager, "selector_dialog")
-        }
-
-        viewModel.finishLiveEvent.observe(viewLifecycleOwner) {
-            findNavController().popBackStack()
         }
     }
+
 }
 
-class SectionItemsAdapter(
-    private val items: List<EvmNetworkViewModel.ViewItem>,
-    private val onSelect: (EvmNetworkViewModel.ViewItem) -> Unit
-) : RecyclerView.Adapter<ViewHolderMultilineLawrence>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMultilineLawrence {
-        return ViewHolderMultilineLawrence(
-            ViewHolderMultilineLawrenceBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            ), onSelect)
+@Composable
+private fun EvmNetworkScreen(
+    viewModel: EvmNetworkViewModel,
+    navController: NavController
+) {
+
+    if (viewModel.closeScreen) {
+        navController.popBackStack()
     }
 
-    override fun onBindViewHolder(holder: ViewHolderMultilineLawrence, position: Int) {
-        holder.bind(items[position], ListPosition.getListPosition(items.size, position))
-    }
-
-    override fun getItemCount() = items.size
-}
-
-class ViewHolderMultilineLawrence(
-    private val itemBinding: ViewHolderMultilineLawrenceBinding,
-    onSelect: (EvmNetworkViewModel.ViewItem) -> Unit
-) : RecyclerView.ViewHolder(itemBinding.root) {
-
-    private var item: EvmNetworkViewModel.ViewItem? = null
-
-    init {
-        itemBinding.wrapper.setOnSingleClickListener {
-            item?.let {
-                onSelect(it)
-            }
-        }
-    }
-
-    fun bind(item: EvmNetworkViewModel.ViewItem, listPosition: ListPosition) {
-        this.item = item
-
-        itemBinding.wrapper.setBackgroundResource(listPosition.getBackground())
-
-        itemBinding.title.text = item.name
-        itemBinding.subtitle.text = item.url
-        itemBinding.checkmarkIcon.isInvisible = !item.selected
-    }
-}
-
-class DescriptionAdapter(
-    private val description: String
-) : RecyclerView.Adapter<ViewHolderDescription>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderDescription {
-        return ViewHolderDescription(
-            ViewHolderDescriptionBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
+    Surface(color = ComposeAppTheme.colors.tyler) {
+        Column {
+            AppBar(
+                TranslatableString.PlainString(viewModel.title),
+                navigationIcon = {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = "back button",
+                            tint = ComposeAppTheme.colors.jacob
+                        )
+                    }
+                },
             )
-        )
-    }
 
-    override fun onBindViewHolder(holder: ViewHolderDescription, position: Int) {
-        holder.bind(description)
-    }
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(top = 12.dp, bottom = 30.dp)
+            ) {
 
-    override fun getItemCount() = 1
+                item {
+                    CoinListHeaderWithInfoButton(
+                        R.string.EvmNetwork_SyncMode,
+                    ) {
+                        navController.slideFromBottom(R.id.evmBlockchainSyncModeInfoFragment)
+                    }
+                }
+
+                item {
+                    CellMultilineLawrenceSection(viewModel.viewItems) { item ->
+                        NetworkSettingCell(item.name, item.url, item.selected) {
+                            viewModel.onSelectViewItem(item)
+                        }
+                    }
+                }
+
+            }
+        }
+
+    }
 }
 
-class ViewHolderDescription(
-    val binding: ViewHolderDescriptionBinding
-) : RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(description: String) {
-        binding.text.text = description
+@Composable
+private fun NetworkSettingCell(
+    title: String,
+    subtitle: String,
+    checked: Boolean,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.padding(start = 16.dp).weight(1f)) {
+            Text(
+                text = title,
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.leah,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(Modifier.height(1.dp))
+            Text(
+                text = subtitle,
+                style = ComposeAppTheme.typography.subhead2,
+                color = ComposeAppTheme.colors.grey,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        Box(
+            modifier = Modifier
+                .width(52.dp)
+                .fillMaxHeight(),
+            contentAlignment = Alignment.Center
+        ) {
+            if (checked) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_checkmark_20),
+                    tint = ComposeAppTheme.colors.jacob,
+                    contentDescription = null,
+                )
+            }
+        }
     }
 }

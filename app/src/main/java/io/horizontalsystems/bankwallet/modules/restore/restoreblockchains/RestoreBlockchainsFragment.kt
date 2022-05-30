@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,10 +30,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSetti
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
-import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.core.findNavController
@@ -42,7 +38,10 @@ import io.horizontalsystems.core.findNavController
 class RestoreBlockchainsFragment : BaseFragment() {
 
     val vmFactory by lazy {
-        RestoreBlockchainsModule.Factory(arguments?.getParcelable(ACCOUNT_TYPE_KEY)!!)
+        RestoreBlockchainsModule.Factory(
+            arguments?.getString(ACCOUNT_NAME_KEY)!!,
+            arguments?.getParcelable(ACCOUNT_TYPE_KEY)!!
+        )
     }
 
     private val viewModel by viewModels<RestoreBlockchainsViewModel> { vmFactory }
@@ -131,6 +130,7 @@ class RestoreBlockchainsFragment : BaseFragment() {
     }
 
     companion object {
+        const val ACCOUNT_NAME_KEY = "account_name_key"
         const val ACCOUNT_TYPE_KEY = "account_type_key"
     }
 }
@@ -149,7 +149,7 @@ private fun ManageWalletsScreen(
         AppBar(
             title = TranslatableString.ResString(R.string.Restore_Title),
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                HsIconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_back),
                         contentDescription = "back",
@@ -211,7 +211,7 @@ private fun ManageWalletsScreen(
                             if (viewItem.state is CoinViewItemState.ToggleVisible) {
                                 Spacer(Modifier.width(12.dp))
                                 if (viewItem.state.hasSettings) {
-                                    IconButton(
+                                    HsIconButton(
                                         onClick = { viewModel.onClickSettings(viewItem.uid) }
                                     ) {
                                         Icon(

@@ -24,8 +24,14 @@ object AddressInputModule {
                 }
                 CoinType.Ethereum,
                 CoinType.BinanceSmartChain,
+                CoinType.Polygon,
+                CoinType.EthereumOptimism,
+                CoinType.EthereumArbitrumOne,
                 is CoinType.Erc20,
-                is CoinType.Bep20 -> {
+                is CoinType.Bep20,
+                is CoinType.Mrc20,
+                is CoinType.OptimismErc20,
+                is CoinType.ArbitrumOneErc20 -> {
                     addressViewModel.addAddressHandler(AddressHandlerEvm())
                 }
                 else -> Unit

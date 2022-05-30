@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.tor
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.managers.TorStatus
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 
 class TorStatusPresenter(
         val view: TorStatusView,

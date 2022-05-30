@@ -8,25 +8,23 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.Color
 
 @Immutable
-class DefaultButtonColors(
+class HsButtonColors(
     private val backgroundColor: Color,
     private val contentColor: Color,
     private val disabledBackgroundColor: Color,
     private val disabledContentColor: Color
 ) : ButtonColors {
     @Composable
-    override fun backgroundColor(enabled: Boolean): State<Color> {
-        return rememberUpdatedState(if (enabled) backgroundColor else disabledBackgroundColor)
-    }
+    override fun backgroundColor(enabled: Boolean): State<Color> =
+        rememberUpdatedState(if (enabled) backgroundColor else disabledBackgroundColor)
 
     @Composable
-    override fun contentColor(enabled: Boolean): State<Color> {
-        return rememberUpdatedState(if (enabled) contentColor else disabledContentColor)
-    }
+    override fun contentColor(enabled: Boolean): State<Color> =
+        rememberUpdatedState(if (enabled) contentColor else disabledContentColor)
 
     override fun equals(other: Any?): Boolean {
 
-        if (other !is DefaultButtonColors) return false
+        if (other !is HsButtonColors) return false
 
         return backgroundColor != other.backgroundColor
                 && contentColor != other.contentColor

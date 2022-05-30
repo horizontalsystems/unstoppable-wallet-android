@@ -1,87 +1,57 @@
 package io.horizontalsystems.bankwallet.modules.evmnetwork
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.managers.AccountSettingManager
-import io.horizontalsystems.bankwallet.core.managers.EvmNetworkManager
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.EvmNetwork
+import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
+import io.horizontalsystems.bankwallet.entities.EvmSyncSource
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class EvmNetworkService(
-    val blockchain: EvmNetworkModule.Blockchain,
-    private val account: Account,
-    private val evmNetworkManager: EvmNetworkManager,
-    private val accountSettingManager: AccountSettingManager
+    val blockchain: EvmBlockchain,
+    private val evmSyncSourceManager: EvmSyncSourceManager
 ) : Clearable {
     private val disposables = CompositeDisposable()
 
-    private val itemsRelay = BehaviorSubject.create<List<Item>>()
+    private val itemsSubject = BehaviorSubject.create<List<Item>>()
     var items = listOf<Item>()
         private set(value) {
             field = value
 
-            itemsRelay.onNext(value)
+            itemsSubject.onNext(value)
         }
 
-    private val networks: List<EvmNetwork>
-        get() = when (blockchain) {
-            EvmNetworkModule.Blockchain.Ethereum -> evmNetworkManager.ethereumNetworks
-            EvmNetworkModule.Blockchain.BinanceSmartChain -> evmNetworkManager.binanceSmartChainNetworks
-        }
-
-    private val currentNetwork: EvmNetwork
-        get() = when (blockchain) {
-            EvmNetworkModule.Blockchain.Ethereum -> {
-                accountSettingManager.ethereumNetwork(account)
-            }
-            EvmNetworkModule.Blockchain.BinanceSmartChain -> {
-                accountSettingManager.binanceSmartChainNetwork(account)
-            }
-        }
+    private val currentSyncSource: EvmSyncSource
+        get() = evmSyncSourceManager.getSyncSource(blockchain)
 
     init {
         syncItems()
     }
 
     private fun syncItems() {
-        val currentNetworkId = currentNetwork.id
+        val currentSyncSourceId = currentSyncSource.id
 
-        items = networks.map { network ->
-            Item(network, network.chain.isMainNet, network.id == currentNetworkId)
+        items = evmSyncSourceManager.getAllBlockchains(blockchain).map { syncSource ->
+            Item(syncSource, syncSource.id == currentSyncSourceId)
         }
     }
 
     val itemsObservable: Observable<List<Item>>
-        get() = itemsRelay
-
-    fun isConfirmationRequired(id: String): Boolean {
-        if (currentNetwork.id == id) return false
-        val item = items.find { it.network.id == id } ?: return false
-
-        return !item.isMainNet
-    }
+        get() = itemsSubject
 
     fun setCurrentNetwork(id: String) {
-        if (currentNetwork.id == id) return
+        if (currentSyncSource.id == id) return
 
-        val network = items.find { it.network.id == id }?.network ?: return
+        val syncSource = items.find { it.syncSource.id == id }?.syncSource ?: return
 
-        when (blockchain) {
-            EvmNetworkModule.Blockchain.Ethereum -> {
-                accountSettingManager.saveEth(network, account)
-            }
-            EvmNetworkModule.Blockchain.BinanceSmartChain -> {
-                accountSettingManager.saveBsc(network, account)
-            }
-        }
+        evmSyncSourceManager.save(syncSource, blockchain)
     }
 
     override fun clear() {
         disposables.clear()
     }
 
-    data class Item(val network: EvmNetwork, val isMainNet: Boolean, val selected: Boolean)
+    data class Item(val syncSource: EvmSyncSource, val selected: Boolean)
 
 }

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -75,7 +74,7 @@ class CoinTreasuriesFragment : BaseFragment() {
             AppBar(
                 title = TranslatableString.ResString(R.string.CoinPage_Treasuries),
                 navigationIcon = {
-                    IconButton(onClick = { findNavController().popBackStack() }) {
+                    HsIconButton(onClick = { findNavController().popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = "back button",

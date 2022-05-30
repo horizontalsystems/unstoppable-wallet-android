@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,7 +30,6 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
-import io.horizontalsystems.bankwallet.modules.networksettings.NetworkSettingsModule
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
 import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -76,7 +74,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
             AppBar(
                 title = TranslatableString.PlainString(viewModel.account.name),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = null,
@@ -124,7 +122,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 icon = painterResource(id = R.drawable.ic_key_20)
                             ) {
                                 navController.slideFromRight(
-                                    R.id.manageAccountFragment_to_showKeyFragment,
+                                    R.id.showKeyIntroFragment,
                                     ShowKeyModule.prepareParams(viewModel.account)
                                 )
                             }
@@ -138,7 +136,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 attention = true
                             ) {
                                 navController.slideFromRight(
-                                    R.id.manageAccountFragment_to_backupKeyFragment,
+                                    R.id.backupKeyFragment,
                                     BackupKeyModule.prepareParams(viewModel.account)
                                 )
 
@@ -146,17 +144,6 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                         }
                     }
                     KeyActionState.None -> Unit
-                }
-                actionItems.add {
-                    AccountActionItem(
-                        title = stringResource(id = R.string.ManageAccount_NetworkSettings),
-                        icon = painterResource(id = R.drawable.ic_blocks_20)
-                    ) {
-                        navController.slideFromRight(
-                            R.id.manageAccountFragment_to_networkSettingsFragment,
-                            NetworkSettingsModule.prepareParams(viewModel.account)
-                        )
-                    }
                 }
 
                 additionalViewItems.forEach { additionViewItem ->

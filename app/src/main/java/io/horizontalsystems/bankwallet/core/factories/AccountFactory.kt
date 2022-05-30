@@ -9,30 +9,30 @@ import java.util.*
 
 class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
 
-    override fun account(type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account {
+    override fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account {
         val id = UUID.randomUUID().toString()
 
         return Account(
                 id = id,
-                name = getNextAccountName(),
+                name = name,
                 type = type,
                 origin = origin,
                 isBackedUp = backedUp
         )
     }
 
-    override fun watchAccount(address: String, domain: String?): Account {
+    override fun watchAccount(name: String, address: String, domain: String?): Account {
         val id = UUID.randomUUID().toString()
         return Account(
             id = id,
-            name = domain ?: getNextWatchAccountName(),
+            name = name,
             type = AccountType.Address(address),
             origin = AccountOrigin.Restored,
             isBackedUp = true
         )
     }
 
-    private fun getNextWatchAccountName(): String {
+    override fun getNextWatchAccountName(): String {
         val watchAccountsCount = accountManager.accounts.count {
             it.type is AccountType.Address
         }
@@ -40,7 +40,7 @@ class AccountFactory(val accountManager: IAccountManager) : IAccountFactory {
         return "Watch Wallet ${watchAccountsCount + 1}"
     }
 
-    private fun getNextAccountName(): String {
+    override fun getNextAccountName(): String {
         val nonWatchAccountsCount = accountManager.accounts.count {
             it.type !is AccountType.Address
         }

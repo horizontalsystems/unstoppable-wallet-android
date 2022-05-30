@@ -8,24 +8,23 @@ import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 
-class LocalStorageManager(private val preferences: SharedPreferences)
-    : ILocalStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard, IMarketStorage {
+class LocalStorageManager(private val preferences: SharedPreferences) : ILocalStorage, IPinStorage, IChartTypeStorage,
+    IThirdKeyboard, IMarketStorage {
 
     private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"
     private val SEND_INPUT_TYPE = "send_input_type"
@@ -49,7 +48,6 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val TOR_ENABLED = "tor_enabled"
     private val APP_LAUNCH_COUNT = "app_launch_count"
     private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
-    private val TRANSACTION_DATA_SORTING_TYPE = "transaction_data_sorting_type"
     private val BALANCE_HIDDEN = "balance_hidden"
     private val CHECKED_TERMS = "checked_terms"
     private val MARKET_CURRENT_TAB = "market_current_tab"
@@ -64,18 +62,18 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val SWAP_PROVIDER = "swap_provider_"
     private val LAUNCH_PAGE = "launch_page"
     private val MAIN_TAB = "main_tab"
-    private val CUSTOM_TOKENS_RESTORE_COMPLETED = "custom_tokens_restore_completed"
     private val FAVORITE_COIN_IDS_MIGRATED = "favorite_coins_ids_migrated"
+    private val FILL_WALLET_INFO_DONE = "fill_wallet_info_done"
     private val MARKET_FAVORITES_SORTING_FIELD = "market_favorites_sorting_field"
     private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
 
     private val gson by lazy { Gson() }
 
-    override var sendInputType: SendModule.InputType?
+    override var amountInputType: AmountInputType?
         get() = preferences.getString(SEND_INPUT_TYPE, null)?.let {
             try {
-                SendModule.InputType.valueOf(it)
+                AmountInputType.valueOf(it)
             } catch (e: IllegalArgumentException) {
                 null
             }
@@ -133,7 +131,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     override var sortType: BalanceSortType
         get() {
             val sortString = preferences.getString(SORT_TYPE, null)
-                    ?: BalanceSortType.Value.getAsString()
+                ?: BalanceSortType.Value.getAsString()
             return BalanceSortType.getTypeFromString(sortString)
         }
         set(sortType) {
@@ -175,7 +173,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
 
     override var currentTheme: ThemeType
         get() = preferences.getString(CURRENT_THEME, null)?.let { ThemeType.valueOf(it) }
-                ?: ThemeType.System
+            ?: ThemeType.System
         set(themeType) {
             preferences.edit().putString(CURRENT_THEME, themeType.value).apply()
         }
@@ -287,20 +285,16 @@ class LocalStorageManager(private val preferences: SharedPreferences)
             preferences.edit().putLong(RATE_APP_LAST_REQ_TIME, value).apply()
         }
 
-    override var transactionSortingType: TransactionDataSortingType
-        get() {
-            val txSortingTypeString = preferences.getString(TRANSACTION_DATA_SORTING_TYPE, null)
-            return txSortingTypeString?.let { TransactionDataSortingType.valueOf(it) }
-                    ?: TransactionDataSortingType.Shuffle
-        }
-        set(sortingType) {
-            preferences.edit().putString(TRANSACTION_DATA_SORTING_TYPE, sortingType.value).apply()
-        }
-
     override var balanceHidden: Boolean
         get() = preferences.getBoolean(BALANCE_HIDDEN, false)
         set(value) {
             preferences.edit().putBoolean(BALANCE_HIDDEN, value).apply()
+        }
+
+    override var balanceTotalCoinUid: String?
+        get() = preferences.getString("balanceTotalCoinUid", null)
+        set(value) {
+            preferences.edit().putString("balanceTotalCoinUid", value).apply()
         }
 
     override var checkedTerms: List<Term>
@@ -368,16 +362,16 @@ class LocalStorageManager(private val preferences: SharedPreferences)
             preferences.edit().putString(MAIN_TAB, value?.name).apply()
         }
 
-    override var customTokensRestoreCompleted: Boolean
-        get() = preferences.getBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, false)
-        set(value) {
-            preferences.edit().putBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, value).apply()
-        }
-
     override var favoriteCoinIdsMigrated: Boolean
         get() = preferences.getBoolean(FAVORITE_COIN_IDS_MIGRATED, false)
         set(value) {
             preferences.edit().putBoolean(FAVORITE_COIN_IDS_MIGRATED, value).apply()
+        }
+
+    override var fillWalletInfoDone: Boolean
+        get() = preferences.getBoolean(FILL_WALLET_INFO_DONE, false)
+        set(value) {
+            preferences.edit().putBoolean(FILL_WALLET_INFO_DONE, value).apply()
         }
 
     override var marketFavoritesSortingField: SortingField?
@@ -402,16 +396,16 @@ class LocalStorageManager(private val preferences: SharedPreferences)
             preferences.edit().putBoolean(RELAUNCH_BY_SETTING_CHANGE, value).commit()
         }
 
-    override fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String? {
+    override fun getSwapProviderId(blockchain: EvmBlockchain): String? {
         return preferences.getString(getSwapProviderKey(blockchain), null)
     }
 
-    override fun setSwapProviderId(blockchain: SwapMainModule.Blockchain, providerId: String) {
+    override fun setSwapProviderId(blockchain: EvmBlockchain, providerId: String) {
         preferences.edit().putString(getSwapProviderKey(blockchain), providerId).apply()
     }
 
-    private fun getSwapProviderKey(blockchain: SwapMainModule.Blockchain): String {
-        return SWAP_PROVIDER + blockchain.id + if (blockchain.mainNet) "MainNet" else "TestNet"
+    private fun getSwapProviderKey(blockchain: EvmBlockchain): String {
+        return SWAP_PROVIDER + blockchain.uid
     }
 
 }

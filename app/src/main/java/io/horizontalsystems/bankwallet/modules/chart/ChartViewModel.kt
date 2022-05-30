@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.viewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
@@ -26,7 +25,7 @@ import java.util.*
 
 open class ChartViewModel(
     private val service: AbstractChartService,
-    private val chartNumberFormatter: ChartModule.ChartNumberFormatter
+    private val valueFormatter: ChartModule.ChartNumberFormatter
 ) : ViewModel() {
     val tabItemsLiveData = MutableLiveData<List<TabItem<HsTimePeriod>>>()
     val indicatorsLiveData = MutableLiveData<List<TabItem<ChartIndicator>>>()
@@ -100,14 +99,17 @@ open class ChartViewModel(
         service.updateIndicator(chartIndicator)
     }
 
+    fun refresh() {
+        loadingLiveData.postValue(true)
+        service.refresh()
+    }
+
     private fun syncChartItems(chartPointsWrapper: ChartPointsWrapper) {
         val chartItems = chartPointsWrapper.items
         if (chartItems.isEmpty()) return
 
         val lastItemValue = chartItems.last().value
-        val currentValue = chartNumberFormatter.formatValue(
-            CurrencyValue(service.currency, lastItemValue.toBigDecimal())
-        )
+        val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
 
         val firstItemValue = chartItems.first().value
         val currentValueDiff = Value.Percent(((lastItemValue - firstItemValue) / firstItemValue * 100).toBigDecimal())
@@ -148,7 +150,7 @@ open class ChartViewModel(
     }
 
     private fun getFormattedValue(value: Float, currency: Currency): String {
-        return App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency,  value.toBigDecimal()))
+        return valueFormatter.formatValue(currency,  value.toBigDecimal())
     }
 
     override fun onCleared() {
@@ -158,9 +160,7 @@ open class ChartViewModel(
 
     fun getSelectedPoint(item: ChartDataItemImmutable): SelectedPoint? {
         return item.values[Indicator.Candle]?.let { candle ->
-            val value = chartNumberFormatter.formatValue(
-                CurrencyValue(service.currency, candle.value.toBigDecimal())
-            )
+            val value = valueFormatter.formatValue(service.currency, candle.value.toBigDecimal())
             val dayAndTime = DateHelper.getDayAndTime(Date(item.timestamp * 1000))
 
             SelectedPoint(
@@ -194,12 +194,7 @@ open class ChartViewModel(
                 App.numberFormatter.format(dominance.value, 0, 2, suffix = "%")
             )
             volume != null -> SelectedPoint.ExtraData.Volume(
-                App.numberFormatter.formatCurrencyValueAsShortened(
-                    CurrencyValue(
-                        service.currency,
-                        volume.value.toBigDecimal()
-                    )
-                )
+                App.numberFormatter.formatFiatShort(volume.value.toBigDecimal(), service.currency.symbol, 2)
             )
             else -> null
         }

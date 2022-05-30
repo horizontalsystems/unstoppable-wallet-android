@@ -16,6 +16,8 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentTransactionInfoBinding
+import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
+import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoAdapter
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
@@ -91,26 +93,18 @@ class TransactionInfoFragment : BaseFragment() {
                         }
                     }
 
-                    override fun closeClick() {
-                        findNavController().popBackStack()
-                    }
-
                     override fun onClickStatusInfo() {
                         findNavController().slideFromBottom(R.id.statusInfoDialog)
                     }
 
                     override fun onLockInfoClick(lockDate: Date) {
                         context?.let {
-                            val title = it.getString(R.string.Info_LockTime_Title)
-                            val description = it.getString(
-                                R.string.Info_LockTime_Description,
-                                DateHelper.getFullDate(lockDate)
-                            )
-                            val infoParameters = InfoParameters(title, description)
+                            val lockTime = DateHelper.getFullDate(lockDate)
+                            val params = TransactionLockTimeInfoFragment.prepareParams(lockTime)
 
                             findNavController().slideFromBottom(
-                                R.id.infoFragment,
-                                InfoFragment.prepareParams(infoParameters)
+                                R.id.transactionLockTimeInfoFragment,
+                                params
                             )
                         }
                     }
@@ -119,17 +113,14 @@ class TransactionInfoFragment : BaseFragment() {
                         transactionHash: String,
                         conflictingHash: String
                     ) {
-                        context?.let {
-                            val title = it.getString(R.string.Info_DoubleSpend_Title)
-                            val description = it.getString(R.string.Info_DoubleSpend_Description)
-                            val infoParameters =
-                                InfoParameters(title, description, transactionHash, conflictingHash)
-
-                            findNavController().slideFromBottom(
-                                R.id.infoFragment,
-                                InfoFragment.prepareParams(infoParameters)
-                            )
-                        }
+                        val params = TransactionDoubleSpendInfoFragment.prepareParams(
+                            transactionHash,
+                            conflictingHash
+                        )
+                        findNavController().slideFromBottom(
+                            R.id.transactionDoubleSpendInfoFragment,
+                            params
+                        )
                     }
 
                     override fun onOptionButtonClick(optionType: TransactionInfoOption.Type) {
@@ -139,25 +130,25 @@ class TransactionInfoFragment : BaseFragment() {
 
         binding.recyclerView.adapter = ConcatAdapter(itemsAdapter)
 
-        viewModel.showShareLiveEvent.observe(viewLifecycleOwner, { value ->
+        viewModel.showShareLiveEvent.observe(viewLifecycleOwner) { value ->
             context?.startActivity(Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, value)
                 type = "text/plain"
             })
-        })
+        }
 
-        viewModel.copyRawTransactionLiveEvent.observe(viewLifecycleOwner, { rawTransaction ->
+        viewModel.copyRawTransactionLiveEvent.observe(viewLifecycleOwner) { rawTransaction ->
             copyText(rawTransaction)
-        })
+        }
 
-        viewModel.openTransactionOptionsModule.observe(viewLifecycleOwner, { (optionType, txHash) ->
+        viewModel.openTransactionOptionsModule.observe(viewLifecycleOwner) { (optionType, txHash) ->
             val params = TransactionSpeedUpCancelFragment.prepareParams(optionType, txHash)
             findNavController().slideFromRight(
-                R.id.transactionInfoFragment_to_transactionSpeedUpCancelFragment,
+                R.id.transactionSpeedUpCancelFragment,
                 params
             )
-        })
+        }
 
         binding.buttonCloseCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)

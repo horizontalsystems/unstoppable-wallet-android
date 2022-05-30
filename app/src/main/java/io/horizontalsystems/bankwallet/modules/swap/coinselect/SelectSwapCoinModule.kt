@@ -14,7 +14,6 @@ object SelectSwapCoinModule {
             val coinProvider by lazy {
                 SwapCoinProvider(
                     dex,
-                    App.coinManager,
                     App.walletManager,
                     App.adapterManager,
                     App.currencyManager,
