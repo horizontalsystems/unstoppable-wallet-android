@@ -145,7 +145,7 @@ enum class EventType(
     Custom("custom", R.string.NftCollection_EventType_Custom),
     Payout("payout", R.string.NftCollection_EventType_Payout),
     Cancel("cancel", R.string.NftCollection_EventType_Cancelled),
-    BulkCancel("bulk_cancel", R.string.NftCollection_EventType_Payout),
+    BulkCancel("bulk_cancel", R.string.NftCollection_EventType_BulkCancel),
     Unknown("unknown", R.string.NftCollection_EventType_Unknown);
 
     override val title: TranslatableString
