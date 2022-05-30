@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -65,22 +66,25 @@ fun Roi(roi: List<RoiViewItem>) {
                                 .width(1.dp)
                                 .background(ComposeAppTheme.colors.steel10)
                         )
+                        val text: String
+                        val color: Color
                         if (value != null) {
                             val sign = if (value >= BigDecimal.ZERO) "+" else "-"
-                            val text = App.numberFormatter.format(value.abs(), 0, 2, sign, "%")
-                            val color =
-                                if (value >= BigDecimal.ZERO) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
+                            text = App.numberFormatter.format(value.abs(), 0, 2, sign, "%")
+                            color = if (value >= BigDecimal.ZERO) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
 
-                            Text(
-                                modifier = Modifier.weight(1f),
-                                text = text,
-                                style = ComposeAppTheme.typography.caption,
-                                color = color,
-                                textAlign = TextAlign.Center
-                            )
                         } else {
-                            Text(text = "")
+                            text = "---"
+                            color = ComposeAppTheme.colors.grey
                         }
+
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = text,
+                            style = ComposeAppTheme.typography.caption,
+                            color = color,
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
             }
