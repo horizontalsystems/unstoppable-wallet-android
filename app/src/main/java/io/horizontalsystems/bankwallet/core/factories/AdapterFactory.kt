@@ -117,9 +117,6 @@ class AdapterFactory(
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(evmBlockchain)
                 evmKitManager.unlink(transactionSource.account)
             }
-            is TransactionSource.Blockchain.Bep2 -> {
-                binanceKitManager.unlink()
-            }
             else -> Unit
         }
     }
