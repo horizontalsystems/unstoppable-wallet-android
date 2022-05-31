@@ -1,11 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
@@ -59,7 +61,7 @@ fun AmountCell(
     val coinAmountColor = when (type) {
         ValueType.Regular -> ComposeAppTheme.colors.bran
         ValueType.Disabled -> ComposeAppTheme.colors.grey
-        ValueType.Outgoing -> ComposeAppTheme.colors.lucian
+        ValueType.Outgoing -> ComposeAppTheme.colors.leah
         ValueType.Incoming -> ComposeAppTheme.colors.remus
     }
     Row(
@@ -95,7 +97,7 @@ fun AmountMultiCell(amounts: List<AmountValues>, type: ValueType, platformCoin: 
     val coinAmountColor = when (type) {
         ValueType.Regular -> ComposeAppTheme.colors.bran
         ValueType.Disabled -> ComposeAppTheme.colors.grey
-        ValueType.Outgoing -> ComposeAppTheme.colors.lucian
+        ValueType.Outgoing -> ComposeAppTheme.colors.leah
         ValueType.Incoming -> ComposeAppTheme.colors.remus
     }
     val height = if (amounts.size == 2) 60.dp else 48.dp
@@ -150,7 +152,7 @@ fun AmountMultiCell(amounts: List<AmountValues>, type: ValueType, platformCoin: 
 }
 
 @Composable
-fun SubheadCell(title: String, value: String) {
+fun SubheadCell(title: String, value: String, iconRes: Int?) {
     Row(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -158,6 +160,14 @@ fun SubheadCell(title: String, value: String) {
             .height(48.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        iconRes?.let { icon ->
+            Icon(
+                modifier = Modifier.padding(end = 16.dp),
+                painter = painterResource(id = icon),
+                tint = ComposeAppTheme.colors.grey,
+                contentDescription = null,
+            )
+        }
         Text(
             text = title,
             color = ComposeAppTheme.colors.leah,

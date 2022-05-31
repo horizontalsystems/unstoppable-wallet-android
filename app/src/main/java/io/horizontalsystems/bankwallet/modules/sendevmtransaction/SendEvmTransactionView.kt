@@ -347,7 +347,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
         private fun getTypeColor(type: ValueType): Int = when (type) {
             ValueType.Regular -> R.color.bran
             ValueType.Disabled -> R.color.grey
-            ValueType.Outgoing -> R.color.lucian
+            ValueType.Outgoing -> R.color.leah
             ValueType.Incoming -> R.color.remus
         }
     }

@@ -140,7 +140,7 @@ fun SendConfirmationScreen(
                                     .getFormattedFull()
                             }
 
-                            ConfirmAmountCell(currencyAmount, "-$coinAmount", coin)
+                            ConfirmAmountCell(currencyAmount, coinAmount, coin)
                         }
                         CellSingleLineLawrence(borderTop = true) {
                             AddressCell(address.hex)
@@ -269,7 +269,7 @@ fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, coin: Coin) {
             modifier = Modifier.padding(start = 16.dp),
             text = coinAmount,
             style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.lucian,
+            color = ComposeAppTheme.colors.leah,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
