@@ -5,7 +5,6 @@ import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.walletconnect.walletconnectv2.client.WalletConnectClient
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -55,28 +54,10 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onTrimMemory(level: Int) {
-        when (level) {
-            TRIM_MEMORY_RUNNING_MODERATE,
-            TRIM_MEMORY_RUNNING_LOW,
-            TRIM_MEMORY_RUNNING_CRITICAL -> {
-                /*
-                   Release any memory that your app doesn't need to run.
-
-                   The device is running low on memory while the app is running.
-                   The event raised indicates the severity of the memory-related event.
-                   If the event is TRIM_MEMORY_RUNNING_CRITICAL, then the system will
-                   begin killing background processes.
-                */
-                if (App.backgroundManager.inBackground) {
-                    val logger = AppLogger("low memory")
-                    logger.info("Kill activity due to low memory, level: $level")
-                    finishAffinity()
-                }
-            }
-            else -> {  /*do nothing*/
-            }
+        if (level >= TRIM_MEMORY_COMPLETE) {
+            val logger = AppLogger("low memory")
+            logger.info("onTrimMemory level: $level")
         }
-
         super.onTrimMemory(level)
     }
 
