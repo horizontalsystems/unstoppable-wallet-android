@@ -70,7 +70,7 @@ class SendEvmTransactionViewModel(
     }
 
     private fun sync(state: SendEvmTransactionService.State) {
-        Log.e("SendEvmTransactionViewModel", "sync: ${state}")
+        Log.e("SendEvmTransactionViewModel", "sync: $state")
         when (state) {
             is SendEvmTransactionService.State.Ready -> {
                 sendEnabledLiveData.postValue(true)
@@ -206,9 +206,8 @@ class SendEvmTransactionViewModel(
 
             is SwapDecoration.Amount.Extremum -> {
                 uniswapInfo?.estimatedIn?.let { estimated ->
-                    val estimatedAmount = getEstimatedSwapAmount(
-                        coinServiceIn.amountData(estimated), ValueType.Outgoing,
-                    )
+                    val estimatedAmount =
+                        getEstimatedSwapAmount(coinServiceIn.amountData(estimated))
                     outViewItems.add(
                         ViewItem.AmountMulti(
                             listOf(estimatedAmount),
@@ -218,7 +217,12 @@ class SendEvmTransactionViewModel(
                     )
                 }
 
-                inViewItems.add(getMaxAmount(coinServiceIn.amountData(amountIn.value), coinServiceIn.platformCoin))
+                inViewItems.add(
+                    getMaxAmount(
+                        coinServiceIn.amountData(amountIn.value),
+                        coinServiceIn.platformCoin
+                    )
+                )
             }
         }
 
@@ -236,16 +240,11 @@ class SendEvmTransactionViewModel(
                 val multiAmount = mutableListOf<AmountValues>()
                 uniswapInfo?.estimatedOut?.let { estimated ->
                     multiAmount.add(
-                        getEstimatedSwapAmount(
-                            coinServiceOut.amountData(estimated), ValueType.Incoming,
-                        )
+                        getEstimatedSwapAmount(coinServiceOut.amountData(estimated))
                     )
                 }
                 multiAmount.add(
-                    getGuaranteedAmount(
-                        coinServiceOut.amountData(amountOut.value),
-                        ValueType.Incoming
-                    )
+                    getGuaranteedAmount(coinServiceOut.amountData(amountOut.value))
                 )
                 outViewItems.add(
                     ViewItem.AmountMulti(
@@ -377,11 +376,11 @@ class SendEvmTransactionViewModel(
 
             oneInchInfo?.estimatedAmountTo?.let {
                 multiAmount.add(
-                    getEstimatedSwapAmount(coinServiceOut.amountData(it), ValueType.Incoming)
+                    getEstimatedSwapAmount(coinServiceOut.amountData(it))
                 )
             }
             multiAmount.add(
-                getGuaranteedAmount(coinServiceOut.amountData(amountOut.value), ValueType.Incoming)
+                getGuaranteedAmount(coinServiceOut.amountData(amountOut.value))
             )
 
             outViewItems.add(
@@ -463,11 +462,10 @@ class SendEvmTransactionViewModel(
         val amountOutMin = oneInchSwapInfo.estimatedAmountTo - oneInchSwapInfo.estimatedAmountTo / BigDecimal("100") * oneInchSwapInfo.slippage
 
         val estimated = getEstimatedSwapAmount(
-            coinServiceOut.amountData(oneInchSwapInfo.estimatedAmountTo), ValueType.Incoming,
+            coinServiceOut.amountData(oneInchSwapInfo.estimatedAmountTo)
         )
         val guaranteed = getGuaranteedAmount(
-            coinServiceOut.amountData(amountOutMin.scaleUp(oneInchSwapInfo.coinTo.decimals)),
-            ValueType.Incoming,
+            coinServiceOut.amountData(amountOutMin.scaleUp(oneInchSwapInfo.coinTo.decimals))
         )
 
         sections.add(
@@ -678,26 +676,20 @@ class SendEvmTransactionViewModel(
 
     private fun getAmount(amountData: SendModule.AmountData, valueType: ValueType, platformCoin: PlatformCoin) =
         ViewItem.Amount(
-            amountData.secondary?.getFormatted(valueType),
-            amountData.primary.getFormatted(valueType),
+            amountData.secondary?.getFormatted(),
+            amountData.primary.getFormatted(),
             valueType,
             platformCoin
         )
 
-    private fun getEstimatedSwapAmount(
-        amountData: SendModule.AmountData,
-        type: ValueType,
-    ): AmountValues = AmountValues(
-        "${amountData.primary.getFormatted(type)} ${Translator.getString(R.string.Swap_AmountEstimated)}",
-        amountData.secondary?.getFormatted(type) ?: "n/a"
+    private fun getEstimatedSwapAmount(amountData: SendModule.AmountData) = AmountValues(
+        "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountEstimated)}",
+        amountData.secondary?.getFormatted() ?: "n/a"
     )
 
-    private fun getGuaranteedAmount(
-        amountData: SendModule.AmountData,
-        type: ValueType = ValueType.Incoming,
-    ): AmountValues = AmountValues(
-        "${amountData.primary.getFormatted(type)} ${Translator.getString(R.string.Swap_AmountMin)}",
-        amountData.secondary?.getFormatted(type),
+    private fun getGuaranteedAmount(amountData: SendModule.AmountData) = AmountValues(
+        "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMin)}",
+        amountData.secondary?.getFormatted(),
     )
 
     private fun getMaxAmount(amountData: SendModule.AmountData, platformCoin: PlatformCoin): ViewItem.Amount {

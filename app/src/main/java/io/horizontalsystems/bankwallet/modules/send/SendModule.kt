@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import java.math.BigDecimal
 
@@ -44,21 +43,11 @@ object SendModule {
             is CurrencyValueInfo -> currencyValue.currency.code
         }
 
-        fun getFormatted(type: ValueType = ValueType.Regular): String = when (this) {
-            is CoinValueInfo -> {
-                val sign = when (type) {
-                    ValueType.Outgoing -> "-"
-                    ValueType.Incoming -> "+"
-                    else -> ""
-                }
-                "$sign${coinValue.getFormattedFull()}"
-            }
-            is CurrencyValueInfo -> {
-                App.numberFormatter.formatFiatFull(
-                    currencyValue.value,
-                    currencyValue.currency.symbol
+        fun getFormatted(): String = when (this) {
+            is CoinValueInfo -> coinValue.getFormattedFull()
+            is CurrencyValueInfo -> App.numberFormatter.formatFiatFull(
+                    currencyValue.value, currencyValue.currency.symbol
                 )
-            }
         }
 
         fun getFormattedPlain(): String = when (this) {

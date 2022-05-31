@@ -54,6 +54,7 @@
         android:layout_marginTop="3dp"
         android:includeFontPadding="false"
         android:singleLine="true"
+        android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="@id/backgroundView"
         app:layout_constraintStart_toStartOf="@+id/coinTextView"
         app:layout_constraintTop_toBottomOf="@id/coinTextView"

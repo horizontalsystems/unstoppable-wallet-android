@@ -70,7 +70,11 @@ fun SendEthRequestScreen(
                     sections.forEach { section ->
                         CellSingleLineLawrenceSection(section.viewItems) { item ->
                             when (item) {
-                                is ViewItem.Subhead -> SubheadCell(item.title, item.value)
+                                is ViewItem.Subhead -> SubheadCell(
+                                    item.title,
+                                    item.value,
+                                    item.iconRes
+                                )
                                 is ViewItem.Value -> TitleTypedValueCell(
                                     item.title,
                                     item.value,
