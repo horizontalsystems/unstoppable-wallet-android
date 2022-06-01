@@ -6,15 +6,17 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.addressType
 
 class ReceiveViewModel(
-        wallet: Wallet,
-        adapterManager: IAdapterManager) : ViewModel() {
+    val wallet: Wallet,
+    adapterManager: IAdapterManager
+) : ViewModel() {
 
     val receiveAddress: String
     val addressType: String?
     val testNet: Boolean
 
     init {
-        val receiveAdapter = adapterManager.getReceiveAdapterForWallet(wallet) ?: throw NoReceiverAdapter()
+        val receiveAdapter =
+            adapterManager.getReceiveAdapterForWallet(wallet) ?: throw NoReceiverAdapter()
 
         testNet = !receiveAdapter.isMainnet
         receiveAddress = receiveAdapter.receiveAddress
