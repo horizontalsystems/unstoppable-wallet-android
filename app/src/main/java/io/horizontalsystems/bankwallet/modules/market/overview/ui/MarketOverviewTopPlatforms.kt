@@ -7,16 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule
-import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformViewItem
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinSecondRow
-import io.horizontalsystems.bankwallet.ui.compose.components.MultilineClear
 
 @Composable
 fun TopPlatformsBoardView(
@@ -38,36 +32,12 @@ fun TopPlatformsBoardView(
             .clip(RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence)
     ) {
-        board.items.forEach { item ->
-            TopPlatformsView(item)
+        board.items.forEach {
+            TopPlatformItem(it)
         }
 
         SeeAllButton(onClickSeeAll)
     }
 
     Spacer(modifier = Modifier.height(24.dp))
-}
-
-@Composable
-private fun TopPlatformsView(
-    item: TopPlatformViewItem,
-) {
-    MultilineClear(borderBottom = true) {
-        CoinImage(
-            iconUrl = item.iconUrl,
-            placeholder = R.drawable.coin_placeholder,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(24.dp)
-        )
-        Column(modifier = Modifier.fillMaxWidth()) {
-            MarketCoinFirstRow(item.platform.name, item.marketCap)
-            Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(
-                item.subtitle,
-                MarketDataValue.Diff(item.marketCapDiff),
-                "${item.rank}"
-            )
-        }
-    }
 }

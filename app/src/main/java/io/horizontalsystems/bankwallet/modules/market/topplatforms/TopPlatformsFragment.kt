@@ -187,33 +187,13 @@ private fun TopPlatformsList(
 
     LazyColumn(state = state) {
         items(viewItems) { item ->
-            MultilineClear(
-                borderBottom = true
-            ) {
-                CoinImage(
-                    iconUrl = item.iconUrl,
-                    placeholder = item.iconPlaceHolder,
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .size(24.dp)
-                )
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    MarketCoinFirstRow(item.platform.name, item.marketCap)
-                    Spacer(modifier = Modifier.height(3.dp))
-                    TopPlatformSecondRow(
-                        subtitle = item.subtitle,
-                        marketDataValue = MarketDataValue.Diff(item.marketCapDiff),
-                        rank = item.rank.toString(),
-                        rankDiff = item.rankDiff?.toBigDecimal()
-                    )
-                }
-            }
+            TopPlatformItem(item)
         }
     }
 }
 
 @Composable
-fun TopPlatformSecondRow(
+private fun TopPlatformSecondRow(
     subtitle: String,
     marketDataValue: MarketDataValue?,
     rank: String,
@@ -236,6 +216,31 @@ fun TopPlatformSecondRow(
         marketDataValue?.let {
             Spacer(modifier = Modifier.weight(1f))
             MarketDataValueComponent(marketDataValue)
+        }
+    }
+}
+
+@Composable
+fun TopPlatformItem(item: TopPlatformViewItem) {
+    MultilineClear(
+        borderBottom = true
+    ) {
+        CoinImage(
+            iconUrl = item.iconUrl,
+            placeholder = item.iconPlaceHolder,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp)
+        )
+        Column(modifier = Modifier.fillMaxWidth()) {
+            MarketCoinFirstRow(item.platform.name, item.marketCap)
+            Spacer(modifier = Modifier.height(3.dp))
+            TopPlatformSecondRow(
+                subtitle = item.subtitle,
+                marketDataValue = MarketDataValue.Diff(item.marketCapDiff),
+                rank = item.rank.toString(),
+                rankDiff = item.rankDiff?.toBigDecimal()
+            )
         }
     }
 }
