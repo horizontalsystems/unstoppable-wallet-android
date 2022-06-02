@@ -43,6 +43,7 @@ class Colors(
     val yellowL = YellowL
     val greenD = GreenD
     val greenL = GreenL
+    val green50 = Green50
     val redD = RedD
     val redL = RedL
     val elenaD = Color(0xFF6E7899)
