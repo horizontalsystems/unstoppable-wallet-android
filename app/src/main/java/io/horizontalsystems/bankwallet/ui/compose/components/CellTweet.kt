@@ -107,11 +107,7 @@ private fun TweetReferencedTweet(referencedTweet: ReferencedTweetViewItem) {
             style = ComposeAppTheme.typography.micro
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = referencedTweet.text,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.subhead2
-        )
+        subhead2_leah(text = referencedTweet.text)
     }
 }
 
@@ -144,17 +140,9 @@ private fun TweetTitle(tweet: TweetViewItem) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-            Text(
-                text = tweet.title,
-                color = ComposeAppTheme.colors.oz,
-                style = ComposeAppTheme.typography.body
-            )
+            body_leah(text = tweet.title)
             Spacer(modifier = Modifier.height(3.dp))
-            Text(
-                text = tweet.subtitle,
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.caption
-            )
+            caption_grey(text = tweet.subtitle)
         }
     }
 }
@@ -250,12 +238,10 @@ private fun AttachmentPoll(attachment: Tweet.Attachment.Poll) {
                         color = textColor,
                         style = ComposeAppTheme.typography.caption
                     )
-                    Text(
+                    caption_leah(
                         modifier = Modifier
                             .padding(horizontal = 12.dp),
                         text = "${(proportion * 100).toInt()}%",
-                        color = ComposeAppTheme.colors.leah,
-                        style = ComposeAppTheme.typography.caption
                     )
                 }
             }

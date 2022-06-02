@@ -11,9 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -41,6 +39,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
@@ -228,10 +227,8 @@ private fun SecurityCenterScreen(
 
 @Composable
 fun CoinListHeader(titleTextRes: Int) {
-    Text(
+    subhead1_grey(
         modifier = Modifier.padding(start = 16.dp, top = 44.dp, end = 16.dp, bottom = 13.dp),
         text = stringResource(titleTextRes),
-        style = ComposeAppTheme.typography.subhead1,
-        color = ComposeAppTheme.colors.grey,
     )
 }

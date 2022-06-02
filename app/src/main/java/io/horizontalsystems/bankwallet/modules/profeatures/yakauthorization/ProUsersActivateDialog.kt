@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -22,6 +21,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
@@ -67,10 +67,8 @@ private fun ProUsersActivateScreen(navController: NavController, viewModel: YakA
         Box(
             modifier = Modifier.fillMaxWidth().padding(all = 16.dp)
         ) {
-            Text(
+            subhead2_grey(
                 text = stringResource(R.string.ProUsersActivate_Description),
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
                 overflow = TextOverflow.Ellipsis,
             )
         }

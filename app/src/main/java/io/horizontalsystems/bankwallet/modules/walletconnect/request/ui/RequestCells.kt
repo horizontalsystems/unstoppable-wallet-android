@@ -16,9 +16,7 @@ import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.AmountValues
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
-import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -33,11 +31,7 @@ fun TitleHexValueCell(title: String, valueVisible: String, value: String) {
             .height(48.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
-        )
+        subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
             modifier = Modifier.padding(start = 8.dp),
@@ -84,11 +78,7 @@ fun AmountCell(
             style = ComposeAppTheme.typography.subhead1
         )
         Spacer(Modifier.weight(1f))
-        Text(
-            text = fiatAmount ?: "",
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
-        )
+        subhead2_grey(text = fiatAmount ?: "")
     }
 }
 
@@ -125,26 +115,14 @@ fun AmountMultiCell(amounts: List<AmountValues>, type: ValueType, platformCoin: 
                     style = ComposeAppTheme.typography.subhead2
                 )
                 Spacer(Modifier.weight(1f))
-                Text(
-                    text = amounts[0].fiatAmount ?: "",
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead1
-                )
+                subhead1_grey(text = amounts[0].fiatAmount ?: "")
             }
             if (amounts.size > 1) {
                 Spacer(Modifier.height(3.dp))
                 Row {
-                    Text(
-                        text = amounts[1].coinAmount,
-                        color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.caption
-                    )
+                    caption_grey(text = amounts[1].coinAmount)
                     Spacer(Modifier.weight(1f))
-                    Text(
-                        text = amounts[1].fiatAmount ?: "",
-                        color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.caption
-                    )
+                    caption_grey(text = amounts[1].fiatAmount ?: "")
                 }
             }
         }
@@ -168,17 +146,9 @@ fun SubheadCell(title: String, value: String, iconRes: Int?) {
                 contentDescription = null,
             )
         }
-        Text(
-            text = title,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.body
-        )
+        body_leah(text = title)
         Spacer(Modifier.weight(1f))
-        Text(
-            text = value,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead1
-        )
+        subhead1_grey(text = value)
     }
 }
 
@@ -197,11 +167,9 @@ fun TitleTypedValueCell(title: String, value: String, type: ValueType = ValueTyp
             .height(48.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
+        subhead2_grey(
             modifier = Modifier.padding(end = 36.dp),
             text = title,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
         )
         Spacer(Modifier.weight(1f))
         Text(

@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -246,11 +245,7 @@ fun SearchView(
             ),
             decorationBox = { innerTextField ->
                 if (searchText.isEmpty()) {
-                    Text(
-                        stringResource(R.string.Market_Search_Hint),
-                        color = ComposeAppTheme.colors.grey50,
-                        style = ComposeAppTheme.typography.body
-                    )
+                    body_grey50(stringResource(R.string.Market_Search_Hint))
                 }
                 innerTextField()
             },
@@ -264,10 +259,8 @@ fun SearchView(
                 onRightTextButtonClick.invoke()
             }
         ) {
-            Text(
+            headline2_jacob(
                 text = stringResource(R.string.Market_Filters),
-                style = ComposeAppTheme.typography.headline2,
-                color = ComposeAppTheme.colors.jacob,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
         }

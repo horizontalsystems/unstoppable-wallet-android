@@ -147,11 +147,7 @@ private fun Links(links: List<NftCollectionOverviewViewItem.Link>, onClick: (Str
     Column {
         Spacer(modifier = Modifier.height(24.dp))
         CellSingleLineClear(borderTop = true) {
-            Text(
-                text = stringResource(id = R.string.NftAsset_Links),
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.leah
-            )
+            body_leah(text = stringResource(id = R.string.NftAsset_Links))
         }
         CellSingleLineLawrenceSection(
             buildList {
@@ -207,11 +203,7 @@ private fun Stats(collection: NftCollectionOverviewViewItem) {
             Column(
                 modifier = Modifier.padding(12.dp)
             ) {
-                Text(
-                    text = stringResource(R.string.NftCollection_Owners),
-                    style = ComposeAppTheme.typography.caption,
-                    color = ComposeAppTheme.colors.grey,
-                )
+                caption_grey(text = stringResource(R.string.NftCollection_Owners))
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = collection.ownersCount,
@@ -232,11 +224,7 @@ private fun Stats(collection: NftCollectionOverviewViewItem) {
             Column(
                 modifier = Modifier.padding(12.dp)
             ) {
-                Text(
-                    text = stringResource(R.string.NftCollection_Items),
-                    style = ComposeAppTheme.typography.caption,
-                    color = ComposeAppTheme.colors.grey,
-                )
+                caption_grey(text = stringResource(R.string.NftCollection_Items))
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = collection.totalSupply,
@@ -279,11 +267,7 @@ private fun RowScope.ChartCard(chartDataWrapper: NftCollectionOverviewViewItem.C
             .background(ComposeAppTheme.colors.lawrence)
             .padding(12.dp)
     ) {
-        Text(
-            text = chartDataWrapper.title,
-            style = ComposeAppTheme.typography.caption,
-            color = ComposeAppTheme.colors.grey
-        )
+        caption_grey(text = chartDataWrapper.title)
         Divider(
             modifier = Modifier.padding(top = 10.dp),
             thickness = 1.dp,

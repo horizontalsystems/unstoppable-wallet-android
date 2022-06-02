@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.marketkit.models.LinkType
 
 @Preview
@@ -59,11 +59,7 @@ fun LinksPreview() {
 fun Links(links: List<CoinLink>, onCoinLinkClick: (CoinLink) -> Unit) {
     Column {
         CellSingleLineClear(borderTop = true) {
-            Text(
-                text = stringResource(id = R.string.CoinPage_Links),
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.oz,
-            )
+            body_leah(text = stringResource(id = R.string.CoinPage_Links))
         }
 
         CellSingleLineLawrenceSection(links) { link ->
@@ -77,13 +73,11 @@ fun Links(links: List<CoinLink>, onCoinLinkClick: (CoinLink) -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(painter = painterResource(id = link.icon), contentDescription = "link")
-                Text(
+                body_leah(
                     text = link.title,
                     modifier = Modifier
                         .weight(1f)
                         .padding(horizontal = 16.dp),
-                    style = ComposeAppTheme.typography.body,
-                    color = ComposeAppTheme.colors.oz
                 )
                 Image(painter = painterResource(id = R.drawable.ic_arrow_right), contentDescription = "")
             }

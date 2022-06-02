@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -95,11 +94,9 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
 
             Column {
                 Header {
-                    Text(
+                    subhead1_grey(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         text = stringResource(id = R.string.ManageAccount_Name),
-                        color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.subhead1
                     )
                 }
 
@@ -182,11 +179,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 tint = ComposeAppTheme.colors.lucian
                             )
 
-                            Text(
-                                text = stringResource(id = R.string.ManageAccount_Unlink),
-                                color = ComposeAppTheme.colors.lucian,
-                                style = ComposeAppTheme.typography.body
-                            )
+                            body_lucian(text = stringResource(id = R.string.ManageAccount_Unlink))
                         }
                     }
                 })
@@ -232,11 +225,9 @@ private fun AccountActionItem(
             )
         }
 
-        Text(
+        body_leah(
             modifier = Modifier.weight(1f),
             text = title,
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah
         )
 
         if (attention) {

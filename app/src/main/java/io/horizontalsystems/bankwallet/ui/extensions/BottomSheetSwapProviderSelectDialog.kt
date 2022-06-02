@@ -9,7 +9,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +23,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 class BottomSheetSwapProviderSelectDialog() : BaseComposableBottomSheetFragment() {
 
@@ -102,11 +102,7 @@ private fun BottomSheetScreen(
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(16.dp))
-                    Text(
-                        text = item.title,
-                        style = ComposeAppTheme.typography.body,
-                        color = ComposeAppTheme.colors.leah
-                    )
+                    body_leah(text = item.title)
                     Spacer(modifier = Modifier.weight(1f))
                     if (item == selectedItem) {
                         Image(

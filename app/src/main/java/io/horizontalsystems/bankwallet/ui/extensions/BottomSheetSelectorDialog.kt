@@ -10,7 +10,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,9 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrence
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 class BottomSheetSelectorDialog(
     private val title: String,
@@ -95,16 +92,8 @@ class BottomSheetSelectorDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            Text(
-                                text = item.title,
-                                style = ComposeAppTheme.typography.body,
-                                color = ComposeAppTheme.colors.leah
-                            )
-                            Text(
-                                text = item.subtitle,
-                                style = ComposeAppTheme.typography.subhead2,
-                                color = ComposeAppTheme.colors.grey
-                            )
+                            body_leah(text = item.title)
+                            subhead2_grey(text = item.subtitle)
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         if (index == selected) {

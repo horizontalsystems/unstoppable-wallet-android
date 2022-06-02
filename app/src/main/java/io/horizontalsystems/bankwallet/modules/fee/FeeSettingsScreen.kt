@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,11 +80,9 @@ fun FeeSettingsScreen(
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.grey
                     )
-                    Text(
+                    subhead2_grey(
                         modifier = Modifier.padding(start = 16.dp),
                         text = stringResource(R.string.Send_DialogSpeed),
-                        color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.subhead2
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -137,18 +134,12 @@ fun FeeSettingsScreen(
                                 .padding(horizontal = 16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                text = stringResource(R.string.Send_FeeRate),
-                                style = ComposeAppTheme.typography.subhead2,
-                                color = ComposeAppTheme.colors.grey
-                            )
+                            subhead2_grey(text = stringResource(R.string.Send_FeeRate),)
 
                             Spacer(modifier = Modifier.weight(1f))
 
-                            Text(
+                            subhead1_leah(
                                 text = "$sliderValue " + stringResource(R.string.Send_TxSpeed_CustomFeeHint),
-                                style = ComposeAppTheme.typography.subhead1,
-                                color = ComposeAppTheme.colors.leah,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )

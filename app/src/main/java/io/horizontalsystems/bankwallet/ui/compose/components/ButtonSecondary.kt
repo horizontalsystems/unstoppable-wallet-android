@@ -70,12 +70,10 @@ fun ButtonSecondaryWithIcon(
         ),
         content = {
             Row {
-                Text(
+                subhead1_leah(
                     text = title,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = ComposeAppTheme.typography.subhead1,
-                    color = ComposeAppTheme.colors.leah
+                    overflow = TextOverflow.Ellipsis
                 )
                 Icon(
                     modifier = Modifier.padding(start = 4.dp),

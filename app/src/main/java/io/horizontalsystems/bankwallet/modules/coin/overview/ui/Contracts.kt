@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,9 +13,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Preview
 @Composable
@@ -38,11 +35,7 @@ fun Contracts(
 ) {
     Column {
         CellSingleLineClear(borderTop = true) {
-            Text(
-                text = stringResource(id = R.string.CoinPage_Contracts),
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.oz,
-            )
+            body_leah(text = stringResource(id = R.string.CoinPage_Contracts))
         }
 
         CellSingleLineLawrenceSection(contracts) { contractInfo ->
@@ -54,13 +47,11 @@ fun Contracts(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Image(painter = painterResource(id = contractInfo.logoResId), contentDescription = "platform")
-                Text(
+                subhead2_leah(
                     text = contractInfo.shortened,
                     modifier = Modifier
                         .weight(1f)
                         .padding(horizontal = 16.dp),
-                    style = ComposeAppTheme.typography.subhead2,
-                    color = ComposeAppTheme.colors.grey,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

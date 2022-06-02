@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -101,10 +100,8 @@ fun NftCollectionsScreen(navController: NavController) {
                             } else {
                                 Column {
                                     CellSingleLineClear(borderTop = true) {
-                                        Text(
+                                        headline2_jacob(
                                             text = totalCurrencyValue?.getFormattedFull() ?: "",
-                                            style = ComposeAppTheme.typography.headline2,
-                                            color = ComposeAppTheme.colors.jacob,
                                         )
                                         Spacer(modifier = Modifier.weight(1f))
                                         var priceType by remember { mutableStateOf(viewModel.priceType) }

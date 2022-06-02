@@ -11,7 +11,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -149,11 +148,7 @@ private fun NoAudits() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = stringResource(R.string.CoinPage_Audits_Empty),
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2,
-        )
+        subhead2_grey(text = stringResource(R.string.CoinPage_Audits_Empty))
     }
 }
 
@@ -166,11 +161,7 @@ fun CoinAuditHeader(name: String, logoUrl: String) {
                 .padding(end = 16.dp)
                 .size(24.dp)
         )
-        Text(
-            text = name,
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
-        )
+        body_leah(text = name)
     }
 }
 
@@ -184,25 +175,15 @@ fun CoinAudit(auditViewItem: CoinAuditsModule.AuditViewItem, onClick: () -> Unit
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = auditViewItem.date ?: "",
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.leah
-            )
-            Text(
+            body_leah(text = auditViewItem.date ?: "")
+            subhead2_grey(
                 text = auditViewItem.name,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         }
 
-        Text(
-            text = auditViewItem.issues.getString(),
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey
-        )
+        subhead2_grey(text = auditViewItem.issues.getString())
 
         if (auditViewItem.reportUrl != null) {
             Image(painterResource(id = R.drawable.ic_arrow_right), contentDescription = "")

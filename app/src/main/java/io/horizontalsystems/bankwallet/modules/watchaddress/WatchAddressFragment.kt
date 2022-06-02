@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
@@ -28,10 +27,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.CoinType
 
@@ -98,11 +94,9 @@ fun WatchAddressScreen(navController: NavController) {
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
-                Text(
+                subhead2_grey(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                     text = stringResource(R.string.Restore_Name),
-                    style = ComposeAppTheme.typography.subhead1,
-                    color = ComposeAppTheme.colors.grey,
                 )
 
                 FormsInput(
@@ -117,11 +111,9 @@ fun WatchAddressScreen(navController: NavController) {
 
                 Spacer(Modifier.height(44.dp))
 
-                Text(
+                subhead1_grey(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     text = stringResource(R.string.Watch_Address_Title),
-                    style = ComposeAppTheme.typography.subhead1,
-                    color = ComposeAppTheme.colors.grey,
                 )
 
                 HSAddressInput(

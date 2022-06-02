@@ -216,10 +216,8 @@ private fun CoinCell(
                 modifier = Modifier.weight(1f)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
+                    body_leah(
                         text = viewItem.title,
-                        color = ComposeAppTheme.colors.leah,
-                        style = ComposeAppTheme.typography.body,
                         maxLines = 1,
                     )
                     viewItem.label?.let { labelText ->
@@ -243,10 +241,8 @@ private fun CoinCell(
                         }
                     }
                 }
-                Text(
+                subhead2_grey(
                     text = viewItem.subtitle,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
                     maxLines = 1,
                     modifier = Modifier.padding(top = 1.dp)
                 )

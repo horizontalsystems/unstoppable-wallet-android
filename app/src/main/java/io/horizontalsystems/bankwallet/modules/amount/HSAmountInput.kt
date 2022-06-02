@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import java.math.BigDecimal
 
 @Composable
@@ -138,12 +139,10 @@ fun HSAmountInput(
                             }
                             Box {
                                 if (textState.text.isEmpty()) {
-                                    Text(
+                                    body_grey50(
                                         "0",
                                         overflow = TextOverflow.Ellipsis,
-                                        maxLines = 1,
-                                        color = ComposeAppTheme.colors.grey50,
-                                        style = ComposeAppTheme.typography.body
+                                        maxLines = 1
                                     )
                                 }
                                 innerTextField()

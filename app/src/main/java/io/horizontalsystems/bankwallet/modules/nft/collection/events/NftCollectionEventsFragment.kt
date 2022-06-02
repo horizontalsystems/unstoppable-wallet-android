@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -193,17 +192,13 @@ private fun NftEvent(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                subhead2_grey(
                     text = subtitle,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
                     maxLines = 1,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(
+                subhead2_grey(
                     text = currencyValue ?: "",
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
                     maxLines = 1,
                 )
             }

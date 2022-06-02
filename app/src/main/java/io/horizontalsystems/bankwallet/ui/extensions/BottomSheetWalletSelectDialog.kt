@@ -8,7 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +21,8 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.HsRadioButton
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
 
@@ -83,16 +84,8 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
                         )
                         Spacer(Modifier.width(16.dp))
                         Column(Modifier.weight(1f)) {
-                            Text(
-                                text = item.name,
-                                style = ComposeAppTheme.typography.body,
-                                color = ComposeAppTheme.colors.leah
-                            )
-                            Text(
-                                text = item.type.description,
-                                style = ComposeAppTheme.typography.subhead2,
-                                color = ComposeAppTheme.colors.grey
-                            )
+                            body_leah(text = item.name)
+                            subhead2_grey(text = item.type.description)
                         }
                         if (item.isWatchAccount) {
                             Icon(

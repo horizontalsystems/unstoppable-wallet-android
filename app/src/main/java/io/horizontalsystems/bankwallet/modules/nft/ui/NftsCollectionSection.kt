@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,6 +20,8 @@ import io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionView
 import io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 
 fun LazyListScope.nftsCollectionSection(
     collection: NftCollectionViewItem,
@@ -45,21 +46,15 @@ fun LazyListScope.nftsCollectionSection(
                 painter = rememberImagePainter(collection.imageUrl),
                 contentDescription = null
             )
-            Text(
+            headline2_leah(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .weight(1f),
                 text = collection.name,
-                style = ComposeAppTheme.typography.headline2,
-                color = ComposeAppTheme.colors.leah,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Text(
-                text = collection.ownedAssetCount.toString(),
-                style = ComposeAppTheme.typography.subhead1,
-                color = ComposeAppTheme.colors.grey,
-            )
+            subhead1_grey(text = collection.ownedAssetCount.toString())
 
             val painter = if (collection.expanded) {
                 painterResource(R.drawable.ic_arrow_big_up_20)

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
@@ -27,6 +26,8 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewMod
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.Header
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -94,11 +95,9 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
                     Column {
                         Spacer(modifier = Modifier.height(12.dp))
                         Header {
-                            Text(
+                            subhead1_grey(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 text = stringResource(R.string.SwapSettings_RecipientAddressTitle),
-                                style = ComposeAppTheme.typography.subhead1,
-                                color = ComposeAppTheme.colors.grey
                             )
                         }
 
@@ -112,11 +111,9 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
                             }
                         )
 
-                        Text(
+                        subhead2_grey(
                             modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
                             text = stringResource(R.string.SwapSettings_RecipientAddressDescription),
-                            style = ComposeAppTheme.typography.subhead2,
-                            color = ComposeAppTheme.colors.grey
                         )
                     }
                 }

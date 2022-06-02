@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.session.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +14,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
 fun WCSessionError(
@@ -32,11 +32,9 @@ fun WCSessionError(
                 contentDescription = null
             )
             Spacer(modifier = Modifier.height(24.dp))
-            Text(
+            subhead2_grey(
                 modifier = Modifier.padding(horizontal = 48.dp),
                 text = error,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey,
             )
         }
         ButtonPrimaryDefault(

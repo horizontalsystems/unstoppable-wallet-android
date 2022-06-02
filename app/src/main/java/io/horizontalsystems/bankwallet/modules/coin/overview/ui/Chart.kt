@@ -132,47 +132,33 @@ private fun <T> HsChartLinePeriodsAndPoint(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
-                    Text(
-                        text = selectedPoint.value,
-                        style = ComposeAppTheme.typography.captionSB,
-                        color = ComposeAppTheme.colors.leah
-                    )
+                    captionSB_leah(text = selectedPoint.value)
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = selectedPoint.date,
-                        style = ComposeAppTheme.typography.caption,
-                        color = ComposeAppTheme.colors.grey
-                    )
+                    caption_grey(text = selectedPoint.date)
                 }
 
                 when (val extraData = selectedPoint.extraData) {
                     is SelectedPoint.ExtraData.Macd -> {
                         Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                             extraData.histogram?.let {
-                                Text(
+                                caption_lucian(
                                     modifier = Modifier.fillMaxWidth(),
                                     text = extraData.histogram,
-                                    style = ComposeAppTheme.typography.caption,
-                                    color = ComposeAppTheme.colors.lucian,
                                     textAlign = TextAlign.End
                                 )
                             }
                             Spacer(modifier = Modifier.height(4.dp))
                             Row(modifier = Modifier.fillMaxWidth()) {
                                 extraData.macd?.let {
-                                    Text(
+                                    caption_issykBlue(
                                         text = it,
-                                        style = ComposeAppTheme.typography.caption,
-                                        color = ComposeAppTheme.colors.issykBlue,
                                         textAlign = TextAlign.End
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(4.dp))
                                 extraData.signal?.let {
-                                    Text(
+                                    caption_jacob(
                                         text = it,
-                                        style = ComposeAppTheme.typography.caption,
-                                        color = ComposeAppTheme.colors.jacob,
                                         textAlign = TextAlign.End
                                     )
                                 }
@@ -181,38 +167,30 @@ private fun <T> HsChartLinePeriodsAndPoint(
                     }
                     is SelectedPoint.ExtraData.Volume -> {
                         Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                            Text(
+                            caption_grey(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = stringResource(R.string.CoinPage_Volume),
-                                style = ComposeAppTheme.typography.caption,
-                                color = ComposeAppTheme.colors.grey,
                                 textAlign = TextAlign.End
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(
+                            caption_grey(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = extraData.volume,
-                                style = ComposeAppTheme.typography.caption,
-                                color = ComposeAppTheme.colors.grey,
                                 textAlign = TextAlign.End
                             )
                         }
                     }
                     is SelectedPoint.ExtraData.Dominance -> {
                         Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                            Text(
+                            caption_grey(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = stringResource(R.string.Market_BtcDominance),
-                                style = ComposeAppTheme.typography.caption,
-                                color = ComposeAppTheme.colors.grey,
                                 textAlign = TextAlign.End
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(
+                            caption_jacob(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = extraData.dominance,
-                                style = ComposeAppTheme.typography.caption,
-                                color = ComposeAppTheme.colors.jacob,
                                 textAlign = TextAlign.End
                             )
                         }

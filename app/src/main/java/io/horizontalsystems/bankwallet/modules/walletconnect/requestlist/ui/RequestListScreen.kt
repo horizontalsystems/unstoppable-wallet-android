@@ -24,10 +24,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.WC2Requ
 import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.WC2RequestListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.HsRadioButton
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
 fun RequestListPage(viewModel: WC2RequestListViewModel, navController: NavController) {
@@ -115,11 +112,9 @@ private fun RequestsSectionHeaderCell(
             onClick = { onWalletSwitch.invoke(accountId) }
         )
         Spacer(Modifier.width(16.dp))
-        Text(
+        body_leah(
             modifier = Modifier.weight(1f),
             text = walletName,
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah
         )
         if (!selected) {
             ButtonSecondaryDefault(

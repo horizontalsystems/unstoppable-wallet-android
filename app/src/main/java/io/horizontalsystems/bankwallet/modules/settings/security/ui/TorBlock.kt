@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.settings.security.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +14,8 @@ import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTor
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
 fun TorBlock(
@@ -61,17 +62,9 @@ fun TorBlock(
                 }
                 Spacer(Modifier.width(16.dp))
                 Column{
-                    Text(
-                        text = stringResource(R.string.Tor_Title),
-                        style = ComposeAppTheme.typography.body,
-                        color = ComposeAppTheme.colors.leah,
-                    )
+                    body_leah(text = stringResource(R.string.Tor_Title))
                     Spacer(Modifier.height(1.dp))
-                    Text(
-                        text = stringResource(connectionState.value),
-                        style = ComposeAppTheme.typography.subhead2,
-                        color = ComposeAppTheme.colors.grey,
-                    )
+                    subhead2_grey(text = stringResource(connectionState.value))
                 }
                 Spacer(Modifier.weight(1f))
                 HsSwitch(
@@ -83,10 +76,8 @@ fun TorBlock(
             }
         })
 
-    Text(
+    subhead2_grey(
         text = stringResource(R.string.SettingsSecurity_TorConnectionDescription),
-        style = ComposeAppTheme.typography.subhead2,
-        color = ComposeAppTheme.colors.grey,
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
     )
 }

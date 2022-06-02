@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessag
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,11 +51,9 @@ fun SignMessageRequestScreen(
 
                 when (val message = viewModel.message) {
                     is SignMessage.PersonalMessage -> {
-                        Text(
+                        subhead2_grey(
                             modifier = Modifier.padding(horizontal = 24.dp),
                             text = message.data,
-                            color = ComposeAppTheme.colors.grey,
-                            style = ComposeAppTheme.typography.subhead2
                         )
                     }
                     is SignMessage.Message -> {
@@ -172,11 +169,7 @@ private fun MessageContent(
                     }
                 )
                 Spacer(Modifier.width(16.dp))
-                Text(
-                    text = stringResource(R.string.WalletConnect_I_Trust),
-                    color = ComposeAppTheme.colors.leah,
-                    style = ComposeAppTheme.typography.subhead2
-                )
+                subhead2_leah(text = stringResource(R.string.WalletConnect_I_Trust))
             }
         }
     }
@@ -197,11 +190,7 @@ private fun SignMessageButton(title: String, data: String, navController: NavCon
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
-        )
+        subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
         Image(
             modifier = Modifier.padding(start = 8.dp),

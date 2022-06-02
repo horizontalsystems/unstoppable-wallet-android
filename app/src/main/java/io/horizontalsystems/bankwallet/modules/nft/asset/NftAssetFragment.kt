@@ -215,11 +215,7 @@ private fun NftAsset(
                             },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = asset.collectionName,
-                            color = ComposeAppTheme.colors.jacob,
-                            style = ComposeAppTheme.typography.subhead1
-                        )
+                        subhead1_jacob(text = asset.collectionName)
                         Spacer(modifier = Modifier.weight(1f))
                         Icon(
                             painter = painterResource(id = R.drawable.ic_arrow_right),
@@ -390,11 +386,7 @@ private fun NftAsset(
                                     .padding(horizontal = 16.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = stringResource(id = R.string.NftAsset_ContractAddress),
-                                    style = ComposeAppTheme.typography.body,
-                                    color = ComposeAppTheme.colors.leah
-                                )
+                                body_leah(text = stringResource(id = R.string.NftAsset_ContractAddress))
                                 Spacer(modifier = Modifier.weight(1f))
 
                                 val contractAddress = asset.contract.address
@@ -552,11 +544,7 @@ private fun NftAssetAttribute(context: Context, attribute: Attribute) {
                 .padding(horizontal = 16.dp, vertical = 10.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = attribute.value,
-                    color = ComposeAppTheme.colors.leah,
-                    style = ComposeAppTheme.typography.body,
-                )
+                body_leah(text = attribute.value)
                 attribute.percent?.let { percent ->
                     Box(
                         modifier = Modifier
@@ -574,11 +562,7 @@ private fun NftAssetAttribute(context: Context, attribute: Attribute) {
                     }
                 }
             }
-            Text(
-                text = attribute.type,
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
-            )
+            subhead2_grey(text = attribute.type)
         }
     }
 }
@@ -600,18 +584,12 @@ private fun NftAssetSale(sale: Sale) {
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 10.dp)
         ) {
-            Text(
-                text = stringResource(R.string.Nfts_Asset_OnSale),
-                color = ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.body,
-            )
+            body_leah(text = stringResource(R.string.Nfts_Asset_OnSale))
 
-            Text(
+            subhead2_grey(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.Nfts_Asset_OnSaleUntil,
                     sale.untilDate?.let { DateHelper.getFullDate(it) } ?: "---"),
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
             )
         }
     }
@@ -636,17 +614,9 @@ private fun DetailItem(title: String, value: String) {
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah
-        )
+        body_leah(text = title)
         Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = value,
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.grey,
-        )
+        subhead1_grey(text = value)
     }
 }
 
@@ -655,11 +625,7 @@ private fun NftAssetSectionBlock(text: String, content: @Composable () -> Unit) 
     Column {
         Spacer(modifier = Modifier.height(24.dp))
         CellSingleLineClear(borderTop = true) {
-            Text(
-                text = text,
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.leah
-            )
+            body_leah(text = text)
         }
         content.invoke()
     }
@@ -676,26 +642,18 @@ private fun NftAssetPriceCell(
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.body,
-        )
+        body_leah(text = title)
         Spacer(modifier = Modifier.weight(1f))
         Column {
-            Text(
+            body_jacob(
                 modifier = Modifier.fillMaxWidth(),
                 text = price?.coinValue?.getFormattedFull() ?: "---",
-                color = ComposeAppTheme.colors.jacob,
-                style = ComposeAppTheme.typography.body,
                 textAlign = TextAlign.End,
             )
             Spacer(modifier = Modifier.height(1.dp))
-            Text(
+            subhead2_grey(
                 modifier = Modifier.fillMaxWidth(),
                 text = price?.currencyValue?.getFormattedFull() ?: "---",
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
                 textAlign = TextAlign.End,
             )
         }

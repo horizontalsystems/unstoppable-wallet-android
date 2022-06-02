@@ -6,8 +6,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,8 +19,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 
 @Composable
 fun WCSessionList(
@@ -77,11 +75,9 @@ private fun LazyListScope.WCSection(
     onDelete: (String) -> Unit
 ) {
     item {
-        Text(
+        subhead1_grey(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
             text = stringResource(section.version.value),
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.grey
         )
     }
     section.pendingRequests?.let {

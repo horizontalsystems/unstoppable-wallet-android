@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -181,17 +180,13 @@ class CoinTreasuriesFragment : BaseFragment() {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
+            subhead2_grey(
                 text = country,
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
                 maxLines = 1,
             )
             Spacer(modifier = Modifier.weight(1f))
-            Text(
+            subhead2_jacob(
                 text = fiatAmount,
-                color = ComposeAppTheme.colors.jacob,
-                style = ComposeAppTheme.typography.subhead2,
                 maxLines = 1,
             )
         }

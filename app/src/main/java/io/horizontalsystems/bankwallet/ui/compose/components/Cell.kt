@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -351,13 +350,11 @@ fun CellFooter(text: String) {
             .fillMaxWidth(),
     ) {
         Divider(color = ComposeAppTheme.colors.steel10)
-        Text(
+        caption_grey(
             text = text,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 12.dp),
-            style = ComposeAppTheme.typography.caption,
-            color = ComposeAppTheme.colors.grey,
             textAlign = TextAlign.Center
         )
     }

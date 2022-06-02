@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.settings.security.passcode.Securi
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.pin.PinModule
 
 @Composable
@@ -43,10 +43,8 @@ fun PasscodeBlock(
                     contentDescription = null,
                 )
                 Spacer(Modifier.width(16.dp))
-                Text(
+                body_leah(
                     text = stringResource(R.string.SettingsSecurity_EnablePin),
-                    style = ComposeAppTheme.typography.body,
-                    color = ComposeAppTheme.colors.leah,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f).padding(end = 8.dp)
@@ -91,11 +89,7 @@ fun PasscodeBlock(
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        text = stringResource(R.string.SettingsSecurity_EditPin),
-                        style = ComposeAppTheme.typography.body,
-                        color = ComposeAppTheme.colors.leah,
-                    )
+                    body_leah(text = stringResource(R.string.SettingsSecurity_EditPin))
                     Spacer(Modifier.weight(1f))
                     Icon(
                         painter = painterResource(R.drawable.ic_arrow_right),
@@ -127,10 +121,8 @@ fun PasscodeBlock(
                         contentDescription = null,
                     )
                     Spacer(Modifier.width(16.dp))
-                    Text(
+                    body_leah(
                         text = stringResource(R.string.SettingsSecurity_Biometric_Authentication),
-                        style = ComposeAppTheme.typography.body,
-                        color = ComposeAppTheme.colors.leah,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f).padding(end = 8.dp)
