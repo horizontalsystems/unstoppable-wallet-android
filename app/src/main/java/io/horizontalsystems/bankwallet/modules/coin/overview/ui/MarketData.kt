@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +14,8 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Preview
 @Composable
@@ -39,24 +40,18 @@ fun MarketData(marketData: List<CoinDataItem>) {
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = marketDataLine.title,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey
-            )
+            subhead2_grey(text = marketDataLine.title)
 
             marketDataLine.rankLabel?.let {
                 Badge(modifier = Modifier.padding(start = 8.dp), it)
             }
 
             marketDataLine.value?.let { value ->
-                Text(
+                subhead1_leah(
                     modifier = Modifier
                         .weight(1f)
                         .padding(start = 8.dp),
                     text = value,
-                    style = ComposeAppTheme.typography.subhead1,
-                    color = ComposeAppTheme.colors.oz,
                     textAlign = TextAlign.End,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

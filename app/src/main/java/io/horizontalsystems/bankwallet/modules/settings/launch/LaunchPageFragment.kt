@@ -9,7 +9,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -31,6 +30,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.core.findNavController
 
 class LaunchPageFragment : BaseFragment() {
@@ -106,13 +106,11 @@ private fun ScreenOptionsView(
                 contentDescription = "option icon",
                 colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
             )
-            Text(
+            body_leah(
                 text = option.title.getString(),
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 16.dp),
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.oz
+                    .padding(horizontal = 16.dp)
             )
             if (option == select.selected) {
                 Image(

@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +15,8 @@ import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.hodler.LockTimeInterval
 
 @Composable
@@ -65,18 +66,12 @@ fun HSHodlerInput(
             tint = ComposeAppTheme.colors.grey,
             contentDescription = "lock icon",
         )
-        Text(
+        subhead2_grey(
             modifier = Modifier.padding(end = 16.dp),
             text = stringResource(R.string.Send_DialogLockTime),
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey,
         )
         Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = stringResource(lockTimeInterval.stringResId()),
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.leah,
-        )
+        subhead1_leah(text = stringResource(lockTimeInterval.stringResId()))
         if (selectable) {
             Icon(
                 modifier = Modifier.padding(start = 8.dp),

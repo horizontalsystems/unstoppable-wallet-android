@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,11 +25,9 @@ fun CoinListHeaderWithInfoButton(
             .height(44.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
+        subhead1_grey(
             modifier = Modifier.padding(start = 16.dp, end = 8.dp).weight(1f),
             text = stringResource(titleTextRes).uppercase(),
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.grey,
         )
         //IconButton has own padding, that's pushes 16.dp from end
         HsIconButton(

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +22,8 @@ import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.Blo
 import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
 fun BlockchainSettingsBlock(
@@ -43,10 +44,8 @@ fun BlockchainSettingsBlock(
             }
         }
     }
-    Text(
+    subhead2_grey(
         text = stringResource(R.string.SecurityCenter_BlockchainSettingsFooterDescription),
-        style = ComposeAppTheme.typography.subhead2,
-        color = ComposeAppTheme.colors.grey,
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
     )
 }
@@ -69,16 +68,8 @@ private fun BlockchainSettingCell(
             contentDescription = null,
         )
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = item.title,
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.leah,
-            )
-            Text(
-                text = item.subtitle,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey,
-            )
+            body_leah(text = item.title)
+            subhead2_grey(text = item.subtitle)
         }
 
         Icon(

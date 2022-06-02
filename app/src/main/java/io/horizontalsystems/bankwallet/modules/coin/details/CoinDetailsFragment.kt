@@ -234,11 +234,7 @@ class CoinDetailsFragment : BaseFragment() {
         onClick: () -> Unit
     ) {
         CellSingleLineClear(borderTop = borderTop) {
-            Text(
-                text = stringResource(R.string.CoinPage_TokenTvl),
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.oz,
-            )
+            body_leah(text = stringResource(R.string.CoinPage_TokenTvl))
             Spacer(Modifier.weight(1f))
             HsIconButton(
                 modifier = Modifier.size(20.dp),
@@ -295,11 +291,7 @@ class CoinDetailsFragment : BaseFragment() {
     @Composable
     private fun SecurityParameters(viewItem: ViewItem, borderTop: Boolean) {
         CellSingleLineClear(borderTop = borderTop) {
-            Text(
-                text = stringResource(R.string.CoinPage_SecurityParams),
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.oz,
-            )
+            body_leah(text = stringResource(R.string.CoinPage_SecurityParams))
             Spacer(Modifier.weight(1f))
             HsIconButton(
                 modifier = Modifier.size(20.dp),
@@ -343,11 +335,7 @@ class CoinDetailsFragment : BaseFragment() {
         if (tokenLiquidityViewItem.liquidity == null && tokenLiquidityViewItem.volume == null) return
 
         CellSingleLineClear(borderTop = borderTop) {
-            Text(
-                text = stringResource(R.string.CoinPage_TokenLiquidity),
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.oz,
-            )
+            body_leah(text = stringResource(R.string.CoinPage_TokenLiquidity))
             Spacer(Modifier.weight(1f))
             HsIconButton(
                 modifier = Modifier.size(20.dp),
@@ -404,11 +392,7 @@ class CoinDetailsFragment : BaseFragment() {
         if (!tokenDistributionViewItem.hasMajorHolders && tokenDistributionViewItem.txCount == null && tokenDistributionViewItem.txVolume == null && tokenDistributionViewItem.activeAddresses == null) return
 
         CellSingleLineClear(borderTop = borderTop) {
-            Text(
-                text = stringResource(R.string.CoinPage_TokenDistribution),
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.oz,
-            )
+            body_leah(text = stringResource(R.string.CoinPage_TokenDistribution))
             Spacer(Modifier.weight(1f))
             HsIconButton(
                 modifier = Modifier.size(20.dp),
@@ -495,11 +479,7 @@ class CoinDetailsFragment : BaseFragment() {
         borderTop: Boolean
     ) {
         CellSingleLineClear(borderTop = borderTop) {
-            Text(
-                text = stringResource(R.string.CoinPage_InvestorData),
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.oz,
-            )
+            body_leah(text = stringResource(R.string.CoinPage_InvestorData))
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -541,19 +521,13 @@ class CoinDetailsFragment : BaseFragment() {
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = title,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey
-            )
+            subhead2_grey(text = title)
 
-            Text(
+            subhead1_leah(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp),
                 text = value ?: "",
-                style = ComposeAppTheme.typography.subhead1,
-                color = ComposeAppTheme.colors.oz,
                 textAlign = TextAlign.End,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -573,11 +547,7 @@ class CoinDetailsFragment : BaseFragment() {
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = stringResource(viewItem.type.title),
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey
-            )
+            subhead2_grey(text = stringResource(viewItem.type.title))
 
             Text(
                 modifier = Modifier

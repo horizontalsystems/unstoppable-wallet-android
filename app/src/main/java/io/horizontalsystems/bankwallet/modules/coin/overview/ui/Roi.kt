@@ -15,6 +15,8 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.coin.RoiViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import java.math.BigDecimal
 
@@ -27,11 +29,9 @@ fun Roi(roi: List<RoiViewItem>) {
         ) {
             when (item) {
                 is RoiViewItem.HeaderRowViewItem -> {
-                    Text(
+                    subhead1_leah(
                         modifier = Modifier.weight(1f),
                         text = item.title,
-                        style = ComposeAppTheme.typography.subhead1,
-                        color = ComposeAppTheme.colors.oz,
                         textAlign = TextAlign.Center
                     )
                     item.periods.forEach { period: HsTimePeriod ->
@@ -52,11 +52,9 @@ fun Roi(roi: List<RoiViewItem>) {
                     }
                 }
                 is RoiViewItem.RowViewItem -> {
-                    Text(
+                    caption_grey(
                         modifier = Modifier.weight(1f),
                         text = item.title,
-                        style = ComposeAppTheme.typography.caption,
-                        color = ComposeAppTheme.colors.grey,
                         textAlign = TextAlign.Center
                     )
                     item.values.forEach { value ->

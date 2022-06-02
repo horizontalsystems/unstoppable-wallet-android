@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +22,7 @@ import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinClear
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 @Composable
 fun BoardsView(
@@ -78,10 +78,8 @@ fun <T : WithTranslatableTitle> TopBoardHeader(
                 painter = painterResource(iconRes),
                 contentDescription = "Section Header Icon"
             )
-            Text(
+            body_leah(
                 text = stringResource(title),
-                color = ComposeAppTheme.colors.oz,
-                style = ComposeAppTheme.typography.body,
                 maxLines = 1,
             )
             Spacer(Modifier.weight(1f))

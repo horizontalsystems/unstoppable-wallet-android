@@ -56,11 +56,7 @@ fun AlertHeader(@StringRes title: Int) {
             .background(ComposeAppTheme.colors.lawrence),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            stringResource(title),
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead1,
-        )
+        subhead1_grey(stringResource(title))
     }
 }
 

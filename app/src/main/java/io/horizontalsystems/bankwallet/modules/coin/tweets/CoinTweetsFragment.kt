@@ -8,7 +8,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -29,10 +28,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.CellTweet
-import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
-import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 
 class CoinTweetsFragment : BaseFragment() {
@@ -111,11 +107,9 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
                 is ViewState.Error -> {
                     if (viewState.t is TweetsProvider.UserNotFound) {
                         Box(modifier = Modifier.fillMaxSize()) {
-                            Text(
+                            subhead2_grey(
                                 modifier = Modifier.align(Alignment.Center),
                                 text = stringResource(id = R.string.CoinPage_Twitter_NotAvailable),
-                                color = ComposeAppTheme.colors.grey,
-                                style = ComposeAppTheme.typography.subhead2,
                             )
                         }
                     } else {

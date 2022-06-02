@@ -37,11 +37,9 @@ fun MiniChartCard(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
+            caption_grey(
                 modifier = Modifier.weight(1f),
                 text = title,
-                style = ComposeAppTheme.typography.caption,
-                color = ComposeAppTheme.colors.grey
             )
             chartViewItem.badge?.let {
                 Badge(text = it)

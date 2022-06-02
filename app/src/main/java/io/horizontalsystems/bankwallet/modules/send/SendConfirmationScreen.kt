@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -232,19 +231,13 @@ fun SectionTitleCell(title: Int, value: String) {
             contentDescription = null,
         )
 
-        Text(
-            text = stringResource(title),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah
-        )
+        body_leah(text = stringResource(title))
 
-        Text(
+        subhead1_grey(
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 8.dp),
             text = value,
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.grey,
             textAlign = TextAlign.End,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -265,20 +258,14 @@ fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, coin: Coin) {
             placeholder = R.drawable.coin_placeholder,
             modifier = Modifier.size(24.dp)
         )
-        Text(
+        subhead2_leah(
             modifier = Modifier.padding(start = 16.dp),
             text = coinAmount,
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.leah,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         Spacer(Modifier.weight(1f))
-        Text(
-            text = fiatAmount ?: "",
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.grey
-        )
+        subhead1_grey(text = fiatAmount ?: "")
     }
 }
 
@@ -293,11 +280,7 @@ fun AddressCell(address: String) {
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = stringResource(R.string.Send_Confirmation_To),
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey
-        )
+        subhead2_grey(text = stringResource(R.string.Send_Confirmation_To))
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
             modifier = Modifier
@@ -320,17 +303,13 @@ fun MemoCell(value: String) {
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
+        subhead2_grey(
             modifier = Modifier.padding(end = 16.dp),
             text = stringResource(R.string.Send_Confirmation_HintMemo),
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey
         )
         Spacer(Modifier.weight(1f))
-        Text(
+        subhead1Italic_leah(
             text = value,
-            style = ComposeAppTheme.typography.subheadItalic,
-            color = ComposeAppTheme.colors.leah,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )

@@ -11,6 +11,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
 fun BlockchainCell(
@@ -34,18 +36,10 @@ fun BlockchainCell(
             )
             Spacer(Modifier.width(16.dp))
         }
-        Text(
-            text = title,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
-        )
+        subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
         Spacer(Modifier.width(8.dp))
-        Text(
-            text = value,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.subhead1,
-        )
+        subhead1_leah(text = value)
     }
 }
 
@@ -58,17 +52,9 @@ fun TitleValueCell(title: String, value: String) {
             .height(48.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
-        )
+        subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
-        Text(
-            text = value,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.subhead1
-        )
+        subhead1_leah(text = value)
     }
 }
 
@@ -81,11 +67,7 @@ fun StatusCell(connectionStatus: WCSessionViewModel.Status?) {
             .height(48.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = stringResource(id = R.string.WalletConnect_Status),
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
-        )
+        subhead2_grey(text = stringResource(id = R.string.WalletConnect_Status))
         Spacer(Modifier.weight(1f))
         connectionStatus?.let { status ->
             val color = when (status) {

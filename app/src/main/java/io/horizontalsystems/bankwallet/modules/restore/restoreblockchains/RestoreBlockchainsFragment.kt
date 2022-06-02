@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -194,16 +193,12 @@ private fun ManageWalletsScreen(
                                     .size(24.dp)
                             )
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(
+                                body_leah(
                                     text = viewItem.title,
-                                    color = ComposeAppTheme.colors.leah,
-                                    style = ComposeAppTheme.typography.body,
                                     maxLines = 1,
                                 )
-                                Text(
+                                subhead2_grey(
                                     text = viewItem.subtitle,
-                                    color = ComposeAppTheme.colors.grey,
-                                    style = ComposeAppTheme.typography.subhead2,
                                     maxLines = 1,
                                     modifier = Modifier.padding(top = 1.dp)
                                 )

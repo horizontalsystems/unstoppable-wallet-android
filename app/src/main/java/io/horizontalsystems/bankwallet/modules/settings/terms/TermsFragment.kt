@@ -29,10 +29,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellCheckboxLawrence
-import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
 class TermsFragment : BaseFragment() {
@@ -103,21 +100,15 @@ class TermsFragment : BaseFragment() {
                                 },
                             )
                             Spacer(Modifier.width(16.dp))
-                            Text(
-                                text = stringResource(item.termType.description),
-                                style = ComposeAppTheme.typography.subhead2,
-                                color = ComposeAppTheme.colors.leah
-                            )
+                            subhead2_leah(text = stringResource(item.termType.description))
                         }
                     }
                 }
 
                 Spacer(Modifier.height(46.dp))
 
-                Text(
+                title3_jacob(
                     text = stringResource(R.string.SettingsTerms_BottomThankYou),
-                    style = ComposeAppTheme.typography.title3,
-                    color = ComposeAppTheme.colors.jacob,
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
                         .align(Alignment.CenterHorizontally)
@@ -133,10 +124,8 @@ class TermsFragment : BaseFragment() {
 
                 Spacer(Modifier.height(12.dp))
 
-                Text(
+                caption_grey(
                     text = stringResource(R.string.FooterText),
-                    style = ComposeAppTheme.typography.caption,
-                    color = ComposeAppTheme.colors.grey,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .align(Alignment.CenterHorizontally)

@@ -45,10 +45,8 @@ fun SearchBar(
     TopAppBar(
         modifier = Modifier.height(56.dp),
         title = {
-            Text(
+            title3_leah(
                 text = if (searchMode) "" else title,
-                style = ComposeAppTheme.typography.title3,
-                color = ComposeAppTheme.colors.oz,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -87,11 +85,7 @@ fun SearchBar(
                         showClearButton = it.isNotEmpty()
                     },
                     placeholder = {
-                        Text(
-                            text = searchHintText,
-                            color = ComposeAppTheme.colors.grey50,
-                            style = ComposeAppTheme.typography.body
-                        )
+                        body_grey50(text = searchHintText)
                     },
                     textStyle = ComposeAppTheme.typography.body,
                     colors = TextFieldDefaults.textFieldColors(

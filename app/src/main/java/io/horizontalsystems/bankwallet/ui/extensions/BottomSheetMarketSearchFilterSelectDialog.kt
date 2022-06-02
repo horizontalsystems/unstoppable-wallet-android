@@ -9,7 +9,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +22,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.filters.FilterViewItemWrapper
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 class BottomSheetMarketSearchFilterSelectDialog<ItemClass> : BaseComposableBottomSheetFragment() {
 
@@ -81,11 +81,7 @@ class BottomSheetMarketSearchFilterSelectDialog<ItemClass> : BaseComposableBotto
                             .padding(horizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = item.title ?: stringResource(R.string.Any),
-                            style = ComposeAppTheme.typography.body,
-                            color = ComposeAppTheme.colors.leah
-                        )
+                        body_leah(text = item.title ?: stringResource(R.string.Any))
                         Spacer(modifier = Modifier.weight(1f))
                         if (item == selectedItem) {
                             Image(

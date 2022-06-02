@@ -326,16 +326,10 @@ fun FeeCell(title: String, value: String?) {
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey
-        )
-        Text(
+        subhead2_grey(text = title)
+        subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value ?: "",
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.leah,
             textAlign = TextAlign.End,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -367,16 +361,10 @@ fun FeeInfoCell(
             modifier = Modifier.padding(end = 16.dp),
             painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
         )
-        Text(
-            text = title,
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey
-        )
-        Text(
+        subhead1_grey(text = title)
+        subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value ?: "",
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.leah,
             textAlign = TextAlign.End,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -423,11 +411,7 @@ fun HSFeeCell(
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey
-        )
+        subhead2_grey(text = title)
 
         Row(
             modifier = Modifier.weight(1f),
@@ -505,11 +489,7 @@ fun MaxFeeCell(
                 modifier = Modifier.padding(end = 16.dp),
                 painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
             )
-            Text(
-                text = title,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey
-            )
+            subhead2_grey(text = title)
 
             Row(
                 modifier = Modifier.weight(1f),

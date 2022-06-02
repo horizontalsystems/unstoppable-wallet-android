@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
@@ -27,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 
 @Composable
 fun BalanceForAccount(navController: NavController, accountViewItem: AccountViewItem) {
@@ -52,10 +52,8 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                             },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
+                        title3_leah(
                             text = accountViewItem.name,
-                            style = ComposeAppTheme.typography.title3,
-                            color = ComposeAppTheme.colors.oz,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )

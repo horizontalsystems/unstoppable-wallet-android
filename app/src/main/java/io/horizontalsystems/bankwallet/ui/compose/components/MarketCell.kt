@@ -126,19 +126,15 @@ fun MarketCoinFirstRow(coinName: String, rate: String?) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
+        body_leah(
             modifier = Modifier.weight(1f).padding(end = 16.dp),
             text = coinName,
-            color = ComposeAppTheme.colors.oz,
-            style = ComposeAppTheme.typography.body,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         rate?.let {
-            Text(
+            body_leah(
                 text = rate,
-                color = ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.body,
                 maxLines = 1,
             )
         }
@@ -160,10 +156,8 @@ fun MarketCoinSecondRow(
                 text = it
             )
         }
-        Text(
+        subhead2_grey(
             text = subtitle,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2,
             maxLines = 1,
         )
         marketDataValue?.let {
@@ -178,34 +172,26 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
     when (marketDataValue) {
         is MarketDataValue.MarketCap -> {
             Row {
-                Text(
+                subhead1_jacob(
                     text = "MCap",
-                    color = ComposeAppTheme.colors.jacob,
-                    style = ComposeAppTheme.typography.subhead2,
                     maxLines = 1,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(
+                subhead2_grey(
                     text = marketDataValue.value,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
                     maxLines = 1,
                 )
             }
         }
         is MarketDataValue.Volume -> {
             Row {
-                Text(
+                subhead2_jacob(
                     text = "Vol",
-                    color = ComposeAppTheme.colors.jacob,
-                    style = ComposeAppTheme.typography.subhead2,
                     maxLines = 1,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(
+                subhead2_grey(
                     text = marketDataValue.value,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
                     maxLines = 1,
                 )
             }

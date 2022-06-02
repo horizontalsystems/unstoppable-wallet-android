@@ -56,10 +56,8 @@ fun AppBar(
         modifier = Modifier.height(56.dp),
         title = {
             title?.let {
-                Text(
+                title3_leah(
                     text = title.getString(),
-                    style = ComposeAppTheme.typography.title3,
-                    color = ComposeAppTheme.colors.oz,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

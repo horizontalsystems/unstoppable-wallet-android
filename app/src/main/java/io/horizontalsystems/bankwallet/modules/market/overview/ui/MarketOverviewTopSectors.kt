@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CategoryCard
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.marketkit.models.CoinCategory
 
 @Composable
@@ -40,10 +40,8 @@ fun TopSectorsBoardView(
             painter = painterResource(board.iconRes),
             contentDescription = null
         )
-        Text(
+        body_leah(
             text = stringResource(board.title),
-            color = ComposeAppTheme.colors.oz,
-            style = ComposeAppTheme.typography.body,
             maxLines = 1,
         )
         Spacer(Modifier.weight(1f))

@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -131,10 +130,8 @@ private fun TransactionHashCell(titleRes: Int, transactionHash: String) {
     val clipboardManager = LocalClipboardManager.current
     CellSingleLineLawrence() {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
+            subhead2_grey(
                 text = stringResource(titleRes),
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey,
                 modifier = Modifier
                     .padding(start = 16.dp)
                     .weight(1f)

@@ -127,10 +127,8 @@ fun BalanceCard(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
+                        headline2_leah(
                             text = viewItem.coinCode,
-                            color = ComposeAppTheme.colors.oz,
-                            style = ComposeAppTheme.typography.headline2,
                             maxLines = 1,
                         )
                         if (!viewItem.badge.isNullOrBlank()) {
@@ -169,10 +167,8 @@ fun BalanceCard(
                             modifier = Modifier.weight(1f),
                         ) {
                             if (viewItem.syncingTextValue.visible) {
-                                Text(
+                                subhead2_grey(
                                     text = viewItem.syncingTextValue.value ?: "",
-                                    color = ComposeAppTheme.colors.grey,
-                                    style = ComposeAppTheme.typography.subhead2,
                                     maxLines = 1,
                                 )
                             }
@@ -198,10 +194,8 @@ fun BalanceCard(
                             modifier = Modifier.padding(start = 16.dp),
                         ) {
                             if (viewItem.syncedUntilTextValue.visible) {
-                                Text(
+                                subhead2_grey(
                                     text = viewItem.syncedUntilTextValue.value ?: "",
-                                    color = ComposeAppTheme.colors.grey,
-                                    style = ComposeAppTheme.typography.subhead2,
                                     maxLines = 1,
                                 )
                             }

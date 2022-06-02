@@ -32,27 +32,21 @@ fun CellNews(
         onClick = { onClick.invoke() }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
+            captionSB_grey(
                 text = source,
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.captionSB,
                 maxLines = 1,
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
+            headline2_leah(
                 text = title,
-                color = ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.headline2,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
                 onTextLayout = { res -> titleLines = res.lineCount }
             )
             if (titleLines < 3) {
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
+                subhead2_grey(
                     text = body,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = if (titleLines == 1) 2 else 1,
                 )

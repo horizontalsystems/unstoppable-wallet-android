@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
 
 @Composable
 fun InfoSubHeader(
@@ -16,11 +17,9 @@ fun InfoSubHeader(
     modifier: Modifier = Modifier
 ) {
     Spacer(Modifier.height(12.dp))
-    Text(
+    headline2_jacob(
         modifier = modifier,
         text = stringResource(text),
-        style = ComposeAppTheme.typography.headline2,
-        color = ComposeAppTheme.colors.jacob
     )
     Spacer(Modifier.height(12.dp))
 }

@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,14 +38,12 @@ fun BottomSheetHeaderCentered(
                 colorFilter = iconTint,
                 contentDescription = null
             )
-            Text(
+            headline2_leah(
                 modifier = Modifier
                     .padding(end = 48.dp)
                     .weight(1f),
                 text = title,
                 textAlign = TextAlign.Center,
-                color = ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.headline2,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

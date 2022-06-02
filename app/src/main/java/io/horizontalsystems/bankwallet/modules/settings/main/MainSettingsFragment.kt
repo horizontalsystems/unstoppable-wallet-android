@@ -40,8 +40,7 @@ import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeSwitchFragmen
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
@@ -282,19 +281,15 @@ fun HsSettingCell(
             painter = painterResource(id = icon),
             contentDescription = null,
         )
-        Text(
+        body_leah(
             text = stringResource(title),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
             maxLines = 1,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         Spacer(Modifier.weight(1f))
         value?.let {
-            Text(
+            subhead1_leah(
                 text = it,
-                style = ComposeAppTheme.typography.subhead1,
-                color = ComposeAppTheme.colors.leah,
                 maxLines = 1,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
@@ -322,11 +317,7 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion).uppercase(),
-            style = ComposeAppTheme.typography.caption,
-            color = ComposeAppTheme.colors.grey,
-        )
+        caption_grey(text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion).uppercase())
         Divider(
             modifier = Modifier.width(100.dp).padding(top = 8.dp, bottom = 4.5.dp),
             thickness = 0.5.dp,
@@ -347,11 +338,9 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
             painter = painterResource(id = R.drawable.ic_company_logo),
             contentDescription = null,
         )
-        Text(
+        caption_grey(
             modifier = Modifier.padding(top = 12.dp, bottom = 32.dp),
             text = stringResource(R.string.Settings_CompanyName),
-            style = ComposeAppTheme.typography.caption,
-            color = ComposeAppTheme.colors.grey,
         )
     }
 }

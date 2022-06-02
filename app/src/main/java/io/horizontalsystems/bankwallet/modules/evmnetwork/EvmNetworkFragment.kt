@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,10 +24,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinListHeaderWithInfoButton
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
 class EvmNetworkFragment : BaseFragment() {
@@ -126,18 +122,14 @@ private fun NetworkSettingCell(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.padding(start = 16.dp).weight(1f)) {
-            Text(
+            body_leah(
                 text = title,
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.leah,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             Spacer(Modifier.height(1.dp))
-            Text(
+            subhead2_grey(
                 text = subtitle,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

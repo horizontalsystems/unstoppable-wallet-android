@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,10 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
@@ -93,13 +88,11 @@ private fun ProUsersInfoScreen(navController: NavController, features: List<Stri
                     .height(44.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                subhead1_grey(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 8.dp)
                         .weight(1f),
                     text = feature,
-                    style = ComposeAppTheme.typography.subhead1,
-                    color = ComposeAppTheme.colors.grey,
                 )
                 //IconButton has own padding, that's pushes 16.dp from end
                 HsIconButton(

@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -23,6 +22,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 
 class WCDisplayTypedMessageFragment : BaseFragment() {
@@ -70,11 +70,9 @@ private fun SignMessageTextScreen(navController: NavController, messageText: Str
             ) {
                 Spacer(Modifier.height(12.dp))
                 messageText?.let {
-                    Text(
+                    subhead2_grey(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         text = it,
-                        color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.subhead2
                     )
                 }
                 Spacer(Modifier.height(12.dp))

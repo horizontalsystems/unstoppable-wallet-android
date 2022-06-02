@@ -201,11 +201,9 @@ private fun getBottomReachedUid(transactionsMap: Map<String, List<TransactionVie
 @Composable
 fun DateHeader(dateHeader: String) {
     Header(borderTop = false, borderBottom = true) {
-        Text(
+        subhead1_grey(
             modifier = Modifier.padding(horizontal = 16.dp),
             text = dateHeader,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead1,
             maxLines = 1,
         )
     }
@@ -286,11 +284,9 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
             }
             Column(modifier = Modifier.padding(end = 16.dp)) {
                 Row {
-                    Text(
+                    body_leah(
                         modifier = Modifier.padding(end = 32.dp),
                         text = item.title,
-                        color = ComposeAppTheme.colors.leah,
-                        style = ComposeAppTheme.typography.body,
                         maxLines = 1,
                     )
                     Spacer(Modifier.weight(1f))
@@ -327,10 +323,8 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                 }
                 Spacer(Modifier.height(1.dp))
                 Row {
-                    Text(
+                    subhead2_grey(
                         text = item.subtitle,
-                        color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.subhead2,
                         maxLines = 1,
                     )
                     Spacer(Modifier.weight(1f))

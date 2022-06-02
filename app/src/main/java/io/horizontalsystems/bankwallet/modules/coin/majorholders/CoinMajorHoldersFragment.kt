@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -151,11 +150,7 @@ private fun ListHeader() {
     CellSingleLineClear(
         borderTop = true
     ) {
-        Text(
-            text = stringResource(R.string.CoinPage_MajorHolders_TopWallets),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
-        )
+        body_leah(text = stringResource(R.string.CoinPage_MajorHolders_TopWallets))
     }
 }
 
@@ -167,19 +162,13 @@ private fun TopWalletCell(item: MajorHolderItem) {
     CellSingleLineClear(
         borderTop = true
     ) {
-        Text(
+        captionSB_grey(
             text = item.index.toString(),
-            style = ComposeAppTheme.typography.captionSB,
-            color = ComposeAppTheme.colors.grey,
             modifier = Modifier.width(24.dp),
             textAlign = TextAlign.Center,
         )
         Spacer(Modifier.width(16.dp))
-        Text(
-            text = item.sharePercent,
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.jacob,
-        )
+        body_jacob(text = item.sharePercent)
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
             modifier = Modifier.padding(start = 8.dp, end = 8.dp),
@@ -213,25 +202,21 @@ private fun SemiCircleChartBlock(share: Float) {
         title = App.numberFormatter.format(share, 0, 2, suffix = "%")
     )
 
-    Text(
+    subhead2_grey(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 32.dp, end = 32.dp, top = 12.dp),
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Ellipsis,
         text = stringResource(R.string.CoinPage_MajorHolders_InTopWallets),
-        color = ComposeAppTheme.colors.grey,
-        style = ComposeAppTheme.typography.subhead1
     )
 
-    Text(
+    subhead2_grey(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 24.dp, end = 24.dp, top = 38.dp, bottom = 7.dp),
         textAlign = TextAlign.Start,
         overflow = TextOverflow.Ellipsis,
         text = stringResource(R.string.CoinPage_MajorHolders_Description),
-        color = ComposeAppTheme.colors.grey,
-        style = ComposeAppTheme.typography.subhead2
     )
 }

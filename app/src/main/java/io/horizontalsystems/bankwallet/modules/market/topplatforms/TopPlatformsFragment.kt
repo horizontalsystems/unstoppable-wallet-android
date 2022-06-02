@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -207,10 +206,8 @@ private fun TopPlatformSecondRow(
             text = rank,
             diff = rankDiff
         )
-        Text(
+        subhead2_grey(
             text = subtitle,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2,
             maxLines = 1,
         )
         marketDataValue?.let {

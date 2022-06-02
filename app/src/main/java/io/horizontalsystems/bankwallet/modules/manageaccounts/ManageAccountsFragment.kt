@@ -9,7 +9,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -131,21 +130,15 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                                 contentDescription = null,
                                 tint = ComposeAppTheme.colors.jacob
                             )
-                            Text(
-                                text = stringResource(id = it.title),
-                                style = ComposeAppTheme.typography.body,
-                                color = ComposeAppTheme.colors.jacob
-                            )
+                            body_jacob(text = stringResource(id = it.title))
                         }
                     }
 
                     Spacer(modifier = Modifier.height(32.dp))
 
-                    Text(
+                    subhead2_grey(
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
                         text = stringResource(id = R.string.ManageAccounts_Hint),
-                        style = ComposeAppTheme.typography.subhead2,
-                        color = ComposeAppTheme.colors.grey
                     )
                 }
             }
@@ -180,16 +173,8 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                 )
             }
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = accountViewItem.title,
-                    style = ComposeAppTheme.typography.body,
-                    color = ComposeAppTheme.colors.leah
-                )
-                Text(
-                    text = accountViewItem.subtitle,
-                    style = ComposeAppTheme.typography.subhead2,
-                    color = ComposeAppTheme.colors.grey
-                )
+                body_leah(text = accountViewItem.title)
+                subhead2_grey(text = accountViewItem.subtitle)
             }
             if (accountViewItem.alert) {
                 Icon(

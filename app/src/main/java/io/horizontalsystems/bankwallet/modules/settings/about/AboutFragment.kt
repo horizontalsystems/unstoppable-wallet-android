@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 
@@ -212,10 +213,8 @@ fun AboutHeader(appVersion: String) {
                 maxLines = 1,
             )
             Spacer(Modifier.height(12.dp))
-            Text(
+            subhead2_grey(
                 text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion),
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey,
                 maxLines = 1,
             )
         }

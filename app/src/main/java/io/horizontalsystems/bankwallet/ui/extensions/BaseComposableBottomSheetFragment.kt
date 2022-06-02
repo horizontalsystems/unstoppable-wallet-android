@@ -10,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +24,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.views.helpers.LayoutHelper
 
 open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
@@ -83,18 +84,14 @@ fun BottomSheetHeader(
                     .padding(start = 16.dp, top = 12.dp)
                     .weight(1f)
             ) {
-                Text(
+                headline2_leah(
                     text = title,
-                    color = ComposeAppTheme.colors.leah,
-                    style = ComposeAppTheme.typography.headline2,
                     maxLines = 1,
                 )
                 subtitle?.let {
                     Spacer(Modifier.height(4.dp))
-                    Text(
+                    subhead2_grey(
                         text = it,
-                        color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.subhead2,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )

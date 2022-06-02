@@ -224,15 +224,13 @@ private fun MessageWithActionContent(
                 tint = ComposeAppTheme.colors.grey
             )
         }
-        Text(
+        subhead2_grey(
             modifier = Modifier
                 .padding(top = 32.dp)
                 .padding(horizontal = 48.dp),
             text = text,
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
         )
         Spacer(Modifier.height(32.dp))
         actionsComposable?.let { it() }
@@ -343,11 +341,9 @@ fun DescriptionCard(title: String, description: String, image: ImageSource) {
                     style = ComposeAppTheme.typography.headline1,
                     color = ComposeAppTheme.colors.oz,
                 )
-                Text(
+                subhead2_grey(
                     text = description,
                     modifier = Modifier.padding(top = 6.dp),
-                    style = ComposeAppTheme.typography.subhead2,
-                    color = ComposeAppTheme.colors.grey,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -394,10 +390,8 @@ fun RowScope.CategoryCard(
                         modifier = Modifier.padding(12.dp),
                     ) {
                         Spacer(modifier = Modifier.weight(1f))
-                        Text(
+                        subhead1_leah(
                             text = stringResource(R.string.Market_Category_TopCoins),
-                            style = ComposeAppTheme.typography.subhead1,
-                            color = ComposeAppTheme.colors.oz,
                             maxLines = 1
                         )
                     }
@@ -420,10 +414,8 @@ fun RowScope.CategoryCard(
                         modifier = Modifier.padding(12.dp),
                     ) {
                         Spacer(modifier = Modifier.weight(1f))
-                        Text(
+                        subhead1_leah(
                             text = type.coinCategory.name,
-                            style = ComposeAppTheme.typography.subhead1,
-                            color = ComposeAppTheme.colors.leah,
                             maxLines = 1
                         )
                         AnimatedVisibility(
@@ -431,10 +423,8 @@ fun RowScope.CategoryCard(
                         ) {
                             type.marketData?.let { marketData ->
                                 Row(modifier = Modifier.padding(top = 8.dp)) {
-                                    Text(
+                                    caption_grey(
                                         text = marketData.marketCap ?: "",
-                                        style = ComposeAppTheme.typography.caption,
-                                        color = ComposeAppTheme.colors.grey,
                                         maxLines = 1
                                     )
                                     AnimatedVisibility(

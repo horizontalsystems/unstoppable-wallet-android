@@ -10,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -170,10 +169,8 @@ private fun BlockchainSettingSection(
             onItemClick(item)
         }
     }
-    Text(
+    subhead2_grey(
         text = stringResource(settingDescriptionTextRes),
-        style = ComposeAppTheme.typography.subhead2,
-        color = ComposeAppTheme.colors.grey,
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
     )
 }
@@ -192,18 +189,14 @@ private fun SettingCell(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.padding(start = 16.dp).weight(1f)) {
-            Text(
+            body_leah(
                 text = title,
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.leah,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             Spacer(Modifier.height(1.dp))
-            Text(
+            subhead2_grey(
                 text = subtitle,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

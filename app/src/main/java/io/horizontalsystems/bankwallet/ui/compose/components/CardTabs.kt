@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -77,10 +76,8 @@ fun <T> CardTabs(
                             }
                         }
                         Spacer(modifier = Modifier.weight(1f))
-                        Text(
+                        subhead1_leah(
                             text = tabItem.title,
-                            style = ComposeAppTheme.typography.subhead1,
-                            color = ComposeAppTheme.colors.oz,
                             maxLines = 1
                         )
                     }

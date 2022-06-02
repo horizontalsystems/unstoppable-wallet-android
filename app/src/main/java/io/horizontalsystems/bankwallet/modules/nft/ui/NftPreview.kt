@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeRatingD
+import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_leah
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -89,11 +90,9 @@ fun NftAssetPreview(
             modifier = Modifier.padding(start = 12.dp, top = 4.dp, end = 12.dp, bottom = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
+            captionSB_leah(
                 modifier = Modifier.padding(end = 4.dp),
                 text = coinPrice?.getFormattedFull() ?: "---",
-                style = ComposeAppTheme.typography.captionSB,
-                color = ComposeAppTheme.colors.leah
             )
             currencyPrice?.let { currencyPrice ->
                 Text(

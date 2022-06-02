@@ -282,10 +282,8 @@ fun AdvancedSearchContent(
 
 @Composable
 private fun SectionHeader(header: Int) {
-    Text(
+    subhead1_grey(
         text = stringResource(header),
-        style = ComposeAppTheme.typography.subhead1,
-        color = ComposeAppTheme.colors.grey,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier.padding(start = 16.dp, top = 44.dp, end = 16.dp, bottom = 1.dp)
@@ -305,10 +303,8 @@ private fun AdvancedSearchDropdown(
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
+        body_leah(
             text = stringResource(type.titleResId),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
@@ -330,10 +326,8 @@ private fun AdvancedSearchSwitch(
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
+        body_leah(
             text = stringResource(titleResId),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
