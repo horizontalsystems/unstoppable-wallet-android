@@ -115,7 +115,6 @@ private fun SettingSections(
     val showAlertSecurityCenter by viewModel.securityCenterShowAlertLiveData.observeAsState(false)
     val showAlertAboutApp by viewModel.aboutAppShowAlertLiveData.observeAsState(false)
     val walletConnectSessionCount by viewModel.walletConnectSessionCountLiveData.observeAsState(0)
-    val launchScreen by viewModel.launchScreenLiveData.observeAsState()
     val baseCurrency by viewModel.baseCurrencyLiveData.observeAsState()
     val language by viewModel.languageLiveData.observeAsState()
     val theme by viewModel.themeLiveData.observeAsState()
@@ -176,11 +175,10 @@ private fun SettingSections(
     CellSingleLineLawrenceSection(
         listOf({
             HsSettingCell(
-                R.string.Settings_LaunchScreen,
-                R.drawable.ic_screen_20,
-                value = launchScreen?.titleRes?.let { Translator.getString(it) },
+                R.string.Settings_Appearance,
+                R.drawable.ic_brush_20,
                 onClick = {
-                    navController.slideFromRight(R.id.launchScreenSettingsFragment)
+                    navController.slideFromRight(R.id.appearanceFragment)
                 }
             )
         }, {

@@ -1,9 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.settings.launch
+package io.horizontalsystems.bankwallet.modules.settings.appearance
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 
-class LaunchPageService(private val localStorage: ILocalStorage) {
+class AppearanceService(private val localStorage: ILocalStorage) {
 
     val selectedOption: LaunchPage
         get() = localStorage.launchPage ?: LaunchPage.Auto

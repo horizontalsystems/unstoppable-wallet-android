@@ -17,7 +17,6 @@ class MainSettingsViewModel(
     val securityCenterShowAlertLiveData = MutableLiveData(!service.isPinSet)
     val aboutAppShowAlertLiveData = MutableLiveData(!service.termsAccepted)
     val walletConnectSessionCountLiveData = MutableLiveData(service.walletConnectSessionCount)
-    val launchScreenLiveData = MutableLiveData(service.launchScreen)
     val baseCurrencyLiveData = MutableLiveData(service.baseCurrency)
     val languageLiveData = MutableLiveData(service.currentLanguageDisplayName)
     val themeLiveData = MutableLiveData(service.themeName)

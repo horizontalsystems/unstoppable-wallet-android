@@ -104,8 +104,8 @@
         android:label="@string/Guides_Title"
         tools:layout="@layout/fragment_guides"/>
     <fragment
-        android:id="@+id/launchScreenSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.launch.LaunchPageFragment" />
+        android:id="@+id/appearanceFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.appearance.AppearanceFragment" />
     <fragment
         android:id="@+id/baseCurrencySettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.basecurrency.BaseCurrencySettingsFragment"

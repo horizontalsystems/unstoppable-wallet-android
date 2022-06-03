@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.launch
+package io.horizontalsystems.bankwallet.modules.settings.appearance
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,9 +33,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.core.findNavController
 
-class LaunchPageFragment : BaseFragment() {
+class AppearanceFragment : BaseFragment() {
 
-    val viewModel by viewModels<LaunchPageViewModel> { LaunchPageModule.Factory() }
+    val viewModel by viewModels<AppearanceViewModel> { AppearanceModule.Factory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +48,7 @@ class LaunchPageFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    LaunchScreen(viewModel) { findNavController().popBackStack() }
+                    AppearanceScreen(viewModel) { findNavController().popBackStack() }
                 }
             }
         }
@@ -56,8 +56,8 @@ class LaunchPageFragment : BaseFragment() {
 }
 
 @Composable
-fun LaunchScreen(
-    viewModel: LaunchPageViewModel,
+fun AppearanceScreen(
+    viewModel: AppearanceViewModel,
     onCloseButtonClick: () -> Unit,
 ) {
     val options by viewModel.optionsLiveData.observeAsState()

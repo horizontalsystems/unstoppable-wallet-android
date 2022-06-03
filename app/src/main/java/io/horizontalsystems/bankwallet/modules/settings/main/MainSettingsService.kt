@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
@@ -79,9 +78,6 @@ class MainSettingsService(
 
     val isPinSet: Boolean
         get() = pinComponent.isPinSet
-
-    val launchScreen: LaunchPage
-        get() = localStorage.launchPage ?: LaunchPage.Auto
 
     fun start() {
         disposables.add(backupManager.allBackedUpFlowable.subscribe {

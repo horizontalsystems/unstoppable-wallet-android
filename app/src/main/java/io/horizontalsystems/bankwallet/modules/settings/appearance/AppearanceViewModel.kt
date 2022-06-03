@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.settings.launch
+package io.horizontalsystems.bankwallet.modules.settings.appearance
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.ui.compose.Select
 
-class LaunchPageViewModel(private val service: LaunchPageService) : ViewModel() {
+class AppearanceViewModel(private val service: AppearanceService) : ViewModel() {
 
     val optionsLiveData = MutableLiveData(getItems())
 
