@@ -120,7 +120,7 @@ class PrivateKeyViewHolder(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     buttonColors = SecondaryButtonDefaults.buttonColors(
                         backgroundColor = ComposeAppTheme.colors.steel20,
-                        contentColor = ComposeAppTheme.colors.oz,
+                        contentColor = ComposeAppTheme.colors.leah,
                     ),
                     content = { Text(key.value, textAlign = TextAlign.Center, maxLines = 2) },
                     onClick = {

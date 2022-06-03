@@ -11,7 +11,6 @@ class Colors(
     jacob: Color,
     remus: Color,
     lucian: Color,
-    oz: Color,
     tyler: Color,
     bran: Color,
     leah: Color,
@@ -57,8 +56,6 @@ class Colors(
         private set
     var lucian by mutableStateOf(lucian)
         private set
-    var oz by mutableStateOf(oz)
-        private set
     var tyler by mutableStateOf(tyler)
         private set
     var bran by mutableStateOf(bran)
@@ -80,7 +77,6 @@ class Colors(
         jacob = other.jacob
         remus = other.remus
         lucian = other.lucian
-        oz = other.oz
         tyler = other.tyler
         bran = other.bran
         leah = other.leah
@@ -95,7 +91,6 @@ class Colors(
         jacob = jacob,
         remus = remus,
         lucian = lucian,
-        oz = oz,
         tyler = tyler,
         bran = bran,
         leah = leah,

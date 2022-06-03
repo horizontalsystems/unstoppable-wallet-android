@@ -339,7 +339,7 @@ fun DescriptionCard(title: String, description: String, image: ImageSource) {
                 Text(
                     text = title,
                     style = ComposeAppTheme.typography.headline1,
-                    color = ComposeAppTheme.colors.oz,
+                    color = ComposeAppTheme.colors.leah,
                 )
                 subhead2_grey(
                     text = description,

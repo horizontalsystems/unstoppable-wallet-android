@@ -240,7 +240,7 @@ fun SearchView(
                 .weight(1f),
             singleLine = true,
             textStyle = ColoredTextStyle(
-                color = ComposeAppTheme.colors.oz,
+                color = ComposeAppTheme.colors.leah,
                 textStyle = ComposeAppTheme.typography.body
             ),
             decorationBox = { innerTextField ->
