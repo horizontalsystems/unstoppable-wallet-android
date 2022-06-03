@@ -44,7 +44,7 @@ fun FormsInput(
     enabled: Boolean = true,
     initial: String? = null,
     hint: String,
-    textColor: Color = ComposeAppTheme.colors.oz,
+    textColor: Color = ComposeAppTheme.colors.leah,
     textStyle: TextStyle = ComposeAppTheme.typography.body,
     hintColor: Color = ComposeAppTheme.colors.grey50,
     hintStyle: TextStyle = ComposeAppTheme.typography.body,

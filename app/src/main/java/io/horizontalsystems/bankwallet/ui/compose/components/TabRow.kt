@@ -48,7 +48,7 @@ fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
                         ) {
                             Text(
                                 text = tab.title,
-                                color = if (selectedIndex == index) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey,
+                                color = if (selectedIndex == index) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -93,7 +93,7 @@ fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
                         ) {
                             Text(
                                 text = tab.title,
-                                color = if (tab.selected) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey
+                                color = if (tab.selected) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey
                             )
                         }
                     }

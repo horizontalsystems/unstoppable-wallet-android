@@ -38,7 +38,7 @@ fun <T : WithTranslatableTitle> AlertGroup(
                 ) {
                     Text(
                         option.title.getString(),
-                        color = if (option == select.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.oz,
+                        color = if (option == select.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.leah,
                         style = ComposeAppTheme.typography.body,
                     )
                 }

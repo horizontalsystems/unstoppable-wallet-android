@@ -356,7 +356,7 @@ fun FilterMenu(title: String?, onClick: () -> Unit) {
             valueText,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            color = if (title != null) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey,
+            color = if (title != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
             modifier = Modifier.weight(1f, fill = false)
         )
         Icon(

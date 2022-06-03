@@ -22,7 +22,7 @@ fun HsIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    rippleColor: Color = ComposeAppTheme.colors.oz,
+    rippleColor: Color = ComposeAppTheme.colors.leah,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable () -> Unit
 ) {
