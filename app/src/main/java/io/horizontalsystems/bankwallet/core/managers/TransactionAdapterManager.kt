@@ -36,29 +36,31 @@ class TransactionAdapterManager(
     fun getAdapter(source: TransactionSource): ITransactionsAdapter? = adaptersMap[source]
 
     private fun initAdapters(adaptersMap: Map<Wallet, IAdapter>) {
-        val newAdapterMap = mutableMapOf<TransactionSource, ITransactionsAdapter>()
+        val currentAdapters = this.adaptersMap.toMutableMap()
+        this.adaptersMap.clear()
 
         for ((wallet, adapter) in adaptersMap) {
             val source = wallet.transactionSource
-            if (newAdapterMap.containsKey(source)) continue
+            if (this.adaptersMap.containsKey(source)) continue
 
-            val transactionsAdapter = when (source.blockchain) {
-                is TransactionSource.Blockchain.Evm -> {
-                    adapterFactory.evmTransactionsAdapter(wallet.transactionSource, source.blockchain.evmBlockchain)
+            var txAdapter = currentAdapters.remove(source)
+            if (txAdapter == null) {
+                txAdapter = when (source.blockchain) {
+                    is TransactionSource.Blockchain.Evm -> {
+                        adapterFactory.evmTransactionsAdapter(wallet.transactionSource, source.blockchain.evmBlockchain)
+                    }
+                    else -> adapter as? ITransactionsAdapter
                 }
-                else -> adapter as? ITransactionsAdapter
             }
 
-            transactionsAdapter?.let {
-                newAdapterMap[source] = transactionsAdapter
+            txAdapter?.let {
+                this.adaptersMap[source] = it
             }
         }
 
-        this.adaptersMap.forEach {
+        currentAdapters.forEach {
             adapterFactory.unlinkAdapter(it.key)
         }
-        this.adaptersMap.clear()
-        this.adaptersMap.putAll(newAdapterMap)
 
         adaptersReadySubject.onNext(Unit)
 

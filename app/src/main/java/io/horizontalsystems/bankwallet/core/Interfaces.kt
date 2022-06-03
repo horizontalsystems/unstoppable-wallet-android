@@ -190,7 +190,7 @@ interface IBinanceKitManager {
     val statusInfo: Map<String, Any>?
 
     fun binanceKit(wallet: Wallet): BinanceChainKit
-    fun unlink()
+    fun unlink(account: Account)
 }
 
 interface ITransactionsAdapter {

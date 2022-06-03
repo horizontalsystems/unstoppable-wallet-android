@@ -104,7 +104,7 @@ class AdapterFactory(
                 evmKitManager.unlink(wallet.account)
             }
             is TransactionSource.Blockchain.Bep2 -> {
-                binanceKitManager.unlink()
+                binanceKitManager.unlink(wallet.account)
             }
             else -> Unit
         }
