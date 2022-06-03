@@ -1,42 +1,56 @@
 package io.horizontalsystems.bankwallet.modules.showkey
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.EvmBlockchain
+import io.horizontalsystems.core.IPinComponent
+import io.horizontalsystems.ethereumkit.core.signer.Signer
+import io.horizontalsystems.ethereumkit.core.toHexString
 
 class ShowKeyViewModel(
-        private val service: ShowKeyService
+    account: Account,
+    pinComponent: IPinComponent,
+    private val evmBlockchainManager: EvmBlockchainManager
 ) : ViewModel() {
-    val openUnlockLiveEvent = SingleLiveEvent<Unit>()
-    val showKeyLiveEvent = SingleLiveEvent<Unit>()
-    val showKeyTabs = listOf(ShowKeyModule.ShowKeyTab.MnemonicPhrase, ShowKeyModule.ShowKeyTab.PrivateKey)
-    val selectedTab = MutableLiveData(ShowKeyModule.ShowKeyTab.MnemonicPhrase)
+    private val words: List<String>
 
-    val words: List<String>
-        get() = service.words
+    var passphrase by mutableStateOf("")
+        private set
 
-    val passphrase: String
-        get() = service.passphrase
+    var viewState by mutableStateOf(ShowKeyModule.ViewState.Warning)
+        private set
 
-    val privateKeys: List<ShowKeyModule.PrivateKey>
-        get() = listOf(
-            ShowKeyModule.PrivateKey("Ethereum", service.ethereumPrivateKey),
-        )
+    var wordsNumbered by mutableStateOf<List<ShowKeyModule.WordNumbered>>(listOf())
+        private set
 
-    fun onClickShow() {
-        if (service.isPinSet) {
-            openUnlockLiveEvent.postValue(Unit)
+    init {
+        if (account.type is AccountType.Mnemonic) {
+            words = account.type.words
+            wordsNumbered = words.mapIndexed { index, word ->
+                ShowKeyModule.WordNumbered(word, index + 1)
+            }
+            passphrase = account.type.passphrase
         } else {
-            showKeyLiveEvent.postValue(Unit)
+            words = listOf()
         }
     }
 
-    fun onUnlock() {
-        showKeyLiveEvent.postValue(Unit)
-    }
+    val isPinSet = pinComponent.isPinSet
 
-    fun onSelectTab(tab: ShowKeyModule.ShowKeyTab) {
-        selectedTab.postValue(tab)
+    val ethereumPrivateKey: String
+        get() = Signer.privateKey(
+            words,
+            passphrase,
+            evmBlockchainManager.getChain(EvmBlockchain.Ethereum)
+        ).toByteArray().toHexString()
+
+    fun showKey() {
+        viewState = ShowKeyModule.ViewState.Key
     }
 
 }

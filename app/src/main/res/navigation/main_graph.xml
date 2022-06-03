@@ -46,13 +46,8 @@
         android:id="@+id/manageAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment"/>
     <fragment
-        android:id="@+id/showKeyIntroFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowKeyIntroFragment"
-        tools:layout="@layout/fragment_show_key_intro"/>
-    <fragment
-        android:id="@+id/showKeyMainFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowKeyMainFragment"
-        tools:layout="@layout/fragment_show_key_main" />
+        android:id="@+id/showKeyFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowKeyFragment"/>
     <fragment
         android:id="@+id/backupKeyFragment"
         android:name="io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyFragment"
