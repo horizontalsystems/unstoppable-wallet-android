@@ -119,7 +119,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 icon = painterResource(id = R.drawable.ic_key_20)
                             ) {
                                 navController.slideFromRight(
-                                    R.id.showKeyIntroFragment,
+                                    R.id.showKeyFragment,
                                     ShowKeyModule.prepareParams(viewModel.account)
                                 )
                             }
