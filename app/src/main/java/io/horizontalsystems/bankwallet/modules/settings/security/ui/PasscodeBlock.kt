@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -50,6 +51,14 @@ fun PasscodeBlock(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f).padding(end = 8.dp)
                 )
+                if (!viewModel.pinEnabled) {
+                    Image(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(id = R.drawable.ic_attention_red_20),
+                        contentDescription = null,
+                    )
+                    Spacer(Modifier.width(16.dp))
+                }
                 HsSwitch(
                     checked = viewModel.pinEnabled,
                     onCheckedChange = { checked ->
