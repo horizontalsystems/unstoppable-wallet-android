@@ -20,7 +20,7 @@ class ThemeService(private val localStorage: ILocalStorage) {
         localStorage.relaunchBySettingChange = true
 
         _optionsFlow.update {
-            Select(localStorage.currentTheme, themes)
+            Select(themeType, themes)
         }
 
         val nightMode = when (themeType) {

@@ -2,16 +2,24 @@ package io.horizontalsystems.bankwallet.modules.settings.appearance
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.ui.compose.Select
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class LaunchScreenService(private val localStorage: ILocalStorage) {
+    private val screens = LaunchPage.values().asList()
 
-    val selectedOption: LaunchPage
-        get() = localStorage.launchPage ?: LaunchPage.Auto
+    private val _optionsFlow = MutableStateFlow(
+        Select(localStorage.launchPage ?: LaunchPage.Auto, screens)
+    )
+    val optionsFlow = _optionsFlow.asStateFlow()
 
-    val options = LaunchPage.values().asList()
-
-    fun selectLaunchPage(launchPage: LaunchPage) {
+    fun setLaunchScreen(launchPage: LaunchPage) {
         localStorage.launchPage = launchPage
-    }
 
+        _optionsFlow.update {
+            Select(launchPage, screens)
+        }
+    }
 }
