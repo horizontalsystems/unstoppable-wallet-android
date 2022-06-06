@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -143,27 +142,31 @@ private fun ReceiveScreen(
                     )
                 }
 
-                Text(
-                    modifier = Modifier.padding(top = 23.dp),
-                    text = addressHint,
-                    textAlign = TextAlign.Center,
-                    color = if (viewModel.testNet) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                if (viewModel.testNet) {
+                    D5(
+                        text = addressHint,
+                        modifier = Modifier.padding(top = 23.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                } else {
+                    D1(
+                        text = addressHint,
+                        modifier = Modifier.padding(top = 23.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
 
-                Text(
+                C2(
+                    text = viewModel.receiveAddress,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
                         .clickable {
                             TextHelper.copyText(viewModel.receiveAddress)
                             HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
                         }
                         .padding(vertical = 12.dp, horizontal = 24.dp),
-                    text = viewModel.receiveAddress,
-                    textAlign = TextAlign.Center,
-                    color = ComposeAppTheme.colors.bran,
-                    style = ComposeAppTheme.typography.subhead1,
                 )
 
                 Row(

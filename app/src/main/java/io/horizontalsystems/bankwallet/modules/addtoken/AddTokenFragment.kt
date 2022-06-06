@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -159,16 +158,8 @@ private fun TitleValueCell(@StringRes title: Int, value: String, showTopBorder: 
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = stringResource(title),
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
-        )
-        Text(
-            text = value,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.subhead1
-        )
+        D1(stringResource(title))
+        C2(value)
     }
 }
 
