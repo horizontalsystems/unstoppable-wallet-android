@@ -58,9 +58,6 @@ class MainSettingsService(
             return appVersion
         }
 
-    val themeName: Int
-        get() = localStorage.currentTheme.getTitle()
-
     val allBackedUp: Boolean
         get() = backupManager.allBackedUp
 
