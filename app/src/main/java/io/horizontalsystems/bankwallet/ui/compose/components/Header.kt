@@ -10,6 +10,16 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
+fun HeaderText(text: String) {
+    Header {
+        subhead1_grey(
+            text = text,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+    }
+}
+
+@Composable
 fun Header(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
