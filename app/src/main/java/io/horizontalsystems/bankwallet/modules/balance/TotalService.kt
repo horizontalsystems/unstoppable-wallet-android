@@ -1,15 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,9 +17,8 @@ import java.math.BigDecimal
 
 class TotalService(
     private val currencyManager: ICurrencyManager,
-    private val coinManager: ICoinManager,
     private val marketKit: MarketKit,
-    private val localStorage: ILocalStorage
+    private val totalBalancePlatformCoinManager: TotalBalancePlatformCoinManager
 ) {
     private var balanceHidden = false
     private var totalCurrencyValue: CurrencyValue? = null
@@ -38,10 +34,6 @@ class TotalService(
     )
     val stateFlow = _stateFlow.asStateFlow()
 
-    private val platformCoins = listOf(CoinType.Bitcoin, CoinType.Ethereum)
-        .mapNotNull {
-            coinManager.getPlatformCoin(it)
-        }
     private var platformCoin: PlatformCoin? = null
     private var coinPrice: CoinPrice? = null
     private var currency = currencyManager.baseCurrency
@@ -59,11 +51,11 @@ class TotalService(
             }
         }
 
-        val coin = localStorage.balanceTotalCoinUid?.let { balanceTotalCoinUid ->
-            platformCoins.find { it.coin.uid == balanceTotalCoinUid }
-        } ?: platformCoins.firstOrNull()
-
-        handleUpdatedPlatformCoin(coin)
+        coroutineScope.launch {
+            totalBalancePlatformCoinManager.platformCoinFlow.collect {
+                handleUpdatedPlatformCoin(it)
+            }
+        }
     }
 
     fun stop() {
@@ -87,17 +79,7 @@ class TotalService(
     }
 
     fun toggleType() {
-        val indexOf = platformCoins.indexOf(platformCoin)
-        val platformCoin = (platformCoins.getOrNull(indexOf + 1)
-            ?: platformCoins.firstOrNull())
-
-        localStorage.balanceTotalCoinUid = platformCoin?.coin?.uid
-
-        handleUpdatedPlatformCoin(platformCoin)
-
-        refreshTotalCoinValue()
-
-        emitState()
+        totalBalancePlatformCoinManager.toggleType()
     }
 
     private fun handleUpdatedCurrency(currency: Currency) {
@@ -116,6 +98,9 @@ class TotalService(
 
         refreshCoinPrice()
         resubscribeForCoinPrice()
+        refreshTotalCoinValue()
+
+        emitState()
     }
 
     private fun refreshCoinPrice() {
