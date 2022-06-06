@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.appearance
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 
 object AppearanceModule {
 

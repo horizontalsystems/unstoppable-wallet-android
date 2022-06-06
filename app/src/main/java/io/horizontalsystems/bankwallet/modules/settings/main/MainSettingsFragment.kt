@@ -31,12 +31,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeSwitchFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -77,9 +75,6 @@ class MainSettingsFragment : BaseFragment() {
             viewModel.onLanguageChange()
             activity?.let { MainModule.startAsNewTask(it) }
         }
-        getNavigationResult(ThemeSwitchFragment.THEME_CHANGE)?.let {
-            viewModel.onThemeChange()
-        }
     }
 
 }
@@ -117,8 +112,6 @@ private fun SettingSections(
     val walletConnectSessionCount by viewModel.walletConnectSessionCountLiveData.observeAsState(0)
     val baseCurrency by viewModel.baseCurrencyLiveData.observeAsState()
     val language by viewModel.languageLiveData.observeAsState()
-    val theme by viewModel.themeLiveData.observeAsState()
-
 
     CellSingleLineLawrenceSection(
         listOf({
@@ -197,15 +190,6 @@ private fun SettingSections(
                 value = language,
                 onClick = {
                     navController.slideFromRight(R.id.languageSettingsFragment)
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_Theme,
-                R.drawable.ic_light_mode,
-                value = theme?.let { Translator.getString(it) },
-                onClick = {
-                    navController.slideFromRight(R.id.themeSwitchFragment)
                 }
             )
         }, {

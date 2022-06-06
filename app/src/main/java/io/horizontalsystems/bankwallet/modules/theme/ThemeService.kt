@@ -1,8 +1,7 @@
-package io.horizontalsystems.bankwallet.modules.settings.appearance
+package io.horizontalsystems.bankwallet.modules.theme
 
 import androidx.appcompat.app.AppCompatDelegate
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

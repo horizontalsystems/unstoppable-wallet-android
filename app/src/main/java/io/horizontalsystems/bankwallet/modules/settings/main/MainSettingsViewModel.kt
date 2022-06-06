@@ -19,8 +19,6 @@ class MainSettingsViewModel(
     val walletConnectSessionCountLiveData = MutableLiveData(service.walletConnectSessionCount)
     val baseCurrencyLiveData = MutableLiveData(service.baseCurrency)
     val languageLiveData = MutableLiveData(service.currentLanguageDisplayName)
-    val themeLiveData = MutableLiveData(service.themeName)
-
     val appVersion by service::appVersion
 
     init {
@@ -62,9 +60,4 @@ class MainSettingsViewModel(
     fun getWalletConnectSupportState() : WC1Manager.SupportState {
         return service.getWalletConnectSupportState()
     }
-
-    fun onThemeChange() {
-        themeLiveData.postValue(service.themeName)
-    }
-
 }
