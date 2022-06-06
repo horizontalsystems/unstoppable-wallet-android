@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -224,10 +223,8 @@ private fun PassphraseCell(passphrase: String) {
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.grey
                     )
-                    Text(
+                    D1(
                         text = stringResource(R.string.ShowKey_Passphrase),
-                        color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.subhead2,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
                     Spacer(Modifier.weight(1f))
@@ -254,8 +251,8 @@ private fun PrivateKey(viewModel: ShowKeyViewModel, showKeyWarning: (String) -> 
         ),
         contentPadding = PaddingValues(vertical = 6.dp, horizontal = 16.dp),
         content = {
-            Text(
-                viewModel.ethereumPrivateKey,
+            C2(
+                text = viewModel.ethereumPrivateKey,
                 textAlign = TextAlign.Center,
                 maxLines = 2
             )
@@ -299,17 +296,11 @@ private fun SeedPhraseList(wordsNumbered: List<ShowKeyModule.WordNumbered>) {
 @Composable
 private fun SeedPhrase(item: ShowKeyModule.WordNumbered, portion: Int) {
     Row(Modifier.padding(bottom = 7.dp)) {
-        Text(
-            modifier = Modifier.width(32.dp),
+        A1(
             text = "${item.number}.",
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.headline2,
+            modifier = Modifier.width(32.dp),
         )
-        Text(
-            text = item.word,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.headline2,
-        )
+        A2(item.word)
     }
     if (item.number.mod(portion) == 0) {
         Spacer(Modifier.height(28.dp))
