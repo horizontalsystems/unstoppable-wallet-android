@@ -658,6 +658,9 @@
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="Settings_Appearance">Appearance</string>
 
+    <string name="Appearance_Theme">THEME</string>
+    <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
+
     <string name="SettingsAboutApp_Title">About App</string>
     <string name="SettingsAboutApp_Github" translatable="false">Github</string>
     <string name="SettingsAboutApp_Site">Website</string>

@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,10 +27,8 @@ import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
 class AppearanceFragment : BaseFragment() {
@@ -62,7 +61,7 @@ fun AppearanceScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.Settings_LaunchScreen),
+                TranslatableString.ResString(R.string.Settings_Appearance),
                 navigationIcon = {
                     HsIconButton(
                         onClick = { navController.popBackStack() }
@@ -76,9 +75,14 @@ fun AppearanceScreen(
                 },
                 menuItems = listOf(),
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            HeaderText(text = stringResource(id = R.string.Appearance_Theme))
+            ScreenOptionsView(uiState.themeOptions) {
+                viewModel.onEnterTheme(it)
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+            HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
             ScreenOptionsView(uiState.launchScreenOptions) {
-                viewModel.onLaunchPageSelect(it)
+                viewModel.onEnterLaunchPage(it)
             }
         }
     }
@@ -86,9 +90,9 @@ fun AppearanceScreen(
 }
 
 @Composable
-private fun ScreenOptionsView(
-    select: Select<LaunchPage>,
-    onClick: ((LaunchPage) -> Unit)
+private fun <T : WithTranslatableTitle>ScreenOptionsView(
+    select: Select<T>,
+    onClick: ((T) -> Unit)
 ) {
     CellSingleLineLawrenceSection(select.options) { option ->
         Row(
@@ -100,11 +104,13 @@ private fun ScreenOptionsView(
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = option.iconRes),
-                contentDescription = "option icon",
-                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-            )
+            option.iconRes?.let {
+                Image(
+                    painter = painterResource(id = it),
+                    contentDescription = "option icon",
+                    colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+                )
+            }
             body_leah(
                 text = option.title.getString(),
                 modifier = Modifier
