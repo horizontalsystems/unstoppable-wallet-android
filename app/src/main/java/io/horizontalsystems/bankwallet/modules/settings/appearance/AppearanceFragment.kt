@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -20,7 +18,8 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.LaunchPage
@@ -35,8 +34,6 @@ import io.horizontalsystems.core.findNavController
 
 class AppearanceFragment : BaseFragment() {
 
-    val viewModel by viewModels<AppearanceViewModel> { AppearanceModule.Factory() }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,7 +45,7 @@ class AppearanceFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    AppearanceScreen(viewModel) { findNavController().popBackStack() }
+                    AppearanceScreen(findNavController())
                 }
             }
         }
@@ -57,17 +54,19 @@ class AppearanceFragment : BaseFragment() {
 
 @Composable
 fun AppearanceScreen(
-    viewModel: AppearanceViewModel,
-    onCloseButtonClick: () -> Unit,
+    navController: NavController,
 ) {
-    val options by viewModel.optionsLiveData.observeAsState()
+    val viewModel = viewModel<AppearanceViewModel>(factory = AppearanceModule.Factory())
+    val uiState = viewModel.uiState
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
                 TranslatableString.ResString(R.string.Settings_LaunchScreen),
                 navigationIcon = {
-                    HsIconButton(onCloseButtonClick) {
+                    HsIconButton(
+                        onClick = { navController.popBackStack() }
+                    ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = "back button",
@@ -78,8 +77,8 @@ fun AppearanceScreen(
                 menuItems = listOf(),
             )
             Spacer(modifier = Modifier.height(12.dp))
-            options?.let {
-                ScreenOptionsView(it) { launchPage -> viewModel.onLaunchPageSelect(launchPage) }
+            ScreenOptionsView(uiState.launchScreenOptions) {
+                viewModel.onLaunchPageSelect(it)
             }
         }
     }

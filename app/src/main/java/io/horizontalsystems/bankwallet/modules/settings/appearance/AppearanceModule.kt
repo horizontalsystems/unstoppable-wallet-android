@@ -9,7 +9,7 @@ object AppearanceModule {
     class Factory() : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = AppearanceService(App.localStorage)
+            val service = LaunchScreenService(App.localStorage)
             return AppearanceViewModel(service) as T
         }
     }
