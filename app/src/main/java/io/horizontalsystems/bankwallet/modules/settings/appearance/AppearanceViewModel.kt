@@ -15,7 +15,7 @@ class AppearanceViewModel(
     private val launchScreenService: LaunchScreenService,
     private val themeService: ThemeService
 ) : ViewModel() {
-    private var launchScreenOptions = getLaunchScreenOptions()
+    private var launchScreenOptions = launchScreenService.optionsFlow.value
     private var themeOptions = themeService.optionsFlow.value
 
     var uiState by mutableStateOf(
@@ -27,6 +27,12 @@ class AppearanceViewModel(
 
     init {
         viewModelScope.launch {
+            launchScreenService.optionsFlow
+                .collect {
+                    handleUpdatedLaunchScreenOptions(it)
+                }
+        }
+        viewModelScope.launch {
             themeService.optionsFlow
                 .collect {
                     handleUpdatedThemeOptions(it)
@@ -34,14 +40,13 @@ class AppearanceViewModel(
         }
     }
 
-    private fun handleUpdatedThemeOptions(themeOptions: Select<ThemeType>) {
-        this.themeOptions = themeOptions
+    private fun handleUpdatedLaunchScreenOptions(launchScreenOptions: Select<LaunchPage>) {
+        this.launchScreenOptions = launchScreenOptions
         emitState()
     }
 
-    fun onEnterLaunchPage(launchPage: LaunchPage) {
-        launchScreenService.selectLaunchPage(launchPage)
-        launchScreenOptions = getLaunchScreenOptions()
+    private fun handleUpdatedThemeOptions(themeOptions: Select<ThemeType>) {
+        this.themeOptions = themeOptions
         emitState()
     }
 
@@ -52,14 +57,13 @@ class AppearanceViewModel(
         )
     }
 
-    private fun getLaunchScreenOptions(): Select<LaunchPage> {
-        return Select(launchScreenService.selectedOption, launchScreenService.options)
+    fun onEnterLaunchPage(launchPage: LaunchPage) {
+        launchScreenService.setLaunchScreen(launchPage)
     }
 
     fun onEnterTheme(themeType: ThemeType) {
         themeService.setThemeType(themeType)
     }
-
 }
 
 data class AppearanceUIState(
