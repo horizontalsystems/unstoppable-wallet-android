@@ -135,6 +135,14 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                     navController.slideFromRight(R.id.termsFragment)
                 }
             )
+        }, {
+            HsSettingCell(
+                R.string.Settings_Privacy,
+                R.drawable.ic_user_20,
+                onClick = {
+                    navController.slideFromRight(R.id.privacyFragment)
+                }
+            )
         })
     )
 
