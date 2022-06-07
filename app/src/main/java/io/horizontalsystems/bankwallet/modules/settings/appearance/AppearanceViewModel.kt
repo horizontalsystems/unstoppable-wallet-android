@@ -5,23 +5,30 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.managers.BaseCoinManager
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.coroutines.launch
 
 class AppearanceViewModel(
     private val launchScreenService: LaunchScreenService,
-    private val themeService: ThemeService
+    private val themeService: ThemeService,
+    private val baseCoinManager: BaseCoinManager
 ) : ViewModel() {
     private var launchScreenOptions = launchScreenService.optionsFlow.value
     private var themeOptions = themeService.optionsFlow.value
+    private var baseCoinOptions = buildBaseCoinSelect(baseCoinManager.baseCoinFlow.value)
 
     var uiState by mutableStateOf(
         AppearanceUIState(
             launchScreenOptions = launchScreenOptions,
-            themeOptions = themeOptions
+            themeOptions = themeOptions,
+            balanceOptions = baseCoinOptions,
         )
     )
 
@@ -38,6 +45,25 @@ class AppearanceViewModel(
                     handleUpdatedThemeOptions(it)
                 }
         }
+        viewModelScope.launch {
+            baseCoinManager.baseCoinFlow
+                .collect { baseCoin ->
+                    handleUpdatedBaseCoin(buildBaseCoinSelect(baseCoin))
+                }
+        }
+    }
+
+    private fun buildBaseCoinSelect(platformCoin: PlatformCoin?): Pair<PlatformCoinWrapper?, List<PlatformCoinWrapper>> {
+        val platformCoinWrappers = baseCoinManager
+            .platformCoins
+            .map {
+                PlatformCoinWrapper(it, TranslatableString.PlainString(it.code))
+            }
+
+        return Pair(
+            platformCoinWrappers.firstOrNull { it.platformCoin == platformCoin },
+            platformCoinWrappers
+        )
     }
 
     private fun handleUpdatedLaunchScreenOptions(launchScreenOptions: Select<LaunchPage>) {
@@ -50,10 +76,16 @@ class AppearanceViewModel(
         emitState()
     }
 
+    private fun handleUpdatedBaseCoin(baseCoinOptions: Pair<PlatformCoinWrapper?, List<PlatformCoinWrapper>>) {
+        this.baseCoinOptions = baseCoinOptions
+        emitState()
+    }
+
     private fun emitState() {
         uiState = AppearanceUIState(
             launchScreenOptions = launchScreenOptions,
-            themeOptions = themeOptions
+            themeOptions = themeOptions,
+            balanceOptions = baseCoinOptions
         )
     }
 
@@ -64,9 +96,19 @@ class AppearanceViewModel(
     fun onEnterTheme(themeType: ThemeType) {
         themeService.setThemeType(themeType)
     }
+
+    fun onEnterBalanceCoin(platformCoinWrapper: PlatformCoinWrapper) {
+        baseCoinManager.setBaseCoin(platformCoinWrapper.platformCoin)
+    }
 }
 
 data class AppearanceUIState(
     val launchScreenOptions: Select<LaunchPage>,
-    val themeOptions: Select<ThemeType>
+    val themeOptions: Select<ThemeType>,
+    val balanceOptions: Pair<PlatformCoinWrapper?, List<PlatformCoinWrapper>>
 )
+
+data class PlatformCoinWrapper(
+    val platformCoin: PlatformCoin,
+    override val title: TranslatableString
+) : WithTranslatableTitle

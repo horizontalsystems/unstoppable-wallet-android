@@ -1,17 +1,18 @@
-package io.horizontalsystems.bankwallet.modules.balance
+package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class TotalBalancePlatformCoinManager(
+class BaseCoinManager(
     private val coinManager: ICoinManager,
     private val localStorage: ILocalStorage,
 ) {
-    private val platformCoins = listOf(CoinType.Bitcoin, CoinType.Ethereum)
+    val platformCoins = listOf(CoinType.Bitcoin, CoinType.Ethereum)
         .mapNotNull {
             coinManager.getPlatformCoin(it)
         }
@@ -20,16 +21,19 @@ class TotalBalancePlatformCoinManager(
         platformCoins.find { it.coin.uid == balanceTotalCoinUid }
     } ?: platformCoins.firstOrNull()
 
-    private val _platformCoinFlow = MutableStateFlow(platformCoin)
-    val platformCoinFlow = _platformCoinFlow.asStateFlow()
+    private val _baseCoinFlow = MutableStateFlow(platformCoin)
+    val baseCoinFlow = _baseCoinFlow.asStateFlow()
 
-    fun toggleType() {
-        val indexOf = platformCoins.indexOf(platformCoin)
-        platformCoin = platformCoins.getOrNull(indexOf + 1) ?: platformCoins.firstOrNull()
+    fun toggleBaseCoin() {
+        val indexOfNext = platformCoins.indexOf(platformCoin) + 1
+        setBaseCoin(platformCoins.getOrNull(indexOfNext) ?: platformCoins.firstOrNull())
+    }
 
+    fun setBaseCoin(platformCoin: PlatformCoin?) {
+        this.platformCoin = platformCoin
         localStorage.balanceTotalCoinUid = platformCoin?.coin?.uid
 
-        _platformCoinFlow.update {
+        _baseCoinFlow.update {
             platformCoin
         }
     }

@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.managers.BaseCoinManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.ICurrencyManager
@@ -18,7 +19,7 @@ import java.math.BigDecimal
 class TotalService(
     private val currencyManager: ICurrencyManager,
     private val marketKit: MarketKit,
-    private val totalBalancePlatformCoinManager: TotalBalancePlatformCoinManager
+    private val baseCoinManager: BaseCoinManager
 ) {
     private var balanceHidden = false
     private var totalCurrencyValue: CurrencyValue? = null
@@ -34,7 +35,7 @@ class TotalService(
     )
     val stateFlow = _stateFlow.asStateFlow()
 
-    private var platformCoin: PlatformCoin? = null
+    private var baseCoin: PlatformCoin? = null
     private var coinPrice: CoinPrice? = null
     private var currency = currencyManager.baseCurrency
     private var items: List<BalanceModule.BalanceItem>? = null
@@ -52,8 +53,8 @@ class TotalService(
         }
 
         coroutineScope.launch {
-            totalBalancePlatformCoinManager.platformCoinFlow.collect {
-                handleUpdatedPlatformCoin(it)
+            baseCoinManager.baseCoinFlow.collect {
+                handleUpdatedBaseCoin(it)
             }
         }
     }
@@ -79,7 +80,7 @@ class TotalService(
     }
 
     fun toggleType() {
-        totalBalancePlatformCoinManager.toggleType()
+        baseCoinManager.toggleBaseCoin()
     }
 
     private fun handleUpdatedCurrency(currency: Currency) {
@@ -93,8 +94,8 @@ class TotalService(
         emitState()
     }
 
-    private fun handleUpdatedPlatformCoin(platformCoin: PlatformCoin?) {
-        this.platformCoin = platformCoin
+    private fun handleUpdatedBaseCoin(baseCoin: PlatformCoin?) {
+        this.baseCoin = baseCoin
 
         refreshCoinPrice()
         resubscribeForCoinPrice()
@@ -104,7 +105,7 @@ class TotalService(
     }
 
     private fun refreshCoinPrice() {
-        coinPrice = platformCoin?.let {
+        coinPrice = baseCoin?.let {
             marketKit.coinPrice(it.coin.uid, currency.code)
         }
     }
@@ -112,7 +113,7 @@ class TotalService(
     private fun resubscribeForCoinPrice() {
         coinPriceUpdatesJob?.cancel()
 
-        platformCoin?.let { platformCoin ->
+        baseCoin?.let { platformCoin ->
             coinPriceUpdatesJob = coroutineScope.launch {
                 marketKit.coinPriceObservable(platformCoin.coin.uid, currency.code)
                     .asFlow()
@@ -141,15 +142,15 @@ class TotalService(
     private fun refreshTotalCoinValue() {
         val tmpTotalCurrencyValue = totalCurrencyValue
         val tmpCoinPrice = coinPrice
-        val tmpPlatformCoin = platformCoin
+        val tmpBaseCoin = baseCoin
 
         totalCoinValue = when {
             tmpTotalCurrencyValue == null -> null
             tmpCoinPrice == null -> null
-            tmpPlatformCoin == null -> null
+            tmpBaseCoin == null -> null
             else -> {
                 val value = tmpTotalCurrencyValue.value / tmpCoinPrice.value
-                CoinValue(tmpPlatformCoin, value)
+                CoinValue(tmpBaseCoin, value)
             }
         }
     }

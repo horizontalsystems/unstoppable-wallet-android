@@ -32,7 +32,7 @@ object BalanceModule {
             return BalanceViewModel(
                 balanceService,
                 BalanceViewItemFactory(),
-                TotalService(App.currencyManager, App.marketKit, App.totalBalancePlatformCoinManager)
+                TotalService(App.currencyManager, App.marketKit, App.baseCoinManager)
             ) as T
         }
     }

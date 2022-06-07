@@ -12,7 +12,11 @@ object AppearanceModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val launchScreenService = LaunchScreenService(App.localStorage)
             val themeService = ThemeService(App.localStorage)
-            return AppearanceViewModel(launchScreenService, themeService) as T
+            return AppearanceViewModel(
+                launchScreenService,
+                themeService,
+                App.baseCoinManager
+            ) as T
         }
     }
 

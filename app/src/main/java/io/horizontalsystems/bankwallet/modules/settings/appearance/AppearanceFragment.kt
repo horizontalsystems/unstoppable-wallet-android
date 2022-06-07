@@ -76,25 +76,41 @@ fun AppearanceScreen(
                 menuItems = listOf(),
             )
             HeaderText(text = stringResource(id = R.string.Appearance_Theme))
-            ScreenOptionsView(uiState.themeOptions) {
+            ScreenOptionsView(
+                options = uiState.themeOptions.options,
+                selected = uiState.themeOptions.selected
+            ) {
                 viewModel.onEnterTheme(it)
             }
+
             Spacer(modifier = Modifier.height(24.dp))
             HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
-            ScreenOptionsView(uiState.launchScreenOptions) {
+            ScreenOptionsView(
+                options = uiState.launchScreenOptions.options,
+                selected = uiState.launchScreenOptions.selected
+            ) {
                 viewModel.onEnterLaunchPage(it)
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+            HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
+            ScreenOptionsView(
+                options = uiState.balanceOptions.second,
+                selected = uiState.balanceOptions.first
+            ) {
+                viewModel.onEnterBalanceCoin(it)
             }
         }
     }
-
 }
 
 @Composable
 private fun <T : WithTranslatableTitle>ScreenOptionsView(
-    select: Select<T>,
-    onClick: ((T) -> Unit)
+    options: List<T>,
+    selected: T?,
+    onClick: (T) -> Unit,
 ) {
-    CellSingleLineLawrenceSection(select.options) { option ->
+    CellSingleLineLawrenceSection(options) { option ->
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -117,7 +133,7 @@ private fun <T : WithTranslatableTitle>ScreenOptionsView(
                     .weight(1f)
                     .padding(horizontal = 16.dp)
             )
-            if (option == select.selected) {
+            if (option == selected) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_checkmark_20),
                     contentDescription = "",
@@ -134,6 +150,6 @@ fun ScreenOptionsViewPreview() {
     val select =
         Select(LaunchPage.Auto, listOf(LaunchPage.Auto, LaunchPage.Market, LaunchPage.Watchlist))
     ComposeAppTheme {
-        ScreenOptionsView(select, { })
+        ScreenOptionsView(select.options, select.selected) { }
     }
 }
