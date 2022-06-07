@@ -19,5 +19,4 @@ sealed class TranslatableString {
 
 interface WithTranslatableTitle {
     val title: TranslatableString
-    val iconRes: Int? get() = null
 }
