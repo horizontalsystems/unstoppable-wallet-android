@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 
-enum class LaunchPage(@StringRes val titleRes: Int, @DrawableRes override val iconRes: Int):
+enum class LaunchPage(@StringRes val titleRes: Int, @DrawableRes val iconRes: Int):
     WithTranslatableTitle {
     Auto(R.string.SettingsLaunchScreen_Auto, R.drawable.ic_settings_20),
     Balance(R.string.SettingsLaunchScreen_Balance, R.drawable.ic_wallet_20),
