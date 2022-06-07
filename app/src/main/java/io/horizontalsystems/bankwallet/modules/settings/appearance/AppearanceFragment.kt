@@ -13,21 +13,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
@@ -76,80 +74,74 @@ fun AppearanceScreen(
                 menuItems = listOf(),
             )
             HeaderText(text = stringResource(id = R.string.Appearance_Theme))
-            ScreenOptionsView(
-                options = uiState.themeOptions.options,
-                selected = uiState.themeOptions.selected
-            ) {
-                viewModel.onEnterTheme(it)
+            CellSingleLineLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
+                RowSelect(
+                    painter = painterResource(id = option.iconRes),
+                    text = option.title.getString(),
+                    selected = option == uiState.themeOptions.selected
+                ) {
+                    viewModel.onEnterTheme(option)
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
             HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
-            ScreenOptionsView(
-                options = uiState.launchScreenOptions.options,
-                selected = uiState.launchScreenOptions.selected
-            ) {
-                viewModel.onEnterLaunchPage(it)
+            CellSingleLineLawrenceSection(uiState.launchScreenOptions.options) { option ->
+                RowSelect(
+                    painter = painterResource(id = option.iconRes),
+                    text = option.title.getString(),
+                    selected = option == uiState.launchScreenOptions.selected
+                ) {
+                    viewModel.onEnterLaunchPage(option)
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
             HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
-            ScreenOptionsView(
-                options = uiState.balanceOptions.second,
-                selected = uiState.balanceOptions.first
-            ) {
-                viewModel.onEnterBalanceCoin(it)
-            }
-        }
-    }
-}
-
-@Composable
-private fun <T : WithTranslatableTitle>ScreenOptionsView(
-    options: List<T>,
-    selected: T?,
-    onClick: (T) -> Unit,
-) {
-    CellSingleLineLawrenceSection(options) { option ->
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable {
-                    onClick.invoke(option)
+            CellSingleLineLawrenceSection(uiState.balanceOptions.second) { option ->
+                RowSelect(
+                    painter = painterResource(id = R.drawable.coin_placeholder),
+                    text = option.coin.code,
+                    selected = option == uiState.balanceOptions.first
+                ) {
+                    viewModel.onEnterBaseCoin(option)
                 }
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            option.iconRes?.let {
-                Image(
-                    painter = painterResource(id = it),
-                    contentDescription = "option icon",
-                    colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-                )
-            }
-            body_leah(
-                text = option.title.getString(),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 16.dp)
-            )
-            if (option == selected) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_checkmark_20),
-                    contentDescription = "",
-                    colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
-                )
             }
         }
     }
 }
 
-@Preview
 @Composable
-fun ScreenOptionsViewPreview() {
-    val select =
-        Select(LaunchPage.Auto, listOf(LaunchPage.Auto, LaunchPage.Market, LaunchPage.Watchlist))
-    ComposeAppTheme {
-        ScreenOptionsView(select.options, select.selected) { }
+private fun RowSelect(
+    painter: Painter,
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painter,
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+        )
+        body_leah(
+            text = text,
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp)
+        )
+        if (selected) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                contentDescription = "",
+                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+            )
+        }
     }
 }

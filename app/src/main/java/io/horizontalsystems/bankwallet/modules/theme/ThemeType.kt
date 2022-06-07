@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 enum class ThemeType(
     val value: String,
     override val title: TranslatableString,
-    override val iconRes: Int?
+    override val iconRes: Int
 ) : WithTranslatableTitle {
     Dark(
         "Dark",
