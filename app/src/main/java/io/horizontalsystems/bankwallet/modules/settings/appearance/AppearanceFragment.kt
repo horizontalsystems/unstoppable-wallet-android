@@ -98,11 +98,11 @@ fun AppearanceScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
             HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
-            CellSingleLineLawrenceSection(uiState.balanceOptions.second) { option ->
+            CellSingleLineLawrenceSection(uiState.baseCoinOptions.options) { option ->
                 RowSelect(
                     painter = painterResource(id = R.drawable.coin_placeholder),
                     text = option.coin.code,
-                    selected = option == uiState.balanceOptions.first
+                    selected = option == uiState.baseCoinOptions.selected
                 ) {
                     viewModel.onEnterBaseCoin(option)
                 }

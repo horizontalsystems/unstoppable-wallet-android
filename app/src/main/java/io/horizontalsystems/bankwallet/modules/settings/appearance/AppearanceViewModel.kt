@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.bankwallet.ui.compose.SelectOptional
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.coroutines.launch
 
@@ -26,7 +27,7 @@ class AppearanceViewModel(
         AppearanceUIState(
             launchScreenOptions = launchScreenOptions,
             themeOptions = themeOptions,
-            balanceOptions = baseCoinOptions,
+            baseCoinOptions = baseCoinOptions,
         )
     )
 
@@ -51,8 +52,8 @@ class AppearanceViewModel(
         }
     }
 
-    private fun buildBaseCoinSelect(platformCoin: PlatformCoin?): Pair<PlatformCoin?, List<PlatformCoin>> {
-        return Pair(platformCoin, baseCoinManager.platformCoins)
+    private fun buildBaseCoinSelect(platformCoin: PlatformCoin?): SelectOptional<PlatformCoin> {
+        return SelectOptional(platformCoin, baseCoinManager.platformCoins)
     }
 
     private fun handleUpdatedLaunchScreenOptions(launchScreenOptions: Select<LaunchPage>) {
@@ -65,7 +66,7 @@ class AppearanceViewModel(
         emitState()
     }
 
-    private fun handleUpdatedBaseCoin(baseCoinOptions: Pair<PlatformCoin?, List<PlatformCoin>>) {
+    private fun handleUpdatedBaseCoin(baseCoinOptions: SelectOptional<PlatformCoin>) {
         this.baseCoinOptions = baseCoinOptions
         emitState()
     }
@@ -74,7 +75,7 @@ class AppearanceViewModel(
         uiState = AppearanceUIState(
             launchScreenOptions = launchScreenOptions,
             themeOptions = themeOptions,
-            balanceOptions = baseCoinOptions
+            baseCoinOptions = baseCoinOptions
         )
     }
 
@@ -94,5 +95,5 @@ class AppearanceViewModel(
 data class AppearanceUIState(
     val launchScreenOptions: Select<LaunchPage>,
     val themeOptions: Select<ThemeType>,
-    val balanceOptions: Pair<PlatformCoin?, List<PlatformCoin>>
+    val baseCoinOptions: SelectOptional<PlatformCoin>
 )
