@@ -661,6 +661,10 @@
     <string name="Appearance_Theme">THEME</string>
     <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
     <string name="Appearance_BalanceConversion">BALANCE CONVERSION</string>
+    <string name="Appearance_BalanceValue">BALANCE VALUE</string>
+
+    <string name="BalanceViewType_CoinValue">Coin Value</string>
+    <string name="BalanceViewType_FiatValue">Fiat Value</string>
 
     <string name="SettingsAboutApp_Title">About App</string>
     <string name="SettingsAboutApp_Github" translatable="false">Github</string>

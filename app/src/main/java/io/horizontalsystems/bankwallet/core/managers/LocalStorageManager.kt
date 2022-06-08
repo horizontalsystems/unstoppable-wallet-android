@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
@@ -176,6 +177,22 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
             ?: ThemeType.System
         set(themeType) {
             preferences.edit().putString(CURRENT_THEME, themeType.value).apply()
+        }
+
+    override var balanceViewType: BalanceViewType?
+        get() = preferences.getString("balanceViewType", null)?.let {
+            try {
+                BalanceViewType.valueOf(it)
+            } catch (e: IllegalArgumentException) {
+                null
+            }
+        }
+        set(value) {
+            if (value != null) {
+                preferences.edit().putString("balanceViewType", value.name).apply()
+            } else {
+                preferences.edit().remove("balanceViewType").apply()
+            }
         }
 
     //  IKeyboardStorage

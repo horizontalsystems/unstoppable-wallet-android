@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
@@ -72,6 +73,7 @@ interface ILocalStorage {
     var notificationId: String?
     var notificationServerTime: Long
     var currentTheme: ThemeType
+    var balanceViewType: BalanceViewType?
     var changelogShownForAppVersion: String?
     var ignoreRootedDeviceWarning: Boolean
     var launchPage: LaunchPage?
