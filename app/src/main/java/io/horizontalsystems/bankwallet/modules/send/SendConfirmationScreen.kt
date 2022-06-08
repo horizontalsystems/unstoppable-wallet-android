@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -123,8 +122,9 @@ fun SendConfirmationScreen(
                     HSSectionRounded {
                         CellSingleLineLawrence {
                             SectionTitleCell(
-                                R.string.Send_Confirmation_YouSend,
-                                coin.name
+                                stringResource(R.string.Send_Confirmation_YouSend),
+                                coin.name,
+                                R.drawable.ic_arrow_up_right_12
                             )
                         }
                         CellSingleLineLawrence(borderTop = true) {
@@ -213,35 +213,6 @@ private fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend:
                 enabled = true
             )
         }
-    }
-}
-
-@Composable
-fun SectionTitleCell(title: Int, value: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            modifier = Modifier.padding(end = 16.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_up_right_12),
-            tint = ComposeAppTheme.colors.grey,
-            contentDescription = null,
-        )
-
-        body_leah(text = stringResource(title))
-
-        subhead1_grey(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp),
-            text = value,
-            textAlign = TextAlign.End,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
     }
 }
 

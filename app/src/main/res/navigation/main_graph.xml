@@ -29,8 +29,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment" />
     <fragment
         android:id="@+id/transactionInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"
-        tools:layout="@layout/fragment_transaction_info"/>
+        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment" />
     <fragment
         android:id="@+id/transactionSpeedUpCancelFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"

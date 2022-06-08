@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValueNew
+import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
@@ -112,8 +112,8 @@ data class TransactionViewItem(
     val progress: Float?,
     val title: String,
     val subtitle: String,
-    val primaryValue: ColoredValueNew?,
-    val secondaryValue: ColoredValueNew?,
+    val primaryValue: ColoredValue?,
+    val secondaryValue: ColoredValue?,
     val date: Date,
     val sentToSelf: Boolean = false,
     val doubleSpend: Boolean = false,

@@ -20,7 +20,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSendEvmBinding
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -34,7 +33,7 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
     private val logger = AppLogger("tx-speedUp-cancel")
     private val transactionInfoViewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment)
     private val optionType by lazy {
-        arguments?.getParcelable<TransactionInfoOption.Type>(
+        arguments?.getParcelable<TransactionInfoOptionsModule.Type>(
             OPTION_TYPE_KEY
         )!!
     }
@@ -172,7 +171,7 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
         private const val TRANSACTION_HASH_KEY = "transaction_hash_key"
 
         fun prepareParams(
-            optionType: TransactionInfoOption.Type,
+            optionType: TransactionInfoOptionsModule.Type,
             transactionHash: String
         ): Bundle {
             return bundleOf(

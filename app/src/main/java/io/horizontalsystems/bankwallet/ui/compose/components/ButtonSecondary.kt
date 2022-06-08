@@ -39,12 +39,20 @@ fun ButtonSecondaryDefault(
         onClick = onClick,
         content = {
             when (ellipsis) {
-                Ellipsis.End -> Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                is Ellipsis.Middle -> Text(
-                    truncateIfNeeded(title, ellipsis.characterCount),
-                    maxLines = 1,
-                    overflow = TextOverflow.Visible
-                )
+                Ellipsis.End -> {
+                    subhead1_leah(
+                        title,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                is Ellipsis.Middle -> {
+                    subhead1_leah(
+                        truncateIfNeeded(title, ellipsis.characterCount),
+                        maxLines = 1,
+                        overflow = TextOverflow.Visible
+                    )
+                }
             }
         },
         enabled = enabled
@@ -102,7 +110,7 @@ fun ButtonSecondaryTransparent(
         buttonColors = buttonColors(
             backgroundColor = ComposeAppTheme.colors.transparent,
             contentColor = ComposeAppTheme.colors.leah,
-            disabledBackgroundColor= ComposeAppTheme.colors.transparent,
+            disabledBackgroundColor = ComposeAppTheme.colors.transparent,
             disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = {
