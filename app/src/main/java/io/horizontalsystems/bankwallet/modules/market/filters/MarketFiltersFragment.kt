@@ -4,19 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -32,14 +31,13 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.*
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.PriceChange
-import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.Item
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetMarketSearchFilterSelectDialog
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetMarketSearchFilterSelectMultipleDialog
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.launch
 
 class MarketFiltersFragment : BaseFragment() {
 
@@ -58,186 +56,93 @@ class MarketFiltersFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ComposeAppTheme {
-                    AdvancedSearchScreen(
-                        viewModel,
-                        findNavController(),
-                    ) { filterType -> openSelectionDialog(filterType) }
-                }
+                AdvancedSearchScreen(
+                    viewModel,
+                    findNavController(),
+                )
             }
         }
     }
-
-    private fun openSelectionDialog(filterType: MarketFiltersModule.FilterDropdown) {
-        when (filterType) {
-            CoinSet -> showFilterCoinListDialog()
-            MarketCap -> showFilterMarketCapDialog()
-            TradingVolume -> showFilterVolumeDialog()
-            Blockchain -> showFilterBlockchainsDialog()
-            PriceChange -> showPriceChangeDialog()
-            PricePeriod -> showPeriodDialog()
-        }
-    }
-
-    private fun showFilterCoinListDialog() {
-        showSelectorDialog(
-            title = R.string.Market_Filter_ChooseSet,
-            headerIcon = R.drawable.ic_circle_coin_24,
-            items = viewModel.coinListsViewItemOptions,
-            selectedItem = viewModel.coinListViewItem,
-        ) {
-            viewModel.coinListViewItem = it
-        }
-    }
-
-    private fun showFilterMarketCapDialog() {
-        showSelectorDialog(
-            title = R.string.Market_Filter_MarketCap,
-            headerIcon = R.drawable.ic_usd_24,
-            items = viewModel.marketCapViewItemOptions,
-            selectedItem = viewModel.marketCapViewItem,
-        ) {
-            viewModel.marketCapViewItem = it
-        }
-    }
-
-    private fun showFilterVolumeDialog() {
-        showSelectorDialog(
-            title = R.string.Market_Filter_Volume,
-            subtitleText = getString(R.string.TimePeriod_24h),
-            headerIcon = R.drawable.ic_chart_24,
-            items = viewModel.volumeViewItemOptions,
-            selectedItem = viewModel.volumeViewItem,
-        ) {
-            viewModel.volumeViewItem = it
-        }
-    }
-
-    private fun showFilterBlockchainsDialog() {
-        showMultipleSelectorDialog(
-            title = R.string.Market_Filter_Blockchains,
-            headerIcon = R.drawable.ic_blocks_24,
-            items = viewModel.blockchainOptions,
-            selectedIndexes = viewModel.selectedBlockchainIndexes,
-        ) { selectedIndexes ->
-            viewModel.selectedBlockchainIndexes = selectedIndexes
-        }
-    }
-
-    private fun showPriceChangeDialog() {
-        showSelectorDialog(
-            title = R.string.Market_Filter_PriceChange,
-            headerIcon = R.drawable.ic_market_24,
-            items = viewModel.priceChangeViewItemOptions,
-            selectedItem = viewModel.priceChangeViewItem,
-        ) {
-            viewModel.priceChangeViewItem = it
-        }
-    }
-
-    private fun showPeriodDialog() {
-        showSelectorDialog(
-            title = R.string.Market_Filter_PricePeriod,
-            headerIcon = R.drawable.ic_circle_clock_24,
-            items = viewModel.periodViewItemOptions,
-            selectedItem = viewModel.periodViewItem,
-        ) {
-            viewModel.periodViewItem = it
-        }
-    }
-
-    private fun <ItemClass> showSelectorDialog(
-        title: Int,
-        subtitleText: String = "---------",
-        headerIcon: Int,
-        items: List<FilterViewItemWrapper<ItemClass>>,
-        selectedItem: FilterViewItemWrapper<ItemClass>?,
-        onSelectListener: (FilterViewItemWrapper<ItemClass>) -> Unit
-    ) {
-        val dialog = BottomSheetMarketSearchFilterSelectDialog<ItemClass>()
-        dialog.titleText = getString(title)
-        dialog.subtitleText = subtitleText
-        dialog.headerIconResourceId = headerIcon
-        dialog.items = items
-        dialog.selectedItem = selectedItem
-        dialog.onSelectListener = onSelectListener
-
-        dialog.show(childFragmentManager, "selector_dialog")
-    }
-
-    private fun <ItemClass> showMultipleSelectorDialog(
-        title: Int,
-        subtitleText: String = "---------",
-        headerIcon: Int,
-        items: List<FilterViewItemWrapper<ItemClass>>,
-        selectedIndexes: List<Int>,
-        onSelectListener: (List<Int>) -> Unit
-    ) {
-        val dialog = BottomSheetMarketSearchFilterSelectMultipleDialog(
-            titleText = getString(title),
-            subtitleText = subtitleText,
-            headerIcon = headerIcon,
-            items = items,
-            selectedIndexes = selectedIndexes,
-            onCloseListener = onSelectListener
-        )
-
-        dialog.show(childFragmentManager, "selector_dialog")
-    }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun AdvancedSearchScreen(
     viewModel: MarketFiltersViewModel,
     navController: NavController,
-    onClick: (MarketFiltersModule.FilterDropdown) -> Unit,
 ) {
     val errorMessage = viewModel.errorMessage
+    val coroutineScope = rememberCoroutineScope()
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
-            AppBar(
-                TranslatableString.ResString(R.string.Market_Filters),
-                navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
+    var bottomSheetType by remember { mutableStateOf(CoinSet) }
+    val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+
+    ComposeAppTheme {
+        ModalBottomSheetLayout(
+            sheetState = modalBottomSheetState,
+            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+            sheetContent = {
+                BottomSheetContent(
+                    bottomSheetType = bottomSheetType,
+                    viewModel = viewModel,
+                    onClose = {
+                        coroutineScope.launch {
+                            modalBottomSheetState.hide()
+                        }
+                    }
+                )
+            },
+        ) {
+            Surface(color = ComposeAppTheme.colors.tyler) {
+                Column {
+                    AppBar(
+                        TranslatableString.ResString(R.string.Market_Filters),
+                        navigationIcon = {
+                            HsIconButton(onClick = { navController.popBackStack() }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_back),
+                                    contentDescription = "back button",
+                                    tint = ComposeAppTheme.colors.jacob
+                                )
+                            }
+                        },
+                        menuItems = listOf(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Button_Reset),
+                                onClick = { viewModel.reset() }
+                            )
+                        ),
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        AdvancedSearchContent(viewModel) { type ->
+                            bottomSheetType = type
+                            coroutineScope.launch {
+                                modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                            }
+                        }
+                    }
+
+                    ButtonsGroupWithShade {
+                        ButtonPrimaryYellowWithSpinner(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            title = viewModel.buttonTitle,
+                            onClick = {
+                                navController.slideFromRight(
+                                    R.id.marketAdvancedSearchResultsFragment
+                                )
+                            },
+                            showSpinner = viewModel.showSpinner,
+                            enabled = viewModel.buttonEnabled,
                         )
                     }
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Reset),
-                        onClick = { viewModel.reset() }
-                    )
-                ),
-            )
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                AdvancedSearchContent(viewModel, onClick)
-            }
-
-            ButtonsGroupWithShade {
-                ButtonPrimaryYellowWithSpinner(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    title = viewModel.buttonTitle,
-                    onClick = {
-                        navController.slideFromRight(
-                            R.id.marketAdvancedSearchResultsFragment
-                        )
-                    },
-                    showSpinner = viewModel.showSpinner,
-                    enabled = viewModel.buttonEnabled,
-                )
+                }
             }
         }
     }
@@ -248,35 +153,184 @@ private fun AdvancedSearchScreen(
 }
 
 @Composable
+private fun BottomSheetContent(
+    bottomSheetType: MarketFiltersModule.FilterDropdown,
+    viewModel: MarketFiltersViewModel,
+    onClose: () -> Unit,
+) {
+    when (bottomSheetType) {
+        CoinSet -> {
+            SingleSelectBottomSheetContent(
+                title = R.string.Market_Filter_ChooseSet,
+                headerIcon = R.drawable.ic_circle_coin_24,
+                items = viewModel.coinListsViewItemOptions,
+                selectedItem = viewModel.coinListSet,
+                onSelect = {
+                    viewModel.updateCoinList(it)
+                },
+                onClose = onClose
+            )
+        }
+        MarketCap -> {
+            SingleSelectBottomSheetContent(
+                title = R.string.Market_Filter_MarketCap,
+                headerIcon = R.drawable.ic_usd_24,
+                items = viewModel.marketCapViewItemOptions,
+                selectedItem = viewModel.marketCap,
+                onSelect = {
+                    viewModel.updateMarketCap(it)
+                },
+                onClose = onClose
+            )
+        }
+        TradingVolume -> {
+            SingleSelectBottomSheetContent(
+                title = R.string.Market_Filter_Volume,
+                subtitle = stringResource(R.string.TimePeriod_24h),
+                headerIcon = R.drawable.ic_chart_24,
+                items = viewModel.volumeViewItemOptions,
+                selectedItem = viewModel.volume,
+                onSelect = {
+                    viewModel.updateVolume(it)
+                },
+                onClose = onClose
+            )
+        }
+        PriceChange -> {
+            SingleSelectBottomSheetContent(
+                title = R.string.Market_Filter_PriceChange,
+                headerIcon = R.drawable.ic_market_24,
+                items = viewModel.priceChangeViewItemOptions,
+                selectedItem = viewModel.priceChange,
+                onSelect = {
+                    viewModel.updatePriceChange(it)
+                },
+                onClose = onClose
+            )
+        }
+        PricePeriod -> {
+            SingleSelectBottomSheetContent(
+                title = R.string.Market_Filter_PricePeriod,
+                headerIcon = R.drawable.ic_circle_clock_24,
+                items = viewModel.periodViewItemOptions,
+                selectedItem = viewModel.period,
+                onSelect = {
+                    viewModel.updatePeriod(it)
+                },
+                onClose = onClose
+            )
+        }
+        Blockchain -> {
+            MultiSelectBottomSheetContent(
+                titleText = stringResource(R.string.Market_Filter_Blockchains),
+                headerIcon = R.drawable.ic_blocks_24,
+                items = viewModel.blockchainOptions,
+                selected = viewModel.selectedBlockchainIndexes,
+                onSelectionUpdate = { selectedIndexes ->
+                    viewModel.updateSelectedBlockchainIndexes(selectedIndexes)
+                },
+                onClose = onClose
+            )
+        }
+    }
+}
+
+@Composable
 fun AdvancedSearchContent(
     viewModel: MarketFiltersViewModel,
-    onDropdownClick: (MarketFiltersModule.FilterDropdown) -> Unit,
+    showBottomSheet: (MarketFiltersModule.FilterDropdown) -> Unit,
 ) {
 
-    viewModel.sectionsState.forEach { section ->
-        section.header?.let {
-            SectionHeader(it)
+    Spacer(Modifier.height(12.dp))
+
+    CellSingleLineLawrenceSection(
+        listOf {
+            AdvancedSearchDropdown(
+                title = R.string.Market_Filter_ChooseSet,
+                value = viewModel.coinListSet.title,
+                onDropdownClick = { showBottomSheet(CoinSet) }
+            )
         }
-        val composables = mutableListOf<@Composable () -> Unit>()
-        section.items.forEach { item ->
-            when (item) {
-                is Item.Switch -> {
-                    composables.add {
-                        AdvancedSearchSwitch(item.type.titleResId, item.selected) { checked ->
-                            viewModel.onSwitchChanged(item.type, checked)
-                        }
-                    }
-                }
-                is Item.DropDown -> {
-                    composables.add {
-                        AdvancedSearchDropdown(item.type, item.value, onDropdownClick)
-                    }
-                }
-            }
+    )
+
+    SectionHeader(R.string.Market_FilterSection_MarketParameters)
+
+    CellSingleLineLawrenceSection(
+        listOf({
+            AdvancedSearchDropdown(
+                title = R.string.Market_Filter_MarketCap,
+                value = viewModel.marketCap.title,
+                onDropdownClick = { showBottomSheet(MarketCap) }
+            )
+        }, {
+            AdvancedSearchDropdown(
+                title = R.string.Market_Filter_Volume,
+                value = viewModel.volume.title,
+                onDropdownClick = { showBottomSheet(TradingVolume) }
+            )
+        })
+    )
+
+    SectionHeader(R.string.Market_FilterSection_NetworkParameters)
+
+    CellSingleLineLawrenceSection(
+        listOf {
+            AdvancedSearchDropdown(
+                title = R.string.Market_Filter_Blockchains,
+                value = viewModel.selectedBlockchainsValue,
+                onDropdownClick = { showBottomSheet(Blockchain) }
+            )
         }
-        Spacer(Modifier.height(12.dp))
-        CellSingleLineLawrenceSection(composables)
-    }
+    )
+
+    SectionHeader(R.string.Market_FilterSection_PriceParameters)
+
+    CellSingleLineLawrenceSection(
+        listOf({
+            AdvancedSearchDropdown(
+                title = R.string.Market_Filter_PriceChange,
+                value = viewModel.priceChange.title,
+                onDropdownClick = { showBottomSheet(PriceChange) }
+            )
+        }, {
+            AdvancedSearchDropdown(
+                title = R.string.Market_Filter_PricePeriod,
+                value = viewModel.period.title,
+                onDropdownClick = { showBottomSheet(PricePeriod) }
+            )
+        }, {
+            AdvancedSearchSwitch(
+                title = R.string.Market_Filter_OutperformedBtc,
+                enabled = viewModel.outperformedBtcOn,
+                onChecked = { viewModel.updateOutperformedBtcOn(it) }
+            )
+        }, {
+            AdvancedSearchSwitch(
+                title = R.string.Market_Filter_OutperformedEth,
+                enabled = viewModel.outperformedEthOn,
+                onChecked = { viewModel.updateOutperformedEthOn(it) }
+            )
+        }, {
+            AdvancedSearchSwitch(
+                title = R.string.Market_Filter_OutperformedBnb,
+                enabled = viewModel.outperformedBnbOn,
+                onChecked = { viewModel.updateOutperformedBnbOn(it) }
+            )
+        }, {
+            AdvancedSearchSwitch(
+                title = R.string.Market_Filter_PriceCloseToAth,
+                enabled = viewModel.priceCloseToAth,
+                onChecked = { viewModel.updateOutperformedAthOn(it) }
+            )
+        }, {
+            AdvancedSearchSwitch(
+                title = R.string.Market_Filter_PriceCloseToAtl,
+                enabled = viewModel.priceCloseToAtl,
+                onChecked = { viewModel.updateOutperformedAtlOn(it) }
+            )
+        })
+    )
+
     Spacer(modifier = Modifier.height(32.dp))
 }
 
@@ -286,36 +340,40 @@ private fun SectionHeader(header: Int) {
         text = stringResource(header),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
-        modifier = Modifier.padding(start = 16.dp, top = 44.dp, end = 16.dp, bottom = 1.dp)
+        modifier = Modifier.padding(start = 16.dp, top = 44.dp, end = 16.dp, bottom = 13.dp)
     )
 }
 
 @Composable
 private fun AdvancedSearchDropdown(
-    type: MarketFiltersModule.FilterDropdown,
+    @StringRes title: Int,
     value: String?,
-    onDropdownClick: (MarketFiltersModule.FilterDropdown) -> Unit,
+    onDropdownClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxHeight()
-            .clickable { onDropdownClick(type) }
+            .clickable {
+                onDropdownClick()
+            }
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         body_leah(
-            text = stringResource(type.titleResId),
+            text = stringResource(title),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
         Spacer(Modifier.weight(1f))
-        FilterMenu(value) { onDropdownClick(type) }
+        FilterMenu(value) {
+            onDropdownClick()
+        }
     }
 }
 
 @Composable
 private fun AdvancedSearchSwitch(
-    titleResId: Int,
+    title: Int,
     enabled: Boolean,
     onChecked: (Boolean) -> Unit,
 ) {
@@ -327,7 +385,7 @@ private fun AdvancedSearchSwitch(
         verticalAlignment = Alignment.CenterVertically
     ) {
         body_leah(
-            text = stringResource(titleResId),
+            text = stringResource(title),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
@@ -365,5 +423,117 @@ fun FilterMenu(title: String?, onClick: () -> Unit) {
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey
         )
+    }
+}
+
+@Composable
+private fun <ItemClass> MultiSelectBottomSheetContent(
+    titleText: String,
+    headerIcon: Int,
+    items: List<FilterViewItemWrapper<ItemClass>>,
+    selected: List<Int> = listOf(),
+    onSelectionUpdate: (List<Int>) -> Unit,
+    onClose: (() -> Unit),
+) {
+
+    BottomSheetHeader(
+        iconPainter = painterResource(headerIcon),
+        title = titleText,
+        subtitle = "---------",
+        onCloseClick = onClose,
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+    ) {
+        Column {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10
+            )
+            items.forEachIndexed { index, item ->
+                CellMultilineLawrence(borderBottom = true) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                val updatedList = if (selected.contains(index)) {
+                                    selected.toMutableList().also { it.remove(index) }
+                                } else {
+                                    selected + listOf(index)
+                                }
+                                onSelectionUpdate(updatedList)
+                            }
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        body_leah(text = item.title ?: stringResource(R.string.Any))
+                        Spacer(modifier = Modifier.weight(1f))
+                        if (selected.contains(index)) {
+                            Image(
+                                modifier = Modifier.padding(start = 5.dp),
+                                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                                contentDescription = null
+                            )
+                        }
+
+                    }
+                }
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+    }
+}
+
+@Composable
+private fun <ItemClass> SingleSelectBottomSheetContent(
+    title: Int,
+    headerIcon: Int,
+    subtitle: String = "---------",
+    items: List<FilterViewItemWrapper<ItemClass>>,
+    selectedItem: FilterViewItemWrapper<ItemClass>? = null,
+    onSelect: (FilterViewItemWrapper<ItemClass>) -> Unit,
+    onClose: (() -> Unit),
+) {
+    BottomSheetHeader(
+        iconPainter = painterResource(headerIcon),
+        title = stringResource(title),
+        subtitle = subtitle,
+        onCloseClick = onClose,
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+    ) {
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10
+        )
+        items.forEach { item ->
+            CellMultilineLawrence(
+                borderBottom = true
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable {
+                            onSelect(item)
+                            onClose()
+                        }
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    body_leah(text = item.title ?: stringResource(R.string.Any))
+                    Spacer(modifier = Modifier.weight(1f))
+                    if (item == selectedItem) {
+                        Image(
+                            modifier = Modifier.padding(start = 5.dp),
+                            painter = painterResource(id = R.drawable.ic_checkmark_20),
+                            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                            contentDescription = null
+                        )
+                    }
+                }
+            }
+        }
+        Spacer(Modifier.height(16.dp))
     }
 }
