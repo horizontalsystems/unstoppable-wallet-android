@@ -30,21 +30,6 @@ object MarketFiltersModule {
         PricePeriod(R.string.Market_Filter_PricePeriod),
     }
 
-    enum class FilterSwitch(val titleResId: Int){
-        OutperformedBtc(R.string.Market_Filter_OutperformedBtc),
-        OutperformedEth(R.string.Market_Filter_OutperformedEth),
-        OutperformedBnb(R.string.Market_Filter_OutperformedBnb),
-        PriceCloseToAth(R.string.Market_Filter_PriceCloseToAth),
-        PriceCloseToAtl(R.string.Market_Filter_PriceCloseToAtl),
-    }
-
-    data class Section(val header: Int?, val items: List<Item>)
-
-    sealed class Item {
-        class DropDown(val type: FilterDropdown, val value: String?) : Item()
-        class Switch(val type: FilterSwitch, val selected: Boolean) : Item()
-    }
-
     val blockchainToCoinTypesMap = mapOf(
         Blockchain.Ethereum to listOf(CoinType.Erc20::class.java),
         Blockchain.BinanceSmartChain to listOf(CoinType.BinanceSmartChain::class.java, CoinType.Bep20::class.java),
