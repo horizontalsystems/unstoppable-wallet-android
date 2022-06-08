@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -41,72 +43,124 @@ class AppearanceFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ComposeAppTheme {
-                    AppearanceScreen(findNavController())
-                }
+                AppearanceScreen(findNavController())
             }
         }
     }
 }
 
 @Composable
-fun AppearanceScreen(
-    navController: NavController,
-) {
+fun AppearanceScreen(navController: NavController) {
+    ComposeAppTheme {
+        Surface(color = ComposeAppTheme.colors.tyler) {
+            Column {
+                AppBar(
+                    TranslatableString.ResString(R.string.Settings_Appearance),
+                    navigationIcon = {
+                        HsIconButton(
+                            onClick = { navController.popBackStack() }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_back),
+                                contentDescription = "back button",
+                                tint = ComposeAppTheme.colors.jacob
+                            )
+                        }
+                    },
+                    menuItems = listOf(),
+                )
+
+                AppearanceScreenContent()
+            }
+        }
+    }
+}
+
+@Composable
+private fun AppearanceScreenContent() {
     val viewModel = viewModel<AppearanceViewModel>(factory = AppearanceModule.Factory())
     val uiState = viewModel.uiState
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
-            AppBar(
-                TranslatableString.ResString(R.string.Settings_Appearance),
-                navigationIcon = {
-                    HsIconButton(
-                        onClick = { navController.popBackStack() }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
-                },
-                menuItems = listOf(),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+    ) {
+        HeaderText(text = stringResource(id = R.string.Appearance_Theme))
+        CellSingleLineLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
+            RowSelect(
+                painter = painterResource(id = option.iconRes),
+                text = option.title.getString(),
+                selected = option == uiState.themeOptions.selected
+            ) {
+                viewModel.onEnterTheme(option)
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+
+        HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
+        CellSingleLineLawrenceSection(uiState.launchScreenOptions.options) { option ->
+            RowSelect(
+                painter = painterResource(id = option.iconRes),
+                text = option.title.getString(),
+                selected = option == uiState.launchScreenOptions.selected
+            ) {
+                viewModel.onEnterLaunchPage(option)
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+
+        HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
+        CellSingleLineLawrenceSection(uiState.baseCoinOptions.options) { option ->
+            RowSelect(
+                painter = painterResource(id = R.drawable.coin_placeholder),
+                text = option.coin.code,
+                selected = option == uiState.baseCoinOptions.selected
+            ) {
+                viewModel.onEnterBaseCoin(option)
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+
+        HeaderText(text = stringResource(id = R.string.Appearance_BalanceValue))
+        CellMultilineLawrenceSection(uiState.balanceViewTypeOptions.options) { option ->
+            RowMultilineSelect(
+                title = stringResource(id = option.titleResId),
+                subtitle = stringResource(id = option.subtitleResId),
+                selected = option == uiState.balanceViewTypeOptions.selected
+            ) {
+                viewModel.onEnterBalanceViewType(option)
+            }
+        }
+        Spacer(modifier = Modifier.height(32.dp))
+    }
+}
+
+@Composable
+private fun RowMultilineSelect(
+    title: String,
+    subtitle: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        MultitextM1(
+            title = title,
+            subtitle = subtitle
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        if (selected) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
             )
-            HeaderText(text = stringResource(id = R.string.Appearance_Theme))
-            CellSingleLineLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
-                RowSelect(
-                    painter = painterResource(id = option.iconRes),
-                    text = option.title.getString(),
-                    selected = option == uiState.themeOptions.selected
-                ) {
-                    viewModel.onEnterTheme(option)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-            HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
-            CellSingleLineLawrenceSection(uiState.launchScreenOptions.options) { option ->
-                RowSelect(
-                    painter = painterResource(id = option.iconRes),
-                    text = option.title.getString(),
-                    selected = option == uiState.launchScreenOptions.selected
-                ) {
-                    viewModel.onEnterLaunchPage(option)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-            HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
-            CellSingleLineLawrenceSection(uiState.baseCoinOptions.options) { option ->
-                RowSelect(
-                    painter = painterResource(id = R.drawable.coin_placeholder),
-                    text = option.coin.code,
-                    selected = option == uiState.baseCoinOptions.selected
-                ) {
-                    viewModel.onEnterBaseCoin(option)
-                }
-            }
         }
     }
 }
@@ -139,7 +193,7 @@ private fun RowSelect(
         if (selected) {
             Image(
                 painter = painterResource(id = R.drawable.ic_checkmark_20),
-                contentDescription = "",
+                contentDescription = null,
                 colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
             )
         }

@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.managers.BaseCoinManager
 import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -17,17 +19,20 @@ import kotlinx.coroutines.launch
 class AppearanceViewModel(
     private val launchScreenService: LaunchScreenService,
     private val themeService: ThemeService,
-    private val baseCoinManager: BaseCoinManager
+    private val baseCoinManager: BaseCoinManager,
+    private val balanceViewTypeService: BalanceViewTypeService
 ) : ViewModel() {
     private var launchScreenOptions = launchScreenService.optionsFlow.value
     private var themeOptions = themeService.optionsFlow.value
     private var baseCoinOptions = buildBaseCoinSelect(baseCoinManager.baseCoinFlow.value)
+    private var balanceViewTypeOptions = balanceViewTypeService.optionsFlow.value
 
     var uiState by mutableStateOf(
         AppearanceUIState(
             launchScreenOptions = launchScreenOptions,
             themeOptions = themeOptions,
             baseCoinOptions = baseCoinOptions,
+            balanceViewTypeOptions = balanceViewTypeOptions,
         )
     )
 
@@ -50,6 +55,12 @@ class AppearanceViewModel(
                     handleUpdatedBaseCoin(buildBaseCoinSelect(baseCoin))
                 }
         }
+        viewModelScope.launch {
+            balanceViewTypeService.optionsFlow
+                .collect {
+                    handleUpdatedBalanceViewType(it)
+                }
+        }
     }
 
     private fun buildBaseCoinSelect(platformCoin: PlatformCoin?): SelectOptional<PlatformCoin> {
@@ -66,6 +77,11 @@ class AppearanceViewModel(
         emitState()
     }
 
+    private fun handleUpdatedBalanceViewType(balanceViewTypeOptions: Select<BalanceViewType>) {
+        this.balanceViewTypeOptions = balanceViewTypeOptions
+        emitState()
+    }
+
     private fun handleUpdatedBaseCoin(baseCoinOptions: SelectOptional<PlatformCoin>) {
         this.baseCoinOptions = baseCoinOptions
         emitState()
@@ -75,7 +91,8 @@ class AppearanceViewModel(
         uiState = AppearanceUIState(
             launchScreenOptions = launchScreenOptions,
             themeOptions = themeOptions,
-            baseCoinOptions = baseCoinOptions
+            baseCoinOptions = baseCoinOptions,
+            balanceViewTypeOptions = balanceViewTypeOptions,
         )
     }
 
@@ -90,10 +107,15 @@ class AppearanceViewModel(
     fun onEnterBaseCoin(platformCoin: PlatformCoin) {
         baseCoinManager.setBaseCoin(platformCoin)
     }
+
+    fun onEnterBalanceViewType(viewType: BalanceViewType) {
+        balanceViewTypeService.setViewType(viewType)
+    }
 }
 
 data class AppearanceUIState(
     val launchScreenOptions: Select<LaunchPage>,
     val themeOptions: Select<ThemeType>,
-    val baseCoinOptions: SelectOptional<PlatformCoin>
+    val baseCoinOptions: SelectOptional<PlatformCoin>,
+    val balanceViewTypeOptions: Select<BalanceViewType>,
 )
