@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -13,8 +14,7 @@ import io.horizontalsystems.core.helpers.DateHelper
 
 object TransactionInfoModule {
 
-    class Factory(private val transactionItem: TransactionItem) :
-        ViewModelProvider.Factory {
+    class Factory(private val transactionItem: TransactionItem) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -31,11 +31,8 @@ object TransactionInfoModule {
                 DateHelper,
                 App.evmLabelManager
             )
-            return TransactionInfoViewModel(
-                service,
-                factory,
-                listOf(service)
-            ) as T
+
+            return TransactionInfoViewModel(service, factory) as T
         }
 
     }
@@ -43,13 +40,13 @@ object TransactionInfoModule {
     data class ExplorerData(val title: String, val url: String?)
 }
 
-sealed class TransactionStatusViewItem {
-    class Pending(val name: String) : TransactionStatusViewItem()
+sealed class TransactionStatusViewItem(val name: Int) {
+    object Pending : TransactionStatusViewItem(R.string.Transactions_Pending)
 
     //progress in 0.0 .. 1.0
-    class Processing(val progress: Float, val name: String) : TransactionStatusViewItem()
-    class Completed(val name: String) : TransactionStatusViewItem()
-    object Failed : TransactionStatusViewItem()
+    class Processing(val progress: Float) : TransactionStatusViewItem(R.string.Transactions_Processing)
+    object Completed : TransactionStatusViewItem(R.string.Transactions_Completed)
+    object Failed : TransactionStatusViewItem(R.string.Transactions_Failed)
 }
 
 data class TransactionInfoItem(

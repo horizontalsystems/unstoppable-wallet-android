@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo.options
 
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
@@ -14,7 +15,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceServi
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
@@ -23,12 +23,18 @@ import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.CoinType
+import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
 
 object TransactionInfoOptionsModule {
 
+    @Parcelize
+    enum class Type : Parcelable {
+        SpeedUp, Cancel
+    }
+
     class Factory(
-        private val optionType: TransactionInfoOption.Type,
+        private val optionType: Type,
         private val transactionHash: String,
         private val source: TransactionSource
     ) : ViewModelProvider.Factory {
@@ -76,10 +82,10 @@ object TransactionInfoOptionsModule {
 
         private val transactionData by lazy {
             when (optionType) {
-                TransactionInfoOption.Type.SpeedUp -> {
+                Type.SpeedUp -> {
                     TransactionData(transaction.to!!, transaction.value!!, transaction.input!!, transaction.nonce)
                 }
-                TransactionInfoOption.Type.Cancel -> {
+                Type.Cancel -> {
                     TransactionData(
                         evmKitWrapper.evmKit.receiveAddress,
                         BigInteger.ZERO,

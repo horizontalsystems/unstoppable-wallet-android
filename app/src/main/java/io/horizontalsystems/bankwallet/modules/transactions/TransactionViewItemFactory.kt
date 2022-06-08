@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
-import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValueNew
+import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import java.math.BigDecimal
 import java.util.*
 
@@ -71,12 +71,12 @@ class TransactionViewItemFactory(
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = record.valueOut?.let {
-            ColoredValueNew(
+            ColoredValue(
                 getCoinString(it),
                 if (record.recipient != null) ColorName.Grey else ColorName.Remus
             )
         }
-        val secondaryValue = ColoredValueNew(getCoinString(record.valueIn), ColorName.Lucian)
+        val secondaryValue = ColoredValue(getCoinString(record.valueIn), ColorName.Lucian)
 
         return TransactionViewItem(
             uid = record.uid,
@@ -100,8 +100,8 @@ class TransactionViewItemFactory(
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
-        val primaryValue = record.valueOut?.let { ColoredValueNew(getCoinString(it), ColorName.Remus) }
-        val secondaryValue = record.valueIn?.let { ColoredValueNew(getCoinString(it), ColorName.Lucian) }
+        val primaryValue = record.valueOut?.let { ColoredValue(getCoinString(it), ColorName.Remus) }
+        val secondaryValue = record.valueIn?.let { ColoredValue(getCoinString(it), ColorName.Lucian) }
 
         return TransactionViewItem(
             uid = record.uid,
@@ -139,13 +139,13 @@ class TransactionViewItemFactory(
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = if (record.sentToSelf) {
-            ColoredValueNew(getCoinString(record.value, true), ColorName.Leah)
+            ColoredValue(getCoinString(record.value, true), ColorName.Leah)
         } else {
-            ColoredValueNew(getCoinString(record.value), ColorName.Lucian)
+            ColoredValue(getCoinString(record.value), ColorName.Lucian)
         }
 
         val secondaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
+            ColoredValue(getCurrencyString(it), ColorName.Grey)
         }
 
         return TransactionViewItem(
@@ -168,9 +168,9 @@ class TransactionViewItemFactory(
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
-        val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Remus)
+        val primaryValue = ColoredValue(getCoinString(record.value), ColorName.Remus)
         val secondaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
+            ColoredValue(getCurrencyString(it), ColorName.Grey)
         }
 
         return TransactionViewItem(
@@ -217,7 +217,7 @@ class TransactionViewItemFactory(
         val incomingEvents = combinedEvents(record.incomingEvents)
         val outgoingEvents = combinedEvents(record.outgoingEvents)
 
-        val (primaryValue: ColoredValueNew?, secondaryValue: ColoredValueNew?, eventIcon) = getValuesFromEvents(incomingEvents, outgoingEvents, currencyValue)
+        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?, eventIcon) = getValuesFromEvents(incomingEvents, outgoingEvents, currencyValue)
         val title = record.method ?: Translator.getString(R.string.Transactions_ContractCall)
 
         return TransactionViewItem(
@@ -242,7 +242,7 @@ class TransactionViewItemFactory(
         val incomingEvents = combinedEvents(record.incomingEvents)
         val outgoingEvents = combinedEvents(record.outgoingEvents)
 
-        val (primaryValue: ColoredValueNew?, secondaryValue: ColoredValueNew?, eventIcon) = getValuesFromEvents(incomingEvents, outgoingEvents, currencyValue)
+        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?, eventIcon) = getValuesFromEvents(incomingEvents, outgoingEvents, currencyValue)
 
         val title: String
         val subTitle: String
@@ -283,13 +283,13 @@ class TransactionViewItemFactory(
         } ?: "---"
 
         val primaryValue = if (record.sentToSelf) {
-            ColoredValueNew(getCoinString(record.value, true), ColorName.Leah)
+            ColoredValue(getCoinString(record.value, true), ColorName.Leah)
         } else {
-            ColoredValueNew(getCoinString(record.value), ColorName.Lucian)
+            ColoredValue(getCoinString(record.value), ColorName.Lucian)
         }
 
         val secondaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
+            ColoredValue(getCurrencyString(it), ColorName.Grey)
         }
 
         val lockState = record.lockState(lastBlockTimestamp)
@@ -328,9 +328,9 @@ class TransactionViewItemFactory(
             )
         } ?: "---"
 
-        val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Remus)
+        val primaryValue = ColoredValue(getCoinString(record.value), ColorName.Remus)
         val secondaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
+            ColoredValue(getCurrencyString(it), ColorName.Grey)
         }
 
         val lockState = record.lockState(lastBlockTimestamp)
@@ -363,13 +363,13 @@ class TransactionViewItemFactory(
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = if (record.sentToSelf) {
-            ColoredValueNew(getCoinString(record.value, true), ColorName.Leah)
+            ColoredValue(getCoinString(record.value, true), ColorName.Leah)
         } else {
-            ColoredValueNew(getCoinString(record.value), ColorName.Lucian)
+            ColoredValue(getCoinString(record.value), ColorName.Lucian)
         }
 
         val secondaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
+            ColoredValue(getCurrencyString(it), ColorName.Grey)
         }
 
         return TransactionViewItem(
@@ -392,9 +392,9 @@ class TransactionViewItemFactory(
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
-        val primaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Remus)
+        val primaryValue = ColoredValue(getCoinString(record.value), ColorName.Remus)
         val secondaryValue = currencyValue?.let {
-            ColoredValueNew(getCurrencyString(it), ColorName.Grey)
+            ColoredValue(getCurrencyString(it), ColorName.Grey)
         }
 
         return TransactionViewItem(
@@ -430,8 +430,8 @@ class TransactionViewItemFactory(
             secondaryValueText = currencyValue?.let { getCurrencyString(it) }
         }
 
-        val primaryValue = ColoredValueNew(primaryValueText, ColorName.Leah)
-        val secondaryValue = secondaryValueText?.let { ColoredValueNew(it, ColorName.Grey) }
+        val primaryValue = ColoredValue(primaryValueText, ColorName.Leah)
+        val secondaryValue = secondaryValueText?.let { ColoredValue(it, ColorName.Grey) }
 
         return TransactionViewItem(
             uid = record.uid,
@@ -487,9 +487,9 @@ class TransactionViewItemFactory(
         return results
     }
 
-    private fun getValuesFromEvents(incomingEvents: List<EvmTransactionRecord.TransferEvent>, outgoingEvents: List<EvmTransactionRecord.TransferEvent>, currencyValue: CurrencyValue?): Triple<ColoredValueNew, ColoredValueNew?, TransactionViewItem.Icon?> {
-        val primaryValue: ColoredValueNew?
-        val secondaryValue: ColoredValueNew?
+    private fun getValuesFromEvents(incomingEvents: List<EvmTransactionRecord.TransferEvent>, outgoingEvents: List<EvmTransactionRecord.TransferEvent>, currencyValue: CurrencyValue?): Triple<ColoredValue, ColoredValue?, TransactionViewItem.Icon?> {
+        val primaryValue: ColoredValue?
+        val secondaryValue: ColoredValue?
         var icon: TransactionViewItem.Icon? = null
 
         val incomingValues = incomingEvents.map { it.value }
@@ -499,9 +499,9 @@ class TransactionViewItemFactory(
             // incoming
             (incomingValues.size == 1 && outgoingValues.isEmpty()) -> {
                 val transactionValue = incomingValues.first()
-                primaryValue = ColoredValueNew(getCoinString(transactionValue), ColorName.Remus)
+                primaryValue = ColoredValue(getCoinString(transactionValue), ColorName.Remus)
                 secondaryValue = currencyValue?.let {
-                    ColoredValueNew(getCurrencyString(it), ColorName.Grey)
+                    ColoredValue(getCurrencyString(it), ColorName.Grey)
                 }
                 icon = TransactionViewItem.Icon.Regular(
                     url = transactionValue.coinIconUrl,
@@ -512,9 +512,9 @@ class TransactionViewItemFactory(
             // outgoing
             (incomingValues.isEmpty() && outgoingValues.size == 1) -> {
                 val transactionValue = outgoingValues.first()
-                primaryValue = ColoredValueNew(getCoinString(transactionValue), ColorName.Lucian)
+                primaryValue = ColoredValue(getCoinString(transactionValue), ColorName.Lucian)
                 secondaryValue = currencyValue?.let {
-                    ColoredValueNew(getCurrencyString(it), ColorName.Grey)
+                    ColoredValue(getCurrencyString(it), ColorName.Grey)
                 }
                 icon = TransactionViewItem.Icon.Regular(
                     url = transactionValue.coinIconUrl,
@@ -526,25 +526,25 @@ class TransactionViewItemFactory(
             (incomingValues.size == 1 && outgoingValues.size == 1) -> {
                 val inTransactionValue = incomingValues.first()
                 val outTransactionValue = outgoingValues.first()
-                primaryValue = ColoredValueNew(getCoinString(inTransactionValue), ColorName.Remus)
-                secondaryValue = ColoredValueNew(getCoinString(outTransactionValue), ColorName.Lucian)
+                primaryValue = ColoredValue(getCoinString(inTransactionValue), ColorName.Remus)
+                secondaryValue = ColoredValue(getCoinString(outTransactionValue), ColorName.Lucian)
             }
 
             // outgoing multiple
             (incomingValues.isEmpty() && outgoingValues.isNotEmpty()) -> {
-                primaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Lucian)
-                secondaryValue = ColoredValueNew(Translator.getString(R.string.Transactions_Multiple), ColorName.Grey)
+                primaryValue = ColoredValue(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Lucian)
+                secondaryValue = ColoredValue(Translator.getString(R.string.Transactions_Multiple), ColorName.Grey)
             }
 
             // incoming multiple
             (incomingValues.isNotEmpty() && outgoingValues.isEmpty()) -> {
-                primaryValue = ColoredValueNew(incomingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Remus)
-                secondaryValue = ColoredValueNew(Translator.getString(R.string.Transactions_Multiple), ColorName.Grey)
+                primaryValue = ColoredValue(incomingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Remus)
+                secondaryValue = ColoredValue(Translator.getString(R.string.Transactions_Multiple), ColorName.Grey)
             }
 
             else -> {
-                primaryValue = ColoredValueNew(incomingValues.joinToString(", ") { it.coinCode }, ColorName.Remus)
-                secondaryValue = ColoredValueNew(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Lucian)
+                primaryValue = ColoredValue(incomingValues.joinToString(", ") { it.coinCode }, ColorName.Remus)
+                secondaryValue = ColoredValue(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Lucian)
             }
         }
         return Triple(primaryValue, secondaryValue, icon)

@@ -15,15 +15,10 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton.CopyButton
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton.ShareButton
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.*
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatusViewItem.*
-import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoPositionedViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.views.ListPosition.Companion
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
@@ -36,7 +31,7 @@ class TransactionInfoViewItemFactory(
     private val evmLabelManager: EvmLabelManager
 ) {
 
-    fun getViewItemSections(transactionItem: TransactionInfoItem): List<TransactionInfoPositionedViewItem?> {
+    fun getViewItemSections(transactionItem: TransactionInfoItem): List<List<TransactionInfoViewItem>> {
         val transaction = transactionItem.record
         val rates = transactionItem.rates
 
@@ -52,11 +47,26 @@ class TransactionInfoViewItemFactory(
             }
 
             is EvmIncomingTransactionRecord ->
-                itemSections.add(getReceiveSectionItems(transaction.value.coinName, transaction.value, transaction.from, rates[transaction.value.coinUid]))
+                itemSections.add(
+                    getReceiveSectionItems(
+                        transaction.value.coinName,
+                        transaction.value,
+                        transaction.from,
+                        rates[transaction.value.coinUid]
+                    )
+                )
 
             is EvmOutgoingTransactionRecord -> {
                 sentToSelf = transaction.sentToSelf
-                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf))
+                itemSections.add(
+                    getSendSectionItems(
+                        transaction.value.coinName,
+                        transaction.value,
+                        transaction.to,
+                        rates[transaction.value.coinUid],
+                        transaction.sentToSelf
+                    )
+                )
             }
 
             is SwapTransactionRecord -> {
@@ -66,11 +76,21 @@ class TransactionInfoViewItemFactory(
                 itemSections.add(getSwapEventSectionItems(getYouPayString(status), valueIn, transaction.amountIn, rates[valueIn.coinUid], false))
 
                 if (valueOut != null) {
-                    val youGetSectionItems = getSwapEventSectionItems(getYouGetString(status), valueOut, transaction.amountOut, rates[valueOut.coinUid], true).toMutableList()
+                    val youGetSectionItems = getSwapEventSectionItems(
+                        getYouGetString(status),
+                        valueOut,
+                        transaction.amountOut,
+                        rates[valueOut.coinUid],
+                        true
+                    ).toMutableList()
 
                     if (transaction.recipient != null) {
                         youGetSectionItems.add(
-                            Decorated(getString(R.string.TransactionInfo_RecipientHash), transaction.recipient, evmLabelManager.mapped(transaction.recipient))
+                            Address(
+                                getString(R.string.TransactionInfo_RecipientHash),
+                                transaction.recipient,
+                                evmLabelManager.mapped(transaction.recipient)
+                            )
                         )
                     }
 
@@ -121,7 +141,14 @@ class TransactionInfoViewItemFactory(
             }
 
             is BitcoinIncomingTransactionRecord -> {
-                itemSections.add(getReceiveSectionItems(transaction.value.coinName, transaction.value, transaction.from, rates[transaction.value.coinUid]))
+                itemSections.add(
+                    getReceiveSectionItems(
+                        transaction.value.coinName,
+                        transaction.value,
+                        transaction.from,
+                        rates[transaction.value.coinUid]
+                    )
+                )
 
                 miscItemsSection.addAll(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
                 addMemoItem(transaction.memo, miscItemsSection)
@@ -129,21 +156,44 @@ class TransactionInfoViewItemFactory(
 
             is BitcoinOutgoingTransactionRecord -> {
                 sentToSelf = transaction.sentToSelf
-                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf))
+                itemSections.add(
+                    getSendSectionItems(
+                        transaction.value.coinName,
+                        transaction.value,
+                        transaction.to,
+                        rates[transaction.value.coinUid],
+                        transaction.sentToSelf
+                    )
+                )
 
                 miscItemsSection.addAll(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
                 addMemoItem(transaction.memo, miscItemsSection)
             }
 
             is BinanceChainIncomingTransactionRecord -> {
-                itemSections.add(getReceiveSectionItems(transaction.value.coinName, transaction.value, transaction.from, rates[transaction.value.coinUid]))
+                itemSections.add(
+                    getReceiveSectionItems(
+                        transaction.value.coinName,
+                        transaction.value,
+                        transaction.from,
+                        rates[transaction.value.coinUid]
+                    )
+                )
 
                 addMemoItem(transaction.memo, miscItemsSection)
             }
 
             is BinanceChainOutgoingTransactionRecord -> {
                 sentToSelf = transaction.sentToSelf
-                itemSections.add(getSendSectionItems(transaction.value.coinName, transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf))
+                itemSections.add(
+                    getSendSectionItems(
+                        transaction.value.coinName,
+                        transaction.value,
+                        transaction.to,
+                        rates[transaction.value.coinUid],
+                        transaction.sentToSelf
+                    )
+                )
 
                 addMemoItem(transaction.memo, miscItemsSection)
             }
@@ -152,9 +202,7 @@ class TransactionInfoViewItemFactory(
         }
 
         if (sentToSelf) {
-            miscItemsSection.add(
-                SentToSelf(getString(R.string.TransactionInfo_SentToSelfNote), R.drawable.ic_arrow_return_20)
-            )
+            miscItemsSection.add(SentToSelf)
         }
         if (miscItemsSection.isNotEmpty()) {
             itemSections.add(miscItemsSection)
@@ -163,7 +211,7 @@ class TransactionInfoViewItemFactory(
         itemSections.add(getStatusSectionItems(transaction, status, rates))
         itemSections.add(getExplorerSectionItems(transactionItem.explorerData))
 
-        return convertToViewItems(itemSections)
+        return itemSections
     }
 
     private fun addMemoItem(
@@ -177,26 +225,14 @@ class TransactionInfoViewItemFactory(
         }
     }
 
-    private fun convertToViewItems(viewItemGroups: List<List<TransactionInfoViewItem>>): List<TransactionInfoPositionedViewItem?> {
-        val viewItems: MutableList<TransactionInfoPositionedViewItem?> = mutableListOf()
-
-        for (viewItemTypes in viewItemGroups) {
-            val sectionViewItems = viewItemTypes.mapIndexed { index, itemType ->
-                TransactionInfoPositionedViewItem(itemType, Companion.getListPosition(viewItemTypes.size, index))
-            }
-
-            if (sectionViewItems.isNotEmpty()) {
-                viewItems.addAll(sectionViewItems)
-                viewItems.add(null)
-            }
-        }
-
-        return viewItems
-    }
-
-    private fun getReceiveSectionItems(coinName: String, value: TransactionValue, fromAddress: String?, coinPrice: CurrencyValue?): List<TransactionInfoViewItem> {
+    private fun getReceiveSectionItems(
+        coinName: String,
+        value: TransactionValue,
+        fromAddress: String?,
+        coinPrice: CurrencyValue?
+    ): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
-            Transaction(getString(R.string.Transactions_Receive), coinName, TransactionViewItem.Icon.ImageResource(R.drawable.ic_arrow_down_left_12)),
+            Transaction(getString(R.string.Transactions_Receive), coinName, R.drawable.ic_arrow_down_left_12),
             getAmount(coinPrice, value, true)
         )
 
@@ -204,7 +240,7 @@ class TransactionInfoViewItemFactory(
 
         fromAddress?.let {
             items.add(
-                Decorated(
+                Address(
                     getString(R.string.TransactionInfo_From),
                     it,
                     evmLabelManager.mapped(it)
@@ -215,9 +251,15 @@ class TransactionInfoViewItemFactory(
         return items
     }
 
-    private fun getSendSectionItems(coinName: String, value: TransactionValue, toAddress: String?, coinPrice: CurrencyValue?, sentToSelf: Boolean = false): List<TransactionInfoViewItem> {
+    private fun getSendSectionItems(
+        coinName: String,
+        value: TransactionValue,
+        toAddress: String?,
+        coinPrice: CurrencyValue?,
+        sentToSelf: Boolean = false
+    ): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
-            Transaction(getString(R.string.Transactions_Send), coinName, TransactionViewItem.Icon.ImageResource(R.drawable.ic_arrow_up_right_12)),
+            Transaction(getString(R.string.Transactions_Send), coinName, R.drawable.ic_arrow_up_right_12),
             getAmount(coinPrice, value, if (sentToSelf) null else false)
         )
 
@@ -225,7 +267,7 @@ class TransactionInfoViewItemFactory(
 
         toAddress?.let {
             items.add(
-                Decorated(
+                Address(
                     getString(R.string.TransactionInfo_To),
                     toAddress,
                     evmLabelManager.mapped(toAddress)
@@ -236,22 +278,28 @@ class TransactionInfoViewItemFactory(
         return items
     }
 
-    private fun getSwapEventSectionItems(title: String, value: TransactionValue, amount: SwapTransactionRecord.Amount?, rate: CurrencyValue?, incoming: Boolean): List<TransactionInfoViewItem> =
+    private fun getSwapEventSectionItems(
+        title: String,
+        value: TransactionValue,
+        amount: SwapTransactionRecord.Amount?,
+        rate: CurrencyValue?,
+        incoming: Boolean
+    ): List<TransactionInfoViewItem> =
         listOf(
             Transaction(
                 title,
                 value.coinName,
-                icon = TransactionViewItem.Icon.ImageResource(
-                    if (incoming)
-                        R.drawable.ic_arrow_down_left_12
-                    else
-                        R.drawable.ic_arrow_up_right_12
-                )
+                icon = if (incoming) R.drawable.ic_arrow_down_left_12 else R.drawable.ic_arrow_up_right_12
             ),
             getAmount(rate, value, incoming, amount)
         )
 
-    private fun getSwapDetailsSectionItems(rates: Map<String, CurrencyValue>, exchangeAddress: String, valueOut: TransactionValue?, valueIn: TransactionValue?): List<TransactionInfoViewItem> {
+    private fun getSwapDetailsSectionItems(
+        rates: Map<String, CurrencyValue>,
+        exchangeAddress: String,
+        valueOut: TransactionValue?,
+        valueIn: TransactionValue?
+    ): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
             Value(
                 getString(R.string.TransactionInfo_Service),
@@ -304,7 +352,7 @@ class TransactionInfoViewItemFactory(
             Transaction(
                 getString(R.string.Transactions_ContractCreation),
                 "",
-                TransactionViewItem.Icon.Platform(transaction.source)
+                TransactionViewItem.Icon.Platform(transaction.source).iconRes
             )
         )
 
@@ -331,16 +379,16 @@ class TransactionInfoViewItemFactory(
             value.coinCode
         ) else coinAmountFormatted
 
-        val coinAmountColoredValue = ColoredValue(coinAmountString,  getAmountColor(null))
+        val coinAmountColoredValue = ColoredValue(coinAmountString, getAmountColor(null))
         val fiatAmountColoredValue = ColoredValue(
             if (value.isMaxValue) "∞" else fiatAmountFormatted,
-            R.color.grey
+            ColorName.Grey
         )
 
         return listOf(
-            Transaction(getString(R.string.Transactions_Approve), value.coinName, TransactionViewItem.Icon.ImageResource(R.drawable.ic_checkmark_24)),
-            Amount(value.coinIconUrl, value.coinIconPlaceholder, coinAmountColoredValue, fiatAmountColoredValue),
-            Decorated(getString(R.string.TransactionInfo_Spender), spenderAddress, evmLabelManager.mapped(spenderAddress))
+            Transaction(getString(R.string.Transactions_Approve), value.coinName, R.drawable.ic_checkmark_24),
+            Amount(coinAmountColoredValue, fiatAmountColoredValue, value.coin),
+            Address(getString(R.string.TransactionInfo_Spender), spenderAddress, evmLabelManager.mapped(spenderAddress))
         )
     }
 
@@ -349,7 +397,7 @@ class TransactionInfoViewItemFactory(
             Transaction(
                 transaction.method ?: getString(R.string.Transactions_ContractCall),
                 evmLabelManager.mapped(transaction.contractAddress),
-                TransactionViewItem.Icon.Platform(transaction.source)
+                TransactionViewItem.Icon.Platform(transaction.source).iconRes
             )
         )
 
@@ -366,12 +414,7 @@ class TransactionInfoViewItemFactory(
         }
 
         if (transaction.showRawTransaction) {
-            items.add(
-                RawTransaction(
-                    getString(R.string.TransactionInfo_RawTransaction),
-                    CopyButton
-                )
-            )
+            items.add(RawTransaction)
         }
 
         val lockState = transaction.lockState(lastBlockInfo?.timestamp)
@@ -382,34 +425,26 @@ class TransactionInfoViewItemFactory(
         return items
     }
 
-    private fun getStatusSectionItems(transaction: TransactionRecord, status: TransactionStatus, rates: Map<String, CurrencyValue?>): List<TransactionInfoViewItem> {
+    private fun getStatusSectionItems(
+        transaction: TransactionRecord,
+        status: TransactionStatus,
+        rates: Map<String, CurrencyValue?>
+    ): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
-            Value(
-                getString(R.string.TransactionInfo_Date),
-                dateHelper.getFullDate(Date(transaction.timestamp * 1000))
-            ),
-            Status(
-                getString(R.string.TransactionInfo_Status),
-                R.drawable.ic_info_24,
-                when (status) {
-                    TransactionStatus.Failed -> Failed
-                    TransactionStatus.Pending -> Pending(getString(R.string.Transactions_Pending))
-                    TransactionStatus.Completed -> Completed(getString(R.string.Transactions_Completed))
-                    is TransactionStatus.Processing -> Processing(
-                        status.progress,
-                        getString(R.string.Transactions_Processing)
-                    )
-                }
-            )
+            Value(getString(R.string.TransactionInfo_Date), dateHelper.getFullDate(Date(transaction.timestamp * 1000))),
+            Status(status)
         )
 
-        getOptionsItem(status)?.let { items.add(it) }
+        if (transaction is EvmOutgoingTransactionRecord && status == TransactionStatus.Pending) {
+            items.add(SpeedUpCancel(transactionHash = transaction.transactionHash))
+        }
 
         when (transaction) {
-            is EvmTransactionRecord ->
+            is EvmTransactionRecord -> {
                 if (!transaction.foreignTransaction && transaction.fee != null) {
                     items.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
                 }
+            }
 
             is BitcoinOutgoingTransactionRecord ->
                 transaction.fee?.let { items.add(getFee(it, rates[it.coinUid])) }
@@ -418,14 +453,7 @@ class TransactionInfoViewItemFactory(
                 items.add(getFee(transaction.fee, rates[transaction.fee.coinUid]))
         }
 
-        items.add(
-            Decorated(
-                getString(R.string.TransactionInfo_Id),
-                transaction.transactionHash,
-                transaction.transactionHash,
-                ShareButton(transaction.transactionHash)
-            )
-        )
+        items.add(TransactionHash(transaction.transactionHash))
 
         return items
     }
@@ -438,12 +466,7 @@ class TransactionInfoViewItemFactory(
             )
         )
 
-    private fun getDoubleSpendViewItem(transactionHash: String, conflictingHash: String) = DoubleSpend(
-        getString(R.string.TransactionInfo_DoubleSpendNote),
-        R.drawable.ic_double_spend_20,
-        transactionHash,
-        conflictingHash
-    )
+    private fun getDoubleSpendViewItem(transactionHash: String, conflictingHash: String) = DoubleSpend(transactionHash, conflictingHash)
 
     private fun getYouPayString(status: TransactionStatus): String {
         return if (status == TransactionStatus.Completed) {
@@ -473,11 +496,11 @@ class TransactionInfoViewItemFactory(
         }
     }
 
-    private fun getAmountColor(incoming: Boolean?): Int {
+    private fun getAmountColor(incoming: Boolean?): ColorName {
         return when (incoming) {
-            true -> R.color.remus
-            false -> R.color.lucian
-            else -> R.color.leah
+            true -> ColorName.Remus
+            false -> ColorName.Lucian
+            else -> ColorName.Leah
         }
     }
 
@@ -499,7 +522,7 @@ class TransactionInfoViewItemFactory(
                 )
             }
         } ?: "---"
-        val fiatValueColored = ColoredValue(valueInFiat, R.color.grey)
+        val fiatValueColored = ColoredValue(valueInFiat, ColorName.Grey)
         val coinValueFormatted = value.decimalValue?.let { decimalValue ->
             val sign = when {
                 incoming == null -> ""
@@ -517,7 +540,7 @@ class TransactionInfoViewItemFactory(
         } ?: "---"
 
         val coinValueColored = ColoredValue(coinValueFormatted, getAmountColor(incoming))
-        return Amount(value.coinIconUrl, value.coinIconPlaceholder, coinValueColored, fiatValueColored)
+        return Amount(coinValueColored, fiatValueColored, value.coin)
     }
 
     private fun getHistoricalRate(
@@ -574,22 +597,5 @@ class TransactionInfoViewItemFactory(
 
         return feeInCoin + (if (feeInFiat != null) " | $feeInFiat" else "")
     }
-
-    private fun getOptionsItem(status: TransactionStatus): TransactionInfoViewItem? =
-        if (status == TransactionStatus.Pending) {
-            Options(
-                Translator.getString(R.string.TransactionInfo_Options),
-                TransactionInfoOption(
-                    Translator.getString(R.string.TransactionInfo_SpeedUp),
-                    TransactionInfoOption.Type.SpeedUp
-                ),
-                TransactionInfoOption(
-                    Translator.getString(R.string.TransactionInfo_Cancel),
-                    TransactionInfoOption.Type.Cancel
-                )
-            )
-        } else {
-            null
-        }
 
 }

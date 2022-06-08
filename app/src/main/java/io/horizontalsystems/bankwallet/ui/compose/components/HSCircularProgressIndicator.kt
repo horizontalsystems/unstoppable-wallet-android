@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
@@ -42,6 +43,29 @@ fun HSCircularProgressIndicator(progress: Float) {
     CircularProgressIndicator(
         progress = progress,
         modifier = Modifier.rotate(rotate),
+        color = ComposeAppTheme.colors.grey50,
+        strokeWidth = 2.dp
+    )
+}
+
+@Composable
+fun HSCircularProgressIndicator(progress: Float, size: Dp) {
+    val transition = rememberInfiniteTransition()
+    val rotate by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 1100,
+                easing = LinearEasing
+            )
+        )
+    )
+    CircularProgressIndicator(
+        progress = progress,
+        modifier = Modifier
+            .size(size)
+            .rotate(rotate),
         color = ComposeAppTheme.colors.grey50,
         strokeWidth = 2.dp
     )

@@ -1,8 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
-import io.horizontalsystems.bankwallet.core.Clearable
+import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
@@ -14,11 +13,13 @@ import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionTyp
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class TransactionInfoService(
@@ -26,22 +27,23 @@ class TransactionInfoService(
     private val adapter: ITransactionsAdapter,
     private val marketKit: MarketKit,
     private val currencyManager: ICurrencyManager
-) : Clearable {
+) {
 
     val transactionHash: String get() = transactionRecord.transactionHash
     val source: TransactionSource get() = transactionRecord.source
 
-    private val disposables = CompositeDisposable()
-
-    private val transactionInfoItemSubject = BehaviorSubject.create<TransactionInfoItem>()
-    val transactionInfoItemObservable: Observable<TransactionInfoItem> = transactionInfoItemSubject
+    private val _transactionInfoItemFlow = MutableStateFlow<TransactionInfoItem?>(null)
+    val transactionInfoItemFlow = _transactionInfoItemFlow.filterNotNull()
 
     private var transactionInfoItem = TransactionInfoItem(
         transactionRecord,
         adapter.lastBlockInfo,
-        TransactionInfoModule.ExplorerData(adapter.explorerTitle, adapter.getTransactionUrl(transactionRecord.transactionHash)),
-        mapOf()
+        TransactionInfoModule.ExplorerData(adapter.explorerTitle, adapter.getTransactionUrl(transactionRecord.transactionHash)), mapOf()
     )
+        set(value) {
+            field = value
+            _transactionInfoItemFlow.update { value }
+        }
 
     private val coinUidsForRates: List<String>
         get() {
@@ -50,16 +52,8 @@ class TransactionInfoService(
             val txCoinTypes = when (val tx = transactionRecord) {
                 is EvmIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is EvmOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
-                is SwapTransactionRecord -> listOf(
-                    tx.fee,
-                    tx.valueIn,
-                    tx.valueOut
-                ).map { it?.coinUid }
-                is UnknownSwapTransactionRecord -> listOf(
-                    tx.fee,
-                    tx.valueIn,
-                    tx.valueOut
-                ).map { it?.coinUid }
+                is SwapTransactionRecord -> listOf(tx.fee, tx.valueIn, tx.valueOut).map { it?.coinUid }
+                is UnknownSwapTransactionRecord -> listOf(tx.fee, tx.valueIn, tx.valueOut).map { it?.coinUid }
                 is ApproveTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
                 is ContractCallTransactionRecord -> {
                     val tempCoinUidList = mutableListOf<String>()
@@ -74,15 +68,9 @@ class TransactionInfoService(
                     tempCoinUidList
                 }
                 is BitcoinIncomingTransactionRecord -> listOf(tx.value.coinUid)
-                is BitcoinOutgoingTransactionRecord -> listOf(
-                    tx.fee,
-                    tx.value
-                ).map { it?.coinUid }
+                is BitcoinOutgoingTransactionRecord -> listOf(tx.fee, tx.value).map { it?.coinUid }
                 is BinanceChainIncomingTransactionRecord -> listOf(tx.value.coinUid)
-                is BinanceChainOutgoingTransactionRecord -> listOf(
-                    tx.fee,
-                    tx.value
-                ).map { it.coinUid }
+                is BinanceChainOutgoingTransactionRecord -> listOf(tx.fee, tx.value).map { it.coinUid }
                 else -> emptyList()
             }
 
@@ -97,91 +85,65 @@ class TransactionInfoService(
             return coinUids.filterNotNull().filter { it.isNotBlank() }.distinct()
         }
 
-    init {
-        transactionInfoItemSubject.onNext(transactionInfoItem)
+    suspend fun start() = withContext(Dispatchers.IO) {
+        _transactionInfoItemFlow.update { transactionInfoItem }
 
         fetchRates()
-            .subscribeIO {
-                handleRates(it)
-            }
-            .let {
-                disposables.add(it)
-            }
 
-        adapter.getTransactionRecordsFlowable(null, FilterTransactionType.All)
-            .flatMap {
-                val record = it.find { it == transactionRecord }
+        adapter.getTransactionRecordsFlowable(null, FilterTransactionType.All).asFlow()
+            .collectWith(this) { transactionRecords ->
+                val record = transactionRecords.find { it == transactionRecord }
+
                 if (record != null) {
-                    Flowable.just(record)
-                } else {
-                    Flowable.empty()
+                    handleRecordUpdate(record)
                 }
             }
-            .subscribeIO {
-                handleRecordUpdate(it)
-            }
-            .let {
-                disposables.add(it)
-            }
 
-        adapter.lastBlockUpdatedFlowable
-            .subscribeIO {
+        adapter.lastBlockUpdatedFlowable.asFlow()
+            .collectWith(this) {
                 handleLastBlockUpdate()
-            }
-            .let {
-                disposables.add(it)
             }
     }
 
-    private fun fetchRates(): Single<Map<String, CurrencyValue>> {
+    private suspend fun fetchRates() = withContext(Dispatchers.IO) {
         val coinUids = coinUidsForRates
         val timestamp = transactionRecord.timestamp
-        val flowables: List<Single<Pair<String, CurrencyValue>>> = coinUids.map { coinUid ->
-            marketKit.coinHistoricalPriceSingle(coinUid, currencyManager.baseCurrency.code, timestamp)
-                .onErrorResumeNext(Single.just(BigDecimal.ZERO)) //provide default value on error
-                .map {
-                    Pair(coinUid, CurrencyValue(currencyManager.baseCurrency, it))
+
+        val rates = coinUids.mapNotNull { coinUid ->
+            try {
+                val rate = marketKit
+                    .coinHistoricalPriceSingle(coinUid, currencyManager.baseCurrency.code, timestamp)
+                    .await()
+                if (rate != BigDecimal.ZERO) {
+                    Pair(coinUid, CurrencyValue(currencyManager.baseCurrency, rate))
+                } else {
+                    null
                 }
-        }
-
-        return Single
-            .zip(flowables) { array ->
-                array.mapNotNull {
-                    it as Pair<String, CurrencyValue>
-
-                    if (it.second.value == BigDecimal.ZERO) {
-                        null
-                    } else {
-                        it.first to it.second
-                    }
-                }.toMap()
+            } catch (error: Exception) {
+                null
             }
+        }.toMap()
+
+        handleRates(rates)
     }
 
     @Synchronized
     private fun handleLastBlockUpdate() {
         transactionInfoItem = transactionInfoItem.copy(lastBlockInfo = adapter.lastBlockInfo)
-        transactionInfoItemSubject.onNext(transactionInfoItem)
     }
 
     @Synchronized
     private fun handleRecordUpdate(transactionRecord: TransactionRecord) {
         transactionInfoItem = transactionInfoItem.copy(record = transactionRecord)
-        transactionInfoItemSubject.onNext(transactionInfoItem)
     }
 
     @Synchronized
     private fun handleRates(rates: Map<String, CurrencyValue>) {
         transactionInfoItem = transactionInfoItem.copy(rates = rates)
-        transactionInfoItemSubject.onNext(transactionInfoItem)
     }
 
-    fun getRaw(): String? {
+    fun getRawTransaction(): String? {
         return adapter.getRawTransaction(transactionRecord.transactionHash)
-    }
-
-    override fun clear() {
-        disposables.clear()
     }
 
 }
