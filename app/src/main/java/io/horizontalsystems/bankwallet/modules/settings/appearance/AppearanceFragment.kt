@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -90,6 +91,7 @@ private fun AppearanceScreenContent() {
         CellSingleLineLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
             RowSelect(
                 painter = painterResource(id = option.iconRes),
+                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey),
                 text = option.title.getString(),
                 selected = option == uiState.themeOptions.selected
             ) {
@@ -102,6 +104,7 @@ private fun AppearanceScreenContent() {
         CellSingleLineLawrenceSection(uiState.launchScreenOptions.options) { option ->
             RowSelect(
                 painter = painterResource(id = option.iconRes),
+                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey),
                 text = option.title.getString(),
                 selected = option == uiState.launchScreenOptions.selected
             ) {
@@ -113,7 +116,7 @@ private fun AppearanceScreenContent() {
         HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
         CellSingleLineLawrenceSection(uiState.baseCoinOptions.options) { option ->
             RowSelect(
-                painter = painterResource(id = R.drawable.coin_placeholder),
+                painter = coinImagePainter(url = option.coin.iconUrl),
                 text = option.coin.code,
                 selected = option == uiState.baseCoinOptions.selected
             ) {
@@ -168,6 +171,7 @@ private fun RowMultilineSelect(
 @Composable
 private fun RowSelect(
     painter: Painter,
+    colorFilter: ColorFilter? = null,
     text: String,
     selected: Boolean,
     onClick: () -> Unit
@@ -182,7 +186,7 @@ private fun RowSelect(
         Image(
             painter = painter,
             contentDescription = null,
-            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+            colorFilter = colorFilter
         )
         body_leah(
             text = text,
