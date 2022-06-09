@@ -148,10 +148,10 @@ fun BalanceCard(
                             }
                         }
                         Spacer(modifier = Modifier.weight(1f))
-                        if (viewItem.coinValue.visible) {
+                        if (viewItem.primaryValue.visible) {
                             Text(
-                                text = viewItem.coinValue.value,
-                                color = if (viewItem.coinValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
+                                text = viewItem.primaryValue.value,
+                                color = if (viewItem.primaryValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
                                 style = ComposeAppTheme.typography.headline2,
                                 maxLines = 1,
                             )
@@ -199,10 +199,10 @@ fun BalanceCard(
                                     maxLines = 1,
                                 )
                             }
-                            if (viewItem.fiatValue.visible) {
+                            if (viewItem.secondaryValue.visible) {
                                 Text(
-                                    text = viewItem.fiatValue.value,
-                                    color = if (viewItem.fiatValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
+                                    text = viewItem.secondaryValue.value,
+                                    color = if (viewItem.secondaryValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                                     style = ComposeAppTheme.typography.subhead2,
                                     maxLines = 1,
                                 )

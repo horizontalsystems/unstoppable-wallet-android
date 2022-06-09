@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.*
 import io.horizontalsystems.bankwallet.core.storage.*
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
@@ -102,6 +103,7 @@ class App : CoreApp(), WorkConfiguration.Provider {
         lateinit var nftManager: NftManager
         lateinit var evmLabelManager: EvmLabelManager
         lateinit var baseCoinManager: BaseCoinManager
+        lateinit var balanceViewTypeManager: BalanceViewTypeManager
     }
 
     override val testMode = BuildConfig.testMode
@@ -279,6 +281,7 @@ class App : CoreApp(), WorkConfiguration.Provider {
         wc2SessionManager = WC2SessionManager(accountManager, WC2SessionStorage(appDatabase), wc2Service, wc2Manager)
 
         baseCoinManager = BaseCoinManager(coinManager, localStorage)
+        balanceViewTypeManager = BalanceViewTypeManager(localStorage)
     }
 
     private fun initializeWalletConnectV2(appConfig: AppConfigProvider) {

@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.managers.BaseCoinManager
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeService
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -20,12 +20,12 @@ class AppearanceViewModel(
     private val launchScreenService: LaunchScreenService,
     private val themeService: ThemeService,
     private val baseCoinManager: BaseCoinManager,
-    private val balanceViewTypeService: BalanceViewTypeService
+    private val balanceViewTypeManager: BalanceViewTypeManager
 ) : ViewModel() {
     private var launchScreenOptions = launchScreenService.optionsFlow.value
     private var themeOptions = themeService.optionsFlow.value
     private var baseCoinOptions = buildBaseCoinSelect(baseCoinManager.baseCoinFlow.value)
-    private var balanceViewTypeOptions = balanceViewTypeService.optionsFlow.value
+    private var balanceViewTypeOptions = buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
 
     var uiState by mutableStateOf(
         AppearanceUIState(
@@ -56,15 +56,19 @@ class AppearanceViewModel(
                 }
         }
         viewModelScope.launch {
-            balanceViewTypeService.optionsFlow
+            balanceViewTypeManager.balanceViewTypeFlow
                 .collect {
-                    handleUpdatedBalanceViewType(it)
+                    handleUpdatedBalanceViewType(buildBalanceViewTypeSelect(it))
                 }
         }
     }
 
     private fun buildBaseCoinSelect(platformCoin: PlatformCoin?): SelectOptional<PlatformCoin> {
         return SelectOptional(platformCoin, baseCoinManager.platformCoins)
+    }
+
+    private fun buildBalanceViewTypeSelect(value: BalanceViewType): Select<BalanceViewType> {
+        return Select(value, balanceViewTypeManager.viewTypes)
     }
 
     private fun handleUpdatedLaunchScreenOptions(launchScreenOptions: Select<LaunchPage>) {
@@ -109,7 +113,7 @@ class AppearanceViewModel(
     }
 
     fun onEnterBalanceViewType(viewType: BalanceViewType) {
-        balanceViewTypeService.setViewType(viewType)
+        balanceViewTypeManager.setViewType(viewType)
     }
 }
 
