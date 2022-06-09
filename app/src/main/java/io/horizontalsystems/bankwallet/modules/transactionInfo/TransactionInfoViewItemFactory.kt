@@ -403,7 +403,19 @@ class TransactionInfoViewItemFactory(
             )
         )
 
-        getOptionsItem(status)?.let { items.add(it) }
+        if (transaction is EvmOutgoingTransactionRecord && status == TransactionStatus.Pending) {
+            Options(
+                Translator.getString(R.string.TransactionInfo_Options),
+                TransactionInfoOption(
+                    Translator.getString(R.string.TransactionInfo_SpeedUp),
+                    TransactionInfoOption.Type.SpeedUp
+                ),
+                TransactionInfoOption(
+                    Translator.getString(R.string.TransactionInfo_Cancel),
+                    TransactionInfoOption.Type.Cancel
+                )
+            )
+        }
 
         when (transaction) {
             is EvmTransactionRecord ->
@@ -574,22 +586,5 @@ class TransactionInfoViewItemFactory(
 
         return feeInCoin + (if (feeInFiat != null) " | $feeInFiat" else "")
     }
-
-    private fun getOptionsItem(status: TransactionStatus): TransactionInfoViewItem? =
-        if (status == TransactionStatus.Pending) {
-            Options(
-                Translator.getString(R.string.TransactionInfo_Options),
-                TransactionInfoOption(
-                    Translator.getString(R.string.TransactionInfo_SpeedUp),
-                    TransactionInfoOption.Type.SpeedUp
-                ),
-                TransactionInfoOption(
-                    Translator.getString(R.string.TransactionInfo_Cancel),
-                    TransactionInfoOption.Type.Cancel
-                )
-            )
-        } else {
-            null
-        }
 
 }
