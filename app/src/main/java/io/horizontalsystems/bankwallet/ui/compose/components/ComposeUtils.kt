@@ -54,12 +54,7 @@ fun CoinImage(
     val fallback = placeholder ?: R.drawable.coin_placeholder
     when {
         iconUrl != null -> Image(
-            painter = rememberImagePainter(
-                data = iconUrl,
-                builder = {
-                    error(fallback)
-                }
-            ),
+            painter = coinImagePainter(iconUrl, fallback),
             contentDescription = null,
             modifier = modifier,
             colorFilter = colorFilter
@@ -72,3 +67,15 @@ fun CoinImage(
         )
     }
 }
+
+@Composable
+fun coinImagePainter(
+    url: String?,
+    placeholder: Int? = null
+) = rememberImagePainter(
+    data = url,
+    builder = {
+        val fallback = placeholder ?: R.drawable.coin_placeholder
+        error(fallback)
+    }
+)
