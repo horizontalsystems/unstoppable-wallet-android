@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconUrl
@@ -116,7 +117,10 @@ private fun AppearanceScreenContent() {
         HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
         CellSingleLineLawrenceSection(uiState.baseCoinOptions.options) { option ->
             RowSelect(
-                painter = coinImagePainter(url = option.coin.iconUrl),
+                painter = rememberAsyncImagePainter(
+                    model = option.coin.iconUrl,
+                    error = painterResource(R.drawable.coin_placeholder)
+                ),
                 text = option.coin.code,
                 selected = option == uiState.baseCoinOptions.selected
             ) {
