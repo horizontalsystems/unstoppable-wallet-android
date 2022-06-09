@@ -15,7 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
@@ -76,11 +76,9 @@ fun WCSessionCell(
                 modifier = Modifier
                     .size(24.dp)
                     .clip(RoundedCornerShape(4.dp)),
-                painter = rememberImagePainter(
-                    data = session.imageUrl,
-                    builder = {
-                        error(R.drawable.coin_placeholder)
-                    }
+                painter = rememberAsyncImagePainter(
+                    model = session.imageUrl,
+                    error = painterResource(R.drawable.coin_placeholder)
                 ),
                 contentDescription = null,
             )

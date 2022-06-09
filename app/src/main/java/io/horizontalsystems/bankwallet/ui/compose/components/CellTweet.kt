@@ -13,14 +13,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
-import coil.size.OriginalSize
-import coil.size.Scale
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
 import com.twitter.twittertext.Extractor
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.tweets.ReferencedTweetViewItem
@@ -135,7 +136,7 @@ private fun TweetTitle(tweet: TweetViewItem) {
             modifier = Modifier
                 .size(24.dp)
                 .clip(CircleShape),
-            painter = rememberImagePainter(tweet.titleImageUrl),
+            painter = rememberAsyncImagePainter(tweet.titleImageUrl),
             contentDescription = ""
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -149,15 +150,14 @@ private fun TweetTitle(tweet: TweetViewItem) {
 
 @Composable
 private fun AttachmentPhoto(attachment: Tweet.Attachment.Photo) {
+    val model = ImageRequest.Builder(LocalContext.current)
+        .data(attachment.url)
+        .size(Size.ORIGINAL)
+        .crossfade(true)
+        .build()
     Image(
         modifier = Modifier.fillMaxWidth(),
-        painter = rememberImagePainter(
-            attachment.url,
-            builder = {
-                size(OriginalSize)
-                scale(Scale.FIT)
-            },
-        ),
+        painter = rememberAsyncImagePainter(model),
         contentDescription = "",
         contentScale = ContentScale.FillWidth
     )
@@ -166,15 +166,14 @@ private fun AttachmentPhoto(attachment: Tweet.Attachment.Photo) {
 @Composable
 private fun AttachmentVideo(attachment: Tweet.Attachment.Video) {
     Box {
+        val model = ImageRequest.Builder(LocalContext.current)
+            .data(attachment.previewImageUrl)
+            .size(Size.ORIGINAL)
+            .crossfade(true)
+            .build()
         Image(
             modifier = Modifier.fillMaxSize(),
-            painter = rememberImagePainter(
-                attachment.previewImageUrl,
-                builder = {
-                    size(OriginalSize)
-                    scale(Scale.FIT)
-                },
-            ),
+            painter = rememberAsyncImagePainter(model),
             contentDescription = null,
             contentScale = ContentScale.FillWidth
         )
