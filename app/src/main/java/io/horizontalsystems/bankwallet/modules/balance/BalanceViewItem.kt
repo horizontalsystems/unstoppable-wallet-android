@@ -24,10 +24,10 @@ data class BalanceViewItem(
     val coinTitle: String,
     val coinIconUrl: String,
     val coinIconPlaceholder: Int,
-    val coinValue: DeemedValue<String>,
+    val primaryValue: DeemedValue<String>,
     val exchangeValue: DeemedValue<String>,
     val diff: BigDecimal?,
-    val fiatValue: DeemedValue<String>,
+    val secondaryValue: DeemedValue<String>,
     val coinValueLocked: DeemedValue<String>,
     val fiatValueLocked: DeemedValue<String>,
     val expanded: Boolean,
@@ -191,7 +191,14 @@ class BalanceViewItemFactory {
         return DeemedValue(value, deemed, visible)
     }
 
-    fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean, watchAccount: Boolean): BalanceViewItem {
+    fun viewItem(
+        item: BalanceModule.BalanceItem,
+        currency: Currency,
+        expanded: Boolean,
+        hideBalance: Boolean,
+        watchAccount: Boolean,
+        balanceViewType: BalanceViewType
+    ): BalanceViewItem {
         val wallet = item.wallet
         val coin = wallet.coin
         val state = item.state
@@ -201,6 +208,35 @@ class BalanceViewItemFactory {
         val balanceTotalVisibility = !hideBalance && !showSyncing
         val fiatLockedVisibility = !hideBalance && item.balanceData.locked > BigDecimal.ZERO
 
+        val coinValueStr = coinValue(
+            state,
+            item.balanceData.total,
+            balanceTotalVisibility,
+            expanded,
+            wallet.decimal
+        )
+        val currencyValueStr = currencyValue(
+            state,
+            item.balanceData.total,
+            latestRate,
+            balanceTotalVisibility,
+            expanded,
+            currency
+        )
+
+        val primaryValue: DeemedValue<String>
+        val secondaryValue: DeemedValue<String>
+        when (balanceViewType) {
+            BalanceViewType.CoinThenFiat -> {
+                primaryValue = coinValueStr
+                secondaryValue = currencyValueStr
+            }
+            BalanceViewType.FiatThenCoin -> {
+                primaryValue = currencyValueStr
+                secondaryValue = coinValueStr
+            }
+        }
+
         return BalanceViewItem(
                 wallet = item.wallet,
                 currencySymbol = currency.symbol,
@@ -208,15 +244,8 @@ class BalanceViewItemFactory {
                 coinTitle = coin.name,
                 coinIconUrl = coin.iconUrl,
                 coinIconPlaceholder = wallet.coinType.iconPlaceholder,
-                coinValue = coinValue(state, item.balanceData.total, balanceTotalVisibility, expanded, wallet.decimal),
-                fiatValue = currencyValue(
-                    state,
-                    item.balanceData.total,
-                    latestRate,
-                    balanceTotalVisibility,
-                    expanded,
-                    currency
-                ),
+                primaryValue = primaryValue,
+                secondaryValue = secondaryValue,
                 coinValueLocked = lockedCoinValue(
                     state,
                     item.balanceData.locked,

@@ -151,8 +151,8 @@ private fun RowMultilineSelect(
         verticalAlignment = Alignment.CenterVertically
     ) {
         MultitextM1(
-            title = title,
-            subtitle = subtitle
+            title = { B2(text = title) },
+            subtitle = { D1(text = subtitle) }
         )
         Spacer(modifier = Modifier.weight(1f))
         if (selected) {

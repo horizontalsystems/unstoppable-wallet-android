@@ -15,12 +15,14 @@ import kotlinx.coroutines.launch
 class BalanceViewModel(
     private val service: BalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
-    private val totalService: TotalService
+    private val totalService: TotalService,
+    private val balanceViewTypeManager: BalanceViewTypeManager
 ) : ViewModel() {
     private var totalState = createTotalUIState(totalService.stateFlow.value)
     private var viewState: ViewState = ViewState.Loading
     private var balanceViewItems = listOf<BalanceViewItem>()
     private var isRefreshing = false
+    private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
 
     var uiState by mutableStateOf(
         BalanceUiState(
@@ -52,9 +54,25 @@ class BalanceViewModel(
             }
         }
 
+        viewModelScope.launch {
+            balanceViewTypeManager.balanceViewTypeFlow.collect {
+                handleUpdatedBalanceViewType(it)
+            }
+        }
+
         totalService.start(service.balanceHidden)
 
         service.start()
+    }
+
+    private fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
+        this.balanceViewType = balanceViewType
+
+        service.balanceItemsFlow.value?.let {
+            refreshViewItems(it)
+
+            emitState()
+        }
     }
 
     private fun handleUpdatedTotalState(totalState: TotalService.State) {
@@ -86,7 +104,8 @@ class BalanceViewModel(
                 service.baseCurrency,
                 balanceItem.wallet == expandedWallet,
                 service.balanceHidden,
-                service.isWatchAccount
+                service.isWatchAccount,
+                balanceViewType
             )
         }
 
