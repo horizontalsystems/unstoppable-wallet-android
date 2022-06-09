@@ -19,12 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -175,11 +176,9 @@ private fun ColumnScope.WCSessionListContent(
                 modifier = Modifier
                     .size(72.dp)
                     .clip(RoundedCornerShape(15.dp)),
-                painter = rememberImagePainter(
-                    data = peerMeta?.icon,
-                    builder = {
-                        error(R.drawable.coin_placeholder)
-                    }
+                painter = rememberAsyncImagePainter(
+                    model = peerMeta?.icon,
+                    error = painterResource(R.drawable.coin_placeholder)
                 ),
                 contentDescription = null,
             )

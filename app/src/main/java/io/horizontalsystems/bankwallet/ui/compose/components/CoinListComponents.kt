@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
@@ -405,7 +405,7 @@ fun RowScope.CategoryCard(
                             .width(76.dp)
                             .align(Alignment.TopEnd)) { imageRes ->
                         Image(
-                            painter = rememberImagePainter(imageRes),
+                            painter = rememberAsyncImagePainter(imageRes),
                             contentDescription = "category image",
                             modifier = Modifier.fillMaxSize()
                         )

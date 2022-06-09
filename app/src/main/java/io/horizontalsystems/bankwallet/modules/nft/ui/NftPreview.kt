@@ -15,8 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -50,8 +50,8 @@ fun NftAssetPreview(
                 .clip(RoundedCornerShape(8.dp))
                 .background(ComposeAppTheme.colors.steel20)
         ) {
-            val painter = rememberImagePainter(imageUrl)
-            if (painter.state !is ImagePainter.State.Success) {
+            val painter = rememberAsyncImagePainter(imageUrl)
+            if (painter.state !is AsyncImagePainter.State.Success) {
                 name?.let {
                     Text(
                         modifier = Modifier

@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnLayout
 import androidx.navigation.navGraphViewModels
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -172,7 +172,7 @@ private fun Header(name: String, imageUrl: String?) {
             modifier = Modifier
                 .size(72.dp)
                 .clip(RoundedCornerShape(15.dp)),
-            painter = rememberImagePainter(imageUrl),
+            painter = rememberAsyncImagePainter(imageUrl),
             contentDescription = null
         )
         Text(

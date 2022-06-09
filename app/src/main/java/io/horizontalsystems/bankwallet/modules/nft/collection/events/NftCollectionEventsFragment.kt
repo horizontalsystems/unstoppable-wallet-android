@@ -16,12 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -173,9 +174,9 @@ private fun NftEvent(
         onClick = onClick
     ) {
         Image(
-            painter = rememberImagePainter(
-                data = iconUrl,
-                builder = { error(R.drawable.coin_placeholder) }
+            painter = rememberAsyncImagePainter(
+                model = iconUrl,
+                error = painterResource(R.drawable.coin_placeholder)
             ),
             contentDescription = null,
             modifier = Modifier

@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule
@@ -54,7 +54,10 @@ fun CoinImage(
     val fallback = placeholder ?: R.drawable.coin_placeholder
     when {
         iconUrl != null -> Image(
-            painter = coinImagePainter(iconUrl, fallback),
+            painter = rememberAsyncImagePainter(
+                model = iconUrl,
+                error = painterResource(fallback)
+            ),
             contentDescription = null,
             modifier = modifier,
             colorFilter = colorFilter
@@ -67,15 +70,3 @@ fun CoinImage(
         )
     }
 }
-
-@Composable
-fun coinImagePainter(
-    url: String?,
-    placeholder: Int? = null
-) = rememberImagePainter(
-    data = url,
-    builder = {
-        val fallback = placeholder ?: R.drawable.coin_placeholder
-        error(fallback)
-    }
-)

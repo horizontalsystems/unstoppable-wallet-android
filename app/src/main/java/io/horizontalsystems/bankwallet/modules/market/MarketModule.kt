@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
@@ -143,7 +143,10 @@ sealed class ImageSource {
     @Composable
     fun painter(): Painter = when (this) {
         is Local -> painterResource(resId)
-        is Remote -> rememberImagePainter(url, builder = { error(placeholder) })
+        is Remote -> rememberAsyncImagePainter(
+            model = url,
+            error = painterResource(placeholder)
+        )
     }
 }
 

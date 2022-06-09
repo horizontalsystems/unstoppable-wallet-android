@@ -38,10 +38,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
-import coil.size.OriginalSize
-import coil.size.Scale
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -171,13 +171,13 @@ private fun NftAsset(
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Box {
-                    val painter = rememberImagePainter(
-                        data = asset.imageUrl,
-                        builder = {
-                            size(OriginalSize)
-                            scale(Scale.FIT)
-                        })
-                    if (painter.state !is ImagePainter.State.Success) {
+                    val model = ImageRequest.Builder(LocalContext.current)
+                        .data(asset.imageUrl)
+                        .size(Size.ORIGINAL)
+                        .crossfade(true)
+                        .build()
+                    val painter = rememberAsyncImagePainter(model)
+                    if (painter.state !is AsyncImagePainter.State.Success) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()

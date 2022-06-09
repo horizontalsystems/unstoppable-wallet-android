@@ -13,7 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.bankwallet.modules.nft.collections.NftCollectionViewItem
@@ -43,7 +43,7 @@ fun LazyListScope.nftsCollectionSection(
                 modifier = Modifier
                     .size(24.dp)
                     .clip(RoundedCornerShape(4.dp)),
-                painter = rememberImagePainter(collection.imageUrl),
+                painter = rememberAsyncImagePainter(collection.imageUrl),
                 contentDescription = null
             )
             headline2_leah(
