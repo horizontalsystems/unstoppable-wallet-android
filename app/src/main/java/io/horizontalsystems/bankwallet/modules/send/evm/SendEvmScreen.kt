@@ -15,13 +15,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
+import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.AddressParserModule
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
