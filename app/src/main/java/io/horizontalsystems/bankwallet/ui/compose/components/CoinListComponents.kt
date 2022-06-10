@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -48,16 +49,17 @@ fun CoinList(
     onAddFavorite: (String) -> Unit,
     onRemoveFavorite: (String) -> Unit,
     onCoinClick: (String) -> Unit,
-    headerContent: (@Composable () -> Unit)? = null
+    headerContent: (@Composable LazyItemScope.() -> Unit)? = null,
+    userScrollEnabled: Boolean = true
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
-    LazyColumn(state = listState) {
-        headerContent?.let{ topContent ->
-            item{
-                topContent()
+    LazyColumn(state = listState, userScrollEnabled = userScrollEnabled) {
+        headerContent?.let { topContent ->
+            item {
+                topContent.invoke(this)
             }
         }
         itemsIndexed(items, key = { _, item -> item.coinUid }) { index, item ->
