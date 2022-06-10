@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -23,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconUrl
@@ -91,8 +89,13 @@ private fun AppearanceScreenContent() {
         HeaderText(text = stringResource(id = R.string.Appearance_Theme))
         CellSingleLineLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
             RowSelect(
-                painter = painterResource(id = option.iconRes),
-                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey),
+                imageContent = {
+                    Image(
+                        painter = painterResource(id = option.iconRes),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+                    )
+                },
                 text = option.title.getString(),
                 selected = option == uiState.themeOptions.selected
             ) {
@@ -104,8 +107,13 @@ private fun AppearanceScreenContent() {
         HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
         CellSingleLineLawrenceSection(uiState.launchScreenOptions.options) { option ->
             RowSelect(
-                painter = painterResource(id = option.iconRes),
-                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey),
+                imageContent = {
+                    Image(
+                        painter = painterResource(id = option.iconRes),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+                    )
+                },
                 text = option.title.getString(),
                 selected = option == uiState.launchScreenOptions.selected
             ) {
@@ -117,10 +125,12 @@ private fun AppearanceScreenContent() {
         HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
         CellSingleLineLawrenceSection(uiState.baseCoinOptions.options) { option ->
             RowSelect(
-                painter = rememberAsyncImagePainter(
-                    model = option.coin.iconUrl,
-                    error = painterResource(R.drawable.coin_placeholder)
-                ),
+                imageContent = {
+                    CoinImage(
+                        iconUrl = option.coin.iconUrl,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
                 text = option.coin.code,
                 selected = option == uiState.baseCoinOptions.selected
             ) {
@@ -174,8 +184,7 @@ private fun RowMultilineSelect(
 
 @Composable
 private fun RowSelect(
-    painter: Painter,
-    colorFilter: ColorFilter? = null,
+    imageContent: @Composable RowScope.() -> Unit,
     text: String,
     selected: Boolean,
     onClick: () -> Unit
@@ -187,11 +196,7 @@ private fun RowSelect(
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painter,
-            contentDescription = null,
-            colorFilter = colorFilter
-        )
+        imageContent.invoke(this)
         body_leah(
             text = text,
             modifier = Modifier
