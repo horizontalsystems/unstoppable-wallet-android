@@ -44,7 +44,8 @@ class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel(
             item.marketImageUrl,
             "${item.baseCoinCode}/${item.targetCoinCode}",
             App.numberFormatter.formatCoinFull(item.rate, item.targetCoinCode, 8),
-            getVolume(item)
+            getVolume(item),
+            item.tradeUrl
         )
     }
 
