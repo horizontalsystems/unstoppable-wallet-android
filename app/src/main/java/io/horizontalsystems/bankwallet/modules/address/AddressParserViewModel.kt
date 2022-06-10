@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send.bitcoin
+package io.horizontalsystems.bankwallet.modules.address
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

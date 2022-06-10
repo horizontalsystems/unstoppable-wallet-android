@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send.bitcoin
+package io.horizontalsystems.bankwallet.modules.address
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
