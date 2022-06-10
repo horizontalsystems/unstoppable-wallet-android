@@ -18,6 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,6 +36,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import kotlinx.coroutines.launch
 
 class CoinMarketsFragment : BaseFragment() {
@@ -160,6 +162,7 @@ fun CoinMarketList(
                 item.marketImageUrl ?: "",
                 item.rate,
                 MarketDataValue.Volume(item.volume),
+                item.tradeUrl
             )
         }
         item {
@@ -180,8 +183,13 @@ fun CoinMarketCell(
     iconUrl: String,
     coinRate: String? = null,
     marketDataValue: MarketDataValue? = null,
+    tradeUrl: String?,
 ) {
+    val context = LocalContext.current
     MultilineClear(
+        onClick = tradeUrl?.let {
+            { LinkHelper.openLinkInAppBrowser(context, it) }
+        },
         borderBottom = true
     ) {
         Image(

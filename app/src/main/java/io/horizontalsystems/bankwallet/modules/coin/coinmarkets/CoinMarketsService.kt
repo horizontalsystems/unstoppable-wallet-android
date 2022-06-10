@@ -89,7 +89,8 @@ class CoinMarketsService(
             marketTicker.target,
             marketTicker.rate,
             volume,
-            volumeType
+            volumeType,
+            marketTicker.tradeUrl
         )
     }
 }

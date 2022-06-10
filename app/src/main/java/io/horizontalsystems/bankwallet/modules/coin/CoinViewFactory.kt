@@ -38,6 +38,7 @@ data class MarketTickerViewItem(
     val pair: String,
     val rate: String,
     val volume: String,
+    val tradeUrl: String?,
 )
 
 sealed class RoiViewItem {

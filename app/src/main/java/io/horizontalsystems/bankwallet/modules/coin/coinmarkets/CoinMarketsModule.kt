@@ -46,6 +46,7 @@ data class MarketTickerItem(
     val rate: BigDecimal,
     val volume: BigDecimal,
     val volumeType: CoinMarketsModule.VolumeMenuType,
+    val tradeUrl: String?
 )
 
 enum class SortType {
