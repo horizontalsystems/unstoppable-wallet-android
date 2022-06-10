@@ -171,11 +171,11 @@ fun FormsInput(
                 if (qrScannerEnabled) {
                     val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                         if (result.resultCode == Activity.RESULT_OK) {
-                            val scannedText2 = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                            val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-                            val scannedText = textPreprocessor.process(scannedText2)
-                            textState = textState.copy(text = scannedText, selection = TextRange(scannedText.length))
-                            onValueChange.invoke(scannedText)
+                            val textProcessed = textPreprocessor.process(scannedText)
+                            textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                            onValueChange.invoke(textProcessed)
                         }
                     }
 
