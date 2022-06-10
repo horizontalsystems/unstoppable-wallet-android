@@ -116,6 +116,8 @@ fun CategoryScreen(
                         is ViewState.Success -> {
                             Column {
                                 viewItems?.let {
+                                    var scrollingEnabled by remember { mutableStateOf(true) }
+
                                     CoinList(
                                         items = it,
                                         scrollToTop = scrollToTopAfterUpdate,
@@ -123,8 +125,15 @@ fun CategoryScreen(
                                         onRemoveFavorite = { uid -> viewModel.onRemoveFavorite(uid) },
                                         onCoinClick = onCoinClick,
                                         headerContent = {
-                                            ListHeader(chartViewModel, viewModel)
-                                        }
+                                            ListHeader(
+                                                chartViewModel = chartViewModel,
+                                                viewModel = viewModel,
+                                                onChangeHoldingPointState = { holding ->
+                                                    scrollingEnabled = !holding
+                                                }
+                                            )
+                                        },
+                                        userScrollEnabled = scrollingEnabled
                                     )
                                     if (scrollToTopAfterUpdate) {
                                         scrollToTopAfterUpdate = false
@@ -156,7 +165,8 @@ fun CategoryScreen(
 @Composable
 private fun ListHeader(
     chartViewModel: ChartViewModel,
-    viewModel: MarketCategoryViewModel
+    viewModel: MarketCategoryViewModel,
+    onChangeHoldingPointState: (Boolean) -> Unit
 ) {
     val header by viewModel.headerLiveData.observeAsState()
     val menu by viewModel.menuLiveData.observeAsState()
@@ -165,7 +175,10 @@ private fun ListHeader(
         DescriptionCard(it.title, it.description, it.icon)
     }
 
-    Chart(chartViewModel)
+    Chart(
+        chartViewModel = chartViewModel,
+        onChangeHoldingPointState = onChangeHoldingPointState
+    )
 
     menu?.let {
         Header(borderTop = true, borderBottom = true) {

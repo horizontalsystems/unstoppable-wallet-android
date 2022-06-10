@@ -9,8 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -114,9 +113,16 @@ class TvlFragment : BaseFragment() {
                             ListErrorView(stringResource(R.string.SyncError), tvlViewModel::onErrorClick)
                         }
                         ViewState.Success -> {
-                            LazyColumn {
+                            var scrollingEnabled by remember { mutableStateOf(true) }
+
+                            LazyColumn(userScrollEnabled = scrollingEnabled) {
                                 item {
-                                    Chart(chartViewModel) {
+                                    Chart(
+                                        chartViewModel = chartViewModel,
+                                        onChangeHoldingPointState = { holding ->
+                                            scrollingEnabled = !holding
+                                        }
+                                    ) {
                                         tvlViewModel.onSelectChartInterval(it)
                                     }
                                 }
