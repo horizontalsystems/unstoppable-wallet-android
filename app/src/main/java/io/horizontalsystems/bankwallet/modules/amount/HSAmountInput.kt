@@ -29,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.AmountUnique
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -36,6 +37,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefa
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import java.math.BigDecimal
 
+/**
+ * @param amountUnique used special class [AmountUnique] to be able to set the same amount again. It won't work with BigDecimal
+ */
 @Composable
 fun HSAmountInput(
     modifier: Modifier = Modifier,
@@ -48,9 +52,17 @@ fun HSAmountInput(
     onClickHint: () -> Unit,
     onValueChange: (BigDecimal?) -> Unit,
     inputType: AmountInputType,
-    rate: CurrencyValue?
+    rate: CurrencyValue?,
+    amountUnique: AmountUnique? = null
 ) {
-    val viewModel = viewModel<AmountInputViewModel2>(factory = AmountInputModule.Factory(coinCode, coinDecimal, fiatDecimal, inputType))
+    val viewModel = viewModel<AmountInputViewModel2>(
+        factory = AmountInputModule.Factory(
+            coinCode,
+            coinDecimal,
+            fiatDecimal,
+            inputType
+        )
+    )
     LaunchedEffect(availableBalance) {
         viewModel.setAvailableBalance(availableBalance)
     }
@@ -75,6 +87,17 @@ fun HSAmountInput(
 
         val text = viewModel.getEnterAmount()
         textState = textState.copy(text = text, selection = TextRange(text.length))
+    }
+
+    LaunchedEffect(amountUnique) {
+        amountUnique?.let {
+            viewModel.setCoinAmountExternal(amountUnique.amount)
+
+            val text = viewModel.getEnterAmount()
+            textState = textState.copy(text = text, selection = TextRange(text.length))
+
+            onValueChange.invoke(viewModel.coinAmount)
+        }
     }
 
     val inputTextColor: Color

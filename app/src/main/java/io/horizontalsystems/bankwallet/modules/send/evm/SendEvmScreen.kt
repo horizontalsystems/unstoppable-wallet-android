@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -19,6 +20,8 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.AddressParserModule
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -37,6 +40,9 @@ fun SendEvmScreen(
     val amountCaution = uiState.amountCaution
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
+
+    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.coinType))
+    val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {
         val fullCoin = wallet.platformCoin.fullCoin
@@ -75,7 +81,8 @@ fun SendEvmScreen(
                     viewModel.onEnterAmount(it)
                 },
                 inputType = amountInputType,
-                rate = viewModel.coinRate
+                rate = viewModel.coinRate,
+                amountUnique = amountUnique
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -83,7 +90,8 @@ fun SendEvmScreen(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 coinType = wallet.coinType,
                 coinCode = wallet.coin.code,
-                error = addressError
+                error = addressError,
+                textPreprocessor = paymentAddressViewModel
             ) {
                 viewModel.onEnterAddress(it)
             }

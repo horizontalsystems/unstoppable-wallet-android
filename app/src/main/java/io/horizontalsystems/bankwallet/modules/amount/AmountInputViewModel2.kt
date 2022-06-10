@@ -60,6 +60,11 @@ class AmountInputViewModel2(
         refreshHint()
     }
 
+    fun setCoinAmountExternal(amount: BigDecimal) {
+        setCoinAmount(amount)
+        refreshHint()
+    }
+
     private fun setCurrencyAmount(amount: BigDecimal?) {
         currencyAmount = amount
         calculateCoinAmount()

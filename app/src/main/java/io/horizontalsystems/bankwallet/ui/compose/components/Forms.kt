@@ -53,8 +53,9 @@ fun FormsInput(
     qrScannerEnabled: Boolean = false,
     pasteEnabled: Boolean = true,
     maxLength: Int? = null,
+    textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
     onChangeFocus: ((Boolean) -> Unit)? = null,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -99,9 +100,11 @@ fun FormsInput(
                 enabled = enabled,
                 value = textState,
                 onValueChange = { textFieldValue ->
-                    val text = textFieldValue.text
+                    val textFieldValueProcessed = textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
+
+                    val text = textFieldValueProcessed.text
                     if (maxLength == null || text.length <= maxLength) {
-                        textState = textFieldValue
+                        textState = textFieldValueProcessed
                         onValueChange.invoke(text)
                     } else {
                         // Need to set textState to new instance of TextFieldValue with the same values
@@ -159,16 +162,18 @@ fun FormsInput(
                     modifier = Modifier.padding(end = 8.dp),
                     icon = R.drawable.ic_delete_20,
                     onClick = {
-                        textState = textState.copy(text = "")
-                        onValueChange.invoke("")
+                        val text = textPreprocessor.process("")
+                        textState = textState.copy(text = text, selection = TextRange(0))
+                        onValueChange.invoke(text)
                     }
                 )
             } else {
                 if (qrScannerEnabled) {
                     val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                         if (result.resultCode == Activity.RESULT_OK) {
-                            val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                            val scannedText2 = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
+                            val scannedText = textPreprocessor.process(scannedText2)
                             textState = textState.copy(text = scannedText, selection = TextRange(scannedText.length))
                             onValueChange.invoke(scannedText)
                         }
@@ -190,8 +195,9 @@ fun FormsInput(
                         title = stringResource(id = R.string.Send_Button_Paste),
                         onClick = {
                             clipboardManager.getText()?.text?.let { textInClipboard ->
-                                textState = textState.copy(text = textInClipboard, selection = TextRange(textInClipboard.length))
-                                onValueChange.invoke(textInClipboard)
+                                val textProcessed = textPreprocessor.process(textInClipboard)
+                                textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                                onValueChange.invoke(textProcessed)
                             }
                         },
                     )
@@ -211,3 +217,11 @@ fun FormsInput(
 }
 
 class FormsInputStateWarning(override val message: String?) : Exception()
+
+interface TextPreprocessor {
+    fun process(text: String): String
+}
+
+object TextPreprocessorImpl : TextPreprocessor {
+    override fun process(text: String) = text
+}

@@ -8,6 +8,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
+import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessor
+import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessorImpl
 import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -20,6 +22,7 @@ fun HSAddressInput(
     coinType: CoinType,
     coinCode: String,
     error: Throwable? = null,
+    textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
     onStateChange: ((DataState<Address>?) -> Unit)? = null,
     onValueChange: ((Address?) -> Unit)? = null
 ) {
@@ -47,6 +50,7 @@ fun HSAddressInput(
         hint = stringResource(id = R.string.Watch_Address_Hint),
         state = inputState,
         qrScannerEnabled = true,
+        textPreprocessor = textPreprocessor,
         onChangeFocus = {
             isFocused = it
         }
