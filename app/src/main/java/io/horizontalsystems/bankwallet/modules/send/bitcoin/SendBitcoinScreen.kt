@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -52,6 +53,9 @@ fun SendBitcoinScreen(
 
     val rate = viewModel.coinRate
 
+    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.coinType))
+    val amountUnique = paymentAddressViewModel.amountUnique
+
     ComposeAppTheme {
         val fullCoin = wallet.platformCoin.fullCoin
         val focusRequester = remember { FocusRequester() }
@@ -89,7 +93,8 @@ fun SendBitcoinScreen(
                     viewModel.onEnterAmount(it)
                 },
                 inputType = amountInputType,
-                rate = rate
+                rate = rate,
+                amountUnique = amountUnique
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -97,7 +102,8 @@ fun SendBitcoinScreen(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 coinType = wallet.coinType,
                 coinCode = wallet.coin.code,
-                error = addressError
+                error = addressError,
+                textPreprocessor = paymentAddressViewModel
             ) {
                 viewModel.onEnterAddress(it)
             }

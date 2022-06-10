@@ -33,7 +33,7 @@ class AddressParser(private val validScheme: String, private val removeScheme: B
         }
 
         // check exist params
-        val versionSeparatedParts = parsedString.split(";", "?")
+        val versionSeparatedParts = parsedString.split(";", "?", "&")
 
         if (versionSeparatedParts.size < 2) {
             address = parsedString

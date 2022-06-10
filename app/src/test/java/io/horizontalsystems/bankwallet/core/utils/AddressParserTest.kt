@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.utils
 import io.horizontalsystems.bankwallet.entities.AddressData
 import org.junit.Assert
 import org.junit.Test
+import java.math.BigDecimal
 
 class AddressParserTest {
     private lateinit var addressParser: AddressParser
@@ -37,6 +38,12 @@ class AddressParserTest {
 
         paymentData = AddressData(address = "address_data", parameters = mutableMapOf("custom" to "any"))
         checkPaymentData(addressParser, "bitcoin:address_data?custom=any", paymentData)
+
+        checkPaymentData(
+            addressParser,
+            "bitcoin:175tWpb8K1S7NmH4Zx6rewF9WQrcZv245W?amount=20.3&label=Luke-Jr",
+            AddressData(address = "175tWpb8K1S7NmH4Zx6rewF9WQrcZv245W", amount = BigDecimal("20.3"), label = "Luke-Jr")
+        )
     }
 
     @Test
@@ -105,6 +112,6 @@ class AddressParserTest {
 
     private fun checkPaymentData(addressParser: AddressParser, paymentAddress: String, paymentData: AddressData) {
         val bitcoinPaymentData = addressParser.parse(paymentAddress)
-        Assert.assertEquals(bitcoinPaymentData, paymentData)
+        Assert.assertEquals(paymentData, bitcoinPaymentData)
     }
 }
