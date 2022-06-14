@@ -26,7 +26,7 @@ class ManageWalletsService(
 
     val cancelEnableCoinObservable = PublishSubject.create<Coin>()
 
-    private val account: Account = accountManager.activeAccount!!
+    private val account: Account? = accountManager.activeAccount
     private var wallets = setOf<Wallet>()
     private var fullCoins = listOf<FullCoin>()
 
@@ -141,6 +141,7 @@ class ManageWalletsService(
     private fun handleEnableCoin(
         configuredPlatformCoins: List<ConfiguredPlatformCoin>, restoreSettings: RestoreSettings
     ) {
+        val account = this.account ?: return
         val coin = configuredPlatformCoins.firstOrNull()?.platformCoin?.coin ?: return
 
         if (restoreSettings.isNotEmpty() && configuredPlatformCoins.size == 1) {

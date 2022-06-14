@@ -273,6 +273,7 @@ dependencies {
 
     // When using a AppCompat theme
     implementation "com.google.accompanist:accompanist-appcompat-theme:0.20.3"
+    implementation "com.google.accompanist:accompanist-pager:0.24.9-beta"
 
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
