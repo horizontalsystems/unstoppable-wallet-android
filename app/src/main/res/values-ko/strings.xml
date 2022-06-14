@@ -551,6 +551,13 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">앱 평가</string>
     <string name="Settings_LaunchScreen">시작 화면</string>
+    <string name="Settings_Appearance">Appearance</string>
+    <string name="Appearance_Theme">THEME</string>
+    <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
+    <string name="Appearance_BalanceConversion">BALANCE CONVERSION</string>
+    <string name="Appearance_BalanceValue">BALANCE VALUE</string>
+    <string name="BalanceViewType_CoinValue">Coin Value</string>
+    <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">앱 정보</string>
     <string name="SettingsAboutApp_Site">웹사이트</string>
     <string name="SettingsAboutApp_WhatsNew">새로운 기능</string>
@@ -710,6 +717,7 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">개인 키 복사의 위험</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">보안 조치로 개인 키에 복사 작업을 사용하지 않는 것이 좋습니다.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">위험을 감수하겠습니다</string>
+    <string name="ShowKey_PrivateKey_Warning">This key is for all EVM-compatible blockchains.\n\nAs a security measure we recommend not to use copy action on private key.</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">백업</string>
     <string name="BackupKey_Description">다음에 표시될 복구 문구는 휴대폰을 분실, 도난, 파손된 경우 자금을 복구할 수 있는 유일한 방법입니다.\n\n아무도 화면을 보고 있지 않은지 확인합니다.</string>
