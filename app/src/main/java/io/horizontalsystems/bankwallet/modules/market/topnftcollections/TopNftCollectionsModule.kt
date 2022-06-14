@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.market.topnftcollections
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -14,7 +13,7 @@ object TopNftCollectionsModule {
     class Factory(val sortingField: SortingField, val timeDuration: TimeDuration) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val topNftCollectionsRepository = TopNftCollectionsRepository(HsNftApiProvider())
+            val topNftCollectionsRepository = TopNftCollectionsRepository(App.marketKit)
             val service = TopNftCollectionsService(sortingField, timeDuration, topNftCollectionsRepository)
             val topNftCollectionsViewItemFactory = TopNftCollectionsViewItemFactory(App.numberFormatter)
             return TopNftCollectionsViewModel(service, topNftCollectionsViewItemFactory) as T

@@ -6,14 +6,13 @@ import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.CoinItem
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.Data.DiscoveryItems
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.Data.SearchResult
-import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.TopCoins
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.CoinCategoryMarketData
+import io.horizontalsystems.marketkit.models.CoinCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,7 +26,7 @@ class MarketSearchService(
     private val baseCurrency: Currency,
 ) {
 
-    private var marketData: List<CoinCategoryMarketData> = listOf()
+    private var categories: List<CoinCategory> = listOf()
 
     private var filter = ""
 
@@ -52,8 +51,8 @@ class MarketSearchService(
 
     private val discoveryItems: List<MarketSearchModule.DiscoveryItem>
         get() {
-            val items = marketKit.coinCategories().map { category ->
-                Category(category, getCategoryMarketData(category.uid))
+            val items = categories.map { category ->
+                MarketSearchModule.DiscoveryItem.Category(category, getCategoryMarketData(category))
             }
 
             val sortedItems = if (sortDescending) {
@@ -77,29 +76,25 @@ class MarketSearchService(
             }
         }
 
-    private fun getCategoryMarketData(categoryUid: String): MarketSearchModule.CategoryMarketData? {
-        marketData.firstOrNull { it.uid == categoryUid }?.let { coinCategoryMarketData ->
-            val marketCap = coinCategoryMarketData.marketCap?.let { marketCap ->
-                App.numberFormatter.formatFiatShort(marketCap, baseCurrency.symbol, 2)
-            }
-
-            val diff = when (selectedPeriod) {
-                TimeDuration.OneDay -> coinCategoryMarketData.diff24H
-                TimeDuration.SevenDay -> coinCategoryMarketData.diff1W
-                TimeDuration.ThirtyDay -> coinCategoryMarketData.diff1M
-            }
-
-            return MarketSearchModule.CategoryMarketData(marketCap ?: "----", diff)
+    private fun getCategoryMarketData(category: CoinCategory): MarketSearchModule.CategoryMarketData? {
+        val marketCap = category.marketCap?.let { marketCap ->
+            App.numberFormatter.formatFiatShort(marketCap, baseCurrency.symbol, 2)
         }
-        return null
+
+        val diff = when (selectedPeriod) {
+            TimeDuration.OneDay -> category.diff24H
+            TimeDuration.SevenDay -> category.diff1W
+            TimeDuration.ThirtyDay -> category.diff1M
+        }
+
+        return MarketSearchModule.CategoryMarketData(marketCap ?: "----", diff)
     }
 
     suspend fun updateState() = withContext(Dispatchers.IO) {
         try {
             if (filter.isBlank()) {
-                if (marketData.isEmpty()) {
-                    marketData =
-                            marketKit.coinCategoriesMarketDataSingle(baseCurrency.code).await()
+                if (categories.isEmpty()) {
+                    categories = marketKit.coinCategoriesSingle(baseCurrency.code).await()
                 }
                 _serviceDataFlow.tryEmit(Result.success((DiscoveryItems(discoveryItems))))
             } else {

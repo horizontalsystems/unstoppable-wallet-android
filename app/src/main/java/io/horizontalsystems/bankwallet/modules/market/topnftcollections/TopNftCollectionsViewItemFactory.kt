@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.market.topnftcollections
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
-import io.horizontalsystems.bankwallet.modules.nft.TopNftCollection
+import io.horizontalsystems.bankwallet.modules.nft.NftCollectionItem
 import java.math.BigDecimal
 
 class TopNftCollectionsViewItemFactory(
@@ -10,12 +11,12 @@ class TopNftCollectionsViewItemFactory(
 ) {
 
     fun viewItem(
-        collection: TopNftCollection,
+        collection: NftCollectionItem,
         timeDuration: TimeDuration,
         order: Int
     ): TopNftCollectionViewItem {
-        val volume: BigDecimal
-        val volumeDiff: BigDecimal
+        val volume: CoinValue?
+        val volumeDiff: BigDecimal?
         when (timeDuration) {
             TimeDuration.OneDay -> {
                 volume = collection.oneDayVolume
@@ -30,9 +31,9 @@ class TopNftCollectionsViewItemFactory(
                 volumeDiff = collection.thirtyDayVolumeDiff
             }
         }
-        val volumeFormatted = numberFormatter.formatCoinShort(volume, "ETH", 2)
+        val volumeFormatted = volume?.let { numberFormatter.formatCoinShort(it.value, it.platformCoin.code, 2) } ?: "---"
         val floorPriceFormatted = collection.floorPrice?.let {
-            "Floor: " + numberFormatter.formatCoinShort(it, "ETH", 2)
+            "Floor: " + numberFormatter.formatCoinShort(it.value, it.platformCoin.code, 2)
         } ?: "---"
 
         return TopNftCollectionViewItem(
@@ -40,7 +41,7 @@ class TopNftCollectionsViewItemFactory(
             name = collection.name,
             imageUrl = collection.imageUrl,
             volume = volumeFormatted,
-            volumeDiff = volumeDiff,
+            volumeDiff = volumeDiff ?: BigDecimal.ZERO,
             order = order,
             floorPrice = floorPriceFormatted
         )

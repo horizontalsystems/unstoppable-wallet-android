@@ -5,18 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
-import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsRepository
+import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopMoversRepository
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionViewItem
-import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformViewItem
-import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import java.math.BigDecimal
@@ -26,25 +23,16 @@ object MarketOverviewModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val topMarketsRepository = MarketTopCoinsRepository(App.marketKit)
-            val marketMetricsRepository = MarketMetricsRepository(App.marketKit)
-            val topNftCollectionsRepository = TopNftCollectionsRepository(HsNftApiProvider())
-            val topSectorsRepository = TopSectorsRepository(App.marketKit)
-            val topPlatformsRepository = TopPlatformsRepository(
-                App.marketKit,
-                App.currencyManager
-            )
+            val topMarketsRepository = MarketTopMoversRepository(App.marketKit)
+            val marketOverviewRepository = MarketOverviewRepository(App.marketKit)
             val service = MarketOverviewService(
                 topMarketsRepository,
-                marketMetricsRepository,
-                topNftCollectionsRepository,
-                topSectorsRepository,
-                topPlatformsRepository,
+                marketOverviewRepository,
                 App.backgroundManager,
                 App.currencyManager
             )
             val topNftCollectionsViewItemFactory = TopNftCollectionsViewItemFactory(App.numberFormatter)
-            return MarketOverviewViewModel(service, topNftCollectionsViewItemFactory) as T
+            return MarketOverviewViewModel(service, topNftCollectionsViewItemFactory, App.currencyManager) as T
         }
     }
 

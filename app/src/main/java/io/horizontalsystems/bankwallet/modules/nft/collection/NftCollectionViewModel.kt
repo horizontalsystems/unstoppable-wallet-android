@@ -18,13 +18,18 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
 import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.bankwallet.modules.nft.NftCollection
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionModule.Tab
+import io.horizontalsystems.bankwallet.modules.nft.oneDayAveragePriceChange
+import io.horizontalsystems.bankwallet.modules.nft.oneDayFloorPriceChange
+import io.horizontalsystems.bankwallet.modules.nft.oneDaySalesChange
+import io.horizontalsystems.bankwallet.modules.nft.oneDayVolumeChange
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.NftCollection
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -110,50 +115,54 @@ class NftCollectionViewModel(
 
         overviewViewItem = item.copy(
             volumeChartDataWrapper = item.volumeChartDataWrapper?.copy(
-                secondaryValue = currencyValue(collection.oneDayVolume, rate)
+                secondaryValue = currencyValue(collection.stats.volumes[HsTimePeriod.Day1]?.value, rate)
             ),
             averagePriceChartDataWrapper = item.averagePriceChartDataWrapper?.copy(
-                secondaryValue = currencyValue(collection.averagePrice, rate)
+                secondaryValue = currencyValue(collection.stats.averagePrice1d?.value, rate)
             ),
             floorPriceChartDataWrapper = item.floorPriceChartDataWrapper?.copy(
-                secondaryValue = currencyValue(collection.floorPrice, rate),
+                secondaryValue = currencyValue(collection.stats.floorPrice?.value, rate),
             )
         )
     }
 
     private fun sync() {
         overviewViewItem = result?.getOrNull()?.let { collection ->
+            val oneDayVolume = collection.stats.volumes[HsTimePeriod.Day1]?.value
             val volumeChartDataWrapper = chartDataWrapper(
                 title = Translator.getString(R.string.Market_Volume24h),
-                chartPoints = collection.chartPoints.map { Pair(it.oneDayVolume.toFloat(), it.timestamp) },
-                primaryValue = coinValue(collection.oneDayVolume),
-                secondaryValue = currencyValue(collection.oneDayVolume, rate),
+                chartPoints = collection.statCharts?.oneDayVolumePoints?.map { Pair(it.value.toFloat(), it.timestamp) } ?: listOf(),
+                primaryValue = oneDayVolume?.let { coinValue(it) } ?: "",
+                secondaryValue = currencyValue(oneDayVolume, rate),
                 change = collection.oneDayVolumeChange
             )
+
+            val averagePrice = collection.stats.averagePrice1d?.value
             val averagePriceChartDataWrapper = chartDataWrapper(
                 title = Translator.getString(R.string.NftCollection_AveragePrice),
-                chartPoints = collection.chartPoints.map { Pair(it.averagePrice.toFloat(), it.timestamp) },
-                primaryValue = coinValue(collection.averagePrice),
-                secondaryValue = currencyValue(collection.averagePrice, rate),
+                chartPoints = collection.statCharts?.averagePricePoints?.map { Pair(it.value.toFloat(), it.timestamp) } ?: listOf(),
+                primaryValue = averagePrice?.let { coinValue(it) } ?: "",
+                secondaryValue = currencyValue(averagePrice, rate),
                 change = collection.oneDayAveragePriceChange
             )
+
+            val oneDaySales = collection.stats.sales[HsTimePeriod.Day1]
             val salesChartDataWrapper = chartDataWrapper(
                 title = Translator.getString(R.string.NftCollection_TodaysSales),
-                chartPoints = collection.chartPoints.map { Pair(it.oneDaySales.toFloat(), it.timestamp) },
-                primaryValue = Translator.getString(R.string.NftCollection_ItemsCount, collection.oneDaySales),
+                chartPoints = collection.statCharts?.oneDaySalesPoints?.map { Pair(it.value.toFloat(), it.timestamp) } ?: listOf(),
+                primaryValue = oneDaySales?.let { Translator.getString(R.string.NftCollection_ItemsCount, it) } ?: "",
                 secondaryValue = Translator.getString(
-                    R.string.NftCollection_AveragePriceDescription, coinValue(collection.oneDayAveragePrice)
+                    R.string.NftCollection_AveragePriceDescription, averagePrice?.let { coinValue(it) } ?: ""
                 ),
                 change = collection.oneDaySalesChange
             )
+
+            val floorPrice = collection.stats.floorPrice
             val floorPriceChartDataWrapper = chartDataWrapper(
                 title = Translator.getString(R.string.NftAsset_Price_Floor),
-                chartPoints = collection.chartPoints.mapNotNull {
-                    it.floorPrice?.let { floorPrice -> Pair(floorPrice.toFloat(), it.timestamp) }
-                },
-                primaryValue = collection.floorPrice?.let { coinValue(it) }
-                    ?: Translator.getString(R.string.NotAvailable),
-                secondaryValue = currencyValue(collection.floorPrice, rate),
+                chartPoints = collection.statCharts?.floorPricePoints?.map { Pair(it.value.toFloat(), it.timestamp) } ?: listOf(),
+                primaryValue = floorPrice?.let { coinValue(it.value) } ?: Translator.getString(R.string.NotAvailable),
+                secondaryValue = currencyValue(floorPrice?.value, rate),
                 change = collection.oneDayFloorPriceChange
             )
 
@@ -161,8 +170,8 @@ class NftCollectionViewModel(
                 name = collection.name,
                 imageUrl = collection.imageUrl,
                 description = collection.description,
-                ownersCount = shortenValue(collection.ownersCount.toBigDecimal()),
-                totalSupply = shortenValue(collection.totalSupply.toBigDecimal()),
+                ownersCount = collection.stats.ownersCount?.let { shortenValue(it.toBigDecimal()) } ?: "",
+                totalSupply = collection.stats.totalSupply?.let { shortenValue(it.toBigDecimal()) } ?: "",
                 volumeChartDataWrapper = volumeChartDataWrapper,
                 averagePriceChartDataWrapper = averagePriceChartDataWrapper,
                 salesChartDataWrapper = salesChartDataWrapper,
@@ -180,16 +189,16 @@ class NftCollectionViewModel(
     }
 
     private fun contracts(collection: NftCollection) =
-        collection.contracts.map {
+        collection.asset_contracts?.map {
             ContractInfo(
                 it.address,
                 R.drawable.logo_ethereum_24,
                 "https://etherscan.io/token/${it.address}"
             )
-        }
+        } ?: listOf()
 
     private fun links(collection: NftCollection) = buildList {
-        collection.links?.externalUrl?.let {
+        collection.externalUrl?.let {
             add(
                 NftCollectionOverviewViewItem.Link(
                     url = it,
@@ -205,7 +214,7 @@ class NftCollectionViewModel(
                 icon = R.drawable.ic_opensea_20
             )
         )
-        collection.links?.discordUrl?.let {
+        collection.discordUrl?.let {
             add(
                 NftCollectionOverviewViewItem.Link(
                     url = it,
@@ -214,7 +223,7 @@ class NftCollectionViewModel(
                 )
             )
         }
-        collection.links?.twitterUsername?.let {
+        collection.twitterUsername?.let {
             add(
                 NftCollectionOverviewViewItem.Link(
                     url = "https://twitter.com/$it",

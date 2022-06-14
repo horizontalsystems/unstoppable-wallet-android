@@ -106,7 +106,7 @@ private fun NftEvents(
             viewItem.events.forEachIndexed { index, event ->
                 item(key = "content-row-$index") {
                     NftEvent(
-                        name = event.eventType.title.getString(),
+                        name = NftEventTypeWrapper.title(event.eventType).getString(),
                         subtitle = event.date?.let { DateHelper.getFullDate(it) } ?: "",
                         iconUrl = event.asset.imageUrl ?: "",
                         coinValue = event.amount?.coinValue?.getFormattedFull(),

@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.*
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
-import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
@@ -279,7 +278,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         startTasks()
 
-        nftManager = NftManager(appDatabase.nftCollectionDao(), HsNftApiProvider(), coinManager)
+        nftManager = NftManager(appDatabase.nftCollectionDao(), marketKit, coinManager)
 
         initializeWalletConnectV2(appConfig)
 

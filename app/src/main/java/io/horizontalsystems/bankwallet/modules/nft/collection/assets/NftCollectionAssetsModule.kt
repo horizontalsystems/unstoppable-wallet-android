@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
 
 object NftCollectionAssetsModule {
 
@@ -13,7 +12,7 @@ object NftCollectionAssetsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = NftCollectionAssetsService(
                 collectionUid,
-                HsNftApiProvider(),
+                App.marketKit,
                 App.nftManager,
                 BalanceXRateRepository(App.currencyManager, App.marketKit)
             )
