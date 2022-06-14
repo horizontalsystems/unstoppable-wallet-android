@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Surface
@@ -88,6 +90,7 @@ class TopNftCollectionsFragment : BaseFragment() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TopNftCollectionsScreen(
     viewModel: TopNftCollectionsViewModel,
@@ -95,14 +98,12 @@ fun TopNftCollectionsScreen(
     onClickCollection: (String) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    val menu = viewModel.menu
+    val header = viewModel.header
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             TopCloseButton(interactionSource, onCloseButtonClick)
-
-            viewModel.header.let {
-                DescriptionCard(it.title, it.description, it.icon)
-            }
 
             HSSwipeRefresh(
                 state = rememberSwipeRefreshState(viewModel.isRefreshing),
@@ -116,31 +117,39 @@ fun TopNftCollectionsScreen(
                             Loading()
                         }
                         is ViewState.Error -> {
-                            ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                            ListErrorView(
+                                stringResource(R.string.SyncError),
+                                viewModel::onErrorClick
+                            )
                         }
                         is ViewState.Success -> {
                             Column {
-                                viewModel.menu?.let { menu ->
-                                    Header(borderTop = true, borderBottom = true) {
-                                        Box(modifier = Modifier.weight(1f)) {
-                                            SortMenu(menu.sortingFieldSelect.selected.title) {
-                                                viewModel.onClickSortingFieldMenu()
+                                TopNftCollectionsList(
+                                    collections = viewModel.viewItems,
+                                    sortingField = viewModel.sortingField,
+                                    timeDuration = viewModel.timeDuration,
+                                    onClickCollection = onClickCollection,
+                                    preItems = {
+                                        item {
+                                            DescriptionCard(header.title, header.description, header.icon)
+                                        }
+
+                                        stickyHeader {
+                                            Header(borderTop = true, borderBottom = true) {
+                                                SortMenu(menu.sortingFieldSelect.selected.title) {
+                                                    viewModel.onClickSortingFieldMenu()
+                                                }
+                                                Spacer(modifier = Modifier.weight(1f))
+                                                ButtonSecondaryToggle(
+                                                    select = menu.timeDurationSelect,
+                                                    onSelect = { timeDuration ->
+                                                        viewModel.onSelectTimeDuration(timeDuration)
+                                                    }
+                                                )
+                                                Spacer(modifier = Modifier.width(16.dp))
                                             }
                                         }
-                                        ButtonSecondaryToggle(
-                                            select = menu.timeDurationSelect,
-                                            onSelect = { timeDuration ->
-                                                viewModel.onSelectTimeDuration(timeDuration)
-                                            }
-                                        )
                                     }
-                                }
-
-                                TopNftCollectionsList(
-                                    viewModel.viewItems,
-                                    viewModel.sortingField,
-                                    viewModel.timeDuration,
-                                    onClickCollection
                                 )
                             }
                         }
@@ -165,13 +174,15 @@ private fun TopNftCollectionsList(
     collections: List<TopNftCollectionViewItem>,
     sortingField: SortingField,
     timeDuration: TimeDuration,
-    onClickCollection: (String) -> Unit
+    onClickCollection: (String) -> Unit,
+    preItems: LazyListScope.() -> Unit
 ) {
     val state = rememberSaveable(sortingField, timeDuration, saver = LazyListState.Saver) {
         LazyListState(0, 0)
     }
 
     LazyColumn(state = state) {
+        preItems.invoke(this)
         items(collections) { collection ->
             MultilineClear(
                 onClick = { onClickCollection(collection.uid) },

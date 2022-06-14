@@ -23,18 +23,21 @@ class TopNftCollectionsViewModel(
     private val topNftCollectionsViewItemFactory: TopNftCollectionsViewItemFactory
 ) : ViewModel() {
 
-    val header by mutableStateOf(
-        MarketModule.Header(
-            Translator.getString(R.string.Nft_TopCollections),
-            Translator.getString(R.string.Nft_TopCollections_Description),
-            ImageSource.Local(R.drawable.ic_top_nfts)
-        )
+    val header = MarketModule.Header(
+        Translator.getString(R.string.Nft_TopCollections),
+        Translator.getString(R.string.Nft_TopCollections_Description),
+        ImageSource.Local(R.drawable.ic_top_nfts)
     )
 
     val sortingField by service::sortingField
     val timeDuration by service::timeDuration
 
-    var menu by mutableStateOf<Menu?>(null)
+    var menu by mutableStateOf(
+        Menu(
+            sortingFieldSelect = Select(service.sortingField, service.sortingFields),
+            timeDurationSelect = Select(service.timeDuration, service.timeDurations)
+        )
+    )
         private set
 
     var viewItems by mutableStateOf<List<TopNftCollectionViewItem>>(listOf())
@@ -61,8 +64,6 @@ class TopNftCollectionsViewModel(
                 }
             }
         }
-
-        updateMenu()
 
         viewModelScope.launch {
             service.start()
