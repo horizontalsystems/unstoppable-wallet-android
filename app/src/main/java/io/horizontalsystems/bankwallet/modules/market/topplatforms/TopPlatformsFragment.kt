@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Surface
@@ -80,6 +82,7 @@ class TopPlatformsFragment : BaseFragment() {
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TopPlatformsScreen(
     viewModel: TopPlatformsViewModel,
@@ -111,14 +114,45 @@ fun TopPlatformsScreen(
                         }
                         is ViewState.Success -> {
                             Column {
-                                ListHeader(
-                                    viewModel
-                                )
                                 viewModel.viewItems.let { viewItems ->
                                     TopPlatformsList(
                                         viewItems = viewItems,
                                         sortingField = viewModel.sortingField,
                                         timeDuration = viewModel.timePeriod,
+                                        preItems = {
+                                            item {
+                                                DescriptionCard(
+                                                    stringResource(R.string.MarketTopPlatforms_PlatofrmsRank),
+                                                    stringResource(R.string.MarketTopPlatforms_Description),
+                                                    ImageSource.Local(R.drawable.ic_platforms)
+                                                )
+                                            }
+
+                                            stickyHeader {
+                                                var timePeriodMenu by remember {
+                                                    mutableStateOf(viewModel.timePeriodSelect)
+                                                }
+
+                                                Header(borderTop = true, borderBottom = true) {
+                                                    SortMenu(
+                                                        viewModel.sortingSelect.selected.titleResId,
+                                                        viewModel::showSelectorMenu
+                                                    )
+                                                    Spacer(modifier = Modifier.weight(1f))
+                                                    ButtonSecondaryToggle(
+                                                        select = timePeriodMenu,
+                                                        onSelect = {
+                                                            viewModel.onTimePeriodSelect(it)
+                                                            timePeriodMenu = Select(
+                                                                it,
+                                                                viewModel.periodOptions
+                                                            )
+                                                        }
+                                                    )
+                                                    Spacer(modifier = Modifier.width(16.dp))
+                                                }
+                                            }
+                                        }
                                     )
                                 }
                             }
@@ -144,47 +178,18 @@ fun TopPlatformsScreen(
 }
 
 @Composable
-private fun ListHeader(
-    viewModel: TopPlatformsViewModel
-) {
-    var timePeriodMenu by remember { mutableStateOf(viewModel.timePeriodSelect) }
-
-    DescriptionCard(
-        stringResource(R.string.MarketTopPlatforms_PlatofrmsRank),
-        stringResource(R.string.MarketTopPlatforms_Description),
-        ImageSource.Local(R.drawable.ic_platforms)
-    )
-
-    Header(borderTop = true, borderBottom = true) {
-        Box(modifier = Modifier.weight(1f)) {
-            SortMenu(
-                viewModel.sortingSelect.selected.titleResId,
-                viewModel::showSelectorMenu
-            )
-        }
-        Box(modifier = Modifier.padding(start = 8.dp, end = 16.dp)) {
-            ButtonSecondaryToggle(
-                select = timePeriodMenu,
-                onSelect = {
-                    viewModel.onTimePeriodSelect(it)
-                    timePeriodMenu = Select(it, viewModel.periodOptions)
-                }
-            )
-        }
-    }
-}
-
-@Composable
 private fun TopPlatformsList(
     viewItems: List<TopPlatformViewItem>,
     sortingField: SortingField,
     timeDuration: TimeDuration,
+    preItems: LazyListScope.() -> Unit
 ) {
     val state = rememberSaveable(sortingField, timeDuration, saver = LazyListState.Saver) {
         LazyListState(0, 0)
     }
 
     LazyColumn(state = state) {
+        preItems.invoke(this)
         items(viewItems) { item ->
             TopPlatformItem(item)
         }
