@@ -128,7 +128,7 @@ enum class MarketField(@StringRes val titleResId: Int) : WithTranslatableTitle, 
 
 @Parcelize
 enum class TopMarket(val value: Int) : WithTranslatableTitle, Parcelable {
-    Top250(250), Top500(500), Top1000(1000);
+    Top100(100), Top200(200), Top300(300);
 
     fun next() = values()[if (ordinal == values().size - 1) 0 else ordinal + 1]
 

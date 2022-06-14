@@ -4,7 +4,6 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import io.horizontalsystems.bankwallet.core.storage.AccountRecord
-import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
 
 @Entity(
     primaryKeys = ["accountId", "uid"],
@@ -34,5 +33,16 @@ data class NftCollectionRecord(
     val floorPrice: NftAssetPrice?,
 
     @Embedded
-    val links: HsNftApiV1Response.Collection.Links?,
+    val links: CollectionLinks?,
 )
+
+data class CollectionLinks(
+    val external_url: String?,
+    val discord_url: String?,
+    val twitter_username: String?
+)
+
+
+//val telegram_url: String?,
+//val instagram_username: String?,
+//val wiki_url: String?,

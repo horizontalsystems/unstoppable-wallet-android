@@ -1,7 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection
 
-import io.horizontalsystems.bankwallet.modules.nft.INftApiProvider
-import io.horizontalsystems.bankwallet.modules.nft.NftCollection
+import io.horizontalsystems.bankwallet.modules.nft.nftCollectionItem
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.NftCollection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +12,7 @@ import kotlinx.coroutines.withContext
 
 class NftCollectionService(
     val collectionUid: String,
-    private val nftApiProvider: INftApiProvider
+    private val marketKit: MarketKit
 ) {
     private var fetchingJob: Job? = null
 
@@ -31,7 +32,7 @@ class NftCollectionService(
 
         fetchingJob = launch {
             try {
-                val collection = nftApiProvider.collection(collectionUid)
+                val collection = marketKit.nftCollection(collectionUid)
 
                 _nftCollection.emit(Result.success(collection))
             } catch (error: Exception) {

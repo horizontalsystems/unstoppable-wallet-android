@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.CoinCategoryMarketData
+import io.horizontalsystems.marketkit.models.CoinCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -18,9 +18,8 @@ class TopSectorsRepository(
     suspend fun get(baseCurrency: Currency, forceRefresh: Boolean): List<Category> =
         withContext(Dispatchers.IO) {
             if (forceRefresh || itemsCache == null) {
-                val coinCategoryData =
-                    marketKit.coinCategoriesMarketDataSingle(baseCurrency.code).blockingGet()
-                val discoveryItems = getDiscoveryItems(coinCategoryData, baseCurrency)
+                val coinCategories = marketKit.coinCategoriesSingle(baseCurrency.code).blockingGet()
+                val discoveryItems = getDiscoveryItems(coinCategories, baseCurrency)
                 itemsCache = discoveryItems
                 itemsCache ?: emptyList()
             } else {
@@ -28,11 +27,11 @@ class TopSectorsRepository(
             }
         }
 
-    private fun getDiscoveryItems(marketData: List<CoinCategoryMarketData>, baseCurrency: Currency): List<Category> {
-        val items = marketKit.coinCategories().map { category ->
+    private fun getDiscoveryItems(coinCategories: List<CoinCategory>, baseCurrency: Currency): List<Category> {
+        val items = coinCategories.map { category ->
             Category(
                 category,
-                getCategoryMarketData(marketData, category.uid, baseCurrency)
+                getCategoryMarketData(category, baseCurrency)
             )
         }
 
@@ -42,22 +41,20 @@ class TopSectorsRepository(
     }
 
     private fun getCategoryMarketData(
-        marketData: List<CoinCategoryMarketData>,
-        categoryUid: String,
+        coinCategory: CoinCategory,
         baseCurrency: Currency
     ): MarketSearchModule.CategoryMarketData? {
-        marketData.firstOrNull { it.uid == categoryUid }?.let { coinCategoryMarketData ->
-            val marketCap = coinCategoryMarketData.marketCap?.let { marketCap ->
-                App.numberFormatter.formatFiatShort(marketCap, baseCurrency.symbol, 2)
-            }
-
-            if (marketCap != null) {
-                return MarketSearchModule.CategoryMarketData(
-                    marketCap,
-                    coinCategoryMarketData.diff24H
-                )
-            }
+        val marketCap = coinCategory.marketCap?.let { marketCap ->
+            App.numberFormatter.formatFiatShort(marketCap, baseCurrency.symbol, 2)
         }
+
+        if (marketCap != null) {
+            return MarketSearchModule.CategoryMarketData(
+                marketCap,
+                coinCategory.diff24H
+            )
+        }
+
         return null
     }
 

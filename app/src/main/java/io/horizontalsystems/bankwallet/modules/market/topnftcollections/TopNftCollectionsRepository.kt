@@ -4,16 +4,17 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
-import io.horizontalsystems.bankwallet.modules.nft.INftApiProvider
-import io.horizontalsystems.bankwallet.modules.nft.TopNftCollection
+import io.horizontalsystems.bankwallet.modules.nft.NftCollectionItem
+import io.horizontalsystems.bankwallet.modules.nft.nftCollectionItem
+import io.horizontalsystems.marketkit.MarketKit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class TopNftCollectionsRepository(
-    private val nftApiProvider: INftApiProvider
+    private val marketKit: MarketKit
 ) {
     private val maxItemsCount = 1500
-    private var itemsCache: List<TopNftCollection>? = null
+    private var itemsCache: List<NftCollectionItem>? = null
 
 
     suspend fun get(
@@ -25,7 +26,7 @@ class TopNftCollectionsRepository(
         val currentCache = itemsCache
 
         val items = if (forceRefresh || currentCache == null) {
-            nftApiProvider.topCollections(maxItemsCount)
+            marketKit.nftCollections().map { it.nftCollectionItem }
         } else {
             currentCache
         }
@@ -37,24 +38,24 @@ class TopNftCollectionsRepository(
         }
     }
 
-    private fun List<TopNftCollection>.sort(sortingField: SortingField, timeDuration: TimeDuration) =
+    private fun List<NftCollectionItem>.sort(sortingField: SortingField, timeDuration: TimeDuration) =
         when (sortingField) {
             SortingField.HighestCap,
             SortingField.LowestCap -> this
-            SortingField.HighestVolume -> sortedByDescendingNullLast { it.volume(timeDuration) }
-            SortingField.LowestVolume -> sortedByNullLast { it.volume(timeDuration) }
+            SortingField.HighestVolume -> sortedByDescendingNullLast { it.volume(timeDuration)?.value }
+            SortingField.LowestVolume -> sortedByNullLast { it.volume(timeDuration)?.value }
             SortingField.TopGainers -> sortedByDescendingNullLast { it.volumeDiff(timeDuration) }
             SortingField.TopLosers -> sortedByNullLast { it.volumeDiff(timeDuration) }
         }
 
-    private fun TopNftCollection.volume(timeDuration: TimeDuration) =
+    private fun NftCollectionItem.volume(timeDuration: TimeDuration) =
         when (timeDuration) {
             TimeDuration.OneDay -> oneDayVolume
             TimeDuration.SevenDay -> sevenDayVolume
             TimeDuration.ThirtyDay -> thirtyDayVolume
         }
 
-    private fun TopNftCollection.volumeDiff(timeDuration: TimeDuration) =
+    private fun NftCollectionItem.volumeDiff(timeDuration: TimeDuration) =
         when (timeDuration) {
             TimeDuration.OneDay -> oneDayVolumeDiff
             TimeDuration.SevenDay -> sevenDayVolumeDiff

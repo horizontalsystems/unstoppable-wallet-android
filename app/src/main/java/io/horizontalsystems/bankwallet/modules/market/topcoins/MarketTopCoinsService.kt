@@ -12,10 +12,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketTopCoinsService(
-    private val marketTopCoinsRepository: MarketTopCoinsRepository,
+    private val marketTopMoversRepository: MarketTopMoversRepository,
     private val currencyManager: ICurrencyManager,
     private val favoritesManager: MarketFavoritesManager,
-    topMarket: TopMarket = TopMarket.Top250,
+    topMarket: TopMarket = TopMarket.Top100,
     sortingField: SortingField = SortingField.HighestCap,
 ) {
     private var disposables = CompositeDisposable()
@@ -46,13 +46,12 @@ class MarketTopCoinsService(
     private fun sync(forceRefresh: Boolean) {
         disposables.clear()
 
-        marketTopCoinsRepository
+        marketTopMoversRepository
             .get(
                 topMarket.value,
                 sortingField,
                 topMarket.value,
-                currencyManager.baseCurrency,
-                forceRefresh
+                currencyManager.baseCurrency
             )
             .subscribeIO({
                 marketItems = it

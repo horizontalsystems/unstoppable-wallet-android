@@ -9,9 +9,11 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiProvider
-import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
+import io.horizontalsystems.bankwallet.modules.nft.AssetLinks
+import io.horizontalsystems.bankwallet.modules.nft.CollectionLinks
+import io.horizontalsystems.bankwallet.modules.nft.NftAssetAttribute
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
+import io.horizontalsystems.marketkit.models.NftAsset
 import java.util.*
 
 object NftAssetModule {
@@ -28,7 +30,7 @@ object NftAssetModule {
                 collectionUid,
                 contractAddress,
                 tokenId,
-                HsNftApiProvider(),
+                App.marketKit,
                 App.nftManager,
                 repository
             )
@@ -56,8 +58,8 @@ data class NftAssetModuleAssetItem(
     val description: String?,
     val contract: NftAssetContract,
     val tokenId: String,
-    val assetLinks: HsNftApiV1Response.Asset.Links?,
-    val collectionLinks: HsNftApiV1Response.Collection.Links?,
+    val assetLinks: AssetLinks?,
+    val collectionLinks: CollectionLinks?,
     val stats: Stats,
     val onSale: Boolean,
     val attributes: List<Attribute>
@@ -98,3 +100,8 @@ data class NftAssetModuleAssetItem(
         Save(R.string.NftAsset_Action_Save)
     }
 }
+
+val NftAsset.Trait.nftAssetAttribute: NftAssetAttribute
+    get() =
+        NftAssetAttribute(traitType, value, count)
+

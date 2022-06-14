@@ -3,12 +3,11 @@ package io.horizontalsystems.bankwallet.modules.nft.collection.assets
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
-import io.horizontalsystems.bankwallet.modules.nft.INftApiProvider
-import io.horizontalsystems.bankwallet.modules.nft.NftAssetRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.NftAsset
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -18,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class NftCollectionAssetsService(
     private val collectionUid: String,
-    private val nftApiProvider: INftApiProvider,
+    private val marketKit: MarketKit,
     private val nftManager: NftManager,
     private val xRateRepository: BalanceXRateRepository
 ) {
@@ -76,9 +75,9 @@ class NftCollectionAssetsService(
                 if (!initialLoad && cursor == null) {
                     _items.update { it }
                 } else {
-                    val (assets, cursor) = nftApiProvider.collectionAssets(collectionUid, cursor)
+                    val pagedAssets = marketKit.nftAssets(collectionUid, cursor)
 
-                    _items.update { handleAssets(assets, cursor) }
+                    _items.update { handleAssets(pagedAssets.assets, pagedAssets.cursor) }
                 }
 
                 loading.set(false)
@@ -91,10 +90,10 @@ class NftCollectionAssetsService(
     }
 
     private fun handleAssets(
-        assets: List<NftAssetRecord>,
-        cursor: HsNftApiV1Response.Cursor
+        assets: List<NftAsset>,
+        cursor: String?
     ): Result<List<CollectionAsset>> {
-        this.cursor = cursor.next
+        this.cursor = cursor
 
         val assetItems = assets.map { asset -> collectionAsset(asset) }
         val newCoinUids = assetItems.mapNotNull { it.price?.coinValue?.coin?.uid }
@@ -122,9 +121,9 @@ class NftCollectionAssetsService(
         asset.copy(price = NftAssetModuleAssetItem.Price(coinValue, currencyValue))
     }
 
-    private fun collectionAsset(assetRecord: NftAssetRecord) =
+    private fun collectionAsset(asset: NftAsset) =
         nftManager.assetItem(
-            assetRecord = assetRecord,
+            asset,
             collectionName = "",
             collectionLinks = null,
             averagePrice7d = null,

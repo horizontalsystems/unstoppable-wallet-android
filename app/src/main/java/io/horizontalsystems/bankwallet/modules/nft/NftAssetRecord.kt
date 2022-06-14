@@ -4,7 +4,6 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import io.horizontalsystems.bankwallet.core.storage.AccountRecord
-import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
 import java.math.BigDecimal
 
 @Entity(
@@ -35,7 +34,7 @@ data class NftAssetRecord(
     val contract: NftAssetContract,
 
     @Embedded
-    val links: HsNftApiV1Response.Asset.Links?,
+    val links: AssetLinks?,
 
     val attributes: List<NftAssetAttribute>
 )
@@ -54,4 +53,9 @@ data class NftAssetAttribute(
     val type: String,
     val value: String,
     val count: Int
+)
+
+data class AssetLinks(
+    val external_link: String?,
+    val permalink: String,
 )

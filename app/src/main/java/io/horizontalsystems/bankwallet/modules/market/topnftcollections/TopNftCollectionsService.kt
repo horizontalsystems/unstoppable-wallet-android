@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.topnftcollections
 
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
-import io.horizontalsystems.bankwallet.modules.nft.TopNftCollection
+import io.horizontalsystems.bankwallet.modules.nft.NftCollectionItem
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -14,8 +14,8 @@ class TopNftCollectionsService(
 ) {
     private var topNftsJob: Job? = null
 
-    private val _topNftCollections = MutableStateFlow<Result<List<TopNftCollection>>?>(null)
-    val topNftCollections = _topNftCollections.filterNotNull()
+    private val _NftCollectionsItem = MutableStateFlow<Result<List<NftCollectionItem>>?>(null)
+    val topNftCollections = _NftCollectionsItem.filterNotNull()
 
     val sortingFields = listOf(
         SortingField.HighestVolume,
@@ -49,11 +49,11 @@ class TopNftCollectionsService(
                     forceRefresh = forceRefresh,
                     limit = 100
                 )
-                _topNftCollections.emit(Result.success(topNfts))
+                _NftCollectionsItem.emit(Result.success(topNfts))
             } catch (cancellation: CancellationException) {
                 // do nothing
             } catch (error: Exception) {
-                _topNftCollections.emit(Result.failure(error))
+                _NftCollectionsItem.emit(Result.failure(error))
             }
         }
     }
