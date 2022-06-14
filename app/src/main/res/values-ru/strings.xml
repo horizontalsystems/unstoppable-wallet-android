@@ -551,6 +551,13 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Оцените наше приложение</string>
     <string name="Settings_LaunchScreen">Экран запуска</string>
+    <string name="Settings_Appearance">Appearance</string>
+    <string name="Appearance_Theme">THEME</string>
+    <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
+    <string name="Appearance_BalanceConversion">BALANCE CONVERSION</string>
+    <string name="Appearance_BalanceValue">BALANCE VALUE</string>
+    <string name="BalanceViewType_CoinValue">Coin Value</string>
+    <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
     <string name="SettingsAboutApp_Site">Веб-сайт</string>
     <string name="SettingsAboutApp_WhatsNew">Что Нового</string>
@@ -707,6 +714,7 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Риск Копирования Секретного Ключа</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">В целях безопасности мы не рекомендуем копировать секретный ключ.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Я рискну</string>
+    <string name="ShowKey_PrivateKey_Warning">This key is for all EVM-compatible blockchains.\n\nAs a security measure we recommend not to use copy action on private key.</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Резервная Копия</string>
     <string name="BackupKey_Description">Показанные далее фразы для восстановления являются единственным способом восстановления ваших средств в случае потери, кражи или поломки вашего телефона.\n\nУбедитесь, что никто не смотрит на ваш экран.</string>
