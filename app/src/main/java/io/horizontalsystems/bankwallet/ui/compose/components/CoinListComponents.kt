@@ -9,7 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -49,19 +49,15 @@ fun CoinList(
     onAddFavorite: (String) -> Unit,
     onRemoveFavorite: (String) -> Unit,
     onCoinClick: (String) -> Unit,
-    headerContent: (@Composable LazyItemScope.() -> Unit)? = null,
-    userScrollEnabled: Boolean = true
+    userScrollEnabled: Boolean = true,
+    preItems: LazyListScope.() -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
     LazyColumn(state = listState, userScrollEnabled = userScrollEnabled) {
-        headerContent?.let { topContent ->
-            item {
-                topContent.invoke(this)
-            }
-        }
+        preItems.invoke(this)
         itemsIndexed(items, key = { _, item -> item.coinUid }) { index, item ->
             Box(
                 modifier = Modifier
@@ -263,7 +259,7 @@ fun HeaderWithSorting(
     onSelectMarketField: (MarketField) -> Unit,
     onSortMenuClick: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth().background(ComposeAppTheme.colors.tyler)) {
         Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
         Row(
             modifier = Modifier

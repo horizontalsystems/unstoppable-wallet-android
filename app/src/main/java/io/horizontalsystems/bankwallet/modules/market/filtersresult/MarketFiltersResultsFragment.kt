@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
@@ -76,6 +77,7 @@ class MarketFiltersResultsFragment : BaseFragment() {
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SearchResultsScreen(
     viewModel: MarketFiltersResultViewModel,
@@ -108,27 +110,27 @@ private fun SearchResultsScreen(
                         ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                     }
                     is ViewState.Success -> {
-                        Column {
-                            ListHeaderMenu(viewModel)
-
-                            CoinList(
-                                items = viewModel.viewItemsState,
-                                scrollToTop = scrollToTopAfterUpdate,
-                                onAddFavorite = { uid ->
-                                    viewModel.onAddFavorite(uid)
-                                },
-                                onRemoveFavorite = { uid ->
-                                    viewModel.onRemoveFavorite(uid)
-                                },
-                                onCoinClick = { coinUid ->
-                                    val arguments = CoinFragment.prepareParams(coinUid)
-                                    navController.slideFromRight(R.id.coinFragment, arguments)
+                        CoinList(
+                            items = viewModel.viewItemsState,
+                            scrollToTop = scrollToTopAfterUpdate,
+                            onAddFavorite = { uid ->
+                                viewModel.onAddFavorite(uid)
+                            },
+                            onRemoveFavorite = { uid ->
+                                viewModel.onRemoveFavorite(uid)
+                            },
+                            onCoinClick = { coinUid ->
+                                val arguments = CoinFragment.prepareParams(coinUid)
+                                navController.slideFromRight(R.id.coinFragment, arguments)
+                            },
+                            preItems = {
+                                stickyHeader {
+                                    ListHeaderMenu(viewModel)
                                 }
-                            )
-                            if (scrollToTopAfterUpdate) {
-                                scrollToTopAfterUpdate = false
                             }
-
+                        )
+                        if (scrollToTopAfterUpdate) {
+                            scrollToTopAfterUpdate = false
                         }
                     }
                 }
