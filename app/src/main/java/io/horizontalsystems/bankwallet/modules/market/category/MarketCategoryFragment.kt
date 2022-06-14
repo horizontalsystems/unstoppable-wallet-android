@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -80,6 +81,7 @@ class MarketCategoryFragment : BaseFragment() {
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CategoryScreen(
     viewModel: MarketCategoryViewModel,
@@ -114,30 +116,60 @@ fun CategoryScreen(
                             ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
                         is ViewState.Success -> {
-                            Column {
-                                viewItems?.let {
-                                    var scrollingEnabled by remember { mutableStateOf(true) }
+                            viewItems?.let {
+                                val header by viewModel.headerLiveData.observeAsState()
+                                val menu by viewModel.menuLiveData.observeAsState()
 
-                                    CoinList(
-                                        items = it,
-                                        scrollToTop = scrollToTopAfterUpdate,
-                                        onAddFavorite = { uid -> viewModel.onAddFavorite(uid) },
-                                        onRemoveFavorite = { uid -> viewModel.onRemoveFavorite(uid) },
-                                        onCoinClick = onCoinClick,
-                                        headerContent = {
-                                            ListHeader(
+                                var scrollingEnabled by remember { mutableStateOf(true) }
+
+                                CoinList(
+                                    items = it,
+                                    scrollToTop = scrollToTopAfterUpdate,
+                                    onAddFavorite = { uid -> viewModel.onAddFavorite(uid) },
+                                    onRemoveFavorite = { uid -> viewModel.onRemoveFavorite(uid) },
+                                    onCoinClick = onCoinClick,
+                                    userScrollEnabled = scrollingEnabled,
+                                    preItems = {
+                                        header?.let {
+                                            item {
+                                                DescriptionCard(it.title, it.description, it.icon)
+                                            }
+                                        }
+                                        item {
+                                            Chart(
                                                 chartViewModel = chartViewModel,
-                                                viewModel = viewModel,
-                                                onChangeHoldingPointState = { holding ->
+                                                onChangeHoldingPointState = { holding: Boolean ->
                                                     scrollingEnabled = !holding
                                                 }
                                             )
-                                        },
-                                        userScrollEnabled = scrollingEnabled
-                                    )
-                                    if (scrollToTopAfterUpdate) {
-                                        scrollToTopAfterUpdate = false
+                                        }
+                                        menu?.let {
+                                            stickyHeader {
+                                                Header(borderTop = true, borderBottom = true) {
+                                                    Box(modifier = Modifier.weight(1f)) {
+                                                        SortMenu(
+                                                            it.sortingFieldSelect.selected.titleResId,
+                                                            viewModel::showSelectorMenu
+                                                        )
+                                                    }
+                                                    Box(
+                                                        modifier = Modifier.padding(
+                                                            start = 8.dp,
+                                                            end = 16.dp
+                                                        )
+                                                    ) {
+                                                        ButtonSecondaryToggle(
+                                                            select = it.marketFieldSelect,
+                                                            onSelect = viewModel::onSelectMarketField
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
+                                )
+                                if (scrollToTopAfterUpdate) {
+                                    scrollToTopAfterUpdate = false
                                 }
                             }
                         }
@@ -162,43 +194,3 @@ fun CategoryScreen(
     }
 }
 
-@Composable
-private fun ListHeader(
-    chartViewModel: ChartViewModel,
-    viewModel: MarketCategoryViewModel,
-    onChangeHoldingPointState: (Boolean) -> Unit
-) {
-    val header by viewModel.headerLiveData.observeAsState()
-    val menu by viewModel.menuLiveData.observeAsState()
-
-    header?.let {
-        DescriptionCard(it.title, it.description, it.icon)
-    }
-
-    Chart(
-        chartViewModel = chartViewModel,
-        onChangeHoldingPointState = onChangeHoldingPointState
-    )
-
-    menu?.let {
-        Header(borderTop = true, borderBottom = true) {
-            Box(modifier = Modifier.weight(1f)) {
-                SortMenu(
-                    it.sortingFieldSelect.selected.titleResId,
-                    viewModel::showSelectorMenu
-                )
-            }
-            Box(
-                modifier = Modifier.padding(
-                    start = 8.dp,
-                    end = 16.dp
-                )
-            ) {
-                ButtonSecondaryToggle(
-                    select = it.marketFieldSelect,
-                    onSelect = viewModel::onSelectMarketField
-                )
-            }
-        }
-    }
-}

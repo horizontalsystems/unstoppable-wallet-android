@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -63,6 +63,7 @@ class MarketFavoritesFragment : BaseFragment() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketFavoritesScreen(
     viewModel: MarketFavoritesViewModel,
@@ -99,23 +100,25 @@ fun MarketFavoritesScreen(
                                 icon = R.drawable.ic_rate_24
                             )
                         } else {
-                            Column {
-                                MarketFavoritesMenu(
-                                    data.sortingFieldSelect,
-                                    data.marketFieldSelect,
-                                    viewModel::onClickSortingField,
-                                    viewModel::onSelectMarketField
-                                )
-                                CoinList(
-                                    items = data.marketItems,
-                                    scrollToTop = scrollToTopAfterUpdate,
-                                    onAddFavorite = { /*not used */ },
-                                    onRemoveFavorite = { uid -> viewModel.removeFromFavorites(uid) },
-                                    onCoinClick = onCoinClick
-                                )
-                                if (scrollToTopAfterUpdate) {
-                                    scrollToTopAfterUpdate = false
+                            CoinList(
+                                items = data.marketItems,
+                                scrollToTop = scrollToTopAfterUpdate,
+                                onAddFavorite = { /*not used */ },
+                                onRemoveFavorite = { uid -> viewModel.removeFromFavorites(uid) },
+                                onCoinClick = onCoinClick,
+                                preItems = {
+                                    stickyHeader {
+                                        MarketFavoritesMenu(
+                                            data.sortingFieldSelect,
+                                            data.marketFieldSelect,
+                                            viewModel::onClickSortingField,
+                                            viewModel::onSelectMarketField
+                                        )
+                                    }
                                 }
+                            )
+                            if (scrollToTopAfterUpdate) {
+                                scrollToTopAfterUpdate = false
                             }
                         }
                     }
