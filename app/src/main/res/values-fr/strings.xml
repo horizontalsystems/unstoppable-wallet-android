@@ -551,6 +551,13 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Evaluez-nous</string>
     <string name="Settings_LaunchScreen">Écran de démarrage</string>
+    <string name="Settings_Appearance">Appearance</string>
+    <string name="Appearance_Theme">THEME</string>
+    <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
+    <string name="Appearance_BalanceConversion">BALANCE CONVERSION</string>
+    <string name="Appearance_BalanceValue">BALANCE VALUE</string>
+    <string name="BalanceViewType_CoinValue">Coin Value</string>
+    <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
     <string name="SettingsAboutApp_Site">Site Web</string>
     <string name="SettingsAboutApp_WhatsNew">Nouveautés</string>
@@ -710,6 +717,7 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risque de copie de clé privée</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Pour des raisons de sécurité, nous recommandons de ne pas utiliser l\'action de copie sur la clé privée.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Je prends le risque</string>
+    <string name="ShowKey_PrivateKey_Warning">This key is for all EVM-compatible blockchains.\n\nAs a security measure we recommend not to use copy action on private key.</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Sauvegarde</string>
     <string name="BackupKey_Description">Les phrases de réinitialisation qui vont suivre sont le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, endommagé, etc.\n\nVeuillez vous assurer que personne ne regarde votre écran.</string>
