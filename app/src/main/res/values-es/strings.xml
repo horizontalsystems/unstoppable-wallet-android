@@ -551,6 +551,13 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Califícanos</string>
     <string name="Settings_LaunchScreen">Pantalla de lanzamiento</string>
+    <string name="Settings_Appearance">Appearance</string>
+    <string name="Appearance_Theme">THEME</string>
+    <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
+    <string name="Appearance_BalanceConversion">BALANCE CONVERSION</string>
+    <string name="Appearance_BalanceValue">BALANCE VALUE</string>
+    <string name="BalanceViewType_CoinValue">Coin Value</string>
+    <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">Sobre la aplicacion</string>
     <string name="SettingsAboutApp_Site">Sitio Web</string>
     <string name="SettingsAboutApp_WhatsNew">Qué novedades hay</string>
@@ -711,6 +718,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Riesgo de copia de la clave privada</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Como medida de seguridad recomendamos no utilizar la acción de copia en la clave privada.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Lo arriesgaré</string>
+    <string name="ShowKey_PrivateKey_Warning">This key is for all EVM-compatible blockchains.\n\nAs a security measure we recommend not to use copy action on private key.</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Copia de seguridad</string>
     <string name="BackupKey_Description">Las frase de recuperación que se mostrará a continuación es la única forma de restaurar sus fondos en caso de que su teléfono se pierda, lo roben, se averíe, etc.\n\nAsegúrese de que nadie está viendo su pantalla.</string>
