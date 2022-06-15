@@ -12,7 +12,7 @@ buildscript {
         constraint_version = "2.1.4"
         core_ktx_version = "1.7.0"
         fragment_ktx_version = "1.4.1"
-        navigation_ktx_version = "2.4.2"
+        navigation_ktx_version = "2.3.5" //increasing to version 2.4.2 breaks deeplink to WalletConnect
         rxjava_version = "2.2.19"
         biometric_version = "1.1.0"
         junit_version = "4.13.2"
