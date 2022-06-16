@@ -16,8 +16,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
@@ -101,8 +99,7 @@ fun AboutContent(
 private fun SettingSections(viewModel: AboutViewModel, navController: NavController) {
 
     val context = LocalContext.current
-
-    val termsShowAlert by viewModel.termsShowAlertLiveData.observeAsState(false)
+    val termsShowAlert = viewModel.termsShowAlert
 
     CellSingleLineLawrenceSection(
         listOf {
