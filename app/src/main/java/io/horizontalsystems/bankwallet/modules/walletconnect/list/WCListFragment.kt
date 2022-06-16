@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionsS
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 
 class WCListFragment : BaseFragment() {
 
@@ -45,6 +46,8 @@ class WCListFragment : BaseFragment() {
                 R.id.wc2SessionFragment,
                 WC2SessionModule.prepareParams(null, connectUri)
             )
+        } else {
+            HudHelper.showErrorMessage(requireView(), R.string.WalletConnect_Error_InvalidUrl)
         }
     }
 

@@ -18,7 +18,7 @@ import java.net.UnknownHostException
 class WCSessionViewModel(
     private val service: WC1Service,
     private val accountManager: IAccountManager
-    ) : ViewModel() {
+) : ViewModel() {
 
     val connectingLiveData = MutableLiveData<Boolean>()
     val peerMetaLiveData = MutableLiveData<PeerMetaViewItem?>()
@@ -30,7 +30,7 @@ class WCSessionViewModel(
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val openRequestLiveEvent = SingleLiveEvent<WCRequestWrapper>()
 
-    var invalidUrlError by mutableStateOf(false)
+    var invalidStateError by mutableStateOf<Int?>(null)
         private set
 
     enum class Status(val value: Int) {
@@ -56,29 +56,29 @@ class WCSessionViewModel(
         sync(service.state, service.connectionState)
 
         service.stateObservable
-                .subscribe {
-                    sync(it, service.connectionState)
-                }
-                .let {
-                    disposables.add(it)
-                }
+            .subscribe {
+                sync(it, service.connectionState)
+            }
+            .let {
+                disposables.add(it)
+            }
 
         service.connectionStateObservable
-                .subscribe {
-                    sync(service.state, it)
-                }
-                .let {
-                    disposables.add(it)
-                }
+            .subscribe {
+                sync(service.state, it)
+            }
+            .let {
+                disposables.add(it)
+            }
 
 
         service.requestObservable
-                .subscribe {
-                    openRequestLiveEvent.postValue(it)
-                }
-                .let {
-                    disposables.add(it)
-                }
+            .subscribe {
+                openRequestLiveEvent.postValue(it)
+            }
+            .let {
+                disposables.add(it)
+            }
 
         service.start()
     }
@@ -108,12 +108,20 @@ class WCSessionViewModel(
         service.reconnect()
     }
 
+    private fun getErrorMessage(error: Throwable): Int? {
+        return when (error) {
+            is WC1Service.SessionError.UnsupportedChainId -> R.string.WalletConnect_Error_UnsupportedChainId
+            is WC1Service.SessionError.NoSuitableAccount -> R.string.WalletConnect_Error_NoSuitableAccount
+            else -> null
+        }
+    }
+
     private fun sync(state: WC1Service.State, connectionState: WalletConnectInteractor.State) {
         if (state == WC1Service.State.Killed) {
             closeLiveEvent.postValue(Unit)
             return
         } else if (state is WC1Service.State.Invalid) {
-            invalidUrlError = true
+            invalidStateError = getErrorMessage(state.error)
             return
         }
 
@@ -175,7 +183,7 @@ class WCSessionViewModel(
     }
 
     private fun getCancelButtonState(state: WC1Service.State): ButtonState {
-        return if (state != WC1Service.State.Ready){
+        return if (state != WC1Service.State.Ready) {
             ButtonState.Enabled
         } else {
             ButtonState.Hidden
@@ -214,4 +222,4 @@ data class PeerMetaViewItem(
     val description: String?,
     val activeWallet: String?,
     val icon: String?
-    )
+)
