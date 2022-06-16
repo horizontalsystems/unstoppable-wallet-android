@@ -334,7 +334,7 @@
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Подписать</string>
     <string name="WalletConnect_Error_NoWallet">Нет подходящего кошелька. Вам нужно создать или восстановить текущий кошелек</string>
     <string name="WalletConnect_Error_WatchAccount">Эта функция не доступна для кошельков для просмотра, вам нужно выбрать восстановленный или созданный кошелек </string>
-    <string name="WalletConnect_Error_UnsupportedChainId">Неподдерживаемый идентификатор цепочки</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Нет подходящего набора evm</string>
     <string name="WalletConnect_Error_DataParsingError">Ошибка разбора данных</string>
@@ -554,6 +554,7 @@
     <string name="Settings_Appearance">Appearance</string>
     <string name="Appearance_Theme">THEME</string>
     <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
+    <string name="Appearance_AppIcon">APP ICON</string>
     <string name="Appearance_BalanceConversion">BALANCE CONVERSION</string>
     <string name="Appearance_BalanceValue">BALANCE VALUE</string>
     <string name="BalanceViewType_CoinValue">Coin Value</string>
