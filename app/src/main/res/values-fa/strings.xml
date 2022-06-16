@@ -334,7 +334,7 @@
     <string name="WalletConnect_SignMessageRequest_ButtonSign">نشانه</string>
     <string name="WalletConnect_Error_NoWallet">کیف پول مناسبی وجود ندارد. شما باید کیف پول موجود را ایجاد یا بازیابی کنید</string>
     <string name="WalletConnect_Error_WatchAccount">این ویژگی با کیف‌پول‌های فقط مشاهده کار نمی‌کند، شما باید به یک کیف پول بازیابی یا ایجاد شده تغییر دهید </string>
-    <string name="WalletConnect_Error_UnsupportedChainId">شناسه زنجیره پشتیبانی نشده</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">حساب مناسبی وجود ندارد</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">بدون کیت evm مناسب</string>
     <string name="WalletConnect_Error_DataParsingError">خطای تجزیه داده ها</string>
@@ -554,6 +554,7 @@
     <string name="Settings_Appearance">Appearance</string>
     <string name="Appearance_Theme">THEME</string>
     <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
+    <string name="Appearance_AppIcon">APP ICON</string>
     <string name="Appearance_BalanceConversion">BALANCE CONVERSION</string>
     <string name="Appearance_BalanceValue">BALANCE VALUE</string>
     <string name="BalanceViewType_CoinValue">Coin Value</string>
