@@ -23,25 +23,7 @@
         <activity
             android:name=".modules.tor.TorConnectionActivity"
             android:launchMode="singleTask" />
-        <activity
-            android:name=".modules.launcher.LauncherActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.App.Starting">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter android:label="@string/App_Name">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="wc" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".modules.launcher.LauncherActivity"/>
         <activity
             android:name=".modules.main.MainActivity"
             android:screenOrientation="portrait"
@@ -68,6 +50,178 @@
             android:authorities="${applicationId}.androidx-startup"
             tools:node="remove">
         </provider>
+
+        <activity-alias
+            android:name="${applicationId}.MainLauncherAlias"
+            android:enabled="true"
+            android:icon="@mipmap/bitcoin_launcher"
+            android:label="@string/App_Name"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting"
+            android:targetActivity=".modules.launcher.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="${applicationId}.DarkLauncherAlias"
+            android:enabled="false"
+            android:icon="@mipmap/launcher_dark"
+            android:label="@string/App_Name"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting"
+            android:targetActivity=".modules.launcher.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="${applicationId}.MonoLauncherAlias"
+            android:enabled="false"
+            android:icon="@mipmap/launcher_mono"
+            android:label="@string/App_Name"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting"
+            android:targetActivity=".modules.launcher.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="${applicationId}.LeoLauncherAlias"
+            android:enabled="false"
+            android:icon="@mipmap/launcher_leo"
+            android:label="@string/App_Name"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting"
+            android:targetActivity=".modules.launcher.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="${applicationId}.MustangLauncherAlias"
+            android:enabled="false"
+            android:icon="@mipmap/launcher_mustang"
+            android:label="@string/App_Name"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting"
+            android:targetActivity=".modules.launcher.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="${applicationId}.YakLauncherAlias"
+            android:enabled="false"
+            android:icon="@mipmap/launcher_yak"
+            android:label="@string/App_Name"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting"
+            android:targetActivity=".modules.launcher.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="${applicationId}.PunkLauncherAlias"
+            android:enabled="false"
+            android:icon="@mipmap/launcher_punk"
+            android:label="@string/App_Name"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting"
+            android:targetActivity=".modules.launcher.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="${applicationId}.ApeLauncherAlias"
+            android:enabled="false"
+            android:icon="@mipmap/launcher_ape"
+            android:label="@string/App_Name"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting"
+            android:targetActivity=".modules.launcher.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name="${applicationId}.HashTag1009LauncherAlias"
+            android:enabled="false"
+            android:icon="@mipmap/launcher_1009"
+            android:label="@string/App_Name"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting"
+            android:targetActivity=".modules.launcher.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc" />
+            </intent-filter>
+        </activity-alias>
     </application>
 
 </manifest>

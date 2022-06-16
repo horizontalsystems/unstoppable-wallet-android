@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.Value
+import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
@@ -77,6 +78,7 @@ interface ILocalStorage {
     var changelogShownForAppVersion: String?
     var ignoreRootedDeviceWarning: Boolean
     var launchPage: LaunchPage?
+    var appIcon: AppIcon?
     var mainTab: MainModule.MainTab?
     var favoriteCoinIdsMigrated: Boolean
     var fillWalletInfoDone: Boolean

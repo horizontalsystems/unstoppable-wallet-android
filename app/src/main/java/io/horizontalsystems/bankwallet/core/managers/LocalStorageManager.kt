@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
@@ -62,6 +63,7 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
     private val IGNORE_ROOTED_DEVICE_WARNING = "ignore_rooted_device_warning"
     private val SWAP_PROVIDER = "swap_provider_"
     private val LAUNCH_PAGE = "launch_page"
+    private val APP_ICON = "app_icon"
     private val MAIN_TAB = "main_tab"
     private val FAVORITE_COIN_IDS_MIGRATED = "favorite_coins_ids_migrated"
     private val FILL_WALLET_INFO_DONE = "fill_wallet_info_done"
@@ -369,6 +371,14 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
         }
         set(value) {
             preferences.edit().putString(LAUNCH_PAGE, value?.name).apply()
+        }
+
+    override var appIcon: AppIcon?
+        get() = preferences.getString(APP_ICON, null)?.let {
+            AppIcon.fromString(it)
+        }
+        set(value) {
+            preferences.edit().putString(APP_ICON, value?.name).apply()
         }
 
     override var mainTab: MainModule.MainTab?
