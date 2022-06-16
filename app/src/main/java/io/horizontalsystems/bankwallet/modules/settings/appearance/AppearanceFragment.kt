@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -27,6 +28,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
@@ -122,6 +124,10 @@ private fun AppearanceScreenContent() {
         }
         Spacer(modifier = Modifier.height(24.dp))
 
+        HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
+        AppIconSection(uiState.appIconOptions) { viewModel.onEnterAppIcon(it) }
+        Spacer(modifier = Modifier.height(24.dp))
+
         HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
         CellSingleLineLawrenceSection(uiState.baseCoinOptions.options) { option ->
             RowSelect(
@@ -151,6 +157,83 @@ private fun AppearanceScreenContent() {
         }
         Spacer(modifier = Modifier.height(32.dp))
     }
+}
+
+@Composable
+private fun AppIconSection(appIconOptions: Select<AppIcon>, onAppIconSelect: (AppIcon) -> Unit) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        val rows = appIconOptions.options.windowed(3, 3, true)
+        AppIconsRow(rows[0], appIconOptions.selected, onAppIconSelect)
+        AppIconsRow(rows[1], appIconOptions.selected, onAppIconSelect)
+        AppIconsRow(rows[2], appIconOptions.selected, onAppIconSelect)
+    }
+}
+
+@Composable
+private fun AppIconsRow(
+    chunk: List<AppIcon>,
+    selected: AppIcon,
+    onAppIconSelect: (AppIcon) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 14.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        IconBox(
+            chunk[0].icon,
+            chunk[0].title.getString(),
+            chunk[0] == selected,
+        ) { onAppIconSelect(chunk[0]) }
+        IconBox(
+            chunk[1].icon,
+            chunk[1].title.getString(),
+            chunk[1] == selected,
+        ) { onAppIconSelect(chunk[1]) }
+        IconBox(
+            chunk[2].icon,
+            chunk[2].title.getString(),
+            chunk[2] == selected
+        ) { onAppIconSelect(chunk[2]) }
+    }
+}
+
+@Composable
+private fun IconBox(
+    icon: Int,
+    name: String,
+    selected: Boolean,
+    onAppIconSelect: () -> Unit
+) {
+    Column(
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = { onAppIconSelect() }
+        ),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            modifier = Modifier.size(60.dp),
+            painter = painterResource(icon),
+            contentDescription = null,
+        )
+        Box(Modifier.height(6.dp).background(ComposeAppTheme.colors.red50))
+        if (selected) {
+            subhead1_jacob(name)
+        } else {
+            subhead1_leah(name)
+        }
+    }
+
 }
 
 @Composable

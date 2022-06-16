@@ -1,10 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.settings.appearance
 
+import android.content.ComponentName
+import android.content.pm.PackageManager
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.BaseCoinManager
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
@@ -16,20 +19,25 @@ import io.horizontalsystems.bankwallet.ui.compose.SelectOptional
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.coroutines.launch
 
+
 class AppearanceViewModel(
     private val launchScreenService: LaunchScreenService,
+    private val appIconService: AppIconService,
     private val themeService: ThemeService,
     private val baseCoinManager: BaseCoinManager,
     private val balanceViewTypeManager: BalanceViewTypeManager
 ) : ViewModel() {
     private var launchScreenOptions = launchScreenService.optionsFlow.value
+    private var appIconOptions = appIconService.optionsFlow.value
     private var themeOptions = themeService.optionsFlow.value
     private var baseCoinOptions = buildBaseCoinSelect(baseCoinManager.baseCoinFlow.value)
-    private var balanceViewTypeOptions = buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
+    private var balanceViewTypeOptions =
+        buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
 
     var uiState by mutableStateOf(
         AppearanceUIState(
             launchScreenOptions = launchScreenOptions,
+            appIconOptions = appIconOptions,
             themeOptions = themeOptions,
             baseCoinOptions = baseCoinOptions,
             balanceViewTypeOptions = balanceViewTypeOptions,
@@ -41,6 +49,12 @@ class AppearanceViewModel(
             launchScreenService.optionsFlow
                 .collect {
                     handleUpdatedLaunchScreenOptions(it)
+                }
+        }
+        viewModelScope.launch {
+            appIconService.optionsFlow
+                .collect {
+                    handleUpdatedAppIconOptions(it)
                 }
         }
         viewModelScope.launch {
@@ -76,6 +90,11 @@ class AppearanceViewModel(
         emitState()
     }
 
+    private fun handleUpdatedAppIconOptions(appIconOptions: Select<AppIcon>) {
+        this.appIconOptions = appIconOptions
+        emitState()
+    }
+
     private fun handleUpdatedThemeOptions(themeOptions: Select<ThemeType>) {
         this.themeOptions = themeOptions
         emitState()
@@ -94,6 +113,7 @@ class AppearanceViewModel(
     private fun emitState() {
         uiState = AppearanceUIState(
             launchScreenOptions = launchScreenOptions,
+            appIconOptions = appIconOptions,
             themeOptions = themeOptions,
             baseCoinOptions = baseCoinOptions,
             balanceViewTypeOptions = balanceViewTypeOptions,
@@ -102,6 +122,21 @@ class AppearanceViewModel(
 
     fun onEnterLaunchPage(launchPage: LaunchPage) {
         launchScreenService.setLaunchScreen(launchPage)
+    }
+
+    fun onEnterAppIcon(enabledAppIcon: AppIcon) {
+        val enabled = PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        val disabled = PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+
+        appIconService.setAppIcon(enabledAppIcon)
+
+        AppIcon.values().forEach { item ->
+            App.instance.packageManager.setComponentEnabledSetting(
+                ComponentName(App.instance, item.launcherName),
+                if (enabledAppIcon == item) enabled else disabled,
+                PackageManager.DONT_KILL_APP
+            )
+        }
     }
 
     fun onEnterTheme(themeType: ThemeType) {
@@ -119,6 +154,7 @@ class AppearanceViewModel(
 
 data class AppearanceUIState(
     val launchScreenOptions: Select<LaunchPage>,
+    val appIconOptions: Select<AppIcon>,
     val themeOptions: Select<ThemeType>,
     val baseCoinOptions: SelectOptional<PlatformCoin>,
     val balanceViewTypeOptions: Select<BalanceViewType>,
