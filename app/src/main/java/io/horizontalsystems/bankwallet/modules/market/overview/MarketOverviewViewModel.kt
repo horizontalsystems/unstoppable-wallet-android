@@ -8,23 +8,22 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ListType
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.Board
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.BoardHeader
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsPoint
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopNftCollectionsBoard
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopPlatformsBoard
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.TopSectorsBoard
-import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule
+import io.horizontalsystems.bankwallet.modules.market.overview.TopSectorsRepository.Companion.getCategoryMarketData
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformItem
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformViewItem
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionItem
 import io.horizontalsystems.bankwallet.modules.nft.nftCollectionItem
@@ -124,33 +123,28 @@ class MarketOverviewViewModel(
         topMovers: TopMovers,
         marketOverview: MarketOverview
     ): MarketOverviewModule.ViewItem {
-        val marketMetrics = getMarketMetrics(marketMetricsItem(marketOverview.globalMarketPoints, baseCurrency))
+        val topPlatformItems = TopPlatformsRepository.getTopPlatformItems(marketOverview.topPlatforms, topPlatformsTimeDuration)
+        val coinCategoryItems = marketOverview.coinCategories.map { category ->
+            Category(category, getCategoryMarketData(category, baseCurrency))
+        }
 
-        val topGainersBoard = getBoard(ListType.TopGainers, topMovers)
-        val topLosersBoard = getBoard(ListType.TopLosers, topMovers)
-        val boardItems = listOf(topGainersBoard, topLosersBoard)
-
-        val topPlatformsBoard = topPlatformsBoard(getTopPlatformItems(marketOverview.topPlatforms, topPlatformsTimeDuration))
-        val topSectorsBoard = topSectorsBoard(getCoinCategoryItems(marketOverview.coinCategories))
-        val topNftsBoard = topNftCollectionsBoard(getNftCollectionItems(marketOverview.nftCollections))
-
-        return MarketOverviewModule.ViewItem(
-            marketMetrics,
-            boardItems,
-            topNftsBoard,
-            topSectorsBoard,
-            topPlatformsBoard
-        )
-    }
-
-    private fun getNftCollectionItems(nftCollections: Map<HsTimePeriod, List<NftCollection>>): List<NftCollectionItem> {
         val timePeriod = when(topNftsTimeDuration) {
             TimeDuration.OneDay -> HsTimePeriod.Day1
             TimeDuration.SevenDay -> HsTimePeriod.Week1
             TimeDuration.ThirtyDay -> HsTimePeriod.Month1
         }
+        val nftCollectionItems = marketOverview.nftCollections.getOrElse(timePeriod) { listOf() }.map { it.nftCollectionItem }
 
-        return nftCollections.getOrElse(timePeriod) { listOf() }.map { it.nftCollectionItem }
+        val topGainersBoard = getBoard(ListType.TopGainers, topMovers)
+        val topLosersBoard = getBoard(ListType.TopLosers, topMovers)
+
+        return MarketOverviewModule.ViewItem(
+            getMarketMetrics(marketOverview.globalMarketPoints, baseCurrency),
+            listOf(topGainersBoard, topLosersBoard),
+            topNftCollectionsBoard(nftCollectionItems),
+            topSectorsBoard(coinCategoryItems),
+            topPlatformsBoard(topPlatformItems)
+        )
     }
 
     private fun topSectorsBoard(items: List<Category>) =
@@ -229,43 +223,80 @@ class MarketOverviewViewModel(
         return Board(boardHeader, topList, type)
     }
 
-    private fun getMarketMetrics(marketMetricsItem: MarketMetricsItem): MarketMetrics {
-        val btcDominanceFormatted = App.numberFormatter.format(marketMetricsItem.btcDominance, 0, 2, suffix = "%")
+    private fun getMarketMetrics(globalMarketPoints: List<GlobalMarketPoint>, baseCurrency: Currency): MarketMetrics {
+        var marketCap = BigDecimal.ZERO
+        var marketCapDiff = BigDecimal.ZERO
+        var defiMarketCap = BigDecimal.ZERO
+        var defiMarketCapDiff = BigDecimal.ZERO
+        var volume24h = BigDecimal.ZERO
+        var volume24hDiff = BigDecimal.ZERO
+        var btcDominance = BigDecimal.ZERO
+        var btcDominanceDiff = BigDecimal.ZERO
+        var tvl = BigDecimal.ZERO
+        var tvlDiff = BigDecimal.ZERO
+
+        if (globalMarketPoints.isNotEmpty()) {
+            val startingPoint = globalMarketPoints.first()
+            val endingPoint = globalMarketPoints.last()
+
+            marketCap = endingPoint.marketCap
+            marketCapDiff = diff(startingPoint.marketCap, marketCap)
+
+            defiMarketCap = endingPoint.defiMarketCap
+            defiMarketCapDiff = diff(startingPoint.defiMarketCap, defiMarketCap)
+
+            volume24h = endingPoint.volume24h
+            volume24hDiff = diff(startingPoint.volume24h, volume24h)
+
+            btcDominance = endingPoint.btcDominance
+            btcDominanceDiff = diff(startingPoint.btcDominance, btcDominance)
+
+            tvl = endingPoint.tvl
+            tvlDiff = diff(startingPoint.tvl, tvl)
+        }
+
+        val totalMarketCapPoints = globalMarketPoints.map { MarketMetricsPoint(it.marketCap, it.timestamp) }
+        val btcDominancePoints = globalMarketPoints.map { MarketMetricsPoint(it.btcDominance, it.timestamp) }
+        val volume24Points = globalMarketPoints.map { MarketMetricsPoint(it.volume24h, it.timestamp) }
+        val defiMarketCapPoints = globalMarketPoints.map { MarketMetricsPoint(it.defiMarketCap, it.timestamp) }
+        val defiTvlPoints = globalMarketPoints.map { MarketMetricsPoint(it.tvl, it.timestamp) }
+
+        val btcDominanceFormatted = App.numberFormatter.format(btcDominance, 0, 2, suffix = "%")
 
         return MarketMetrics(
             totalMarketCap = MetricData(
-                formatFiatShortened(marketMetricsItem.marketCap.value, marketMetricsItem.marketCap.currency.symbol),
-                marketMetricsItem.marketCapDiff24h,
-                getChartData(marketMetricsItem.totalMarketCapPoints),
+                formatFiatShortened(marketCap, baseCurrency.symbol),
+                marketCapDiff,
+                getChartData(totalMarketCapPoints),
                 MetricsType.TotalMarketCap
             ),
             btcDominance = MetricData(
                 btcDominanceFormatted,
-                marketMetricsItem.btcDominanceDiff24h,
-                getChartData(marketMetricsItem.btcDominancePoints),
+                btcDominanceDiff,
+                getChartData(btcDominancePoints),
                 MetricsType.BtcDominance
             ),
             volume24h = MetricData(
-                formatFiatShortened(marketMetricsItem.volume24h.value, marketMetricsItem.volume24h.currency.symbol),
-                marketMetricsItem.volume24hDiff24h,
-                getChartData(marketMetricsItem.volume24Points),
+                formatFiatShortened(volume24h, baseCurrency.symbol),
+                volume24hDiff,
+                getChartData(volume24Points),
                 MetricsType.Volume24h
             ),
             defiCap = MetricData(
                 formatFiatShortened(
-                    marketMetricsItem.defiMarketCap.value,
-                    marketMetricsItem.defiMarketCap.currency.symbol
+                    defiMarketCap,
+                    baseCurrency.symbol
                 ),
-                marketMetricsItem.defiMarketCapDiff24h,
-                getChartData(marketMetricsItem.defiMarketCapPoints),
+                defiMarketCapDiff,
+                getChartData(defiMarketCapPoints),
                 MetricsType.DefiCap
             ),
             defiTvl = MetricData(
-                formatFiatShortened(marketMetricsItem.defiTvl.value, marketMetricsItem.defiTvl.currency.symbol),
-                marketMetricsItem.defiTvlDiff24h,
-                getChartData(marketMetricsItem.defiTvlPoints),
+                formatFiatShortened(tvl, baseCurrency.symbol),
+                tvlDiff,
+                getChartData(defiTvlPoints),
                 MetricsType.TvlInDefi
-            ),
+            )
         )
     }
 
@@ -299,116 +330,6 @@ class MarketOverviewViewModel(
             delay(1000)
             isRefreshingLiveData.postValue(false)
         }
-    }
-
-    private fun getCoinCategoryItems(coinCategories: List<CoinCategory>): List<Category> =
-        coinCategories.map { category ->
-            Category(
-                category,
-                getCategoryMarketData(category, baseCurrency)
-            )
-        }
-
-    private fun getTopPlatformItems(topPlatforms: List<TopPlatform>, timeDuration: TimeDuration): List<TopPlatformItem> {
-        return topPlatforms.map { platform ->
-            val prevRank = when (timeDuration) {
-                TimeDuration.OneDay -> platform.rank1D
-                TimeDuration.SevenDay -> platform.rank1W
-                TimeDuration.ThirtyDay -> platform.rank1M
-            }
-
-            val rankDiff = if (prevRank == platform.rank || prevRank == null) {
-                null
-            } else {
-                prevRank - platform.rank
-            }
-
-            val marketCapDiff = when (timeDuration) {
-                TimeDuration.OneDay -> platform.change1D
-                TimeDuration.SevenDay -> platform.change1W
-                TimeDuration.ThirtyDay -> platform.change1M
-            }
-
-            TopPlatformItem(
-                io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform(platform.uid, platform.name),
-                platform.rank,
-                platform.protocols,
-                platform.marketCap,
-                rankDiff,
-                marketCapDiff
-            )
-        }
-    }
-
-    private fun getCategoryMarketData(
-        category: CoinCategory,
-        baseCurrency: Currency
-    ): MarketSearchModule.CategoryMarketData? {
-        val marketCap = category.marketCap?.let { marketCap ->
-            App.numberFormatter.formatFiatShort(marketCap, baseCurrency.symbol, 2)
-        }
-
-        return marketCap?.let {
-            MarketSearchModule.CategoryMarketData(
-                it,
-                category.diff24H
-            )
-        }
-    }
-
-    private fun marketMetricsItem(
-        globalMarketPoints: List<GlobalMarketPoint>,
-        baseCurrency: Currency
-    ): MarketMetricsItem {
-        var marketCap = BigDecimal.ZERO
-        var marketCapDiff = BigDecimal.ZERO
-        var defiMarketCap = BigDecimal.ZERO
-        var defiMarketCapDiff = BigDecimal.ZERO
-        var volume24h = BigDecimal.ZERO
-        var volume24hDiff = BigDecimal.ZERO
-        var btcDominance = BigDecimal.ZERO
-        var btcDominanceDiff = BigDecimal.ZERO
-        var tvl = BigDecimal.ZERO
-        var tvlDiff = BigDecimal.ZERO
-
-        if (globalMarketPoints.isNotEmpty()) {
-            val startingPoint = globalMarketPoints.first()
-            val endingPoint = globalMarketPoints.last()
-
-            marketCap = endingPoint.marketCap
-            marketCapDiff = diff(startingPoint.marketCap, marketCap)
-
-            defiMarketCap = endingPoint.defiMarketCap
-            defiMarketCapDiff = diff(startingPoint.defiMarketCap, defiMarketCap)
-
-            volume24h = endingPoint.volume24h
-            volume24hDiff = diff(startingPoint.volume24h, volume24h)
-
-            btcDominance = endingPoint.btcDominance
-            btcDominanceDiff = diff(startingPoint.btcDominance, btcDominance)
-
-            tvl = endingPoint.tvl
-            tvlDiff = diff(startingPoint.tvl, tvl)
-        }
-
-        return MarketMetricsItem(
-            baseCurrency.code,
-            CurrencyValue(baseCurrency, volume24h),
-            volume24hDiff,
-            CurrencyValue(baseCurrency, marketCap),
-            marketCapDiff,
-            btcDominance,
-            btcDominanceDiff,
-            CurrencyValue(baseCurrency, defiMarketCap),
-            defiMarketCapDiff,
-            CurrencyValue(baseCurrency, tvl),
-            tvlDiff,
-            totalMarketCapPoints = globalMarketPoints.map { MarketMetricsPoint(it.marketCap, it.timestamp) },
-            btcDominancePoints = globalMarketPoints.map { MarketMetricsPoint(it.btcDominance, it.timestamp) },
-            volume24Points = globalMarketPoints.map { MarketMetricsPoint(it.volume24h, it.timestamp) },
-            defiMarketCapPoints = globalMarketPoints.map { MarketMetricsPoint(it.defiMarketCap, it.timestamp) },
-            defiTvlPoints = globalMarketPoints.map { MarketMetricsPoint(it.tvl, it.timestamp) }
-        )
     }
 
     private fun diff(sourceValue: BigDecimal, targetValue: BigDecimal): BigDecimal =

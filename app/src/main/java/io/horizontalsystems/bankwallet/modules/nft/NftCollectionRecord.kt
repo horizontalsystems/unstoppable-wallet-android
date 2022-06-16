@@ -41,8 +41,3 @@ data class CollectionLinks(
     val discord_url: String?,
     val twitter_username: String?
 )
-
-
-//val telegram_url: String?,
-//val instagram_username: String?,
-//val wiki_url: String?,

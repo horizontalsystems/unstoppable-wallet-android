@@ -40,22 +40,24 @@ class TopSectorsRepository(
             .take(itemsCount)
     }
 
-    private fun getCategoryMarketData(
-        coinCategory: CoinCategory,
-        baseCurrency: Currency
-    ): MarketSearchModule.CategoryMarketData? {
-        val marketCap = coinCategory.marketCap?.let { marketCap ->
-            App.numberFormatter.formatFiatShort(marketCap, baseCurrency.symbol, 2)
+    companion object {
+
+        fun getCategoryMarketData(
+                coinCategory: CoinCategory,
+                baseCurrency: Currency
+        ): MarketSearchModule.CategoryMarketData? {
+            val marketCap = coinCategory.marketCap?.let { marketCap ->
+                App.numberFormatter.formatFiatShort(marketCap, baseCurrency.symbol, 2)
+            }
+
+            return marketCap?.let {
+                MarketSearchModule.CategoryMarketData(
+                        it,
+                        coinCategory.diff24H
+                )
+            }
         }
 
-        if (marketCap != null) {
-            return MarketSearchModule.CategoryMarketData(
-                marketCap,
-                coinCategory.diff24H
-            )
-        }
-
-        return null
     }
 
 }
