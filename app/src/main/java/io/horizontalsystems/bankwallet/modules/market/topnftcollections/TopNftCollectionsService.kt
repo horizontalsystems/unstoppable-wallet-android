@@ -14,8 +14,8 @@ class TopNftCollectionsService(
 ) {
     private var topNftsJob: Job? = null
 
-    private val _NftCollectionsItem = MutableStateFlow<Result<List<NftCollectionItem>>?>(null)
-    val topNftCollections = _NftCollectionsItem.filterNotNull()
+    private val _nftCollectionsItem = MutableStateFlow<Result<List<NftCollectionItem>>?>(null)
+    val topNftCollections = _nftCollectionsItem.filterNotNull()
 
     val sortingFields = listOf(
         SortingField.HighestVolume,
@@ -49,11 +49,11 @@ class TopNftCollectionsService(
                     forceRefresh = forceRefresh,
                     limit = 100
                 )
-                _NftCollectionsItem.emit(Result.success(topNfts))
+                _nftCollectionsItem.emit(Result.success(topNfts))
             } catch (cancellation: CancellationException) {
                 // do nothing
             } catch (error: Exception) {
-                _NftCollectionsItem.emit(Result.failure(error))
+                _nftCollectionsItem.emit(Result.failure(error))
             }
         }
     }

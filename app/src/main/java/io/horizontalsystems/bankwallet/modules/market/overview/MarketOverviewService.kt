@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopMoversRepository
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.MarketOverview
 import io.horizontalsystems.marketkit.models.TopMovers
 import io.reactivex.disposables.Disposable
@@ -16,7 +17,7 @@ import kotlinx.coroutines.cancel
 
 class MarketOverviewService(
     private val marketTopMoversRepository: MarketTopMoversRepository,
-    private val marketOverviewRepository: MarketOverviewRepository,
+    private val marketKit: MarketKit,
     private val backgroundManager: BackgroundManager,
     private val currencyManager: ICurrencyManager
 ) : BackgroundManager.Listener {
@@ -46,7 +47,7 @@ class MarketOverviewService(
     private fun updateMarketOverview() {
         marketOverviewDisposable?.dispose()
 
-        marketOverviewRepository.get(currencyManager.baseCurrency)
+        marketKit.marketOverviewSingle(currencyManager.baseCurrency.code)
             .subscribeIO(
                 { marketOverviewObservable.onNext(Result.success(it)) },
                 { marketOverviewObservable.onNext(Result.failure(it)) }

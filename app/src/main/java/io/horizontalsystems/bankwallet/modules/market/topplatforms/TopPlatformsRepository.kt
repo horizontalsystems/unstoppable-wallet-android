@@ -40,37 +40,39 @@ class TopPlatformsRepository(
         }
     }
 
-    private fun getTopPlatformItems(
-        topPlatforms: List<TopPlatform>,
-        timeDuration: TimeDuration
-    ): List<TopPlatformItem> {
-        return topPlatforms.map { platform ->
-            val prevRank = when (timeDuration) {
-                TimeDuration.OneDay -> platform.rank1D
-                TimeDuration.SevenDay -> platform.rank1W
-                TimeDuration.ThirtyDay -> platform.rank1M
-            }
+    companion object {
+        fun getTopPlatformItems(
+                topPlatforms: List<TopPlatform>,
+                timeDuration: TimeDuration
+        ): List<TopPlatformItem> {
+            return topPlatforms.map { platform ->
+                val prevRank = when (timeDuration) {
+                    TimeDuration.OneDay -> platform.rank1D
+                    TimeDuration.SevenDay -> platform.rank1W
+                    TimeDuration.ThirtyDay -> platform.rank1M
+                }
 
-            val rankDiff = if (prevRank == platform.rank || prevRank == null) {
-                null
-            } else {
-                prevRank - platform.rank
-            }
+                val rankDiff = if (prevRank == platform.rank || prevRank == null) {
+                    null
+                } else {
+                    prevRank - platform.rank
+                }
 
-            val marketCapDiff = when (timeDuration) {
-                TimeDuration.OneDay -> platform.change1D
-                TimeDuration.SevenDay -> platform.change1W
-                TimeDuration.ThirtyDay -> platform.change1M
-            }
+                val marketCapDiff = when (timeDuration) {
+                    TimeDuration.OneDay -> platform.change1D
+                    TimeDuration.SevenDay -> platform.change1W
+                    TimeDuration.ThirtyDay -> platform.change1M
+                }
 
-            TopPlatformItem(
-                Platform(platform.uid, platform.name),
-                platform.rank,
-                platform.protocols,
-                platform.marketCap,
-                rankDiff,
-                marketCapDiff
-            )
+                TopPlatformItem(
+                        Platform(platform.uid, platform.name),
+                        platform.rank,
+                        platform.protocols,
+                        platform.marketCap,
+                        rankDiff,
+                        marketCapDiff
+                )
+            }
         }
     }
 

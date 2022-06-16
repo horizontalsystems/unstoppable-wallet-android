@@ -24,10 +24,9 @@ object MarketOverviewModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val topMarketsRepository = MarketTopMoversRepository(App.marketKit)
-            val marketOverviewRepository = MarketOverviewRepository(App.marketKit)
             val service = MarketOverviewService(
                 topMarketsRepository,
-                marketOverviewRepository,
+                App.marketKit,
                 App.backgroundManager,
                 App.currencyManager
             )
@@ -56,25 +55,6 @@ object MarketOverviewModule {
     data class MarketMetricsPoint(
         val value: BigDecimal,
         val timestamp: Long
-    )
-
-    data class MarketMetricsItem(
-        val currencyCode: String,
-        val volume24h: CurrencyValue,
-        val volume24hDiff24h: BigDecimal,
-        val marketCap: CurrencyValue,
-        val marketCapDiff24h: BigDecimal,
-        var btcDominance: BigDecimal = BigDecimal.ZERO,
-        var btcDominanceDiff24h: BigDecimal = BigDecimal.ZERO,
-        var defiMarketCap: CurrencyValue,
-        var defiMarketCapDiff24h: BigDecimal = BigDecimal.ZERO,
-        var defiTvl: CurrencyValue,
-        var defiTvlDiff24h: BigDecimal = BigDecimal.ZERO,
-        val totalMarketCapPoints: List<MarketMetricsPoint>,
-        val btcDominancePoints: List<MarketMetricsPoint>,
-        val volume24Points: List<MarketMetricsPoint>,
-        val defiMarketCapPoints: List<MarketMetricsPoint>,
-        val defiTvlPoints: List<MarketMetricsPoint>
     )
 
     data class Board(

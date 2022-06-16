@@ -14,16 +14,7 @@ class MarketTopMoversRepository(
 ) {
 
     fun getTopMovers(baseCurrency: Currency): Single<TopMovers> =
-        Single.create { emitter ->
-
-            try {
-                val topMovers = marketKit.topMoversSingle(baseCurrency.code).blockingGet()
-
-                emitter.onSuccess(topMovers)
-            } catch (error: Throwable) {
-                emitter.onError(error)
-            }
-        }
+        marketKit.topMoversSingle(baseCurrency.code)
 
     fun get(
         size: Int,
