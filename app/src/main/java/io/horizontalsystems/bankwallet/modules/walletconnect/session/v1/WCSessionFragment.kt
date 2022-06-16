@@ -51,7 +51,7 @@ class WCSessionFragment : BaseFragment() {
         WalletConnectModule.Factory(
             arguments?.getString(REMOTE_PEER_ID_KEY),
             arguments?.getString(CONNECTION_LINK_KEY)
-            )
+        )
     }
 
     private val viewModel by viewModels<WCSessionViewModel> {
@@ -119,6 +119,7 @@ fun WCSessionPage(
 ) {
     val closeEnabled by viewModel.closeEnabledLiveData.observeAsState(false)
     val connecting by viewModel.connectingLiveData.observeAsState(false)
+    val invalidStateError = viewModel.invalidStateError
 
     ComposeAppTheme {
         Column(
@@ -136,11 +137,8 @@ fun WCSessionPage(
                     )
                 )
             )
-            if (viewModel.invalidUrlError){
-                WCSessionError(
-                    stringResource(R.string.WalletConnect_Error_InvalidUrl),
-                    navController
-                )
+            if (invalidStateError != null) {
+                WCSessionError(error = stringResource(invalidStateError), navController = navController)
             } else {
                 WCSessionListContent(viewModel)
             }

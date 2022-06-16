@@ -401,7 +401,7 @@
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <string name="WalletConnect_Error_NoWallet">No suitable Wallet. You need to create or restore existing wallet</string>
     <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
-    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported chain id</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
     <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
