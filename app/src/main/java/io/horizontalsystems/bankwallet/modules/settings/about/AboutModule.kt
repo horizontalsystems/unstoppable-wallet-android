@@ -8,8 +8,7 @@ object AboutModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = AboutService(App.appConfigProvider, App.termsManager, App.systemInfoManager)
-            return AboutViewModel(service) as T
+            return AboutViewModel(App.appConfigProvider, App.termsManager, App.systemInfoManager) as T
         }
     }
 }

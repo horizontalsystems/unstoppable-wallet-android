@@ -1,34 +1,46 @@
 package io.horizontalsystems.bankwallet.modules.settings.about
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.reactivex.disposables.Disposable
+import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.BuildConfig
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.core.ISystemInfoManager
+import kotlinx.coroutines.launch
 
 class AboutViewModel(
-    private val service: AboutService,
+    private val appConfigProvider: AppConfigProvider,
+    private val termsManager: ITermsManager,
+    private val systemInfoManager: ISystemInfoManager,
 ) : ViewModel() {
 
-    val githubLink by service::githubLink
-    val appWebPageLink by service::appWebPageLink
-    val reportEmail by service::reportEmail
-    val appVersion by service::appVersion
+    val githubLink = appConfigProvider.appGithubLink
+    val appWebPageLink = appConfigProvider.appWebPageLink
+    val reportEmail = appConfigProvider.reportEmail
+    val appVersion: String
+        get() {
+            var appVersion = systemInfoManager.appVersion
+            if (Translator.getString(R.string.is_release) == "false") {
+                appVersion += " (${BuildConfig.VERSION_CODE})"
+            }
 
-    val termsShowAlertLiveData = MutableLiveData(!service.termsAccepted)
+            return appVersion
+        }
 
-    var disposable: Disposable? = null
+    var termsShowAlert by mutableStateOf(!termsManager.termsAccepted)
+        private set
 
     init {
-        service.termsAcceptedObservable
-            .subscribeIO { termsShowAlertLiveData.postValue(!it) }
-            .let { disposable = it }
-
-        service.start()
-    }
-
-    override fun onCleared() {
-        service.stop()
-        disposable?.dispose()
+        viewModelScope.launch {
+            termsManager.termsAcceptedSignalFlow.collect {
+                termsShowAlert = !it
+            }
+        }
     }
 
 }

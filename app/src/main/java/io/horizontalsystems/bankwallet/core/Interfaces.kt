@@ -29,6 +29,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.Subject
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -419,6 +420,7 @@ interface ICoinManager {
 
 interface ITermsManager {
     val termsAcceptedSignal: Subject<Boolean>
+    val termsAcceptedSignalFlow: Flow<Boolean>
     val terms: List<Term>
     val termsAccepted: Boolean
     fun update(term: Term)
