@@ -68,6 +68,10 @@ class Chart @JvmOverloads constructor(
         }
     }
 
+    fun setIndicatorLineVisible(v: Boolean) {
+        binding.chartBottom.isVisible = v
+    }
+
     fun setListener(listener: Listener) {
         binding.chartTouch.onUpdate(object : Listener {
             override fun onTouchDown() {
@@ -166,7 +170,6 @@ class Chart @JvmOverloads constructor(
         setVisible(
             binding.chartMain,
             binding.topLowRange,
-            binding.chartBottom,
             binding.chartTimeline,
             isVisible = visible
         )
