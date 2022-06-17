@@ -49,7 +49,9 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
     }
 
     fun onTextChange(text: CharSequence?) {
-        addTokenService.set(text.toString().trim())
+        viewModelScope.launch {
+            addTokenService.set(text.toString().trim())
+        }
     }
 
 

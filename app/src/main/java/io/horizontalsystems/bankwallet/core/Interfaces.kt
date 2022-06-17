@@ -162,8 +162,8 @@ interface INetworkManager {
 
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
-    fun getBep2TokeInfo(symbol: String): Single<TokenInfoService.Bep2TokenInfo>
-    fun getEvmTokeInfo(apiPath: String, address: String): Single<TokenInfoService.EvmTokenInfo>
+    suspend fun getBep2TokeInfo(symbol: String): TokenInfoService.Bep2TokenInfo
+    suspend fun getEvmTokeInfo(apiPath: String, address: String): TokenInfoService.EvmTokenInfo
 
     suspend fun subscribe(host: String, path: String, body: String): JsonObject
     suspend fun unsubscribe(host: String, path: String, body: String): JsonObject

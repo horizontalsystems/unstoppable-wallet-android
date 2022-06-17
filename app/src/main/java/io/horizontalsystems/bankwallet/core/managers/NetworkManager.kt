@@ -52,11 +52,11 @@ class NetworkManager : INetworkManager {
         return ServiceEvmContractInfo.service(host).getTokenInfo(path)
     }
 
-    override fun getBep2TokeInfo(symbol: String): Single<TokenInfoService.Bep2TokenInfo> {
+    override suspend fun getBep2TokeInfo(symbol: String): TokenInfoService.Bep2TokenInfo {
         return TokenInfoService.service().getBep2TokenInfo(symbol)
     }
 
-    override fun getEvmTokeInfo(apiPath: String, address: String): Single<TokenInfoService.EvmTokenInfo> {
+    override suspend fun getEvmTokeInfo(apiPath: String, address: String): TokenInfoService.EvmTokenInfo {
         return TokenInfoService.service().getTokenInfo(apiPath, address)
     }
 
@@ -140,13 +140,13 @@ object TokenInfoService {
 
     interface TokenInfoAPI {
         @GET("bep2")
-        fun getBep2TokenInfo(@Query("symbol") symbol: String): Single<Bep2TokenInfo>
+        suspend fun getBep2TokenInfo(@Query("symbol") symbol: String): Bep2TokenInfo
 
         @GET("{apiPath}")
-        fun getTokenInfo(
+        suspend fun getTokenInfo(
             @Path("apiPath") apiPath: String,
             @Query("address") address: String
-        ): Single<EvmTokenInfo>
+        ): EvmTokenInfo
     }
 }
 
