@@ -30,7 +30,10 @@ class Chart @JvmOverloads constructor(
     }
 
     private val config = ChartConfig(context, attrs)
-    private val animatorMain = ChartAnimator { binding.chartMain.invalidate() }
+    private val animatorMain = ChartAnimator {
+        binding.chartMain.invalidate()
+        binding.chartGrid.invalidate()
+    }
     private val animatorBottom = ChartAnimator { binding.chartBottom.invalidate() }
     private val animatorTopBottomRange = ChartAnimator { binding.topLowRange.invalidate() }
 
