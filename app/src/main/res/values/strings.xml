@@ -931,7 +931,7 @@
     <string name="AddToken_Symbol">Symbol</string>
     <string name="AddToken_Decimals">Decimals</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">Coin Type(s)</string>
+    <string name="AddToken_CoinTypes">COIN TYPES</string>
     <string name="AddToken_AddressOrSymbol">Contract Address</string>
 
     <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
