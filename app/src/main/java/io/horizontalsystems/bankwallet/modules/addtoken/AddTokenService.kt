@@ -7,13 +7,9 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.customCoinUid
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
 import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.Platform
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.reactivex.disposables.Disposable
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 
 class AddTokenService(
     private val coinManager: ICoinManager,
@@ -22,96 +18,82 @@ class AddTokenService(
     private val accountManager: IAccountManager
 ) {
 
-    private val _stateFlow =
-        MutableSharedFlow<Result<AddTokenModule.State>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    suspend fun getTokens(reference: String): List<TokenInfo> {
+        if (reference.isEmpty()) return listOf()
 
-    val stateFlow = _stateFlow.asSharedFlow()
+        val validServices = blockchainServices.filter { it.isValid(reference) }
 
-    private var disposable: Disposable? = null
+        if (validServices.isEmpty()) throw TokenError.InvalidReference
 
-    var state: AddTokenModule.State = AddTokenModule.State.Idle
-        private set(value) {
-            field = value
-            _stateFlow.tryEmit(Result.success(value))
-        }
-
-    private var fetchCustomCoinsJob: Job? = null
-
-    suspend fun set(reference: String?) = withContext(Dispatchers.IO) {
-        fetchCustomCoinsJob?.cancel()
-
-        val referenceNonNull = if (reference.isNullOrEmpty()) {
-            state = AddTokenModule.State.Idle
-            return@withContext
-        } else {
-            reference
-        }
-
-        val validServices = blockchainServices.filter { it.isValid(referenceNonNull) }
-
-        if (validServices.isEmpty()) {
-            state = AddTokenModule.State.Failed(TokenError.InvalidReference)
-            return@withContext
-        }
-        val existingPlatformCoins = mutableListOf<PlatformCoin>()
-
+        val tokenInfos = mutableListOf<TokenInfo>()
+        val activeWallets = walletManager.activeWallets
         validServices.forEach { service ->
-            val coinType = service.coinType(referenceNonNull)
-            coinManager.getPlatformCoin(coinType)?.let {
-                existingPlatformCoins.add(it)
-            }
-        }
+            val platformCoin = coinManager.getPlatformCoin(service.coinType(reference))
 
-        if (existingPlatformCoins.isNotEmpty()) {
-            state = AddTokenModule.State.AlreadyExists(existingPlatformCoins)
-            return@withContext
-        }
-
-        state = AddTokenModule.State.Loading
-
-        fetchCustomCoinsJob = launch {
-            val customCoins = validServices.mapNotNull { service ->
+            if (platformCoin != null) {
+                val inWallet = activeWallets.any { it.platformCoin == platformCoin }
+                tokenInfos.add(TokenInfo.Local(platformCoin, inWallet))
+            } else {
                 try {
-                    ensureActive()
-                    service.customCoin(reference)
+                    val customCoin = service.customCoin(reference)
+                    tokenInfos.add(TokenInfo.Remote(customCoin))
                 } catch (e: Exception) {
-                    null
                 }
             }
-
-            ensureActive()
-            state = if (customCoins.isEmpty()) {
-                AddTokenModule.State.Failed(TokenError.NotFound)
-            } else {
-                AddTokenModule.State.Fetched(customCoins)
-            }
         }
+
+        if (tokenInfos.isEmpty()) throw TokenError.NotFound
+
+        return tokenInfos
     }
 
-    fun save() {
-        val customCoins = (state as? AddTokenModule.State.Fetched)?.customCoins ?: return
+    fun addTokens(tokens: List<TokenInfo>) {
         val account = accountManager.activeAccount ?: return
-
-        val platformCoins = customCoins.map { customCoin ->
-            val coinType = customCoin.type
-            val coinUid = coinType.customCoinUid
-            PlatformCoin(
-                Platform(coinType, customCoin.decimals, coinUid),
-                Coin(coinUid, customCoin.name, customCoin.code)
-            )
+        val platformCoins = tokens.map { tokenInfo ->
+            when (tokenInfo) {
+                is TokenInfo.Local -> {
+                    tokenInfo.platformCoin
+                }
+                is TokenInfo.Remote -> {
+                    val coinType = tokenInfo.coinType
+                    val coinUid = coinType.customCoinUid
+                    PlatformCoin(
+                        Platform(coinType, tokenInfo.decimals, coinUid),
+                        Coin(coinUid, tokenInfo.coinName, tokenInfo.coinCode)
+                    )
+                }
+            }
         }
 
         val wallets = platformCoins.map { Wallet(it, account) }
         walletManager.save(wallets)
     }
 
-    fun onCleared() {
-        disposable?.dispose()
-    }
-
     sealed class TokenError : Exception() {
         object InvalidReference : TokenError()
         object NotFound : TokenError()
     }
+}
 
+sealed class TokenInfo {
+    abstract val coinName: String
+    abstract val coinCode: String
+    abstract val decimals: Int
+    abstract val coinType: CoinType
+    abstract val inWallet: Boolean
+
+    data class Local(val platformCoin: PlatformCoin, override val inWallet: Boolean) : TokenInfo() {
+        override val coinName = platformCoin.coin.name
+        override val coinCode = platformCoin.coin.code
+        override val decimals = platformCoin.decimals
+        override val coinType = platformCoin.coinType
+    }
+
+    data class Remote(val customCoin: AddTokenModule.CustomCoin) : TokenInfo() {
+        override val inWallet = false
+        override val coinName = customCoin.name
+        override val coinCode = customCoin.code
+        override val decimals = customCoin.decimals
+        override val coinType = customCoin.type
+    }
 }

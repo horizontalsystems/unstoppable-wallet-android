@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -59,14 +60,13 @@ private fun AddTokenScreen(
     navController: NavController,
     viewModel: AddTokenViewModel = viewModel(factory = AddTokenModule.Factory())
 ) {
-    if (viewModel.closeScreen) {
-        navController.popBackStack()
-    }
+    val uiState = viewModel.uiState
 
-    if (viewModel.showSuccessMessage) {
+    if (uiState.finished) {
         HudHelper.showSuccessMessage(
             LocalView.current, R.string.Hud_Text_Done, SnackbarDuration.LONG
         )
+        navController.popBackStack()
     }
 
     val dots = stringResource(R.string.AddToken_Dots)
@@ -96,10 +96,10 @@ private fun AddTokenScreen(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     enabled = false,
                     hint = stringResource(R.string.AddToken_AddressOrSymbol),
-                    state = getState(viewModel.caution, viewModel.loading),
+                    state = getState(uiState.caution, uiState.loading),
                     qrScannerEnabled = true,
                 ) {
-                    viewModel.onTextChange(it)
+                    viewModel.onEnterText(it)
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Column(
@@ -108,22 +108,45 @@ private fun AddTokenScreen(
                         .clip(RoundedCornerShape(12.dp))
                 ) {
                     TitleValueCell(
-                        R.string.AddToken_CoinTypes,
-                        viewModel.viewItem?.coinType ?: dots,
-                        false
-                    )
-                    TitleValueCell(
                         R.string.AddToken_CoinName,
-                        viewModel.viewItem?.coinName ?: dots
+                        uiState.coinName ?: dots
                     )
                     TitleValueCell(
                         R.string.AddToken_Symbol,
-                        viewModel.viewItem?.symbol ?: dots
+                        uiState.coinCode ?: dots
                     )
                     TitleValueCell(
                         R.string.AddToken_Decimals,
-                        viewModel.viewItem?.decimals?.toString() ?: dots
+                        uiState.decimals?.toString() ?: dots
                     )
+                }
+
+                val tokens = uiState.tokens
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                AnimatedVisibility(tokens.isNotEmpty()) {
+                    Column {
+                        HeaderText(text = stringResource(id = R.string.AddToken_CoinTypes))
+                        CellSingleLineLawrenceSection(tokens) { tokenInfoUiState ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                D2(text = tokenInfoUiState.title)
+                                Spacer(modifier = Modifier.weight(1f))
+                                HsSwitch(
+                                    checked = tokenInfoUiState.checked,
+                                    enabled = tokenInfoUiState.enabled,
+                                    onCheckedChange = {
+                                        viewModel.onToggleToken(tokenInfoUiState)
+                                    }
+                                )
+                            }
+                        }
+                    }
                 }
             }
 
@@ -134,7 +157,7 @@ private fun AddTokenScreen(
                         .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                     title = stringResource(R.string.Button_Add),
                     onClick = { viewModel.onAddClick() },
-                    enabled = viewModel.buttonEnabled
+                    enabled = uiState.addEnabled
                 )
             }
         }
