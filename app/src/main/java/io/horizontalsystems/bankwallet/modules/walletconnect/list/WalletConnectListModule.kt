@@ -50,8 +50,8 @@ object WalletConnectListModule {
 
     fun getVersionFromUri(scannedText: String): Int {
         return when {
-            scannedText.contains("@1?") -> 1
-            scannedText.contains("@2?") -> 2
+            scannedText.contains("@1") -> 1
+            scannedText.contains("@2") -> 2
             else -> 0
         }
     }

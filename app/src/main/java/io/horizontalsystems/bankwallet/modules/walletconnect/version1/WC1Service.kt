@@ -120,6 +120,8 @@ class WC1Service(
             interactor?.connect()
 
             state = State.Ready
+
+            processNextRequest()
         } catch (error: Throwable) {
             state = State.Invalid(error)
         }
