@@ -347,7 +347,7 @@ class Chart @JvmOverloads constructor(
         mainGradient.setShape(binding.chartMain.shape)
         mainGradient.setShader(config.curveGradient)
 
-        mainGrid.setShape(binding.chartMain.shape)
+        mainGrid.setShape(binding.chartGrid.shape)
         mainGrid.set(timeline)
 
         mainRange.setShape(binding.chartMain.shape)
@@ -367,9 +367,12 @@ class Chart @JvmOverloads constructor(
 
         binding.chartMain.clear()
         binding.chartMain.add(mainCurve, mainGradient)
-        binding.chartMain.add(mainGrid, emaLabel, dominanceLabel)
+        binding.chartMain.add(emaLabel, dominanceLabel)
         binding.chartMain.add(emaFastCurve, emaSlowCurve)
         binding.chartMain.add(dominanceCurve)
+
+        binding.chartGrid.clear()
+        binding.chartGrid.add(mainGrid)
 
         binding.topLowRange.clear()
         binding.topLowRange.add(mainRange)
