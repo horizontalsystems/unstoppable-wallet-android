@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.CustomCoi
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.CoinType
-import io.reactivex.Single
 
 class AddEvmTokenBlockchainService(
     private val blockchain: EvmBlockchain,
@@ -26,11 +25,9 @@ class AddEvmTokenBlockchainService(
         return blockchain.getEvm20CoinType(reference.lowercase())
     }
 
-    override fun customCoinsSingle(reference: String): Single<CustomCoin> {
-        return networkManager.getEvmTokeInfo(apiPath(blockchain), reference)
-            .map { tokenInfo ->
-                CustomCoin(coinType(reference), tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals)
-            }
+    override suspend fun customCoin(reference: String): CustomCoin {
+        val tokenInfo = networkManager.getEvmTokeInfo(apiPath(blockchain), reference)
+        return CustomCoin(coinType(reference), tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals)
     }
 
     private fun apiPath(blockchain: EvmBlockchain): String = when (blockchain) {

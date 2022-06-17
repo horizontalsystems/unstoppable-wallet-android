@@ -5,18 +5,15 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.customCoinUid
-import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.CustomCoin
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.Platform
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import java.util.*
 
 class AddTokenService(
     private val coinManager: ICoinManager,
@@ -38,12 +35,14 @@ class AddTokenService(
             _stateFlow.tryEmit(Result.success(value))
         }
 
-    fun set(reference: String?) {
-        disposable?.dispose()
+    private var fetchCustomCoinsJob: Job? = null
+
+    suspend fun set(reference: String?) = withContext(Dispatchers.IO) {
+        fetchCustomCoinsJob?.cancel()
 
         val referenceNonNull = if (reference.isNullOrEmpty()) {
             state = AddTokenModule.State.Idle
-            return
+            return@withContext
         } else {
             reference
         }
@@ -52,7 +51,7 @@ class AddTokenService(
 
         if (validServices.isEmpty()) {
             state = AddTokenModule.State.Failed(TokenError.InvalidReference)
-            return
+            return@withContext
         }
         val existingPlatformCoins = mutableListOf<PlatformCoin>()
 
@@ -65,22 +64,28 @@ class AddTokenService(
 
         if (existingPlatformCoins.isNotEmpty()) {
             state = AddTokenModule.State.AlreadyExists(existingPlatformCoins)
-            return
+            return@withContext
         }
 
         state = AddTokenModule.State.Loading
 
-        disposable = joinedCustomTokensSingle(validServices, reference)
-            .subscribeOn(Schedulers.io())
-            .subscribe({ customCoins ->
-                state = if (customCoins.isEmpty()) {
-                    AddTokenModule.State.Failed(TokenError.NotFound)
-                } else {
-                    AddTokenModule.State.Fetched(customCoins)
+        fetchCustomCoinsJob = launch {
+            val customCoins = validServices.mapNotNull { service ->
+                try {
+                    ensureActive()
+                    service.customCoin(reference)
+                } catch (e: Exception) {
+                    null
                 }
-            }, { error ->
-                state = AddTokenModule.State.Failed(error)
-            })
+            }
+
+            ensureActive()
+            state = if (customCoins.isEmpty()) {
+                AddTokenModule.State.Failed(TokenError.NotFound)
+            } else {
+                AddTokenModule.State.Fetched(customCoins)
+            }
+        }
     }
 
     fun save() {
@@ -102,22 +107,6 @@ class AddTokenService(
 
     fun onCleared() {
         disposable?.dispose()
-    }
-
-    private fun joinedCustomTokensSingle(
-        services: List<IAddTokenBlockchainService>,
-        reference: String
-    ): Single<List<CustomCoin>> {
-        val singles: List<Single<Optional<CustomCoin>>> = services.map { service ->
-            service.customCoinsSingle(reference)
-                .map { Optional.of(it) }
-                .onErrorReturn { Optional.empty<CustomCoin>() }
-        }
-
-        return Single.zip(singles) { array ->
-            val customTokens = array.map { it as? Optional<CustomCoin> }
-            customTokens.mapNotNull { it?.orElse(null) }
-        }
     }
 
     sealed class TokenError : Exception() {

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.reactivex.Single
 
 object AddTokenModule {
     class Factory : ViewModelProvider.Factory {
@@ -30,7 +29,7 @@ object AddTokenModule {
     interface IAddTokenBlockchainService {
         fun isValid(reference: String): Boolean
         fun coinType(reference: String): CoinType
-        fun customCoinsSingle(reference: String): Single<CustomCoin>
+        suspend fun customCoin(reference: String): CustomCoin
     }
 
     data class CustomCoin(
