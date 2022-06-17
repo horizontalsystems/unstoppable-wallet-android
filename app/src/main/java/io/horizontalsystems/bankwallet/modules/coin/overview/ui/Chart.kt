@@ -96,7 +96,13 @@ fun <T> Chart(
         var selectedPoint by remember { mutableStateOf<SelectedPoint?>(null) }
         HsChartLinePeriodsAndPoint(tabItems, selectedPoint, onSelectTab)
         val chartIndicator = indicators.firstOrNull { it.selected && it.enabled }?.item
-        PriceVolChart(chartInfoData, chartIndicator, chartLoading, viewState) { item ->
+        PriceVolChart(
+            chartInfoData = chartInfoData,
+            chartIndicator = chartIndicator,
+            loading = chartLoading,
+            viewState = viewState,
+            showIndicatorLine = indicators.isNotEmpty()
+        ) { item ->
             onChangeHoldingPointState.invoke(item != null)
             selectedPoint = item?.let { itemToPointConverter.invoke(it) }
         }
@@ -234,11 +240,13 @@ fun PriceVolChart(
     chartIndicator: ChartIndicator?,
     loading: Boolean,
     viewState: ViewState?,
+    showIndicatorLine: Boolean,
     onSelectPoint: (ChartDataItemImmutable?) -> Unit,
 ) {
+    val height = if (showIndicatorLine) 228.dp else 180.dp
     Box(
         modifier = Modifier
-            .height(182.dp)
+            .height(height)
     ) {
         Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
 
@@ -274,6 +282,8 @@ fun PriceVolChart(
                     }
                     ViewState.Success -> {
                         chart.hideError()
+                        chart.setIndicatorLineVisible(showIndicatorLine)
+
                         chartInfoData?.let { chartInfoData ->
                             val chartType = ChartView.ChartType.fromString(chartInfoData.chartInterval.value)
                             chart.doOnLayout {
