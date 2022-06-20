@@ -87,15 +87,15 @@ class ManageWalletsFragment : BaseFragment() {
         }
 
         restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
-            val zcashBirhdayHeightDialog = ZcashBirthdayHeightDialog()
-            zcashBirhdayHeightDialog.onEnter = {
+            val zcashBirthdayHeightDialog = ZcashBirthdayHeightDialog()
+            zcashBirthdayHeightDialog.onEnter = {
                 restoreSettingsViewModel.onEnter(it)
             }
-            zcashBirhdayHeightDialog.onCancel = {
+            zcashBirthdayHeightDialog.onCancel = {
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
 
-            zcashBirhdayHeightDialog.show(
+            zcashBirthdayHeightDialog.show(
                 requireActivity().supportFragmentManager,
                 "ZcashBirthdayHeightDialog"
             )

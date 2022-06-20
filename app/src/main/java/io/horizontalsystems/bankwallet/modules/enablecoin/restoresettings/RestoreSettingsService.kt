@@ -4,14 +4,19 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.restoreSettingTypes
+import io.horizontalsystems.bankwallet.ui.extensions.ZCashConfig
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.subjects.PublishSubject
 
-class RestoreSettingsService(private val manager: RestoreSettingsManager) : Clearable {
+class RestoreSettingsService(
+    private val manager: RestoreSettingsManager,
+    private val zcashBirthdayProvider: ZcashBirthdayProvider
+    ) : Clearable {
 
     val approveSettingsObservable = PublishSubject.create<CoinWithSettings>()
     val rejectApproveSettingsObservable = PublishSubject.create<PlatformCoin>()
@@ -47,9 +52,13 @@ class RestoreSettingsService(private val manager: RestoreSettingsManager) : Clea
         manager.save(settings, account, coinType)
     }
 
-    fun enter(birthdayHeight: String?, platformCoin: PlatformCoin) {
+    fun enter(zcashConfig: ZCashConfig, platformCoin: PlatformCoin) {
         val settings = RestoreSettings()
-        settings.birthdayHeight = birthdayHeight?.toIntOrNull()
+        settings.birthdayHeight =
+            if (zcashConfig.restoreAsNew)
+                zcashBirthdayProvider.getNearestBirthdayHeight()
+            else
+                zcashConfig.birthdayHeight?.toIntOrNull()
 
         val coinWithSettings = CoinWithSettings(platformCoin, settings)
         approveSettingsObservable.onNext(coinWithSettings)

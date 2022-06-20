@@ -79,6 +79,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
         lateinit var proFeatureAuthorizationManager: ProFeaturesAuthorizationManager
+        lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
 
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
@@ -225,7 +226,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val zcashBirthdayProvider = ZcashBirthdayProvider(this, testMode)
+        zcashBirthdayProvider = ZcashBirthdayProvider(this, testMode)
         restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
 
         evmLabelManager = EvmLabelManager(
