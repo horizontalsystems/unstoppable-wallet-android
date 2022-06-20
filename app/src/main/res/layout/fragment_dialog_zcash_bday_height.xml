@@ -3,9 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="40dp"
-    android:layout_marginRight="40dp"
-    android:background="@color/lawrence">
+    >
+
+    <View
+        android:id="@+id/backgroundView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bottom_sheet_floating_background"
+        android:backgroundTint="@color/lawrence"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/title"
@@ -15,10 +25,11 @@
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="21dp"
         android:text="@string/Restore_ZCash_BirthdayHeight"
-        android:textColor="@color/oz"
+        android:textColor="@color/leah"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/hint"
@@ -28,27 +39,68 @@
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="11dp"
         android:text="@string/Restore_ZCash_BirthdayHeight_Hint"
-        android:textColor="@color/oz"
+        android:textColor="@color/leah"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title" />
+        app:layout_constraintTop_toBottomOf="@id/title"
+        />
 
     <EditText
         android:id="@+id/input"
+        style="@style/Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="23dp"
+        android:backgroundTint="@color/stateful_edittext_background_color"
+        android:hint="@string/Restore_ZCash_Birthday_Hint"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hint" />
+        app:layout_constraintTop_toBottomOf="@id/hint"
+        />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/steel_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input"
+        />
+
+    <CheckBox
+        android:id="@+id/restoreAsNewCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        />
+
+    <TextView
+        android:id="@+id/restoreAsNewText"
+        style="@style/Subhead2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:text="@string/Restore_ZCash_RestoreAsNew"
+        android:textColor="@color/leah"
+        app:layout_constraintBottom_toBottomOf="@+id/restoreAsNewCheckbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/restoreAsNewCheckbox"
+        app:layout_constraintTop_toTopOf="@+id/restoreAsNewCheckbox"
+        />
 
     <Button
         android:id="@+id/btnDone"
         style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/Button_Done"
@@ -56,7 +108,8 @@
         android:textColor="@color/jacob"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/input" />
+        app:layout_constraintTop_toBottomOf="@id/restoreAsNewCheckbox"
+        />
 
     <Button
         android:id="@+id/btnCancel"
@@ -69,6 +122,7 @@
         android:textColor="@color/jacob"
         app:layout_constraintBottom_toBottomOf="@id/btnDone"
         app:layout_constraintEnd_toStartOf="@id/btnDone"
-        app:layout_constraintTop_toTopOf="@id/btnDone" />
+        app:layout_constraintTop_toTopOf="@id/btnDone"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.databinding.FragmentDialogZcashBdayHeight
 
 class ZcashBirthdayHeightDialog : DialogFragment() {
 
-    lateinit var onEnter: ((String?) -> Unit)
+    lateinit var onEnter: ((ZCashConfig) -> Unit)
     lateinit var onCancel: (() -> Unit)
 
     private var _binding: FragmentDialogZcashBdayHeightBinding? = null
@@ -28,7 +28,7 @@ class ZcashBirthdayHeightDialog : DialogFragment() {
         _binding = FragmentDialogZcashBdayHeightBinding.inflate(LayoutInflater.from(context))
 
         binding.btnDone.setOnSingleClickListener {
-            onEnter(binding.input.text.toString())
+            onEnter(ZCashConfig(binding.input.text.toString(), binding.restoreAsNewCheckbox.isChecked))
             dismiss()
         }
 
@@ -54,3 +54,4 @@ class ZcashBirthdayHeightDialog : DialogFragment() {
     }
 }
 
+data class ZCashConfig(val birthdayHeight: String?, val restoreAsNew: Boolean)
