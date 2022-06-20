@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.tweets
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,48 +9,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
-import androidx.navigation.navGraphViewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-
-class CoinTweetsFragment : BaseFragment() {
-    private val vmFactory by lazy { CoinTweetsModule.Factory(coinViewModel.fullCoin) }
-
-    private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
-    private val viewModel by viewModels<CoinTweetsViewModel> { vmFactory }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                ComposeAppTheme {
-                    CoinTweetsScreen(viewModel)
-                }
-            }
-        }
-    }
-}
+import io.horizontalsystems.marketkit.models.FullCoin
 
 @Composable
-fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
+fun CoinTweetsScreen(
+    fullCoin: FullCoin
+) {
+    val viewModel = viewModel<CoinTweetsViewModel>(factory = CoinTweetsModule.Factory(fullCoin))
+
     val items by viewModel.itemsLiveData.observeAsState(listOf())
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val viewState by viewModel.viewStateLiveData.observeAsState()

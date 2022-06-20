@@ -139,11 +139,13 @@ class TransactionsService(
             if (record.spam) return@forEach
             var transactionItem = transactionItems.find { it.record == record }
 
-            if (transactionItem == null) {
+            transactionItem = if (transactionItem == null) {
                 val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
                 val currencyValue = getCurrencyValue(record)
 
-                transactionItem = TransactionItem(record, currencyValue, lastBlockInfo)
+                TransactionItem(record, currencyValue, lastBlockInfo)
+            } else {
+                transactionItem.copy(record = record)
             }
 
             tmpList.add(transactionItem)

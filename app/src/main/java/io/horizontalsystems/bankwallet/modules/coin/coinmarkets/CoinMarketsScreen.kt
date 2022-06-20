@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -23,51 +19,29 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberImagePainter
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import kotlinx.coroutines.launch
 
-class CoinMarketsFragment : BaseFragment() {
-
-    private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
-    private val viewModel by viewModels<CoinMarketsViewModel> {
-        CoinMarketsModule.Factory(coinViewModel.fullCoin)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    CoinMarketsScreen(viewModel)
-                }
-            }
-        }
-    }
-}
-
 @Composable
 fun CoinMarketsScreen(
-    viewModel: CoinMarketsViewModel,
+    fullCoin: FullCoin
 ) {
+    val viewModel = viewModel<CoinMarketsViewModel>(factory = CoinMarketsModule.Factory(fullCoin))
+
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     val viewItemState by viewModel.viewStateLiveData.observeAsState()
     val viewItems by viewModel.viewItemsLiveData.observeAsState()

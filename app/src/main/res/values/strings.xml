@@ -649,6 +649,7 @@
     <string name="Settings_Language">Language</string>
     <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">Terms</string>
+    <string name="Settings_Privacy">Privacy</string>
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion" translatable="false">Unstoppable %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
@@ -673,6 +674,14 @@
     <string name="SettingsAboutApp_Github" translatable="false">Github</string>
     <string name="SettingsAboutApp_Site">Website</string>
     <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
+
+    <!-- Privacy  -->
+
+    <string name="Privacy_Information">Unstoppable doesn\'t collect any data or use analytics tools that may expose any data about its users. The wallet is designed to ensure a high level of privacy for its users.</string>
+    <string name="Privacy_BulletedText1">User data always remains on the user\'s device.</string>
+    <string name="Privacy_BulletedText2">The wallet doesn\'t collect any data about users.</string>
+    <string name="Privacy_BulletedText3">The wallet doesn\'t share any data about users.</string>
+    <string name="Privacy_BulletedText4">There are no user accounts or databases keeping user data elsewhere.</string>
 
     <!-- Security Center -->
 
@@ -1106,6 +1115,7 @@
     <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
 
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">7D avg.</string>

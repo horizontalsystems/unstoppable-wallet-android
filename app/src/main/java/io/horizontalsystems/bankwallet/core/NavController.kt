@@ -9,8 +9,8 @@ import io.horizontalsystems.bankwallet.R
 fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
     val navOptions = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_right)
-        .setExitAnim(R.anim.slide_to_left)
-        .setPopEnterAnim(R.anim.slide_from_left)
+        .setExitAnim(android.R.anim.fade_out)
+        .setPopEnterAnim(android.R.anim.fade_in)
         .setPopExitAnim(R.anim.slide_to_right)
         .build()
 
