@@ -78,8 +78,10 @@
     <string name="Restore_Name">Name (optional)</string>
     <string name="Restore_Key">Key</string>
     <string name="Select_Coins">Coins auswählen</string>
-    <string name="Restore_ZCash_BirthdayHeight">Geburtstagshöhe</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Wenn Sie die Blockgröße bei Kauf Ihres Wallets kennen, geben Sie diese für schnelle Synchronisierung ein.</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
+    <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <!--Market-->
