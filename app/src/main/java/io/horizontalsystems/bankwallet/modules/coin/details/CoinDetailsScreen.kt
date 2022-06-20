@@ -160,7 +160,7 @@ private fun TokenTvl(
         Text(
             text = stringResource(R.string.CoinPage_TokenTvl),
             style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.oz,
+            color = ComposeAppTheme.colors.leah,
         )
         Spacer(Modifier.weight(1f))
         HsIconButton(
@@ -227,7 +227,7 @@ private fun SecurityParameters(
         Text(
             text = stringResource(R.string.CoinPage_SecurityParams),
             style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.oz,
+            color = ComposeAppTheme.colors.leah,
         )
         Spacer(Modifier.weight(1f))
         HsIconButton(
@@ -280,7 +280,7 @@ private fun TokenLiquidity(
         Text(
             text = stringResource(R.string.CoinPage_TokenLiquidity),
             style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.oz,
+            color = ComposeAppTheme.colors.leah,
         )
         Spacer(Modifier.weight(1f))
         HsIconButton(
@@ -351,7 +351,7 @@ private fun TokenDistribution(
         Text(
             text = stringResource(R.string.CoinPage_TokenDistribution),
             style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.oz,
+            color = ComposeAppTheme.colors.leah,
         )
         Spacer(Modifier.weight(1f))
         HsIconButton(
@@ -456,7 +456,7 @@ private fun InvestorData(
         Text(
             text = stringResource(R.string.CoinPage_InvestorData),
             style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.oz,
+            color = ComposeAppTheme.colors.leah,
         )
     }
 
@@ -515,7 +515,7 @@ private fun CoinDetailsCell(title: String, value: String? = null, onClick: (() -
                 .padding(start = 8.dp),
             text = value ?: "",
             style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.oz,
+            color = ComposeAppTheme.colors.leah,
             textAlign = TextAlign.End,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
