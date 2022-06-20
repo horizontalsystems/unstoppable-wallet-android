@@ -78,8 +78,10 @@
     <string name="Restore_Name">Nombre (opcional)</string>
     <string name="Restore_Key">Clave</string>
     <string name="Select_Coins">Elegir monedas</string>
-    <string name="Restore_ZCash_BirthdayHeight">Altura de Cumpleaños</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Si conoces la altura de tu cumpleaños de la billetera introdúzcala para una rápida sincronización.</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
+    <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
     <!--Market-->
