@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
-import android.util.Log
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.MutableLiveData
@@ -70,7 +69,6 @@ class SendEvmTransactionViewModel(
     }
 
     private fun sync(state: SendEvmTransactionService.State) {
-        Log.e("SendEvmTransactionViewModel", "sync: $state")
         when (state) {
             is SendEvmTransactionService.State.Ready -> {
                 sendEnabledLiveData.postValue(true)
