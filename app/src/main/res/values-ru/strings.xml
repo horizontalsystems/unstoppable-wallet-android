@@ -78,8 +78,10 @@
     <string name="Restore_Name">Имя (опционально)</string>
     <string name="Restore_Key">Ключ</string>
     <string name="Select_Coins">Выберите Токены</string>
-    <string name="Restore_ZCash_BirthdayHeight">Блок Создания</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете дату создания вашего кошелька, укажите ее для быстрой синхронизации.</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
+    <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <!--Market-->
