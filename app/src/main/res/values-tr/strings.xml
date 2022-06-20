@@ -78,8 +78,10 @@
     <string name="Restore_Name">İsim(İsteğe bağlı)</string>
     <string name="Restore_Key">Anahtar</string>
     <string name="Select_Coins">Kripto Parayı Seç</string>
-    <string name="Restore_ZCash_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Cüzdanınızın ilk gün boyunu biliyorsanız hızlı senkronizasyon için bunu girin.</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
+    <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
     <!--Market-->
