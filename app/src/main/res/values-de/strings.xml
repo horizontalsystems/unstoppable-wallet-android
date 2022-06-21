@@ -548,6 +548,7 @@
     <string name="Settings_Language">Sprache</string>
     <string name="Settings_Theme">Design</string>
     <string name="Settings_Terms">Bedingungen</string>
+    <string name="Settings_Privacy">Privacy</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_AppStatus">App-Status</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
@@ -564,6 +565,12 @@
     <string name="SettingsAboutApp_Title">Über die App</string>
     <string name="SettingsAboutApp_Site">Webseite</string>
     <string name="SettingsAboutApp_WhatsNew">Das ist neu</string>
+    <!-- Privacy  -->
+    <string name="Privacy_Information">Unstoppable doesn\'t collect any data or use analytics tools that may expose any data about its users. The wallet is designed to ensure a high level of privacy for its users.</string>
+    <string name="Privacy_BulletedText1">User data always remains on the user\'s device.</string>
+    <string name="Privacy_BulletedText2">The wallet doesn\'t collect any data about users.</string>
+    <string name="Privacy_BulletedText3">The wallet doesn\'t share any data about users.</string>
+    <string name="Privacy_BulletedText4">There are no user accounts or databases keeping user data elsewhere.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN EINSTELLUNGEN</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
@@ -918,6 +925,7 @@
     <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">Durchschnitt 7D</string>
     <string name="Nfts_PriceType_Days_30">Durchschnitt 30D</string>
