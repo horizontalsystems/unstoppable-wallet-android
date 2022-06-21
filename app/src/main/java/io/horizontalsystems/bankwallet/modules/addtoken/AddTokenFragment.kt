@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -135,6 +136,8 @@ private fun AddTokenScreen(
                                     .padding(horizontal = 16.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
+                                Image(painter = painterResource(id = tokenInfoUiState.image), contentDescription = null)
+                                Spacer(modifier = Modifier.width(16.dp))
                                 D2(text = tokenInfoUiState.title)
                                 Spacer(modifier = Modifier.weight(1f))
                                 HsSwitch(
