@@ -548,6 +548,7 @@
     <string name="Settings_Language">언어</string>
     <string name="Settings_Theme">테마</string>
     <string name="Settings_Terms">약관</string>
+    <string name="Settings_Privacy">Privacy</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_AppStatus">앱 상태</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
@@ -564,6 +565,12 @@
     <string name="SettingsAboutApp_Title">앱 정보</string>
     <string name="SettingsAboutApp_Site">웹사이트</string>
     <string name="SettingsAboutApp_WhatsNew">새로운 기능</string>
+    <!-- Privacy  -->
+    <string name="Privacy_Information">Unstoppable doesn\'t collect any data or use analytics tools that may expose any data about its users. The wallet is designed to ensure a high level of privacy for its users.</string>
+    <string name="Privacy_BulletedText1">User data always remains on the user\'s device.</string>
+    <string name="Privacy_BulletedText2">The wallet doesn\'t collect any data about users.</string>
+    <string name="Privacy_BulletedText3">The wallet doesn\'t share any data about users.</string>
+    <string name="Privacy_BulletedText4">There are no user accounts or databases keeping user data elsewhere.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN SETTINGS</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
@@ -914,6 +921,7 @@
     <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
     <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">평균 7일</string>
     <string name="Nfts_PriceType_Days_30">평균 30일</string>
