@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.blockchainType
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
+import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -69,6 +70,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                     TokenInfoUiState(
                         tokenInfo = it,
                         title = it.coinType.blockchainType ?: "",
+                        image = getPlatformLogo(it.coinType),
                         checked = it.inWallet,
                         enabled = !it.inWallet
                     )
@@ -85,6 +87,14 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
             loading = false
             emitState()
         }
+    }
+
+    private fun getPlatformLogo(coinType: CoinType) = when (coinType) {
+        is CoinType.Erc20 -> R.drawable.logo_ethereum_24
+        is CoinType.Bep20 -> R.drawable.logo_binancesmartchain_24
+        is CoinType.Mrc20 -> R.drawable.logo_polygon_24
+        is CoinType.Bep2 -> R.drawable.logo_bep2_24
+        else -> R.drawable.ic_platform_placeholder_24
     }
 
     fun onAddClick() {
@@ -132,4 +142,10 @@ data class AddTokenUiState(
     val caution: Caution?,
 )
 
-data class TokenInfoUiState(val tokenInfo: TokenInfo, val title: String, val checked: Boolean, val enabled: Boolean)
+data class TokenInfoUiState(
+    val tokenInfo: TokenInfo,
+    val title: String,
+    val image: Int,
+    val checked: Boolean,
+    val enabled: Boolean
+)
