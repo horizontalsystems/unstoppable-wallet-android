@@ -548,6 +548,7 @@
     <string name="Settings_Language">Язык</string>
     <string name="Settings_Theme">Тема</string>
     <string name="Settings_Terms">Условия Использования</string>
+    <string name="Settings_Privacy">Privacy</string>
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_AppStatus">Статус Приложения</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
@@ -564,6 +565,12 @@
     <string name="SettingsAboutApp_Title">О приложении</string>
     <string name="SettingsAboutApp_Site">Веб-сайт</string>
     <string name="SettingsAboutApp_WhatsNew">Что Нового</string>
+    <!-- Privacy  -->
+    <string name="Privacy_Information">Unstoppable doesn\'t collect any data or use analytics tools that may expose any data about its users. The wallet is designed to ensure a high level of privacy for its users.</string>
+    <string name="Privacy_BulletedText1">User data always remains on the user\'s device.</string>
+    <string name="Privacy_BulletedText2">The wallet doesn\'t collect any data about users.</string>
+    <string name="Privacy_BulletedText3">The wallet doesn\'t share any data about users.</string>
+    <string name="Privacy_BulletedText4">There are no user accounts or databases keeping user data elsewhere.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">НАСТРОЙКИ BLOCKCHAIN</string>
     <string name="SecurityCenter_Internet">ИНТЕРНЕТ</string>
@@ -911,6 +918,7 @@
     <string name="CoinPage_DetailsActiveAddresses_Description">Количество уникальных адресов кошельков, использованных для осуществления транзакций за различные периоды.</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Получите доступ к расширенным функциям Unstoppable Кошелька.</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
     <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">7Д сред.</string>
     <string name="Nfts_PriceType_Days_30">30Д сред.</string>
