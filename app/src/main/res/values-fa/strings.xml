@@ -87,7 +87,7 @@
     <!--Market-->
     <string name="Market_Field_MarketCap">MCap</string>
     <string name="Market_Field_Volume">Vol</string>
-    <string name="Market_Field_PriceDiff">Price</string>
+    <string name="Market_Field_PriceDiff">قیمت</string>
     <string name="Market_Title">Markets</string>
     <string name="Market_Search">Search</string>
     <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
@@ -99,18 +99,18 @@
     <string name="Market_Field_LowestVolume">Lowest Volume</string>
     <string name="Market_Field_HighestPrice">Highest Price</string>
     <string name="Market_Field_LowestPrice">Lowest Price</string>
-    <string name="Market_Sort_PopupTitle">Sort by</string>
-    <string name="Market_TotalMarketCap">Total Cap</string>
+    <string name="Market_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
+    <string name="Market_TotalMarketCap">آستانه کل</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
-    <string name="Market_Volume24h">24h Volume</string>
+    <string name="Market_Volume24h">۲۴ ساعته</string>
     <string name="Market_TvlDeFi">TVL in DeFi</string>
     <string name="Market_DeFiCap">DeFi Cap</string>
-    <string name="Market_SeeAll">See All</string>
+    <string name="Market_SeeAll">همه</string>
     <string name="Market_PoweredByHorizontalApi">Powered By Horizontal API</string>
-    <string name="Market_Tab_Overview">Overview</string>
-    <string name="Market_Tab_Posts">News</string>
+    <string name="Market_Tab_Overview">نمای کلی</string>
+    <string name="Market_Tab_Posts">اخبار</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
-    <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
+    <string name="Market_Tab_Watchlist_EmptyList">فهرست تماشا شما خالی است.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
     <!--Market Overview-->
@@ -121,7 +121,7 @@
     <string name="MarketTopPlatforms_Description">Leading blockchain platforms by cumulative market of projects built on top.</string>
     <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
     <!--Market Global Metrics-->
-    <string name="MarketGlobalMetrics_Chart">Chart</string>
+    <string name="MarketGlobalMetrics_Chart">نمودار</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
     <string name="MarketGlobalMetrics_Volume">24h Volume</string>
@@ -767,7 +767,7 @@
     <string name="AddToken_Symbol">نماد</string>
     <string name="AddToken_Decimals">اعشارها</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">انواع سکه</string>
+    <string name="AddToken_CoinTypes">COIN TYPES</string>
     <string name="AddToken_AddressOrSymbol">آدرس قرارداد</string>
     <string name="AddToken_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
     <string name="AddToken_InvalidAddressError">آدرس قرارداد یا نماد BEP2 نامعتبر است</string>
