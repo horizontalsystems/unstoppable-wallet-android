@@ -767,7 +767,7 @@
     <string name="AddToken_Symbol">标志</string>
     <string name="AddToken_Decimals">小数</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">代币类型</string>
+    <string name="AddToken_CoinTypes">COIN TYPES</string>
     <string name="AddToken_AddressOrSymbol">智能合约地址</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidAddressError">找不到符号</string>
