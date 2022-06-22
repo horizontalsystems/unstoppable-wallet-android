@@ -36,7 +36,7 @@ enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle
     Mustang(R.drawable.launcher_mustang_preview, "Mustang"),
     Yak(R.drawable.launcher_yak_preview, "Yak"),
     Punk(R.drawable.launcher_punk_preview, "Punk"),
-    Ape(R.drawable.launcher_ape_preview, "Ape"),
+    Ape(R.drawable.launcher_ape_preview, "#1874"),
     HashTag1009(R.drawable.launcher_1009_preview, "#1009");
 
     override val title: TranslatableString
