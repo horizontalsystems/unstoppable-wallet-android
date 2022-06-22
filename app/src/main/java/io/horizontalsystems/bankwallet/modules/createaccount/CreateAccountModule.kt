@@ -17,10 +17,8 @@ object CreateAccountModule {
                 App.accountFactory,
                 App.wordsManager,
                 App.accountManager,
-                App.walletManager,
                 App.walletActivator,
                 PassphraseValidator(),
-                App.marketKit,
                 PredefinedBlockchainSettingsProvider(
                     App.restoreSettingsManager,
                     App.zcashBirthdayProvider
