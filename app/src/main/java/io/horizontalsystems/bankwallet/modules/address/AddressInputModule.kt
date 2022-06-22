@@ -11,6 +11,7 @@ object AddressInputModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val addressViewModel = AddressViewModel()
 
+            addressViewModel.addAddressHandler(AddressHandlerEns())
             addressViewModel.addAddressHandler(AddressHandlerUdn(coinType, coinCode))
 
             when (coinType) {
