@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
+import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -21,7 +22,8 @@ class CreateAccountService(
     private val walletManager: IWalletManager,
     private val walletActivator: WalletActivator,
     private val passphraseValidator: PassphraseValidator,
-    private val marketKit: MarketKit
+    private val marketKit: MarketKit,
+    private val predefinedBlockchainSettingsProvider: PredefinedBlockchainSettingsProvider,
 ) : Clearable {
 
     val allKinds: Array<CreateAccountModule.Kind> = CreateAccountModule.Kind.values()
@@ -56,6 +58,7 @@ class CreateAccountService(
 
         accountManager.save(account)
         activateDefaultWallets(account)
+        predefinedBlockchainSettingsProvider.prepareNew(account, CoinType.Zcash)
     }
 
     private fun activateDefaultWallets(account: Account) {
