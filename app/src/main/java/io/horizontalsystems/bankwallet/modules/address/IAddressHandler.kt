@@ -4,10 +4,32 @@ import com.unstoppabledomains.resolution.Resolution
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.CoinType
+import org.kethereum.eip137.model.ENSName
+import org.kethereum.ens.ENS
+import org.kethereum.ens.isPotentialENSDomain
+import org.kethereum.rpc.min3.getMin3RPC
 
 interface IAddressHandler {
     fun isSupported(value: String): Boolean
     fun parseAddress(value: String): Address
+}
+
+class AddressHandlerEns : IAddressHandler {
+    private val ens = ENS(getMin3RPC())
+
+    private val cache = mutableMapOf<String, Address>()
+
+    override fun isSupported(value: String): Boolean {
+        if (!ENSName(value).isPotentialENSDomain()) return false
+        val address = ens.getAddress(ENSName(value)) ?: return false
+
+        cache[value] = Address(address.hex, value)
+        return true
+    }
+
+    override fun parseAddress(value: String): Address {
+        return cache[value]!!
+    }
 }
 
 class AddressHandlerUdn(private val coinType: CoinType, private val coinCode: String) : IAddressHandler {
