@@ -12,7 +12,7 @@ class BaseCoinManager(
     private val coinManager: ICoinManager,
     private val localStorage: ILocalStorage,
 ) {
-    val platformCoins = listOf(CoinType.Bitcoin, CoinType.Ethereum)
+    val platformCoins = listOf(CoinType.Bitcoin, CoinType.Ethereum, CoinType.BinanceSmartChain)
         .mapNotNull {
             coinManager.getPlatformCoin(it)
         }
