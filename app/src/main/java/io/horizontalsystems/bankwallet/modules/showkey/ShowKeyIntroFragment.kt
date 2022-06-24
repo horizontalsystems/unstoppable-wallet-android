@@ -88,7 +88,7 @@ class ShowKeyIntroFragment : BaseFragment() {
     }
 
     private fun subscribeFragmentResults() {
-        getNavigationResult(PinModule.requestKey)?.let { bundle ->
+        getNavigationResult(PinModule.requestKey) { bundle ->
             val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
             val resultCode = bundle.getInt(PinModule.requestResult)
 
