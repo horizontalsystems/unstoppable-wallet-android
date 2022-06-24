@@ -74,11 +74,11 @@ class MainSettingsFragment : BaseFragment() {
     }
 
     private fun subscribeFragmentResult() {
-        getNavigationResult(LanguageSettingsFragment.LANGUAGE_CHANGE)?.let {
+        getNavigationResult(LanguageSettingsFragment.LANGUAGE_CHANGE) {
             viewModel.onLanguageChange()
             activity?.let { MainModule.startAsNewTask(it) }
         }
-        getNavigationResult(ThemeSwitchFragment.THEME_CHANGE)?.let {
+        getNavigationResult(ThemeSwitchFragment.THEME_CHANGE) {
             viewModel.onThemeChange()
         }
     }

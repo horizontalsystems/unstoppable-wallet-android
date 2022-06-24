@@ -105,23 +105,26 @@ class SwapApproveFragment : BaseFragment() {
             binding.amountError.text = it
         })
 
-        viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner, { sendEvmData ->
+        viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner) { sendEvmData ->
+            subscribeToApproveResult()
             findNavController().slideFromRight(
                 R.id.swapApproveConfirmationFragment,
                 SwapApproveConfirmationModule.prepareParams(sendEvmData)
             )
-        })
-
-        getNavigationResult(requestKey)?.let {
-            if (it.getBoolean(resultKey)) {
-                setNavigationResult(requestKey, bundleOf(resultKey to true))
-                findNavController().popBackStack(R.id.swapFragment, false)
-            }
         }
 
         binding.buttonProceedCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
+    }
+
+    private fun subscribeToApproveResult() {
+        getNavigationResult(requestKey) {
+            if (it.getBoolean(resultKey)) {
+                setNavigationResult(requestKey, bundleOf(resultKey to true))
+                findNavController().popBackStack(R.id.swapFragment, false)
+            }
+        }
     }
 
     private fun setButton(enabled: Boolean, onClick: () -> Unit) {

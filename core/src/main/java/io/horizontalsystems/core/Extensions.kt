@@ -40,8 +40,12 @@ fun Fragment.findNavController(): NavController {
     return NavHostFragment.findNavController(this)
 }
 
-fun Fragment.getNavigationResult(key: String = "result"): Bundle? {
-    return findNavController().currentBackStackEntry?.savedStateHandle?.remove<Bundle>(key)
+fun Fragment.getNavigationResult(key: String = "result", result: (Bundle) -> (Unit)) {
+    findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Bundle>(key)
+        ?.observe(viewLifecycleOwner) {
+            result(it)
+            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Bundle>(key)
+        }
 }
 
 fun Fragment.getNavigationLiveData(key: String = "result"): LiveData<Bundle>? {

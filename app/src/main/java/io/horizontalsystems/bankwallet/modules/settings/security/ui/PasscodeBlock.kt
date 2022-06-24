@@ -25,6 +25,7 @@ import io.horizontalsystems.pin.PinModule
 fun PasscodeBlock(
     viewModel: SecurityPasscodeSettingsViewModel,
     navController: NavController,
+    subscribeForPinResult: () -> Unit,
 ) {
 
     Spacer(Modifier.height(12.dp))
@@ -62,6 +63,7 @@ fun PasscodeBlock(
                 HsSwitch(
                     checked = viewModel.pinEnabled,
                     onCheckedChange = { checked ->
+                        subscribeForPinResult()
                         if (checked) {
                             navController.slideFromRight(
                                 R.id.pinFragment,

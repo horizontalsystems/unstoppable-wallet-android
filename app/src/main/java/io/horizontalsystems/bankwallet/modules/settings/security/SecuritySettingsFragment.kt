@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -82,16 +81,12 @@ class SecuritySettingsFragment : BaseFragment() {
                         navController = findNavController(),
                         showAppRestartAlert = { showAppRestartAlert() },
                         showNotificationsNotEnabledAlert = { showNotificationsNotEnabledAlert() },
-                        restartApp = { restartApp() }
+                        restartApp = { restartApp() },
+                        subscribeForPinResult = { subscribeFragmentResult() },
                     )
                 }
             }
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        subscribeFragmentResult()
     }
 
     private fun showAppRestartAlert() {
@@ -150,7 +145,7 @@ class SecuritySettingsFragment : BaseFragment() {
     }
 
     private fun subscribeFragmentResult() {
-        getNavigationResult(PinModule.requestKey)?.let { bundle ->
+        getNavigationResult(PinModule.requestKey) { bundle ->
             val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
             val resultCode = bundle.getInt(PinModule.requestResult)
 
@@ -174,6 +169,7 @@ private fun SecurityCenterScreen(
     showAppRestartAlert: () -> Unit,
     showNotificationsNotEnabledAlert: () -> Unit,
     restartApp: () -> Unit,
+    subscribeForPinResult: () -> Unit,
 ) {
 
     if (torViewModel.restartApp) {
@@ -202,7 +198,11 @@ private fun SecurityCenterScreen(
             ) {
 
                 item {
-                    PasscodeBlock(passcodeViewModel, navController)
+                    PasscodeBlock(
+                        passcodeViewModel,
+                        navController,
+                        subscribeForPinResult
+                    )
                 }
 
                 item {
