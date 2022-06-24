@@ -19,7 +19,7 @@ class ShowKeyService(
     init {
         if (account.type is AccountType.Mnemonic) {
             words = account.type.words
-            passphrase = account.type.passphrase ?: ""
+            passphrase = account.type.passphrase
         } else {
             words = listOf()
             passphrase = ""
@@ -34,6 +34,12 @@ class ShowKeyService(
             words,
             passphrase,
             evmBlockchainManager.getChain(EvmBlockchain.Ethereum)
-        ).toByteArray().toHexString()
+        ).toByteArray().let {
+            if (it.size > 32) {
+                it.copyOfRange(1, it.size)
+            } else {
+                it
+            }.toHexString()
+        }
 
 }
