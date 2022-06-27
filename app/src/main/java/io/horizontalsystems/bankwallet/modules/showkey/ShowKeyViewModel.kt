@@ -47,7 +47,13 @@ class ShowKeyViewModel(
             words,
             passphrase,
             evmBlockchainManager.getChain(EvmBlockchain.Ethereum)
-        ).toByteArray().toHexString()
+        ).toByteArray().let {
+            if (it.size > 32) {
+                it.copyOfRange(1, it.size)
+            } else {
+                it
+            }.toHexString()
+        }
 
     fun showKey() {
         viewState = ShowKeyModule.ViewState.Key

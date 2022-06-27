@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -28,7 +28,6 @@ import com.google.accompanist.pager.rememberPagerState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -36,12 +35,17 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
 import kotlinx.coroutines.launch
 
 class ShowKeyFragment : BaseFragment() {
+
+    private val viewModel by viewModels<ShowKeyViewModel> {
+        ShowKeyModule.Factory(arguments?.getParcelable(ShowKeyModule.ACCOUNT)!!)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,9 +58,10 @@ class ShowKeyFragment : BaseFragment() {
             )
             setContent {
                 ShowKeyIntroScreen(
-                    arguments?.getParcelable(ShowKeyModule.ACCOUNT)!!,
+                    viewModel,
                     findNavController(),
-                    { key -> showPrivateKeyCopyWarning(key) }
+                    { key -> showPrivateKeyCopyWarning(key) },
+                    { subscribeForPinResult() }
                 )
             }
         }
@@ -79,16 +84,26 @@ class ShowKeyFragment : BaseFragment() {
             }
         )
     }
+
+    private fun subscribeForPinResult() {
+        getNavigationResult(PinModule.requestKey) { bundle ->
+            val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
+            val resultCode = bundle.getInt(PinModule.requestResult)
+
+            if (resultType == PinInteractionType.UNLOCK && resultCode == PinModule.RESULT_OK) {
+                viewModel.showKey()
+            }
+        }
+    }
 }
 
 @Composable
 private fun ShowKeyIntroScreen(
-    account: Account,
+    viewModel: ShowKeyViewModel,
     navController: NavController,
     showKeyWarning: (String) -> Unit,
-    viewModel: ShowKeyViewModel = viewModel(factory = ShowKeyModule.Factory(account))
+    subscribeForPinResult: () -> Unit,
 ) {
-    SubscribeForFragmentResult(navController, viewModel)
 
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -119,6 +134,7 @@ private fun ShowKeyIntroScreen(
                     }
                     ActionButton(R.string.ShowKey_ButtonShow) {
                         if (viewModel.isPinSet) {
+                            subscribeForPinResult()
                             navController.slideFromRight(R.id.pinFragment, PinModule.forUnlock())
                         } else {
                             viewModel.showKey()
@@ -137,29 +153,6 @@ private fun ShowKeyIntroScreen(
             }
         }
     }
-}
-
-@Composable
-private fun SubscribeForFragmentResult(
-    navController: NavController,
-    viewModel: ShowKeyViewModel
-) {
-    navController.currentBackStackEntry?.savedStateHandle?.remove<Bundle>(PinModule.requestKey)
-        ?.let { bundle ->
-            val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
-            val resultCode = bundle.getInt(PinModule.requestResult)
-
-            if (resultType == PinInteractionType.UNLOCK) {
-                when (resultCode) {
-                    PinModule.RESULT_OK -> {
-                        viewModel.showKey()
-                    }
-                    PinModule.RESULT_CANCELLED -> {
-                        // on cancel unlock
-                    }
-                }
-            }
-        }
 }
 
 @OptIn(ExperimentalPagerApi::class)
