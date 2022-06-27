@@ -118,12 +118,6 @@ class OneInchFragment : SwapBaseFragment() {
 
         observeViewModel()
 
-        getNavigationResult(SwapApproveModule.requestKey)?.let {
-            if (it.getBoolean(SwapApproveModule.resultKey)) {
-                oneInchViewModel.didApprove()
-            }
-        }
-
         binding.switchButton.setOnClickListener {
             oneInchViewModel.onTapSwitch()
         }
@@ -131,6 +125,14 @@ class OneInchFragment : SwapBaseFragment() {
         binding.buttonsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
+    }
+
+    private fun subscribeToApproveResult() {
+        getNavigationResult(SwapApproveModule.requestKey) {
+            if (it.getBoolean(SwapApproveModule.resultKey)) {
+                oneInchViewModel.didApprove()
+            }
+        }
     }
 
     private fun observeViewModel() {
@@ -147,12 +149,13 @@ class OneInchFragment : SwapBaseFragment() {
             setButtons(buttons)
         })
 
-        oneInchViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
+        oneInchViewModel.openApproveLiveEvent().observe(viewLifecycleOwner) { approveData ->
+            subscribeToApproveResult()
             findNavController().slideFromBottom(
                 R.id.swapApproveFragment,
                 SwapApproveModule.prepareParams(approveData)
             )
-        })
+        }
 
         oneInchViewModel.openConfirmationLiveEvent()
             .observe(viewLifecycleOwner, { oneInchSwapParameters ->
