@@ -20,7 +20,7 @@ object AppearanceModule {
                 launchScreenService,
                 appIconService,
                 themeService,
-                App.baseCoinManager,
+                App.baseTokenManager,
                 App.balanceViewTypeManager
             ) as T
         }

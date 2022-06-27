@@ -52,6 +52,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
 import java.util.logging.Logger
 import androidx.work.Configuration as WorkConfiguration
+import io.horizontalsystems.xxxkit.MarketKit as XxxKit
 
 class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
@@ -102,13 +103,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKit
+        lateinit var xxxKit: XxxKit
         lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
         lateinit var evmBlockchainManager: EvmBlockchainManager
         lateinit var nftManager: NftManager
         lateinit var evmLabelManager: EvmLabelManager
-        lateinit var baseCoinManager: BaseCoinManager
+        lateinit var baseTokenManager: BaseTokenManager
         lateinit var balanceViewTypeManager: BalanceViewTypeManager
     }
 
@@ -143,6 +145,15 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
         marketKit.sync()
 
+        xxxKit = XxxKit.getInstance(
+            this,
+            appConfig.marketApiBaseUrl,
+            appConfig.marketApiKey,
+            cryptoCompareApiKey = appConfig.cryptoCompareApiKey,
+            defiYieldApiKey = appConfig.defiyieldProviderApiKey
+        )
+        xxxKit.sync()
+
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)
 
@@ -170,7 +181,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
         walletManager = WalletManager(accountManager, walletStorage)
-        coinManager = CoinManager(marketKit, walletManager)
+        coinManager = CoinManager(marketKit, xxxKit, walletManager)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
         walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
@@ -286,7 +297,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         wc2Service = WC2Service()
         wc2SessionManager = WC2SessionManager(accountManager, WC2SessionStorage(appDatabase), wc2Service, wc2Manager)
 
-        baseCoinManager = BaseCoinManager(coinManager, localStorage)
+        baseTokenManager = BaseTokenManager(coinManager, localStorage)
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
     }
 

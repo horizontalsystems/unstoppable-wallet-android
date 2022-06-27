@@ -33,6 +33,9 @@ val Platform.iconUrl: String
 val Coin.iconUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/$uid@3x.png"
 
+val io.horizontalsystems.xxxkit.models.Coin.iconUrl: String
+    get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/$uid@3x.png"
+
 val CoinCategory.imageUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/category-icons/$uid@3x.png"
 

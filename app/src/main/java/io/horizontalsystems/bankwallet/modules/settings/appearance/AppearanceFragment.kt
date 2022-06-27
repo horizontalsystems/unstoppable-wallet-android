@@ -188,7 +188,7 @@ private fun AppearanceScreenContent() {
             Spacer(modifier = Modifier.height(24.dp))
 
             HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
-            CellSingleLineLawrenceSection(uiState.baseCoinOptions.options) { option ->
+            CellSingleLineLawrenceSection(uiState.baseTokenOptions.options) { option ->
                 RowSelect(
                     imageContent = {
                         CoinImage(
@@ -197,9 +197,9 @@ private fun AppearanceScreenContent() {
                         )
                     },
                     text = option.coin.code,
-                    selected = option == uiState.baseCoinOptions.selected
+                    selected = option == uiState.baseTokenOptions.selected
                 ) {
-                    viewModel.onEnterBaseCoin(option)
+                    viewModel.onEnterBaseToken(option)
                 }
             }
             Spacer(modifier = Modifier.height(24.dp))

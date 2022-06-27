@@ -26,6 +26,8 @@ import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.xxxkit.models.TokenQuery
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -418,6 +420,7 @@ interface IRateAppManager {
 
 interface ICoinManager {
     fun getPlatformCoin(coinType: CoinType): PlatformCoin?
+    fun getToken(query: TokenQuery): Token?
 }
 
 interface ITermsManager {
