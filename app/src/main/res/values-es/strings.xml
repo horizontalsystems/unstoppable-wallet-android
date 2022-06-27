@@ -560,6 +560,7 @@
     <string name="Appearance_AppIcon">APP ICON</string>
     <string name="Appearance_BalanceConversion">BALANCE CONVERSION</string>
     <string name="Appearance_BalanceValue">BALANCE VALUE</string>
+    <string name="Appearance_Warning_CloseApplication">Changing icon will close application</string>
     <string name="BalanceViewType_CoinValue">Coin Value</string>
     <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">Sobre la aplicacion</string>
