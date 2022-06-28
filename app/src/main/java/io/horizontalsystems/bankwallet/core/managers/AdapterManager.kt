@@ -4,10 +4,10 @@ import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-import io.horizontalsystems.bankwallet.entities.BtcBlockchain
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.Blockchain
+import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.xxxkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -50,7 +50,7 @@ class AdapterManager(
         )
 
         for (blockchain in evmBlockchainManager.allBlockchains) {
-            evmBlockchainManager.getEvmKitManager(blockchain).evmKitUpdatedObservable
+            evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitUpdatedObservable
                 .subscribeIO {
                     handleUpdatedKit(blockchain)
                 }
@@ -60,9 +60,9 @@ class AdapterManager(
         }
     }
 
-    private fun handleUpdatedKit(blockchain: EvmBlockchain) {
+    private fun handleUpdatedKit(blockchain: Blockchain) {
         val wallets = adaptersMap.keys().toList().filter {
-            blockchain.supports(it.coinType)
+            it.token.blockchain == blockchain
         }
 
         if (wallets.isEmpty()) return
@@ -75,9 +75,9 @@ class AdapterManager(
         initAdapters(walletManager.activeWallets)
     }
 
-    private fun handleUpdatedRestoreMode(blockchain: BtcBlockchain) {
+    private fun handleUpdatedRestoreMode(blockchainType: BlockchainType) {
         val wallets = adaptersMap.keys().toList().filter {
-            blockchain.supports(it.coinType)
+            it.token.blockchainType == blockchainType
         }
 
         if (wallets.isEmpty()) return
@@ -102,7 +102,7 @@ class AdapterManager(
         }
 
         for (blockchain in evmBlockchainManager.allBlockchains) {
-            evmBlockchainManager.getEvmKitManager(blockchain).evmKitWrapper?.evmKit?.refresh()
+            evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
         }
 
         binanceKitManager.binanceKit?.refresh()
@@ -169,10 +169,10 @@ class AdapterManager(
     }
 
     override fun refreshByWallet(wallet: Wallet) {
-        val blockchain = evmBlockchainManager.getBlockchain(wallet.coinType)
+        val blockchain = evmBlockchainManager.getBlockchain(wallet.token)
 
         if (blockchain != null) {
-            evmBlockchainManager.getEvmKitManager(blockchain).evmKitWrapper?.evmKit?.refresh()
+            evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
         } else {
             adaptersMap[wallet]?.refresh()
         }
@@ -182,8 +182,8 @@ class AdapterManager(
         return adaptersMap[wallet]
     }
 
-    override fun getAdapterForPlatformCoin(platformCoin: PlatformCoin): IAdapter? {
-        return walletManager.activeWallets.firstOrNull { it.platformCoin == platformCoin }
+    override fun getAdapterForToken(token: Token): IAdapter? {
+        return walletManager.activeWallets.firstOrNull { it.token == token }
             ?.let { wallet ->
                 adaptersMap[wallet]
             }

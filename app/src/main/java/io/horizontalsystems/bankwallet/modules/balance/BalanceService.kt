@@ -1,13 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.entities.isCustom
-import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.xxxkit.models.CoinPrice
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -146,7 +142,7 @@ class BalanceService(
         isWatchAccount = accountManager.activeAccount?.isWatchAccount == true
 
         adapterRepository.setWallet(wallets)
-        xRateRepository.setCoinUids(wallets.mapNotNull { if (it.platformCoin.isCustom) null else it.coin.uid })
+        xRateRepository.setCoinUids(wallets.mapNotNull { if (it.token.isCustom) null else it.coin.uid })
         val latestRates = xRateRepository.getLatestRates()
 
         val balanceItems = wallets.map { wallet ->

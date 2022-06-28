@@ -3,19 +3,19 @@ package io.horizontalsystems.bankwallet.modules.addtoken
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.customCoinUid
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.entities.customCoinUid
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.Platform
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.MarketKit
+import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.xxxkit.models.TokenQuery
 
 class AddTokenService(
     private val coinManager: ICoinManager,
     private val blockchainServices: List<IAddTokenBlockchainService>,
     private val walletManager: IWalletManager,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
+    private val marketKit: MarketKit
 ) {
 
     suspend fun getTokens(reference: String): List<TokenInfo> {
@@ -28,11 +28,11 @@ class AddTokenService(
         val tokenInfos = mutableListOf<TokenInfo>()
         val activeWallets = walletManager.activeWallets
         validServices.forEach { service ->
-            val platformCoin = coinManager.getPlatformCoin(service.coinType(reference))
+            val token = coinManager.getToken(service.tokenQuery(reference))
 
-            if (platformCoin != null) {
-                val inWallet = activeWallets.any { it.platformCoin == platformCoin }
-                tokenInfos.add(TokenInfo.Local(platformCoin, inWallet))
+            if (token != null) {
+                val inWallet = activeWallets.any { it.token == token }
+                tokenInfos.add(TokenInfo.Local(token, inWallet))
             } else {
                 try {
                     val customCoin = service.customCoin(reference)
@@ -49,18 +49,22 @@ class AddTokenService(
 
     fun addTokens(tokens: List<TokenInfo>) {
         val account = accountManager.activeAccount ?: return
-        val platformCoins = tokens.map { tokenInfo ->
+        val platformCoins = tokens.mapNotNull { tokenInfo ->
             when (tokenInfo) {
                 is TokenInfo.Local -> {
-                    tokenInfo.platformCoin
+                    tokenInfo.token
                 }
                 is TokenInfo.Remote -> {
-                    val coinType = tokenInfo.coinType
-                    val coinUid = coinType.customCoinUid
-                    PlatformCoin(
-                        Platform(coinType, tokenInfo.decimals, coinUid),
-                        Coin(coinUid, tokenInfo.coinName, tokenInfo.coinCode)
-                    )
+                    val tokenQuery = tokenInfo.tokenQuery
+                    marketKit.blockchain(tokenQuery.blockchainType.uid)?.let { blockchain ->
+                        val coinUid = tokenQuery.customCoinUid
+                        Token(
+                            coin = io.horizontalsystems.xxxkit.models.Coin(coinUid, tokenInfo.coinName, tokenInfo.coinCode),
+                            blockchain = blockchain,
+                            type = tokenQuery.tokenType,
+                            decimals = tokenInfo.decimals
+                        )
+                    }
                 }
             }
         }
@@ -79,14 +83,14 @@ sealed class TokenInfo {
     abstract val coinName: String
     abstract val coinCode: String
     abstract val decimals: Int
-    abstract val coinType: CoinType
+    abstract val tokenQuery: TokenQuery
     abstract val inWallet: Boolean
 
-    data class Local(val platformCoin: PlatformCoin, override val inWallet: Boolean) : TokenInfo() {
-        override val coinName = platformCoin.coin.name
-        override val coinCode = platformCoin.coin.code
-        override val decimals = platformCoin.decimals
-        override val coinType = platformCoin.coinType
+    data class Local(val token: Token, override val inWallet: Boolean) : TokenInfo() {
+        override val coinName = token.coin.name
+        override val coinCode = token.coin.code
+        override val decimals = token.decimals
+        override val tokenQuery = token.tokenQuery
     }
 
     data class Remote(val customCoin: AddTokenModule.CustomCoin) : TokenInfo() {
@@ -94,6 +98,6 @@ sealed class TokenInfo {
         override val coinName = customCoin.name
         override val coinCode = customCoin.code
         override val decimals = customCoin.decimals
-        override val coinType = customCoin.type
+        override val tokenQuery = customCoin.tokenQuery
     }
 }

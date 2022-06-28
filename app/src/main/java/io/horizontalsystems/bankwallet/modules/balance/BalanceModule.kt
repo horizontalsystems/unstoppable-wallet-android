@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.xxxkit.models.CoinPrice
 
 object BalanceModule {
     class AccountsFactory : ViewModelProvider.Factory {
@@ -21,7 +21,7 @@ object BalanceModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val balanceService = BalanceService(
                 BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager),
-                BalanceXRateRepository(App.currencyManager, App.marketKit),
+                BalanceXRateRepository(App.currencyManager, App.xxxKit),
                 BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
                 App.localStorage,
                 App.connectivityManager,

@@ -2,18 +2,14 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.entities.swappable
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.xxxkit.models.CoinPrice
+import io.horizontalsystems.xxxkit.models.Token
 import java.math.BigDecimal
 
 @Immutable
@@ -98,36 +94,27 @@ class BalanceViewItemFactory {
         return DeemedValue(value, dimmed = coinPrice?.expired ?: false, visible = !showSyncing)
     }
 
-    private fun getSyncingProgress(state: AdapterState?, coinType: CoinType): SyncingProgress {
+    private fun getSyncingProgress(state: AdapterState?, blockchainType: BlockchainType): SyncingProgress {
         return when (state) {
-            is AdapterState.Syncing -> SyncingProgress(state.progress ?: getDefaultSyncingProgress(coinType), false)
+            is AdapterState.Syncing -> SyncingProgress(state.progress ?: getDefaultSyncingProgress(blockchainType), false)
             is AdapterState.SearchingTxs -> SyncingProgress(10, true)
             else -> SyncingProgress(null, false)
         }
     }
 
-    private fun getDefaultSyncingProgress(coinType: CoinType): Int {
-        return when (coinType) {
-            CoinType.Bitcoin, CoinType.Litecoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Zcash -> 10
-            CoinType.Ethereum, CoinType.BinanceSmartChain, is CoinType.Erc20, is CoinType.Bep2, is CoinType.Bep20,
-            CoinType.Polygon, is CoinType.Mrc20 -> 50
-            is CoinType.Avalanche,
-            is CoinType.Fantom,
-            is CoinType.HarmonyShard0,
-            is CoinType.HuobiToken,
-            is CoinType.Iotex,
-            is CoinType.Moonriver,
-            is CoinType.OkexChain,
-            CoinType.EthereumOptimism,
-            CoinType.EthereumArbitrumOne,
-            is CoinType.OptimismErc20,
-            is CoinType.ArbitrumOneErc20,
-            is CoinType.Solana,
-            is CoinType.Sora,
-            is CoinType.Tomochain,
-            is CoinType.Xdai,
-            is CoinType.Unsupported -> 0
-        }
+    private fun getDefaultSyncingProgress(blockchainType: BlockchainType) = when (blockchainType) {
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.Litecoin,
+        BlockchainType.Dash,
+        BlockchainType.Zcash -> 10
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.BinanceChain,
+        BlockchainType.Polygon,
+        BlockchainType.Optimism,
+        BlockchainType.ArbitrumOne -> 50
+        is BlockchainType.Unsupported -> 0
     }
 
     private fun getSyncingText(state: AdapterState?, expanded: Boolean): DeemedValue<String?> {
@@ -181,12 +168,12 @@ class BalanceViewItemFactory {
         balance: BigDecimal,
         hideBalance: Boolean,
         coinDecimals: Int,
-        platformCoin: PlatformCoin
+        token: Token
     ): DeemedValue<String> {
         val visible = !hideBalance && balance > BigDecimal.ZERO
         val deemed = state !is AdapterState.Synced
 
-        val value = App.numberFormatter.formatCoinFull(balance, platformCoin.code, coinDecimals)
+        val value = App.numberFormatter.formatCoinFull(balance, token.coin.code, coinDecimals)
 
         return DeemedValue(value, deemed, visible)
     }
@@ -243,7 +230,7 @@ class BalanceViewItemFactory {
                 coinCode = coin.code,
                 coinTitle = coin.name,
                 coinIconUrl = coin.iconUrl,
-                coinIconPlaceholder = wallet.coinType.iconPlaceholder,
+                coinIconPlaceholder = wallet.token.iconPlaceholder,
                 primaryValue = primaryValue,
                 secondaryValue = secondaryValue,
                 coinValueLocked = lockedCoinValue(
@@ -251,7 +238,7 @@ class BalanceViewItemFactory {
                     item.balanceData.locked,
                     hideBalance,
                     wallet.decimal,
-                    wallet.platformCoin
+                    wallet.token
                 ),
                 fiatValueLocked = currencyValue(
                     state,
@@ -266,13 +253,13 @@ class BalanceViewItemFactory {
                 expanded = expanded,
                 sendEnabled = state is AdapterState.Synced,
                 receiveEnabled = state != null,
-                syncingProgress = getSyncingProgress(state, wallet.coinType),
+                syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
                 syncingTextValue = getSyncingText(state, expanded),
                 syncedUntilTextValue = getSyncedUntilText(state, expanded),
                 failedIconVisible = state is AdapterState.NotSynced,
                 coinIconVisible = state !is AdapterState.NotSynced,
                 badge = wallet.badge,
-                swapVisible = item.wallet.coinType.swappable,
+                swapVisible = wallet.token.swappable,
                 swapEnabled = state is AdapterState.Synced,
                 mainNet = item.mainNet,
                 errorMessage = (state as? AdapterState.NotSynced)?.error?.message,

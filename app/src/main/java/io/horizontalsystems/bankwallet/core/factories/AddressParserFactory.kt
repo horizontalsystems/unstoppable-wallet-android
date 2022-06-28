@@ -1,40 +1,22 @@
 package io.horizontalsystems.bankwallet.core.factories
 
-import io.horizontalsystems.bankwallet.core.IAddressParser
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.xxxkit.models.BlockchainType
 
 class AddressParserFactory {
-    fun parser(coinType: CoinType): IAddressParser {
-        return when (coinType) {
-            is CoinType.Bitcoin -> AddressParser("bitcoin", true)
-            is CoinType.Litecoin -> AddressParser("litecoin", true)
-            is CoinType.BitcoinCash -> AddressParser("bitcoincash", false)
-            is CoinType.Dash -> AddressParser("dash", true)
-            is CoinType.Ethereum -> AddressParser("ethereum", true)
-            is CoinType.Erc20 -> AddressParser("", true)
-            is CoinType.BinanceSmartChain -> AddressParser("", true)
-            is CoinType.Bep20 -> AddressParser("", true)
-            is CoinType.Polygon, is CoinType.Mrc20 -> AddressParser("", true)
-            is CoinType.Bep2 -> AddressParser("binance", true)
-            is CoinType.Zcash -> AddressParser("zcash", true)
-            is CoinType.Avalanche,
-            is CoinType.Fantom,
-            is CoinType.HarmonyShard0,
-            is CoinType.HuobiToken,
-            is CoinType.Iotex,
-            is CoinType.Moonriver,
-            is CoinType.OkexChain,
-            CoinType.EthereumOptimism,
-            CoinType.EthereumArbitrumOne,
-            is CoinType.OptimismErc20,
-            is CoinType.ArbitrumOneErc20,
-            is CoinType.Solana,
-            is CoinType.Sora,
-            is CoinType.Tomochain,
-            is CoinType.Xdai,
-            is CoinType.Unsupported -> AddressParser("", false)
-        }
+    fun parser(blockchainType: BlockchainType) = when (blockchainType) {
+        BlockchainType.Bitcoin -> AddressParser("bitcoin", true)
+        BlockchainType.BitcoinCash -> AddressParser("bitcoincash", false)
+        BlockchainType.Litecoin -> AddressParser("litecoin", true)
+        BlockchainType.Dash -> AddressParser("dash", true)
+        BlockchainType.Zcash -> AddressParser("zcash", true)
+        BlockchainType.Ethereum -> AddressParser("ethereum", true)
+        BlockchainType.BinanceSmartChain -> AddressParser("", true)
+        BlockchainType.BinanceChain -> AddressParser("binance", true)
+        BlockchainType.Polygon -> AddressParser("", true)
+        BlockchainType.Optimism,
+        BlockchainType.ArbitrumOne,
+        is BlockchainType.Unsupported -> AddressParser("", false)
     }
 
 }

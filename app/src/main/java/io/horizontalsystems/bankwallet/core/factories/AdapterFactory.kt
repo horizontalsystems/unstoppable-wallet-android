@@ -65,7 +65,7 @@ class AdapterFactory(
                 DashAdapter(wallet, syncMode, testMode, backgroundManager)
             }
             BlockchainType.Zcash -> {
-                ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.coinType), testMode)
+                ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType), testMode)
             }
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
