@@ -16,11 +16,15 @@ class ExternalContractCallTransactionRecord(
     !incomingEvents.any { it.value is TransactionValue.CoinValue } && !outgoingEvents.any { it.value is TransactionValue.CoinValue }
 ) {
 
-    override val mainValue: TransactionValue? =
-        when {
-            (incomingEvents.isEmpty() && outgoingEvents.size == 1) -> outgoingEvents.first().value
-            (incomingEvents.size == 1 && outgoingEvents.isEmpty()) -> incomingEvents.first().value
-            else -> null
+    override val mainValue: TransactionValue?
+        get() {
+            val (incomingValues, outgoingValues) = combined(incomingEvents, outgoingEvents)
+
+            return when {
+                (incomingValues.isEmpty() && outgoingValues.size == 1) -> outgoingValues.first()
+                (incomingValues.size == 1 && outgoingValues.isEmpty()) -> incomingValues.first()
+                else -> null
+            }
         }
 
 }
