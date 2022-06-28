@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRe
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
 import io.horizontalsystems.marketkit.models.PlatformCoin
+import java.math.BigDecimal
 
 open class EvmTransactionRecord(transaction: Transaction, baseCoin: PlatformCoin, source: TransactionSource, val foreignTransaction: Boolean = false, spam: Boolean = false) :
     TransactionRecord(
@@ -37,6 +38,49 @@ open class EvmTransactionRecord(transaction: Transaction, baseCoin: PlatformCoin
         } else {
             null
         }
+    }
+
+    private fun sameType(value: TransactionValue, value2: TransactionValue): Boolean =
+        when {
+            value is TransactionValue.CoinValue && value2 is TransactionValue.CoinValue ->
+                value.platformCoin == value2.platformCoin
+            value is TransactionValue.TokenValue && value2 is TransactionValue.TokenValue ->
+                value.tokenName == value.tokenName && value.tokenCode == value2.tokenCode && value.tokenDecimals == value2.tokenDecimals
+            else ->
+                false
+        }
+
+    fun combined(incomingEvents: List<TransferEvent>, outgoingEvents: List<TransferEvent>): Pair<List<TransactionValue>, List<TransactionValue>> {
+        val values = (incomingEvents + outgoingEvents).map { it.value }
+        val resultIncoming: MutableList<TransactionValue> = mutableListOf()
+        val resultOutgoing: MutableList<TransactionValue> = mutableListOf()
+
+        for (value in values) {
+            if ((resultIncoming + resultOutgoing).any { sameType(value, it) }) {
+                continue
+            }
+
+            val sameTypeValues = values.filter { sameType(value, it) }
+            val totalValue = sameTypeValues.map { it.decimalValue ?: BigDecimal.ZERO }.reduce { sum, t -> sum + t }
+            val resultValue = when (value) {
+                is TransactionValue.CoinValue -> TransactionValue.CoinValue(value.platformCoin, totalValue)
+                is TransactionValue.TokenValue -> TransactionValue.TokenValue(
+                        tokenName = value.tokenName,
+                        tokenCode = value.tokenCode,
+                        tokenDecimals = value.tokenDecimals,
+                        value = totalValue
+                )
+                is TransactionValue.RawValue -> value
+            }
+
+            if (totalValue > BigDecimal.ZERO) {
+                resultIncoming.add(resultValue)
+            } else {
+                resultOutgoing.add(resultValue)
+            }
+        }
+
+        return Pair(resultIncoming, resultOutgoing)
     }
 
 }

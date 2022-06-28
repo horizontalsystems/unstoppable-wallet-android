@@ -15,11 +15,15 @@ class ContractCallTransactionRecord(
     val outgoingEvents: List<TransferEvent>
 ) : EvmTransactionRecord(transaction, baseCoin, source) {
 
-    override val mainValue: TransactionValue? =
-        when {
-            (incomingEvents.isEmpty() && outgoingEvents.size == 1) -> outgoingEvents.first().value
-            (incomingEvents.size == 1 && outgoingEvents.isEmpty()) -> incomingEvents.first().value
-            else -> null
+    override val mainValue: TransactionValue?
+        get() {
+            val (incomingValues, outgoingValues) = combined(incomingEvents, outgoingEvents)
+
+            return when {
+                (incomingValues.isEmpty() && outgoingValues.size == 1) -> outgoingValues.first()
+                (incomingValues.size == 1 && outgoingValues.isEmpty()) -> incomingValues.first()
+                else -> null
+            }
         }
 
 }
