@@ -3,17 +3,17 @@ package io.horizontalsystems.bankwallet.entities.transactionrecords.evm
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.Token
 
 class ContractCallTransactionRecord(
     transaction: Transaction,
-    baseCoin: PlatformCoin,
+    baseToken: Token,
     source: TransactionSource,
     val contractAddress: String,
     val method: String?,
     val incomingEvents: List<TransferEvent>,
     val outgoingEvents: List<TransferEvent>
-) : EvmTransactionRecord(transaction, baseCoin, source) {
+) : EvmTransactionRecord(transaction, baseToken, source) {
 
     override val mainValue: TransactionValue? =
         when {

@@ -5,9 +5,9 @@ import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.Token
 
-open class EvmTransactionRecord(transaction: Transaction, baseCoin: PlatformCoin, source: TransactionSource, val foreignTransaction: Boolean = false, spam: Boolean = false) :
+open class EvmTransactionRecord(transaction: Transaction, baseToken: Token, source: TransactionSource, val foreignTransaction: Boolean = false, spam: Boolean = false) :
     TransactionRecord(
         uid = transaction.hashString,
         transactionHash = transaction.hashString,
@@ -31,9 +31,9 @@ open class EvmTransactionRecord(transaction: Transaction, baseCoin: PlatformCoin
         fee = if (feeAmount != null && gasPrice != null) {
             val feeDecimal = feeAmount.toBigDecimal()
                 .multiply(gasPrice.toBigDecimal())
-                .movePointLeft(baseCoin.decimals).stripTrailingZeros()
+                .movePointLeft(baseToken.decimals).stripTrailingZeros()
 
-            TransactionValue.CoinValue(baseCoin, feeDecimal)
+            TransactionValue.CoinValue(baseToken, feeDecimal)
         } else {
             null
         }
