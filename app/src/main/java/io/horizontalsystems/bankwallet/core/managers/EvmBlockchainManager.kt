@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.ethereumkit.models.Chain
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.MarketKit
+import io.horizontalsystems.xxxkit.models.*
 
 class EvmBlockchainManager(
     private val backgroundManager: BackgroundManager,
@@ -14,55 +12,63 @@ class EvmBlockchainManager(
     private val marketKit: MarketKit,
     private val accountManagerFactory: EvmAccountManagerFactory
 ) {
-    private var evmKitManagersMap: MutableMap<EvmBlockchain, Pair<EvmKitManager, EvmAccountManager>> = mutableMapOf()
+    private val evmKitManagersMap = mutableMapOf<BlockchainType, Pair<EvmKitManager, EvmAccountManager>>()
+    private val blockchainTypes = listOf(
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Polygon,
+    )
 
-    private fun getEvmKitManagers(blockchain: EvmBlockchain): Pair<EvmKitManager, EvmAccountManager> {
-        val evmKitManagers = evmKitManagersMap[blockchain]
+    val allBlockchains = marketKit.blockchains(blockchainTypes.map { it.uid })
+
+    private fun getEvmKitManagers(blockchainType: BlockchainType): Pair<EvmKitManager, EvmAccountManager> {
+        val evmKitManagers = evmKitManagersMap[blockchainType]
 
         evmKitManagers?.let {
             return it
         }
 
-        val evmKitManager = EvmKitManager(getChain(blockchain), backgroundManager, syncSourceManager)
-        val evmAccountManager = accountManagerFactory.evmAccountManager(blockchain, evmKitManager)
+        val evmKitManager = EvmKitManager(getChain(blockchainType), backgroundManager, syncSourceManager)
+        val evmAccountManager = accountManagerFactory.evmAccountManager(blockchainType, evmKitManager)
 
         val pair = Pair(evmKitManager, evmAccountManager)
 
-        evmKitManagersMap[blockchain] = pair
+        evmKitManagersMap[blockchainType] = pair
 
         return pair
     }
 
-    fun getChain(blockchain: EvmBlockchain) =
-        when (blockchain) {
-            EvmBlockchain.Ethereum -> Chain.Ethereum
-            EvmBlockchain.BinanceSmartChain -> Chain.BinanceSmartChain
-            EvmBlockchain.Polygon -> Chain.Polygon
-            EvmBlockchain.Optimism -> Chain.Optimism
-            EvmBlockchain.ArbitrumOne -> Chain.ArbitrumOne
-        }
+    fun getChain(blockchainType: BlockchainType) = when (blockchainType) {
+        BlockchainType.Ethereum -> Chain.Ethereum
+        BlockchainType.BinanceSmartChain -> Chain.BinanceSmartChain
+        BlockchainType.Polygon -> Chain.Polygon
+        BlockchainType.Optimism -> Chain.Optimism
+        BlockchainType.ArbitrumOne -> Chain.ArbitrumOne
+        else -> throw IllegalArgumentException("Unsupported blockchain type $blockchainType")
+    }
 
-    fun getBlockchain(chainId: Int): EvmBlockchain? =
-        allBlockchains.firstOrNull { getChain(it).id == chainId }
+    fun getBlockchain(chainId: Int): Blockchain? =
+        allBlockchains.firstOrNull { getChain(it.type).id == chainId }
 
-    fun getBlockchain(coinType: CoinType): EvmBlockchain? =
-        allBlockchains.firstOrNull { it.supports(coinType) }
+    fun getBlockchain(token: Token): Blockchain? =
+        allBlockchains.firstOrNull { token.blockchain == it }
 
-    fun getEvmKitManager(blockchain: EvmBlockchain): EvmKitManager =
-        getEvmKitManagers(blockchain).first
+    fun getBlockchain(blockchainType: BlockchainType): Blockchain? =
+        allBlockchains.firstOrNull { it.type == blockchainType }
 
-    fun getEvmAccountManager(blockchain: EvmBlockchain): EvmAccountManager =
-        getEvmKitManagers(blockchain).second
+    fun getEvmKitManager(blockchainType: BlockchainType): EvmKitManager =
+        getEvmKitManagers(blockchainType).first
 
-    fun getBasePlatformCoin(blockchain: EvmBlockchain): PlatformCoin? =
-        marketKit.platformCoin(blockchain.baseCoinType)
+    fun getEvmAccountManager(blockchainType: BlockchainType): EvmAccountManager =
+        getEvmKitManagers(blockchainType).second
 
-    val allBlockchains: List<EvmBlockchain> = listOf(
-        EvmBlockchain.Ethereum,
-        EvmBlockchain.BinanceSmartChain,
-        EvmBlockchain.Polygon,
-//        EvmBlockchain.Optimism,
-//        EvmBlockchain.ArbitrumOne,
+    fun getBaseToken(blockchainType: BlockchainType): Token? =
+        marketKit.token(TokenQuery(blockchainType, TokenType.Native))
+
+    val allBlockchainTypes = listOf(
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Polygon,
     )
 
 }

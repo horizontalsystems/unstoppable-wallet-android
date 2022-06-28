@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
+import io.horizontalsystems.bankwallet.entities.BtcBlockchain
+import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
+import io.horizontalsystems.xxxkit.models.BlockchainType
 
 class BlockchainSettingsStorage(appDatabase: AppDatabase) {
 
@@ -45,14 +49,14 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         )
     }
 
-    fun evmSyncSourceName(evmBlockchain: EvmBlockchain): String? {
-        return dao.getBlockchainSetting(evmBlockchain.uid, keyEvmSyncSource)?.value
+    fun evmSyncSourceName(blockchainType: BlockchainType): String? {
+        return dao.getBlockchainSetting(blockchainType.uid, keyEvmSyncSource)?.value
     }
 
-    fun save(evmSyncSourceName: String, evmBlockchain: EvmBlockchain) {
+    fun save(evmSyncSourceName: String, blockchainType: BlockchainType) {
         dao.insert(
             BlockchainSettingRecord(
-                blockchainUid = evmBlockchain.uid,
+                blockchainUid = blockchainType.uid,
                 key = keyEvmSyncSource,
                 value = evmSyncSourceName
             )

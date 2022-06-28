@@ -26,7 +26,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bitcoincore.extensions.toReversedHex
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -190,7 +190,7 @@ class ZcashAdapter(
 
     override fun getTransactionsAsync(
         from: TransactionRecord?,
-        coin: PlatformCoin?,
+        token: Token?,
         limit: Int,
         transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
@@ -207,7 +207,7 @@ class ZcashAdapter(
             }
     }
 
-    override fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    override fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
         return transactionsProvider.getNewTransactionsFlowable(transactionType).map { transactions ->
             transactions.map { getTransactionRecord(it) }
         }
@@ -332,7 +332,7 @@ class ZcashAdapter(
 
         return if (transaction.isIncoming) {
             BitcoinIncomingTransactionRecord(
-                coin = wallet.platformCoin,
+                token = wallet.token,
                 uid = transactionHashHex,
                 transactionHash = transactionHashHex,
                 transactionIndex = transaction.transactionIndex,
@@ -351,7 +351,7 @@ class ZcashAdapter(
             )
         } else {
             BitcoinOutgoingTransactionRecord(
-                coin = wallet.platformCoin,
+                token = wallet.token,
                 uid = transactionHashHex,
                 transactionHash = transactionHashHex,
                 transactionIndex = transaction.transactionIndex,

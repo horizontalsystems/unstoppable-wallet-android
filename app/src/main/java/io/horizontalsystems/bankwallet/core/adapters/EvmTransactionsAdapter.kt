@@ -14,14 +14,14 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionTag
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.xxxkit.models.TokenType
 import io.reactivex.Flowable
 import io.reactivex.Single
 
 class EvmTransactionsAdapter(
     val evmKitWrapper: EvmKitWrapper,
-    baseCoin: PlatformCoin,
+    baseToken: Token,
     coinManager: ICoinManager,
     source: TransactionSource,
     private val evmTransactionSource: io.horizontalsystems.ethereumkit.models.TransactionSource,
@@ -29,7 +29,7 @@ class EvmTransactionsAdapter(
 ) : ITransactionsAdapter {
 
     private val evmKit = evmKitWrapper.evmKit
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, baseCoin, evmLabelManager)
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, baseToken, evmLabelManager)
 
     override val explorerTitle: String
         get() = evmTransactionSource.name
@@ -51,12 +51,12 @@ class EvmTransactionsAdapter(
 
     override fun getTransactionsAsync(
         from: TransactionRecord?,
-        coin: PlatformCoin?,
+        token: Token?,
         limit: Int,
         transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
         return evmKit.getFullTransactionsAsync(
-            getFilters(coin, transactionType),
+            getFilters(token, transactionType),
             from?.transactionHash?.hexStringToByteArray(),
             limit
         ).map {
@@ -65,10 +65,10 @@ class EvmTransactionsAdapter(
     }
 
     override fun getTransactionRecordsFlowable(
-        coin: PlatformCoin?,
+        token: Token?,
         transactionType: FilterTransactionType
     ): Flowable<List<TransactionRecord>> {
-        return evmKit.getFullTransactionsFlowable(getFilters(coin, transactionType)).map {
+        return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType)).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
         }
     }
@@ -80,29 +80,25 @@ class EvmTransactionsAdapter(
             is EthereumKit.SyncState.Syncing -> AdapterState.Syncing()
         }
 
-    private fun coinTagName(coin: PlatformCoin) = when (val type = coin.coinType) {
-        CoinType.Ethereum, CoinType.BinanceSmartChain, CoinType.Polygon, CoinType.EthereumOptimism, CoinType.EthereumArbitrumOne -> TransactionTag.EVM_COIN
-        is CoinType.Erc20 -> type.address
-        is CoinType.Bep20 -> type.address
-        is CoinType.Mrc20 -> type.address
-        is CoinType.OptimismErc20 -> type.address
-        is CoinType.ArbitrumOneErc20 -> type.address
-        else -> throw IllegalArgumentException()
+    private fun coinTagName(token: Token) = when (val type = token.type) {
+        TokenType.Native -> TransactionTag.EVM_COIN
+        is TokenType.Eip20 -> type.address
+        else -> ""
     }
 
-    private fun getFilters(coin: PlatformCoin?, filter: FilterTransactionType): List<List<String>> {
-        val filterCoin = coin?.let {
+    private fun getFilters(token: Token?, filter: FilterTransactionType): List<List<String>> {
+        val filterCoin = token?.let {
             coinTagName(it)
         }
 
         val filterTag = when (filter) {
             FilterTransactionType.All -> null
             FilterTransactionType.Incoming -> when {
-                coin != null -> TransactionTag.eip20Incoming(coinTagName(coin))
+                token != null -> TransactionTag.eip20Incoming(coinTagName(token))
                 else -> TransactionTag.INCOMING
             }
             FilterTransactionType.Outgoing -> when {
-                coin != null -> TransactionTag.eip20Outgoing(coinTagName(coin))
+                token != null -> TransactionTag.eip20Outgoing(coinTagName(token))
                 else -> TransactionTag.OUTGOING
             }
             FilterTransactionType.Swap -> TransactionTag.SWAP

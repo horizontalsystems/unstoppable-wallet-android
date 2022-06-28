@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -15,6 +14,7 @@ import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.*
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.uniswapkit.UniswapKit
+import io.horizontalsystems.xxxkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -42,8 +42,8 @@ class EvmKitManager(
             }
     }
 
-    private fun handleUpdateNetwork(blockchain: EvmBlockchain) {
-        if (blockchain != evmKitWrapper?.blockchain) return
+    private fun handleUpdateNetwork(blockchainType: BlockchainType) {
+        if (blockchainType != evmKitWrapper?.blockchainType) return
 
         stopEvmKit()
 
@@ -72,7 +72,7 @@ class EvmKitManager(
         get() = evmKitWrapper?.evmKit?.statusInfo()
 
     @Synchronized
-    fun getEvmKitWrapper(account: Account, blockchain: EvmBlockchain): EvmKitWrapper {
+    fun getEvmKitWrapper(account: Account, blockchainType: BlockchainType): EvmKitWrapper {
         if (this.evmKitWrapper != null && currentAccount != account) {
             stopEvmKit()
         }
@@ -81,10 +81,10 @@ class EvmKitManager(
             val accountType = account.type
             this.evmKitWrapper = when (accountType) {
                 is AccountType.Mnemonic -> {
-                    createKitInstance(accountType, account, blockchain)
+                    createKitInstance(accountType, account, blockchainType)
                 }
                 is AccountType.Address -> {
-                    createKitInstance(accountType, account, blockchain)
+                    createKitInstance(accountType, account, blockchainType)
                 }
                 else -> throw UnsupportedAccountException()
             }
@@ -99,9 +99,9 @@ class EvmKitManager(
     private fun createKitInstance(
         accountType: AccountType.Mnemonic,
         account: Account,
-        blockchain: EvmBlockchain
+        blockchainType: BlockchainType
     ): EvmKitWrapper {
-        val syncSource = syncSourceManager.getSyncSource(blockchain)
+        val syncSource = syncSourceManager.getSyncSource(blockchainType)
         val seed = accountType.seed
         val address = Signer.address(seed, chain)
         val signer = Signer.getInstance(seed, chain)
@@ -123,15 +123,15 @@ class EvmKitManager(
 
         kit.start()
 
-        return EvmKitWrapper(kit, blockchain, signer)
+        return EvmKitWrapper(kit, blockchainType, signer)
     }
 
     private fun createKitInstance(
         accountType: AccountType.Address,
         account: Account,
-        blockchain: EvmBlockchain
+        blockchainType: BlockchainType
     ): EvmKitWrapper {
-        val syncSource = syncSourceManager.getSyncSource(blockchain)
+        val syncSource = syncSourceManager.getSyncSource(blockchainType)
         val address = accountType.address
 
         val kit = EthereumKit.getInstance(
@@ -151,7 +151,7 @@ class EvmKitManager(
 
         kit.start()
 
-        return EvmKitWrapper(kit, blockchain, null)
+        return EvmKitWrapper(kit, blockchainType, null)
     }
 
     @Synchronized
@@ -192,7 +192,7 @@ val RpcSource.urls: List<URL>
         is RpcSource.Http -> urls
     }
 
-class EvmKitWrapper(val evmKit: EthereumKit, val blockchain: EvmBlockchain, val signer: Signer?) {
+class EvmKitWrapper(val evmKit: EthereumKit, val blockchainType: BlockchainType, val signer: Signer?) {
 
     fun sendSingle(
         transactionData: TransactionData,

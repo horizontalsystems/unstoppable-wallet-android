@@ -2,12 +2,11 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.IWalletStorage
+import io.horizontalsystems.bankwallet.core.customCoinUid
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.Platform
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.MarketKit
+import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.xxxkit.models.TokenQuery
 
 class WalletStorage(
     private val marketKit: MarketKit,
@@ -17,28 +16,35 @@ class WalletStorage(
     override fun wallets(account: Account): List<Wallet> {
         val enabledWallets = storage.enabledWallets(account.id)
 
-        val coinTypeIds = enabledWallets.map { it.coinId }
-        val platformCoins = marketKit.platformCoinsByCoinTypeIds(coinTypeIds)
+        val queries = enabledWallets.mapNotNull { TokenQuery.fromId(it.tokenQueryId) }
+        val tokens = marketKit.tokens(queries)
+
+        val blockchainUids = queries.map { it.blockchainType.uid }
+        val blockchains = marketKit.blockchains(blockchainUids)
 
         return enabledWallets.mapNotNull { enabledWallet ->
-            val coinSettings = CoinSettings(enabledWallet.coinSettingsId)
+            val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
 
-            platformCoins.find { it.coinType.id == enabledWallet.coinId }?.let { platformCoin ->
-                val configuredPlatformCoin = ConfiguredPlatformCoin(platformCoin, coinSettings)
-                return@mapNotNull Wallet(configuredPlatformCoin, account)
+            val coinSettings = CoinSettings(enabledWallet.coinSettingsId)
+            tokens.find { it.tokenQuery == tokenQuery }?.let { token ->
+                val configuredToken = ConfiguredToken(token, coinSettings)
+                return@mapNotNull Wallet(configuredToken, account)
             }
 
             if (enabledWallet.coinName != null && enabledWallet.coinCode != null && enabledWallet.coinDecimals != null) {
-                val coinType = CoinType.fromId(enabledWallet.coinId)
-                val coinUid = coinType.customCoinUid
-                val platformCoin = PlatformCoin(
-                    platform = Platform(coinType, enabledWallet.coinDecimals, coinUid),
-                    coin = Coin(coinUid, enabledWallet.coinName, enabledWallet.coinCode)
+                val coinUid = tokenQuery.customCoinUid
+                val blockchain = blockchains.first { it.uid == tokenQuery.blockchainType.uid }
+
+                val token = Token(
+                    coin = io.horizontalsystems.xxxkit.models.Coin(coinUid, enabledWallet.coinName, enabledWallet.coinCode),
+                    blockchain = blockchain,
+                    type = tokenQuery.tokenType,
+                    decimals = enabledWallet.coinDecimals
                 )
 
-                val configuredPlatformCoin = ConfiguredPlatformCoin(platformCoin, coinSettings)
+                val configuredToken = ConfiguredToken(token, coinSettings)
 
-                Wallet(configuredPlatformCoin, account)
+                Wallet(configuredToken, account)
             } else {
                 null
             }
@@ -62,23 +68,19 @@ class WalletStorage(
         storage.delete(wallets.map { enabledWallet(it) })
     }
 
-    override fun isEnabled(accountId: String, coinId: String): Boolean {
-        return storage.isEnabled(accountId, coinId)
-    }
-
     override fun clear() {
         storage.deleteAll()
     }
 
     private fun enabledWallet(wallet: Wallet, index: Int? = null): EnabledWallet {
         return EnabledWallet(
-            wallet.platform.coinType.id,
+            wallet.token.tokenQuery.id,
             wallet.coinSettings.id,
             wallet.account.id,
             index,
             wallet.coin.name,
             wallet.coin.code,
-            wallet.platform.decimals
+            wallet.decimal
         )
     }
 }

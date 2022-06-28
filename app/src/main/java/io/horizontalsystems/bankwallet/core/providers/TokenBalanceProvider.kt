@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.APIClient
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
+import io.horizontalsystems.xxxkit.models.BlockchainType
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -17,13 +17,13 @@ class TokenBalanceProvider {
     private val balanceThreshold = BigDecimal(BigInteger.ONE, 8)
     private val usdBalanceThreshold = BigDecimal(BigInteger.ONE)
 
-    suspend fun addresses(address: String, evmBlockchain: EvmBlockchain): AddressInfo {
-        val response = apiService.addresses(address, chain(evmBlockchain))
+    suspend fun addresses(address: String, blockchainType: BlockchainType): AddressInfo {
+        val response = apiService.addresses(address, chain(blockchainType))
         return addressInfo(response)
     }
 
-    suspend fun blockNumber(evmBlockchain: EvmBlockchain): Long {
-        return apiService.chain(chain(evmBlockchain)).block_number
+    suspend fun blockNumber(blockchainType: BlockchainType): Long {
+        return apiService.chain(chain(blockchainType)).block_number
     }
 
     private fun addressInfo(response: AddressesResponse): AddressInfo {
@@ -40,12 +40,13 @@ class TokenBalanceProvider {
         return AddressInfo(response.block_number, addresses)
     }
 
-    private fun chain(blockchain: EvmBlockchain) = when (blockchain) {
-        EvmBlockchain.ArbitrumOne -> "arbitrum-one"
-        EvmBlockchain.BinanceSmartChain -> "bsc"
-        EvmBlockchain.Ethereum -> "ethereum"
-        EvmBlockchain.Optimism -> "optimism"
-        EvmBlockchain.Polygon -> "matic"
+    private fun chain(blockchainType: BlockchainType) = when (blockchainType) {
+        BlockchainType.ArbitrumOne -> "arbitrum-one"
+        BlockchainType.BinanceSmartChain -> "bsc"
+        BlockchainType.Ethereum -> "ethereum"
+        BlockchainType.Optimism -> "optimism"
+        BlockchainType.Polygon -> "matic"
+        else -> throw IllegalArgumentException("Unsupported blockchain type $blockchainType")
     }
 
     data class AddressInfo(

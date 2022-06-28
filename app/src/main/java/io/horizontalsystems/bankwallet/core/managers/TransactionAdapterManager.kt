@@ -47,7 +47,7 @@ class TransactionAdapterManager(
             if (txAdapter == null) {
                 txAdapter = when (source.blockchain) {
                     is TransactionSource.Blockchain.Evm -> {
-                        adapterFactory.evmTransactionsAdapter(wallet.transactionSource, source.blockchain.evmBlockchain)
+                        adapterFactory.evmTransactionsAdapter(wallet.transactionSource, source.blockchain.blockchainType)
                     }
                     else -> adapter as? ITransactionsAdapter
                 }

@@ -7,16 +7,17 @@ import io.horizontalsystems.bankwallet.core.storage.EvmAccountStateDao
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.EvmAccountState
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.erc20kit.events.TransferEventInstance
 import io.horizontalsystems.ethereumkit.decorations.IncomingDecoration
 import io.horizontalsystems.ethereumkit.decorations.UnknownTransactionDecoration
 import io.horizontalsystems.ethereumkit.models.FullTransaction
-import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapDecoration
 import io.horizontalsystems.uniswapkit.decorations.SwapDecoration
+import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.xxxkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +27,7 @@ import java.util.concurrent.Executors
 import kotlin.math.max
 
 class EvmAccountManager(
-    private val blockchain: EvmBlockchain,
+    private val blockchainType: BlockchainType,
     private val accountManager: IAccountManager,
     private val evmKitManager: EvmKitManager,
     private val provider: TokenBalanceProvider,
@@ -78,13 +79,16 @@ class EvmAccountManager(
         if (syncState == null) {
             // blockchain is enabled after restore
 
-            evmAccountStateDao.insert(EvmAccountState(account.id, chainId, provider.blockNumber(blockchain)))
+            evmAccountStateDao.insert(EvmAccountState(account.id, chainId, provider.blockNumber(blockchainType)))
         } else if (syncState.transactionsSyncedBlockNumber == 0L) {
             // blockchain is enabled during restore or 'watch address'
 
-            val addressInfo = provider.addresses(evmKitWrapper.evmKit.receiveAddress.hex, blockchain)
-            val coinTypes = addressInfo.addresses.map { blockchain.getEvm20CoinType(it) }
-            walletActivator.activateWallets(account, coinTypes)
+            val addressInfo = provider.addresses(evmKitWrapper.evmKit.receiveAddress.hex, blockchainType)
+            val tokenTypes = addressInfo.addresses.map { TokenType.Eip20(it) }
+            if (tokenTypes.isEmpty()) return
+
+            val tokenQueries = tokenTypes.map { TokenQuery(blockchainType, it) }
+            walletActivator.activateWallets(account, tokenQueries)
 
             evmAccountStateDao.insert(EvmAccountState(account.id, chainId, addressInfo.blockNumber))
         }
@@ -106,7 +110,7 @@ class EvmAccountManager(
         val lastBlockNumber =
             evmAccountStateDao.get(account.id, evmKitManager.chain.id)?.transactionsSyncedBlockNumber ?: 0
 
-        val coinTypes = mutableListOf<CoinType>()
+        val tokenTypes = mutableListOf<TokenType>()
         var maxBlockNumber = 0L
 
         for (fullTransaction in fullTransactions) {
@@ -120,40 +124,40 @@ class EvmAccountManager(
 
             when (decoration) {
                 is IncomingDecoration -> {
-                    coinTypes.add(blockchain.baseCoinType)
+                    tokenTypes.add(TokenType.Native)
                 }
 
                 is SwapDecoration -> {
                     val tokenOut = decoration.tokenOut
                     if (tokenOut is SwapDecoration.Token.Eip20Coin) {
-                        coinTypes.add(blockchain.getEvm20CoinType(tokenOut.address.hex))
+                        tokenTypes.add(TokenType.Eip20(tokenOut.address.hex))
                     }
                 }
 
                 is OneInchSwapDecoration -> {
                     val tokenOut = decoration.tokenOut
                     if (tokenOut is OneInchDecoration.Token.Eip20Coin) {
-                        coinTypes.add(blockchain.getEvm20CoinType(tokenOut.address.hex))
+                        tokenTypes.add(TokenType.Eip20(tokenOut.address.hex))
                     }
                 }
 
                 is OneInchUnoswapDecoration -> {
                     val tokenOut = decoration.tokenOut
                     if (tokenOut is OneInchDecoration.Token.Eip20Coin) {
-                        coinTypes.add(blockchain.getEvm20CoinType(tokenOut.address.hex))
+                        tokenTypes.add(TokenType.Eip20(tokenOut.address.hex))
                     }
                 }
 
                 is UnknownTransactionDecoration -> {
                     if (decoration.internalTransactions.any { it.to == address }) {
-                        coinTypes.add(blockchain.baseCoinType)
+                        tokenTypes.add(TokenType.Native)
                     }
 
                     for (eventInstance in decoration.eventInstances) {
                         if (eventInstance !is TransferEventInstance) continue
 
                         if (eventInstance.to == address) {
-                            coinTypes.add(blockchain.getEvm20CoinType(eventInstance.contractAddress.hex))
+                            tokenTypes.add(TokenType.Eip20(eventInstance.contractAddress.hex))
                         }
                     }
                 }
@@ -164,7 +168,10 @@ class EvmAccountManager(
             evmAccountStateDao.insert(EvmAccountState(account.id, evmKitManager.chain.id, maxBlockNumber))
         }
 
-        walletActivator.activateWallets(account, coinTypes)
+        if (tokenTypes.isEmpty()) return
+        val tokenQueries = tokenTypes.map { TokenQuery(blockchainType, it) }
+
+        walletActivator.activateWallets(account, tokenQueries)
     }
 
 

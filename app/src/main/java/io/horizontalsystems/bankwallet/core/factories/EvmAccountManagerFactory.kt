@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.managers.EvmKitManager
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.providers.TokenBalanceProvider
 import io.horizontalsystems.bankwallet.core.storage.EvmAccountStateDao
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
+import io.horizontalsystems.xxxkit.models.BlockchainType
 
 class EvmAccountManagerFactory(
     private val accountManager: IAccountManager,
@@ -15,9 +15,9 @@ class EvmAccountManagerFactory(
     private val evmAccountStateDao: EvmAccountStateDao
 ) {
 
-    fun evmAccountManager(blockchain: EvmBlockchain, evmKitManager: EvmKitManager) =
+    fun evmAccountManager(blockchainType: BlockchainType, evmKitManager: EvmKitManager) =
         EvmAccountManager(
-            blockchain,
+            blockchainType,
             accountManager,
             evmKitManager,
             provider,
