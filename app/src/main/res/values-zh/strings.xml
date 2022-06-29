@@ -725,6 +725,7 @@
     <string name="ShowKey_ButtonClose">关闭</string>
     <string name="ShowKey_TabMnemonicPhrase">恢复码</string>
     <string name="ShowKey_TabPrivateKey">私钥</string>
+    <string name="ShowKey_TabPublicKeys">Public Keys</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">警告</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">私钥复制风险</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">作为一项安全措施，我们建议不要复制私钥。</string>
