@@ -724,6 +724,7 @@
     <string name="ShowKey_ButtonClose">Fermer</string>
     <string name="ShowKey_TabMnemonicPhrase">Phrase de réinitialisation</string>
     <string name="ShowKey_TabPrivateKey">Clé privée</string>
+    <string name="ShowKey_TabPublicKeys">Public Keys</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Attention</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risque de copie de clé privée</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Pour des raisons de sécurité, nous recommandons de ne pas utiliser l\'action de copie sur la clé privée.</string>
