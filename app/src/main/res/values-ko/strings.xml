@@ -724,6 +724,7 @@
     <string name="ShowKey_ButtonClose">가까운, 닫힌</string>
     <string name="ShowKey_TabMnemonicPhrase">복구 문구</string>
     <string name="ShowKey_TabPrivateKey">개인 암호</string>
+    <string name="ShowKey_TabPublicKeys">Public Keys</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">경고</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">개인 키 복사의 위험</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">보안 조치로 개인 키에 복사 작업을 사용하지 않는 것이 좋습니다.</string>
