@@ -725,6 +725,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="ShowKey_ButtonClose">Cerrar</string>
     <string name="ShowKey_TabMnemonicPhrase">Frase de Recuperación</string>
     <string name="ShowKey_TabPrivateKey">Clave privada</string>
+    <string name="ShowKey_TabPublicKeys">Public Keys</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Aviso</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Riesgo de copia de la clave privada</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Como medida de seguridad recomendamos no utilizar la acción de copia en la clave privada.</string>
