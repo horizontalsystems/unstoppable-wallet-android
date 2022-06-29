@@ -721,6 +721,7 @@
     <string name="ShowKey_ButtonClose">Закрыть</string>
     <string name="ShowKey_TabMnemonicPhrase">Фраза для восстановления</string>
     <string name="ShowKey_TabPrivateKey">Приватный Ключ</string>
+    <string name="ShowKey_TabPublicKeys">Public Keys</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Внимание</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Риск Копирования Секретного Ключа</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">В целях безопасности мы не рекомендуем копировать секретный ключ.</string>
