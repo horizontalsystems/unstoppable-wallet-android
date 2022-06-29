@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.overview.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -31,19 +32,21 @@ fun TopSectorsBoardView(
         thickness = 1.dp,
         color = ComposeAppTheme.colors.steel10
     )
-    Row(
-        modifier = Modifier.height(42.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            painter = painterResource(board.iconRes),
-            contentDescription = null
-        )
-        body_leah(
-            text = stringResource(board.title),
-            maxLines = 1,
-        )
+    Row(modifier = Modifier.height(42.dp)) {
+        Row(
+            modifier = Modifier.height(42.dp).clickable { onClickSeeAll.invoke() },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                painter = painterResource(board.iconRes),
+                contentDescription = "Section Header Icon"
+            )
+            body_leah(
+                text = stringResource(board.title),
+                maxLines = 1,
+            )
+        }
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
             title = stringResource(R.string.Market_SeeAll),

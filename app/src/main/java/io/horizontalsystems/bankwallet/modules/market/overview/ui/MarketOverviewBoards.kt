@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.overview.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -36,7 +37,8 @@ fun BoardsView(
             title = boardItem.boardHeader.title,
             iconRes = boardItem.boardHeader.iconRes,
             select = boardItem.boardHeader.topMarketSelect,
-            onSelect = { topMarket -> onSelectTopMarket(topMarket, boardItem.type) }
+            onSelect = { topMarket -> onSelectTopMarket(topMarket, boardItem.type) },
+            onClickSeeAll = { onClickSeeAll(boardItem.type) }
         )
 
         Column(
@@ -62,32 +64,39 @@ fun <T : WithTranslatableTitle> TopBoardHeader(
     title: Int,
     iconRes: Int,
     select: Select<T>,
-    onSelect: (T) -> Unit
+    onSelect: (T) -> Unit,
+    onClickSeeAll: () -> Unit
 ) {
     Column {
         Divider(
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10
         )
-        Row(
-            modifier = Modifier.height(42.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                painter = painterResource(iconRes),
-                contentDescription = "Section Header Icon"
-            )
-            body_leah(
-                text = stringResource(title),
-                maxLines = 1,
-            )
+        Row(modifier = Modifier.height(42.dp)) {
+            Row(
+                    modifier = Modifier.height(42.dp).clickable { onClickSeeAll.invoke() },
+                    verticalAlignment = Alignment.CenterVertically
+            ) {
+                    Image(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        painter = painterResource(iconRes),
+                        contentDescription = "Section Header Icon"
+                    )
+                    body_leah(
+                        text = stringResource(title),
+                        maxLines = 1,
+                    )
+            }
             Spacer(Modifier.weight(1f))
-            ButtonSecondaryToggle(
-                modifier = Modifier.padding(end = 16.dp),
-                select = select,
-                onSelect = onSelect
-            )
+            Row(
+                    modifier = Modifier.padding(end = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+            ) {
+                    ButtonSecondaryToggle(
+                            select = select,
+                            onSelect = onSelect
+                    )
+            }
         }
         Spacer(modifier = Modifier.height(12.dp))
     }
