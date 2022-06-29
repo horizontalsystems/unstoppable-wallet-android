@@ -728,6 +728,7 @@
     <string name="ShowKey_ButtonClose">Schließen</string>
     <string name="ShowKey_TabMnemonicPhrase">Wiederherstellungsphrase</string>
     <string name="ShowKey_TabPrivateKey">Privater Schlüssel</string>
+    <string name="ShowKey_TabPublicKeys">Public Keys</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Warnung</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risiko einer Private Key Kopie</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Als Sicherheitsmaßnahme empfehlen wir, keine Kopieraktion für Private Keys durchzuführen.</string>
