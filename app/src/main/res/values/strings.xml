@@ -880,11 +880,15 @@
     <string name="ShowKey_ButtonClose">Close</string>
     <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
     <string name="ShowKey_TabPrivateKey">Private Key</string>
+    <string name="ShowKey_TabPublicKeys">Public Keys</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Warning</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risk of Private Key copy</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">As a security measure we recommend not to use copy action on private key.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">I will risk it</string>
     <string name="ShowKey_PrivateKey_Warning">This key is for all EVM-compatible blockchains.\n\nAs a security measure we recommend not to use copy action on private key.</string>
+    <string name="ShowKey_Bip44" translatable="false">BIP 44</string>
+    <string name="ShowKey_Bip49" translatable="false">BIP 49 - SegWit</string>
+    <string name="ShowKey_Bip84" translatable="false">BIP 84 - Native SegWit</string>
 
     <!-- Backup Key -->
     <string name="BackupKey_Title">Backup</string>
