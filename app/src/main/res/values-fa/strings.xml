@@ -725,6 +725,7 @@
     <string name="ShowKey_ButtonClose">ببند</string>
     <string name="ShowKey_TabMnemonicPhrase">عبارت بازیابی</string>
     <string name="ShowKey_TabPrivateKey">کلید خصوصی</string>
+    <string name="ShowKey_TabPublicKeys">Public Keys</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">هشدار</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">خطر کپی کلید خصوصی</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">به عنوان یک اقدام امنیتی، توصیه می کنیم از عملکرد کپی در کلید خصوصی استفاده نکنید.</string>
