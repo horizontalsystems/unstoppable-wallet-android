@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -28,6 +29,9 @@ import com.google.accompanist.pager.rememberPagerState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
+import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -158,7 +162,11 @@ private fun ShowKeyIntroScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun KeyTabs(viewModel: ShowKeyViewModel, showKeyWarning: (String) -> Unit) {
-    val tabs = listOf(R.string.ShowKey_TabMnemonicPhrase, R.string.ShowKey_TabPrivateKey)
+    val tabs = listOf(
+        R.string.ShowKey_TabMnemonicPhrase,
+        R.string.ShowKey_TabPrivateKey,
+        R.string.ShowKey_TabPublicKeys
+    )
     val pagerState = rememberPagerState(initialPage = 0)
     val selectedTabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
@@ -168,7 +176,7 @@ private fun KeyTabs(viewModel: ShowKeyViewModel, showKeyWarning: (String) -> Uni
         TabItem(stringResource(it), it == selectedTab, it)
     }
 
-    Tabs(tabItems) { item ->
+    ScrollableTabs(tabItems) { item ->
         val selectedIndex = tabs.indexOf(item)
         coroutineScope.launch {
             pagerState.scrollToPage(selectedIndex)
@@ -176,27 +184,154 @@ private fun KeyTabs(viewModel: ShowKeyViewModel, showKeyWarning: (String) -> Uni
     }
 
     HorizontalPager(
-        count = 2,
+        count = 3,
         state = pagerState,
-        userScrollEnabled = false
+        userScrollEnabled = false,
+        verticalAlignment = Alignment.Top,
     ) { index ->
-        if (index == 0) {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
-                Spacer(Modifier.height(12.dp))
-                SeedPhraseList(viewModel.wordsNumbered)
-                PassphraseCell(viewModel.passphrase)
+        when (index) {
+            0 -> {
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    Spacer(Modifier.height(12.dp))
+                    SeedPhraseList(viewModel.wordsNumbered)
+                    PassphraseCell(viewModel.passphrase)
+                }
             }
-        } else {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
-                Spacer(Modifier.height(12.dp))
-                TextImportantWarning(
-                    modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-                    text = stringResource(R.string.ShowKey_PrivateKey_Warning)
-                )
-                Spacer(Modifier.height(12.dp))
-                PrivateKey(viewModel, showKeyWarning)
+            1 -> {
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    Spacer(Modifier.height(12.dp))
+                    TextImportantWarning(
+                        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+                        text = stringResource(R.string.ShowKey_PrivateKey_Warning)
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    PrivateKey(viewModel, showKeyWarning)
+                }
+            }
+            else -> {
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    Spacer(Modifier.height(24.dp))
+                    PublicKeys(viewModel)
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun PublicKeys(viewModel: ShowKeyViewModel) {
+    val localView = LocalView.current
+    C1(
+        text = BtcBlockchain.Bitcoin.title.uppercase(),
+        modifier = Modifier.padding(horizontal = 16.dp)
+    )
+    Spacer(Modifier.height(13.dp))
+    CellSingleLineLawrenceSection(
+        listOf(
+            {
+                KeyCell(stringResource(R.string.ShowKey_Bip44)) {
+                    copy(viewModel.bitcoinPublicKeys(AccountType.Derivation.bip44), localView)
+                }
+            },
+            {
+                KeyCell(stringResource(R.string.ShowKey_Bip49)) {
+                    copy(viewModel.bitcoinPublicKeys(AccountType.Derivation.bip49), localView)
+                }
+            },
+            {
+                KeyCell(stringResource(R.string.ShowKey_Bip84)) {
+                    copy(viewModel.bitcoinPublicKeys(AccountType.Derivation.bip84), localView)
+                }
+            },
+        )
+    )
+    Spacer(Modifier.height(36.dp))
+    C1(
+        text = BtcBlockchain.BitcoinCash.title.uppercase(),
+        modifier = Modifier.padding(horizontal = 16.dp)
+    )
+    Spacer(Modifier.height(13.dp))
+    CellSingleLineLawrenceSection(
+        listOf(
+            {
+                KeyCell(stringResource(R.string.CoinSettings_BitcoinCashCoinType_Type0_Title)) {
+                    copy(viewModel.bitcoinCashPublicKeys(BitcoinCashCoinType.type0), localView)
+                }
+            },
+            {
+                KeyCell(stringResource(R.string.CoinSettings_BitcoinCashCoinType_Type145_Title)) {
+                    copy(viewModel.bitcoinCashPublicKeys(BitcoinCashCoinType.type145), localView)
+                }
+            },
+        )
+    )
+    Spacer(Modifier.height(36.dp))
+    C1(
+        text = BtcBlockchain.Litecoin.title.uppercase(),
+        modifier = Modifier.padding(horizontal = 16.dp)
+    )
+    Spacer(Modifier.height(13.dp))
+    CellSingleLineLawrenceSection(
+        listOf(
+            {
+                KeyCell(stringResource(R.string.ShowKey_Bip44)) {
+                    copy(viewModel.litecoinPublicKeys(AccountType.Derivation.bip44), localView)
+                }
+            },
+            {
+                KeyCell(stringResource(R.string.ShowKey_Bip49)) {
+                    copy(viewModel.litecoinPublicKeys(AccountType.Derivation.bip49), localView)
+                }
+            },
+            {
+                KeyCell(stringResource(R.string.ShowKey_Bip84)) {
+                    copy(viewModel.litecoinPublicKeys(AccountType.Derivation.bip84), localView)
+                }
+            },
+        )
+    )
+    Spacer(Modifier.height(36.dp))
+    C1(
+        text = BtcBlockchain.Dash.title.uppercase(),
+        modifier = Modifier.padding(horizontal = 16.dp)
+    )
+    Spacer(Modifier.height(13.dp))
+    CellSingleLineLawrenceSection(
+        listOf {
+            KeyCell(stringResource(R.string.ShowKey_TabPublicKeys)) {
+                copy(viewModel.dashKeys(), localView)
+            }
+        }
+    )
+    Spacer(Modifier.height(60.dp))
+}
+
+private fun copy(publicKeys: String?, localView: View) {
+    if (publicKeys != null) {
+        TextHelper.copyText(publicKeys)
+        HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+    } else {
+        HudHelper.showErrorMessage(localView, R.string.Error)
+    }
+}
+
+@Composable
+private fun KeyCell(title: String, onCopy: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        B2(
+            text = title,
+            modifier = Modifier.padding(end = 16.dp)
+        )
+        Spacer(Modifier.weight(1f))
+        ButtonSecondaryCircle(
+            icon = R.drawable.ic_copy_20,
+            onClick = onCopy
+        )
     }
 }
 
@@ -297,5 +432,26 @@ private fun SeedPhrase(item: ShowKeyModule.WordNumbered, portion: Int) {
     }
     if (item.number.mod(portion) == 0) {
         Spacer(Modifier.height(28.dp))
+    }
+}
+
+@Preview
+@Composable
+private fun PublicKeys_Preview() {
+    ComposeAppTheme {
+        Column {
+            C1(
+                text = BtcBlockchain.Litecoin.title.uppercase(),
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Spacer(Modifier.height(13.dp))
+            CellSingleLineLawrenceSection(
+                listOf(
+                    { KeyCell(stringResource(R.string.ShowKey_Bip44)) {} },
+                    { KeyCell(stringResource(R.string.ShowKey_Bip49)) {} },
+                    { KeyCell(stringResource(R.string.ShowKey_Bip84)) {} },
+                )
+            )
+        }
     }
 }
