@@ -724,6 +724,7 @@
     <string name="ShowKey_ButtonClose">Kapat</string>
     <string name="ShowKey_TabMnemonicPhrase">Kurtarma cümlesi</string>
     <string name="ShowKey_TabPrivateKey">Özel Anahtar</string>
+    <string name="ShowKey_TabPublicKeys">Public Keys</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Uyarı</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Özel Anahtar kopyalama riski</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Bir güvenlik önlemi olarak, özel anahtar için kopyalama eylemi kullanılmamasını öneririz.</string>
