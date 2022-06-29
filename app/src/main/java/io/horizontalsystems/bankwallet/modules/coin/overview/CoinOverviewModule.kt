@@ -3,12 +3,12 @@ package io.horizontalsystems.bankwallet.modules.coin.overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterSignificant
+import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.*
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.MarketInfoOverview
+import io.horizontalsystems.xxxkit.models.FullCoin
+import io.horizontalsystems.xxxkit.models.MarketInfoOverview
 
 object CoinOverviewModule {
 
@@ -21,7 +21,7 @@ object CoinOverviewModule {
                     val currency = App.currencyManager.baseCurrency
                     val service = CoinOverviewService(
                         fullCoin,
-                        App.marketKit,
+                        App.xxxKit,
                         App.currencyManager,
                         App.appConfigProvider,
                         App.languageManager

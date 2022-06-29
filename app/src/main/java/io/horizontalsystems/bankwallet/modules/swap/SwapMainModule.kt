@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFra
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapFragment
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.Token
 import io.reactivex.Observable
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -33,9 +33,9 @@ object SwapMainModule {
     const val coinCardTypeFrom = "coinCardTypeFrom"
     const val coinCardTypeTo = "coinCardTypeTo"
 
-    private const val coinFromKey = "coinFromKey"
+    private const val tokenFromKey = "tokenFromKey"
 
-    fun prepareParams(coinFrom: PlatformCoin) = bundleOf(coinFromKey to coinFrom)
+    fun prepareParams(tokenFrom: Token) = bundleOf(tokenFromKey to tokenFrom)
 
     interface ISwapProvider : Parcelable {
         val id: String
@@ -117,23 +117,23 @@ object SwapMainModule {
     }
 
     interface ISwapTradeService {
-        val coinFrom: PlatformCoin?
-        val coinFromObservable: Observable<Optional<PlatformCoin>>
+        val tokenFrom: Token?
+        val tokenFromObservable: Observable<Optional<Token>>
         val amountFrom: BigDecimal?
         val amountFromObservable: Observable<Optional<BigDecimal>>
 
-        val coinTo: PlatformCoin?
-        val coinToObservable: Observable<Optional<PlatformCoin>>
+        val tokenTo: Token?
+        val tokenToObservable: Observable<Optional<Token>>
         val amountTo: BigDecimal?
         val amountToObservable: Observable<Optional<BigDecimal>>
 
         val amountType: AmountType
         val amountTypeObservable: Observable<AmountType>
 
-        fun enterCoinFrom(coin: PlatformCoin?)
+        fun enterTokenFrom(token: Token?)
         fun enterAmountFrom(amount: BigDecimal?)
 
-        fun enterCoinTo(coin: PlatformCoin?)
+        fun enterTokenTo(token: Token?)
         fun enterAmountTo(amount: BigDecimal?)
 
         fun restoreState(swapProviderState: SwapProviderState)
@@ -162,7 +162,7 @@ object SwapMainModule {
 
     @Parcelize
     data class CoinBalanceItem(
-        val platformCoin: PlatformCoin,
+        val token: Token,
         val balance: BigDecimal?,
         val fiatBalanceValue: CurrencyValue?,
     ) : Parcelable
@@ -173,15 +173,15 @@ object SwapMainModule {
 
     @Parcelize
     data class SwapProviderState(
-        val coinFrom: PlatformCoin? = null,
-        val coinTo: PlatformCoin? = null,
+        val tokenFrom: Token? = null,
+        val tokenTo: Token? = null,
         val amountFrom: BigDecimal? = null,
         val amountTo: BigDecimal? = null,
         val amountType: AmountType = AmountType.ExactFrom
     ) : Parcelable
 
     class Factory(arguments: Bundle) : ViewModelProvider.Factory {
-        private val coinFrom: PlatformCoin? = arguments.getParcelable(coinFromKey)
+        private val tokenFrom: Token? = arguments.getParcelable(tokenFromKey)
         private val swapProviders: List<ISwapProvider> =
             listOf(UniswapProvider, PancakeSwapProvider, OneInchProvider, QuickSwapProvider)
 
@@ -192,7 +192,7 @@ object SwapMainModule {
                 SwapMainViewModel::class.java -> {
                     SwapMainViewModel(
                         SwapMainService(
-                            coinFrom,
+                            tokenFrom,
                             swapProviders,
                             App.localStorage
                         )

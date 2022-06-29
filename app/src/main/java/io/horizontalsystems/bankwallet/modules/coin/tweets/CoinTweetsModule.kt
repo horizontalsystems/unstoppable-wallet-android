@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.twitter.twittertext.Extractor
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.xxxkit.models.FullCoin
 
 object CoinTweetsModule {
     class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {

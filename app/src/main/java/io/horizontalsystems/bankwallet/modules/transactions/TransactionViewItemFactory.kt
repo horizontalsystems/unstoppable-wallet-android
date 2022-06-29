@@ -450,10 +450,10 @@ class TransactionViewItemFactory(
         val value2 = event2.value
 
         if (value1 is TransactionValue.CoinValue && value2 is TransactionValue.CoinValue) {
-            if (value1.platformCoin == value2.platformCoin) {
+            if (value1.token == value2.token) {
                 return EvmTransactionRecord.TransferEvent(
                     event1.address,
-                    TransactionValue.CoinValue(value1.platformCoin, value1.value + value2.value)
+                    TransactionValue.CoinValue(value1.token, value1.value + value2.value)
                 )
             }
         }

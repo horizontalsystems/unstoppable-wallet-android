@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizat
 import io.horizontalsystems.bankwallet.modules.profeatures.ProNft
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.xxxkit.MarketKit
+import io.horizontalsystems.xxxkit.models.*
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -38,13 +38,17 @@ class CoinDetailsService(
     val currency: Currency
         get() = currencyManager.baseCurrency
 
-    val hasMajorHolders: Boolean by lazy { fullCoin.platforms.any { it.coinType is CoinType.Erc20 } }
+    val hasMajorHolders: Boolean by lazy { fullCoin.tokens.any { it.tokenQuery.blockchainType is BlockchainType.Ethereum && it.tokenQuery.tokenType is TokenType.Eip20 } }
 
     val auditAddresses: List<String> by lazy {
-        fullCoin.platforms.mapNotNull {
-            when (val coinType = it.coinType) {
-                is CoinType.Erc20 -> coinType.address
-                is CoinType.Bep20 -> coinType.address
+        fullCoin.tokens.mapNotNull { token ->
+            val tokenQuery = token.tokenQuery
+            when (val tokenType = tokenQuery.tokenType) {
+                is TokenType.Eip20 -> when (tokenQuery.blockchainType) {
+                    BlockchainType.Ethereum -> tokenType.address
+                    BlockchainType.BinanceSmartChain -> tokenType.address
+                    else -> null
+                }
                 else -> null
             }
         }

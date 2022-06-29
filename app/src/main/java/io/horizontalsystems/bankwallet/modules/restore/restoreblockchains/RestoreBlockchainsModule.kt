@@ -7,15 +7,18 @@ import io.horizontalsystems.bankwallet.core.blockchainLogo
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsService
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensService
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.xxxkit.models.TokenType
 
 object RestoreBlockchainsModule {
 
@@ -30,11 +33,11 @@ object RestoreBlockchainsModule {
         private val coinSettingsService by lazy {
             CoinSettingsService()
         }
-        private val coinPlatformsService by lazy {
-            CoinPlatformsService()
+        private val coinTokensService by lazy {
+            CoinTokensService()
         }
         private val enableCoinService by lazy {
-            EnableCoinService(coinPlatformsService, restoreSettingsService, coinSettingsService)
+            EnableCoinService(coinTokensService, restoreSettingsService, coinSettingsService)
         }
 
         private val restoreSelectCoinsService by lazy {
@@ -44,7 +47,7 @@ object RestoreBlockchainsModule {
                 App.accountFactory,
                 App.accountManager,
                 App.walletManager,
-                App.marketKit,
+                App.xxxKit,
                 enableCoinService,
                 App.evmBlockchainManager
             )
@@ -68,8 +71,8 @@ object RestoreBlockchainsModule {
                         listOf(restoreSelectCoinsService)
                     ) as T
                 }
-                CoinPlatformsViewModel::class.java -> {
-                    CoinPlatformsViewModel(coinPlatformsService) as T
+                CoinTokensViewModel::class.java -> {
+                    CoinTokensViewModel(coinTokensService) as T
                 }
                 else -> throw IllegalArgumentException()
             }
@@ -129,6 +132,17 @@ object RestoreBlockchainsModule {
                 is Evm -> this.evmBlockchain.baseCoinType
             }
 
+        val tokenQuery: TokenQuery
+            get() = when (this) {
+                Bitcoin -> TokenQuery(BlockchainType.Bitcoin, TokenType.Native)
+                BitcoinCash -> TokenQuery(BlockchainType.BitcoinCash, TokenType.Native)
+                Zcash -> TokenQuery(BlockchainType.Zcash, TokenType.Native)
+                Litecoin -> TokenQuery(BlockchainType.Litecoin, TokenType.Native)
+                Dash -> TokenQuery(BlockchainType.Dash, TokenType.Native)
+                BinanceChain -> TokenQuery(BlockchainType.BinanceChain, TokenType.Native)
+                is Evm -> TokenQuery(this.evmBlockchain.blockchainType, TokenType.Native)
+            }
+
         val icon: ImageSource
              get() = ImageSource.Local(coinType.blockchainLogo)
 
@@ -147,7 +161,7 @@ object RestoreBlockchainsModule {
         }
     }
 
-    class InternalItem(val blockchain: Blockchain, val platformCoin: PlatformCoin)
+    class InternalItem(val blockchain: Blockchain, val token: Token)
 }
 
 data class CoinViewItem(

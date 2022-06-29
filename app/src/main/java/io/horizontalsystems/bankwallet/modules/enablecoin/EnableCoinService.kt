@@ -1,36 +1,41 @@
 package io.horizontalsystems.bankwallet.modules.enablecoin
 
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsService
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.CoinSettings
+import io.horizontalsystems.bankwallet.entities.ConfiguredToken
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.xxxkit.models.Coin
+import io.horizontalsystems.xxxkit.models.FullCoin
+import io.horizontalsystems.xxxkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class EnableCoinService(
-    private val coinPlatformsService: CoinPlatformsService,
+    private val coinTokensService: CoinTokensService,
     private val restoreSettingsService: RestoreSettingsService,
     private val coinSettingsService: CoinSettingsService
 ) {
     private val disposable = CompositeDisposable()
 
-    val enableCoinObservable = PublishSubject.create<Pair<List<ConfiguredPlatformCoin>, RestoreSettings>>()
+    val enableCoinObservable = PublishSubject.create<Pair<List<ConfiguredToken>, RestoreSettings>>()
     val cancelEnableCoinObservable = PublishSubject.create<FullCoin>()
 
     init {
-        coinPlatformsService.approvePlatformsObservable
-            .subscribeIO { handleApproveCoinPlatforms(it.coin, it.platforms) }
+        coinTokensService.approveTokensObservable
+            .subscribeIO { handleApproveCoinTokens(it.coin, it.tokens) }
             .let { disposable.add(it) }
 
-        coinPlatformsService.rejectApprovePlatformsObservable
+        coinTokensService.rejectApproveTokensObservable
             .subscribeIO { handleRejectApprovePlatformSettings(it) }
             .let { disposable.add(it) }
 
         restoreSettingsService.approveSettingsObservable
-            .subscribeIO { handleApproveRestoreSettings(it.platformCoin, it.settings) }
+            .subscribeIO { handleApproveRestoreSettings(it.token, it.settings) }
             .let { disposable.add(it) }
 
         restoreSettingsService.rejectApproveSettingsObservable
@@ -38,7 +43,7 @@ class EnableCoinService(
             .let { disposable.add(it) }
 
         coinSettingsService.approveSettingsObservable
-            .subscribeIO { handleApproveCoinSettings(it.coin, it.settingsList) }
+            .subscribeIO { handleApproveCoinSettings(it.token, it.settingsList) }
             .let { disposable.add(it) }
 
         coinSettingsService.rejectApproveSettingsObservable
@@ -46,9 +51,9 @@ class EnableCoinService(
             .let { disposable.add(it) }
     }
 
-    private fun handleApproveCoinPlatforms(coin: Coin, platforms: List<Platform>) {
-        val configuredPlatformCoins = platforms.map { ConfiguredPlatformCoin(PlatformCoin(it, coin)) }
-        enableCoinObservable.onNext(Pair(configuredPlatformCoins, RestoreSettings()))
+    private fun handleApproveCoinTokens(coin: Coin, tokens: List<Token>) {
+        val configuredTokens = tokens.map { ConfiguredToken(it) }
+        enableCoinObservable.onNext(Pair(configuredTokens, RestoreSettings()))
     }
 
     private fun handleRejectApprovePlatformSettings(fullCoin: FullCoin) {
@@ -56,61 +61,60 @@ class EnableCoinService(
     }
 
     private fun handleApproveRestoreSettings(
-        platformCoin: PlatformCoin,
+        token: Token,
         settings: RestoreSettings = RestoreSettings()
     ) {
-        enableCoinObservable.onNext(Pair(listOf(ConfiguredPlatformCoin(platformCoin)), settings))
+        enableCoinObservable.onNext(Pair(listOf(ConfiguredToken(token)), settings))
     }
 
-    private fun handleRejectApproveRestoreSettings(platformCoin: PlatformCoin) {
-        cancelEnableCoinObservable.onNext(platformCoin.fullCoin)
+    private fun handleRejectApproveRestoreSettings(token: Token) {
+        cancelEnableCoinObservable.onNext(token.fullCoin)
     }
 
-    private fun handleApproveCoinSettings(platformCoin: PlatformCoin, settingsList: List<CoinSettings> = listOf()) {
-        val configuredPlatformCoins = settingsList.map { ConfiguredPlatformCoin(platformCoin, it) }
-        enableCoinObservable.onNext(Pair(configuredPlatformCoins, RestoreSettings()))
+    private fun handleApproveCoinSettings(token: Token, settingsList: List<CoinSettings> = listOf()) {
+        val configuredTokens = settingsList.map { ConfiguredToken(token, it) }
+        enableCoinObservable.onNext(Pair(configuredTokens, RestoreSettings()))
     }
 
-    private fun handleRejectApproveCoinSettings(platformCoin: PlatformCoin) {
-        cancelEnableCoinObservable.onNext(platformCoin.fullCoin)
+    private fun handleRejectApproveCoinSettings(token: Token) {
+        cancelEnableCoinObservable.onNext(token.fullCoin)
     }
 
     fun enable(fullCoin: FullCoin, account: Account? = null) {
-        val supportedPlatforms = fullCoin.supportedPlatforms
-        if (supportedPlatforms.size == 1) {
-            val platformCoin = PlatformCoin(supportedPlatforms.first(), fullCoin.coin)
+        val supportedTokens = fullCoin.supportedTokens
+        if (supportedTokens.size == 1) {
+            val token = supportedTokens.first()
             when {
-                platformCoin.coinType.restoreSettingTypes.isNotEmpty() -> {
-                    restoreSettingsService.approveSettings(platformCoin, account)
+                token.blockchainType.restoreSettingTypes.isNotEmpty() -> {
+                    restoreSettingsService.approveSettings(token, account)
                 }
-                platformCoin.coinType.coinSettingTypes.isNotEmpty() -> {
-                    coinSettingsService.approveSettings(platformCoin, platformCoin.coinType.defaultSettingsArray)
+                token.blockchainType.coinSettingTypes.isNotEmpty() -> {
+                    coinSettingsService.approveSettings(token, token.blockchainType.defaultSettingsArray)
                 }
                 else -> {
-                    enableCoinObservable.onNext(Pair(listOf(ConfiguredPlatformCoin(platformCoin)), RestoreSettings()))
+                    enableCoinObservable.onNext(Pair(listOf(ConfiguredToken(token)), RestoreSettings()))
                 }
             }
         } else {
-            coinPlatformsService.approvePlatforms(fullCoin)
+            coinTokensService.approveTokens(fullCoin)
         }
     }
 
-    fun configure(fullCoin: FullCoin, configuredPlatformCoins: List<ConfiguredPlatformCoin>) {
-        val supportedPlatforms = fullCoin.supportedPlatforms
-        if (supportedPlatforms.size == 1) {
-            val platform = supportedPlatforms.first()
-            if (platform.coinType.coinSettingTypes.isNotEmpty()) {
-                val settings = configuredPlatformCoins.map { it.coinSettings }
-                val platformCoin = PlatformCoin(platform, fullCoin.coin)
-                coinSettingsService.approveSettings(platformCoin, settings)
+    fun configure(fullCoin: FullCoin, configuredTokens: List<ConfiguredToken>) {
+        val supportedTokens = fullCoin.supportedTokens
+        if (supportedTokens.size == 1) {
+            val token = supportedTokens.first()
+            if (token.blockchainType.coinSettingTypes.isNotEmpty()) {
+                val settings = configuredTokens.map { it.coinSettings }
+                coinSettingsService.approveSettings(token, settings)
             }
         } else {
-            val currentPlatforms = configuredPlatformCoins.map { it.platformCoin.platform }
-            coinPlatformsService.approvePlatforms(fullCoin, currentPlatforms)
+            val currentTokens = configuredTokens.map { it.token }
+            coinTokensService.approveTokens(fullCoin, currentTokens)
         }
     }
 
-    fun save(restoreSettings: RestoreSettings, account: Account, coinType: CoinType) {
-        restoreSettingsService.save(restoreSettings, account, coinType)
+    fun save(restoreSettings: RestoreSettings, account: Account, blockchainType: BlockchainType) {
+        restoreSettingsService.save(restoreSettings, account, blockchainType)
     }
 }

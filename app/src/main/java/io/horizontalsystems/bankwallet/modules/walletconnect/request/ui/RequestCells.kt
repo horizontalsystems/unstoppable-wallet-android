@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.Token
 
 @Composable
 fun TitleHexValueCell(title: String, valueVisible: String, value: String) {
@@ -50,7 +50,7 @@ fun AmountCell(
     fiatAmount: String?,
     coinAmount: String,
     type: ValueType,
-    platformCoin: PlatformCoin
+    token: Token
 ) {
     val coinAmountColor = when (type) {
         ValueType.Regular -> ComposeAppTheme.colors.bran
@@ -66,8 +66,8 @@ fun AmountCell(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CoinImage(
-            iconUrl = platformCoin.coin.iconUrl,
-            placeholder = platformCoin.coinType.iconPlaceholder,
+            iconUrl = token.coin.iconUrl,
+            placeholder = token.iconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(24.dp)
@@ -83,7 +83,7 @@ fun AmountCell(
 }
 
 @Composable
-fun AmountMultiCell(amounts: List<AmountValues>, type: ValueType, platformCoin: PlatformCoin) {
+fun AmountMultiCell(amounts: List<AmountValues>, type: ValueType, token: Token) {
     val coinAmountColor = when (type) {
         ValueType.Regular -> ComposeAppTheme.colors.bran
         ValueType.Disabled -> ComposeAppTheme.colors.grey
@@ -99,8 +99,8 @@ fun AmountMultiCell(amounts: List<AmountValues>, type: ValueType, platformCoin: 
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CoinImage(
-            iconUrl = platformCoin.coin.iconUrl,
-            placeholder = platformCoin.coinType.iconPlaceholder,
+            iconUrl = token.coin.iconUrl,
+            placeholder = token.iconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(24.dp)

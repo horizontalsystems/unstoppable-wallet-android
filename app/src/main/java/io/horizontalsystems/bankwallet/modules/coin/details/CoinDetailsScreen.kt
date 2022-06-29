@@ -41,8 +41,8 @@ import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakA
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.xxxkit.models.Coin
+import io.horizontalsystems.xxxkit.models.FullCoin
 
 @Composable
 fun CoinDetailsScreen(

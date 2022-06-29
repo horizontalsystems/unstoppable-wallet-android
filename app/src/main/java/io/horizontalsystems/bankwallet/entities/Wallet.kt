@@ -21,8 +21,11 @@ data class Wallet(
             BlockchainType.Litecoin -> TransactionSource.Blockchain.Litecoin
             BlockchainType.Dash -> TransactionSource.Blockchain.Dash
             BlockchainType.Zcash -> TransactionSource.Blockchain.Zcash
-            BlockchainType.Ethereum -> TransactionSource.Blockchain.Evm(BlockchainType.Ethereum)
-            BlockchainType.BinanceSmartChain -> TransactionSource.Blockchain.Evm(BlockchainType.BinanceSmartChain)
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Optimism,
+            BlockchainType.ArbitrumOne -> TransactionSource.Blockchain.Evm(token.blockchain)
             BlockchainType.BinanceChain -> {
                 when (val tokenType = token.type) {
                     TokenType.Native -> TransactionSource.Blockchain.Bep2("BNB")
@@ -30,9 +33,6 @@ data class Wallet(
                     else -> throw IllegalArgumentException("Unsupported coin may not have transactions to show")
                 }
             }
-            BlockchainType.Polygon -> TransactionSource.Blockchain.Evm(BlockchainType.Polygon)
-            BlockchainType.Optimism -> TransactionSource.Blockchain.Evm(BlockchainType.Optimism)
-            BlockchainType.ArbitrumOne -> TransactionSource.Blockchain.Evm(BlockchainType.ArbitrumOne)
             is BlockchainType.Unsupported -> throw IllegalArgumentException("Unsupported coin may not have transactions to show")
         }
 

@@ -26,7 +26,7 @@ import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.xxxkit.models.BlockchainType
 
 class SendFragment : BaseFragment() {
 
@@ -43,29 +43,30 @@ class SendFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                when (wallet.coinType) {
-                    CoinType.Bitcoin,
-                    CoinType.Litecoin,
-                    CoinType.BitcoinCash,
-                    CoinType.Dash,
+                when (wallet.token.blockchainType) {
+                    BlockchainType.Bitcoin,
+                    BlockchainType.BitcoinCash,
+                    BlockchainType.Litecoin,
+                    BlockchainType.Dash,
                     -> {
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) { SendBitcoinModule.Factory(wallet) }
 
                         SendBitcoinScreen(findNavController(), sendBitcoinViewModel, amountInputModeViewModel)
                     }
-                    is CoinType.Bep2 -> {
+                    is BlockchainType.BinanceChain -> {
                         val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) { SendBinanceModule.Factory(wallet) }
 
                         SendBinanceScreen(findNavController(), sendBinanceViewModel, amountInputModeViewModel)
                     }
-                    CoinType.Zcash -> {
+                    BlockchainType.Zcash -> {
                         val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment) { SendZCashModule.Factory(wallet) }
 
                         SendZCashScreen(findNavController(), sendZCashViewModel, amountInputModeViewModel)
                     }
-                    CoinType.Ethereum, is CoinType.Erc20,
-                    CoinType.BinanceSmartChain, is CoinType.Bep20,
-                    CoinType.Polygon, is CoinType.Mrc20 -> {
+                    BlockchainType.Ethereum,
+                    BlockchainType.BinanceSmartChain,
+                    BlockchainType.Polygon,
+                    -> {
                         val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment) { SendEvmModule.Factory(wallet) }
 
                         SendEvmScreen(findNavController(), sendEvmViewModel, amountInputModeViewModel)

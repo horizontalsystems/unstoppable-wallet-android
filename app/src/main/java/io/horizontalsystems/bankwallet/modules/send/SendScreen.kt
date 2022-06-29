@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.xxxkit.models.FullCoin
 
 @Composable
 fun SendScreen(

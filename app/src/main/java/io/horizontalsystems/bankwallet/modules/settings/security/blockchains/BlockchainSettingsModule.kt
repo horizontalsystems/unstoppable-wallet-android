@@ -3,7 +3,11 @@ package io.horizontalsystems.bankwallet.modules.settings.security.blockchains
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.core.order
+import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
+import io.horizontalsystems.bankwallet.entities.EvmSyncSource
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
+import io.horizontalsystems.xxxkit.models.Blockchain
 
 object BlockchainSettingsModule {
 
@@ -28,35 +32,21 @@ object BlockchainSettingsModule {
     )
 
     sealed class BlockchainItem {
+        abstract val blockchain: Blockchain
+
         class Btc(
-            val blockchain: BtcBlockchain,
+            override val blockchain: Blockchain,
             val restoreMode: BtcRestoreMode,
             val transactionMode: TransactionDataSortMode
         ) : BlockchainItem()
 
-        class Evm(val blockchain: EvmBlockchain, val syncSource: EvmSyncSource) : BlockchainItem()
+        class Evm(
+            override val blockchain: Blockchain,
+            val syncSource: EvmSyncSource
+        ) : BlockchainItem()
 
-        val order: Int
-            get() = when (this) {
-                is Btc -> {
-                    when (this.blockchain) {
-                        BtcBlockchain.Bitcoin -> 0
-                        BtcBlockchain.BitcoinCash -> 100
-                        BtcBlockchain.Litecoin -> 101
-                        BtcBlockchain.Dash -> 102
-                    }
-                }
-                is Evm -> {
-                    when (this.blockchain) {
-                        EvmBlockchain.Ethereum -> 2
-                        EvmBlockchain.BinanceSmartChain -> 3
-                        EvmBlockchain.Polygon -> 4
-                        EvmBlockchain.Optimism -> 5
-                        EvmBlockchain.ArbitrumOne -> 6
-                    }
-                }
-
-            }
+        val order
+            get() = blockchain.type.order
     }
 
 }

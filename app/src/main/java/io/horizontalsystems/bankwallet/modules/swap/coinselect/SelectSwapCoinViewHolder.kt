@@ -27,14 +27,14 @@ class SelectSwapCoinViewHolder(
 
         coinItem.apply {
             binding.coinIcon.setRemoteImage(
-                platformCoin.coin.iconUrl,
-                platformCoin.coinType.iconPlaceholder
+                token.coin.iconUrl,
+                token.iconPlaceholder
             )
-            binding.coinTitle.text = platformCoin.name
-            binding.coinSubtitle.text = platformCoin.code
+            binding.coinTitle.text = token.coin.name
+            binding.coinSubtitle.text = token.coin.code
 
             binding.coinBalance.text = balance?.let {
-                App.numberFormatter.formatCoinFull(it, platformCoin.code, 8)
+                App.numberFormatter.formatCoinFull(it, token.coin.code, 8)
             }
 
             binding.fiatBalance.text = fiatBalanceValue?.let {

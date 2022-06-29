@@ -2,23 +2,23 @@ package io.horizontalsystems.bankwallet.modules.swap
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.EvmBlockchain
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.xxxkit.models.Token
 import io.reactivex.subjects.PublishSubject
 
 class SwapMainService(
-    coinFrom: PlatformCoin?,
+    tokenFrom: Token?,
     private val providers: List<SwapMainModule.ISwapProvider>,
     private val localStorage: ILocalStorage
 ) {
-    var dex: SwapMainModule.Dex = getDex(coinFrom)
+    var dex: SwapMainModule.Dex = getDex(tokenFrom)
         private set
 
     val currentProvider: SwapMainModule.ISwapProvider
         get() = dex.provider
     val providerObservable = PublishSubject.create<SwapMainModule.ISwapProvider>()
 
-    var providerState = SwapMainModule.SwapProviderState(coinFrom = coinFrom)
+    var providerState = SwapMainModule.SwapProviderState(tokenFrom = tokenFrom)
 
     val availableProviders: List<SwapMainModule.ISwapProvider>
         get() = providers.filter { it.supports(dex.blockchain) }
@@ -35,7 +35,7 @@ class SwapMainService(
         }
     }
 
-    private fun getDex(coinFrom: PlatformCoin?): SwapMainModule.Dex {
+    private fun getDex(coinFrom: Token?): SwapMainModule.Dex {
         val blockchain = getBlockchainForCoin(coinFrom)
         val provider = getSwapProvider(blockchain)
             ?: throw IllegalStateException("No provider found for ${blockchain.name}")
@@ -50,14 +50,14 @@ class SwapMainService(
         return providers.firstOrNull { it.id == providerId }
     }
 
-    private fun getBlockchainForCoin(coin: PlatformCoin?) =
-        when (coin?.coinType) {
-            CoinType.Ethereum, is CoinType.Erc20, null -> EvmBlockchain.Ethereum
-            CoinType.BinanceSmartChain, is CoinType.Bep20 -> EvmBlockchain.BinanceSmartChain
-            CoinType.Polygon, is CoinType.Mrc20 -> EvmBlockchain.Polygon
-            CoinType.EthereumOptimism, is CoinType.OptimismErc20 -> EvmBlockchain.Optimism
-            CoinType.EthereumArbitrumOne, is CoinType.ArbitrumOneErc20 -> EvmBlockchain.ArbitrumOne
-            else -> throw IllegalStateException("Swap not supported for ${coin.coinType}")
-        }
+    private fun getBlockchainForCoin(coin: Token?) = when (coin?.blockchainType) {
+        BlockchainType.Ethereum -> EvmBlockchain.Ethereum
+        BlockchainType.BinanceSmartChain -> EvmBlockchain.BinanceSmartChain
+        BlockchainType.Polygon -> EvmBlockchain.Polygon
+        BlockchainType.Optimism -> EvmBlockchain.Optimism
+        BlockchainType.ArbitrumOne -> EvmBlockchain.ArbitrumOne
+        null -> EvmBlockchain.Ethereum
+        else -> throw IllegalStateException("Swap not supported for ${coin.blockchainType}")
+    }
 
 }

@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.xxxkit.models.TokenType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -16,7 +16,7 @@ import java.math.RoundingMode
 
 class SendEvmAmountService(
     private val adapter: ISendEthereumAdapter,
-    private val coin: PlatformCoin,
+    private val token: Token,
     private val amountValidator: AmountValidator,
     private val coinMaxAllowedDecimals: Int
 ) {
@@ -64,13 +64,13 @@ class SendEvmAmountService(
     private fun validateAmount() {
         amountCaution = amountValidator.validate(
             amount,
-            coin.code,
+            token.coin.code,
             availableBalance
         )
 
         if (amountCaution == null && amount == availableBalance && isCoinUsedForFee()) {
             amountCaution = HSCaution(
-                TranslatableString.ResString(R.string.EthereumTransaction_Warning_CoinNeededForFee, coin.code),
+                TranslatableString.ResString(R.string.EthereumTransaction_Warning_CoinNeededForFee, token.coin.code),
                 HSCaution.Type.Warning
             )
         }
@@ -79,19 +79,14 @@ class SendEvmAmountService(
     private fun refreshEvmAmount() {
         val tmpAmount = amount
         evmAmount = if (tmpAmount != null && tmpAmount > BigDecimal.ZERO) {
-            tmpAmount.movePointRight(coin.decimals).toBigInteger()
+            tmpAmount.movePointRight(token.decimals).toBigInteger()
         } else {
             null
         }
     }
 
-    private fun isCoinUsedForFee() = when (coin.coinType) {
-        is CoinType.Ethereum,
-        is CoinType.BinanceSmartChain,
-        is CoinType.Polygon,
-        is CoinType.EthereumOptimism,
-        is CoinType.EthereumArbitrumOne -> true
-        else -> false
+    private fun isCoinUsedForFee(): Boolean {
+        return token.type is TokenType.Native
     }
 
     data class State(

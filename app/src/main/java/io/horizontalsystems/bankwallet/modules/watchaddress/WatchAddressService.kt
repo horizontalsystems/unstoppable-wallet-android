@@ -8,6 +8,8 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.xxxkit.models.TokenType
 
 class WatchAddressService(
     private val accountFactory: IAccountFactory,
@@ -42,9 +44,11 @@ class WatchAddressService(
 
         val allBlockchains = evmBlockchainManager.allBlockchains
         allBlockchains.forEach {
-            evmBlockchainManager.getEvmAccountManager(it).markAutoEnable(account)
+            evmBlockchainManager.getEvmAccountManager(it.type).markAutoEnable(account)
         }
-        walletActivator.activateWallets(account, coinTypes = allBlockchains.map { it.baseCoinType })
+
+        val tokenQueries = allBlockchains.map { TokenQuery(it.type, TokenType.Native) }
+        walletActivator.activateWallets(account, tokenQueries)
     }
 }
 

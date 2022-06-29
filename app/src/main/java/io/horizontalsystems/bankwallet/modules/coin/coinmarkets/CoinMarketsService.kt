@@ -5,9 +5,9 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsModule.VolumeMenuType
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.MarketTicker
+import io.horizontalsystems.xxxkit.MarketKit
+import io.horizontalsystems.xxxkit.models.FullCoin
+import io.horizontalsystems.xxxkit.models.MarketTicker
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal

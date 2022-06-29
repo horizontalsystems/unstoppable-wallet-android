@@ -14,7 +14,7 @@ object NftCollectionAssetsModule {
                 collectionUid,
                 App.marketKit,
                 App.nftManager,
-                BalanceXRateRepository(App.currencyManager, App.marketKit)
+                BalanceXRateRepository(App.currencyManager, App.xxxKit)
             )
             return NftCollectionAssetsViewModel(service) as T
         }

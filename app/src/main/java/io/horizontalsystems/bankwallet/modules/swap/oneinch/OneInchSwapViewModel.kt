@@ -73,8 +73,8 @@ class OneInchSwapViewModel(
 
     fun getProviderState(): SwapMainModule.SwapProviderState {
         return SwapMainModule.SwapProviderState(
-            tradeService.coinFrom,
-            tradeService.coinTo,
+            tradeService.tokenFrom,
+            tradeService.tokenTo,
             tradeService.amountFrom,
             tradeService.amountTo,
             tradeService.amountType

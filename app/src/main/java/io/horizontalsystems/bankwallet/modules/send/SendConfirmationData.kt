@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.hodler.LockTimeInterval
-import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.xxxkit.models.Coin
 import java.math.BigDecimal
 
 data class SendConfirmationData(

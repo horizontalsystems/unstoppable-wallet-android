@@ -104,7 +104,7 @@ class AdapterFactory(
     fun unlinkAdapter(wallet: Wallet) {
         when (val blockchain = wallet.transactionSource.blockchain) {
             is TransactionSource.Blockchain.Evm -> {
-                val blockchainType = blockchain.blockchainType
+                val blockchainType = blockchain.blockchain.type
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
                 evmKitManager.unlink(wallet.account)
             }
@@ -118,7 +118,7 @@ class AdapterFactory(
     fun unlinkAdapter(transactionSource: TransactionSource) {
         when (val blockchain = transactionSource.blockchain) {
             is TransactionSource.Blockchain.Evm -> {
-                val blockchainType = blockchain.blockchainType
+                val blockchainType = blockchain.blockchain.type
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
                 evmKitManager.unlink(transactionSource.account)
             }

@@ -12,12 +12,12 @@ import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.Token
 import java.math.BigDecimal
 
 class SendEvmViewModel(
     val wallet: Wallet,
-    val sendCoin: PlatformCoin,
+    val sendToken: Token,
     val adapter: ISendEthereumAdapter,
     private val xRateService: XRateService,
     private val amountService: SendEvmAmountService,
@@ -39,7 +39,7 @@ class SendEvmViewModel(
     )
         private set
 
-    var coinRate by mutableStateOf(xRateService.getRate(sendCoin.coin.uid))
+    var coinRate by mutableStateOf(xRateService.getRate(sendToken.coin.uid))
         private set
 
     init {
@@ -49,7 +49,7 @@ class SendEvmViewModel(
         addressService.stateFlow.collectWith(viewModelScope) {
             handleUpdatedAddressState(it)
         }
-        xRateService.getRateFlow(sendCoin.coin.uid).collectWith(viewModelScope) {
+        xRateService.getRateFlow(sendToken.coin.uid).collectWith(viewModelScope) {
             coinRate = it
         }
     }

@@ -33,9 +33,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.xxxkit.models.Token
 
 class SendEvmTransactionView @JvmOverloads constructor(
     context: Context,
@@ -214,14 +214,14 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             is ViewItem.AmountMulti -> (holder as? AmountMultiViewHolder)?.bind(
                 item.amounts,
                 item.type,
-                item.platformCoin,
+                item.token,
                 listPosition
             )
             is ViewItem.Amount -> (holder as? AmountViewHolder)?.bind(
                 item.fiatAmount,
                 item.coinAmount,
                 item.type,
-                item.platformCoin,
+                item.token,
                 listPosition
             )
             is ViewItem.Input -> (holder as? TitleValueHexViewHolder)?.bind(
@@ -307,9 +307,9 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 
     class AmountMultiViewHolder(private val binding: ViewHolderAmountMultiBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(amounts: List<AmountValues>, type: ValueType, platformCoin: PlatformCoin, position: ListPosition) {
+        fun bind(amounts: List<AmountValues>, type: ValueType, token: Token, position: ListPosition) {
             binding.wrapper.layoutParams.height = LayoutHelper.dp(if (amounts.size == 2) 60f else 48f, binding.wrapper.context)
-            binding.coinIcon.setRemoteImage(platformCoin.coin.iconUrl, platformCoin.coinType.iconPlaceholder)
+            binding.coinIcon.setRemoteImage(token.coin.iconUrl, token.iconPlaceholder)
 
             binding.coinTextView.text = amounts[0].coinAmount
             binding.fiatTextView.text = amounts[0].fiatAmount
@@ -331,8 +331,8 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 
     class AmountViewHolder(private val binding: ViewHolderAmountBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(fiatAmount: String?, coinAmount: String, type: ValueType, platformCoin: PlatformCoin, position: ListPosition) {
-            binding.coinIcon.setRemoteImage(platformCoin.coin.iconUrl, platformCoin.coinType.iconPlaceholder)
+        fun bind(fiatAmount: String?, coinAmount: String, type: ValueType, token: Token, position: ListPosition) {
+            binding.coinIcon.setRemoteImage(token.coin.iconUrl, token.iconPlaceholder)
             binding.fiatTextView.text = fiatAmount
             binding.coinTextView.text = coinAmount
 

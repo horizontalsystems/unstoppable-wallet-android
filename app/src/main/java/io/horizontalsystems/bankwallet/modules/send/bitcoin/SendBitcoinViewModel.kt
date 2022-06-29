@@ -33,7 +33,7 @@ class SendBitcoinViewModel(
     private val xRateService: XRateService,
     private val btcBlockchainManager: BtcBlockchainManager
 ) : ViewModel() {
-    val coinMaxAllowedDecimals = wallet.platformCoin.decimals
+    val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
     val feeRatePriorities by feeRateService::feeRatePriorities
@@ -178,8 +178,8 @@ class SendBitcoinViewModel(
             amount = amountState.amount!!,
             fee = fee!!,
             address = addressState.validAddress!!,
-            coin = wallet.platformCoin.coin,
-            feeCoin = wallet.platformCoin.coin,
+            coin = wallet.token.coin,
+            feeCoin = wallet.token.coin,
             lockTimeInterval = pluginState.lockTimeInterval
         )
     }

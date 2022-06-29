@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
-import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.xxxkit.models.BlockchainType
@@ -16,33 +15,33 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
 
     private val dao = appDatabase.blockchainSettingDao()
 
-    fun btcRestoreMode(btcBlockchain: BtcBlockchain): BtcRestoreMode? {
-        return dao.getBlockchainSetting(btcBlockchain.raw, keyBtcRestore)?.let { storedSetting ->
+    fun btcRestoreMode(blockchainType: BlockchainType): BtcRestoreMode? {
+        return dao.getBlockchainSetting(blockchainType.uid, keyBtcRestore)?.let { storedSetting ->
             BtcRestoreMode.values().firstOrNull { it.raw == storedSetting.value }
         }
     }
 
-    fun save(btcRestoreMode: BtcRestoreMode, btcBlockchain: BtcBlockchain) {
+    fun save(btcRestoreMode: BtcRestoreMode, blockchainType: BlockchainType) {
         dao.insert(
             BlockchainSettingRecord(
-                blockchainUid = btcBlockchain.raw,
+                blockchainUid = blockchainType.uid,
                 key = keyBtcRestore,
                 value = btcRestoreMode.raw
             )
         )
     }
 
-    fun btcTransactionSortMode(btcBlockchain: BtcBlockchain): TransactionDataSortMode? {
-        return dao.getBlockchainSetting(btcBlockchain.raw, keyBtcTransactionSort)
+    fun btcTransactionSortMode(blockchainType: BlockchainType): TransactionDataSortMode? {
+        return dao.getBlockchainSetting(blockchainType.uid, keyBtcTransactionSort)
             ?.let { sortSetting ->
                 TransactionDataSortMode.values().firstOrNull { it.raw == sortSetting.value }
             }
     }
 
-    fun save(transactionDataSortMode: TransactionDataSortMode, btcBlockchain: BtcBlockchain) {
+    fun save(transactionDataSortMode: TransactionDataSortMode, blockchainType: BlockchainType) {
         dao.insert(
             BlockchainSettingRecord(
-                blockchainUid = btcBlockchain.raw,
+                blockchainUid = blockchainType.uid,
                 key = keyBtcTransactionSort,
                 value = transactionDataSortMode.raw
             )
