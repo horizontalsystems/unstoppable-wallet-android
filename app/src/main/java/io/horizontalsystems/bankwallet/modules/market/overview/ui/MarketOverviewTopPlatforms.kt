@@ -22,7 +22,8 @@ fun TopPlatformsBoardView(
         title = board.title,
         iconRes = board.iconRes,
         select = board.timeDurationSelect,
-        onSelect = onSelectTimeDuration
+        onSelect = onSelectTimeDuration,
+        onClickSeeAll = onClickSeeAll
     )
 
     Column(
