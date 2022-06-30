@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.coincard
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Observable
 import java.math.BigDecimal
 import java.util.*
@@ -20,8 +20,8 @@ class SwapToCoinCardService(
     override val amount: BigDecimal?
         get() = tradeService.amountTo
 
-    override val coin: PlatformCoin?
-        get() = tradeService.coinTo
+    override val token: Token?
+        get() = tradeService.tokenTo
 
     override val balance: BigDecimal?
         get() = service.balanceTo
@@ -32,8 +32,8 @@ class SwapToCoinCardService(
     override val amountObservable: Observable<Optional<BigDecimal>>
         get() = tradeService.amountToObservable
 
-    override val coinObservable: Observable<Optional<PlatformCoin>>
-        get() = tradeService.coinToObservable
+    override val tokenObservable: Observable<Optional<Token>>
+        get() = tradeService.tokenToObservable
 
     override val balanceObservable: Observable<Optional<BigDecimal>>
         get() = service.balanceToObservable
@@ -66,8 +66,8 @@ class SwapToCoinCardService(
         tradeService.enterAmountTo(amount)
     }
 
-    override fun onSelectCoin(coin: PlatformCoin) {
-        tradeService.enterCoinTo(coin)
+    override fun onSelectCoin(token: Token) {
+        tradeService.enterTokenTo(token)
     }
 
 }

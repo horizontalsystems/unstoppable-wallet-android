@@ -4,9 +4,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
-import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
+import io.horizontalsystems.bankwallet.core.providers.FeeTokenProvider
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -14,11 +14,11 @@ import java.math.BigDecimal
 
 class SendBinanceFeeService(
     private val adapter: ISendBinanceAdapter,
-    private val coin: PlatformCoin,
-    private val feeCoinProvider: FeeCoinProvider
+    private val token: Token,
+    private val feeTokenProvider: FeeTokenProvider
 ) {
-    private val feeCoinData = feeCoinProvider.feeCoinData(coin.coinType)
-    val feeCoin = feeCoinData?.first ?: coin
+    private val feeTokenData = feeTokenProvider.feeTokenData(token)
+    val feeToken = feeTokenData?.first ?: token
 
     private val fee = adapter.fee
 
@@ -40,17 +40,17 @@ class SendBinanceFeeService(
     }
 
     private fun validate() {
-        feeCaution = feeCoinData?.let { (feeCoin, tokenProtocol) ->
+        feeCaution = feeTokenData?.let { (feeToken, tokenProtocol) ->
             if (fee > adapter.availableBinanceBalance) {
-                val feeCoinName = feeCoin.name
-                val feeCoinCode = feeCoin.code
-                val formattedFee = App.numberFormatter.formatCoinFull(fee, feeCoinCode,8)
+                val feeTokenName = feeToken.coin.name
+                val feeTokenCode = feeToken.coin.code
+                val formattedFee = App.numberFormatter.formatCoinFull(fee, feeTokenCode,8)
 
                 HSCaution(
                     s = TranslatableString.ResString(R.string.Swap_ErrorInsufficientBalance),
                     description = TranslatableString.ResString(
-                        R.string.Send_Token_InsufficientFeeAlert, coin.code, tokenProtocol,
-                        feeCoinName, formattedFee
+                        R.string.Send_Token_InsufficientFeeAlert, token.coin.code, tokenProtocol,
+                        feeTokenName, formattedFee
                     )
                 )
             } else {

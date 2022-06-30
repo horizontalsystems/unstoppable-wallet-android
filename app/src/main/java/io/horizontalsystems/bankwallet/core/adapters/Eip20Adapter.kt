@@ -15,7 +15,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -25,13 +25,13 @@ class Eip20Adapter(
     context: Context,
     evmKitWrapper: EvmKitWrapper,
     contractAddress: String,
-    baseCoin: PlatformCoin,
+    baseToken: Token,
     coinManager: ICoinManager,
     wallet: Wallet,
     evmLabelManager: EvmLabelManager
 ) : BaseEvmAdapter(evmKitWrapper, wallet.decimal, coinManager) {
 
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, wallet.transactionSource, baseCoin, evmLabelManager)
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, wallet.transactionSource, baseToken, evmLabelManager)
 
     private val contractAddress: Address = Address(contractAddress)
     val eip20Kit: Erc20Kit = Erc20Kit.getInstance(context, this.evmKit, this.contractAddress)

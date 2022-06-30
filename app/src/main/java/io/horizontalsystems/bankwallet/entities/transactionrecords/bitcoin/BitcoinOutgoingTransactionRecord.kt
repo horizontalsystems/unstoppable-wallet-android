@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 class BitcoinOutgoingTransactionRecord(
-    coin: PlatformCoin,
+    token: Token,
     uid: String,
     transactionHash: String,
     transactionIndex: Int,
@@ -31,7 +31,7 @@ class BitcoinOutgoingTransactionRecord(
     blockHeight = blockHeight,
     confirmationsThreshold = confirmationsThreshold,
     timestamp = timestamp,
-    fee = fee?.let { TransactionValue.CoinValue(coin, it) },
+    fee = fee?.let { TransactionValue.CoinValue(token, it) },
     failed = failed,
     lockInfo = lockInfo,
     conflictingHash = conflictingHash,
@@ -39,7 +39,7 @@ class BitcoinOutgoingTransactionRecord(
     memo = memo,
     source = source
 ) {
-    val value: TransactionValue = TransactionValue.CoinValue(coin, amount)
+    val value: TransactionValue = TransactionValue.CoinValue(token, amount)
 
     override val mainValue = value
 

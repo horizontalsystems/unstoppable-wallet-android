@@ -31,9 +31,9 @@ class TopNftCollectionsViewItemFactory(
                 volumeDiff = collection.thirtyDayVolumeDiff
             }
         }
-        val volumeFormatted = volume?.let { numberFormatter.formatCoinShort(it.value, it.platformCoin.code, 2) } ?: "---"
+        val volumeFormatted = volume?.let { numberFormatter.formatCoinShort(it.value, it.coin.code, 2) } ?: "---"
         val floorPriceFormatted = collection.floorPrice?.let {
-            "Floor: " + numberFormatter.formatCoinShort(it.value, it.platformCoin.code, 2)
+            "Floor: " + numberFormatter.formatCoinShort(it.value, it.coin.code, 2)
         } ?: "---"
 
         return TopNftCollectionViewItem(

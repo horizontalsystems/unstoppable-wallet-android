@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceServi
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -75,15 +75,15 @@ class UniswapService(
                 }
                 .let { disposables.add(it) }
 
-        tradeService.coinFromObservable
+        tradeService.tokenFromObservable
                 .subscribeOn(Schedulers.io())
-                .subscribe { coin ->
-                    onUpdateCoinFrom(coin.orElse(null))
+                .subscribe { token ->
+                    onUpdateCoinFrom(token.orElse(null))
                 }
                 .let { disposables.add(it) }
-        onUpdateCoinFrom(tradeService.coinFrom)
+        onUpdateCoinFrom(tradeService.tokenFrom)
 
-        tradeService.coinToObservable
+        tradeService.tokenToObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe { coin ->
                     onUpdateCoinTo(coin.orElse(null))
@@ -133,14 +133,14 @@ class UniswapService(
         syncState()
     }
 
-    private fun onUpdateCoinFrom(coin: PlatformCoin?) {
-        balanceFrom = coin?.let { balance(it) }
-        allowanceService.set(coin)
-        pendingAllowanceService.set(coin)
+    private fun onUpdateCoinFrom(token: Token?) {
+        balanceFrom = token?.let { balance(it) }
+        allowanceService.set(token)
+        pendingAllowanceService.set(token)
     }
 
-    private fun onUpdateCoinTo(coin: PlatformCoin?) {
-        balanceTo = coin?.let { balance(it) }
+    private fun onUpdateCoinTo(token: Token?) {
+        balanceTo = token?.let { balance(it) }
     }
 
     private fun onUpdateAmountFrom(amount: BigDecimal?) {
@@ -208,8 +208,8 @@ class UniswapService(
         }
     }
 
-    private fun balance(coin: PlatformCoin): BigDecimal? =
-            (adapterManager.getAdapterForPlatformCoin(coin) as? IBalanceAdapter)?.balanceData?.available
+    private fun balance(coin: Token): BigDecimal? =
+            (adapterManager.getAdapterForToken(coin) as? IBalanceAdapter)?.balanceData?.available
 
     //region models
     sealed class State {

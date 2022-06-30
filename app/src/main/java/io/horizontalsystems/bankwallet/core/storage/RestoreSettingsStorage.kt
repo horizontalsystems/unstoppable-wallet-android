@@ -8,8 +8,8 @@ class RestoreSettingsStorage(appDatabase: AppDatabase) : IRestoreSettingsStorage
         appDatabase.restoreSettingDao()
     }
 
-    override fun restoreSettings(accountId: String, coinId: String): List<RestoreSettingRecord> {
-        return dao.get(accountId, coinId)
+    override fun restoreSettings(accountId: String, blockchainTypeUid: String): List<RestoreSettingRecord> {
+        return dao.get(accountId, blockchainTypeUid)
     }
 
     override fun restoreSettings(accountId: String): List<RestoreSettingRecord> {

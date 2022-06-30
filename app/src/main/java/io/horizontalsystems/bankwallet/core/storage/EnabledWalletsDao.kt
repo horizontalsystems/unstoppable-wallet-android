@@ -12,26 +12,23 @@ interface EnabledWalletsDao {
     @Query("SELECT * FROM EnabledWallet WHERE accountId = :accountId ORDER BY `walletOrder` ASC")
     fun enabledCoins(accountId: String): List<EnabledWallet>
 
-    @Query("SELECT COUNT(*) FROM EnabledWallet WHERE accountId = :accountId AND coinId = :coinId")
-    fun count(accountId: String, coinId: String): Int
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(storableCoin: EnabledWallet)
+    fun insert(enabledWallet: EnabledWallet)
 
     @Query("DELETE FROM EnabledWallet")
     fun deleteAll()
 
-    @Query("DELETE FROM EnabledWallet WHERE coinId = :coinId AND accountId = :accountId AND coinSettingsId = :coinSettingsId")
-    fun delete(coinId: String, accountId: String, coinSettingsId: String)
+    @Query("DELETE FROM EnabledWallet WHERE tokenQueryId = :tokenQueryId AND accountId = :accountId AND coinSettingsId = :coinSettingsId")
+    fun delete(tokenQueryId: String, accountId: String, coinSettingsId: String)
 
     @Transaction
-    fun insertWallets(coins: List<EnabledWallet>) {
-        coins.forEach { insert(it) }
+    fun insertWallets(enabledWallets: List<EnabledWallet>) {
+        enabledWallets.forEach { insert(it) }
     }
 
     @Transaction
     fun deleteWallets(enabledWallets: List<EnabledWallet>) {
-        enabledWallets.forEach { delete(it.coinId, it.accountId, it.coinSettingsId) }
+        enabledWallets.forEach { delete(it.tokenQueryId, it.accountId, it.coinSettingsId) }
     }
 
 }

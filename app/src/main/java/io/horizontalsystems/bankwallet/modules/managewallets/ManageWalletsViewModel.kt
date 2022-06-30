@@ -2,12 +2,7 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.label
-import io.horizontalsystems.bankwallet.entities.supportedPlatforms
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Supported
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Unsupported
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
@@ -46,8 +41,8 @@ class ManageWalletsViewModel(
     private fun viewItem(
         item: ManageWalletsService.Item,
     ): CoinViewItem {
-        val supportedPlatforms = item.fullCoin.supportedPlatforms
-        val label = supportedPlatforms.singleOrNull()?.coinType?.label
+        val supportedTokens = item.fullCoin.supportedTokens
+        val label = supportedTokens.singleOrNull()?.protocolType
         val state = when (item.state) {
             is Supported -> CoinViewItemState.ToggleVisible(
                 item.state.enabled,

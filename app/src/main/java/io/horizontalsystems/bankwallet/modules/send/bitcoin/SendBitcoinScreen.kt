@@ -55,11 +55,11 @@ fun SendBitcoinScreen(
 
     val rate = viewModel.coinRate
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.coinType))
+    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.token.blockchainType))
     val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {
-        val fullCoin = wallet.platformCoin.fullCoin
+        val fullCoin = wallet.token.fullCoin
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {
@@ -102,7 +102,7 @@ fun SendBitcoinScreen(
             Spacer(modifier = Modifier.height(12.dp))
             HSAddressInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                coinType = wallet.coinType,
+                tokenQuery = wallet.token.tokenQuery,
                 coinCode = wallet.coin.code,
                 error = addressError,
                 textPreprocessor = paymentAddressViewModel

@@ -16,12 +16,12 @@ object SendBitcoinModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendBitcoinAdapter
 
-            val provider = FeeRateProviderFactory.provider(wallet.coinType)!!
+            val provider = FeeRateProviderFactory.provider(wallet.token.blockchainType)!!
             val feeService = SendBitcoinFeeService(adapter)
             val feeRateService = SendBitcoinFeeRateService(provider)
             val amountService = SendBitcoinAmountService(adapter, wallet.coin.code, AmountValidator())
             val addressService = SendBitcoinAddressService(adapter)
-            val pluginService = SendBitcoinPluginService(App.localStorage, wallet.coinType)
+            val pluginService = SendBitcoinPluginService(App.localStorage, wallet.token.blockchainType)
             return SendBitcoinViewModel(
                 adapter,
                 wallet,

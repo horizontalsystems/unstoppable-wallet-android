@@ -144,12 +144,12 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                 }
 
                 additionalViewItems.forEach { additionViewItem ->
-                    val platformCoin = additionViewItem.platformCoin
+                    val token = additionViewItem.token
                     actionItems.add {
                         AccountActionItem(
                             title = additionViewItem.title,
-                            coinIconUrl = platformCoin.coin.iconUrl,
-                            coinIconPlaceholder = platformCoin.coinType.iconPlaceholder,
+                            coinIconUrl = token.coin.iconUrl,
+                            coinIconPlaceholder = token.iconPlaceholder,
                             badge = additionViewItem.value
                         )
                     }

@@ -3,8 +3,6 @@ package io.horizontalsystems.bankwallet.modules.syncerror
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.BtcBlockchain
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.entities.Wallet
 
 object SyncErrorModule {
@@ -24,7 +22,7 @@ object SyncErrorModule {
     }
 
     sealed class Blockchain {
-        class Btc(val blockchain: BtcBlockchain) : Blockchain()
-        class Evm(val blockchain: EvmBlockchain) : Blockchain()
+        class Btc(val blockchain: io.horizontalsystems.marketkit.models.Blockchain) : Blockchain()
+        class Evm(val blockchain: io.horizontalsystems.marketkit.models.Blockchain) : Blockchain()
     }
 }

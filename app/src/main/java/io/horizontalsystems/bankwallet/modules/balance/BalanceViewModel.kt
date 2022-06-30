@@ -178,7 +178,7 @@ class BalanceViewModel(
                 App.numberFormatter.formatFiatFull(it.value, it.currency.symbol)
             } ?: "---",
             coinValueStr = totalState.coinValue?.let {
-                "~" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.platformCoin.decimals)
+                "~" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
             } ?: "---",
             dimmed = totalState.dimmed
         )

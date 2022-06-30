@@ -80,8 +80,8 @@ class UniswapViewModel(
                 recipientDomain = tradeService.tradeOptions.recipient?.title,
                 price = formatter.price(
                     trade?.tradeData?.executionPrice,
-                    tradeService.coinFrom,
-                    tradeService.coinTo
+                    tradeService.tokenFrom,
+                    tradeService.tokenTo
                 ),
                 priceImpact = trade?.let { formatter.priceImpactViewItem(it) }
             )
@@ -110,8 +110,8 @@ class UniswapViewModel(
 
     fun getProviderState(): SwapMainModule.SwapProviderState {
         return SwapMainModule.SwapProviderState(
-            tradeService.coinFrom,
-            tradeService.coinTo,
+            tradeService.tokenFrom,
+            tradeService.tokenTo,
             tradeService.amountFrom,
             tradeService.amountTo,
             tradeService.amountType
@@ -271,22 +271,22 @@ class UniswapViewModel(
         return TradeViewItem(
             buyPrice = formatter.price(
                 trade.tradeData.executionPrice,
-                quoteCoin = tradeService.coinFrom,
-                baseCoin = tradeService.coinTo
+                quoteToken = tradeService.tokenFrom,
+                baseToken = tradeService.tokenTo
             ),
             sellPrice = formatter.price(
                 Price(
                     baseTokenAmount = trade.tradeData.trade.tokenAmountOut,
                     quoteTokenAmount = trade.tradeData.trade.tokenAmountIn
                 ).decimalValue,
-                quoteCoin = tradeService.coinTo,
-                baseCoin = tradeService.coinFrom
+                quoteToken = tradeService.tokenTo,
+                baseToken = tradeService.tokenFrom
             ),
             priceImpact = formatter.priceImpactViewItem(trade, UniswapTradeService.PriceImpactLevel.Warning),
             guaranteedAmount = formatter.guaranteedAmountViewItem(
                 trade.tradeData,
-                tradeService.coinFrom,
-                tradeService.coinTo
+                tradeService.tokenFrom,
+                tradeService.tokenTo
             )
         )
     }

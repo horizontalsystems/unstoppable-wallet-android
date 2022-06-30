@@ -31,7 +31,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
@@ -50,7 +50,7 @@ class ManageWalletsFragment : BaseFragment() {
     private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
     private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
     private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
-    private val coinPlatformsViewModel by viewModels<CoinPlatformsViewModel> { vmFactory }
+    private val coinTokensViewModel by viewModels<CoinTokensViewModel> { vmFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -101,11 +101,11 @@ class ManageWalletsFragment : BaseFragment() {
             )
         }
 
-        coinPlatformsViewModel.openPlatformsSelectorEvent.observe(viewLifecycleOwner) { config ->
+        coinTokensViewModel.openSelectorEvent.observe(viewLifecycleOwner) { config ->
             showBottomSelectorDialog(
                 config,
-                onSelect = { indexes -> coinPlatformsViewModel.onSelect(indexes) },
-                onCancel = { coinPlatformsViewModel.onCancelSelect() }
+                onSelect = { indexes -> coinTokensViewModel.onSelect(indexes) },
+                onCancel = { coinTokensViewModel.onCancelSelect() }
             )
         }
     }

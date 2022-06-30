@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
+import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartNumberFormatterShortened
 
 object ProChartModule {

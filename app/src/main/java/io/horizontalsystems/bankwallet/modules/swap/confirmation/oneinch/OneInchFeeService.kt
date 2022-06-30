@@ -1,14 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
 
 import io.horizontalsystems.bankwallet.core.EvmError
-import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.*
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.oneinchkit.Swap
 import io.reactivex.Observable
@@ -76,8 +74,8 @@ class OneInchFeeService(
         retryDisposable?.dispose()
 
         oneInchKitHelper.getSwapAsync(
-            fromCoin = parameters.coinFrom,
-            toCoin = parameters.coinTo,
+            fromToken = parameters.tokenFrom,
+            toToken = parameters.tokenTo,
             fromAmount = parameters.amountFrom,
             recipient = parameters.recipient?.hex,
             slippagePercentage = parameters.slippage.toFloat(),

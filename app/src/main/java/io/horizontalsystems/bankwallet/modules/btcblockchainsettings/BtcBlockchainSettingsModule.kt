@@ -5,16 +5,16 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.BtcBlockchain
+import io.horizontalsystems.marketkit.models.Blockchain
 
 object BtcBlockchainSettingsModule {
 
-    fun args(blockchain: BtcBlockchain): Bundle {
-        return bundleOf("blockchain" to blockchain,)
+    fun args(blockchain: Blockchain): Bundle {
+        return bundleOf("blockchain" to blockchain)
     }
 
     class Factory(arguments: Bundle) : ViewModelProvider.Factory {
-        private val blockchain = arguments.getParcelable<BtcBlockchain>("blockchain")!!
+        private val blockchain = arguments.getParcelable<Blockchain>("blockchain")!!
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

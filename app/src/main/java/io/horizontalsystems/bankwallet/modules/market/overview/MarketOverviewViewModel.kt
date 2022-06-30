@@ -386,4 +386,4 @@ class MarketOverviewViewModel(
 }
 
 val NftPrice.coinValue: CoinValue
-    get() = CoinValue(platformCoin, value)
+    get() = CoinValue(token, value)

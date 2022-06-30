@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -73,8 +73,8 @@ data class SendEvmData(
 
     @Parcelize
     data class OneInchSwapInfo(
-        val coinFrom: PlatformCoin,
-        val coinTo: PlatformCoin,
+        val tokenFrom: Token,
+        val tokenTo: Token,
         val amountFrom: BigDecimal,
         val estimatedAmountTo: BigDecimal,
         val slippage: BigDecimal,
@@ -109,15 +109,15 @@ object SendEvmModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendEthereumAdapter
             val amountValidator = AmountValidator()
-            val coinMaxAllowedDecimals = wallet.platformCoin.decimals
+            val coinMaxAllowedDecimals = wallet.token.decimals
 
-            val amountService = SendEvmAmountService(adapter, wallet.platformCoin, amountValidator, coinMaxAllowedDecimals)
+            val amountService = SendEvmAmountService(adapter, wallet.token, amountValidator, coinMaxAllowedDecimals)
             val addressService = SendEvmAddressService()
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
             return SendEvmViewModel(
                 wallet,
-                wallet.platformCoin,
+                wallet.token,
                 adapter,
                 xRateService,
                 amountService,

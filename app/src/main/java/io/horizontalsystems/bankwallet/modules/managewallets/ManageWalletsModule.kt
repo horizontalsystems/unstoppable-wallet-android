@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsService
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensService
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
@@ -23,12 +23,12 @@ object ManageWalletsModule {
             CoinSettingsService()
         }
 
-        private val coinPlatformsService by lazy {
-            CoinPlatformsService()
+        private val coinTokensService by lazy {
+            CoinTokensService()
         }
 
         private val enableCoinService by lazy {
-            EnableCoinService(coinPlatformsService, restoreSettingsService, coinSettingsService)
+            EnableCoinService(coinTokensService, restoreSettingsService, coinSettingsService)
         }
 
         private val manageWalletsService by lazy {
@@ -47,8 +47,8 @@ object ManageWalletsModule {
                 ManageWalletsViewModel::class.java -> {
                     ManageWalletsViewModel(manageWalletsService, listOf(manageWalletsService)) as T
                 }
-                CoinPlatformsViewModel::class.java -> {
-                    CoinPlatformsViewModel(coinPlatformsService) as T
+                CoinTokensViewModel::class.java -> {
+                    CoinTokensViewModel(coinTokensService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bitcoincore.BitcoinCore
@@ -15,6 +14,7 @@ import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 
 class BitcoinAdapter(
@@ -78,7 +78,7 @@ class BitcoinAdapter(
         // ignored for now
     }
 
-    override val blockchain = BtcBlockchain.Bitcoin
+    override val blockchainType = BlockchainType.Bitcoin
 
 
     companion object {
