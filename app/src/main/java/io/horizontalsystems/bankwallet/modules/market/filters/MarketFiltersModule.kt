@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Single
 
 object MarketFiltersModule {
@@ -30,26 +30,6 @@ object MarketFiltersModule {
         PricePeriod(R.string.Market_Filter_PricePeriod),
     }
 
-    val blockchainToCoinTypesMap = mapOf(
-        Blockchain.Ethereum to listOf(CoinType.Erc20::class.java),
-        Blockchain.BinanceSmartChain to listOf(CoinType.BinanceSmartChain::class.java, CoinType.Bep20::class.java),
-        Blockchain.Polygon to listOf(CoinType.Polygon::class.java, CoinType.Mrc20::class.java),
-        Blockchain.Binance to listOf(CoinType.Bep2::class.java),
-        Blockchain.Optimism to listOf(CoinType.EthereumOptimism::class.java, CoinType.OptimismErc20::class.java),
-        Blockchain.ArbitrumOne to listOf(CoinType.EthereumArbitrumOne::class.java, CoinType.ArbitrumOneErc20::class.java),
-        Blockchain.Avalanche to listOf(CoinType.Avalanche::class.java),
-        Blockchain.Fantom to listOf(CoinType.Fantom::class.java),
-        Blockchain.Harmony to listOf(CoinType.HarmonyShard0::class.java),
-        Blockchain.Huobi to listOf(CoinType.HuobiToken::class.java),
-        Blockchain.Iotex to listOf(CoinType.Iotex::class.java),
-        Blockchain.Moonriver to listOf(CoinType.Moonriver::class.java),
-        Blockchain.Okex to listOf(CoinType.OkexChain::class.java),
-        Blockchain.Solana to listOf(CoinType.Solana::class.java),
-        Blockchain.Sora to listOf(CoinType.Sora::class.java),
-        Blockchain.Tomochain to listOf(CoinType.Tomochain::class.java),
-        Blockchain.Xdai to listOf(CoinType.Xdai::class.java),
-    )
-
     enum class Blockchain(val value: String) {
         Ethereum("Ethereum"),
         BinanceSmartChain("Binance Smart Chain"),
@@ -69,8 +49,26 @@ object MarketFiltersModule {
         Tomochain("Tomochain"),
         Xdai("Xdai");
 
-        fun contains(coinType: CoinType): Boolean =
-            blockchainToCoinTypesMap[this]?.contains(coinType.javaClass) == true
+        fun matchesWithType(blockchainType: BlockchainType) = when (this) {
+            Ethereum -> blockchainType is BlockchainType.Ethereum
+            BinanceSmartChain -> blockchainType is BlockchainType.BinanceSmartChain
+            Binance -> blockchainType is BlockchainType.BinanceChain
+            ArbitrumOne -> blockchainType is BlockchainType.ArbitrumOne
+            Optimism -> blockchainType is BlockchainType.Optimism
+            Polygon -> blockchainType is BlockchainType.Polygon
+//            Avalanche -> blockchainType is BlockchainType.
+//            Fantom -> blockchainType is BlockchainType.
+//            Harmony -> blockchainType is BlockchainType.
+//            Huobi -> blockchainType is BlockchainType.
+//            Iotex -> blockchainType is BlockchainType.
+//            Moonriver -> blockchainType is BlockchainType.
+//            Okex -> blockchainType is BlockchainType.
+//            Solana -> blockchainType is BlockchainType.
+//            Sora -> blockchainType is BlockchainType.
+//            Tomochain -> blockchainType is BlockchainType.
+//            Xdai -> blockchainType is BlockchainType.
+            else -> false
+        }
     }
 }
 

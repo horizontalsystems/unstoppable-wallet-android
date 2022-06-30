@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -12,11 +12,11 @@ enum class BtcBlockchain(val raw: String): Parcelable {
     Litecoin("litecoin"),
     Dash("dash");
 
-    fun supports(coinType: CoinType): Boolean = when {
-        this == Bitcoin && coinType == CoinType.Bitcoin -> true
-        this == BitcoinCash && coinType == CoinType.BitcoinCash -> true
-        this == Litecoin && coinType == CoinType.Litecoin -> true
-        this == Dash && coinType == CoinType.Dash -> true
+    fun supports(blockchainType: BlockchainType): Boolean = when {
+        this == Bitcoin && blockchainType == BlockchainType.Bitcoin -> true
+        this == BitcoinCash && blockchainType == BlockchainType.BitcoinCash -> true
+        this == Litecoin && blockchainType == BlockchainType.Litecoin -> true
+        this == Dash && blockchainType == BlockchainType.Dash -> true
         else -> false
     }
 

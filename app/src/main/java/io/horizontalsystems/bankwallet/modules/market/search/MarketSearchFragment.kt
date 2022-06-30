@@ -43,9 +43,6 @@ import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.Platform
 
 class MarketSearchFragment : BaseFragment() {
 
@@ -366,20 +363,16 @@ private fun MarketCoin(
 @Composable
 fun MarketCoinPreview() {
     val coin = Coin("ether", "Ethereum", "ETH")
-    val fullCoin = FullCoin(
-        coin = coin,
-        platforms = listOf(Platform(CoinType.fromId("ethereum"), 18, "ethereum"))
-    )
     ComposeAppTheme {
         MarketCoin(
-            fullCoin.coin.name,
-            fullCoin.coin.code,
-            fullCoin.coin.iconUrl,
-            fullCoin.iconPlaceholder,
+            coin.name,
+            coin.code,
+            coin.iconUrl,
+            R.drawable.coin_placeholder,
             false,
             {},
             {},
-            label = fullCoin.typeLabel,
+            label = "label",
         )
     }
 }

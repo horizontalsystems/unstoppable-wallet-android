@@ -29,10 +29,10 @@ class SendBinanceViewModel(
     private val feeService: SendBinanceFeeService,
     private val xRateService: XRateService,
 ) : ViewModel() {
-    val feeCoin by feeService::feeCoin
-    val feeCoinMaxAllowedDecimals = feeCoin.decimals
+    val feeToken by feeService::feeToken
+    val feeTokenMaxAllowedDecimals = feeToken.decimals
 
-    val coinMaxAllowedDecimals = wallet.platformCoin.decimals
+    val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
     val memoMaxLength = 120
 
@@ -55,7 +55,7 @@ class SendBinanceViewModel(
 
     var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
         private set
-    var feeCoinRate by mutableStateOf(xRateService.getRate(feeCoin.coin.uid))
+    var feeCoinRate by mutableStateOf(xRateService.getRate(feeToken.coin.uid))
         private set
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
@@ -75,7 +75,7 @@ class SendBinanceViewModel(
         xRateService.getRateFlow(wallet.coin.uid).collectWith(viewModelScope) {
             coinRate = it
         }
-        xRateService.getRateFlow(feeCoin.coin.uid).collectWith(viewModelScope) {
+        xRateService.getRateFlow(feeToken.coin.uid).collectWith(viewModelScope) {
             feeCoinRate = it
         }
 
@@ -129,7 +129,7 @@ class SendBinanceViewModel(
             fee = feeState.fee,
             address = addressState.address!!,
             coin = wallet.coin,
-            feeCoin = feeCoin.coin,
+            feeCoin = feeToken.coin,
             memo = memo
         )
     }

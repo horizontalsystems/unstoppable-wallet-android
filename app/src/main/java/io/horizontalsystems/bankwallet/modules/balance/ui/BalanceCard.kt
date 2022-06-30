@@ -289,7 +289,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 onClick = {
                     navController.slideFromBottom(
                         R.id.swapFragment,
-                        SwapMainModule.prepareParams(viewItem.wallet.platformCoin)
+                        SwapMainModule.prepareParams(viewItem.wallet.token)
                     )
                 },
                 enabled = viewItem.swapEnabled

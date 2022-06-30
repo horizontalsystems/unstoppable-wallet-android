@@ -3,8 +3,9 @@ package io.horizontalsystems.bankwallet.modules.nft.collection.events
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.bankwallet.modules.nft.*
+import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
+import io.horizontalsystems.bankwallet.modules.nft.nftAssetPrice
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.NftAsset

@@ -18,8 +18,8 @@ class WC1Manager(
 
     fun getEvmKitWrapper(chainId: Int, account: Account): EvmKitWrapper? {
         val blockchain = evmBlockchainManager.getBlockchain(chainId) ?: return null
-        val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchain)
-        val evmKitWrapper = evmKitManager.getEvmKitWrapper(account, blockchain)
+        val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchain.type)
+        val evmKitWrapper = evmKitManager.getEvmKitWrapper(account, blockchain.type)
 
         return if (evmKitWrapper.evmKit.chain.id == chainId) {
             evmKitWrapper

@@ -14,10 +14,10 @@ class SyncErrorService(
 ) {
 
     val blockchain by lazy {
-        btcBlockchainManager.blockchain(wallet.coinType)?.let {
+        btcBlockchainManager.blockchain(wallet.token.blockchainType)?.let {
             SyncErrorModule.Blockchain.Btc(it)
         } ?: run {
-            evmBlockchainManager.getBlockchain(wallet.coinType)?.let {
+            evmBlockchainManager.getBlockchain(wallet.token)?.let {
                 SyncErrorModule.Blockchain.Evm(it)
             }
         }

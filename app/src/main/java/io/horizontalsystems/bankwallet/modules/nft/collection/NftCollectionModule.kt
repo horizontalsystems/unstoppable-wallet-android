@@ -18,7 +18,8 @@ object NftCollectionModule {
                 service,
                 App.numberFormatter,
                 XRateService(App.marketKit, App.currencyManager.baseCurrency),
-                App.coinManager
+                App.coinManager,
+                App.marketKit,
             ) as T
         }
 

@@ -6,8 +6,6 @@ import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
@@ -88,7 +86,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
-        lateinit var feeCoinProvider: FeeCoinProvider
+        lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
@@ -108,7 +106,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var evmBlockchainManager: EvmBlockchainManager
         lateinit var nftManager: NftManager
         lateinit var evmLabelManager: EvmLabelManager
-        lateinit var baseCoinManager: BaseCoinManager
+        lateinit var baseTokenManager: BaseTokenManager
         lateinit var balanceViewTypeManager: BalanceViewTypeManager
     }
 
@@ -151,7 +149,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
         evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage)
 
-        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage)
+        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
 
         binanceKitManager = BinanceKitManager(testMode)
 
@@ -173,7 +171,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         coinManager = CoinManager(marketKit, walletManager)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
         LocalStorageManager(preferences).apply {
             localStorage = this
@@ -202,7 +199,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         encryptionManager = EncryptionManager(keyProvider)
 
-        walletActivator = WalletActivator(walletManager, marketKit, walletStorage)
+        walletActivator = WalletActivator(walletManager, marketKit)
 
         val tokenBalanceProvider = TokenBalanceProvider()
         val evmAccountManagerFactory = EvmAccountManagerFactory(
@@ -240,7 +237,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
-        feeCoinProvider = FeeCoinProvider(marketKit)
+        feeCoinProvider = FeeTokenProvider(marketKit)
 
         addressParserFactory = AddressParserFactory()
 
@@ -279,14 +276,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         startTasks()
 
-        nftManager = NftManager(appDatabase.nftCollectionDao(), marketKit, coinManager)
+        nftManager = NftManager(appDatabase.nftCollectionDao(), marketKit)
 
         initializeWalletConnectV2(appConfig)
 
         wc2Service = WC2Service()
         wc2SessionManager = WC2SessionManager(accountManager, WC2SessionStorage(appDatabase), wc2Service, wc2Manager)
 
-        baseCoinManager = BaseCoinManager(coinManager, localStorage)
+        baseTokenManager = BaseTokenManager(coinManager, localStorage)
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
     }
 
@@ -368,14 +365,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 
-            if (!localStorage.favoriteCoinIdsMigrated) {
-                val request = OneTimeWorkRequestBuilder<MigrateFavoriteCoinIdsWorker>().build()
-                WorkManager.getInstance(instance).enqueue(request)
-            }
-            if (!localStorage.fillWalletInfoDone) {
-                val request = OneTimeWorkRequestBuilder<FillWalletInfoWorker>().build()
-                WorkManager.getInstance(instance).enqueue(request)
-            }
+//            if (!localStorage.favoriteCoinIdsMigrated) {
+//                val request = OneTimeWorkRequestBuilder<MigrateFavoriteCoinIdsWorker>().build()
+//                WorkManager.getInstance(instance).enqueue(request)
+//            }
+//            if (!localStorage.fillWalletInfoDone) {
+//                val request = OneTimeWorkRequestBuilder<FillWalletInfoWorker>().build()
+//                WorkManager.getInstance(instance).enqueue(request)
+//            }
 
             evmLabelManager.sync()
 

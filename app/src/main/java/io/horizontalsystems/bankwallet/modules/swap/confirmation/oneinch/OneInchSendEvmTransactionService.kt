@@ -95,8 +95,8 @@ class OneInchSendEvmTransactionService(
     private fun getAdditionalInfo(parameters: OneInchSwapParameters): SendEvmData.AdditionalInfo {
         return parameters.let {
             val swapInfo = SendEvmData.OneInchSwapInfo(
-                coinFrom = it.coinFrom,
-                coinTo = it.coinTo,
+                tokenFrom = it.tokenFrom,
+                tokenTo = it.tokenTo,
                 amountFrom = it.amountFrom,
                 estimatedAmountTo = it.amountTo,
                 slippage = it.slippage,

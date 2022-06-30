@@ -40,7 +40,7 @@ data class NftAssetRecord(
 )
 
 data class NftAssetPrice(
-    val coinTypeId: String,
+    val tokenQueryId: String,
     val value: BigDecimal
 )
 

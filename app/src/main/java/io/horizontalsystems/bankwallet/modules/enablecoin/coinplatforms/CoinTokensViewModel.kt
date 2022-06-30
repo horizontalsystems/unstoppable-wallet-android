@@ -2,25 +2,20 @@ package io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.platformCoinType
-import io.horizontalsystems.bankwallet.entities.platformType
-import io.horizontalsystems.bankwallet.entities.supportedPlatforms
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 
-class CoinPlatformsViewModel(
-    private val service: CoinPlatformsService
+class CoinTokensViewModel(
+    private val service: CoinTokensService
 ) : ViewModel() {
-    val openPlatformsSelectorEvent = SingleLiveEvent<BottomSheetSelectorMultipleDialog.Config>()
+    val openSelectorEvent = SingleLiveEvent<BottomSheetSelectorMultipleDialog.Config>()
 
-    private var currentRequest: CoinPlatformsService.Request? = null
+    private var currentRequest: CoinTokensService.Request? = null
     private val disposable: Disposable
 
     init {
@@ -30,7 +25,7 @@ class CoinPlatformsViewModel(
             }
     }
 
-    private fun handle(request: CoinPlatformsService.Request) {
+    private fun handle(request: CoinTokensService.Request) {
         currentRequest = request
         val fullCoin = request.fullCoin
         val config = BottomSheetSelectorMultipleDialog.Config(
@@ -38,20 +33,20 @@ class CoinPlatformsViewModel(
             title = Translator.getString(R.string.CoinPlatformsSelector_Title),
             subtitle = fullCoin.coin.name,
             description = Translator.getString(R.string.CoinPlatformsSelector_Description),
-            selectedIndexes = request.currentPlatforms.map { fullCoin.supportedPlatforms.indexOf(it) },
-            viewItems = fullCoin.supportedPlatforms.map { platform ->
+            selectedIndexes = request.currentTokens.map { fullCoin.supportedTokens.indexOf(it) },
+            viewItems = fullCoin.supportedTokens.map { token ->
                 BottomSheetSelectorViewItem(
-                    title = platform.coinType.platformType,
-                    subtitle = platform.coinType.platformCoinType
+                    title = token.protocolType ?: "",
+                    subtitle = token.protocolInfo
                 )
             }
         )
-        openPlatformsSelectorEvent.postValue(config)
+        openSelectorEvent.postValue(config)
     }
 
     fun onSelect(indexes: List<Int>) {
         currentRequest?.let { currentRequest ->
-            val platforms = currentRequest.fullCoin.supportedPlatforms
+            val platforms = currentRequest.fullCoin.supportedTokens
             service.select(indexes.map { platforms[it] }, currentRequest.fullCoin.coin)
         }
     }

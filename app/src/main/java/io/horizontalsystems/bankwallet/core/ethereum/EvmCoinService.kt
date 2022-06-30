@@ -6,12 +6,12 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.math.BigInteger
 
 class EvmCoinService(
-    val platformCoin: PlatformCoin,
+    val token: Token,
     private val currencyManager: ICurrencyManager,
     private val marketKit: MarketKit
 ) : Clearable {
@@ -19,14 +19,14 @@ class EvmCoinService(
     val rate: CurrencyValue?
         get() {
             val baseCurrency = currencyManager.baseCurrency
-            return marketKit.coinPrice(platformCoin.coin.uid, baseCurrency.code)?.let {
+            return marketKit.coinPrice(token.coin.uid, baseCurrency.code)?.let {
                 CurrencyValue(baseCurrency, it.value)
             }
         }
 
     fun amountData(value: BigInteger): SendModule.AmountData {
-        val decimalValue = BigDecimal(value, platformCoin.decimals)
-        val coinValue = CoinValue(platformCoin, decimalValue)
+        val decimalValue = BigDecimal(value, token.decimals)
+        val coinValue = CoinValue(token, decimalValue)
 
         val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
         val secondaryAmountInfo = rate?.let {
@@ -37,19 +37,19 @@ class EvmCoinService(
     }
 
     fun amountData(value: BigDecimal): SendModule.AmountData {
-        return amountData(value.movePointRight(platformCoin.decimals).toBigInteger())
+        return amountData(value.movePointRight(token.decimals).toBigInteger())
     }
 
     fun coinValue(value: BigInteger): CoinValue {
-        return CoinValue(platformCoin, convertToMonetaryValue(value))
+        return CoinValue(token, convertToMonetaryValue(value))
     }
 
     fun convertToMonetaryValue(value: BigInteger): BigDecimal {
-        return value.toBigDecimal().movePointLeft(platformCoin.decimals).stripTrailingZeros()
+        return value.toBigDecimal().movePointLeft(token.decimals).stripTrailingZeros()
     }
 
     fun convertToFractionalMonetaryValue(value: BigDecimal): BigInteger {
-        return value.movePointRight(platformCoin.decimals).toBigInteger()
+        return value.movePointRight(token.decimals).toBigInteger()
     }
 
     override fun clear() = Unit

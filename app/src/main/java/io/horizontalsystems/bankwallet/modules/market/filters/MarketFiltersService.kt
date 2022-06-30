@@ -4,8 +4,8 @@ import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.priceChangeValue
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.MarketInfo
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
@@ -104,7 +104,7 @@ class MarketFiltersService(
 
         return filterByRange(filterMarketCap, marketCap.toLong())
                 && filterByRange(filterVolume, totalVolume.toLong())
-                && inBlockchain(marketInfo.coinTypes)
+                && inBlockchain(marketInfo.fullCoin.tokens)
                 && filterByRange(filterPriceChange, priceChangeValue.toLong())
                 && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage))
                 && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage))
@@ -147,13 +147,14 @@ class MarketFiltersService(
         return value.abs() < allTimeDeltaPercent
     }
 
-    private fun inBlockchain(coinTypes: List<CoinType>?): Boolean {
+    private fun inBlockchain(tokens: List<Token>): Boolean {
         if (filterBlockchains.isEmpty()) return true
 
-        coinTypes?.forEach { coinType ->
-            if (filterBlockchains.any { it.contains(coinType) }) {
-                return true
+        tokens.forEach { token ->
+            val inBlockchain = filterBlockchains.any {
+                it.matchesWithType(token.blockchainType)
             }
+            if (inBlockchain) return true
         }
 
         return false

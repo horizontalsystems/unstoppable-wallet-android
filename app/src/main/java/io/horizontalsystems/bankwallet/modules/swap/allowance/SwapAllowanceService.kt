@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -24,7 +24,7 @@ class SwapAllowanceService(
     private val ethereumKit: EthereumKit
 ) {
 
-    private var coin: PlatformCoin? = null
+    private var token: Token? = null
     private val stateSubject = PublishSubject.create<Optional<State>>()
 
     var state: State? = null
@@ -39,8 +39,8 @@ class SwapAllowanceService(
     private val disposables = CompositeDisposable()
     private var allowanceDisposable: Disposable? = null
 
-    fun set(coin: PlatformCoin?) {
-        this.coin = coin
+    fun set(token: Token?) {
+        this.token = token
         sync()
     }
 
@@ -48,8 +48,8 @@ class SwapAllowanceService(
         val allowance = (state as? State.Ready)?.allowance
 
         return allowance?.let {
-            coin?.let { coin ->
-                ApproveData(dex, coin, spenderAddress.hex, amount, allowance.value)
+            token?.let { token ->
+                ApproveData(dex, token, spenderAddress.hex, amount, allowance.value)
             }
         }
 
@@ -80,10 +80,10 @@ class SwapAllowanceService(
         allowanceDisposable?.dispose()
         allowanceDisposable = null
 
-        val coin = coin
-        val adapter = coin?.let { adapterManager.getAdapterForPlatformCoin(it) } as? Eip20Adapter
+        val token = token
+        val adapter = token?.let { adapterManager.getAdapterForToken(it) } as? Eip20Adapter
 
-        if (coin == null || adapter == null) {
+        if (token == null || adapter == null) {
             state = null
             return
         }
@@ -97,7 +97,7 @@ class SwapAllowanceService(
         allowanceDisposable = adapter.allowance(spenderAddress, DefaultBlockParameter.Latest)
             .subscribeOn(Schedulers.io())
             .subscribe({ allowance ->
-                state = State.Ready(CoinValue(coin, allowance))
+                state = State.Ready(CoinValue(token, allowance))
             }, { error ->
                 state = State.NotReady(error)
             })
@@ -129,7 +129,7 @@ class SwapAllowanceService(
     @Parcelize
     data class ApproveData(
         val dex: SwapMainModule.Dex,
-        val coin: PlatformCoin,
+        val token: Token,
         val spenderAddress: String,
         val amount: BigDecimal,
         val allowance: BigDecimal

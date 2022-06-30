@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeType
@@ -29,8 +29,8 @@ class UniswapTradeService(
 
     //region internal subjects
     private val amountTypeSubject = PublishSubject.create<AmountType>()
-    private val coinFromSubject = PublishSubject.create<Optional<PlatformCoin>>()
-    private val coinToSubject = PublishSubject.create<Optional<PlatformCoin>>()
+    private val tokenFromSubject = PublishSubject.create<Optional<Token>>()
+    private val tokenToSubject = PublishSubject.create<Optional<Token>>()
     private val amountFromSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val amountToSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val stateSubject = PublishSubject.create<State>()
@@ -38,19 +38,19 @@ class UniswapTradeService(
     //endregion
 
     //region outputs
-    override var coinFrom: PlatformCoin? = null
+    override var tokenFrom: Token? = null
         private set(value) {
             field = value
-            coinFromSubject.onNext(Optional.ofNullable(value))
+            tokenFromSubject.onNext(Optional.ofNullable(value))
         }
-    override val coinFromObservable: Observable<Optional<PlatformCoin>> = coinFromSubject
+    override val tokenFromObservable: Observable<Optional<Token>> = tokenFromSubject
 
-    override var coinTo: PlatformCoin? = null
+    override var tokenTo: Token? = null
         private set(value) {
             field = value
-            coinToSubject.onNext(Optional.ofNullable(value))
+            tokenToSubject.onNext(Optional.ofNullable(value))
         }
-    override val coinToObservable: Observable<Optional<PlatformCoin>> = coinToSubject
+    override val tokenToObservable: Observable<Optional<Token>> = tokenToSubject
 
     override var amountFrom: BigDecimal? = null
         private set(value) {
@@ -94,17 +94,17 @@ class UniswapTradeService(
         return uniswapProvider.transactionData(tradeData)
     }
 
-    override fun enterCoinFrom(coin: PlatformCoin?) {
-        if (coinFrom == coin) return
+    override fun enterTokenFrom(token: Token?) {
+        if (tokenFrom == token) return
 
-        coinFrom = coin
+        tokenFrom = token
 
         if (amountType == AmountType.ExactTo) {
             amountFrom = null
         }
 
-        if (coinTo == coinFrom) {
-            coinTo = null
+        if (tokenTo == tokenFrom) {
+            tokenTo = null
             amountTo = null
         }
 
@@ -112,17 +112,17 @@ class UniswapTradeService(
         syncSwapData()
     }
 
-    override fun enterCoinTo(coin: PlatformCoin?) {
-        if (coinTo == coin) return
+    override fun enterTokenTo(token: Token?) {
+        if (tokenTo == token) return
 
-        coinTo = coin
+        tokenTo = token
 
         if (amountType == AmountType.ExactFrom) {
             amountTo = null
         }
 
-        if (coinFrom == coinTo) {
-            coinFrom = null
+        if (tokenFrom == tokenTo) {
+            tokenFrom = null
             amountFrom = null
         }
 
@@ -151,8 +151,8 @@ class UniswapTradeService(
     }
 
     override fun restoreState(swapProviderState: SwapMainModule.SwapProviderState) {
-        coinTo = swapProviderState.coinTo
-        coinFrom = swapProviderState.coinFrom
+        tokenTo = swapProviderState.tokenTo
+        tokenFrom = swapProviderState.tokenFrom
         amountType = swapProviderState.amountType
 
         when (swapProviderState.amountType) {
@@ -171,10 +171,10 @@ class UniswapTradeService(
     }
 
     override fun switchCoins() {
-        val swapCoin = coinTo
-        coinTo = coinFrom
+        val swapCoin = tokenTo
+        tokenTo = tokenFrom
 
-        enterCoinFrom(swapCoin)
+        enterTokenFrom(swapCoin)
     }
 
     fun start() {
@@ -203,10 +203,10 @@ class UniswapTradeService(
     }
 
     private fun syncSwapData() {
-        val coinFrom = coinFrom
-        val coinTo = coinTo
+        val tokenFrom = tokenFrom
+        val tokenTo = tokenTo
 
-        if (coinFrom == null || coinTo == null) {
+        if (tokenFrom == null || tokenTo == null) {
             state = State.NotReady()
             return
         }
@@ -218,7 +218,7 @@ class UniswapTradeService(
         swapDataDisposable?.dispose()
         swapDataDisposable = null
 
-        swapDataDisposable = uniswapProvider.swapDataSingle(coinFrom, coinTo)
+        swapDataDisposable = uniswapProvider.swapDataSingle(tokenFrom, tokenTo)
             .subscribeOn(Schedulers.io())
             .subscribe({
                 swapData = it

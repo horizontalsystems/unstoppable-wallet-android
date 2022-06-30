@@ -6,12 +6,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
@@ -127,10 +127,10 @@ data class TransactionViewItem(
         class Swap(val iconIn: Regular, val iconOut: Regular) : Icon()
         object Failed : Icon()
         class Platform(source: TransactionSource) : Icon() {
-            val iconRes = when ((source.blockchain as? TransactionSource.Blockchain.Evm)?.evmBlockchain) {
-                EvmBlockchain.BinanceSmartChain -> R.drawable.logo_chain_bsc_trx_24
-                EvmBlockchain.Ethereum -> R.drawable.logo_chain_ethereum_trx_24
-                EvmBlockchain.Polygon -> R.drawable.logo_chain_polygon_trx_24
+            val iconRes = when ((source.blockchain as? TransactionSource.Blockchain.Evm)?.blockchain?.type) {
+                BlockchainType.BinanceSmartChain -> R.drawable.logo_chain_bsc_trx_24
+                BlockchainType.Ethereum -> R.drawable.logo_chain_ethereum_trx_24
+                BlockchainType.Polygon -> R.drawable.logo_chain_polygon_trx_24
                 else -> null
             }
         }

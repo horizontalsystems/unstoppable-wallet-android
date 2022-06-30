@@ -362,14 +362,14 @@ private fun FilterCoinTabs(
     onCoinFilterClick: (TransactionWallet?) -> Unit
 ) {
     val tabItems = filterCoins.mapNotNull {
-        it.item.platformCoin?.let { platformCoin ->
+        it.item.token?.let { token ->
             TabItem(
-                platformCoin.code,
+                token.coin.code,
                 it.selected,
                 it.item,
                 ImageSource.Remote(
-                    platformCoin.coin.iconUrl,
-                    platformCoin.coinType.iconPlaceholder
+                    token.coin.iconUrl,
+                    token.iconPlaceholder
                 ),
                 it.item.badge
             )
