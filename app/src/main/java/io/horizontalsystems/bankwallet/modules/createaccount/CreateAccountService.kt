@@ -10,7 +10,9 @@ import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettin
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.xxxkit.models.TokenType
 import io.reactivex.subjects.BehaviorSubject
 
 class CreateAccountService(
@@ -54,11 +56,18 @@ class CreateAccountService(
 
         accountManager.save(account)
         activateDefaultWallets(account)
-        predefinedBlockchainSettingsProvider.prepareNew(account, CoinType.Zcash)
+        predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
     }
 
     private fun activateDefaultWallets(account: Account) {
-        walletActivator.activateWallets(account, listOf(CoinType.Bitcoin, CoinType.Ethereum, CoinType.BinanceSmartChain, CoinType.Polygon, CoinType.Zcash))
+        val tokenQueries = listOf(
+            TokenQuery(BlockchainType.Bitcoin, TokenType.Native),
+            TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
+            TokenQuery(BlockchainType.Polygon, TokenType.Native),
+            TokenQuery(BlockchainType.Zcash, TokenType.Native)
+        )
+        walletActivator.activateWallets(account, tokenQueries)
     }
 
     private fun resolveAccountType() = when (kind) {

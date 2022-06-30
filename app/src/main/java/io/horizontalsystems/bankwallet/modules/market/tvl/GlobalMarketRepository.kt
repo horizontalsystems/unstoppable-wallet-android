@@ -8,9 +8,9 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.DefiMarketInfo
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.xxxkit.MarketKit
+import io.horizontalsystems.xxxkit.models.DefiMarketInfo
+import io.horizontalsystems.xxxkit.models.HsTimePeriod
 import io.reactivex.Single
 import java.math.BigDecimal
 

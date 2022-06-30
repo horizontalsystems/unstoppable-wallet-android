@@ -1,23 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.nft
 
-import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.bankwallet.modules.nft.asset.nftAssetAttribute
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.NftAsset
-import io.horizontalsystems.marketkit.models.NftCollection
+import io.horizontalsystems.xxxkit.MarketKit
+import io.horizontalsystems.xxxkit.models.NftAsset
+import io.horizontalsystems.xxxkit.models.NftCollection
+import io.horizontalsystems.xxxkit.models.TokenQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 class NftManager(
     private val nftDao: NftDao,
-    private val marketKit: MarketKit,
-    private val coinManager: ICoinManager
+    private val marketKit: MarketKit
 ) {
     suspend fun getCollectionAndAssetsFromCache(accountId: String): Map<NftCollectionRecord, List<NftAssetRecord>> {
         val collections = nftDao.getCollections(accountId)
@@ -37,11 +35,10 @@ class NftManager(
 
     fun nftAssetPriceToCoinValue(nftAssetPrice: NftAssetPrice?): CoinValue? {
         if (nftAssetPrice == null) return null
+        val tokenQuery = TokenQuery.fromId(nftAssetPrice.tokenQueryId) ?: return null
+        val token = marketKit.token(tokenQuery) ?: return null
 
-        return coinManager.getPlatformCoin(CoinType.fromId(nftAssetPrice.coinTypeId))
-            ?.let { platformCoin ->
-                CoinValue(platformCoin, nftAssetPrice.value)
-            }
+        return CoinValue(token, nftAssetPrice.value)
     }
 
     fun assetItem(

@@ -89,7 +89,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
-        lateinit var feeCoinProvider: FeeCoinProvider
+        lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
@@ -162,7 +162,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
         evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage)
 
-        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage)
+        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, xxxKit)
 
         binanceKitManager = BinanceKitManager(testMode)
 
@@ -178,13 +178,12 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
-        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
+        walletStorage = WalletStorage(xxxKit, enabledWalletsStorage)
 
         walletManager = WalletManager(accountManager, walletStorage)
-        coinManager = CoinManager(marketKit, xxxKit, walletManager)
+        coinManager = CoinManager(xxxKit, walletManager)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
         LocalStorageManager(preferences).apply {
             localStorage = this
@@ -213,7 +212,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         encryptionManager = EncryptionManager(keyProvider)
 
-        walletActivator = WalletActivator(walletManager, marketKit, walletStorage)
+        walletActivator = WalletActivator(walletManager, xxxKit)
 
         val tokenBalanceProvider = TokenBalanceProvider()
         val evmAccountManagerFactory = EvmAccountManagerFactory(
@@ -225,7 +224,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         evmBlockchainManager = EvmBlockchainManager(
             backgroundManager,
             evmSyncSourceManager,
-            marketKit,
+            xxxKit,
             evmAccountManagerFactory
         )
 
@@ -251,7 +250,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
-        feeCoinProvider = FeeCoinProvider(marketKit)
+        feeCoinProvider = FeeTokenProvider(xxxKit)
 
         addressParserFactory = AddressParserFactory()
 
@@ -290,7 +289,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         startTasks()
 
-        nftManager = NftManager(appDatabase.nftCollectionDao(), marketKit, coinManager)
+        nftManager = NftManager(appDatabase.nftCollectionDao(), xxxKit)
 
         initializeWalletConnectV2(appConfig)
 

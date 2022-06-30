@@ -17,7 +17,7 @@ object MarketTopCoinsModule {
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val topMarketsRepository = MarketTopMoversRepository(App.marketKit)
+            val topMarketsRepository = MarketTopMoversRepository(App.xxxKit)
             val service = MarketTopCoinsService(
                 topMarketsRepository,
                 App.currencyManager,

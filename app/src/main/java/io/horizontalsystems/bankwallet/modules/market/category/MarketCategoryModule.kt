@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.market.category
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
+import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
@@ -22,7 +22,7 @@ object MarketCategoryModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 MarketCategoryViewModel::class.java -> {
-                    val marketCategoryRepository = MarketCategoryRepository(App.marketKit)
+                    val marketCategoryRepository = MarketCategoryRepository(App.xxxKit)
                     val service = MarketCategoryService(
                         marketCategoryRepository,
                         App.currencyManager,
@@ -38,7 +38,7 @@ object MarketCategoryModule {
                 ChartViewModel::class.java -> {
                     val chartService = CoinCategoryMarketDataChartService(
                         App.currencyManager,
-                        App.marketKit,
+                        App.xxxKit,
                         coinCategory.uid
                     )
                     val chartNumberFormatter = ChartCurrencyValueFormatterShortened()

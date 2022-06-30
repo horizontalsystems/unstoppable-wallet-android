@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.xxxkit.models.Coin
 import java.util.*
 
 sealed class TransactionInfoViewItem {

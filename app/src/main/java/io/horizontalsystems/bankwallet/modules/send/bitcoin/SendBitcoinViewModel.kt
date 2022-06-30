@@ -202,7 +202,7 @@ class SendBitcoinViewModel(
                 addressState.validAddress!!.hex,
                 feeRateState.feeRate!!,
                 pluginState.pluginData,
-                btcBlockchainManager.transactionSortMode(adapter.blockchain),
+                btcBlockchainManager.transactionSortMode(adapter.blockchainType),
                 logger
             ).blockingGet()
 

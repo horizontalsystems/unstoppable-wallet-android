@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.modules.profeatures.ProNft
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.xxxkit.MarketKit
+import io.horizontalsystems.xxxkit.models.HsTimePeriod
 import io.reactivex.Single
 
 class ProChartService(
@@ -29,7 +29,7 @@ class ProChartService(
     ): Single<ChartPointsWrapper> {
         val sessionKey = proFeaturesAuthorizationManager.getSessionKey(ProNft.YAK)?.key?.value
 
-        val chartDataSingle: Single<List<io.horizontalsystems.marketkit.models.ChartPoint>> = when (chartType) {
+        val chartDataSingle: Single<List<io.horizontalsystems.xxxkit.models.ChartPoint>> = when (chartType) {
             ProChartModule.ChartType.DexVolume ->
                 marketKit.dexVolumesSingle(coinUid, currency.code, chartInterval, sessionKey)
                     .map { response -> response.volumePoints }

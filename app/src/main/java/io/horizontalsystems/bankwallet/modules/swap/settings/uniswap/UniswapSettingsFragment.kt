@@ -96,7 +96,7 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
     private fun setRecipientAddressCompose() {
         binding.recipientAddressCompose.setContent {
             ComposeAppTheme {
-                val tokenQuery = TokenQuery(dex.blockchain.blockchainType, TokenType.Native)
+                val tokenQuery = TokenQuery(dex.blockchainType, TokenType.Native)
                 App.xxxKit.token(tokenQuery)?.let { token ->
                     Column {
                         Spacer(modifier = Modifier.height(12.dp))

@@ -34,7 +34,7 @@ import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.xxxkit.models.*
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -386,4 +386,4 @@ class MarketOverviewViewModel(
 }
 
 val NftPrice.coinValue: CoinValue
-    get() = CoinValue(platformCoin, value)
+    get() = CoinValue(token, value)

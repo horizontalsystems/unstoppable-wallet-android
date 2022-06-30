@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
@@ -23,10 +22,10 @@ object MarketOverviewModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val topMarketsRepository = MarketTopMoversRepository(App.marketKit)
+            val topMarketsRepository = MarketTopMoversRepository(App.xxxKit)
             val service = MarketOverviewService(
                 topMarketsRepository,
-                App.marketKit,
+                App.xxxKit,
                 App.backgroundManager,
                 App.currencyManager
             )

@@ -26,7 +26,10 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.xxxkit.models.TokenType
 import java.math.BigInteger
 
 object WCRequestModule {
@@ -37,7 +40,7 @@ object WCRequestModule {
         dAppName: String?
     ) : ViewModelProvider.Factory {
         private val evmKitWrapper by lazy { baseService.evmKitWrapper!! }
-        private val coin by lazy { platformCoin(evmKitWrapper.evmKit.chain) }
+        private val token by lazy { getToken(evmKitWrapper.evmKit.chain) }
         private val transaction = request.transaction
         private val transactionData =
             TransactionData(transaction.to, transaction.value, transaction.data)
@@ -52,7 +55,7 @@ object WCRequestModule {
         }
 
         private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager)
+            EvmCoinServiceFactory(token, App.xxxKit, App.currencyManager)
         }
         private val feeService by lazy {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, transactionData, 10)
@@ -98,7 +101,7 @@ object WCRequestModule {
         private val service by lazy {
             WC2SendEthereumTransactionRequestService(requestId, App.wc2SessionManager)
         }
-        private val coin by lazy { platformCoin(service.evmKitWrapper.evmKit.chain) }
+        private val token by lazy { getToken(service.evmKitWrapper.evmKit.chain) }
         private val transaction = service.transactionRequest.transaction
         private val transactionData =
             TransactionData(transaction.to, transaction.value, transaction.data)
@@ -110,7 +113,7 @@ object WCRequestModule {
         }
 
         private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager)
+            EvmCoinServiceFactory(token, App.xxxKit, App.currencyManager)
         }
         private val feeService by lazy {
             EvmFeeService(
@@ -158,14 +161,16 @@ object WCRequestModule {
         }
     }
 
-    private fun platformCoin(chain: Chain) =
-        when (chain) {
-            Chain.BinanceSmartChain -> App.coinManager.getPlatformCoin(CoinType.BinanceSmartChain)!!
-            Chain.Polygon -> App.coinManager.getPlatformCoin(CoinType.Polygon)!!
-            Chain.Optimism -> App.coinManager.getPlatformCoin(CoinType.EthereumOptimism)!!
-            Chain.ArbitrumOne -> App.coinManager.getPlatformCoin(CoinType.EthereumArbitrumOne)!!
-            else -> App.coinManager.getPlatformCoin(CoinType.Ethereum)!!
+    private fun getToken(chain: Chain): Token {
+        val blockchainType = when (chain) {
+            Chain.BinanceSmartChain -> BlockchainType.BinanceSmartChain
+            Chain.Polygon -> BlockchainType.Polygon
+            Chain.Optimism -> BlockchainType.Optimism
+            Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
+            else -> BlockchainType.Ethereum
         }
+        return App.xxxKit.token(TokenQuery(blockchainType, TokenType.Native))!!
+    }
 
     private fun getGasPrice(transaction: WalletConnectTransaction): GasPrice? = when {
         transaction.maxFeePerGas != null && transaction.maxPriorityFeePerGas != null -> {

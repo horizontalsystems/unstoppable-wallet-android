@@ -13,12 +13,13 @@ object NftCollectionModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = NftCollectionService(collectionUid, App.marketKit)
+            val service = NftCollectionService(collectionUid, App.xxxKit)
             return NftCollectionViewModel(
                 service,
                 App.numberFormatter,
                 XRateService(App.marketKit, App.currencyManager.baseCurrency),
-                App.coinManager
+                App.coinManager,
+                App.xxxKit,
             ) as T
         }
 

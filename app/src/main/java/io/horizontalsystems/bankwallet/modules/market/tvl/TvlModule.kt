@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatter
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.xxxkit.models.FullCoin
 import java.math.BigDecimal
 
 object TvlModule {
@@ -19,7 +19,7 @@ object TvlModule {
     @Suppress("UNCHECKED_CAST")
     class Factory : ViewModelProvider.Factory {
         private val globalMarketRepository: GlobalMarketRepository by lazy {
-            GlobalMarketRepository(App.marketKit)
+            GlobalMarketRepository(App.xxxKit)
         }
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

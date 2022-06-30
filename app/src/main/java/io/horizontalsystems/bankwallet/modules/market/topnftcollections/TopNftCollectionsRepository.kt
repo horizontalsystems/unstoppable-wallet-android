@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionItem
 import io.horizontalsystems.bankwallet.modules.nft.nftCollectionItem
-import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.xxxkit.MarketKit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

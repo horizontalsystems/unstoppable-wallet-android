@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.xxxkit.models.HsTimePeriod
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 

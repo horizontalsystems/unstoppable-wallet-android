@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.coin.majorholders
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.TokenHolder
+import io.horizontalsystems.xxxkit.MarketKit
+import io.horizontalsystems.xxxkit.models.TokenHolder
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject

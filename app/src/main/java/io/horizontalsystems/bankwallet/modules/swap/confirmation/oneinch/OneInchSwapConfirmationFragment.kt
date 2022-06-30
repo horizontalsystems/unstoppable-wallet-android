@@ -14,7 +14,9 @@ class OneInchSwapConfirmationFragment(
 
     override val logger = AppLogger("swap_1inch")
 
-    private val vmFactory by lazy { OneInchConfirmationModule.Factory(dex.blockchain, requireArguments()) }
+    private val vmFactory by lazy {
+        OneInchConfirmationModule.Factory(dex.blockchainType, requireArguments())
+    }
     override val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     override val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(navGraphId) { vmFactory }
 }

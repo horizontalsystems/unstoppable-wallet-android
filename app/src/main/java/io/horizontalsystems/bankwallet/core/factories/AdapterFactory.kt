@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.*
-import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
@@ -49,19 +48,19 @@ class AdapterFactory(
     fun getAdapter(wallet: Wallet) = when (val tokenType = wallet.token.type) {
         TokenType.Native -> when (wallet.token.blockchainType) {
             BlockchainType.Bitcoin -> {
-                val syncMode = btcBlockchainManager.syncMode(BtcBlockchain.Bitcoin, wallet.account.origin)
+                val syncMode = btcBlockchainManager.syncMode(BlockchainType.Bitcoin, wallet.account.origin)
                 BitcoinAdapter(wallet, syncMode, testMode, backgroundManager)
             }
             BlockchainType.BitcoinCash -> {
-                val syncMode = btcBlockchainManager.syncMode(BtcBlockchain.BitcoinCash, wallet.account.origin)
+                val syncMode = btcBlockchainManager.syncMode(BlockchainType.BitcoinCash, wallet.account.origin)
                 BitcoinCashAdapter(wallet, syncMode, testMode, backgroundManager)
             }
             BlockchainType.Litecoin -> {
-                val syncMode = btcBlockchainManager.syncMode(BtcBlockchain.Litecoin, wallet.account.origin)
+                val syncMode = btcBlockchainManager.syncMode(BlockchainType.Litecoin, wallet.account.origin)
                 LitecoinAdapter(wallet, syncMode, testMode, backgroundManager)
             }
             BlockchainType.Dash -> {
-                val syncMode = btcBlockchainManager.syncMode(BtcBlockchain.Dash, wallet.account.origin)
+                val syncMode = btcBlockchainManager.syncMode(BlockchainType.Dash, wallet.account.origin)
                 DashAdapter(wallet, syncMode, testMode, backgroundManager)
             }
             BlockchainType.Zcash -> {

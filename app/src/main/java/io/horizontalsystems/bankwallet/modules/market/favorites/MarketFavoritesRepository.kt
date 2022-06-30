@@ -5,11 +5,11 @@ import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.xxxkit.MarketKit
 import io.reactivex.Single
 
 class MarketFavoritesRepository(
-    private val kit: MarketKit,
+    private val marketKit: MarketKit,
     private val manager: MarketFavoritesManager
 ) {
     private var cache: List<MarketItem> = listOf()
@@ -25,7 +25,7 @@ class MarketFavoritesRepository(
             var marketItems = listOf<MarketItem>()
             if (favoriteCoins.isNotEmpty()) {
                 val favoriteCoinUids = favoriteCoins.map { it.coinUid }
-                marketItems = kit.marketInfosSingle(favoriteCoinUids, currency.code).blockingGet()
+                marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code).blockingGet()
                     .map { marketInfo ->
                         MarketItem.createFromCoinMarket(marketInfo, currency)
                     }

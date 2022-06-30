@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.TvlDiffType
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.xxxkit.models.HsTimePeriod
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -2,13 +2,15 @@ package io.horizontalsystems.bankwallet.modules.nft.asset
 
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.nft.*
+import io.horizontalsystems.bankwallet.modules.nft.CollectionLinks
+import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Price
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale.PriceType
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.AssetOrder
-import io.horizontalsystems.marketkit.models.NftPrice
+import io.horizontalsystems.bankwallet.modules.nft.nftAssetPrice
+import io.horizontalsystems.xxxkit.MarketKit
+import io.horizontalsystems.xxxkit.models.AssetOrder
+import io.horizontalsystems.xxxkit.models.NftPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow

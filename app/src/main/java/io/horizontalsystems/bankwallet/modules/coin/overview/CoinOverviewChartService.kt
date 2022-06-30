@@ -10,11 +10,11 @@ import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.ChartInfo
-import io.horizontalsystems.marketkit.models.ChartPointType
-import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.xxxkit.MarketKit
+import io.horizontalsystems.xxxkit.models.ChartInfo
+import io.horizontalsystems.xxxkit.models.ChartPointType
+import io.horizontalsystems.xxxkit.models.CoinPrice
+import io.horizontalsystems.xxxkit.models.HsTimePeriod
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 

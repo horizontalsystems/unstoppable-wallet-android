@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bitcoincore.BitcoinCore
@@ -14,6 +13,7 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.dashkit.DashKit
 import io.horizontalsystems.dashkit.DashKit.NetworkType
 import io.horizontalsystems.dashkit.models.DashTransactionInfo
+import io.horizontalsystems.xxxkit.models.BlockchainType
 import java.math.BigDecimal
 
 class DashAdapter(
@@ -77,7 +77,7 @@ class DashAdapter(
         // ignored for now
     }
 
-    override val blockchain: BtcBlockchain = BtcBlockchain.Dash
+    override val blockchainType = BlockchainType.Dash
 
     companion object {
 

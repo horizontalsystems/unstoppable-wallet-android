@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.swap.coincard.ISwapCoinCardService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapFromCoinCardService
@@ -22,6 +21,8 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFra
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapFragment
+import io.horizontalsystems.xxxkit.models.Blockchain
+import io.horizontalsystems.xxxkit.models.BlockchainType
 import io.horizontalsystems.xxxkit.models.Token
 import io.reactivex.Observable
 import kotlinx.parcelize.Parcelize
@@ -44,7 +45,7 @@ object SwapMainModule {
         val fragment: SwapBaseFragment
         val settingsFragment: SwapSettingsBaseFragment
 
-        fun supports(blockchain: EvmBlockchain): Boolean
+        fun supports(blockchainType: BlockchainType): Boolean
     }
 
     @Parcelize
@@ -57,8 +58,8 @@ object SwapMainModule {
         override val settingsFragment: SwapSettingsBaseFragment
             get() = UniswapSettingsFragment()
 
-        override fun supports(blockchain: EvmBlockchain): Boolean {
-            return blockchain == EvmBlockchain.Ethereum
+        override fun supports(blockchainType: BlockchainType): Boolean {
+            return blockchainType == BlockchainType.Ethereum
         }
     }
 
@@ -72,8 +73,8 @@ object SwapMainModule {
         override val settingsFragment: SwapSettingsBaseFragment
             get() = UniswapSettingsFragment()
 
-        override fun supports(blockchain: EvmBlockchain): Boolean {
-            return blockchain == EvmBlockchain.BinanceSmartChain
+        override fun supports(blockchainType: BlockchainType): Boolean {
+            return blockchainType == BlockchainType.BinanceSmartChain
         }
     }
 
@@ -87,9 +88,13 @@ object SwapMainModule {
         override val settingsFragment: SwapSettingsBaseFragment
             get() = OneInchSettingsFragment()
 
-        override fun supports(blockchain: EvmBlockchain): Boolean {
-            return blockchain == EvmBlockchain.Ethereum || blockchain == EvmBlockchain.BinanceSmartChain || blockchain == EvmBlockchain.Polygon ||
-                blockchain == EvmBlockchain.Optimism || blockchain == EvmBlockchain.ArbitrumOne
+        override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Optimism,
+            BlockchainType.ArbitrumOne -> true
+            else -> false
         }
     }
 
@@ -103,13 +108,15 @@ object SwapMainModule {
         override val settingsFragment: SwapSettingsBaseFragment
             get() = UniswapSettingsFragment()
 
-        override fun supports(blockchain: EvmBlockchain): Boolean {
-            return blockchain == EvmBlockchain.Polygon
+        override fun supports(blockchainType: BlockchainType): Boolean {
+            return blockchainType == BlockchainType.Polygon
         }
     }
 
     @Parcelize
-    class Dex(val blockchain: EvmBlockchain, val provider: ISwapProvider) : Parcelable
+    class Dex(val blockchain: Blockchain, val provider: ISwapProvider) : Parcelable {
+        val blockchainType get() = blockchain.type
+    }
 
     @Parcelize
     enum class AmountType : Parcelable {

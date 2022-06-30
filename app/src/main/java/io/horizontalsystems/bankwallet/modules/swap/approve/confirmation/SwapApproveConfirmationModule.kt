@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
@@ -18,16 +17,19 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransac
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
+import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.xxxkit.models.TokenType
 
 object SwapApproveConfirmationModule {
 
     class Factory(
         private val sendEvmData: SendEvmData,
-        private val blockchain: EvmBlockchain
+        private val blockchainType: BlockchainType
     ) : ViewModelProvider.Factory {
 
-        private val platformCoin by lazy { App.marketKit.platformCoin(blockchain.baseCoinType)!! }
-        private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchain).evmKitWrapper!! }
+        private val token by lazy { App.xxxKit.token(TokenQuery(blockchainType, TokenType.Native))!! }
+        private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
             if (evmKit.chain.isEIP1559Supported) {
@@ -43,8 +45,8 @@ object SwapApproveConfirmationModule {
         }
         private val coinServiceFactory by lazy {
             EvmCoinServiceFactory(
-                platformCoin,
-                App.marketKit,
+                token,
+                App.xxxKit,
                 App.currencyManager
             )
         }

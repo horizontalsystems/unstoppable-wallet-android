@@ -4,8 +4,8 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
+import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
@@ -18,7 +18,7 @@ object MetricsPageModule {
     @Suppress("UNCHECKED_CAST")
     class Factory(private val metricsType: MetricsType) : ViewModelProvider.Factory {
         private val globalMarketRepository by lazy {
-            GlobalMarketRepository(App.marketKit)
+            GlobalMarketRepository(App.xxxKit)
         }
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

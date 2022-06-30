@@ -22,6 +22,19 @@ val Token.isSupported: Boolean
 val Token.placeholderImageName: String
     get() = protocolType?.let { "Coin Icon Placeholder - $it" } ?: "icon_placeholder_24"
 
+val Token.iconPlaceholder: Int
+    get() = when (type) {
+        is TokenType.Eip20 -> {
+            when (blockchainType) {
+                BlockchainType.Ethereum -> R.drawable.erc20
+                BlockchainType.BinanceSmartChain -> R.drawable.bep20
+                else -> R.drawable.coin_placeholder
+            }
+        }
+        is TokenType.Bep2 -> R.drawable.bep2
+        else -> R.drawable.coin_placeholder
+    }
+
 val Token.swappable: Boolean
     get() = when (blockchainType) {
         BlockchainType.Ethereum,
@@ -131,6 +144,22 @@ val BlockchainType.restoreSettingTypes: List<RestoreSettingType>
         else -> listOf()
     }
 
+val BlockchainType.icon24: Int
+    get() = when (this) {
+        BlockchainType.Bitcoin -> R.drawable.logo_bitcoin_24
+        BlockchainType.BitcoinCash -> R.drawable.logo_bitcoincash_24
+        BlockchainType.Litecoin -> R.drawable.logo_litecoin_24
+        BlockchainType.Dash -> R.drawable.logo_dash_24
+        BlockchainType.Ethereum -> R.drawable.logo_ethereum_24
+        BlockchainType.BinanceSmartChain -> R.drawable.logo_binancesmartchain_24
+        BlockchainType.Polygon -> R.drawable.logo_polygon_24
+        BlockchainType.Optimism -> R.drawable.logo_optimism_24
+        BlockchainType.ArbitrumOne -> R.drawable.logo_arbitrum_24
+        BlockchainType.Zcash -> R.drawable.logo_zcash_24
+        BlockchainType.BinanceChain -> R.drawable.logo_bep2_24
+        is BlockchainType.Unsupported -> R.drawable.ic_platform_placeholder_24
+    }
+
 val BlockchainType.order: Int
     get() = when (this) {
         BlockchainType.Bitcoin -> 1
@@ -152,6 +181,9 @@ val Coin.imageUrl: String
 
 val TopPlatform.imageUrl
     get() = "https://markets.nyc3.digitaloceanspaces.com/platform-icons/$uid@3x.png"
+
+val FullCoin.typeLabel: String?
+    get() = tokens.singleOrNull()?.protocolType
 
 val FullCoin.supportedTokens
     get() = tokens.filter { it.isSupported }

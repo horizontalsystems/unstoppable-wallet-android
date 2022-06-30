@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo.options
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.xxxkit.models.Token
 
 class TransactionSpeedUpCancelViewModel(
-    basePlatformCoin: PlatformCoin,
+    baseToken: Token,
     optionType: TransactionInfoOptionsModule.Type,
     val isTransactionPending: Boolean
 ) : ViewModel() {
@@ -18,7 +18,7 @@ class TransactionSpeedUpCancelViewModel(
 
     val description: String = when (optionType) {
         TransactionInfoOptionsModule.Type.SpeedUp -> Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Description)
-        TransactionInfoOptionsModule.Type.Cancel -> Translator.getString(R.string.TransactionInfoOptions_Cancel_Description, basePlatformCoin.code)
+        TransactionInfoOptionsModule.Type.Cancel -> Translator.getString(R.string.TransactionInfoOptions_Cancel_Description, baseToken.coin.code)
     }
 
     val buttonTitle: String = when (optionType) {

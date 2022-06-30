@@ -25,16 +25,16 @@ class FillWalletInfoWorker(ctx: Context, params: WorkerParameters) :
             return Result.success()
         }
 
-        val coinTypeIds = nonFilledWallets.map { it.coinId }
+        val coinTypeIds = nonFilledWallets.map { it.tokenQueryId }
         val platformCoins = marketKit.platformCoinsByCoinTypeIds(coinTypeIds)
 
         val updatedEnabledWallets = mutableListOf<EnabledWallet>()
 
         platformCoins.forEach { platformCoin ->
-            enabledWallets.firstOrNull { it.coinId == platformCoin.coinType.id }
+            enabledWallets.firstOrNull { it.tokenQueryId == platformCoin.coinType.id }
                 ?.let { enabledWallet ->
                     val updatedEnabledWallet = EnabledWallet(
-                        coinId = enabledWallet.coinId,
+                        tokenQueryId = enabledWallet.tokenQueryId,
                         coinSettingsId = enabledWallet.coinSettingsId,
                         accountId = enabledWallet.accountId,
                         walletOrder= enabledWallet.walletOrder,

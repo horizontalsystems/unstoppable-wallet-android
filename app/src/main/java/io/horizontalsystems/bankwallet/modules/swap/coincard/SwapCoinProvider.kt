@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.swap.coincard
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Dex
 import io.horizontalsystems.core.ICurrencyManager
@@ -21,7 +20,7 @@ class SwapCoinProvider(
 ) {
 
     private fun getCoinItems(filter: String): List<CoinBalanceItem> {
-        val tokens = marketKit.tokens(dex.blockchain.blockchainType, filter)
+        val tokens = marketKit.tokens(dex.blockchainType, filter)
 
         return tokens.map { CoinBalanceItem(it, null, null) }
     }
@@ -45,11 +44,11 @@ class SwapCoinProvider(
     }
 
     private fun dexSupportsCoin(token: Token) = when (token.blockchainType) {
-        BlockchainType.Ethereum -> dex.blockchain == EvmBlockchain.Ethereum
-        BlockchainType.BinanceSmartChain -> dex.blockchain == EvmBlockchain.BinanceSmartChain
-        BlockchainType.Polygon -> dex.blockchain == EvmBlockchain.Polygon
-        BlockchainType.Optimism -> dex.blockchain == EvmBlockchain.Optimism
-        BlockchainType.ArbitrumOne -> dex.blockchain == EvmBlockchain.ArbitrumOne
+        BlockchainType.Ethereum -> dex.blockchainType == BlockchainType.Ethereum
+        BlockchainType.BinanceSmartChain -> dex.blockchainType == BlockchainType.BinanceSmartChain
+        BlockchainType.Polygon -> dex.blockchainType == BlockchainType.Polygon
+        BlockchainType.Optimism -> dex.blockchainType == BlockchainType.Optimism
+        BlockchainType.ArbitrumOne -> dex.blockchainType == BlockchainType.ArbitrumOne
         else -> false
     }
 

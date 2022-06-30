@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.market.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.marketkit.models.CoinCategory
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.xxxkit.models.CoinCategory
+import io.horizontalsystems.xxxkit.models.FullCoin
 import java.math.BigDecimal
 import javax.annotation.concurrent.Immutable
 
@@ -14,7 +14,7 @@ object MarketSearchModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MarketSearchService(
-                App.marketKit,
+                App.xxxKit,
                 App.marketFavoritesManager,
                 App.currencyManager.baseCurrency
             )
