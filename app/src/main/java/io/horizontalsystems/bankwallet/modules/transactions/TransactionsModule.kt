@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.shortName
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CoinSettings
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.util.*
 
@@ -44,7 +44,7 @@ sealed class TransactionStatus {
 }
 
 data class TransactionWallet(
-    val platformCoin: PlatformCoin?,
+    val token: Token?,
     val source: TransactionSource,
     val badge: String?
 )
@@ -72,27 +72,27 @@ data class TransactionSource(
                 }
             }
         }
-        class Evm(val evmBlockchain: EvmBlockchain) : Blockchain() {
+        class Evm(val blockchain: io.horizontalsystems.marketkit.models.Blockchain) : Blockchain() {
             override fun hashCode(): Int {
-                return this.evmBlockchain.hashCode()
+                return this.blockchain.hashCode()
             }
             override fun equals(other: Any?): Boolean {
                 return when(other){
-                    is Evm -> this.evmBlockchain == other.evmBlockchain
+                    is Evm -> this.blockchain == other.blockchain
                     else -> false
                 }
             }
         }
 
         fun getTitle(): String {
-            return when(this){
+            return when (this) {
                 Bitcoin -> "Bitcoin"
                 Litecoin -> "Litecoin"
                 BitcoinCash -> "BitcoinCash"
                 Dash -> "Dash"
                 Zcash -> "Zcash"
                 is Bep2 -> "Binance Chain"
-                is Evm -> this.evmBlockchain.shortName
+                is Evm -> this.blockchain.shortName
             }
         }
     }

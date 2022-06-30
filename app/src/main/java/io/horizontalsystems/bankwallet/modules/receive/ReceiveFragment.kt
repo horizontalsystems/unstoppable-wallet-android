@@ -80,7 +80,7 @@ private fun ReceiveScreen(
 ) {
     val localView = LocalView.current
     val context = LocalContext.current
-    val fullCoin = viewModel.wallet.platformCoin.fullCoin
+    val fullCoin = viewModel.wallet.token.fullCoin
     val qrBitmap = TextHelper.getQrCodeBitmap(viewModel.receiveAddress)
     val addressHint = getAddressHint(viewModel.testNet, viewModel.addressType)
 

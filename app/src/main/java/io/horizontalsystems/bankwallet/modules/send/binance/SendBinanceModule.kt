@@ -20,7 +20,7 @@ object SendBinanceModule {
             val amountValidator = AmountValidator()
             val amountService = SendAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
             val addressService = SendBinanceAddressService(adapter)
-            val feeService = SendBinanceFeeService(adapter, wallet.platformCoin, App.feeCoinProvider)
+            val feeService = SendBinanceFeeService(adapter, wallet.token, App.feeCoinProvider)
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
             return SendBinanceViewModel(

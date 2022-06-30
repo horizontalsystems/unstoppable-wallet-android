@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.entities
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -21,19 +21,19 @@ sealed class TransactionValue {
     abstract val abs: TransactionValue
     abstract val formattedString: String
 
-    data class CoinValue(val platformCoin: PlatformCoin, val value: BigDecimal) : TransactionValue() {
-        override val coin: Coin = platformCoin.coin
-        override val coinIconUrl = platformCoin.coin.iconUrl
-        override val coinIconPlaceholder = platformCoin.fullCoin.iconPlaceholder
+    data class CoinValue(val token: Token, val value: BigDecimal) : TransactionValue() {
+        override val coin: Coin = token.coin
+        override val coinIconUrl = token.coin.iconUrl
+        override val coinIconPlaceholder = token.fullCoin.iconPlaceholder
         override val coinUid: String = coin.uid
         override val coinName: String = coin.name
         override val coinCode: String = coin.code
         override val decimalValue: BigDecimal = value
-        override val decimals: Int = platformCoin.decimals
+        override val decimals: Int = token.decimals
         override val zeroValue: Boolean
             get() = value.compareTo(BigDecimal.ZERO) == 0
         override val isMaxValue: Boolean
-            get() = value.isMaxValue(platformCoin.decimals)
+            get() = value.isMaxValue(token.decimals)
         override val abs: TransactionValue
             get() = copy(value = value.abs())
         override val formattedString: String

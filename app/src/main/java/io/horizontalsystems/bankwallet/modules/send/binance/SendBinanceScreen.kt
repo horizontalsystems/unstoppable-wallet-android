@@ -45,11 +45,11 @@ fun SendBinanceScreen(
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.coinType))
+    val paymentAddressViewModel = viewModel<AddressParserViewModel>(factory = AddressParserModule.Factory(wallet.token.blockchainType))
     val amountUnique = paymentAddressViewModel.amountUnique
 
     ComposeAppTheme {
-        val fullCoin = wallet.platformCoin.fullCoin
+        val fullCoin = wallet.token.fullCoin
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {
@@ -92,7 +92,7 @@ fun SendBinanceScreen(
             Spacer(modifier = Modifier.height(12.dp))
             HSAddressInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                coinType = wallet.coinType,
+                tokenQuery = wallet.token.tokenQuery,
                 coinCode = wallet.coin.code,
                 error = addressError,
                 textPreprocessor = paymentAddressViewModel
@@ -109,8 +109,8 @@ fun SendBinanceScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
             HSFeeInput(
-                coinCode = viewModel.feeCoin.code,
-                coinDecimal = viewModel.feeCoinMaxAllowedDecimals,
+                coinCode = viewModel.feeToken.coin.code,
+                coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
                 fiatDecimal = viewModel.fiatMaxAllowedDecimals,
                 fee = fee,
                 amountInputType = amountInputType,

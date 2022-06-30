@@ -30,7 +30,7 @@ class SendZCashViewModel(
     private val memoService: SendZCashMemoService
 ) : ViewModel() {
 
-    val coinMaxAllowedDecimals = wallet.platformCoin.decimals
+    val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
     val memoMaxLength by memoService::memoMaxLength
 

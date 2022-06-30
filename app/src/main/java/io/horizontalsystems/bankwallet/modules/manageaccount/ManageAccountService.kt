@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -42,15 +42,15 @@ class ManageAccountService(
     private val accountDeletedSubject = PublishSubject.create<Unit>()
     val accountDeletedObservable: Flowable<Unit> = accountDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    val accountSettingsInfo: List<Triple<PlatformCoin, RestoreSettingType, String>>
+    val accountSettingsInfo: List<Triple<Token, RestoreSettingType, String>>
         get() {
             val accountWallets = walletManager.getWallets(account)
-            return restoreSettingsManager.accountSettingsInfo(account).mapNotNull { (coinType, restoreSettingType, value) ->
-                val wallet = accountWallets.find { it.coinType == coinType }
+            return restoreSettingsManager.accountSettingsInfo(account).mapNotNull { (blockchainType, restoreSettingType, value) ->
+                val wallet = accountWallets.find { it.token.blockchainType == blockchainType }
                 if (wallet == null || (restoreSettingType == RestoreSettingType.BirthdayHeight && value.isEmpty())) {
                     null
                 } else {
-                    Triple(wallet.platformCoin, restoreSettingType, value)
+                    Triple(wallet.token, restoreSettingType, value)
                 }
             }
         }
@@ -89,8 +89,8 @@ class ManageAccountService(
         accountManager.update(account)
     }
 
-    fun getSettingsTitle(settingType: RestoreSettingType, platformCoin: PlatformCoin): String {
-        return restoreSettingsManager.getSettingsTitle(settingType, platformCoin)
+    fun getSettingsTitle(settingType: RestoreSettingType, token: Token): String {
+        return restoreSettingsManager.getSettingsTitle(settingType, token)
     }
 
     override fun clear() {

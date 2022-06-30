@@ -41,7 +41,7 @@ class SwapApproveConfirmationFragment : BaseFragment() {
     private val vmFactory by lazy {
         SwapApproveConfirmationModule.Factory(
             SendEvmData(transactionData, additionalItems),
-            mainViewModel.dex.blockchain
+            mainViewModel.dex.blockchainType
         )
     }
     private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }

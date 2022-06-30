@@ -23,9 +23,10 @@ import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -41,7 +42,7 @@ interface IAdapterManager {
     fun preloadAdapters()
     fun refresh()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
-    fun getAdapterForPlatformCoin(platformCoin: PlatformCoin): IAdapter?
+    fun getAdapterForToken(token: Token): IAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
     fun refreshAdapters(wallets: List<Wallet>)
@@ -87,8 +88,8 @@ interface ILocalStorage {
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
 
-    fun getSwapProviderId(blockchain: EvmBlockchain): String?
-    fun setSwapProviderId(blockchain: EvmBlockchain, providerId: String)
+    fun getSwapProviderId(blockchainType: BlockchainType): String?
+    fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)
 
     fun clear()
 }
@@ -98,7 +99,7 @@ interface IChartTypeStorage {
 }
 
 interface IRestoreSettingsStorage {
-    fun restoreSettings(accountId: String, coinId: String): List<RestoreSettingRecord>
+    fun restoreSettings(accountId: String, blockchainTypeUid: String): List<RestoreSettingRecord>
     fun restoreSettings(accountId: String): List<RestoreSettingRecord>
     fun save(restoreSettingRecords: List<RestoreSettingRecord>)
     fun deleteAllRestoreSettings(accountId: String)
@@ -142,7 +143,6 @@ interface IWalletStorage {
     fun wallets(account: Account): List<Wallet>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
-    fun isEnabled(accountId: String, coinId: String): Boolean
     fun clear()
 }
 
@@ -208,7 +208,7 @@ interface ITransactionsAdapter {
 
     fun getTransactionsAsync(
         from: TransactionRecord?,
-        coin: PlatformCoin?,
+        token: Token?,
         limit: Int,
         transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>>
@@ -216,7 +216,7 @@ interface ITransactionsAdapter {
     fun getRawTransaction(transactionHash: String): String? = null
 
     fun getTransactionRecordsFlowable(
-        coin: PlatformCoin?,
+        token: Token?,
         transactionType: FilterTransactionType
     ): Flowable<List<TransactionRecord>>
 
@@ -243,7 +243,7 @@ interface IReceiveAdapter: IBaseAdapter {
 
 interface ISendBitcoinAdapter {
     val balanceData: BalanceData
-    val blockchain: BtcBlockchain
+    val blockchainType: BlockchainType
     fun availableBalance(
         feeRate: Long,
         address: String?,
@@ -326,7 +326,6 @@ interface IEnabledWalletStorage {
     fun save(enabledWallets: List<EnabledWallet>)
     fun delete(enabledWallets: List<EnabledWallet>)
     fun deleteAll()
-    fun isEnabled(accountId: String, coinId: String): Boolean
 }
 
 interface IWalletManager {
@@ -417,7 +416,7 @@ interface IRateAppManager {
 }
 
 interface ICoinManager {
-    fun getPlatformCoin(coinType: CoinType): PlatformCoin?
+    fun getToken(query: TokenQuery): Token?
 }
 
 interface ITermsManager {

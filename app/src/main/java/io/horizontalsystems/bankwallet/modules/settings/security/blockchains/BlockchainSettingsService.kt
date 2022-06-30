@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsModule.BlockchainItem
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -59,14 +58,14 @@ class BlockchainSettingsService(
     }
 
     private fun syncBlockchainItems() {
-        val btcBlockchainItems = BtcBlockchain.values().map { blockchain ->
-            val restoreMode = btcBlockchainManager.restoreMode(blockchain)
-            val transactionMode = btcBlockchainManager.transactionSortMode(blockchain)
+        val btcBlockchainItems = btcBlockchainManager.allBlockchains.map { blockchain ->
+            val restoreMode = btcBlockchainManager.restoreMode(blockchain.type)
+            val transactionMode = btcBlockchainManager.transactionSortMode(blockchain.type)
             BlockchainItem.Btc(blockchain, restoreMode, transactionMode)
         }
 
         val evmBlockchainItems = evmBlockchainManager.allBlockchains.map { blockchain ->
-            val syncSource = evmSyncSourceManager.getSyncSource(blockchain)
+            val syncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
             BlockchainItem.Evm(blockchain, syncSource)
         }
 

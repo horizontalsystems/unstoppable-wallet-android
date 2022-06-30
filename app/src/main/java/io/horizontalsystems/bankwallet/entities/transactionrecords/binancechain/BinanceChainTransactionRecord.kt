@@ -5,11 +5,11 @@ import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 
 abstract class BinanceChainTransactionRecord(
     transaction: TransactionInfo,
-    feeCoin: PlatformCoin,
+    feeToken: Token,
     source: TransactionSource
 ) : TransactionRecord(
     uid = transaction.hash,
@@ -22,7 +22,7 @@ abstract class BinanceChainTransactionRecord(
     source = source
 ) {
 
-    val fee = TransactionValue.CoinValue(feeCoin, BinanceAdapter.transferFee)
+    val fee = TransactionValue.CoinValue(feeToken, BinanceAdapter.transferFee)
     val memo = transaction.memo
 
 }

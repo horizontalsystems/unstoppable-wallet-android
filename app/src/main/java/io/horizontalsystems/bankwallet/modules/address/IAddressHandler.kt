@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.address
 import com.unstoppabledomains.resolution.Resolution
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.ethereumkit.core.AddressValidator
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import org.kethereum.eip137.model.ENSName
 import org.kethereum.ens.ENS
 import org.kethereum.ens.isPotentialENSDomain
@@ -32,10 +34,10 @@ class AddressHandlerEns : IAddressHandler {
     }
 }
 
-class AddressHandlerUdn(private val coinType: CoinType, private val coinCode: String) : IAddressHandler {
+class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode: String) : IAddressHandler {
     private val resolution = Resolution()
-    private val chain by lazy { chain(coinType) }
-    private val chainCoinCode by lazy { chainCoinCode(coinType) }
+    private val chain by lazy { chain(tokenQuery) }
+    private val chainCoinCode by lazy { chainCoinCode(tokenQuery.blockchainType) }
 
     override fun isSupported(value: String): Boolean {
         return value.contains(".") && resolution.isSupported(value)
@@ -72,25 +74,24 @@ class AddressHandlerUdn(private val coinType: CoinType, private val coinCode: St
     }
 
     companion object {
-        private fun chainCoinCode(coinType: CoinType) = when (coinType) {
-            is CoinType.Ethereum,
-            is CoinType.Erc20,
-            is CoinType.BinanceSmartChain,
-            is CoinType.Bep20,
-            is CoinType.Polygon,
-            is CoinType.Mrc20 -> "ETH"
-//            is CoinType.EthereumOptimism -> "ETH"
-//            is CoinType.OptimismErc20 -> "ETH"
-//            is CoinType.EthereumArbitrumOne -> "ETH"
-//            is CoinType.ArbitrumOneErc20 -> "ETH"
+        private fun chainCoinCode(blockchainType: BlockchainType) = when (blockchainType) {
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon -> "ETH"
             else -> null
         }
 
-        private fun chain(coinType: CoinType) = when (coinType) {
-            is CoinType.Erc20 -> "ERC20"
-            is CoinType.Bep20 -> "BEP20"
-            is CoinType.Polygon,
-            is CoinType.Mrc20 -> "MATIC"
+        private fun chain(tokenQuery: TokenQuery) = when (tokenQuery.tokenType) {
+            TokenType.Native -> when (tokenQuery.blockchainType) {
+                BlockchainType.Polygon -> "MATIC"
+                else -> null
+            }
+            is TokenType.Eip20 -> when (tokenQuery.blockchainType) {
+                BlockchainType.Ethereum -> "ERC20"
+                BlockchainType.BinanceSmartChain -> "BEP20"
+                BlockchainType.Polygon -> "MATIC"
+                else -> null
+            }
             else -> null
         }
     }

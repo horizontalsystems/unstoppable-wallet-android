@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScree
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewScreen
 import io.horizontalsystems.bankwallet.modules.coin.tweets.CoinTweetsScreen
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
@@ -54,7 +54,7 @@ class CoinFragment : BaseFragment() {
     private val manageWalletsViewModel by viewModels<ManageWalletsViewModel> { vmFactory }
     private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
     private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
-    private val coinPlatformsViewModel by viewModels<CoinPlatformsViewModel> { vmFactory }
+    private val coinTokensViewModel by viewModels<CoinTokensViewModel> { vmFactory }
     private val authorizationViewModel by navGraphViewModels<YakAuthorizationViewModel>(R.id.coinFragment) { YakAuthorizationModule.Factory() }
 
     private var snackbarInProcess: CustomSnackbar? = null
@@ -151,11 +151,11 @@ class CoinFragment : BaseFragment() {
             )
         }
 
-        coinPlatformsViewModel.openPlatformsSelectorEvent.observe(viewLifecycleOwner) { config ->
+        coinTokensViewModel.openSelectorEvent.observe(viewLifecycleOwner) { config ->
             showBottomSelectorDialog(
                 config,
-                onSelect = { indexes -> coinPlatformsViewModel.onSelect(indexes) },
-                onCancel = { coinPlatformsViewModel.onCancelSelect() }
+                onSelect = { indexes -> coinTokensViewModel.onSelect(indexes) },
+                onCancel = { coinTokensViewModel.onCancelSelect() }
             )
         }
     }

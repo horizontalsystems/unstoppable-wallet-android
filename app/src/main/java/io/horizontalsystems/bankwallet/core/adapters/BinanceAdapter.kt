@@ -12,7 +12,7 @@ import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceError
 import io.horizontalsystems.binancechainkit.models.TransactionFilterType
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -20,13 +20,13 @@ import java.math.BigDecimal
 class BinanceAdapter(
     private val binanceKit: BinanceChainKit,
     private val symbol: String,
-    private val feeCoin: PlatformCoin,
+    private val feeToken: Token,
     private val wallet: Wallet,
     private val testMode: Boolean
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBinanceAdapter {
 
     private val asset = binanceKit.register(symbol)
-    private val coin = wallet.platformCoin
+    private val token = wallet.token
 
     private val syncState: AdapterState
         get() = when (val kitSyncState = binanceKit.syncState) {
@@ -87,7 +87,7 @@ class BinanceAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = binanceKit.latestBlockFlowable.map { }
 
-    override fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    override fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
         return try {
             val filter = getBinanceTransactionTypeFilter(transactionType)
             asset.getTransactionsFlowable(filter).map { it.map { transactionRecord(it) } }
@@ -96,7 +96,7 @@ class BinanceAdapter(
         }
     }
 
-    override fun getTransactionsAsync(from: TransactionRecord?, coin: PlatformCoin?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>> {
+    override fun getTransactionsAsync(from: TransactionRecord?, token: Token?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>> {
         return try {
             val filter = getBinanceTransactionTypeFilter(transactionType)
             binanceKit
@@ -124,21 +124,21 @@ class BinanceAdapter(
         return when {
             fromMine && !toMine -> BinanceChainOutgoingTransactionRecord(
                 transaction,
-                feeCoin,
-                coin,
+                feeToken,
+                token,
                 false,
                 wallet.transactionSource
             )
             !fromMine && toMine -> BinanceChainIncomingTransactionRecord(
                 transaction,
-                feeCoin,
-                coin,
+                feeToken,
+                token,
                 wallet.transactionSource
             )
             else -> BinanceChainOutgoingTransactionRecord(
                 transaction,
-                feeCoin,
-                coin,
+                feeToken,
+                token,
                 true,
                 wallet.transactionSource
             )

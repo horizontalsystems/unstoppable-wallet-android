@@ -18,7 +18,7 @@ import io.horizontalsystems.bitcoincore.models.*
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -93,7 +93,7 @@ abstract class BitcoinBaseAdapter(
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    override fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
         val observable: Observable<List<TransactionRecord>> = when (transactionType) {
             FilterTransactionType.All -> {
                 transactionRecordsSubject
@@ -156,7 +156,7 @@ abstract class BitcoinBaseAdapter(
 
     override fun getTransactionsAsync(
         from: TransactionRecord?,
-        coin: PlatformCoin?,
+        token: Token?,
         limit: Int,
         transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
@@ -276,7 +276,7 @@ abstract class BitcoinBaseAdapter(
             TransactionType.Incoming -> {
                 BitcoinIncomingTransactionRecord(
                         source = wallet.transactionSource,
-                        coin = wallet.platformCoin,
+                        token = wallet.token,
                         uid = transaction.uid,
                         transactionHash = transaction.transactionHash,
                         transactionIndex = transaction.transactionIndex,
@@ -295,7 +295,7 @@ abstract class BitcoinBaseAdapter(
             TransactionType.Outgoing -> {
                 BitcoinOutgoingTransactionRecord(
                         source = wallet.transactionSource,
-                        coin = wallet.platformCoin,
+                        token = wallet.token,
                         uid = transaction.uid,
                         transactionHash = transaction.transactionHash,
                         transactionIndex = transaction.transactionIndex,
@@ -315,7 +315,7 @@ abstract class BitcoinBaseAdapter(
             TransactionType.SentToSelf -> {
                 BitcoinOutgoingTransactionRecord(
                         source = wallet.transactionSource,
-                        coin = wallet.platformCoin,
+                        token = wallet.token,
                         uid = transaction.uid,
                         transactionHash = transaction.transactionHash,
                         transactionIndex = transaction.transactionIndex,

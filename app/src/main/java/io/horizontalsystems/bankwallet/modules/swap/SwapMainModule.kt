@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.swap.coincard.ISwapCoinCardService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapFromCoinCardService
@@ -22,7 +21,9 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFra
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapFragment
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Observable
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -33,9 +34,9 @@ object SwapMainModule {
     const val coinCardTypeFrom = "coinCardTypeFrom"
     const val coinCardTypeTo = "coinCardTypeTo"
 
-    private const val coinFromKey = "coinFromKey"
+    private const val tokenFromKey = "tokenFromKey"
 
-    fun prepareParams(coinFrom: PlatformCoin) = bundleOf(coinFromKey to coinFrom)
+    fun prepareParams(tokenFrom: Token) = bundleOf(tokenFromKey to tokenFrom)
 
     interface ISwapProvider : Parcelable {
         val id: String
@@ -44,7 +45,7 @@ object SwapMainModule {
         val fragment: SwapBaseFragment
         val settingsFragment: SwapSettingsBaseFragment
 
-        fun supports(blockchain: EvmBlockchain): Boolean
+        fun supports(blockchainType: BlockchainType): Boolean
     }
 
     @Parcelize
@@ -57,8 +58,8 @@ object SwapMainModule {
         override val settingsFragment: SwapSettingsBaseFragment
             get() = UniswapSettingsFragment()
 
-        override fun supports(blockchain: EvmBlockchain): Boolean {
-            return blockchain == EvmBlockchain.Ethereum
+        override fun supports(blockchainType: BlockchainType): Boolean {
+            return blockchainType == BlockchainType.Ethereum
         }
     }
 
@@ -72,8 +73,8 @@ object SwapMainModule {
         override val settingsFragment: SwapSettingsBaseFragment
             get() = UniswapSettingsFragment()
 
-        override fun supports(blockchain: EvmBlockchain): Boolean {
-            return blockchain == EvmBlockchain.BinanceSmartChain
+        override fun supports(blockchainType: BlockchainType): Boolean {
+            return blockchainType == BlockchainType.BinanceSmartChain
         }
     }
 
@@ -87,9 +88,13 @@ object SwapMainModule {
         override val settingsFragment: SwapSettingsBaseFragment
             get() = OneInchSettingsFragment()
 
-        override fun supports(blockchain: EvmBlockchain): Boolean {
-            return blockchain == EvmBlockchain.Ethereum || blockchain == EvmBlockchain.BinanceSmartChain || blockchain == EvmBlockchain.Polygon ||
-                blockchain == EvmBlockchain.Optimism || blockchain == EvmBlockchain.ArbitrumOne
+        override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Optimism,
+            BlockchainType.ArbitrumOne -> true
+            else -> false
         }
     }
 
@@ -103,13 +108,15 @@ object SwapMainModule {
         override val settingsFragment: SwapSettingsBaseFragment
             get() = UniswapSettingsFragment()
 
-        override fun supports(blockchain: EvmBlockchain): Boolean {
-            return blockchain == EvmBlockchain.Polygon
+        override fun supports(blockchainType: BlockchainType): Boolean {
+            return blockchainType == BlockchainType.Polygon
         }
     }
 
     @Parcelize
-    class Dex(val blockchain: EvmBlockchain, val provider: ISwapProvider) : Parcelable
+    class Dex(val blockchain: Blockchain, val provider: ISwapProvider) : Parcelable {
+        val blockchainType get() = blockchain.type
+    }
 
     @Parcelize
     enum class AmountType : Parcelable {
@@ -117,23 +124,23 @@ object SwapMainModule {
     }
 
     interface ISwapTradeService {
-        val coinFrom: PlatformCoin?
-        val coinFromObservable: Observable<Optional<PlatformCoin>>
+        val tokenFrom: Token?
+        val tokenFromObservable: Observable<Optional<Token>>
         val amountFrom: BigDecimal?
         val amountFromObservable: Observable<Optional<BigDecimal>>
 
-        val coinTo: PlatformCoin?
-        val coinToObservable: Observable<Optional<PlatformCoin>>
+        val tokenTo: Token?
+        val tokenToObservable: Observable<Optional<Token>>
         val amountTo: BigDecimal?
         val amountToObservable: Observable<Optional<BigDecimal>>
 
         val amountType: AmountType
         val amountTypeObservable: Observable<AmountType>
 
-        fun enterCoinFrom(coin: PlatformCoin?)
+        fun enterTokenFrom(token: Token?)
         fun enterAmountFrom(amount: BigDecimal?)
 
-        fun enterCoinTo(coin: PlatformCoin?)
+        fun enterTokenTo(token: Token?)
         fun enterAmountTo(amount: BigDecimal?)
 
         fun restoreState(swapProviderState: SwapProviderState)
@@ -162,7 +169,7 @@ object SwapMainModule {
 
     @Parcelize
     data class CoinBalanceItem(
-        val platformCoin: PlatformCoin,
+        val token: Token,
         val balance: BigDecimal?,
         val fiatBalanceValue: CurrencyValue?,
     ) : Parcelable
@@ -173,15 +180,15 @@ object SwapMainModule {
 
     @Parcelize
     data class SwapProviderState(
-        val coinFrom: PlatformCoin? = null,
-        val coinTo: PlatformCoin? = null,
+        val tokenFrom: Token? = null,
+        val tokenTo: Token? = null,
         val amountFrom: BigDecimal? = null,
         val amountTo: BigDecimal? = null,
         val amountType: AmountType = AmountType.ExactFrom
     ) : Parcelable
 
     class Factory(arguments: Bundle) : ViewModelProvider.Factory {
-        private val coinFrom: PlatformCoin? = arguments.getParcelable(coinFromKey)
+        private val tokenFrom: Token? = arguments.getParcelable(tokenFromKey)
         private val swapProviders: List<ISwapProvider> =
             listOf(UniswapProvider, PancakeSwapProvider, OneInchProvider, QuickSwapProvider)
 
@@ -192,7 +199,7 @@ object SwapMainModule {
                 SwapMainViewModel::class.java -> {
                     SwapMainViewModel(
                         SwapMainService(
-                            coinFrom,
+                            tokenFrom,
                             swapProviders,
                             App.localStorage
                         )

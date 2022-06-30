@@ -6,10 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.protocolType
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.blockchainType
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -69,8 +69,8 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                 this@AddTokenViewModel.tokens = tokens.map {
                     TokenInfoUiState(
                         tokenInfo = it,
-                        title = it.coinType.blockchainType ?: "",
-                        image = getPlatformLogo(it.coinType),
+                        title = it.tokenQuery.protocolType ?: "",
+                        image = getPlatformLogo(it.tokenQuery.blockchainType),
                         checked = it.inWallet,
                         enabled = !it.inWallet
                     )
@@ -89,11 +89,11 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
         }
     }
 
-    private fun getPlatformLogo(coinType: CoinType) = when (coinType) {
-        is CoinType.Erc20 -> R.drawable.logo_ethereum_24
-        is CoinType.Bep20 -> R.drawable.logo_binancesmartchain_24
-        is CoinType.Mrc20 -> R.drawable.logo_polygon_24
-        is CoinType.Bep2 -> R.drawable.logo_bep2_24
+    private fun getPlatformLogo(blockchainType: BlockchainType) = when (blockchainType) {
+        BlockchainType.Ethereum -> R.drawable.logo_ethereum_24
+        BlockchainType.BinanceSmartChain -> R.drawable.logo_binancesmartchain_24
+        BlockchainType.Polygon -> R.drawable.logo_polygon_24
+        BlockchainType.BinanceChain -> R.drawable.logo_bep2_24
         else -> R.drawable.ic_platform_placeholder_24
     }
 

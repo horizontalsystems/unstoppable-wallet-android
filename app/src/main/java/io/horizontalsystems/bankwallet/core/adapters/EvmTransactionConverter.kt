@@ -19,7 +19,9 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.ethereumkit.models.InternalTransaction
 import io.horizontalsystems.ethereumkit.models.Transaction
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnknownDecoration
@@ -32,7 +34,7 @@ class EvmTransactionConverter(
     private val coinManager: ICoinManager,
     private val evmKitWrapper: EvmKitWrapper,
     private val source: TransactionSource,
-    private val baseCoin: PlatformCoin,
+    private val baseToken: Token,
     private val evmLabelManager: EvmLabelManager
 ) {
     private val evmKit: EthereumKit
@@ -43,28 +45,28 @@ class EvmTransactionConverter(
 
         return when (val decoration = fullTransaction.decoration) {
             is ContractCreationDecoration -> {
-                ContractCreationTransactionRecord(transaction, baseCoin, source)
+                ContractCreationTransactionRecord(transaction, baseToken, source)
             }
 
             is IncomingDecoration -> {
-                EvmIncomingTransactionRecord(transaction, baseCoin, source, decoration.from.eip55, baseCoinValue(decoration.value, false))
+                EvmIncomingTransactionRecord(transaction, baseToken, source, decoration.from.eip55, baseCoinValue(decoration.value, false))
             }
 
             is OutgoingDecoration -> {
-                EvmOutgoingTransactionRecord(transaction, baseCoin, source, decoration.to.eip55, baseCoinValue(decoration.value, true), decoration.sentToSelf)
+                EvmOutgoingTransactionRecord(transaction, baseToken, source, decoration.to.eip55, baseCoinValue(decoration.value, true), decoration.sentToSelf)
             }
 
             is OutgoingEip20Decoration -> {
-                EvmOutgoingTransactionRecord(transaction, baseCoin, source, decoration.to.eip55, getEip20Value(decoration.contractAddress, decoration.value, true, decoration.tokenInfo), decoration.sentToSelf)
+                EvmOutgoingTransactionRecord(transaction, baseToken, source, decoration.to.eip55, getEip20Value(decoration.contractAddress, decoration.value, true, decoration.tokenInfo), decoration.sentToSelf)
             }
 
             is ApproveEip20Decoration -> {
-                ApproveTransactionRecord(transaction, baseCoin, source, decoration.spender.eip55, getEip20Value(decoration.contractAddress, decoration.value, false))
+                ApproveTransactionRecord(transaction, baseToken, source, decoration.spender.eip55, getEip20Value(decoration.contractAddress, decoration.value, false))
             }
 
             is SwapDecoration -> {
                 SwapTransactionRecord(
-                    transaction, baseCoin, source,
+                    transaction, baseToken, source,
                     decoration.contractAddress.eip55,
                     convertToAmount(decoration.tokenIn, decoration.amountIn, true),
                     convertToAmount(decoration.tokenOut, decoration.amountOut, false),
@@ -74,7 +76,7 @@ class EvmTransactionConverter(
 
             is OneInchSwapDecoration -> {
                 SwapTransactionRecord(
-                    transaction, baseCoin, source,
+                    transaction, baseToken, source,
                     decoration.contractAddress.eip55,
                     SwapTransactionRecord.Amount.Exact(convertToTransactionValue(decoration.tokenIn, decoration.amountIn, true)),
                     convertToAmount(decoration.tokenOut, decoration.amountOut, false),
@@ -84,7 +86,7 @@ class EvmTransactionConverter(
 
             is OneInchUnoswapDecoration -> {
                 SwapTransactionRecord(
-                    transaction, baseCoin, source,
+                    transaction, baseToken, source,
                     decoration.contractAddress.eip55,
                     SwapTransactionRecord.Amount.Exact(convertToTransactionValue(decoration.tokenIn, decoration.amountIn, true)),
                     decoration.tokenOut?.let { convertToAmount(it, decoration.amountOut, false) },
@@ -94,7 +96,7 @@ class EvmTransactionConverter(
 
             is OneInchUnknownDecoration -> {
                 return UnknownSwapTransactionRecord(
-                    transaction, baseCoin, source,
+                    transaction, baseToken, source,
                     decoration.contractAddress.eip55,
                     decoration.tokenAmountIn?.let { convertToTransactionValue(it.token, it.value, true) },
                     decoration.tokenAmountOut?.let { convertToTransactionValue(it.token, it.value, true) }
@@ -105,7 +107,7 @@ class EvmTransactionConverter(
                 val address = evmKit.receiveAddress
 
                 val internalTransactions = decoration.internalTransactions.filter { it.to == address }
-                val transferEventInstances = decoration.eventInstances.mapNotNull { it as TransferEventInstance }
+                val transferEventInstances = decoration.eventInstances.mapNotNull { it as? TransferEventInstance }
                 val incomingTransfers = transferEventInstances.filter { it.to == address && it.from != address }
                 val outgoingTransfers = transferEventInstances.filter { it.from == address }
 
@@ -114,7 +116,7 @@ class EvmTransactionConverter(
 
                 return if (transaction.from == address && contractAddress != null && value != null) {
                     ContractCallTransactionRecord(
-                        transaction, baseCoin, source,
+                        transaction, baseToken, source,
                         contractAddress.eip55,
                         transaction.input?.let { evmLabelManager.methodLabel(it) },
                         getInternalEvents(internalTransactions) + getIncomingEvents(incomingTransfers),
@@ -122,7 +124,7 @@ class EvmTransactionConverter(
                     )
                 } else {
                     ExternalContractCallTransactionRecord(
-                        transaction, baseCoin, source,
+                        transaction, baseToken, source,
                         getInternalEvents(internalTransactions) + getIncomingEvents(incomingTransfers),
                         getOutgoingEvents(outgoingTransfers)
                     )
@@ -131,7 +133,7 @@ class EvmTransactionConverter(
             }
 
             else -> {
-                EvmTransactionRecord(transaction, baseCoin, source)
+                EvmTransactionRecord(transaction, baseToken, source)
             }
 
         }
@@ -152,12 +154,12 @@ class EvmTransactionConverter(
     }
 
     private fun getEip20Value(tokenAddress: Address, amount: BigInteger, negative: Boolean, tokenInfo: TokenInfo? = null): TransactionValue {
-        val coinType = evmKitWrapper.blockchain.getEvm20CoinType(tokenAddress.hex)
-        val platformCoin = coinManager.getPlatformCoin(coinType)
+        val query = TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(tokenAddress.hex))
+        val token = coinManager.getToken(query)
 
         return when {
-            platformCoin != null -> {
-                TransactionValue.CoinValue(platformCoin, convertAmount(amount, platformCoin.decimals, negative))
+            token != null -> {
+                TransactionValue.CoinValue(token, convertAmount(amount, token.decimals, negative))
             }
             tokenInfo != null -> {
                 TransactionValue.TokenValue("", tokenInfo.tokenName, tokenInfo.tokenSymbol, tokenInfo.tokenDecimal, convertAmount(amount, tokenInfo.tokenDecimal, negative))
@@ -191,9 +193,9 @@ class EvmTransactionConverter(
     }
 
     private fun baseCoinValue(value: BigInteger, negative: Boolean): TransactionValue {
-        val amount = convertAmount(value, baseCoin.decimals, negative)
+        val amount = convertAmount(value, baseToken.decimals, negative)
 
-        return TransactionValue.CoinValue(baseCoin, amount)
+        return TransactionValue.CoinValue(baseToken, amount)
     }
 
     private fun convertToAmount(token: SwapDecoration.Token, amount: SwapDecoration.Amount, negative: Boolean): SwapTransactionRecord.Amount {

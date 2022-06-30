@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionD
     WalletConnectV2Session::class,
     RestoreSettingRecord::class,
     ActiveAccount::class,
-    CustomToken::class,
     EvmAccountState::class,
     NftCollectionRecord::class,
     NftAssetRecord::class,
@@ -54,7 +53,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun marketFavoritesDao(): MarketFavoritesDao
     abstract fun wc1SessionDao(): WC1SessionDao
     abstract fun wc2SessionDao(): WC2SessionDao
-    abstract fun customTokenDao(): CustomTokenDao
     abstract fun evmAccountStateDao(): EvmAccountStateDao
     abstract fun nftCollectionDao(): NftDao
     abstract fun proFeaturesDao(): ProFeaturesDao

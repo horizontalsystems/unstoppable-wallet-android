@@ -94,12 +94,12 @@ fun SendEthRequestScreen(
                                     item.fiatAmount,
                                     item.coinAmount,
                                     item.type,
-                                    item.platformCoin
+                                    item.token
                                 )
                                 is ViewItem.AmountMulti -> AmountMultiCell(
                                     item.amounts,
                                     item.type,
-                                    item.platformCoin
+                                    item.token
                                 )
                                 is ViewItem.Warning -> TextImportantWarning(
                                     text = item.description,

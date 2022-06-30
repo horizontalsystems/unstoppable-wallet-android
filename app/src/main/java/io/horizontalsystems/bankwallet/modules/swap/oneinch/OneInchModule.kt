@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceServi
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -33,7 +33,7 @@ object OneInchModule {
     }
 
     class Factory(dex: SwapMainModule.Dex) : ViewModelProvider.Factory {
-        private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(dex.blockchain).evmKitWrapper?.evmKit!! }
+        private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(dex.blockchainType).evmKitWrapper?.evmKit!! }
         private val oneIncKitHelper by lazy { OneInchKitHelper(evmKit) }
         private val allowanceService by lazy { SwapAllowanceService(oneIncKitHelper.smartContractAddress, App.adapterManager, evmKit) }
         private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
@@ -71,8 +71,8 @@ object OneInchModule {
 
 @Parcelize
 data class OneInchSwapParameters(
-    val coinFrom: PlatformCoin,
-    val coinTo: PlatformCoin,
+    val tokenFrom: Token,
+    val tokenTo: Token,
     val amountFrom: BigDecimal,
     val amountTo: BigDecimal,
     val slippage: BigDecimal,

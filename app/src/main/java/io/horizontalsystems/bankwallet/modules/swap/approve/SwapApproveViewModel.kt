@@ -51,7 +51,7 @@ class SwapApproveViewModel(
         if (value.isEmpty()) return true
 
         return try {
-            BigDecimal(value).scale() <= coinService.platformCoin.decimals
+            BigDecimal(value).scale() <= coinService.token.decimals
         } catch (e: NumberFormatException) {
             false
         }

@@ -22,7 +22,9 @@ import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
 
@@ -47,14 +49,15 @@ object TransactionInfoOptionsModule {
             adapter.evmKitWrapper
         }
 
-        private val baseCoin by lazy {
-            when (evmKitWrapper.evmKit.chain) {
-                Chain.BinanceSmartChain -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)!!
-                Chain.Polygon -> App.marketKit.platformCoin(CoinType.Polygon)!!
-                Chain.Optimism -> App.marketKit.platformCoin(CoinType.EthereumOptimism)!!
-                Chain.ArbitrumOne -> App.marketKit.platformCoin(CoinType.EthereumArbitrumOne)!!
-                else -> App.marketKit.platformCoin(CoinType.Ethereum)!!
+        private val baseToken by lazy {
+            val blockchainType = when (evmKitWrapper.evmKit.chain) {
+                Chain.BinanceSmartChain -> BlockchainType.BinanceSmartChain
+                Chain.Polygon -> BlockchainType.Polygon
+                Chain.Optimism -> BlockchainType.Optimism
+                Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
+                else -> BlockchainType.Ethereum
             }
+            App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))!!
         }
 
         private val fullTransaction by lazy {
@@ -99,7 +102,7 @@ object TransactionInfoOptionsModule {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, transactionData)
         }
 
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(baseCoin, App.marketKit, App.currencyManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(baseToken, App.marketKit, App.currencyManager) }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
 
         private val sendService by lazy {
@@ -122,7 +125,7 @@ object TransactionInfoOptionsModule {
                 }
                 TransactionSpeedUpCancelViewModel::class.java -> {
                     TransactionSpeedUpCancelViewModel(
-                        baseCoin,
+                        baseToken,
                         optionType,
                         fullTransaction.transaction.blockNumber == null
                     ) as T

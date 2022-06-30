@@ -27,10 +27,8 @@ import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.horizontalsystems.marketkit.models.NftCollection
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -39,12 +37,13 @@ class NftCollectionViewModel(
     private val service: NftCollectionService,
     private val numberFormatter: IAppNumberFormatter,
     xRateService: XRateService,
-    coinManager: ICoinManager
+    coinManager: ICoinManager,
+    marketKit: MarketKit
 ) : ViewModel() {
 
-    private val basePlatformCoin: PlatformCoin = coinManager.getPlatformCoin(CoinType.Ethereum)!!
+    private val baseToken = marketKit.token(TokenQuery(BlockchainType.Ethereum, TokenType.Native))!!
     private var result: Result<NftCollection>? = null
-    private var rate: CurrencyValue? = xRateService.getRate(basePlatformCoin.coin.uid)
+    private var rate: CurrencyValue? = xRateService.getRate(baseToken.coin.uid)
 
     var selectedTabLiveData = MutableLiveData(Tab.Overview)
     val tabs = Tab.values()
@@ -67,7 +66,7 @@ class NftCollectionViewModel(
             sync()
         }
 
-        xRateService.getRateFlow(basePlatformCoin.coin.uid).collectWith(viewModelScope) { rate ->
+        xRateService.getRateFlow(baseToken.coin.uid).collectWith(viewModelScope) { rate ->
             this.rate = rate
             syncRate()
         }
@@ -101,7 +100,7 @@ class NftCollectionViewModel(
     }
 
     private fun coinValue(value: BigDecimal) =
-        numberFormatter.formatCoinShort(value, basePlatformCoin.code, basePlatformCoin.decimals)
+        numberFormatter.formatCoinShort(value, baseToken.coin.code, baseToken.decimals)
 
     private fun currencyValue(value: BigDecimal?, rate: CurrencyValue?): String? {
         if (value == null || rate == null) return null

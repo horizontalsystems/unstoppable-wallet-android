@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection
 
-import io.horizontalsystems.bankwallet.modules.nft.nftCollectionItem
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.NftCollection
 import kotlinx.coroutines.Dispatchers

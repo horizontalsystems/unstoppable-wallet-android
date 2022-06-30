@@ -34,7 +34,7 @@ class UniswapConfirmationFragment(
 
     private val vmFactory by lazy {
         UniswapConfirmationModule.Factory(
-            dex.blockchain,
+            dex.blockchainType,
             SendEvmData(transactionData, additionalInfo)
         )
     }

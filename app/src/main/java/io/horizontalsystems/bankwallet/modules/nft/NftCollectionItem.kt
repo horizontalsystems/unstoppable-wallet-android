@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.nft
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.horizontalsystems.marketkit.models.NftAsset
 import io.horizontalsystems.marketkit.models.NftCollection
 import io.horizontalsystems.marketkit.models.NftPrice
 import java.math.BigDecimal
@@ -71,8 +70,7 @@ val NftCollection.oneDayFloorPriceChange: BigDecimal?
     }
 
 val NftPrice.nftAssetPrice: NftAssetPrice
-    get() =
-        NftAssetPrice(platformCoin.coinType.id, value)
+    get() = NftAssetPrice(token.tokenQuery.id, value)
 
 private fun diff(firstValue: BigDecimal?, lastValue: BigDecimal?) =
     if (firstValue != null && lastValue != null) {

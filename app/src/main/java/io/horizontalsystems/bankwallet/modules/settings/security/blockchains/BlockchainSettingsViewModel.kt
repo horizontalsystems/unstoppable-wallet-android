@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.icon24
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.reactivex.disposables.CompositeDisposable
@@ -41,17 +42,17 @@ class BlockchainSettingsViewModel(
             viewItems = blockchainItems.map { item ->
                 when (item) {
                     is BlockchainSettingsModule.BlockchainItem.Btc -> BlockchainSettingsModule.BlockchainViewItem(
-                        title = item.blockchain.title,
+                        title = item.blockchain.name,
                         subtitle = "${Translator.getString(item.restoreMode.title)}, ${
                             Translator.getString(item.transactionMode.title)
                         }",
-                        icon = item.blockchain.icon24,
+                        icon = item.blockchain.type.icon24,
                         blockchainItem = item
                     )
                     is BlockchainSettingsModule.BlockchainItem.Evm -> BlockchainSettingsModule.BlockchainViewItem(
                         title = item.blockchain.name,
                         subtitle = item.syncSource.name,
-                        icon = item.blockchain.icon24,
+                        icon = item.blockchain.type.icon24,
                         blockchainItem = item
                     )
                 }

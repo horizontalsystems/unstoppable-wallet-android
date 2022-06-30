@@ -32,6 +32,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class UniswapSettingsFragment : SwapSettingsBaseFragment() {
     private val uniswapViewModel by navGraphViewModels<UniswapViewModel>(R.id.swapFragment) {
@@ -94,7 +96,8 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
     private fun setRecipientAddressCompose() {
         binding.recipientAddressCompose.setContent {
             ComposeAppTheme {
-                App.marketKit.platformCoin(dex.blockchain.baseCoinType)?.let { platformCoin ->
+                val tokenQuery = TokenQuery(dex.blockchainType, TokenType.Native)
+                App.marketKit.token(tokenQuery)?.let { token ->
                     Column {
                         Spacer(modifier = Modifier.height(12.dp))
                         Header {
@@ -107,8 +110,8 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
                         HSAddressInput(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             initial = recipientAddressViewModel.initialAddress,
-                            coinType = platformCoin.coinType,
-                            coinCode = platformCoin.coin.code,
+                            tokenQuery = token.tokenQuery,
+                            coinCode = token.coin.code,
                             onStateChange = {
                                 recipientAddressViewModel.setAddressWithError(it?.dataOrNull, it?.errorOrNull)
                             }
