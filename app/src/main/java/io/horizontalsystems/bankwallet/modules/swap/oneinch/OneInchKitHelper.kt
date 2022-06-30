@@ -4,11 +4,11 @@ import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.oneinchkit.Quote
 import io.horizontalsystems.oneinchkit.Swap
-import io.horizontalsystems.xxxkit.models.Token
-import io.horizontalsystems.xxxkit.models.TokenType
 import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.BigInteger

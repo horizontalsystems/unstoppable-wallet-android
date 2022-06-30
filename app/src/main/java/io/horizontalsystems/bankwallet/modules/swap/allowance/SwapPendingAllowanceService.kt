@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.allowance
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

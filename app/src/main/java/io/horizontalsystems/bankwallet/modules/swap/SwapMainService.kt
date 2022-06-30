@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.swap
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.xxxkit.models.Blockchain
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.subjects.PublishSubject
 
 class SwapMainService(

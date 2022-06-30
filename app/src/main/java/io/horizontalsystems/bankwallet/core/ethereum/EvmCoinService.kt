@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.math.BigInteger
 

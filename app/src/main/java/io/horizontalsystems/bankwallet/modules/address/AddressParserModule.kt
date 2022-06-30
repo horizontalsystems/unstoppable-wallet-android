@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
-import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 object AddressParserModule {
     class Factory(private val blockchainType: BlockchainType) : ViewModelProvider.Factory {

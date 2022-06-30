@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 
 class CoinSettingsViewModel(

@@ -9,8 +9,8 @@ import io.horizontalsystems.bankwallet.core.restoreSettingTypes
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.ui.extensions.ZCashConfig
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.subjects.PublishSubject
 
 class RestoreSettingsService(

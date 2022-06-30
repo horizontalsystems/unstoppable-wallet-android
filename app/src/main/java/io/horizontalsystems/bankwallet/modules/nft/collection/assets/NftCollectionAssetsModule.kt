@@ -12,9 +12,9 @@ object NftCollectionAssetsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = NftCollectionAssetsService(
                 collectionUid,
-                App.xxxKit,
+                App.marketKit,
                 App.nftManager,
-                BalanceXRateRepository(App.currencyManager, App.xxxKit)
+                BalanceXRateRepository(App.currencyManager, App.marketKit)
             )
             return NftCollectionAssetsViewModel(service) as T
         }

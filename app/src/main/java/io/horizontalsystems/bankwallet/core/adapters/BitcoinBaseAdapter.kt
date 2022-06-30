@@ -18,7 +18,7 @@ import io.horizontalsystems.bitcoincore.models.*
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable

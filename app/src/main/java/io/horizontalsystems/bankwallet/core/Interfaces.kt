@@ -23,10 +23,10 @@ import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.HsTimePeriod
-import io.horizontalsystems.xxxkit.models.Token
-import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single

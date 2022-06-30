@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.core.ethereum
 
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.Token
-import io.horizontalsystems.xxxkit.models.TokenQuery
-import io.horizontalsystems.xxxkit.models.TokenType
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class EvmCoinServiceFactory(
     private val baseToken: Token,

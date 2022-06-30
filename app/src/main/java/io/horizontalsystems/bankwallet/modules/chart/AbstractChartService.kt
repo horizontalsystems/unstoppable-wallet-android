@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xxxkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

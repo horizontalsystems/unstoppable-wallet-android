@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.TopPlatform
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.TopPlatform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext

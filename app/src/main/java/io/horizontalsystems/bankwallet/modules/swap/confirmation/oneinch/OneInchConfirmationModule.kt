@@ -16,9 +16,9 @@ import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.TokenQuery
-import io.horizontalsystems.xxxkit.models.TokenType
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 object OneInchConfirmationModule {
     private const val oneInchSwapParametersKey = "oneInchSwapParametersKey"
@@ -32,7 +32,7 @@ object OneInchConfirmationModule {
         }
         private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
         private val oneInchKitHelper by lazy { OneInchKitHelper(evmKitWrapper.evmKit) }
-        private val token by lazy { App.xxxKit.token(TokenQuery(blockchainType, TokenType.Native))!! }
+        private val token by lazy { App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))!! }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
             if (evmKit.chain.isEIP1559Supported) {
@@ -46,7 +46,7 @@ object OneInchConfirmationModule {
         private val feeService by lazy {
             OneInchFeeService(oneInchKitHelper, evmKitWrapper.evmKit, gasPriceService, oneInchSwapParameters)
         }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(token, App.xxxKit, App.currencyManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(token, App.marketKit, App.currencyManager) }
         private val sendService by lazy {
             OneInchSendEvmTransactionService(
                 evmKitWrapper,

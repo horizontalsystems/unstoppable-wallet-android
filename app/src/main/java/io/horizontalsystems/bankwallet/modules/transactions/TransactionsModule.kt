@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.shortName
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CoinSettings
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.util.*
 
@@ -72,7 +72,7 @@ data class TransactionSource(
                 }
             }
         }
-        class Evm(val blockchain: io.horizontalsystems.xxxkit.models.Blockchain) : Blockchain() {
+        class Evm(val blockchain: io.horizontalsystems.marketkit.models.Blockchain) : Blockchain() {
             override fun hashCode(): Int {
                 return this.blockchain.hashCode()
             }

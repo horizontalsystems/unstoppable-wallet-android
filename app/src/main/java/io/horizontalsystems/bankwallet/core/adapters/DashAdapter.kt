@@ -13,7 +13,7 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.dashkit.DashKit
 import io.horizontalsystems.dashkit.DashKit.NetworkType
 import io.horizontalsystems.dashkit.models.DashTransactionInfo
-import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 
 class DashAdapter(

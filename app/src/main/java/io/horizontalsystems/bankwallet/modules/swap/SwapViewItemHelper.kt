@@ -5,10 +5,10 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType
-import io.horizontalsystems.xxxkit.models.Token
 import java.math.BigDecimal
 import java.math.RoundingMode
 

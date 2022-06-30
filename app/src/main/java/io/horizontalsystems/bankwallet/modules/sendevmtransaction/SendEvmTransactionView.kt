@@ -33,9 +33,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.helpers.LayoutHelper
-import io.horizontalsystems.xxxkit.models.Token
 
 class SendEvmTransactionView @JvmOverloads constructor(
     context: Context,

@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 
 class RestoreSettingsManager(
         private val storage: IRestoreSettingsStorage,

@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.protocolType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 

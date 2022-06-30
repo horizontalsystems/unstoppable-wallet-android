@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatter
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.*
-import io.horizontalsystems.xxxkit.models.FullCoin
-import io.horizontalsystems.xxxkit.models.MarketInfoOverview
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.MarketInfoOverview
 
 object CoinOverviewModule {
 
@@ -21,7 +21,7 @@ object CoinOverviewModule {
                     val currency = App.currencyManager.baseCurrency
                     val service = CoinOverviewService(
                         fullCoin,
-                        App.xxxKit,
+                        App.marketKit,
                         App.currencyManager,
                         App.appConfigProvider,
                         App.languageManager
@@ -30,7 +30,7 @@ object CoinOverviewModule {
                     CoinOverviewViewModel(service, CoinViewFactory(currency, App.numberFormatter)) as T
                 }
                 ChartViewModel::class.java -> {
-                    val chartService = CoinOverviewChartService(App.xxxKit, App.currencyManager, App.chartTypeStorage, fullCoin.coin.uid)
+                    val chartService = CoinOverviewChartService(App.marketKit, App.currencyManager, App.chartTypeStorage, fullCoin.coin.uid)
                     val chartNumberFormatter = ChartCurrencyValueFormatterSignificant()
                     ChartModule.createViewModel(chartService, chartNumberFormatter) as T
                 }

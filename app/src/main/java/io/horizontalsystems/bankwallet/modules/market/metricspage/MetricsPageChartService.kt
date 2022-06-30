@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xxxkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
 class MetricsPageChartService(

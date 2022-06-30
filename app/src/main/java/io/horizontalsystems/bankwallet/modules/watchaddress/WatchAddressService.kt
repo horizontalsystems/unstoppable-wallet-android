@@ -8,8 +8,8 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.xxxkit.models.TokenQuery
-import io.horizontalsystems.xxxkit.models.TokenType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class WatchAddressService(
     private val accountFactory: IAccountFactory,

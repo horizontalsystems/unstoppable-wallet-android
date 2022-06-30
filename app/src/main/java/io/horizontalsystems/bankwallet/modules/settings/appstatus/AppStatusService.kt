@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.ISystemInfoManager
-import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import java.util.*
 
 class AppStatusService(

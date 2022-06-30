@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-import io.horizontalsystems.xxxkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 
 @Composable
 fun CoinTweetsScreen(

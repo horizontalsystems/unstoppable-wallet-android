@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.APIClient
-import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

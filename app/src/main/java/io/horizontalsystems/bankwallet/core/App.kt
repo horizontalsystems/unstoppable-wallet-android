@@ -50,7 +50,6 @@ import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
 import java.util.logging.Logger
 import androidx.work.Configuration as WorkConfiguration
-import io.horizontalsystems.xxxkit.MarketKit as XxxKit
 
 class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
@@ -101,7 +100,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKit
-        lateinit var xxxKit: XxxKit
         lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
@@ -143,15 +141,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
         marketKit.sync()
 
-        xxxKit = XxxKit.getInstance(
-            this,
-            appConfig.marketApiBaseUrl,
-            appConfig.marketApiKey,
-            cryptoCompareApiKey = appConfig.cryptoCompareApiKey,
-            defiYieldApiKey = appConfig.defiyieldProviderApiKey
-        )
-        xxxKit.sync()
-
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)
 
@@ -160,7 +149,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
         evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage)
 
-        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, xxxKit)
+        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
 
         binanceKitManager = BinanceKitManager(testMode)
 
@@ -176,10 +165,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
-        walletStorage = WalletStorage(xxxKit, enabledWalletsStorage)
+        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
         walletManager = WalletManager(accountManager, walletStorage)
-        coinManager = CoinManager(xxxKit, walletManager)
+        coinManager = CoinManager(marketKit, walletManager)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
 
@@ -210,7 +199,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         encryptionManager = EncryptionManager(keyProvider)
 
-        walletActivator = WalletActivator(walletManager, xxxKit)
+        walletActivator = WalletActivator(walletManager, marketKit)
 
         val tokenBalanceProvider = TokenBalanceProvider()
         val evmAccountManagerFactory = EvmAccountManagerFactory(
@@ -222,7 +211,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         evmBlockchainManager = EvmBlockchainManager(
             backgroundManager,
             evmSyncSourceManager,
-            xxxKit,
+            marketKit,
             evmAccountManagerFactory
         )
 
@@ -248,7 +237,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
-        feeCoinProvider = FeeTokenProvider(xxxKit)
+        feeCoinProvider = FeeTokenProvider(marketKit)
 
         addressParserFactory = AddressParserFactory()
 
@@ -287,7 +276,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         startTasks()
 
-        nftManager = NftManager(appDatabase.nftCollectionDao(), xxxKit)
+        nftManager = NftManager(appDatabase.nftCollectionDao(), marketKit)
 
         initializeWalletConnectV2(appConfig)
 

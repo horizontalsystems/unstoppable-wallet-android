@@ -33,7 +33,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.xxxkit.models.Coin
+import io.horizontalsystems.marketkit.models.Coin
 
 @Composable
 fun SectionTitleCell(

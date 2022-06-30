@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.xxxkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 
 object CoinDetailsModule {
 
@@ -17,7 +17,7 @@ object CoinDetailsModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = CoinDetailsService(fullCoin, App.xxxKit, App.currencyManager, App.proFeatureAuthorizationManager)
+            val service = CoinDetailsService(fullCoin, App.marketKit, App.currencyManager, App.proFeatureAuthorizationManager)
 
             return CoinDetailsViewModel(
                 service

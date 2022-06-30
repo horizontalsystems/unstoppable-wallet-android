@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.modules.nft.AssetLinks
 import io.horizontalsystems.bankwallet.modules.nft.CollectionLinks
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetAttribute
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
-import io.horizontalsystems.xxxkit.models.NftAsset
+import io.horizontalsystems.marketkit.models.NftAsset
 import java.util.*
 
 object NftAssetModule {
@@ -25,12 +25,12 @@ object NftAssetModule {
         private val tokenId: String
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val repository = NftAssetRepository(BalanceXRateRepository(App.currencyManager, App.xxxKit))
+            val repository = NftAssetRepository(BalanceXRateRepository(App.currencyManager, App.marketKit))
             val service = NftAssetService(
                 collectionUid,
                 contractAddress,
                 tokenId,
-                App.xxxKit,
+                App.marketKit,
                 App.nftManager,
                 repository
             )

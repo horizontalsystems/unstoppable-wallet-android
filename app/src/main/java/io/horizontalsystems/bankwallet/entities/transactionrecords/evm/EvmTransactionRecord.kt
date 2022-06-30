@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Token
 
 open class EvmTransactionRecord(transaction: Transaction, baseToken: Token, source: TransactionSource, val foreignTransaction: Boolean = false, spam: Boolean = false) :
     TransactionRecord(

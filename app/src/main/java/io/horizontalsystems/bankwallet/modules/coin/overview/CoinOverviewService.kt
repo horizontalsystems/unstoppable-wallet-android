@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.ILanguageManager
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.FullCoin
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject

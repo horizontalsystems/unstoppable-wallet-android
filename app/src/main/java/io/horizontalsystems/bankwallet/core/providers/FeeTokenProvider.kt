@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.core.protocolType
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.Token
-import io.horizontalsystems.xxxkit.models.TokenQuery
-import io.horizontalsystems.xxxkit.models.TokenType
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class FeeTokenProvider(private val marketKit: MarketKit) {
 

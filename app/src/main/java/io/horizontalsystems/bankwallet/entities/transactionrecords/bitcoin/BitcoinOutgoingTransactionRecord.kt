@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 class BitcoinOutgoingTransactionRecord(

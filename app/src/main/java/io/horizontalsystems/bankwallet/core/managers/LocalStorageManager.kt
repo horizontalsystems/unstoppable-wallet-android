@@ -22,8 +22,8 @@ import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 class LocalStorageManager(private val preferences: SharedPreferences) : ILocalStorage, IPinStorage, IChartTypeStorage,
     IThirdKeyboard, IMarketStorage {

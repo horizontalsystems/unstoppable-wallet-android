@@ -14,8 +14,8 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionTag
-import io.horizontalsystems.xxxkit.models.Token
-import io.horizontalsystems.xxxkit.models.TokenType
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.Flowable
 import io.reactivex.Single
 

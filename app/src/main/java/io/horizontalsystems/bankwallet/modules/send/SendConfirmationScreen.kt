@@ -30,8 +30,8 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hodler.LockTimeInterval
+import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.snackbar.SnackbarDuration
-import io.horizontalsystems.xxxkit.models.Coin
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 

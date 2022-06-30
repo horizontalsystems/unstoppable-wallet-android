@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.core.toHexString
-import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 class ShowKeyViewModel(
     account: Account,

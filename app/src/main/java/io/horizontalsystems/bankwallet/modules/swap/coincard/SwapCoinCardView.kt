@@ -18,8 +18,8 @@ import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDia
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.views.helpers.LayoutHelper
-import io.horizontalsystems.xxxkit.models.Token
 import java.math.BigDecimal
 import java.util.*
 

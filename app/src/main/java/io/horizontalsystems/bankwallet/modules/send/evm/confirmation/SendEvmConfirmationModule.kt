@@ -19,9 +19,9 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransac
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.models.Chain
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.TokenQuery
-import io.horizontalsystems.xxxkit.models.TokenType
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 object SendEvmConfirmationModule {
 
@@ -38,7 +38,7 @@ object SendEvmConfirmationModule {
                 Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
                 else -> BlockchainType.Ethereum
             }
-            App.xxxKit.token(TokenQuery(blockchainType, TokenType.Native))!!
+            App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))!!
         }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
@@ -54,7 +54,7 @@ object SendEvmConfirmationModule {
             val gasLimitSurchargePercent = if (sendEvmData.transactionData.input.isEmpty()) 0 else 20
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, sendEvmData.transactionData, gasLimitSurchargePercent)
         }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeToken, App.xxxKit, App.currencyManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeToken, App.marketKit, App.currencyManager) }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val sendService by lazy {
             SendEvmTransactionService(sendEvmData, evmKitWrapper, feeService, App.evmLabelManager)

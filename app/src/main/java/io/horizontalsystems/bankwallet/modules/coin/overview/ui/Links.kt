@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.xxxkit.models.LinkType
+import io.horizontalsystems.marketkit.models.LinkType
 
 @Preview
 @Composable

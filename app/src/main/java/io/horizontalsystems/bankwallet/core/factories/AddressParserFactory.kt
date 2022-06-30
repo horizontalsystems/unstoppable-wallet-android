@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
-import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 class AddressParserFactory {
     fun parser(blockchainType: BlockchainType) = when (blockchainType) {

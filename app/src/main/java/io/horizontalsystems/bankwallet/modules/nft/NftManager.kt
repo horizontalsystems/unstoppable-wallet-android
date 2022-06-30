@@ -5,10 +5,10 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.bankwallet.modules.nft.asset.nftAssetAttribute
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.NftAsset
-import io.horizontalsystems.xxxkit.models.NftCollection
-import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.NftAsset
+import io.horizontalsystems.marketkit.models.NftCollection
+import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt

@@ -13,9 +13,9 @@ class NftCollectionEventsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = NftCollectionEventsService(
                 collectionUid,
-                App.xxxKit,
+                App.marketKit,
                 App.nftManager,
-                BalanceXRateRepository(App.currencyManager, App.xxxKit)
+                BalanceXRateRepository(App.currencyManager, App.marketKit)
             )
             return NftCollectionEventsViewModel(service) as T
         }

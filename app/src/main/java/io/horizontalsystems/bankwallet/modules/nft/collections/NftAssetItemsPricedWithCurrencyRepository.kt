@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
-import io.horizontalsystems.xxxkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow

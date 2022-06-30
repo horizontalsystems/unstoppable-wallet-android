@@ -6,9 +6,9 @@ import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopMoversRepository
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.MarketOverview
-import io.horizontalsystems.xxxkit.models.TopMovers
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.MarketOverview
+import io.horizontalsystems.marketkit.models.TopMovers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope

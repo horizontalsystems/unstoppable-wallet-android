@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CategoryCard
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.xxxkit.models.CoinCategory
+import io.horizontalsystems.marketkit.models.CoinCategory
 
 @Composable
 fun TopSectorsBoardView(

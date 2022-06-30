@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.coin
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.xxxkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject

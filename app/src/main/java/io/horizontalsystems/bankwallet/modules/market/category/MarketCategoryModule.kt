@@ -22,7 +22,7 @@ object MarketCategoryModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 MarketCategoryViewModel::class.java -> {
-                    val marketCategoryRepository = MarketCategoryRepository(App.xxxKit)
+                    val marketCategoryRepository = MarketCategoryRepository(App.marketKit)
                     val service = MarketCategoryService(
                         marketCategoryRepository,
                         App.currencyManager,
@@ -38,7 +38,7 @@ object MarketCategoryModule {
                 ChartViewModel::class.java -> {
                     val chartService = CoinCategoryMarketDataChartService(
                         App.currencyManager,
-                        App.xxxKit,
+                        App.marketKit,
                         coinCategory.uid
                     )
                     val chartNumberFormatter = ChartCurrencyValueFormatterShortened()

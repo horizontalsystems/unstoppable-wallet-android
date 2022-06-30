@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsServic
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItemState
-import io.horizontalsystems.xxxkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsViewModel(

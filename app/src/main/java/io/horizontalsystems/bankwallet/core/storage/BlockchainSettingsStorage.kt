@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.core.storage
 import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
-import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 class BlockchainSettingsStorage(appDatabase: AppDatabase) {
 

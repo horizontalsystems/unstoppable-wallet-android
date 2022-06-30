@@ -12,7 +12,7 @@ object MetricChartTvlModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val chartService = CoinTvlChartService(App.currencyManager, App.xxxKit, coinUid)
+            val chartService = CoinTvlChartService(App.currencyManager, App.marketKit, coinUid)
             val chartNumberFormatter = ChartCurrencyValueFormatterShortened()
             return ChartModule.createViewModel(chartService, chartNumberFormatter) as T
         }

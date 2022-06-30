@@ -38,7 +38,7 @@ object SwapApproveModule {
                         allowanceAmountBigInteger
                     )
                     val coinService by lazy {
-                        EvmCoinService(approveData.token, App.currencyManager, App.xxxKit)
+                        EvmCoinService(approveData.token, App.currencyManager, App.marketKit)
                     }
                     SwapApproveViewModel(approveData.dex, swapApproveService, coinService) as T
                 }

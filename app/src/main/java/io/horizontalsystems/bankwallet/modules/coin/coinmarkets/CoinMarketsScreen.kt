@@ -28,7 +28,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-import io.horizontalsystems.xxxkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.launch
 
 @Composable

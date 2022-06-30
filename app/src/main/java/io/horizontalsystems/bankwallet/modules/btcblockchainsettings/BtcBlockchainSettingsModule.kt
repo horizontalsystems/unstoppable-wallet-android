@@ -5,7 +5,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.xxxkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.Blockchain
 
 object BtcBlockchainSettingsModule {
 

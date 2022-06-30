@@ -30,8 +30,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.xxxkit.models.TokenQuery
-import io.horizontalsystems.xxxkit.models.TokenType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class OneInchSettingsFragment : SwapSettingsBaseFragment() {
 
@@ -94,7 +94,7 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
         binding.recipientAddressCompose.setContent {
             ComposeAppTheme {
                 val tokenQuery = TokenQuery(dex.blockchainType, TokenType.Native)
-                App.xxxKit.token(tokenQuery)?.let { token ->
+                App.marketKit.token(tokenQuery)?.let { token ->
                     Column {
                         Spacer(modifier = Modifier.height(12.dp))
                         Header {

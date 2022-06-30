@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizat
 import io.horizontalsystems.bankwallet.modules.profeatures.ProNft
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.*
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable

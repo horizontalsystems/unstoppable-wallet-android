@@ -8,9 +8,9 @@ import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale.PriceType
 import io.horizontalsystems.bankwallet.modules.nft.nftAssetPrice
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.AssetOrder
-import io.horizontalsystems.xxxkit.models.NftPrice
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.AssetOrder
+import io.horizontalsystems.marketkit.models.NftPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow

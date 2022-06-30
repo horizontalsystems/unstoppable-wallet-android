@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.CoinPrice
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject

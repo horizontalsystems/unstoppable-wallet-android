@@ -22,7 +22,7 @@ object SyncErrorModule {
     }
 
     sealed class Blockchain {
-        class Btc(val blockchain: io.horizontalsystems.xxxkit.models.Blockchain) : Blockchain()
-        class Evm(val blockchain: io.horizontalsystems.xxxkit.models.Blockchain) : Blockchain()
+        class Btc(val blockchain: io.horizontalsystems.marketkit.models.Blockchain) : Blockchain()
+        class Evm(val blockchain: io.horizontalsystems.marketkit.models.Blockchain) : Blockchain()
     }
 }

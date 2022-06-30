@@ -37,8 +37,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.xxxkit.models.FullCoin
-import io.horizontalsystems.xxxkit.models.LinkType
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.LinkType
 
 @Composable
 fun CoinOverviewScreen(

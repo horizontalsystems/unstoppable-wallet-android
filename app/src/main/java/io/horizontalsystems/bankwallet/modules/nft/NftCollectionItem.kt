@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.nft
 
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
-import io.horizontalsystems.xxxkit.models.HsTimePeriod
-import io.horizontalsystems.xxxkit.models.NftCollection
-import io.horizontalsystems.xxxkit.models.NftPrice
+import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.NftCollection
+import io.horizontalsystems.marketkit.models.NftPrice
 import java.math.BigDecimal
 import java.math.RoundingMode
 

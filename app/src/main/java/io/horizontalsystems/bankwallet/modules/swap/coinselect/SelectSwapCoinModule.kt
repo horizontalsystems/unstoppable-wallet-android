@@ -17,7 +17,7 @@ object SelectSwapCoinModule {
                     App.walletManager,
                     App.adapterManager,
                     App.currencyManager,
-                    App.xxxKit
+                    App.marketKit
                 )
             }
             return SelectSwapCoinViewModel(coinProvider) as T

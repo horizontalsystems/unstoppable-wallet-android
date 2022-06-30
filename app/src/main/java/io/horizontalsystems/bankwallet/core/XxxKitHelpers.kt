@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
-import io.horizontalsystems.xxxkit.models.Coin
+import io.horizontalsystems.marketkit.models.Coin
 
 fun Coin.toOld() : io.horizontalsystems.marketkit.models.Coin {
     return io.horizontalsystems.marketkit.models.Coin(

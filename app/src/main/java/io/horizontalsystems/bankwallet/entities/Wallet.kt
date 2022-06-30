@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.entities
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.protocolType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.Token
-import io.horizontalsystems.xxxkit.models.TokenType
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 import java.util.*
 

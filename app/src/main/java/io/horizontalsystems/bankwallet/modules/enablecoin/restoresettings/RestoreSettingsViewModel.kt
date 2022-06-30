@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.ui.extensions.ZCashConfig
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 
 class RestoreSettingsViewModel(

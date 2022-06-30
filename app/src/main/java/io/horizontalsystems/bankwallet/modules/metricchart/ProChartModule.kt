@@ -13,7 +13,7 @@ object ProChartModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val chartService = ProChartService(App.currencyManager, App.proFeatureAuthorizationManager, App.xxxKit, coinUid, chartType)
+            val chartService = ProChartService(App.currencyManager, App.proFeatureAuthorizationManager, App.marketKit, coinUid, chartType)
             val chartNumberFormatter = when (chartType) {
                 ChartType.DexVolume, ChartType.DexLiquidity, ChartType.TxVolume -> ChartCurrencyValueFormatterShortened()
                 ChartType.TxCount, ChartType.AddressesCount -> ChartNumberFormatterShortened()

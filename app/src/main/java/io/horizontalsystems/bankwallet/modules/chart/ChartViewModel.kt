@@ -18,7 +18,7 @@ import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.xxxkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*

@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.market.filters
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.priceChangeValue
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.MarketInfo
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.MarketInfo
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow

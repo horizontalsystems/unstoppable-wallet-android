@@ -17,7 +17,7 @@ object NftCollectionsModule {
             val assetItemsRepository = NftAssetItemsRepository(App.nftManager)
             val assetItemsPricedRepository = NftAssetItemsPricedRepository()
             val assetItemsPricedWithCurrencyRepository = NftAssetItemsPricedWithCurrencyRepository(
-                BalanceXRateRepository(App.currencyManager, App.xxxKit)
+                BalanceXRateRepository(App.currencyManager, App.marketKit)
             )
 
             val service = NftCollectionsService(

@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
 import io.horizontalsystems.bankwallet.entities.CoinSettingType
 import io.horizontalsystems.bankwallet.entities.CoinSettings
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.subjects.PublishSubject
 
 class CoinSettingsService : Clearable {

@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.entities
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.toOld
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.math.BigInteger
 

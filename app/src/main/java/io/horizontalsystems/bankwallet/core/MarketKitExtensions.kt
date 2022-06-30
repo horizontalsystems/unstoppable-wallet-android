@@ -7,8 +7,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
 import io.horizontalsystems.bankwallet.entities.CoinSettingType
 import io.horizontalsystems.bankwallet.entities.CoinSettings
-import io.horizontalsystems.xxxkit.models.*
-import java.util.*
+import io.horizontalsystems.marketkit.models.*
 
 val Token.protocolType: String?
     get() = tokenQuery.protocolType
@@ -189,57 +188,8 @@ val FullCoin.supportedTokens
     get() = tokens.filter { it.isSupported }
 
 val FullCoin.iconPlaceholder: Int
-    get() {
-        return R.drawable.coin_placeholder
-//        if (tokens.size == 1) {
-//            tokens.first().blockchainType.iconPlaceholder
-//        } else {
-//            R.drawable.coin_placeholder
-//        }
+    get() = if (tokens.size == 1) {
+        tokens.first().iconPlaceholder
+    } else {
+        R.drawable.coin_placeholder
     }
-
-val CoinCategory.imageUrl
-    get() = "https://markets.nyc3.digitaloceanspaces.com/category-icons/$uid@3x.png"
-
-val CoinInvestment.Fund.logoUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/fund-icons/$uid@3x.png"
-
-val CoinTreasury.logoUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/treasury-icons/$fundUid@3x.png"
-
-val Auditor.logoUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/auditor-icons/$name@3x.png"
-
-
-fun List<FullCoin>.sortedByFilter(filter: String, enabled: (FullCoin) -> Boolean): List<FullCoin> {
-    var comparator: Comparator<FullCoin> = compareByDescending {
-        enabled.invoke(it)
-    }
-    if (filter.isNotBlank()) {
-        val lowercasedFilter = filter.lowercase()
-        comparator = comparator
-            .thenByDescending {
-                it.coin.code.lowercase() == lowercasedFilter
-            }.thenByDescending {
-                it.coin.code.lowercase().startsWith(lowercasedFilter)
-            }.thenByDescending {
-                it.coin.name.lowercase().startsWith(lowercasedFilter)
-            }
-    }
-    comparator = comparator.thenBy {
-        it.coin.marketCapRank ?: Int.MAX_VALUE
-    }
-    comparator = comparator.thenBy {
-        it.coin.name.lowercase(Locale.ENGLISH)
-    }
-
-    return sortedWith(comparator)
-}
-
-//extension Array where Element == Token {
-//
-//    var sorted: [Token] {
-//        sorted { $0.blockchainType.order < $1.blockchainType.order }
-//    }
-//
-//}

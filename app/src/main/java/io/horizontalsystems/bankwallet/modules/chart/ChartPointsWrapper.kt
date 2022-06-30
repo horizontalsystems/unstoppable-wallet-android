@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.xxxkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 data class ChartPointsWrapper(
     val chartInterval: HsTimePeriod,

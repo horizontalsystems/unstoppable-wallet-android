@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.EvmSyncSource
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
-import io.horizontalsystems.xxxkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.Blockchain
 
 object BlockchainSettingsModule {
 

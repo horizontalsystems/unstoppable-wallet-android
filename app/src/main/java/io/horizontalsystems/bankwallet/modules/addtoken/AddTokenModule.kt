@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.addtoken
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenQuery
 
 object AddTokenModule {
     class Factory : ViewModelProvider.Factory {
@@ -19,7 +19,7 @@ object AddTokenModule {
                 add(AddBep2TokenBlockchainService(App.networkManager))
             }
 
-            val service = AddTokenService(App.coinManager, services, App.walletManager, App.accountManager, App.xxxKit)
+            val service = AddTokenService(App.coinManager, services, App.walletManager, App.accountManager, App.marketKit)
 
             return AddTokenViewModel(service) as T
         }

@@ -21,9 +21,9 @@ import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.Se
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.chartview.ChartDataBuilder
-import io.horizontalsystems.xxxkit.models.ChartPoint
-import io.horizontalsystems.xxxkit.models.Coin
-import io.horizontalsystems.xxxkit.models.MarketInfoDetails
+import io.horizontalsystems.marketkit.models.ChartPoint
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.MarketInfoDetails
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

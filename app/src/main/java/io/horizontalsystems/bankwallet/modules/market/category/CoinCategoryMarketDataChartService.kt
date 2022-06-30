@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
 class CoinCategoryMarketDataChartService(

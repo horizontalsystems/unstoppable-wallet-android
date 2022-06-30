@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Single
 
 object MarketFiltersModule {
@@ -15,7 +15,7 @@ object MarketFiltersModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = MarketFiltersService(App.xxxKit, App.currencyManager.baseCurrency)
+            val service = MarketFiltersService(App.marketKit, App.currencyManager.baseCurrency)
             return MarketFiltersViewModel(service) as T
         }
 

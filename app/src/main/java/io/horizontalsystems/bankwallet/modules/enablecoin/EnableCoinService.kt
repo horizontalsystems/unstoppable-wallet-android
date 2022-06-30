@@ -8,10 +8,10 @@ import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.Coin
-import io.horizontalsystems.xxxkit.models.FullCoin
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 

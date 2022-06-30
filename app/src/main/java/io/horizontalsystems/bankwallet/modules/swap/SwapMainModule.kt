@@ -21,9 +21,9 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFra
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapFragment
-import io.horizontalsystems.xxxkit.models.Blockchain
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Observable
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal

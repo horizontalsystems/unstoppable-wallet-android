@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.core.defaultSettingsArray
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.TokenQuery
 
 class WalletActivator(
     private val walletManager: IWalletManager,

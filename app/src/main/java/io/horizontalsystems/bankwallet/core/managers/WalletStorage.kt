@@ -4,9 +4,9 @@ import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.core.customCoinUid
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.Token
-import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
 
 class WalletStorage(
     private val marketKit: MarketKit,
@@ -36,7 +36,7 @@ class WalletStorage(
                 val blockchain = blockchains.first { it.uid == tokenQuery.blockchainType.uid }
 
                 val token = Token(
-                    coin = io.horizontalsystems.xxxkit.models.Coin(coinUid, enabledWallet.coinName, enabledWallet.coinCode),
+                    coin = io.horizontalsystems.marketkit.models.Coin(coinUid, enabledWallet.coinName, enabledWallet.coinCode),
                     blockchain = blockchain,
                     type = tokenQuery.tokenType,
                     decimals = enabledWallet.coinDecimals

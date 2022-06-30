@@ -14,10 +14,10 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSetti
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.Token
-import io.horizontalsystems.xxxkit.models.TokenQuery
-import io.horizontalsystems.xxxkit.models.TokenType
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 object RestoreBlockchainsModule {
 
@@ -46,7 +46,7 @@ object RestoreBlockchainsModule {
                 App.accountFactory,
                 App.accountManager,
                 App.walletManager,
-                App.xxxKit,
+                App.marketKit,
                 enableCoinService,
                 App.evmBlockchainManager
             )

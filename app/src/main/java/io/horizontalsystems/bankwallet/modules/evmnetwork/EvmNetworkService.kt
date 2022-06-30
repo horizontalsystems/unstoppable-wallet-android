@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.evmnetwork
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.entities.EvmSyncSource
-import io.horizontalsystems.xxxkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject

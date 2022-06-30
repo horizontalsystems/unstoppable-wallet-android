@@ -26,11 +26,11 @@ import io.horizontalsystems.ethereumkit.decorations.OutgoingDecoration
 import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapDecoration
 import io.horizontalsystems.uniswapkit.decorations.SwapDecoration
-import io.horizontalsystems.xxxkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 import java.math.BigInteger

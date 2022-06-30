@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.address
 import com.unstoppabledomains.resolution.Resolution
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.ethereumkit.core.AddressValidator
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.TokenQuery
-import io.horizontalsystems.xxxkit.models.TokenType
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import org.kethereum.eip137.model.ENSName
 import org.kethereum.ens.ENS
 import org.kethereum.ens.isPotentialENSDomain

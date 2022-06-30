@@ -11,13 +11,13 @@ import io.horizontalsystems.erc20kit.events.TransferEventInstance
 import io.horizontalsystems.ethereumkit.decorations.IncomingDecoration
 import io.horizontalsystems.ethereumkit.decorations.UnknownTransactionDecoration
 import io.horizontalsystems.ethereumkit.models.FullTransaction
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapDecoration
 import io.horizontalsystems.uniswapkit.decorations.SwapDecoration
-import io.horizontalsystems.xxxkit.models.BlockchainType
-import io.horizontalsystems.xxxkit.models.TokenQuery
-import io.horizontalsystems.xxxkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope

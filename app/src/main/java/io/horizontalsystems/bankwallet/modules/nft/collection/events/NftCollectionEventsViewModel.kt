@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.xxxkit.models.NftEvent
+import io.horizontalsystems.marketkit.models.NftEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

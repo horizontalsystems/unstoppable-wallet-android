@@ -12,8 +12,8 @@ import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.*
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.xxxkit.models.*
 import java.math.BigDecimal
 import java.net.URI
 

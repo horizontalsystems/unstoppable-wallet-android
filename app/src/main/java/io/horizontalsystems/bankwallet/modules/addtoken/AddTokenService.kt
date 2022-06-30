@@ -6,9 +6,9 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.customCoinUid
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.Token
-import io.horizontalsystems.xxxkit.models.TokenQuery
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
 
 class AddTokenService(
     private val coinManager: ICoinManager,
@@ -59,7 +59,7 @@ class AddTokenService(
                     marketKit.blockchain(tokenQuery.blockchainType.uid)?.let { blockchain ->
                         val coinUid = tokenQuery.customCoinUid
                         Token(
-                            coin = io.horizontalsystems.xxxkit.models.Coin(coinUid, tokenInfo.coinName, tokenInfo.coinCode),
+                            coin = io.horizontalsystems.marketkit.models.Coin(coinUid, tokenInfo.coinName, tokenInfo.coinCode),
                             blockchain = blockchain,
                             type = tokenQuery.tokenType,
                             decimals = tokenInfo.decimals

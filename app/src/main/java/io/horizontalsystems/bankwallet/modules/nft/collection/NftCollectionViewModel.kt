@@ -27,8 +27,8 @@ import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.xxxkit.MarketKit
-import io.horizontalsystems.xxxkit.models.*
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal

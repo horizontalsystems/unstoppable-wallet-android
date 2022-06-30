@@ -29,7 +29,7 @@ import io.horizontalsystems.chartview.ChartDataItemImmutable
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.xxxkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 @Composable
 fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {

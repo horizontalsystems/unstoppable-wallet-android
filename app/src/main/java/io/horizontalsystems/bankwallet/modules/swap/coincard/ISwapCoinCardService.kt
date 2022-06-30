@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.coincard
 
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Observable
 import java.math.BigDecimal
 import java.util.*

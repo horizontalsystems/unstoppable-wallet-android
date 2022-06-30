@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.btcblockchainsettings
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
-import io.horizontalsystems.xxxkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 

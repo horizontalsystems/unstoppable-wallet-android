@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo.options
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Token
 
 class TransactionSpeedUpCancelViewModel(
     baseToken: Token,

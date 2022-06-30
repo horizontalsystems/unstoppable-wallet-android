@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.providers.BitcoinCashFeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.BitcoinFeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.DashFeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.LitecoinFeeRateProvider
-import io.horizontalsystems.xxxkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 object FeeRateProviderFactory {
     fun provider(blockchainType: BlockchainType): IFeeRateProvider? {

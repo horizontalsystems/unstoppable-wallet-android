@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.entities
 
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.xxxkit.models.Coin
-import io.horizontalsystems.xxxkit.models.Token
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.math.BigInteger
 
