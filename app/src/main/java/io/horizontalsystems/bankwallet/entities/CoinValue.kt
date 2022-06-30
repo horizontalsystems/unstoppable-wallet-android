@@ -3,14 +3,12 @@ package io.horizontalsystems.bankwallet.entities
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.toOld
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.xxxkit.models.Token
 import java.math.BigDecimal
 import java.math.BigInteger
 
 data class CoinValue(val coin: Coin, val decimal: Int, val value: BigDecimal) {
 
-    constructor(platformCoin: PlatformCoin, value: BigDecimal) : this(platformCoin.coin, platformCoin.decimals, value)
     constructor(token: Token, value: BigDecimal) : this(token.coin.toOld(), token.decimals, value)
 
     override fun equals(other: Any?): Boolean {
