@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.blockchainLogo
+import io.horizontalsystems.bankwallet.core.icon24
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSetti
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.xxxkit.models.BlockchainType
 import io.horizontalsystems.xxxkit.models.Token
 import io.horizontalsystems.xxxkit.models.TokenQuery
@@ -85,7 +84,7 @@ object RestoreBlockchainsModule {
         object Zcash: Blockchain()
         object Litecoin: Blockchain()
         object Dash: Blockchain()
-        object BinanceChain: Blockchain();
+        object BinanceChain: Blockchain()
         class Evm(val evmBlockchain: EvmBlockchain): Blockchain()
 
         val uid: String
@@ -121,15 +120,15 @@ object RestoreBlockchainsModule {
                 is Evm -> this.evmBlockchain.description
             }
 
-        val coinType: CoinType
+        val blockchainType
             get() = when (this) {
-                Bitcoin -> CoinType.Bitcoin
-                BitcoinCash -> CoinType.BitcoinCash
-                Zcash -> CoinType.Zcash
-                Litecoin -> CoinType.Litecoin
-                Dash -> CoinType.Dash
-                BinanceChain -> CoinType.Bep2("BNB")
-                is Evm -> this.evmBlockchain.baseCoinType
+                Bitcoin -> BlockchainType.Bitcoin
+                BitcoinCash -> BlockchainType.BitcoinCash
+                Zcash -> BlockchainType.Zcash
+                Litecoin -> BlockchainType.Litecoin
+                Dash -> BlockchainType.Dash
+                BinanceChain -> BlockchainType.BinanceChain
+                is Evm -> this.evmBlockchain.blockchainType
             }
 
         val tokenQuery: TokenQuery
@@ -144,7 +143,7 @@ object RestoreBlockchainsModule {
             }
 
         val icon: ImageSource
-             get() = ImageSource.Local(coinType.blockchainLogo)
+             get() = ImageSource.Local(blockchainType.icon24)
 
         companion object {
 

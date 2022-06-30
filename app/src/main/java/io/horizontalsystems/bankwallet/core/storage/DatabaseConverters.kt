@@ -7,7 +7,6 @@ import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.session.WCSession
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetAttribute
-import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigDecimal
 import java.util.*
 
@@ -65,16 +64,6 @@ class DatabaseConverters {
         return secretList?.list?.joinToString(separator = ",")?.let {
             App.encryptionManager.encrypt(it)
         }
-    }
-
-    @TypeConverter
-    fun fromCoinType(coinType: CoinType?): String {
-        return coinType?.id ?: ""
-    }
-
-    @TypeConverter
-    fun toCoinType(value: String): CoinType {
-        return CoinType.fromId(value)
     }
 
     @TypeConverter

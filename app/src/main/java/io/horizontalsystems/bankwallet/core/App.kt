@@ -6,8 +6,6 @@ import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
@@ -378,14 +376,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 
-            if (!localStorage.favoriteCoinIdsMigrated) {
-                val request = OneTimeWorkRequestBuilder<MigrateFavoriteCoinIdsWorker>().build()
-                WorkManager.getInstance(instance).enqueue(request)
-            }
-            if (!localStorage.fillWalletInfoDone) {
-                val request = OneTimeWorkRequestBuilder<FillWalletInfoWorker>().build()
-                WorkManager.getInstance(instance).enqueue(request)
-            }
+//            if (!localStorage.favoriteCoinIdsMigrated) {
+//                val request = OneTimeWorkRequestBuilder<MigrateFavoriteCoinIdsWorker>().build()
+//                WorkManager.getInstance(instance).enqueue(request)
+//            }
+//            if (!localStorage.fillWalletInfoDone) {
+//                val request = OneTimeWorkRequestBuilder<FillWalletInfoWorker>().build()
+//                WorkManager.getInstance(instance).enqueue(request)
+//            }
 
             evmLabelManager.sync()
 
