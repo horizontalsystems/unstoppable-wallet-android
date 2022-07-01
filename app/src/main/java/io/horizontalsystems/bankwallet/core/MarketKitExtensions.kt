@@ -109,6 +109,12 @@ val Blockchain.shortName: String
 
 val Blockchain.description: String
     get() = when (type) {
+        BlockchainType.Bitcoin -> "BTC (BIP44, BIP49, BIP84)"
+        BlockchainType.BitcoinCash -> "BCH (Legacy, CashAddress)"
+        BlockchainType.Zcash -> "ZEC"
+        BlockchainType.Litecoin -> "LTC (BIP44, BIP49, BIP84)"
+        BlockchainType.Dash -> "DASH"
+        BlockchainType.BinanceChain -> "BNB, BEP2 tokens"
         BlockchainType.Ethereum -> "ETH, ERC20 tokens"
         BlockchainType.BinanceSmartChain -> "BNB, BEP20 tokens"
         BlockchainType.Polygon -> "MATIC, MRC20 tokens"

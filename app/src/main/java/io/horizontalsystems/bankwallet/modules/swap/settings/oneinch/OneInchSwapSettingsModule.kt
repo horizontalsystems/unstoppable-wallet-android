@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.swap.settings.oneinch
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel

@@ -16,7 +16,7 @@ class ManageWalletsViewModel(
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewItemsLiveData = MutableLiveData<List<CoinViewItem>>()
+    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<String>>>()
     val disableCoinLiveData = MutableLiveData<String>()
 
     private var disposables = CompositeDisposable()
@@ -40,7 +40,7 @@ class ManageWalletsViewModel(
 
     private fun viewItem(
         item: ManageWalletsService.Item,
-    ): CoinViewItem {
+    ): CoinViewItem<String> {
         val supportedTokens = item.fullCoin.supportedTokens
         val label = supportedTokens.singleOrNull()?.protocolType
         val state = when (item.state) {

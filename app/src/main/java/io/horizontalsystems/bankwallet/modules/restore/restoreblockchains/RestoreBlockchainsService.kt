@@ -8,11 +8,9 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
-import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsModule.Blockchain
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsModule.InternalItem
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -45,6 +43,18 @@ class RestoreBlockchainsService(
             itemsObservable.onNext(value)
         }
 
+    private val blockchainTypes = listOf(
+        BlockchainType.Bitcoin,
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Polygon,
+        BlockchainType.Zcash,
+        BlockchainType.Dash,
+        BlockchainType.BitcoinCash,
+        BlockchainType.Litecoin,
+        BlockchainType.BinanceChain,
+    )
+
     init {
         enableCoinService.enableCoinObservable
             .subscribeIO { (configuredPlatformCoins, settings) ->
@@ -63,10 +73,17 @@ class RestoreBlockchainsService(
     }
 
     private fun syncInternalItems() {
-        val tokens = marketKit.tokens(Blockchain.all.map { it.tokenQuery })
-        internalItems = Blockchain.all.mapNotNull { blockchain ->
-            tokens.firstOrNull { it.tokenQuery == blockchain.tokenQuery }?.let { token ->
-                InternalItem(blockchain, token)
+        val blockchains = marketKit
+            .blockchains(blockchainTypes.map { it.uid })
+            .sortedBy { blockchainTypes.indexOf(it.type) }
+
+        val tokens = blockchainTypes
+            .map { TokenQuery(it, TokenType.Native) }
+            .let { marketKit.tokens(it) }
+
+        internalItems = blockchains.mapNotNull { blockchain ->
+            tokens.find { it.blockchain == blockchain }?.let {
+                InternalItem(blockchain, it)
             }
         }
     }
@@ -124,7 +141,7 @@ class RestoreBlockchainsService(
     }
 
     private fun getInternalItemByBlockchain(blockchain: Blockchain): InternalItem? =
-        internalItems.firstOrNull { it.blockchain.uid == blockchain.uid }
+        internalItems.firstOrNull { it.blockchain == blockchain }
 
     fun enable(blockchain: Blockchain) {
         val internalItem = getInternalItemByBlockchain(blockchain) ?: return
@@ -157,8 +174,9 @@ class RestoreBlockchainsService(
         }
 
         items.filter { it.enabled }.forEach { item ->
-            (item.blockchain as? Blockchain.Evm)?.let { evmBlockchain ->
-                evmBlockchainManager.getEvmAccountManager(evmBlockchain.evmBlockchain.blockchainType).markAutoEnable(account)
+            val isEvm = evmBlockchainManager.allBlockchainTypes.contains(item.blockchain.type)
+            if (isEvm) {
+                evmBlockchainManager.getEvmAccountManager(item.blockchain.type).markAutoEnable(account)
             }
         }
 
