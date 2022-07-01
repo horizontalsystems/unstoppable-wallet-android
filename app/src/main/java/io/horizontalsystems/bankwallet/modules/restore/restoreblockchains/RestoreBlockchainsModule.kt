@@ -3,9 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.icon24
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
@@ -14,10 +12,8 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSetti
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 
 object RestoreBlockchainsModule {
 
@@ -78,93 +74,11 @@ object RestoreBlockchainsModule {
         }
     }
 
-    sealed class Blockchain {
-        object Bitcoin: Blockchain()
-        object BitcoinCash: Blockchain()
-        object Zcash: Blockchain()
-        object Litecoin: Blockchain()
-        object Dash: Blockchain()
-        object BinanceChain: Blockchain()
-        class Evm(val evmBlockchain: EvmBlockchain): Blockchain()
-
-        val uid: String
-            get() = when (this) {
-                Bitcoin -> "Bitcoin"
-                BitcoinCash -> "BitcoinCash"
-                Zcash -> "Zcash"
-                Litecoin -> "Litecoin"
-                Dash -> "Dash"
-                BinanceChain -> "BinanceChain"
-                is Evm -> "EVM_${this.evmBlockchain.name}"
-            }
-
-        val title: String
-            get() = when (this) {
-                Bitcoin -> "Bitcoin"
-                BitcoinCash -> "Bitcoin Cash"
-                Zcash -> "Zcash"
-                Litecoin -> "Litecoin"
-                Dash -> "Dash"
-                BinanceChain -> "Binance Chain"
-                is Evm -> this.evmBlockchain.name
-            }
-
-        val description: String
-            get() = when (this) {
-                Bitcoin -> "BTC (BIP44, BIP49, BIP84)"
-                BitcoinCash -> "BCH (Legacy, CashAddress)"
-                Zcash -> "ZEC"
-                Litecoin -> "LTC (BIP44, BIP49, BIP84)"
-                Dash -> "DASH"
-                BinanceChain -> "BNB, BEP2 tokens"
-                is Evm -> this.evmBlockchain.description
-            }
-
-        val blockchainType
-            get() = when (this) {
-                Bitcoin -> BlockchainType.Bitcoin
-                BitcoinCash -> BlockchainType.BitcoinCash
-                Zcash -> BlockchainType.Zcash
-                Litecoin -> BlockchainType.Litecoin
-                Dash -> BlockchainType.Dash
-                BinanceChain -> BlockchainType.BinanceChain
-                is Evm -> this.evmBlockchain.blockchainType
-            }
-
-        val tokenQuery: TokenQuery
-            get() = when (this) {
-                Bitcoin -> TokenQuery(BlockchainType.Bitcoin, TokenType.Native)
-                BitcoinCash -> TokenQuery(BlockchainType.BitcoinCash, TokenType.Native)
-                Zcash -> TokenQuery(BlockchainType.Zcash, TokenType.Native)
-                Litecoin -> TokenQuery(BlockchainType.Litecoin, TokenType.Native)
-                Dash -> TokenQuery(BlockchainType.Dash, TokenType.Native)
-                BinanceChain -> TokenQuery(BlockchainType.BinanceChain, TokenType.Native)
-                is Evm -> TokenQuery(this.evmBlockchain.blockchainType, TokenType.Native)
-            }
-
-        val icon: ImageSource
-             get() = ImageSource.Local(blockchainType.icon24)
-
-        companion object {
-
-            val all: List<Blockchain>
-                get() = listOf(
-                    Bitcoin,
-                    Evm(EvmBlockchain.Ethereum), Evm(EvmBlockchain.BinanceSmartChain), Evm(EvmBlockchain.Polygon),
-                    Zcash, Dash, BitcoinCash, Litecoin, BinanceChain
-                )
-
-            fun getBlockchainByUid(uid: String): Blockchain? =
-                all.firstOrNull { it.uid == uid }
-
-        }
-    }
-
     class InternalItem(val blockchain: Blockchain, val token: Token)
 }
 
-data class CoinViewItem(
-    val uid: String,
+data class CoinViewItem<T>(
+    val item: T,
     val imageSource: ImageSource,
     val title: String,
     val subtitle: String,

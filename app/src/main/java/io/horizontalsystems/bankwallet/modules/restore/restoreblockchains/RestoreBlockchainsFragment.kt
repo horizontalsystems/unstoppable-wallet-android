@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.Blockchain
 
 class RestoreBlockchainsFragment : BaseFragment() {
 
@@ -207,7 +208,7 @@ private fun ManageWalletsScreen(
                                 Spacer(Modifier.width(12.dp))
                                 if (viewItem.state.hasSettings) {
                                     HsIconButton(
-                                        onClick = { viewModel.onClickSettings(viewItem.uid) }
+                                        onClick = { viewModel.onClickSettings(viewItem.item) }
                                     ) {
                                         Icon(
                                             painter = painterResource(R.drawable.ic_edit_20),
@@ -229,12 +230,12 @@ private fun ManageWalletsScreen(
     }
 }
 
-private fun onItemClick(viewItem: CoinViewItem, viewModel: RestoreBlockchainsViewModel) {
+private fun onItemClick(viewItem: CoinViewItem<Blockchain>, viewModel: RestoreBlockchainsViewModel) {
     if (viewItem.state is CoinViewItemState.ToggleVisible) {
         if (viewItem.state.enabled) {
-            viewModel.disable(viewItem.uid)
+            viewModel.disable(viewItem.item)
         } else {
-            viewModel.enable(viewItem.uid)
+            viewModel.enable(viewItem.item)
         }
     }
 }

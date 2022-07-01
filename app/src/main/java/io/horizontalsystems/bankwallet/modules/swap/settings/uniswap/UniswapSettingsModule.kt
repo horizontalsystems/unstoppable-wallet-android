@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.swap.settings.uniswap
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.entities.EvmBlockchain
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapDeadlineViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel

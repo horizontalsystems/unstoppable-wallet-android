@@ -180,7 +180,7 @@ private fun ManageWalletsScreen(
                         CoinCell(
                             viewItem = viewItem,
                             onItemClick = { onItemClick(viewItem, viewModel) },
-                            onSettingClick = { viewModel.onClickSettings(viewItem.uid) },
+                            onSettingClick = { viewModel.onClickSettings(viewItem.item) },
                         )
                     }
                 }
@@ -191,7 +191,7 @@ private fun ManageWalletsScreen(
 
 @Composable
 private fun CoinCell(
-    viewItem: CoinViewItem,
+    viewItem: CoinViewItem<String>,
     onItemClick: () -> Unit,
     onSettingClick: () -> Unit,
 ) {
@@ -269,12 +269,12 @@ private fun CoinCell(
     }
 }
 
-private fun onItemClick(viewItem: CoinViewItem, viewModel: ManageWalletsViewModel) {
+private fun onItemClick(viewItem: CoinViewItem<String>, viewModel: ManageWalletsViewModel) {
     if (viewItem.state is CoinViewItemState.ToggleVisible) {
         if (viewItem.state.enabled) {
-            viewModel.disable(viewItem.uid)
+            viewModel.disable(viewItem.item)
         } else {
-            viewModel.enable(viewItem.uid)
+            viewModel.enable(viewItem.item)
         }
     }
 }

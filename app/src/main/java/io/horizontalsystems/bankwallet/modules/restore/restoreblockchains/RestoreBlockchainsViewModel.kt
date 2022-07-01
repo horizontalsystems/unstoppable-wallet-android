@@ -5,8 +5,12 @@ import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.description
+import io.horizontalsystems.bankwallet.core.icon24
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.BackpressureStrategy
 import io.reactivex.disposables.CompositeDisposable
 
@@ -15,7 +19,7 @@ class RestoreBlockchainsViewModel(
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewItemsLiveData = MutableLiveData<List<CoinViewItem>>()
+    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Blockchain>>>()
     val disableBlockchainLiveData = MutableLiveData<String>()
     val successLiveEvent = SingleLiveEvent<Unit>()
     val restoreEnabledLiveData: LiveData<Boolean>
@@ -45,25 +49,22 @@ class RestoreBlockchainsViewModel(
     private fun viewItem(
         item: RestoreBlockchainsService.Item,
     ) = CoinViewItem(
-        item.blockchain.uid,
-        item.blockchain.icon,
-        item.blockchain.title,
+        item.blockchain,
+        ImageSource.Local(item.blockchain.type.icon24),
+        item.blockchain.name,
         item.blockchain.description,
         state = CoinViewItemState.ToggleVisible(item.enabled, item.hasSettings)
     )
 
-    fun enable(uid: String) {
-        val blockchain = RestoreBlockchainsModule.Blockchain.getBlockchainByUid(uid) ?: return
+    fun enable(blockchain: Blockchain) {
         service.enable(blockchain)
     }
 
-    fun disable(uid: String) {
-        val blockchain = RestoreBlockchainsModule.Blockchain.getBlockchainByUid(uid) ?: return
+    fun disable(blockchain: Blockchain) {
         service.disable(blockchain)
     }
 
-    fun onClickSettings(uid: String) {
-        val blockchain = RestoreBlockchainsModule.Blockchain.getBlockchainByUid(uid) ?: return
+    fun onClickSettings(blockchain: Blockchain) {
         service.configure(blockchain)
     }
 
