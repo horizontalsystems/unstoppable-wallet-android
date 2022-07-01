@@ -7,7 +7,7 @@ class SyncErrorViewModel(
 ) : ViewModel() {
 
     val sourceChangeable by service::sourceChangeable
-    val blockchain by service::blockchain
+    val blockchainWrapper by service::blockchainWrapper
     val coinName by service::coinName
     val reportEmail by service::reportEmail
 

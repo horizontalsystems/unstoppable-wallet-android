@@ -13,19 +13,19 @@ class SyncErrorService(
     private val evmBlockchainManager: EvmBlockchainManager
 ) {
 
-    val blockchain by lazy {
+    val blockchainWrapper by lazy {
         btcBlockchainManager.blockchain(wallet.token.blockchainType)?.let {
-            SyncErrorModule.Blockchain.Btc(it)
+            SyncErrorModule.BlockchainWrapper(it, SyncErrorModule.BlockchainWrapper.Type.Bitcoin)
         } ?: run {
             evmBlockchainManager.getBlockchain(wallet.token)?.let {
-                SyncErrorModule.Blockchain.Evm(it)
+                SyncErrorModule.BlockchainWrapper(it, SyncErrorModule.BlockchainWrapper.Type.Evm)
             }
         }
     }
 
     val coinName: String = wallet.coin.name
 
-    val sourceChangeable = blockchain != null
+    val sourceChangeable = blockchainWrapper != null
 
     fun retry() {
         adapterManager.refreshByWallet(wallet)
