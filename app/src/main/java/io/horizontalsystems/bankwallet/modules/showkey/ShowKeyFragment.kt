@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
-import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -222,7 +221,7 @@ private fun KeyTabs(viewModel: ShowKeyViewModel, showKeyWarning: (String) -> Uni
 private fun PublicKeys(viewModel: ShowKeyViewModel) {
     val localView = LocalView.current
     C1(
-        text = BtcBlockchain.Bitcoin.title.uppercase(),
+        text = "BITCOIN",
         modifier = Modifier.padding(horizontal = 16.dp)
     )
     Spacer(Modifier.height(13.dp))
@@ -247,7 +246,7 @@ private fun PublicKeys(viewModel: ShowKeyViewModel) {
     )
     Spacer(Modifier.height(36.dp))
     C1(
-        text = BtcBlockchain.BitcoinCash.title.uppercase(),
+        text = "BITCOIN CASH",
         modifier = Modifier.padding(horizontal = 16.dp)
     )
     Spacer(Modifier.height(13.dp))
@@ -267,7 +266,7 @@ private fun PublicKeys(viewModel: ShowKeyViewModel) {
     )
     Spacer(Modifier.height(36.dp))
     C1(
-        text = BtcBlockchain.Litecoin.title.uppercase(),
+        text = "LITECOIN",
         modifier = Modifier.padding(horizontal = 16.dp)
     )
     Spacer(Modifier.height(13.dp))
@@ -292,7 +291,7 @@ private fun PublicKeys(viewModel: ShowKeyViewModel) {
     )
     Spacer(Modifier.height(36.dp))
     C1(
-        text = BtcBlockchain.Dash.title.uppercase(),
+        text = "DASH",
         modifier = Modifier.padding(horizontal = 16.dp)
     )
     Spacer(Modifier.height(13.dp))
@@ -441,7 +440,7 @@ private fun PublicKeys_Preview() {
     ComposeAppTheme {
         Column {
             C1(
-                text = BtcBlockchain.Litecoin.title.uppercase(),
+                text = "LITECOIN",
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             Spacer(Modifier.height(13.dp))

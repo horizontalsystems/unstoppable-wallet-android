@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core.storage.migrations
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
-import io.horizontalsystems.bankwallet.entities.BtcBlockchain
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 
 object Migration_40_41 : Migration(40, 41) {
@@ -50,4 +49,11 @@ object Migration_40_41 : Migration(40, 41) {
         database.execSQL("DROP TABLE BlockchainSetting")
         database.execSQL("DROP TABLE AccountSettingRecord")
     }
+}
+
+private enum class BtcBlockchain(val raw: String) {
+    Bitcoin("bitcoin"),
+    BitcoinCash("bitcoinCash"),
+    Litecoin("litecoin"),
+    Dash("dash");
 }
