@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.marketkit.models.Blockchain
 
 object SyncErrorModule {
 
@@ -21,8 +22,12 @@ object SyncErrorModule {
         }
     }
 
-    sealed class Blockchain {
-        class Btc(val blockchain: io.horizontalsystems.marketkit.models.Blockchain) : Blockchain()
-        class Evm(val blockchain: io.horizontalsystems.marketkit.models.Blockchain) : Blockchain()
+    data class BlockchainWrapper(
+        val blockchain: Blockchain,
+        val type: Type
+    ) {
+        enum class Type {
+            Bitcoin, Evm
+        }
     }
 }

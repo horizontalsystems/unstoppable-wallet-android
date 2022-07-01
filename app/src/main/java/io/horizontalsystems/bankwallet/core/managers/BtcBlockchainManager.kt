@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -32,9 +31,8 @@ class BtcBlockchainManager(
 
     val allBlockchains = marketKit.blockchains(blockchainTypes.map { it.uid })
 
-    fun blockchain(blockchainType: BlockchainType): Blockchain? {
-        return marketKit.blockchain(blockchainType.uid)
-    }
+    fun blockchain(blockchainType: BlockchainType) =
+        allBlockchains.firstOrNull { blockchainType == it.type }
 
     fun restoreMode(blockchainType: BlockchainType): BtcRestoreMode {
         return storage.btcRestoreMode(blockchainType) ?: BtcRestoreMode.Api

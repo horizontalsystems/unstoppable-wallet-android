@@ -123,13 +123,14 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                     onClick = {
                         navController.popBackStack()
 
-                        when (val blockchainItem = viewModel.blockchain) {
-                            is SyncErrorModule.Blockchain.Btc -> {
-                                val params = BtcBlockchainSettingsModule.args(blockchainItem.blockchain)
+                        val blockchainWrapper = viewModel.blockchainWrapper
+                        when (blockchainWrapper?.type) {
+                            SyncErrorModule.BlockchainWrapper.Type.Bitcoin -> {
+                                val params = BtcBlockchainSettingsModule.args(blockchainWrapper.blockchain)
                                 navController.slideFromRight(R.id.btcBlockchainSettingsFragment, params)
                             }
-                            is SyncErrorModule.Blockchain.Evm -> {
-                                val params = EvmNetworkModule.args(blockchainItem.blockchain)
+                            SyncErrorModule.BlockchainWrapper.Type.Evm -> {
+                                val params = EvmNetworkModule.args(blockchainWrapper.blockchain)
                                 navController.slideFromRight(R.id.evmNetworkFragment, params)
                             }
                             else -> { }
