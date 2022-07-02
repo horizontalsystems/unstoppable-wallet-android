@@ -11,6 +11,7 @@ import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.FlingBehavior
@@ -136,17 +137,23 @@ private fun StaticContent(
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            title3_leah(
-                modifier = Modifier.padding(horizontal = 24.dp),
-                text = stringResource(viewModel.slides[pagerState.currentPage].title),
-                textAlign = TextAlign.Center
-            )
+            val title = viewModel.slides[pagerState.currentPage].title
+            Crossfade(title) {
+                title3_leah(
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    text = stringResource(title),
+                    textAlign = TextAlign.Center
+                )
+            }
             Spacer(Modifier.height(16.dp))
-            body_grey(
-                text = stringResource(viewModel.slides[pagerState.currentPage].subtitle),
-                modifier = Modifier.padding(horizontal = 48.dp),
-                textAlign = TextAlign.Center
-            )
+            val subtitle = viewModel.slides[pagerState.currentPage].subtitle
+            Crossfade(subtitle) {
+                body_grey(
+                    text = stringResource(subtitle),
+                    modifier = Modifier.padding(horizontal = 48.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
         Spacer(Modifier.weight(2f))
         ButtonPrimaryYellow(
