@@ -268,10 +268,9 @@
     <fragment
         android:id="@+id/feePriorityInfo"
         android:name="io.horizontalsystems.bankwallet.modules.fee.FeePriorityInfoFragment" />
-    <dialog
+    <fragment
         android:id="@+id/statusInfoDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.StatusInfoFragment"
-        tools:layout="@layout/fragment_status_info" />
+        android:name="io.horizontalsystems.bankwallet.modules.info.TransactionStatusInfoFragment" />
     <dialog
         android:id="@+id/selectSwapCoinDialog"
         android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment"
