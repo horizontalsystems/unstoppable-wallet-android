@@ -13,9 +13,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.FlingBehavior
+import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,10 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.pager.*
+import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
@@ -82,7 +83,7 @@ class IntroActivity : BaseActivity() {
 
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalSnapperApi::class)
 @Composable
 private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActivity: () -> Unit) {
     val pagerState = rememberPagerState(initialPage = 0)
@@ -100,6 +101,10 @@ private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActi
             count = 3,
             state = pagerState,
             verticalAlignment = Alignment.Top,
+            flingBehavior = rememberFlingBehaviorMultiplier(
+                multiplier = 1.5f,
+                baseFlingBehavior = PagerDefaults.flingBehavior(pagerState)
+            )
         ) { index ->
             SlidingContent(viewModel.slides[index], nightMode)
         }
@@ -201,4 +206,23 @@ private fun SlidingContent(
         Spacer(Modifier.weight(2f))
         Spacer(Modifier.height(110.dp))
     }
+}
+
+private class FlingBehaviourMultiplier(
+    private val multiplier: Float,
+    private val baseFlingBehavior: FlingBehavior
+) : FlingBehavior {
+    override suspend fun ScrollScope.performFling(initialVelocity: Float): Float {
+        return with(baseFlingBehavior) {
+            performFling(initialVelocity * multiplier)
+        }
+    }
+}
+
+@Composable
+fun rememberFlingBehaviorMultiplier(
+    multiplier: Float,
+    baseFlingBehavior: FlingBehavior
+): FlingBehavior = remember(multiplier, baseFlingBehavior) {
+    FlingBehaviourMultiplier(multiplier, baseFlingBehavior)
 }
