@@ -59,7 +59,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Veuillez utiliser uniquement des lettres et des chiffres latins pour la phrase d\'authentification</string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmation de la phrase d\'authentification ne correspond pas</string>
-    <string name="EnterPassphrase">Phrase d\'authentification</string>
+    <string name="EnterPassphrase">Enter the passphrase</string>
     <string name="CreateWallet_PassphraseDescription">Les phrases d\'authentification ajoutent une strate de sécurité supplémentaire aux portefeuilles. Les utilisateurs peuvent ainsi créer plusieurs portefeuilles indépendants à pièces multiples à l\'aide d\'une seule phrase de réinitialisation mnémonique, mais associée à des mots de passe différents. \n\nPour restaurer ces portefeuilles, l\'utilisateur doit disposer d\'une phrase de réinitialisation mnémonique et d\'un mot de passe pour chaque portefeuille à restaurer.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Bonjour!</string>
