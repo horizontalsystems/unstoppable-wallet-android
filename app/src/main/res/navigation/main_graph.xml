@@ -57,8 +57,7 @@
         tools:layout="@layout/fragment_show_backup_words"/>
     <fragment
         android:id="@+id/backupConfirmationKeyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyFragment"
-        tools:layout="@layout/fragment_backup_words_confirm" />
+        android:name="io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyFragment" />
     <fragment
         android:id="@+id/securityParamsInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.SecurityParamsInfoFragment"/>
