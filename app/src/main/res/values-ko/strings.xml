@@ -59,7 +59,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">암호에는 라틴 문자 및 숫자만 사용하십시오</string>
     <string name="CreateWallet_Error_InvalidConfirmation">암호 확인이 일치하지 않습니다</string>
-    <string name="EnterPassphrase">암호문구</string>
+    <string name="EnterPassphrase">Enter the passphrase</string>
     <string name="CreateWallet_PassphraseDescription">암호 문구는 사용자가 하나의 연상 기호 복구 문구를 사용하여 여러 개의 독립적인 멀티코인 지갑을 만들 수 있도록 지갑에 보안 계층을 추가합니다.\n\n이러한 지갑을 복원하려면 사용자가 복원하기 위해 각 지갑에 대한 비밀번호와 연상 기호 복구 문구가 필요합니다.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
