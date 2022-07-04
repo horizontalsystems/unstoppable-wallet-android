@@ -59,7 +59,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только латинские буквы и цифры для кодовой фразы</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
-    <string name="EnterPassphrase">Кодовая Фраза</string>
+    <string name="EnterPassphrase">Enter the passphrase</string>
     <string name="CreateWallet_PassphraseDescription">Кодовые фразы обеспечивают дополнительную защиту для кошельков, позволяя пользователям создавать несколько независимых мультивалютных кошельков, использующих одну мнемоническую фразу для восстановления, но имеющих разные пароли.\n\nДля восстановления этих кошельков пользователю потребуются мнемоническая фраза для восстановления, а также пароль для каждого восстанавливаемого кошелька.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
