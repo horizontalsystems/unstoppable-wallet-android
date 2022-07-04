@@ -44,6 +44,7 @@ fun FormsInput(
     enabled: Boolean = true,
     initial: String? = null,
     hint: String,
+    prefix: String? = null,
     textColor: Color = ComposeAppTheme.colors.leah,
     textStyle: TextStyle = ComposeAppTheme.typography.body,
     hintColor: Color = ComposeAppTheme.colors.grey50,
@@ -88,6 +89,13 @@ fun FormsInput(
         ) {
             var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
                 mutableStateOf(TextFieldValue(initial ?: ""))
+            }
+
+            prefix?.let{
+                body_grey(
+                    modifier = Modifier.padding(start = 12.dp),
+                    text = prefix
+                )
             }
 
             BasicTextField(

@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="24dp"
-        android:hint="@string/EnterPassphrase"
+        android:hint="@string/Passphrase"
         android:inputType="textPassword" />
 
     <io.horizontalsystems.bankwallet.ui.extensions.InputView
