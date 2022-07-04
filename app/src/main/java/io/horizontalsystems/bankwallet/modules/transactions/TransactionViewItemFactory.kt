@@ -160,7 +160,7 @@ class TransactionViewItemFactory(
 
     private fun getColoredValue(value: Any, color: ColorName): ColoredValue =
         when (value) {
-            is TransactionValue -> ColoredValue(getCoinString(value), if (value.zeroValue) ColorName.Grey else color)
+            is TransactionValue -> ColoredValue(getCoinString(value), if (value.zeroValue) ColorName.Leah else color)
             is CurrencyValue -> ColoredValue(getCurrencyString(value), if (value.value.compareTo(BigDecimal.ZERO) == 0) ColorName.Grey else color)
             else -> ColoredValue(value.toString(), color)
         }
