@@ -1,51 +1,71 @@
 package io.horizontalsystems.bankwallet.modules.basecurrency
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.views.ListPosition
 
-class BaseCurrencySettingsViewModel(private val service: BaseCurrencySettingsService) : ViewModel() {
+class BaseCurrencySettingsViewModel(private val currencyManager: ICurrencyManager) : ViewModel() {
 
-    val disclaimerLiveEvent = SingleLiveEvent<String>()
-    val finishLiveEvent = SingleLiveEvent<Unit>()
-
+    private val popularCurrencyCodes = listOf("USD", "EUR", "GBP", "JPY")
+    private val popularCurrencies: List<Currency>
+    private val otherCurrencies: List<Currency>
     private var tmpBaseCurrency: Currency? = null
 
-    val popularItems = service.popularCurrencies.mapIndexed { index, currency ->
-        CurrencyViewItemWrapper(
-                currency,
-                currency == service.baseCurrency,
-                ListPosition.getListPosition(service.popularCurrencies.size, index)
-        )
+    init {
+        val currencies = currencyManager.currencies.toMutableList()
+        val populars = mutableListOf<Currency>()
+
+        popularCurrencyCodes.forEach { code ->
+            populars.add(currencies.removeAt(currencies.indexOfFirst { it.code == code }))
+        }
+
+        popularCurrencies = populars
+        otherCurrencies = currencies
     }
 
-    val otherItems = service.otherCurrencies.mapIndexed { index, currency ->
-        CurrencyViewItemWrapper(
-                currency,
-                currency == service.baseCurrency,
-                ListPosition.getListPosition(service.otherCurrencies.size, index)
-        )
-    }
+    private var baseCurrency: Currency
+        get() = currencyManager.baseCurrency
+        set(value) {
+            currencyManager.baseCurrency = value
+        }
 
-    fun setBaseCurrency(v: Currency) {
-        if (service.popularCurrencies.contains(v)) {
+    val disclaimerCurrencies = popularCurrencies.joinToString { it.code }
+
+    var showDisclaimer by mutableStateOf(false)
+        private set
+
+    var closeScreen by mutableStateOf(false)
+        private set
+
+    val popularItems = popularCurrencies.map { CurrencyViewItem(it, it == baseCurrency) }
+    val otherItems = otherCurrencies.map { CurrencyViewItem(it, it == baseCurrency) }
+
+    fun onSelectBaseCurrency(v: Currency) {
+        if (popularCurrencies.contains(v)) {
             doSetBaseCurrency(v)
         } else {
             tmpBaseCurrency = v
-            disclaimerLiveEvent.postValue(service.popularCurrencies.map { it.code }.joinToString())
+            showDisclaimer = true
         }
     }
 
     fun onAcceptDisclaimer() {
+        showDisclaimer = false
         tmpBaseCurrency?.let {
             doSetBaseCurrency(it)
         }
     }
 
     private fun doSetBaseCurrency(v: Currency) {
-        service.baseCurrency = v
-        finishLiveEvent.call()
+        baseCurrency = v
+        closeScreen = true
+    }
+
+    fun closeDisclaimer() {
+        showDisclaimer = false
     }
 
 }
