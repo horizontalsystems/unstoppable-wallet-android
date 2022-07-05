@@ -63,8 +63,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         listOf(FilterViewItemWrapper.getAny<PriceChange>()) + PriceChange.values().map {
             FilterViewItemWrapper<PriceChange?>(Translator.getString(it.titleResId), it)
         }
-    val blockchainOptions = MarketFiltersModule.Blockchain.values().map {
-        FilterViewItemWrapper(it.value, it)
+    val blockchainOptions = service.blockchains.map {
+        FilterViewItemWrapper(it.name, it)
     }
 
     var showSpinner by mutableStateOf(false)
@@ -169,7 +169,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     fun updateSelectedBlockchainIndexes(values: List<Int>) {
         selectedBlockchainIndexes = values
         updateBlockchainsValue()
-        val selectedBlockchains = values.map { MarketFiltersModule.Blockchain.values()[it] }
+        val selectedBlockchains = values.map { service.blockchains[it] }
         service.filterBlockchains = selectedBlockchains
         refresh()
     }
