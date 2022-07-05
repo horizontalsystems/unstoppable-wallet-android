@@ -3,10 +3,12 @@ package io.horizontalsystems.bankwallet.modules.market.overview.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -74,7 +76,12 @@ fun <T : WithTranslatableTitle> TopBoardHeader(
         )
         Row(modifier = Modifier.height(42.dp)) {
             Row(
-                    modifier = Modifier.height(42.dp).clickable { onClickSeeAll.invoke() },
+                    modifier = Modifier
+                            .height(42.dp)
+                            .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                            ) { onClickSeeAll.invoke() },
                     verticalAlignment = Alignment.CenterVertically
             ) {
                     Image(
