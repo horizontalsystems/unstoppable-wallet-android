@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Single
 
 object MarketFiltersModule {
@@ -28,47 +27,6 @@ object MarketFiltersModule {
         Blockchain(R.string.Market_Filter_Blockchains),
         PriceChange(R.string.Market_Filter_PriceChange),
         PricePeriod(R.string.Market_Filter_PricePeriod),
-    }
-
-    enum class Blockchain(val value: String) {
-        Ethereum("Ethereum"),
-        BinanceSmartChain("Binance Smart Chain"),
-        Binance("Binance"),
-        ArbitrumOne("Arbitrum One"),
-        Avalanche("Avalanche"),
-        Fantom("Fantom"),
-        Harmony("Harmony"),
-        Huobi("Huobi"),
-        Iotex("Iotex"),
-        Moonriver("Moonriver"),
-        Okex("Okex"),
-        Optimism("Optimism"),
-        Polygon("Polygon"),
-        Solana("Solana"),
-        Sora("Sora"),
-        Tomochain("Tomochain"),
-        Xdai("Xdai");
-
-        fun matchesWithType(blockchainType: BlockchainType) = when (this) {
-            Ethereum -> blockchainType is BlockchainType.Ethereum
-            BinanceSmartChain -> blockchainType is BlockchainType.BinanceSmartChain
-            Binance -> blockchainType is BlockchainType.BinanceChain
-            ArbitrumOne -> blockchainType is BlockchainType.ArbitrumOne
-            Optimism -> blockchainType is BlockchainType.Optimism
-            Polygon -> blockchainType is BlockchainType.Polygon
-//            Avalanche -> blockchainType is BlockchainType.
-//            Fantom -> blockchainType is BlockchainType.
-//            Harmony -> blockchainType is BlockchainType.
-//            Huobi -> blockchainType is BlockchainType.
-//            Iotex -> blockchainType is BlockchainType.
-//            Moonriver -> blockchainType is BlockchainType.
-//            Okex -> blockchainType is BlockchainType.
-//            Solana -> blockchainType is BlockchainType.
-//            Sora -> blockchainType is BlockchainType.
-//            Tomochain -> blockchainType is BlockchainType.
-//            Xdai -> blockchainType is BlockchainType.
-            else -> false
-        }
     }
 }
 

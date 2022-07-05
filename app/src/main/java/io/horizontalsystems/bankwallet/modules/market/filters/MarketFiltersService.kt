@@ -4,6 +4,8 @@ import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.priceChangeValue
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Single
@@ -20,6 +22,28 @@ class MarketFiltersService(
     private val baseCurrency: Currency
 ) : IMarketListFetcher {
 
+    private val blockchainTypes = listOf(
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.BinanceChain,
+        BlockchainType.ArbitrumOne,
+        BlockchainType.Unsupported("avalanche"),
+        BlockchainType.Unsupported("fantom"),
+        BlockchainType.Unsupported("harmony-shard-0"),
+        BlockchainType.Unsupported("huobi-token"),
+        BlockchainType.Unsupported("iotex"),
+        BlockchainType.Unsupported("moonriver"),
+        BlockchainType.Unsupported("okex-chain"),
+        BlockchainType.Optimism,
+        BlockchainType.Polygon,
+        BlockchainType.Unsupported("solana"),
+        BlockchainType.Unsupported("sora"),
+        BlockchainType.Unsupported("tomochain"),
+        BlockchainType.Unsupported("xdai"),
+    )
+
+    val blockchains = marketKit.blockchains(blockchainTypes.map { it.uid })
+
     val currencyCode: String
         get() = baseCurrency.code
 
@@ -35,7 +59,7 @@ class MarketFiltersService(
 
     var filterPriceChange: Pair<Long?, Long?>? = null
 
-    var filterBlockchains: List<MarketFiltersModule.Blockchain> = listOf()
+    var filterBlockchains: List<Blockchain> = listOf()
 
     var filterOutperformedBtcOn: Boolean = false
 
@@ -151,9 +175,7 @@ class MarketFiltersService(
         if (filterBlockchains.isEmpty()) return true
 
         tokens.forEach { token ->
-            val inBlockchain = filterBlockchains.any {
-                it.matchesWithType(token.blockchainType)
-            }
+            val inBlockchain = filterBlockchains.any { token.blockchain == it }
             if (inBlockchain) return true
         }
 
