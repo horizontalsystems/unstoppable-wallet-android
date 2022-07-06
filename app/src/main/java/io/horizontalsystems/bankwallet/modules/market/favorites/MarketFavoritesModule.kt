@@ -15,7 +15,7 @@ object MarketFavoritesModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val repository = MarketFavoritesRepository(App.marketKit, App.marketFavoritesManager)
-            val menuService = MarketFavoritesMenuService(App.localStorage)
+            val menuService = MarketFavoritesMenuService(App.localStorage, App.marketWidgetManager)
             val service = MarketFavoritesService(repository, menuService, App.currencyManager, App.backgroundManager)
             return MarketFavoritesViewModel(service, menuService) as T
         }
