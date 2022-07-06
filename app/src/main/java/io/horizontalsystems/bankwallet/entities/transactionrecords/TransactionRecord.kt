@@ -17,8 +17,6 @@ abstract class TransactionRecord(
     val source: TransactionSource
 ) : Comparable<TransactionRecord> {
 
-    val blockchainTitle: String = source.blockchain.getTitle()
-
     open val mainValue: TransactionValue? = null
 
     open fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean =

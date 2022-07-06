@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -45,9 +46,13 @@ class TransactionAdapterManager(
 
             var txAdapter = currentAdapters.remove(source)
             if (txAdapter == null) {
-                txAdapter = when (source.blockchain) {
-                    is TransactionSource.Blockchain.Evm -> {
-                        adapterFactory.evmTransactionsAdapter(wallet.transactionSource, source.blockchain.blockchain.type)
+                txAdapter = when (val blockchainType = source.blockchain.type) {
+                    BlockchainType.Ethereum,
+                    BlockchainType.BinanceSmartChain,
+                    BlockchainType.Polygon,
+                    BlockchainType.Optimism,
+                    BlockchainType.ArbitrumOne -> {
+                        adapterFactory.evmTransactionsAdapter(wallet.transactionSource, blockchainType)
                     }
                     else -> adapter as? ITransactionsAdapter
                 }
