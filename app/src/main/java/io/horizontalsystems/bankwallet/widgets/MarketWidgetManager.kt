@@ -29,8 +29,7 @@ class MarketWidgetManager {
 
             for (glanceId in glanceIds) {
                 val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
-                if (state.widgetId == state.widgetId) {
-                    // TODO add check for widget type: watchlist, top coins, top platforms, top gainers etc
+                if (state.type == MarketWidgetType.Watchlist) {
                     MarketWorker.enqueue(context, state.widgetId)
                 }
             }
