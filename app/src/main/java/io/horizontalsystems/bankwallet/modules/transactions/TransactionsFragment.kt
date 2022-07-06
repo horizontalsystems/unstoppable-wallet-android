@@ -17,8 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -76,6 +75,7 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
 
     val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
     val filterTypes by viewModel.filterTypesLiveData.observeAsState()
+    val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
     val transactions by viewModel.transactionList.observeAsState()
     val viewState by viewModel.viewState.observeAsState()
     val syncing by viewModel.syncingLiveData.observeAsState(false)
@@ -92,6 +92,41 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
                     onTransactionTypeClick = viewModel::setFilterTransactionType
                 )
             }
+            filterBlockchains?.let { filterBlockchains ->
+                CellHeaderSorting {
+                    var showFilterBlockchainDialog by remember { mutableStateOf(false) }
+
+                    val filterBlockchain = filterBlockchains.firstOrNull { it.selected }?.item
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        ButtonSecondaryTransparent(
+                            title = filterBlockchain?.name ?: stringResource(R.string.Transactions_Filter_AllBlockchains),
+                            iconRight = R.drawable.ic_down_arrow_20,
+                            onClick = {
+                                showFilterBlockchainDialog = true
+                            }
+                        )
+                    }
+
+                    if (showFilterBlockchainDialog) {
+                        SelectorDialogCompose(
+                            title = stringResource(R.string.Transactions_Filter_Blockchain),
+                            items = filterBlockchains.map {
+                                TabItem(it.item?.name ?: stringResource(R.string.Transactions_Filter_AllBlockchains), it.selected, it)
+                            },
+                            onDismissRequest = {
+                                showFilterBlockchainDialog = false
+                            },
+                            onSelectItem = viewModel::onEnterFilterBlockchain
+                        )
+                    }
+                }
+
+            }
+
+
             filterCoins?.let { filterCoins ->
                 FilterCoinTabs(
                     filterCoins = filterCoins,

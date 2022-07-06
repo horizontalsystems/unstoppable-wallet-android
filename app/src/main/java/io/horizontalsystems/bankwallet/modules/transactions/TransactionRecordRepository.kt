@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -20,6 +21,7 @@ class TransactionRecordRepository(
     private var selectedFilterTransactionType: FilterTransactionType = FilterTransactionType.All
 
     private var selectedWallet: TransactionWallet? = null
+    private var selectedBlockchain: Blockchain? = null
 
     private val itemsSubject = PublishSubject.create<Pair<List<TransactionRecord>, Int>>()
     override val itemsObservable: Observable<Pair<List<TransactionRecord>, Int>> get() = itemsSubject
@@ -37,7 +39,16 @@ class TransactionRecordRepository(
 
     private val activeAdapters: List<TransactionAdapterWrapper>
         get() {
-            val activeWallets = selectedWallet?.let { listOf(it) } ?: walletsGroupedBySource
+            val tmpSelectedWallet = selectedWallet
+            val tmpSelectedBlockchain = selectedBlockchain
+
+            val activeWallets = when {
+                tmpSelectedWallet != null -> listOf(tmpSelectedWallet)
+                tmpSelectedBlockchain != null -> walletsGroupedBySource.filter {
+                    it.source.blockchain == tmpSelectedBlockchain
+                }
+                else -> walletsGroupedBySource
+            }
             return activeWallets.mapNotNull { adaptersMap[it] }
         }
 
@@ -137,6 +148,16 @@ class TransactionRecordRepository(
         allLoaded.set(false)
         loadItems(1)
         subscribeForUpdates()
+    }
+
+    override fun setBlockchain(blockchain: Blockchain?) {
+        selectedBlockchain = blockchain
+
+        unsubscribeFromUpdates()
+        allLoaded.set(false)
+        loadItems(1)
+        subscribeForUpdates()
+
     }
 
     override fun loadNext() {
