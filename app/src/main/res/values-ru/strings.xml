@@ -1008,4 +1008,6 @@
     <string name="Hud_Text_Activate">Активировать</string>
     <string name="ProUsersActivate_Title">Активировать кодовую фразу</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Безграничная свобода действий. Вам предоставят важные данные рынка, аналитические инструменты, полезные диаграммы, основанные на ончейн-данных, с помощью которых вы сможете составить себе четкое представление о проектах</string>
+    <!--Widget-->
+    <string name="WidgetList_Config_Title">Choose Type</string>
 </resources>
