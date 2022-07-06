@@ -1,11 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.marketkit.models.Blockchain
 
 class TransactionFilterService {
     private var transactionWallets: List<TransactionWallet> = listOf()
     var selectedWallet: TransactionWallet? = null
     var selectedTransactionType: FilterTransactionType = FilterTransactionType.All
+    var selectedBlockchain: Blockchain? = null
+
+    private var blockchains: List<Blockchain?> = listOf(null)
 
     fun setWallets(wallets: List<Wallet>) {
         transactionWallets = wallets.sortedBy { it.coin.code }.map {
@@ -20,6 +24,11 @@ class TransactionFilterService {
 
             selectedTransactionType = FilterTransactionType.All
         }
+
+        blockchains = listOf(null).plus(wallets.map { it.token.blockchain }.distinct())
+        if (!blockchains.contains(selectedBlockchain)) {
+            selectedBlockchain = null
+        }
     }
 
     fun getTransactionWallets(): List<TransactionWallet> {
@@ -28,5 +37,9 @@ class TransactionFilterService {
 
     fun getFilterTypes(): List<FilterTransactionType> {
         return FilterTransactionType.values().toList()
+    }
+
+    fun getBlockchains(): List<Blockchain?> {
+        return blockchains
     }
 }

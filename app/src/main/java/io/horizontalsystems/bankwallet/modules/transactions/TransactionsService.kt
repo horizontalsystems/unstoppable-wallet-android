@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -27,6 +28,9 @@ class TransactionsService(
     val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
 
     val syncingObservable get() = transactionSyncStateRepository.syncingObservable
+
+    private val blockchainSubject = BehaviorSubject.create<Pair<List<Blockchain?>, Blockchain?>>()
+    val blockchainObservable get() = blockchainSubject
 
     private val typesSubject = BehaviorSubject.create<Pair<List<FilterTransactionType>, FilterTransactionType>>()
     val typesObservable get() = typesSubject
@@ -179,6 +183,7 @@ class TransactionsService(
 
         walletsSubject.onNext(Pair(transactionWallets, transactionFilterService.selectedWallet))
         typesSubject.onNext(Pair(transactionFilterService.getFilterTypes(), transactionFilterService.selectedTransactionType))
+        blockchainSubject.onNext(Pair(transactionFilterService.getBlockchains(), transactionFilterService.selectedBlockchain))
     }
 
     override fun clear() {
@@ -196,6 +201,14 @@ class TransactionsService(
             typesSubject.onNext(Pair(transactionFilterService.getFilterTypes(), f))
             transactionFilterService.selectedTransactionType = f
             transactionRecordRepository.setTransactionType(f)
+        }
+    }
+
+    fun setFilterBlockchain(blockchain: Blockchain?) {
+        executorService.submit {
+            blockchainSubject.onNext(Pair(transactionFilterService.getBlockchains(), blockchain))
+            transactionFilterService.selectedBlockchain = blockchain
+            transactionRecordRepository.setBlockchain(blockchain)
         }
     }
 

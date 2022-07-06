@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
@@ -25,6 +26,7 @@ class TransactionsViewModel(
     val syncingLiveData = MutableLiveData<Boolean>()
     val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
+    val filterBlockchainsLiveData = MutableLiveData<List<Filter<Blockchain?>>>()
     val transactionList = MutableLiveData<Map<String, List<TransactionViewItem>>>()
     val viewState = MutableLiveData<ViewState>(ViewState.Loading)
 
@@ -45,6 +47,17 @@ class TransactionsViewModel(
                     Filter(it, it == selectedType)
                 }
                 filterTypesLiveData.postValue(filterTypes)
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        service.blockchainObservable
+            .subscribeIO { (types, selectedType) ->
+                val filterBlockchains = types.map {
+                    Filter(it, it == selectedType)
+                }
+                filterBlockchainsLiveData.postValue(filterBlockchains)
             }
             .let {
                 disposables.add(it)
@@ -81,6 +94,10 @@ class TransactionsViewModel(
 
     fun setFilterCoin(w: TransactionWallet?) {
         service.setFilterCoin(w)
+    }
+
+    fun onEnterFilterBlockchain(filterBlockchain: Filter<Blockchain?>) {
+        service.setFilterBlockchain(filterBlockchain.item)
     }
 
     fun onBottomReached() {
