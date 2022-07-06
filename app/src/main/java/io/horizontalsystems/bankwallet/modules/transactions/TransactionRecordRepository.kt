@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -44,18 +45,23 @@ class TransactionRecordRepository(
         val mergedWallets = mutableListOf<TransactionWallet>()
 
         transactionWallets.forEach { wallet ->
-            when (wallet.source.blockchain) {
-                TransactionSource.Blockchain.Bitcoin,
-                TransactionSource.Blockchain.BitcoinCash,
-                TransactionSource.Blockchain.Litecoin,
-                TransactionSource.Blockchain.Dash,
-                TransactionSource.Blockchain.Zcash,
-                is TransactionSource.Blockchain.Bep2 -> mergedWallets.add(wallet)
-                is TransactionSource.Blockchain.Evm -> {
+            when (wallet.source.blockchain.type) {
+                BlockchainType.Bitcoin,
+                BlockchainType.BitcoinCash,
+                BlockchainType.Litecoin,
+                BlockchainType.Dash,
+                BlockchainType.Zcash,
+                BlockchainType.BinanceChain -> mergedWallets.add(wallet)
+                BlockchainType.Ethereum,
+                BlockchainType.BinanceSmartChain,
+                BlockchainType.Polygon,
+                BlockchainType.Optimism,
+                BlockchainType.ArbitrumOne -> {
                     if (mergedWallets.none { it.source == wallet.source }) {
                         mergedWallets.add(TransactionWallet(null, wallet.source, null))
                     }
                 }
+                is BlockchainType.Unsupported -> Unit
             }
         }
         return mergedWallets

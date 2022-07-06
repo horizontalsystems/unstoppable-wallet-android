@@ -127,7 +127,7 @@ data class TransactionViewItem(
         class Swap(val iconIn: Regular, val iconOut: Regular) : Icon()
         object Failed : Icon()
         class Platform(source: TransactionSource) : Icon() {
-            val iconRes = when ((source.blockchain as? TransactionSource.Blockchain.Evm)?.blockchain?.type) {
+            val iconRes = when (source.blockchain.type) {
                 BlockchainType.BinanceSmartChain -> R.drawable.logo_chain_bsc_trx_24
                 BlockchainType.Ethereum -> R.drawable.logo_chain_ethereum_trx_24
                 BlockchainType.Polygon -> R.drawable.logo_chain_polygon_trx_24
