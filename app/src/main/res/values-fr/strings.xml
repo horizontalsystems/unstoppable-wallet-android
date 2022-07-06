@@ -1011,4 +1011,6 @@
     <string name="Hud_Text_Activate">Activer</string>
     <string name="ProUsersActivate_Title">Activer le Passe</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Au-delà des frontières. Il vous permettra de disposer de données essentielles sur le marché, d\'outils analytiques, de graphiques utiles basés sur des données on-chain qui vous aideront à avoir une vision claire des projets</string>
+    <!--Widget-->
+    <string name="WidgetList_Config_Title">Choose Type</string>
 </resources>
