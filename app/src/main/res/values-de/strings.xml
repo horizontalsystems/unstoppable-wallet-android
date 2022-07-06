@@ -1015,4 +1015,6 @@
     <string name="Hud_Text_Activate">Activate</string>
     <string name="ProUsersActivate_Title">Activate the Pass</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, useful charts based on on-chain data that will help give you a clear view of projects</string>
+    <!--Widget-->
+    <string name="WidgetList_Config_Title">Choose Type</string>
 </resources>
