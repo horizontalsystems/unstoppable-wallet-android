@@ -47,7 +47,35 @@ object MarketRepository {
         )
     }
 
-    suspend fun getMarketItems(): List<MarketWidgetItem> {
+    suspend fun getMarketItems(marketWidgetType: MarketWidgetType): List<MarketWidgetItem> =
+        when (marketWidgetType) {
+            MarketWidgetType.Watchlist -> {
+                getWatchlist()
+            }
+            MarketWidgetType.TopGainers -> {
+                getTopGainers()
+            }
+            MarketWidgetType.TopNfts -> {
+                getTopNtfs()
+            }
+            MarketWidgetType.TopPlatforms -> {
+                getTopPlatforms()
+            }
+        }
+
+    private fun getTopPlatforms(): List<MarketWidgetItem> {
+        return listOf()
+    }
+
+    private fun getTopNtfs(): List<MarketWidgetItem> {
+        return listOf()
+    }
+
+    private fun getTopGainers(): List<MarketWidgetItem> {
+        return listOf()
+    }
+
+    private suspend fun getWatchlist(): List<MarketWidgetItem> {
         val marketKit = App.marketKit
         val favoritesManager = App.marketFavoritesManager
         val favoritesMenuService = MarketFavoritesMenuService(App.localStorage, App.marketWidgetManager)
