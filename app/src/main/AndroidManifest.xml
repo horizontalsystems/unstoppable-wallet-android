@@ -20,6 +20,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppTheme.DayNight"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <receiver
+            android:name=".widgets.MarketWidgetReceiver"
+            android:exported="false">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_provider_info" />
+        </receiver>
+
+        <activity
+            android:name=".widgets.MarketWidgetConfigurationActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".modules.tor.TorConnectionActivity"
             android:launchMode="singleTask" />

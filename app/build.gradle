@@ -157,6 +157,9 @@ dependencies {
     //Splash screen
     implementation "androidx.core:core-splashscreen:1.0.0-rc01"
 
+    //AppWidgets
+    implementation 'androidx.glance:glance-appwidget:1.0.0-alpha03'
+
     // Room
     def room_version = '2.4.1'
     implementation "androidx.room:room-runtime:$room_version"
