@@ -70,7 +70,7 @@ class MarketWorker(
                         item.imageLocalPath?.let { set(item.imageRemoteUrl, it) }
                     }
                 }
-                var marketItems = MarketRepository.getMarketItems()
+                var marketItems = MarketRepository.getMarketItems(state.type)
                 marketItems = marketItems.map { it.copy(imageLocalPath = imagePathCache[it.imageRemoteUrl]) }
 
                 state = state.copy(items = marketItems, loading = false)

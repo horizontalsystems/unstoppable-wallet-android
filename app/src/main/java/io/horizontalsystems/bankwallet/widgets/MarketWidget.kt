@@ -70,7 +70,7 @@ class MarketWidget : GlanceAppWidget() {
                     ) {
                         Text(
                             modifier = GlanceModifier.defaultWeight(),
-                            text = context.getString(R.string.Market_Tab_Watchlist),
+                            text = context.getString(state.type.title),
                             style = AppWidgetTheme.textStyles.d1
                         )
                         /*
@@ -124,7 +124,7 @@ class MarketWidget : GlanceAppWidget() {
                             Item(item = it)
                         }
                     }
-                    if (!state.loading && state.items.isEmpty()) {
+                    if (!state.loading && state.type == MarketWidgetType.Watchlist && state.items.isEmpty()) {
                         FullScreenMessage(
                             icon = R.drawable.ic_rate_24,
                             text = context.getString(R.string.Market_Tab_Watchlist_EmptyList),
