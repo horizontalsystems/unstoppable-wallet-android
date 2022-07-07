@@ -1,12 +1,15 @@
 package io.horizontalsystems.bankwallet.widgets
 
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesMenuService
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
 import kotlinx.coroutines.rx2.await
@@ -18,6 +21,7 @@ class MarketWidgetRepository(
     private val favoritesMenuService: MarketFavoritesMenuService,
     private val topNftCollectionsRepository: TopNftCollectionsRepository,
     private val topNftCollectionsViewItemFactory: TopNftCollectionsViewItemFactory,
+    private val topPlatformsRepository: TopPlatformsRepository,
     private val currencyManager: ICurrencyManager
 ) {
     companion object {
@@ -44,8 +48,30 @@ class MarketWidgetRepository(
             }
         }
 
-    private fun getTopPlatforms(): List<MarketWidgetItem> {
-        return listOf()
+    private suspend fun getTopPlatforms(): List<MarketWidgetItem> {
+        val platformItems = topPlatformsRepository.get(
+            sortingField = SortingField.HighestCap,
+            timeDuration = TimeDuration.OneDay,
+            forceRefresh = true,
+            limit = 5
+        )
+        return platformItems.map { item ->
+            MarketWidgetItem(
+                uid = item.platform.uid,
+                title = item.platform.name,
+                subtitle = Translator.getString(R.string.MarketTopPlatforms_Protocols, item.protocols),
+                label = item.rank.toString(),
+                value = App.numberFormatter.formatFiatShort(
+                    item.marketCap,
+                    currency.symbol,
+                    2
+                ),
+                diff = item.changeDiff,
+                marketCap = null,
+                volume = null,
+                imageRemoteUrl = item.platform.iconUrl
+            )
+        }
     }
 
     private suspend fun getTopNtfs(): List<MarketWidgetItem> {
