@@ -179,7 +179,12 @@ class TransactionsService(
         val transactionWallets = transactionFilterService.getTransactionWallets()
 
         transactionSyncStateRepository.setTransactionWallets(transactionWallets)
-        transactionRecordRepository.setWallets(transactionWallets, transactionFilterService.selectedWallet, transactionFilterService.selectedTransactionType)
+        transactionRecordRepository.setWallets(
+            transactionWallets,
+            transactionFilterService.selectedWallet,
+            transactionFilterService.selectedTransactionType,
+            transactionFilterService.selectedBlockchain,
+        )
 
         walletsSubject.onNext(Pair(transactionWallets, transactionFilterService.selectedWallet))
         typesSubject.onNext(Pair(transactionFilterService.getFilterTypes(), transactionFilterService.selectedTransactionType))
@@ -207,16 +212,24 @@ class TransactionsService(
     fun setFilterBlockchain(blockchain: Blockchain?) {
         executorService.submit {
             blockchainSubject.onNext(Pair(transactionFilterService.getBlockchains(), blockchain))
-            transactionFilterService.selectedBlockchain = blockchain
-            transactionRecordRepository.setBlockchain(blockchain)
+            transactionFilterService.setSelectedBlockchain(blockchain)
+
+            val selectedWallet = transactionFilterService.selectedWallet
+            walletsSubject.onNext(Pair(transactionFilterService.getTransactionWallets(), selectedWallet))
+
+            transactionRecordRepository.setWalletAndBlockchain(selectedWallet, blockchain)
         }
     }
 
     fun setFilterCoin(w: TransactionWallet?) {
         executorService.submit {
             walletsSubject.onNext(Pair(transactionFilterService.getTransactionWallets(), w))
-            transactionFilterService.selectedWallet = w
-            transactionRecordRepository.setSelectedWallet(w)
+            transactionFilterService.setSelectedWallet(w)
+
+            val selectedBlockchain = transactionFilterService.selectedBlockchain
+            blockchainSubject.onNext(Pair(transactionFilterService.getBlockchains(), selectedBlockchain))
+
+            transactionRecordRepository.setWalletAndBlockchain(w, selectedBlockchain)
         }
     }
 

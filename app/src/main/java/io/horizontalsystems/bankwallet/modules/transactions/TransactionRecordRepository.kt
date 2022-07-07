@@ -83,6 +83,7 @@ class TransactionRecordRepository(
         transactionWallets: List<TransactionWallet>,
         wallet: TransactionWallet?,
         transactionType: FilterTransactionType,
+        blockchain: Blockchain?,
     ) {
         this.walletsGroupedBySource = groupWalletsBySource(transactionWallets)
 
@@ -111,6 +112,11 @@ class TransactionRecordRepository(
             reload = true
         }
 
+        if (selectedBlockchain != blockchain) {
+            selectedBlockchain = blockchain
+            reload = true
+        }
+
         if (transactionType != selectedFilterTransactionType) {
             selectedFilterTransactionType = transactionType
 
@@ -128,8 +134,9 @@ class TransactionRecordRepository(
         }
     }
 
-    override fun setSelectedWallet(transactionWallet: TransactionWallet?) {
+    override fun setWalletAndBlockchain(transactionWallet: TransactionWallet?, blockchain: Blockchain?) {
         selectedWallet = transactionWallet
+        this.selectedBlockchain = blockchain
 
         unsubscribeFromUpdates()
         allLoaded.set(false)
@@ -148,16 +155,6 @@ class TransactionRecordRepository(
         allLoaded.set(false)
         loadItems(1)
         subscribeForUpdates()
-    }
-
-    override fun setBlockchain(blockchain: Blockchain?) {
-        selectedBlockchain = blockchain
-
-        unsubscribeFromUpdates()
-        allLoaded.set(false)
-        loadItems(1)
-        subscribeForUpdates()
-
     }
 
     override fun loadNext() {
