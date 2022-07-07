@@ -17,6 +17,7 @@ import coil.request.ErrorResult
 import coil.request.ImageRequest
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import java.time.Duration
 
@@ -30,6 +31,7 @@ class MarketWidgetWorker(
         private const val inputDataKeyWidgetId = "widgetIdKey"
         private const val notificationChannelName = "MARKET_WIDGET_CHANNEL_NAME"
         private const val notificationChannelId = "MARKET_WIDGET_CHANNEL_ID"
+        private val logger = AppLogger("widget-worker")
 
         private fun uniqueWorkName(widgetId: Int) = "${MarketWidgetWorker::class.java.simpleName}_${widgetId}"
 
@@ -40,15 +42,21 @@ class MarketWidgetWorker(
             val inputData = Data.Builder().putInt(inputDataKeyWidgetId, widgetId).build()
             requestBuilder.setInputData(inputData)
 
+            val uniqueWorkName = uniqueWorkName(widgetId)
+            logger.info("enqueue $uniqueWorkName")
+
             manager.enqueueUniquePeriodicWork(
-                uniqueWorkName(widgetId),
+                uniqueWorkName,
                 ExistingPeriodicWorkPolicy.REPLACE,
                 requestBuilder.build()
             )
         }
 
         fun cancel(context: Context, widgetId: Int) {
-            WorkManager.getInstance(context).cancelUniqueWork(uniqueWorkName(widgetId))
+            val uniqueWorkName = uniqueWorkName(widgetId)
+            logger.info("cancel $uniqueWorkName")
+
+            WorkManager.getInstance(context).cancelUniqueWork(uniqueWorkName)
         }
     }
 
@@ -58,6 +66,8 @@ class MarketWidgetWorker(
         val currentTimestampMillis = System.currentTimeMillis()
         val widgetId = inputData.getInt(inputDataKeyWidgetId, 0)
         val marketRepository = App.marketWidgetRepository
+
+        logger.info("doWork widgetId: $widgetId")
 
         return try {
             for (glanceId in glanceIds) {
