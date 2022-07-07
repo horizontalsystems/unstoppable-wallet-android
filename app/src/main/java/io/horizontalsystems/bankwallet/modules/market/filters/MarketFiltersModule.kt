@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Single
 
 object MarketFiltersModule {
@@ -24,10 +25,11 @@ object MarketFiltersModule {
         CoinSet(R.string.Market_Filter_ChooseSet),
         MarketCap(R.string.Market_Filter_MarketCap),
         TradingVolume(R.string.Market_Filter_Volume),
-        Blockchain(R.string.Market_Filter_Blockchains),
         PriceChange(R.string.Market_Filter_PriceChange),
         PricePeriod(R.string.Market_Filter_PricePeriod),
     }
+
+    data class BlockchainViewItem(val blockchain: Blockchain, val checked: Boolean)
 }
 
 enum class CoinList(val itemsCount: Int, @StringRes val titleResId: Int) {
