@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.BlockchainViewItem
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
@@ -63,9 +65,9 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         listOf(FilterViewItemWrapper.getAny<PriceChange>()) + PriceChange.values().map {
             FilterViewItemWrapper<PriceChange?>(Translator.getString(it.titleResId), it)
         }
-    val blockchainOptions = service.blockchains.map {
-        FilterViewItemWrapper(it.name, it)
-    }
+
+    var blockchainOptions by mutableStateOf<List<BlockchainViewItem>>(emptyList())
+        private set
 
     var showSpinner by mutableStateOf(false)
         private set
@@ -87,6 +89,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
             sync()
         }
 
+        updateSelectedBlockchains()
         refresh()
     }
 
@@ -124,15 +127,9 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         priceCloseToAth = false
         priceCloseToAtl = false
         selectedBlockchainIndexes = listOf()
-        updateBlockchainsValue()
-        showSpinner = false
-    }
-
-    private fun refresh() {
-        showSpinner = true
-        viewModelScope.launch {
-            service.refresh()
-        }
+        service.filterBlockchains = emptyList()
+        updateSelectedBlockchains()
+        refresh()
     }
 
     fun updateCoinList(value: FilterViewItemWrapper<CoinList>) {
@@ -166,22 +163,26 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         refresh()
     }
 
-    fun updateSelectedBlockchainIndexes(values: List<Int>) {
-        selectedBlockchainIndexes = values
-        updateBlockchainsValue()
-        val selectedBlockchains = values.map { service.blockchains[it] }
+    fun onBlockchainCheck(blockchain: Blockchain) {
+        val index = service.blockchains.indexOf(blockchain)
+        selectedBlockchainIndexes = selectedBlockchainIndexes.toMutableList().also {
+            it.add(index)
+        }
+        updateSelectedBlockchains()
+    }
+
+    fun onBlockchainUncheck(blockchain: Blockchain) {
+        val index = service.blockchains.indexOf(blockchain)
+        selectedBlockchainIndexes = selectedBlockchainIndexes.toMutableList().also {
+            it.remove(index)
+        }
+        updateSelectedBlockchains()
+    }
+
+    fun updateListBySelectedBlockchains() {
+        val selectedBlockchains = selectedBlockchainIndexes.map { service.blockchains[it] }
         service.filterBlockchains = selectedBlockchains
         refresh()
-    }
-
-    private fun updateBlockchainsValue() {
-        selectedBlockchainsValue =
-            if (selectedBlockchainIndexes.isEmpty()) null else selectedBlockchainIndexes.size.toString()
-    }
-
-    private fun convertErrorMessage(error: Throwable) = when (error) {
-        is UnknownHostException -> TranslatableString.ResString(R.string.Hud_Text_NoInternet)
-        else -> TranslatableString.PlainString(error.message ?: error.javaClass.simpleName)
     }
 
     fun updateOutperformedBtcOn(checked: Boolean) {
@@ -212,6 +213,35 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         priceCloseToAtl = checked
         service.filterPriceCloseToAtl = checked
         refresh()
+    }
+
+    fun anyBlockchains() {
+        selectedBlockchainIndexes = emptyList()
+        updateSelectedBlockchains()
+        refresh()
+    }
+
+    private fun refresh() {
+        showSpinner = true
+        viewModelScope.launch {
+            service.refresh()
+        }
+    }
+
+    private fun updateSelectedBlockchains() {
+        blockchainOptions = service.blockchains.mapIndexed { index, blockchain ->
+            BlockchainViewItem(
+                blockchain,
+                selectedBlockchainIndexes.contains(index)
+            )
+        }
+        selectedBlockchainsValue =
+            if (selectedBlockchainIndexes.isEmpty()) null else selectedBlockchainIndexes.size.toString()
+    }
+
+    private fun convertErrorMessage(error: Throwable) = when (error) {
+        is UnknownHostException -> TranslatableString.ResString(R.string.Hud_Text_NoInternet)
+        else -> TranslatableString.PlainString(error.message ?: error.javaClass.simpleName)
     }
 }
 

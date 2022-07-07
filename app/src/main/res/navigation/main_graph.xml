@@ -205,6 +205,9 @@
         android:id="@+id/marketAdvancedSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersFragment"/>
     <fragment
+        android:id="@+id/blockchainsSelectorFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.filters.BlockchainsSelectorFragment"/>
+    <fragment
         android:id="@+id/marketTopCoinsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment"/>
     <fragment

@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.*
@@ -119,12 +120,18 @@ private fun AdvancedSearchScreen(
                             .weight(1f)
                             .verticalScroll(rememberScrollState())
                     ) {
-                        AdvancedSearchContent(viewModel) { type ->
-                            bottomSheetType = type
-                            coroutineScope.launch {
-                                modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                        AdvancedSearchContent(
+                            viewModel = viewModel,
+                            onFilterByBlockchainsClick = {
+                                navController.slideFromBottom(R.id.blockchainsSelectorFragment)
+                            },
+                            showBottomSheet = { type ->
+                                bottomSheetType = type
+                                coroutineScope.launch {
+                                    modalBottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                                }
                             }
-                        }
+                        )
                     }
 
                     ButtonsGroupWithShade {
@@ -220,24 +227,13 @@ private fun BottomSheetContent(
                 onClose = onClose
             )
         }
-        Blockchain -> {
-            MultiSelectBottomSheetContent(
-                titleText = stringResource(R.string.Market_Filter_Blockchains),
-                headerIcon = R.drawable.ic_blocks_24,
-                items = viewModel.blockchainOptions,
-                selected = viewModel.selectedBlockchainIndexes,
-                onSelectionUpdate = { selectedIndexes ->
-                    viewModel.updateSelectedBlockchainIndexes(selectedIndexes)
-                },
-                onClose = onClose
-            )
-        }
     }
 }
 
 @Composable
 fun AdvancedSearchContent(
     viewModel: MarketFiltersViewModel,
+    onFilterByBlockchainsClick: () -> Unit,
     showBottomSheet: (MarketFiltersModule.FilterDropdown) -> Unit,
 ) {
 
@@ -278,7 +274,7 @@ fun AdvancedSearchContent(
             AdvancedSearchDropdown(
                 title = R.string.Market_Filter_Blockchains,
                 value = viewModel.selectedBlockchainsValue,
-                onDropdownClick = { showBottomSheet(Blockchain) }
+                onDropdownClick = onFilterByBlockchainsClick
             )
         }
     )
@@ -423,65 +419,6 @@ fun FilterMenu(title: String?, onClick: () -> Unit) {
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey
         )
-    }
-}
-
-@Composable
-private fun <ItemClass> MultiSelectBottomSheetContent(
-    titleText: String,
-    headerIcon: Int,
-    items: List<FilterViewItemWrapper<ItemClass>>,
-    selected: List<Int> = listOf(),
-    onSelectionUpdate: (List<Int>) -> Unit,
-    onClose: (() -> Unit),
-) {
-
-    BottomSheetHeader(
-        iconPainter = painterResource(headerIcon),
-        title = titleText,
-        subtitle = "---------",
-        onCloseClick = onClose,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
-    ) {
-        Column {
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
-            )
-            items.forEachIndexed { index, item ->
-                CellMultilineLawrence(borderBottom = true) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clickable {
-                                val updatedList = if (selected.contains(index)) {
-                                    selected.toMutableList().also { it.remove(index) }
-                                } else {
-                                    selected + listOf(index)
-                                }
-                                onSelectionUpdate(updatedList)
-                            }
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        body_leah(text = item.title ?: stringResource(R.string.Any))
-                        Spacer(modifier = Modifier.weight(1f))
-                        if (selected.contains(index)) {
-                            Image(
-                                modifier = Modifier.padding(start = 5.dp),
-                                painter = painterResource(id = R.drawable.ic_checkmark_20),
-                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                                contentDescription = null
-                            )
-                        }
-
-                    }
-                }
-            }
-        }
-
-        Spacer(Modifier.height(16.dp))
     }
 }
 
