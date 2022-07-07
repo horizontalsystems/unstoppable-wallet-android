@@ -16,6 +16,7 @@ import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.state.getAppWidgetState
+import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.layout.*
 import androidx.glance.layout.Alignment.Vertical.Companion.CenterVertically
 import androidx.glance.text.FontWeight
@@ -64,12 +65,11 @@ class MarketWidget : GlanceAppWidget() {
                     Row(
                         modifier = GlanceModifier
                             .height(44.dp)
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+                            .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            modifier = GlanceModifier.defaultWeight(),
+                            modifier = GlanceModifier.defaultWeight().padding(start = 16.dp),
                             text = context.getString(state.type.title),
                             style = AppWidgetTheme.textStyles.d1
                         )
@@ -89,19 +89,26 @@ class MarketWidget : GlanceAppWidget() {
                         )
                         Spacer(modifier = GlanceModifier.width(16.dp))
                         */
-                        if (state.loading) {
-                            CircularProgressIndicator(
-                                modifier = GlanceModifier
-                                    .size(20.dp)
-                            )
-                        } else {
-                            Image(
-                                modifier = GlanceModifier
-                                    .size(20.dp)
-                                    .clickable(actionRunCallback<UpdateMarketAction>()),
-                                provider = ImageProvider(R.drawable.ic_refresh),
-                                contentDescription = null
-                            )
+                        Box(
+                            modifier = GlanceModifier
+                                .fillMaxHeight()
+                                .padding(horizontal = 16.dp)
+                                .clickable(actionRunCallback<UpdateMarketAction>()),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (state.loading) {
+                                CircularProgressIndicator(
+                                    modifier = GlanceModifier
+                                        .size(20.dp)
+                                )
+                            } else {
+                                Image(
+                                    modifier = GlanceModifier
+                                        .size(20.dp),
+                                    provider = ImageProvider(R.drawable.ic_refresh),
+                                    contentDescription = null
+                                )
+                            }
                         }
                     }
 
@@ -340,6 +347,11 @@ class UpdateMarketAction : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
+        updateAppWidgetState(context, MarketWidgetStateDefinition, glanceId) { state ->
+            state.copy(loading = true)
+        }
+        MarketWidget().update(context, glanceId)
+
         val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
         MarketWidgetWorker.enqueue(context = context, widgetId = state.widgetId)
     }
