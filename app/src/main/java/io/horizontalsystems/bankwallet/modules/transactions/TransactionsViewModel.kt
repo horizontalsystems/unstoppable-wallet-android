@@ -24,7 +24,7 @@ class TransactionsViewModel(
     var tmpItemToShow: TransactionItem? = null
 
     val syncingLiveData = MutableLiveData<Boolean>()
-    val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet>>>()
+    val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet?>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
     val filterBlockchainsLiveData = MutableLiveData<List<Filter<Blockchain?>>>()
     val transactionList = MutableLiveData<Map<String, List<TransactionViewItem>>>()
@@ -53,8 +53,8 @@ class TransactionsViewModel(
             }
 
         service.blockchainObservable
-            .subscribeIO { (types, selectedType) ->
-                val filterBlockchains = types.map {
+            .subscribeIO { (blockchains, selectedType) ->
+                val filterBlockchains = blockchains.map {
                     Filter(it, it == selectedType)
                 }
                 filterBlockchainsLiveData.postValue(filterBlockchains)
@@ -65,7 +65,7 @@ class TransactionsViewModel(
 
         service.walletsObservable
             .subscribeIO { (wallets, selected) ->
-                val filterCoins = wallets.map {
+                val filterCoins = listOf(null).plus(wallets).map {
                     Filter(it, it == selected)
                 }
                 filterCoinsLiveData.postValue(filterCoins)

@@ -553,6 +553,8 @@
     <string name="Transactions_All">All</string>
     <string name="Transactions_Filter_Blockchain">Filter by blockchain</string>
     <string name="Transactions_Filter_AllBlockchains">All Blockchains</string>
+    <string name="Transactions_Filter_AllCoins">All Coins</string>
+    <string name="Transactions_Filter_ChooseCoin">Choose Coin</string>
     <string name="Transactions_Incoming">Received</string>
     <string name="Transactions_Outgoing">Sent</string>
     <string name="Transactions_Swaps">Swaps</string>
