@@ -28,6 +28,9 @@
         android:id="@+id/sendEvmFeeSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment" />
     <fragment
+        android:id="@+id/filterCoinFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactions.FilterCoinFragment" />
+    <fragment
         android:id="@+id/transactionInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment" />
     <fragment

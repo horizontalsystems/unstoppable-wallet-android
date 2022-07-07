@@ -34,13 +34,10 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.balance.BalanceAccountsViewModel
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -93,23 +90,8 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
                 )
             }
             filterBlockchains?.let { filterBlockchains ->
-                CellHeaderSorting {
+                CellHeaderSorting(borderBottom = true) {
                     var showFilterBlockchainDialog by remember { mutableStateOf(false) }
-
-                    val filterBlockchain = filterBlockchains.firstOrNull { it.selected }?.item
-                    Row(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        ButtonSecondaryTransparent(
-                            title = filterBlockchain?.name ?: stringResource(R.string.Transactions_Filter_AllBlockchains),
-                            iconRight = R.drawable.ic_down_arrow_20,
-                            onClick = {
-                                showFilterBlockchainDialog = true
-                            }
-                        )
-                    }
-
                     if (showFilterBlockchainDialog) {
                         SelectorDialogCompose(
                             title = stringResource(R.string.Transactions_Filter_Blockchain),
@@ -122,16 +104,34 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
                             onSelectItem = viewModel::onEnterFilterBlockchain
                         )
                     }
+
+                    val filterBlockchain = filterBlockchains.firstOrNull { it.selected }?.item
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        ButtonSecondaryTransparent(
+                            title = filterBlockchain?.name ?: stringResource(R.string.Transactions_Filter_AllBlockchains),
+                            iconRight = R.drawable.ic_down_arrow_20,
+                            onClick = {
+                                showFilterBlockchainDialog = true
+                            }
+                        )
+
+                        filterCoins?.let { filterCoins ->
+                            val filterCoin = filterCoins.firstOrNull { it.selected }?.item
+
+                            ButtonSecondaryTransparent(
+                                title = filterCoin?.token?.coin?.code ?: stringResource(R.string.Transactions_Filter_AllCoins),
+                                iconRight = R.drawable.ic_down_arrow_20,
+                                onClick = {
+                                    navController.slideFromBottom(R.id.filterCoinFragment)
+                                }
+                            )
+                        }
+                    }
                 }
-
-            }
-
-
-            filterCoins?.let { filterCoins ->
-                FilterCoinTabs(
-                    filterCoins = filterCoins,
-                    onCoinFilterClick = viewModel::setFilterCoin
-                )
             }
 
             Crossfade(viewState) { viewState ->
@@ -388,31 +388,6 @@ private fun FilterTypeTabs(
 
     ScrollableTabs(tabItems) { transactionType ->
         onTransactionTypeClick.invoke(transactionType)
-    }
-}
-
-@Composable
-private fun FilterCoinTabs(
-    filterCoins: List<Filter<TransactionWallet>>,
-    onCoinFilterClick: (TransactionWallet?) -> Unit
-) {
-    val tabItems = filterCoins.mapNotNull {
-        it.item.token?.let { token ->
-            TabItem(
-                token.coin.code,
-                it.selected,
-                it.item,
-                ImageSource.Remote(
-                    token.coin.iconUrl,
-                    token.iconPlaceholder
-                ),
-                it.item.badge
-            )
-        }
-    }
-
-    CardTabs(tabItems = tabItems, edgePadding = 16.dp) {
-        onCoinFilterClick.invoke(it)
     }
 }
 
