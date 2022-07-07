@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import java.time.Duration
 
-class MarketWorker(
+class MarketWidgetWorker(
     private val context: Context,
     workerParameters: WorkerParameters
 ) : CoroutineWorker(context, workerParameters) {
@@ -31,11 +31,11 @@ class MarketWorker(
         private const val notificationChannelName = "MARKET_WIDGET_CHANNEL_NAME"
         private const val notificationChannelId = "MARKET_WIDGET_CHANNEL_ID"
 
-        private fun uniqueWorkName(widgetId: Int) = "${MarketWorker::class.java.simpleName}_${widgetId}"
+        private fun uniqueWorkName(widgetId: Int) = "${MarketWidgetWorker::class.java.simpleName}_${widgetId}"
 
         fun enqueue(context: Context, widgetId: Int) {
             val manager = WorkManager.getInstance(context)
-            val requestBuilder = PeriodicWorkRequestBuilder<MarketWorker>(Duration.ofMillis(updatePeriodMillis))
+            val requestBuilder = PeriodicWorkRequestBuilder<MarketWidgetWorker>(Duration.ofMillis(updatePeriodMillis))
 
             val inputData = Data.Builder().putInt(inputDataKeyWidgetId, widgetId).build()
             requestBuilder.setInputData(inputData)

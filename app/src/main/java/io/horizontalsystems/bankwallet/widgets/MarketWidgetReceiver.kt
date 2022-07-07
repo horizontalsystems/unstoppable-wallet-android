@@ -25,7 +25,7 @@ class MarketWidgetReceiver : GlanceAppWidgetReceiver() {
         super.onDeleted(context, appWidgetIds)
 
         appWidgetIds.forEach {
-            MarketWorker.cancel(context, it)
+            MarketWidgetWorker.cancel(context, it)
         }
     }
 

@@ -329,7 +329,7 @@ class RefreshAllAction : ActionCallback {
     ) {
         GlanceAppWidgetManager(context).getGlanceIds(MarketWidget::class.java).forEach {
             val state = getAppWidgetState(context, MarketWidgetStateDefinition, it)
-            MarketWorker.enqueue(context = context, widgetId = state.widgetId)
+            MarketWidgetWorker.enqueue(context = context, widgetId = state.widgetId)
         }
     }
 }
@@ -341,7 +341,7 @@ class UpdateMarketAction : ActionCallback {
         parameters: ActionParameters
     ) {
         val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
-        MarketWorker.enqueue(context = context, widgetId = state.widgetId)
+        MarketWidgetWorker.enqueue(context = context, widgetId = state.widgetId)
     }
 }
 

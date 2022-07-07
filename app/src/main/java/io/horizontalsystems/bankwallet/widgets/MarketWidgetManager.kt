@@ -30,7 +30,7 @@ class MarketWidgetManager {
             for (glanceId in glanceIds) {
                 val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
                 if (state.type == MarketWidgetType.Watchlist) {
-                    MarketWorker.enqueue(context, state.widgetId)
+                    MarketWidgetWorker.enqueue(context, state.widgetId)
                 }
             }
         }
