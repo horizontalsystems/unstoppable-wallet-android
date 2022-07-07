@@ -6,8 +6,10 @@ import io.horizontalsystems.marketkit.models.Blockchain
 class TransactionFilterService {
     private var transactionWallets: List<TransactionWallet> = listOf()
     var selectedWallet: TransactionWallet? = null
+        private set
     var selectedTransactionType: FilterTransactionType = FilterTransactionType.All
     var selectedBlockchain: Blockchain? = null
+        private set
 
     private var blockchains: List<Blockchain?> = listOf(null)
 
@@ -23,6 +25,8 @@ class TransactionFilterService {
             selectedWallet = null
 
             selectedTransactionType = FilterTransactionType.All
+
+            selectedBlockchain = null
         }
 
         blockchains = listOf(null).plus(wallets.map { it.token.blockchain }.distinct())
@@ -41,5 +45,15 @@ class TransactionFilterService {
 
     fun getBlockchains(): List<Blockchain?> {
         return blockchains
+    }
+
+    fun setSelectedWallet(wallet: TransactionWallet?) {
+        selectedWallet = wallet
+        selectedBlockchain = selectedWallet?.source?.blockchain
+    }
+
+    fun setSelectedBlockchain(blockchain: Blockchain?) {
+        selectedBlockchain = blockchain
+        selectedWallet = null
     }
 }

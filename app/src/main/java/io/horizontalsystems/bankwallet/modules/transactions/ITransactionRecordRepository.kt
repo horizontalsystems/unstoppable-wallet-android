@@ -11,10 +11,10 @@ interface ITransactionRecordRepository : Clearable {
     fun setWallets(
         transactionWallets: List<TransactionWallet>,
         wallet: TransactionWallet?,
-        transactionType: FilterTransactionType
+        transactionType: FilterTransactionType,
+        blockchain: Blockchain?
     )
-    fun setSelectedWallet(transactionWallet: TransactionWallet?)
+    fun setWalletAndBlockchain(transactionWallet: TransactionWallet?, blockchain: Blockchain?)
     fun setTransactionType(transactionType: FilterTransactionType)
-    fun setBlockchain(blockchain: Blockchain?)
     fun loadNext()
 }
