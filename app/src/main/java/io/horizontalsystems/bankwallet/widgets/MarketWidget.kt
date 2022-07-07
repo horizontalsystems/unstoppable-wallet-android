@@ -158,7 +158,7 @@ class MarketWidget : GlanceAppWidget() {
             )
             Spacer(modifier = GlanceModifier.width(16.dp))
             Column {
-                ItemFirstRow(coinName = item.title, rate = item.value)
+                ItemFirstRow(title = item.title, value = item.value)
                 Spacer(modifier = GlanceModifier.height(3.dp))
                 ItemSecondRow(
                     subtitle = item.subtitle,
@@ -178,20 +178,20 @@ class MarketWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun ItemFirstRow(coinName: String, rate: String?) {
+    private fun ItemFirstRow(title: String, value: String?) {
         Row(
             modifier = GlanceModifier.fillMaxWidth(),
             verticalAlignment = CenterVertically
         ) {
 
             Text(
-                text = coinName,
+                text = if (title.length > 20) title.take(17) + "..." else title,
                 maxLines = 1,
                 style = TextStyle(AppWidgetTheme.colors.leah, fontSize = 16.sp)
             )
             Spacer(modifier = GlanceModifier.defaultWeight())
             Text(
-                text = rate ?: "",
+                text = value ?: "",
                 maxLines = 1,
                 style = TextStyle(color = AppWidgetTheme.colors.leah, fontSize = 16.sp)
             )
@@ -351,9 +351,8 @@ class OpenCoinPageAction : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
-        val coinUid = parameters.get<String>(ActionParameters.Key("coinUid"))
-        val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
-
+//        val coinUid = parameters.get<String>(ActionParameters.Key("coinUid"))
+//        val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
 //        coinUid?.let {
 //            val arguments = CoinFragment.prepareParams(coinUid)
 //            findNavController().slideFromRight(R.id.coinFragment, arguments)
