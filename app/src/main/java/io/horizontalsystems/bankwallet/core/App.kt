@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesMenuService
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
@@ -39,6 +40,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
+import io.horizontalsystems.bankwallet.widgets.MarketWidgetRepository
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -110,6 +112,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var baseTokenManager: BaseTokenManager
         lateinit var balanceViewTypeManager: BalanceViewTypeManager
         lateinit var marketWidgetManager: MarketWidgetManager
+        lateinit var marketWidgetRepository: MarketWidgetRepository
     }
 
     override val testMode = BuildConfig.testMode
@@ -270,6 +273,13 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         marketWidgetManager = MarketWidgetManager()
         marketFavoritesManager = MarketFavoritesManager(appDatabase, marketWidgetManager)
+
+        marketWidgetRepository = MarketWidgetRepository(
+            marketKit,
+            marketFavoritesManager,
+            MarketFavoritesMenuService(localStorage, marketWidgetManager),
+            currencyManager
+        )
 
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
 
