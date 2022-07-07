@@ -3,11 +3,10 @@ package io.horizontalsystems.bankwallet.widgets
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesMenuService
-import io.horizontalsystems.bankwallet.modules.market.sort
+import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
+import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
 import kotlinx.coroutines.rx2.await
@@ -17,6 +16,8 @@ class MarketWidgetRepository(
     private val marketKit: MarketKit,
     private val favoritesManager: MarketFavoritesManager,
     private val favoritesMenuService: MarketFavoritesMenuService,
+    private val topNftCollectionsRepository: TopNftCollectionsRepository,
+    private val topNftCollectionsViewItemFactory: TopNftCollectionsViewItemFactory,
     private val currencyManager: ICurrencyManager
 ) {
     companion object {
@@ -47,8 +48,29 @@ class MarketWidgetRepository(
         return listOf()
     }
 
-    private fun getTopNtfs(): List<MarketWidgetItem> {
-        return listOf()
+    private suspend fun getTopNtfs(): List<MarketWidgetItem> {
+        val nftCollectionViewItems = topNftCollectionsRepository.get(
+            sortingField = SortingField.HighestVolume,
+            timeDuration = TimeDuration.SevenDay,
+            forceRefresh = true,
+            limit = itemsLimit
+        ).mapIndexed { index, item ->
+            topNftCollectionsViewItemFactory.viewItem(item, TimeDuration.SevenDay, index + 1)
+        }
+
+        return nftCollectionViewItems.map {
+            MarketWidgetItem(
+                uid = it.uid,
+                title = it.name,
+                subtitle = it.floorPrice,
+                label = it.order.toString(),
+                value = it.volume,
+                marketCap = null,
+                diff = it.volumeDiff,
+                volume = null,
+                imageRemoteUrl = it.imageUrl ?: ""
+            )
+        }
     }
 
     private suspend fun getTopGainers(): List<MarketWidgetItem> {
