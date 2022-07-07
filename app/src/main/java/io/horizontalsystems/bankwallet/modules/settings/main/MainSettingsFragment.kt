@@ -33,7 +33,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -41,8 +40,6 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 
 class MainSettingsFragment : BaseFragment() {
 
@@ -62,18 +59,6 @@ class MainSettingsFragment : BaseFragment() {
                     SettingsScreen(viewModel, findNavController())
                 }
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        subscribeFragmentResult()
-    }
-
-    private fun subscribeFragmentResult() {
-        getNavigationResult(LanguageSettingsFragment.LANGUAGE_CHANGE) {
-            viewModel.onLanguageChange()
-            activity?.let { MainModule.startAsNewTask(it) }
         }
     }
 

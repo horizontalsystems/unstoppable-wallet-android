@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IBackupManager
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
@@ -19,7 +18,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MainSettingsService(
-    private val localStorage: ILocalStorage,
     private val backupManager: IBackupManager,
     private val languageManager: ILanguageManager,
     private val systemInfoManager: ISystemInfoManager,
@@ -104,10 +102,6 @@ class MainSettingsService(
 
     fun stop() {
         disposables.clear()
-    }
-
-    fun setAppRelaunchingFromSettings() {
-        localStorage.relaunchBySettingChange = true
     }
 
     fun getWalletConnectSupportState(): WC1Manager.SupportState {

@@ -106,12 +106,10 @@
         android:name="io.horizontalsystems.bankwallet.modules.settings.appearance.AppearanceFragment" />
     <fragment
         android:id="@+id/baseCurrencySettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.basecurrency.BaseCurrencySettingsFragment"
-        tools:layout="@layout/fragment_base_currency_settings" />
+        android:name="io.horizontalsystems.bankwallet.modules.basecurrency.BaseCurrencySettingsFragment" />
     <fragment
         android:id="@+id/languageSettingsFragment"
-        android:name="io.horizontalsystems.languageswitcher.LanguageSettingsFragment"
-        tools:layout="@layout/fragment_language_settings" />
+        android:name="io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsFragment" />
     <fragment
         android:id="@+id/termsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment"/>
