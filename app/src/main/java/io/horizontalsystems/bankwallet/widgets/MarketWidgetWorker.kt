@@ -74,9 +74,6 @@ class MarketWidgetWorker(
                 var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
                 if (state.widgetId != widgetId) continue
 
-                state = state.copy(loading = true, error = null)
-                setWidgetState(glanceId, state)
-
                 val imagePathCache = buildMap {
                     state.items.forEach { item ->
                         item.imageLocalPath?.let { set(item.imageRemoteUrl, it) }
@@ -85,7 +82,7 @@ class MarketWidgetWorker(
                 var marketItems = marketRepository.getMarketItems(state.type)
                 marketItems = marketItems.map { it.copy(imageLocalPath = imagePathCache[it.imageRemoteUrl]) }
 
-                state = state.copy(items = marketItems, loading = false)
+                state = state.copy(items = marketItems, loading = false, error = null)
                 setWidgetState(glanceId, state)
 
                 marketItems = marketItems.map { item ->
