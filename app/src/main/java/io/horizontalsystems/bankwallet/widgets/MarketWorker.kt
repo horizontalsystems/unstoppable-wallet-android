@@ -16,6 +16,7 @@ import coil.imageLoader
 import coil.request.ErrorResult
 import coil.request.ImageRequest
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import java.time.Duration
 
@@ -56,6 +57,7 @@ class MarketWorker(
         val glanceIds = manager.getGlanceIds(MarketWidget::class.java)
         val currentTimestampMillis = System.currentTimeMillis()
         val widgetId = inputData.getInt(inputDataKeyWidgetId, 0)
+        val marketRepository = App.marketWidgetRepository
 
         return try {
             for (glanceId in glanceIds) {
@@ -70,7 +72,7 @@ class MarketWorker(
                         item.imageLocalPath?.let { set(item.imageRemoteUrl, it) }
                     }
                 }
-                var marketItems = MarketRepository.getMarketItems(state.type)
+                var marketItems = marketRepository.getMarketItems(state.type)
                 marketItems = marketItems.map { it.copy(imageLocalPath = imagePathCache[it.imageRemoteUrl]) }
 
                 state = state.copy(items = marketItems, loading = false)
