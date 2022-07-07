@@ -110,7 +110,7 @@ class MarketWidgetConfigurationActivity : CoreActivity() {
                 }
             }
 
-            MarketWorker.enqueue(context = context, widgetId = appWidgetId)
+            MarketWidgetWorker.enqueue(context = context, widgetId = appWidgetId)
 
             val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             setResult(Activity.RESULT_OK, resultValue)
