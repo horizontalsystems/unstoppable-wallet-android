@@ -46,10 +46,6 @@ class MainSettingsViewModel(
         service.start()
     }
 
-    fun onLanguageChange() {
-        service.setAppRelaunchingFromSettings()
-    }
-
     // ViewModel
 
     override fun onCleared() {
