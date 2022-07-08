@@ -19,10 +19,11 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 class NftCollectionEventsService(
-    private val collectionUid: String,
-    private val marketKit: MarketKit,
-    private val nftManager: NftManager,
-    private val xRateRepository: BalanceXRateRepository
+        private val eventListType: NftEventListType,
+        var eventType: NftEvent.EventType,
+        private val marketKit: MarketKit,
+        private val nftManager: NftManager,
+        private val xRateRepository: BalanceXRateRepository
 ) {
     private val _items = MutableStateFlow<Result<List<CollectionEvent>>?>(null)
     val items = _items.filterNotNull()
@@ -34,9 +35,6 @@ class NftCollectionEventsService(
     private var loadingJob: Job? = null
 
     private val baseCurrency by xRateRepository::baseCurrency
-
-    var eventType: NftEvent.EventType = NftEvent.EventType.Sale
-        private set
 
     suspend fun start() = withContext(Dispatchers.IO) {
         if (started.getAndSet(true)) return@withContext
@@ -84,7 +82,11 @@ class NftCollectionEventsService(
                     _items.update { it }
                 } else {
                     val type = if (eventType == NftEvent.EventType.All) null else eventType
-                    val (events, cursor) = marketKit.nftEvents(collectionUid, type, cursor)
+                    val (events, cursor) = when (eventListType) {
+                        is NftEventListType.Collection -> marketKit.nftCollectionEvents(eventListType.uid, type, cursor)
+                        is NftEventListType.Asset -> marketKit.nftAssetEvents(eventListType.contractAddress, eventListType.tokenId, type, cursor)
+                    }
+
 
                     _items.update { handleEvents(events, cursor) }
                 }

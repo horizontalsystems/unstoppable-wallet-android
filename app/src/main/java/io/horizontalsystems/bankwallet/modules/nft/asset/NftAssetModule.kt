@@ -48,6 +48,11 @@ object NftAssetModule {
         tokenIdKey to tokenId,
     )
 
+    enum class Tab(@StringRes val titleResId: Int) {
+        Overview(R.string.NftAsset_Overview),
+        Activity(R.string.NftAsset_Activity);
+    }
+
 }
 
 data class NftAssetModuleAssetItem(

@@ -62,7 +62,7 @@ class NftCollectionEventsFragment : BaseFragment() {
 
 @Composable
 private fun NftCollectionEventsScreen(navController: NavController, collectionUid: String) {
-    val viewModel = viewModel<NftCollectionEventsViewModel>(factory = NftCollectionEventsModule.Factory(collectionUid))
+    val viewModel = viewModel<NftCollectionEventsViewModel>(factory = NftCollectionEventsModule.Factory(NftEventListType.Collection(collectionUid)))
 
     HSSwipeRefresh(
         state = rememberSwipeRefreshState(viewModel.isRefreshing),
@@ -161,13 +161,13 @@ private fun NftEvents(
 }
 
 @Composable
-private fun NftEvent(
+fun NftEvent(
     name: String,
     subtitle: String,
     iconUrl: String,
     coinValue: String?,
     currencyValue: String?,
-    onClick: () -> Unit
+    onClick: (() -> Unit)? = null
 ) {
     MultilineClear(
         borderBottom = true,

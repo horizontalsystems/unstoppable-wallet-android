@@ -23,6 +23,8 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
     var errorMessage by mutableStateOf<TranslatableString?>(null)
         private set
 
+    val tabs = NftAssetModule.Tab.values()
+
     init {
         service.serviceDataFlow
             .collectWith(viewModelScope) { result ->

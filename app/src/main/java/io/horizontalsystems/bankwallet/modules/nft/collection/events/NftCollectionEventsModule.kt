@@ -5,14 +5,16 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.marketkit.models.NftEvent
 
 class NftCollectionEventsModule {
 
-    class Factory(private val collectionUid: String) : ViewModelProvider.Factory {
+    class Factory(private val eventListType: NftEventListType, private val defaultEventType: NftEvent.EventType = NftEvent.EventType.Sale) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = NftCollectionEventsService(
-                collectionUid,
+                eventListType,
+                defaultEventType,
                 App.marketKit,
                 App.nftManager,
                 BalanceXRateRepository(App.currencyManager, App.marketKit)
@@ -31,4 +33,9 @@ data class ViewItem(
 sealed class SelectorDialogState {
     object Closed : SelectorDialogState()
     class Opened(val select: Select<NftEventTypeWrapper>) : SelectorDialogState()
+}
+
+sealed class NftEventListType {
+    data class Collection(val uid: String): NftEventListType()
+    data class Asset(val contractAddress: String, val tokenId: String): NftEventListType()
 }
