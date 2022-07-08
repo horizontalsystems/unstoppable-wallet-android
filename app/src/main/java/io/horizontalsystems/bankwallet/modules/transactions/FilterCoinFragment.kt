@@ -104,7 +104,13 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
                                             contentDescription = null
                                         )
                                         Column {
-                                            B2(text = token.coin.name)
+                                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                                B2(text = token.coin.name)
+                                                it.item.badge?.let { badge ->
+                                                    Spacer(modifier = Modifier.width(6.dp))
+                                                    Badge(text = badge)
+                                                }
+                                            }
                                             Spacer(modifier = Modifier.height(1.dp))
                                             D1(text = token.coin.code)
                                         }
