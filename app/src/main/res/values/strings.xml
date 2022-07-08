@@ -1134,6 +1134,8 @@
     <string name="Nfts_Asset_OnSaleUntil">until %s</string>
     <string name="Nfts_Empty">You don\'t have an NFT in your wallet</string>
 
+    <string name="NftAsset_Overview">Overview</string>
+    <string name="NftAsset_Activity">Activity</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Share</string>
     <string name="NftAsset_Action_Save">Save</string>

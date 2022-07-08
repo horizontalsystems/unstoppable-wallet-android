@@ -16,6 +16,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -37,11 +38,13 @@ import androidx.core.app.ShareCompat
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -51,15 +54,18 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.*
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
+import io.horizontalsystems.bankwallet.modules.nft.collection.events.*
 import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
+import io.horizontalsystems.bankwallet.ui.compose.OnBottomReached
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.NftEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -127,7 +133,7 @@ fun NftAssetScreen(
                         }
                         ViewState.Success -> {
                             viewModel.nftAssetItem?.let { asset ->
-                                NftAsset(asset, viewModel.viewModelScope, navController)
+                                NftAsset(asset, viewModel, navController)
                             }
                         }
                     }
@@ -142,13 +148,50 @@ fun NftAssetScreen(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun NftAsset(
     asset: NftAssetModuleAssetItem,
-    coroutineScope: CoroutineScope,
+    viewModel: NftAssetViewModel,
     navController: NavController
 ) {
+    val pagerState = rememberPagerState(initialPage = 0)
+    val coroutineScope = viewModel.viewModelScope
+
+    val tabs = viewModel.tabs
+    val selectedTab = tabs[pagerState.currentPage]
+    val tabItems = tabs.map {
+        TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+    }
+
+    Column {
+        Tabs(tabItems, onClick = {
+            coroutineScope.launch {
+                pagerState.scrollToPage(it.ordinal)
+            }
+        })
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        HorizontalPager(
+                count = tabs.size,
+                state = pagerState,
+                userScrollEnabled = false
+        ) { page ->
+            when (tabs[page]) {
+                NftAssetModule.Tab.Overview -> {
+                    NftAssrtInfo(asset, navController, coroutineScope)
+                }
+                NftAssetModule.Tab.Activity -> {
+                    NftAssetEvents(asset.contract.address, asset.tokenId)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NftAssrtInfo(asset: NftAssetModuleAssetItem, navController: NavController, coroutineScope: CoroutineScope) {
     val context = LocalContext.current
     val view = LocalView.current
 
@@ -488,6 +531,49 @@ private fun NftAsset(
             }
         }
     }
+}
+
+@Composable
+private fun NftAssetEvents(contractAddress: String, tokenId: String) {
+    val viewModel = viewModel<NftCollectionEventsViewModel>(factory = NftCollectionEventsModule.Factory(NftEventListType.Asset(contractAddress, tokenId), NftEvent.EventType.All))
+    val viewItem = viewModel.viewItem ?: return
+    val listState = rememberLazyListState()
+
+    LazyColumn(state = listState) {
+        viewItem.events.forEachIndexed { index, event ->
+            item(key = "content-row-$index") {
+                NftEvent(
+                        name = NftEventTypeWrapper.title(event.eventType).getString(),
+                        subtitle = event.date?.let { DateHelper.getFullDate(it) } ?: "",
+                        iconUrl = event.asset.imageUrl ?: "",
+                        coinValue = event.amount?.coinValue?.getFormattedFull(),
+                        currencyValue = event.amount?.currencyValue?.getFormattedFull()
+                )
+            }
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(26.dp))
+        }
+
+        if (viewModel.loadingMore) {
+            item {
+                Row(
+                        modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.Center
+                ) {
+                    HSCircularProgressIndicator()
+                }
+            }
+        }
+    }
+
+    listState.OnBottomReached(buffer = 6) {
+        viewModel.onBottomReached()
+    }
+
 }
 
 @Composable
