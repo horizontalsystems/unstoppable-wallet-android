@@ -120,10 +120,17 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
                         )
 
                         filterCoins?.let { filterCoins ->
-                            val filterCoin = filterCoins.firstOrNull { it.selected }?.item
+                            val filterCoin = filterCoins.find { it.selected }?.item
+
+                            val coinCode = filterCoin?.token?.coin?.code
+                            val badge = filterCoin?.badge
+                            val title = when {
+                                badge != null -> "$coinCode ($badge)"
+                                else -> coinCode
+                            }
 
                             ButtonSecondaryTransparent(
-                                title = filterCoin?.token?.coin?.code ?: stringResource(R.string.Transactions_Filter_AllCoins),
+                                title = title ?: stringResource(R.string.Transactions_Filter_AllCoins),
                                 iconRight = R.drawable.ic_down_arrow_20,
                                 onClick = {
                                     navController.slideFromBottom(R.id.filterCoinFragment)
