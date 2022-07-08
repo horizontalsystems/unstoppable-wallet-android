@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.language
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -90,9 +89,9 @@ private fun LanguageScreen(
                     LanguageCell(
                         title = item.name,
                         subtitle = item.nativeName,
-                        icon = getLanguageDrawableResource(context, item.language),
+                        icon = item.icon,
                         checked = item.current,
-                        onClick = { viewModel.onSelectLanguage(item.language) }
+                        onClick = { viewModel.onSelectLocale(item.localeType) }
                     )
                 }
                 Spacer(Modifier.height(24.dp))
@@ -148,8 +147,4 @@ private fun LanguageCell(
             }
         }
     }
-}
-
-private fun getLanguageDrawableResource(context: Context, langCode: String): Int {
-    return context.resources.getIdentifier("lang_$langCode", "drawable", context.packageName)
 }
