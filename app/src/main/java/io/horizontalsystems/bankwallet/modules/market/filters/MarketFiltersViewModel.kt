@@ -51,7 +51,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     var selectedBlockchainsValue by mutableStateOf<String?>(null)
         private set
 
-    var selectedBlockchainIndexes by mutableStateOf(listOf<Int>())
+    var selectedBlockchains by mutableStateOf(listOf<Blockchain>())
+        private set
 
     val coinListsViewItemOptions = CoinList.values().map {
         FilterViewItemWrapper(Translator.getString(it.titleResId), it)
@@ -126,7 +127,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         outperformedBnbOn = false
         priceCloseToAth = false
         priceCloseToAtl = false
-        selectedBlockchainIndexes = listOf()
+        selectedBlockchains = emptyList()
         service.filterBlockchains = emptyList()
         updateSelectedBlockchains()
         refresh()
@@ -164,23 +165,22 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     }
 
     fun onBlockchainCheck(blockchain: Blockchain) {
-        val index = service.blockchains.indexOf(blockchain)
-        selectedBlockchainIndexes = selectedBlockchainIndexes.toMutableList().also {
-            it.add(index)
-        }
+        selectedBlockchains = selectedBlockchains.toMutableList()
+            .also {
+                it.add(blockchain)
+            }
         updateSelectedBlockchains()
     }
 
     fun onBlockchainUncheck(blockchain: Blockchain) {
-        val index = service.blockchains.indexOf(blockchain)
-        selectedBlockchainIndexes = selectedBlockchainIndexes.toMutableList().also {
-            it.remove(index)
-        }
+        selectedBlockchains = selectedBlockchains.toMutableList()
+            .also {
+                it.remove(blockchain)
+            }
         updateSelectedBlockchains()
     }
 
     fun updateListBySelectedBlockchains() {
-        val selectedBlockchains = selectedBlockchainIndexes.map { service.blockchains[it] }
         service.filterBlockchains = selectedBlockchains
         refresh()
     }
@@ -216,7 +216,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     }
 
     fun anyBlockchains() {
-        selectedBlockchainIndexes = emptyList()
+        selectedBlockchains = emptyList()
         updateSelectedBlockchains()
         refresh()
     }
@@ -229,14 +229,11 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     }
 
     private fun updateSelectedBlockchains() {
-        blockchainOptions = service.blockchains.mapIndexed { index, blockchain ->
-            BlockchainViewItem(
-                blockchain,
-                selectedBlockchainIndexes.contains(index)
-            )
+        blockchainOptions = service.blockchains.map { blockchain ->
+            BlockchainViewItem(blockchain, selectedBlockchains.contains(blockchain))
         }
         selectedBlockchainsValue =
-            if (selectedBlockchainIndexes.isEmpty()) null else selectedBlockchainIndexes.size.toString()
+            if (selectedBlockchains.isEmpty()) null else selectedBlockchains.size.toString()
     }
 
     private fun convertErrorMessage(error: Throwable) = when (error) {

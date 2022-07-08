@@ -98,7 +98,7 @@ private fun FilterByBlockchainsScreen(
                 Spacer(Modifier.height(12.dp))
                 HSSectionRounded {
                     AnyCell(
-                        checked = viewModel.selectedBlockchainIndexes.isEmpty(),
+                        checked = viewModel.selectedBlockchains.isEmpty(),
                         onClick = { viewModel.anyBlockchains() }
                     )
                     viewModel.blockchainOptions.forEach { item ->
