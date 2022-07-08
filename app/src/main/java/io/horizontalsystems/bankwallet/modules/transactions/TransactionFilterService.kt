@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.Blockchain
 
 class TransactionFilterService {
-    private var transactionWallets: List<TransactionWallet> = listOf()
+    private var transactionWallets: List<TransactionWallet?> = listOf(null)
     var selectedWallet: TransactionWallet? = null
         private set
     var selectedTransactionType: FilterTransactionType = FilterTransactionType.All
@@ -14,7 +14,7 @@ class TransactionFilterService {
     private var blockchains: List<Blockchain?> = listOf(null)
 
     fun setWallets(wallets: List<Wallet>) {
-        transactionWallets = wallets.sortedBy { it.coin.code }.map {
+        transactionWallets = listOf(null) + wallets.sortedBy { it.coin.code }.map {
             TransactionWallet(it.token, it.transactionSource, it.badge)
         }
 
@@ -35,7 +35,7 @@ class TransactionFilterService {
         }
     }
 
-    fun getTransactionWallets(): List<TransactionWallet> {
+    fun getTransactionWallets(): List<TransactionWallet?> {
         return transactionWallets
     }
 

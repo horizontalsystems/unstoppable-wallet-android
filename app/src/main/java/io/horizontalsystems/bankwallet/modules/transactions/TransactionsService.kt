@@ -35,7 +35,7 @@ class TransactionsService(
     private val typesSubject = BehaviorSubject.create<Pair<List<FilterTransactionType>, FilterTransactionType>>()
     val typesObservable get() = typesSubject
 
-    private val walletsSubject = BehaviorSubject.create<Pair<List<TransactionWallet>, TransactionWallet?>>()
+    private val walletsSubject = BehaviorSubject.create<Pair<List<TransactionWallet?>, TransactionWallet?>>()
     val walletsObservable get() = walletsSubject
 
     private val disposables = CompositeDisposable()
@@ -178,9 +178,9 @@ class TransactionsService(
 
         val transactionWallets = transactionFilterService.getTransactionWallets()
 
-        transactionSyncStateRepository.setTransactionWallets(transactionWallets)
+        transactionSyncStateRepository.setTransactionWallets(transactionWallets.filterNotNull())
         transactionRecordRepository.setWallets(
-            transactionWallets,
+            transactionWallets.filterNotNull(),
             transactionFilterService.selectedWallet,
             transactionFilterService.selectedTransactionType,
             transactionFilterService.selectedBlockchain,
