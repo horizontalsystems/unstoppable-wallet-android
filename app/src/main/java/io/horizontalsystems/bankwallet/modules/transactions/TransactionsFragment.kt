@@ -153,10 +153,12 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
                             } else {
                                 val filterCoin = filterCoins?.find { it.selected }?.item
                                 val filterType = filterTypes?.find { it.selected }?.item
+                                val filterBlockchain = filterBlockchains?.find { it.selected }?.item
 
                                 val listState = rememberSaveable(
                                     filterCoin,
                                     filterType,
+                                    filterBlockchain,
                                     accountsViewModel.accountViewItem?.id,
                                     saver = LazyListState.Saver
                                 ) {
