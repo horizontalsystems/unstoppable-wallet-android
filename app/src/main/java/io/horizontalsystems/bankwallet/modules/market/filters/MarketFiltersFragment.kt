@@ -39,6 +39,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
+import io.horizontalsystems.bankwallet.modules.market.filters.PriceChange as FilterPriceChange
 
 class MarketFiltersFragment : BaseFragment() {
 
@@ -286,6 +287,7 @@ fun AdvancedSearchContent(
             AdvancedSearchDropdown(
                 title = R.string.Market_Filter_PriceChange,
                 value = viewModel.priceChange.title,
+                valueColor = viewModel.priceChange.item?.color ?: TextColor.Grey,
                 onDropdownClick = { showBottomSheet(PriceChange) }
             )
         }, {
@@ -344,6 +346,7 @@ private fun SectionHeader(header: Int) {
 private fun AdvancedSearchDropdown(
     @StringRes title: Int,
     value: String?,
+    valueColor: TextColor = TextColor.Leah,
     onDropdownClick: () -> Unit,
 ) {
     Row(
@@ -361,7 +364,7 @@ private fun AdvancedSearchDropdown(
             overflow = TextOverflow.Ellipsis,
         )
         Spacer(Modifier.weight(1f))
-        FilterMenu(value) {
+        FilterMenu(value, valueColor) {
             onDropdownClick()
         }
     }
@@ -394,8 +397,9 @@ private fun AdvancedSearchSwitch(
 }
 
 @Composable
-fun FilterMenu(title: String?, onClick: () -> Unit) {
+private fun FilterMenu(title: String?, valueColor: TextColor, onClick: () -> Unit) {
     val valueText = title ?: stringResource(R.string.Any)
+    val textColor = if (title != null) valueColor else TextColor.Grey
     Row(
         Modifier
             .fillMaxHeight()
@@ -406,13 +410,12 @@ fun FilterMenu(title: String?, onClick: () -> Unit) {
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            valueText,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = if (title != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
-            modifier = Modifier.weight(1f, fill = false)
-        )
+        when(textColor) {
+            TextColor.Grey -> body_grey(text = valueText, overflow = TextOverflow.Ellipsis, maxLines = 1)
+            TextColor.Remus -> body_remus(text = valueText, overflow = TextOverflow.Ellipsis, maxLines = 1)
+            TextColor.Lucian -> body_lucian(text = valueText, overflow = TextOverflow.Ellipsis, maxLines = 1)
+            TextColor.Leah -> body_leah(text = valueText, overflow = TextOverflow.Ellipsis, maxLines = 1)
+        }
         Icon(
             modifier = Modifier.padding(start = 4.dp),
             painter = painterResource(id = R.drawable.ic_down_arrow_20),
@@ -444,7 +447,7 @@ private fun <ItemClass> SingleSelectBottomSheetContent(
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10
         )
-        items.forEach { item ->
+        items.forEach { itemWrapper ->
             CellMultilineLawrence(
                 borderBottom = true
             ) {
@@ -452,15 +455,28 @@ private fun <ItemClass> SingleSelectBottomSheetContent(
                     modifier = Modifier
                         .fillMaxSize()
                         .clickable {
-                            onSelect(item)
+                            onSelect(itemWrapper)
                             onClose()
                         }
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    body_leah(text = item.title ?: stringResource(R.string.Any))
+                    if (itemWrapper.title != null && itemWrapper.item is FilterPriceChange) {
+                        when (itemWrapper.item.color){
+                            TextColor.Lucian -> body_lucian(text = itemWrapper.title)
+                            TextColor.Remus -> body_remus(text = itemWrapper.title)
+                            TextColor.Grey -> body_grey(text = itemWrapper.title)
+                            TextColor.Leah -> body_leah(text = itemWrapper.title)
+                        }
+                    } else {
+                        if (itemWrapper.title != null) {
+                            body_leah(text = itemWrapper.title)
+                        } else {
+                            body_grey(text = stringResource(R.string.Any))
+                        }
+                    }
                     Spacer(modifier = Modifier.weight(1f))
-                    if (item == selectedItem) {
+                    if (itemWrapper == selectedItem) {
                         Image(
                             modifier = Modifier.padding(start = 5.dp),
                             painter = painterResource(id = R.drawable.ic_checkmark_20),

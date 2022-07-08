@@ -137,15 +137,55 @@ enum class TimePeriod(@StringRes val titleResId: Int) {
     TimePeriod_1Y(R.string.Market_Filter_TimePeriod_1Y),
 }
 
-enum class PriceChange(@StringRes val titleResId: Int, @ColorRes val colorResId: Int, val values: Pair<Long?, Long?>) {
-    Positive_10_plus(R.string.Market_Filter_PriceChange_Positive_10_plus, R.color.remus, Pair(10, null)),
-    Positive_25_plus(R.string.Market_Filter_PriceChange_Positive_25_plus, R.color.remus, Pair(25, null)),
-    Positive_50_plus(R.string.Market_Filter_PriceChange_Positive_50_plus, R.color.remus, Pair(50, null)),
-    Positive_100_plus(R.string.Market_Filter_PriceChange_Positive_100_plus, R.color.remus, Pair(100, null)),
-    Negative_10_minus(R.string.Market_Filter_PriceChange_Negative_10_minus, R.color.lucian, Pair(null, -10)),
-    Negative_25_minus(R.string.Market_Filter_PriceChange_Negative_25_minus, R.color.lucian, Pair(null, -25)),
-    Negative_50_minus(R.string.Market_Filter_PriceChange_Negative_50_minus, R.color.lucian, Pair(null, -50)),
-    Negative_100_minus(R.string.Market_Filter_PriceChange_Negative_100_minus, R.color.lucian, Pair(null, -100)),
+enum class PriceChange(
+    @StringRes val titleResId: Int,
+    @ColorRes val color: TextColor,
+    val values: Pair<Long?, Long?>
+) {
+    Positive_10_plus(
+        R.string.Market_Filter_PriceChange_Positive_10_plus,
+        TextColor.Remus,
+        Pair(10, null)
+    ),
+    Positive_25_plus(
+        R.string.Market_Filter_PriceChange_Positive_25_plus,
+        TextColor.Remus,
+        Pair(25, null)
+    ),
+    Positive_50_plus(
+        R.string.Market_Filter_PriceChange_Positive_50_plus,
+        TextColor.Remus,
+        Pair(50, null)
+    ),
+    Positive_100_plus(
+        R.string.Market_Filter_PriceChange_Positive_100_plus,
+        TextColor.Remus,
+        Pair(100, null)
+    ),
+    Negative_10_minus(
+        R.string.Market_Filter_PriceChange_Negative_10_minus,
+        TextColor.Lucian,
+        Pair(null, -10)
+    ),
+    Negative_25_minus(
+        R.string.Market_Filter_PriceChange_Negative_25_minus,
+        TextColor.Lucian,
+        Pair(null, -25)
+    ),
+    Negative_50_minus(
+        R.string.Market_Filter_PriceChange_Negative_50_minus,
+        TextColor.Lucian,
+        Pair(null, -50)
+    ),
+    Negative_100_minus(
+        R.string.Market_Filter_PriceChange_Negative_100_minus,
+        TextColor.Lucian,
+        Pair(null, -100)
+    ),
+}
+
+enum class TextColor{
+    Remus, Lucian, Grey, Leah
 }
 
 class FilterViewItemWrapper<T>(val title: String?, val item: T) {
