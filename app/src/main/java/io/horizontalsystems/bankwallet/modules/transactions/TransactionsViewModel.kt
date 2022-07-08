@@ -65,7 +65,7 @@ class TransactionsViewModel(
 
         service.walletsObservable
             .subscribeIO { (wallets, selected) ->
-                val filterCoins = listOf(null).plus(wallets).map {
+                val filterCoins = wallets.map {
                     Filter(it, it == selected)
                 }
                 filterCoinsLiveData.postValue(filterCoins)
