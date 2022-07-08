@@ -468,6 +468,10 @@
     <string name="Transactions_From">发送人%s</string>
     <string name="Transaction_Unlimited">无限%s</string>
     <string name="Transactions_All">所有</string>
+    <string name="Transactions_Filter_Blockchain">Filter by blockchain</string>
+    <string name="Transactions_Filter_AllBlockchains">All Blockchains</string>
+    <string name="Transactions_Filter_AllCoins">All Coins</string>
+    <string name="Transactions_Filter_ChooseCoin">Choose Coin</string>
     <string name="Transactions_Incoming">已收到</string>
     <string name="Transactions_Outgoing">已发送</string>
     <string name="Transactions_Swaps">掉期交易</string>
