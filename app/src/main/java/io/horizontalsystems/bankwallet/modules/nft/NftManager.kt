@@ -29,8 +29,12 @@ class NftManager(
         address: Address
     ): Map<NftCollectionRecord, List<NftAssetRecord>> = withContext(Dispatchers.IO) {
         val assetCollections = marketKit.nftAssetCollection(address.hex)
+        val assets = assetCollections.assets.map { collectionAsset(it, account) }
+        val collections = assetCollections.collections.map { collectionRecord(it, account) }
 
-        map(assetCollections.assets.map { collectionAsset(it, account) }, assetCollections.collections.map { collectionRecord(it, account) })
+        nftDao.replaceCollectionAssets(account.id, collections, assets)
+
+        map(assets, collections)
     }
 
     fun nftAssetPriceToCoinValue(nftAssetPrice: NftAssetPrice?): CoinValue? {
