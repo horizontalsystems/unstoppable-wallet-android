@@ -939,6 +939,8 @@
     <string name="Nfts_Asset_OnSale">Im Verkauf</string>
     <string name="Nfts_Asset_OnSaleUntil">bis %s</string>
     <string name="Nfts_Empty">Sie haben keinen NFT in Ihrer Brieftasche</string>
+    <string name="NftAsset_Overview">Overview</string>
+    <string name="NftAsset_Activity">Activity</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Teilen</string>
     <string name="NftAsset_Action_Save">Speichern</string>
