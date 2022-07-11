@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
+import java.net.UnknownHostException
 import java.time.Duration
 
 class MarketWidgetWorker(
@@ -96,13 +97,21 @@ class MarketWidgetWorker(
             }
 
             Result.success()
-        } catch (e: Exception) {
+        } catch (exception: Exception) {
             glanceIds.forEach { glanceId ->
                 var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
 
                 if (state.widgetId == widgetId) {
-                    state = state.copy(loading = false, error = e.message ?: e.javaClass.simpleName)
+                    val errorText = if (exception is UnknownHostException)
+                        context.getString(R.string.Hud_Text_NoInternet)
+                    else {
+                        context.getString(R.string.SyncError) + "\n\n\n" + "[ ${state.error} ]"
+                    }
+
+                    state = state.copy(loading = false, error = errorText)
                     setWidgetState(glanceId, state)
+
+                    logger.info("doWork error, widgetId: $widgetId, ${exception.javaClass.simpleName}: ${exception.message}")
                 }
             }
             if (runAttemptCount < 10) {
