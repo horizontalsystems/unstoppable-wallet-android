@@ -21,6 +21,7 @@ import androidx.glance.layout.*
 import androidx.glance.layout.Alignment.Vertical.Companion.CenterVertically
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
+import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -71,7 +72,7 @@ class MarketWidget : GlanceAppWidget() {
                         Text(
                             modifier = GlanceModifier.defaultWeight().padding(start = 16.dp),
                             text = context.getString(state.type.title),
-                            style = AppWidgetTheme.textStyles.d1
+                            style = AppWidgetTheme.textStyles.d1()
                         )
                         /*
                         Image(
@@ -97,14 +98,10 @@ class MarketWidget : GlanceAppWidget() {
                             contentAlignment = Alignment.Center
                         ) {
                             if (state.loading) {
-                                CircularProgressIndicator(
-                                    modifier = GlanceModifier
-                                        .size(20.dp)
-                                )
+                                CircularProgressIndicator(modifier = GlanceModifier.size(20.dp))
                             } else {
                                 Image(
-                                    modifier = GlanceModifier
-                                        .size(20.dp),
+                                    modifier = GlanceModifier.size(20.dp),
                                     provider = ImageProvider(R.drawable.ic_refresh),
                                     contentDescription = null
                                 )
@@ -142,7 +139,7 @@ class MarketWidget : GlanceAppWidget() {
                     Spacer(modifier = GlanceModifier.height(8.dp))
                     Text(
                         text = "Updated: " + SimpleDateFormat("HH:mm:ss, dd-MM-yyyy", Locale.US).format(Date(state.updateTimestampMillis)),
-                        style = AppWidgetTheme.textStyles.micro
+                        style = AppWidgetTheme.textStyles.micro()
                     )
                 }
             }
@@ -224,7 +221,7 @@ class MarketWidget : GlanceAppWidget() {
             Text(
                 text = subtitle,
                 maxLines = 1,
-                style = AppWidgetTheme.textStyles.d1
+                style = AppWidgetTheme.textStyles.d1()
             )
             Spacer(modifier = GlanceModifier.defaultWeight())
             MarketDataValueComponent(diff, marketCap, volume)
@@ -258,13 +255,13 @@ class MarketWidget : GlanceAppWidget() {
                 Row {
                     Text(
                         text = "MCap",
-                        style = AppWidgetTheme.textStyles.c3,
+                        style = AppWidgetTheme.textStyles.c3(),
                         maxLines = 1
                     )
                     Spacer(modifier = GlanceModifier.width(4.dp))
                     Text(
                         text = marketCap,
-                        style = AppWidgetTheme.textStyles.d1,
+                        style = AppWidgetTheme.textStyles.d1(),
                         maxLines = 1
                     )
                 }
@@ -273,13 +270,13 @@ class MarketWidget : GlanceAppWidget() {
                 Row {
                     Text(
                         text = "Vol",
-                        style = AppWidgetTheme.textStyles.d3,
+                        style = AppWidgetTheme.textStyles.d3(),
                         maxLines = 1
                     )
                     Spacer(modifier = GlanceModifier.width(4.dp))
                     Text(
                         text = volume,
-                        style = AppWidgetTheme.textStyles.d1,
+                        style = AppWidgetTheme.textStyles.d1(),
                         maxLines = 1
                     )
                 }
@@ -301,7 +298,7 @@ class MarketWidget : GlanceAppWidget() {
     @Composable
     private fun FullScreenMessage(icon: Int, text: String) {
         Column(
-            modifier = GlanceModifier.fillMaxSize(),
+            modifier = GlanceModifier.fillMaxSize().padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -320,7 +317,7 @@ class MarketWidget : GlanceAppWidget() {
             Spacer(modifier = GlanceModifier.height(32.dp))
             Text(
                 text = text,
-                style = AppWidgetTheme.textStyles.d1
+                style = AppWidgetTheme.textStyles.d1(textAlign = TextAlign.Center)
             )
             Spacer(modifier = GlanceModifier.height(32.dp))
         }
