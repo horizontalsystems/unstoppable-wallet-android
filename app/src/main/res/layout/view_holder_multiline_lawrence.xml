@@ -42,7 +42,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toEndOf="@id/subtitle"
-        android:src="@drawable/ic_checkmark_yellow"
+        android:src="@drawable/icon_24_check_1_jacob"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
