@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import androidx.glance.appwidget.unit.ColorProvider
 import androidx.glance.text.FontWeight
+import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import io.horizontalsystems.bankwallet.ui.compose.*
@@ -22,21 +23,41 @@ object AppWidgetTheme {
 }
 
 class TextStyles {
-    val c3: TextStyle
-        @Composable
-        get() = TextStyle(color = AppWidgetTheme.colors.jacob, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+    @Composable
+    fun c3(textAlign: TextAlign = TextAlign.Start) =
+        TextStyle(
+            color = AppWidgetTheme.colors.jacob,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            textAlign = textAlign
+        )
 
-    val d1: TextStyle
-        @Composable
-        get() = TextStyle(color = AppWidgetTheme.colors.grey, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+    @Composable
+    fun d1(textAlign: TextAlign = TextAlign.Start) =
+        TextStyle(
+            color = AppWidgetTheme.colors.grey,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+            textAlign = textAlign
+        )
 
-    val d3: TextStyle
-        @Composable
-        get() = TextStyle(color = AppWidgetTheme.colors.jacob, fontSize = 14.sp, fontWeight = FontWeight.Normal)
+    @Composable
+    fun d3(textAlign: TextAlign = TextAlign.Start) =
+        TextStyle(
+            color = AppWidgetTheme.colors.jacob,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+            textAlign = textAlign
+        )
 
-    val micro: TextStyle
-        @Composable
-        get() = TextStyle(color = AppWidgetTheme.colors.grey, fontSize = 10.sp, fontWeight = FontWeight.Normal)
+    @Composable
+    fun micro(textAlign: TextAlign = TextAlign.Start) =
+        TextStyle(
+            color = AppWidgetTheme.colors.grey,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Normal,
+            textAlign = textAlign
+        )
 }
 
 @Composable
