@@ -94,6 +94,7 @@ private fun BackupConfirmScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Done),
+                        icon = R.drawable.icon_24_check_1_jacob,
                         onClick = { viewModel.onClickDone() },
                     )
                 )

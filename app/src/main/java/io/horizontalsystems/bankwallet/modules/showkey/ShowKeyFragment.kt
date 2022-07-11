@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.showkey
 
+import SeedPhrase
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -112,15 +113,15 @@ private fun ShowKeyIntroScreen(
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
                 title = TranslatableString.ResString(R.string.ShowKey_Title),
-                navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
-                }
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    )
+                )
             )
 
             when (viewModel.viewState) {
@@ -335,10 +336,9 @@ private fun KeyCell(title: String, onCopy: () -> Unit) {
 }
 
 @Composable
-private fun PassphraseCell(passphrase: String) {
+fun PassphraseCell(passphrase: String) {
     val localView = LocalView.current
     if (passphrase.isNotBlank()) {
-        Spacer(Modifier.height(27.dp))
         CellSingleLineLawrenceSection(
             listOf {
                 Row(
@@ -402,35 +402,27 @@ private fun ActionButton(title: Int, onClick: () -> Unit) {
 }
 
 @Composable
-private fun SeedPhraseList(wordsNumbered: List<ShowKeyModule.WordNumbered>) {
+fun SeedPhraseList(wordsNumbered: List<ShowKeyModule.WordNumbered>) {
     val portion = if (wordsNumbered.size == 12) 3 else 4
     val half = wordsNumbered.size / 2
 
     Row(Modifier.padding(horizontal = 16.dp)) {
         Column(Modifier.weight(1f)) {
             wordsNumbered.take(half).forEach { item ->
-                SeedPhrase(item, portion)
+                SeedPhrase(item.number, item.word)
+                if (item.number.mod(portion) == 0) {
+                    Spacer(Modifier.height(32.dp))
+                }
             }
         }
         Column(Modifier.weight(1f)) {
             wordsNumbered.takeLast(half).forEach { item ->
-                SeedPhrase(item, portion)
+                SeedPhrase(item.number, item.word)
+                if (item.number.mod(portion) == 0) {
+                    Spacer(Modifier.height(32.dp))
+                }
             }
         }
-    }
-}
-
-@Composable
-private fun SeedPhrase(item: ShowKeyModule.WordNumbered, portion: Int) {
-    Row(Modifier.padding(bottom = 7.dp)) {
-        A1(
-            text = "${item.number}.",
-            modifier = Modifier.width(32.dp),
-        )
-        A2(item.word)
-    }
-    if (item.number.mod(portion) == 0) {
-        Spacer(Modifier.height(28.dp))
     }
 }
 

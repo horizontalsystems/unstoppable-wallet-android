@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -97,7 +97,7 @@ fun BackupRequiredScreen(navController: NavController, account: Account, coinTit
                 title = stringResource(R.string.ManageAccount_RecoveryPhraseBackup),
                 onClick = {
                     navController.popBackStack()
-                    navController.slideFromRight(
+                    navController.slideFromBottom(
                         R.id.backupKeyFragment,
                         BackupKeyModule.prepareParams(account)
                     )

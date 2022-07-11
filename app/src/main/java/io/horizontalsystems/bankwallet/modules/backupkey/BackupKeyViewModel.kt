@@ -1,36 +1,67 @@
 package io.horizontalsystems.bankwallet.modules.backupkey
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
+import io.horizontalsystems.core.IPinComponent
 
 class BackupKeyViewModel(
-        private val service: BackupKeyService
+    val account: Account,
+    pinComponent: IPinComponent
 ) : ViewModel() {
-    val openUnlockLiveEvent = SingleLiveEvent<Unit>()
-    val showKeyLiveEvent = SingleLiveEvent<Unit>()
-    val openConfirmationLiveEvent = SingleLiveEvent<Account>()
 
-    val words: List<String>
-        get() = service.words
+    private val isPinSet = pinComponent.isPinSet
 
-    val passphrase: String
-        get() = service.passphrase
+    var passphrase by mutableStateOf("")
+        private set
 
-    fun onClickShow() {
-        if (service.isPinSet) {
-            openUnlockLiveEvent.postValue(Unit)
-        } else {
-            showKeyLiveEvent.postValue(Unit)
+    var wordsNumbered by mutableStateOf<List<ShowKeyModule.WordNumbered>>(listOf())
+        private set
+
+    var viewState by mutableStateOf(BackupKeyModule.ViewState.Warning)
+        private set
+
+    var showPinUnlock by mutableStateOf(false)
+        private set
+
+    var showKeyConfirmation by mutableStateOf(false)
+        private set
+
+    init {
+        if (account.type is AccountType.Mnemonic) {
+            wordsNumbered = account.type.words.mapIndexed { index, word ->
+                ShowKeyModule.WordNumbered(word, index + 1)
+            }
+            passphrase = account.type.passphrase
         }
     }
 
-    fun onUnlock() {
-        showKeyLiveEvent.postValue(Unit)
+    fun onClickShow() {
+        if (isPinSet) {
+            showPinUnlock = true
+        } else {
+            viewState = BackupKeyModule.ViewState.MnemonicKey
+        }
     }
 
     fun onClickBackup() {
-        openConfirmationLiveEvent.postValue(service.account)
+        showKeyConfirmation = true
+    }
+
+    fun pinUnlocked() {
+        viewState = BackupKeyModule.ViewState.MnemonicKey
+    }
+
+    fun pinUnlockShown() {
+        showPinUnlock = false
+    }
+
+    fun keyConfirmationShown() {
+        showKeyConfirmation = false
     }
 
 }
