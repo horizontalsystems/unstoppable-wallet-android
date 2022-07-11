@@ -935,6 +935,8 @@
     <string name="Nfts_Asset_OnSale">İndirimde</string>
     <string name="Nfts_Asset_OnSaleUntil">%s kadar</string>
     <string name="Nfts_Empty">Cüzdanınızda NFT yok</string>
+    <string name="NftAsset_Overview">Overview</string>
+    <string name="NftAsset_Activity">Activity</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Paylaş</string>
     <string name="NftAsset_Action_Save">Kaydet</string>
