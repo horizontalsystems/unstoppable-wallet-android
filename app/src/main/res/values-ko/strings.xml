@@ -935,6 +935,8 @@
     <string name="Nfts_Asset_OnSale">할인 중</string>
     <string name="Nfts_Asset_OnSaleUntil">%s 까지</string>
     <string name="Nfts_Empty">지갑에 NFT가 없습니다.</string>
+    <string name="NftAsset_Overview">Overview</string>
+    <string name="NftAsset_Activity">Activity</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">공유</string>
     <string name="NftAsset_Action_Save">저장</string>
