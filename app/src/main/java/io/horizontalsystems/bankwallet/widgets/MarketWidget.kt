@@ -109,12 +109,23 @@ class MarketWidget : GlanceAppWidget() {
                         }
                     }
 
-                    state.items.forEach {
-                        Box(
-                            modifier = GlanceModifier
-                                .height(60.dp)
-                                .background(ImageProvider(R.drawable.widget_list_item_background))
-                            /*.clickable(
+                    if (!state.loading && state.type == MarketWidgetType.Watchlist && state.items.isEmpty()) {
+                        FullScreenMessage(
+                            icon = R.drawable.ic_rate_24,
+                            text = context.getString(R.string.Market_Tab_Watchlist_EmptyList),
+                        )
+                    } else if (state.error != null) {
+                        FullScreenMessage(
+                            icon = R.drawable.ic_sync_error,
+                            text = state.error,
+                        )
+                    } else {
+                        state.items.forEach {
+                            Box(
+                                modifier = GlanceModifier
+                                    .height(60.dp)
+                                    .background(ImageProvider(R.drawable.widget_list_item_background))
+                                /*.clickable(
                                 actionStartActivity<LauncherActivity>(
                                     parameters = actionParametersOf()
                                 )
@@ -124,15 +135,10 @@ class MarketWidget : GlanceAppWidget() {
                                     )
                                 )
                             )*/
-                        ) {
-                            Item(item = it)
+                            ) {
+                                Item(item = it)
+                            }
                         }
-                    }
-                    if (!state.loading && state.type == MarketWidgetType.Watchlist && state.items.isEmpty()) {
-                        FullScreenMessage(
-                            icon = R.drawable.ic_rate_24,
-                            text = context.getString(R.string.Market_Tab_Watchlist_EmptyList),
-                        )
                     }
                 }
                 Column {
