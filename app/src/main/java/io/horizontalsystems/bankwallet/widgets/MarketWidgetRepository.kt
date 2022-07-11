@@ -53,7 +53,7 @@ class MarketWidgetRepository(
             sortingField = SortingField.HighestCap,
             timeDuration = TimeDuration.OneDay,
             forceRefresh = true,
-            limit = 5
+            limit = itemsLimit
         )
         return platformItems.map { item ->
             MarketWidgetItem(
