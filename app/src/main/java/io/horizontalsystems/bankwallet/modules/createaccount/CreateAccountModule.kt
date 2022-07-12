@@ -13,7 +13,7 @@ object CreateAccountModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = CreateAccountService(
+            return CreateAccountViewModel(
                 App.accountFactory,
                 App.wordsManager,
                 App.accountManager,
@@ -23,9 +23,7 @@ object CreateAccountModule {
                     App.restoreSettingsManager,
                     App.zcashBirthdayProvider
                 )
-            )
-
-            return CreateAccountViewModel(service, listOf(service)) as T
+            ) as T
         }
     }
 
