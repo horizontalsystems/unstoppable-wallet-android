@@ -1,115 +1,148 @@
 package io.horizontalsystems.bankwallet.modules.createaccount
 
-import androidx.lifecycle.LiveDataReactiveStreams
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.IAccountFactory
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
+import io.horizontalsystems.bankwallet.core.managers.WalletActivator
+import io.horizontalsystems.bankwallet.core.managers.WordsManager
+import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
-import io.horizontalsystems.core.SingleLiveEvent
-import io.reactivex.BackpressureStrategy
-import io.reactivex.disposables.CompositeDisposable
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
+import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountModule.Kind.Mnemonic24
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
-class CreateAccountViewModel(private val service: CreateAccountService, private val clearables: List<Clearable>) : ViewModel() {
+class CreateAccountViewModel(
+    private val accountFactory: IAccountFactory,
+    private val wordsManager: WordsManager,
+    private val accountManager: IAccountManager,
+    private val walletActivator: WalletActivator,
+    private val passphraseValidator: PassphraseValidator,
+    private val predefinedBlockchainSettingsProvider: PredefinedBlockchainSettingsProvider,
+) : ViewModel() {
 
-    val kindLiveData = service.kindObservable
-            .toFlowable(BackpressureStrategy.BUFFER)
-            .map {
-                it.title
-            }
-            .let {
-                LiveDataReactiveStreams.fromPublisher(it)
-            }
+    private var passphrase = ""
+    private var passphraseConfirmation = ""
 
-    val inputsVisibleLiveData = LiveDataReactiveStreams.fromPublisher(service.passphraseEnabledObservable.toFlowable(BackpressureStrategy.BUFFER))
-    val passphraseCautionLiveData = MutableLiveData<Caution?>()
-    val passphraseConfirmationCautionLiveData = MutableLiveData<Caution?>()
-    val clearInputsLiveEvent = SingleLiveEvent<Unit>()
-    val showErrorLiveEvent = SingleLiveEvent<String>()
-    val finishLiveEvent = SingleLiveEvent<Unit>()
+    val mnemonicKinds = listOf(Mnemonic12, Mnemonic24)
 
-    private val disposables = CompositeDisposable()
+    var selectedKind: CreateAccountModule.Kind = Mnemonic12
+        private set
 
-    val kindViewItems = service.allKinds.map {
-        ViewItemWrapper(it.title, it)
-    }
+    var passphraseEnabled by mutableStateOf(false)
+        private set
 
-    var selectedKindViewItem: ViewItemWrapper<CreateAccountModule.Kind>
-        get() = ViewItemWrapper(service.kind.title, service.kind)
-        set(value) {
-            service.kind = value.item
+    var passphraseConfirmState by mutableStateOf<DataState.Error?>(null)
+        private set
+
+    var passphraseState by mutableStateOf<DataState.Error?>(null)
+        private set
+
+    var successMessage by mutableStateOf<Int?>(null)
+        private set
+
+    fun createAccount() {
+        if (passphraseEnabled && passphraseIsInvalid()) {
+            return
         }
 
-    private fun clearInputs() {
-        clearInputsLiveEvent.postValue(Unit)
-        clearCautions()
+        val accountType = resolveAccountType()
+        val account = accountFactory.account(
+            accountFactory.getNextAccountName(),
+            accountType,
+            AccountOrigin.Created,
+            false
+        )
 
-        service.passphrase = ""
-        service.passphraseConfirmation = ""
-    }
-
-    private fun clearCautions() {
-        if (passphraseCautionLiveData.value != null) {
-            passphraseCautionLiveData.postValue(null)
-        }
-
-        if (passphraseConfirmationCautionLiveData.value != null) {
-            passphraseConfirmationCautionLiveData.postValue(null)
-        }
-    }
-
-    override fun onCleared() {
-        clearables.forEach(Clearable::clear)
-        disposables.clear()
-    }
-
-    fun onTogglePassphrase(enabled: Boolean) {
-        service.passphraseEnabled = enabled
-        clearInputs()
+        accountManager.save(account)
+        activateDefaultWallets(account)
+        predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
+        successMessage = R.string.Hud_Text_Created
     }
 
     fun onChangePassphrase(v: String) {
-        service.passphrase = v
-        clearCautions()
+        if (passphraseValidator.validate(v)) {
+            passphraseState = null
+            passphrase = v
+        } else {
+            passphraseState = DataState.Error(
+                Exception(
+                    Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
+                )
+            )
+        }
     }
 
     fun onChangePassphraseConfirmation(v: String) {
-        service.passphraseConfirmation = v
-        clearCautions()
+        passphraseConfirmState = null
+        passphraseConfirmation = v
     }
 
-    fun onClickCreate() {
-        passphraseCautionLiveData.postValue(null)
-        passphraseConfirmationCautionLiveData.postValue(null)
+    fun setMnemonicKind(kind: CreateAccountModule.Kind) {
+        selectedKind = kind
+    }
 
-        try {
-            service.createAccount()
-            finishLiveEvent.postValue(Unit)
-        } catch (t: CreateAccountService.CreateError.EmptyPassphrase) {
-            passphraseCautionLiveData.postValue(Caution(Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase), Caution.Type.Error))
-        } catch (t: CreateAccountService.CreateError.InvalidConfirmation) {
-            passphraseConfirmationCautionLiveData.postValue(Caution(Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation), Caution.Type.Error))
-        } catch (t: Throwable) {
-            showErrorLiveEvent.postValue(t.localizedMessage ?: t.javaClass.simpleName)
+    fun setPassphraseEnabledState(enabled: Boolean) {
+        passphraseEnabled = enabled
+        if (!enabled) {
+            passphrase = ""
+            passphraseConfirmation = ""
         }
     }
 
-    fun validatePassphrase(text: String?): Boolean {
-        return validatePassphraseAndNotify(text, passphraseCautionLiveData)
+    fun onSuccessMessageShown() {
+        successMessage = null
     }
 
-    fun validatePassphraseConfirmation(text: String?): Boolean {
-        return validatePassphraseAndNotify(text, passphraseConfirmationCautionLiveData)
-    }
-
-    private fun validatePassphraseAndNotify(text: String?, cautionLiveData: MutableLiveData<Caution?>): Boolean {
-        val valid = service.validatePassphrase(text)
-        if (!valid) {
-            cautionLiveData.postValue(Caution(Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols), Caution.Type.Error))
+    private fun passphraseIsInvalid(): Boolean {
+        if (passphrase.isBlank()) {
+            passphraseState = DataState.Error(
+                Exception(
+                    Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase)
+                )
+            )
+            return true
         }
-        return valid
+        if (passphrase != passphraseConfirmation) {
+            passphraseConfirmState = DataState.Error(
+                Exception(
+                    Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation)
+                )
+            )
+            return true
+        }
+        return false
+    }
+
+    private fun activateDefaultWallets(account: Account) {
+        val tokenQueries = listOf(
+            TokenQuery(BlockchainType.Bitcoin, TokenType.Native),
+            TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
+            TokenQuery(BlockchainType.Polygon, TokenType.Native),
+            TokenQuery(BlockchainType.Zcash, TokenType.Native)
+        )
+        walletActivator.activateWallets(account, tokenQueries)
+    }
+
+    private fun resolveAccountType() = when (selectedKind) {
+        Mnemonic12 -> mnemonicAccountType(12)
+        Mnemonic24 -> mnemonicAccountType(24)
+    }
+
+    private fun mnemonicAccountType(wordCount: Int): AccountType {
+        val words = wordsManager.generateWords(wordCount)
+        return AccountType.Mnemonic(words, passphrase)
     }
 
 }
