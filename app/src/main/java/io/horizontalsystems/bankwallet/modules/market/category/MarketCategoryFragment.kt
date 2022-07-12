@@ -120,15 +120,12 @@ fun CategoryScreen(
                                 val header by viewModel.headerLiveData.observeAsState()
                                 val menu by viewModel.menuLiveData.observeAsState()
 
-                                var scrollingEnabled by remember { mutableStateOf(true) }
-
                                 CoinList(
                                     items = it,
                                     scrollToTop = scrollToTopAfterUpdate,
                                     onAddFavorite = { uid -> viewModel.onAddFavorite(uid) },
                                     onRemoveFavorite = { uid -> viewModel.onRemoveFavorite(uid) },
                                     onCoinClick = onCoinClick,
-                                    userScrollEnabled = scrollingEnabled,
                                     preItems = {
                                         header?.let {
                                             item {
@@ -136,12 +133,7 @@ fun CategoryScreen(
                                             }
                                         }
                                         item {
-                                            Chart(
-                                                chartViewModel = chartViewModel,
-                                                onChangeHoldingPointState = { holding: Boolean ->
-                                                    scrollingEnabled = !holding
-                                                }
-                                            )
+                                            Chart(chartViewModel = chartViewModel)
                                         }
                                         menu?.let {
                                             stickyHeader {

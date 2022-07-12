@@ -52,7 +52,7 @@ fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
 }
 
 @Composable
-fun Chart(chartViewModel: ChartViewModel, onChangeHoldingPointState: (Boolean) -> Unit = {}, onSelectChartInterval: ((HsTimePeriod) -> Unit)? = null) {
+fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod) -> Unit)? = null) {
     val chartDataWrapper by chartViewModel.dataWrapperLiveData.observeAsState()
     val chartTabs by chartViewModel.tabItemsLiveData.observeAsState(listOf())
     val chartIndicators by chartViewModel.indicatorsLiveData.observeAsState(listOf())
@@ -74,8 +74,7 @@ fun Chart(chartViewModel: ChartViewModel, onChangeHoldingPointState: (Boolean) -
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
             viewState = chartViewState,
-            itemToPointConverter = chartViewModel::getSelectedPoint,
-            onChangeHoldingPointState = onChangeHoldingPointState
+            itemToPointConverter = chartViewModel::getSelectedPoint
         )
     }
 }
@@ -89,8 +88,7 @@ fun <T> Chart(
     chartInfoData: ChartInfoData?,
     chartLoading: Boolean,
     viewState: ViewState?,
-    itemToPointConverter: (ChartDataItemImmutable) -> SelectedPoint?,
-    onChangeHoldingPointState: (Boolean) -> Unit
+    itemToPointConverter: (ChartDataItemImmutable) -> SelectedPoint?
 ) {
     Column {
         var selectedPoint by remember { mutableStateOf<SelectedPoint?>(null) }
@@ -103,7 +101,6 @@ fun <T> Chart(
             viewState = viewState,
             showIndicatorLine = indicators.isNotEmpty()
         ) { item ->
-            onChangeHoldingPointState.invoke(item != null)
             selectedPoint = item?.let { itemToPointConverter.invoke(it) }
         }
         if (indicators.isNotEmpty()) {
