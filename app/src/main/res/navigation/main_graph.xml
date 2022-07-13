@@ -119,8 +119,10 @@
         android:name="io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment"/>
     <fragment
         android:id="@+id/experimentalFeaturesFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesFragment"
-        tools:layout="@layout/fragment_experimental_features"/>
+        android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesFragment"/>
+    <fragment
+        android:id="@+id/timeLockFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.TimeLockFragment"/>
     <fragment
         android:id="@+id/metricsPageFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment"
@@ -149,10 +151,6 @@
         android:id="@+id/pinFragment"
         android:name="io.horizontalsystems.pin.PinFragment"
         tools:layout="@layout/fragment_pin" />
-    <fragment
-        android:id="@+id/bitcoinHodlingFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.bitcoinhodling.BitcoinHodlingFragment"
-        tools:layout="@layout/fragment_bitcoin_hodling" />
     <fragment
         android:id="@+id/releaseNotesFragment"
         android:name="io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment"
