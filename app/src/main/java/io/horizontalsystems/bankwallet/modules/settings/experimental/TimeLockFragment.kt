@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,16 +18,16 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
-class ExperimentalFeaturesFragment : BaseFragment() {
+class TimeLockFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,13 +50,14 @@ class ExperimentalFeaturesFragment : BaseFragment() {
 @Composable
 private fun ExperimentalScreen(
     navController: NavController,
+    viewModel: TimeLockViewModel = viewModel(factory = TimeLockModule.Factory())
 ) {
     ComposeAppTheme {
         Column(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
-                title = TranslatableString.ResString(R.string.ExperimentalFeatures_Title),
+                title = TranslatableString.ResString(R.string.BitcoinHodling_Title),
                 navigationIcon = {
                     HsIconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -67,11 +71,14 @@ private fun ExperimentalScreen(
             Column(
                 Modifier.verticalScroll(rememberScrollState())
             ) {
-                InfoText(
-                    text = stringResource(R.string.ExperimentalFeatures_Description)
-                )
                 Spacer(Modifier.height(12.dp))
-                TimeLockButtonCell(navController)
+                ActivateCell(
+                    checked = viewModel.timeLockActivated,
+                    onChecked = { activated -> viewModel.setActivated(activated) }
+                )
+                InfoText(
+                    text = stringResource(R.string.BitcoinHodling_Description)
+                )
                 Spacer(Modifier.height(24.dp))
             }
         }
@@ -79,14 +86,17 @@ private fun ExperimentalScreen(
 }
 
 @Composable
-private fun TimeLockButtonCell(navController: NavController) {
+private fun ActivateCell(
+    checked: Boolean,
+    onChecked: (Boolean) -> Unit
+) {
     CellSingleLineLawrenceSection(
         listOf {
             Row(
                 modifier = Modifier
                     .fillMaxSize()
                     .clickable(onClick = {
-                        navController.slideFromRight(R.id.timeLockFragment)
+                        onChecked(!checked)
                     })
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -96,10 +106,9 @@ private fun TimeLockButtonCell(navController: NavController) {
                     maxLines = 1,
                 )
                 Spacer(Modifier.weight(1f))
-                Image(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_arrow_right),
-                    contentDescription = null,
+                HsSwitch(
+                    checked = checked,
+                    onCheckedChange = onChecked
                 )
             }
         }
