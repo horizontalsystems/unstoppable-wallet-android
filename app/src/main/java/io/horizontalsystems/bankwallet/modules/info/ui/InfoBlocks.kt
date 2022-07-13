@@ -1,69 +1,28 @@
 package io.horizontalsystems.bankwallet.modules.info.ui
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoH1
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoH3
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
+
+@Composable
+fun InfoHeader(
+    text: Int,
+) {
+    InfoH1(stringResource(text))
+}
 
 @Composable
 fun InfoSubHeader(
     text: Int,
-    modifier: Modifier = Modifier
 ) {
-    Spacer(Modifier.height(12.dp))
-    headline2_jacob(
-        modifier = modifier,
-        text = stringResource(text),
-    )
-    Spacer(Modifier.height(12.dp))
-}
-
-@Composable
-fun InfoBodyString(
-    text: String,
-    modifier: Modifier = Modifier
-) {
-    Spacer(Modifier.height(12.dp))
-    Text(
-        modifier = modifier,
-        text = text,
-        style = ComposeAppTheme.typography.body,
-        color = ComposeAppTheme.colors.bran
-    )
-    Spacer(Modifier.height(24.dp))
+    InfoH3(stringResource(text))
 }
 
 @Composable
 fun InfoBody(
     text: Int,
-    modifier: Modifier = Modifier
 ) {
-    InfoBodyString(stringResource(text), modifier)
-}
-
-@Composable
-fun InfoHeader(
-    text: Int,
-    modifier: Modifier = Modifier
-) {
-    Spacer(Modifier.height(5.dp))
-    Text(
-        modifier = modifier,
-        text = stringResource(text),
-        style = ComposeAppTheme.typography.title2,
-        color = ComposeAppTheme.colors.leah
-    )
-    Spacer(Modifier.height(8.dp))
-    Divider(
-        modifier = modifier,
-        thickness = 1.dp,
-        color = ComposeAppTheme.colors.grey50
-    )
-    Spacer(Modifier.height(5.dp))
+    InfoTextBody(stringResource(text))
 }

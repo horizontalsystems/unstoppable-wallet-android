@@ -20,9 +20,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoBody
@@ -49,9 +49,11 @@ class TransactionDoubleSpendInfoFragment : BaseFragment() {
             setContent {
                 ComposeAppTheme {
                     InfoScreen(
-                        requireArguments().getString(TRANSACTION_HASH)!!,
-                        requireArguments().getString(CONFLICTING_TRANSACTION_HASH)!!,
-                        findNavController()
+                        txHash = requireArguments().getString(TRANSACTION_HASH)!!,
+                        conflictingTxHash = requireArguments().getString(
+                            CONFLICTING_TRANSACTION_HASH
+                        )!!,
+                        onBackClick = { findNavController().popBackStack() }
                     )
                 }
             }
@@ -72,9 +74,9 @@ class TransactionDoubleSpendInfoFragment : BaseFragment() {
 
 @Composable
 private fun InfoScreen(
-    transactionHash: String,
-    conflictingTransactionHash: String,
-    navController: NavController
+    txHash: String,
+    conflictingTxHash: String,
+    onBackClick: () -> Unit
 ) {
 
     Surface(color = ComposeAppTheme.colors.tyler) {
@@ -84,7 +86,7 @@ private fun InfoScreen(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
-                        onClick = { navController.popBackStack() }
+                        onClick = onBackClick
                     )
                 )
             )
@@ -94,12 +96,11 @@ private fun InfoScreen(
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
-                InfoHeader(R.string.Info_DoubleSpend_Title, Modifier.padding(horizontal = 24.dp))
+                InfoHeader(R.string.Info_DoubleSpend_Title)
                 InfoBody(
                     R.string.Info_DoubleSpend_Description,
-                    Modifier.padding(horizontal = 24.dp)
                 )
-                ConflictingTransactions(transactionHash, conflictingTransactionHash)
+                ConflictingTransactions(txHash, conflictingTxHash)
                 Spacer(Modifier.height(44.dp))
             }
         }
@@ -146,5 +147,16 @@ private fun TransactionHashCell(titleRes: Int, transactionHash: String) {
                 ellipsis = Ellipsis.Middle(10)
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview_InfoScreen() {
+    ComposeAppTheme {
+        InfoScreen(
+            "jh2rnj23rnk2b3k42b2k4jb",
+            "nb3k4brk34bk34bk34bk3g"
+        ) { }
     }
 }
