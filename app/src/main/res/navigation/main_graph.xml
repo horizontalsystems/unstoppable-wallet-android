@@ -185,8 +185,7 @@
         tools:layout="@layout/fragment_confirmation_send_evm" />
     <fragment
         android:id="@+id/swapInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoFragment"
-        tools:layout="@layout/fragment_swap_info" />
+        android:name="io.horizontalsystems.bankwallet.modules.info.SwapInfoFragment" />
     <fragment
         android:id="@+id/swapSettingsMainFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsMainFragment"
