@@ -4,7 +4,6 @@
     <color name="jacob">@color/yellow_d</color>
     <color name="remus">@color/green_d</color>
     <color name="lucian">@color/red_d</color>
-    <color name="oz">@color/light</color>
     <color name="tyler">@color/dark</color>
     <color name="cassandra">@color/dark</color>
     <color name="bran">@color/light_grey</color>

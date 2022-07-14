@@ -25,7 +25,7 @@
         android:layout_marginEnd="16dp"
         android:paddingTop="12dp"
         android:paddingBottom="20dp"
-        android:textColor="@color/oz"
+        android:textColor="@color/leah"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/divider"
         tools:text="About" />

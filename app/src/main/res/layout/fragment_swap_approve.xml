@@ -63,7 +63,7 @@
                     android:background="@null"
                     android:inputType="number|numberDecimal"
                     android:maxLines="1"
-                    android:textColor="@color/oz"
+                    android:textColor="@color/leah"
                     tools:layout_editor_absoluteX="16dp"
                     tools:text="2.003434" />
 

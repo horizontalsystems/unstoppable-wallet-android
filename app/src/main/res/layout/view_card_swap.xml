@@ -24,7 +24,7 @@
         android:layout_marginStart="16dp"
         android:ellipsize="end"
         android:lines="1"
-        android:textColor="@color/oz"
+        android:textColor="@color/leah"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@id/iconCoin"
         app:layout_constraintEnd_toStartOf="@+id/selectedToken"

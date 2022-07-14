@@ -36,7 +36,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         android:includeFontPadding="false"
-        android:textColor="@color/oz"
+        android:textColor="@color/leah"
         app:layout_constraintBottom_toBottomOf="@id/backgroundView"
         app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintTop_toTopOf="@id/backgroundView"
