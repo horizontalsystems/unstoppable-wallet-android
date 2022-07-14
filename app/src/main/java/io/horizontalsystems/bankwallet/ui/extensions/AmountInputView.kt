@@ -129,7 +129,7 @@ class AmountInputView @JvmOverloads constructor(
     private fun getPrimaryTextColor(type: AmountTypeSwitchService.AmountType): Int {
         return when (type) {
             AmountTypeSwitchService.AmountType.Currency -> R.color.jacob
-            AmountTypeSwitchService.AmountType.Coin -> R.color.oz
+            AmountTypeSwitchService.AmountType.Coin -> R.color.leah
         }
     }
 
@@ -140,7 +140,7 @@ class AmountInputView @JvmOverloads constructor(
         return when {
             !switchEnabled -> R.color.grey_50
             type == AmountTypeSwitchService.AmountType.Coin -> R.color.jacob
-            else -> R.color.oz
+            else -> R.color.leah
         }
     }
 

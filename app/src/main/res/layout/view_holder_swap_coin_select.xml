@@ -37,7 +37,7 @@
         android:layout_marginStart="16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/oz"
+        android:textColor="@color/leah"
         app:layout_constraintBottom_toTopOf="@+id/coinSubtitle"
         app:layout_constraintEnd_toStartOf="@+id/coinBalance"
         app:layout_constraintStart_toEndOf="@+id/coinIcon"
@@ -64,7 +64,7 @@
     <TextView
         android:id="@+id/coinBalance"
         style="@style/Body"
-        android:textColor="@color/oz"
+        android:textColor="@color/leah"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

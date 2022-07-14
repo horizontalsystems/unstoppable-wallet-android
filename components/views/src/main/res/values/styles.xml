@@ -74,21 +74,6 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="TabComponent">
-        <item name="android:background">@drawable/tab_rounded_background</item>
-        <item name="android:textColor">@color/stateful_tab_text_color</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:minWidth">0dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">6dp</item>
-        <item name="android:paddingStart">12dp</item>
-        <item name="android:paddingEnd">12dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textAlignment">center</item>
-    </style>
-
     <style name="ButtonPrimaryGreen" parent="Button">
         <item name="android:background">@drawable/button_green_background</item>
     </style>
@@ -110,7 +95,7 @@
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">14sp</item>
         <item name="android:background">@drawable/background_important_text</item>
-        <item name="android:textColor">@color/oz</item>
+        <item name="android:textColor">@color/leah</item>
         <item name="android:paddingStart">12dp</item>
         <item name="android:paddingEnd">12dp</item>
         <item name="android:paddingTop">8dp</item>
