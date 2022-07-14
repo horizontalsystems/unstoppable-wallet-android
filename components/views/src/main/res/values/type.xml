@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Typography -->
-    <style name="Title1">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">38sp</item>
-        <item name="android:textColor">?TitleColor</item>
-    </style>
 
     <style name="Title2">
         <item name="android:fontFamily">sans-serif</item>
@@ -47,12 +41,6 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="SubheadItalic">
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textStyle">italic</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
     <style name="Subhead2">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">14sp</item>
@@ -70,11 +58,6 @@
 
     <style name="Micro">
         <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textSize">10sp</item>
-    </style>
-
-    <style name="MicroSB">
-        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">10sp</item>
     </style>
 

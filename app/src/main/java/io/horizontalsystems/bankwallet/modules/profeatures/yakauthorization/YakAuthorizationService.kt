@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bankwallet.modules.profeatures.HSProFeaturesAdapter
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
