@@ -42,8 +42,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment"/>
     <fragment
         android:id="@+id/manageAccountsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsFragment"
-        tools:layout="@layout/fragment_manage_accounts"/>
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsFragment" />
     <fragment
         android:id="@+id/manageAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment"/>
@@ -125,16 +124,13 @@
         android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.TimeLockFragment"/>
     <fragment
         android:id="@+id/metricsPageFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment"
-        tools:layout="@layout/fragment_metrics_page" />
+        android:name="io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment" />
     <fragment
         android:id="@+id/coinFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment"
-        tools:layout="@layout/fragment_coin"/>
+        android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment" />
     <fragment
         android:id="@+id/coinMajorHoldersFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment"
-        tools:layout="@layout/fragment_recyclerview" />
+        android:name="io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment" />
     <fragment
         android:id="@+id/coinTreasuriesFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment" />

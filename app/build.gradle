@@ -260,7 +260,6 @@ dependencies {
     implementation project(':components:chartview')
     implementation project(':components:keystore')
     implementation project(':components:pin')
-    implementation project(':components:seekbar')
 
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.4.0'
