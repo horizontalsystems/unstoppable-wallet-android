@@ -9,8 +9,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentSwapSettingsBinding
+import io.horizontalsystems.bankwallet.modules.info.SwapInfoFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
-import io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoModule
 import io.horizontalsystems.core.findNavController
 
 class SwapSettingsMainFragment : BaseFragment() {
@@ -42,7 +42,7 @@ class SwapSettingsMainFragment : BaseFragment() {
                 R.id.menuInfo -> {
                     findNavController().slideFromRight(
                         R.id.swapInfoFragment,
-                        SwapInfoModule.prepareParams(mainViewModel.dex)
+                        SwapInfoFragment.prepareParams(mainViewModel.dex)
                     )
                     true
                 }
