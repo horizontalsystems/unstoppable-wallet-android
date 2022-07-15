@@ -127,7 +127,11 @@
         android:name="io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment" />
     <fragment
         android:id="@+id/coinFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment" >
+        <deepLink
+            app:action="android.intent.action.VIEW"
+            app:uri="unstoppable://coin-page?uid={coinUid}" />
+    </fragment>
     <fragment
         android:id="@+id/coinMajorHoldersFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment" />
@@ -191,7 +195,11 @@
         android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"/>
     <fragment
         android:id="@+id/marketTopPlatformsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsFragment"/>
+        android:name="io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsFragment">
+        <deepLink
+            app:action="android.intent.action.VIEW"
+            app:uri="unstoppable://top-platforms?uid={platformUid}" />
+    </fragment>
     <fragment
         android:id="@+id/marketAdvancedSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersFragment"/>
@@ -245,7 +253,11 @@
         android:name="io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetFragment" />
     <fragment
         android:id="@+id/nftCollectionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment"/>
+        android:name="io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment">
+        <deepLink
+            app:action="android.intent.action.VIEW"
+            app:uri="unstoppable://nft-collection?uid={collectionUid}" />
+    </fragment>
     <fragment
         android:id="@+id/sendXFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.SendFragment" />

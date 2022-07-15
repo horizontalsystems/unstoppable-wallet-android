@@ -43,9 +43,7 @@ import java.math.BigDecimal
 
 class TopPlatformsFragment : BaseFragment() {
 
-    private val timeDuration by lazy {
-        arguments?.getParcelable<TimeDuration>(timeDurationKey)!!
-    }
+    private val timeDuration by lazy { arguments?.getParcelable<TimeDuration>(timeDurationKey) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

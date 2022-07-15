@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class TopPlatformsViewModel(
     private val service: TopPlatformsService,
-    timeDuration: TimeDuration,
+    timeDuration: TimeDuration?,
 ) : ViewModel() {
 
     private val sortingFields = listOf(
@@ -33,7 +33,7 @@ class TopPlatformsViewModel(
 
     val periodOptions = TimeDuration.values().toList()
 
-    var timePeriod = timeDuration
+    var timePeriod = timeDuration ?: TimeDuration.OneDay
         private set
 
     val timePeriodSelect = Select(timePeriod, periodOptions)
