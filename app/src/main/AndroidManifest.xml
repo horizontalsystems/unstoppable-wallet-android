@@ -91,6 +91,13 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="wc" />
             </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="unstoppable" />
+            </intent-filter>
         </activity-alias>
         <activity-alias
             android:name="${applicationId}.DarkLauncherAlias"

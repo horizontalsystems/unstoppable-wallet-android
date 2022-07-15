@@ -24,10 +24,6 @@ import io.horizontalsystems.core.findNavController
 
 class NftCollectionFragment : BaseFragment() {
 
-    private val viewModel by navGraphViewModels<NftCollectionViewModel>(R.id.nftCollectionFragment) {
-        NftCollectionModule.Factory(requireArguments().getString(collectionUidKey)!!)
-    }
-
     private var _binding: FragmentCollectionBinding? = null
     private val binding get() = _binding!!
 
@@ -60,9 +56,19 @@ class NftCollectionFragment : BaseFragment() {
         binding.viewPager.adapter = NftCollectionTabsAdapter(this.childFragmentManager, viewLifecycleOwner.lifecycle)
         binding.viewPager.isUserInputEnabled = false
 
+        val uid = activity?.intent?.data?.getQueryParameter("uid")
+        if (uid != null) {
+            activity?.intent?.data = null
+        }
+
+        val nftCollectionUid = requireArguments().getString(collectionUidKey, uid ?: "")
+        val viewModel by navGraphViewModels<NftCollectionViewModel>(R.id.nftCollectionFragment) {
+            NftCollectionModule.Factory(nftCollectionUid)
+        }
+
         viewModel.selectedTabLiveData.observe(viewLifecycleOwner) { selectedTab ->
             binding.viewPager.setCurrentItem(viewModel.tabs.indexOf(selectedTab), false)
-            setTabs(selectedTab)
+            setTabs(selectedTab, viewModel)
         }
 
         binding.tabsCompose.setViewCompositionStrategy(
@@ -70,7 +76,7 @@ class NftCollectionFragment : BaseFragment() {
         )
     }
 
-    private fun setTabs(selectedTab: NftCollectionModule.Tab) {
+    private fun setTabs(selectedTab: NftCollectionModule.Tab, viewModel: NftCollectionViewModel) {
         val tabItems = viewModel.tabs.map {
             TabItem(getString(it.titleResId), it == selectedTab, it)
         }

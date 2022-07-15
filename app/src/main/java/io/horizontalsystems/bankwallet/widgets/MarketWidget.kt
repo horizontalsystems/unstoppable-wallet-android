@@ -1,20 +1,23 @@
 package io.horizontalsystems.bankwallet.widgets
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.glance.*
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.layout.*
@@ -120,23 +123,16 @@ class MarketWidget : GlanceAppWidget() {
                             text = state.error,
                         )
                     } else {
-                        state.items.forEach {
+                        state.items.forEach { item ->
                             Box(
                                 modifier = GlanceModifier
                                     .height(60.dp)
                                     .background(ImageProvider(R.drawable.widget_list_item_background))
-                                /*.clickable(
-                                actionStartActivity<LauncherActivity>(
-                                    parameters = actionParametersOf()
-                                )
-                                actionRunCallback<OpenCoinPageAction>(
-                                    actionParametersOf(
-                                        ActionParameters.Key<String>("coinUid") to it.uid
+                                    .clickable(
+                                        actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item.uid, state.type)))
                                     )
-                                )
-                            )*/
                             ) {
-                                Item(item = it)
+                                Item(item = item)
                             }
                         }
                     }
@@ -149,6 +145,19 @@ class MarketWidget : GlanceAppWidget() {
                     )
                 }
             }
+        }
+    }
+
+    private fun getDeeplinkUri(itemUid: String, type: MarketWidgetType): Uri = when (type) {
+        MarketWidgetType.Watchlist,
+        MarketWidgetType.TopGainers -> {
+            "unstoppable://coin-page?uid=${itemUid}".toUri()
+        }
+        MarketWidgetType.TopNfts -> {
+            "unstoppable://nft-collection?uid=${itemUid}".toUri()
+        }
+        MarketWidgetType.TopPlatforms -> {
+            "unstoppable://top-platforms?uid=${itemUid}".toUri()
         }
     }
 
@@ -331,19 +340,6 @@ class MarketWidget : GlanceAppWidget() {
 
 }
 
-class RefreshAllAction : ActionCallback {
-    override suspend fun onRun(
-        context: Context,
-        glanceId: GlanceId,
-        parameters: ActionParameters
-    ) {
-        GlanceAppWidgetManager(context).getGlanceIds(MarketWidget::class.java).forEach {
-            val state = getAppWidgetState(context, MarketWidgetStateDefinition, it)
-            MarketWidgetWorker.enqueue(context = context, widgetId = state.widgetId)
-        }
-    }
-}
-
 class UpdateMarketAction : ActionCallback {
     override suspend fun onRun(
         context: Context,
@@ -357,21 +353,5 @@ class UpdateMarketAction : ActionCallback {
 
         val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
         MarketWidgetWorker.enqueue(context = context, widgetId = state.widgetId)
-    }
-}
-
-class OpenCoinPageAction : ActionCallback {
-    override suspend fun onRun(
-        context: Context,
-        glanceId: GlanceId,
-        parameters: ActionParameters
-    ) {
-//        val coinUid = parameters.get<String>(ActionParameters.Key("coinUid"))
-//        val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
-//        coinUid?.let {
-//            val arguments = CoinFragment.prepareParams(coinUid)
-//            findNavController().slideFromRight(R.id.coinFragment, arguments)
-//        }
-//        MarketWorker.enqueue(context = context, widgetId = state.widgetId)
     }
 }

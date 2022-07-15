@@ -19,6 +19,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -69,7 +70,12 @@ class CoinFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val coinUid = requireArguments().getString(COIN_UID_KEY, "")
+                val uid = activity?.intent?.data?.getQueryParameter("uid")
+                val coinUid = requireArguments().getString(COIN_UID_KEY, uid ?: "")
+                if (uid != null) {
+                    activity?.intent?.data = null
+                }
+
                 CoinScreen(
                     coinUid,
                     coinViewModel(coinUid),
