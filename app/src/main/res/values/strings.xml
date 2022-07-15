@@ -102,6 +102,8 @@
 
     <string name="Select_Coins">Choose Coins</string>
 
+    <string name="Restore_BirthdayHeight">Birthday Height</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
