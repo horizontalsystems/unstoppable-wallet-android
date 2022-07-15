@@ -1,10 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.ui.extensions.ZCashConfig
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 
@@ -13,7 +14,8 @@ class RestoreSettingsViewModel(
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val openBirthdayAlertSignal = SingleLiveEvent<Token>()
+    var openBirthdayAlertSignal by mutableStateOf<Token?>(null)
+        private set
     private var disposables = CompositeDisposable()
 
     private var currentRequest: RestoreSettingsService.Request? = null
@@ -33,12 +35,13 @@ class RestoreSettingsViewModel(
 
         when (request.requestType) {
             RestoreSettingsService.RequestType.BirthdayHeight -> {
-                openBirthdayAlertSignal.postValue(request.token)
+                openBirthdayAlertSignal = request.token
             }
         }
     }
 
     fun onEnter(zcashConfig: ZCashConfig) {
+        openBirthdayAlertSignal = null
         val request = currentRequest ?: return
 
         when (request.requestType) {
@@ -49,6 +52,7 @@ class RestoreSettingsViewModel(
     }
 
     fun onCancelEnterBirthdayHeight() {
+        openBirthdayAlertSignal = null
         val request = currentRequest ?: return
 
         service.cancel(request.token)
@@ -59,3 +63,5 @@ class RestoreSettingsViewModel(
         disposables.clear()
     }
 }
+
+data class ZCashConfig(val birthdayHeight: String?, val restoreAsNew: Boolean)

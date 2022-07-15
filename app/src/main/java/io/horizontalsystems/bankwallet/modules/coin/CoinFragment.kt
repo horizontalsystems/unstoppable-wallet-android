@@ -43,7 +43,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
-import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.CustomSnackbar
@@ -82,7 +81,8 @@ class CoinFragment : BaseFragment() {
                     authorizationViewModel,
                     manageWalletsViewModel,
                     findNavController(),
-                    childFragmentManager
+                    childFragmentManager,
+                    restoreSettingsViewModel
                 )
             }
         }
@@ -142,21 +142,6 @@ class CoinFragment : BaseFragment() {
             )
         }
 
-        restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
-            val zcashBirthdayHeightDialog = ZcashBirthdayHeightDialog()
-            zcashBirthdayHeightDialog.onEnter = {
-                restoreSettingsViewModel.onEnter(it)
-            }
-            zcashBirthdayHeightDialog.onCancel = {
-                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-            }
-
-            zcashBirthdayHeightDialog.show(
-                requireActivity().supportFragmentManager,
-                "ZcashBirthdayHeightDialog"
-            )
-        }
-
         coinTokensViewModel.openSelectorEvent.observe(viewLifecycleOwner) { config ->
             showBottomSelectorDialog(
                 config,
@@ -208,7 +193,8 @@ fun CoinScreen(
     authorizationViewModel: YakAuthorizationViewModel,
     manageWalletsViewModel: ManageWalletsViewModel,
     navController: NavController,
-    fragmentManager: FragmentManager
+    fragmentManager: FragmentManager,
+    restoreSettingsViewModel: RestoreSettingsViewModel
 ) {
     ComposeAppTheme {
         if (coinViewModel != null) {
@@ -216,6 +202,7 @@ fun CoinScreen(
         } else {
             CoinNotFound(coinUid, navController)
         }
+        ZCashBirthdayHeightDialogWrapper(restoreSettingsViewModel)
     }
 }
 

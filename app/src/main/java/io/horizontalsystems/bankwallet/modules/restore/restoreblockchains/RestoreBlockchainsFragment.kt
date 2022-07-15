@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
-import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Blockchain
 
@@ -64,6 +63,7 @@ class RestoreBlockchainsFragment : BaseFragment() {
                         findNavController(),
                         viewModel
                     )
+                    ZCashBirthdayHeightDialogWrapper(restoreSettingsViewModel)
                 }
             }
         }
@@ -83,21 +83,6 @@ class RestoreBlockchainsFragment : BaseFragment() {
                 config,
                 onSelect = { indexes -> coinSettingsViewModel.onSelect(indexes) },
                 onCancel = { coinSettingsViewModel.onCancelSelect() }
-            )
-        }
-
-        restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
-            val zcashBirthdayHeightDialog = ZcashBirthdayHeightDialog()
-            zcashBirthdayHeightDialog.onEnter = {
-                restoreSettingsViewModel.onEnter(it)
-            }
-            zcashBirthdayHeightDialog.onCancel = {
-                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-            }
-
-            zcashBirthdayHeightDialog.show(
-                requireActivity().supportFragmentManager,
-                "ZcashBirthdayHeightDialog"
             )
         }
 
