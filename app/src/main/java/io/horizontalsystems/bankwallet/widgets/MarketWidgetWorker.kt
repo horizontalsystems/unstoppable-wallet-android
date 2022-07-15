@@ -44,7 +44,6 @@ class MarketWidgetWorker(
             requestBuilder.setInputData(inputData)
 
             val uniqueWorkName = uniqueWorkName(widgetId)
-            logger.info("enqueue $uniqueWorkName")
 
             manager.enqueueUniquePeriodicWork(
                 uniqueWorkName,
@@ -55,7 +54,6 @@ class MarketWidgetWorker(
 
         fun cancel(context: Context, widgetId: Int) {
             val uniqueWorkName = uniqueWorkName(widgetId)
-            logger.info("cancel $uniqueWorkName")
 
             WorkManager.getInstance(context).cancelUniqueWork(uniqueWorkName)
         }
@@ -67,8 +65,6 @@ class MarketWidgetWorker(
         val currentTimestampMillis = System.currentTimeMillis()
         val widgetId = inputData.getInt(inputDataKeyWidgetId, 0)
         val marketRepository = App.marketWidgetRepository
-
-        logger.info("doWork widgetId: $widgetId")
 
         return try {
             for (glanceId in glanceIds) {
@@ -98,6 +94,8 @@ class MarketWidgetWorker(
 
             Result.success()
         } catch (exception: Exception) {
+            logger.info("doWork error, widgetId: $widgetId, ${exception.javaClass.simpleName}: ${exception.message}")
+
             glanceIds.forEach { glanceId ->
                 var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
 
@@ -110,8 +108,6 @@ class MarketWidgetWorker(
 
                     state = state.copy(loading = false, error = errorText)
                     setWidgetState(glanceId, state)
-
-                    logger.info("doWork error, widgetId: $widgetId, ${exception.javaClass.simpleName}: ${exception.message}")
                 }
             }
             if (runAttemptCount < 10) {
