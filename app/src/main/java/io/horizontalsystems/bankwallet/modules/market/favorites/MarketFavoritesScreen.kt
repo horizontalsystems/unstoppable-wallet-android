@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market.favorites
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -16,14 +12,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
@@ -34,40 +28,12 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
-
-class MarketFavoritesFragment : BaseFragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val viewModel by viewModels<MarketFavoritesViewModel> { MarketFavoritesModule.Factory() }
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    MarketFavoritesScreen(viewModel) { onCoinClick(it) }
-                }
-            }
-        }
-    }
-
-    private fun onCoinClick(coinUid: String) {
-        val arguments = CoinFragment.prepareParams(coinUid)
-        findNavController().slideFromRight(R.id.coinFragment, arguments)
-    }
-}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketFavoritesScreen(
-    viewModel: MarketFavoritesViewModel,
-    onCoinClick: (String) -> Unit
+    navController: NavController,
+    viewModel: MarketFavoritesViewModel = viewModel(factory = MarketFavoritesModule.Factory())
 ) {
     val viewState by viewModel.viewStateLiveData.observeAsState()
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
@@ -105,7 +71,10 @@ fun MarketFavoritesScreen(
                                 scrollToTop = scrollToTopAfterUpdate,
                                 onAddFavorite = { /*not used */ },
                                 onRemoveFavorite = { uid -> viewModel.removeFromFavorites(uid) },
-                                onCoinClick = onCoinClick,
+                                onCoinClick = { coinUid ->
+                                    val arguments = CoinFragment.prepareParams(coinUid)
+                                    navController.slideFromRight(R.id.coinFragment, arguments)
+                                },
                                 preItems = {
                                     stickyHeader {
                                         MarketFavoritesMenu(
