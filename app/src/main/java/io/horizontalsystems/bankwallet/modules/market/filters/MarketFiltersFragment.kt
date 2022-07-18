@@ -193,8 +193,7 @@ private fun BottomSheetContent(
         }
         TradingVolume -> {
             SingleSelectBottomSheetContent(
-                title = R.string.Market_Filter_Volume,
-                subtitle = stringResource(R.string.TimePeriod_24h),
+                title = R.string.Market_Filter_Volume24h,
                 headerIcon = R.drawable.ic_chart_24,
                 items = viewModel.volumeViewItemOptions,
                 selectedItem = viewModel.volume,
@@ -410,11 +409,27 @@ private fun FilterMenu(title: String?, valueColor: TextColor, onClick: () -> Uni
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        when(textColor) {
-            TextColor.Grey -> body_grey(text = valueText, overflow = TextOverflow.Ellipsis, maxLines = 1)
-            TextColor.Remus -> body_remus(text = valueText, overflow = TextOverflow.Ellipsis, maxLines = 1)
-            TextColor.Lucian -> body_lucian(text = valueText, overflow = TextOverflow.Ellipsis, maxLines = 1)
-            TextColor.Leah -> body_leah(text = valueText, overflow = TextOverflow.Ellipsis, maxLines = 1)
+        when (textColor) {
+            TextColor.Grey -> body_grey(
+                text = valueText,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            TextColor.Remus -> body_remus(
+                text = valueText,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            TextColor.Lucian -> body_lucian(
+                text = valueText,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            TextColor.Leah -> body_leah(
+                text = valueText,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
         }
         Icon(
             modifier = Modifier.padding(start = 4.dp),
@@ -429,7 +444,6 @@ private fun FilterMenu(title: String?, valueColor: TextColor, onClick: () -> Uni
 private fun <ItemClass> SingleSelectBottomSheetContent(
     title: Int,
     headerIcon: Int,
-    subtitle: String = "---------",
     items: List<FilterViewItemWrapper<ItemClass>>,
     selectedItem: FilterViewItemWrapper<ItemClass>? = null,
     onSelect: (FilterViewItemWrapper<ItemClass>) -> Unit,
@@ -438,55 +452,46 @@ private fun <ItemClass> SingleSelectBottomSheetContent(
     BottomSheetHeader(
         iconPainter = painterResource(headerIcon),
         title = stringResource(title),
-        subtitle = subtitle,
         onCloseClick = onClose,
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
     ) {
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
-        items.forEach { itemWrapper ->
-            CellMultilineLawrence(
-                borderBottom = true
+        Spacer(Modifier.height(12.dp))
+        CellSingleLineLawrenceSectionFramed(items) { itemWrapper ->
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable {
+                        onSelect(itemWrapper)
+                        onClose()
+                    }
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clickable {
-                            onSelect(itemWrapper)
-                            onClose()
-                        }
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (itemWrapper.title != null && itemWrapper.item is FilterPriceChange) {
-                        when (itemWrapper.item.color){
-                            TextColor.Lucian -> body_lucian(text = itemWrapper.title)
-                            TextColor.Remus -> body_remus(text = itemWrapper.title)
-                            TextColor.Grey -> body_grey(text = itemWrapper.title)
-                            TextColor.Leah -> body_leah(text = itemWrapper.title)
-                        }
+                if (itemWrapper.title != null && itemWrapper.item is FilterPriceChange) {
+                    when (itemWrapper.item.color) {
+                        TextColor.Lucian -> body_lucian(text = itemWrapper.title)
+                        TextColor.Remus -> body_remus(text = itemWrapper.title)
+                        TextColor.Grey -> body_grey(text = itemWrapper.title)
+                        TextColor.Leah -> body_leah(text = itemWrapper.title)
+                    }
+                } else {
+                    if (itemWrapper.title != null) {
+                        body_leah(text = itemWrapper.title)
                     } else {
-                        if (itemWrapper.title != null) {
-                            body_leah(text = itemWrapper.title)
-                        } else {
-                            body_grey(text = stringResource(R.string.Any))
-                        }
+                        body_grey(text = stringResource(R.string.Any))
                     }
-                    Spacer(modifier = Modifier.weight(1f))
-                    if (itemWrapper == selectedItem) {
-                        Image(
-                            modifier = Modifier.padding(start = 5.dp),
-                            painter = painterResource(id = R.drawable.ic_checkmark_20),
-                            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                            contentDescription = null
-                        )
-                    }
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                if (itemWrapper == selectedItem) {
+                    Image(
+                        modifier = Modifier.padding(start = 5.dp),
+                        painter = painterResource(id = R.drawable.ic_checkmark_20),
+                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                        contentDescription = null
+                    )
                 }
             }
         }
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(44.dp))
     }
 }

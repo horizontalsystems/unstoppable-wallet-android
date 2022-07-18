@@ -90,17 +90,27 @@ class SecuritySettingsFragment : BaseFragment() {
     }
 
     private fun showAppRestartAlert() {
+        val warningTitle =
+            if (torViewModel.torCheckEnabled)
+                getString(R.string.Tor_Connection_Enable)
+            else
+                getString(R.string.Tor_Connection_Disable)
+
         ConfirmationDialog.show(
             icon = R.drawable.ic_tor_connection_24,
-            title = getString(R.string.Tor_Title),
-            subtitle = getString(R.string.Tor_Connection_Title),
-            contentText = getString(R.string.SettingsSecurity_AppRestartWarning),
+            title = getString(R.string.Tor_Alert_Title),
+            warningTitle = warningTitle,
+            warningText = getString(R.string.SettingsSecurity_AppRestartWarning),
             actionButtonTitle = getString(R.string.Alert_Restart),
-            cancelButtonTitle = null, // Do not show cancel button
+            transparentButtonTitle = getString(R.string.Alert_Cancel),
             fragmentManager = childFragmentManager,
             listener = object : ConfirmationDialog.Listener {
                 override fun onActionButtonClick() {
                     torViewModel.setTorEnabled(torViewModel.torCheckEnabled)
+                }
+
+                override fun onTransparentButtonClick() {
+                    torViewModel.resetSwitch()
                 }
 
                 override fun onCancelButtonClick() {

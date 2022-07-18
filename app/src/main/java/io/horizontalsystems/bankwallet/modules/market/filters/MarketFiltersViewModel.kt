@@ -128,9 +128,22 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         priceCloseToAth = false
         priceCloseToAtl = false
         selectedBlockchains = emptyList()
-        service.filterBlockchains = emptyList()
         updateSelectedBlockchains()
+        resetService()
         refresh()
+    }
+
+    private fun resetService() {
+        service.filterMarketCap = marketCap.item?.values
+        service.filterVolume = volume.item?.values
+        service.filterPeriod = period.item
+        service.filterPriceChange = priceChange.item?.values
+        service.filterOutperformedBtcOn = outperformedBtcOn
+        service.filterOutperformedEthOn = outperformedEthOn
+        service.filterOutperformedBnbOn = outperformedBnbOn
+        service.filterPriceCloseToAth = priceCloseToAth
+        service.filterPriceCloseToAtl = priceCloseToAtl
+        service.filterBlockchains = selectedBlockchains
     }
 
     fun updateCoinList(value: FilterViewItemWrapper<CoinList>) {

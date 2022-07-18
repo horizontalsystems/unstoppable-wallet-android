@@ -23,9 +23,6 @@ class SwapMainService(
     val availableProviders: List<SwapMainModule.ISwapProvider>
         get() = providers.filter { it.supports(dex.blockchainType) }
 
-    val blockchainTitle: String
-        get() = dex.blockchain.name
-
     fun setProvider(provider: SwapMainModule.ISwapProvider) {
         if (dex.provider.id != provider.id) {
             dex = SwapMainModule.Dex(dex.blockchain, provider)

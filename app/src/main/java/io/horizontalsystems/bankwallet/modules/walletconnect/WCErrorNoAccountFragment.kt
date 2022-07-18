@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,8 +15,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -35,7 +37,9 @@ class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    WalletConnectErrorNoAccount(findNavController())
+                    WalletConnectErrorNoAccount() {
+                        findNavController().popBackStack()
+                    }
                 }
             }
         }
@@ -43,28 +47,32 @@ class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-fun WalletConnectErrorNoAccount(navController: NavController) {
+fun WalletConnectErrorNoAccount(onCloseClick: () -> Unit) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.WalletConnect_Title),
-        subtitle = stringResource(R.string.WalletConnect_Alert),
-        onCloseClick = {
-            navController.popBackStack()
-        }
+        onCloseClick = onCloseClick
     ) {
         TextImportantWarning(
-            modifier = Modifier.padding(vertical = 12.dp, horizontal = 22.dp),
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
             text = stringResource(id = R.string.WalletConnect_Error_NoWallet)
         )
         ButtonPrimaryYellow(
             modifier = Modifier
-                .padding(vertical = 16.dp, horizontal = 22.dp)
+                .padding(vertical = 20.dp, horizontal = 24.dp)
                 .fillMaxWidth(),
             title = stringResource(R.string.Button_Understand),
-            onClick = {
-                navController.popBackStack()
-            }
+            onClick = onCloseClick
         )
+        Spacer(Modifier.height(12.dp))
+    }
+}
+
+@Preview
+@Composable
+private fun WalletConnectErrorNoAccountPreview() {
+    ComposeAppTheme {
+        WalletConnectErrorNoAccount({})
     }
 }

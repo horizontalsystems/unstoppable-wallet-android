@@ -108,7 +108,6 @@ class SwapMainFragment : BaseFragment() {
 
     private fun showSwapProviderSelectorDialog() {
         val dialog = BottomSheetSwapProviderSelectDialog()
-        dialog.subtitle = mainViewModel.blockchainTitle
         dialog.items = mainViewModel.providerItems
         dialog.selectedItem = mainViewModel.selectedProviderItem
         dialog.onSelectListener = { mainViewModel.setProvider(it) }

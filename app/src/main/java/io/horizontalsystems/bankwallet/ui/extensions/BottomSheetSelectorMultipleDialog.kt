@@ -5,13 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
@@ -23,12 +25,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 class BottomSheetSelectorMultipleDialog(
     private val title: String,
-    private val subtitle: String,
     private val icon: ImageSource,
     private val items: List<BottomSheetSelectorViewItem>,
     private val selectedIndexes: List<Int>,
     private val onItemsSelected: (List<Int>) -> Unit,
     private val onCancelled: (() -> Unit)?,
+    private val warningTitle: String?,
     private val warning: String?,
     private val notifyUnchanged: Boolean
 ) : BaseComposableBottomSheetFragment() {
@@ -51,7 +53,6 @@ class BottomSheetSelectorMultipleDialog(
                     BottomSheetHeader(
                         iconPainter = icon.painter(),
                         title = title,
-                        subtitle = subtitle,
                         onCloseClick = { close() }
                     ) {
                         BottomSheetContent()
@@ -63,58 +64,59 @@ class BottomSheetSelectorMultipleDialog(
 
     @Composable
     private fun BottomSheetContent() {
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
+
         warning?.let {
             TextImportantWarning(
-                modifier = Modifier.padding(horizontal = 21.dp, vertical = 12.dp),
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                title = warningTitle,
                 text = it
             )
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
-            )
         }
-        items.forEachIndexed { index, item ->
-            CellMultilineLawrence(borderBottom = true) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clickable {
-                            if (selected.contains(index)) {
-                                selected.remove(index)
-                            } else {
-                                selected.add(index)
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
+        ) {
+            items.forEachIndexed { index, item ->
+                CellMultilineLawrence(borderTop = index != 0) {
+                    CellMultilineLawrence(borderBottom = true) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clickable {
+                                    if (selected.contains(index)) {
+                                        selected.remove(index)
+                                    } else {
+                                        selected.add(index)
+                                    }
+                                }
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                body_leah(text = item.title)
+                                subhead2_grey(text = item.subtitle)
                             }
+                            Spacer(modifier = Modifier.weight(1f))
+                            HsSwitch(
+                                modifier = Modifier.padding(start = 5.dp),
+                                checked = selected.contains(index),
+                                onCheckedChange = { checked ->
+                                    if (checked) {
+                                        selected.add(index)
+                                    } else {
+                                        selected.remove(index)
+                                    }
+                                },
+                            )
                         }
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        body_leah(text = item.title)
-                        subhead2_grey(text = item.subtitle)
                     }
-                    Spacer(modifier = Modifier.weight(1f))
-                    HsSwitch(
-                        modifier = Modifier.padding(start = 5.dp),
-                        checked = selected.contains(index),
-                        onCheckedChange = { checked ->
-                            if (checked) {
-                                selected.add(index)
-                            } else {
-                                selected.remove(index)
-                            }
-                        },
-                    )
                 }
             }
         }
         ButtonPrimaryYellow(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 32.dp),
             title = getString(R.string.Button_Done),
             onClick = {
                 if (notifyUnchanged || !equals(selectedIndexes, selected)) {
@@ -144,23 +146,23 @@ class BottomSheetSelectorMultipleDialog(
         fun show(
             fragmentManager: FragmentManager,
             title: String,
-            subtitle: String,
             icon: ImageSource,
             items: List<BottomSheetSelectorViewItem>,
             selected: List<Int>,
             onItemSelected: (List<Int>) -> Unit,
             onCancelled: (() -> Unit)? = null,
+            warningTitle: String? = null,
             warning: String? = null,
             notifyUnchanged: Boolean = false
         ) {
             BottomSheetSelectorMultipleDialog(
                 title,
-                subtitle,
                 icon,
                 items,
                 selected,
                 onItemSelected,
                 onCancelled,
+                warningTitle,
                 warning,
                 notifyUnchanged
             )
@@ -171,9 +173,11 @@ class BottomSheetSelectorMultipleDialog(
     data class Config(
         val icon: ImageSource,
         val title: String,
-        val subtitle: String,
         val selectedIndexes: List<Int>,
         val viewItems: List<BottomSheetSelectorViewItem>,
-        val description: String
+        val descriptionTitle: String?,
+        val description: String,
     )
 }
+
+data class BottomSheetSelectorViewItem(val title: String, val subtitle: String)

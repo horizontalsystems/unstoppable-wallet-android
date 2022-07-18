@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -15,8 +14,8 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -40,7 +39,10 @@ class ProUsersActivateDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    ProUsersActivateScreen(findNavController(), authorizationViewModel)
+                    ProUsersActivateScreen(
+                        { findNavController().popBackStack() },
+                        { authorizationViewModel.onActivateClick() }
+                    )
                 }
             }
         }
@@ -49,23 +51,18 @@ class ProUsersActivateDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-private fun ProUsersActivateScreen(navController: NavController, viewModel: YakAuthorizationViewModel) {
+private fun ProUsersActivateScreen(
+    onCloseClick: () -> Unit,
+    onActivateClick: () -> Unit
+) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_pro_user),
         title = stringResource(R.string.ProUsersActivate_Title),
-        subtitle = "",
-        onCloseClick = {
-            navController.popBackStack()
-        }
+        onCloseClick = onCloseClick
     ) {
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
 
         Box(
-            modifier = Modifier.fillMaxWidth().padding(all = 16.dp)
+            modifier = Modifier.fillMaxWidth().padding(start = 32.dp, top = 12.dp, end = 32.dp)
         ) {
             subhead2_grey(
                 text = stringResource(R.string.ProUsersActivate_Description),
@@ -75,13 +72,23 @@ private fun ProUsersActivateScreen(navController: NavController, viewModel: YakA
 
         ButtonPrimaryYellow(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(horizontal = 24.dp, vertical = 32.dp)
                 .fillMaxWidth(),
             title = stringResource(R.string.Hud_Text_Activate),
             onClick = {
-                viewModel.onActivateClick()
-                navController.popBackStack()
+                onActivateClick()
+                onCloseClick()
             }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ProUsersActivateScreenPreview() {
+    ComposeAppTheme {
+        ProUsersActivateScreen(
+            {}, {}
         )
     }
 }

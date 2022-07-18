@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
@@ -14,7 +13,7 @@ fun HeaderText(text: String) {
     Header {
         subhead1_grey(
             text = text,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 32.dp)
         )
     }
 }
@@ -28,8 +27,7 @@ fun Header(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(44.dp)
-            .background(ComposeAppTheme.colors.tyler)
+            .height(32.dp)
     ) {
         if (borderTop) {
             Divider(

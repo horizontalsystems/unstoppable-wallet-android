@@ -150,7 +150,8 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
         onSelectListener: (account: Account) -> Unit
     ) {
         val dialog = BottomSheetWalletSelectDialog()
-        dialog.items = items
+        dialog.wallets = items.filter { !it.isWatchAccount }
+        dialog.watchingAddresses = items.filter { it.isWatchAccount }
         dialog.selectedItem = selectedItem
         dialog.onSelectListener = { onSelectListener(it) }
 

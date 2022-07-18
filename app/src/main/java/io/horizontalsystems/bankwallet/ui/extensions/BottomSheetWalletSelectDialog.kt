@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,14 +18,12 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrence
-import io.horizontalsystems.bankwallet.ui.compose.components.HsRadioButton
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
 
-    var items: List<Account>? = null
+    var wallets: List<Account> = emptyList()
+    var watchingAddresses: List<Account> = emptyList()
     var selectedItem: Account? = null
     var onSelectListener: ((Account) -> Unit)? = null
 
@@ -49,56 +46,71 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
 
     @Composable
     private fun BottomSheetScreen() {
+        val comparator = compareBy<Account> { it.name.lowercase() }
+
         BottomSheetHeader(
-            iconPainter = painterResource(R.drawable.ic_wallet_24),
+            iconPainter = painterResource(R.drawable.icon_24_lock_jacob),
             title = stringResource(R.string.ManageAccount_SwitchWallet_Title),
-            subtitle = stringResource(R.string.ManageAccount_SwitchWallet_Subtitle),
             onCloseClick = { close() },
         ) {
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
-            )
-            val comparator = compareBy<Account> { it.isWatchAccount }.thenBy { it.name.lowercase() }
-            items?.sortedWith(comparator)?.forEach { item ->
-                CellMultilineLawrence(
-                    borderBottom = true
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clickable {
-                                onSelectListener?.invoke(item)
-                                dismiss()
-                            }
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        HsRadioButton(
-                            selected = item == selectedItem,
-                            onClick = {
-                                onSelectListener?.invoke(item)
-                                dismiss()
-                            }
-                        )
-                        Spacer(Modifier.width(16.dp))
-                        Column(Modifier.weight(1f)) {
-                            body_leah(text = item.name)
-                            subhead2_grey(text = item.type.description)
-                        }
-                        if (item.isWatchAccount) {
-                            Icon(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                painter = painterResource(id = R.drawable.ic_eye_20),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.grey
-                            )
-                        }
+
+            Spacer(Modifier.height(12.dp))
+
+            if (wallets.isNotEmpty()) {
+                HeaderText(
+                    text = stringResource(R.string.ManageAccount_Wallets).uppercase()
+                )
+                Section(wallets.sortedWith(comparator))
+            }
+
+            if (watchingAddresses.isNotEmpty()) {
+                if (wallets.isNotEmpty()) {
+                    Spacer(Modifier.height(24.dp))
+                }
+                HeaderText(
+                    text = stringResource(R.string.ManageAccount_WatchAddresses).uppercase()
+                )
+                Section(watchingAddresses.sortedWith(comparator))
+            }
+
+            Spacer(Modifier.height(44.dp))
+        }
+    }
+
+    @Composable
+    private fun Section(items: List<Account>) {
+        CellMultilineLawrenceSectionFramed(items) { item ->
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable {
+                        onSelectListener?.invoke(item)
+                        dismiss()
                     }
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                HsRadioButton(
+                    selected = item == selectedItem,
+                    onClick = {
+                        onSelectListener?.invoke(item)
+                        dismiss()
+                    }
+                )
+                Spacer(Modifier.width(16.dp))
+                Column(Modifier.weight(1f)) {
+                    body_leah(text = item.name)
+                    subhead2_grey(text = item.type.description)
+                }
+                if (item.isWatchAccount) {
+                    Icon(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        painter = painterResource(id = R.drawable.ic_eye_20),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.grey
+                    )
                 }
             }
-            Spacer(Modifier.height(16.dp))
         }
     }
 

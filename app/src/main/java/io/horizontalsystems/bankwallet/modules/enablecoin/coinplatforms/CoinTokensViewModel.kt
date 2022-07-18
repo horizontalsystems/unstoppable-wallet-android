@@ -30,8 +30,8 @@ class CoinTokensViewModel(
         val fullCoin = request.fullCoin
         val config = BottomSheetSelectorMultipleDialog.Config(
             icon = ImageSource.Remote(fullCoin.coin.iconUrl, fullCoin.iconPlaceholder),
-            title = Translator.getString(R.string.CoinPlatformsSelector_Title),
-            subtitle = fullCoin.coin.name,
+            title = fullCoin.coin.name,
+            descriptionTitle = Translator.getString(R.string.CoinPlatformsSelector_Title),
             description = Translator.getString(R.string.CoinPlatformsSelector_Description),
             selectedIndexes = request.currentTokens.map { fullCoin.supportedTokens.indexOf(it) },
             viewItems = fullCoin.supportedTokens.map { token ->

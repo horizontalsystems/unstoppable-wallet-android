@@ -56,7 +56,6 @@ class ProChartFragment : BaseComposableBottomSheetFragment() {
                     BottomSheetHeader(
                         iconPainter = painterResource(R.drawable.ic_chart_24),
                         title = title,
-                        subtitle = getString(R.string.MarketGlobalMetrics_Chart),
                         onCloseClick = { close() }
                     ) {
                         MetricChartScreen(

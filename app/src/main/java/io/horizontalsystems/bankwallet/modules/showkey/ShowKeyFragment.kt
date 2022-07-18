@@ -74,17 +74,17 @@ class ShowKeyFragment : BaseFragment() {
     private fun showPrivateKeyCopyWarning(key: String) {
         ConfirmationDialog.show(
             title = getString(R.string.ShowKey_PrivateKeyCopyWarning_Title),
-            subtitle = getString(R.string.ShowKey_PrivateKeyCopyWarning_Subtitle),
-            contentText = getString(R.string.ShowKey_PrivateKeyCopyWarning_Text),
-            destructiveButtonTitle = getString(R.string.ShowKey_PrivateKeyCopyWarning_Proceed),
-            actionButtonTitle = null,
-            cancelButtonTitle = null,
+            warningTitle = getString(R.string.ShowKey_PrivateKeyCopyWarning_Subtitle),
+            warningText = getString(R.string.ShowKey_PrivateKeyCopyWarning_Text),
+            actionButtonTitle = getString(R.string.Alert_Ok),
+            transparentButtonTitle = getString(R.string.ShowKey_PrivateKeyCopyWarning_Proceed),
             fragmentManager = childFragmentManager,
             listener = object : ConfirmationDialog.Listener {
-                override fun onDestructiveButtonClick() {
+                override fun onTransparentButtonClick() {
                     TextHelper.copyText(key)
                     HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
                 }
+
             }
         )
     }
