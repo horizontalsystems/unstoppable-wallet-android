@@ -78,6 +78,8 @@
     <string name="Restore_Name">نام (اختیاری)</string>
     <string name="Restore_Key">کلید</string>
     <string name="Select_Coins">سکه ها را انتخاب کنید</string>
+    <string name="Restore_BirthdayHeight">Birthday Height</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">اگر ارتفاع تولد کیف پول خود را می دانید برای همگام سازی سریع آن را وارد کنید.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
