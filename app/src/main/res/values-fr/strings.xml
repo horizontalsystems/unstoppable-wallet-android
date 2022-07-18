@@ -78,6 +78,8 @@
     <string name="Restore_Name">Nom (optionnel)</string>
     <string name="Restore_Key">Clé</string>
     <string name="Select_Coins">Crypto Monnaie</string>
+    <string name="Restore_BirthdayHeight">Birthday Height</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Si vous connaissez la hauteur anniversaire de votre portefeuille, saisissez-la pour accélérer la synchronisation.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
