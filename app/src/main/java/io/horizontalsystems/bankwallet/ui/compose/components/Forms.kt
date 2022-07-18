@@ -107,7 +107,7 @@ fun FormsInput(
                     .onFocusChanged {
                         onChangeFocus?.invoke(it.isFocused)
                     }
-                    .padding(12.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
                     .weight(1f),
                 enabled = enabled,
                 value = textState,
@@ -173,7 +173,7 @@ fun FormsInput(
 
             if (textState.text.isNotEmpty()) {
                 ButtonSecondaryCircle(
-                    modifier = Modifier.padding(end = 8.dp),
+                    modifier = Modifier.padding(end = 16.dp),
                     icon = R.drawable.ic_delete_20,
                     onClick = {
                         val text = textPreprocessor.process("")
@@ -194,7 +194,7 @@ fun FormsInput(
                     }
 
                     ButtonSecondaryCircle(
-                        modifier = Modifier.padding(end = 8.dp),
+                        modifier = Modifier.padding(end = if(pasteEnabled) 8.dp else 16.dp),
                         icon = R.drawable.ic_qr_scan_20,
                         onClick = {
                             qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
@@ -205,7 +205,7 @@ fun FormsInput(
                 if (pasteEnabled) {
                     val clipboardManager = LocalClipboardManager.current
                     ButtonSecondaryDefault(
-                        modifier = Modifier.padding(end = 8.dp),
+                        modifier = Modifier.padding(end = 16.dp),
                         title = stringResource(id = R.string.Send_Button_Paste),
                         onClick = {
                             clipboardManager.getText()?.text?.let { textInClipboard ->
