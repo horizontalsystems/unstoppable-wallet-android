@@ -124,7 +124,7 @@ private fun AddTokenScreen(
 
                 val tokens = uiState.tokens
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 AnimatedVisibility(tokens.isNotEmpty()) {
                     Column {

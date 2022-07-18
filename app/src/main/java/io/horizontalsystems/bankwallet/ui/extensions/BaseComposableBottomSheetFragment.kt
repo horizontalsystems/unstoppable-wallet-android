@@ -73,7 +73,7 @@ fun BottomSheetHeader(
         Box(Modifier.height(60.dp)){
             Row(
                 modifier = Modifier
-                    .padding(start = 24.dp, top = 24.dp, end = 24.dp)
+                    .padding(start = 32.dp, top = 24.dp, end = 32.dp)
                     .height(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -112,10 +112,11 @@ fun BottomSheetHeader(
 @Preview
 @Composable
 private fun BottomSheetHeader_Preview() {
-    val iconPainter = painterResource(R.drawable.icon_24_lock_jacob)
+    val iconPainter = painterResource(R.drawable.icon_24_lock)
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = iconPainter,
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = stringResource(R.string.ManageAccount_SwitchWallet_Title),
             onCloseClick = {  },
         ){

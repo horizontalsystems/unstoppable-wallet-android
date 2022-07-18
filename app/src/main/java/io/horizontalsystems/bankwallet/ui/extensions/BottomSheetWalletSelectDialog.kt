@@ -10,6 +10,7 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -49,7 +50,8 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
         val comparator = compareBy<Account> { it.name.lowercase() }
 
         BottomSheetHeader(
-            iconPainter = painterResource(R.drawable.icon_24_lock_jacob),
+            iconPainter = painterResource(R.drawable.icon_24_lock),
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = stringResource(R.string.ManageAccount_SwitchWallet_Title),
             onCloseClick = { close() },
         ) {
