@@ -78,6 +78,8 @@
     <string name="Restore_Name">이름 (선택 사항)</string>
     <string name="Restore_Key">키</string>
     <string name="Select_Coins">코인 선택하기</string>
+    <string name="Restore_BirthdayHeight">Birthday Height</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">지갑의 생일 높이를 알고 있다면 빠른 동기화를 위해 입력하십시오.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
