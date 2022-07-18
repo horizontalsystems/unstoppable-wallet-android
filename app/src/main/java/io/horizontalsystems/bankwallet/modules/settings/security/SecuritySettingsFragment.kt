@@ -45,7 +45,6 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
-import io.horizontalsystems.views.AlertDialogFragment
 import kotlin.system.exitProcess
 
 class SecuritySettingsFragment : BaseFragment() {
@@ -80,7 +79,6 @@ class SecuritySettingsFragment : BaseFragment() {
                         blockchainSettingsViewModel = blockchainSettingsViewModel,
                         navController = findNavController(),
                         showAppRestartAlert = { showAppRestartAlert() },
-                        showNotificationsNotEnabledAlert = { showNotificationsNotEnabledAlert() },
                         restartApp = { restartApp() },
                         subscribeForPinResult = { subscribeFragmentResult() },
                     )
@@ -120,29 +118,6 @@ class SecuritySettingsFragment : BaseFragment() {
         )
     }
 
-    private fun showNotificationsNotEnabledAlert() {
-        AlertDialogFragment.newInstance(
-            descriptionString = getString(R.string.SettingsSecurity_NotificationsDisabledWarning),
-            buttonText = R.string.Button_Enable,
-            cancelButtonText = R.string.Alert_Cancel,
-            cancelable = true,
-            listener = object : AlertDialogFragment.Listener {
-                override fun onButtonClick() {
-                    openAppNotificationSettings()
-                }
-
-                override fun onCancel() {}
-
-            }).show(childFragmentManager, "alert_dialog_notification")
-    }
-
-    private fun openAppNotificationSettings() {
-        val intent = Intent()
-        intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-        intent.putExtra("android.provider.extra.APP_PACKAGE", context?.packageName)
-        startActivity(intent)
-    }
-
     private fun restartApp() {
         activity?.let {
             MainModule.startAsNewTask(it)
@@ -177,7 +152,6 @@ private fun SecurityCenterScreen(
     blockchainSettingsViewModel: BlockchainSettingsViewModel,
     navController: NavController,
     showAppRestartAlert: () -> Unit,
-    showNotificationsNotEnabledAlert: () -> Unit,
     restartApp: () -> Unit,
     subscribeForPinResult: () -> Unit,
 ) {
@@ -220,7 +194,6 @@ private fun SecurityCenterScreen(
                     TorBlock(
                         torViewModel,
                         showAppRestartAlert,
-                        showNotificationsNotEnabledAlert,
                     )
                 }
 

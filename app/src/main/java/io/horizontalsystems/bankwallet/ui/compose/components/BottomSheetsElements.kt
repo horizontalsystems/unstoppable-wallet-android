@@ -18,7 +18,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun BottomSheetsElementsButtons(onClickDone: () -> Unit) {
+fun BottomSheetsElementsButtons(
+    buttonText: String = stringResource(R.string.Button_Done),
+    onClickDone: () -> Unit
+) {
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -30,7 +33,7 @@ fun BottomSheetsElementsButtons(onClickDone: () -> Unit) {
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            title = stringResource(R.string.Button_Done),
+            title = buttonText,
             onClick = onClickDone
         )
     }
