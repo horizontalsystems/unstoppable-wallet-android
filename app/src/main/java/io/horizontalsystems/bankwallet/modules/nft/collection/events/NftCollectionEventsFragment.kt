@@ -95,7 +95,7 @@ private fun NftEvents(
     val viewItem = viewModel.viewItem ?: return
 
     Column {
-        Header(borderBottom = true) {
+        HeaderSorting(borderBottom = true) {
             Box(modifier = Modifier.weight(1f)) {
                 SortMenu(viewItem.eventTypeSelect.selected.title) {
                     viewModel.onClickEventType()

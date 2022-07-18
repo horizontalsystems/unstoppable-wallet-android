@@ -160,7 +160,7 @@ class CoinTreasuriesFragment : BaseFragment() {
         onClickTreasuryTypeSelector: () -> Unit,
         onToggleSortType: () -> Unit
     ) {
-        Header(borderTop = true, borderBottom = true) {
+        HeaderSorting(borderTop = true, borderBottom = true) {
             Box(modifier = Modifier.weight(1f)) {
                 SortMenu(treasuryTypeSelect.selected.title, onClickTreasuryTypeSelector)
             }

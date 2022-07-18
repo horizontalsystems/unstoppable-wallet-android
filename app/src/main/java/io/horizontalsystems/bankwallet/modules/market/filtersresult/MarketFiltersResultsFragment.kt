@@ -158,7 +158,7 @@ private fun SearchResultsScreen(
 private fun ListHeaderMenu(
     viewModel: MarketFiltersResultViewModel,
 ) {
-    Header(borderTop = true, borderBottom = true) {
+    HeaderSorting(borderTop = true, borderBottom = true) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

@@ -92,7 +92,7 @@ fun CoinMarketsMenu(
     var sortingType by remember { mutableStateOf(menuSorting) }
     var volumeType by remember { mutableStateOf(menuVolumeType) }
 
-    Header(borderTop = true, borderBottom = true) {
+    HeaderSorting(borderTop = true, borderBottom = true) {
         ButtonSecondaryCircle(
             modifier = Modifier
                 .padding(start = 16.dp),

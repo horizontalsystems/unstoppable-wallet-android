@@ -279,7 +279,7 @@ fun CardsGrid(
 
     LazyColumn {
         item {
-            Header(borderTop = true) {
+            HeaderSorting(borderTop = true) {
                 ButtonSecondaryCircle(
                     modifier = Modifier
                         .padding(start = 16.dp),
