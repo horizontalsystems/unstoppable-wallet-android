@@ -184,7 +184,7 @@ class TvlFragment : BaseFragment() {
         onToggleSortType: () -> Unit,
         onToggleTvlDiffType: () -> Unit
     ) {
-        Header(borderBottom = true) {
+        HeaderSorting(borderBottom = true) {
             Box(modifier = Modifier.weight(1f)) {
                 SortMenu(chainSelect.selected.title) {
                     onClickChainSelector()

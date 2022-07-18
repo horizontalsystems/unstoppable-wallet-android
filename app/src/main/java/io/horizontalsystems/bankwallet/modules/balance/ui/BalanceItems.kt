@@ -78,7 +78,7 @@ fun BalanceItems(
             }
         }
 
-        Header(borderTop = true) {
+        HeaderSorting(borderTop = true) {
             var showSortTypeSelectorDialog by remember { mutableStateOf(false) }
 
             ButtonSecondaryTransparent(

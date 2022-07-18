@@ -96,7 +96,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
             )
 
             Column {
-                Header {
+                HeaderSorting {
                     subhead1_grey(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         text = stringResource(id = R.string.ManageAccount_Name),

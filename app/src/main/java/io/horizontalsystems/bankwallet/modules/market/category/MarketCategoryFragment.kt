@@ -137,7 +137,7 @@ fun CategoryScreen(
                                         }
                                         menu?.let {
                                             stickyHeader {
-                                                Header(borderTop = true, borderBottom = true) {
+                                                HeaderSorting(borderTop = true, borderBottom = true) {
                                                     Box(modifier = Modifier.weight(1f)) {
                                                         SortMenu(
                                                             it.sortingFieldSelect.selected.titleResId,

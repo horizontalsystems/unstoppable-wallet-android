@@ -131,7 +131,7 @@ fun TopPlatformsScreen(
                                                     mutableStateOf(viewModel.timePeriodSelect)
                                                 }
 
-                                                Header(borderTop = true, borderBottom = true) {
+                                                HeaderSorting(borderTop = true, borderBottom = true) {
                                                     SortMenu(
                                                         viewModel.sortingSelect.selected.titleResId,
                                                         viewModel::showSelectorMenu

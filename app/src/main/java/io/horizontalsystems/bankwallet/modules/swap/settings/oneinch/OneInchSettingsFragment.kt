@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFra
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.Header
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
@@ -97,7 +97,7 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
                 App.marketKit.token(tokenQuery)?.let { token ->
                     Column {
                         Spacer(modifier = Modifier.height(12.dp))
-                        Header {
+                        HeaderSorting {
                             subhead1_grey(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 text = stringResource(R.string.SwapSettings_RecipientAddressTitle),

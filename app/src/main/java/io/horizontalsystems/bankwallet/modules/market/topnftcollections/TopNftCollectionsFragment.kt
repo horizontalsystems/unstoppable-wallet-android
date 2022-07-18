@@ -135,7 +135,7 @@ fun TopNftCollectionsScreen(
                                         }
 
                                         stickyHeader {
-                                            Header(borderTop = true, borderBottom = true) {
+                                            HeaderSorting(borderTop = true, borderBottom = true) {
                                                 SortMenu(menu.sortingFieldSelect.selected.title) {
                                                     viewModel.onClickSortingFieldMenu()
                                                 }

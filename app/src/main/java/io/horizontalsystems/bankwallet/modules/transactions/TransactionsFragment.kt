@@ -244,11 +244,8 @@ private fun getBottomReachedUid(transactionsMap: Map<String, List<TransactionVie
 
 @Composable
 fun DateHeader(dateHeader: String) {
-    Header(borderTop = false, borderBottom = true) {
+    HeaderStick(borderTop = false, borderBottom = true) {
         subhead1_grey(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .background(ComposeAppTheme.colors.tyler),
             text = dateHeader,
             maxLines = 1,
         )

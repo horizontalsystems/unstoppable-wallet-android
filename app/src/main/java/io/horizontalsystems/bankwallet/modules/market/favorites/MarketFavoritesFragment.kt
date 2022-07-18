@@ -150,7 +150,7 @@ fun MarketFavoritesMenu(
     onSelectMarketField: (MarketField) -> Unit
 ) {
 
-    Header(borderTop = true, borderBottom = true) {
+    HeaderSorting(borderTop = true, borderBottom = true) {
         Box(modifier = Modifier.weight(1f)) {
             SortMenu(sortingFieldSelect.selected.title, onClickSortingField)
         }
