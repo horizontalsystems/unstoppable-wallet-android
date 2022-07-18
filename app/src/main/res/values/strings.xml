@@ -181,6 +181,7 @@
     <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
     <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Volume24h">Trading Volume (24h)</string>
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
@@ -464,7 +465,7 @@
     <string name="Swap_MaximumPaid">Maximum Amount</string>
     <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <string name="Swap_PoweredBy">Powered by</string>
-    <string name="Swap_SelectSwapProvider_Title">Swap Service</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
@@ -868,7 +869,9 @@
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <string name="ManageAccount_NWords">%s words</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
-    <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
+    <string name="ManageAccount_SwitchWallet_Title">Switcher</string>
+    <string name="ManageAccount_Wallets">Wallets</string>
+    <string name="ManageAccount_WatchAddresses">Watch Addresses</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <string name="ManageAccount_DeleteWarning">Do you want to stop watching this wallet address?</string>
 
@@ -977,6 +980,9 @@
 
     <string name="Tor_Title" translatable="false">Tor</string>
     <string name="Tor_Connection_Title">Connection</string>
+    <string name="Tor_Connection_Enable">Enable Tor</string>
+    <string name="Tor_Connection_Disable">Disable Tor</string>
+    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Starting Tor...</string>
     <string name="Tor_Status_Error">Error starting Tor !</string>
     <string name="TorPage_Connecting">Connecting…</string>
@@ -1215,6 +1221,7 @@
     <string name="ReleaseNotes_FollowUs">Follow Us</string>
     <string name="CoinPage_Chart_Locked">Locked</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
     <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>

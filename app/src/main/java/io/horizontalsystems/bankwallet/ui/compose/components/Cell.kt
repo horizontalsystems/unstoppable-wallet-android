@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -60,6 +61,25 @@ fun <T> CellMultilineLawrenceSection(
 }
 
 @Composable
+fun <T> CellMultilineLawrenceSectionFramed(
+    items: Iterable<T>,
+    itemContent: @Composable (T) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
+    ) {
+        items.forEachIndexed { index, marketDataLine ->
+            CellMultilineLawrence(borderTop = index != 0) {
+                itemContent(marketDataLine)
+            }
+        }
+    }
+}
+
+@Composable
 fun CellMultilineLawrence(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
@@ -100,6 +120,26 @@ fun <T> CellSingleLineLawrenceSection(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(12.dp))
+    ) {
+        items.forEachIndexed { index, marketDataLine ->
+            CellSingleLineLawrence(borderTop = index != 0) {
+                itemContent(marketDataLine)
+            }
+        }
+    }
+
+}
+
+@Composable
+fun <T> CellSingleLineLawrenceSectionFramed(
+    items: List<T>,
+    itemContent: @Composable (T) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
     ) {
         items.forEachIndexed { index, marketDataLine ->
             CellSingleLineLawrence(borderTop = index != 0) {

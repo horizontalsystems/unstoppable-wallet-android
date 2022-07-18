@@ -103,13 +103,13 @@ class RestoreBlockchainsFragment : BaseFragment() {
         BottomSheetSelectorMultipleDialog.show(
             fragmentManager = childFragmentManager,
             title = config.title,
-            subtitle = config.subtitle,
             icon = config.icon,
             items = config.viewItems,
             selected = config.selectedIndexes,
             notifyUnchanged = true,
             onItemSelected = { onSelect(it) },
             onCancelled = { onCancel() },
+            warningTitle = config.descriptionTitle,
             warning = config.description
         )
     }

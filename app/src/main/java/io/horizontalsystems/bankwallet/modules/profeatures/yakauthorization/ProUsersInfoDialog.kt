@@ -4,11 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -59,29 +55,18 @@ class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
 private fun ProUsersInfoScreen(navController: NavController, features: List<String>) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_pro_user),
-        title = stringResource(R.string.ProUsersInfo_Title),
-        subtitle = stringResource(R.string.ProUsersInfo_SubTitle),
+        title = stringResource(R.string.ProUsersInfo_UnstoppablePass),
         onCloseClick = {
             navController.popBackStack()
         }
     ) {
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
 
         TextImportantWarning(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
             text = stringResource(R.string.ProUsersInfo_Description)
         )
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
 
-        features.forEach { feature ->
+        CellSingleLineLawrenceSectionFramed(features) { feature ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -105,17 +90,12 @@ private fun ProUsersInfoScreen(navController: NavController, features: List<Stri
                     )
                 }
             }
-
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
-            )
         }
 
+        Spacer(Modifier.height(44.dp))
         ButtonPrimaryYellow(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(horizontal = 24.dp)
                 .fillMaxWidth(),
             title = stringResource(R.string.Hud_Text_LearnMore),
             onClick = {
@@ -123,14 +103,15 @@ private fun ProUsersInfoScreen(navController: NavController, features: List<Stri
             }
         )
 
-        ButtonPrimaryDefault(
+        ButtonPrimaryTransparent(
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                .padding(start = 24.dp, end = 24.dp, top = 12.dp)
                 .fillMaxWidth(),
             title = stringResource(R.string.Button_Cancel),
             onClick = {
                 navController.popBackStack()
             }
         )
+        Spacer(Modifier.height(32.dp))
     }
 }

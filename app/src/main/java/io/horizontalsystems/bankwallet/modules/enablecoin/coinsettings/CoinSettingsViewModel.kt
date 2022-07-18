@@ -58,8 +58,7 @@ class CoinSettingsViewModel(
     ): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
             icon = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
-            title = Translator.getString(R.string.AddressFormatSettings_Title),
-            subtitle = token.coin.name,
+            title = token.coin.name,
             selectedIndexes = current.map { allDerivations.indexOf(it) }.filter { it > -1 },
             viewItems = allDerivations.map { derivation ->
                 BottomSheetSelectorViewItem(
@@ -67,6 +66,7 @@ class CoinSettingsViewModel(
                     subtitle = derivation.description
                 )
             },
+            descriptionTitle = Translator.getString(R.string.AddressFormatSettings_Title),
             description = Translator.getString(R.string.AddressFormatSettings_Description, token.coin.name)
         )
     }
@@ -78,8 +78,7 @@ class CoinSettingsViewModel(
     ): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
             icon = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
-            title = Translator.getString(R.string.AddressFormatSettings_Title),
-            subtitle = token.coin.name,
+            title = token.coin.name,
             selectedIndexes = current.map { types.indexOf(it) }.filter { it > -1 },
             viewItems = types.map { type ->
                 BottomSheetSelectorViewItem(
@@ -87,6 +86,7 @@ class CoinSettingsViewModel(
                     subtitle = Translator.getString(type.description)
                 )
             },
+            descriptionTitle = Translator.getString(R.string.AddressFormatSettings_Title),
             description = Translator.getString(R.string.AddressFormatSettings_Description, token.coin.name)
         )
     }

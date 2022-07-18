@@ -18,7 +18,7 @@ fun InfoText(text: String) {
 @Composable
 fun InfoTextBody(text: String) {
     Text(
-        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+        modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp),
         text = text,
         style = ComposeAppTheme.typography.body,
         color = ComposeAppTheme.colors.bran

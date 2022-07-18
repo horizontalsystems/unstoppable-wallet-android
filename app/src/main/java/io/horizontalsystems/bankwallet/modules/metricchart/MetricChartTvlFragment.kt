@@ -41,7 +41,6 @@ class MetricChartTvlFragment : BaseComposableBottomSheetFragment() {
                     BottomSheetHeader(
                         iconPainter = painterResource(R.drawable.ic_chart_24),
                         title = getString(R.string.CoinPage_Tvl),
-                        subtitle = getString(R.string.MarketGlobalMetrics_Chart),
                         onCloseClick = { close() }
                     ) {
                         MetricChartScreen(
