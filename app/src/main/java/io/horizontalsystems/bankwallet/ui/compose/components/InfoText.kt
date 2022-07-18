@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 @Composable
 fun InfoText(text: String) {
     subhead2_grey(
-        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+        modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp),
         text = text
     )
 }

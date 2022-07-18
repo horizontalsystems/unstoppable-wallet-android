@@ -48,10 +48,8 @@
                 android:background="@drawable/input_background_themed"
                 android:gravity="top"
                 android:maxLines="1"
-                android:paddingStart="12dp"
-                android:paddingTop="11dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="11dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
                 />
 
             <TextView
@@ -79,10 +77,8 @@
                 android:inputType="textMultiLine|textVisiblePassword"
                 android:maxLines="6"
                 android:minHeight="88dp"
-                android:paddingStart="12dp"
-                android:paddingTop="11dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="11dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
                 />
 
             <TextView

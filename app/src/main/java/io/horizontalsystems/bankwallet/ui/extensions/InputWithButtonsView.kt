@@ -74,16 +74,16 @@ class InputWithButtonsView @JvmOverloads constructor(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (binding.input.text.isEmpty()) {
-                        buttons.forEach { button ->
+                        buttons.forEachIndexed { index, button ->
                             ButtonSecondaryDefault(
-                                modifier = Modifier.padding(end = 8.dp),
+                                modifier = Modifier.padding(end = if (index == buttons.size - 1) 16.dp else 8.dp),
                                 title = button.title,
                                 onClick = button.onClick
                             )
                         }
                     } else {
                         ButtonSecondaryCircle(
-                            modifier = Modifier.padding(end = 8.dp),
+                            modifier = Modifier.padding(end = 16.dp),
                             icon = R.drawable.ic_delete_20,
                             onClick = {
                                 binding.input.text = null

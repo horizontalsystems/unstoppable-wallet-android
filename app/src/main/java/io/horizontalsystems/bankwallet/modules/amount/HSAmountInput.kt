@@ -124,11 +124,12 @@ fun HSAmountInput(
             Row(
                 modifier = Modifier
                     .height(44.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 BasicTextField(
                     modifier = Modifier
-                        .padding(start = 12.dp, top = 12.dp)
+                        .padding(start = 16.dp)
                         .weight(1f)
                         .focusRequester(focusRequester),
                     value = textState,
@@ -176,7 +177,7 @@ fun HSAmountInput(
 
                 if (textState.text.isNotEmpty()) {
                     ButtonSecondaryCircle(
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(start = 8.dp, end = 16.dp),
                         icon = R.drawable.ic_delete_20,
                         onClick = {
                             textState = textState.copy(text = "")
@@ -187,12 +188,13 @@ fun HSAmountInput(
                     )
                 } else if (viewModel.isMaxEnabled) {
                     ButtonSecondaryDefault(
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(start = 8.dp, end = 16.dp),
                         title = stringResource(R.string.Send_Button_Max),
                         onClick = {
                             viewModel.onClickMax()
                             val text = viewModel.getEnterAmount()
-                            textState = textState.copy(text = text, selection = TextRange(text.length))
+                            textState =
+                                textState.copy(text = text, selection = TextRange(text.length))
 
                             onValueChange.invoke(viewModel.coinAmount)
                         }
@@ -213,12 +215,11 @@ fun HSAmountInput(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
                         onClick = onClickHint
-                    )
+                    ),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    modifier = Modifier
-                        .padding(start = 12.dp, bottom = 12.dp, end = 12.dp)
-                        .align(Alignment.Bottom),
+                    modifier = Modifier.padding(horizontal = 16.dp),
                     text = hint ?: stringResource(R.string.NotAvailable),
                     style = ComposeAppTheme.typography.subhead2,
                     color = if (hint == null) ComposeAppTheme.colors.grey50 else hintTextColor,
