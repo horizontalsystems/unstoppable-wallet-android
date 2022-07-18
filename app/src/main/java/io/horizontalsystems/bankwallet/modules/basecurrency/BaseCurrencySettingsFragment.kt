@@ -101,7 +101,7 @@ private fun BaseCurrencyScreen(
                         { viewModel.onSelectBaseCurrency(item.currency) }
                     )
                 }
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(24.dp))
                 HeaderText(
                     stringResource(R.string.SettingsCurrency_Other)
                 )
