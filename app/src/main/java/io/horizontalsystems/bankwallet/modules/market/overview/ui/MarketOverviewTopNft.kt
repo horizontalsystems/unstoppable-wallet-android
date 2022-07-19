@@ -13,10 +13,10 @@ import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinSecondRow
 import io.horizontalsystems.bankwallet.ui.compose.components.MultilineClear
+import io.horizontalsystems.bankwallet.ui.compose.components.NftIcon
 
 @Composable
 fun TopNftCollectionsBoardView(
@@ -61,7 +61,7 @@ private fun TopNftCollectionView(
         onClick = onClick,
         borderBottom = true
     ) {
-        CoinImage(
+        NftIcon(
             iconUrl = collection.imageUrl ?: "",
             placeholder = R.drawable.coin_placeholder,
             modifier = Modifier
