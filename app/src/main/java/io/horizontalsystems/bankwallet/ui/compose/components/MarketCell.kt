@@ -40,9 +40,9 @@ fun MarketCoinClear(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            MarketCoinFirstRow(coinName, coinRate)
+            MarketCoinFirstRow(coinCode.uppercase(), coinRate)
             Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(coinCode, marketDataValue, label)
+            MarketCoinSecondRow(coinName, marketDataValue, label)
         }
     }
 }
@@ -113,22 +113,22 @@ fun MarketCoin(
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                MarketCoinFirstRow(coinName, coinRate)
+                MarketCoinFirstRow(coinCode.uppercase(), coinRate)
                 Spacer(modifier = Modifier.height(3.dp))
-                MarketCoinSecondRow(coinCode, marketDataValue, label)
+                MarketCoinSecondRow(coinName, marketDataValue, label)
             }
         }
     }
 }
 
 @Composable
-fun MarketCoinFirstRow(coinName: String, rate: String?) {
+fun MarketCoinFirstRow(title: String, rate: String?) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         body_leah(
             modifier = Modifier.weight(1f).padding(end = 16.dp),
-            text = coinName,
+            text = title,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
