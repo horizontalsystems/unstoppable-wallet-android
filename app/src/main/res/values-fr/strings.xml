@@ -68,7 +68,7 @@
     <string name="RateApp_Button_NotNow">Plus tard</string>
     <!--Restore-->
     <string name="Restore_Enter_Key_Title">Entrez la clé</string>
-    <string name="Restore_Mnemonic_Description">Saisissez votre mnémonique qui consiste en 12 ou 24 mots. Les mots doivent être saisis dans l\'ordre correct et séparés par des espaces.</string>
+    <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Clé incorrect</string>
     <string name="Restore_Error_MnemonicWordCount">Le nombre de mots est incorrect. Il doit être compris entre 12 et 24 mots. Vous avez saisi : %d</string>
     <string name="Restore_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
