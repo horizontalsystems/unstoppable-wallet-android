@@ -50,6 +50,7 @@ import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.pin.PinComponent
 import io.reactivex.plugins.RxJavaPlugins
@@ -190,7 +191,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         torKitManager = TorManager(instance, localStorage)
 
-        wordsManager = WordsManager()
+        wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
         accountFactory = AccountFactory(accountManager)
         backupManager = BackupManager(accountManager)

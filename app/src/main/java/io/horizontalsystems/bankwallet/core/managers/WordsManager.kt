@@ -2,30 +2,30 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.hdwalletkit.WordList
 
-class WordsManager : IWordsManager {
-    private val wordList = WordList.getWords()
+class WordsManager(
+    private val mnemonic: Mnemonic
+) : IWordsManager {
 
     @Throws
     override fun validateChecksum(words: List<String>) {
-        Mnemonic().validateChecksum(words)
+        mnemonic.validate(words)
     }
 
     override fun isWordValid(word: String): Boolean {
-        return wordList.binarySearch(word) >= 0
+        return mnemonic.isWordValid(word)
     }
 
     override fun isWordPartiallyValid(word: String): Boolean {
-        return wordList.any { it.startsWith(word) }
+        return mnemonic.isWordValid(word, partial = true)
     }
 
     override fun generateWords(count: Int): List<String> {
         val strength = when (count) {
-            24 -> Mnemonic.Strength.VeryHigh
-            else -> Mnemonic.Strength.Default
+            24 -> Mnemonic.EntropyStrength.VeryHigh
+            else -> Mnemonic.EntropyStrength.Default
         }
 
-        return Mnemonic().generate(strength)
+        return mnemonic.generate(strength)
     }
 }
