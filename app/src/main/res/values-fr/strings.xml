@@ -147,6 +147,7 @@
     <string name="Market_Filter_ChooseSet">Choisissez le set</string>
     <string name="Market_Filter_MarketCap">Cap. marché</string>
     <string name="Market_Filter_Volume">Volume de trading</string>
+    <string name="Market_Filter_Volume24h">Trading Volume (24h)</string>
     <string name="Market_Filter_PricePeriod">Période de prix</string>
     <string name="Market_Filter_PriceChange">Variation de prix</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
@@ -392,7 +393,7 @@
     <string name="Swap_MaximumPaid">Montant maximum payé</string>
     <string name="Swap_MinimumGot">Montant garanti</string>
     <string name="Swap_PoweredBy">Propulsé par</string>
-    <string name="Swap_SelectSwapProvider_Title">Service de Swap</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
@@ -715,6 +716,8 @@
     <string name="ManageAccount_NWords">%s mots</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s mots avec phrase d\'authentification</string>
     <string name="ManageAccount_SwitchWallet_Title">Changer de portefeuille</string>
+    <string name="ManageAccount_Wallets">Wallets</string>
+    <string name="ManageAccount_WatchAddresses">Watch Addresses</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Sélectionnez le portefeuille pour un changement rapide</string>
     <string name="ManageAccount_DeleteWarning">Voulez-vous arrêter de surveiller cette adresse de portefeuille ?</string>
     <!--Network Settings-->
@@ -796,6 +799,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Commun après 2018</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Connexion</string>
+    <string name="Tor_Connection_Enable">Enable Tor</string>
+    <string name="Tor_Connection_Disable">Disable Tor</string>
+    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Démarrage de Tor...</string>
     <string name="Tor_Status_Error">Erreur lors du démarrage de Tor !</string>
     <string name="TorPage_Connecting">Connexion en cours…</string>
@@ -1007,6 +1013,7 @@
     <string name="ReleaseNotes_FollowUs">Suivez-nous</string>
     <string name="CoinPage_Chart_Locked">Verrouillé</string>
     <string name="ProUsersInfo_Title">Utilisateur Pro</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">Informations supplémentaires sur le jeton</string>
     <string name="ProUsersInfo_Description">Pour activer ces données, vous devriez obtenir des NFT UW au niveau de bronze « Coin Info+»\n\nVous avez également accès aux données ci-dessous:</string>
     <string name="ProUsersInfo_Features_DexVolume">Volume et rang DEX</string>
