@@ -68,7 +68,7 @@
     <string name="RateApp_Button_NotNow">No ahora</string>
     <!--Restore-->
     <string name="Restore_Enter_Key_Title">Coloque la clave</string>
-    <string name="Restore_Mnemonic_Description">Introduzca su clave mnemotécnica para el monedero, la cual está compuesta por 12 o 24 palabras. Las palabras deben ser introducidas en el orden correcto y separadas por espacios.</string>
+    <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Clave incorrecta</string>
     <string name="Restore_Error_MnemonicWordCount">Número de palabras erróneas. Debe tener entre 12 y 24 palabras. Has ingresado: %d</string>
     <string name="Restore_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
