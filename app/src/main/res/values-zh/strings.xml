@@ -147,6 +147,7 @@
     <string name="Market_Filter_ChooseSet">可选集合</string>
     <string name="Market_Filter_MarketCap">市值</string>
     <string name="Market_Filter_Volume">成交量</string>
+    <string name="Market_Filter_Volume24h">Trading Volume (24h)</string>
     <string name="Market_Filter_PricePeriod">价格区间</string>
     <string name="Market_Filter_PriceChange">价格变化</string>
     <string name="Market_Filter_Blockchains">区块链</string>
@@ -392,7 +393,7 @@
     <string name="Swap_MaximumPaid">最大支付金额</string>
     <string name="Swap_MinimumGot">保证金额</string>
     <string name="Swap_PoweredBy">技术支持：</string>
-    <string name="Swap_SelectSwapProvider_Title">互兑供应商</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
     <string name="Swap_AmountEstimated">(预估金额)</string>
     <string name="Swap_AmountMin">(最小金额)</string>
     <string name="Swap_AmountMax">(最大金额)</string>
@@ -716,6 +717,8 @@
     <string name="ManageAccount_NWords">%s 个单词</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s 个单词的密码</string>
     <string name="ManageAccount_SwitchWallet_Title">切换钱包</string>
+    <string name="ManageAccount_Wallets">Wallets</string>
+    <string name="ManageAccount_WatchAddresses">Watch Addresses</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">选择钱包以快速切换</string>
     <string name="ManageAccount_DeleteWarning">您要停止监视这个钱包地址吗？</string>
     <!--Network Settings-->
@@ -797,6 +800,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018年之后常用</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">连接</string>
+    <string name="Tor_Connection_Enable">Enable Tor</string>
+    <string name="Tor_Connection_Disable">Disable Tor</string>
+    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">正在启动Tor...</string>
     <string name="Tor_Status_Error">启动Tor时出错！</string>
     <string name="TorPage_Connecting">正在连接...</string>
@@ -1008,6 +1014,7 @@
     <string name="ReleaseNotes_FollowUs">关注我们</string>
     <string name="CoinPage_Chart_Locked">锁住</string>
     <string name="ProUsersInfo_Title">专业用户</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">附加令牌信息</string>
     <string name="ProUsersInfo_Description">若要启用此数据，您应该获得精灵等级的 UW NFTs “Coin Info+”\n\n也可以访问下面的数据：</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX 音量和等级</string>
