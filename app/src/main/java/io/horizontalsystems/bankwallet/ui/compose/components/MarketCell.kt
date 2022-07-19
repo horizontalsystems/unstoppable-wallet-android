@@ -40,7 +40,7 @@ fun MarketCoinClear(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            MarketCoinFirstRow(coinCode.uppercase(), coinRate)
+            MarketCoinFirstRow(coinCode, coinRate)
             Spacer(modifier = Modifier.height(3.dp))
             MarketCoinSecondRow(coinName, marketDataValue, label)
         }
@@ -113,7 +113,7 @@ fun MarketCoin(
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                MarketCoinFirstRow(coinCode.uppercase(), coinRate)
+                MarketCoinFirstRow(coinCode, coinRate)
                 Spacer(modifier = Modifier.height(3.dp))
                 MarketCoinSecondRow(coinName, marketDataValue, label)
             }
