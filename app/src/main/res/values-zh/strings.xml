@@ -68,7 +68,7 @@
     <string name="RateApp_Button_NotNow">暂不</string>
     <!--Restore-->
     <string name="Restore_Enter_Key_Title">输入密钥</string>
-    <string name="Restore_Mnemonic_Description">输入助记词，其中应包含12到24个单词。这些单词必须以正确的顺序输入并用空格分隔。</string>
+    <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_Error_MnemonicWordCount">个数有误。必须为12到24个单词。您输入了：%d</string>
     <string name="Restore_Error_EmptyPassphrase">助记词不能为空</string>
