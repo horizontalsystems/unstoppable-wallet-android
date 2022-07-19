@@ -128,7 +128,7 @@ fun BalanceCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         headline2_leah(
-                            text = viewItem.coinCode,
+                            text = viewItem.coinCode.uppercase(),
                             maxLines = 1,
                         )
                         if (!viewItem.badge.isNullOrBlank()) {
