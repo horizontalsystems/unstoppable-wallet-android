@@ -244,8 +244,9 @@ private fun getBottomReachedUid(transactionsMap: Map<String, List<TransactionVie
 
 @Composable
 fun DateHeader(dateHeader: String) {
-    HeaderStick(borderTop = false, borderBottom = true) {
+    HeaderSorting(borderTop = false, borderBottom = true) {
         subhead1_grey(
+            modifier = Modifier.padding(horizontal = 16.dp),
             text = dateHeader,
             maxLines = 1,
         )
