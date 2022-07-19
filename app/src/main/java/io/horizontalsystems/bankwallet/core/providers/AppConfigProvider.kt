@@ -81,6 +81,7 @@ class AppConfigProvider {
             Currency("RUB", "₽", 2),
             Currency("SGD", "S$", 2),
             Currency("USD", "$", 2),
+            Currency("ZAR", "R", 2),
     )
 
 }
