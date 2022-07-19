@@ -147,6 +147,7 @@
     <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
     <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Volume24h">Trading Volume (24h)</string>
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
@@ -392,7 +393,7 @@
     <string name="Swap_MaximumPaid">Maksimum Ödenen</string>
     <string name="Swap_MinimumGot">Garantili Tutar</string>
     <string name="Swap_PoweredBy">İle çalışır</string>
-    <string name="Swap_SelectSwapProvider_Title">Swap Hizmeti</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
     <string name="Swap_AmountEstimated">(tah)</string>
     <string name="Swap_AmountMin">(dk)</string>
     <string name="Swap_AmountMax">(azami)</string>
@@ -715,6 +716,8 @@
     <string name="ManageAccount_NWords">%s kelime</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s parolalı kelime</string>
     <string name="ManageAccount_SwitchWallet_Title">Cüzdan Değiştir</string>
+    <string name="ManageAccount_Wallets">Wallets</string>
+    <string name="ManageAccount_WatchAddresses">Watch Addresses</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Hızlı değiştirme için cüzdan seçin</string>
     <string name="ManageAccount_DeleteWarning">Bu cüzdan adresini izlemeyi bırakmak istiyor musunuz?</string>
     <!--Network Settings-->
@@ -796,6 +799,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018 sonrasında yaygın</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Bağlantı</string>
+    <string name="Tor_Connection_Enable">Enable Tor</string>
+    <string name="Tor_Connection_Disable">Disable Tor</string>
+    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Tor Başlatılıyor...</string>
     <string name="Tor_Status_Error">Tor başlatma hatası !</string>
     <string name="TorPage_Connecting">Bağlanıyor…</string>
@@ -1007,6 +1013,7 @@
     <string name="ReleaseNotes_FollowUs">Bizi Takip Et</string>
     <string name="CoinPage_Chart_Locked">Locked</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
     <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
