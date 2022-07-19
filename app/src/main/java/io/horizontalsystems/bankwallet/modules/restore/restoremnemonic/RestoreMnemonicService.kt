@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.reactivex.subjects.BehaviorSubject
 
 class RestoreMnemonicService(
@@ -44,7 +45,7 @@ class RestoreMnemonicService(
             throw RestoreError.EmptyPassphrase
         }
 
-        if (words.size != 12 && words.size != 24) {
+        if (words.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount })) {
             throw ValidationError.InvalidWordCountException(words.size)
         }
 
