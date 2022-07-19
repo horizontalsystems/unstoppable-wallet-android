@@ -147,6 +147,7 @@
     <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
     <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Volume24h">Trading Volume (24h)</string>
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
@@ -392,7 +393,7 @@
     <string name="Swap_MaximumPaid">بیشترین مقدار</string>
     <string name="Swap_MinimumGot">مقدار تضمین شده</string>
     <string name="Swap_PoweredBy">قدرت گرفته از</string>
-    <string name="Swap_SelectSwapProvider_Title">سرویس تبادل</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
     <string name="Swap_AmountEstimated">(تخمینی)</string>
     <string name="Swap_AmountMin">(دقیقه)</string>
     <string name="Swap_AmountMax">(حداکثر)</string>
@@ -716,6 +717,8 @@
     <string name="ManageAccount_NWords">%s کلمه</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s کلمه با عبارت عبور</string>
     <string name="ManageAccount_SwitchWallet_Title">کیف پول را تغییر دهید</string>
+    <string name="ManageAccount_Wallets">Wallets</string>
+    <string name="ManageAccount_WatchAddresses">Watch Addresses</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">کیف پول را برای تعویض سریع انتخاب کنید</string>
     <string name="ManageAccount_DeleteWarning">Do you want to stop watching this wallet address?</string>
     <!--Network Settings-->
@@ -797,6 +800,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">رایج بعد از ۲۰۱۸</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">ارتباط</string>
+    <string name="Tor_Connection_Enable">Enable Tor</string>
+    <string name="Tor_Connection_Disable">Disable Tor</string>
+    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">درحال راه اندازی Tor...</string>
     <string name="Tor_Status_Error">خطا در راه اندازی Tor!</string>
     <string name="TorPage_Connecting">در حال اتصال…</string>
@@ -1008,6 +1014,7 @@
     <string name="ReleaseNotes_FollowUs">ما را دنبال کنید</string>
     <string name="CoinPage_Chart_Locked">Locked</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
     <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
