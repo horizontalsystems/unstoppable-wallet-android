@@ -249,7 +249,8 @@ fun AdvancedSearchContent(
         }
     )
 
-    SectionHeader(R.string.Market_FilterSection_MarketParameters)
+    Spacer(Modifier.height(32.dp))
+    HeaderText(stringResource(R.string.Market_FilterSection_MarketParameters))
 
     CellSingleLineLawrenceSection(
         listOf({
@@ -267,7 +268,8 @@ fun AdvancedSearchContent(
         })
     )
 
-    SectionHeader(R.string.Market_FilterSection_NetworkParameters)
+    Spacer(Modifier.height(32.dp))
+    HeaderText(stringResource(R.string.Market_FilterSection_NetworkParameters))
 
     CellSingleLineLawrenceSection(
         listOf {
@@ -279,7 +281,8 @@ fun AdvancedSearchContent(
         }
     )
 
-    SectionHeader(R.string.Market_FilterSection_PriceParameters)
+    Spacer(Modifier.height(32.dp))
+    HeaderText(stringResource(R.string.Market_FilterSection_PriceParameters))
 
     CellSingleLineLawrenceSection(
         listOf({
@@ -329,16 +332,6 @@ fun AdvancedSearchContent(
     )
 
     Spacer(modifier = Modifier.height(32.dp))
-}
-
-@Composable
-private fun SectionHeader(header: Int) {
-    subhead1_grey(
-        text = stringResource(header),
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        modifier = Modifier.padding(start = 16.dp, top = 44.dp, end = 16.dp, bottom = 13.dp)
-    )
 }
 
 @Composable
