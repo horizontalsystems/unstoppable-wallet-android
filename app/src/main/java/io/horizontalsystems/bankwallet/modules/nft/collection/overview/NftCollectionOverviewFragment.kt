@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -173,6 +174,7 @@ private fun Header(name: String, imageUrl: String?) {
                 .size(72.dp)
                 .clip(RoundedCornerShape(15.dp)),
             painter = rememberAsyncImagePainter(imageUrl),
+            contentScale = ContentScale.Crop,
             contentDescription = null
         )
         Text(
@@ -246,13 +248,12 @@ private fun Stats(collection: NftCollectionOverviewViewItem) {
     for (row in rows) {
         Spacer(modifier = Modifier.height(8.dp))
         Row(Modifier.padding(horizontal = 16.dp)) {
-            ChartCard(row[0])
-            Spacer(modifier = Modifier.width(8.dp))
-            val secondChart = row.getOrNull(1)
-            if (secondChart != null) {
-                ChartCard(secondChart)
+            if (row.size == 2) {
+                ChartCard(row[0])
+                Spacer(modifier = Modifier.width(8.dp))
+                ChartCard(row[1])
             } else {
-                Box(modifier = Modifier.weight(1f))
+                ChartCard(row[0])
             }
         }
     }

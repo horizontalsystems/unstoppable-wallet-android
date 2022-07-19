@@ -188,7 +188,7 @@ private fun TopNftCollectionsList(
                 onClick = { onClickCollection(collection.uid) },
                 borderBottom = true
             ) {
-                CoinImage(
+                NftIcon(
                     iconUrl = collection.imageUrl ?: "",
                     placeholder = R.drawable.coin_placeholder,
                     modifier = Modifier

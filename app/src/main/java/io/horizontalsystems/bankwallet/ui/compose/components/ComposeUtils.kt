@@ -1,10 +1,14 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -61,6 +65,34 @@ fun CoinImage(
             contentDescription = null,
             modifier = modifier,
             colorFilter = colorFilter
+        )
+        else -> Image(
+            painter = painterResource(fallback),
+            contentDescription = null,
+            modifier = modifier,
+            colorFilter = colorFilter
+        )
+    }
+}
+
+@Composable
+fun NftIcon(
+    iconUrl: String?,
+    placeholder: Int? = null,
+    modifier: Modifier,
+    colorFilter: ColorFilter? = null
+) {
+    val fallback = placeholder ?: R.drawable.coin_placeholder
+    when {
+        iconUrl != null -> Image(
+            painter = rememberAsyncImagePainter(
+                model = iconUrl,
+                error = painterResource(fallback)
+            ),
+            contentDescription = null,
+            modifier = modifier.clip(RoundedCornerShape(4.dp)),
+            colorFilter = colorFilter,
+            contentScale = ContentScale.Crop
         )
         else -> Image(
             painter = painterResource(fallback),
