@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,6 +33,8 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Guide
+import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -64,10 +67,9 @@ class GuidesFragment : BaseFragment() {
 fun GuidesScreen(navController: NavController) {
     val viewModel = viewModel<GuidesViewModel>(factory = GuidesModule.Factory())
 
+    val viewState = viewModel.viewState
     val categories = viewModel.categories
     val selectedCategory = viewModel.selectedCategory
-    val loading = viewModel.loading
-    val error = viewModel.error
     val guides = viewModel.guides
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -81,45 +83,56 @@ fun GuidesScreen(navController: NavController) {
                         tint = ComposeAppTheme.colors.jacob
                     )
                 }
-            },
-            showSpinner = loading
+            }
         )
 
-        if (error != null) {
-            val s = when (error) {
-                is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
-                is LocalizedException -> stringResource(error.errorTextRes)
-                else -> stringResource(R.string.Hud_UnknownError, error)
-            }
-
-            ScreenMessageWithAction(s, R.drawable.ic_error_48)
-        } else if (selectedCategory != null) {
-            val tabItems = categories.map { TabItem(it.category, it == selectedCategory, it) }
-            ScrollableTabs(tabItems) { tab ->
-                viewModel.onSelectCategory(tab)
-            }
-            val listState = rememberSaveable(
-                selectedCategory,
-                saver = LazyListState.Saver
-            ) {
-                LazyListState()
-            }
-            LazyColumn(
-                state = listState,
-                contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)
-            ) {
-                items(guides) { guide ->
-                    CardsPreviewCardsGuide(guide) {
-                        val arguments = bundleOf(
-                            MarkdownFragment.markdownUrlKey to guide.fileUrl,
-                            MarkdownFragment.handleRelativeUrlKey to true
-                        )
-                        navController.slideFromRight(
-                            R.id.markdownFragment,
-                            arguments
-                        )
+        Crossfade(viewState) { viewState ->
+            when (viewState) {
+                ViewState.Loading -> {
+                    Loading()
+                }
+                is ViewState.Error -> {
+                    val s = when (val error = viewState.t) {
+                        is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
+                        is LocalizedException -> stringResource(error.errorTextRes)
+                        else -> stringResource(R.string.Hud_UnknownError, error)
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+
+                    ScreenMessageWithAction(s, R.drawable.ic_error_48)
+                }
+                ViewState.Success -> {
+                    if (selectedCategory != null) {
+                        Column {
+                            val tabItems = categories.map { TabItem(it.category, it == selectedCategory, it) }
+                            ScrollableTabs(tabItems) { tab ->
+                                viewModel.onSelectCategory(tab)
+                            }
+                            val listState = rememberSaveable(
+                                selectedCategory,
+                                saver = LazyListState.Saver
+                            ) {
+                                LazyListState()
+                            }
+                            LazyColumn(
+                                state = listState,
+                                contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)
+                            ) {
+                                items(guides) { guide ->
+                                    CardsPreviewCardsGuide(guide) {
+                                        val arguments = bundleOf(
+                                            MarkdownFragment.markdownUrlKey to guide.fileUrl,
+                                            MarkdownFragment.handleRelativeUrlKey to true
+                                        )
+                                        navController.slideFromRight(
+                                            R.id.markdownFragment,
+                                            arguments
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

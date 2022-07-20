@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.guides
 
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.GuidesManager
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.horizontalsystems.bankwallet.entities.GuideCategoryMultiLang
 import io.horizontalsystems.core.ILanguageManager
@@ -45,7 +46,7 @@ class GuidesRepository(
     }
 
     private fun fetch() {
-        guideCategoriesSubject.onNext(DataState.Loading())
+        guideCategoriesSubject.onNext(DataState.Loading)
 
         guidesManager.getGuideCategories()
                 //retry on error java.lang.AssertionError: No System TLS
