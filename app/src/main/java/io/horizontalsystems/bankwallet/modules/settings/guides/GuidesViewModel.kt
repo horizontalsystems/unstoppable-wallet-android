@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategory
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 
@@ -18,24 +20,23 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
         private set
     var guides by mutableStateOf<List<Guide>>(listOf())
         private set
-    var loading by mutableStateOf(false)
-        private set
-    var error by mutableStateOf<Throwable?>(null)
+
+    var viewState by mutableStateOf<ViewState>(ViewState.Loading)
         private set
 
     private var disposables = CompositeDisposable()
 
     init {
         repository.guideCategories
-                .subscribe {
+                .subscribe { dataState ->
                     viewModelScope.launch {
-                        loading = it is DataState.Loading
-
-                        if (it is DataState.Success) {
-                            didFetchGuideCategories(it.data)
+                        dataState.viewState?.let {
+                            viewState = it
                         }
 
-                        error = (it as? DataState.Error)?.throwable
+                        if (dataState is DataState.Success) {
+                            didFetchGuideCategories(dataState.data)
+                        }
                     }
                 }
                 .let {
