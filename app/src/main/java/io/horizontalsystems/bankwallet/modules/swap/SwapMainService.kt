@@ -53,7 +53,7 @@ class SwapMainService(
         BlockchainType.Polygon,
         BlockchainType.Optimism,
         BlockchainType.ArbitrumOne -> token.blockchain
-        null -> Blockchain(BlockchainType.Ethereum, "Ethereum") // todo: find better solution
+        null -> Blockchain(BlockchainType.Ethereum, "Ethereum", null) // todo: find better solution
         else -> throw IllegalStateException("Swap not supported for ${token.blockchainType}")
     }
 

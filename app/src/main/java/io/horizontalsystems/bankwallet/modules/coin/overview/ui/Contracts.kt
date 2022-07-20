@@ -31,7 +31,7 @@ fun ContractsPreview() {
 fun Contracts(
     contracts: List<ContractInfo>,
     onClickCopy: (ContractInfo) -> Unit,
-    onClickExplorer: (ContractInfo) -> Unit,
+    onClickExplorer: (String) -> Unit,
 ) {
     Column {
         CellSingleLineClear(borderTop = true) {
@@ -61,13 +61,15 @@ fun Contracts(
                         onClickCopy.invoke(contractInfo)
                     }
                 )
-                ButtonSecondaryCircle(
-                    modifier = Modifier.padding(start = 16.dp),
-                    icon = R.drawable.ic_globe_20,
-                    onClick = {
-                        onClickExplorer.invoke(contractInfo)
-                    }
-                )
+                contractInfo.explorerUrl?.let{ explorerUrl ->
+                    ButtonSecondaryCircle(
+                        modifier = Modifier.padding(start = 16.dp),
+                        icon = R.drawable.ic_globe_20,
+                        onClick = {
+                            onClickExplorer.invoke(explorerUrl)
+                        }
+                    )
+                }
             }
         }
     }

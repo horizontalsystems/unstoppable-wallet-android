@@ -55,7 +55,7 @@ sealed class RoiViewItem {
 open class ContractInfo(
     val rawValue: String,
     @DrawableRes val logoResId: Int,
-    val explorerUrl: String
+    val explorerUrl: String?
 ) {
     val shortened = shortenAddress(rawValue)
 
@@ -224,16 +224,22 @@ class CoinViewFactory(
         .mapNotNull { token ->
             when (val tokenType = token.type) {
                 is TokenType.Eip20 -> when (token.blockchainType) {
-                    is BlockchainType.Ethereum -> ContractInfo(tokenType.address, R.drawable.logo_ethereum_24,"https://etherscan.io/token/${tokenType.address}")
-                    is BlockchainType.BinanceSmartChain -> ContractInfo(tokenType.address, R.drawable.logo_binancesmartchain_24,"https://bscscan.com/token/${tokenType.address}")
-                    is BlockchainType.Polygon -> ContractInfo(tokenType.address, R.drawable.logo_polygon_24, "https://polygonscan.com/token/${tokenType.address}")
-                    is BlockchainType.Optimism -> ContractInfo(tokenType.address, R.drawable.logo_optimism_24, "https://optimistic.etherscan.io/token/${tokenType.address}")
-                    is BlockchainType.ArbitrumOne -> ContractInfo(tokenType.address, R.drawable.logo_arbitrum_24, "https://arbiscan.io/token/${tokenType.address}")
+                    is BlockchainType.Ethereum -> ContractInfo(tokenType.address, R.drawable.logo_ethereum_24, explorerUrl(token, tokenType.address))
+                    is BlockchainType.BinanceSmartChain -> ContractInfo(tokenType.address, R.drawable.logo_binancesmartchain_24, explorerUrl(token, tokenType.address))
+                    is BlockchainType.Polygon -> ContractInfo(tokenType.address, R.drawable.logo_polygon_24, explorerUrl(token, tokenType.address))
+                    is BlockchainType.Optimism -> ContractInfo(tokenType.address, R.drawable.logo_optimism_24, explorerUrl(token, tokenType.address))
+                    is BlockchainType.ArbitrumOne -> ContractInfo(tokenType.address, R.drawable.logo_arbitrum_24, explorerUrl(token, tokenType.address))
                     else -> null
                 }
-                is TokenType.Bep2 -> ContractInfo(tokenType.symbol, R.drawable.logo_bep2_24,"https://explorer.binance.org/asset/${tokenType.symbol}")
+                is TokenType.Bep2 -> ContractInfo(tokenType.symbol, R.drawable.logo_bep2_24,explorerUrl(token, tokenType.symbol))
                 else -> null
             }
+    }
+
+    private fun explorerUrl(token: Token, reference: String) : String? {
+        return token.blockchain.explorerUrl?.let{
+            it.replace("\$ref", reference)
+        }
     }
 
     fun getLinks(coinMarketDetails: MarketInfoOverview, guideUrl: String?): List<CoinLink> {

@@ -105,7 +105,7 @@ fun CoinOverviewScreen(
                                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                                         },
                                         onClickExplorer = {
-                                            LinkHelper.openLinkInAppBrowser(context, it.explorerUrl)
+                                            LinkHelper.openLinkInAppBrowser(context, it)
                                         },
                                     )
                                 }
