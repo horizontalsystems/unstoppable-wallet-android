@@ -55,8 +55,8 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
         repository.clear()
     }
 
-    private fun didFetchGuideCategories(guideCategories: Array<GuideCategory>) {
-        categories = guideCategories.toList()
+    private fun didFetchGuideCategories(guideCategories: List<GuideCategory>) {
+        categories = guideCategories
         onSelectCategory(guideCategories.first())
     }
 
