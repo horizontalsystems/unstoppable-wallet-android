@@ -96,8 +96,7 @@
     <fragment
         android:id="@+id/academyFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.guides.GuidesFragment"
-        android:label="@string/Guides_Title"
-        tools:layout="@layout/fragment_guides"/>
+        android:label="@string/Guides_Title" />
     <fragment
         android:id="@+id/appearanceFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.appearance.AppearanceFragment" />
