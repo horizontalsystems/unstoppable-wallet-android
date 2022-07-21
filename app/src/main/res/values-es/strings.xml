@@ -790,7 +790,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Nativa</string>
     <string name="CoinPlatformsSelector_Title">Tipo de moneda</string>
-    <string name="CoinPlatformsSelector_Description">Este token existe en múltiples blockchains. Seleccione las versiones que desea utilizar.</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurar Fuente</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %s.</string>
