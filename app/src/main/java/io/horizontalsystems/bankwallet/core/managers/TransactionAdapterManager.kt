@@ -50,6 +50,7 @@ class TransactionAdapterManager(
                     BlockchainType.Ethereum,
                     BlockchainType.BinanceSmartChain,
                     BlockchainType.Polygon,
+                    BlockchainType.Avalanche,
                     BlockchainType.Optimism,
                     BlockchainType.ArbitrumOne -> {
                         adapterFactory.evmTransactionsAdapter(wallet.transactionSource, blockchainType)

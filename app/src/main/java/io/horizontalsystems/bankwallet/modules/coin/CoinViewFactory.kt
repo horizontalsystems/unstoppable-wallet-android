@@ -227,6 +227,7 @@ class CoinViewFactory(
                     is BlockchainType.Ethereum -> ContractInfo(tokenType.address, R.drawable.logo_ethereum_24, explorerUrl(token, tokenType.address))
                     is BlockchainType.BinanceSmartChain -> ContractInfo(tokenType.address, R.drawable.logo_binancesmartchain_24, explorerUrl(token, tokenType.address))
                     is BlockchainType.Polygon -> ContractInfo(tokenType.address, R.drawable.logo_polygon_24, explorerUrl(token, tokenType.address))
+                    is BlockchainType.Avalanche -> ContractInfo(tokenType.address, R.drawable.logo_avalanche_24, explorerUrl(token, tokenType.address))
                     is BlockchainType.Optimism -> ContractInfo(tokenType.address, R.drawable.logo_optimism_24, explorerUrl(token, tokenType.address))
                     is BlockchainType.ArbitrumOne -> ContractInfo(tokenType.address, R.drawable.logo_arbitrum_24, explorerUrl(token, tokenType.address))
                     else -> null

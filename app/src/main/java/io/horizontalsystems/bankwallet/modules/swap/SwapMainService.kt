@@ -51,6 +51,7 @@ class SwapMainService(
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
+        BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.ArbitrumOne -> token.blockchain
         null -> Blockchain(BlockchainType.Ethereum, "Ethereum", null) // todo: find better solution

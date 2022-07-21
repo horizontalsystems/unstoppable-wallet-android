@@ -66,6 +66,7 @@ class TransactionRecordRepository(
                 BlockchainType.Ethereum,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Polygon,
+                BlockchainType.Avalanche,
                 BlockchainType.Optimism,
                 BlockchainType.ArbitrumOne -> {
                     if (mergedWallets.none { it.source == wallet.source }) {

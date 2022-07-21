@@ -48,6 +48,7 @@ class RestoreBlockchainsService(
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
+        BlockchainType.Avalanche,
         BlockchainType.Zcash,
         BlockchainType.Dash,
         BlockchainType.BitcoinCash,

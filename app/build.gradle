@@ -55,6 +55,7 @@ android {
             resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
             resValue "string", "bscscanKey", "5ZGSHWYHZVA8XZHB8PF6UUTRNNB4KT43ZZ"
             resValue "string", "polygonscanKey", "TNQ44BCF1MS3S75Y6A2B6SN88I8UYFJFRM"
+            resValue "string", "snowtraceApiKey", "DD8VX77TQ73KSNDFGBQQ31J7K5B51CXXPH"
             resValue "string", "defiyieldProviderApiKey", "87e8671e-8267-427c-92c3-4627833445ae"
             resValue "string", "is_release", "false"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/develop/index.json"
@@ -94,6 +95,7 @@ android {
             resValue "string", "etherscanKey", "TTH1114D5VD5ZMCJZ4B74SGIDRCGSKWGX9"
             resValue "string", "bscscanKey", "HBQQN4GTKCHYSRZCKFVQJ3FWGPY4T8237Y"
             resValue "string", "polygonscanKey", "2JM7USE5YRI59RWFZQI2RECAZSNI5QEQGV"
+            resValue "string", "snowtraceApiKey", "47IXTRAAFT1E1J4RNSPZPNB5EWUIQR16FG"
             resValue "string", "defiyieldProviderApiKey", "87e8671e-8267-427c-92c3-4627833445ae"
             resValue "string", "is_release", "true"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json"
@@ -221,10 +223,10 @@ dependencies {
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:38402d5'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:f541970'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:65a006a'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:501cf1e'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:cce84f7'
-    implementation 'com.github.horizontalsystems:market-kit-android:cc8f1ec'
+    implementation 'com.github.horizontalsystems:market-kit-android:29b2717'
 
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:1.5.0-beta01"

@@ -39,6 +39,7 @@ val Token.swappable: Boolean
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
+        BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.ArbitrumOne -> true
         else -> false
@@ -75,6 +76,7 @@ val TokenQuery.protocolType: String?
                 BlockchainType.Ethereum -> "ERC20"
                 BlockchainType.BinanceSmartChain -> "BEP20"
                 BlockchainType.Polygon -> "POLYGON"
+                BlockchainType.Avalanche -> "AVALANCHE"
                 BlockchainType.Optimism -> "OPTIMISM"
                 BlockchainType.ArbitrumOne -> "ARBITRUM"
                 else -> null
@@ -98,7 +100,8 @@ val TokenQuery.isSupported: Boolean
         }
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
-        BlockchainType.Polygon -> {
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche -> {
             tokenType is TokenType.Native || tokenType is TokenType.Eip20
         }
         BlockchainType.BinanceChain -> {
@@ -124,7 +127,8 @@ val Blockchain.description: String
         BlockchainType.BinanceChain -> "BNB, BEP2 tokens"
         BlockchainType.Ethereum -> "ETH, ERC20 tokens"
         BlockchainType.BinanceSmartChain -> "BNB, BEP20 tokens"
-        BlockchainType.Polygon -> "MATIC, MRC20 tokens"
+        BlockchainType.Polygon -> "MATIC, ERC20 tokens"
+        BlockchainType.Avalanche -> "AVAX, ERC20 tokens"
         BlockchainType.Optimism -> "L2 chain"
         BlockchainType.ArbitrumOne -> "L2 chain"
         else -> ""
@@ -165,6 +169,7 @@ val BlockchainType.icon24: Int
         BlockchainType.Ethereum -> R.drawable.logo_ethereum_24
         BlockchainType.BinanceSmartChain -> R.drawable.logo_binancesmartchain_24
         BlockchainType.Polygon -> R.drawable.logo_polygon_24
+        BlockchainType.Avalanche -> R.drawable.logo_avalanche_24
         BlockchainType.Optimism -> R.drawable.logo_optimism_24
         BlockchainType.ArbitrumOne -> R.drawable.logo_arbitrum_24
         BlockchainType.Zcash -> R.drawable.logo_zcash_24
@@ -182,8 +187,9 @@ val BlockchainType.order: Int
         BlockchainType.Ethereum -> 6
         BlockchainType.BinanceSmartChain -> 7
         BlockchainType.Polygon -> 8
-        BlockchainType.Optimism -> 9
-        BlockchainType.ArbitrumOne -> 10
+        BlockchainType.Avalanche -> 9
+        BlockchainType.Optimism -> 10
+        BlockchainType.ArbitrumOne -> 11
         else -> Int.MAX_VALUE
     }
 
