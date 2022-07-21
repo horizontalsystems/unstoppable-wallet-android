@@ -61,7 +61,7 @@ class NftAssetItemsPricedWithCurrencyRepository(
         val items = data.value?.let { value ->
             val coinUids = value.map { (_, items) ->
                 items.mapNotNull { it.price?.coinValue?.coin?.uid }
-            }.flatten()
+            }.flatten().distinct()
 
             xRateRepository.setCoinUids(coinUids)
             val latestRates = xRateRepository.getLatestRates()
