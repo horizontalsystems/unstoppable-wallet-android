@@ -79,7 +79,7 @@ private fun NftCollectionEventsScreen(navController: NavController, collectionUi
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
                 ViewState.Success -> {
-                    NftEvents(navController, viewModel)
+                    NftEvents(viewModel, navController)
                 }
             }
         }
@@ -87,9 +87,9 @@ private fun NftCollectionEventsScreen(navController: NavController, collectionUi
 }
 
 @Composable
-private fun NftEvents(
-    navController: NavController,
-    viewModel: NftCollectionEventsViewModel
+fun NftEvents(
+    viewModel: NftCollectionEventsViewModel,
+    navController: NavController?
 ) {
     val listState = rememberLazyListState()
     val viewItem = viewModel.viewItem ?: return
@@ -110,18 +110,21 @@ private fun NftEvents(
                         subtitle = event.date?.let { DateHelper.getFullDate(it) } ?: "",
                         iconUrl = event.asset.imageUrl ?: "",
                         coinValue = event.amount?.coinValue?.getFormattedFull(),
-                        currencyValue = event.amount?.currencyValue?.getFormattedFull()
-                    ) {
-                        val asset = event.asset
-                        navController.slideFromBottom(
-                            R.id.nftAssetFragment,
-                            NftAssetModule.prepareParams(
-                                asset.collectionUid,
-                                asset.contract.address,
-                                asset.tokenId
-                            )
-                        )
-                    }
+                        currencyValue = event.amount?.currencyValue?.getFormattedFull(),
+                        onClick = navController?.let {
+                            {
+                                val asset = event.asset
+                                navController.slideFromBottom(
+                                        R.id.nftAssetFragment,
+                                        NftAssetModule.prepareParams(
+                                                asset.collectionUid,
+                                                asset.contract.address,
+                                                asset.tokenId
+                                        )
+                                )
+                            }
+                        }
+                    )
                 }
             }
 
