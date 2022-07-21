@@ -789,7 +789,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">네이티브</string>
     <string name="CoinPlatformsSelector_Title">코인 유형</string>
-    <string name="CoinPlatformsSelector_Description">이 토큰은 여러 블록체인에 존재합니다. 사용하려는 버전을 선택하십시오.</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
