@@ -790,7 +790,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">بومی</string>
     <string name="CoinPlatformsSelector_Title">نوع سکه</string>
-    <string name="CoinPlatformsSelector_Description">این توکن در چندین بلاک چین وجود دارد. نسخه(های) مورد نظر برای استفاده را انتخاب کنید.</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %s مجدداً همزمان سازی کند.</string>
