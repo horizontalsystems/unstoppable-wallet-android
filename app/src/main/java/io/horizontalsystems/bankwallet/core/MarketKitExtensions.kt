@@ -60,6 +60,13 @@ val Token.typeInfo: String
         is TokenType.Unsupported -> ""
     }
 
+val Token.copyableTypeInfo: String?
+    get() = when (val type = type) {
+        is TokenType.Eip20 -> type.address
+        is TokenType.Bep2 -> type.symbol
+        else -> null
+    }
+
 
 val TokenQuery.protocolType: String?
     get() = when (tokenType) {

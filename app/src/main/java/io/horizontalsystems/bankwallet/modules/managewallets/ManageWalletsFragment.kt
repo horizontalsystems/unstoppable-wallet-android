@@ -111,7 +111,8 @@ class ManageWalletsFragment : BaseFragment() {
             onItemSelected = { onSelect(it) },
             onCancelled = { onCancel() },
             warningTitle = config.descriptionTitle,
-            warning = config.description
+            warning = config.description,
+            allowEmpty= config.allowEmpty
         )
     }
 
@@ -270,8 +271,8 @@ fun PreviewCoinCell() {
     val viewItem = CoinViewItem(
         "arbitrum",
         ImageSource.Local(R.drawable.logo_arbitrum_24),
-        "Arbitrum",
         "ARB",
+        "Arbitrum",
         CoinViewItemState.ToggleVisible(true, true),
         "Arbitrum"
     )

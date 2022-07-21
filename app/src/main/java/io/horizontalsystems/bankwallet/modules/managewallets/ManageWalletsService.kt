@@ -195,7 +195,7 @@ class ManageWalletsService(
     }
 
     fun enable(fullCoin: FullCoin) {
-        enableCoinService.enable(fullCoin, account)
+        enableCoinService.enable(fullCoin)
     }
 
     fun disable(uid: String) {

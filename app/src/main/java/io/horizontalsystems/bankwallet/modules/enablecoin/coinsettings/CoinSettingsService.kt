@@ -14,7 +14,7 @@ class CoinSettingsService : Clearable {
     val rejectApproveSettingsObservable = PublishSubject.create<Token>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approveSettings(token: Token, settings: List<CoinSettings>) {
+    fun approveSettings(token: Token, settings: List<CoinSettings>, allowEmpty: Boolean = false) {
         if (token.blockchainType.coinSettingTypes.contains(CoinSettingType.derivation)) {
             val currentDerivations = settings.mapNotNull {
                 it.settings[CoinSettingType.derivation]?.let {
@@ -22,7 +22,7 @@ class CoinSettingsService : Clearable {
                 }
             }
             val type = RequestType.Derivation(AccountType.Derivation.values().toList(), currentDerivations)
-            val request = Request(token, type)
+            val request = Request(token, type, allowEmpty)
             requestObservable.onNext(request)
             return
         }
@@ -34,7 +34,7 @@ class CoinSettingsService : Clearable {
                 }
             }
             val type = RequestType.BCHCoinType(BitcoinCashCoinType.values().toList(), currentTypes)
-            val request = Request(token, type)
+            val request = Request(token, type, allowEmpty)
             requestObservable.onNext(request)
             return
         }
@@ -65,7 +65,7 @@ class CoinSettingsService : Clearable {
     override fun clear() = Unit
 
     data class CoinWithSettings(val token: Token, val settingsList: List<CoinSettings> = listOf())
-    data class Request(val token: Token, val type: RequestType)
+    data class Request(val token: Token, val type: RequestType, val allowEmpty: Boolean)
     sealed class RequestType {
         class Derivation(
             val allDerivations: List<AccountType.Derivation>,

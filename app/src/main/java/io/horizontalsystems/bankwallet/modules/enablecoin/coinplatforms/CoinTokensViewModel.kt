@@ -28,16 +28,19 @@ class CoinTokensViewModel(
     private fun handle(request: CoinTokensService.Request) {
         currentRequest = request
         val fullCoin = request.fullCoin
+        val selectedTokenIndexes = if (request.currentTokens.isEmpty()) listOf(0) else request.currentTokens.map { fullCoin.supportedTokens.indexOf(it) }
         val config = BottomSheetSelectorMultipleDialog.Config(
             icon = ImageSource.Remote(fullCoin.coin.iconUrl, fullCoin.iconPlaceholder),
             title = fullCoin.coin.name,
-            descriptionTitle = Translator.getString(R.string.CoinPlatformsSelector_Title),
-            description = Translator.getString(R.string.CoinPlatformsSelector_Description),
-            selectedIndexes = request.currentTokens.map { fullCoin.supportedTokens.indexOf(it) },
+            description = if (fullCoin.supportedTokens. size > 1) Translator.getString(R.string.CoinPlatformsSelector_Description) else null,
+            selectedIndexes = selectedTokenIndexes,
+            allowEmpty = request.allowEmpty,
             viewItems = fullCoin.supportedTokens.map { token ->
                 BottomSheetSelectorViewItem(
-                    title = token.protocolType ?: "",
-                    subtitle = token.protocolInfo
+                    title = token.protocolInfo,
+                    subtitle = token.typeInfo,
+                    copyableString = token.copyableTypeInfo,
+                    icon = token.blockchainType.imageUrl
                 )
             }
         )

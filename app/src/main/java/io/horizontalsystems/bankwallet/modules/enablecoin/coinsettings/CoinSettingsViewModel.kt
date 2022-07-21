@@ -40,10 +40,10 @@ class CoinSettingsViewModel(
     private fun handle(request: CoinSettingsService.Request) {
         val config = when (request.type) {
             is CoinSettingsService.RequestType.Derivation -> {
-                derivationConfig(request.token, request.type.allDerivations, request.type.current)
+                derivationConfig(request.token, request.type.allDerivations, request.type.current, request.allowEmpty)
             }
             is CoinSettingsService.RequestType.BCHCoinType -> {
-                bitcoinCashCoinTypeConfig(request.token, request.type.allTypes, request.type.current)
+                bitcoinCashCoinTypeConfig(request.token, request.type.allTypes, request.type.current, request.allowEmpty,)
             }
         }
 
@@ -54,11 +54,12 @@ class CoinSettingsViewModel(
     private fun derivationConfig(
         token: Token,
         allDerivations: List<AccountType.Derivation>,
-        current: List<AccountType.Derivation>
+        current: List<AccountType.Derivation>,
+        allowEmpty: Boolean
     ): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
             icon = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
-            title = token.coin.name,
+            title = token.coin.code,
             selectedIndexes = current.map { allDerivations.indexOf(it) }.filter { it > -1 },
             viewItems = allDerivations.map { derivation ->
                 BottomSheetSelectorViewItem(
@@ -66,19 +67,20 @@ class CoinSettingsViewModel(
                     subtitle = derivation.description
                 )
             },
-            descriptionTitle = Translator.getString(R.string.AddressFormatSettings_Title),
-            description = Translator.getString(R.string.AddressFormatSettings_Description, token.coin.name)
+            description = Translator.getString(R.string.AddressFormatSettings_Description, token.coin.name),
+            allowEmpty = allowEmpty,
         )
     }
 
     private fun bitcoinCashCoinTypeConfig(
         token: Token,
         types: List<BitcoinCashCoinType>,
-        current: List<BitcoinCashCoinType>
+        current: List<BitcoinCashCoinType>,
+        allowEmpty: Boolean
     ): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
             icon = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
-            title = token.coin.name,
+            title = token.coin.code,
             selectedIndexes = current.map { types.indexOf(it) }.filter { it > -1 },
             viewItems = types.map { type ->
                 BottomSheetSelectorViewItem(
@@ -86,8 +88,9 @@ class CoinSettingsViewModel(
                     subtitle = Translator.getString(type.description)
                 )
             },
-            descriptionTitle = Translator.getString(R.string.AddressFormatSettings_Title),
-            description = Translator.getString(R.string.AddressFormatSettings_Description, token.coin.name)
+            descriptionTitle = null,
+            description = Translator.getString(R.string.AddressFormatSettings_Description, token.coin.name),
+            allowEmpty = allowEmpty,
         )
     }
 
