@@ -790,7 +790,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">原生</string>
     <string name="CoinPlatformsSelector_Title">代币平台选择</string>
-    <string name="CoinPlatformsSelector_Description">此代币存在于多个区块链上。请选择您想要使用的平台。</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
