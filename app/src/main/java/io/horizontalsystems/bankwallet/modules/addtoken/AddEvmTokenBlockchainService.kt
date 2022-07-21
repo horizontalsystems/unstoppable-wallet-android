@@ -37,6 +37,7 @@ class AddEvmTokenBlockchainService(
         BlockchainType.Ethereum -> "erc20"
         BlockchainType.Optimism -> "optimism"
         BlockchainType.Polygon -> "mrc20"
+        BlockchainType.Avalanche -> "erc20"
         else -> throw IllegalStateException()
     }
 

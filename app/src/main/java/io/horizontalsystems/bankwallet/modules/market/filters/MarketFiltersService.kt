@@ -27,7 +27,7 @@ class MarketFiltersService(
         BlockchainType.BinanceSmartChain,
         BlockchainType.BinanceChain,
         BlockchainType.ArbitrumOne,
-        BlockchainType.Unsupported("avalanche"),
+        BlockchainType.Avalanche,
         BlockchainType.Unsupported("fantom"),
         BlockchainType.Unsupported("harmony-shard-0"),
         BlockchainType.Unsupported("huobi-token"),

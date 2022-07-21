@@ -92,6 +92,7 @@ object SwapMainModule {
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
+            BlockchainType.Avalanche,
             BlockchainType.Optimism,
             BlockchainType.ArbitrumOne -> true
             else -> false

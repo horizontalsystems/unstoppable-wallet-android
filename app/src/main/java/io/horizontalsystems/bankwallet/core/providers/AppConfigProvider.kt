@@ -43,6 +43,9 @@ class AppConfigProvider {
      val polygonscanApiKey by lazy {
         Translator.getString(R.string.polygonscanKey)
     }
+     val snowtraceApiKey by lazy {
+        Translator.getString(R.string.snowtraceApiKey)
+    }
      val guidesUrl by lazy {
         Translator.getString(R.string.guidesUrl)
     }

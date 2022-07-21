@@ -46,6 +46,7 @@ class TokenBalanceProvider {
         BlockchainType.Ethereum -> "ethereum"
         BlockchainType.Optimism -> "optimism"
         BlockchainType.Polygon -> "matic"
+        BlockchainType.Avalanche -> "avalanche"
         else -> throw IllegalArgumentException("Unsupported blockchain type $blockchainType")
     }
 

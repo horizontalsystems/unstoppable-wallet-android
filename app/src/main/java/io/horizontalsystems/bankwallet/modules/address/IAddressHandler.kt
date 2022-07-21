@@ -77,7 +77,8 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
         private fun chainCoinCode(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
-            BlockchainType.Polygon -> "ETH"
+            BlockchainType.Polygon,
+            BlockchainType.Avalanche -> "ETH"
             else -> null
         }
 
@@ -90,6 +91,7 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
                 BlockchainType.Ethereum -> "ERC20"
                 BlockchainType.BinanceSmartChain -> "BEP20"
                 BlockchainType.Polygon -> "MATIC"
+                BlockchainType.Avalanche -> "AVAX"
                 else -> null
             }
             else -> null

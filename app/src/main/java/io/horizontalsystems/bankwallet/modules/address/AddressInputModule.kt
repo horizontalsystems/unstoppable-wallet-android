@@ -27,6 +27,7 @@ object AddressInputModule {
                 BlockchainType.Ethereum,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Polygon,
+                BlockchainType.Avalanche,
                 BlockchainType.Optimism,
                 BlockchainType.ArbitrumOne -> {
                     addressViewModel.addAddressHandler(AddressHandlerEvm())

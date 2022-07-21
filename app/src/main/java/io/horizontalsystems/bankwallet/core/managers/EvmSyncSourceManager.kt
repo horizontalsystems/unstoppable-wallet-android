@@ -46,6 +46,10 @@ class EvmSyncSourceManager(
                 getSyncSource(BlockchainType.Polygon, "Polygon-RPC HTTP", RpcSource.polygonRpcHttp(), TransactionSource.polygonscan(appConfigProvider.polygonscanApiKey))
             ),
 
+            BlockchainType.Avalanche to listOf(
+                getSyncSource(BlockchainType.Avalanche, "Avax.network", RpcSource.avaxNetworkHttp(), TransactionSource.snowtrace(appConfigProvider.snowtraceApiKey))
+            ),
+
             BlockchainType.Optimism to listOf(
                 getSyncSource(BlockchainType.Optimism, "Optimism.io HTTP", RpcSource.optimismRpcHttp(), TransactionSource.optimisticEtherscan(""))
             ),

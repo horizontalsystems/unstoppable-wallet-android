@@ -49,6 +49,7 @@ class SwapCoinProvider(
         BlockchainType.Polygon -> dex.blockchainType == BlockchainType.Polygon
         BlockchainType.Optimism -> dex.blockchainType == BlockchainType.Optimism
         BlockchainType.ArbitrumOne -> dex.blockchainType == BlockchainType.ArbitrumOne
+        BlockchainType.Avalanche -> dex.blockchainType == BlockchainType.Avalanche
         else -> false
     }
 

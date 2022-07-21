@@ -17,6 +17,7 @@ class EvmBlockchainManager(
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
+        BlockchainType.Avalanche,
     )
 
     val allBlockchains = marketKit.blockchains(blockchainTypes.map { it.uid })
@@ -42,6 +43,7 @@ class EvmBlockchainManager(
         BlockchainType.Ethereum -> Chain.Ethereum
         BlockchainType.BinanceSmartChain -> Chain.BinanceSmartChain
         BlockchainType.Polygon -> Chain.Polygon
+        BlockchainType.Avalanche -> Chain.Avalanche
         BlockchainType.Optimism -> Chain.Optimism
         BlockchainType.ArbitrumOne -> Chain.ArbitrumOne
         else -> throw IllegalArgumentException("Unsupported blockchain type $blockchainType")
@@ -69,6 +71,7 @@ class EvmBlockchainManager(
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
+        BlockchainType.Avalanche,
     )
 
 }

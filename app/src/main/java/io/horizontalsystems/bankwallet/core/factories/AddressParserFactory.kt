@@ -13,7 +13,8 @@ class AddressParserFactory {
         BlockchainType.Ethereum -> AddressParser("ethereum", true)
         BlockchainType.BinanceSmartChain -> AddressParser("", true)
         BlockchainType.BinanceChain -> AddressParser("binance", true)
-        BlockchainType.Polygon -> AddressParser("", true)
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.ArbitrumOne,
         is BlockchainType.Unsupported -> AddressParser("", false)
