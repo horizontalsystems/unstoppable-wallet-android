@@ -793,7 +793,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Nativ</string>
     <string name="CoinPlatformsSelector_Title">Cointyp</string>
-    <string name="CoinPlatformsSelector_Description">Dieser Token existiert auf mehreren Blockchains. Wählen Sie die Version(en), die Sie verwenden möchten.</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Parameter wiederherstellen</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
