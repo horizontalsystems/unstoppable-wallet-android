@@ -786,7 +786,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Нативный</string>
     <string name="CoinPlatformsSelector_Title">Тип Монеты</string>
-    <string name="CoinPlatformsSelector_Description">Этот токен существует в нескольких блокчейнах. Выберите версию (-и), которую (-ые) вы хотите использовать.</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После вступления данного изменения в силу кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
