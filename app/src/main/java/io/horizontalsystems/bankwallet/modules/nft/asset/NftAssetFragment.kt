@@ -16,7 +16,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -54,11 +53,13 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.*
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
-import io.horizontalsystems.bankwallet.modules.nft.collection.events.*
+import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsModule
+import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsViewModel
+import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftEventListType
+import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftEvents
 import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.OnBottomReached
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -171,8 +172,6 @@ private fun NftAsset(
             }
         })
 
-        Spacer(modifier = Modifier.height(12.dp))
-
         HorizontalPager(
                 count = tabs.size,
                 state = pagerState,
@@ -208,6 +207,8 @@ private fun NftAssrtInfo(asset: NftAssetModuleAssetItem, navController: NavContr
                 }
             }
         }
+
+    Spacer(modifier = Modifier.height(12.dp))
 
     LazyColumn {
         item {
@@ -536,44 +537,8 @@ private fun NftAssrtInfo(asset: NftAssetModuleAssetItem, navController: NavContr
 @Composable
 private fun NftAssetEvents(contractAddress: String, tokenId: String) {
     val viewModel = viewModel<NftCollectionEventsViewModel>(factory = NftCollectionEventsModule.Factory(NftEventListType.Asset(contractAddress, tokenId), NftEvent.EventType.All))
-    val viewItem = viewModel.viewItem ?: return
-    val listState = rememberLazyListState()
 
-    LazyColumn(state = listState) {
-        viewItem.events.forEachIndexed { index, event ->
-            item(key = "content-row-$index") {
-                NftEvent(
-                        name = NftEventTypeWrapper.title(event.eventType).getString(),
-                        subtitle = event.date?.let { DateHelper.getFullDate(it) } ?: "",
-                        iconUrl = event.asset.imageUrl ?: "",
-                        coinValue = event.amount?.coinValue?.getFormattedFull(),
-                        currencyValue = event.amount?.currencyValue?.getFormattedFull()
-                )
-            }
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(26.dp))
-        }
-
-        if (viewModel.loadingMore) {
-            item {
-                Row(
-                        modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp),
-                        horizontalArrangement = Arrangement.Center
-                ) {
-                    HSCircularProgressIndicator()
-                }
-            }
-        }
-    }
-
-    listState.OnBottomReached(buffer = 6) {
-        viewModel.onBottomReached()
-    }
-
+    NftEvents(viewModel, null)
 }
 
 @Composable
