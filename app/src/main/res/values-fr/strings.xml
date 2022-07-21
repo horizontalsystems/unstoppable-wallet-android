@@ -789,7 +789,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Natif</string>
     <string name="CoinPlatformsSelector_Title">Type de pièce</string>
-    <string name="CoinPlatformsSelector_Description">Ce token existe sur plusieurs blockchains. Sélectionnez la (les) version(s) que vous souhaitez utiliser.</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
