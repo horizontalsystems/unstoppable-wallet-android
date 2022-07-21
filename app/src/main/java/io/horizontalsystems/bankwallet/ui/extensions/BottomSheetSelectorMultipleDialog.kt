@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
@@ -22,6 +23,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.helpers.HudHelper
 
 class BottomSheetSelectorMultipleDialog(
     private val title: String,
@@ -32,7 +35,8 @@ class BottomSheetSelectorMultipleDialog(
     private val onCancelled: (() -> Unit)?,
     private val warningTitle: String?,
     private val warning: String?,
-    private val notifyUnchanged: Boolean
+    private val notifyUnchanged: Boolean,
+    private val allowEmpty: Boolean
 ) : BaseComposableBottomSheetFragment() {
 
     val selected = mutableStateListOf<Int>().apply {
@@ -64,7 +68,7 @@ class BottomSheetSelectorMultipleDialog(
 
     @Composable
     private fun BottomSheetContent() {
-
+        val localView = LocalView.current
         warning?.let {
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
@@ -84,16 +88,29 @@ class BottomSheetSelectorMultipleDialog(
                         Row(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .clickable {
-                                    if (selected.contains(index)) {
-                                        selected.remove(index)
-                                    } else {
-                                        selected.add(index)
+                                .clickable(
+                                    enabled = item.copyableString != null,
+                                    onClick = {
+                                        item.copyableString?.let {
+                                            TextHelper.copyText(it)
+                                            HudHelper.showSuccessMessage(
+                                                localView,
+                                                R.string.Hud_Text_Copied
+                                            )
+                                        }
                                     }
-                                }
+                                )
                                 .padding(horizontal = 16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            item.icon?.let { url ->
+                                CoinImage(
+                                    iconUrl = url,
+                                    modifier = Modifier
+                                        .padding(end = 16.dp)
+                                        .size(24.dp)
+                                )
+                            }
                             Column {
                                 body_leah(text = item.title)
                                 subhead2_grey(text = item.subtitle)
@@ -124,7 +141,7 @@ class BottomSheetSelectorMultipleDialog(
                 }
                 dismiss()
             },
-            enabled = selected.isNotEmpty()
+            enabled = allowEmpty || selected.isNotEmpty()
         )
     }
 
@@ -153,7 +170,8 @@ class BottomSheetSelectorMultipleDialog(
             onCancelled: (() -> Unit)? = null,
             warningTitle: String? = null,
             warning: String? = null,
-            notifyUnchanged: Boolean = false
+            notifyUnchanged: Boolean = false,
+            allowEmpty: Boolean
         ) {
             BottomSheetSelectorMultipleDialog(
                 title,
@@ -164,7 +182,8 @@ class BottomSheetSelectorMultipleDialog(
                 onCancelled,
                 warningTitle,
                 warning,
-                notifyUnchanged
+                notifyUnchanged,
+                allowEmpty
             )
                 .show(fragmentManager, "selector_dialog")
         }
@@ -175,9 +194,15 @@ class BottomSheetSelectorMultipleDialog(
         val title: String,
         val selectedIndexes: List<Int>,
         val viewItems: List<BottomSheetSelectorViewItem>,
-        val descriptionTitle: String?,
-        val description: String,
+        val descriptionTitle: String? = null,
+        val description: String? = null,
+        val allowEmpty: Boolean = false
     )
 }
 
-data class BottomSheetSelectorViewItem(val title: String, val subtitle: String)
+data class BottomSheetSelectorViewItem(
+    val title: String,
+    val subtitle: String,
+    val copyableString: String? = null,
+    val icon: String? = null
+)

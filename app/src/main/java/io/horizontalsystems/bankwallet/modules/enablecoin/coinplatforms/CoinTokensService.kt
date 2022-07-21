@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms
 
-import io.horizontalsystems.bankwallet.core.supportedTokens
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.subjects.PublishSubject
 
@@ -9,13 +8,8 @@ class CoinTokensService {
     val rejectApproveTokensObservable = PublishSubject.create<io.horizontalsystems.marketkit.models.FullCoin>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approveTokens(fullCoin: io.horizontalsystems.marketkit.models.FullCoin, currentTokens: List<Token> = listOf()) {
-        val supportedTokens = fullCoin.supportedTokens
-        if (supportedTokens.size == 1) {
-            approveTokensObservable.onNext(CoinWithTokens(fullCoin.coin, supportedTokens))
-        } else {
-            requestObservable.onNext(Request(fullCoin, currentTokens))
-        }
+    fun approveTokens(fullCoin: io.horizontalsystems.marketkit.models.FullCoin, currentTokens: List<Token> = listOf(), allowEmpty: Boolean = false) {
+        requestObservable.onNext(Request(fullCoin, currentTokens, allowEmpty))
     }
 
     fun select(tokens: List<Token>, coin: io.horizontalsystems.marketkit.models.Coin) {
@@ -33,6 +27,7 @@ class CoinTokensService {
 
     data class Request(
         val fullCoin: io.horizontalsystems.marketkit.models.FullCoin,
-        val currentTokens: List<Token>
+        val currentTokens: List<Token>,
+        val allowEmpty: Boolean
     )
 }
