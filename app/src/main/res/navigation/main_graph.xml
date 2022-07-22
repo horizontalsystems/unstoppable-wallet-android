@@ -226,9 +226,12 @@
         android:id="@+id/createAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment" />
     <fragment
-        android:id="@+id/restoreMnemonicFragment"
+        android:id="@+id/restoreMnemonicFragmentOld"
         android:name="io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.RestoreMnemonicFragment"
         tools:layout="@layout/fragment_restore_mnemonic" />
+    <fragment
+        android:id="@+id/restoreMnemonicFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.compose.RestoreMnemonicFragment" />
     <fragment
         android:id="@+id/watchAddressFragment"
         android:name="io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment" />

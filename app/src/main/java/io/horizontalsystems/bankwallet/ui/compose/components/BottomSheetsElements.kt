@@ -19,23 +19,37 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun BottomSheetsElementsButtons(
-    buttonText: String = stringResource(R.string.Button_Done),
-    onClickDone: () -> Unit
+    buttonPrimaryText: String,
+    onClickPrimary: () -> Unit,
+    buttonDefaultText: String? = null,
+    onClickDefault: (() -> Unit)? = null
 ) {
-    Box(
+    Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         Divider(
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10,
         )
+        Spacer(modifier = Modifier.height(15.dp))
         ButtonPrimaryYellow(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
-            title = buttonText,
-            onClick = onClickDone
+            title = buttonPrimaryText,
+            onClick = onClickPrimary
         )
+        buttonDefaultText?.let {
+            Spacer(modifier = Modifier.height(16.dp))
+            ButtonPrimaryDefault(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                title = buttonDefaultText,
+                onClick = onClickDefault ?: {}
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
@@ -122,7 +136,7 @@ fun BottomSheetsElementsCheckbox(
                 .padding(vertical = 14.dp, horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var checked by remember { mutableStateOf(false)}
+            var checked by remember { mutableStateOf(false) }
             HsCheckbox(
                 checked = checked,
                 onCheckedChange = {

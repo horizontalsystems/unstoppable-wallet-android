@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.BackpressureStrategy
 import io.reactivex.disposables.CompositeDisposable
-import java.util.*
 
 class RestoreMnemonicViewModel(private val service: RestoreMnemonicService, private val clearables: List<Clearable>) : ViewModel() {
 
@@ -36,7 +35,7 @@ class RestoreMnemonicViewModel(private val service: RestoreMnemonicService, priv
     }
 
     private fun wordItems(text: String): List<WordItem> {
-        return regex.findAll(text.toLowerCase(Locale.ENGLISH))
+        return regex.findAll(text.lowercase())
                 .map { WordItem(it.value, it.range) }
                 .toList()
     }

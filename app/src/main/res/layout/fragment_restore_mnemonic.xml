@@ -78,8 +78,7 @@
                 android:maxLines="6"
                 android:minHeight="88dp"
                 android:paddingHorizontal="16dp"
-                android:paddingVertical="12dp"
-                />
+                android:paddingVertical="12dp" />
 
             <TextView
                 android:id="@+id/description"

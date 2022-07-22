@@ -15,8 +15,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun TorEnableNotificationsDialog(onEnable: () -> Unit, onCancel: () -> Unit) {
-    Dialog(onDismissRequest = onCancel) {
+fun KeyboardWarningDialog(
+    onSelect: () -> Unit,
+    onSkip: () -> Unit,
+    onCancel: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = onCancel
+    ) {
         Column(
             Modifier
                 .fillMaxWidth()
@@ -24,18 +30,21 @@ fun TorEnableNotificationsDialog(onEnable: () -> Unit, onCancel: () -> Unit) {
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
             BottomSheetsElementsHeader(
-                icon = painterResource(R.drawable.ic_tor_connection_24),
-                title = stringResource(R.string.Tor_Title),
-                subtitle = stringResource(R.string.Tor_Connection_Title),
+                icon = painterResource(R.drawable.icon_24_warning_2),
+                title = stringResource(R.string.Alert_TitleWarning),
+                subtitle = stringResource(R.string.Keyboard),
                 onClickClose = onCancel
             )
             BottomSheetsElementsText(
-                text = stringResource(R.string.SettingsSecurity_NotificationsDisabledWarning)
+                text = stringResource(R.string.Alert_CustomKeyboardIsUsed)
             )
             BottomSheetsElementsButtons(
-                buttonPrimaryText = stringResource(R.string.Button_Enable),
-                onClickPrimary = onEnable
+                buttonPrimaryText = stringResource(id = R.string.Alert_Select),
+                onClickPrimary = onSelect,
+                buttonDefaultText = stringResource(id = R.string.Alert_Skip),
+                onClickDefault = onSkip
             )
         }
     }
+
 }
