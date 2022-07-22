@@ -35,7 +35,7 @@ class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    FeeSettingsInfoScreen(title, text)
+                    FeeSettingsInfoScreen(title, text) { dismiss() }
                 }
             }
         }
@@ -53,12 +53,12 @@ class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-fun FeeSettingsInfoScreen(title: String?, text: String?) {
+fun FeeSettingsInfoScreen(title: String?, text: String?, onCloseClick: () -> Unit) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_info_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
         title = title ?: "",
-        onCloseClick = { }
+        onCloseClick = onCloseClick
     ) {
         InfoTextBody(text = text ?: "")
         Spacer(modifier = Modifier.height(52.dp))
