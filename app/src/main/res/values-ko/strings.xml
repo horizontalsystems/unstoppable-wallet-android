@@ -1022,7 +1022,7 @@
     <string name="ProUsersInfo_Features_TxCount">Transaction Count</string>
     <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
     <string name="ProUsersInfo_Features_Authenticating">Authenticating...</string>
-    <string name="Hud_Text_LearnMore">Coming So Soon</string>
+    <string name="Hud_Text_LearnMore">Coming Soon</string>
     <string name="Hud_Text_Activate">Activate</string>
     <string name="ProUsersActivate_Title">Activate the Pass</string>
     <string name="ProUsersActivate_Description">Mountain Yak - 경계 없이 사용. 중요한 시장 데이터, 분석 도구, 온체인 데이터를 기반으로 하는 유용한 차트를 보여줌으로써 프로젝트를 명확하게 볼 수 있습니다.</string>
