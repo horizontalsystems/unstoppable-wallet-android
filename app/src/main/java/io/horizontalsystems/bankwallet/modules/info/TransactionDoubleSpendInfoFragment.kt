@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.info.ui.InfoBody
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -97,8 +96,9 @@ private fun InfoScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 InfoHeader(R.string.Info_DoubleSpend_Title)
-                InfoBody(
-                    R.string.Info_DoubleSpend_Description,
+                TextImportantWarning(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    text = stringResource(R.string.Info_DoubleSpend_Description),
                 )
                 ConflictingTransactions(txHash, conflictingTxHash)
                 Spacer(Modifier.height(44.dp))
