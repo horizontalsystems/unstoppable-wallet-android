@@ -206,7 +206,7 @@ private fun BottomSheetContent(
         PriceChange -> {
             SingleSelectBottomSheetContent(
                 title = R.string.Market_Filter_PriceChange,
-                headerIcon = R.drawable.ic_market_24,
+                headerIcon = R.drawable.icon_24_markets,
                 items = viewModel.priceChangeViewItemOptions,
                 selectedItem = viewModel.priceChange,
                 onSelect = {
