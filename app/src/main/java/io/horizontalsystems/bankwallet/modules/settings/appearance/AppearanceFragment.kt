@@ -51,36 +51,9 @@ class AppearanceFragment : BaseFragment() {
     }
 }
 
-@Composable
-fun AppearanceScreen(navController: NavController) {
-    ComposeAppTheme {
-        Surface(color = ComposeAppTheme.colors.tyler) {
-            Column {
-                AppBar(
-                    TranslatableString.ResString(R.string.Settings_Appearance),
-                    navigationIcon = {
-                        HsIconButton(
-                            onClick = { navController.popBackStack() }
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_back),
-                                contentDescription = "back button",
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                        }
-                    },
-                    menuItems = listOf(),
-                )
-
-                AppearanceScreenContent()
-            }
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun AppearanceScreenContent() {
+fun AppearanceScreen(navController: NavController) {
     val viewModel = viewModel<AppearanceViewModel>(factory = AppearanceModule.Factory())
     val uiState = viewModel.uiState
 
@@ -89,134 +62,156 @@ private fun AppearanceScreenContent() {
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
-    ModalBottomSheetLayout(
-        sheetState = sheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-        sheetContent = {
-            BottomSheetHeader(
-                iconPainter = painterResource(id = R.drawable.ic_attention_24),
-                title = stringResource(id = R.string.Alert_TitleWarning),
-                iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                onCloseClick = {
-                    scope.launch {
-                        sheetState.hide()
-                    }
+
+    ComposeAppTheme {
+        Surface(color = ComposeAppTheme.colors.tyler) {
+            ModalBottomSheetLayout(
+                sheetState = sheetState,
+                sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+                sheetContent = {
+                    AppCloseWarningBottomSheet(
+                        onCloseClick = { scope.launch { sheetState.hide() } },
+                        onChangeClick = {
+                            selectedAppIcon?.let { viewModel.onEnterAppIcon(it) }
+                            scope.launch { sheetState.hide() }
+                        }
+                    )
                 }
             ) {
-                TextImportantWarning(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    text = stringResource(R.string.Appearance_Warning_CloseApplication)
-                )
-
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 24.dp, end = 24.dp, top = 20.dp),
-                    title = stringResource(id = R.string.Button_Change),
-                    onClick = {
-                        scope.launch {
-                            selectedAppIcon?.let {
-                                viewModel.onEnterAppIcon(it)
+                Column {
+                    AppBar(
+                        TranslatableString.ResString(R.string.Settings_Appearance),
+                        navigationIcon = {
+                            HsIconButton(
+                                onClick = { navController.popBackStack() }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_back),
+                                    contentDescription = "back button",
+                                    tint = ComposeAppTheme.colors.jacob
+                                )
                             }
-                            sheetState.hide()
-                        }
-                    }
-                )
+                        },
+                        menuItems = listOf(),
+                    )
 
-                ButtonPrimaryTransparent(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 12.dp),
-                    title = stringResource(id = R.string.Button_Cancel),
-                    onClick = {
-                        scope.launch {
-                            sheetState.hide()
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()),
+                    ) {
+                        HeaderText(text = stringResource(id = R.string.Appearance_Theme))
+                        CellSingleLineLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
+                            RowSelect(
+                                imageContent = {
+                                    Image(
+                                        painter = painterResource(id = option.iconRes),
+                                        contentDescription = null,
+                                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+                                    )
+                                },
+                                text = option.title.getString(),
+                                selected = option == uiState.themeOptions.selected
+                            ) {
+                                viewModel.onEnterTheme(option)
+                            }
                         }
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
+                        CellSingleLineLawrenceSection(uiState.launchScreenOptions.options) { option ->
+                            RowSelect(
+                                imageContent = {
+                                    Image(
+                                        painter = painterResource(id = option.iconRes),
+                                        contentDescription = null,
+                                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+                                    )
+                                },
+                                text = option.title.getString(),
+                                selected = option == uiState.launchScreenOptions.selected
+                            ) {
+                                viewModel.onEnterLaunchPage(option)
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
+                        AppIconSection(uiState.appIconOptions) {
+                            scope.launch {
+                                selectedAppIcon = it
+                                sheetState.show()
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
+                        CellSingleLineLawrenceSection(uiState.baseTokenOptions.options) { option ->
+                            RowSelect(
+                                imageContent = {
+                                    CoinImage(
+                                        iconUrl = option.coin.iconUrl,
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                },
+                                text = option.coin.code,
+                                selected = option == uiState.baseTokenOptions.selected
+                            ) {
+                                viewModel.onEnterBaseToken(option)
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        HeaderText(text = stringResource(id = R.string.Appearance_BalanceValue))
+                        CellMultilineLawrenceSection(uiState.balanceViewTypeOptions.options) { option ->
+                            RowMultilineSelect(
+                                title = stringResource(id = option.titleResId),
+                                subtitle = stringResource(id = option.subtitleResId),
+                                selected = option == uiState.balanceViewTypeOptions.selected
+                            ) {
+                                viewModel.onEnterBalanceViewType(option)
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(32.dp))
                     }
-                )
-                Spacer(modifier = Modifier.height(20.dp))
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun AppCloseWarningBottomSheet(
+    onCloseClick: () -> Unit,
+    onChangeClick: () -> Unit
+) {
+    BottomSheetHeader(
+        iconPainter = painterResource(id = R.drawable.ic_attention_24),
+        title = stringResource(id = R.string.Alert_TitleWarning),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+        onCloseClick = onCloseClick
     ) {
-        Column(
+        TextImportantWarning(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            text = stringResource(R.string.Appearance_Warning_CloseApplication)
+        )
+
+        ButtonPrimaryYellow(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-        ) {
-            HeaderText(text = stringResource(id = R.string.Appearance_Theme))
-            CellSingleLineLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
-                RowSelect(
-                    imageContent = {
-                        Image(
-                            painter = painterResource(id = option.iconRes),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-                        )
-                    },
-                    text = option.title.getString(),
-                    selected = option == uiState.themeOptions.selected
-                ) {
-                    viewModel.onEnterTheme(option)
-                }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, top = 20.dp),
+            title = stringResource(id = R.string.Button_Change),
+            onClick = onChangeClick
+        )
 
-            HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
-            CellSingleLineLawrenceSection(uiState.launchScreenOptions.options) { option ->
-                RowSelect(
-                    imageContent = {
-                        Image(
-                            painter = painterResource(id = option.iconRes),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-                        )
-                    },
-                    text = option.title.getString(),
-                    selected = option == uiState.launchScreenOptions.selected
-                ) {
-                    viewModel.onEnterLaunchPage(option)
-                }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-
-            HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
-            AppIconSection(uiState.appIconOptions) {
-                scope.launch {
-                    selectedAppIcon = it
-                    sheetState.show()
-                }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-
-            HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
-            CellSingleLineLawrenceSection(uiState.baseTokenOptions.options) { option ->
-                RowSelect(
-                    imageContent = {
-                        CoinImage(
-                            iconUrl = option.coin.iconUrl,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    },
-                    text = option.coin.code,
-                    selected = option == uiState.baseTokenOptions.selected
-                ) {
-                    viewModel.onEnterBaseToken(option)
-                }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-
-            HeaderText(text = stringResource(id = R.string.Appearance_BalanceValue))
-            CellMultilineLawrenceSection(uiState.balanceViewTypeOptions.options) { option ->
-                RowMultilineSelect(
-                    title = stringResource(id = option.titleResId),
-                    subtitle = stringResource(id = option.subtitleResId),
-                    selected = option == uiState.balanceViewTypeOptions.selected
-                ) {
-                    viewModel.onEnterBalanceViewType(option)
-                }
-            }
-            Spacer(modifier = Modifier.height(32.dp))
-        }
+        ButtonPrimaryTransparent(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 12.dp),
+            title = stringResource(id = R.string.Button_Cancel),
+            onClick = onCloseClick
+        )
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
