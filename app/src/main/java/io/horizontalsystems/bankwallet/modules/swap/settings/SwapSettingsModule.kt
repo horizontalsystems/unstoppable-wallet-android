@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.swap.settings
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarning
 import java.math.BigDecimal
 
 object SwapSettingsModule {
@@ -34,6 +36,12 @@ object SwapSettingsModule {
                 return Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
             }
         }
+    }
+
+    fun getState(caution: Caution?) = when (caution?.type) {
+        Caution.Type.Error -> DataState.Error(Exception(caution.text))
+        Caution.Type.Warning -> DataState.Error(FormsInputStateWarning(caution.text))
+        null -> null
     }
 
 

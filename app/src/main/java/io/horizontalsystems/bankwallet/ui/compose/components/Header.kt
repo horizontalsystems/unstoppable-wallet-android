@@ -18,7 +18,7 @@ fun HeaderText(text: String) {
             .padding(horizontal = 32.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        subhead1_grey(text = text)
+        subhead1_grey(text = text.uppercase())
     }
 }
 

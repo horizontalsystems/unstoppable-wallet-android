@@ -17,9 +17,6 @@ import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewMod
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapFromCoinCardService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapToCoinCardService
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchFragment
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFragment
-import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
-import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapFragment
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -43,7 +40,6 @@ object SwapMainModule {
         val title: String
         val url: String
         val fragment: SwapBaseFragment
-        val settingsFragment: SwapSettingsBaseFragment
 
         fun supports(blockchainType: BlockchainType): Boolean
     }
@@ -55,8 +51,6 @@ object SwapMainModule {
         override val url = "https://uniswap.org/"
         override val fragment: SwapBaseFragment
             get() = UniswapFragment()
-        override val settingsFragment: SwapSettingsBaseFragment
-            get() = UniswapSettingsFragment()
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.Ethereum
@@ -70,8 +64,6 @@ object SwapMainModule {
         override val url = "https://pancakeswap.finance/"
         override val fragment: SwapBaseFragment
             get() = UniswapFragment()
-        override val settingsFragment: SwapSettingsBaseFragment
-            get() = UniswapSettingsFragment()
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.BinanceSmartChain
@@ -85,8 +77,6 @@ object SwapMainModule {
         override val url = "https://app.1inch.io/"
         override val fragment: SwapBaseFragment
             get() = OneInchFragment()
-        override val settingsFragment: SwapSettingsBaseFragment
-            get() = OneInchSettingsFragment()
 
         override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.Ethereum,
@@ -106,8 +96,6 @@ object SwapMainModule {
         override val url = "https://quickswap.exchange/"
         override val fragment: SwapBaseFragment
             get() = UniswapFragment()
-        override val settingsFragment: SwapSettingsBaseFragment
-            get() = UniswapSettingsFragment()
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.Polygon

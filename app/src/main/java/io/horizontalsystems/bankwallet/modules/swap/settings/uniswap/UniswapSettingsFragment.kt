@@ -4,36 +4,39 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.databinding.FragmentSwapSettingsUniswapBinding
-import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.info.SwapInfoFragment
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapDeadlineViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
-import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsViewModel.ActionState
+import io.horizontalsystems.bankwallet.modules.swap.settings.ui.RecipientAddress
+import io.horizontalsystems.bankwallet.modules.swap.settings.ui.SlippageAmount
+import io.horizontalsystems.bankwallet.modules.swap.settings.ui.TransactionDeadlineInput
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 
 class UniswapSettingsFragment : SwapSettingsBaseFragment() {
     private val uniswapViewModel by navGraphViewModels<UniswapViewModel>(R.id.swapFragment) {
@@ -43,113 +46,106 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
     private val vmFactory by lazy {
         UniswapSettingsModule.Factory(uniswapViewModel.tradeService)
     }
-    private val uniswapSettingsViewModel by viewModels<UniswapSettingsViewModel> { vmFactory }
-    private val deadlineViewModel by viewModels<SwapDeadlineViewModel> { vmFactory }
-    private val recipientAddressViewModel by viewModels<RecipientAddressViewModel> { vmFactory }
-    private val slippageViewModel by viewModels<SwapSlippageViewModel> { vmFactory }
-
-    private var _binding: FragmentSwapSettingsUniswapBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSwapSettingsUniswapBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        uniswapSettingsViewModel.actionStateLiveData.observe(viewLifecycleOwner) { actionState ->
-            when (actionState) {
-                is ActionState.Enabled -> {
-                    setButton(getString(R.string.SwapSettings_Apply), true)
-                }
-                is ActionState.Disabled -> {
-                    setButton(actionState.title, false)
-                }
-            }
-        }
-
-        binding.slippageInputView.setViewModel(slippageViewModel, viewLifecycleOwner)
-        binding.deadlineInputView.setViewModel(deadlineViewModel, viewLifecycleOwner)
-
-        binding.buttonApplyCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        binding.recipientAddressCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        setRecipientAddressCompose()
-    }
-
-    private fun setRecipientAddressCompose() {
-        binding.recipientAddressCompose.setContent {
-            ComposeAppTheme {
-                val tokenQuery = TokenQuery(dex.blockchainType, TokenType.Native)
-                App.marketKit.token(tokenQuery)?.let { token ->
-                    Column {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        HeaderSorting {
-                            subhead1_grey(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                text = stringResource(R.string.SwapSettings_RecipientAddressTitle),
-                            )
-                        }
-
-                        HSAddressInput(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            initial = recipientAddressViewModel.initialAddress,
-                            tokenQuery = token.tokenQuery,
-                            coinCode = token.coin.code,
-                            onStateChange = {
-                                recipientAddressViewModel.setAddressWithError(it?.dataOrNull, it?.errorOrNull)
-                            }
-                        )
-
-                        subhead2_grey(
-                            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-                            text = stringResource(R.string.SwapSettings_RecipientAddressDescription),
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setButton(title: String, enabled: Boolean = false) {
-        binding.buttonApplyCompose.setContent {
-            ComposeAppTheme {
-                ButtonPrimaryYellow(
-                    modifier = Modifier.padding(
-                        top = 28.dp,
-                        bottom = 24.dp
-                    ),
-                    title = title,
-                    onClick = {
-                        if (uniswapSettingsViewModel.onDoneClick()) {
+            setContent {
+                ComposeAppTheme {
+                    UniswapSettingsScreen(
+                        onCloseClick = {
                             findNavController().popBackStack()
-                        } else {
-                            HudHelper.showErrorMessage(
-                                this.requireView(),
-                                getString(R.string.default_error_msg)
+                        },
+                        onInfoClick = {
+                            findNavController().slideFromRight(
+                                R.id.swapInfoFragment,
+                                SwapInfoFragment.prepareParams(dex)
                             )
+                        },
+                        dex = dex,
+                        factory = vmFactory,
+                    )
+                }
+            }
+        }
+    }
+
+}
+
+@Composable
+private fun UniswapSettingsScreen(
+    onCloseClick: () -> Unit,
+    onInfoClick: () -> Unit,
+    factory: UniswapSettingsModule.Factory,
+    dex: SwapMainModule.Dex,
+    uniswapSettinsViewModel: UniswapSettingsViewModel = viewModel(factory = factory),
+    deadlineViewModel: SwapDeadlineViewModel = viewModel(factory = factory),
+    recipientAddressViewModel: RecipientAddressViewModel = viewModel(factory = factory),
+    slippageViewModel: SwapSlippageViewModel = viewModel(factory = factory),
+) {
+    val (buttonTitle, buttonEnabled) = uniswapSettinsViewModel.buttonState
+    val localview = LocalView.current
+
+    Surface(color = ComposeAppTheme.colors.tyler) {
+        Column {
+            AppBar(
+                title = TranslatableString.ResString(R.string.SwapSettings_Title),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Info_Title),
+                        icon = R.drawable.ic_info_24,
+                        onClick = onInfoClick
+                    ),
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = onCloseClick
+                    )
+                )
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Column {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    RecipientAddress(dex.blockchainType, recipientAddressViewModel)
+
+                    Spacer(modifier = Modifier.height(24.dp))
+                    SlippageAmount(slippageViewModel)
+
+                    Spacer(modifier = Modifier.height(24.dp))
+                    TransactionDeadlineInput(deadlineViewModel)
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+            }
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, end = 24.dp, bottom = 32.dp),
+                    title = buttonTitle,
+                    onClick = {
+                        if (uniswapSettinsViewModel.onDoneClick()) {
+                            onCloseClick()
+                        } else {
+                            HudHelper.showErrorMessage(localview, R.string.default_error_msg)
                         }
                     },
-                    enabled = enabled
+                    enabled = buttonEnabled
                 )
             }
         }
     }
-
 }

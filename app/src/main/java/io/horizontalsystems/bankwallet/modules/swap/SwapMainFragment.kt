@@ -98,7 +98,11 @@ class SwapMainFragment : BaseFragment() {
                     ButtonSecondaryCircle(
                         icon = R.drawable.ic_manage_2,
                         onClick = {
-                            findNavController().slideFromBottom(R.id.swapSettingsMainFragment)
+                            val destination = when(mainViewModel.provider){
+                                SwapMainModule.OneInchProvider -> R.id.oneinchSettingsFragment
+                                else -> R.id.uniswapSettingsFragment
+                            }
+                            findNavController().slideFromBottom(destination)
                         }
                     )
                 }
