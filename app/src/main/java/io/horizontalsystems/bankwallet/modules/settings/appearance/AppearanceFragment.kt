@@ -103,14 +103,15 @@ private fun AppearanceScreenContent() {
                     }
                 }
             ) {
-                ImportantText {
-                    TextImportantWarning(text = stringResource(id = R.string.Appearance_Warning_CloseApplication))
-                }
+                TextImportantWarning(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    text = stringResource(R.string.Appearance_Warning_CloseApplication)
+                )
 
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                        .padding(start = 24.dp, end = 24.dp, top = 20.dp),
                     title = stringResource(id = R.string.Button_Change),
                     onClick = {
                         scope.launch {
@@ -122,10 +123,10 @@ private fun AppearanceScreenContent() {
                     }
                 )
 
-                ButtonPrimaryDefault(
+                ButtonPrimaryTransparent(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 16.dp),
+                        .padding(horizontal = 24.dp, vertical = 12.dp),
                     title = stringResource(id = R.string.Button_Cancel),
                     onClick = {
                         scope.launch {
@@ -133,8 +134,8 @@ private fun AppearanceScreenContent() {
                         }
                     }
                 )
+                Spacer(modifier = Modifier.height(20.dp))
             }
-            Spacer(modifier = Modifier.height(8.dp))
         }
     ) {
         Column(
