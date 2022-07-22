@@ -6,22 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -29,8 +26,10 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.helpers.LayoutHelper
+import kotlinx.coroutines.launch
 
 class BaseCurrencySettingsFragment : BaseFragment() {
 
@@ -50,6 +49,7 @@ class BaseCurrencySettingsFragment : BaseFragment() {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun BaseCurrencyScreen(
     navController: NavController,
@@ -59,124 +59,133 @@ private fun BaseCurrencyScreen(
 ) {
     val context = LocalContext.current
 
+    val scope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(
+        ModalBottomSheetValue.Hidden,
+        confirmStateChange = {
+            if (it == ModalBottomSheetValue.Hidden) {
+                viewModel.closeDisclaimer()
+            }
+            true
+        }
+    )
+
     if (viewModel.closeScreen) {
         navController.popBackStack()
     }
 
-    ComposeAppTheme {
-        if (viewModel.showDisclaimer) {
-            DisclaimerDialog(
-                viewModel.disclaimerCurrencies,
-                { viewModel.onAcceptDisclaimer() },
-                { viewModel.closeDisclaimer() }
-            )
+    if (viewModel.showDisclaimer) {
+        scope.launch {
+            sheetState.show()
         }
-        Column(
-            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    }
+
+    ComposeAppTheme {
+        ModalBottomSheetLayout(
+            sheetState = sheetState,
+            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+            sheetContent = {
+                WarningBottomSheet(
+                    text = stringResource(
+                        R.string.SettingsCurrency_DisclaimerText,
+                        viewModel.disclaimerCurrencies
+                    ),
+                    onCloseClick = {
+                        viewModel.closeDisclaimer()
+                        scope.launch { sheetState.hide() }
+                    },
+                    onOkClick = {
+                        viewModel.onAcceptDisclaimer()
+                        scope.launch { sheetState.hide() }
+                    }
+                )
+            }
         ) {
-            AppBar(
-                title = TranslatableString.ResString(R.string.SettingsCurrency_Title),
-                navigationIcon = {
-                    HsIconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
+            Column(
+                modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+            ) {
+                AppBar(
+                    title = TranslatableString.ResString(R.string.SettingsCurrency_Title),
+                    navigationIcon = {
+                        HsIconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_back),
+                                contentDescription = "back button",
+                                tint = ComposeAppTheme.colors.jacob
+                            )
+                        }
+                    }
+                )
+                Column(
+                    Modifier.verticalScroll(rememberScrollState())
+                ) {
+                    Spacer(Modifier.height(12.dp))
+                    CellMultilineLawrenceSection(viewModel.popularItems) { item ->
+                        CurrencyCell(
+                            item.currency.code,
+                            item.currency.symbol,
+                            LayoutHelper.getCurrencyDrawableResource(
+                                context, item.currency.code.lowercase()
+                            ),
+                            item.selected,
+                            { viewModel.onSelectBaseCurrency(item.currency) }
                         )
                     }
-                }
-            )
-            Column(
-                Modifier.verticalScroll(rememberScrollState())
-            ) {
-                Spacer(Modifier.height(12.dp))
-                CellMultilineLawrenceSection(viewModel.popularItems) { item ->
-                    CurrencyCell(
-                        item.currency.code,
-                        item.currency.symbol,
-                        LayoutHelper.getCurrencyDrawableResource(
-                            context, item.currency.code.lowercase()
-                        ),
-                        item.selected,
-                        { viewModel.onSelectBaseCurrency(item.currency) }
+                    Spacer(Modifier.height(24.dp))
+                    HeaderText(
+                        stringResource(R.string.SettingsCurrency_Other)
                     )
+                    CellMultilineLawrenceSection(viewModel.otherItems) { item ->
+                        CurrencyCell(
+                            item.currency.code,
+                            item.currency.symbol,
+                            LayoutHelper.getCurrencyDrawableResource(
+                                context, item.currency.code.lowercase()
+                            ),
+                            item.selected,
+                            { viewModel.onSelectBaseCurrency(item.currency) }
+                        )
+                    }
+                    Spacer(Modifier.height(24.dp))
                 }
-                Spacer(Modifier.height(24.dp))
-                HeaderText(
-                    stringResource(R.string.SettingsCurrency_Other)
-                )
-                CellMultilineLawrenceSection(viewModel.otherItems) { item ->
-                    CurrencyCell(
-                        item.currency.code,
-                        item.currency.symbol,
-                        LayoutHelper.getCurrencyDrawableResource(
-                            context, item.currency.code.lowercase()
-                        ),
-                        item.selected,
-                        { viewModel.onSelectBaseCurrency(item.currency) }
-                    )
-                }
-                Spacer(Modifier.height(24.dp))
             }
         }
     }
 }
 
 @Composable
-private fun DisclaimerDialog(
-    currencyCodes: String,
-    onAccept: () -> Unit,
-    onDismiss: () -> Unit,
+private fun WarningBottomSheet(
+    text: String,
+    onCloseClick: () -> Unit,
+    onOkClick: () -> Unit
 ) {
-    Dialog(
-        onDismissRequest = onDismiss
+    BottomSheetHeader(
+        iconPainter = painterResource(R.drawable.ic_attention_24),
+        title = stringResource(R.string.SettingsCurrency_DisclaimerTitle),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+        onCloseClick = onCloseClick
     ) {
-        Column(
+        TextImportantWarning(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            text = text
+        )
+
+        ButtonPrimaryYellow(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence)
-        ) {
-            Row(
-                modifier = Modifier.height(64.dp).fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.padding(horizontal = 12.dp),
-                    painter = painterResource(R.drawable.ic_attention_24),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.jacob
-                )
-                headline2_leah(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 48.dp),
-                    text = stringResource(R.string.SettingsCurrency_DisclaimerTitle),
-                    textAlign = TextAlign.Center
-                )
-            }
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-            )
-            Spacer(Modifier.height(11.dp))
-            TextImportantWarning(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(R.string.SettingsCurrency_DisclaimerText, currencyCodes)
-            )
-            ButtonPrimaryYellow(
-                modifier = Modifier
-                    .padding(
-                        start = 16.dp,
-                        top = 28.dp,
-                        end = 16.dp,
-                        bottom = 16.dp
-                    )
-                    .fillMaxWidth(),
-                title = stringResource(R.string.SettingsCurrency_Understand),
-                onClick = onAccept
-            )
-        }
+                .padding(start = 24.dp, end = 24.dp, top = 20.dp),
+            title = stringResource(id = R.string.Button_Change),
+            onClick = onOkClick
+        )
+
+        ButtonPrimaryTransparent(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 12.dp),
+            title = stringResource(id = R.string.Button_Cancel),
+            onClick = onCloseClick
+        )
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
