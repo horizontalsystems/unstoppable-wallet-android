@@ -102,7 +102,7 @@ private fun ActivateCell(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 B2(
-                    text = stringResource(R.string.ExperimentalFeatures_BitcoinHodling),
+                    text = stringResource(R.string.Hud_Text_Activate),
                     maxLines = 1,
                 )
                 Spacer(Modifier.weight(1f))
