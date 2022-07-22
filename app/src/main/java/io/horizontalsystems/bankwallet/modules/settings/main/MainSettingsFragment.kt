@@ -255,7 +255,7 @@ fun HsSettingCell(
         )
         Spacer(Modifier.weight(1f))
         value?.let {
-            subhead1_leah(
+            subhead1_grey(
                 text = it,
                 maxLines = 1,
                 modifier = Modifier.padding(horizontal = 8.dp)
