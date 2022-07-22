@@ -61,7 +61,8 @@ fun ZCashBirthdayHeightDialog(
                 }
             )
             BottomSheetsElementsButtons(
-                onClickDone = {
+                buttonPrimaryText = stringResource(R.string.Button_Done),
+                onClickPrimary = {
                     onEnter.invoke(zCashConfig)
                 }
             )
