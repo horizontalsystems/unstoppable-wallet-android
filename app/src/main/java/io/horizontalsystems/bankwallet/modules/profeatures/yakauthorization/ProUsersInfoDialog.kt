@@ -9,6 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -54,7 +55,8 @@ class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
 @Composable
 private fun ProUsersInfoScreen(navController: NavController, features: List<String>) {
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.ic_pro_user),
+        iconPainter = painterResource(R.drawable.icon_24_lock),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.ProUsersInfo_UnstoppablePass),
         onCloseClick = {
             navController.popBackStack()
@@ -73,7 +75,7 @@ private fun ProUsersInfoScreen(navController: NavController, features: List<Stri
                     .height(44.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                subhead1_grey(
+                subhead2_leah(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 8.dp)
                         .weight(1f),
@@ -100,18 +102,10 @@ private fun ProUsersInfoScreen(navController: NavController, features: List<Stri
             title = stringResource(R.string.Hud_Text_LearnMore),
             onClick = {
                 navController.popBackStack()
-            }
+            },
+            enabled = false
         )
 
-        ButtonPrimaryTransparent(
-            modifier = Modifier
-                .padding(start = 24.dp, end = 24.dp, top = 12.dp)
-                .fillMaxWidth(),
-            title = stringResource(R.string.Button_Cancel),
-            onClick = {
-                navController.popBackStack()
-            }
-        )
         Spacer(Modifier.height(32.dp))
     }
 }
