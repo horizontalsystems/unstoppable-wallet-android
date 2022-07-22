@@ -1023,7 +1023,7 @@
     <string name="ProUsersInfo_Features_TxCount">Transaction Count</string>
     <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
     <string name="ProUsersInfo_Features_Authenticating">Authenticating...</string>
-    <string name="Hud_Text_LearnMore">Coming So Soon</string>
+    <string name="Hud_Text_LearnMore">Coming Soon</string>
     <string name="Hud_Text_Activate">Activate</string>
     <string name="ProUsersActivate_Title">Activate the Pass</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, useful charts based on on-chain data that will help give you a clear view of projects</string>
