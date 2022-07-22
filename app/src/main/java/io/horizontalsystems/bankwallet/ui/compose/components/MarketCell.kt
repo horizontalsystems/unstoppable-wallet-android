@@ -172,11 +172,6 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
     when (marketDataValue) {
         is MarketDataValue.MarketCap -> {
             Row {
-                subhead1_jacob(
-                    text = "MCap",
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
                 subhead2_grey(
                     text = marketDataValue.value,
                     maxLines = 1,
@@ -185,11 +180,6 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
         }
         is MarketDataValue.Volume -> {
             Row {
-                subhead2_jacob(
-                    text = "Vol",
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
                 subhead2_grey(
                     text = marketDataValue.value,
                     maxLines = 1,
