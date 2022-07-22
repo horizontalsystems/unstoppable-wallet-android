@@ -1023,7 +1023,7 @@
     <string name="ProUsersInfo_Features_TxCount">交易数</string>
     <string name="ProUsersInfo_Features_TxVolume">交易量</string>
     <string name="ProUsersInfo_Features_Authenticating">正在验证身份...</string>
-    <string name="Hud_Text_LearnMore">马上就来了</string>
+    <string name="Hud_Text_LearnMore">Coming Soon</string>
     <string name="Hud_Text_Activate">激活</string>
     <string name="ProUsersActivate_Title">激活Pass</string>
     <string name="ProUsersActivate_Description">Mountain Yak - 不受边界限制。 将为您提供重要的市场数据、分析工具、基于链式数据的有用图表，有助您清晰了解项目</string>
