@@ -1,9 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.swap.settings
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.swap.settings.ui.InputButton
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
@@ -27,21 +31,19 @@ class SwapSlippageViewModel(
 
     private val disposable = CompositeDisposable()
 
-    override val inputFieldButtonItems: List<InputFieldButtonItem>
+    override val inputButtons: List<InputButton>
         get() = service.recommendedSlippages.map {
             val slippageStr = it.toPlainString()
-            InputFieldButtonItem("$slippageStr%") {
-                setTextLiveData.postValue(slippageStr)
-                onChangeText(slippageStr)
-            }
+            InputButton("$slippageStr%", slippageStr)
         }
 
     override val inputFieldPlaceholder: String?
         get() = service.defaultSlippage.toPlainString()
-    override val setTextLiveData = MutableLiveData<String?>()
-    override val cautionLiveData = MutableLiveData<Caution?>()
     override val initialValue: String?
         get() = service.initialSlippage?.toPlainString()
+
+    var errorState by mutableStateOf<DataState.Error?>(null)
+        private set
 
     init {
         service.slippageChangeObservable
@@ -63,7 +65,7 @@ class SwapSlippageViewModel(
             )
             else -> null
         }
-        cautionLiveData.postValue(caution)
+        errorState = SwapSettingsModule.getState(caution)
     }
 
     override fun onCleared() {

@@ -60,7 +60,7 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
 
             if (wallets.isNotEmpty()) {
                 HeaderText(
-                    text = stringResource(R.string.ManageAccount_Wallets).uppercase()
+                    text = stringResource(R.string.ManageAccount_Wallets)
                 )
                 Section(wallets.sortedWith(comparator))
             }
@@ -70,7 +70,7 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
                     Spacer(Modifier.height(24.dp))
                 }
                 HeaderText(
-                    text = stringResource(R.string.ManageAccount_WatchAddresses).uppercase()
+                    text = stringResource(R.string.ManageAccount_WatchAddresses)
                 )
                 Section(watchingAddresses.sortedWith(comparator))
             }

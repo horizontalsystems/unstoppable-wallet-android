@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.swap.settings.uniswap
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -15,7 +17,8 @@ class UniswapSettingsViewModel(
         private val tradeService: UniswapTradeService
 ) : ViewModel() {
 
-    val actionStateLiveData = MutableLiveData<ActionState>(ActionState.Enabled)
+    var buttonState by mutableStateOf(Pair(Translator.getString(R.string.SwapSettings_Apply), true))
+        private set
 
     private val disposable = CompositeDisposable()
 
@@ -32,7 +35,7 @@ class UniswapSettingsViewModel(
     private fun syncAction() {
         when (service.state) {
             is State.Valid -> {
-                actionStateLiveData.postValue(ActionState.Enabled)
+                buttonState = Pair(Translator.getString(R.string.SwapSettings_Apply), true)
             }
             State.Invalid -> {
                 val error = service.errors.firstOrNull() ?: return
@@ -52,7 +55,7 @@ class UniswapSettingsViewModel(
                 }
 
                 errorText?.let {
-                    actionStateLiveData.postValue(ActionState.Disabled(it))
+                    buttonState = Pair(it, false)
                 }
             }
         }

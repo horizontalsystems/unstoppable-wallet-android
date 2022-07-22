@@ -14,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 
 class OneInchSettingsService(
-        swapSettings: OneInchSwapSettings
+    swapSettings: OneInchSwapSettings
 ) : IRecipientAddressService, ISwapSlippageService {
 
     var state: State = State.Valid(swapSettings)
@@ -26,7 +26,6 @@ class OneInchSettingsService(
     val stateObservable = BehaviorSubject.createDefault<State>(State.Invalid)
     var errors: List<Throwable> = listOf()
 
-    //region IRecipientAddressService
     private var recipient: Address? = swapSettings.recipient
     private var recipientError: Throwable? = null
         set(value) {
@@ -66,9 +65,6 @@ class OneInchSettingsService(
     override fun setRecipientAmount(amount: BigDecimal) {
     }
 
-    //endregion
-
-    // region ISwapSlippageService
     private val limitSlippageBounds = Range(BigDecimal("0.01"), BigDecimal("50"))
     private val usualHighestSlippage = BigDecimal(5)
     private var slippage: BigDecimal = swapSettings.slippage
@@ -103,7 +99,6 @@ class OneInchSettingsService(
             it is SwapSettingsError.InvalidSlippage
         }
     }
-    //endregion
 
     init {
         sync()
@@ -124,10 +119,18 @@ class OneInchSettingsService(
                 errs.add(SwapSettingsError.ZeroSlippage)
             }
             slippage > limitSlippageBounds.upper -> {
-                errs.add(SwapSettingsError.InvalidSlippage(InvalidSlippageType.Higher(limitSlippageBounds.upper)))
+                errs.add(
+                    SwapSettingsError.InvalidSlippage(
+                        InvalidSlippageType.Higher(limitSlippageBounds.upper)
+                    )
+                )
             }
             slippage < limitSlippageBounds.lower -> {
-                errs.add(SwapSettingsError.InvalidSlippage(InvalidSlippageType.Lower(limitSlippageBounds.lower)))
+                errs.add(
+                    SwapSettingsError.InvalidSlippage(
+                        InvalidSlippageType.Lower(limitSlippageBounds.lower)
+                    )
+                )
             }
             else -> {
                 swapSettings.slippage = slippage
