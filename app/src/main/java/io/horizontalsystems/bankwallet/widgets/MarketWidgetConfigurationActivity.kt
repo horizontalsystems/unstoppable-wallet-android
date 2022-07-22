@@ -45,7 +45,7 @@ class MarketWidgetConfigurationActivity : CoreActivity() {
         val context = applicationContext
 
         setContent {
-            var selectedType by remember { mutableStateOf(MarketWidgetType.Watchlist) }
+            var selectedType by remember { mutableStateOf<MarketWidgetType?>(null) }
             var currentGlanceId by remember { mutableStateOf<GlanceId?>(null) }
 
             LaunchedEffect(Unit) {
@@ -53,7 +53,7 @@ class MarketWidgetConfigurationActivity : CoreActivity() {
                 for (glanceId in manager.getGlanceIds(MarketWidget::class.java)) {
                     val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
                     if (state.widgetId == 0 || state.widgetId == appWidgetId) {
-                        selectedType = state.type
+                        selectedType = if (state.widgetId != 0) state.type else null
                         currentGlanceId = glanceId
                         break
                     }
@@ -68,7 +68,7 @@ class MarketWidgetConfigurationActivity : CoreActivity() {
                         menuItems = listOf(MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),
                             icon = R.drawable.ic_close,
-                            onClick = { finishActivity(selectedType, appWidgetId, currentGlanceId, context) }
+                            onClick = { finish() }
                         ))
                     )
                     Spacer(modifier = Modifier.height(12.dp))
@@ -78,7 +78,7 @@ class MarketWidgetConfigurationActivity : CoreActivity() {
                                 .fillMaxSize()
                                 .clickable(onClick = {
                                     selectedType = type
-                                    finishActivity(selectedType, appWidgetId, currentGlanceId, context)
+                                    finishActivity(type, appWidgetId, currentGlanceId, context)
                                 })
                                 .padding(horizontal = 16.dp),
                             verticalAlignment = Alignment.CenterVertically
