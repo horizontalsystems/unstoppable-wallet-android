@@ -55,7 +55,15 @@ val Token.protocolInfo: String
 
 val Token.typeInfo: String
     get() = when (val type = type) {
-        TokenType.Native -> Translator.getString(R.string.CoinPlatforms_Native)
+        TokenType.Native -> {
+            val parts = mutableListOf(Translator.getString(R.string.CoinPlatforms_Native))
+            when(this.blockchainType) {
+                BlockchainType.BinanceSmartChain -> parts.add("(BEP20)")
+                BlockchainType.BinanceChain -> parts.add("(BEP2)")
+                else -> { }
+            }
+            parts.joinToString(" ")
+        }
         is TokenType.Eip20 -> type.address.shortenedAddress()
         is TokenType.Bep2 -> type.symbol
         is TokenType.Unsupported -> ""
