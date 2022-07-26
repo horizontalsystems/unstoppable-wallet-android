@@ -264,6 +264,7 @@ fun CoinTabs(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
                             icon = R.drawable.ic_filled_star_24,
+                            tint = ComposeAppTheme.colors.jacob,
                             onClick = { viewModel.onUnfavoriteClick() }
                         )
                     )

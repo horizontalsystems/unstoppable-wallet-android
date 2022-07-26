@@ -133,7 +133,8 @@ fun WCSessionPage(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
                         onClick = { navController.popBackStack() },
-                        enabled = closeEnabled
+                        enabled = closeEnabled,
+                        tint = if (closeEnabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey50
                     )
                 )
             )

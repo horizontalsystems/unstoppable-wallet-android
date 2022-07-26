@@ -141,7 +141,8 @@ fun SearchBar(
                             icon = menuItem.icon,
                             onClick = menuItem.onClick,
                             description = menuItem.title.getString(),
-                            enabled = menuItem.enabled
+                            enabled = menuItem.enabled,
+                            tint = menuItem.tint
                         )
                     } else {
                         Text(

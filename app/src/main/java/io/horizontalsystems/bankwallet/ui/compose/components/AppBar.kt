@@ -22,6 +22,7 @@ data class MenuItem(
     val title: TranslatableString,
     @DrawableRes val icon: Int? = null,
     val enabled: Boolean = true,
+    val tint: Color = Color.Unspecified,
     val onClick: () -> Unit,
 )
 
@@ -31,7 +32,7 @@ fun AppBarMenuButton(
     onClick: () -> Unit,
     description: String? = null,
     enabled: Boolean = true,
-    tint: Color = ComposeAppTheme.colors.jacob,
+    tint: Color = Color.Unspecified,
 ) {
     HsIconButton(
         onClick = onClick,
@@ -84,7 +85,8 @@ fun AppBar(
                     AppBarMenuButton(
                         icon = menuItem.icon,
                         onClick = menuItem.onClick,
-                        enabled = menuItem.enabled
+                        enabled = menuItem.enabled,
+                        tint = menuItem.tint,
                     )
                 } else {
                     val color = if (menuItem.enabled) {
