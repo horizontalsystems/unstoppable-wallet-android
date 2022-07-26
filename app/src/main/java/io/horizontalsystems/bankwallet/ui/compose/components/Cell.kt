@@ -69,7 +69,7 @@ fun <T> CellMultilineLawrenceSectionFramed(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
+            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
     ) {
         items.forEachIndexed { index, marketDataLine ->
             CellMultilineLawrence(borderTop = index != 0) {
@@ -139,7 +139,7 @@ fun <T> CellSingleLineLawrenceSectionFramed(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
+            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
     ) {
         items.forEachIndexed { index, marketDataLine ->
             CellSingleLineLawrence(borderTop = index != 0) {

@@ -75,10 +75,10 @@ val TokenQuery.protocolType: String?
             when (blockchainType) {
                 BlockchainType.Ethereum -> "ERC20"
                 BlockchainType.BinanceSmartChain -> "BEP20"
-                BlockchainType.Polygon -> "POLYGON"
-                BlockchainType.Avalanche -> "AVALANCHE"
-                BlockchainType.Optimism -> "OPTIMISM"
-                BlockchainType.ArbitrumOne -> "ARBITRUM"
+                BlockchainType.Polygon -> "Polygon"
+                BlockchainType.Avalanche -> "Avalanche"
+                BlockchainType.Optimism -> "Optimism"
+                BlockchainType.ArbitrumOne -> "Arbitrum"
                 else -> null
             }
         }
@@ -193,6 +193,12 @@ val BlockchainType.order: Int
         else -> Int.MAX_VALUE
     }
 
+val TokenType.order: Int
+    get() = when (this) {
+        TokenType.Native -> 0
+        else -> Int.MAX_VALUE
+    }
+
 
 val Coin.imageUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/$uid@3x.png"
@@ -204,7 +210,9 @@ val FullCoin.typeLabel: String?
     get() = tokens.singleOrNull()?.protocolType
 
 val FullCoin.supportedTokens
-    get() = tokens.filter { it.isSupported }
+    get() = tokens
+        .filter { it.isSupported }
+        .sortedWith(compareBy({ it.type.order }, { it.blockchain.type.order }))
 
 val FullCoin.iconPlaceholder: Int
     get() = if (tokens.size == 1) {
