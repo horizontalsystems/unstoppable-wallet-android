@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -72,16 +71,12 @@ class TermsFragment : BaseFragment() {
                 }
             )
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                Spacer(modifier = Modifier.height(24.dp))
 
-                Text(
+                InfoTextBody(
                     text = stringResource(R.string.SettingsTerms_Text),
-                    style = ComposeAppTheme.typography.body,
-                    color = ComposeAppTheme.colors.bran,
-                    modifier = Modifier.padding(horizontal = 24.dp)
                 )
 
-                Spacer(modifier = Modifier.height(36.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Column(
                     modifier = Modifier

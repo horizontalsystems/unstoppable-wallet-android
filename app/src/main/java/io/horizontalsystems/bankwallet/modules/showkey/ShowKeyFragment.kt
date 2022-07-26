@@ -221,11 +221,7 @@ private fun KeyTabs(viewModel: ShowKeyViewModel, showKeyWarning: (String) -> Uni
 @Composable
 private fun PublicKeys(viewModel: ShowKeyViewModel) {
     val localView = LocalView.current
-    C1(
-        text = "BITCOIN",
-        modifier = Modifier.padding(horizontal = 16.dp)
-    )
-    Spacer(Modifier.height(13.dp))
+    HeaderText(text = "BITCOIN")
     CellSingleLineLawrenceSection(
         listOf(
             {
@@ -245,12 +241,8 @@ private fun PublicKeys(viewModel: ShowKeyViewModel) {
             },
         )
     )
-    Spacer(Modifier.height(36.dp))
-    C1(
-        text = "BITCOIN CASH",
-        modifier = Modifier.padding(horizontal = 16.dp)
-    )
-    Spacer(Modifier.height(13.dp))
+    Spacer(Modifier.height(24.dp))
+    HeaderText(text = "BITCOIN CASH")
     CellSingleLineLawrenceSection(
         listOf(
             {
@@ -265,12 +257,8 @@ private fun PublicKeys(viewModel: ShowKeyViewModel) {
             },
         )
     )
-    Spacer(Modifier.height(36.dp))
-    C1(
-        text = "LITECOIN",
-        modifier = Modifier.padding(horizontal = 16.dp)
-    )
-    Spacer(Modifier.height(13.dp))
+    Spacer(Modifier.height(24.dp))
+    HeaderText(text = "LITECOIN",)
     CellSingleLineLawrenceSection(
         listOf(
             {
@@ -290,12 +278,8 @@ private fun PublicKeys(viewModel: ShowKeyViewModel) {
             },
         )
     )
-    Spacer(Modifier.height(36.dp))
-    C1(
-        text = "DASH",
-        modifier = Modifier.padding(horizontal = 16.dp)
-    )
-    Spacer(Modifier.height(13.dp))
+    Spacer(Modifier.height(24.dp))
+    HeaderText(text = "DASH")
     CellSingleLineLawrenceSection(
         listOf {
             KeyCell(stringResource(R.string.ShowKey_TabPublicKeys)) {
@@ -303,7 +287,7 @@ private fun PublicKeys(viewModel: ShowKeyViewModel) {
             }
         }
     )
-    Spacer(Modifier.height(60.dp))
+    Spacer(Modifier.height(32.dp))
 }
 
 private fun copy(publicKeys: String?, localView: View) {
@@ -431,11 +415,7 @@ fun SeedPhraseList(wordsNumbered: List<ShowKeyModule.WordNumbered>) {
 private fun PublicKeys_Preview() {
     ComposeAppTheme {
         Column {
-            C1(
-                text = "LITECOIN",
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            Spacer(Modifier.height(13.dp))
+            HeaderText(text = "LITECOIN")
             CellSingleLineLawrenceSection(
                 listOf(
                     { KeyCell(stringResource(R.string.ShowKey_Bip44)) {} },

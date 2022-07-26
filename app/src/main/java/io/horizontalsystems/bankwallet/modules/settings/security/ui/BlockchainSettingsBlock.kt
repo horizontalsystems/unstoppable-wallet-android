@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.Blo
 import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
@@ -44,9 +45,8 @@ fun BlockchainSettingsBlock(
             }
         }
     }
-    subhead2_grey(
+    InfoText(
         text = stringResource(R.string.SecurityCenter_BlockchainSettingsFooterDescription),
-        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
     )
 }
 

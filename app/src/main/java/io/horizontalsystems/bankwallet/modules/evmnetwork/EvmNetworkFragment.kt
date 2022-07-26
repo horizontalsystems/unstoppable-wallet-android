@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -83,13 +84,10 @@ private fun EvmNetworkScreen(
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(top = 12.dp, bottom = 30.dp)
             ) {
 
                 item {
-                    CoinListHeaderWithInfoButton(
-                        R.string.EvmNetwork_SyncMode,
-                    ) {
+                    HeaderText(stringResource(R.string.EvmNetwork_SyncMode)) {
                         navController.slideFromBottom(R.id.evmBlockchainSyncModeInfoFragment)
                     }
                 }
@@ -100,6 +98,7 @@ private fun EvmNetworkScreen(
                             viewModel.onSelectViewItem(item)
                         }
                     }
+                    Spacer(Modifier.height(32.dp))
                 }
 
             }

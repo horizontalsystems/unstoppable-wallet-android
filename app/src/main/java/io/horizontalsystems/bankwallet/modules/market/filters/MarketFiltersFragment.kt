@@ -249,7 +249,7 @@ fun AdvancedSearchContent(
         }
     )
 
-    Spacer(Modifier.height(32.dp))
+    Spacer(Modifier.height(24.dp))
     HeaderText(stringResource(R.string.Market_FilterSection_MarketParameters))
 
     CellSingleLineLawrenceSection(
@@ -268,7 +268,7 @@ fun AdvancedSearchContent(
         })
     )
 
-    Spacer(Modifier.height(32.dp))
+    Spacer(Modifier.height(24.dp))
     HeaderText(stringResource(R.string.Market_FilterSection_NetworkParameters))
 
     CellSingleLineLawrenceSection(
@@ -281,7 +281,7 @@ fun AdvancedSearchContent(
         }
     )
 
-    Spacer(Modifier.height(32.dp))
+    Spacer(Modifier.height(24.dp))
     HeaderText(stringResource(R.string.Market_FilterSection_PriceParameters))
 
     CellSingleLineLawrenceSection(

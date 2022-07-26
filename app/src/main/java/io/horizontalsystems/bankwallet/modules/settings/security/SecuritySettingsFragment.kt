@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
@@ -38,8 +35,8 @@ import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
@@ -178,7 +175,7 @@ private fun SecurityCenterScreen(
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(top = 12.dp, bottom = 30.dp)
+                contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)
             ) {
 
                 item {
@@ -190,7 +187,8 @@ private fun SecurityCenterScreen(
                 }
 
                 item {
-                    CoinListHeader(R.string.SecurityCenter_Internet)
+                    Spacer(Modifier.height(24.dp))
+                    HeaderText(stringResource(R.string.SecurityCenter_Internet))
                     TorBlock(
                         torViewModel,
                         showAppRestartAlert,
@@ -198,7 +196,8 @@ private fun SecurityCenterScreen(
                 }
 
                 item {
-                    CoinListHeader(R.string.SecurityCenter_BlockchainSettings)
+                    Spacer(Modifier.height(24.dp))
+                    HeaderText(stringResource(R.string.SecurityCenter_BlockchainSettings))
                     BlockchainSettingsBlock(blockchainSettingsViewModel, navController)
                 }
 
@@ -207,12 +206,4 @@ private fun SecurityCenterScreen(
 
     }
 
-}
-
-@Composable
-fun CoinListHeader(titleTextRes: Int) {
-    subhead1_grey(
-        modifier = Modifier.padding(start = 16.dp, top = 44.dp, end = 16.dp, bottom = 13.dp),
-        text = stringResource(titleTextRes),
-    )
 }
