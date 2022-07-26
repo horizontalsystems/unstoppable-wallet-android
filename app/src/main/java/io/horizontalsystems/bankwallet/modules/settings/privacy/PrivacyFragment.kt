@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -27,6 +28,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import io.horizontalsystems.core.findNavController
 
 class PrivacyFragment : BaseFragment() {
@@ -75,21 +77,16 @@ private fun PrivacyScreen(navController: NavController) {
                     .weight(1f)
                     .verticalScroll(rememberScrollState())
             ) {
-                Spacer(modifier = Modifier.height(24.dp))
 
-                Text(
+                InfoTextBody(
                     text = stringResource(R.string.Privacy_Information),
-                    style = ComposeAppTheme.typography.body,
-                    color = ComposeAppTheme.colors.bran,
-                    modifier = Modifier.padding(horizontal = 24.dp)
                 )
 
-                Spacer(modifier = Modifier.height(15.dp))
                 BulletedText(R.string.Privacy_BulletedText1)
                 BulletedText(R.string.Privacy_BulletedText2)
                 BulletedText(R.string.Privacy_BulletedText3)
                 BulletedText(R.string.Privacy_BulletedText4)
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
             }
 
             Divider(
@@ -121,14 +118,15 @@ private fun BulletedText(@StringRes text: Int) {
             text = "\u2022 ",
             style = ComposeAppTheme.typography.body,
             color = ComposeAppTheme.colors.bran,
-            modifier = Modifier.padding(start = 9.dp, end = 8.dp)
+            modifier = Modifier.width(32.dp),
+            textAlign = TextAlign.Center
         )
 
         Text(
             text = stringResource(text),
             style = ComposeAppTheme.typography.body,
             color = ComposeAppTheme.colors.bran,
-            modifier = Modifier.padding(end = 24.dp)
+            modifier = Modifier.padding(end = 32.dp)
         )
     }
 

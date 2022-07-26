@@ -97,11 +97,13 @@ private fun BtcBlockchainSettingsScreen(
                     text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceChangeWarning)
                 )
 
+                Spacer(Modifier.height(24.dp))
                 RestoreSourceSettings(viewModel, navController)
 
+                Spacer(Modifier.height(24.dp))
                 TransactionDataSortSettings(viewModel, navController)
 
-                Spacer(Modifier.height(30.dp))
+                Spacer(Modifier.height(32.dp))
             }
 
             ButtonsGroupWithShade {
@@ -158,20 +160,18 @@ private fun BlockchainSettingSection(
     onItemClick: (BtcBlockchainSettingsModule.ViewItem) -> Unit,
     navController: NavController
 ) {
-    Spacer(Modifier.height(12.dp))
-    CoinListHeaderWithInfoButton(
-      settingTitleTextRes,
-    ) {
-        navController.slideFromBottom(infoScreenId)
-    }
+    HeaderText(
+        text = stringResource(settingTitleTextRes),
+        onInfoClick = {
+            navController.slideFromBottom(infoScreenId)
+        })
     CellMultilineLawrenceSection(restoreSources) { item ->
         SettingCell(item.title, item.subtitle, item.selected) {
             onItemClick(item)
         }
     }
-    subhead2_grey(
+    InfoText(
         text = stringResource(settingDescriptionTextRes),
-        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
     )
 }
 

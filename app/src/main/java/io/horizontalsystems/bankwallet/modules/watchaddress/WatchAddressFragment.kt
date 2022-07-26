@@ -96,10 +96,7 @@ fun WatchAddressScreen(navController: NavController) {
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
-                subhead2_grey(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    text = stringResource(R.string.Restore_Name),
-                )
+                HeaderText(text = stringResource(R.string.Restore_Name))
 
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -111,21 +108,20 @@ fun WatchAddressScreen(navController: NavController) {
                     }
                 )
 
-                Spacer(Modifier.height(44.dp))
+                Spacer(Modifier.height(24.dp))
 
-                subhead1_grey(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(R.string.Watch_Address_Title),
-                )
+                HeaderText(text = stringResource(R.string.Watch_Address_Title))
 
                 HSAddressInput(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .padding(horizontal = 16.dp)
                         .focusRequester(focusRequester),
                     tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
                     coinCode = "ETH",
                     onValueChange = viewModel::onEnterAddress
                 )
+
+                Spacer(Modifier.height(32.dp))
             }
 
             SideEffect {

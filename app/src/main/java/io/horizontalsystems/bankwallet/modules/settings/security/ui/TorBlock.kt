@@ -84,8 +84,7 @@ fun TorBlock(
             }
         })
 
-    subhead2_grey(
+    InfoText(
         text = stringResource(R.string.SettingsSecurity_TorConnectionDescription),
-        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
     )
 }

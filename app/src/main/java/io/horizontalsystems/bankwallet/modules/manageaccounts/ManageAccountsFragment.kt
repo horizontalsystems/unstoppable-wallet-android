@@ -134,12 +134,11 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    subhead2_grey(
-                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+                    InfoText(
                         text = stringResource(id = R.string.ManageAccounts_Hint),
                     )
+
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
             }
         }
