@@ -51,14 +51,11 @@ class NftCollectionEventsViewModel(
         )
 
     init {
-        service.items.collectWith(viewModelScope) { result ->
-            result.getOrNull()?.let { list ->
-                viewItem = ViewItem(eventTypeSelect, list)
+        service.itemsUpdatedFlow.collectWith(viewModelScope) { result ->
+            viewItem = ViewItem(eventTypeSelect, service.items?.getOrNull())
 
-                loadingMore = false
-            }
-
-            viewState = result.exceptionOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
+            loadingMore = false
+            viewState = service.items?.exceptionOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
         }
 
         viewModelScope.launch {

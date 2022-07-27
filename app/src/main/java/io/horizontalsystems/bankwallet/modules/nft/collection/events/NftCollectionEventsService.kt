@@ -11,9 +11,7 @@ import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.NftAsset
 import io.horizontalsystems.marketkit.models.NftEvent
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.rx2.asFlow
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -25,8 +23,8 @@ class NftCollectionEventsService(
         private val nftManager: NftManager,
         private val xRateRepository: BalanceXRateRepository
 ) {
-    private val _items = MutableStateFlow<Result<List<CollectionEvent>>?>(null)
-    val items = _items.filterNotNull()
+    var items: Result<List<CollectionEvent>>? = null
+    val itemsUpdatedFlow = MutableSharedFlow<Unit>()
 
     private var cursor: String? = null
     private val loading = AtomicBoolean(false)
@@ -42,7 +40,7 @@ class NftCollectionEventsService(
         load(true)
 
         xRateRepository.itemObservable.asFlow().collectWith(this) { xRatesMap ->
-            handleCoinPriceUpdate(xRatesMap)
+            this.launch { handleCoinPriceUpdate(xRatesMap) }
         }
     }
 
@@ -61,8 +59,13 @@ class NftCollectionEventsService(
        restart()
     }
 
+    private suspend fun updateItems(items: Result<List<CollectionEvent>>?) {
+        this.items = items
+        itemsUpdatedFlow.emit(Unit)
+    }
+
     private suspend fun restart() {
-        _items.update { Result.success(listOf()) }
+        updateItems(null)
 
         loadingJob?.cancel()
         loading.set(false)
@@ -79,7 +82,7 @@ class NftCollectionEventsService(
         loadingJob = launch {
             try {
                 if (!initialLoad && cursor == null) {
-                    _items.update { it }
+                    updateItems(items)
                 } else {
                     val type = if (eventType == NftEvent.EventType.All) null else eventType
                     val (events, cursor) = when (eventListType) {
@@ -87,15 +90,14 @@ class NftCollectionEventsService(
                         is NftEventListType.Asset -> marketKit.nftAssetEvents(eventListType.contractAddress, eventListType.tokenId, type, cursor)
                     }
 
-
-                    _items.update { handleEvents(events, cursor) }
+                    updateItems(handleEvents(events, cursor))
                 }
 
                 loading.set(false)
             } catch (cancellation: CancellationException) {
                 //ignore
             } catch (error: Throwable) {
-                _items.update { Result.failure(error) }
+                updateItems(Result.failure(error))
             }
         }
     }
@@ -120,20 +122,16 @@ class NftCollectionEventsService(
 
         val xRatesMap = xRateRepository.getLatestRates()
 
-        val wholeList = (_items.value?.getOrNull() ?: listOf()) + items
+        val wholeList = (this.items?.getOrNull() ?: listOf()) + items
 
         return Result.success(
             updateCurrencyValues(wholeList, xRatesMap)
         )
     }
 
-    private fun handleCoinPriceUpdate(xRatesMap: Map<String, CoinPrice?>) {
-        _items.update { result ->
-            result?.getOrNull()?.let {
-                Result.success(
-                    updateCurrencyValues(it, xRatesMap)
-                )
-            }
+    private suspend fun handleCoinPriceUpdate(xRatesMap: Map<String, CoinPrice?>) {
+        items?.getOrNull()?.let {
+            updateItems(Result.success(updateCurrencyValues(it, xRatesMap)))
         }
     }
 

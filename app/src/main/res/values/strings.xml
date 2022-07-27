@@ -1238,5 +1238,6 @@
     <!--Widget-->
 
     <string name="WidgetList_Config_Title">Choose Type</string>
+    <string name="NftAssetActivity_Empty">No item activity yet</string>
 
 </resources>
