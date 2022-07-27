@@ -1029,4 +1029,5 @@
     <string name="ProUsersActivate_Description">Mountain Yak - 不受边界限制。 将为您提供重要的市场数据、分析工具、基于链式数据的有用图表，有助您清晰了解项目</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Choose Type</string>
+    <string name="NftAssetActivity_Empty">No item activity yet</string>
 </resources>
