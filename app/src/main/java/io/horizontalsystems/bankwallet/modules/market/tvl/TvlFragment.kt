@@ -5,13 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -71,6 +74,7 @@ class TvlFragment : BaseFragment() {
         }
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     private fun TvlScreen(
         tvlViewModel: TvlViewModel,
@@ -114,7 +118,18 @@ class TvlFragment : BaseFragment() {
                             ListErrorView(stringResource(R.string.SyncError), tvlViewModel::onErrorClick)
                         }
                         ViewState.Success -> {
-                            LazyColumn {
+                            val listState = rememberSaveable(
+                                tvlData?.chainSelect?.selected,
+                                tvlData?.sortDescending,
+                                saver = LazyListState.Saver
+                            ) {
+                                LazyListState()
+                            }
+
+                            LazyColumn(
+                                state = listState,
+                                contentPadding = PaddingValues(bottom = 32.dp),
+                            ) {
                                 item {
                                     Chart(chartViewModel = chartViewModel) {
                                         tvlViewModel.onSelectChartInterval(it)
@@ -122,7 +137,7 @@ class TvlFragment : BaseFragment() {
                                 }
 
                                 tvlData?.let { tvlData ->
-                                    item {
+                                    stickyHeader {
                                         TvlMenu(
                                             tvlData.chainSelect,
                                             tvlData.sortDescending,
