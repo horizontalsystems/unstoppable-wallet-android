@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.core.setRemoteImage
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.databinding.ViewCardSwapBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment
+import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
@@ -52,7 +52,7 @@ class SwapCoinCardView @JvmOverloads constructor(
         observe(viewModel, lifecycleOwner)
 
         binding.selectedToken.setOnSingleClickListener {
-            val params = SelectSwapCoinDialogFragment.prepareParams(uuid, viewModel.dex)
+            val params = SelectSwapCoinFragment.prepareParams(uuid, viewModel.dex)
             fragment.findNavController().slideFromBottom(R.id.selectSwapCoinDialog, params)
         }
 
@@ -66,12 +66,12 @@ class SwapCoinCardView @JvmOverloads constructor(
             }
         }
 
-        fragment.getNavigationLiveData(SelectSwapCoinDialogFragment.resultBundleKey)
+        fragment.getNavigationLiveData(SelectSwapCoinFragment.resultBundleKey)
             ?.observe(lifecycleOwner, { bundle ->
-                val requestId = bundle.getLong(SelectSwapCoinDialogFragment.requestIdKey)
+                val requestId = bundle.getLong(SelectSwapCoinFragment.requestIdKey)
                 val coinBalanceItem =
                     bundle.getParcelable<SwapMainModule.CoinBalanceItem>(
-                        SelectSwapCoinDialogFragment.coinBalanceItemResultKey
+                        SelectSwapCoinFragment.coinBalanceItemResultKey
                     )
                 if (requestId == uuid && coinBalanceItem != null) {
                     viewModel.onSelectCoin(coinBalanceItem.token)
