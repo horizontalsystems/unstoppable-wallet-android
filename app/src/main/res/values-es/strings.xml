@@ -1029,4 +1029,5 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="ProUsersActivate_Description">Yak de Montaña - Ve sin fronteras. Le mostrará datos de mercado importantes, herramientas analíticas, gráficos útiles basados en datos en cadena que le ayudarán a ver claramente los proyectos</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Choose Type</string>
+    <string name="NftAssetActivity_Empty">No item activity yet</string>
 </resources>
