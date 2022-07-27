@@ -5,15 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -75,6 +79,7 @@ class MetricsPageFragment : BaseFragment() {
         findNavController().slideFromRight(R.id.coinFragment, arguments)
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun MetricsPage(
         viewModel: MetricsPageViewModel,
@@ -116,12 +121,22 @@ class MetricsPageFragment : BaseFragment() {
                             ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
                         ViewState.Success -> {
-                            LazyColumn {
+                            val listState = rememberSaveable(
+                                marketData?.menu?.sortDescending,
+                                saver = LazyListState.Saver
+                            ) {
+                                LazyListState()
+                            }
+
+                            LazyColumn(
+                                state = listState,
+                                contentPadding = PaddingValues(bottom = 32.dp),
+                            ) {
                                 item {
                                     Chart(chartViewModel = chartViewModel)
                                 }
                                 marketData?.let { marketData ->
-                                    item {
+                                    stickyHeader {
                                         Menu(
                                             marketData.menu,
                                             viewModel::onToggleSortType,
