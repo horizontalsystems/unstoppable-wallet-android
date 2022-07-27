@@ -538,7 +538,7 @@ private fun NftAssrtInfo(asset: NftAssetModuleAssetItem, navController: NavContr
 private fun NftAssetEvents(contractAddress: String, tokenId: String) {
     val viewModel = viewModel<NftCollectionEventsViewModel>(factory = NftCollectionEventsModule.Factory(NftEventListType.Asset(contractAddress, tokenId), NftEvent.EventType.All))
 
-    NftEvents(viewModel, null)
+    NftEvents(viewModel, null, true)
 }
 
 @Composable

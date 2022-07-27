@@ -27,7 +27,7 @@ class NftCollectionEventsModule {
 
 data class ViewItem(
     val eventTypeSelect: Select<NftEventTypeWrapper>,
-    val events: List<CollectionEvent>
+    val events: List<CollectionEvent>?
 )
 
 sealed class SelectorDialogState {

@@ -89,7 +89,8 @@ private fun NftCollectionEventsScreen(navController: NavController, collectionUi
 @Composable
 fun NftEvents(
     viewModel: NftCollectionEventsViewModel,
-    navController: NavController?
+    navController: NavController?,
+    hideEventIcon: Boolean = false,
 ) {
     val listState = rememberLazyListState()
     val viewItem = viewModel.viewItem ?: return
@@ -103,12 +104,12 @@ fun NftEvents(
             }
         }
         LazyColumn(state = listState) {
-            viewItem.events.forEachIndexed { index, event ->
+            viewItem.events?.forEachIndexed { index, event ->
                 item(key = "content-row-$index") {
                     NftEvent(
                         name = NftEventTypeWrapper.title(event.eventType).getString(),
                         subtitle = event.date?.let { DateHelper.getFullDate(it) } ?: "",
-                        iconUrl = event.asset.imageUrl ?: "",
+                        iconUrl = if (hideEventIcon) null else event.asset.imageUrl ?: "",
                         coinValue = event.amount?.coinValue?.getFormattedFull(),
                         currencyValue = event.amount?.currencyValue?.getFormattedFull(),
                         onClick = navController?.let {
@@ -145,6 +146,13 @@ fun NftEvents(
                 }
             }
         }
+
+        if (viewItem.events != null && viewItem.events.isEmpty()) {
+            ListEmptyView(
+                    text = stringResource(R.string.NftAssetActivity_Empty),
+                    icon = R.drawable.ic_outgoingraw
+            )
+        }
     }
 
     listState.OnBottomReached(buffer = 6) {
@@ -167,7 +175,7 @@ fun NftEvents(
 fun NftEvent(
     name: String,
     subtitle: String,
-    iconUrl: String,
+    iconUrl: String?,
     coinValue: String?,
     currencyValue: String?,
     onClick: (() -> Unit)? = null
@@ -176,17 +184,19 @@ fun NftEvent(
         borderBottom = true,
         onClick = onClick
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(
-                model = iconUrl,
-                error = painterResource(R.drawable.coin_placeholder)
-            ),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(24.dp)
-                .clip(RoundedCornerShape(4.dp)),
-        )
+        iconUrl?.let {
+            Image(
+                    painter = rememberAsyncImagePainter(
+                            model = iconUrl,
+                            error = painterResource(R.drawable.coin_placeholder)
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier
+                            .padding(end = 16.dp)
+                            .size(24.dp)
+                            .clip(RoundedCornerShape(4.dp)),
+            )
+        }
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
