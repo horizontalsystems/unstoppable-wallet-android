@@ -276,10 +276,9 @@
     <fragment
         android:id="@+id/statusInfoDialog"
         android:name="io.horizontalsystems.bankwallet.modules.info.TransactionStatusInfoFragment" />
-    <dialog
+    <fragment
         android:id="@+id/selectSwapCoinDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment"
-        tools:layout="@layout/fragment_swap_select_token" />
+        android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment" />
     <dialog
         android:id="@+id/wcErrorNoAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment" />
