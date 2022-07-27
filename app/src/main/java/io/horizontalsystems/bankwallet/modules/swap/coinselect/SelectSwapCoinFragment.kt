@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -95,7 +93,8 @@ fun SelectSwapCoinDialogScreen(
     onClickItem: (CoinBalanceItem) -> Unit
 ) {
     val viewModel = viewModel<SelectSwapCoinViewModel>(factory = SelectSwapCoinModule.Factory(dex))
-    val coinItems by viewModel.coinItemsLivedData.observeAsState(listOf())
+    val coinItems = viewModel.coinItems
+
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             SearchBar(
@@ -103,7 +102,7 @@ fun SelectSwapCoinDialogScreen(
                 searchHintText = stringResource(R.string.ManageCoins_Search),
                 navController = navController,
                 onSearchTextChanged = {
-                    viewModel.updateFilter(it)
+                    viewModel.onEnterQuery(it)
                 }
             )
 

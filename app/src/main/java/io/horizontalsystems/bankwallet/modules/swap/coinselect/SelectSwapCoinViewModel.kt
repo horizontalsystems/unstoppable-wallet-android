@@ -1,27 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinProvider
 
 class SelectSwapCoinViewModel(private val swapCoinProvider: SwapCoinProvider) : ViewModel() {
 
-    val coinItemsLivedData = MutableLiveData<List<CoinBalanceItem>>()
-    private var filter: String? = null
+    var coinItems by mutableStateOf(swapCoinProvider.getCoins(""))
+        private set
 
-    init {
-        syncViewState()
-    }
-
-    fun updateFilter(newText: String?) {
-        filter = newText
-        syncViewState()
-    }
-
-    private fun syncViewState() {
-        val filteredItems = swapCoinProvider.getCoins(filter ?: "")
-        coinItemsLivedData.postValue(filteredItems)
+    fun onEnterQuery(query: String) {
+        coinItems = swapCoinProvider.getCoins(query)
     }
 
 }
