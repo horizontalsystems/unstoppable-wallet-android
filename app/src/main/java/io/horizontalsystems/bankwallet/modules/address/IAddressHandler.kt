@@ -78,7 +78,9 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
-            BlockchainType.Avalanche -> "ETH"
+            BlockchainType.Optimism,
+            BlockchainType.Avalanche,
+            BlockchainType.ArbitrumOne -> "ETH"
             else -> null
         }
 
@@ -92,6 +94,8 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
                 BlockchainType.BinanceSmartChain -> "BEP20"
                 BlockchainType.Polygon -> "MATIC"
                 BlockchainType.Avalanche -> "AVAX"
+                BlockchainType.Optimism -> "ERC20"
+                BlockchainType.ArbitrumOne -> "ERC20"
                 else -> null
             }
             else -> null

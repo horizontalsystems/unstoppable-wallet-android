@@ -67,6 +67,8 @@ class SendFragment : BaseFragment() {
                     BlockchainType.BinanceSmartChain,
                     BlockchainType.Polygon,
                     BlockchainType.Avalanche,
+                    BlockchainType.Optimism,
+                    BlockchainType.ArbitrumOne,
                     -> {
                         val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment) { SendEvmModule.Factory(wallet) }
 

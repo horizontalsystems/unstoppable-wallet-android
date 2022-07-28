@@ -111,6 +111,8 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
+        BlockchainType.Optimism,
+        BlockchainType.ArbitrumOne,
         BlockchainType.Avalanche -> {
             tokenType is TokenType.Native || tokenType is TokenType.Eip20
         }
