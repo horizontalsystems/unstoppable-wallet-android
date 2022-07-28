@@ -66,7 +66,8 @@ data class MarketItem(
     val volume: CurrencyValue,
     val rate: CurrencyValue,
     val diff: BigDecimal?,
-    val marketCap: CurrencyValue
+    val marketCap: CurrencyValue,
+    val rank: Int?
 ) {
     companion object {
         fun createFromCoinMarket(
@@ -75,11 +76,12 @@ data class MarketItem(
             pricePeriod: TimePeriod = TimePeriod.TimePeriod_1D
         ): MarketItem {
             return MarketItem(
-                marketInfo.fullCoin,
-                CurrencyValue(currency, marketInfo.totalVolume ?: BigDecimal.ZERO),
-                CurrencyValue(currency, marketInfo.price ?: BigDecimal.ZERO),
-                marketInfo.priceChangeValue(pricePeriod),
-                CurrencyValue(currency, marketInfo.marketCap ?: BigDecimal.ZERO)
+                fullCoin = marketInfo.fullCoin,
+                volume = CurrencyValue(currency, marketInfo.totalVolume ?: BigDecimal.ZERO),
+                rate = CurrencyValue(currency, marketInfo.price ?: BigDecimal.ZERO),
+                diff = marketInfo.priceChangeValue(pricePeriod),
+                marketCap = CurrencyValue(currency, marketInfo.marketCap ?: BigDecimal.ZERO),
+                rank = marketInfo.marketCapRank
             )
         }
     }
@@ -235,7 +237,7 @@ data class MarketViewItem(
                     marketItem.rate.currency.symbol
                 ),
                 marketDataValue,
-                marketItem.fullCoin.coin.marketCapRank?.toString(),
+                marketItem.rank?.toString(),
                 favorited
             )
         }
