@@ -130,6 +130,8 @@ class CreateAccountViewModel(
             TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
             TokenQuery(BlockchainType.Polygon, TokenType.Native),
             TokenQuery(BlockchainType.Avalanche, TokenType.Native),
+            TokenQuery(BlockchainType.Optimism, TokenType.Native),
+            TokenQuery(BlockchainType.ArbitrumOne, TokenType.Native),
             TokenQuery(BlockchainType.Zcash, TokenType.Native)
         )
         walletActivator.activateWallets(account, tokenQueries)
