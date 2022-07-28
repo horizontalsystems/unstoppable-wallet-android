@@ -80,7 +80,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
                 .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
         ) {
             confirmations.forEach { item ->
-                CellCheckboxLawrence(
+                CellLawrence(
                     borderBottom = true,
                     onClick = { viewModel.toggleConfirm(item) }
                 ) {

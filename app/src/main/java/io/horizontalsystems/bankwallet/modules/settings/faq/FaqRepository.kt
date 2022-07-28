@@ -2,7 +2,10 @@ package io.horizontalsystems.bankwallet.modules.settings.faq
 
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.FaqMap
+import io.horizontalsystems.bankwallet.entities.FaqSection
+import io.horizontalsystems.core.ILanguageManager
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -10,16 +13,20 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
-class FaqRepository(private val faqManager: FaqManager, private val connectivityManager: ConnectivityManager) {
+class FaqRepository(
+    private val faqManager: FaqManager,
+    private val connectivityManager: ConnectivityManager,
+    private val languageManager: ILanguageManager
+) {
 
-    val faqList: Observable<DataState<Array<FaqMap>>>
+    val faqList: Observable<DataState<List<FaqSection>>>
         get() = faqListSubject
 
-    private val faqListSubject = BehaviorSubject.create<DataState<Array<FaqMap>>>()
+    private val faqListSubject = BehaviorSubject.create<DataState<List<FaqSection>>>()
     private val disposables = CompositeDisposable()
     private val retryLimit = 3
 
-    init {
+    fun start() {
         fetch()
 
         connectivityManager.networkAvailabilitySignal
@@ -39,7 +46,7 @@ class FaqRepository(private val faqManager: FaqManager, private val connectivity
     }
 
     private fun fetch() {
-        faqListSubject.onNext(DataState.Loading())
+        faqListSubject.onNext(DataState.Loading)
 
         faqManager.getFaqList()
             .retryWhen { errors -> // retry on error java.lang.AssertionError: No System TLS
@@ -58,7 +65,12 @@ class FaqRepository(private val faqManager: FaqManager, private val connectivity
             }
             .subscribeOn(Schedulers.io())
             .subscribe({
-                faqListSubject.onNext(DataState.Success(it.toTypedArray()))
+                val faqSections = getByLocalLanguage(
+                    it,
+                    languageManager.currentLocale.language,
+                    languageManager.fallbackLocale.language
+                )
+                faqListSubject.onNext(DataState.Success(faqSections))
             }, {
                 faqListSubject.onNext(DataState.Error(it))
             })
@@ -66,4 +78,19 @@ class FaqRepository(private val faqManager: FaqManager, private val connectivity
                 disposables.add(it)
             }
     }
+
+    private fun getByLocalLanguage(
+        faqMultiLanguage: List<FaqMap>,
+        language: String,
+        fallbackLanguage: String
+    ) =
+        faqMultiLanguage.map { sectionMultiLang ->
+            val categoryTitle = sectionMultiLang.section[language]
+                ?: sectionMultiLang.section[fallbackLanguage]
+                ?: ""
+            val sectionItems =
+                sectionMultiLang.items.mapNotNull { it[language] ?: it[fallbackLanguage] }
+
+            FaqSection(categoryTitle, sectionItems)
+        }
 }
