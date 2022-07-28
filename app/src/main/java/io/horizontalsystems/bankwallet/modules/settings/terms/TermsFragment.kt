@@ -84,7 +84,7 @@ class TermsFragment : BaseFragment() {
                         .clip(RoundedCornerShape(12.dp))
                 ) {
                     terms?.forEachIndexed { index, item ->
-                        CellCheckboxLawrence(
+                        CellLawrence(
                             borderBottom = true,
                             onClick = { viewModel.onTapTerm(index, !item.checked) }
                         ) {

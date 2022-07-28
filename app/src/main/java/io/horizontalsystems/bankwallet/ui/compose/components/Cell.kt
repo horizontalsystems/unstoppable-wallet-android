@@ -409,7 +409,7 @@ fun CellFooterPreview() {
 }
 
 @Composable
-fun CellCheckboxLawrence(
+fun CellLawrence(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
     onClick: () -> Unit,
