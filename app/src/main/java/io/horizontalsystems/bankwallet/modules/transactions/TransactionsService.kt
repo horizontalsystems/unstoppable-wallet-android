@@ -23,6 +23,7 @@ class TransactionsService(
     private val walletManager: IWalletManager,
     private val transactionFilterService: TransactionFilterService
 ) : Clearable {
+    val filterResetEnabled by transactionFilterService::resetEnabled
 
     private val itemsSubject = BehaviorSubject.create<List<TransactionItem>>()
     val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
@@ -204,7 +205,7 @@ class TransactionsService(
     fun setFilterType(f: FilterTransactionType) {
         executorService.submit {
             typesSubject.onNext(Pair(transactionFilterService.getFilterTypes(), f))
-            transactionFilterService.selectedTransactionType = f
+            transactionFilterService.setSelectedTransactionType(f)
             transactionRecordRepository.setTransactionType(f)
         }
     }
@@ -230,6 +231,28 @@ class TransactionsService(
             blockchainSubject.onNext(Pair(transactionFilterService.getBlockchains(), selectedBlockchain))
 
             transactionRecordRepository.setWalletAndBlockchain(w, selectedBlockchain)
+        }
+    }
+
+    fun resetFilters() {
+        executorService.submit {
+            transactionFilterService.reset()
+
+            val transactionType = transactionFilterService.selectedTransactionType
+            val blockchain = transactionFilterService.selectedBlockchain
+            val wallet = transactionFilterService.selectedWallet
+            val transactionWallets = transactionFilterService.getTransactionWallets()
+
+            typesSubject.onNext(Pair(transactionFilterService.getFilterTypes(), transactionType))
+            blockchainSubject.onNext(Pair(transactionFilterService.getBlockchains(), blockchain))
+            walletsSubject.onNext(Pair(transactionWallets, wallet))
+
+            transactionRecordRepository.setWallets(
+                transactionWallets.filterNotNull(),
+                wallet,
+                transactionType,
+                blockchain,
+            )
         }
     }
 

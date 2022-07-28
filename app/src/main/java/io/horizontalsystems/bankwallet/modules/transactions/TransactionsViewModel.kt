@@ -24,6 +24,7 @@ class TransactionsViewModel(
     var tmpItemToShow: TransactionItem? = null
 
     val syncingLiveData = MutableLiveData<Boolean>()
+    val filterResetEnabled by service::filterResetEnabled
     val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet?>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
     val filterBlockchainsLiveData = MutableLiveData<List<Filter<Blockchain?>>>()
@@ -99,6 +100,11 @@ class TransactionsViewModel(
     fun onEnterFilterBlockchain(filterBlockchain: Filter<Blockchain?>) {
         service.setFilterBlockchain(filterBlockchain.item)
     }
+
+    fun resetFilters() {
+        service.resetFilters()
+    }
+
 
     fun onBottomReached() {
         service.loadNext()

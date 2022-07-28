@@ -76,12 +76,22 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
     val transactions by viewModel.transactionList.observeAsState()
     val viewState by viewModel.viewState.observeAsState()
     val syncing by viewModel.syncingLiveData.observeAsState(false)
+    val filterResetEnabled by viewModel.filterResetEnabled.collectAsState()
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
-                TranslatableString.ResString(R.string.Transactions_Title),
-                showSpinner = syncing
+                title = TranslatableString.ResString(R.string.Transactions_Title),
+                showSpinner = syncing,
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Reset),
+                        enabled = filterResetEnabled,
+                        onClick = {
+                            viewModel.resetFilters()
+                        }
+                    )
+                )
             )
             filterTypes?.let { filterTypes ->
                 FilterTypeTabs(
