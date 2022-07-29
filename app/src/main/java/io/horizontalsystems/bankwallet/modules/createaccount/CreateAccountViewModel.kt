@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
-import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountModule.Kind.Mnemonic24
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
@@ -34,7 +33,7 @@ class CreateAccountViewModel(
     private var passphrase = ""
     private var passphraseConfirmation = ""
 
-    val mnemonicKinds = listOf(Mnemonic12, Mnemonic24)
+    val mnemonicKinds = CreateAccountModule.Kind.values().toList()
 
     var selectedKind: CreateAccountModule.Kind = Mnemonic12
         private set
@@ -56,7 +55,7 @@ class CreateAccountViewModel(
             return
         }
 
-        val accountType = resolveAccountType()
+        val accountType = mnemonicAccountType(selectedKind.wordsCount)
         val account = accountFactory.account(
             accountFactory.getNextAccountName(),
             accountType,
@@ -134,11 +133,6 @@ class CreateAccountViewModel(
             TokenQuery(BlockchainType.Zcash, TokenType.Native)
         )
         walletActivator.activateWallets(account, tokenQueries)
-    }
-
-    private fun resolveAccountType() = when (selectedKind) {
-        Mnemonic12 -> mnemonicAccountType(12)
-        Mnemonic24 -> mnemonicAccountType(24)
     }
 
     private fun mnemonicAccountType(wordCount: Int): AccountType {

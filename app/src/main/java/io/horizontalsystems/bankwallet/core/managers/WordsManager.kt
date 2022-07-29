@@ -21,11 +21,7 @@ class WordsManager(
     }
 
     override fun generateWords(count: Int): List<String> {
-        val strength = when (count) {
-            24 -> Mnemonic.EntropyStrength.VeryHigh
-            else -> Mnemonic.EntropyStrength.Default
-        }
-
+        val strength = Mnemonic.EntropyStrength.fromWordCount(count)
         return mnemonic.generate(strength)
     }
 }
