@@ -5,7 +5,6 @@ import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.walletconnect.walletconnectv2.client.WalletConnectClient
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestFragment
@@ -52,13 +51,4 @@ class MainActivity : BaseActivity() {
 
         WalletConnectClient.shutdown()
     }
-
-    override fun onTrimMemory(level: Int) {
-        if (level >= TRIM_MEMORY_COMPLETE) {
-            val logger = AppLogger("low memory")
-            logger.info("onTrimMemory level: $level")
-        }
-        super.onTrimMemory(level)
-    }
-
 }

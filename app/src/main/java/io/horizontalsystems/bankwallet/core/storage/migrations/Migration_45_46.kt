@@ -15,6 +15,7 @@ object Migration_45_46 : Migration(45, 46) {
         renameColumnRestoreSettingRecord(database)
         renameColumnNftCollectionRecord(database)
         renameColumnNftAssetRecord(database)
+        deleteRecordsAppLogMemory(database)
     }
 
     private fun renameColumnEnabledWallet(database: SupportSQLiteDatabase) {
@@ -116,6 +117,10 @@ object Migration_45_46 : Migration(45, 46) {
     private fun renameColumnNftAssetRecord(database: SupportSQLiteDatabase) {
         database.execSQL("DROP TABLE IF EXISTS NftAssetRecord")
         database.execSQL("CREATE TABLE IF NOT EXISTS `NftAssetRecord` (`accountId` TEXT NOT NULL, `collectionUid` TEXT NOT NULL, `tokenId` TEXT NOT NULL, `name` TEXT, `imageUrl` TEXT, `imagePreviewUrl` TEXT, `description` TEXT, `onSale` INTEGER NOT NULL, `attributes` TEXT NOT NULL, `tokenQueryId` TEXT, `value` TEXT, `contract_address` TEXT NOT NULL, `contract_type` TEXT NOT NULL, `external_link` TEXT, `permalink` TEXT, PRIMARY KEY(`accountId`, `tokenId`, `contract_address`), FOREIGN KEY(`accountId`) REFERENCES `AccountRecord`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)")
+    }
+
+    private fun deleteRecordsAppLogMemory(database: SupportSQLiteDatabase) {
+        database.execSQL("DELETE FROM `LogEntry` WHERE `actionId` = 'low memory'")
     }
 }
 
