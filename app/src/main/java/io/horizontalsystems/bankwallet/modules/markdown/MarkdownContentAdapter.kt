@@ -8,8 +8,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.databinding.*
 
 class MarkdownContentAdapter(
+    private val handleRelativeUrl: Boolean,
     private val listener: Listener,
-    private val handleRelativeUrl: Boolean
 ) : ListAdapter<MarkdownBlock, MarkdownBlockViewHolder>(diffCallback) {
 
     interface Listener {
@@ -80,4 +80,3 @@ class MarkdownContentAdapter(
     }
 
 }
-
