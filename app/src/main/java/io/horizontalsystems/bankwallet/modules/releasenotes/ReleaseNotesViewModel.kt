@@ -1,16 +1,98 @@
 package io.horizontalsystems.bankwallet.modules.releasenotes
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
+import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.markdown.MarkdownBlock
+import io.horizontalsystems.bankwallet.modules.markdown.MarkdownVisitorBlock
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import org.commonmark.parser.Parser
+import java.net.URL
 
 class ReleaseNotesViewModel(
-    appConfigProvider: AppConfigProvider,
-    releaseNotesManager: ReleaseNotesManager
+    private val networkManager: INetworkManager,
+    private val contentUrl: String,
+    private val connectivityManager: ConnectivityManager,
+    appConfigProvider: AppConfigProvider
 ) : ViewModel() {
 
-    val releaseNotesUrl = releaseNotesManager.releaseNotesUrl
     val twitterUrl = appConfigProvider.appTwitterLink
     val telegramUrl = appConfigProvider.appTelegramLink
     val redditUrl = appConfigProvider.appRedditLink
+
+    var markdownBlocks by mutableStateOf<List<MarkdownBlock>>(listOf())
+        private set
+
+    var viewState by mutableStateOf<ViewState>(ViewState.Loading)
+        private set
+
+    private var disposables = CompositeDisposable()
+
+    init {
+        loadContent()
+
+        connectivityManager.networkAvailabilitySignal
+            .subscribe {
+                if (connectivityManager.isConnected && viewState is ViewState.Error) {
+                    retry()
+                }
+            }
+            .let {
+                disposables.add(it)
+            }
+    }
+
+    override fun onCleared() {
+        disposables.dispose()
+    }
+
+    fun retry() {
+        viewState = ViewState.Loading
+        loadContent()
+    }
+
+    private fun loadContent() {
+        getContent()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                markdownBlocks = getMarkdownBlocks(it)
+                viewState = ViewState.Success
+            }, {
+                viewState = ViewState.Error(it)
+            })
+            .let {
+                disposables.add(it)
+            }
+    }
+
+    private fun getMarkdownBlocks(content: String): List<MarkdownBlock> {
+        val parser = Parser.builder().build()
+        val document = parser.parse(content)
+
+        val markdownVisitor = MarkdownVisitorBlock()
+
+        document.accept(markdownVisitor)
+
+        return markdownVisitor.blocks + MarkdownBlock.Footer()
+    }
+
+    private fun getContent(): Single<String> {
+        val url = URL(contentUrl)
+        return networkManager.getReleaseNotes("${url.protocol}://${url.host}", contentUrl)
+            .flatMap { jsonObject ->
+                return@flatMap when {
+                    jsonObject.has("body") -> Single.just(jsonObject.asJsonObject["body"].asString)
+                    else -> Single.just("")
+                }
+            }
+    }
 }

@@ -152,12 +152,10 @@
         tools:layout="@layout/fragment_pin" />
     <fragment
         android:id="@+id/releaseNotesFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment"
-        tools:layout="@layout/fragment_release_notes" />
+        android:name="io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment" />
     <fragment
         android:id="@+id/markdownFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment"
-        tools:layout="@layout/fragment_markdown"/>
+        android:name="io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment"/>
     <fragment
         android:id="@+id/addTokenFragment"
         android:name="io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment"/>
