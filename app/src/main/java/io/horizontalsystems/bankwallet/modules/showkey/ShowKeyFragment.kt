@@ -1,13 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.showkey
 
-import SeedPhrase
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -24,6 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -192,8 +195,9 @@ private fun KeyTabs(viewModel: ShowKeyViewModel, showKeyWarning: (String) -> Uni
         when (index) {
             0 -> {
                 Column(Modifier.verticalScroll(rememberScrollState())) {
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(16.dp))
                     SeedPhraseList(viewModel.wordsNumbered)
+                    Spacer(Modifier.height(24.dp))
                     PassphraseCell(viewModel.passphrase)
                 }
             }
@@ -387,24 +391,22 @@ private fun ActionButton(title: Int, onClick: () -> Unit) {
 
 @Composable
 fun SeedPhraseList(wordsNumbered: List<ShowKeyModule.WordNumbered>) {
-    val portion = if (wordsNumbered.size == 12) 3 else 4
-    val half = wordsNumbered.size / 2
-
-    Row(Modifier.padding(horizontal = 16.dp)) {
-        Column(Modifier.weight(1f)) {
-            wordsNumbered.take(half).forEach { item ->
-                SeedPhrase(item.number, item.word)
-                if (item.number.mod(portion) == 0) {
-                    Spacer(Modifier.height(32.dp))
+    FlowRow(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
+            .padding(horizontal = 16.dp, vertical = 24.dp),
+        mainAxisAlignment = FlowMainAxisAlignment.Center,
+        crossAxisSpacing = 16.dp
+    ) {
+        wordsNumbered.chunked(3).forEach {
+            it.forEach { word ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    D7(text = word.number.toString())
+                    Spacer(modifier = Modifier.width(8.dp))
+                    B2(text = word.word)
                 }
-            }
-        }
-        Column(Modifier.weight(1f)) {
-            wordsNumbered.takeLast(half).forEach { item ->
-                SeedPhrase(item.number, item.word)
-                if (item.number.mod(portion) == 0) {
-                    Spacer(Modifier.height(32.dp))
-                }
+                Spacer(modifier = Modifier.width(12.dp))
             }
         }
     }
