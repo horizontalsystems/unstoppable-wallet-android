@@ -32,7 +32,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.Subject
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
@@ -151,8 +150,8 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getMarkdown(host: String, path: String): Single<String>
-    fun getReleaseNotes(host: String, path: String): Single<JsonObject>
+    suspend fun getMarkdown(host: String, path: String): String
+    suspend fun getReleaseNotes(host: String, path: String): JsonObject
     fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
     fun getTransactionWithPost(
         host: String,
@@ -164,10 +163,6 @@ interface INetworkManager {
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
     suspend fun getBep2TokeInfo(symbol: String): TokenInfoService.Bep2TokenInfo
     suspend fun getEvmTokeInfo(apiPath: String, address: String): TokenInfoService.EvmTokenInfo
-
-    suspend fun subscribe(host: String, path: String, body: String): JsonObject
-    suspend fun unsubscribe(host: String, path: String, body: String): JsonObject
-    suspend fun getNotifications(host: String, path: String): Response<JsonObject>
 }
 
 interface IClipboardManager {

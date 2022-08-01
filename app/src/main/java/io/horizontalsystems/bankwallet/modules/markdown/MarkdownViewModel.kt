@@ -4,13 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import java.net.URL
 
@@ -26,24 +26,16 @@ class MarkdownViewModel(
     var viewState by mutableStateOf<ViewState>(ViewState.Loading)
         private set
 
-    private var disposables = CompositeDisposable()
-
     init {
         loadContent()
 
-        connectivityManager.networkAvailabilitySignal
-            .subscribe {
+        connectivityManager.networkAvailabilityFlow
+            .onEach {
                 if (connectivityManager.isConnected && viewState is ViewState.Error) {
                     retry()
                 }
             }
-            .let {
-                disposables.add(it)
-            }
-    }
-
-    override fun onCleared() {
-        disposables.dispose()
+            .launchIn(viewModelScope)
     }
 
     fun retry() {
@@ -52,18 +44,15 @@ class MarkdownViewModel(
     }
 
     private fun loadContent() {
-        getContent()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                markdownBlocks = getMarkdownBlocks(it)
+        viewModelScope.launch {
+            try {
+                val content = getContent()
+                markdownBlocks = getMarkdownBlocks(content)
                 viewState = ViewState.Success
-            }, {
-                viewState = ViewState.Error(it)
-            })
-            .let {
-                disposables.add(it)
+            } catch (e: Exception) {
+                viewState = ViewState.Error(e)
             }
+        }
     }
 
     private fun getMarkdownBlocks(content: String): List<MarkdownBlock> {
@@ -77,7 +66,7 @@ class MarkdownViewModel(
         return markdownVisitor.blocks + MarkdownBlock.Footer()
     }
 
-    private fun getContent(): Single<String> {
+    private suspend fun getContent(): String {
         val url = URL(contentUrl)
         return networkManager.getMarkdown("${url.protocol}://${url.host}", contentUrl)
     }
