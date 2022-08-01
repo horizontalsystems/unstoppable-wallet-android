@@ -145,8 +145,9 @@ private fun BackupKeyScreen(
                             .weight(1f)
                             .verticalScroll(rememberScrollState())
                     ) {
-                        Spacer(Modifier.height(12.dp))
+                        Spacer(Modifier.height(16.dp))
                         SeedPhraseList(viewModel.wordsNumbered)
+                        Spacer(Modifier.height(24.dp))
                         PassphraseCell(viewModel.passphrase)
                     }
                     ButtonsGroupWithShade {
