@@ -96,6 +96,20 @@ fun WatchAddressScreen(navController: NavController) {
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
+                HeaderText(text = stringResource(R.string.Watch_Address_Title))
+
+                HSAddressInput(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .focusRequester(focusRequester),
+                    tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+                    coinCode = "ETH",
+                    onValueChange = viewModel::onEnterAddress
+                )
+                InfoText(text = stringResource(R.string.Watch_Address_Description))
+
+                Spacer(Modifier.height(24.dp))
+
                 HeaderText(text = stringResource(R.string.Restore_Name))
 
                 FormsInput(
@@ -106,19 +120,6 @@ fun WatchAddressScreen(navController: NavController) {
                     onValueChange = {
                         viewModel.onNameChange(it)
                     }
-                )
-
-                Spacer(Modifier.height(24.dp))
-
-                HeaderText(text = stringResource(R.string.Watch_Address_Title))
-
-                HSAddressInput(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .focusRequester(focusRequester),
-                    tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
-                    coinCode = "ETH",
-                    onValueChange = viewModel::onEnterAddress
                 )
 
                 Spacer(Modifier.height(32.dp))

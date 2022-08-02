@@ -857,6 +857,7 @@
 
     <string name="Watch_Address_Title">Address</string>
     <string name="Watch_Address_Hint">Address or Domain</string>
+    <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
     <string name="Watch_Address_Watch">Watch</string>
 
     <!--Manage Account-->
