@@ -27,6 +27,7 @@ object Migration_40_41 : Migration(40, 41) {
                         "bitcoin" -> BtcBlockchain.Bitcoin
                         "bitcoinCash" -> BtcBlockchain.BitcoinCash
                         "litecoin" -> BtcBlockchain.Litecoin
+                        "tyzen" -> BtcBlockchain.Tyzen
                         "dash" -> BtcBlockchain.Dash
                         else -> null
                     }
