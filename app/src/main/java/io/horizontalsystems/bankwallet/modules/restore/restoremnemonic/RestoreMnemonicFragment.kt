@@ -85,7 +85,7 @@ fun RestoreMnemonicScreen(navController: NavController) {
         mutableStateOf(TextFieldValue(""))
     }
     val focusRequester = remember { FocusRequester() }
-    var showCustomKeyboardAlert by remember { mutableStateOf(false) }
+    var showCustomKeyboardDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -144,7 +144,7 @@ fun RestoreMnemonicScreen(navController: NavController) {
 
                         viewModel.onEnterMnemonicPhrase(it.text, it.selection.max)
 
-                        showCustomKeyboardAlert = !viewModel.isThirdPartyKeyboardAllowed && Utils.isUsingCustomKeyboard(context)
+                        showCustomKeyboardDialog = !viewModel.isThirdPartyKeyboardAllowed && Utils.isUsingCustomKeyboard(context)
                     },
                     textStyle = ColoredTextStyle(
                         color = ComposeAppTheme.colors.leah,
@@ -209,19 +209,19 @@ fun RestoreMnemonicScreen(navController: NavController) {
         viewModel.onSelectCoinsShown()
     }
 
-    if (showCustomKeyboardAlert) {
-        KeyboardWarningDialog(
+    if (showCustomKeyboardDialog) {
+        CustomKeyboardWarningDialog(
             onSelect = {
                 val imeManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imeManager.showInputMethodPicker()
-                showCustomKeyboardAlert = false
+                showCustomKeyboardDialog = false
             },
             onSkip = {
                 viewModel.onAllowThirdPartyKeyboard()
-                showCustomKeyboardAlert = false
+                showCustomKeyboardDialog = false
             },
             onCancel = {
-                showCustomKeyboardAlert = false
+                showCustomKeyboardDialog = false
             }
         )
     }
