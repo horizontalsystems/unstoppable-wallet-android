@@ -272,6 +272,7 @@ object CoinInfoMap {
             "MX" to CoinInfo(null, null, "https://www.mxc.ceo"),
             "GT" to CoinInfo(null, null, "https://gatechain.io"),
             "FTT" to CoinInfo(null, null, "https://indexed.finance"),
+            "Tyzen" to CoinInfo(BigDecimal(100_000_000), "27/06/2022", "https://www.tyzen.io"),
 
 
             )
