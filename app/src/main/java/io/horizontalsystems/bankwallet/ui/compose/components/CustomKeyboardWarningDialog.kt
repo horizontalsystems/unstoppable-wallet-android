@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun KeyboardWarningDialog(
+fun CustomKeyboardWarningDialog(
     onSelect: () -> Unit,
     onSkip: () -> Unit,
     onCancel: () -> Unit
