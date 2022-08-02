@@ -32,6 +32,10 @@ class FeeRateProvider(appConfig: AppConfigProvider) {
     fun litecoinFeeRate(): Single<BigInteger> {
         return feeRateKit.litecoin()
     }
+    
+    fun tyzenFeeRate(): Single<BigInteger> {
+        return feeRateKit.tyzen()
+    }
 
     fun bitcoinCashFeeRate(): Single<BigInteger> {
         return feeRateKit.bitcoinCash()
@@ -76,6 +80,12 @@ class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFe
 class LitecoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
     override suspend fun getFeeRate(feeRatePriority: FeeRatePriority) = withContext(Dispatchers.IO) {
         feeRateProvider.litecoinFeeRate().blockingGet().toLong()
+    }
+}
+
+class TyzenFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override suspend fun getFeeRate(feeRatePriority: FeeRatePriority) = withContext(Dispatchers.IO) {
+        feeRateProvider.tyzenFeeRate().blockingGet().toLong()
     }
 }
 
