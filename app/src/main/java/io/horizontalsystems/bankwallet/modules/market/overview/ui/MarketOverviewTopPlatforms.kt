@@ -9,6 +9,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
@@ -16,6 +17,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 fun TopPlatformsBoardView(
     board: MarketOverviewModule.TopPlatformsBoard,
     onSelectTimeDuration: (TimeDuration) -> Unit,
+    onItemClick: (Platform) -> Unit,
     onClickSeeAll: () -> Unit
 ) {
     TopBoardHeader(
@@ -34,7 +36,7 @@ fun TopPlatformsBoardView(
             .background(ComposeAppTheme.colors.lawrence)
     ) {
         board.items.forEach {
-            TopPlatformItem(it)
+            TopPlatformItem(it, onItemClick)
         }
 
         SeeAllButton(onClickSeeAll)

@@ -27,12 +27,14 @@ import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
+import io.horizontalsystems.bankwallet.modules.market.platform.MarketPlatformFragment
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -117,6 +119,10 @@ fun TopPlatformsScreen(
                                         viewItems = viewItems,
                                         sortingField = viewModel.sortingField,
                                         timeDuration = viewModel.timePeriod,
+                                        onItemClick = {
+                                            val args = MarketPlatformFragment.prepareParams(it)
+                                            navController.slideFromRight(R.id.marketPlatformFragment, args)
+                                        },
                                         preItems = {
                                             item {
                                                 DescriptionCard(
@@ -180,6 +186,7 @@ private fun TopPlatformsList(
     viewItems: List<TopPlatformViewItem>,
     sortingField: SortingField,
     timeDuration: TimeDuration,
+    onItemClick: (Platform) -> Unit,
     preItems: LazyListScope.() -> Unit
 ) {
     val state = rememberSaveable(sortingField, timeDuration, saver = LazyListState.Saver) {
@@ -189,7 +196,7 @@ private fun TopPlatformsList(
     LazyColumn(state = state) {
         preItems.invoke(this)
         items(viewItems) { item ->
-            TopPlatformItem(item)
+            TopPlatformItem(item, onItemClick)
         }
     }
 }
@@ -221,9 +228,10 @@ private fun TopPlatformSecondRow(
 }
 
 @Composable
-fun TopPlatformItem(item: TopPlatformViewItem) {
+fun TopPlatformItem(item: TopPlatformViewItem, onItemClick: (Platform) -> Unit) {
     MultilineClear(
-        borderBottom = true
+        borderBottom = true,
+        onClick = { onItemClick(item.platform) }
     ) {
         CoinImage(
             iconUrl = item.iconUrl,
