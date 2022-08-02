@@ -202,6 +202,9 @@
             app:uri="unstoppable://top-platforms?uid={platformUid}" />
     </fragment>
     <fragment
+        android:id="@+id/marketPlatformFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.platform.MarketPlatformFragment"/>
+    <fragment
         android:id="@+id/marketAdvancedSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersFragment"/>
     <fragment

@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.ui.*
+import io.horizontalsystems.bankwallet.modules.market.platform.MarketPlatformFragment
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsFragment
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsFragment
@@ -119,6 +120,10 @@ fun MarketOverviewScreen(
                                 viewItem.topPlatformsBoard,
                                 onSelectTimeDuration = { timeDuration ->
                                     viewModel.onSelectTopPlatformsTimeDuration(timeDuration)
+                                },
+                                onItemClick = {
+                                    val args = MarketPlatformFragment.prepareParams(it)
+                                    navController.slideFromRight(R.id.marketPlatformFragment, args)
                                 },
                                 onClickSeeAll = {
                                     val timeDuration = viewModel.topPlatformsTimeDuration
