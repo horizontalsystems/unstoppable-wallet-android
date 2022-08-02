@@ -51,6 +51,7 @@ interface ILocalStorage {
 
     var baseBitcoinProvider: String?
     var baseLitecoinProvider: String?
+    var baseTyzenProvider: String?
     var baseEthereumProvider: String?
     var baseDashProvider: String?
     var baseBinanceProvider: String?
