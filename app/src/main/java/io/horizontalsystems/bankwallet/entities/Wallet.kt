@@ -18,6 +18,7 @@ data class Wallet(
             CoinType.BitcoinCash -> TransactionSource.Blockchain.BitcoinCash
             CoinType.Dash -> TransactionSource.Blockchain.Dash
             CoinType.Litecoin -> TransactionSource.Blockchain.Litecoin
+            CoinType.Tyzen -> TransactionSource.Blockchain.Tyzen
             CoinType.Ethereum, is CoinType.Erc20 -> TransactionSource.Blockchain.Evm(EvmBlockchain.Ethereum)
             CoinType.BinanceSmartChain, is CoinType.Bep20 -> TransactionSource.Blockchain.Evm(EvmBlockchain.BinanceSmartChain)
             CoinType.Polygon, is CoinType.Mrc20 -> TransactionSource.Blockchain.Evm(EvmBlockchain.Polygon)
@@ -61,6 +62,7 @@ data class Wallet(
         get() = when (coinType) {
             CoinType.Bitcoin,
             CoinType.Litecoin,
+            CoinType.Tyzen,
             -> coinSettings.derivation?.value?.uppercase()
             CoinType.BitcoinCash -> coinSettings.bitcoinCashCoinType?.value?.uppercase()
             else -> coinType.blockchainType
