@@ -81,6 +81,7 @@ object RestoreBlockchainsModule {
         object BitcoinCash: Blockchain()
         object Zcash: Blockchain()
         object Litecoin: Blockchain()
+        object Tyzen: Blockchain()
         object Dash: Blockchain()
         object BinanceChain: Blockchain();
         class Evm(val evmBlockchain: EvmBlockchain): Blockchain()
@@ -91,6 +92,7 @@ object RestoreBlockchainsModule {
                 BitcoinCash -> "BitcoinCash"
                 Zcash -> "Zcash"
                 Litecoin -> "Litecoin"
+                Tyzen -> "Tyzen"
                 Dash -> "Dash"
                 BinanceChain -> "BinanceChain"
                 is Evm -> "EVM_${this.evmBlockchain.name}"
@@ -102,6 +104,7 @@ object RestoreBlockchainsModule {
                 BitcoinCash -> "Bitcoin Cash"
                 Zcash -> "Zcash"
                 Litecoin -> "Litecoin"
+                Tyzen -> "Tyzen"
                 Dash -> "Dash"
                 BinanceChain -> "Binance Chain"
                 is Evm -> this.evmBlockchain.name
@@ -113,6 +116,7 @@ object RestoreBlockchainsModule {
                 BitcoinCash -> "BCH (Legacy, CashAddress)"
                 Zcash -> "ZEC"
                 Litecoin -> "LTC (BIP44, BIP49, BIP84)"
+                Tyzen -> "TZN (Fast, Secure and Cheap Transactions)"
                 Dash -> "DASH"
                 BinanceChain -> "BNB, BEP2 tokens"
                 is Evm -> this.evmBlockchain.description
@@ -124,6 +128,7 @@ object RestoreBlockchainsModule {
                 BitcoinCash -> CoinType.BitcoinCash
                 Zcash -> CoinType.Zcash
                 Litecoin -> CoinType.Litecoin
+                Tyzen -> CoinType.Tyzen
                 Dash -> CoinType.Dash
                 BinanceChain -> CoinType.Bep2("BNB")
                 is Evm -> this.evmBlockchain.baseCoinType
@@ -138,7 +143,7 @@ object RestoreBlockchainsModule {
                 get() = listOf(
                     Bitcoin,
                     Evm(EvmBlockchain.Ethereum), Evm(EvmBlockchain.BinanceSmartChain), Evm(EvmBlockchain.Polygon),
-                    Zcash, Dash, BitcoinCash, Litecoin, BinanceChain
+                    Zcash, Dash, BitcoinCash, Tyzen, BinanceChain
                 )
 
             fun getBlockchainByUid(uid: String): Blockchain? =
