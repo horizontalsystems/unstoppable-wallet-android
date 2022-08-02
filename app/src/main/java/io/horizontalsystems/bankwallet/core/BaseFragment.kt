@@ -1,8 +1,5 @@
 package io.horizontalsystems.bankwallet.core
 
-import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.MenuItem
@@ -11,10 +8,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.views.AlertDialogKeyboardFragment
-
-
-
 
 abstract class BaseFragment(@LayoutRes layoutResId: Int = 0) : Fragment(layoutResId) {
 
@@ -40,31 +33,4 @@ abstract class BaseFragment(@LayoutRes layoutResId: Int = 0) : Fragment(layoutRe
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
     }
 
-    fun showCustomKeyboardAlert() {
-        AlertDialogKeyboardFragment.newInstance(
-                titleString = getString(R.string.Alert_TitleWarning),
-                descriptionString = getString(R.string.Alert_CustomKeyboardIsUsed),
-                selectButtonText = R.string.Alert_Select,
-                skipButtonText = R.string.Alert_Skip,
-                listener = object : AlertDialogKeyboardFragment.Listener {
-                    override fun onButtonClick() {
-                        val imeManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imeManager.showInputMethodPicker()
-                        hideKeyboard()
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            try {
-                                requireActivity().onBackPressed()
-                            } catch (e: NullPointerException) {
-                                //do nothing
-                            }
-                        }, (1 * 750).toLong())
-                    }
-
-
-                    override fun onCancel() {}
-                    override fun onSkipClick() {
-                        App.thirdKeyboardStorage.isThirdPartyKeyboardAllowed = true
-                    }
-                }).show(parentFragmentManager, "custom_keyboard_alert")
-    }
 }
