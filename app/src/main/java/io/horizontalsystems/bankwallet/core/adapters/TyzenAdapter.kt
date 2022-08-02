@@ -42,7 +42,7 @@ class TyzenAdapter(
     //
 
     override val explorerTitle: String
-        get() = "blockchair.com"
+        get() = "tyzen.io"
 
 
     override fun getTransactionUrl(transactionHash: String): String? =
