@@ -58,6 +58,7 @@ data class TransactionSource(
     sealed class Blockchain {
         object Bitcoin : Blockchain()
         object Litecoin : Blockchain()
+        object Tyzen : Blockchain()
         object BitcoinCash : Blockchain()
         object Dash : Blockchain()
         object Zcash : Blockchain()
@@ -88,6 +89,7 @@ data class TransactionSource(
             return when(this){
                 Bitcoin -> "Bitcoin"
                 Litecoin -> "Litecoin"
+                Tyzen -> "Tyzen"
                 BitcoinCash -> "BitcoinCash"
                 Dash -> "Dash"
                 Zcash -> "Zcash"
