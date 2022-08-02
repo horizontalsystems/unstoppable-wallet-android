@@ -122,6 +122,8 @@
     <string name="MarketTopPlatforms_PlatofrmsRank">Лучшие блокчейн-платформы</string>
     <string name="MarketTopPlatforms_Description">Лучшие ведущие блокчейн-платформы кумулятивного рынка проектов.</string>
     <string name="MarketTopPlatforms_Protocols">Протокол: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Общая Капитализация</string>
