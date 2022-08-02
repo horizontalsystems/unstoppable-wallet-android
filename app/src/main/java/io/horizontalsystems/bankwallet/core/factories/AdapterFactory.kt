@@ -54,6 +54,10 @@ class AdapterFactory(
                 val syncMode = btcBlockchainManager.syncMode(BtcBlockchain.Litecoin, wallet.account.origin)
                 LitecoinAdapter(wallet, syncMode, testMode, backgroundManager)
             }
+			is CoinType.Tyzen -> {
+                val syncMode = btcBlockchainManager.syncMode(BtcBlockchain.Tyzen, wallet.account.origin)
+                TyzenAdapter(wallet, syncMode, testMode, backgroundManager)
+            }
             is CoinType.BitcoinCash -> {
                 val syncMode = btcBlockchainManager.syncMode(BtcBlockchain.BitcoinCash, wallet.account.origin)
                 BitcoinCashAdapter(wallet, syncMode, testMode, backgroundManager)
