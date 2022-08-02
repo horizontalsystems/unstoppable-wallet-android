@@ -122,6 +122,8 @@
     <string name="MarketTopPlatforms_PlatofrmsRank">Top Blockchain-Plattformen</string>
     <string name="MarketTopPlatforms_Description">Führende Blockchain-Plattformen durch den kumulativen Markt von Projekten, die auf der Spitze.</string>
     <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
