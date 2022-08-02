@@ -108,7 +108,7 @@ class BalanceViewItemFactory {
 
     private fun getDefaultSyncingProgress(coinType: CoinType): Int {
         return when (coinType) {
-            CoinType.Bitcoin, CoinType.Litecoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Zcash -> 10
+            CoinType.Bitcoin, CoinType.Litecoin, CoinType.Tyzen, CoinType.BitcoinCash, CoinType.Dash, CoinType.Zcash -> 10
             CoinType.Ethereum, CoinType.BinanceSmartChain, is CoinType.Erc20, is CoinType.Bep2, is CoinType.Bep20,
             CoinType.Polygon, is CoinType.Mrc20 -> 50
             is CoinType.Avalanche,
