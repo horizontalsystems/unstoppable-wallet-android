@@ -46,6 +46,7 @@ class SendFragment : BaseFragment() {
                 when (wallet.coinType) {
                     CoinType.Bitcoin,
                     CoinType.Litecoin,
+                    CoinType.Tyzen,
                     CoinType.BitcoinCash,
                     CoinType.Dash,
                     -> {
