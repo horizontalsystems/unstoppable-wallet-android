@@ -48,6 +48,7 @@ val CoinType.title: String
         return when (this) {
             is CoinType.Bitcoin -> "Bitcoin"
             is CoinType.Litecoin -> "Litecoin"
+            is CoinType.Tyzen -> "Tyzen"
             is CoinType.BitcoinCash -> "Bitcoin Cash"
             is CoinType.Dash -> "Dash"
             else -> ""
@@ -73,6 +74,7 @@ val CoinType.coinSettingTypes: List<CoinSettingType>
     get() = when (this) {
         CoinType.Bitcoin,
         CoinType.Litecoin -> listOf(CoinSettingType.derivation)
+        CoinType.Tyzen -> listOf(CoinSettingType.derivation)
         CoinType.BitcoinCash -> listOf(CoinSettingType.bitcoinCashCoinType)
         else -> listOf()
     }
@@ -81,6 +83,7 @@ val CoinType.defaultSettingsArray: List<CoinSettings>
     get() = when (this) {
         CoinType.Bitcoin,
         CoinType.Litecoin -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to AccountType.Derivation.bip49.value)))
+        CoinType.Tyzen -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to AccountType.Derivation.bip49.value)))
         CoinType.BitcoinCash -> listOf(CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to BitcoinCashCoinType.type145.value)))
         else -> listOf()
     }
@@ -96,6 +99,7 @@ val CoinType.isSupported: Boolean
         CoinType.Bitcoin,
         CoinType.BitcoinCash,
         CoinType.Litecoin,
+        CoinType.Tyzen,
         CoinType.Dash,
         CoinType.Zcash,
         CoinType.Ethereum,
@@ -128,30 +132,31 @@ val CoinType.order: Int
         is CoinType.Bitcoin -> 1
         is CoinType.BitcoinCash -> 2
         is CoinType.Litecoin -> 3
-        is CoinType.Dash -> 4
-        is CoinType.Zcash -> 5
-        is CoinType.Ethereum -> 6
-        is CoinType.BinanceSmartChain -> 7
-        is CoinType.Polygon -> 8
-        CoinType.EthereumOptimism -> 9
-        CoinType.EthereumArbitrumOne -> 10
-        is CoinType.Erc20 -> 11
-        is CoinType.Bep20 -> 12
-        is CoinType.Mrc20 -> 13
-        is CoinType.OptimismErc20 -> 14
-        is CoinType.ArbitrumOneErc20 -> 15
-        is CoinType.Bep2 -> 16
-        is CoinType.Solana -> 17
-        is CoinType.Avalanche -> 18
-        is CoinType.Fantom -> 19
-        is CoinType.HuobiToken -> 20
-        is CoinType.HarmonyShard0 -> 21
-        is CoinType.Xdai -> 22
-        is CoinType.Moonriver -> 23
-        is CoinType.OkexChain -> 24
-        is CoinType.Sora -> 25
-        is CoinType.Tomochain -> 26
-        is CoinType.Iotex -> 27
+        is CoinType.Tyzen -> 4
+        is CoinType.Dash -> 5
+        is CoinType.Zcash -> 6
+        is CoinType.Ethereum -> 7
+        is CoinType.BinanceSmartChain -> 8
+        is CoinType.Polygon -> 9
+        CoinType.EthereumOptimism -> 10
+        CoinType.EthereumArbitrumOne -> 11
+        is CoinType.Erc20 -> 12
+        is CoinType.Bep20 -> 13
+        is CoinType.Mrc20 -> 14
+        is CoinType.OptimismErc20 -> 15
+        is CoinType.ArbitrumOneErc20 -> 16
+        is CoinType.Bep2 -> 17
+        is CoinType.Solana -> 18
+        is CoinType.Avalanche -> 19
+        is CoinType.Fantom -> 20
+        is CoinType.HuobiToken -> 21
+        is CoinType.HarmonyShard0 -> 22
+        is CoinType.Xdai -> 23
+        is CoinType.Moonriver -> 24
+        is CoinType.OkexChain -> 25
+        is CoinType.Sora -> 26
+        is CoinType.Tomochain -> 27
+        is CoinType.Iotex -> 28
         else -> Int.MAX_VALUE
     }
 
