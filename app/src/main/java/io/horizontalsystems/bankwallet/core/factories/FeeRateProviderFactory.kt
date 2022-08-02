@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.providers.BitcoinCashFeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.BitcoinFeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.DashFeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.LitecoinFeeRateProvider
+import io.horizontalsystems.bankwallet.core.providers.TyzenFeeRateProvider
 import io.horizontalsystems.marketkit.models.CoinType
 
 object FeeRateProviderFactory {
@@ -15,6 +16,7 @@ object FeeRateProviderFactory {
         return when (coinType) {
             is CoinType.Bitcoin -> BitcoinFeeRateProvider(feeRateProvider)
             is CoinType.Litecoin -> LitecoinFeeRateProvider(feeRateProvider)
+            is CoinType.Tyzen -> TyzenFeeRateProvider(feeRateProvider)
             is CoinType.BitcoinCash -> BitcoinCashFeeRateProvider(feeRateProvider)
             is CoinType.Dash -> DashFeeRateProvider(feeRateProvider)
             else -> null
