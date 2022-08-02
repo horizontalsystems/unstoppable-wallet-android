@@ -122,6 +122,8 @@
     <string name="MarketTopPlatforms_PlatofrmsRank">顶级区块链平台</string>
     <string name="MarketTopPlatforms_Description">通过建立在顶部的项目的累积市场来领导区块链平台。</string>
     <string name="MarketTopPlatforms_Protocols">協議: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">图表</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">总市值</string>
