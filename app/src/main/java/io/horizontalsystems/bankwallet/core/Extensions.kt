@@ -104,6 +104,7 @@ val CoinType.blockchainLogo: Int
         CoinType.EthereumArbitrumOne -> R.drawable.logo_arbitrum_24
         is CoinType.Bep2 -> R.drawable.logo_bep2_24
         CoinType.Litecoin -> R.drawable.logo_litecoin_24
+        CoinType.Tyzen -> R.drawable.logo_tyzen_24
         CoinType.Zcash -> R.drawable.logo_zcash_24
         else -> R.drawable.coin_placeholder
     }
