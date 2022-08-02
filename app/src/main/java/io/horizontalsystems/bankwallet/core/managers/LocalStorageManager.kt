@@ -33,6 +33,7 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
     private val LOCKOUT_TIMESTAMP = "lockout_timestamp"
     private val BASE_BITCOIN_PROVIDER = "base_bitcoin_provider"
     private val BASE_LITECOIN_PROVIDER = "base_litecoin_provider"
+    private val BASE_TYZEN_PROVIDER = "base_tyzen_provider"
     private val BASE_ETHEREUM_PROVIDER = "base_ethereum_provider"
     private val BASE_DASH_PROVIDER = "base_dash_provider"
     private val BASE_BINANCE_PROVIDER = "base_binance_provider"
@@ -102,6 +103,12 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
         get() = preferences.getString(BASE_LITECOIN_PROVIDER, null)
         set(value) {
             preferences.edit().putString(BASE_LITECOIN_PROVIDER, value).apply()
+        }
+        
+    override var baseTyzenProvider: String?
+        get() = preferences.getString(BASE_TYZEN_PROVIDER, null)
+        set(value) {
+            preferences.edit().putString(BASE_TYZEN_PROVIDER, value).apply()
         }
 
     override var baseEthereumProvider: String?
