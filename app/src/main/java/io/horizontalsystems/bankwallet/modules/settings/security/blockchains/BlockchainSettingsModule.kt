@@ -43,7 +43,8 @@ object BlockchainSettingsModule {
                         BtcBlockchain.Bitcoin -> 0
                         BtcBlockchain.BitcoinCash -> 100
                         BtcBlockchain.Litecoin -> 101
-                        BtcBlockchain.Dash -> 102
+                        BtcBlockchain.Tyzen -> 102
+                        BtcBlockchain.Dash -> 103
                     }
                 }
                 is Evm -> {
