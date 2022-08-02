@@ -9,7 +9,7 @@ class AddressParserFactory {
         return when (coinType) {
             is CoinType.Bitcoin -> AddressParser("bitcoin", true)
             is CoinType.Litecoin -> AddressParser("litecoin", true)
-			is CoinType.Tyzen -> AddressParser("tyzen", true)
+	    is CoinType.Tyzen -> AddressParser("tyzen", true)
             is CoinType.BitcoinCash -> AddressParser("bitcoincash", false)
             is CoinType.Dash -> AddressParser("dash", true)
             is CoinType.Ethereum -> AddressParser("ethereum", true)
