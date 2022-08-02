@@ -17,6 +17,7 @@ object AddressInputModule {
                 CoinType.Bitcoin,
                 CoinType.BitcoinCash,
                 CoinType.Litecoin,
+                CoinType.Tyzen,
                 CoinType.Dash,
                 CoinType.Zcash,
                 is CoinType.Bep2 -> {
