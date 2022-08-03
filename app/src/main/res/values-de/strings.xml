@@ -68,7 +68,7 @@
     <string name="RateApp_Button_RateIt">Bewerten</string>
     <string name="RateApp_Button_NotNow">Nicht jetzt</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Restore Wallet</string>
+    <string name="Restore_Enter_Key_Title">Restore</string>
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Falscher Schlüssel</string>
     <string name="Restore_Error_MnemonicWordCount">Falsche Wortzahl. Sie muss zwischen 12 und 24 Wörtern liegen. Sie haben eingegeben: %d</string>
@@ -704,7 +704,7 @@
     <string name="ManageAccounts_ImportWallet">Wiederherstellen</string>
     <string name="ManageAccounts_WatchAddress">Watch-Adresse</string>
     <string name="ManageAccounts_Hint">Tipp! Wenn Sie ein bestehendes Wallet mit einer neuen Passphrase wiederherstellen, wird ein brandneues Wallet erzeugt. Praktisch, wenn Sie eine einzelne 12-24-Wörter-Wiederherstellungsphrase für mehrere Wallets verwenden möchten.</string>
-    <string name="Watch_Address_Title">Adresse</string>
+    <string name="Watch_Address_Title">Watch Address</string>
     <string name="Watch_Address_Hint">Adresse oder Domäne</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
     <string name="Watch_Address_Watch">Beobachten</string>
