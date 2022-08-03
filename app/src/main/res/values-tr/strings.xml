@@ -68,7 +68,7 @@
     <string name="RateApp_Button_RateIt">Puanla</string>
     <string name="RateApp_Button_NotNow">Şimdi değil</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Restore Wallet</string>
+    <string name="Restore_Enter_Key_Title">Restore</string>
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_Error_MnemonicWordCount">Hatalı sözcük sayısı. 12-24 arası sözcük olmalıdır. Girilen: %d</string>
@@ -700,7 +700,7 @@
     <string name="ManageAccounts_ImportWallet">Geri Yükle</string>
     <string name="ManageAccounts_WatchAddress">Adresi İzle</string>
     <string name="ManageAccounts_Hint">İpucu! Mevcut bir cüzdanı geri yüklemek, yeni bir şifre ile en baştan bir cüzdan oluşturur. Birden fazla cüzdan için 12-24 kelimelik tek bir hatırlatıcı kurtarma öbeği kullanmak istiyorsanız kullanışlıdır.</string>
-    <string name="Watch_Address_Title">Adres</string>
+    <string name="Watch_Address_Title">Watch Address</string>
     <string name="Watch_Address_Hint">Adres veya Domain</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
     <string name="Watch_Address_Watch">İzle</string>
