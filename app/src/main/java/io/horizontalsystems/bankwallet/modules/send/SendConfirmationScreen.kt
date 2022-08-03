@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -256,12 +257,11 @@ fun AddressCell(address: String) {
         ButtonSecondaryDefault(
             modifier = Modifier
                 .padding(start = 8.dp),
-            title = address,
+            title = address.shorten(),
             onClick = {
                 clipboardManager.setText(AnnotatedString(address))
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-            },
-            ellipsis = Ellipsis.Middle(10)
+            }
         )
     }
 }

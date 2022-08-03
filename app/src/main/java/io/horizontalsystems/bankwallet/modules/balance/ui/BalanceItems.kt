@@ -18,7 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.shortenedAddress
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.*
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
@@ -110,7 +110,7 @@ fun BalanceItems(
                 val clipboardManager = LocalClipboardManager.current
                 val view = LocalView.current
                 ButtonSecondaryDefault(
-                    title = address.shortenedAddress(),
+                    title = address.shorten(),
                     onClick = {
                         clipboardManager.setText(AnnotatedString(address))
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)

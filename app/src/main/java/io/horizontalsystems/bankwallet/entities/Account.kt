@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.entities
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.shortenedAddress
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -89,7 +89,7 @@ open class AccountType : Parcelable {
                     Translator.getString(R.string.ManageAccount_NWords, count)
                 }
             }
-            is Address -> this.address.shortenedAddress()
+            is Address -> this.address.shorten()
             else -> ""
         }
 }

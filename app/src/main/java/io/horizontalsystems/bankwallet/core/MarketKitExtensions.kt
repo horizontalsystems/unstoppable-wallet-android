@@ -64,7 +64,7 @@ val Token.typeInfo: String
             }
             parts.joinToString(" ")
         }
-        is TokenType.Eip20 -> type.address.shortenedAddress()
+        is TokenType.Eip20 -> type.address.shorten()
         is TokenType.Bep2 -> type.symbol
         is TokenType.Unsupported -> ""
     }

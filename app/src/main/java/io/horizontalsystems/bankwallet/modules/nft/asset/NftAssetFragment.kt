@@ -47,7 +47,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.shortenedAddress
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
@@ -459,7 +459,7 @@ private fun NftAssrtInfo(asset: NftAssetModuleAssetItem, navController: NavContr
                         add {
                             DetailItem(
                                 stringResource(id = R.string.NftAsset_TokenId),
-                                asset.tokenId.shortenedAddress()
+                                asset.tokenId.shorten()
                             )
                         }
                         add {

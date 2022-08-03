@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
@@ -131,8 +132,7 @@ fun TransactionInfoAddressCell(
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-            },
-            ellipsis = Ellipsis.Middle(5)
+            }
         )
     }
 }
@@ -219,15 +219,13 @@ fun TransactionInfoSpeedUpCancelCell(
             title = stringResource(R.string.TransactionInfo_SpeedUp),
             onClick = {
                 openTransactionOptionsModule(TransactionInfoOptionsModule.Type.SpeedUp, transactionHash, navController)
-            },
-            ellipsis = Ellipsis.End
+            }
         )
         ButtonSecondaryDefault(
             title = stringResource(R.string.TransactionInfo_Cancel),
             onClick = {
                 openTransactionOptionsModule(TransactionInfoOptionsModule.Type.Cancel, transactionHash, navController)
-            },
-            ellipsis = Ellipsis.End
+            }
         )
     }
 }
@@ -247,12 +245,11 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
         subhead2_grey(text = stringResource(R.string.TransactionInfo_Id), modifier = Modifier.padding(end = 16.dp))
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
-            title = transactionHash,
+            title = transactionHash.shorten(),
             onClick = {
                 TextHelper.copyText(transactionHash)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-            },
-            ellipsis = Ellipsis.Middle(5)
+            }
         )
         Spacer(modifier = Modifier.width(8.dp))
         ButtonSecondaryCircle(
