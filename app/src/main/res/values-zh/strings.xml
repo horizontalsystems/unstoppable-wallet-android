@@ -38,6 +38,7 @@
     <string name="Any">任何</string>
     <string name="SyncError">同步错误。请再试一次</string>
     <string name="PercentTitle">百分比</string>
+    <string name="Keyboard">Keyboard</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">资产解绑</string>
@@ -67,7 +68,7 @@
     <string name="RateApp_Button_RateIt">评价它</string>
     <string name="RateApp_Button_NotNow">暂不</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">输入密钥</string>
+    <string name="Restore_Enter_Key_Title">Restore Wallet</string>
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_Error_MnemonicWordCount">个数有误。必须为12到24个单词。您输入了：%d</string>
@@ -702,6 +703,7 @@
     <string name="ManageAccounts_Hint">注意：使用一个新密码恢复现有的钱包将生成一个全新的钱包。如果您希望对多个钱包使用单个12-24个单词的助记词恢复码，这将非常方便。</string>
     <string name="Watch_Address_Title">地址</string>
     <string name="Watch_Address_Hint">地址或域名</string>
+    <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
     <string name="Watch_Address_Watch">观察</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
