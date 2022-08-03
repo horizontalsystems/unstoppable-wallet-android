@@ -173,7 +173,19 @@ fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit): Disposable {
         .subscribe(onSuccess)
 }
 
-fun String.shortenedAddress(characters: Int = 6) = when {
-    length <= characters * 2 + 4 -> this
-    else -> take(characters) + "..." + takeLast(characters)
+fun String.shorten(): String {
+    val prefixes = listOf("0x", "bc", "bnb", "ltc", "bitcoincash:")
+
+    var prefix = ""
+    for (p in prefixes) {
+        if (this.startsWith(p)) {
+            prefix = p
+            break
+        }
+    }
+
+    val withoutPrefix = this.removePrefix(prefix)
+
+    val characters = 4
+    return prefix + withoutPrefix.take(characters) + "..." + withoutPrefix.takeLast(characters)
 }

@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
@@ -57,13 +58,7 @@ open class ContractInfo(
     @DrawableRes val logoResId: Int,
     val explorerUrl: String?
 ) {
-    val shortened = shortenAddress(rawValue)
-
-    private fun shortenAddress(address: String) = if (address.length >= 20) {
-        address.take(8) + "..." + address.takeLast(8)
-    } else {
-        address
-    }
+    val shortened = rawValue.shorten()
 }
 
 data class CoinDataItem(

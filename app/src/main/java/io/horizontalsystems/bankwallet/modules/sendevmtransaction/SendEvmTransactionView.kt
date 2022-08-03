@@ -18,10 +18,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.setRemoteImage
-import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.databinding.*
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
@@ -29,7 +26,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
@@ -226,7 +222,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             )
             is ViewItem.Input -> (holder as? TitleValueHexViewHolder)?.bind(
                 "Input",
-                item.value,
+                item.value.shorten(),
                 item.value,
                 listPosition
             )
@@ -282,8 +278,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
                         onClick = {
                             TextHelper.copyText(value)
                             HudHelper.showSuccessMessage(binding.wrapper, R.string.Hud_Text_Copied)
-                        },
-                        ellipsis = Ellipsis.Middle(10)
+                        }
                     )
                 }
             }

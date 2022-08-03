@@ -32,28 +32,12 @@ fun ButtonSecondaryDefault(
     title: String,
     onClick: () -> Unit,
     enabled: Boolean = true,
-    ellipsis: Ellipsis = Ellipsis.End
 ) {
     ButtonSecondary(
         modifier = modifier,
         onClick = onClick,
         content = {
-            when (ellipsis) {
-                Ellipsis.End -> {
-                    subhead1_leah(
-                        title,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                is Ellipsis.Middle -> {
-                    subhead1_leah(
-                        truncateIfNeeded(title, ellipsis.characterCount),
-                        maxLines = 1,
-                        overflow = TextOverflow.Visible
-                    )
-                }
-            }
+            subhead1_leah(text = title, maxLines = 1)
         },
         enabled = enabled
     )
@@ -264,9 +248,4 @@ object SecondaryButtonDefaults {
         disabledBackgroundColor = disabledBackgroundColor,
         disabledContentColor = disabledContentColor,
     )
-}
-
-sealed class Ellipsis {
-    object End : Ellipsis()
-    class Middle(val characterCount: Int = 5) : Ellipsis()
 }

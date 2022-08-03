@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -139,12 +140,11 @@ private fun TransactionHashCell(titleRes: Int, transactionHash: String) {
             )
             ButtonSecondaryDefault(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = transactionHash,
+                title = transactionHash.shorten(),
                 onClick = {
                     clipboardManager.setText(AnnotatedString(transactionHash))
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                },
-                ellipsis = Ellipsis.Middle(10)
+                }
             )
         }
     }

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.providers.EvmLabelProvider
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.storage.EvmAddressLabelDao
 import io.horizontalsystems.bankwallet.core.storage.EvmMethodLabelDao
 import io.horizontalsystems.bankwallet.core.storage.SyncerStateDao
@@ -48,7 +49,7 @@ class EvmLabelManager(
     }
 
     fun mapped(address: String): String {
-        return addressLabel(address) ?: "${address.take(5)}...${address.takeLast(5)}"
+        return addressLabel(address) ?: address.shorten()
     }
 
     private suspend fun syncAddressLabels(timestamp: Long) {

@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
@@ -172,12 +173,11 @@ private fun TopWalletCell(item: MajorHolderItem) {
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
             modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-            title = item.address,
+            title = item.address.shorten(),
             onClick = {
                 TextHelper.copyText(item.address)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-            },
-            ellipsis = Ellipsis.Middle(8)
+            }
         )
         ButtonSecondaryCircle(
             icon = R.drawable.ic_globe_20,

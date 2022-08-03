@@ -39,8 +39,7 @@ fun TitleHexValueCell(title: String, valueVisible: String, value: String) {
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-            },
-            ellipsis = Ellipsis.Middle(10)
+            }
         )
     }
 }

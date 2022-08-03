@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
@@ -87,7 +88,7 @@ fun SendEthRequestScreen(
                                 )
                                 is ViewItem.Input -> TitleHexValueCell(
                                     Translator.getString(R.string.WalletConnect_Input),
-                                    item.value,
+                                    item.value.shorten(),
                                     item.value
                                 )
                                 is ViewItem.Amount -> AmountCell(
