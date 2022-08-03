@@ -22,7 +22,7 @@ class CoinCategoryMarketDataChartService(
         chartInterval: HsTimePeriod,
         currency: Currency
     ): Single<ChartPointsWrapper> = try {
-        marketKit.coinCategoryMarketPointsSingle(categoryUid, chartInterval)
+        marketKit.coinCategoryMarketPointsSingle(categoryUid, chartInterval, currency.code)
             .map { info ->
                 info.map { ChartPoint(it.marketCap.toFloat(), it.timestamp) }
             }
