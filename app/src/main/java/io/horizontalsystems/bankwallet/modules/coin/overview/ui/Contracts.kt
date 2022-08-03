@@ -21,8 +21,8 @@ fun ContractsPreview() {
     ComposeAppTheme(darkTheme = true) {
         val contracts = listOf(
             ContractInfo("0xda123as34290098asd0098asdasd9098asd90123asd", R.drawable.logo_ethereum_24,"https://etherscan.io/token/0xda123as34290098asd0098asdasd9098asd90123asd"),
-            ContractInfo("0x34290098asd8asdasd98asd8asdasd9098asd098as9", R.drawable.logo_binancesmartchain_24,"https://bscscan.com/token/0x34290098asd8asdasd98asd8asdasd9098asd098as9"),
-            ContractInfo("BNB", R.drawable.logo_bep2_24,"https://explorer.binance.org/asset/BNB"),
+            ContractInfo("0x34290098asd8asdasd98asd8asdasd9098asd098as9", R.drawable.logo_binancecoin_24,"https://bscscan.com/token/0x34290098asd8asdasd98asd8asdasd9098asd098as9"),
+            ContractInfo("BNB", R.drawable.logo_binance_smart_chain_24,"https://explorer.binance.org/asset/BNB"),
         )
         Contracts(contracts = contracts, {}, {})
     }

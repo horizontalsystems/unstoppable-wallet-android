@@ -6,10 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.icon24
 import io.horizontalsystems.bankwallet.core.protocolType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -70,7 +70,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                     TokenInfoUiState(
                         tokenInfo = it,
                         title = it.tokenQuery.protocolType ?: "",
-                        image = getPlatformLogo(it.tokenQuery.blockchainType),
+                        image = it.tokenQuery.blockchainType.icon24,
                         checked = it.inWallet,
                         enabled = !it.inWallet
                     )
@@ -87,14 +87,6 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
             loading = false
             emitState()
         }
-    }
-
-    private fun getPlatformLogo(blockchainType: BlockchainType) = when (blockchainType) {
-        BlockchainType.Ethereum -> R.drawable.logo_ethereum_24
-        BlockchainType.BinanceSmartChain -> R.drawable.logo_binancesmartchain_24
-        BlockchainType.Polygon -> R.drawable.logo_polygon_24
-        BlockchainType.BinanceChain -> R.drawable.logo_bep2_24
-        else -> R.drawable.ic_platform_placeholder_24
     }
 
     fun onAddClick() {
