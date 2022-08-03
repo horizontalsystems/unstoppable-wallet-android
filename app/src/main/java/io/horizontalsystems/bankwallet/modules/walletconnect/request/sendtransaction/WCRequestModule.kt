@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
@@ -58,7 +59,8 @@ object WCRequestModule {
             EvmCoinServiceFactory(token, App.marketKit, App.currencyManager)
         }
         private val feeService by lazy {
-            EvmFeeService(evmKitWrapper.evmKit, gasPriceService, transactionData, 10)
+            val gasDataService = EvmCommonGasDataService(evmKitWrapper.evmKit, 10)
+            EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(dAppName))
@@ -116,12 +118,9 @@ object WCRequestModule {
             EvmCoinServiceFactory(token, App.marketKit, App.currencyManager)
         }
         private val feeService by lazy {
-            EvmFeeService(
-                service.evmKitWrapper.evmKit,
-                gasPriceService,
-                transactionData,
-                10
-            )
+            val evmKitWrapper = service.evmKitWrapper
+            val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, 10)
+            EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
         private val additionalInfo =

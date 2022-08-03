@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
@@ -53,7 +54,8 @@ object SendEvmConfirmationModule {
         }
         private val feeService by lazy {
             val gasLimitSurchargePercent = if (sendEvmData.transactionData.input.isEmpty()) 0 else 20
-            EvmFeeService(evmKitWrapper.evmKit, gasPriceService, sendEvmData.transactionData, gasLimitSurchargePercent)
+            val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, gasLimitSurchargePercent)
+            EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, sendEvmData.transactionData)
         }
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeToken, App.marketKit, App.currencyManager) }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }

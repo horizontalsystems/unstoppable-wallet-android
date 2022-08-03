@@ -3,10 +3,8 @@ package io.horizontalsystems.bankwallet.modules.evmfee
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -14,10 +12,9 @@ import java.math.BigInteger
 
 class EvmFeeService(
     private val evmKit: EthereumKit,
-    private val gasPriceService: IEvmGasPriceService,
-    private val transactionData: TransactionData,
-    private val gasLimitSurchargePercent: Int = 0,
-    private val gasLimit: Long? = null
+    gasPriceService: IEvmGasPriceService,
+    private val gasDataService: EvmCommonGasDataService,
+    private val transactionData: TransactionData
 ) : IEvmFeeService {
 
     private val disposable = CompositeDisposable()
@@ -64,19 +61,38 @@ class EvmFeeService(
     private fun sync(gasPriceInfo: GasPriceInfo) {
         gasPriceInfoDisposable?.dispose()
 
-        if (gasLimit != null) {
-            val gasData = GasData(gasLimit, gasPriceInfo.gasPrice)
-            val transaction = Transaction(transactionData, gasData, gasPriceInfo.warnings, gasPriceInfo.errors)
-            sync(transaction)
+        val gasPrice = gasPriceInfo.gasPrice
+        val warnings = gasPriceInfo.warnings
+        val errors = gasPriceInfo.errors
+
+        val transactionSingle = gasDataService.predefinedGasDataAsync(gasPrice, transactionData)?.map { gasData ->
+            Transaction(transactionData, gasData, warnings, errors)
+
+        } ?: if (transactionData.input.isEmpty() && transactionData.value == evmBalance) {
+            gasDataService.estimatedGasDataAsync(gasPrice, transactionData, BigInteger.ONE).map { gasData ->
+                val adjustedValue = transactionData.value - gasData.fee
+
+                if (adjustedValue <= BigInteger.ZERO) {
+                    throw FeeSettingsError.InsufficientBalance
+                } else {
+                    val transactionData = TransactionData(transactionData.to, adjustedValue, byteArrayOf())
+                    Transaction(transactionData, gasData, warnings, errors)
+                }
+            }
+
         } else {
-            getTransactionAsync(gasPriceInfo, transactionData)
+            gasDataService.estimatedGasDataAsync(gasPriceInfo.gasPrice, transactionData, null).map { gasData ->
+                Transaction(transactionData, gasData, warnings, errors)
+            }
+        }
+
+        transactionSingle
                 .subscribeIO({ transaction ->
                     sync(transaction)
                 }, {
                     transactionStatus = DataState.Error(it)
                 })
                 .let { gasPriceInfoDisposable = it }
-        }
     }
 
     private fun sync(transaction: Transaction) {
@@ -87,46 +103,4 @@ class EvmFeeService(
         }
     }
 
-    private fun getTransactionAsync(gasPriceInfo: GasPriceInfo, transactionData: TransactionData): Single<Transaction> {
-        return getAdjustedTransactionDataAsync(gasPriceInfo.gasPrice, transactionData)
-            .flatMap { adjustedTransactionData ->
-                getGasLimitAsync(gasPriceInfo.gasPrice, adjustedTransactionData)
-                    .map { estimatedGasLimit ->
-                        val gasLimit = getSurchargedGasLimit(estimatedGasLimit)
-                        val gasData = GasData(gasLimit, gasPriceInfo.gasPrice)
-                        Transaction(adjustedTransactionData, gasData, gasPriceInfo.warnings, gasPriceInfo.errors)
-                    }
-            }
-    }
-
-    private fun getAdjustedTransactionDataAsync(
-        gasPrice: GasPrice,
-        transactionData: TransactionData
-    ): Single<TransactionData> {
-        if (transactionData.input.isEmpty() && transactionData.value == evmBalance) {
-            val stubTransactionData = TransactionData(transactionData.to, BigInteger.ONE, byteArrayOf())
-            return getGasLimitAsync(gasPrice, stubTransactionData)
-                .flatMap { estimatedGasLimit ->
-                    val gasLimit = getSurchargedGasLimit(estimatedGasLimit)
-                    val adjustedValue = transactionData.value - gasLimit.toBigInteger() * gasPrice.max.toBigInteger()
-
-                    if (adjustedValue <= BigInteger.ZERO) {
-                        Single.error(FeeSettingsError.InsufficientBalance)
-                    } else {
-                        val adjustedTransactionData = TransactionData(transactionData.to, adjustedValue, byteArrayOf())
-                        Single.just(adjustedTransactionData)
-                    }
-                }
-        } else {
-            return Single.just(transactionData)
-        }
-    }
-
-    private fun getGasLimitAsync(gasPrice: GasPrice, transactionData: TransactionData): Single<Long> {
-        return evmKit.estimateGas(transactionData, gasPrice)
-    }
-
-    private fun getSurchargedGasLimit(estimatedGasLimit: Long): Long {
-        return (estimatedGasLimit + estimatedGasLimit / 100.0 * gasLimitSurchargePercent).toLong()
-    }
 }

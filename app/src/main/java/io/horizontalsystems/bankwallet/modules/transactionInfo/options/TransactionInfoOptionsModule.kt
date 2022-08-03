@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
@@ -100,7 +101,8 @@ object TransactionInfoOptionsModule {
             }
         }
         private val transactionService by lazy {
-            EvmFeeService(evmKitWrapper.evmKit, gasPriceService, transactionData)
+            val gasDataService = EvmCommonGasDataService.instance(evmKitWrapper.evmKit, evmKitWrapper.blockchainType, gasLimit = transaction.gasLimit)
+            EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
 
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(baseToken, App.marketKit, App.currencyManager) }

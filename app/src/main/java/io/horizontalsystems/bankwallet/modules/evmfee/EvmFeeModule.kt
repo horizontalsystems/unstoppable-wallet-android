@@ -10,8 +10,10 @@ import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettings
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
+import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -77,12 +79,18 @@ data class GasPriceInfo(
     val errors: List<Throwable>
 )
 
-data class GasData(
-    val gasLimit: Long,
-    val gasPrice: GasPrice
-) {
-    val fee: BigInteger
+open class GasData(val gasLimit: Long, val gasPrice: GasPrice) {
+
+    open val fee: BigInteger
         get() = gasLimit.toBigInteger() * gasPrice.max.toBigInteger()
+
+}
+
+class RollupGasData(gasLimit: Long, gasPrice: GasPrice, val l1Fee: BigInteger): GasData(gasLimit, gasPrice) {
+
+    override val fee: BigInteger
+        get() = super.fee + l1Fee
+
 }
 
 data class Transaction(
@@ -124,3 +132,10 @@ sealed class GasDataError : Error() {
 data class FeeViewItem(val fee: String, val gasLimit: String)
 
 data class SliderViewItem(val initialValue: Long, val range: LongRange, val unit: String)
+
+internal val BlockchainType.l1GasFeeContractAddress: Address?
+    get() =
+        when (this) {
+            BlockchainType.Optimism -> Address("0x420000000000000000000000000000000000000F")
+            else -> null
+        }
