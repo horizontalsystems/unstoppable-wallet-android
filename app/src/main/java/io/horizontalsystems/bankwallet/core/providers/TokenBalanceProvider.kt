@@ -64,7 +64,7 @@ class TokenBalanceProvider {
         @GET("addresses/{address}/coins")
         suspend fun addresses(
             @Path("address") address: String,
-            @Query("chain") chain: String
+            @Query("blockchain") blockchain: String
         ): AddressesResponse
 
         @GET("chain/{chain}")
