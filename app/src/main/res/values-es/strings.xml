@@ -68,7 +68,7 @@
     <string name="RateApp_Button_RateIt">Valóralo</string>
     <string name="RateApp_Button_NotNow">No ahora</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Restore Wallet</string>
+    <string name="Restore_Enter_Key_Title">Restore</string>
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Clave incorrecta</string>
     <string name="Restore_Error_MnemonicWordCount">Número de palabras erróneas. Debe tener entre 12 y 24 palabras. Has ingresado: %d</string>
@@ -701,7 +701,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="ManageAccounts_ImportWallet">Restaurar desde</string>
     <string name="ManageAccounts_WatchAddress">Ver Dirección</string>
     <string name="ManageAccounts_Hint">¡Sugerencia! Restaurar un monedero existente pero con una nueva contraseña generará un nuevo monedero. Esto puede ser útil si quieres usar una sola frase de recuperación mnemónica de 12-24 palabras para múltiples monederos.</string>
-    <string name="Watch_Address_Title">Dirección</string>
+    <string name="Watch_Address_Title">Watch Address</string>
     <string name="Watch_Address_Hint">Dominio o dirección</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
     <string name="Watch_Address_Watch">Ver</string>
