@@ -5,11 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,6 +21,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.icon24
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -81,16 +79,15 @@ private fun FilterByBlockchainsScreen(
         ) {
             AppBar(
                 title = TranslatableString.ResString(R.string.Market_Filter_Blockchains),
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            viewModel.updateListBySelectedBlockchains()
-                            navController.popBackStack()
-                        }
-                    )
-                )
+                navigationIcon = {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = "back",
+                            tint = ComposeAppTheme.colors.jacob
+                        )
+                    }
+                }
             )
             Column(
                 Modifier.verticalScroll(rememberScrollState())
@@ -134,6 +131,13 @@ private fun BlockchainCell(
                 },
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Image(
+                painter = painterResource(item.blockchain.type.icon24),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .size(24.dp)
+            )
             body_leah(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = item.blockchain.name,

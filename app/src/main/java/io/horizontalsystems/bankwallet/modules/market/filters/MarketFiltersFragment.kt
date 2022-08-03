@@ -27,7 +27,6 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.*
@@ -124,7 +123,7 @@ private fun AdvancedSearchScreen(
                         AdvancedSearchContent(
                             viewModel = viewModel,
                             onFilterByBlockchainsClick = {
-                                navController.slideFromBottom(R.id.blockchainsSelectorFragment)
+                                navController.slideFromRight(R.id.blockchainsSelectorFragment)
                             },
                             showBottomSheet = { type ->
                                 bottomSheetType = type

@@ -182,7 +182,21 @@ val BlockchainType.icon24: Int
         BlockchainType.ArbitrumOne -> R.drawable.logo_arbitrum_24
         BlockchainType.Zcash -> R.drawable.logo_zcash_24
         BlockchainType.BinanceChain -> R.drawable.logo_bep2_24
-        is BlockchainType.Unsupported -> R.drawable.ic_platform_placeholder_24
+        is BlockchainType.Unsupported -> {
+            when(this._uid){
+                "fantom" -> R.drawable.logo_fantom_24
+                "harmony-shard-0" -> R.drawable.logo_harmony_24
+                "huobi-token" -> R.drawable.logo_huobi_token_24
+                "iotex" -> R.drawable.logo_iotex_24
+                "moonriver" -> R.drawable.logo_moonriver_24
+                "okex-chain" -> R.drawable.logo_okex_24
+                "solana" -> R.drawable.logo_solana_24
+                "sora" -> R.drawable.logo_sora_24
+                "tomochain" -> R.drawable.logo_tomochain_24
+                "xdai" -> R.drawable.logo_xdai_24
+                else ->R.drawable.ic_platform_placeholder_24
+            }
+        }
     }
 
 val BlockchainType.order: Int
