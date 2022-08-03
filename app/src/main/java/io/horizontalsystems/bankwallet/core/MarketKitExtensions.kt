@@ -202,16 +202,17 @@ val BlockchainType.icon24: Int
 val BlockchainType.order: Int
     get() = when (this) {
         BlockchainType.Bitcoin -> 1
-        BlockchainType.BitcoinCash -> 2
-        BlockchainType.Litecoin -> 3
-        BlockchainType.Dash -> 4
-        BlockchainType.Zcash -> 5
-        BlockchainType.Ethereum -> 6
-        BlockchainType.BinanceSmartChain -> 7
-        BlockchainType.Polygon -> 8
-        BlockchainType.Avalanche -> 9
-        BlockchainType.Optimism -> 10
-        BlockchainType.ArbitrumOne -> 11
+        BlockchainType.Ethereum -> 2
+        BlockchainType.BinanceSmartChain -> 3
+        BlockchainType.Polygon -> 4
+        BlockchainType.Avalanche -> 5
+        BlockchainType.Zcash -> 6
+        BlockchainType.Dash -> 7
+        BlockchainType.BitcoinCash -> 8
+        BlockchainType.Litecoin -> 9
+        BlockchainType.BinanceChain -> 10
+        BlockchainType.Optimism -> 11
+        BlockchainType.ArbitrumOne -> 12
         else -> Int.MAX_VALUE
     }
 
