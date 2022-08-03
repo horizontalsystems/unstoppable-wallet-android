@@ -855,7 +855,7 @@
     <string name="ManageAccounts_WatchAddress">Watch Address</string>
     <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. This is handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
 
-    <string name="Watch_Address_Title">Address</string>
+    <string name="Watch_Address_Title">Watch Address</string>
     <string name="Watch_Address_Hint">Address or Domain</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
     <string name="Watch_Address_Watch">Watch</string>
