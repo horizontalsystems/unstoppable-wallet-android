@@ -40,18 +40,7 @@ class NftAssetItemsPricedWithCurrencyRepository(
     private fun handleUpdatedRates(latestRates: Map<String, CoinPrice?>) {
         val currentData = _itemsDataFlow.replayCache.lastOrNull() ?: return
         val updatedValue = currentData.value?.map { (collectionRecord, items) ->
-            collectionRecord to items.map { asset ->
-                val coinPrice = asset.price?.coinValue
-                val itemCoinUid = coinPrice?.coin?.uid
-                if (itemCoinUid != null && latestRates.containsKey(itemCoinUid)) {
-                    val currencyPrice = latestRates[itemCoinUid]?.let { latestRate ->
-                        CurrencyValue(xRateRepository.baseCurrency, coinPrice.value.multiply(latestRate.value))
-                    }
-                    asset.copy(price = NftAssetModuleAssetItem.Price(coinPrice, currencyPrice))
-                } else {
-                    asset
-                }
-            }
+            collectionRecord to updateRates(items, latestRates)
         }?.toMap()
 
         _itemsDataFlow.tryEmit(currentData.copy(value = updatedValue))
@@ -67,19 +56,24 @@ class NftAssetItemsPricedWithCurrencyRepository(
             val latestRates = xRateRepository.getLatestRates()
 
             value.map { (collectionRecord, assets) ->
-                collectionRecord to assets.map { asset ->
-                    val coinPrice = asset.price?.coinValue
-                    val currencyPrice = coinPrice?.let {
-                        latestRates[coinPrice.coin.uid]?.let { latestRate ->
-                            CurrencyValue(xRateRepository.baseCurrency, coinPrice.value.multiply(latestRate.value))
-                        }
-                    }
-                    asset.copy(price = coinPrice?.let { NftAssetModuleAssetItem.Price(coinPrice, currencyPrice) })
-                }
+                collectionRecord to updateRates(assets, latestRates)
             }.toMap()
         }
 
         _itemsDataFlow.tryEmit(DataWithError(items, data.error))
+    }
+
+    private fun updateRates(
+        assets: List<CollectionAsset>,
+        latestRates: Map<String, CoinPrice?>
+    ) = assets.map { asset ->
+        val coinPrice = asset.price?.coinValue
+        coinPrice?.let {
+            latestRates[coinPrice.coin.uid]?.let { latestRate ->
+                val currencyPrice = CurrencyValue(xRateRepository.baseCurrency, coinPrice.value.multiply(latestRate.value))
+                asset.copy(price = NftAssetModuleAssetItem.Price(coinPrice, currencyPrice), xRate = latestRate)
+            }
+        } ?: asset
     }
 
     fun stop() {

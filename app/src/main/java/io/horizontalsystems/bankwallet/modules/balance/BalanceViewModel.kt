@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -16,7 +18,8 @@ class BalanceViewModel(
     private val service: BalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val totalService: TotalService,
-    private val balanceViewTypeManager: BalanceViewTypeManager
+    private val balanceViewTypeManager: BalanceViewTypeManager,
+    private val balanceHiddenManager: BalanceHiddenManager
 ) : ViewModel() {
     private var totalState = createTotalUIState(totalService.stateFlow.value)
     private var viewState: ViewState = ViewState.Loading
@@ -43,7 +46,13 @@ class BalanceViewModel(
         viewModelScope.launch {
             service.balanceItemsFlow
                 .collect { items ->
-                    totalService.setBalanceItems(items)
+                    totalService.setItems(items?.map {
+                        TotalService.BalanceItem(
+                            it.balanceData.total,
+                            it.state !is AdapterState.Synced,
+                            it.coinPrice
+                        )
+                    })
                     items?.let { refreshViewItems(it) }
                 }
         }
@@ -60,7 +69,7 @@ class BalanceViewModel(
             }
         }
 
-        totalService.start(service.balanceHidden)
+        totalService.start()
 
         service.start()
     }
@@ -103,7 +112,7 @@ class BalanceViewModel(
                 balanceItem,
                 service.baseCurrency,
                 balanceItem.wallet == expandedWallet,
-                service.balanceHidden,
+                balanceHiddenManager.balanceHidden,
                 service.isWatchAccount,
                 balanceViewType
             )
@@ -119,9 +128,7 @@ class BalanceViewModel(
     }
 
     fun onBalanceClick() {
-        service.balanceHidden = !service.balanceHidden
-
-        totalService.setBalanceHidden(service.balanceHidden)
+        balanceHiddenManager.toggleBalanceHidden()
 
         service.balanceItemsFlow.value?.let { refreshViewItems(it) }
     }

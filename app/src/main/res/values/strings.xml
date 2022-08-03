@@ -1147,6 +1147,7 @@
     <string name="Nfts_Asset_OnSale">On Sale</string>
     <string name="Nfts_Asset_OnSaleUntil">until %s</string>
     <string name="Nfts_Empty">You don\'t have an NFT in your wallet</string>
+    <string name="Nfts_PriceMode">Price Mode</string>
 
     <string name="NftAsset_Overview">Overview</string>
     <string name="NftAsset_Activity">Activity</string>

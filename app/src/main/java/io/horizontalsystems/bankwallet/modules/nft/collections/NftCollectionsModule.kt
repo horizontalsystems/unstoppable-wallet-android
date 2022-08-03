@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
+import io.horizontalsystems.bankwallet.modules.balance.TotalService
 import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
@@ -26,8 +27,9 @@ object NftCollectionsModule {
                 assetItemsPricedRepository,
                 assetItemsPricedWithCurrencyRepository
             )
+            val totalService = TotalService(App.currencyManager, App.marketKit, App.baseTokenManager, App.balanceHiddenManager)
 
-            return NftCollectionsViewModel(service) as T
+            return NftCollectionsViewModel(service, totalService, App.balanceHiddenManager) as T
         }
     }
 }

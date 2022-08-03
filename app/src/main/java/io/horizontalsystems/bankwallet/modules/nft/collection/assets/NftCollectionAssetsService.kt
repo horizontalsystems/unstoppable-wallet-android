@@ -118,7 +118,7 @@ class NftCollectionAssetsService(
 
         val currencyValue = CurrencyValue(baseCurrency, coinValue.value.times(coinPrice.value))
 
-        asset.copy(price = NftAssetModuleAssetItem.Price(coinValue, currencyValue))
+        asset.copy(price = NftAssetModuleAssetItem.Price(coinValue, currencyValue), xRate = coinPrice)
     }
 
     private fun collectionAsset(asset: NftAsset) =
@@ -136,5 +136,6 @@ class NftCollectionAssetsService(
 
 data class CollectionAsset(
     val asset: NftAssetModuleAssetItem,
-    val price: NftAssetModuleAssetItem.Price?
+    val price: NftAssetModuleAssetItem.Price?,
+    val xRate: CoinPrice? = null
 )
