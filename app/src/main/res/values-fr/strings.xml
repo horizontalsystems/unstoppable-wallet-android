@@ -38,6 +38,7 @@
     <string name="Any">N\'importe lequel</string>
     <string name="SyncError">Erreur de synchronisation. Réessayez</string>
     <string name="PercentTitle">Pourcent</string>
+    <string name="Keyboard">Keyboard</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Soyez Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Désenchaînez les actifs</string>
@@ -67,7 +68,7 @@
     <string name="RateApp_Button_RateIt">Evaluez-là</string>
     <string name="RateApp_Button_NotNow">Plus tard</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Entrez la clé</string>
+    <string name="Restore_Enter_Key_Title">Restore Wallet</string>
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Clé incorrect</string>
     <string name="Restore_Error_MnemonicWordCount">Le nombre de mots est incorrect. Il doit être compris entre 12 et 24 mots. Vous avez saisi : %d</string>
@@ -701,6 +702,7 @@
     <string name="ManageAccounts_Hint">Astuce ! La restauration d\'un portefeuille existant, mais avec une nouvelle phrase d\'authentification, génère un tout nouveau portefeuille. Pratique si vous souhaitez utiliser une seule phrase de réinitialisation mnémonique de 12 à 24 mots pour plusieurs portefeuilles.</string>
     <string name="Watch_Address_Title">Adresse</string>
     <string name="Watch_Address_Hint">Adresse ou domaine</string>
+    <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
     <string name="Watch_Address_Watch">Suivi</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
