@@ -18,15 +18,17 @@ val Token.isCustom: Boolean
 val Token.isSupported: Boolean
     get() = tokenQuery.isSupported
 
-val Token.placeholderImageName: String
-    get() = protocolType?.let { "Coin Icon Placeholder - $it" } ?: "icon_placeholder_24"
-
 val Token.iconPlaceholder: Int
     get() = when (type) {
         is TokenType.Eip20 -> {
             when (blockchainType) {
                 BlockchainType.Ethereum -> R.drawable.erc20
                 BlockchainType.BinanceSmartChain -> R.drawable.bep20
+                BlockchainType.BinanceChain -> R.drawable.bep2
+                BlockchainType.Avalanche -> R.drawable.avalanche_erc20
+                BlockchainType.Polygon -> R.drawable.polygon_erc20
+                BlockchainType.Optimism -> R.drawable.optimism_erc20
+                BlockchainType.ArbitrumOne -> R.drawable.arbitrum_erc20
                 else -> R.drawable.coin_placeholder
             }
         }
@@ -175,13 +177,13 @@ val BlockchainType.icon24: Int
         BlockchainType.Litecoin -> R.drawable.logo_litecoin_24
         BlockchainType.Dash -> R.drawable.logo_dash_24
         BlockchainType.Ethereum -> R.drawable.logo_ethereum_24
-        BlockchainType.BinanceSmartChain -> R.drawable.logo_binancesmartchain_24
+        BlockchainType.BinanceSmartChain -> R.drawable.logo_binance_smart_chain_24
         BlockchainType.Polygon -> R.drawable.logo_polygon_24
         BlockchainType.Avalanche -> R.drawable.logo_avalanche_24
         BlockchainType.Optimism -> R.drawable.logo_optimism_24
         BlockchainType.ArbitrumOne -> R.drawable.logo_arbitrum_24
         BlockchainType.Zcash -> R.drawable.logo_zcash_24
-        BlockchainType.BinanceChain -> R.drawable.logo_bep2_24
+        BlockchainType.BinanceChain -> R.drawable.logo_binancecoin_24
         is BlockchainType.Unsupported -> {
             when(this._uid){
                 "fantom" -> R.drawable.logo_fantom_24
