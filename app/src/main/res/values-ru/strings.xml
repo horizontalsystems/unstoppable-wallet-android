@@ -68,7 +68,7 @@
     <string name="RateApp_Button_RateIt">Оценить</string>
     <string name="RateApp_Button_NotNow">Не сейчас</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Restore Wallet</string>
+    <string name="Restore_Enter_Key_Title">Restore</string>
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Неверный Ключ</string>
     <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12-24 слова. Вы ввели: %d</string>
@@ -697,7 +697,7 @@
     <string name="ManageAccounts_ImportWallet">Восстановить</string>
     <string name="ManageAccounts_WatchAddress">Посмотреть Адрес</string>
     <string name="ManageAccounts_Hint">Совет: восстановление существующего кошелька при помощи другой кодовой фразы приведет к созданию нового кошелька. Это очень удобно, когда вы хотите использовать одну мнемоническую восстановительную фразу длиной от 12 до 24 слов для нескольких кошельков.</string>
-    <string name="Watch_Address_Title">Адрес</string>
+    <string name="Watch_Address_Title">Watch Address</string>
     <string name="Watch_Address_Hint">Адрес или Домен</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
     <string name="Watch_Address_Watch">Смотреть</string>
