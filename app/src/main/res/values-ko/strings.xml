@@ -68,7 +68,7 @@
     <string name="RateApp_Button_RateIt">평가 하기</string>
     <string name="RateApp_Button_NotNow">다음에 확인</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Restore Wallet</string>
+    <string name="Restore_Enter_Key_Title">Restore</string>
     <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_Error_MnemonicWordCount">단어 수가 틀렸습니다. 12 개 와 24개 사이여야 합니다. 이렇게 입력했습니다: %d</string>
@@ -700,7 +700,7 @@
     <string name="ManageAccounts_ImportWallet">다음에서 복원하기</string>
     <string name="ManageAccounts_WatchAddress">주소 관찰</string>
     <string name="ManageAccounts_Hint">중요! 기존 지갑을 복원하지만 새로운 암호를 사용하면 완전히 새로운 지갑이 생성됩니다. 여러 지갑에 대해 단일 12-24 단어 니모닉 복구 구문을 사용하려는 경우 편리합니다.</string>
-    <string name="Watch_Address_Title">주소</string>
+    <string name="Watch_Address_Title">Watch Address</string>
     <string name="Watch_Address_Hint">주소 또는 도메인</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
     <string name="Watch_Address_Watch">관찰</string>
