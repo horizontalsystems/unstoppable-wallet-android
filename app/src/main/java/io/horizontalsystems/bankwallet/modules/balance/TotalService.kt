@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -19,9 +19,10 @@ import java.math.BigDecimal
 class TotalService(
     private val currencyManager: ICurrencyManager,
     private val marketKit: MarketKit,
-    private val baseTokenManager: BaseTokenManager
+    private val baseTokenManager: BaseTokenManager,
+    private val balanceHiddenManager: BalanceHiddenManager
 ) {
-    private var balanceHidden = false
+    private var balanceHidden = balanceHiddenManager.balanceHidden
     private var totalCurrencyValue: CurrencyValue? = null
     private var totalCoinValue: CoinValue? = null
     private var dimmed = false
@@ -38,14 +39,12 @@ class TotalService(
     private var baseToken: Token? = null
     private var coinPrice: CoinPrice? = null
     private var currency = currencyManager.baseCurrency
-    private var items: List<BalanceModule.BalanceItem>? = null
+    private var items: List<BalanceItem>? = null
     private var coinPriceUpdatesJob: Job? = null
 
     private var coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    fun start(balanceHidden: Boolean) {
-        this.balanceHidden = balanceHidden
-
+    fun start() {
         coroutineScope.launch {
             currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
                 handleUpdatedCurrency(currencyManager.baseCurrency)
@@ -57,13 +56,19 @@ class TotalService(
                 handleUpdatedBaseToken(it)
             }
         }
+
+        coroutineScope.launch {
+            balanceHiddenManager.balanceHiddenFlow.collect {
+                setBalanceHidden(it)
+            }
+        }
     }
 
     fun stop() {
         coroutineScope.cancel()
     }
 
-    fun setBalanceItems(items: List<BalanceModule.BalanceItem>?) {
+    fun setItems(items: List<BalanceItem>?) {
         this.items = items
 
         refreshTotalCurrencyValue()
@@ -73,14 +78,14 @@ class TotalService(
         emitState()
     }
 
-    fun setBalanceHidden(balanceHidden: Boolean) {
+    fun toggleType() {
+        baseTokenManager.toggleBaseToken()
+    }
+
+    private fun setBalanceHidden(balanceHidden: Boolean) {
         this.balanceHidden = balanceHidden
 
         emitState()
-    }
-
-    fun toggleType() {
-        baseTokenManager.toggleBaseToken()
     }
 
     private fun handleUpdatedCurrency(currency: Currency) {
@@ -132,7 +137,7 @@ class TotalService(
         totalCurrencyValue = items?.let { items ->
             var total = BigDecimal.ZERO
             items.forEach { item ->
-                total = total.add(item.balanceFiatTotal ?: BigDecimal.ZERO)
+                total = total.add(item.coinPrice?.value?.let { item.value.times(it) } ?: BigDecimal.ZERO)
             }
 
             CurrencyValue(currency, total)
@@ -157,7 +162,9 @@ class TotalService(
 
     private fun refreshDimmed() {
         dimmed = items?.let { items ->
-            items.any { it.state !is AdapterState.Synced || (it.coinPrice != null && it.coinPrice.expired) }
+            items.any {
+                it.isValuePending || (it.coinPrice != null && it.coinPrice.expired)
+            }
         } ?: false
     }
 
@@ -174,6 +181,12 @@ class TotalService(
             }
         }
     }
+
+    data class BalanceItem(
+        val value: BigDecimal,
+        val isValuePending: Boolean,
+        val coinPrice: CoinPrice?
+    )
 
     sealed class State {
         data class Visible(

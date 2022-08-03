@@ -115,6 +115,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var evmLabelManager: EvmLabelManager
         lateinit var baseTokenManager: BaseTokenManager
         lateinit var balanceViewTypeManager: BalanceViewTypeManager
+        lateinit var balanceHiddenManager: BalanceHiddenManager
         lateinit var marketWidgetManager: MarketWidgetManager
         lateinit var marketWidgetRepository: MarketWidgetRepository
     }
@@ -305,6 +306,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         baseTokenManager = BaseTokenManager(coinManager, localStorage)
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
+        balanceHiddenManager = BalanceHiddenManager(localStorage)
     }
 
     override fun newImageLoader(): ImageLoader {

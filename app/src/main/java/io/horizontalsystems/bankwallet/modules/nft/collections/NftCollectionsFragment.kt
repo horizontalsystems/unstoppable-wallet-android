@@ -14,6 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,6 +26,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
 import io.horizontalsystems.bankwallet.modules.nft.ui.nftsCollectionSection
@@ -34,6 +36,7 @@ import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 
 class NftCollectionsFragment : BaseFragment() {
 
@@ -59,7 +62,6 @@ fun NftCollectionsScreen(navController: NavController) {
 
     val viewState = viewModel.viewState
     val collections = viewModel.collectionViewItems
-    val totalCurrencyValue = viewModel.totalCurrencyPrice
     val errorMessage = viewModel.errorMessage
 
     val loading = viewModel.loading
@@ -99,9 +101,43 @@ fun NftCollectionsScreen(navController: NavController) {
                                 )
                             } else {
                                 Column {
+                                    val context = LocalContext.current
+
+                                    when (val totalState = viewModel.totalState) {
+                                        TotalUIState.Hidden -> {
+                                            DoubleText(
+                                                title = "*****",
+                                                body = "*****",
+                                                dimmed = false,
+                                                onClickTitle = {
+                                                    viewModel.onBalanceClick()
+                                                    HudHelper.vibrate(context)
+                                                },
+                                                onClickBody = {
+
+                                                }
+                                            )
+                                        }
+                                        is TotalUIState.Visible -> {
+                                            DoubleText(
+                                                title = totalState.currencyValueStr,
+                                                body = totalState.coinValueStr,
+                                                dimmed = totalState.dimmed,
+                                                onClickTitle = {
+                                                    viewModel.onBalanceClick()
+                                                    HudHelper.vibrate(context)
+                                                },
+                                                onClickBody = {
+                                                    viewModel.toggleTotalType()
+                                                    HudHelper.vibrate(context)
+                                                }
+                                            )
+                                        }
+                                    }
+
                                     CellSingleLineClear(borderTop = true) {
-                                        headline2_jacob(
-                                            text = totalCurrencyValue?.getFormattedFull() ?: "",
+                                        subhead2_grey(
+                                            text = stringResource(R.string.Nfts_PriceMode),
                                         )
                                         Spacer(modifier = Modifier.weight(1f))
                                         var priceType by remember { mutableStateOf(viewModel.priceType) }

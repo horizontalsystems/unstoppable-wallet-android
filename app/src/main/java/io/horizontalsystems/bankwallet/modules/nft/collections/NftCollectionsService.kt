@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.core.orNull
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
@@ -17,7 +16,6 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 class NftCollectionsService(
     private val accountManager: IAccountManager,
@@ -27,11 +25,10 @@ class NftCollectionsService(
 ) {
     val priceType by itemsPricedRepository::priceType
 
-    private val _serviceItemDataFlow =
-        MutableSharedFlow<DataWithError<Pair<Map<NftCollectionRecord, List<CollectionAsset>>, CurrencyValue>?>>(
-            replay = 1,
-            onBufferOverflow = BufferOverflow.DROP_OLDEST
-        )
+    private val _serviceItemDataFlow = MutableSharedFlow<DataWithError<Map<NftCollectionRecord, List<CollectionAsset>>?>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
     val serviceItemDataFlow = _serviceItemDataFlow.asSharedFlow()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -41,18 +38,7 @@ class NftCollectionsService(
         coroutineScope.launch {
             itemsPricedWithCurrencyRepository.itemsDataFlow
                 .collect { data ->
-                    val itemsWithTotalValue = data.value?.let { assetItemsPriced ->
-                        val totalValue = assetItemsPriced.map { (_, assets) ->
-                            assets.sumOf {
-                                it.price?.currencyValue?.value ?: BigDecimal.ZERO
-                            }
-                        }.sumOf { it }
-                        Pair(
-                            assetItemsPriced,
-                            CurrencyValue(itemsPricedWithCurrencyRepository.baseCurrency, totalValue)
-                        )
-                    }
-                    _serviceItemDataFlow.tryEmit(DataWithError(itemsWithTotalValue, data.error))
+                    _serviceItemDataFlow.tryEmit(DataWithError(data.value, data.error))
                 }
         }
 

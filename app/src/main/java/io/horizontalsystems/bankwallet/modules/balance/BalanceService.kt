@@ -24,7 +24,6 @@ class BalanceService(
 
     val networkAvailable by connectivityManager::isConnected
     val baseCurrency by xRateRepository::baseCurrency
-    var balanceHidden by localStorage::balanceHidden
 
     var sortType: BalanceSortType
         get() = localStorage.sortType
