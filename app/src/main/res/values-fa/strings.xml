@@ -948,6 +948,7 @@
     <string name="Nfts_Asset_OnSale">فروش ویژه</string>
     <string name="Nfts_Asset_OnSaleUntil">تا %s</string>
     <string name="Nfts_Empty">شما NFT در کیف پول خود ندارید</string>
+    <string name="Nfts_PriceMode">Price Mode</string>
     <string name="NftAsset_Overview">Overview</string>
     <string name="NftAsset_Activity">Activity</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
