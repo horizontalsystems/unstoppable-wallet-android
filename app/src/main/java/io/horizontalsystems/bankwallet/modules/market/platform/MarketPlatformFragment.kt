@@ -10,11 +10,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
@@ -194,11 +196,12 @@ private fun HeaderContent(title: String, description: String, image: ImageSource
         Row(
             modifier = Modifier
                 .height(100.dp)
+                .padding(horizontal = 16.dp)
                 .background(ComposeAppTheme.colors.tyler)
         ) {
             Column(
                 modifier = Modifier
-                    .padding(start = 16.dp, top = 12.dp, end = 8.dp)
+                    .padding(top = 12.dp, end = 8.dp)
                     .weight(1f)
             ) {
                 title3_leah(
@@ -211,14 +214,21 @@ private fun HeaderContent(title: String, description: String, image: ImageSource
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            Image(
-                painter = image.painter(),
-                contentDescription = null,
+            Box(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .padding(end = 16.dp)
-                    .size(48.dp),
-            )
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(ComposeAppTheme.colors.lawrence)
+            ) {
+                Image(
+                    painter = image.painter(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(24.dp),
+                )
+            }
         }
     }
 }
