@@ -24,7 +24,6 @@ class LegacyFeeSettingsViewModel(
 
     private val disposable = CompositeDisposable()
 
-    private val gasPriceUnit: String = "gwei"
     val sliderViewItemLiveData = MutableLiveData<SliderViewItem>()
     val feeViewItemLiveData = MutableLiveData<FeeViewItem>()
     val feeViewItemStateLiveData = MutableLiveData<ViewState>()
@@ -53,7 +52,7 @@ class LegacyFeeSettingsViewModel(
     }
 
     fun onSelectGasPrice(gasPrice: Long) {
-        gasPriceService.setGasPrice(wei(gasPrice))
+        gasPriceService.setGasPrice(gasPrice)
     }
 
     fun onClickReset() {
@@ -108,24 +107,13 @@ class LegacyFeeSettingsViewModel(
     private fun sync(state: DataState<GasPriceInfo>) {
         if (state is DataState.Success) {
             sliderViewItemLiveData.postValue(
-                SliderViewItem(
-                    initialValue = gwei(state.data.gasPrice.max),
-                    range = gwei(gasPriceService.gasPriceRange ?: gasPriceService.defaultGasPriceRange),
-                    unit = gasPriceUnit
-                )
+                    SliderViewItem(
+                            state.data.gasPrice.max,
+                            gasPriceService.gasPriceRange ?: gasPriceService.defaultGasPriceRange,
+                            EvmFeeModule.stepSize(gasPriceService.recommendedGasPrice ?: gasPriceService.defaultGasPriceRange.first),
+                    )
             )
         }
     }
 
-    private fun wei(gwei: Long): Long {
-        return gwei * 1_000_000_000
-    }
-
-    private fun gwei(wei: Long): Long {
-        return wei / 1_000_000_000
-    }
-
-    private fun gwei(range: LongRange): LongRange {
-        return LongRange(gwei(range.first), gwei(range.last))
-    }
 }

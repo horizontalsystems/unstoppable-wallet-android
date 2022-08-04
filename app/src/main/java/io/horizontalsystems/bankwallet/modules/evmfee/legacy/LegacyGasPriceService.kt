@@ -16,7 +16,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import java.lang.Long.max
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 class LegacyGasPriceService(
     private val gasPriceProvider: LegacyGasPriceProvider,
@@ -24,7 +23,7 @@ class LegacyGasPriceService(
     private val initialGasPrice: Long? = null,
 ) : IEvmGasPriceService {
 
-    private var recommendedGasPrice: Long? = null
+    var recommendedGasPrice: Long? = null
     private var disposable: Disposable? = null
 
     private val gasPriceRangeConfig = FeeRangeConfig(
@@ -32,8 +31,8 @@ class LegacyGasPriceService(
         upperBound = Bound.Multiplied(BigDecimal(3.0))
     )
 
-    private val overpricingBound = Bound.Added(2_000_000_000)
-    private val riskOfStuckBound = Bound.Added(-2_000_000_000)
+    private val overpricingBound = Bound.Multiplied(BigDecimal(1.5))
+    private val riskOfStuckBound = Bound.Multiplied(BigDecimal(0.9))
 
     override var state: DataState<GasPriceInfo> = DataState.Loading
         private set(value) {
@@ -50,7 +49,7 @@ class LegacyGasPriceService(
             ?: gasPriceProvider.gasPriceSingle()
                 .map { it }
                 .doOnSuccess { gasPrice ->
-                    val adjustedGasPrice = roundToBillionthDigit(max(gasPrice.toLong(), minRecommendedGasPrice ?: 0))
+                    val adjustedGasPrice = max(gasPrice.toLong(), minRecommendedGasPrice ?: 0)
                     recommendedGasPrice = adjustedGasPrice
                     syncGasPriceRange(adjustedGasPrice)
                 }
@@ -135,11 +134,6 @@ class LegacyGasPriceService(
         }
 
         gasPriceRange = lowerBound..upperBound
-    }
-
-    private fun roundToBillionthDigit(wei: Long): Long {
-        val gweiFactor = 1_000_000_000
-        return BigDecimal(wei).divide(BigDecimal(gweiFactor), RoundingMode.CEILING).toLong() * gweiFactor
     }
 
 }

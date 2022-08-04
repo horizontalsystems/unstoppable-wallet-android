@@ -95,49 +95,48 @@ fun Eip1559FeeSettings(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            maxBaseFeeSlider?.let { slider ->
-                maxBaseFee = slider.initialValue
+            maxBaseFeeSlider?.let { baseFeeSlider ->
+                maxPriorityFeeSlider?.let { priorityFeeSlider ->
+                    maxBaseFee = baseFeeSlider.initialSliderValue
+                    maxPriorityFee = priorityFeeSlider.initialSliderValue
 
-                settingsViewItems.add {
-                    FeeInfoCell(
-                        title = stringResource(R.string.FeeSettings_MaxBaseFee),
-                        value = "$maxBaseFee ${slider.unit}",
-                        infoTitle = Translator.getString(R.string.FeeSettings_MaxBaseFee),
-                        infoText = Translator.getString(R.string.FeeSettings_MaxBaseFee_Info),
-                        navController = navController
-                    )
-                }
+                    settingsViewItems.add {
+                        FeeInfoCell(
+                                title = stringResource(R.string.FeeSettings_MaxBaseFee),
+                                value = baseFeeSlider.gweiString(maxBaseFee),
+                                infoTitle = Translator.getString(R.string.FeeSettings_MaxBaseFee),
+                                infoText = Translator.getString(R.string.FeeSettings_MaxBaseFee_Info),
+                                navController = navController
+                        )
+                    }
 
-                settingsViewItems.add {
-                    HsSlider(
-                        value = slider.initialValue,
-                        onValueChange = { maxBaseFee = it },
-                        valueRange = slider.range.first..slider.range.last,
-                        onValueChangeFinished = { viewModel.onSelectGasPrice(maxBaseFee, maxPriorityFee) }
-                    )
-                }
-            }
+                    settingsViewItems.add {
+                        HsSlider(
+                                value = baseFeeSlider.initialSliderValue,
+                                onValueChange = { maxBaseFee = it },
+                                valueRange = baseFeeSlider.range.first..baseFeeSlider.range.last,
+                                onValueChangeFinished = { viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee)) }
+                        )
+                    }
 
-            maxPriorityFeeSlider?.let { slider ->
-                maxPriorityFee = slider.initialValue
+                    settingsViewItems.add {
+                        FeeInfoCell(
+                                title = stringResource(R.string.FeeSettings_MaxMinerTips),
+                                value = priorityFeeSlider.gweiString(maxPriorityFee),
+                                infoTitle = Translator.getString(R.string.FeeSettings_MaxMinerTips),
+                                infoText = Translator.getString(R.string.FeeSettings_MaxMinerTips_Info),
+                                navController = navController
+                        )
+                    }
 
-                settingsViewItems.add {
-                    FeeInfoCell(
-                        title = stringResource(R.string.FeeSettings_MaxMinerTips),
-                        value = "$maxPriorityFee ${slider.unit}",
-                        infoTitle = Translator.getString(R.string.FeeSettings_MaxMinerTips),
-                        infoText = Translator.getString(R.string.FeeSettings_MaxMinerTips_Info),
-                        navController = navController
-                    )
-                }
-
-                settingsViewItems.add {
-                    HsSlider(
-                        value = slider.initialValue,
-                        onValueChange = { maxPriorityFee = it },
-                        valueRange = slider.range.first..slider.range.last,
-                        onValueChangeFinished = { viewModel.onSelectGasPrice(maxBaseFee, maxPriorityFee) }
-                    )
+                    settingsViewItems.add {
+                        HsSlider(
+                                value = priorityFeeSlider.initialSliderValue,
+                                onValueChange = { maxPriorityFee = it },
+                                valueRange = priorityFeeSlider.range.first..priorityFeeSlider.range.last,
+                                onValueChangeFinished = { viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee)) }
+                        )
+                    }
                 }
             }
 
@@ -244,13 +243,13 @@ fun LegacyFeeSettings(
                 )
             }
 
-            sliderViewItem?.let { slider ->
-                selectedGasPrice = slider.initialValue
+            selectedGasPrice = sliderViewItem?.initialSliderValue ?: 0
 
+            sliderViewItem?.let { slider ->
                 settingsViewItems.add {
                     FeeInfoCell(
                         title = stringResource(R.string.FeeSettings_GasPrice),
-                        value = "$selectedGasPrice ${slider.unit}",
+                        value = slider.gweiString(selectedGasPrice),
                         infoTitle = Translator.getString(R.string.FeeSettings_GasPrice),
                         infoText = Translator.getString(R.string.FeeSettings_GasPrice_Info),
                         navController = navController
@@ -259,10 +258,10 @@ fun LegacyFeeSettings(
 
                 settingsViewItems.add {
                     HsSlider(
-                        value = slider.initialValue,
+                        value = slider.initialSliderValue,
                         onValueChange = { selectedGasPrice = it },
                         valueRange = slider.range.first..slider.range.last,
-                        onValueChangeFinished = { viewModel.onSelectGasPrice(selectedGasPrice) }
+                        onValueChangeFinished = { viewModel.onSelectGasPrice(slider.wei(selectedGasPrice)) }
                     )
                 }
             }

@@ -29,7 +29,7 @@ class EvmRollupGasDataService(
             super.estimatedGasDataAsync(gasPrice, transactionData, stubAmount).flatMap { gasData ->
                 val gasLimit = gasData.gasLimit
                 val stubTransactionData = if (stubAmount != null)  {
-                    TransactionData(transactionData.to, maxBytes(stubAmount), transactionData.input)
+                    TransactionData(transactionData.to, maxBytes(transactionData.value), transactionData.input)
                 } else {
                     transactionData
                 }
@@ -40,7 +40,7 @@ class EvmRollupGasDataService(
             }
 
     private fun maxBytes(value: BigInteger): BigInteger {
-        val hexString = value.toHexString()
+        val hexString = value.toString(16)
         val maximumHexValue = "F".repeat(hexString.length)
 
         return maximumHexValue.hexStringToBigIntegerOrNull() ?: value

@@ -15,18 +15,15 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.evmfee.*
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.reactivex.disposables.CompositeDisposable
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 class Eip1559FeeSettingsViewModel(
     private val gasPriceService: Eip1559GasPriceService,
-    private val feeService: IEvmFeeService,
+    feeService: IEvmFeeService,
     private val coinService: EvmCoinService,
     private val cautionViewItemFactory: CautionViewItemFactory
 ) : ViewModel() {
 
     private val disposable = CompositeDisposable()
-    private val gasPriceUnit: String = "Gwei"
 
     val baseFeeSliderViewItemLiveData = MutableLiveData<SliderViewItem>()
     val priorityFeeSliderViewItemLiveData = MutableLiveData<SliderViewItem>()
@@ -57,7 +54,7 @@ class Eip1559FeeSettingsViewModel(
     }
 
     fun onSelectGasPrice(baseFee: Long, maxPriorityFee: Long) {
-        gasPriceService.setGasPrice(wei(baseFee), wei(maxPriorityFee))
+        gasPriceService.setGasPrice(baseFee, maxPriorityFee)
     }
 
     fun onClickReset() {
@@ -74,18 +71,18 @@ class Eip1559FeeSettingsViewModel(
         state.dataOrNull?.let { gasPriceInfo ->
             if (gasPriceInfo.gasPrice is GasPrice.Eip1559) {
                 baseFeeSliderViewItemLiveData.postValue(
-                    SliderViewItem(
-                        initialValue = gwei(gasPriceInfo.gasPrice.maxFeePerGas - gasPriceInfo.gasPrice.maxPriorityFeePerGas),
-                        range = gwei(gasPriceService.baseFeeRange ?: gasPriceService.defaultBaseFeeRange),
-                        unit = gasPriceUnit
-                    )
+                        SliderViewItem(
+                                gasPriceInfo.gasPrice.maxFeePerGas - gasPriceInfo.gasPrice.maxPriorityFeePerGas,
+                                gasPriceService.baseFeeRange ?: gasPriceService.defaultBaseFeeRange,
+                                EvmFeeModule.stepSize(gasPriceService.currentBaseFee ?: gasPriceService.defaultBaseFeeRange.first)
+                        )
                 )
                 priorityFeeSliderViewItemLiveData.postValue(
-                    SliderViewItem(
-                        initialValue = gwei(gasPriceInfo.gasPrice.maxPriorityFeePerGas),
-                        range = gwei(gasPriceService.priorityFeeRange ?: gasPriceService.defaultPriorityFeeRange),
-                        unit = gasPriceUnit
-                    )
+                        SliderViewItem(
+                                gasPriceInfo.gasPrice.maxPriorityFeePerGas,
+                                gasPriceService.priorityFeeRange ?: gasPriceService.defaultPriorityFeeRange,
+                                EvmFeeModule.stepSize(gasPriceService.currentPriorityFee ?: gasPriceService.defaultPriorityFeeRange.first)
+                        )
                 )
             }
         }
@@ -93,7 +90,7 @@ class Eip1559FeeSettingsViewModel(
 
     private fun sync(currentBaseFee: Long?) {
         if (currentBaseFee != null) {
-            currentBaseFeeLiveData.postValue("${gwei(currentBaseFee)} $gasPriceUnit")
+            currentBaseFeeLiveData.postValue(EvmFeeModule.gweiString(currentBaseFee))
         } else {
             currentBaseFeeLiveData.postValue(Translator.getString(R.string.NotAvailable))
         }
@@ -144,16 +141,4 @@ class Eip1559FeeSettingsViewModel(
         cautionsLiveData.postValue(cautionViewItemFactory.cautionViewItems(warnings, errors))
     }
 
-
-    private fun wei(gwei: Long): Long {
-        return gwei * 1_000_000_000
-    }
-
-    private fun gwei(wei: Long): Long {
-        return BigDecimal(wei).divide(BigDecimal(1_000_000_000), RoundingMode.CEILING).toLong()
-    }
-
-    private fun gwei(range: LongRange): LongRange {
-        return LongRange(gwei(range.first), gwei(range.last))
-    }
 }
