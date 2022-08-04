@@ -948,6 +948,7 @@
     <string name="Nfts_Asset_OnSale">在售</string>
     <string name="Nfts_Asset_OnSaleUntil">直到 %s</string>
     <string name="Nfts_Empty">你的钱包中没有 NFT</string>
+    <string name="Nfts_PriceMode">Price Mode</string>
     <string name="NftAsset_Overview">Overview</string>
     <string name="NftAsset_Activity">Activity</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
