@@ -42,10 +42,10 @@ class TokenBalanceProvider {
 
     private fun chain(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.ArbitrumOne -> "arbitrum-one"
-        BlockchainType.BinanceSmartChain -> "bsc"
+        BlockchainType.BinanceSmartChain -> "binance-smart-chain"
         BlockchainType.Ethereum -> "ethereum"
         BlockchainType.Optimism -> "optimism"
-        BlockchainType.Polygon -> "matic"
+        BlockchainType.Polygon -> "polygon-pos"
         BlockchainType.Avalanche -> "avalanche"
         else -> throw IllegalArgumentException("Unsupported blockchain type $blockchainType")
     }
