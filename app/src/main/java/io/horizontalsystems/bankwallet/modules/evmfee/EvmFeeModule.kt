@@ -49,6 +49,21 @@ object EvmFeeModule {
             }
         }
     }
+
+    fun gweiString(wei: Long): String = "${wei.toDouble() / 1_000_000_000} Gwei"
+
+    fun stepSize(weiValue: Long): Long {
+        var digitsCount = 0
+        var value = weiValue
+
+        while (value > 0) {
+            value /= 10
+            digitsCount += 1
+        }
+
+        return 1L * 10.toBigDecimal().pow(Integer.max(digitsCount - 2, 0)).toLong()
+    }
+
 }
 
 interface IEvmFeeService {
@@ -131,7 +146,22 @@ sealed class GasDataError : Error() {
 
 data class FeeViewItem(val fee: String, val gasLimit: String)
 
-data class SliderViewItem(val initialValue: Long, val range: LongRange, val unit: String)
+data class SliderViewItem(private val initialWeiValue: Long, private val weiRange: LongRange, private val stepSize: Long) {
+
+    var initialSliderValue: Long = sliderValue(initialWeiValue)
+    var range: LongRange = LongRange(sliderValue(weiRange.first), sliderValue(weiRange.last))
+
+    fun wei(sliderValue: Long): Long {
+        return sliderValue * stepSize
+    }
+
+    fun sliderValue(wei: Long): Long {
+        return wei / stepSize
+    }
+
+    fun gweiString(sliderValue: Long): String = EvmFeeModule.gweiString(wei(sliderValue))
+
+}
 
 internal val BlockchainType.l1GasFeeContractAddress: Address?
     get() =

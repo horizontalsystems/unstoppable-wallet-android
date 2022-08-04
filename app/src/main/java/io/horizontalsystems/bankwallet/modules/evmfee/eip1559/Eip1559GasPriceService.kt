@@ -43,8 +43,8 @@ class Eip1559GasPriceService(
         lowerBound = Bound.Fixed(0),
         upperBound = Bound.Multiplied(BigDecimal(10))
     )
-    private val overpricingBound = Bound.Added(2_000_000_000)
-    private val riskOfStuckBound = Bound.Added(-2_000_000_000)
+    private val overpricingBound = Bound.Multiplied(BigDecimal(1.5))
+    private val riskOfStuckBound = Bound.Multiplied(BigDecimal(0.9))
 
     private var recommendedGasPrice: GasPrice.Eip1559? = null
 
@@ -181,7 +181,7 @@ class Eip1559GasPriceService(
 
     private fun recommendedBaseFee(feeHistory: FeeHistory): Long {
         val lastNRecommendedBaseFeesList = feeHistory.baseFeePerGas.takeLast(lastNRecommendedBaseFees)
-        return roundToBillionthDigit(java.util.Collections.max(lastNRecommendedBaseFeesList))
+        return java.util.Collections.max(lastNRecommendedBaseFeesList)
     }
 
     private fun recommendedPriorityFee(feeHistory: FeeHistory): Long {
@@ -198,7 +198,7 @@ class Eip1559GasPriceService(
         else
             0
 
-        return roundToBillionthDigit(priorityFee)
+        return priorityFee
     }
 
     private fun syncFeeRanges(newRecommendGasPrice: GasPrice.Eip1559) {
@@ -236,11 +236,6 @@ class Eip1559GasPriceService(
         }
 
         return baseFeeRangeLowerBound..baseFeeRangeUpperBound
-    }
-
-    private fun roundToBillionthDigit(wei: Long): Long {
-        val gweiFactor = 1_000_000_000
-        return BigDecimal(wei).divide(BigDecimal(gweiFactor), RoundingMode.CEILING).toLong() * gweiFactor
     }
 
 }

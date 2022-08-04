@@ -81,6 +81,14 @@ val Token.copyableTypeInfo: String?
 
 val TokenQuery.protocolType: String?
     get() = when (tokenType) {
+        is TokenType.Native -> {
+            when (blockchainType) {
+                BlockchainType.Optimism -> "Optimism"
+                BlockchainType.ArbitrumOne -> "Arbitrum"
+                BlockchainType.BinanceChain -> "BEP2"
+                else -> null
+            }
+        }
         is TokenType.Eip20 -> {
             when (blockchainType) {
                 BlockchainType.Ethereum -> "ERC20"
