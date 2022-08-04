@@ -51,11 +51,11 @@ class EvmSyncSourceManager(
             ),
 
             BlockchainType.Optimism to listOf(
-                getSyncSource(BlockchainType.Optimism, "Optimism.io HTTP", RpcSource.optimismRpcHttp(), TransactionSource.optimisticEtherscan(""))
+                getSyncSource(BlockchainType.Optimism, "Optimism.io HTTP", RpcSource.optimismRpcHttp(), TransactionSource.optimisticEtherscan(appConfigProvider.optimisticEtherscanApiKey))
             ),
 
             BlockchainType.ArbitrumOne to listOf(
-                getSyncSource(BlockchainType.ArbitrumOne, "Arbitrum.io HTTP", RpcSource.arbitrumOneRpcHttp(), TransactionSource.arbiscan(""))
+                getSyncSource(BlockchainType.ArbitrumOne, "Arbitrum.io HTTP", RpcSource.arbitrumOneRpcHttp(), TransactionSource.arbiscan(appConfigProvider.arbiscanApiKey))
             )
         )
 

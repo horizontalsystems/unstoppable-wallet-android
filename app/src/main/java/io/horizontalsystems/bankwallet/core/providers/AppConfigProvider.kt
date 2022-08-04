@@ -46,6 +46,12 @@ class AppConfigProvider {
      val snowtraceApiKey by lazy {
         Translator.getString(R.string.snowtraceApiKey)
     }
+     val optimisticEtherscanApiKey by lazy {
+        Translator.getString(R.string.optimisticEtherscanApiKey)
+    }
+     val arbiscanApiKey by lazy {
+        Translator.getString(R.string.arbiscanApiKey)
+    }
      val guidesUrl by lazy {
         Translator.getString(R.string.guidesUrl)
     }

@@ -50,7 +50,11 @@ object EvmFeeModule {
         }
     }
 
-    fun gweiString(wei: Long): String = "${wei.toDouble() / 1_000_000_000} Gwei"
+    fun gweiString(wei: Long): String {
+        val gwei = wei.toDouble() / 1_000_000_000
+
+        return "${gwei.toBigDecimal().toPlainString()} Gwei"
+    }
 
     fun stepSize(weiValue: Long): Long {
         var digitsCount = 0

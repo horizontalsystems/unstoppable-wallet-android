@@ -28,7 +28,8 @@ class TransactionInfoViewItemFactory(
     private val numberFormatter: IAppNumberFormatter,
     private val translator: Translator,
     private val dateHelper: DateHelper,
-    private val evmLabelManager: EvmLabelManager
+    private val evmLabelManager: EvmLabelManager,
+    private val resendEnabled: Boolean
 ) {
 
     fun getViewItemSections(transactionItem: TransactionInfoItem): List<List<TransactionInfoViewItem>> {
@@ -435,7 +436,7 @@ class TransactionInfoViewItemFactory(
             Status(status)
         )
 
-        if (transaction is EvmOutgoingTransactionRecord && status == TransactionStatus.Pending) {
+        if (transaction is EvmOutgoingTransactionRecord && status == TransactionStatus.Pending && resendEnabled) {
             items.add(SpeedUpCancel(transactionHash = transaction.transactionHash))
         }
 
