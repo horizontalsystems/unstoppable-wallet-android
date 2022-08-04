@@ -120,13 +120,6 @@ val TokenQuery.isSupported: Boolean
         else -> false
     }
 
-
-val Blockchain.shortName: String
-    get() = when (type) {
-        BlockchainType.BinanceSmartChain -> "BSC"
-        else -> name
-    }
-
 val Blockchain.description: String
     get() = when (type) {
         BlockchainType.Bitcoin -> "BTC (BIP44, BIP49, BIP84)"
