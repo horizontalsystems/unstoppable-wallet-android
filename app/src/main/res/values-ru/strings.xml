@@ -944,6 +944,7 @@
     <string name="Nfts_Asset_OnSale">В Продаже</string>
     <string name="Nfts_Asset_OnSaleUntil">до %s</string>
     <string name="Nfts_Empty">У вас нет NFT в вашем кошельке</string>
+    <string name="Nfts_PriceMode">Price Mode</string>
     <string name="NftAsset_Overview">Overview</string>
     <string name="NftAsset_Activity">Activity</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
