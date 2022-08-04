@@ -948,6 +948,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Nfts_Asset_OnSale">En venta</string>
     <string name="Nfts_Asset_OnSaleUntil">hasta %s</string>
     <string name="Nfts_Empty">No tiene un NFT en su cartera</string>
+    <string name="Nfts_PriceMode">Price Mode</string>
     <string name="NftAsset_Overview">Overview</string>
     <string name="NftAsset_Activity">Activity</string>
     <string name="NftAsset_OpenSea">Abierto</string>
