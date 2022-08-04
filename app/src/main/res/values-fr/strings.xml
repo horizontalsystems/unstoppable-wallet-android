@@ -947,6 +947,7 @@
     <string name="Nfts_Asset_OnSale">En Vente</string>
     <string name="Nfts_Asset_OnSaleUntil">jusqu\'à: %s</string>
     <string name="Nfts_Empty">Vous n\'avez pas de NFT dans votre portefeuille</string>
+    <string name="Nfts_PriceMode">Price Mode</string>
     <string name="NftAsset_Overview">Overview</string>
     <string name="NftAsset_Activity">Activity</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
