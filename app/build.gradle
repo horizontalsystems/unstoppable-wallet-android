@@ -56,6 +56,8 @@ android {
             resValue "string", "bscscanKey", "5ZGSHWYHZVA8XZHB8PF6UUTRNNB4KT43ZZ"
             resValue "string", "polygonscanKey", "TNQ44BCF1MS3S75Y6A2B6SN88I8UYFJFRM"
             resValue "string", "snowtraceApiKey", "DD8VX77TQ73KSNDFGBQQ31J7K5B51CXXPH"
+            resValue "string", "optimisticEtherscanApiKey", "A4E6DAX46FFFW4CGZP6IMZ64ADI3TIRBTS"
+            resValue "string", "arbiscanApiKey", "Z43JN5434XVNA5D73UGPWKF26G5D9MGDPZ"
             resValue "string", "defiyieldProviderApiKey", "87e8671e-8267-427c-92c3-4627833445ae"
             resValue "string", "is_release", "false"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/develop/index.json"
@@ -96,6 +98,8 @@ android {
             resValue "string", "bscscanKey", "HBQQN4GTKCHYSRZCKFVQJ3FWGPY4T8237Y"
             resValue "string", "polygonscanKey", "2JM7USE5YRI59RWFZQI2RECAZSNI5QEQGV"
             resValue "string", "snowtraceApiKey", "47IXTRAAFT1E1J4RNSPZPNB5EWUIQR16FG"
+            resValue "string", "optimisticEtherscanApiKey", "745EUI4781T147M9QJRNS5G3Q5NFF2SJXP"
+            resValue "string", "arbiscanApiKey", "4QWW522BV13BJCZMXH1JIB2ESJ7MZTSJYI"
             resValue "string", "defiyieldProviderApiKey", "87e8671e-8267-427c-92c3-4627833445ae"
             resValue "string", "is_release", "true"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json"
@@ -223,7 +227,7 @@ dependencies {
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:3527c36'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:d89cd9f'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:865ed1c'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:501cf1e'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:cce84f7'
     implementation 'com.github.horizontalsystems:market-kit-android:41690a0'

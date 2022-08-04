@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 object TransactionInfoModule {
 
@@ -18,7 +19,8 @@ object TransactionInfoModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val adapter: ITransactionsAdapter = App.transactionAdapterManager.getAdapter(transactionItem.record.source)!!
+            val transactionSource = transactionItem.record.source
+            val adapter: ITransactionsAdapter = App.transactionAdapterManager.getAdapter(transactionSource)!!
             val service = TransactionInfoService(
                 transactionItem.record,
                 adapter,
@@ -29,7 +31,8 @@ object TransactionInfoModule {
                 App.numberFormatter,
                 Translator,
                 DateHelper,
-                App.evmLabelManager
+                App.evmLabelManager,
+                transactionSource.blockchain.type.resendable
             )
 
             return TransactionInfoViewModel(service, factory) as T
@@ -55,3 +58,10 @@ data class TransactionInfoItem(
     val explorerData: TransactionInfoModule.ExplorerData,
     val rates: Map<String, CurrencyValue>
 )
+
+val BlockchainType.resendable: Boolean
+    get() =
+        when (this) {
+            BlockchainType.Optimism, BlockchainType.ArbitrumOne -> false
+            else -> true
+        }
