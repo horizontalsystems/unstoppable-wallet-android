@@ -121,7 +121,7 @@ class BalanceViewModel(
     }
 
     fun getWalletForReceive(viewItem: BalanceViewItem) = when {
-        viewItem.wallet.account.isBackedUp -> viewItem.wallet
+        viewItem.wallet.account.isBackedUp || viewItem.isWatchAccount -> viewItem.wallet
         else -> throw BackupRequiredError(viewItem.wallet.account, viewItem.coinTitle)
     }
 

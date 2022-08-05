@@ -103,16 +103,9 @@ fun BalanceCard(
             .padding(vertical = 4.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ) {
-                if (viewItem.isWatchAccount) {
-                    val coinUid = viewItem.wallet.coin.uid
-                    val arguments = CoinFragment.prepareParams(coinUid)
-                    navController.slideFromRight(R.id.coinFragment, arguments)
-                } else {
-                    viewModel.onItem(viewItem)
-                }
-            }
+                indication = null,
+                onClick = { viewModel.onItem(viewItem) }
+            )
     ) {
         CellMultilineClear {
             Row {
