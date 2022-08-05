@@ -49,9 +49,20 @@ class MarketPlatformFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
+        val platformUid = activity?.intent?.data?.getQueryParameter("uid")
+        val platformTitle = activity?.intent?.data?.getQueryParameter("title")
 
-        val platform by lazy { arguments?.getParcelable<Platform>(platformKey)!! }
+        val platform = if (platformUid != null && platformTitle != null) {
+            Platform(platformUid, platformTitle)
+        } else {
+            arguments?.getParcelable(platformKey)
+        }
+
+        if (platform == null) {
+            findNavController().popBackStack()
+            return null
+        }
 
         val factory = MarketPlatformModule.Factory(platform)
 
