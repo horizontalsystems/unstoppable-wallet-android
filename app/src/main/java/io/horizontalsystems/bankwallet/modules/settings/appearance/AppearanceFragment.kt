@@ -225,7 +225,7 @@ private fun AppIconSection(appIconOptions: Select<AppIcon>, onAppIconSelect: (Ap
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        val rows = appIconOptions.options.windowed(3, 3, true)
+        val rows = appIconOptions.options.chunked(3)
         AppIconsRow(rows[0], appIconOptions.selected, onAppIconSelect)
         AppIconsRow(rows[1], appIconOptions.selected, onAppIconSelect)
         AppIconsRow(rows[2], appIconOptions.selected, onAppIconSelect)
