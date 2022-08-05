@@ -252,7 +252,7 @@ class BalanceViewItemFactory {
                 exchangeValue = rateValue(latestRate, showSyncing, currency),
                 diff = item.coinPrice?.diff,
                 expanded = expanded,
-                sendEnabled = state is AdapterState.Synced,
+                sendEnabled = state is AdapterState.Synced && !watchAccount,
                 receiveEnabled = state != null,
                 syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
                 syncingTextValue = getSyncingText(state, expanded),
@@ -261,7 +261,7 @@ class BalanceViewItemFactory {
                 coinIconVisible = state !is AdapterState.NotSynced,
                 badge = wallet.badge,
                 swapVisible = wallet.token.swappable,
-                swapEnabled = state is AdapterState.Synced,
+                swapEnabled = state is AdapterState.Synced && !watchAccount,
                 mainNet = item.mainNet,
                 errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
                 isWatchAccount = watchAccount
