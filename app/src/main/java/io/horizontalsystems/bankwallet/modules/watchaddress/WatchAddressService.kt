@@ -5,17 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
-import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 
 class WatchAddressService(
     private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
-    private val walletActivator: WalletActivator,
-    private val evmBlockchainManager: EvmBlockchainManager
 ) {
     val defaultName = accountFactory.getNextWatchAccountName()
 
@@ -41,14 +35,6 @@ class WatchAddressService(
         val account = accountFactory.watchAccount(accountName, tmpAddress.hex, tmpAddress.domain)
 
         accountManager.save(account)
-
-        val allBlockchains = evmBlockchainManager.allBlockchains
-        allBlockchains.forEach {
-            evmBlockchainManager.getEvmAccountManager(it.type).markAutoEnable(account)
-        }
-
-        val tokenQueries = allBlockchains.map { TokenQuery(it.type, TokenType.Native) }
-        walletActivator.activateWallets(account, tokenQueries)
     }
 }
 
