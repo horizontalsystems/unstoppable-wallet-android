@@ -129,7 +129,7 @@ class MarketWidget : GlanceAppWidget() {
                                     .height(60.dp)
                                     .background(ImageProvider(R.drawable.widget_list_item_background))
                                     .clickable(
-                                        actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item.uid, state.type)))
+                                        actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item.uid, item.title, state.type)))
                                     )
                             ) {
                                 Item(item = item)
@@ -148,7 +148,7 @@ class MarketWidget : GlanceAppWidget() {
         }
     }
 
-    private fun getDeeplinkUri(itemUid: String, type: MarketWidgetType): Uri = when (type) {
+    private fun getDeeplinkUri(itemUid: String, title: String, type: MarketWidgetType): Uri = when (type) {
         MarketWidgetType.Watchlist,
         MarketWidgetType.TopGainers -> {
             "unstoppable://coin-page?uid=${itemUid}".toUri()
@@ -157,7 +157,7 @@ class MarketWidget : GlanceAppWidget() {
             "unstoppable://nft-collection?uid=${itemUid}".toUri()
         }
         MarketWidgetType.TopPlatforms -> {
-            "unstoppable://top-platforms?uid=${itemUid}".toUri()
+            "unstoppable://top-platforms?uid=${itemUid}&title=${title}".toUri()
         }
     }
 
