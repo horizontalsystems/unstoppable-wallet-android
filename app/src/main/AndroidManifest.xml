@@ -94,7 +94,6 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="unstoppable" />
             </intent-filter>
         </activity-alias>
@@ -116,6 +115,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="wc" />
             </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="unstoppable" />
+            </intent-filter>
         </activity-alias>
         <activity-alias
             android:name="${applicationId}.MonoLauncherAlias"
@@ -134,6 +139,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="wc" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="unstoppable" />
             </intent-filter>
         </activity-alias>
         <activity-alias
@@ -154,6 +165,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="wc" />
             </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="unstoppable" />
+            </intent-filter>
         </activity-alias>
         <activity-alias
             android:name="${applicationId}.MustangLauncherAlias"
@@ -172,6 +189,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="wc" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="unstoppable" />
             </intent-filter>
         </activity-alias>
         <activity-alias
@@ -192,6 +215,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="wc" />
             </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="unstoppable" />
+            </intent-filter>
         </activity-alias>
         <activity-alias
             android:name="${applicationId}.PunkLauncherAlias"
@@ -210,6 +239,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="wc" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="unstoppable" />
             </intent-filter>
         </activity-alias>
         <activity-alias
@@ -230,6 +265,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="wc" />
             </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="unstoppable" />
+            </intent-filter>
         </activity-alias>
         <activity-alias
             android:name="${applicationId}.HashTag1009LauncherAlias"
@@ -248,6 +289,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="wc" />
+            </intent-filter>
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="unstoppable" />
             </intent-filter>
         </activity-alias>
     </application>
