@@ -1,14 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
@@ -18,24 +16,15 @@ class SwapApproveViewModel(
         private val coinService: EvmCoinService
 ) : ViewModel() {
 
-    var amount: String
-        get() {
-            return service.amount?.let {
-                coinService.convertToMonetaryValue(it).toPlainString()
-            } ?: ""
-        }
-        set(value) {
-            service.amount = when {
-                value.isEmpty() -> null
-                else -> coinService.convertToFractionalMonetaryValue(BigDecimal(value))
-            }
-        }
+    val initialAmount = service.amount?.let {
+        coinService.convertToMonetaryValue(it).toPlainString()
+    } ?: ""
 
     private val disposables = CompositeDisposable()
 
-    val approveAllowedLiveData = MutableLiveData(false)
-    val openConfirmationLiveEvent = SingleLiveEvent<SendEvmData>()
-    val amountErrorLiveData = MutableLiveData<String?>(null)
+    var approveAllowed by mutableStateOf(false)
+    var openConfirmation by mutableStateOf<SendEvmData?>(null)
+    var amountError by mutableStateOf<Throwable?>(null)
 
     init {
         service.stateObservable
@@ -57,41 +46,30 @@ class SwapApproveViewModel(
         }
     }
 
-    private fun handle(approveState: SwapApproveService.State) {
-        approveAllowedLiveData.postValue(approveState is SwapApproveService.State.ApproveAllowed)
-
-        var amountErrorText: String? = null
-
-        if (approveState is SwapApproveService.State.ApproveNotAllowed) {
-            val errors = approveState.errors.toMutableList()
-
-            val balanceErrorIndex = errors.indexOfFirst {
-                it is SwapApproveService.TransactionAmountError
-            }
-            if (balanceErrorIndex != -1) {
-                amountErrorText = convertError(errors.removeAt(balanceErrorIndex))
-            }
+    fun onEnterAmount(value: String) {
+        service.amount = when {
+            value.isEmpty() -> null
+            else -> coinService.convertToFractionalMonetaryValue(BigDecimal(value))
         }
-        amountErrorLiveData.postValue(amountErrorText)
     }
 
-    private fun convertError(error: Throwable): String {
-        return when (val convertedError = error.convertedError) {
-            is SwapApproveService.TransactionAmountError.AlreadyApproved -> {
-                Translator.getString(R.string.Approve_Error_AlreadyApproved)
-            }
-            else -> convertedError.message ?: convertedError.javaClass.simpleName
-        }
+    private fun handle(approveState: SwapApproveService.State) {
+        approveAllowed = approveState is SwapApproveService.State.ApproveAllowed
+        amountError = (approveState as? SwapApproveService.State.ApproveNotAllowed)?.error
     }
 
     fun onProceed() {
         val serviceState = service.state
         if (serviceState is SwapApproveService.State.ApproveAllowed) {
-            openConfirmationLiveEvent.postValue(SendEvmData(serviceState.transactionData))
+            openConfirmation = SendEvmData(serviceState.transactionData)
         }
     }
 
     override fun onCleared() {
         disposables.dispose()
+    }
+
+    fun openConfirmationProcessed() {
+        openConfirmation = null
     }
 }

@@ -34,6 +34,20 @@ fun View.hideKeyboard(context: Context) {
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
+fun NavController.setNavigationResult(key: String, bundle: Bundle) {
+    previousBackStackEntry?.savedStateHandle?.set(key, bundle)
+}
+
+fun NavController.getNavigationResult(keyResult: String, onResult: (Bundle) -> Unit) {
+    currentBackStackEntry?.let { backStackEntry ->
+        backStackEntry.savedStateHandle.getLiveData<Bundle>(keyResult).observe(backStackEntry) {
+            onResult.invoke(it)
+
+            backStackEntry.savedStateHandle.remove<Bundle>(keyResult)
+        }
+    }
+}
+
 //  Fragment
 
 fun Fragment.findNavController(): NavController {
@@ -41,11 +55,7 @@ fun Fragment.findNavController(): NavController {
 }
 
 fun Fragment.getNavigationResult(key: String = "result", result: (Bundle) -> (Unit)) {
-    findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Bundle>(key)
-        ?.observe(viewLifecycleOwner) {
-            result(it)
-            findNavController().currentBackStackEntry?.savedStateHandle?.remove<Bundle>(key)
-        }
+    findNavController().getNavigationResult(key, result)
 }
 
 fun Fragment.getNavigationLiveData(key: String = "result"): LiveData<Bundle>? {
@@ -53,7 +63,7 @@ fun Fragment.getNavigationLiveData(key: String = "result"): LiveData<Bundle>? {
 }
 
 fun Fragment.setNavigationResult(key: String = "result", bundle: Bundle) {
-    findNavController().previousBackStackEntry?.savedStateHandle?.set(key, bundle)
+    findNavController().setNavigationResult(key, bundle)
 }
 
 //  Dialog
