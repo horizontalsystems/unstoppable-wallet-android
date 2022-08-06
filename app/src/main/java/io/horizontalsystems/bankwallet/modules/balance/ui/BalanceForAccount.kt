@@ -49,7 +49,8 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                     R.id.manageAccountsFragment,
                                     ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
                                 )
-                            },
+                            }
+                            .weight(1f),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
@@ -57,7 +58,8 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                             style = ComposeAppTheme.typography.title3,
                             color = ComposeAppTheme.colors.oz,
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(weight = 1f, fill = false)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
@@ -66,7 +68,6 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                             tint = ComposeAppTheme.colors.grey
                         )
                     }
-                    Spacer(modifier = Modifier.weight(1f))
                     Icon(
                         modifier = Modifier
                             .clickable(
