@@ -59,6 +59,14 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
+                        if (accountViewItem.isWatchAccount) {
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_eye_20),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.grey
+                            )
+                        }
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
                             painter = painterResource(id = R.drawable.ic_down_24),
