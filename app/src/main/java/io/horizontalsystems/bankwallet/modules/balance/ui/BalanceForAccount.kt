@@ -51,7 +51,8 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                     title3_leah(
                         text = accountViewItem.name,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(weight = 1f, fill = false)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(
