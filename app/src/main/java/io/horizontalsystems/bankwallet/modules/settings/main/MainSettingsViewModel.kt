@@ -24,7 +24,7 @@ class MainSettingsViewModel(
     init {
 
         service.backedUpObservable
-            .subscribeIO { securityCenterShowAlertLiveData.postValue(!it) }
+            .subscribeIO { manageWalletShowAlertLiveData.postValue(!it) }
             .let { disposables.add(it) }
 
         service.pinSetObservable
