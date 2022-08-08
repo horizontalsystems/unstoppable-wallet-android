@@ -59,10 +59,16 @@ sealed class TransactionValue {
 
     }
 
-    data class TokenValue(override val coinUid: String = "", val tokenName: String, val tokenCode: String, val tokenDecimals: Int, val value: BigDecimal) : TransactionValue() {
+    data class TokenValue(
+        override val coinUid: String = "",
+        val tokenName: String,
+        val tokenCode: String,
+        val tokenDecimals: Int,
+        val value: BigDecimal,
+        override val coinIconPlaceholder: Int? = null
+    ) : TransactionValue() {
         override val coin: Coin? = null
         override val coinIconUrl = null
-        override val coinIconPlaceholder = null
         override val coinName: String
             get() = tokenName
         override val coinCode: String

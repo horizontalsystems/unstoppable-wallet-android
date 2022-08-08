@@ -388,7 +388,7 @@ class TransactionInfoViewItemFactory(
 
         return listOf(
             Transaction(getString(R.string.Transactions_Approve), value.coinName, R.drawable.ic_checkmark_24),
-            Amount(coinAmountColoredValue, fiatAmountColoredValue, value.coin),
+            Amount(coinAmountColoredValue, fiatAmountColoredValue, value.coinIconUrl, value.coinIconPlaceholder),
             Address(getString(R.string.TransactionInfo_Spender), spenderAddress, evmLabelManager.mapped(spenderAddress))
         )
     }
@@ -541,7 +541,7 @@ class TransactionInfoViewItemFactory(
         } ?: "---"
 
         val coinValueColored = ColoredValue(coinValueFormatted, getAmountColor(incoming))
-        return Amount(coinValueColored, fiatValueColored, value.coin)
+        return Amount(coinValueColored, fiatValueColored, value.coinIconUrl, value.coinIconPlaceholder)
     }
 
     private fun getHistoricalRate(

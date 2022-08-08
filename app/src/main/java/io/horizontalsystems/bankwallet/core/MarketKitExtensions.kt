@@ -20,18 +20,7 @@ val Token.isSupported: Boolean
 
 val Token.iconPlaceholder: Int
     get() = when (type) {
-        is TokenType.Eip20 -> {
-            when (blockchainType) {
-                BlockchainType.Ethereum -> R.drawable.erc20
-                BlockchainType.BinanceSmartChain -> R.drawable.bep20
-                BlockchainType.BinanceChain -> R.drawable.bep2
-                BlockchainType.Avalanche -> R.drawable.avalanche_erc20
-                BlockchainType.Polygon -> R.drawable.polygon_erc20
-                BlockchainType.Optimism -> R.drawable.optimism_erc20
-                BlockchainType.ArbitrumOne -> R.drawable.arbitrum_erc20
-                else -> R.drawable.coin_placeholder
-            }
-        }
+        is TokenType.Eip20 -> blockchainType.tokenIconPlaceholder
         is TokenType.Bep2 -> R.drawable.bep2
         else -> R.drawable.coin_placeholder
     }
@@ -59,10 +48,10 @@ val Token.typeInfo: String
     get() = when (val type = type) {
         TokenType.Native -> {
             val parts = mutableListOf(Translator.getString(R.string.CoinPlatforms_Native))
-            when(this.blockchainType) {
+            when (this.blockchainType) {
                 BlockchainType.BinanceSmartChain -> parts.add("(BEP20)")
                 BlockchainType.BinanceChain -> parts.add("(BEP2)")
-                else -> { }
+                else -> {}
             }
             parts.joinToString(" ")
         }
@@ -188,7 +177,7 @@ val BlockchainType.icon24: Int
         BlockchainType.Zcash -> R.drawable.logo_zcash_24
         BlockchainType.BinanceChain -> R.drawable.logo_binancecoin_24
         is BlockchainType.Unsupported -> {
-            when(this._uid){
+            when (this._uid) {
                 "fantom" -> R.drawable.logo_fantom_24
                 "harmony-shard-0" -> R.drawable.logo_harmony_24
                 "huobi-token" -> R.drawable.logo_huobi_token_24
@@ -199,7 +188,7 @@ val BlockchainType.icon24: Int
                 "sora" -> R.drawable.logo_sora_24
                 "tomochain" -> R.drawable.logo_tomochain_24
                 "xdai" -> R.drawable.logo_xdai_24
-                else ->R.drawable.ic_platform_placeholder_24
+                else -> R.drawable.ic_platform_placeholder_24
             }
         }
     }
@@ -219,6 +208,18 @@ val BlockchainType.order: Int
         BlockchainType.ArbitrumOne -> 11
         BlockchainType.Optimism -> 12
         else -> Int.MAX_VALUE
+    }
+
+val BlockchainType.tokenIconPlaceholder: Int
+    get() = when (this) {
+        BlockchainType.Ethereum -> R.drawable.erc20
+        BlockchainType.BinanceSmartChain -> R.drawable.bep20
+        BlockchainType.BinanceChain -> R.drawable.bep2
+        BlockchainType.Avalanche -> R.drawable.avalanche_erc20
+        BlockchainType.Polygon -> R.drawable.polygon_erc20
+        BlockchainType.Optimism -> R.drawable.optimism_erc20
+        BlockchainType.ArbitrumOne -> R.drawable.arbitrum_erc20
+        else -> R.drawable.coin_placeholder
     }
 
 val TokenType.order: Int
