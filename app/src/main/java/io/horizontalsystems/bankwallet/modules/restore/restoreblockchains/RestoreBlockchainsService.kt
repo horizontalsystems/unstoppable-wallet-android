@@ -78,7 +78,7 @@ class RestoreBlockchainsService(
     private fun syncInternalItems() {
         val blockchains = marketKit
             .blockchains(blockchainTypes.map { it.uid })
-            .sortedBy { blockchainTypes.indexOf(it.type) }
+            .sortedBy { it.type.order }
 
         val tokens = blockchainTypes
             .map { TokenQuery(it, TokenType.Native) }

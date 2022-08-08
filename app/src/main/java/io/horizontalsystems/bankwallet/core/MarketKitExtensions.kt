@@ -216,8 +216,8 @@ val BlockchainType.order: Int
         BlockchainType.BitcoinCash -> 8
         BlockchainType.Litecoin -> 9
         BlockchainType.BinanceChain -> 10
-        BlockchainType.Optimism -> 11
-        BlockchainType.ArbitrumOne -> 12
+        BlockchainType.ArbitrumOne -> 11
+        BlockchainType.Optimism -> 12
         else -> Int.MAX_VALUE
     }
 
