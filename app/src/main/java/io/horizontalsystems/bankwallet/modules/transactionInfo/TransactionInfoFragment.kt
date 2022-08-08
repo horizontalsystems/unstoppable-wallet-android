@@ -112,7 +112,7 @@ fun TransactionInfoSection(
                     }
                     is TransactionInfoViewItem.Amount -> {
                         add {
-                            TransactionAmountCell(fiatAmount = viewItem.fiatValue, coinAmount = viewItem.coinValue, coin = viewItem.coin)
+                            TransactionAmountCell(fiatAmount = viewItem.fiatValue, coinAmount = viewItem.coinValue, coinIconUrl = viewItem.coinIconUrl, coinIconPlaceholder = viewItem.coinIconPlaceholder)
                         }
                     }
                     is TransactionInfoViewItem.Value -> {

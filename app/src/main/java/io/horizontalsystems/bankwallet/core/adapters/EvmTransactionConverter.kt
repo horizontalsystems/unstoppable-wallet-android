@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -162,7 +163,14 @@ class EvmTransactionConverter(
                 TransactionValue.CoinValue(token, convertAmount(amount, token.decimals, negative))
             }
             tokenInfo != null -> {
-                TransactionValue.TokenValue("", tokenInfo.tokenName, tokenInfo.tokenSymbol, tokenInfo.tokenDecimal, convertAmount(amount, tokenInfo.tokenDecimal, negative))
+                TransactionValue.TokenValue(
+                    coinUid = "",
+                    tokenName = tokenInfo.tokenName,
+                    tokenCode = tokenInfo.tokenSymbol,
+                    tokenDecimals = tokenInfo.tokenDecimal,
+                    value = convertAmount(amount, tokenInfo.tokenDecimal, negative),
+                    coinIconPlaceholder = evmKitWrapper.blockchainType.tokenIconPlaceholder
+                )
             }
             else -> {
                 TransactionValue.RawValue(value = amount)

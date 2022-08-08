@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -34,7 +33,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.Coin
 
 @Composable
 fun SectionTitleCell(
@@ -75,7 +73,8 @@ fun SectionTitleCell(
 fun TransactionAmountCell(
     fiatAmount: ColoredValue?,
     coinAmount: ColoredValue,
-    coin: Coin?
+    coinIconUrl: String?,
+    coinIconPlaceholder: Int?
 ) {
     Row(
         modifier = Modifier
@@ -84,8 +83,8 @@ fun TransactionAmountCell(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CoinImage(
-            iconUrl = coin?.iconUrl,
-            placeholder = R.drawable.coin_placeholder,
+            iconUrl = coinIconUrl,
+            placeholder = coinIconPlaceholder,
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))

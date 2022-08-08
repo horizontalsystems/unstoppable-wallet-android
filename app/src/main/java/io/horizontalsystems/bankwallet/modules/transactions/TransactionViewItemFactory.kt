@@ -219,7 +219,7 @@ class TransactionViewItemFactory(
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val (incomingValues, outgoingValues) = record.combined(record.incomingEvents, record.outgoingEvents)
-        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?, eventIcon) = getValues(incomingValues, outgoingValues, currencyValue)
+        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?, _) = getValues(incomingValues, outgoingValues, currencyValue)
         val title = record.method ?: Translator.getString(R.string.Transactions_ContractCall)
 
         return TransactionViewItem(
@@ -230,7 +230,7 @@ class TransactionViewItemFactory(
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: eventIcon ?: TransactionViewItem.Icon.Platform(record.source)
+            icon = icon ?: TransactionViewItem.Icon.Platform(record.source)
         )
     }
 
