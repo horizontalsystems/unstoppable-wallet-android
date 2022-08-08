@@ -81,10 +81,10 @@
     <string name="Select_Coins">选择货币</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
     <string name="Restore_ZCash">ZCash</string>
-    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight">%s 生日高度</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">如果您知道您Zcash钱包生成时的区块高度，请将其添加至下方以加速同步过程。</string>
-    <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
-    <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (可选)</string>
+    <string name="Restore_ZCash_RestoreAsNew">恢复为新的</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">检查...</string>
     <!--Market-->
@@ -109,7 +109,7 @@
     <string name="Market_TvlDeFi">DeFi锁定</string>
     <string name="Market_DeFiCap">DeFi市值</string>
     <string name="Market_SeeAll">更多</string>
-    <string name="Market_PoweredByHorizontalApi">Powered By Horizontal API</string>
+    <string name="Market_PoweredByHorizontalApi">水平API支持</string>
     <string name="Market_Tab_Overview">行情</string>
     <string name="Market_Tab_Posts">发现</string>
     <string name="Market_Tab_Watchlist">关注</string>
@@ -123,8 +123,8 @@
     <string name="MarketTopPlatforms_PlatofrmsRank">顶级区块链平台</string>
     <string name="MarketTopPlatforms_Description">通过建立在顶部的项目的累积市场来领导区块链平台。</string>
     <string name="MarketTopPlatforms_Protocols">協議: %s</string>
-    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
-    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s 星系</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">%s 链上所有协议的市场上限</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">图表</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">总市值</string>
@@ -150,7 +150,7 @@
     <string name="Market_Filter_ChooseSet">可选集合</string>
     <string name="Market_Filter_MarketCap">市值</string>
     <string name="Market_Filter_Volume">成交量</string>
-    <string name="Market_Filter_Volume24h">Trading Volume (24h)</string>
+    <string name="Market_Filter_Volume24h">交易量 (24h)</string>
     <string name="Market_Filter_PricePeriod">价格区间</string>
     <string name="Market_Filter_PriceChange">价格变化</string>
     <string name="Market_Filter_Blockchains">区块链</string>
