@@ -154,6 +154,9 @@ data class TransactionViewItem(
                 BlockchainType.BinanceSmartChain -> R.drawable.logo_chain_bsc_trx_24
                 BlockchainType.Ethereum -> R.drawable.logo_chain_ethereum_trx_24
                 BlockchainType.Polygon -> R.drawable.logo_chain_polygon_trx_24
+                BlockchainType.Avalanche ->  R.drawable.logo_chain_avalanche_trx_24
+                BlockchainType.Optimism ->  R.drawable.logo_chain_optimism_trx_24
+                BlockchainType.ArbitrumOne ->  R.drawable.logo_chain_arbitrum_one_trx_24
                 else -> null
             }
         }
