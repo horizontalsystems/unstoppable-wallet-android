@@ -38,6 +38,7 @@
     <string name="Any">Beliebig</string>
     <string name="SyncError">Sync-Fehler. Versuchen Sie es erneut</string>
     <string name="PercentTitle">Prozent</string>
+    <string name="Keyboard">Tastatur</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Sei unaufhaltsam</string>
     <string name="Intro_Wallet_Screen2Title">Assets lösen</string>
@@ -59,7 +60,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase darf nicht leer sein</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Bitte verwenden Sie nur lateinische Buchstaben und Zahlen für die Passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase-Bestätigung stimmt nicht überein</string>
-    <string name="EnterPassphrase">Passphrase</string>
+    <string name="EnterPassphrase">Geben Sie Ihre Passphrase ein</string>
     <string name="CreateWallet_PassphraseDescription">Passphrasen fügen den Wallets eine zusätzliche Sicherheitsebene hinzu, wodurch Benutzer mehrere unabhängige Multi-Coin-Wallets mit einer einzigen mnemonischen Wiederherstellungsphrase erstellen können, die jedoch mit unterschiedlichen Passwörtern verbunden sind. \n\nUm diese Wallets wiederherzustellen, benötigt der Benutzer eine mnemonische Wiederherstellungsphrase sowie ein Passwort für jedes wiederherzustellende Wallet.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
@@ -67,8 +68,8 @@
     <string name="RateApp_Button_RateIt">Bewerten</string>
     <string name="RateApp_Button_NotNow">Nicht jetzt</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Schlüssel Eingeben</string>
-    <string name="Restore_Mnemonic_Description">Geben Sie Ihre Eselsbrücke ein, die aus 12 oder 24 Wörtern besteht. Die Wörter müssen in der richtigen Reihenfolge und durch Leerzeichen getrennt eingegeben werden.</string>
+    <string name="Restore_Enter_Key_Title">Wiederherstellen</string>
+    <string name="Restore_Mnemonic_Description">Geben Sie Ihre Wallet-Wiederherstellungsphrase (aka mnemonic) ein, die aus 12, 15, 18, 21 oder 24 Wörtern besteht und ein alphanumerisches Passwort enthalten kann.</string>
     <string name="Restore_ValidationFailed">Falscher Schlüssel</string>
     <string name="Restore_Error_MnemonicWordCount">Falsche Wortzahl. Sie muss zwischen 12 und 24 Wörtern liegen. Sie haben eingegeben: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase darf nicht leer sein</string>
@@ -78,8 +79,12 @@
     <string name="Restore_Name">Name (optional)</string>
     <string name="Restore_Key">Key</string>
     <string name="Select_Coins">Coins auswählen</string>
-    <string name="Restore_ZCash_BirthdayHeight">Geburtstagshöhe</string>
+    <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
+    <string name="Restore_ZCash">Zcash</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Geburtstagshöhe</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Wenn Sie die Blockgröße bei Kauf Ihres Wallets kennen, geben Sie diese für schnelle Synchronisierung ein.</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
+    <string name="Restore_ZCash_RestoreAsNew">Als neu wiederherstellen</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <!--Market-->
@@ -118,6 +123,8 @@
     <string name="MarketTopPlatforms_PlatofrmsRank">Top Blockchain-Plattformen</string>
     <string name="MarketTopPlatforms_Description">Führende Blockchain-Plattformen durch den kumulativen Markt von Projekten, die auf der Spitze.</string>
     <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
@@ -143,6 +150,7 @@
     <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
     <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Volume24h">Handelsvolumen (24h)</string>
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
@@ -203,7 +211,7 @@
     <string name="TvlRank_MultiChain">Multi-Chain</string>
     <string name="TvlRank_Field_HighestTvl">Highest TVL</string>
     <string name="TvlRank_Field_LowestTvl">Niedrigste TVL</string>
-    <string name="TvlRank_Field_All">All</string>
+    <string name="TvlRank_Field_All">Alle</string>
     <string name="TvlRank_Field_Eth">Ethereum</string>
     <string name="TvlRank_Field_Bsc">Binance</string>
     <string name="TvlRank_Field_Sol">Solana</string>
@@ -334,7 +342,7 @@
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signieren</string>
     <string name="WalletConnect_Error_NoWallet">Kein passendes Wallet. Sie müssen ein neues Wallet erstellen oder ein bestehendes Wallet wiederherstellen</string>
     <string name="WalletConnect_Error_WatchAccount">Diese Funktion funktioniert nicht mit den Watch Only Wallets, Sie müssen zu einem wiederhergestellten oder erstellten Wallet wechseln </string>
-    <string name="WalletConnect_Error_UnsupportedChainId">Nicht unterstützte Kettennummer</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Nicht unterstützte Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Kein passendes Konto</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Kein passendes evm Kit</string>
     <string name="WalletConnect_Error_DataParsingError">Datenverarbeitungsfehler</string>
@@ -388,7 +396,7 @@
     <string name="Swap_MaximumPaid">Maximal bezahlt</string>
     <string name="Swap_MinimumGot">Garantierter Betrag</string>
     <string name="Swap_PoweredBy">Betrieben durch</string>
-    <string name="Swap_SelectSwapProvider_Title">Dienst wechseln</string>
+    <string name="Swap_SelectSwapProvider_Title">Provider tauschen</string>
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
@@ -466,6 +474,10 @@
     <string name="Transactions_From">von %s</string>
     <string name="Transaction_Unlimited">unbegrenzt %s</string>
     <string name="Transactions_All">Alle</string>
+    <string name="Transactions_Filter_Blockchain">Nach Blockchain filtern</string>
+    <string name="Transactions_Filter_AllBlockchains">Alle Blockchains</string>
+    <string name="Transactions_Filter_AllCoins">Alle Coins</string>
+    <string name="Transactions_Filter_ChooseCoin">Coins auswählen</string>
     <string name="Transactions_Incoming">Erhalten</string>
     <string name="Transactions_Outgoing">Gesendet</string>
     <string name="Transactions_Swaps">Swaps</string>
@@ -546,14 +558,30 @@
     <string name="Settings_Language">Sprache</string>
     <string name="Settings_Theme">Design</string>
     <string name="Settings_Terms">Bedingungen</string>
+    <string name="Settings_Privacy">Privacy</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_AppStatus">App-Status</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Bewerten Sie uns</string>
     <string name="Settings_LaunchScreen">Startbildschirm</string>
+    <string name="Settings_Appearance">Darstellung</string>
+    <string name="Appearance_Theme">THEMA</string>
+    <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
+    <string name="Appearance_AppIcon">APP ICON</string>
+    <string name="Appearance_BalanceConversion">SALDOKONVERTIERUNG</string>
+    <string name="Appearance_BalanceValue">SALDO WERT</string>
+    <string name="Appearance_Warning_CloseApplication">Das Ändern des Symbols schließt die Anwendung</string>
+    <string name="BalanceViewType_CoinValue">Coin Value</string>
+    <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">Über die App</string>
     <string name="SettingsAboutApp_Site">Webseite</string>
     <string name="SettingsAboutApp_WhatsNew">Das ist neu</string>
+    <!-- Privacy  -->
+    <string name="Privacy_Information">Unaufhaltsam sammelt keine Daten oder verwendet Analysewerkzeuge, die möglicherweise Daten über ihre Nutzer enthüllen. Die Brieftasche ist so konzipiert, dass sie den Benutzern ein hohes Maß an Privatsphäre garantiert.</string>
+    <string name="Privacy_BulletedText1">Benutzerdaten bleiben immer auf dem Gerät des Benutzers.</string>
+    <string name="Privacy_BulletedText2">Das Wallet sammelt keine Daten über Benutzer.</string>
+    <string name="Privacy_BulletedText3">Das Wallet teilt keine Daten über Benutzer.</string>
+    <string name="Privacy_BulletedText4">Es gibt keine Benutzerkonten oder Datenbanken, die Benutzerdaten woanders speichern.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN EINSTELLUNGEN</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
@@ -676,8 +704,9 @@
     <string name="ManageAccounts_ImportWallet">Wiederherstellen</string>
     <string name="ManageAccounts_WatchAddress">Watch-Adresse</string>
     <string name="ManageAccounts_Hint">Tipp! Wenn Sie ein bestehendes Wallet mit einer neuen Passphrase wiederherstellen, wird ein brandneues Wallet erzeugt. Praktisch, wenn Sie eine einzelne 12-24-Wörter-Wiederherstellungsphrase für mehrere Wallets verwenden möchten.</string>
-    <string name="Watch_Address_Title">Adresse</string>
+    <string name="Watch_Address_Title">Watch-Adresse</string>
     <string name="Watch_Address_Hint">Adresse oder Domäne</string>
+    <string name="Watch_Address_Description">Nur für Ethereum und andere unterstützte EVM Blockchains verfügbar.</string>
     <string name="Watch_Address_Watch">Beobachten</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
@@ -695,6 +724,8 @@
     <string name="ManageAccount_NWords">%s Wörter</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s Wörter mit Passphrase</string>
     <string name="ManageAccount_SwitchWallet_Title">Wallet wechseln</string>
+    <string name="ManageAccount_Wallets">Wallets</string>
+    <string name="ManageAccount_WatchAddresses">Watch-Adresse</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Wallet für Schnellwechsel auswählen</string>
     <string name="ManageAccount_DeleteWarning">Möchten Sie die Beobachtung dieser Wallet-Adresse beenden?</string>
     <!--Network Settings-->
@@ -710,10 +741,12 @@
     <string name="ShowKey_ButtonClose">Schließen</string>
     <string name="ShowKey_TabMnemonicPhrase">Wiederherstellungsphrase</string>
     <string name="ShowKey_TabPrivateKey">Privater Schlüssel</string>
+    <string name="ShowKey_TabPublicKeys">Öffentliche Schlüssel</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Warnung</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risiko einer Private Key Kopie</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Als Sicherheitsmaßnahme empfehlen wir, keine Kopieraktion für Private Keys durchzuführen.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Ich werde es riskieren</string>
+    <string name="ShowKey_PrivateKey_Warning">Dieser Schlüssel ist für alle EVM-kompatiblen Blockchains.\n\nAls Sicherheitsmaßnahme empfehlen wir, keine Kopieraktion auf dem privaten Schlüssel zu verwenden.</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Sicherung</string>
     <string name="BackupKey_Description">Die Wiederherstellungsphrasen, die als nächstes gezeigt werden, sind die einzige Möglichkeit, Ihr Guthaben wiederherzustellen, falls Ihr Mobiltelefon jemals verloren geht, gestohlen wird, kaputt geht usw.\n\nStellen Sie sicher, dass niemand Ihren Bildschirm beobachtet.</string>
@@ -752,7 +785,7 @@
     <string name="AddToken_Symbol">Symbol</string>
     <string name="AddToken_Decimals">Dezimalen</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">Cointyp(en)</string>
+    <string name="AddToken_CoinTypes">Münztypen</string>
     <string name="AddToken_AddressOrSymbol">Vertragsadresse</string>
     <string name="AddToken_CoinAlreadyInListWarning">Dieser Token befindet sich bereits in der Coin-Verwaltungsliste</string>
     <string name="AddToken_InvalidAddressError">Ungültige Vertragsadresse oder BEP2-Symbol</string>
@@ -764,7 +797,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Nativ</string>
     <string name="CoinPlatformsSelector_Title">Cointyp</string>
-    <string name="CoinPlatformsSelector_Description">Dieser Token existiert auf mehreren Blockchains. Wählen Sie die Version(en), die Sie verwenden möchten.</string>
+    <string name="CoinPlatformsSelector_Description">Dieses Token existiert auf mehreren Blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Parameter wiederherstellen</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
@@ -774,6 +807,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Üblich nach 2018</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Verbinde</string>
+    <string name="Tor_Connection_Enable">Tor aktivieren</string>
+    <string name="Tor_Connection_Disable">Tor deaktivieren</string>
+    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Tor starten...</string>
     <string name="Tor_Status_Error">Fehler beim Starten von Tor!</string>
     <string name="TorPage_Connecting">Verbinde…</string>
@@ -907,6 +943,7 @@
     <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nnicht gefunden</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">Durchschnitt 7D</string>
     <string name="Nfts_PriceType_Days_30">Durchschnitt 30D</string>
@@ -914,6 +951,9 @@
     <string name="Nfts_Asset_OnSale">Im Verkauf</string>
     <string name="Nfts_Asset_OnSaleUntil">bis %s</string>
     <string name="Nfts_Empty">Sie haben keinen NFT in Ihrer Brieftasche</string>
+    <string name="Nfts_PriceMode">Price Mode</string>
+    <string name="NftAsset_Overview">Übersicht</string>
+    <string name="NftAsset_Activity">Aktivität</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Teilen</string>
     <string name="NftAsset_Action_Save">Speichern</string>
@@ -943,16 +983,16 @@
     <string name="Nft_TopCollections_Description">Leading NFT collections by trading volume.</string>
     <!-- NFT Collection -->
     <string name="NftCollection_Overview">Overview</string>
-    <string name="NftCollection_Items">Items</string>
-    <string name="NftCollection_Activity">Activity</string>
-    <string name="NftCollection_Owners">Owners</string>
+    <string name="NftCollection_Items">Stück</string>
+    <string name="NftCollection_Activity">Aktivität</string>
+    <string name="NftCollection_Owners">Besitzer</string>
     <string name="NftCollection_AveragePrice">All-time Average</string>
     <string name="NftCollection_ItemsCount">%d Items</string>
-    <string name="NftCollection_TodaysSales">Today\'s Sales</string>
+    <string name="NftCollection_TodaysSales">Heutige Verkäufer</string>
     <string name="NftCollection_AveragePriceDescription">~%s / Item</string>
     <!-- NFT Collection Events -->
-    <string name="NftCollection_EventType_SelectorTitle">Select Event Type</string>
-    <string name="NftCollection_EventType_All">All</string>
+    <string name="NftCollection_EventType_SelectorTitle">Ereignistyp auswählen</string>
+    <string name="NftCollection_EventType_All">Alle</string>
     <string name="NftCollection_EventType_List">Liste</string>
     <string name="NftCollection_EventType_Sale">Sale</string>
     <string name="NftCollection_EventType_Cancelled">Cancel</string>
@@ -982,6 +1022,7 @@
     <string name="ReleaseNotes_FollowUs">Folge Uns</string>
     <string name="CoinPage_Chart_Locked">Locked</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
     <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
@@ -990,8 +1031,11 @@
     <string name="ProUsersInfo_Features_TxCount">Transaction Count</string>
     <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
     <string name="ProUsersInfo_Features_Authenticating">Authenticating...</string>
-    <string name="Hud_Text_LearnMore">Coming So Soon</string>
+    <string name="Hud_Text_LearnMore">Coming Soon</string>
     <string name="Hud_Text_Activate">Activate</string>
     <string name="ProUsersActivate_Title">Activate the Pass</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, useful charts based on on-chain data that will help give you a clear view of projects</string>
+    <!--Widget-->
+    <string name="WidgetList_Config_Title">Typ auswählen</string>
+    <string name="NftAssetActivity_Empty">Noch keine Artikel-Aktivität</string>
 </resources>

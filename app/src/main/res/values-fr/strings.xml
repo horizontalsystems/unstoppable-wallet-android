@@ -38,6 +38,7 @@
     <string name="Any">N\'importe lequel</string>
     <string name="SyncError">Erreur de synchronisation. Réessayez</string>
     <string name="PercentTitle">Pourcent</string>
+    <string name="Keyboard">Clavier</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Soyez Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Désenchaînez les actifs</string>
@@ -59,7 +60,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Veuillez utiliser uniquement des lettres et des chiffres latins pour la phrase d\'authentification</string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmation de la phrase d\'authentification ne correspond pas</string>
-    <string name="EnterPassphrase">Phrase d\'authentification</string>
+    <string name="EnterPassphrase">Saisir la phrase d\'authentification</string>
     <string name="CreateWallet_PassphraseDescription">Les phrases d\'authentification ajoutent une strate de sécurité supplémentaire aux portefeuilles. Les utilisateurs peuvent ainsi créer plusieurs portefeuilles indépendants à pièces multiples à l\'aide d\'une seule phrase de réinitialisation mnémonique, mais associée à des mots de passe différents. \n\nPour restaurer ces portefeuilles, l\'utilisateur doit disposer d\'une phrase de réinitialisation mnémonique et d\'un mot de passe pour chaque portefeuille à restaurer.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Bonjour!</string>
@@ -67,8 +68,8 @@
     <string name="RateApp_Button_RateIt">Evaluez-là</string>
     <string name="RateApp_Button_NotNow">Plus tard</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Entrez la clé</string>
-    <string name="Restore_Mnemonic_Description">Saisissez votre mnémonique qui consiste en 12 ou 24 mots. Les mots doivent être saisis dans l\'ordre correct et séparés par des espaces.</string>
+    <string name="Restore_Enter_Key_Title">Restaurer</string>
+    <string name="Restore_Mnemonic_Description">Saisissez la phrase de récupération de votre portefeuille (mnémonique) qui se compose de 12, 15, 18, 21 ou 24 mots et peut inclure un mot de passe alphanumérique supplémentaire.</string>
     <string name="Restore_ValidationFailed">Clé incorrect</string>
     <string name="Restore_Error_MnemonicWordCount">Le nombre de mots est incorrect. Il doit être compris entre 12 et 24 mots. Vous avez saisi : %d</string>
     <string name="Restore_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
@@ -78,8 +79,12 @@
     <string name="Restore_Name">Nom (optionnel)</string>
     <string name="Restore_Key">Clé</string>
     <string name="Select_Coins">Crypto Monnaie</string>
-    <string name="Restore_ZCash_BirthdayHeight">Hauteur de l\'anniversaire</string>
+    <string name="Restore_BirthdayHeight">Hauteur de l\'anniversaire</string>
+    <string name="Restore_ZCash">ZCash</string>
+    <string name="Restore_ZCash_BirthdayHeight">Hauteur de l\'anniversaire de Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Si vous connaissez la hauteur anniversaire de votre portefeuille, saisissez-la pour accélérer la synchronisation.</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (facultatif)</string>
+    <string name="Restore_ZCash_RestoreAsNew">Restaurer à l\'état d\'usine</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Vérification…</string>
     <!--Market-->
@@ -118,6 +123,8 @@
     <string name="MarketTopPlatforms_PlatofrmsRank">Meilleures plateformes blockchain</string>
     <string name="MarketTopPlatforms_Description">Les meilleures plateformes blockchain en fonction du marché cumulé des projets bâtis sur celles-ci.</string>
     <string name="MarketTopPlatforms_Protocols">Protocole: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">Écosystème %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Capitalisation boursière de tous les protocoles de la chaîne %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Graphique</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Cap totale</string>
@@ -143,6 +150,7 @@
     <string name="Market_Filter_ChooseSet">Choisissez le set</string>
     <string name="Market_Filter_MarketCap">Cap. marché</string>
     <string name="Market_Filter_Volume">Volume de trading</string>
+    <string name="Market_Filter_Volume24h">Volume de négociation (24h)</string>
     <string name="Market_Filter_PricePeriod">Période de prix</string>
     <string name="Market_Filter_PriceChange">Variation de prix</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
@@ -334,7 +342,7 @@
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signer</string>
     <string name="WalletConnect_Error_NoWallet">Aucun portefeuille adéquat. Vous devez créer ou restaurer un portefeuille existant</string>
     <string name="WalletConnect_Error_WatchAccount">Cette fonctionnalité ne peut être utilisée avec les portefeuilles de type watching only. Vous devez basculer vers un portefeuille restauré ou en créer un </string>
-    <string name="WalletConnect_Error_UnsupportedChainId">ID de chaîne non pris en charge</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Blockchain non pris en charge</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Aucun compte approprié</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Aucun kit evm approprié</string>
     <string name="WalletConnect_Error_DataParsingError">Erreur d\'analyse des données</string>
@@ -388,7 +396,7 @@
     <string name="Swap_MaximumPaid">Montant maximum payé</string>
     <string name="Swap_MinimumGot">Montant garanti</string>
     <string name="Swap_PoweredBy">Propulsé par</string>
-    <string name="Swap_SelectSwapProvider_Title">Service de Swap</string>
+    <string name="Swap_SelectSwapProvider_Title">Fournisseur swap</string>
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
@@ -466,6 +474,10 @@
     <string name="Transactions_From">de %s</string>
     <string name="Transaction_Unlimited">%s illimité</string>
     <string name="Transactions_All">Tout</string>
+    <string name="Transactions_Filter_Blockchain">Filtrer par blockchain</string>
+    <string name="Transactions_Filter_AllBlockchains">Toutes les blockchains</string>
+    <string name="Transactions_Filter_AllCoins">Toutes les pièces</string>
+    <string name="Transactions_Filter_ChooseCoin">Choisir la pièce</string>
     <string name="Transactions_Incoming">Reçue</string>
     <string name="Transactions_Outgoing">Envoyée</string>
     <string name="Transactions_Swaps">Echanger</string>
@@ -546,14 +558,30 @@
     <string name="Settings_Language">Langue</string>
     <string name="Settings_Theme">Thème</string>
     <string name="Settings_Terms">Conditions</string>
+    <string name="Settings_Privacy">Privacy</string>
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_AppStatus">Statut de l\'appli</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Evaluez-nous</string>
     <string name="Settings_LaunchScreen">Écran de démarrage</string>
+    <string name="Settings_Appearance">Apparence</string>
+    <string name="Appearance_Theme">Thème</string>
+    <string name="Appearance_LaunchScreen">ÉCRAN DE LÉCHARGEMENT</string>
+    <string name="Appearance_AppIcon">ICON APPLICATION</string>
+    <string name="Appearance_BalanceConversion">CONVERSION DE BALANCE</string>
+    <string name="Appearance_BalanceValue">VALEUR DE BALANCE</string>
+    <string name="Appearance_Warning_CloseApplication">La modification de l\'icône fermera l\'application</string>
+    <string name="BalanceViewType_CoinValue">Valeur de la pièce</string>
+    <string name="BalanceViewType_FiatValue">Valeur Fiat</string>
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
     <string name="SettingsAboutApp_Site">Site Web</string>
     <string name="SettingsAboutApp_WhatsNew">Nouveautés</string>
+    <!-- Privacy  -->
+    <string name="Privacy_Information">Unstoppable ne collecte aucune donnée et n\'utilise aucun outil d\'analyse susceptible d\'exposer des données sur ses utilisateurs. Le portefeuille est conçu pour assurer un haut niveau de confidentialité à ses utilisateurs.</string>
+    <string name="Privacy_BulletedText1">Les données de l\'utilisateur restent toujours sur l\'appareil de l\'utilisateur.</string>
+    <string name="Privacy_BulletedText2">Le portefeuille ne collecte aucune donnée sur les utilisateurs.</string>
+    <string name="Privacy_BulletedText3">Le portefeuille ne partage aucune donnée sur les utilisateurs.</string>
+    <string name="Privacy_BulletedText4">Aucun compte utilisateur ni aucune base de données ne conserve les données des utilisateurs à un autre endroit.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">PARAMÈTRES DE BLOCKCHAIN</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
@@ -672,8 +700,9 @@
     <string name="ManageAccounts_ImportWallet">Restaurer</string>
     <string name="ManageAccounts_WatchAddress">Adresse à suivre</string>
     <string name="ManageAccounts_Hint">Astuce ! La restauration d\'un portefeuille existant, mais avec une nouvelle phrase d\'authentification, génère un tout nouveau portefeuille. Pratique si vous souhaitez utiliser une seule phrase de réinitialisation mnémonique de 12 à 24 mots pour plusieurs portefeuilles.</string>
-    <string name="Watch_Address_Title">Adresse</string>
+    <string name="Watch_Address_Title">Adresse à suivre</string>
     <string name="Watch_Address_Hint">Adresse ou domaine</string>
+    <string name="Watch_Address_Description">Disponible uniquement pour Ethereum et autres blockchains EVM prises en charge.</string>
     <string name="Watch_Address_Watch">Suivi</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
@@ -691,6 +720,8 @@
     <string name="ManageAccount_NWords">%s mots</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s mots avec phrase d\'authentification</string>
     <string name="ManageAccount_SwitchWallet_Title">Changer de portefeuille</string>
+    <string name="ManageAccount_Wallets">Wallets</string>
+    <string name="ManageAccount_WatchAddresses">Adresse à suivre</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Sélectionnez le portefeuille pour un changement rapide</string>
     <string name="ManageAccount_DeleteWarning">Voulez-vous arrêter de surveiller cette adresse de portefeuille ?</string>
     <!--Network Settings-->
@@ -706,10 +737,12 @@
     <string name="ShowKey_ButtonClose">Fermer</string>
     <string name="ShowKey_TabMnemonicPhrase">Phrase de réinitialisation</string>
     <string name="ShowKey_TabPrivateKey">Clé privée</string>
+    <string name="ShowKey_TabPublicKeys">Clés publiques</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Attention</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risque de copie de clé privée</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Pour des raisons de sécurité, nous recommandons de ne pas utiliser l\'action de copie sur la clé privée.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Je prends le risque</string>
+    <string name="ShowKey_PrivateKey_Warning">Cette clé est pour toutes les blockchains compatibles EVM.\n\nEn tant que mesure de sécurité, nous vous recommandons de ne pas utiliser l\'action de copie sur la clé privée.</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Sauvegarde</string>
     <string name="BackupKey_Description">Les phrases de réinitialisation qui vont suivre sont le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, endommagé, etc.\n\nVeuillez vous assurer que personne ne regarde votre écran.</string>
@@ -748,7 +781,7 @@
     <string name="AddToken_Symbol">Symbole</string>
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">Type(s) de pièce</string>
+    <string name="AddToken_CoinTypes">TYPES DE COINS</string>
     <string name="AddToken_AddressOrSymbol">Adresse du contrat</string>
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
     <string name="AddToken_InvalidAddressError">Adresse du contrat ou symbole BEP2 non valide</string>
@@ -760,7 +793,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Natif</string>
     <string name="CoinPlatformsSelector_Title">Type de pièce</string>
-    <string name="CoinPlatformsSelector_Description">Ce token existe sur plusieurs blockchains. Sélectionnez la (les) version(s) que vous souhaitez utiliser.</string>
+    <string name="CoinPlatformsSelector_Description">Ce token existe sur plusieurs blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
@@ -770,6 +803,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Commun après 2018</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Connexion</string>
+    <string name="Tor_Connection_Enable">Activer Tor</string>
+    <string name="Tor_Connection_Disable">Désactiver Tor</string>
+    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Démarrage de Tor...</string>
     <string name="Tor_Status_Error">Erreur lors du démarrage de Tor !</string>
     <string name="TorPage_Connecting">Connexion en cours…</string>
@@ -903,6 +939,7 @@
     <string name="CoinPage_DetailsActiveAddresses_Description">Le nombre d\'adresses uniques de portefeuille impliquées dans les transactions sur différentes périodes.</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Accédez aux fonctionnalités avancées du portefeuilleen maintenant des NFT non stoppables.</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nNon trouvé</string>
     <string name="Nfts_Title">NFTs</string>
     <string name="Nfts_PriceType_Days_7">Moy. 7D</string>
     <string name="Nfts_PriceType_Days_30">Moy. 30D</string>
@@ -910,6 +947,9 @@
     <string name="Nfts_Asset_OnSale">En Vente</string>
     <string name="Nfts_Asset_OnSaleUntil">jusqu\'à: %s</string>
     <string name="Nfts_Empty">Vous n\'avez pas de NFT dans votre portefeuille</string>
+    <string name="Nfts_PriceMode">Mode prix</string>
+    <string name="NftAsset_Overview">Overview</string>
+    <string name="NftAsset_Activity">Activité</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Partager</string>
     <string name="NftAsset_Action_Save">Sauvegarder</string>
@@ -978,6 +1018,7 @@
     <string name="ReleaseNotes_FollowUs">Suivez-nous</string>
     <string name="CoinPage_Chart_Locked">Verrouillé</string>
     <string name="ProUsersInfo_Title">Utilisateur Pro</string>
+    <string name="ProUsersInfo_UnstoppablePass">Passe Unstoppable</string>
     <string name="ProUsersInfo_SubTitle">Informations supplémentaires sur le jeton</string>
     <string name="ProUsersInfo_Description">Pour activer ces données, vous devriez obtenir des NFT UW au niveau de bronze « Coin Info+»\n\nVous avez également accès aux données ci-dessous:</string>
     <string name="ProUsersInfo_Features_DexVolume">Volume et rang DEX</string>
@@ -990,4 +1031,7 @@
     <string name="Hud_Text_Activate">Activer</string>
     <string name="ProUsersActivate_Title">Activer le Passe</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Au-delà des frontières. Il vous permettra de disposer de données essentielles sur le marché, d\'outils analytiques, de graphiques utiles basés sur des données on-chain qui vous aideront à avoir une vision claire des projets</string>
+    <!--Widget-->
+    <string name="WidgetList_Config_Title">Choisir le type</string>
+    <string name="NftAssetActivity_Empty">Aucune activité pour l\'instant</string>
 </resources>

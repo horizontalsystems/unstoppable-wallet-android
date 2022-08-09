@@ -38,6 +38,7 @@
     <string name="Any">任何</string>
     <string name="SyncError">同步错误。请再试一次</string>
     <string name="PercentTitle">百分比</string>
+    <string name="Keyboard">键盘</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">资产解绑</string>
@@ -59,7 +60,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">请只对密码使用拉丁字母和数字</string>
     <string name="CreateWallet_Error_InvalidConfirmation">确认密码不匹配</string>
-    <string name="EnterPassphrase">密码</string>
+    <string name="EnterPassphrase">输入密码</string>
     <string name="CreateWallet_PassphraseDescription">密码为钱包增加了一个额外的保护层，同一组助记词使用不同的密码，就可以让用户创建许多个独立的多币钱包。\n\n要恢复这些钱包，用户必须有一组助记词和不同密码。</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM！</string>
@@ -67,8 +68,8 @@
     <string name="RateApp_Button_RateIt">评价它</string>
     <string name="RateApp_Button_NotNow">暂不</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">输入密钥</string>
-    <string name="Restore_Mnemonic_Description">输入助记词，其中应包含12到24个单词。这些单词必须以正确的顺序输入并用空格分隔。</string>
+    <string name="Restore_Enter_Key_Title">恢复自</string>
+    <string name="Restore_Mnemonic_Description">输入包含12、15、18、21或24个字的钱包恢复短语(又名mnemonic)，可能包含额外的字母和数字密码。</string>
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_Error_MnemonicWordCount">个数有误。必须为12到24个单词。您输入了：%d</string>
     <string name="Restore_Error_EmptyPassphrase">助记词不能为空</string>
@@ -78,8 +79,12 @@
     <string name="Restore_Name">名称 (可选)</string>
     <string name="Restore_Key">密钥</string>
     <string name="Select_Coins">选择货币</string>
-    <string name="Restore_ZCash_BirthdayHeight">生日高度</string>
+    <string name="Restore_BirthdayHeight">生日高度</string>
+    <string name="Restore_ZCash">ZCash</string>
+    <string name="Restore_ZCash_BirthdayHeight">%s 生日高度</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">如果您知道您Zcash钱包生成时的区块高度，请将其添加至下方以加速同步过程。</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (可选)</string>
+    <string name="Restore_ZCash_RestoreAsNew">恢复为新的</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">检查...</string>
     <!--Market-->
@@ -104,7 +109,7 @@
     <string name="Market_TvlDeFi">DeFi锁定</string>
     <string name="Market_DeFiCap">DeFi市值</string>
     <string name="Market_SeeAll">更多</string>
-    <string name="Market_PoweredByHorizontalApi">Powered By Horizontal API</string>
+    <string name="Market_PoweredByHorizontalApi">水平API支持</string>
     <string name="Market_Tab_Overview">行情</string>
     <string name="Market_Tab_Posts">发现</string>
     <string name="Market_Tab_Watchlist">关注</string>
@@ -118,6 +123,8 @@
     <string name="MarketTopPlatforms_PlatofrmsRank">顶级区块链平台</string>
     <string name="MarketTopPlatforms_Description">通过建立在顶部的项目的累积市场来领导区块链平台。</string>
     <string name="MarketTopPlatforms_Protocols">協議: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s 星系</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">%s 链上所有协议的市场上限</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">图表</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">总市值</string>
@@ -143,6 +150,7 @@
     <string name="Market_Filter_ChooseSet">可选集合</string>
     <string name="Market_Filter_MarketCap">市值</string>
     <string name="Market_Filter_Volume">成交量</string>
+    <string name="Market_Filter_Volume24h">交易量 (24h)</string>
     <string name="Market_Filter_PricePeriod">价格区间</string>
     <string name="Market_Filter_PriceChange">价格变化</string>
     <string name="Market_Filter_Blockchains">区块链</string>
@@ -334,7 +342,7 @@
     <string name="WalletConnect_SignMessageRequest_ButtonSign">签名</string>
     <string name="WalletConnect_Error_NoWallet">没有合适的钱包。您需要创建或恢复现有钱包</string>
     <string name="WalletConnect_Error_WatchAccount">此功能不适用于观察中的钱包，您需要切换到恢复或创建的钱包 </string>
-    <string name="WalletConnect_Error_UnsupportedChainId">不支持的链号</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">不支持的Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">没有合适的帐户</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">没有合适的 evm 套件</string>
     <string name="WalletConnect_Error_DataParsingError">数据解析错误</string>
@@ -388,7 +396,7 @@
     <string name="Swap_MaximumPaid">最大支付金额</string>
     <string name="Swap_MinimumGot">保证金额</string>
     <string name="Swap_PoweredBy">技术支持：</string>
-    <string name="Swap_SelectSwapProvider_Title">互兑供应商</string>
+    <string name="Swap_SelectSwapProvider_Title">掉期供应商</string>
     <string name="Swap_AmountEstimated">(预估金额)</string>
     <string name="Swap_AmountMin">(最小金额)</string>
     <string name="Swap_AmountMax">(最大金额)</string>
@@ -466,6 +474,10 @@
     <string name="Transactions_From">发送人%s</string>
     <string name="Transaction_Unlimited">无限%s</string>
     <string name="Transactions_All">所有</string>
+    <string name="Transactions_Filter_Blockchain">按区块链过滤</string>
+    <string name="Transactions_Filter_AllBlockchains">所有Blockchains</string>
+    <string name="Transactions_Filter_AllCoins">所有硬币</string>
+    <string name="Transactions_Filter_ChooseCoin">选择代币</string>
     <string name="Transactions_Incoming">已收到</string>
     <string name="Transactions_Outgoing">已发送</string>
     <string name="Transactions_Swaps">掉期交易</string>
@@ -546,14 +558,30 @@
     <string name="Settings_Language">语言选择</string>
     <string name="Settings_Theme">主题样式</string>
     <string name="Settings_Terms">使用条款</string>
+    <string name="Settings_Privacy">隐私保护</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_AppStatus">应用状态</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">评价我们</string>
     <string name="Settings_LaunchScreen">启动屏幕</string>
+    <string name="Settings_Appearance">外观</string>
+    <string name="Appearance_Theme">主题</string>
+    <string name="Appearance_LaunchScreen">局域网SCREEN</string>
+    <string name="Appearance_AppIcon">应用图标</string>
+    <string name="Appearance_BalanceConversion">余额配对</string>
+    <string name="Appearance_BalanceValue">平衡值</string>
+    <string name="Appearance_Warning_CloseApplication">更改图标将关闭应用程序</string>
+    <string name="BalanceViewType_CoinValue">币值</string>
+    <string name="BalanceViewType_FiatValue">纤维值</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
     <string name="SettingsAboutApp_Site">网站</string>
     <string name="SettingsAboutApp_WhatsNew">更新说明</string>
+    <!-- Privacy  -->
+    <string name="Privacy_Information">不可阻挡不会收集任何数据，也不会使用可能会暴露任何用户数据的分析工具。 钱包的设计是为了确保用户高度的隐私。</string>
+    <string name="Privacy_BulletedText1">用户数据总是保留在用户的设备上。</string>
+    <string name="Privacy_BulletedText2">钱包没有收集任何有关用户的数据。</string>
+    <string name="Privacy_BulletedText3">钱包没有收集任何有关用户的数据。</string>
+    <string name="Privacy_BulletedText4">没有用户帐户或数据库存放其他地方的用户数据。</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">黑色设置</string>
     <string name="SecurityCenter_Internet">网络</string>
@@ -566,7 +594,7 @@
     <string name="BtcBlockchainSettings_RestoreSource">恢复参数</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">通过交易为恢复钱包选择数据源。</string>
     <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.\n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).\n\n2. from Blockchain: The app tries to restore directly from a network of the blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
-    <string name="BtcBlockchainSettings_TransactionInputsOutputs">Transaction Inputs / Outputs</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputs">交易输入 / 输出</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Make your BTC, LTC, BCH transactions harder to trace by changing the way transactions are structured.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.
 \n\nThe Unstoppable wallet implements measures to make it harder for someone to figure out which output goes where.
@@ -673,8 +701,9 @@
     <string name="ManageAccounts_ImportWallet">恢复自</string>
     <string name="ManageAccounts_WatchAddress">观察地址</string>
     <string name="ManageAccounts_Hint">注意：使用一个新密码恢复现有的钱包将生成一个全新的钱包。如果您希望对多个钱包使用单个12-24个单词的助记词恢复码，这将非常方便。</string>
-    <string name="Watch_Address_Title">地址</string>
+    <string name="Watch_Address_Title">观察地址</string>
     <string name="Watch_Address_Hint">地址或域名</string>
+    <string name="Watch_Address_Description">仅供以太坊和其他支持 EVM 区块链使用。</string>
     <string name="Watch_Address_Watch">观察</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
@@ -692,6 +721,8 @@
     <string name="ManageAccount_NWords">%s 个单词</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s 个单词的密码</string>
     <string name="ManageAccount_SwitchWallet_Title">切换钱包</string>
+    <string name="ManageAccount_Wallets">钱包</string>
+    <string name="ManageAccount_WatchAddresses">观察地址</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">选择钱包以快速切换</string>
     <string name="ManageAccount_DeleteWarning">您要停止监视这个钱包地址吗？</string>
     <!--Network Settings-->
@@ -707,10 +738,12 @@
     <string name="ShowKey_ButtonClose">关闭</string>
     <string name="ShowKey_TabMnemonicPhrase">恢复码</string>
     <string name="ShowKey_TabPrivateKey">私钥</string>
+    <string name="ShowKey_TabPublicKeys">公钥</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">警告</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">私钥复制风险</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">作为一项安全措施，我们建议不要复制私钥。</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">我将冒险使用此操作</string>
+    <string name="ShowKey_PrivateKey_Warning">此密钥适用于所有EVM兼容的区块链。\n\n作为一项安全措施，我们建议不要在私钥上使用复制操作。</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">备份</string>
     <string name="BackupKey_Description">如果您的手机出现丢失、被盗或损坏等情况，那么在下一步显示的恢复码将是恢复您资金的唯一方法。\n\n确保不会有任何人看到您的屏幕。</string>
@@ -749,7 +782,7 @@
     <string name="AddToken_Symbol">标志</string>
     <string name="AddToken_Decimals">小数</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">代币类型</string>
+    <string name="AddToken_CoinTypes">焦炭类型</string>
     <string name="AddToken_AddressOrSymbol">智能合约地址</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidAddressError">找不到符号</string>
@@ -761,7 +794,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">原生</string>
     <string name="CoinPlatformsSelector_Title">代币平台选择</string>
-    <string name="CoinPlatformsSelector_Description">此代币存在于多个区块链上。请选择您想要使用的平台。</string>
+    <string name="CoinPlatformsSelector_Description">此令牌存在于多个区块链中。</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
@@ -771,6 +804,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018年之后常用</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">连接</string>
+    <string name="Tor_Connection_Enable">启用Tor</string>
+    <string name="Tor_Connection_Disable">禁用Tor</string>
+    <string name="Tor_Alert_Title">互联网</string>
     <string name="Tor_Status_Starting">正在启动Tor...</string>
     <string name="Tor_Status_Error">启动Tor时出错！</string>
     <string name="TorPage_Connecting">正在连接...</string>
@@ -904,6 +940,7 @@
     <string name="CoinPage_DetailsActiveAddresses_Description">不同时期交易中唯一钱包地址的数量。</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">通过持有不可阻挡的 NFT 获取高级钱包功能。</string>
+    <string name="CoinPage_CoinNotFound">[%s]\n未找到</string>
     <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">平均7天</string>
     <string name="Nfts_PriceType_Days_30">平均30天</string>
@@ -911,6 +948,9 @@
     <string name="Nfts_Asset_OnSale">在售</string>
     <string name="Nfts_Asset_OnSaleUntil">直到 %s</string>
     <string name="Nfts_Empty">你的钱包中没有 NFT</string>
+    <string name="Nfts_PriceMode">价格模式</string>
+    <string name="NftAsset_Overview">行情</string>
+    <string name="NftAsset_Activity">活动</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">分享</string>
     <string name="NftAsset_Action_Save">保存</string>
@@ -979,6 +1019,7 @@
     <string name="ReleaseNotes_FollowUs">关注我们</string>
     <string name="CoinPage_Chart_Locked">锁住</string>
     <string name="ProUsersInfo_Title">专业用户</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">附加令牌信息</string>
     <string name="ProUsersInfo_Description">若要启用此数据，您应该获得精灵等级的 UW NFTs “Coin Info+”\n\n也可以访问下面的数据：</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX 音量和等级</string>
@@ -987,8 +1028,11 @@
     <string name="ProUsersInfo_Features_TxCount">交易数</string>
     <string name="ProUsersInfo_Features_TxVolume">交易量</string>
     <string name="ProUsersInfo_Features_Authenticating">正在验证身份...</string>
-    <string name="Hud_Text_LearnMore">马上就来了</string>
+    <string name="Hud_Text_LearnMore">即将推出</string>
     <string name="Hud_Text_Activate">激活</string>
     <string name="ProUsersActivate_Title">激活Pass</string>
     <string name="ProUsersActivate_Description">Mountain Yak - 不受边界限制。 将为您提供重要的市场数据、分析工具、基于链式数据的有用图表，有助您清晰了解项目</string>
+    <!--Widget-->
+    <string name="WidgetList_Config_Title">选择类型</string>
+    <string name="NftAssetActivity_Empty">还没有项目活动</string>
 </resources>

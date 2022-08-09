@@ -38,8 +38,9 @@
     <string name="Any">Любые</string>
     <string name="SyncError">Ошибка синхронизации. Повторите попытку</string>
     <string name="PercentTitle">Процент</string>
+    <string name="Keyboard">Клавиатура</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
+    <string name="Intro_Wallet_Screen1Description">Двигайтесь вперед</string>
     <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
     <string name="Intro_Wallet_Screen2Description">Распоряжайтесь активами свободно и без ограничений.</string>
     <string name="Intro_Wallet_Screen3Title">Избавьтесь от Границ</string>
@@ -59,7 +60,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только латинские буквы и цифры для кодовой фразы</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
-    <string name="EnterPassphrase">Кодовая Фраза</string>
+    <string name="EnterPassphrase">Введите кодовую фразу</string>
     <string name="CreateWallet_PassphraseDescription">Кодовые фразы обеспечивают дополнительную защиту для кошельков, позволяя пользователям создавать несколько независимых мультивалютных кошельков, использующих одну мнемоническую фразу для восстановления, но имеющих разные пароли.\n\nДля восстановления этих кошельков пользователю потребуются мнемоническая фраза для восстановления, а также пароль для каждого восстанавливаемого кошелька.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
@@ -67,8 +68,8 @@
     <string name="RateApp_Button_RateIt">Оценить</string>
     <string name="RateApp_Button_NotNow">Не сейчас</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Введите ключ</string>
-    <string name="Restore_Mnemonic_Description">Введите мнемоническую фразу, которая состоит из 12 или 24 слов. Слова должны быть введены в правильном порядке и разделены пробелами.</string>
+    <string name="Restore_Enter_Key_Title">Восстановить</string>
+    <string name="Restore_Mnemonic_Description">Введите фразу для восстановления (мнемоническая фраза), которая состоит из 12, 15, 18, 21 или 24 слов и может содержать дополнительный буквенно-цифровой пароль.</string>
     <string name="Restore_ValidationFailed">Неверный Ключ</string>
     <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12-24 слова. Вы ввели: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
@@ -78,8 +79,12 @@
     <string name="Restore_Name">Имя (опционально)</string>
     <string name="Restore_Key">Ключ</string>
     <string name="Select_Coins">Выберите Токены</string>
-    <string name="Restore_ZCash_BirthdayHeight">Блок Создания</string>
+    <string name="Restore_BirthdayHeight">Блок Создания</string>
+    <string name="Restore_ZCash">ZCash</string>
+    <string name="Restore_ZCash_BirthdayHeight">Блок Создания Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете дату создания вашего кошелька, укажите ее для быстрой синхронизации.</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (необязательно)</string>
+    <string name="Restore_ZCash_RestoreAsNew">Вставить как новое</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <!--Market-->
@@ -118,6 +123,8 @@
     <string name="MarketTopPlatforms_PlatofrmsRank">Лучшие блокчейн-платформы</string>
     <string name="MarketTopPlatforms_Description">Лучшие ведущие блокчейн-платформы кумулятивного рынка проектов.</string>
     <string name="MarketTopPlatforms_Protocols">Протокол: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s Экосистема</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Капитализация рынка всех протоколов на блокчейне %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Общая Капитализация</string>
@@ -143,6 +150,7 @@
     <string name="Market_Filter_ChooseSet">Выбрать Набор</string>
     <string name="Market_Filter_MarketCap">Рыночная Капитализация</string>
     <string name="Market_Filter_Volume">Объем Торговли</string>
+    <string name="Market_Filter_Volume24h">Объем Торговли (24ч)</string>
     <string name="Market_Filter_PricePeriod">Ценовой Период</string>
     <string name="Market_Filter_PriceChange">Изменение Цены</string>
     <string name="Market_Filter_Blockchains">Блокчейны</string>
@@ -334,7 +342,7 @@
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Подписать</string>
     <string name="WalletConnect_Error_NoWallet">Нет подходящего кошелька. Вам нужно создать или восстановить текущий кошелек</string>
     <string name="WalletConnect_Error_WatchAccount">Эта функция не доступна для кошельков для просмотра, вам нужно выбрать восстановленный или созданный кошелек </string>
-    <string name="WalletConnect_Error_UnsupportedChainId">Неподдерживаемый идентификатор цепочки</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Неподдерживаемый Блокчейн</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Нет подходящего набора evm</string>
     <string name="WalletConnect_Error_DataParsingError">Ошибка разбора данных</string>
@@ -388,7 +396,7 @@
     <string name="Swap_MaximumPaid">Максимальная Выплата</string>
     <string name="Swap_MinimumGot">Гарантированная Сумма</string>
     <string name="Swap_PoweredBy">При поддержке</string>
-    <string name="Swap_SelectSwapProvider_Title">Служба Обмена</string>
+    <string name="Swap_SelectSwapProvider_Title">Смена Провайдера</string>
     <string name="Swap_AmountEstimated">(прим.)</string>
     <string name="Swap_AmountMin">(мин)</string>
     <string name="Swap_AmountMax">(макс)</string>
@@ -466,6 +474,10 @@
     <string name="Transactions_From">от %s</string>
     <string name="Transaction_Unlimited">неограниченно %s</string>
     <string name="Transactions_All">Все</string>
+    <string name="Transactions_Filter_Blockchain">Фильтр по блокчейну</string>
+    <string name="Transactions_Filter_AllBlockchains">Все Блокчейны</string>
+    <string name="Transactions_Filter_AllCoins">Все Токены</string>
+    <string name="Transactions_Filter_ChooseCoin">Выберите Токен</string>
     <string name="Transactions_Incoming">Получено</string>
     <string name="Transactions_Outgoing">Отправлено</string>
     <string name="Transactions_Swaps">Обмены</string>
@@ -546,14 +558,30 @@
     <string name="Settings_Language">Язык</string>
     <string name="Settings_Theme">Тема</string>
     <string name="Settings_Terms">Условия Использования</string>
+    <string name="Settings_Privacy">Конфиденциальность</string>
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_AppStatus">Статус Приложения</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Оцените наше приложение</string>
     <string name="Settings_LaunchScreen">Экран запуска</string>
+    <string name="Settings_Appearance">Оформление</string>
+    <string name="Appearance_Theme">ТЕМА</string>
+    <string name="Appearance_LaunchScreen">ЗАПУСК ЭКРАНА</string>
+    <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
+    <string name="Appearance_BalanceConversion">КОНВЕРТАЦИЯ БАЛАНСА</string>
+    <string name="Appearance_BalanceValue">ЗНАЧЕНИЕ БАЛАНСА</string>
+    <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
+    <string name="BalanceViewType_CoinValue">Токен Значение</string>
+    <string name="BalanceViewType_FiatValue">Фиатное Значение</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
     <string name="SettingsAboutApp_Site">Веб-сайт</string>
     <string name="SettingsAboutApp_WhatsNew">Что Нового</string>
+    <!-- Privacy  -->
+    <string name="Privacy_Information">Unstoppable не собирает данные и не использует инструменты аналитики, которые могут раскрывать любые данные о своих пользователях. Кошелек разработан для обеспечения высокого уровня конфиденциальности для своих пользователей.</string>
+    <string name="Privacy_BulletedText1">Данные пользователя всегда остаются на устройстве пользователя.</string>
+    <string name="Privacy_BulletedText2">Кошелек не собирает никаких данных о пользователях.</string>
+    <string name="Privacy_BulletedText3">Кошелек не передает никаких данных о пользователях.</string>
+    <string name="Privacy_BulletedText4">Нет учетных записей или баз данных, хранящих данные пользователя в другом месте.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">НАСТРОЙКИ BLOCKCHAIN</string>
     <string name="SecurityCenter_Internet">ИНТЕРНЕТ</string>
@@ -669,8 +697,9 @@
     <string name="ManageAccounts_ImportWallet">Восстановить</string>
     <string name="ManageAccounts_WatchAddress">Посмотреть Адрес</string>
     <string name="ManageAccounts_Hint">Совет: восстановление существующего кошелька при помощи другой кодовой фразы приведет к созданию нового кошелька. Это очень удобно, когда вы хотите использовать одну мнемоническую восстановительную фразу длиной от 12 до 24 слов для нескольких кошельков.</string>
-    <string name="Watch_Address_Title">Адрес</string>
+    <string name="Watch_Address_Title">Посмотреть Адрес</string>
     <string name="Watch_Address_Hint">Адрес или Домен</string>
+    <string name="Watch_Address_Description">Доступно только для Ethereum и других поддерживаемых EVM блокчейнов.</string>
     <string name="Watch_Address_Watch">Смотреть</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Названию</string>
@@ -688,6 +717,8 @@
     <string name="ManageAccount_NWords">%s слов</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s слов с кодовой фразой</string>
     <string name="ManageAccount_SwitchWallet_Title">Сменить Кошелек</string>
+    <string name="ManageAccount_Wallets">Кошельки</string>
+    <string name="ManageAccount_WatchAddresses">Посмотреть Адрес</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Выберите кошелек для быстрого переключения</string>
     <string name="ManageAccount_DeleteWarning">Вы хотите приостановить просмотр этого адреса кошелька?</string>
     <!--Network Settings-->
@@ -703,10 +734,12 @@
     <string name="ShowKey_ButtonClose">Закрыть</string>
     <string name="ShowKey_TabMnemonicPhrase">Фраза для восстановления</string>
     <string name="ShowKey_TabPrivateKey">Приватный Ключ</string>
+    <string name="ShowKey_TabPublicKeys">Публичные Ключи</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Внимание</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Риск Копирования Секретного Ключа</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">В целях безопасности мы не рекомендуем копировать секретный ключ.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Я рискну</string>
+    <string name="ShowKey_PrivateKey_Warning">Этот ключ для всех EVM-совместимых блокчейнов.\n\nВ качестве меры безопасности мы не рекомендуем использовать действие копирования на закрытом ключе.</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Резервная Копия</string>
     <string name="BackupKey_Description">Показанные далее фразы для восстановления являются единственным способом восстановления ваших средств в случае потери, кражи или поломки вашего телефона.\n\nУбедитесь, что никто не смотрит на ваш экран.</string>
@@ -745,7 +778,7 @@
     <string name="AddToken_Symbol">Символ</string>
     <string name="AddToken_Decimals">Десятичные Знаки</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">Тип(-ы) токенов</string>
+    <string name="AddToken_CoinTypes">ТИПЫ ТОКЕНОВ</string>
     <string name="AddToken_AddressOrSymbol">Адрес Контракта</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
     <string name="AddToken_InvalidAddressError">Неверный адрес контракта или символ BEP2</string>
@@ -757,7 +790,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Нативный</string>
     <string name="CoinPlatformsSelector_Title">Тип Монеты</string>
-    <string name="CoinPlatformsSelector_Description">Этот токен существует в нескольких блокчейнах. Выберите версию (-и), которую (-ые) вы хотите использовать.</string>
+    <string name="CoinPlatformsSelector_Description">Этот токен существует на нескольких блокчейнах.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После вступления данного изменения в силу кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
@@ -767,6 +800,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">после 2018 года</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Соединение</string>
+    <string name="Tor_Connection_Enable">Включить Tor</string>
+    <string name="Tor_Connection_Disable">Отключить Tor</string>
+    <string name="Tor_Alert_Title">Доступ в Интернет</string>
     <string name="Tor_Status_Starting">Запуск Tor ...</string>
     <string name="Tor_Status_Error">Ошибка запуска Tor !</string>
     <string name="TorPage_Connecting">Подключение…</string>
@@ -900,6 +936,7 @@
     <string name="CoinPage_DetailsActiveAddresses_Description">Количество уникальных адресов кошельков, использованных для осуществления транзакций за различные периоды.</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Получите доступ к расширенным функциям Unstoppable Кошелька.</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nне найден</string>
     <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">7Д сред.</string>
     <string name="Nfts_PriceType_Days_30">30Д сред.</string>
@@ -907,6 +944,9 @@
     <string name="Nfts_Asset_OnSale">В Продаже</string>
     <string name="Nfts_Asset_OnSaleUntil">до %s</string>
     <string name="Nfts_Empty">У вас нет NFT в вашем кошельке</string>
+    <string name="Nfts_PriceMode">Режим Цены</string>
+    <string name="NftAsset_Overview">Обзор</string>
+    <string name="NftAsset_Activity">Активность</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Поделиться</string>
     <string name="NftAsset_Action_Save">Сохранить</string>
@@ -975,6 +1015,7 @@
     <string name="ReleaseNotes_FollowUs">Мы в соцсетях</string>
     <string name="CoinPage_Chart_Locked">Заблокировано</string>
     <string name="ProUsersInfo_Title">Pro-пользователь</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">Дополнительная информация о токене</string>
     <string name="ProUsersInfo_Description">Чтобы включить эти данные, вы должны получить бронзовый уровень UW NFTs “Coin Info+”\n\nТакже вы получите доступ к данным ниже:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX Объем и Рейтинг</string>
@@ -983,8 +1024,11 @@
     <string name="ProUsersInfo_Features_TxCount">Количество Транзакций</string>
     <string name="ProUsersInfo_Features_TxVolume">Объем Транзакций</string>
     <string name="ProUsersInfo_Features_Authenticating">Идентификация...</string>
-    <string name="Hud_Text_LearnMore">Скоро появится</string>
+    <string name="Hud_Text_LearnMore">Уже Скоро</string>
     <string name="Hud_Text_Activate">Активировать</string>
     <string name="ProUsersActivate_Title">Активировать кодовую фразу</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Безграничная свобода действий. Вам предоставят важные данные рынка, аналитические инструменты, полезные диаграммы, основанные на ончейн-данных, с помощью которых вы сможете составить себе четкое представление о проектах</string>
+    <!--Widget-->
+    <string name="WidgetList_Config_Title">Выберите Тип</string>
+    <string name="NftAssetActivity_Empty">Нет активности</string>
 </resources>

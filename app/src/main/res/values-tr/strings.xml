@@ -38,6 +38,7 @@
     <string name="Any">Herhangi</string>
     <string name="SyncError">Senkronizasyon hatası. Tekrar deneyin</string>
     <string name="PercentTitle">Yüzde</string>
+    <string name="Keyboard">Klavye</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Varlıkları Serbest Bırak</string>
@@ -59,7 +60,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Parola için lütfen yalnızca latin harfleri ve rakamları kullanın</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Parola onayı eşleşmiyor</string>
-    <string name="EnterPassphrase">Parola</string>
+    <string name="EnterPassphrase">Parolayı girin</string>
     <string name="CreateWallet_PassphraseDescription">Parolalar cüzdanlara ek güvenlik katmanı ekleyerek kullanıcıların tek bir anımsatıcı kurtarma ifadesi kullanarak ancak farklı parolalarla ilişkilendirilmiş birden çok bağımsız çoklu para cüzdanı oluşturmasına olanak tanır. \n\nBu cüzdanları geri yüklemek için bir kullanıcı mnemonic kurtarma ifadesinin yanı sıra bir parola gerektirecektir. her biri geri yüklenecek cüzdan.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Günaydın!</string>
@@ -67,8 +68,8 @@
     <string name="RateApp_Button_RateIt">Puanla</string>
     <string name="RateApp_Button_NotNow">Şimdi değil</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Anahtarı girin</string>
-    <string name="Restore_Mnemonic_Description">12 veya 24 kelimeden oluşan anımsatıcı ifadenizi girin. Kelimelerin doğru sırayla girilmesi ve boşluklarla ayrılması gerekir.</string>
+    <string name="Restore_Enter_Key_Title">Geri Yükle</string>
+    <string name="Restore_Mnemonic_Description">12, 15, 18, 21 veya 24 kelimeden oluşan ve ek bir alfasayısal şifre içerebilen cüzdan kurtarma ifadenizi (aka anımsatıcı) girin.</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_Error_MnemonicWordCount">Hatalı sözcük sayısı. 12-24 arası sözcük olmalıdır. Girilen: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Parola boş olamaz</string>
@@ -78,8 +79,12 @@
     <string name="Restore_Name">İsim(İsteğe bağlı)</string>
     <string name="Restore_Key">Anahtar</string>
     <string name="Select_Coins">Kripto Parayı Seç</string>
-    <string name="Restore_ZCash_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
+    <string name="Restore_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
+    <string name="Restore_ZCash">Zcash</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Cüzdanınızın ilk gün boyunu biliyorsanız hızlı senkronizasyon için bunu girin.</string>
+    <string name="Restore_ZCash_Birthday_Hint">00000000 (isteğe bağlı)</string>
+    <string name="Restore_ZCash_RestoreAsNew">Yeni olarak geri yükle</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
     <!--Market-->
@@ -118,6 +123,8 @@
     <string name="MarketTopPlatforms_PlatofrmsRank">Top Blockchain Platforms</string>
     <string name="MarketTopPlatforms_Description">Leading blockchain platforms by cumulative market of projects built on top.</string>
     <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
@@ -143,6 +150,7 @@
     <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
     <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Volume24h">Trading Volume (24h)</string>
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
@@ -334,7 +342,7 @@
     <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
     <string name="WalletConnect_Error_NoWallet">Uygun Cüzdan yok. Cüzdan oluşturmanız veya mevcut cüzdanı geri yüklemeniz gerekiyor</string>
     <string name="WalletConnect_Error_WatchAccount">Bu özellik salt izlenir cüzdanlarda çalışmaz, geri yüklediğiniz veya oluşturduğunuz bir cüzdana geçmeniz gerekiyor </string>
-    <string name="WalletConnect_Error_UnsupportedChainId">Desteklenmeyen zincir kimliği</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Uygun hesap yok</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Uygun evm kiti yok</string>
     <string name="WalletConnect_Error_DataParsingError">Veri ayrıştırma hatası</string>
@@ -388,7 +396,7 @@
     <string name="Swap_MaximumPaid">Maksimum Ödenen</string>
     <string name="Swap_MinimumGot">Garantili Tutar</string>
     <string name="Swap_PoweredBy">İle çalışır</string>
-    <string name="Swap_SelectSwapProvider_Title">Swap Hizmeti</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Sağlayıcısı</string>
     <string name="Swap_AmountEstimated">(tah)</string>
     <string name="Swap_AmountMin">(dk)</string>
     <string name="Swap_AmountMax">(azami)</string>
@@ -466,6 +474,10 @@
     <string name="Transactions_From">%s kişisinden</string>
     <string name="Transaction_Unlimited">sınırsız %s</string>
     <string name="Transactions_All">Hepsi</string>
+    <string name="Transactions_Filter_Blockchain">Blok zincirine göre filtrele</string>
+    <string name="Transactions_Filter_AllBlockchains">Tüm Blok Zincirleri</string>
+    <string name="Transactions_Filter_AllCoins">Tüm paralar</string>
+    <string name="Transactions_Filter_ChooseCoin">Kripto Parayı Seç</string>
     <string name="Transactions_Incoming">Alındı</string>
     <string name="Transactions_Outgoing">Gönderildi</string>
     <string name="Transactions_Swaps">Swap</string>
@@ -546,14 +558,30 @@
     <string name="Settings_Language">Dil</string>
     <string name="Settings_Theme">Tema</string>
     <string name="Settings_Terms">Şartlar</string>
+    <string name="Settings_Privacy">Gizlilik</string>
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_AppStatus">Uygulama Durumu</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Bizi Değerlendirin</string>
     <string name="Settings_LaunchScreen">Başlangıç Ekranı</string>
+    <string name="Settings_Appearance">Görünüm</string>
+    <string name="Appearance_Theme">TEMA</string>
+    <string name="Appearance_LaunchScreen">BAŞLANGIÇ EKRANI</string>
+    <string name="Appearance_AppIcon">UYGULAMA IKONLARI</string>
+    <string name="Appearance_BalanceConversion">BAKIYE ÇEVRIMI</string>
+    <string name="Appearance_BalanceValue">BAKIYE DEĞERI</string>
+    <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
+    <string name="BalanceViewType_CoinValue">Para değeri</string>
+    <string name="BalanceViewType_FiatValue">Fiat Değeri</string>
     <string name="SettingsAboutApp_Title">Uygulama Hakkında</string>
     <string name="SettingsAboutApp_Site">Web sitesi</string>
     <string name="SettingsAboutApp_WhatsNew">Neler yeni</string>
+    <!-- Privacy  -->
+    <string name="Privacy_Information">Unstoppable doesn\'t collect any data or use analytics tools that may expose any data about its users. The wallet is designed to ensure a high level of privacy for its users.</string>
+    <string name="Privacy_BulletedText1">User data always remains on the user\'s device.</string>
+    <string name="Privacy_BulletedText2">The wallet doesn\'t collect any data about users.</string>
+    <string name="Privacy_BulletedText3">The wallet doesn\'t share any data about users.</string>
+    <string name="Privacy_BulletedText4">There are no user accounts or databases keeping user data elsewhere.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN SETTINGS</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
@@ -672,8 +700,9 @@
     <string name="ManageAccounts_ImportWallet">Geri Yükle</string>
     <string name="ManageAccounts_WatchAddress">Adresi İzle</string>
     <string name="ManageAccounts_Hint">İpucu! Mevcut bir cüzdanı geri yüklemek, yeni bir şifre ile en baştan bir cüzdan oluşturur. Birden fazla cüzdan için 12-24 kelimelik tek bir hatırlatıcı kurtarma öbeği kullanmak istiyorsanız kullanışlıdır.</string>
-    <string name="Watch_Address_Title">Adres</string>
+    <string name="Watch_Address_Title">Adresi İzle</string>
     <string name="Watch_Address_Hint">Adres veya Domain</string>
+    <string name="Watch_Address_Description">Yalnızca Ethereum ve diğer desteklenen EVM blok zincirleri için kullanılabilir.</string>
     <string name="Watch_Address_Watch">İzle</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">İsim</string>
@@ -691,6 +720,8 @@
     <string name="ManageAccount_NWords">%s kelime</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s parolalı kelime</string>
     <string name="ManageAccount_SwitchWallet_Title">Cüzdan Değiştir</string>
+    <string name="ManageAccount_Wallets">Cüzdanlar</string>
+    <string name="ManageAccount_WatchAddresses">Adresi İzle</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">Hızlı değiştirme için cüzdan seçin</string>
     <string name="ManageAccount_DeleteWarning">Bu cüzdan adresini izlemeyi bırakmak istiyor musunuz?</string>
     <!--Network Settings-->
@@ -706,10 +737,12 @@
     <string name="ShowKey_ButtonClose">Kapat</string>
     <string name="ShowKey_TabMnemonicPhrase">Kurtarma cümlesi</string>
     <string name="ShowKey_TabPrivateKey">Özel Anahtar</string>
+    <string name="ShowKey_TabPublicKeys">Genel Anahtarlar</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">Uyarı</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Özel Anahtar kopyalama riski</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Bir güvenlik önlemi olarak, özel anahtar için kopyalama eylemi kullanılmamasını öneririz.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Riski alıyorum</string>
+    <string name="ShowKey_PrivateKey_Warning">Bu anahtar, tüm EVM uyumlu blok zincirleri içindir.\n\nGüvenlik önlemi olarak, özel anahtar üzerinde kopyalama eyleminin kullanılmamasını öneririz.</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Yedekle</string>
     <string name="BackupKey_Description">Telefonunuzun kaybolması, çalınması, kırılması vb. Durumunda, aşağıda gösterilecek olan kurtarma ifadeleri paranızı geri yüklemenin tek yoludur. \n\nKimsenin ekranınızı izlemediğinden emin olun.</string>
@@ -748,7 +781,7 @@
     <string name="AddToken_Symbol">Sembol</string>
     <string name="AddToken_Decimals">Ondalıklar</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">Kripto Para Tipi/Tipleri</string>
+    <string name="AddToken_CoinTypes">COIN TYPES</string>
     <string name="AddToken_AddressOrSymbol">Sözleşme Adresi</string>
     <string name="AddToken_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
     <string name="AddToken_InvalidAddressError">Geçersiz sözleşme adresi veya BEP2 sembolü</string>
@@ -760,7 +793,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Yerel</string>
     <string name="CoinPlatformsSelector_Title">Coin Tipi</string>
-    <string name="CoinPlatformsSelector_Description">Bu token birden fazla blok zincirinde mevcuttur. Kullanmak istediğiniz sürümü/sürümleri seçin.</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Geri Yükleme Ayarları</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Bu değişiklikten sonra cüzdan %s blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
@@ -770,6 +803,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018 sonrasında yaygın</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Bağlantı</string>
+    <string name="Tor_Connection_Enable">Tor\'u etkinleştir</string>
+    <string name="Tor_Connection_Disable">Tor\'u devre dışı bırak</string>
+    <string name="Tor_Alert_Title">İnternet</string>
     <string name="Tor_Status_Starting">Tor Başlatılıyor...</string>
     <string name="Tor_Status_Error">Tor başlatma hatası !</string>
     <string name="TorPage_Connecting">Bağlanıyor…</string>
@@ -903,6 +939,7 @@
     <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
     <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
     <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
     <string name="Nfts_Title">NFT\'ler</string>
     <string name="Nfts_PriceType_Days_7">Ortalama 7G</string>
     <string name="Nfts_PriceType_Days_30">Ortalama 30G</string>
@@ -910,6 +947,9 @@
     <string name="Nfts_Asset_OnSale">İndirimde</string>
     <string name="Nfts_Asset_OnSaleUntil">%s kadar</string>
     <string name="Nfts_Empty">Cüzdanınızda NFT yok</string>
+    <string name="Nfts_PriceMode">Fiyat Modu</string>
+    <string name="NftAsset_Overview">İzleme</string>
+    <string name="NftAsset_Activity">Aktivite</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Paylaş</string>
     <string name="NftAsset_Action_Save">Kaydet</string>
@@ -948,7 +988,7 @@
     <string name="NftCollection_AveragePriceDescription">~%s / Item</string>
     <!-- NFT Collection Events -->
     <string name="NftCollection_EventType_SelectorTitle">Select Event Type</string>
-    <string name="NftCollection_EventType_All">All</string>
+    <string name="NftCollection_EventType_All">Hepsi</string>
     <string name="NftCollection_EventType_List">Liste</string>
     <string name="NftCollection_EventType_Sale">İndirim</string>
     <string name="NftCollection_EventType_Cancelled">İptal</string>
@@ -960,7 +1000,7 @@
     <string name="NftCollection_EventType_Custom">Özel</string>
     <string name="NftCollection_EventType_Payout">Ödeme</string>
     <string name="NftCollection_EventType_BulkCancel">Toplu İptal</string>
-    <string name="NftCollection_EventType_Unknown">Unknown</string>
+    <string name="NftCollection_EventType_Unknown">Bilinmeyen</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
@@ -978,6 +1018,7 @@
     <string name="ReleaseNotes_FollowUs">Bizi Takip Et</string>
     <string name="CoinPage_Chart_Locked">Locked</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
     <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
@@ -986,8 +1027,11 @@
     <string name="ProUsersInfo_Features_TxCount">Transaction Count</string>
     <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
     <string name="ProUsersInfo_Features_Authenticating">Doğrulanıyor...</string>
-    <string name="Hud_Text_LearnMore">Coming So Soon</string>
+    <string name="Hud_Text_LearnMore">Çok Yakında</string>
     <string name="Hud_Text_Activate">Activate</string>
     <string name="ProUsersActivate_Title">Activate the Pass</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, and useful charts based on on-chain data that will help give you a clear view of projects</string>
+    <!--Widget-->
+    <string name="WidgetList_Config_Title">Türü Seç</string>
+    <string name="NftAssetActivity_Empty">Henüz öğe etkinliği yok</string>
 </resources>
