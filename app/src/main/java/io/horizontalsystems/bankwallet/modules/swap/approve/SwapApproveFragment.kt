@@ -1,12 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,7 +24,6 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.databinding.FragmentSwapApproveBinding
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
@@ -44,14 +40,11 @@ import io.horizontalsystems.core.setNavigationResult
 
 class SwapApproveFragment : BaseFragment() {
 
-    private var _binding: FragmentSwapApproveBinding? = null
-    private val binding get() = _binding!!
-
-    val vmFactory by lazy {
+    private val vmFactory by lazy {
         val approveData = requireArguments().getParcelable<SwapAllowanceService.ApproveData>(dataKey)!!
         SwapApproveModule.Factory(approveData)
     }
-    val viewModel by navGraphViewModels<SwapApproveViewModel>(R.id.swapApproveFragment) { vmFactory }
+    private val viewModel by navGraphViewModels<SwapApproveViewModel>(R.id.swapApproveFragment) { vmFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,37 +59,6 @@ class SwapApproveFragment : BaseFragment() {
                 SwapApproveScreen(findNavController(), viewModel)
             }
         }
-    }
-
-    fun _onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val watcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
-                Unit
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
-
-            override fun afterTextChanged(s: Editable?) {
-                val amountText = s?.toString() ?: ""
-
-                if (viewModel.validateAmount(amountText)) {
-//                    viewModel.amount = amountText
-                } else {
-                    binding.amount.removeTextChangedListener(this)
-//                    binding.amount.setText(viewModel.amount)
-//                    binding.amount.setSelection(viewModel.amount.length)
-                    binding.amount.startAnimation(
-                        AnimationUtils.loadAnimation(
-                            context,
-                            R.anim.shake_edittext
-                        )
-                    )
-                    binding.amount.addTextChangedListener(this)
-                }
-            }
-        }
-        binding.amount.addTextChangedListener(watcher)
     }
 }
 
