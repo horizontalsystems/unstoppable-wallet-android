@@ -5,14 +5,12 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -37,7 +35,6 @@ class NftCollectionViewModel(
     private val service: NftCollectionService,
     private val numberFormatter: IAppNumberFormatter,
     xRateService: XRateService,
-    coinManager: ICoinManager,
     marketKit: MarketKit
 ) : ViewModel() {
 
@@ -45,7 +42,6 @@ class NftCollectionViewModel(
     private var result: Result<NftCollection>? = null
     private var rate: CurrencyValue? = xRateService.getRate(baseToken.coin.uid)
 
-    var selectedTabLiveData = MutableLiveData(Tab.Overview)
     val tabs = Tab.values()
 
     var overviewViewItem by mutableStateOf<NftCollectionOverviewViewItem?>(null)
@@ -74,10 +70,6 @@ class NftCollectionViewModel(
         viewModelScope.launch {
             service.start()
         }
-    }
-
-    fun onSelect(tab: Tab) {
-        selectedTabLiveData.postValue(tab)
     }
 
     fun refresh() {

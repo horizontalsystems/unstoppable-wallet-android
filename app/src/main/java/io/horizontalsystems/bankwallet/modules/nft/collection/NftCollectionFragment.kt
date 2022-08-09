@@ -4,87 +4,65 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.navGraphViewModels
-import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.databinding.FragmentCollectionBinding
-import io.horizontalsystems.bankwallet.modules.nft.collection.assets.NftCollectionAssetsFragment
-import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsFragment
-import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionOverviewFragment
+import io.horizontalsystems.bankwallet.modules.nft.collection.assets.NftCollectionAssetsScreen
+import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsScreen
+import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionOverviewScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
-import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.launch
 
 class NftCollectionFragment : BaseFragment() {
-
-    private var _binding: FragmentCollectionBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCollectionBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuClose -> {
-                    findNavController().popBackStack()
-                    true
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                val uid = activity?.intent?.data?.getQueryParameter("uid")
+                if (uid != null) {
+                    activity?.intent?.data = null
                 }
-                else -> false
-            }
-        }
+                val nftCollectionUid = requireArguments().getString(collectionUidKey, uid ?: "")
 
-        binding.viewPager.adapter = NftCollectionTabsAdapter(this.childFragmentManager, viewLifecycleOwner.lifecycle)
-        binding.viewPager.isUserInputEnabled = false
-
-        val uid = activity?.intent?.data?.getQueryParameter("uid")
-        if (uid != null) {
-            activity?.intent?.data = null
-        }
-
-        val nftCollectionUid = requireArguments().getString(collectionUidKey, uid ?: "")
-        val viewModel by navGraphViewModels<NftCollectionViewModel>(R.id.nftCollectionFragment) {
-            NftCollectionModule.Factory(nftCollectionUid)
-        }
-
-        viewModel.selectedTabLiveData.observe(viewLifecycleOwner) { selectedTab ->
-            binding.viewPager.setCurrentItem(viewModel.tabs.indexOf(selectedTab), false)
-            setTabs(selectedTab, viewModel)
-        }
-
-        binding.tabsCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-    }
-
-    private fun setTabs(selectedTab: NftCollectionModule.Tab, viewModel: NftCollectionViewModel) {
-        val tabItems = viewModel.tabs.map {
-            TabItem(getString(it.titleResId), it == selectedTab, it)
-        }
-        binding.tabsCompose.setContent {
-            ComposeAppTheme {
-                Tabs(tabItems) { item ->
-                    viewModel.onSelect(item)
+                val viewModel by navGraphViewModels<NftCollectionViewModel>(R.id.nftCollectionFragment) {
+                    NftCollectionModule.Factory(nftCollectionUid)
                 }
+
+                NftCollectionScreen(
+                    findNavController(),
+                    viewModel
+                )
             }
         }
     }
@@ -96,17 +74,65 @@ class NftCollectionFragment : BaseFragment() {
     }
 }
 
-class NftCollectionTabsAdapter(fm: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fm, lifecycle) {
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+private fun NftCollectionScreen(navController: NavController, viewModel: NftCollectionViewModel) {
+    ComposeAppTheme {
+        val pagerState = rememberPagerState(initialPage = 0)
+        val coroutineScope = rememberCoroutineScope()
+        val view = LocalView.current
+        val context = LocalContext.current
 
-    override fun getItemCount() = 3
+        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            AppBar(
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    )
+                )
+            )
 
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> NftCollectionOverviewFragment()
-            1 -> NftCollectionAssetsFragment()
-            2 -> NftCollectionEventsFragment()
-            else -> throw IllegalStateException()
+            val tabs = viewModel.tabs
+            val selectedTab = tabs[pagerState.currentPage]
+            val tabItems = tabs.map {
+                TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+            }
+            Tabs(tabItems, onClick = {
+                coroutineScope.launch {
+                    pagerState.scrollToPage(it.ordinal)
+                }
+            })
+
+            HorizontalPager(
+                count = tabs.size,
+                state = pagerState,
+                userScrollEnabled = false
+            ) { page ->
+                when (tabs[page]) {
+                    NftCollectionModule.Tab.Overview -> {
+                        NftCollectionOverviewScreen(
+                            viewModel,
+                            onCopyText = {
+                                TextHelper.copyText(it)
+                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                            },
+                            onOpenUrl = {
+                                LinkHelper.openLinkInAppBrowser(context, it)
+                            }
+                        )
+                    }
+                    NftCollectionModule.Tab.Items -> {
+                        NftCollectionAssetsScreen(navController, viewModel.collectionUid)
+                    }
+                    NftCollectionModule.Tab.Activity -> {
+                        NftCollectionEventsScreen(navController, viewModel.collectionUid)
+                    }
+                }
+            }
         }
     }
-
 }
