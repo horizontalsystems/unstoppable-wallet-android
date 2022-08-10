@@ -15,7 +15,7 @@ class PredefinedBlockchainSettingsProvider(
         val settings = RestoreSettings()
         when (blockchainType) {
             BlockchainType.Zcash -> {
-                settings.birthdayHeight = zcashBirthdayProvider.getNearestBirthdayHeight()
+                settings.birthdayHeight = zcashBirthdayProvider.getLatestCheckpointBlockHeight()
             }
             else -> {}
         }
