@@ -47,7 +47,7 @@ class RestoreSettingsManager(
             RestoreSettingType.BirthdayHeight -> {
                 when (blockchainType) {
                     BlockchainType.Zcash -> {
-                        return zcashBirthdayProvider.getNearestBirthdayHeight().toString()
+                        return zcashBirthdayProvider.getLatestCheckpointBlockHeight().toString()
                     }
                     else -> null
                 }
@@ -76,8 +76,8 @@ enum class RestoreSettingType {
 class RestoreSettings {
     val values = mutableMapOf<RestoreSettingType, String>()
 
-    var birthdayHeight: Int?
-        get() = values[RestoreSettingType.BirthdayHeight]?.toIntOrNull()
+    var birthdayHeight: Long?
+        get() = values[RestoreSettingType.BirthdayHeight]?.toLongOrNull()
         set(value) {
             values[RestoreSettingType.BirthdayHeight] = value?.toString() ?: ""
         }
