@@ -40,7 +40,7 @@ $ git branch version/0.1
 
 ### 6. Build apk file
 
-* Build apk file via Docker.
+#### 6.1 Build apk file via Docker.
 
 You will find a bash script located at `[Wallet-Project-Path]/docker/build-apk.sh`
 1. Create and go to temporary folder for APK output
@@ -58,6 +58,17 @@ Example:
 ./build-apk.sh 0.18.0 ~/Documents/Keystore/Apk_HorSys/horsys Keystore_Psw
 ```
 
+#### 6.2 Verify apk file is reproducible from source code
+
+Run command:
+
+```
+./test.sh [APK-FILE-NAME]
+```
+Where:<br>
+`test.sh` bash script located at `[Wallet-Project-Path]/docker`<br>
+APK-FILE-NAME: Name of the apk file<br>
+
 ### 7. Upload Build to Google Play
 
 * Upload apk to `Google Play Console`.
@@ -65,3 +76,7 @@ Example:
 ### 8. Create Release in GitHub Repository
 
 * Create new `Release`, add changelog and upload apk file.
+
+### 9. Make sure Unstoppable Wallet is 'Reproducible' in [WalletScrutiny](https://walletscrutiny.com/android/io.horizontalsystems.bankwallet/)
+
+* After apk is uploaded to Google Play make sure that new version of Unstoppable Wallet is 'Reproducible' in WalletScrutiny.
