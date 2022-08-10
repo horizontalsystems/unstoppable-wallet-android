@@ -41,6 +41,7 @@ class CoinTreasuriesViewModel(
                     is DataState.Error -> {
                         viewStateLiveData.postValue(ViewState.Error(state.error))
                     }
+                    DataState.Loading -> {}
                 }
             }, {
                 viewStateLiveData.postValue(ViewState.Error(it))

@@ -162,6 +162,7 @@ class OneInchSwapService(
             is OneInchTradeService.State.NotReady -> {
                 allErrors.addAll(state.errors)
             }
+            is OneInchTradeService.State.Ready -> {}
         }
 
         when (val state = allowanceService.state) {
@@ -178,6 +179,7 @@ class OneInchSwapService(
             is SwapAllowanceService.State.NotReady -> {
                 allErrors.add(state.error)
             }
+            null -> {}
         }
 
         tradeService.amountFrom?.let { amountFrom ->

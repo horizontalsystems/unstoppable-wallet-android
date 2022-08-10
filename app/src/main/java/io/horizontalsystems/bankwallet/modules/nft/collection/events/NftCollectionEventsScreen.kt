@@ -135,6 +135,7 @@ fun NftEvents(
                 onDismiss = { viewModel.onDismissEventTypeDialog() }
             )
         }
+        SelectorDialogState.Closed -> {}
     }
 }
 

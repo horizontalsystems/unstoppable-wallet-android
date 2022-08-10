@@ -120,7 +120,7 @@ private fun PlatformScreen(
             ) {
                 Crossfade(viewModel.viewState) { state ->
                     when (state) {
-                        is ViewState.Loading -> {
+                        ViewState.Loading -> {
                             Loading()
                         }
                         is ViewState.Error -> {
@@ -129,7 +129,7 @@ private fun PlatformScreen(
                                 viewModel::onErrorClick
                             )
                         }
-                        is ViewState.Success -> {
+                        ViewState.Success -> {
                             viewModel.viewItems.let { viewItems ->
 
                                 CoinList(

@@ -114,7 +114,7 @@ class MetricsPageFragment : BaseFragment() {
             ) {
                 Crossfade(viewState) { viewState ->
                     when (viewState) {
-                        is ViewState.Loading -> {
+                        ViewState.Loading -> {
                             Loading()
                         }
                         is ViewState.Error -> {
@@ -157,6 +157,7 @@ class MetricsPageFragment : BaseFragment() {
                                 }
                             }
                         }
+                        null -> {}
                     }
                 }
             }

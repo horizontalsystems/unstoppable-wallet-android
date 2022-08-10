@@ -109,13 +109,13 @@ fun CategoryScreen(
             ) {
                 Crossfade(viewItemState) { state ->
                     when (state) {
-                        is ViewState.Loading -> {
+                        ViewState.Loading -> {
                             Loading()
                         }
                         is ViewState.Error -> {
                             ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
-                        is ViewState.Success -> {
+                        ViewState.Success -> {
                             viewItems?.let {
                                 val header by viewModel.headerLiveData.observeAsState()
                                 val menu by viewModel.menuLiveData.observeAsState()
@@ -182,6 +182,8 @@ fun CategoryScreen(
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
+            SelectorDialogState.Closed,
+            null -> {}
         }
     }
 }

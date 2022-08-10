@@ -50,13 +50,13 @@ fun MarketOverviewScreen(
     ) {
         Crossfade(viewState) { viewState ->
             when (viewState) {
-                is ViewState.Loading -> {
+                ViewState.Loading -> {
                     Loading()
                 }
                 is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
-                is ViewState.Success -> {
+                ViewState.Success -> {
                     viewItem?.let { viewItem ->
                         Column(
                             modifier = Modifier.verticalScroll(scrollState)
@@ -135,6 +135,7 @@ fun MarketOverviewScreen(
                         }
                     }
                 }
+                null -> {}
             }
         }
     }

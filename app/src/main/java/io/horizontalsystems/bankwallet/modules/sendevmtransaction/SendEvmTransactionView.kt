@@ -227,6 +227,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
                 listPosition
             )
             is ViewItem.Warning -> (holder as? WarningViewHolder)?.bind(item)
+            null -> {}
         }
     }
 

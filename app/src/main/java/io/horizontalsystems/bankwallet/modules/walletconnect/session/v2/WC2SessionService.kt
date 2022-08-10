@@ -145,6 +145,8 @@ class WC2SessionService(
                     is WC2Service.Event.Error -> {
                         state = State.Invalid(event.error)
                     }
+                    WC2Service.Event.Default,
+                    WC2Service.Event.Ready -> {}
                 }
             }
             .let {

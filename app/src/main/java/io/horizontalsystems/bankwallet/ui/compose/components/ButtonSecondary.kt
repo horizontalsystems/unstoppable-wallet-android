@@ -3,14 +3,11 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -185,9 +181,6 @@ fun ButtonSecondary(
         border = border,
         onClick = onClick,
         enabled = enabled,
-        role = Role.Button,
-        interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple()
     ) {
         ProvideTextStyle(
             value = ComposeAppTheme.typography.subhead1
@@ -204,14 +197,6 @@ fun ButtonSecondary(
                 content = content
             )
         }
-    }
-}
-
-private fun truncateIfNeeded(title: String, characterCount: Int): String {
-    return if (title.length > characterCount * 2) {
-        "${title.take(characterCount)}...${title.takeLast(characterCount)}"
-    } else {
-        title
     }
 }
 

@@ -89,6 +89,7 @@ fun CoinTweetsScreen(
                         ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                     }
                 }
+                null -> {}
             }
         }
     }

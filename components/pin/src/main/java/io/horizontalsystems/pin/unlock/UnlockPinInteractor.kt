@@ -52,6 +52,7 @@ class UnlockPinInteractor(
         val state = lockoutManager.currentState
         when (state) {
             is LockoutState.Locked -> timer.schedule(state.until)
+            is LockoutState.Unlocked -> {}
         }
 
         delegate?.updateLockoutState(state)

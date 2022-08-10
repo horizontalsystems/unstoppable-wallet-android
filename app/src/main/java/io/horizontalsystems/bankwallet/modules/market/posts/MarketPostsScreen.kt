@@ -39,7 +39,7 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
     ) {
         Crossfade(viewState) { viewState ->
             when (viewState) {
-                is ViewState.Loading -> {
+                ViewState.Loading -> {
                     Loading()
                 }
                 is ViewState.Error -> {
@@ -63,6 +63,7 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
                         }
                     }
                 }
+                null -> {}
             }
         }
     }

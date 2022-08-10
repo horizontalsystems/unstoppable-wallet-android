@@ -53,6 +53,8 @@ class WalletConnectListService(private val sessionManager: WC1SessionManager) {
 
                 clearSessionKillManager()
             }
+            WC1SessionKillManager.State.NotConnected,
+            WC1SessionKillManager.State.Processing -> {}
         }
 
         sessionKillingStateObservable.onNext(state)

@@ -124,13 +124,13 @@ fun TopCoinsScreen(
             ) {
                 Crossfade(viewState) { state ->
                     when (state) {
-                        is ViewState.Loading -> {
+                        ViewState.Loading -> {
                             Loading()
                         }
                         is ViewState.Error -> {
                             ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
-                        is ViewState.Success -> {
+                        ViewState.Success -> {
                             viewItems?.let {
                                 CoinList(
                                     items = it,
@@ -167,6 +167,7 @@ fun TopCoinsScreen(
                                 }
                             }
                         }
+                        null -> {}
                     }
                 }
             }
@@ -184,6 +185,8 @@ fun TopCoinsScreen(
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
+            SelectorDialogState.Closed,
+            null -> {}
         }
     }
 }
