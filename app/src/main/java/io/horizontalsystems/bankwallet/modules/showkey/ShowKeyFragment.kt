@@ -79,7 +79,7 @@ class ShowKeyFragment : BaseFragment() {
             title = getString(R.string.ShowKey_PrivateKeyCopyWarning_Title),
             warningTitle = getString(R.string.ShowKey_PrivateKeyCopyWarning_Subtitle),
             warningText = getString(R.string.ShowKey_PrivateKeyCopyWarning_Text),
-            actionButtonTitle = getString(R.string.Alert_Ok),
+            actionButtonTitle = getString(R.string.Button_Ok),
             transparentButtonTitle = getString(R.string.ShowKey_PrivateKeyCopyWarning_Proceed),
             fragmentManager = childFragmentManager,
             listener = object : ConfirmationDialog.Listener {
