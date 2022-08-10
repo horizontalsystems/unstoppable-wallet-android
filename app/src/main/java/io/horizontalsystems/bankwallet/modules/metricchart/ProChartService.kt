@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
@@ -7,14 +8,13 @@ import io.horizontalsystems.bankwallet.modules.profeatures.ProNft
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 
 class ProChartService(
     override val currencyManager: ICurrencyManager,
     private val proFeaturesAuthorizationManager: ProFeaturesAuthorizationManager,
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val coinUid: String,
     private val chartType: ProChartModule.ChartType
 ) : AbstractChartService() {

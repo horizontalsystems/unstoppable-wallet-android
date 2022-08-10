@@ -1,18 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.market.topplatforms
 
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.TopPlatform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 
 class TopPlatformsRepository(
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val currencyManager: ICurrencyManager
 ) {
     private var itemsCache: List<TopPlatform>? = null

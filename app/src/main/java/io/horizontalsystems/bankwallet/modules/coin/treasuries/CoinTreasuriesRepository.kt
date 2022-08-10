@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.coin.treasuries
 
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesModule.TreasuryTypeFilter
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinTreasury
 import io.horizontalsystems.marketkit.models.CoinTreasury.TreasuryType
 import io.reactivex.Single
 
 class CoinTreasuriesRepository(
-    private val marketKit: MarketKit
+    private val marketKit: MarketKitWrapper
 ) {
     private var cache: List<CoinTreasury> = listOf()
 

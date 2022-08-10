@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection.assets
 
 import cash.z.ecc.android.sdk.ext.collectWith
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.NftAsset
 import kotlinx.coroutines.*
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class NftCollectionAssetsService(
     private val collectionUid: String,
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val nftManager: NftManager,
     private val xRateRepository: BalanceXRateRepository
 ) {

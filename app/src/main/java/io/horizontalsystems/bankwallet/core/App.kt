@@ -51,7 +51,6 @@ import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.pin.PinComponent
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
@@ -106,7 +105,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var wc2Manager: WC2Manager
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
-        lateinit var marketKit: MarketKit
+        lateinit var marketKit: MarketKitWrapper
         lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
@@ -143,10 +142,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val appConfig = AppConfigProvider()
         appConfigProvider = appConfig
 
-        marketKit = MarketKit.getInstance(
-            this,
-            appConfig.marketApiBaseUrl,
-            appConfig.marketApiKey,
+        marketKit = MarketKitWrapper(
+            context = this,
+            hsApiBaseUrl = appConfig.marketApiBaseUrl,
+            hsApiKey = appConfig.marketApiKey,
             cryptoCompareApiKey = appConfig.cryptoCompareApiKey,
             defiYieldApiKey = appConfig.defiyieldProviderApiKey
         )

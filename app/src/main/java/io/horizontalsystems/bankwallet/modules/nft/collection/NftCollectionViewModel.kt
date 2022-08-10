@@ -11,6 +11,7 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -25,7 +26,6 @@ import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -35,7 +35,7 @@ class NftCollectionViewModel(
     private val service: NftCollectionService,
     private val numberFormatter: IAppNumberFormatter,
     xRateService: XRateService,
-    marketKit: MarketKit
+    marketKit: MarketKitWrapper
 ) : ViewModel() {
 
     private val baseToken = marketKit.token(TokenQuery(BlockchainType.Ethereum, TokenType.Native))!!

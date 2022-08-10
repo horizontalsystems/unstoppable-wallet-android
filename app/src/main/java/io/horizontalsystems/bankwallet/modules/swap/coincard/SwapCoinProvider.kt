@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.modules.swap.coincard
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Dex
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -16,7 +16,7 @@ class SwapCoinProvider(
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
     private val currencyManager: ICurrencyManager,
-    private val marketKit: MarketKit
+    private val marketKit: MarketKitWrapper
 ) {
 
     private fun getCoinItems(filter: String): List<CoinBalanceItem> {

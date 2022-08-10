@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.market.posts
 
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Post
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketPostService(
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val backgroundManager: BackgroundManager,
 ) : BackgroundManager.Listener {
 

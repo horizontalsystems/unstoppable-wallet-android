@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesMenuService
@@ -11,12 +12,11 @@ import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCo
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.marketkit.MarketKit
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class MarketWidgetRepository(
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val favoritesManager: MarketFavoritesManager,
     private val favoritesMenuService: MarketFavoritesMenuService,
     private val topNftCollectionsRepository: TopNftCollectionsRepository,
