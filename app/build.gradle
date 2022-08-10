@@ -264,7 +264,6 @@ dependencies {
     implementation project(':components:snackbar')
     implementation project(':components:icons')
     implementation project(':components:chartview')
-    implementation project(':components:keystore')
     implementation project(':components:pin')
 
     // Integration with activities
