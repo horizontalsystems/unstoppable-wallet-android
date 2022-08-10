@@ -1,15 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
 import io.reactivex.Single
 
 class MarketFavoritesRepository(
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val manager: MarketFavoritesManager
 ) {
     private var cache: List<MarketItem> = listOf()

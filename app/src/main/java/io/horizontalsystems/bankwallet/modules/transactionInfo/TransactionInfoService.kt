@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
@@ -12,7 +13,6 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.marketkit.MarketKit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -25,7 +25,7 @@ import java.math.BigDecimal
 class TransactionInfoService(
     private val transactionRecord: TransactionRecord,
     private val adapter: ITransactionsAdapter,
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val currencyManager: ICurrencyManager
 ) {
 

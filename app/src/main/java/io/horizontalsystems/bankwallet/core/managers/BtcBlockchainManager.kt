@@ -5,14 +5,13 @@ import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bitcoincore.BitcoinCore
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 class BtcBlockchainManager(
     private val storage: BlockchainSettingsStorage,
-    private val marketKit: MarketKit
+    marketKit: MarketKitWrapper
 ) {
 
     private val restoreModeUpdatedSubject = PublishSubject.create<BlockchainType>()

@@ -1,20 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.managewallets
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class ManageWalletsService(
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val walletManager: IWalletManager,
     accountManager: IAccountManager,
     private val enableCoinService: EnableCoinService

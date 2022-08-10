@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
@@ -8,14 +9,13 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.DefiMarketInfo
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import java.math.BigDecimal
 
 class GlobalMarketRepository(
-    private val marketKit: MarketKit
+    private val marketKit: MarketKitWrapper
 ) {
 
     private var cache: List<DefiMarketInfo> = listOf()

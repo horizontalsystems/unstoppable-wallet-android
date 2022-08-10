@@ -1,15 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.xrate
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.rx2.asFlow
 
 class XRateService(
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val currency: Currency
 ) : ViewModel() {
 

@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.coin.tweets
 
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.LinkType
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -12,7 +12,7 @@ import io.reactivex.subjects.BehaviorSubject
 class CoinTweetsService(
     private val coinUid: String,
     private val twitterProvider: TweetsProvider,
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
 ) {
     private val disposables = CompositeDisposable()
 

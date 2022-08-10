@@ -1,19 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.market.topnftcollections
 
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionItem
 import io.horizontalsystems.bankwallet.modules.nft.nftCollectionItem
-import io.horizontalsystems.marketkit.MarketKit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class TopNftCollectionsRepository(
-    private val marketKit: MarketKit
+    private val marketKit: MarketKitWrapper
 ) {
-    private val maxItemsCount = 1500
     private var itemsCache: List<NftCollectionItem>? = null
 
 

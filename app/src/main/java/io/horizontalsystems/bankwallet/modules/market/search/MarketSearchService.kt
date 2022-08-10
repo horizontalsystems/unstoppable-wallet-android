@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.search
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.CoinItem
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.Data.DiscoveryItems
@@ -11,7 +12,6 @@ import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
@@ -21,7 +21,7 @@ import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 
 class MarketSearchService(
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val marketFavoritesManager: MarketFavoritesManager,
     private val baseCurrency: Currency,
 ) {

@@ -4,12 +4,11 @@ import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.core.customCoinUid
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 
 class WalletStorage(
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val storage: IEnabledWalletStorage
 ) : IWalletStorage {
 

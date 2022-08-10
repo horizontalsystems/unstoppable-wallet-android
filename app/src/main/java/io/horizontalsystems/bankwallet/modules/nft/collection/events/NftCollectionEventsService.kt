@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection.events
 
 import cash.z.ecc.android.sdk.ext.collectWith
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.bankwallet.modules.nft.nftAssetPrice
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.NftAsset
 import io.horizontalsystems.marketkit.models.NftEvent
@@ -17,11 +17,11 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 class NftCollectionEventsService(
-        private val eventListType: NftEventListType,
-        var eventType: NftEvent.EventType,
-        private val marketKit: MarketKit,
-        private val nftManager: NftManager,
-        private val xRateRepository: BalanceXRateRepository
+    private val eventListType: NftEventListType,
+    var eventType: NftEvent.EventType,
+    private val marketKit: MarketKitWrapper,
+    private val nftManager: NftManager,
+    private val xRateRepository: BalanceXRateRepository
 ) {
     var items: Result<List<CollectionEvent>>? = null
     val itemsUpdatedFlow = MutableSharedFlow<Unit>()

@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.market.filters
 
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.priceChangeValue
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.MarketInfo
@@ -18,7 +18,7 @@ import java.math.BigDecimal
 
 
 class MarketFiltersService(
-    private val marketKit: MarketKit,
+    private val marketKit: MarketKitWrapper,
     private val baseCurrency: Currency
 ) : IMarketListFetcher {
 

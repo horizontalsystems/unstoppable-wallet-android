@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection
 
-import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.marketkit.models.NftCollection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 
 class NftCollectionService(
     val collectionUid: String,
-    private val marketKit: MarketKit
+    private val marketKit: MarketKitWrapper
 ) {
     private var fetchingJob: Job? = null
 

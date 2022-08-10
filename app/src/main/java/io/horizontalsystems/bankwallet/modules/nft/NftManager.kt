@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.nft
 
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.bankwallet.modules.nft.asset.nftAssetAttribute
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.NftAsset
 import io.horizontalsystems.marketkit.models.NftCollection
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -15,7 +15,7 @@ import kotlin.math.roundToInt
 
 class NftManager(
     private val nftDao: NftDao,
-    private val marketKit: MarketKit
+    private val marketKit: MarketKitWrapper
 ) {
     suspend fun getCollectionAndAssetsFromCache(accountId: String): Map<NftCollectionRecord, List<NftAssetRecord>> {
         val collections = nftDao.getCollections(accountId)

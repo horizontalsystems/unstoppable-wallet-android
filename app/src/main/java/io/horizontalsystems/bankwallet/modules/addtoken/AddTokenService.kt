@@ -4,9 +4,9 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.customCoinUid
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 
@@ -15,7 +15,7 @@ class AddTokenService(
     private val blockchainServices: List<IAddTokenBlockchainService>,
     private val walletManager: IWalletManager,
     private val accountManager: IAccountManager,
-    private val marketKit: MarketKit
+    private val marketKit: MarketKitWrapper
 ) {
 
     suspend fun getTokens(reference: String): List<TokenInfo> {
