@@ -113,7 +113,7 @@ fun TopNftCollectionsScreen(
             ) {
                 Crossfade(viewModel.viewState) { state ->
                     when (state) {
-                        is ViewState.Loading -> {
+                        ViewState.Loading -> {
                             Loading()
                         }
                         is ViewState.Error -> {
@@ -122,7 +122,7 @@ fun TopNftCollectionsScreen(
                                 viewModel::onErrorClick
                             )
                         }
-                        is ViewState.Success -> {
+                        ViewState.Success -> {
                             Column {
                                 TopNftCollectionsList(
                                     collections = viewModel.viewItems,

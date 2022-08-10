@@ -138,7 +138,8 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             }
                         }
                     }
-                    KeyActionState.None -> Unit
+                    KeyActionState.None,
+                    null -> Unit
                 }
 
                 additionalViewItems.forEach { additionViewItem ->

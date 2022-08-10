@@ -192,6 +192,9 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
                             }
                         }
                     }
+                    is ViewState.Error,
+                    ViewState.Loading,
+                    null -> {}
                 }
             }
         }

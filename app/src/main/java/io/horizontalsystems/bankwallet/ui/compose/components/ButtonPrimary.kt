@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -40,7 +39,6 @@ fun ButtonPrimaryDefault(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ButtonPrimaryTransparent(
     modifier: Modifier = Modifier,
@@ -61,11 +59,6 @@ fun ButtonPrimaryTransparent(
         modifier = modifier,
         color = ComposeAppTheme.colors.transparent,
         contentColor = contentColor,
-        onClick = onClick,
-        enabled = enabled,
-        role = Role.Button,
-        interactionSource = interactionSource,
-        indication = null
     ) {
         ProvideTextStyle(
             value = ComposeAppTheme.typography.headline2
@@ -76,10 +69,22 @@ fun ButtonPrimaryTransparent(
                         minWidth = ButtonPrimaryDefaults.MinWidth,
                         minHeight = ButtonPrimaryDefaults.MinHeight
                     )
-                    .padding(ButtonPrimaryDefaults.ContentPadding),
+                    .padding(ButtonPrimaryDefaults.ContentPadding)
+                    .clickable(
+                        enabled = enabled,
+                        onClick = onClick,
+                        interactionSource = interactionSource,
+                        indication = null
+                    ),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
-                content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+                content = {
+                    Text(
+                        text = title,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             )
         }
     }
@@ -187,9 +192,6 @@ fun ButtonPrimary(
         border = border,
         onClick = onClick,
         enabled = enabled,
-        role = Role.Button,
-        interactionSource = remember { MutableInteractionSource() },
-        indication = rememberRipple()
     ) {
         ProvideTextStyle(
             value = ComposeAppTheme.typography.headline2

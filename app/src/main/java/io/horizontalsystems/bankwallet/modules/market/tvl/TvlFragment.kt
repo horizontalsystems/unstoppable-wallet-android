@@ -111,7 +111,7 @@ class TvlFragment : BaseFragment() {
             ) {
                 Crossfade(viewState) { viewState ->
                     when (viewState) {
-                        is ViewState.Loading -> {
+                        ViewState.Loading -> {
                             Loading()
                         }
                         is ViewState.Error -> {
@@ -170,6 +170,7 @@ class TvlFragment : BaseFragment() {
                                 }
                             }
                         }
+                        null -> {}
                     }
                 }
                 // chain selector dialog
@@ -185,6 +186,7 @@ class TvlFragment : BaseFragment() {
                             onDismiss = tvlViewModel::onChainSelectorDialogDismiss
                         )
                     }
+                    SelectorDialogState.Closed -> {}
                 }
             }
         }

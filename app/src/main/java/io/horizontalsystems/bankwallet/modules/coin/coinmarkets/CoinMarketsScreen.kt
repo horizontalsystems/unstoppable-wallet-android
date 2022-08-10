@@ -44,13 +44,13 @@ fun CoinMarketsScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Crossfade(viewItemState) { viewItemState ->
             when (viewItemState) {
-                is ViewState.Loading -> {
+                ViewState.Loading -> {
                     Loading()
                 }
                 is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                 }
-                is ViewState.Success -> {
+                ViewState.Success -> {
                     viewItems?.let { items ->
                         Column {
                             if (items.isEmpty()) {
@@ -76,6 +76,7 @@ fun CoinMarketsScreen(
                         }
                     }
                 }
+                null -> {}
             }
         }
     }

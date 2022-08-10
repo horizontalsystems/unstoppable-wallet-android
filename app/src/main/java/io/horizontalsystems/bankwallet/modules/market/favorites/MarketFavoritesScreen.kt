@@ -52,7 +52,7 @@ fun MarketFavoritesScreen(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) { viewState ->
             when (viewState) {
-                is ViewState.Loading -> {
+                ViewState.Loading -> {
                     Loading()
                 }
                 is ViewState.Error -> {
@@ -92,6 +92,7 @@ fun MarketFavoritesScreen(
                         }
                     }
                 }
+                null -> {}
             }
         }
     }
@@ -108,6 +109,8 @@ fun MarketFavoritesScreen(
                 { viewModel.onSortingFieldDialogDismiss() }
             )
         }
+        MarketFavoritesModule.SelectorDialogState.Closed,
+        null -> {}
     }
 }
 

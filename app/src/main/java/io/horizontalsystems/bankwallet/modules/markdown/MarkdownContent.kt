@@ -35,10 +35,10 @@ fun MarkdownContent(
                         onRetryClick()
                     }
                 }
-                is ViewState.Loading -> {
+                ViewState.Loading -> {
                     Loading()
                 }
-                is ViewState.Success -> {
+                ViewState.Success -> {
                     AndroidView(
                         modifier = Modifier.weight(1f),
                         factory = { context ->
@@ -71,6 +71,7 @@ fun MarkdownContent(
                         }
                     )
                 }
+                null -> {}
             }
         }
     }

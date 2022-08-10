@@ -105,7 +105,7 @@ private fun CoinInvestmentsScreen(
         ) {
             Crossfade(viewState) { viewState ->
                 when (viewState) {
-                    is ViewState.Loading -> {
+                    ViewState.Loading -> {
                         Loading()
                     }
                     is ViewState.Error -> {
@@ -128,6 +128,7 @@ private fun CoinInvestmentsScreen(
                             }
                         }
                     }
+                    null -> {}
                 }
             }
         }

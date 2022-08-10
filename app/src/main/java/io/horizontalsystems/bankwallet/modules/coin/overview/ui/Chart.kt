@@ -198,6 +198,7 @@ private fun <T> HsChartLinePeriodsAndPoint(
                             )
                         }
                     }
+                    null ->{}
                 }
             }
         }
@@ -293,6 +294,8 @@ fun PriceVolChart(
                             }
                         }
                     }
+                    ViewState.Loading,
+                    null -> {}
                 }
             }
         )

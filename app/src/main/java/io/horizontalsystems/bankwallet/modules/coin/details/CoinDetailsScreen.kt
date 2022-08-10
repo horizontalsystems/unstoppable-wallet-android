@@ -63,7 +63,7 @@ fun CoinDetailsScreen(
     ) {
         Crossfade(viewState) { viewState ->
             when (viewState) {
-                is ViewState.Loading -> {
+                ViewState.Loading -> {
                     Loading()
                 }
                 ViewState.Success -> {
@@ -142,6 +142,7 @@ fun CoinDetailsScreen(
                 is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                 }
+                null -> {}
             }
         }
     }

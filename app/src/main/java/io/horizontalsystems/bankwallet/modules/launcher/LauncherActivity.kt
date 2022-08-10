@@ -17,9 +17,8 @@ class LauncherActivity : AppCompatActivity() {
     private val viewModel by viewModels<LaunchViewModel> { LaunchModule.Factory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         installSplashScreen()
+        super.onCreate(savedInstanceState)
 
         when (viewModel.getPage()) {
             LaunchViewModel.Page.Welcome -> {

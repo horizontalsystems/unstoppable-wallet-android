@@ -66,7 +66,7 @@ fun CoinOverviewScreen(
         content = {
             Crossfade(viewState) { viewState ->
                 when (viewState) {
-                    is ViewState.Loading -> {
+                    ViewState.Loading -> {
                         Loading()
                     }
                     ViewState.Success -> {
@@ -132,6 +132,7 @@ fun CoinOverviewScreen(
                             chartViewModel.refresh()
                         }
                     }
+                    null -> {}
                 }
             }
         },

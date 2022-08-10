@@ -112,7 +112,7 @@ fun TopPlatformsScreen(
                                 viewModel::onErrorClick
                             )
                         }
-                        is ViewState.Success -> {
+                        ViewState.Success -> {
                             Column {
                                 viewModel.viewItems.let { viewItems ->
                                     TopPlatformsList(
@@ -177,6 +177,7 @@ fun TopPlatformsScreen(
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
+            SelectorDialogState.Closed -> {}
         }
     }
 }

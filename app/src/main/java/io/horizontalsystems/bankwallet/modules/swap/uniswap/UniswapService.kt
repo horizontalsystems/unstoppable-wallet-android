@@ -186,6 +186,7 @@ class UniswapService(
             is SwapAllowanceService.State.NotReady -> {
                 allErrors.add(state.error)
             }
+            null -> {}
         }
 
         tradeService.amountFrom?.let { amountFrom ->

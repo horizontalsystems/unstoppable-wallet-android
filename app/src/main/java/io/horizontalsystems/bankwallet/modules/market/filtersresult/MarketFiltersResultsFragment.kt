@@ -103,13 +103,13 @@ private fun SearchResultsScreen(
 
             Crossfade(viewModel.viewState) { state ->
                 when (state) {
-                    is ViewState.Loading -> {
+                    ViewState.Loading -> {
                         Loading()
                     }
                     is ViewState.Error -> {
                         ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                     }
-                    is ViewState.Success -> {
+                    ViewState.Success -> {
                         CoinList(
                             items = viewModel.viewItemsState,
                             scrollToTop = scrollToTopAfterUpdate,
