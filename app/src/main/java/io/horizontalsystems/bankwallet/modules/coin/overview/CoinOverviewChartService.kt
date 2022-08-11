@@ -128,11 +128,17 @@ class CoinOverviewChartService(
 
             if (chartInterval == HsTimePeriod.Day1) {
                 val startTimestamp = lastCoinPrice.timestamp - 24 * 60 * 60
-                val startValue = (lastCoinPrice.value * 100.toBigDecimal()) / (lastCoinPrice.diff + 100.toBigDecimal())
-                val startItem = ChartPoint(startValue.toFloat(), startTimestamp)
+                val diff = lastCoinPrice.diff
+                if (diff == null) {
+                    items.removeIf { it.timestamp < startTimestamp }
+                } else {
+                    items.removeIf { it.timestamp <= startTimestamp }
 
-                items.removeIf { it.timestamp <= startTimestamp }
-                items.add(0, startItem)
+                    val startValue = (lastCoinPrice.value * 100.toBigDecimal()) / (diff + 100.toBigDecimal())
+                    val startItem = ChartPoint(startValue.toFloat(), startTimestamp)
+
+                    items.add(0, startItem)
+                }
             }
         }
 
