@@ -93,8 +93,11 @@ val TokenQuery.protocolType: String?
         else -> null
     }
 
+val TokenQuery.Companion.customCoinPrefix: String
+    get() = "custom-"
+
 val TokenQuery.customCoinUid: String
-    get() = "custom-$id"
+    get() = "${TokenQuery.customCoinPrefix}${id}"
 
 val TokenQuery.isSupported: Boolean
     get() = when (blockchainType) {

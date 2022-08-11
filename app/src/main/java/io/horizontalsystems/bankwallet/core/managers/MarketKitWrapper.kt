@@ -1,9 +1,12 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
+import io.horizontalsystems.bankwallet.core.customCoinPrefix
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Observable
+import io.reactivex.Single
+import java.math.BigDecimal
 
 class MarketKitWrapper(
     context: Context,
@@ -45,7 +48,8 @@ class MarketKitWrapper(
 
     fun advancedMarketInfosSingle(top: Int = 250, currencyCode: String) = marketKit.advancedMarketInfosSingle(top, currencyCode)
 
-    fun marketInfosSingle(coinUids: List<String>, currencyCode: String) = marketKit.marketInfosSingle(coinUids, currencyCode)
+    fun marketInfosSingle(coinUids: List<String>, currencyCode: String): Single<List<MarketInfo>> =
+        marketKit.marketInfosSingle(coinUids.removeCustomCoins(), currencyCode)
 
     fun marketInfosSingle(categoryUid: String, currencyCode: String) = marketKit.marketInfosSingle(categoryUid, currencyCode)
 
@@ -73,22 +77,32 @@ class MarketKitWrapper(
 
     // Coin Prices
 
+    private val String.isCustomCoin: Boolean
+        get() = startsWith(TokenQuery.customCoinPrefix)
+
+    private fun List<String>.removeCustomCoins(): List<String> = filterNot { it.isCustomCoin }
+
     fun refreshCoinPrices(currencyCode: String) = marketKit.refreshCoinPrices(currencyCode)
 
-    fun coinPrice(coinUid: String, currencyCode: String) = marketKit.coinPrice(coinUid, currencyCode)
+    fun coinPrice(coinUid: String, currencyCode: String): CoinPrice? =
+        if (coinUid.isCustomCoin) null else marketKit.coinPrice(coinUid, currencyCode)
 
-    fun coinPriceMap(coinUids: List<String>, currencyCode: String) = marketKit.coinPriceMap(coinUids, currencyCode)
+    fun coinPriceMap(coinUids: List<String>, currencyCode: String): Map<String, CoinPrice> =
+        marketKit.coinPriceMap(coinUids.removeCustomCoins(), currencyCode)
 
-    fun coinPriceObservable(coinUid: String, currencyCode: String) = marketKit.coinPriceObservable(coinUid, currencyCode)
+    fun coinPriceObservable(coinUid: String, currencyCode: String): Observable<CoinPrice> =
+        if (coinUid.isCustomCoin) Observable.never() else marketKit.coinPriceObservable(coinUid, currencyCode)
 
-    fun coinPriceMapObservable(coinUids: List<String>, currencyCode: String) = marketKit.coinPriceMapObservable(coinUids, currencyCode)
+    fun coinPriceMapObservable(coinUids: List<String>, currencyCode: String): Observable<Map<String, CoinPrice>> =
+        marketKit.coinPriceMapObservable(coinUids.removeCustomCoins(), currencyCode)
 
     // Coin Historical Price
 
-    fun coinHistoricalPriceSingle(coinUid: String, currencyCode: String, timestamp: Long) =
-        marketKit.coinHistoricalPriceSingle(coinUid, currencyCode, timestamp)
+    fun coinHistoricalPriceSingle(coinUid: String, currencyCode: String, timestamp: Long): Single<BigDecimal> =
+        if (coinUid.isCustomCoin) Single.never() else marketKit.coinHistoricalPriceSingle(coinUid, currencyCode, timestamp)
 
-    fun coinHistoricalPrice(coinUid: String, currencyCode: String, timestamp: Long) = marketKit.coinHistoricalPrice(coinUid, currencyCode, timestamp)
+    fun coinHistoricalPrice(coinUid: String, currencyCode: String, timestamp: Long) =
+        if (coinUid.isCustomCoin) null else marketKit.coinHistoricalPrice(coinUid, currencyCode, timestamp)
 
     // Posts
 
