@@ -49,7 +49,7 @@ class BalanceXRateRepository(
     }
 
     fun getLatestRates(): Map<String, CoinPrice?> {
-        return coinUids.map { it to null }.toMap() + marketKit.coinPriceMap(coinUids, baseCurrency.code)
+        return coinUids.associateWith { null } + marketKit.coinPriceMap(coinUids, baseCurrency.code)
     }
 
     fun refresh() {
