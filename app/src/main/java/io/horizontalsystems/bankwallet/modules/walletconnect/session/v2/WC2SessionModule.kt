@@ -22,6 +22,7 @@ object WC2SessionModule {
                 App.accountManager,
                 WC2PingService(),
                 App.connectivityManager,
+                App.evmBlockchainManager,
                 sessionTopic,
                 connectionLink,
             )
@@ -78,37 +79,6 @@ data class WCBlockchain(
 
 data class WCAccountData(
     val eip: String,
-    val chain: WCChain,
+    val chain: Chain,
     val address: String?
 )
-
-enum class WCChain(val id: Int) {
-    Ethereum(1),
-    BinanceSmartChain(56),
-    Ropsten(3),
-    Rinkeby(4),
-    Kovan(42),
-    Goerli(5);
-
-    val title: String
-        get() = when (this) {
-            Ethereum -> "Ethereum"
-            BinanceSmartChain -> "Binance Smart Chain"
-            Ropsten -> "Ropsten"
-            Rinkeby -> "Rinkeby"
-            Kovan -> "Kovan"
-            Goerli -> "Goerli"
-        }
-
-    val chain: Chain
-        get() {
-            return when (this) {
-                Ethereum -> Chain.Ethereum
-                BinanceSmartChain -> Chain.BinanceSmartChain
-                Ropsten -> Chain.EthereumRopsten
-                Rinkeby -> Chain.EthereumRinkeby
-                Kovan -> Chain.EthereumKovan
-                Goerli -> Chain.EthereumGoerli
-            }
-        }
-}

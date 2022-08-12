@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.session.v2
 import com.walletconnect.walletconnectv2.client.WalletConnect
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule.PeerMetaItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.*
@@ -19,6 +20,7 @@ class WC2SessionService(
     private val accountManager: IAccountManager,
     private val pingService: WC2PingService,
     private val connectivityManager: ConnectivityManager,
+    private val evmBlockchainManager: EvmBlockchainManager,
     private val topic: String?,
     private val connectionLink: String?
 ) {
@@ -265,7 +267,8 @@ class WC2SessionService(
         return sessionAccountData.mapNotNull { data ->
             wcManager.getEvmKitWrapper(data.chain.id, account)?.let { evmKitWrapper ->
                 val address = evmKitWrapper.evmKit.receiveAddress.eip55
-                WCBlockchain(data.chain.id, data.chain.title, address, true)
+                val chainName = evmBlockchainManager.getBlockchain(data.chain.id)?.name ?: data.chain.name
+                WCBlockchain(data.chain.id, chainName, address, true)
             }
         }
     }
