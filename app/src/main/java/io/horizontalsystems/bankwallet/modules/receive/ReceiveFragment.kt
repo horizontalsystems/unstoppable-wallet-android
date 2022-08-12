@@ -82,12 +82,18 @@ private fun ReceiveScreen(
     val context = LocalContext.current
     val fullCoin = viewModel.wallet.token.fullCoin
     val qrBitmap = TextHelper.getQrCodeBitmap(viewModel.receiveAddress)
-    val addressHint = getAddressHint(viewModel.testNet, viewModel.addressType)
+    val addressHint =
+        getAddressHint(viewModel.watchAccount, viewModel.testNet, viewModel.addressType)
+    val title = if (viewModel.watchAccount) {
+        ResString(R.string.Deposit_Address)
+    } else {
+        ResString(R.string.Deposit_Title, fullCoin.coin.code)
+    }
 
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = ResString(R.string.Deposit_Title, fullCoin.coin.code),
+                title = title,
                 navigationIcon = {
                     CoinImage(
                         iconUrl = fullCoin.coin.iconUrl,
@@ -209,10 +215,11 @@ private fun ReceiveScreen(
 }
 
 @Composable
-private fun getAddressHint(testNet: Boolean, addressType: String?): String {
+private fun getAddressHint(watchAddress: Boolean, testNet: Boolean, addressType: String?): String {
     val addressTypeText = if (testNet) "Testnet" else addressType
 
     val addressHint = when {
+        watchAddress -> stringResource(R.string.Deposit_Address)
         addressType != null -> stringResource(R.string.Deposit_Your_Address) + " ($addressTypeText)"
         else -> stringResource(R.string.Deposit_Your_Address)
     }

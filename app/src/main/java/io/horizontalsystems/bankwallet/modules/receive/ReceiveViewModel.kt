@@ -13,6 +13,7 @@ class ReceiveViewModel(
     val receiveAddress: String
     val addressType: String?
     val testNet: Boolean
+    val watchAccount = wallet.account.isWatchAccount
 
     init {
         val receiveAdapter =

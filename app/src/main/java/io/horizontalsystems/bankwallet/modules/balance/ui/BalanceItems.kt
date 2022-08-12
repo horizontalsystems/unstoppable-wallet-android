@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -7,17 +8,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.*
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
@@ -105,17 +103,13 @@ fun BalanceItems(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            accountViewItem.address?.let { address ->
-                val clipboardManager = LocalClipboardManager.current
-                val view = LocalView.current
-                ButtonSecondaryDefault(
-                    title = address.shorten(),
-                    onClick = {
-                        clipboardManager.setText(AnnotatedString(address))
-                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                    }
+            if (accountViewItem.isWatchAccount) {
+                Image(
+                    painter = painterResource(R.drawable.icon_binocule_24),
+                    contentDescription = "binoculars icon"
                 )
             }
+
             if (accountViewItem.manageCoinsAllowed) {
                 ButtonSecondaryCircle(
                     icon = R.drawable.ic_manage_2,

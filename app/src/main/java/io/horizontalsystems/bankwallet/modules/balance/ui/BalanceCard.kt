@@ -105,13 +105,7 @@ fun BalanceCard(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) {
-                if (viewItem.isWatchAccount) {
-                    val coinUid = viewItem.wallet.coin.uid
-                    val arguments = CoinFragment.prepareParams(coinUid)
-                    navController.slideFromRight(R.id.coinFragment, arguments)
-                } else {
-                    viewModel.onItem(viewItem)
-                }
+                viewModel.onItem(viewItem)
             }
     ) {
         CellMultilineClear {
@@ -219,7 +213,6 @@ fun BalanceCard(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ExpandableContent(
     viewItem: BalanceViewItem,
@@ -265,40 +258,48 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             .height(70.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ButtonPrimaryYellow(
-            modifier = Modifier.weight(1f),
-            title = stringResource(R.string.Balance_Send),
-            onClick = {
-                navController.slideFromBottom(
-                    R.id.sendXFragment,
-                    SendFragment.prepareParams(viewItem.wallet)
-                )
-            },
-            enabled = viewItem.sendEnabled
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        if (viewItem.swapVisible) {
-            ButtonPrimaryCircle(
-                icon = R.drawable.ic_arrow_down_left_24,
-                onClick = onClickReceive,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            ButtonPrimaryCircle(
-                icon = R.drawable.ic_swap_24,
-                onClick = {
-                    navController.slideFromBottom(
-                        R.id.swapFragment,
-                        SwapMainModule.prepareParams(viewItem.wallet.token)
-                    )
-                },
-                enabled = viewItem.swapEnabled
-            )
-        } else {
+        if (viewItem.isWatchAccount) {
             ButtonPrimaryDefault(
                 modifier = Modifier.weight(1f),
-                title = stringResource(R.string.Balance_Receive),
+                title = stringResource(R.string.Balance_Address),
                 onClick = onClickReceive,
             )
+        } else {
+            ButtonPrimaryYellow(
+                modifier = Modifier.weight(1f),
+                title = stringResource(R.string.Balance_Send),
+                onClick = {
+                    navController.slideFromBottom(
+                        R.id.sendXFragment,
+                        SendFragment.prepareParams(viewItem.wallet)
+                    )
+                },
+                enabled = viewItem.sendEnabled
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            if (viewItem.swapVisible) {
+                ButtonPrimaryCircle(
+                    icon = R.drawable.ic_arrow_down_left_24,
+                    onClick = onClickReceive,
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                ButtonPrimaryCircle(
+                    icon = R.drawable.ic_swap_24,
+                    onClick = {
+                        navController.slideFromBottom(
+                            R.id.swapFragment,
+                            SwapMainModule.prepareParams(viewItem.wallet.token)
+                        )
+                    },
+                    enabled = viewItem.swapEnabled
+                )
+            } else {
+                ButtonPrimaryDefault(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.Balance_Receive),
+                    onClick = onClickReceive,
+                )
+            }
         }
         Spacer(modifier = Modifier.width(8.dp))
         ButtonPrimaryCircle(
