@@ -30,7 +30,7 @@ fun WCSessionList(
 ) {
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
-    LazyColumn {
+    LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
         viewModelWc2.sectionItem?.let { section ->
             WCSection(
                 section,

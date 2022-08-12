@@ -322,7 +322,7 @@ private fun RowMultilineSelect(
 }
 
 @Composable
-private fun RowSelect(
+fun RowSelect(
     imageContent: @Composable RowScope.() -> Unit,
     text: String,
     selected: Boolean,
