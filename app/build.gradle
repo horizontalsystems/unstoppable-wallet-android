@@ -227,7 +227,7 @@ dependencies {
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:bb8505c'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:865ed1c'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:511a1e6'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:501cf1e'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:cce84f7'
     implementation 'com.github.horizontalsystems:market-kit-android:68f1004'
