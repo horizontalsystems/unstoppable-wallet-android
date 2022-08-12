@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.reactivex.disposables.CompositeDisposable
 
-class BalanceAccountsViewModel(private val accountManager: IAccountManager) : ViewModel() {
+class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
     private val disposables = CompositeDisposable()
 
     var accountViewItem by mutableStateOf<AccountViewItem?>(null)
@@ -29,13 +29,7 @@ class BalanceAccountsViewModel(private val accountManager: IAccountManager) : Vi
 
     private fun handleAccount(activeAccount: Account?) {
         accountViewItem = activeAccount?.let { account ->
-
-            val address = when (account.type) {
-                is AccountType.Address -> account.type.address
-                else -> null
-            }
-
-            AccountViewItem(address, account.type !is AccountType.Address, account.type is AccountType.Address, account.name, account.id)
+            AccountViewItem(account.type !is AccountType.Address, account.type is AccountType.Address, account.name, account.id)
         }
     }
 
@@ -44,4 +38,4 @@ class BalanceAccountsViewModel(private val accountManager: IAccountManager) : Vi
     }
 }
 
-data class AccountViewItem(val address: String?, val manageCoinsAllowed: Boolean, val isWatchAccount: Boolean, val name: String = "", val id: String)
+data class AccountViewItem(val manageCoinsAllowed: Boolean, val isWatchAccount: Boolean, val name: String = "", val id: String)

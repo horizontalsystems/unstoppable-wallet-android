@@ -113,7 +113,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
                             navController.slideFromRight(R.id.restoreMnemonicFragment)
                         },
-                        ActionViewItem(R.drawable.ic_eye_2_20, R.string.ManageAccounts_WatchAddress) {
+                        ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
                             navController.slideFromRight(R.id.watchAddressFragment)
                         }
                     )
@@ -187,7 +187,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
             }
             if (accountViewItem.isWatchAccount) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_eye_20),
+                    painter = painterResource(id = R.drawable.icon_binocule_20),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey
                 )
