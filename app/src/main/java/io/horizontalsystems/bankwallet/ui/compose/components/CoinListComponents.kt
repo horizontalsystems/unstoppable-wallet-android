@@ -58,7 +58,7 @@ fun CoinList(
 
     LazyColumn(state = listState, userScrollEnabled = userScrollEnabled) {
         preItems.invoke(this)
-        itemsIndexed(items, key = { _, item -> item.coinUid }) { index, item ->
+        itemsIndexed(items, key = { _, item -> item.coinUid }) { _, item ->
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -247,46 +247,6 @@ fun SortMenu(title: TranslatableString, onClick: () -> Unit) {
 @Composable
 fun SortMenu(titleRes: Int, onClick: () -> Unit) {
     SortMenu(TranslatableString.ResString(titleRes), onClick)
-}
-
-@Composable
-@Deprecated("Use Header component")
-fun HeaderWithSorting(
-    sortingTitleRes: Int,
-    topMarketSelect: Select<TopMarket>?,
-    onSelectTopMarket: ((TopMarket) -> Unit)?,
-    marketFieldSelect: Select<MarketField>,
-    onSelectMarketField: (MarketField) -> Unit,
-    onSortMenuClick: () -> Unit,
-) {
-    Column(modifier = Modifier.fillMaxWidth().background(ComposeAppTheme.colors.tyler)) {
-        Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 16.dp)
-                .height(44.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(modifier = Modifier.weight(1f)) {
-                SortMenu(sortingTitleRes) {
-                    onSortMenuClick()
-                }
-            }
-            topMarketSelect?.let {
-                Box(modifier = Modifier.padding(start = 8.dp)) {
-                    ButtonSecondaryToggle(
-                        select = topMarketSelect,
-                        onSelect = onSelectTopMarket ?: {})
-                }
-            }
-
-            Box(modifier = Modifier.padding(start = 8.dp)) {
-                ButtonSecondaryToggle(select = marketFieldSelect, onSelect = onSelectMarketField)
-            }
-        }
-        Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
-    }
 }
 
 @Composable

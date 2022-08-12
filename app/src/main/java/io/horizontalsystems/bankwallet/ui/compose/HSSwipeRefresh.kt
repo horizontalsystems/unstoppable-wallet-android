@@ -19,9 +19,9 @@ fun HSSwipeRefresh(
         state = state,
         onRefresh = onRefresh,
         swipeEnabled = swipeEnabled,
-        indicator = { state, trigger ->
+        indicator = { swipeRefreshState, trigger ->
             SwipeRefreshIndicator(
-                state = state,
+                state = swipeRefreshState,
                 refreshTriggerDistance = trigger,
                 scale = true,
                 backgroundColor = ComposeAppTheme.colors.claude,

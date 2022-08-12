@@ -14,7 +14,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
-import java.math.RoundingMode
 import kotlin.math.max
 import kotlin.math.min
 
@@ -114,7 +113,7 @@ class Eip1559GasPriceService(
 
     @Throws
     private fun validatedGasPriceInfo(gasPrice: GasPrice): GasPriceInfo {
-        val gasPrice = (gasPrice as? GasPrice.Eip1559)
+        val gasPriceEip1559 = (gasPrice as? GasPrice.Eip1559)
             ?: throw FeeSettingsError.InvalidGasPriceType("Expected EIP1559, received Legacy")
 
         val recommendedGasPrice = recommendedGasPrice
@@ -123,7 +122,7 @@ class Eip1559GasPriceService(
 
         if (recommendedGasPrice != null) {
             val recommendedBaseFee = recommendedGasPrice.maxFeePerGas - recommendedGasPrice.maxPriorityFeePerGas
-            val tip = min(gasPrice.maxFeePerGas - recommendedBaseFee, gasPrice.maxPriorityFeePerGas)
+            val tip = min(gasPriceEip1559.maxFeePerGas - recommendedBaseFee, gasPriceEip1559.maxPriorityFeePerGas)
 
             when {
                 tip < 0 -> {
@@ -138,7 +137,7 @@ class Eip1559GasPriceService(
             }
         }
 
-        return GasPriceInfo(gasPrice, warnings, errors)
+        return GasPriceInfo(gasPriceEip1559, warnings, errors)
     }
 
     private fun syncRecommended() {

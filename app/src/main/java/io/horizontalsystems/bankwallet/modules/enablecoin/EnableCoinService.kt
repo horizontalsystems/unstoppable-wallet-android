@@ -8,7 +8,10 @@ import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
@@ -24,7 +27,7 @@ class EnableCoinService(
 
     init {
         coinTokensService.approveTokensObservable
-            .subscribeIO { handleApproveCoinTokens(it.coin, it.tokens) }
+            .subscribeIO { handleApproveCoinTokens(it.tokens) }
             .let { disposable.add(it) }
 
         coinTokensService.rejectApproveTokensObservable
@@ -48,7 +51,7 @@ class EnableCoinService(
             .let { disposable.add(it) }
     }
 
-    private fun handleApproveCoinTokens(coin: Coin, tokens: List<Token>) {
+    private fun handleApproveCoinTokens(tokens: List<Token>) {
         val configuredTokens = tokens.map { ConfiguredToken(it) }
         enableCoinObservable.onNext(Pair(configuredTokens, RestoreSettings()))
     }

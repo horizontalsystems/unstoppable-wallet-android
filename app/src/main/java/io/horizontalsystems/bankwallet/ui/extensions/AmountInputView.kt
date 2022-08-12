@@ -122,7 +122,8 @@ class AmountInputView @JvmOverloads constructor(
         binding.txtHintInfo.setTextColor(context.getColor(hintTextColor))
 
         binding.secondaryArea.setOnClickListener {
-            if (inputParams.switchEnabled) onTapSecondaryCallback?.invoke() else null
+            if (inputParams.switchEnabled)
+                onTapSecondaryCallback?.invoke()
         }
     }
 

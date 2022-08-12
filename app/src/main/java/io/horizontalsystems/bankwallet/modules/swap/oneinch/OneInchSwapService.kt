@@ -70,8 +70,8 @@ class OneInchSwapService(
     init {
         tradeService.stateObservable
             .subscribeOn(Schedulers.io())
-            .subscribe { state ->
-                onUpdateTrade(state)
+            .subscribe {
+                onUpdateTrade()
             }
             .let { disposables.add(it) }
 
@@ -93,7 +93,7 @@ class OneInchSwapService(
         tradeService.amountFromObservable
             .subscribeOn(Schedulers.io())
             .subscribe {
-                onUpdateAmountFrom(it.orElse(null))
+                onUpdateAmountFrom()
             }
             .let { disposables.add(it) }
 
@@ -129,7 +129,7 @@ class OneInchSwapService(
         pendingAllowanceService.onCleared()
     }
 
-    private fun onUpdateTrade(state: OneInchTradeService.State) {
+    private fun onUpdateTrade() {
         syncState()
     }
 
@@ -143,7 +143,7 @@ class OneInchSwapService(
         balanceTo = token?.let { balance(it) }
     }
 
-    private fun onUpdateAmountFrom(amount: BigDecimal?) {
+    private fun onUpdateAmountFrom() {
         syncState()
     }
 

@@ -35,15 +35,15 @@ class MarketTopCoinsService(
 
     fun setSortingField(sortingField: SortingField) {
         this.sortingField = sortingField
-        sync(false)
+        sync()
     }
 
     fun setTopMarket(topMarket: TopMarket) {
         this.topMarket = topMarket
-        sync(false)
+        sync()
     }
 
-    private fun sync(forceRefresh: Boolean) {
+    private fun sync() {
         disposables.clear()
 
         marketTopMoversRepository
@@ -71,7 +71,7 @@ class MarketTopCoinsService(
     }
 
     fun start() {
-        sync(true)
+        sync()
 
         favoritesManager.dataUpdatedAsync
             .subscribeIO {
@@ -82,7 +82,7 @@ class MarketTopCoinsService(
     }
 
     fun refresh() {
-        sync(true)
+        sync()
     }
 
     fun stop() {

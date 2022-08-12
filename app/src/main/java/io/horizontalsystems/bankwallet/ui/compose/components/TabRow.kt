@@ -105,7 +105,7 @@ fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
                 )
             }
         ) {
-            tabs.forEachIndexed { index, tab ->
+            tabs.forEach { tab ->
                 Tab(
                     modifier = Modifier
                         .fillMaxHeight()

@@ -1,8 +1,10 @@
 package io.horizontalsystems.core.helpers
 
 import android.content.Context
+import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.View
 import io.horizontalsystems.core.R
 import io.horizontalsystems.snackbar.CustomSnackbar
@@ -48,7 +50,14 @@ object HudHelper {
     }
 
     fun vibrate(context: Context) {
-        val vibratorService = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+        val vibratorService = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager =
+                context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
+            vibratorManager?.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+        }
 
         val vibrationEffect = VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
 
