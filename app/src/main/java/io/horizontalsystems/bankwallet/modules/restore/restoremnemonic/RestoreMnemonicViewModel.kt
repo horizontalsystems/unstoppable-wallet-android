@@ -14,7 +14,9 @@ import io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.RestoreMn
 import io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.RestoreMnemonicModule.WordItem
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.IThirdKeyboard
+import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.hdwalletkit.WordList
 
 class RestoreMnemonicViewModel(
     accountFactory: IAccountFactory,
@@ -63,7 +65,30 @@ class RestoreMnemonicViewModel(
             it.range
         }
 
-        uiState = uiState.copy(words = allItems, invalidWords = invalidItems, invalidWordRanges = invalidWordRanges)
+        val wordItemWithCursor = allItems.find {
+            it.range.contains(cursorPosition - 1)
+        }
+
+        val wordSuggestions = wordItemWithCursor?.let {
+            RestoreMnemonicModule.WordSuggestions(it, fetchSuggestions(it.word))
+        }
+
+        uiState = uiState.copy(words = allItems, invalidWords = invalidItems, invalidWordRanges = invalidWordRanges, wordSuggestions = wordSuggestions)
+    }
+
+    private fun fetchSuggestions(input: String): MutableList<String> {
+        val suggestions = mutableListOf<String>()
+        for (lang in Language.values()) {
+            val words = WordList.getWords(lang)
+
+            for (word in words) {
+                if (word.startsWith(input)) {
+                    suggestions.add(word)
+                }
+            }
+        }
+
+        return suggestions
     }
 
     fun onEnterName(name: String) {

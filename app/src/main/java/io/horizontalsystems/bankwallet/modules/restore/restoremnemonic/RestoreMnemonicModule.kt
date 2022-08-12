@@ -25,10 +25,12 @@ object RestoreMnemonicModule {
         val invalidWords: List<WordItem> = listOf(),
         val invalidWordRanges: List<IntRange> = listOf(),
         val error: String? = null,
-        val accountType: AccountType? = null
+        val accountType: AccountType? = null,
+        val wordSuggestions: WordSuggestions? = null,
     )
 
     data class WordItem(val word: String, val range: IntRange)
     data class State(val allItems: List<WordItem>, val invalidItems: List<WordItem>)
+    data class WordSuggestions(val wordItem: WordItem, val options: List<String>)
 
 }

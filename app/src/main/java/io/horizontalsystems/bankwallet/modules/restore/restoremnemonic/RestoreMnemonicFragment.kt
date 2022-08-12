@@ -9,6 +9,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -22,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
@@ -30,6 +33,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -48,9 +52,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment
-import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.*
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -86,6 +88,8 @@ fun RestoreMnemonicScreen(navController: NavController) {
     }
     val focusRequester = remember { FocusRequester() }
     var showCustomKeyboardDialog by remember { mutableStateOf(false) }
+    var isMnemonicPhraseInputFocused by remember { mutableStateOf(false) }
+    val keyboardState by observeKeyboardState()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -111,83 +115,111 @@ fun RestoreMnemonicScreen(navController: NavController) {
             )
         )
 
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            Spacer(Modifier.height(12.dp))
-            HeaderText(text = stringResource(R.string.Restore_Key))
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
-                    .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(8.dp))
-                    .background(ComposeAppTheme.colors.lawrence),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                val style = SpanStyle(
-                    color = ComposeAppTheme.colors.lucian,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    letterSpacing = 0.sp
-                )
-
-                BasicTextField(
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                Spacer(Modifier.height(12.dp))
+                HeaderText(text = stringResource(R.string.Restore_Key))
+                Row(
                     modifier = Modifier
-                        .focusRequester(focusRequester)
-                        .defaultMinSize(minHeight = 93.dp)
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .weight(1f),
-                    enabled = true,
-                    value = textState,
-                    onValueChange = {
-                        textState = it
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(8.dp))
+                        .background(ComposeAppTheme.colors.lawrence),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
-                        viewModel.onEnterMnemonicPhrase(it.text, it.selection.max)
+                    val style = SpanStyle(
+                        color = ComposeAppTheme.colors.lucian,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        letterSpacing = 0.sp
+                    )
 
-                        showCustomKeyboardDialog = !viewModel.isThirdPartyKeyboardAllowed && Utils.isUsingCustomKeyboard(context)
-                    },
-                    textStyle = ColoredTextStyle(
-                        color = ComposeAppTheme.colors.leah,
-                        textStyle = ComposeAppTheme.typography.body
-                    ),
-                    maxLines = 6,
-                    cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
-                    visualTransformation = {
-                        try {
-                            val annotatedString = buildAnnotatedString {
-                                append(it.text)
-
-                                uiState.invalidWordRanges.forEach { range ->
-                                    addStyle(style = style, range.first, range.last + 1)
-                                }
+                    BasicTextField(
+                        modifier = Modifier
+                            .onFocusChanged {
+                                isMnemonicPhraseInputFocused = it.isFocused
                             }
-                            TransformedText(annotatedString, OffsetMapping.Identity)
-                        } catch (error: Throwable) {
-                            error.printStackTrace()
-                            TransformedText(it, OffsetMapping.Identity)
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions.Default,
+                            .focusRequester(focusRequester)
+                            .defaultMinSize(minHeight = 93.dp)
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                            .weight(1f),
+                        enabled = true,
+                        value = textState,
+                        onValueChange = {
+                            textState = it
+
+                            viewModel.onEnterMnemonicPhrase(it.text, it.selection.max)
+
+                            showCustomKeyboardDialog = !viewModel.isThirdPartyKeyboardAllowed && Utils.isUsingCustomKeyboard(context)
+                        },
+                        textStyle = ColoredTextStyle(
+                            color = ComposeAppTheme.colors.leah,
+                            textStyle = ComposeAppTheme.typography.body
+                        ),
+                        maxLines = 6,
+                        cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                        visualTransformation = {
+                            try {
+                                val annotatedString = buildAnnotatedString {
+                                    append(it.text)
+
+                                    uiState.invalidWordRanges.forEach { range ->
+                                        addStyle(style = style, range.first, range.last + 1)
+                                    }
+                                }
+                                TransformedText(annotatedString, OffsetMapping.Identity)
+                            } catch (error: Throwable) {
+                                error.printStackTrace()
+                                TransformedText(it, OffsetMapping.Identity)
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    )
+                }
+                InfoText(text = stringResource(R.string.Restore_Mnemonic_Description))
+                Spacer(Modifier.height(24.dp))
+                Passphrase(
+                    enabled = uiState.passphraseEnabled,
+                    error = uiState.passphraseError,
+                    onEnabled = viewModel::onEnablePassphrase,
+                    onEnterPassphrase = viewModel::onEnterPassphrase
                 )
+                Spacer(Modifier.height(24.dp))
+                HeaderText(text = stringResource(R.string.Restore_Name))
+                FormsInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    hint = uiState.defaultName,
+                    singleLine = true,
+                    pasteEnabled = false,
+                    onValueChange = viewModel::onEnterName
+                )
+                Spacer(Modifier.height(32.dp))
             }
-            InfoText(text = stringResource(R.string.Restore_Mnemonic_Description))
-            Spacer(Modifier.height(24.dp))
-            Passphrase(
-                enabled = uiState.passphraseEnabled,
-                error = uiState.passphraseError,
-                onEnabled = viewModel::onEnablePassphrase,
-                onEnterPassphrase = viewModel::onEnterPassphrase
-            )
-            Spacer(Modifier.height(24.dp))
-            HeaderText(text = stringResource(R.string.Restore_Name))
-            FormsInput(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                hint = uiState.defaultName,
-                singleLine = true,
-                pasteEnabled = false,
-                onValueChange = viewModel::onEnterName
-            )
-            Spacer(Modifier.height(32.dp))
+
+            if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
+                SuggestionsBar(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    wordSuggestions = uiState.wordSuggestions
+                ) { wordItem, suggestion ->
+                    HudHelper.vibrate(context)
+
+                    val cursorIndex = wordItem.range.first + suggestion.length + 1
+                    var text = textState.text.replaceRange(wordItem.range, suggestion)
+
+                    if (text.length < cursorIndex) {
+                        text = "$text "
+                    }
+
+                    textState = TextFieldValue(
+                        text = text,
+                        selection = TextRange(cursorIndex)
+                    )
+
+                    viewModel.onEnterMnemonicPhrase(text, cursorIndex)
+                }
+            }
         }
     }
 
@@ -226,6 +258,37 @@ fun RestoreMnemonicScreen(navController: NavController) {
         )
     }
 
+}
+
+@Composable
+private fun SuggestionsBar(
+    modifier: Modifier = Modifier,
+    wordSuggestions: RestoreMnemonicModule.WordSuggestions?,
+    onClick: (RestoreMnemonicModule.WordItem, String) -> Unit
+) {
+    Box(modifier = modifier) {
+        BoxTyler44(borderTop = true) {
+            LazyRow(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(start = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                wordSuggestions?.let { wordSuggestions ->
+                    items(wordSuggestions.options) { suggestion ->
+                        val wordItem = wordSuggestions.wordItem
+                        ButtonSecondary(
+                            onClick = {
+                                onClick.invoke(wordItem, suggestion)
+                            }
+                        ) {
+                            subhead1_leah(text = suggestion)
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable
