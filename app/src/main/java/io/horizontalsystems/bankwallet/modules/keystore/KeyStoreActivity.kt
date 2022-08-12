@@ -2,9 +2,11 @@ package io.horizontalsystems.bankwallet.modules.keystore
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -56,8 +58,13 @@ class KeyStoreActivity : BaseActivity() {
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(getString(R.string.OSPin_Confirm_Title))
             .setDescription(getString(R.string.OSPin_Prompt_Desciption))
-            .setDeviceCredentialAllowed(true)
-            .build()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            promptInfo.setAllowedAuthenticators(BIOMETRIC_STRONG)
+        } else {
+            @Suppress("DEPRECATION")
+            promptInfo.setDeviceCredentialAllowed(true)
+        }
 
         val executor = ContextCompat.getMainExecutor(this)
 
@@ -80,7 +87,7 @@ class KeyStoreActivity : BaseActivity() {
                 }
             })
 
-        biometricPrompt.authenticate(promptInfo)
+        biometricPrompt.authenticate(promptInfo.build())
     }
 
     companion object {

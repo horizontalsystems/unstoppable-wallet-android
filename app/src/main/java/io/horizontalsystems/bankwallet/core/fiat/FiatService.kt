@@ -53,7 +53,7 @@ class FiatService(
         switchService.amountTypeObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    syncAmountType(it)
+                    syncAmountType()
                 }
                 .let { disposables.add(it) }
     }
@@ -115,7 +115,7 @@ class FiatService(
         }
     }
 
-    private fun syncAmountType(amountType: AmountType) {
+    private fun syncAmountType() {
         fullAmountInfoSubject.onNext(Optional.ofNullable(fullAmountInfo()))
     }
 

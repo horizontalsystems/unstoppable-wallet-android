@@ -70,8 +70,8 @@ class UniswapService(
     init {
         tradeService.stateObservable
                 .subscribeOn(Schedulers.io())
-                .subscribe { state ->
-                    onUpdateTrade(state)
+                .subscribe {
+                    onUpdateTrade()
                 }
                 .let { disposables.add(it) }
 
@@ -93,7 +93,7 @@ class UniswapService(
         tradeService.amountFromObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    onUpdateAmountFrom(it.orElse(null))
+                    onUpdateAmountFrom()
                 }
                 .let { disposables.add(it) }
 
@@ -129,7 +129,7 @@ class UniswapService(
         pendingAllowanceService.onCleared()
     }
 
-    private fun onUpdateTrade(state: UniswapTradeService.State) {
+    private fun onUpdateTrade() {
         syncState()
     }
 
@@ -143,7 +143,7 @@ class UniswapService(
         balanceTo = token?.let { balance(it) }
     }
 
-    private fun onUpdateAmountFrom(amount: BigDecimal?) {
+    private fun onUpdateAmountFrom() {
         syncState()
     }
 

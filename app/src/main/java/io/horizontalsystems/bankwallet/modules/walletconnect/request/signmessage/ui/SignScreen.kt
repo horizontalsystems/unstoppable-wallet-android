@@ -107,11 +107,11 @@ private fun TypedMessageContent(
             navController
         )
     }
-    dAppName?.let { dAppName ->
+    dAppName?.let { name ->
         composableItems.add {
             TitleTypedValueCell(
                 stringResource(R.string.WalletConnect_SignMessageRequest_dApp),
-                dAppName
+                name
             )
         }
     }

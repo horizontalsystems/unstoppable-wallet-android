@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -134,7 +133,6 @@ fun BalanceItems(
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Wallets(
     balanceViewItems: List<BalanceViewItem>,

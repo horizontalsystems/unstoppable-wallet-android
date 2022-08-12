@@ -7,14 +7,11 @@ import android.view.inputmethod.InputMethodManager
 
 object KeyboardHelper {
 
-    private fun showKeyboard(context: Context) {
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-        imm?.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
-    }
-
     fun showKeyboard(context: Context, view: View?) {
-        view?.requestFocus()
-        showKeyboard(context)
+        view ?: return
+        view.requestFocus()
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
     }
 
     fun showKeyboardDelayed(context: Context, view: View?, delay: Long) {

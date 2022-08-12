@@ -23,7 +23,7 @@ class TransactionViewItemFactory(
     private val cache = mutableMapOf<String, Map<Long, TransactionViewItem>>()
 
     fun convertToViewItemCached(transactionItem: TransactionItem): TransactionViewItem {
-        cache.get(transactionItem.record.uid)?.get(transactionItem.createdAt)?.let {
+        cache[transactionItem.record.uid]?.get(transactionItem.createdAt)?.let {
             return it
         }
 
@@ -46,18 +46,18 @@ class TransactionViewItemFactory(
         val lastBlockTimestamp = transactionItem.lastBlockInfo?.timestamp
 
         return when (record) {
-            is ApproveTransactionRecord -> createViewItemFromApproveTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
-            is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
-            is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is ApproveTransactionRecord -> createViewItemFromApproveTransactionRecord(record, transactionItem.currencyValue, progress, icon)
+            is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(record, transactionItem.currencyValue, progress, icon)
+            is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, icon)
             is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
-            is ContractCallTransactionRecord -> createViewItemFromContractCallTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
-            is ExternalContractCallTransactionRecord -> createViewItemFromExternalContractCallTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
-            is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
-            is EvmIncomingTransactionRecord -> createViewItemFromEvmIncomingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
-            is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
-            is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
-            is UnknownSwapTransactionRecord -> createViewItemFromUnknownSwapTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is ContractCallTransactionRecord -> createViewItemFromContractCallTransactionRecord(record, transactionItem.currencyValue, progress, icon)
+            is ExternalContractCallTransactionRecord -> createViewItemFromExternalContractCallTransactionRecord(record, transactionItem.currencyValue, progress, icon)
+            is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, progress, icon)
+            is EvmIncomingTransactionRecord -> createViewItemFromEvmIncomingTransactionRecord(record, transactionItem.currencyValue, progress, icon)
+            is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, icon)
+            is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, progress, icon)
+            is UnknownSwapTransactionRecord -> createViewItemFromUnknownSwapTransactionRecord(record, progress, icon)
             is EvmTransactionRecord -> createViewItemFromEvmTransactionRecord(record, progress, icon)
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
@@ -65,9 +65,7 @@ class TransactionViewItemFactory(
 
     private fun createViewItemFromSwapTransactionRecord(
         record: SwapTransactionRecord,
-        currencyValue: CurrencyValue?,
         progress: Float?,
-        lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = record.valueOut?.let {
@@ -92,9 +90,7 @@ class TransactionViewItemFactory(
 
     private fun createViewItemFromUnknownSwapTransactionRecord(
         record: UnknownSwapTransactionRecord,
-        currencyValue: CurrencyValue?,
         progress: Float?,
-        lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = record.valueOut?.let { getColoredValue(it, ColorName.Remus) }
@@ -132,7 +128,6 @@ class TransactionViewItemFactory(
         record: EvmOutgoingTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
-        lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = if (record.sentToSelf) {
@@ -169,7 +164,6 @@ class TransactionViewItemFactory(
         record: EvmIncomingTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
-        lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = getColoredValue(record.value, ColorName.Remus)
@@ -194,9 +188,7 @@ class TransactionViewItemFactory(
 
     private fun createViewItemFromContractCreationTransactionRecord(
         record: ContractCreationTransactionRecord,
-        currencyValue: CurrencyValue?,
         progress: Float?,
-        lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         return TransactionViewItem(
@@ -215,7 +207,6 @@ class TransactionViewItemFactory(
         record: ContractCallTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
-        lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val (incomingValues, outgoingValues) = record.combined(record.incomingEvents, record.outgoingEvents)
@@ -238,7 +229,6 @@ class TransactionViewItemFactory(
         record: ExternalContractCallTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
-        lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val (incomingValues, outgoingValues) = record.combined(record.incomingEvents, record.outgoingEvents)
@@ -359,7 +349,6 @@ class TransactionViewItemFactory(
         record: BinanceChainOutgoingTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
-        lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = if (record.sentToSelf) {
@@ -389,7 +378,6 @@ class TransactionViewItemFactory(
         record: BinanceChainIncomingTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
-        lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValue = getColoredValue(record.value, ColorName.Remus)
@@ -416,7 +404,6 @@ class TransactionViewItemFactory(
         record: ApproveTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
-        lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
         val primaryValueText: String

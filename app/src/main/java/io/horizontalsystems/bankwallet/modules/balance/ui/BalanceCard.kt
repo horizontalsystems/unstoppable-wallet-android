@@ -281,7 +281,6 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             ButtonPrimaryCircle(
                 icon = R.drawable.ic_arrow_down_left_24,
                 onClick = onClickReceive,
-                enabled = viewItem.receiveEnabled
             )
             Spacer(modifier = Modifier.width(8.dp))
             ButtonPrimaryCircle(
@@ -299,7 +298,6 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.Balance_Receive),
                 onClick = onClickReceive,
-                enabled = viewItem.receiveEnabled
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
@@ -311,7 +309,6 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
 
                 navController.slideFromRight(R.id.coinFragment, arguments)
             },
-            enabled = viewItem.exchangeValue.value != null
         )
     }
 }

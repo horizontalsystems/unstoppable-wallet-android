@@ -3,7 +3,7 @@
 
     <!--Common-->
 
-    <string name="LargeNumberFormat">%s%s</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
 
     <string name="Alert_Cancel">Cancel</string>
     <string name="Alert_Copy">Copy</string>
@@ -513,7 +513,7 @@
 
     <!--Uniswap Info -->
 
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on the %s blockchain. \n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
+    <string name="SwapInfo_Description">This exchange service is powered by %1$s, a decentralized token exchange protocol built on the %2$s blockchain. \n\n%3$s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="SwapInfo_DexRelated">%s Related</string>
     <string name="SwapInfo_AllowanceTitle">Allowance</string>
     <string name="SwapInfo_AllowanceDescription">Token swaps on Unstoppable are powered by decentralized token exchanges i.e. Uniswap, 1inch, PancakeSwap, Quickswap etc. These services are fully automated and facilitate token exchanges in a reliable manner without any means to cheat. \n\nAllowance refers to the amount of token an exchange service has a permission to spend on user\'s behalf. Typically, the allowance amount is set using \'approval\' transaction before a trade. A sufficient allowance is required before a swap action can take place.</string>

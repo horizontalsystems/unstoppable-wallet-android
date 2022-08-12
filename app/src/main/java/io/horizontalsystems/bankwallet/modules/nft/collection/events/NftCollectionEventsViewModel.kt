@@ -51,7 +51,7 @@ class NftCollectionEventsViewModel(
         )
 
     init {
-        service.itemsUpdatedFlow.collectWith(viewModelScope) { result ->
+        service.itemsUpdatedFlow.collectWith(viewModelScope) {
             viewItem = ViewItem(eventTypeSelect, service.items?.getOrNull())
 
             loadingMore = false

@@ -22,15 +22,15 @@ class LanguageManager : ILanguageManager {
         }
 
     override val currentLanguageName: String
-        get() = currentLocale.displayLanguage.capitalize()
+        get() = currentLocale.displayLanguage.replaceFirstChar(Char::uppercase)
 
     override fun getName(language: String): String {
-        return Locale(language).displayLanguage.capitalize()
+        return Locale(language).displayLanguage.replaceFirstChar(Char::uppercase)
     }
 
     override fun getNativeName(language: String): String {
         val locale = Locale(language)
-        return locale.getDisplayLanguage(locale).capitalize()
+        return locale.getDisplayLanguage(locale).replaceFirstChar(Char::uppercase)
     }
 
 }

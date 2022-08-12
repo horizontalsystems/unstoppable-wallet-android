@@ -6,25 +6,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.client.android.DecodeFormatManager
 import com.google.zxing.client.android.DecodeHintManager
 import com.google.zxing.client.android.Intents
-import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import com.journeyapps.barcodescanner.ScanOptions
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.databinding.ActivityQrScannerBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -38,7 +35,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
-class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+class QRScannerActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var binding: ActivityQrScannerBinding
     private var showPasteButton = false
@@ -61,9 +58,7 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = ""
 
-        val oldFlags = window.decorView.systemUiVisibility
-        window.decorView.systemUiVisibility =
-            oldFlags or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        setStatusBarTransparent()
 
         binding.buttonsCompose.setContent {
             ComposeAppTheme {
@@ -190,22 +185,9 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         private const val REQUEST_CAMERA_PERMISSION = 1
         private const val SHOW_PASTE_BUTTON = "show_paste_button_key"
 
-        fun getIntentForFragment(fragment: Fragment, showPasteButton: Boolean = false): Intent {
-            val intentIntegrator = IntentIntegrator.forSupportFragment(fragment)
-            intentIntegrator.captureActivity = QRScannerActivity::class.java
-            intentIntegrator.setOrientationLocked(true)
-            intentIntegrator.setPrompt("")
-            intentIntegrator.setBeepEnabled(false)
-            intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
-            intentIntegrator.addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN)
-            val intent = intentIntegrator.createScanIntent()
-            intent.putExtra(SHOW_PASTE_BUTTON, showPasteButton)
-            return intent
-        }
-
         fun getScanQrIntent(context: Context, showPasteButton: Boolean = false): Intent {
             val options = ScanOptions()
-            options.setCaptureActivity(QRScannerActivity::class.java)
+            options.captureActivity = QRScannerActivity::class.java
             options.setOrientationLocked(true)
             options.setPrompt("")
             options.setBeepEnabled(false)

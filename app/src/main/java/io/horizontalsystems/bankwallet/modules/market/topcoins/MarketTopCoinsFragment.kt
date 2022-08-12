@@ -7,14 +7,17 @@ import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -147,17 +150,47 @@ fun TopCoinsScreen(
 
                                         menu?.let { menu ->
                                             stickyHeader {
-                                                HeaderWithSorting(
-                                                    menu.sortingFieldSelect.selected.titleResId,
-                                                    menu.topMarketSelect,
-                                                    { topMarket ->
-                                                        scrollToTopAfterUpdate = true
-                                                        viewModel.onSelectTopMarket(topMarket)
-                                                    },
-                                                    menu.marketFieldSelect,
-                                                    viewModel::onSelectMarketField,
-                                                    viewModel::showSelectorMenu
-                                                )
+                                                HeaderSorting(
+                                                    borderTop = true,
+                                                    borderBottom = true
+                                                ) {
+                                                    Row(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                            .padding(end = 16.dp)
+                                                            .height(44.dp),
+                                                        verticalAlignment = Alignment.CenterVertically
+                                                    ) {
+                                                        Box(modifier = Modifier.weight(1f)) {
+                                                            SortMenu(
+                                                                titleRes = menu.sortingFieldSelect.selected.titleResId,
+                                                                onClick = viewModel::showSelectorMenu
+                                                            )
+                                                        }
+
+                                                        menu.topMarketSelect?.let {
+                                                            Box(modifier = Modifier.padding(start = 8.dp)) {
+                                                                ButtonSecondaryToggle(
+                                                                    select = menu.topMarketSelect,
+                                                                    onSelect = { topMarket ->
+                                                                        scrollToTopAfterUpdate =
+                                                                            true
+                                                                        viewModel.onSelectTopMarket(
+                                                                            topMarket
+                                                                        )
+                                                                    }
+                                                                )
+                                                            }
+                                                        }
+
+                                                        Box(modifier = Modifier.padding(start = 8.dp)) {
+                                                            ButtonSecondaryToggle(
+                                                                select = menu.marketFieldSelect,
+                                                                onSelect = viewModel::onSelectMarketField
+                                                            )
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }

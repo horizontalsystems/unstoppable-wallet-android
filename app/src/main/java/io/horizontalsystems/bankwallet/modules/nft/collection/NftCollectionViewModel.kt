@@ -162,7 +162,7 @@ class NftCollectionViewModel(
                 imageUrl = collection.imageUrl,
                 description = collection.description,
                 ownersCount = collection.stats.ownersCount?.let { shortenValue(it.toBigDecimal()) } ?: "",
-                totalSupply = collection.stats.totalSupply?.let { shortenValue(it.toBigDecimal()) } ?: "",
+                totalSupply = collection.stats.totalSupply.let { shortenValue(it.toBigDecimal()) },
                 volumeChartDataWrapper = volumeChartDataWrapper,
                 averagePriceChartDataWrapper = averagePriceChartDataWrapper,
                 salesChartDataWrapper = salesChartDataWrapper,
