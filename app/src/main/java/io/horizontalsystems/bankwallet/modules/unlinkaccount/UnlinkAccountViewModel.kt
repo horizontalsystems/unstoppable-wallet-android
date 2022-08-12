@@ -33,7 +33,6 @@ class UnlinkAccountViewModel(
         } else {
             confirmations = listOf(
                 ConfirmationItem(ConfirmationType.ConfirmationRemove),
-                ConfirmationItem(ConfirmationType.ConfirmationDisable),
                 ConfirmationItem(ConfirmationType.ConfirmationLos),
             )
         }
@@ -63,7 +62,6 @@ class UnlinkAccountViewModel(
 
 enum class ConfirmationType(val title: TranslatableString) {
     ConfirmationRemove(TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationRemove)),
-    ConfirmationDisable(TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationDisable)),
     ConfirmationLos(TranslatableString.ResString(R.string.ManageAccount_Delete_ConfirmationLose))
 }
 
