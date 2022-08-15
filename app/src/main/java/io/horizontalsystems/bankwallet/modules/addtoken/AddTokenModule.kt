@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.addtoken
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 
 object AddTokenModule {
@@ -16,7 +17,7 @@ object AddTokenModule {
                         AddEvmTokenBlockchainService(it, App.networkManager)
                     }
                 )
-                add(AddBep2TokenBlockchainService(App.networkManager))
+                add(AddBep2TokenBlockchainService(BlockchainType.BinanceChain, App.networkManager))
             }
 
             val service = AddTokenService(App.coinManager, services, App.walletManager, App.accountManager, App.marketKit)

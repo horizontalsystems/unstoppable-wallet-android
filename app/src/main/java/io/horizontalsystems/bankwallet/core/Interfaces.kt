@@ -161,8 +161,8 @@ interface INetworkManager {
 
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
-    suspend fun getBep2TokeInfo(symbol: String): TokenInfoService.Bep2TokenInfo
-    suspend fun getEvmTokeInfo(apiPath: String, address: String): TokenInfoService.EvmTokenInfo
+    suspend fun getBep2TokeInfo(blockchainUid: String, symbol: String): TokenInfoService.Bep2TokenInfo
+    suspend fun getEvmTokeInfo(blockchainUid: String, address: String): TokenInfoService.EvmTokenInfo
 }
 
 interface IClipboardManager {
