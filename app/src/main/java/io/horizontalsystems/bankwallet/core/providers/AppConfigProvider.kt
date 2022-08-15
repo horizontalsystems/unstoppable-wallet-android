@@ -12,7 +12,7 @@ class AppConfigProvider {
      val appTelegramLink: String = "https://t.me/unstoppable_announcements"
      val appRedditLink: String = "https://www.reddit.com/r/UNSTOPPABLEWallet/"
      val reportEmail = "support.unstoppable@protonmail.com"
-     val btcCoreRpcUrl: String = "https://btc.horizontalsystems.xyz/rpc"
+     val btcCoreRpcUrl: String = "https://btc.blocksdecoded.com/rpc"
      val releaseNotesUrl: String = "https://api.github.com/repos/horizontalsystems/unstoppable-wallet-android/releases/tags/"
      val walletConnectUrl = "relay.walletconnect.com"
      val walletConnectProjectId by lazy {
