@@ -14,15 +14,14 @@ import io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.RestoreMn
 import io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.RestoreMnemonicModule.WordItem
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.IThirdKeyboard
-import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.hdwalletkit.WordList
 
 class RestoreMnemonicViewModel(
     accountFactory: IAccountFactory,
     private val passphraseValidator: PassphraseValidator,
     private val wordsManager: WordsManager,
-    private val thirdKeyboardStorage: IThirdKeyboard
+    private val thirdKeyboardStorage: IThirdKeyboard,
+    private val helper: RestoreMnemonicHelper
 ) : ViewModel() {
 
     private val regex = Regex("\\S+")
@@ -69,59 +68,8 @@ class RestoreMnemonicViewModel(
             words = allItems,
             invalidWords = invalidItems,
             invalidWordRanges = invalidWordRanges,
-            wordSuggestions = getWordSuggestions(allItems, cursorPosition)
+            wordSuggestions = helper.getWordSuggestions(allItems, cursorPosition)
         )
-    }
-
-    private fun getWordSuggestions(
-        allItems: List<WordItem>,
-        cursorPosition: Int
-    ): RestoreMnemonicModule.WordSuggestions? {
-        val wordItemWithCursor = allItems.find {
-            it.range.contains(cursorPosition - 1)
-        } ?: return null
-
-        return RestoreMnemonicModule.WordSuggestions(
-            wordItemWithCursor,
-            fetchSuggestions(wordItemWithCursor.word, detectLanguages(allItems))
-        )
-    }
-
-    private fun detectLanguages(inputWords: List<WordItem>): List<Language> {
-        var languages = Language.values().toList()
-
-        for (wordItem in inputWords) {
-            val filteredLanguages = filterLanguages(languages, wordItem.word)
-            if (filteredLanguages.isEmpty()) {
-                break
-            }
-            languages = filteredLanguages
-        }
-
-        return languages
-    }
-
-    private fun filterLanguages(languages: List<Language>, word: String): List<Language> {
-        return languages.filter { lang ->
-            val words = WordList.getWords(lang)
-
-            words.any { it.startsWith(word) }
-        }
-    }
-
-    private fun fetchSuggestions(input: String, languages: List<Language>): List<String> {
-        val suggestions = mutableListOf<String>()
-        for (lang in languages) {
-            val words = WordList.getWords(lang)
-
-            for (word in words) {
-                if (word.startsWith(input)) {
-                    suggestions.add(word)
-                }
-            }
-        }
-
-        return suggestions.distinct()
     }
 
     fun onEnterName(name: String) {

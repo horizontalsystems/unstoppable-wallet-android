@@ -11,7 +11,13 @@ object RestoreMnemonicModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RestoreMnemonicViewModel(App.accountFactory, PassphraseValidator(), App.wordsManager, App.thirdKeyboardStorage) as T
+            return RestoreMnemonicViewModel(
+                App.accountFactory,
+                PassphraseValidator(),
+                App.wordsManager,
+                App.thirdKeyboardStorage,
+                RestoreMnemonicHelper()
+            ) as T
         }
     }
 
