@@ -62,7 +62,7 @@ class MarketKitWrapper(
         marketKit.marketInfoTvlSingle(coinUid, currencyCode, timePeriod)
 
     fun marketInfoGlobalTvlSingle(chain: String, currencyCode: String, timePeriod: HsTimePeriod) =
-        marketKit.marketInfoTvlSingle(chain, currencyCode, timePeriod)
+        marketKit.marketInfoGlobalTvlSingle(chain, currencyCode, timePeriod)
 
     fun defiMarketInfosSingle(currencyCode: String) = marketKit.defiMarketInfosSingle(currencyCode)
 
