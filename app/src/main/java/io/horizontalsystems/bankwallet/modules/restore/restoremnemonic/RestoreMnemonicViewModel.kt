@@ -65,20 +65,53 @@ class RestoreMnemonicViewModel(
             it.range
         }
 
-        val wordItemWithCursor = allItems.find {
-            it.range.contains(cursorPosition - 1)
-        }
-
-        val wordSuggestions = wordItemWithCursor?.let {
-            RestoreMnemonicModule.WordSuggestions(it, fetchSuggestions(it.word))
-        }
-
-        uiState = uiState.copy(words = allItems, invalidWords = invalidItems, invalidWordRanges = invalidWordRanges, wordSuggestions = wordSuggestions)
+        uiState = uiState.copy(
+            words = allItems,
+            invalidWords = invalidItems,
+            invalidWordRanges = invalidWordRanges,
+            wordSuggestions = getWordSuggestions(allItems, cursorPosition)
+        )
     }
 
-    private fun fetchSuggestions(input: String): MutableList<String> {
+    private fun getWordSuggestions(
+        allItems: List<WordItem>,
+        cursorPosition: Int
+    ): RestoreMnemonicModule.WordSuggestions? {
+        val wordItemWithCursor = allItems.find {
+            it.range.contains(cursorPosition - 1)
+        } ?: return null
+
+        return RestoreMnemonicModule.WordSuggestions(
+            wordItemWithCursor,
+            fetchSuggestions(wordItemWithCursor.word, detectLanguages(allItems))
+        )
+    }
+
+    private fun detectLanguages(inputWords: List<WordItem>): List<Language> {
+        var languages = Language.values().toList()
+
+        for (wordItem in inputWords) {
+            val filteredLanguages = filterLanguages(languages, wordItem.word)
+            if (filteredLanguages.isEmpty()) {
+                break
+            }
+            languages = filteredLanguages
+        }
+
+        return languages
+    }
+
+    private fun filterLanguages(languages: List<Language>, word: String): List<Language> {
+        return languages.filter { lang ->
+            val words = WordList.getWords(lang)
+
+            words.any { it.startsWith(word) }
+        }
+    }
+
+    private fun fetchSuggestions(input: String, languages: List<Language>): List<String> {
         val suggestions = mutableListOf<String>()
-        for (lang in Language.values()) {
+        for (lang in languages) {
             val words = WordList.getWords(lang)
 
             for (word in words) {
@@ -88,7 +121,7 @@ class RestoreMnemonicViewModel(
             }
         }
 
-        return suggestions
+        return suggestions.distinct()
     }
 
     fun onEnterName(name: String) {
