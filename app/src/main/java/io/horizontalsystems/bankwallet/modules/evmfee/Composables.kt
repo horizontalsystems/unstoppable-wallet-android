@@ -43,6 +43,7 @@ fun Eip1559FeeSettings(
     val settingsViewItems = mutableListOf<@Composable () -> Unit>()
     var maxBaseFee by remember { mutableStateOf(0L) }
     var maxPriorityFee by remember { mutableStateOf(1L) }
+    var valueChanged by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -98,12 +99,11 @@ fun Eip1559FeeSettings(
             maxBaseFeeSlider?.let { baseFeeSlider ->
                 maxPriorityFeeSlider?.let { priorityFeeSlider ->
                     maxBaseFee = baseFeeSlider.initialSliderValue
-                    maxPriorityFee = priorityFeeSlider.initialSliderValue
 
                     settingsViewItems.add {
                         FeeInfoCell(
                                 title = stringResource(R.string.FeeSettings_MaxBaseFee),
-                                value = baseFeeSlider.gweiString(maxBaseFee),
+                                value = baseFeeSlider.scaledString(maxBaseFee),
                                 infoTitle = Translator.getString(R.string.FeeSettings_MaxBaseFee),
                                 infoText = Translator.getString(R.string.FeeSettings_MaxBaseFee_Info),
                                 navController = navController
@@ -122,7 +122,7 @@ fun Eip1559FeeSettings(
                     settingsViewItems.add {
                         FeeInfoCell(
                                 title = stringResource(R.string.FeeSettings_MaxMinerTips),
-                                value = priorityFeeSlider.gweiString(maxPriorityFee),
+                                value = if (valueChanged) priorityFeeSlider.scaledString(maxPriorityFee) else priorityFeeSlider.initialValueScaledString,
                                 infoTitle = Translator.getString(R.string.FeeSettings_MaxMinerTips),
                                 infoText = Translator.getString(R.string.FeeSettings_MaxMinerTips_Info),
                                 navController = navController
@@ -132,9 +132,14 @@ fun Eip1559FeeSettings(
                     settingsViewItems.add {
                         HsSlider(
                                 value = priorityFeeSlider.initialSliderValue,
-                                onValueChange = { maxPriorityFee = it },
+                                onValueChange = {
+                                    valueChanged = true
+                                    maxPriorityFee = it
+                                                },
                                 valueRange = priorityFeeSlider.range.first..priorityFeeSlider.range.last,
-                                onValueChangeFinished = { viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee)) }
+                                onValueChangeFinished = {
+                                    viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee))
+                                }
                         )
                     }
                 }
@@ -249,7 +254,7 @@ fun LegacyFeeSettings(
                 settingsViewItems.add {
                     FeeInfoCell(
                         title = stringResource(R.string.FeeSettings_GasPrice),
-                        value = slider.gweiString(selectedGasPrice),
+                        value = slider.scaledString(selectedGasPrice),
                         infoTitle = Translator.getString(R.string.FeeSettings_GasPrice),
                         infoText = Translator.getString(R.string.FeeSettings_GasPrice_Info),
                         navController = navController

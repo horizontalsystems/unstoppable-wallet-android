@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
+import io.horizontalsystems.bankwallet.core.feePriceScale
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -71,18 +72,28 @@ class Eip1559FeeSettingsViewModel(
         state.dataOrNull?.let { gasPriceInfo ->
             if (gasPriceInfo.gasPrice is GasPrice.Eip1559) {
                 baseFeeSliderViewItemLiveData.postValue(
-                        SliderViewItem(
-                                gasPriceInfo.gasPrice.maxFeePerGas - gasPriceInfo.gasPrice.maxPriorityFeePerGas,
-                                gasPriceService.baseFeeRange ?: gasPriceService.defaultBaseFeeRange,
-                                EvmFeeModule.stepSize(gasPriceService.currentBaseFee ?: gasPriceService.defaultBaseFeeRange.first)
-                        )
+                    SliderViewItem(
+                        initialWeiValue = gasPriceInfo.gasPrice.maxFeePerGas - gasPriceInfo.gasPrice.maxPriorityFeePerGas,
+                        weiRange = gasPriceService.baseFeeRange
+                            ?: gasPriceService.defaultBaseFeeRange,
+                        stepSize = EvmFeeModule.stepSize(
+                            gasPriceService.currentBaseFee
+                                ?: gasPriceService.defaultBaseFeeRange.first
+                        ),
+                        scale = coinService.token.blockchainType.feePriceScale
+                    )
                 )
                 priorityFeeSliderViewItemLiveData.postValue(
-                        SliderViewItem(
-                                gasPriceInfo.gasPrice.maxPriorityFeePerGas,
-                                gasPriceService.priorityFeeRange ?: gasPriceService.defaultPriorityFeeRange,
-                                EvmFeeModule.stepSize(gasPriceService.currentPriorityFee ?: gasPriceService.defaultPriorityFeeRange.first)
-                        )
+                    SliderViewItem(
+                        initialWeiValue = gasPriceInfo.gasPrice.maxPriorityFeePerGas,
+                        weiRange = gasPriceService.priorityFeeRange
+                            ?: gasPriceService.defaultPriorityFeeRange,
+                        stepSize = EvmFeeModule.stepSize(
+                            gasPriceService.currentPriorityFee
+                                ?: gasPriceService.defaultPriorityFeeRange.first
+                        ),
+                        scale = coinService.token.blockchainType.feePriceScale
+                    )
                 )
             }
         }
@@ -90,7 +101,7 @@ class Eip1559FeeSettingsViewModel(
 
     private fun sync(currentBaseFee: Long?) {
         if (currentBaseFee != null) {
-            currentBaseFeeLiveData.postValue(EvmFeeModule.gweiString(currentBaseFee))
+            currentBaseFeeLiveData.postValue(EvmFeeModule.scaledString(currentBaseFee, coinService.token.blockchainType.feePriceScale))
         } else {
             currentBaseFeeLiveData.postValue(Translator.getString(R.string.NotAvailable))
         }

@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.FeePriceScale
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
@@ -50,10 +51,10 @@ object EvmFeeModule {
         }
     }
 
-    fun gweiString(wei: Long): String {
-        val gwei = wei.toDouble() / 1_000_000_000
+    fun scaledString(wei: Long, scale: FeePriceScale): String {
+        val gwei = wei.toDouble() / scale.scaleValue
 
-        return "${gwei.toBigDecimal().toPlainString()} Gwei"
+        return "${gwei.toBigDecimal().toPlainString()} ${scale.unit}"
     }
 
     fun stepSize(weiValue: Long): Long {
@@ -150,10 +151,16 @@ sealed class GasDataError : Error() {
 
 data class FeeViewItem(val fee: String, val gasLimit: String)
 
-data class SliderViewItem(private val initialWeiValue: Long, private val weiRange: LongRange, private val stepSize: Long) {
+data class SliderViewItem(
+    private val initialWeiValue: Long,
+    private val weiRange: LongRange,
+    private val stepSize: Long,
+    private val scale: FeePriceScale
+) {
 
-    var initialSliderValue: Long = sliderValue(initialWeiValue)
-    var range: LongRange = LongRange(sliderValue(weiRange.first), sliderValue(weiRange.last))
+    val initialSliderValue: Long = sliderValue(initialWeiValue)
+    val range: LongRange = LongRange(sliderValue(weiRange.first), sliderValue(weiRange.last))
+    val initialValueScaledString = EvmFeeModule.scaledString(initialWeiValue, scale)
 
     fun wei(sliderValue: Long): Long {
         return sliderValue * stepSize
@@ -163,7 +170,7 @@ data class SliderViewItem(private val initialWeiValue: Long, private val weiRang
         return wei / stepSize
     }
 
-    fun gweiString(sliderValue: Long): String = EvmFeeModule.gweiString(wei(sliderValue))
+    fun scaledString(sliderValue: Long): String = EvmFeeModule.scaledString(wei(sliderValue), scale)
 
 }
 
