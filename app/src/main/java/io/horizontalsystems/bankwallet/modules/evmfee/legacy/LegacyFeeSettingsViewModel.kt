@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
+import io.horizontalsystems.bankwallet.core.feePriceScale
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -107,11 +108,16 @@ class LegacyFeeSettingsViewModel(
     private fun sync(state: DataState<GasPriceInfo>) {
         if (state is DataState.Success) {
             sliderViewItemLiveData.postValue(
-                    SliderViewItem(
-                            state.data.gasPrice.max,
-                            gasPriceService.gasPriceRange ?: gasPriceService.defaultGasPriceRange,
-                            EvmFeeModule.stepSize(gasPriceService.recommendedGasPrice ?: gasPriceService.defaultGasPriceRange.first),
-                    )
+                SliderViewItem(
+                    initialWeiValue = state.data.gasPrice.max,
+                    weiRange = gasPriceService.gasPriceRange
+                        ?: gasPriceService.defaultGasPriceRange,
+                    stepSize = EvmFeeModule.stepSize(
+                        gasPriceService.recommendedGasPrice
+                            ?: gasPriceService.defaultGasPriceRange.first
+                    ),
+                    scale = coinService.token.blockchainType.feePriceScale
+                )
             )
         }
     }
