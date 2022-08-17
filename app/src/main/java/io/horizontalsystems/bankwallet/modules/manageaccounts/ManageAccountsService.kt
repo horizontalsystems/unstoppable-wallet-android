@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.manageaccounts
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.reactivex.BackpressureStrategy
@@ -10,7 +11,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class ManageAccountsService(
-        private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
+    private val walletManager: IWalletManager
 ) : Clearable {
     private val disposable = CompositeDisposable()
 
@@ -37,7 +39,13 @@ class ManageAccountsService(
     private fun syncItems() {
         val activeAccount = accountManager.activeAccount
         items = accountManager.accounts.map { account ->
-            Item(account, account == activeAccount)
+            val coinCodes = walletManager
+                .getWallets(account).sortedBy {
+                    it.coin.marketCapRank
+                }.map {
+                    it.coin.code
+                }.distinct()
+            Item(account, coinCodes, account == activeAccount)
         }
     }
 
@@ -50,8 +58,9 @@ class ManageAccountsService(
     }
 
     data class Item(
-            val account: Account,
-            val isActive: Boolean
+        val account: Account,
+        val coinCodes: List<String>,
+        val isActive: Boolean
     )
 
 }

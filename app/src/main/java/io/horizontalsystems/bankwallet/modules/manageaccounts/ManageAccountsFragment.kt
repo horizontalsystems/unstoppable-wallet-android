@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -177,7 +178,11 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                 if (accountViewItem.backupRequired) {
                     subhead2_lucian(text = stringResource(id = R.string.ManageAccount_BackupRequired_Title))
                 } else {
-                    subhead2_grey(text = accountViewItem.subtitle)
+                    subhead2_grey(
+                        text = accountViewItem.subtitle,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
                 }
             }
             if (accountViewItem.isWatchAccount) {
