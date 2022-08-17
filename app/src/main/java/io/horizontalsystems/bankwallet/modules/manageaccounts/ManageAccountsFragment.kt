@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,11 +54,11 @@ class ManageAccountsFragment : BaseFragment() {
 fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModule.Mode) {
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
 
-    val viewItems by viewModel.viewItemsLiveData.observeAsState()
-    val finish by viewModel.finishLiveEvent.observeAsState()
+    val viewItems = viewModel.viewItems
+    val finish = viewModel.finish
     val isCloseButtonVisible = viewModel.isCloseButtonVisible
 
-    if (finish != null) {
+    if (finish) {
         navController.popBackStack()
     }
 

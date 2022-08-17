@@ -1,63 +1,77 @@
 package io.horizontalsystems.bankwallet.modules.manageaccounts
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.subscribeIO
+import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
-import io.horizontalsystems.core.SingleLiveEvent
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 
 class ManageAccountsViewModel(
-        private val service: ManageAccountsService,
-        private val mode: ManageAccountsModule.Mode,
-        private val clearables: List<Clearable>
+    private val accountManager: IAccountManager,
+    private val walletManager: IWalletManager,
+    private val mode: ManageAccountsModule.Mode
 ) : ViewModel() {
-    private val disposable = CompositeDisposable()
 
-    val viewItemsLiveData = MutableLiveData<Pair<List<AccountViewItem>, List<AccountViewItem>>>()
-    val finishLiveEvent = SingleLiveEvent<Unit>()
-    val isCloseButtonVisible: Boolean = mode == ManageAccountsModule.Mode.Switcher
+    var viewItems by mutableStateOf<Pair<List<AccountViewItem>, List<AccountViewItem>>?>(null)
+    var finish by mutableStateOf(false)
+    val isCloseButtonVisible = mode == ManageAccountsModule.Mode.Switcher
 
     init {
-        service.itemsObservable
-                .subscribeIO { sync(it) }
-                .let { disposable.add(it) }
-
-        sync(service.items)
-    }
-
-    private fun sync(items: List<ManageAccountsService.Item>) {
-        val sortedItems = items.sortedBy { it.account.name.lowercase() }
-        val (watchAccounts, regularAccounts) = sortedItems.partition {
-            it.account.isWatchAccount
+        viewModelScope.launch {
+            accountManager.accountsFlowable.asFlow()
+                .collect {
+                    updateViewItems(accountManager.activeAccount, it)
+                }
         }
-        viewItemsLiveData.postValue(Pair(regularAccounts.map { getViewItem(it) }, watchAccounts.map { getViewItem(it) }))
+
+        viewModelScope.launch {
+            accountManager.activeAccountObservable.asFlow()
+                .collect { activeAccount ->
+                    updateViewItems(activeAccount.orElse(null), accountManager.accounts)
+                }
+        }
+
+        updateViewItems(accountManager.activeAccount, accountManager.accounts)
     }
 
-    private fun getViewItem(item: ManageAccountsService.Item): AccountViewItem {
-        val account = item.account
-        return AccountViewItem(
+    private fun updateViewItems(activeAccount: Account?, accounts: List<Account>) {
+        viewItems = accounts
+            .sortedBy { it.name.lowercase() }
+            .map { getViewItem(it, activeAccount) }
+            .partition { !it.isWatchAccount }
+    }
+
+    private fun getViewItem(account: Account, activeAccount: Account?) =
+        AccountViewItem(
             accountId = account.id,
             title = account.name,
-            subtitle = if (account.isWatchAccount) account.type.description else item.coinCodes.joinToString(),
-            selected = item.isActive,
+            subtitle = if (account.isWatchAccount) {
+                account.type.description
+            } else {
+                val coinCodes = walletManager
+                    .getWallets(account)
+                    .sortedBy { it.coin.marketCapRank }
+                    .map { it.coin.code }
+                    .distinct()
+
+                coinCodes.joinToString()
+            },
+            selected = account == activeAccount,
             backupRequired = !account.isBackedUp,
             isWatchAccount = account.isWatchAccount
         )
-    }
 
     fun onSelect(accountViewItem: AccountViewItem) {
-        service.setActiveAccountId(accountViewItem.accountId)
+        accountManager.setActiveAccountId(accountViewItem.accountId)
 
         if (mode == ManageAccountsModule.Mode.Switcher) {
-            finishLiveEvent.postValue(Unit)
+            finish = true
         }
     }
-
-    override fun onCleared() {
-        clearables.forEach(Clearable::clear)
-        disposable.clear()
-    }
-
 }
