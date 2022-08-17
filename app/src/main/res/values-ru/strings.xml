@@ -350,6 +350,8 @@
     <string name="WalletConnect_NoConnection">У вас нет подключенных dapps</string>
     <string name="WalletConnect_PendingRequests">Отложенные Запросы</string>
     <string name="WalletConnect_ActiveWallet">Активный Кошелек</string>
+    <string name="WalletConnect_Address">Адрес</string>
+    <string name="WalletConnect_Network">Сеть</string>
     <string name="WalletConnect_Input">Ввод</string>
     <string name="WalletConnect_Version1">Версия 1.0</string>
     <string name="WalletConnect_Version2">Версия 2.0</string>
