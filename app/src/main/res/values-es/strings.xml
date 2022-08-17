@@ -350,6 +350,8 @@
     <string name="WalletConnect_NoConnection">No tienes ninguna dapps conectadas</string>
     <string name="WalletConnect_PendingRequests">Solicitudes Pendientes</string>
     <string name="WalletConnect_ActiveWallet">Active su cartera</string>
+    <string name="WalletConnect_Address">Dirección</string>
+    <string name="WalletConnect_Network">La red</string>
     <string name="WalletConnect_Input">Entrada</string>
     <string name="WalletConnect_Version1">Versión 1.0</string>
     <string name="WalletConnect_Version2">Versión 2.0</string>

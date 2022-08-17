@@ -350,6 +350,8 @@
     <string name="WalletConnect_NoConnection">Du hast keine verbundenen Dapps</string>
     <string name="WalletConnect_PendingRequests">Ausstehende Anfragen</string>
     <string name="WalletConnect_ActiveWallet">Aktive Wallet</string>
+    <string name="WalletConnect_Address">Adresse</string>
+    <string name="WalletConnect_Network">Netzwerk</string>
     <string name="WalletConnect_Input">Eingabe</string>
     <string name="WalletConnect_Version1">Version 1.0</string>
     <string name="WalletConnect_Version2">Version 2.0</string>
