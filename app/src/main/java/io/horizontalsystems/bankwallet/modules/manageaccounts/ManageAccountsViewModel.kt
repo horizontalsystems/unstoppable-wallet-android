@@ -40,7 +40,7 @@ class ManageAccountsViewModel(
         return AccountViewItem(
             accountId = account.id,
             title = account.name,
-            subtitle = account.type.description,
+            subtitle = if (account.isWatchAccount) account.type.description else item.coinCodes.joinToString(),
             selected = item.isActive,
             backupRequired = !account.isBackedUp,
             isWatchAccount = account.isWatchAccount
