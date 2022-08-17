@@ -27,7 +27,7 @@ object ManageAccountsModule {
         val title: String,
         val subtitle: String,
         val selected: Boolean,
-        val alert: Boolean,
+        val backupRequired: Boolean,
         val isWatchAccount: Boolean
     )
 
