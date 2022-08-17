@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
@@ -173,17 +174,11 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
             }
             Column(modifier = Modifier.weight(1f)) {
                 body_leah(text = accountViewItem.title)
-                subhead2_grey(text = accountViewItem.subtitle)
-            }
-            if (accountViewItem.alert) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_attention_20),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.lucian
-                )
-            }
-            if (accountViewItem.alert && accountViewItem.isWatchAccount) {
-                Spacer(modifier = Modifier.width(12.dp))
+                if (accountViewItem.backupRequired) {
+                    subhead2_lucian(text = stringResource(id = R.string.ManageAccount_BackupRequired_Title))
+                } else {
+                    subhead2_grey(text = accountViewItem.subtitle)
+                }
             }
             if (accountViewItem.isWatchAccount) {
                 Icon(
@@ -192,20 +187,27 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                     tint = ComposeAppTheme.colors.grey
                 )
             }
-            Icon(
-                modifier = Modifier
-                    .clickable {
-                        navController.slideFromRight(
-                            R.id.manageAccountFragment,
-                            ManageAccountModule.prepareParams(accountViewItem.accountId)
-                        )
-                    }
-                    .padding(12.dp),
-                painter = painterResource(id = R.drawable.ic_more2_20),
-                contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
-            )
-            Spacer(modifier = Modifier.width(4.dp))
+
+            val icon: Int
+            val iconTint: Color
+            if (accountViewItem.backupRequired) {
+                icon = R.drawable.ic_attention_20
+                iconTint = ComposeAppTheme.colors.lucian
+            } else {
+                icon = R.drawable.ic_more2_20
+                iconTint = ComposeAppTheme.colors.leah
+            }
+
+            ButtonSecondaryCircle(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                icon = icon,
+                tint = iconTint
+            ) {
+                navController.slideFromRight(
+                    R.id.manageAccountFragment,
+                    ManageAccountModule.prepareParams(accountViewItem.accountId)
+                )
+            }
         }
     }
 }
