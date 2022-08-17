@@ -350,6 +350,8 @@
     <string name="WalletConnect_NoConnection">Bağlı dapp\'niz yok</string>
     <string name="WalletConnect_PendingRequests">bekleyen istekler</string>
     <string name="WalletConnect_ActiveWallet">Aktif Cüzdan</string>
+    <string name="WalletConnect_Address">Adres</string>
+    <string name="WalletConnect_Network">Ağ</string>
     <string name="WalletConnect_Input">Giriş</string>
     <string name="WalletConnect_Version1">Sürüm 1.0</string>
     <string name="WalletConnect_Version2">Sürüm 2.0</string>
