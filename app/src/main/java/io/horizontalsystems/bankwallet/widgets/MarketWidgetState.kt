@@ -15,7 +15,12 @@ data class MarketWidgetState(
     val updateTimestampMillis: Long = System.currentTimeMillis()
 ) {
     override fun toString(): String {
-        return "{ widgetId: $widgetId, type: ${type.id}, loading: $loading, error: $error, items: ${items.joinToString(separator = ", ")} }"
+        return "{ widgetId: $widgetId, " +
+                "type: ${type.id}, " +
+                "loading: $loading, " +
+                "updateTimestampMillis: ${updateTimestampMillis}, " +
+                "error: $error, " +
+                "items: ${items.joinToString(separator = ", ")} }"
     }
 }
 

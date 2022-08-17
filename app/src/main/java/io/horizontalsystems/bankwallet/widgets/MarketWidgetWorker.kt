@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidgetManager
@@ -32,6 +33,8 @@ class MarketWidgetWorker(
         private const val inputDataKeyWidgetId = "widgetIdKey"
         private const val notificationChannelName = "MARKET_WIDGET_CHANNEL_NAME"
         private const val notificationChannelId = "MARKET_WIDGET_CHANNEL_ID"
+        private val pendingIntentFlagMutable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0
+
         private val logger = AppLogger("widget-worker")
 
         private fun uniqueWorkName(widgetId: Int) = "${MarketWidgetWorker::class.java.simpleName}_${widgetId}"
@@ -67,6 +70,10 @@ class MarketWidgetWorker(
         val marketRepository = App.marketWidgetRepository
 
         return try {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                setForeground(getForegroundInfo())
+            }
+
             for (glanceId in glanceIds) {
                 var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
                 if (state.widgetId != widgetId) continue
@@ -146,22 +153,22 @@ class MarketWidgetWorker(
     }
 
     override suspend fun getForegroundInfo(): ForegroundInfo {
+        val widgetId = inputData.getInt(inputDataKeyWidgetId, 0)
+        val channelId = "$notificationChannelId-$widgetId"
+        val channelName = "$notificationChannelName-$widgetId"
+
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val channel = NotificationChannel(
-            notificationChannelId,
-            notificationChannelName,
-            NotificationManager.IMPORTANCE_HIGH
-        )
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
         notificationManager.createNotificationChannel(channel)
 
-        val notification = NotificationCompat.Builder(context, notificationChannelId)
+        val notification = NotificationCompat.Builder(context, channelId)
             .setContentIntent(
                 PendingIntent.getActivity(
                     context,
                     0,
                     Intent(context, LauncherActivity::class.java),
-                    PendingIntent.FLAG_IMMUTABLE
+                    pendingIntentFlagMutable
                 )
             )
             .setSmallIcon(R.drawable.ic_refresh)
