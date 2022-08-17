@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.entities.Currency
@@ -97,7 +98,7 @@ class BalanceViewItemFactory {
     private fun getSyncingProgress(state: AdapterState?, blockchainType: BlockchainType): SyncingProgress {
         return when (state) {
             is AdapterState.Syncing -> SyncingProgress(state.progress ?: getDefaultSyncingProgress(blockchainType), false)
-            is AdapterState.SearchingTxs -> SyncingProgress(10, true)
+            is AdapterState.SearchingTxs, is AdapterState.Zcash -> SyncingProgress(10, true)
             else -> SyncingProgress(null, false)
         }
     }
@@ -132,6 +133,12 @@ class BalanceViewItemFactory {
                 }
             }
             is AdapterState.SearchingTxs -> Translator.getString(R.string.Balance_SearchingTransactions)
+            is AdapterState.Zcash -> {
+                when(state.zcashState){
+                    is ZcashAdapter.ZcashState.DownloadingBlocks -> Translator.getString(R.string.Balance_DownloadingBlocks)
+                    is ZcashAdapter.ZcashState.ScanningBlocks -> Translator.getString(R.string.Balance_ScanningBlocks)
+                }
+            }
             else -> null
         }
 
@@ -156,6 +163,18 @@ class BalanceViewItemFactory {
                     Translator.getString(R.string.Balance_FoundTx, state.count.toString())
                 } else {
                     null
+                }
+            }
+            is AdapterState.Zcash -> {
+                when (val zcash = state.zcashState) {
+                    is ZcashAdapter.ZcashState.DownloadingBlocks -> {
+                        if (zcash.blockProgress != null) {
+                            "${zcash.blockProgress.current}/${zcash.blockProgress.total}"
+                        } else {
+                            ""
+                        }
+                    }
+                    is ZcashAdapter.ZcashState.ScanningBlocks -> "${zcash.blockProgress.current}/${zcash.blockProgress.total}"
                 }
             }
             else -> null
@@ -192,7 +211,7 @@ class BalanceViewItemFactory {
         val state = item.state
         val latestRate = item.coinPrice
 
-        val showSyncing = expanded && (state is AdapterState.Syncing || state is AdapterState.SearchingTxs)
+        val showSyncing = expanded && (state is AdapterState.Syncing || state is AdapterState.SearchingTxs || state is AdapterState.Zcash)
         val balanceTotalVisibility = !hideBalance && !showSyncing
         val fiatLockedVisibility = !hideBalance && item.balanceData.locked > BigDecimal.ZERO
 

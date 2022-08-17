@@ -183,6 +183,7 @@ sealed class AdapterState {
     data class Syncing(val progress: Int? = null, val lastBlockDate: Date? = null) : AdapterState()
     data class SearchingTxs(val count: Int) : AdapterState()
     data class NotSynced(val error: Throwable) : AdapterState()
+    data class Zcash(val zcashState: ZcashAdapter.ZcashState) : AdapterState()
 }
 
 interface IBinanceKitManager {
