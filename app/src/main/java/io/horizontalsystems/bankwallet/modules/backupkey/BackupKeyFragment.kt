@@ -57,16 +57,21 @@ class BackupKeyFragment : BaseFragment() {
                 ComposeAppTheme {
                     BackupKeyScreen(
                         navController = findNavController(),
-                        viewModel = viewModel,
-                        subscribeForPinResult = { subscribeForPinResult() }
+                        viewModel = viewModel
                     )
                 }
             }
         }
     }
+}
 
-    private fun subscribeForPinResult() {
-        getNavigationResult(PinModule.requestKey) { bundle ->
+@Composable
+private fun BackupKeyScreen(
+    navController: NavController,
+    viewModel: BackupKeyViewModel,
+) {
+    if (viewModel.showPinUnlock) {
+        navController.getNavigationResult(PinModule.requestKey) { bundle ->
             val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
             val resultCode = bundle.getInt(PinModule.requestResult)
 
@@ -74,19 +79,7 @@ class BackupKeyFragment : BaseFragment() {
                 viewModel.pinUnlocked()
             }
         }
-    }
 
-}
-
-@Composable
-private fun BackupKeyScreen(
-    navController: NavController,
-    viewModel: BackupKeyViewModel,
-    subscribeForPinResult: () -> Unit,
-) {
-
-    if (viewModel.showPinUnlock) {
-        subscribeForPinResult()
         navController.slideFromBottom(R.id.pinFragment, PinModule.forUnlock())
         viewModel.pinUnlockShown()
     }
