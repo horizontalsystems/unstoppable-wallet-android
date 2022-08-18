@@ -5,6 +5,9 @@ import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.pin.PinInteractionType
+import io.horizontalsystems.pin.PinModule
 
 fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
     val navOptions = NavOptions.Builder()
@@ -26,4 +29,20 @@ fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
         .build()
 
     navigate(resId, args, navOptions)
+}
+
+fun NavController.authorizedAction(action: () -> Unit) {
+    if (App.pinComponent.isPinSet) {
+        getNavigationResult(PinModule.requestKey) { bundle ->
+            val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
+            val resultCode = bundle.getInt(PinModule.requestResult)
+
+            if (resultType == PinInteractionType.UNLOCK && resultCode == PinModule.RESULT_OK) {
+                action.invoke()
+            }
+        }
+        slideFromBottom(R.id.pinFragment, PinModule.forUnlock())
+    } else {
+        action.invoke()
+    }
 }

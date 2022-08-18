@@ -7,28 +7,13 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
-import io.horizontalsystems.core.IPinComponent
 
-class BackupKeyViewModel(
-    val account: Account,
-    pinComponent: IPinComponent
-) : ViewModel() {
-
-    private val isPinSet = pinComponent.isPinSet
+class BackupKeyViewModel(val account: Account) : ViewModel() {
 
     var passphrase by mutableStateOf("")
         private set
 
     var wordsNumbered by mutableStateOf<List<ShowKeyModule.WordNumbered>>(listOf())
-        private set
-
-    var viewState by mutableStateOf(BackupKeyModule.ViewState.Warning)
-        private set
-
-    var showPinUnlock by mutableStateOf(false)
-        private set
-
-    var showKeyConfirmation by mutableStateOf(false)
         private set
 
     init {
@@ -39,29 +24,4 @@ class BackupKeyViewModel(
             passphrase = account.type.passphrase
         }
     }
-
-    fun onClickShow() {
-        if (isPinSet) {
-            showPinUnlock = true
-        } else {
-            viewState = BackupKeyModule.ViewState.MnemonicKey
-        }
-    }
-
-    fun onClickBackup() {
-        showKeyConfirmation = true
-    }
-
-    fun pinUnlocked() {
-        viewState = BackupKeyModule.ViewState.MnemonicKey
-    }
-
-    fun pinUnlockShown() {
-        showPinUnlock = false
-    }
-
-    fun keyConfirmationShown() {
-        showKeyConfirmation = false
-    }
-
 }
