@@ -924,6 +924,12 @@
     <string name="ShowKey_Bip49" translatable="false">BIP 49 - SegWit</string>
     <string name="ShowKey_Bip84" translatable="false">BIP 84 - Native SegWit</string>
 
+    <!-- Recovery Phrase -->
+    <string name="RecoveryPhrase_Title">Recovery Phrase</string>
+    <string name="RecoveryPhrase_Description">Write these words down in the correct order and keep them in a safe place</string>
+    <string name="RecoveryPhrase_ShowPhrase">Tap to show recovery phrase</string>
+    <string name="RecoveryPhrase_Verify">Verify</string>
+
     <!-- Backup Key -->
     <string name="BackupKey_Title">Backup</string>
     <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken, etc.\n\nMake sure no one is watching your screen.</string>

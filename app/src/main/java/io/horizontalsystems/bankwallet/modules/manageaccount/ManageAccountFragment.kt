@@ -25,10 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
@@ -130,11 +127,12 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 icon = painterResource(id = R.drawable.ic_key_20),
                                 attention = true
                             ) {
-                                navController.slideFromBottom(
-                                    R.id.backupKeyFragment,
-                                    BackupKeyModule.prepareParams(viewModel.account)
-                                )
-
+                                navController.authorizedAction {
+                                    navController.slideFromBottom(
+                                        R.id.backupKeyFragment,
+                                        BackupKeyModule.prepareParams(viewModel.account)
+                                    )
+                                }
                             }
                         }
                     }

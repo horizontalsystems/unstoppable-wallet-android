@@ -4,15 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -196,9 +192,12 @@ private fun KeyTabs(viewModel: ShowKeyViewModel, showKeyWarning: (String) -> Uni
             0 -> {
                 Column(Modifier.verticalScroll(rememberScrollState())) {
                     Spacer(Modifier.height(16.dp))
-                    SeedPhraseList(viewModel.wordsNumbered)
+                    var hidden by remember { mutableStateOf(true) }
+                    SeedPhraseList(viewModel.wordsNumbered, hidden) {
+                        hidden = false
+                    }
                     Spacer(Modifier.height(24.dp))
-                    PassphraseCell(viewModel.passphrase)
+                    PassphraseCell(viewModel.passphrase, hidden)
                 }
             }
             1 -> {
@@ -324,13 +323,14 @@ private fun KeyCell(title: String, onCopy: () -> Unit) {
 }
 
 @Composable
-fun PassphraseCell(passphrase: String) {
-    val localView = LocalView.current
+fun PassphraseCell(passphrase: String, hidden: Boolean) {
     if (passphrase.isNotBlank()) {
         CellSingleLineLawrenceSection(
             listOf {
                 Row(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
@@ -343,13 +343,7 @@ fun PassphraseCell(passphrase: String) {
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
                     Spacer(Modifier.weight(1f))
-                    ButtonSecondaryDefault(
-                        title = passphrase,
-                        onClick = {
-                            TextHelper.copyText(passphrase)
-                            HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-                        }
-                    )
+                    C2(text = if (hidden) "*****" else passphrase)
                 }
             })
         Spacer(Modifier.height(32.dp))
@@ -390,23 +384,45 @@ private fun ActionButton(title: Int, onClick: () -> Unit) {
 }
 
 @Composable
-fun SeedPhraseList(wordsNumbered: List<ShowKeyModule.WordNumbered>) {
-    FlowRow(
+fun SeedPhraseList(
+    wordsNumbered: List<ShowKeyModule.WordNumbered>,
+    hidden: Boolean,
+    onClickShow: () -> Unit
+) {
+    Box(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
-            .padding(horizontal = 16.dp, vertical = 24.dp),
-        mainAxisAlignment = FlowMainAxisAlignment.Center,
-        crossAxisSpacing = 16.dp
     ) {
-        wordsNumbered.chunked(3).forEach {
-            it.forEach { word ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    D7(text = word.number.toString())
-                    Spacer(modifier = Modifier.width(8.dp))
-                    B2(text = word.word)
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 24.dp),
+            mainAxisAlignment = FlowMainAxisAlignment.Center,
+            crossAxisSpacing = 16.dp
+        ) {
+            wordsNumbered.chunked(3).forEach {
+                it.forEach { word ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        D7(text = word.number.toString())
+                        Spacer(modifier = Modifier.width(8.dp))
+                        B2(text = word.word)
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
                 }
-                Spacer(modifier = Modifier.width(12.dp))
+            }
+        }
+
+        if (hidden) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .clickable(onClick = onClickShow)
+                    .background(ComposeAppTheme.colors.tyler),
+                contentAlignment = Alignment.Center
+            ) {
+                subhead2_grey(text = stringResource(R.string.RecoveryPhrase_ShowPhrase))
             }
         }
     }
