@@ -3,10 +3,7 @@ package io.horizontalsystems.bankwallet.core
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
-import io.horizontalsystems.bankwallet.entities.CoinSettingType
-import io.horizontalsystems.bankwallet.entities.CoinSettings
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.marketkit.models.*
 
 val Token.protocolType: String?
@@ -223,6 +220,12 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.Optimism -> R.drawable.optimism_erc20
         BlockchainType.ArbitrumOne -> R.drawable.arbitrum_erc20
         else -> R.drawable.coin_placeholder
+    }
+
+val BlockchainType.feePriceScale: FeePriceScale
+    get() = when (this) {
+        BlockchainType.Avalanche -> FeePriceScale.Navax
+        else -> FeePriceScale.Gwei
     }
 
 val TokenType.order: Int

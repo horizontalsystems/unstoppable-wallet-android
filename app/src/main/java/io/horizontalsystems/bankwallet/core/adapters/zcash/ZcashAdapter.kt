@@ -62,9 +62,6 @@ class ZcashAdapter(
     private val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
-    private var scanProgress: Int = 0
-    private var downloadProgress: Int = 0
-
     private val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
     private val seed = accountType.seed
 
@@ -119,7 +116,9 @@ class ZcashAdapter(
         return Zatoshi(value)
     }
 
-    private var syncState: AdapterState = AdapterState.Syncing()
+    private var syncState: AdapterState = AdapterState.Zcash(
+        ZcashState.DownloadingBlocks(null)
+    )
         set(value) {
             if (value != field) {
                 field = value
@@ -303,28 +302,34 @@ class ZcashAdapter(
         }
     }
 
-    private fun onDownloadProgress(progress: Int) {
-        downloadProgress = progress
-        updateSyncingState()
-    }
+    private fun onDownloadProgress(progress: Int) {}
 
     private fun onProcessorInfo(processorInfo: CompactBlockProcessor.ProcessorInfo) {
-        scanProgress = processorInfo.scanProgress
-        updateSyncingState()
+        if (processorInfo.isDownloading){
+            syncState = AdapterState.Zcash(
+                ZcashState.DownloadingBlocks(
+                    BlockProgress(
+                        processorInfo.lastDownloadedHeight,
+                        processorInfo.networkBlockHeight
+                    )
+                )
+            )
+        } else if(processorInfo.isScanning){
+            syncState = AdapterState.Zcash(
+                ZcashState.ScanningBlocks(
+                    BlockProgress(
+                        processorInfo.lastScannedHeight,
+                        processorInfo.networkBlockHeight
+                    )
+                )
+            )
+        }
 
         lastBlockUpdatedSubject.onNext(Unit)
     }
 
     private fun onBalance(balance: WalletBalance?) {
         balanceUpdatedSubject.onNext(Unit)
-    }
-
-    private fun updateSyncingState() {
-        val totalProgress = (downloadProgress + scanProgress) / 2
-
-        if (totalProgress < 100) {
-            syncState = AdapterState.Syncing(totalProgress)
-        }
     }
 
     private fun getTransactionRecord(transaction: ZcashTransaction): TransactionRecord {
@@ -380,6 +385,13 @@ class ZcashAdapter(
         object InvalidAddress : ZcashError()
         object SendToSelfNotAllowed : ZcashError()
     }
+
+    sealed class ZcashState{
+        class DownloadingBlocks(val blockProgress: BlockProgress?): ZcashState()
+        class ScanningBlocks(val blockProgress: BlockProgress): ZcashState()
+    }
+
+    class BlockProgress(val current: Int, val total: Int)
 
     companion object {
         private const val ALIAS_PREFIX = "zcash_"

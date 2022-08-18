@@ -35,7 +35,7 @@ object Migration_45_46 : Migration(45, 46) {
 
         database.execSQL("ALTER TABLE EnabledWallet RENAME TO TempEnabledWallet")
         database.execSQL("CREATE TABLE IF NOT EXISTS `EnabledWallet` (`tokenQueryId` TEXT NOT NULL, `coinSettingsId` TEXT NOT NULL, `accountId` TEXT NOT NULL, `walletOrder` INTEGER, `coinName` TEXT, `coinCode` TEXT, `coinDecimals` INTEGER, PRIMARY KEY(`tokenQueryId`, `coinSettingsId`, `accountId`), FOREIGN KEY(`accountId`) REFERENCES `AccountRecord`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)")
-        database.execSQL("INSERT INTO EnabledWallet (`tokenQueryId`, `coinSettingsId`, `accountId`, `walletOrder`) SELECT `coinId`,`coinSettingsId`,`accountId`,`walletOrder` FROM TempEnabledWallet")
+        database.execSQL("INSERT INTO EnabledWallet (`tokenQueryId`, `coinSettingsId`, `accountId`, `walletOrder`, `coinName`, `coinCode`, `coinDecimals`) SELECT `coinId`,`coinSettingsId`,`accountId`,`walletOrder`,`coinName`,`coinCode`,`coinDecimals` FROM TempEnabledWallet")
         database.execSQL("DROP TABLE IF EXISTS TempEnabledWallet")
         database.execSQL("CREATE INDEX IF NOT EXISTS `index_EnabledWallet_accountId` ON `EnabledWallet` (`accountId`)")
     }

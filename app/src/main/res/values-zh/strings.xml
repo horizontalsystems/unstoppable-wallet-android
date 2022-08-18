@@ -350,6 +350,8 @@
     <string name="WalletConnect_NoConnection">您没有任何已连接的dapps</string>
     <string name="WalletConnect_PendingRequests">待处理请求</string>
     <string name="WalletConnect_ActiveWallet">激活钱包</string>
+    <string name="WalletConnect_Address">地址</string>
+    <string name="WalletConnect_Network">網絡</string>
     <string name="WalletConnect_Input">输入</string>
     <string name="WalletConnect_Version1">版本 1.0</string>
     <string name="WalletConnect_Version2">版本 2.0</string>

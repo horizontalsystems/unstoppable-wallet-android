@@ -9,9 +9,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule.WCRequestWrapper
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 
@@ -29,6 +32,9 @@ class WCSessionViewModel(
     val statusLiveData = MutableLiveData<Status?>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val openRequestLiveEvent = SingleLiveEvent<WCRequestWrapper>()
+
+    var blockchainSelect by mutableStateOf(Select(service.selectedBlockchain, service.availableBlockchains))
+    var blockchainSelectEnabled by mutableStateOf(false)
 
     var invalidStateError by mutableStateOf<Int?>(null)
         private set
@@ -96,6 +102,12 @@ class WCSessionViewModel(
         }
     }
 
+    fun onSelectBlockchain(blockchain: Blockchain) {
+        service.selectedBlockchain = blockchain
+
+        blockchainSelect = Select(blockchain, service.availableBlockchains)
+    }
+
     fun connect() {
         service.approveSession()
     }
@@ -131,10 +143,14 @@ class WCSessionViewModel(
                 peerMeta.url,
                 peerMeta.description,
                 accountManager.activeAccount?.name,
+                service.evmAddress?.eip55?.shorten(),
                 peerMeta.icons.lastOrNull()
             )
         }
         peerMetaLiveData.postValue(peerMetaViewItem)
+
+        blockchainSelect = Select(service.selectedBlockchain, service.availableBlockchains)
+        blockchainSelectEnabled = state == WC1Service.State.WaitingForApproveSession
 
         connectingLiveData.postValue(connectionState == WalletConnectInteractor.State.Connecting)
         closeEnabledLiveData.postValue(state == WC1Service.State.Ready)
@@ -221,5 +237,6 @@ data class PeerMetaViewItem(
     val url: String,
     val description: String?,
     val activeWallet: String?,
+    val address: String?,
     val icon: String?
 )

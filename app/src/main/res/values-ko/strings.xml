@@ -350,6 +350,8 @@
     <string name="WalletConnect_NoConnection">연결된 dapp이 없습니다.</string>
     <string name="WalletConnect_PendingRequests">보류 중인 요청</string>
     <string name="WalletConnect_ActiveWallet">지갑 활성화</string>
+    <string name="WalletConnect_Address">주소</string>
+    <string name="WalletConnect_Network">회로망</string>
     <string name="WalletConnect_Input">입력</string>
     <string name="WalletConnect_Version1">버전 1.0</string>
     <string name="WalletConnect_Version2">버전 2.0</string>

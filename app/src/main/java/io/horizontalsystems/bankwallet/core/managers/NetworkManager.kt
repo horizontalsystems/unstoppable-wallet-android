@@ -51,12 +51,12 @@ class NetworkManager : INetworkManager {
         return ServiceEvmContractInfo.service(host).getTokenInfo(path)
     }
 
-    override suspend fun getBep2TokeInfo(symbol: String): TokenInfoService.Bep2TokenInfo {
-        return TokenInfoService.service().getBep2TokenInfo(symbol)
+    override suspend fun getBep2TokeInfo(blockchainUid: String, symbol: String): TokenInfoService.Bep2TokenInfo {
+        return TokenInfoService.service().getBep2TokenInfo(blockchainUid, symbol)
     }
 
-    override suspend fun getEvmTokeInfo(apiPath: String, address: String): TokenInfoService.EvmTokenInfo {
-        return TokenInfoService.service().getTokenInfo(apiPath, address)
+    override suspend fun getEvmTokeInfo(blockchainUid: String, address: String): TokenInfoService.EvmTokenInfo {
+        return TokenInfoService.service().getEip20TokenInfo(blockchainUid, address)
     }
 }
 
@@ -127,11 +127,14 @@ object TokenInfoService {
 
     interface TokenInfoAPI {
         @GET("bep2")
-        suspend fun getBep2TokenInfo(@Query("symbol") symbol: String): Bep2TokenInfo
+        suspend fun getBep2TokenInfo(
+            @Query("blockchain") blockchain: String,
+            @Query("symbol") symbol: String
+        ): Bep2TokenInfo
 
-        @GET("{apiPath}")
-        suspend fun getTokenInfo(
-            @Path("apiPath") apiPath: String,
+        @GET("eip20")
+        suspend fun getEip20TokenInfo(
+            @Query("blockchain") blockchain: String,
             @Query("address") address: String
         ): EvmTokenInfo
     }

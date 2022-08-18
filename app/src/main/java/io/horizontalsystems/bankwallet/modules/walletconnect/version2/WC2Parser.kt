@@ -5,8 +5,8 @@ import com.google.gson.JsonParser
 import com.walletconnect.walletconnectv2.client.WalletConnect
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.SignMessage
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WCAccountData
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WCChain
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.models.Chain
 
 object WC2Parser {
 
@@ -16,11 +16,6 @@ object WC2Parser {
             return splitted[1].toIntOrNull()
         }
         return null
-    }
-
-    fun getChainName(chain: String): String? {
-        val chainId = getChainId(chain) ?: return null
-        return WCChain.values().firstOrNull { it.id == chainId }?.title
     }
 
     fun getSessionRequestMethod(body: String?): String? {
@@ -137,7 +132,7 @@ object WC2Parser {
         }
 
         val chainId = chunks[1].toIntOrNull() ?: return null
-        val chain = WCChain.values().firstOrNull { it.id == chainId }
+        val chain = Chain.values().firstOrNull { it.id == chainId }
         val address: String? = when {
             chunks.size >= 3 -> chunks[2]
             else -> null

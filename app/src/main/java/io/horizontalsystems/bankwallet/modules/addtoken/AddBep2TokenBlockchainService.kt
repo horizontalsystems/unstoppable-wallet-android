@@ -8,6 +8,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 
 class AddBep2TokenBlockchainService(
+    private val blockchainType: BlockchainType,
     private val networkManager: INetworkManager
 ) : IAddTokenBlockchainService {
 
@@ -22,7 +23,7 @@ class AddBep2TokenBlockchainService(
     }
 
     override suspend fun customCoin(reference: String): CustomCoin {
-        val tokenInfo = networkManager.getBep2TokeInfo(reference)
+        val tokenInfo = networkManager.getBep2TokeInfo(blockchainType.uid, reference)
         return CustomCoin(TokenQuery(BlockchainType.BinanceChain, TokenType.Bep2(reference)), tokenInfo.name, tokenInfo.originalSymbol, tokenInfo.decimals)
     }
 

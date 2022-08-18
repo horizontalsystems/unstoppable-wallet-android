@@ -27,18 +27,7 @@ class AddEvmTokenBlockchainService(
     }
 
     override suspend fun customCoin(reference: String): CustomCoin {
-        val tokenInfo = networkManager.getEvmTokeInfo(apiPath(blockchainType), reference)
+        val tokenInfo = networkManager.getEvmTokeInfo(blockchainType.uid, reference)
         return CustomCoin(tokenQuery(reference), tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals)
     }
-
-    private fun apiPath(blockchainType: BlockchainType): String = when (blockchainType) {
-        BlockchainType.ArbitrumOne -> "arbitrum-one"
-        BlockchainType.BinanceSmartChain -> "bep20"
-        BlockchainType.Ethereum -> "erc20"
-        BlockchainType.Optimism -> "optimism"
-        BlockchainType.Polygon -> "mrc20"
-        BlockchainType.Avalanche -> "erc20"
-        else -> throw IllegalStateException()
-    }
-
 }

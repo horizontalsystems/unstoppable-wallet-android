@@ -284,6 +284,8 @@
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">Price Change</string>
     <string name="Balance_Hidden">hidden</string>
+    <string name="Balance_DownloadingBlocks">Downloading Blocks</string>
+    <string name="Balance_ScanningBlocks">Scanning Blocks</string>
     <string name="Balance_Backup_Alert">You need to backup the %1$s Wallet before you may receive %2$s.</string>
     <string name="Balance_NoWalletAlert">You don\'t have any installed wallets yet.\nCreate a new wallet or restore an existing one </string>
     <string name="Balance_NoCoinsAlert">You don\'t have an added coins.\nAdd the coins you will be using</string>
@@ -420,6 +422,8 @@
     <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
     <string name="WalletConnect_PendingRequests">Pending Requests</string>
     <string name="WalletConnect_ActiveWallet">Active Wallet</string>
+    <string name="WalletConnect_Address">Address</string>
+    <string name="WalletConnect_Network">Network</string>
     <string name="WalletConnect_Input">Input</string>
     <string name="WalletConnect_Version1">Version 1.0</string>
     <string name="WalletConnect_Version2">Version 2.0</string>
@@ -872,7 +876,6 @@
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
     <string name="ManageAccount_BackupRequired_Description">You need to backup %1$s before you may receive %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
-    <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <string name="ManageAccount_NWords">%s words</string>

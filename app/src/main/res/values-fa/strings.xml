@@ -350,6 +350,8 @@
     <string name="WalletConnect_NoConnection">شما هیچ برنامه متصل ندارید</string>
     <string name="WalletConnect_PendingRequests">درخواست های معلق</string>
     <string name="WalletConnect_ActiveWallet">کیف پول فعال</string>
+    <string name="WalletConnect_Address">نشانی</string>
+    <string name="WalletConnect_Network">خالص</string>
     <string name="WalletConnect_Input">ورودی</string>
     <string name="WalletConnect_Version1">نسخه 1.0</string>
     <string name="WalletConnect_Version2">نسخه 2.0</string>

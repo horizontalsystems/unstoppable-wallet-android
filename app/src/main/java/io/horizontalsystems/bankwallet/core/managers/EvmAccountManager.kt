@@ -70,27 +70,31 @@ class EvmAccountManager(
     }
 
     private suspend fun initialSync() {
-        val account = accountManager.activeAccount ?: return
-        val evmKitWrapper = evmKitManager.evmKitWrapper ?: return
+        try {
+            val account = accountManager.activeAccount ?: return
+            val evmKitWrapper = evmKitManager.evmKitWrapper ?: return
 
-        val chainId = evmKitManager.chain.id
-        val syncState = evmAccountStateDao.get(account.id, chainId)
+            val chainId = evmKitManager.chain.id
+            val syncState = evmAccountStateDao.get(account.id, chainId)
 
-        if (syncState == null) {
-            // blockchain is enabled after restore
+            if (syncState == null) {
+                // blockchain is enabled after restore
 
-            evmAccountStateDao.insert(EvmAccountState(account.id, chainId, provider.blockNumber(blockchainType)))
-        } else if (syncState.transactionsSyncedBlockNumber == 0L) {
-            // blockchain is enabled during restore or 'watch address'
+                evmAccountStateDao.insert(EvmAccountState(account.id, chainId, provider.blockNumber(blockchainType)))
+            } else if (syncState.transactionsSyncedBlockNumber == 0L) {
+                // blockchain is enabled during restore or 'watch address'
 
-            val addressInfo = provider.addresses(evmKitWrapper.evmKit.receiveAddress.hex, blockchainType)
-            val tokenTypes = addressInfo.addresses.map { TokenType.Eip20(it) }
-            if (tokenTypes.isEmpty()) return
+                val addressInfo = provider.addresses(evmKitWrapper.evmKit.receiveAddress.hex, blockchainType)
+                val tokenTypes = addressInfo.addresses.map { TokenType.Eip20(it) }
+                if (tokenTypes.isEmpty()) return
 
-            val tokenQueries = tokenTypes.map { TokenQuery(blockchainType, it) }
-            walletActivator.activateWallets(account, tokenQueries)
+                val tokenQueries = tokenTypes.map { TokenQuery(blockchainType, it) }
+                walletActivator.activateWallets(account, tokenQueries)
 
-            evmAccountStateDao.insert(EvmAccountState(account.id, chainId, addressInfo.blockNumber))
+                evmAccountStateDao.insert(EvmAccountState(account.id, chainId, addressInfo.blockNumber))
+            }
+        } catch (exception: Exception) {
+            logger.warning("error", exception)
         }
     }
 

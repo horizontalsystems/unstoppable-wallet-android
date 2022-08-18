@@ -13,11 +13,11 @@ class WordsManager(
     }
 
     override fun isWordValid(word: String): Boolean {
-        return mnemonic.isWordValid(word)
+        return mnemonic.isWordValid(word, false)
     }
 
     override fun isWordPartiallyValid(word: String): Boolean {
-        return mnemonic.isWordValid(word, partial = true)
+        return mnemonic.isWordValid(word, true)
     }
 
     override fun generateWords(count: Int): List<String> {
