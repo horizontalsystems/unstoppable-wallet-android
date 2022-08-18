@@ -117,7 +117,7 @@ class ZcashAdapter(
     }
 
     private var syncState: AdapterState = AdapterState.Zcash(
-        ZcashState.DownloadingBlocks(null)
+        ZcashState.DownloadingBlocks(BlockProgress(null, null))
     )
         set(value) {
             if (value != field) {
@@ -309,8 +309,8 @@ class ZcashAdapter(
             syncState = AdapterState.Zcash(
                 ZcashState.DownloadingBlocks(
                     BlockProgress(
-                        processorInfo.lastDownloadedHeight,
-                        processorInfo.networkBlockHeight
+                        processorInfo.lastDownloadedHeight?.value,
+                        processorInfo.networkBlockHeight?.value
                     )
                 )
             )
@@ -318,8 +318,8 @@ class ZcashAdapter(
             syncState = AdapterState.Zcash(
                 ZcashState.ScanningBlocks(
                     BlockProgress(
-                        processorInfo.lastScannedHeight,
-                        processorInfo.networkBlockHeight
+                        processorInfo.lastScannedHeight?.value,
+                        processorInfo.networkBlockHeight?.value
                     )
                 )
             )
@@ -387,11 +387,11 @@ class ZcashAdapter(
     }
 
     sealed class ZcashState{
-        class DownloadingBlocks(val blockProgress: BlockProgress?): ZcashState()
+        class DownloadingBlocks(val blockProgress: BlockProgress): ZcashState()
         class ScanningBlocks(val blockProgress: BlockProgress): ZcashState()
     }
 
-    class BlockProgress(val current: Int, val total: Int)
+    class BlockProgress(val current: Long?, val total: Long?)
 
     companion object {
         private const val ALIAS_PREFIX = "zcash_"

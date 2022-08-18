@@ -167,13 +167,19 @@ class BalanceViewItemFactory {
             is AdapterState.Zcash -> {
                 when (val zcash = state.zcashState) {
                     is ZcashAdapter.ZcashState.DownloadingBlocks -> {
-                        if (zcash.blockProgress != null) {
+                        if (zcash.blockProgress.current != null && zcash.blockProgress.total != null) {
                             "${zcash.blockProgress.current}/${zcash.blockProgress.total}"
                         } else {
                             ""
                         }
                     }
-                    is ZcashAdapter.ZcashState.ScanningBlocks -> "${zcash.blockProgress.current}/${zcash.blockProgress.total}"
+                    is ZcashAdapter.ZcashState.ScanningBlocks -> {
+                        if (zcash.blockProgress.current != null && zcash.blockProgress.total != null) {
+                            "${zcash.blockProgress.current}/${zcash.blockProgress.total}"
+                        } else {
+                            ""
+                        }
+                    }
                 }
             }
             else -> null
