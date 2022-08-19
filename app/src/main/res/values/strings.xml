@@ -940,6 +940,10 @@
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Public Keys</string>
 
+    <!-- Recovery Phrase Verify -->
+    <string name="RecoveryPhraseVerify_Title">Verify</string>
+    <string name="RecoveryPhraseVerify_Description">Select requested words from your wallet recovery phrase</string>
+
     <!-- Backup Key -->
     <string name="BackupKey_Title">Backup</string>
     <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken, etc.\n\nMake sure no one is watching your screen.</string>
