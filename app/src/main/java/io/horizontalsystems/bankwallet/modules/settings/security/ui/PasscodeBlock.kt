@@ -13,6 +13,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.authorizedAction
+import io.horizontalsystems.bankwallet.core.navigateToSetPin
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -25,7 +27,6 @@ import io.horizontalsystems.pin.PinModule
 fun PasscodeBlock(
     viewModel: SecurityPasscodeSettingsViewModel,
     navController: NavController,
-    subscribeForPinResult: () -> Unit,
 ) {
 
     Spacer(Modifier.height(12.dp))
@@ -61,17 +62,14 @@ fun PasscodeBlock(
                 HsSwitch(
                     checked = viewModel.pinEnabled,
                     onCheckedChange = { checked ->
-                        subscribeForPinResult()
                         if (checked) {
-                            navController.slideFromRight(
-                                R.id.pinFragment,
-                                PinModule.forSetPin()
-                            )
+                            navController.navigateToSetPin {
+                                viewModel.didSetPin()
+                            }
                         } else {
-                            navController.slideFromRight(
-                                R.id.pinFragment,
-                                PinModule.forUnlock()
-                            )
+                            navController.authorizedAction {
+                                viewModel.disablePin()
+                            }
                         }
                     }
                 )
