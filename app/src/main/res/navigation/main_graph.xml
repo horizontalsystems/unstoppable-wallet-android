@@ -47,8 +47,14 @@
         android:id="@+id/manageAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment"/>
     <fragment
-        android:id="@+id/showKeyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowKeyFragment"/>
+        android:id="@+id/publicKeysFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.publickeys.PublicKeysFragment"/>
+    <fragment
+        android:id="@+id/recoveryPhraseFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.recoveryphrase.RecoveryPhraseFragment"/>
+    <fragment
+        android:id="@+id/evmPrivateKeyFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.evmprivatekey.EvmPrivateKeyFragment"/>
     <fragment
         android:id="@+id/backupKeyFragment"
         android:name="io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyFragment"/>

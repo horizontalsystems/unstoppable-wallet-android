@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.backupkey
+package io.horizontalsystems.bankwallet.modules.recoveryphrase
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,9 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.recoveryphrase.RecoveryPhraseModule
 
-class BackupKeyViewModel(val account: Account) : ViewModel() {
+class RecoveryPhraseViewModel(account: Account) : ViewModel() {
+    val words: List<String>
+    private val seed: ByteArray?
 
     var passphrase by mutableStateOf("")
         private set
@@ -18,10 +19,16 @@ class BackupKeyViewModel(val account: Account) : ViewModel() {
 
     init {
         if (account.type is AccountType.Mnemonic) {
-            wordsNumbered = account.type.words.mapIndexed { index, word ->
+            words = account.type.words
+            wordsNumbered = words.mapIndexed { index, word ->
                 RecoveryPhraseModule.WordNumbered(word, index + 1)
             }
             passphrase = account.type.passphrase
+            seed = account.type.seed
+        } else {
+            words = listOf()
+            seed = null
         }
     }
+
 }
