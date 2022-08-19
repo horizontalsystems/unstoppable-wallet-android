@@ -46,3 +46,16 @@ fun NavController.authorizedAction(action: () -> Unit) {
         action.invoke()
     }
 }
+
+fun NavController.navigateToSetPin(onSuccess: () -> Unit) {
+    getNavigationResult(PinModule.requestKey) { bundle ->
+        val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
+        val resultCode = bundle.getInt(PinModule.requestResult)
+
+        if (resultCode == PinModule.RESULT_OK && resultType == PinInteractionType.SET_PIN) {
+            onSuccess.invoke()
+        }
+    }
+
+    slideFromRight(R.id.pinFragment, PinModule.forSetPin())
+}

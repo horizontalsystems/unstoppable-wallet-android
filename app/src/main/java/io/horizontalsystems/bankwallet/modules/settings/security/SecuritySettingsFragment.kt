@@ -39,9 +39,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.pin.PinInteractionType
-import io.horizontalsystems.pin.PinModule
 import kotlin.system.exitProcess
 
 class SecuritySettingsFragment : BaseFragment() {
@@ -77,7 +74,6 @@ class SecuritySettingsFragment : BaseFragment() {
                         navController = findNavController(),
                         showAppRestartAlert = { showAppRestartAlert() },
                         restartApp = { restartApp() },
-                        subscribeForPinResult = { subscribeFragmentResult() },
                     )
                 }
             }
@@ -125,21 +121,6 @@ class SecuritySettingsFragment : BaseFragment() {
             exitProcess(0)
         }
     }
-
-    private fun subscribeFragmentResult() {
-        getNavigationResult(PinModule.requestKey) { bundle ->
-            val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
-            val resultCode = bundle.getInt(PinModule.requestResult)
-
-            if (resultCode == PinModule.RESULT_OK) {
-                when (resultType) {
-                    PinInteractionType.SET_PIN -> passcodeViewModel.didSetPin()
-                    PinInteractionType.UNLOCK -> passcodeViewModel.disablePin()
-                    else -> Unit
-                }
-            }
-        }
-    }
 }
 
 @Composable
@@ -150,7 +131,6 @@ private fun SecurityCenterScreen(
     navController: NavController,
     showAppRestartAlert: () -> Unit,
     restartApp: () -> Unit,
-    subscribeForPinResult: () -> Unit,
 ) {
 
     if (torViewModel.restartApp) {
@@ -181,8 +161,7 @@ private fun SecurityCenterScreen(
                 item {
                     PasscodeBlock(
                         passcodeViewModel,
-                        navController,
-                        subscribeForPinResult
+                        navController
                     )
                 }
 
