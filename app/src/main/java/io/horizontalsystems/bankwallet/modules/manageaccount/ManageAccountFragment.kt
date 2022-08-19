@@ -29,7 +29,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
-import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
+import io.horizontalsystems.bankwallet.modules.publickeys.PublicKeysModule
 import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -60,7 +60,6 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
     val viewModel = viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
 
     val saveEnabled by viewModel.saveEnabledLiveData.observeAsState(false)
-    val keyActionState by viewModel.keyActionStateLiveData.observeAsState()
     val additionalViewItems by viewModel.additionalViewItemsLiveData.observeAsState(listOf())
     val finish by viewModel.finishLiveEvent.observeAsState()
 
@@ -106,27 +105,54 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
 
                 val actionItems = mutableListOf<@Composable () -> Unit>()
 
-                when (keyActionState) {
+                when (viewModel.keyActionState) {
                     KeyActionState.ShowRecoveryPhrase -> {
                         actionItems.add {
                             AccountActionItem(
-                                title = stringResource(id = R.string.ManageAccount_RecoveryPhraseShow),
+                                title = stringResource(id = R.string.RecoveryPhrase_Title),
+                                icon = painterResource(id = R.drawable.icon_paper_contract_20)
+                            ) {
+                                navController.authorizedAction {
+                                    navController.slideFromRight(
+                                        R.id.recoveryPhraseFragment,
+                                        PublicKeysModule.prepareParams(viewModel.account)
+                                    )
+                                }
+                            }
+                        }
+                        actionItems.add {
+                            AccountActionItem(
+                                title = stringResource(id = R.string.EvmPrivateKey_Title),
                                 icon = painterResource(id = R.drawable.ic_key_20)
                             ) {
-                                navController.slideFromBottom(
-                                    R.id.showKeyFragment,
-                                    ShowKeyModule.prepareParams(viewModel.account)
-                                )
+                                navController.authorizedAction {
+                                    navController.slideFromRight(
+                                        R.id.evmPrivateKeyFragment,
+                                        PublicKeysModule.prepareParams(viewModel.account)
+                                    )
+                                }
+                            }
+                        }
+                        actionItems.add {
+                            AccountActionItem(
+                                title = stringResource(id = R.string.PublicKeys_Title),
+                                icon = painterResource(id = R.drawable.icon_link_20)
+                            ) {
+                                navController.authorizedAction {
+                                    navController.slideFromRight(
+                                        R.id.publicKeysFragment,
+                                        PublicKeysModule.prepareParams(viewModel.account)
+                                    )
+                                }
                             }
                         }
                     }
                     KeyActionState.BackupRecoveryPhrase -> {
                         actionItems.add {
-                            AccountActionItem(
+                            RedActionItem(
                                 title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
-                                icon = painterResource(id = R.drawable.ic_key_20),
-                                attention = true
-                            ) {
+                                icon = painterResource(id = R.drawable.icon_warning_2_20)
+                            ){
                                 navController.authorizedAction {
                                     navController.slideFromBottom(
                                         R.id.backupKeyFragment,
@@ -136,13 +162,14 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             }
                         }
                     }
-                    KeyActionState.None,
-                    null -> Unit
+                    KeyActionState.None -> Unit
                 }
+
+                val additionalItems = mutableListOf<@Composable () -> Unit>()
 
                 additionalViewItems.forEach { additionViewItem ->
                     val token = additionViewItem.token
-                    actionItems.add {
+                    additionalItems.add {
                         AccountActionItem(
                             title = additionViewItem.title,
                             coinIconUrl = token.coin.iconUrl,
@@ -155,28 +182,22 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                 Spacer(modifier = Modifier.height(32.dp))
                 CellSingleLineLawrenceSection(actionItems)
 
+                if (additionalItems.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(32.dp))
+                    CellSingleLineLawrenceSection(additionalItems)
+                }
+
                 Spacer(modifier = Modifier.height(32.dp))
                 CellSingleLineLawrenceSection(listOf {
                     CellSingleLineLawrence {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clickable {
-                                    navController.slideFromBottom(
-                                        R.id.unlinkConfirmationDialog,
-                                        UnlinkAccountDialog.prepareParams(viewModel.account)
-                                    )
-                                },
-                            verticalAlignment = Alignment.CenterVertically
+                        RedActionItem(
+                            title = stringResource(id = R.string.ManageAccount_Unlink),
+                            icon = painterResource(id = R.drawable.ic_delete_20)
                         ) {
-                            Icon(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                painter = painterResource(id = R.drawable.ic_delete_20),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.lucian
+                            navController.slideFromBottom(
+                                R.id.unlinkConfirmationDialog,
+                                UnlinkAccountDialog.prepareParams(viewModel.account)
                             )
-
-                            body_lucian(text = stringResource(id = R.string.ManageAccount_Unlink))
                         }
                     }
                 })
@@ -260,5 +281,31 @@ private fun AccountActionItem(
             )
             Spacer(modifier = Modifier.width(16.dp))
         }
+    }
+}
+
+@Composable
+private fun RedActionItem(
+    title: String,
+    icon: Painter,
+    onClick: () -> Unit
+) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            painter = icon,
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.lucian
+        )
+
+        body_lucian(
+            text = title,
+        )
     }
 }

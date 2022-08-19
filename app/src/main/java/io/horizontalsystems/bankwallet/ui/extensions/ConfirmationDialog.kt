@@ -116,7 +116,7 @@ class ConfirmationDialog(
         fun show(
             icon: Int? = null,
             title: String,
-            warningTitle: String,
+            warningTitle: String? = null,
             warningText: String?,
             actionButtonTitle: String? = "",
             transparentButtonTitle: String? = "",

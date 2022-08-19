@@ -883,7 +883,7 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Recovery Phrase</string>
     <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
     <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Unlink</string>
@@ -929,6 +929,16 @@
     <string name="RecoveryPhrase_Description">Write these words down in the correct order and keep them in a safe place</string>
     <string name="RecoveryPhrase_ShowPhrase">Tap to show recovery phrase</string>
     <string name="RecoveryPhrase_Verify">Verify</string>
+    <string name="RecoveryPhrase_Warning">Never share your recovery phrase with anyone.  Unstoppable Wallet team will never ask for your recovery phrase.</string>
+    <string name="RecoveryPhrase_CopyWarning_Title">Risk of Copying</string>
+
+    <!-- Evm Private Key -->
+    <string name="EvmPrivateKey_Title">EVM Private Key</string>
+    <string name="EvmPrivateKey_Warning">This key is for all EVM-compatible blockchains. Do not share it with anyone.</string>
+    <string name="EvmPrivateKey_ShowPrivateKey">Tap to show private key</string>
+
+    <!-- Public Keys -->
+    <string name="PublicKeys_Title">Public Keys</string>
 
     <!-- Backup Key -->
     <string name="BackupKey_Title">Backup</string>

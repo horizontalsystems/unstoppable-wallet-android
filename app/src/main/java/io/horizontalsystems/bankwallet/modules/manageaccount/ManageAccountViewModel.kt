@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
@@ -15,7 +18,9 @@ class ManageAccountViewModel(
 ) : ViewModel() {
     val disposable = CompositeDisposable()
 
-    val keyActionStateLiveData = MutableLiveData<KeyActionState>()
+    var keyActionState by mutableStateOf(KeyActionState.None)
+        private set
+
     val saveEnabledLiveData = MutableLiveData<Boolean>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
     val additionalViewItemsLiveData = MutableLiveData<List<AdditionalViewItem>>()
@@ -47,19 +52,25 @@ class ManageAccountViewModel(
     }
 
     private fun syncAccount(account: Account) {
-        val keyActionState = when {
+        keyActionState = when {
             account.isWatchAccount -> KeyActionState.None
             account.isBackedUp -> KeyActionState.ShowRecoveryPhrase
             else -> KeyActionState.BackupRecoveryPhrase
         }
-        keyActionStateLiveData.postValue(keyActionState)
     }
 
     private fun syncAccountSettings() {
-        val additionalViewItems = service.accountSettingsInfo.map { (token, restoreSettingType, value) ->
-            AdditionalViewItem(token, service.getSettingsTitle(restoreSettingType, token), value)
+        if(keyActionState == KeyActionState.ShowRecoveryPhrase) {
+            val additionalViewItems =
+                service.accountSettingsInfo.map { (token, restoreSettingType, value) ->
+                    AdditionalViewItem(
+                        token,
+                        service.getSettingsTitle(restoreSettingType, token),
+                        value
+                    )
+                }
+            additionalViewItemsLiveData.postValue(additionalViewItems)
         }
-        additionalViewItemsLiveData.postValue(additionalViewItems)
     }
 
     fun onChange(name: String?) {

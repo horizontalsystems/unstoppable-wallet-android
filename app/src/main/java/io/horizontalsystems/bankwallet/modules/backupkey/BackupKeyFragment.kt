@@ -20,8 +20,8 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyModule
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.showkey.PassphraseCell
-import io.horizontalsystems.bankwallet.modules.showkey.SeedPhraseList
+import io.horizontalsystems.bankwallet.modules.recoveryphrase.PassphraseCell
+import io.horizontalsystems.bankwallet.modules.recoveryphrase.SeedPhraseList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
