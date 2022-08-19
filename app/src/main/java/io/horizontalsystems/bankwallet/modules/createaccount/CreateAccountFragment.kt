@@ -28,11 +28,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.displayNameStringRes
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.hdwalletkit.Language
 
 class CreateAccountFragment : BaseFragment() {
 
@@ -68,6 +70,7 @@ private fun CreateAccountScreen(
     }
 
     var showMnemonicSizeSelectorDialog by remember { mutableStateOf(false) }
+    var showLanguageSelectorDialog by remember { mutableStateOf(false) }
 
     ComposeAppTheme {
         Surface(color = ComposeAppTheme.colors.tyler) {
@@ -82,6 +85,24 @@ private fun CreateAccountScreen(
                     },
                     onSelectItem = {
                         viewModel.setMnemonicKind(it)
+                    }
+                )
+            }
+            if (showLanguageSelectorDialog) {
+                SelectorDialogCompose(
+                    title = stringResource(R.string.CreateWallet_Wordlist),
+                    items = viewModel.mnemonicLanguages.map {
+                        TabItem(
+                            stringResource(it.displayNameStringRes),
+                            it == viewModel.selectedLanguage,
+                            it
+                        )
+                    },
+                    onDismissRequest = {
+                        showLanguageSelectorDialog = false
+                    },
+                    onSelectItem = {
+                        viewModel.setMnemonicLanguage(it)
                     }
                 )
             }
@@ -111,10 +132,27 @@ private fun CreateAccountScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     Spacer(Modifier.height(12.dp))
-                    MnemonicNumberCell(
-                        kind = viewModel.selectedKind,
-                        showMnemonicSizeSelectorDialog = { showMnemonicSizeSelectorDialog = true }
+                    CellSingleLineLawrenceSection(
+                        listOf(
+                            {
+                                MnemonicNumberCell(
+                                    kind = viewModel.selectedKind,
+                                    showMnemonicSizeSelectorDialog = {
+                                        showMnemonicSizeSelectorDialog = true
+                                    }
+                                )
+                            },
+                            {
+                                MnemonicLanguageCell(
+                                    language = viewModel.selectedLanguage,
+                                    showLanguageSelectorDialog = {
+                                        showLanguageSelectorDialog = true
+                                    }
+                                )
+                            },
+                        )
                     )
+
                     Spacer(Modifier.height(32.dp))
                     PassphraseCell(
                         enabled = viewModel.passphraseEnabled,
@@ -163,31 +201,55 @@ private fun MnemonicNumberCell(
     kind: CreateAccountModule.Kind,
     showMnemonicSizeSelectorDialog: () -> Unit
 ) {
-    CellSingleLineLawrenceSection(
-        listOf {
-            Row(
-                modifier = Modifier.padding(start = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_key_20),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
-                )
-                D1(
-                    text = stringResource(R.string.CreateWallet_Mnemonic),
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-                Spacer(Modifier.weight(1f))
-                ButtonSecondaryTransparent(
-                    title = kind.title,
-                    iconRight = R.drawable.ic_down_arrow_20,
-                    onClick = {
-                        showMnemonicSizeSelectorDialog()
-                    }
-                )
+    Row(
+        modifier = Modifier.padding(start = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_key_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
+        B2(
+            text = stringResource(R.string.CreateWallet_Mnemonic),
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+        Spacer(Modifier.weight(1f))
+        ButtonSecondaryTransparent(
+            title = kind.title,
+            iconRight = R.drawable.ic_down_arrow_20,
+            onClick = {
+                showMnemonicSizeSelectorDialog()
             }
-        })
+        )
+    }
+}
+
+@Composable
+private fun MnemonicLanguageCell(
+    language: Language,
+    showLanguageSelectorDialog: () -> Unit
+) {
+    Row(
+        modifier = Modifier.padding(start = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_globe_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
+        B2(
+            text = stringResource(R.string.CreateWallet_Wordlist),
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+        Spacer(Modifier.weight(1f))
+        ButtonSecondaryTransparent(
+            title = stringResource(language.displayNameStringRes),
+            iconRight = R.drawable.ic_down_arrow_20,
+            onClick = showLanguageSelectorDialog
+        )
+    }
 }
 
 @Composable
@@ -210,7 +272,7 @@ private fun PassphraseCell(
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey
                 )
-                D1(
+                B2(
                     text = stringResource(R.string.Passphrase),
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )

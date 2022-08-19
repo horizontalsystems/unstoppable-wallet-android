@@ -74,6 +74,7 @@
     <!--Create Wallet-->
     <string name="CreateWallet_Title">New Wallet</string>
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
+    <string name="CreateWallet_Wordlist">Wordlist</string>
     <string name="Passphrase">Passphrase</string>
     <string name="CreateWallet_N_Words">%s words</string>
     <string name="CreateWallet_PassphraseConfirm">Confirm</string>
@@ -82,6 +83,19 @@
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
     <string name="EnterPassphrase">Enter the passphrase</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases add an additional security layer to the wallets, enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase, but associated with different passwords. \n\nTo restore these wallets, a user will require a mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+
+    <!--Languages-->
+    <string name="Language_English">English</string>
+    <string name="Language_Japanese">Japanese</string>
+    <string name="Language_Korean">Korean</string>
+    <string name="Language_Spanish">Spanish</string>
+    <string name="Language_SimplifiedChinese">Chinese (Simplified)</string>
+    <string name="Language_TraditionalChinese">Chinese (Traditional)</string>
+    <string name="Language_French">French</string>
+    <string name="Language_Italian">Italian</string>
+    <string name="Language_Czech">Czech</string>
+    <string name="Language_Portuguese">Portuguese</string>
+
 
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>

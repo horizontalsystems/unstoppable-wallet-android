@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
+import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
@@ -34,8 +35,12 @@ class CreateAccountViewModel(
     private var passphraseConfirmation = ""
 
     val mnemonicKinds = CreateAccountModule.Kind.values().toList()
+    val mnemonicLanguages = Language.values().toList()
 
     var selectedKind: CreateAccountModule.Kind = Mnemonic12
+        private set
+
+    var selectedLanguage: Language = Language.English
         private set
 
     var passphraseEnabled by mutableStateOf(false)
@@ -91,6 +96,10 @@ class CreateAccountViewModel(
         selectedKind = kind
     }
 
+    fun setMnemonicLanguage(language: Language) {
+        selectedLanguage = language
+    }
+
     fun setPassphraseEnabledState(enabled: Boolean) {
         passphraseEnabled = enabled
         if (!enabled) {
@@ -138,7 +147,7 @@ class CreateAccountViewModel(
     }
 
     private fun mnemonicAccountType(wordCount: Int): AccountType {
-        val words = wordsManager.generateWords(wordCount)
+        val words = wordsManager.generateWords(wordCount, selectedLanguage)
         return AccountType.Mnemonic(words, passphrase)
     }
 
