@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IWordsManager
+import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
 
 class WordsManager(
@@ -20,8 +21,8 @@ class WordsManager(
         return mnemonic.isWordValid(word, true)
     }
 
-    override fun generateWords(count: Int): List<String> {
+    override fun generateWords(count: Int, language: Language): List<String> {
         val strength = Mnemonic.EntropyStrength.fromWordCount(count)
-        return mnemonic.generate(strength)
+        return mnemonic.generate(strength, language)
     }
 }

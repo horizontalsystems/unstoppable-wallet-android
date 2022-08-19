@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.ethereumkit.core.toRawHexString
+import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.*
 import io.horizontalsystems.views.SingleClickListener
@@ -68,6 +69,20 @@ fun List<FullCoin>.sortedByFilter(filter: String, enabled: (FullCoin) -> Boolean
 
     return sortedWith(comparator)
 }
+
+val Language.displayNameStringRes: Int
+    get() = when (this) {
+        Language.English -> R.string.Language_English
+        Language.Japanese -> R.string.Language_Japanese
+        Language.Korean -> R.string.Language_Korean
+        Language.Spanish -> R.string.Language_Spanish
+        Language.SimplifiedChinese -> R.string.Language_SimplifiedChinese
+        Language.TraditionalChinese -> R.string.Language_TraditionalChinese
+        Language.French -> R.string.Language_French
+        Language.Italian -> R.string.Language_Italian
+        Language.Czech -> R.string.Language_Czech
+        Language.Portuguese -> R.string.Language_Portuguese
+    }
 
 // ImageView
 
