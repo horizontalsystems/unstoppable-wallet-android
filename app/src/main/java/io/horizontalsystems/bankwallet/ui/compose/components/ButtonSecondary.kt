@@ -33,7 +33,11 @@ fun ButtonSecondaryDefault(
         modifier = modifier,
         onClick = onClick,
         content = {
-            subhead1_leah(text = title, maxLines = 1)
+            if (enabled) {
+                subhead1_leah(text = title, maxLines = 1)
+            } else {
+                subhead1_grey50(text = title, maxLines = 1)
+            }
         },
         enabled = enabled
     )
