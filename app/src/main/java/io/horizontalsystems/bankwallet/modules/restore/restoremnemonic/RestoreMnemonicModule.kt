@@ -20,8 +20,6 @@ object RestoreMnemonicModule {
     }
 
     data class UiState(
-        val name: String = "",
-        val defaultName: String,
         val passphraseEnabled: Boolean = false,
         val passphrase: String = "",
         val passphraseError: String? = null,

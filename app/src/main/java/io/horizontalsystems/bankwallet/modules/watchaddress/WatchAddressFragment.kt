@@ -108,20 +108,6 @@ fun WatchAddressScreen(navController: NavController) {
                 )
                 InfoText(text = stringResource(R.string.Watch_Address_Description))
 
-                Spacer(Modifier.height(24.dp))
-
-                HeaderText(text = stringResource(R.string.Restore_Name))
-
-                FormsInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = viewModel.nameState,
-                    hint = viewModel.defaultName,
-                    pasteEnabled = false,
-                    onValueChange = {
-                        viewModel.onNameChange(it)
-                    }
-                )
-
                 Spacer(Modifier.height(32.dp))
             }
 
