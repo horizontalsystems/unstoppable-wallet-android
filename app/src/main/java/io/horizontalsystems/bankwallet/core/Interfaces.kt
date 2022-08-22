@@ -147,7 +147,7 @@ interface IWalletStorage {
 }
 
 interface IRandomProvider {
-    fun getRandomIndexes(count: Int, maxIndex: Int): List<Int>
+    fun getRandomNumbers(count: Int, maxIndex: Int): List<Int>
 }
 
 interface INetworkManager {

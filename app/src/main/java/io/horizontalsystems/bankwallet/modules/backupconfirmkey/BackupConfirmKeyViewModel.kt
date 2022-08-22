@@ -14,10 +14,10 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 class BackupConfirmKeyViewModel(
     private val account: Account,
     private val accountManager: IAccountManager,
-    private val indexesProvider: IRandomProvider
+    private val randomProvider: IRandomProvider
 ) : ViewModel() {
 
-    private val wordsOriginal: List<String>
+    private val wordsIndexed: List<Pair<Int, String>>
     private var hiddenWordItems = listOf<HiddenWordItem>()
     private var wordOptions = listOf<WordOption>()
     private var currentHiddenWordItemIndex = -1
@@ -36,27 +36,38 @@ class BackupConfirmKeyViewModel(
 
     init {
         if (account.type is AccountType.Mnemonic) {
-            wordsOriginal = account.type.words
+            wordsIndexed = account.type.words.mapIndexed { index, s ->
+                Pair(index, s)
+            }
 
             reset()
             emitState()
         } else {
-            wordsOriginal = listOf()
+            wordsIndexed = listOf()
         }
     }
 
     private fun reset() {
-        val randomIndexes = indexesProvider.getRandomIndexes(2, wordsOriginal.size)
+        val wordsCountToGuess = when (wordsIndexed.size) {
+            12 -> 2
+            15, 18, 21 -> 3
+            24 -> 4
+            else -> 2
+        }
 
-        hiddenWordItems = randomIndexes.map { index ->
+        val shuffled = wordsIndexed.shuffled().take(12)
+        val randomNumbers = randomProvider.getRandomNumbers(wordsCountToGuess, shuffled.size)
+
+        hiddenWordItems = randomNumbers.map { number ->
+            val wordIndexed = shuffled[number]
             HiddenWordItem(
-                index = index,
-                word = wordsOriginal[index],
+                index = wordIndexed.first,
+                word = wordIndexed.second,
                 isRevealed = false
             )
         }
-        wordOptions = wordsOriginal.shuffled().map {
-            WordOption(it, true)
+        wordOptions = shuffled.map {
+            WordOption(it.second, true)
         }
         currentHiddenWordItemIndex = 0
     }
