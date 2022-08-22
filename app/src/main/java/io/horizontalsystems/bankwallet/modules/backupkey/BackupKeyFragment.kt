@@ -37,6 +37,7 @@ class BackupKeyFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        disallowScreenshot()
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -47,6 +48,11 @@ class BackupKeyFragment : BaseFragment() {
                 RecoveryPhraseScreen(findNavController(), account)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        allowScreenshot()
+        super.onDestroyView()
     }
 }
 
