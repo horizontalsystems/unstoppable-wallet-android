@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core
 
 import android.content.Intent
 import android.os.Parcelable
-import android.view.View
 import android.widget.ImageView
 import androidx.annotation.CheckResult
 import coil.load
@@ -13,7 +12,6 @@ import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.*
-import io.horizontalsystems.views.SingleClickListener
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -99,17 +97,6 @@ fun ImageView.setImage(imageSource: ImageSource) {
         is ImageSource.Local -> setImageResource(imageSource.resId)
         is ImageSource.Remote -> setRemoteImage(imageSource.url, imageSource.placeholder)
     }
-}
-
-// View
-
-fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
-    this.setOnClickListener(
-        object : SingleClickListener() {
-            override fun onSingleClick(v: View) {
-                l.invoke(v)
-            }
-        })
 }
 
 // String

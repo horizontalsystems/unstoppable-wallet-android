@@ -30,7 +30,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.helpers.LayoutHelper
 
 class SendEvmTransactionView @JvmOverloads constructor(
@@ -345,6 +344,36 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             ValueType.Disabled -> R.color.grey
             ValueType.Outgoing -> R.color.leah
             ValueType.Incoming -> R.color.remus
+        }
+    }
+}
+
+enum class ListPosition(val id: Int) {
+    Single(0),
+    First(1),
+    Middle(2),
+    Last(3);
+
+    fun getBackground(): Int {
+        return when (this) {
+            First -> io.horizontalsystems.views.R.drawable.rounded_lawrence_background_top
+            Middle -> io.horizontalsystems.views.R.drawable.rounded_lawrence_background_middle
+            Last -> io.horizontalsystems.views.R.drawable.rounded_lawrence_background_bottom
+            Single -> io.horizontalsystems.views.R.drawable.rounded_lawrence_background_single
+        }
+    }
+
+    companion object {
+        private val map = values().associateBy(ListPosition::id)
+
+        fun getListPosition(id: Int): ListPosition = map[id] ?: Middle
+        fun getListPosition(size: Int, position: Int): ListPosition {
+            return when {
+                size == 1 -> Single
+                position == 0 -> First
+                position == size - 1 -> Last
+                else -> Middle
+            }
         }
     }
 }
