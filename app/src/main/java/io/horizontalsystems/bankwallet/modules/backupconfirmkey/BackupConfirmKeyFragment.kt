@@ -130,16 +130,18 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 24.dp),
                     mainAxisAlignment = FlowMainAxisAlignment.Center,
-                    crossAxisSpacing = 12.dp
+                    crossAxisSpacing = 16.dp
                 ) {
                     uiState.wordOptions.forEach { wordOption ->
-                        ButtonSecondaryDefault(
-                            title = wordOption.word,
-                            enabled = wordOption.enabled,
-                            onClick = {
-                                viewModel.onSelectWord(wordOption)
-                            }
-                        )
+                        Box(modifier = Modifier.height(28.dp)) {
+                            ButtonSecondaryDefault(
+                                title = wordOption.word,
+                                enabled = wordOption.enabled,
+                                onClick = {
+                                    viewModel.onSelectWord(wordOption)
+                                }
+                            )
+                        }
                         Spacer(modifier = Modifier.width(8.dp))
                     }
                 }
