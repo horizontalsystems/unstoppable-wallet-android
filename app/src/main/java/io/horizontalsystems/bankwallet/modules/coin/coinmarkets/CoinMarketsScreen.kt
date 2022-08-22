@@ -52,7 +52,7 @@ fun CoinMarketsScreen(
                 }
                 ViewState.Success -> {
                     viewItems?.let { items ->
-                        Column {
+                        Column(modifier = Modifier.fillMaxSize()) {
                             if (items.isEmpty()) {
                                 ListEmptyView(
                                     text = stringResource(R.string.CoinPage_NoDataAvailable),
