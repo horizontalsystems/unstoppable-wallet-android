@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -110,7 +111,7 @@ private fun RecoveryPhraseScreen(
                 Spacer(Modifier.height(24.dp))
                 var hidden by remember { mutableStateOf(true) }
                 SeedPhraseList(viewModel.wordsNumbered, hidden) {
-                    hidden = it
+                    hidden = !hidden
                 }
                 Spacer(Modifier.height(24.dp))
                 PassphraseCell(viewModel.passphrase, hidden)
@@ -167,7 +168,7 @@ private fun ActionButton(title: Int, onClick: () -> Unit) {
 fun SeedPhraseList(
     wordsNumbered: List<RecoveryPhraseModule.WordNumbered>,
     hidden: Boolean,
-    onClickToggle: (Boolean) -> Unit
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -175,7 +176,11 @@ fun SeedPhraseList(
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
             .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
-            .clickable(onClick = { onClickToggle.invoke(!hidden) })
+            .clickable(
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            )
     ) {
         FlowRow(
             modifier = Modifier
