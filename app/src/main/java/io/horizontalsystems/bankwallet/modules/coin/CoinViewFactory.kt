@@ -6,15 +6,12 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.*
-import io.horizontalsystems.views.ListPosition
 import java.math.BigDecimal
 import java.net.URI
 
@@ -23,14 +20,6 @@ data class ChartInfoData(
     val chartInterval: HsTimePeriod,
     val maxValue: String?,
     val minValue: String?
-)
-
-data class ChartPointViewItem(
-    val date: Long,
-    val price: CurrencyValue,
-    val volume: CurrencyValue?,
-    val dominance: BigDecimal?,
-    val macdInfo: MacdInfo?
 )
 
 data class MarketTickerViewItem(
@@ -68,19 +57,8 @@ data class CoinDataItem(
     val valueLabeledBackground: Int? = null,
     val valueDecorated: Boolean = false,
     @DrawableRes val icon: Int? = null,
-    var listPosition: ListPosition? = null,
     val rankLabel: String? = null
 )
-
-sealed class InvestorItem {
-    data class Header(val title: String) : InvestorItem()
-    data class Fund(
-        val name: String,
-        val url: String,
-        val cleanedUrl: String,
-        val position: ListPosition
-    ) : InvestorItem()
-}
 
 class MajorHolderItem(
     val index: Int,
@@ -94,13 +72,6 @@ data class CoinLink(
     val linkType: LinkType,
     val title: String,
     val icon: Int,
-    var listPosition: ListPosition? = null
-)
-
-data class LastPoint(
-    val rate: BigDecimal,
-    val timestamp: Long,
-    val rateDiff24h: BigDecimal
 )
 
 class CoinViewFactory(
@@ -264,10 +235,6 @@ class CoinViewFactory(
                     }
                 }
             }
-        }
-
-        links.forEachIndexed { index, link ->
-            link.listPosition = ListPosition.getListPosition(links.size, index)
         }
 
         return links

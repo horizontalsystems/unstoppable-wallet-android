@@ -97,8 +97,7 @@
     <fragment
         android:id="@+id/faqListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.faq.FaqListFragment"
-        android:label="@string/Settings_Faq"
-        tools:layout="@layout/fragment_faq_list"/>
+        android:label="@string/Settings_Faq"/>
     <fragment
         android:id="@+id/academyFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.guides.GuidesFragment"
