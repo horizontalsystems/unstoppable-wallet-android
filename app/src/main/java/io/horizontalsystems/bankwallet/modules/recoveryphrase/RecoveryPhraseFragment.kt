@@ -40,6 +40,7 @@ class RecoveryPhraseFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        disallowScreenshot()
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -52,6 +53,11 @@ class RecoveryPhraseFragment : BaseFragment() {
                 )
             }
         }
+    }
+
+    override fun onDestroyView() {
+        allowScreenshot()
+        super.onDestroyView()
     }
 
     private fun showPrivateKeyCopyWarning(key: String) {
