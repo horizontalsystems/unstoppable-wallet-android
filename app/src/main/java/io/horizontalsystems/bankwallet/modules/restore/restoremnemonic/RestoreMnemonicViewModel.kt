@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountFactory
-import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -18,7 +17,6 @@ import io.horizontalsystems.hdwalletkit.Mnemonic
 
 class RestoreMnemonicViewModel(
     accountFactory: IAccountFactory,
-    private val passphraseValidator: PassphraseValidator,
     private val wordsManager: WordsManager,
     private val thirdKeyboardStorage: IThirdKeyboard,
     private val helper: RestoreMnemonicHelper
@@ -41,14 +39,7 @@ class RestoreMnemonicViewModel(
     }
 
     fun onEnterPassphrase(passphrase: String) {
-        uiState = if (passphraseValidator.validate(passphrase)) {
-            uiState.copy(passphrase = passphrase, passphraseError = null)
-        } else {
-            uiState.copy(
-                passphrase = passphrase,
-                passphraseError = Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
-            )
-        }
+        uiState = uiState.copy(passphrase = passphrase, passphraseError = null)
     }
 
     fun onEnterMnemonicPhrase(text: String, cursorPosition: Int) {
