@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.customCoinPrefix
 import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.SyncInfo
 import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -189,5 +190,11 @@ class MarketKitWrapper(
 
     suspend fun nftAssetEvents(contractAddress: String, tokenId: String, eventType: NftEvent.EventType?, cursor: String? = null): PagedNftEvents =
         marketKit.nftAssetEvents(contractAddress, tokenId, eventType, cursor)
+
+    // Misc
+
+    fun syncInfo(): SyncInfo {
+        return marketKit.syncInfo()
+    }
 
 }
