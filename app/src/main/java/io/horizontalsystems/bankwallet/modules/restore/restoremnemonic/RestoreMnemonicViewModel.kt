@@ -23,15 +23,12 @@ class RestoreMnemonicViewModel(
 ) : ViewModel() {
 
     private val regex = Regex("\\S+")
-    private val defaultName = accountFactory.getNextAccountName()
+    val defaultName = accountFactory.getNextAccountName()
 
     val isThirdPartyKeyboardAllowed: Boolean
         get() = CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed
 
-    val resolvedName: String
-        get() = uiState.name.ifBlank { defaultName }
-
-    var uiState by mutableStateOf(UiState(defaultName = defaultName))
+    var uiState by mutableStateOf(UiState())
         private set
 
     fun onEnablePassphrase(enabled: Boolean) {
@@ -61,10 +58,6 @@ class RestoreMnemonicViewModel(
             invalidWordRanges = invalidWordRanges,
             wordSuggestions = helper.getWordSuggestions(allItems, cursorPosition)
         )
-    }
-
-    fun onEnterName(name: String) {
-        uiState = uiState.copy(name = name)
     }
 
     fun onProceed() {

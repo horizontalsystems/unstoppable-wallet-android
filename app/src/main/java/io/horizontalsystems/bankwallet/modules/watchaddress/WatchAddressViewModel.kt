@@ -14,9 +14,6 @@ class WatchAddressViewModel(private val service: WatchAddressService) : ViewMode
     var submitEnabled by mutableStateOf(false)
         private set
 
-    val defaultName by service::defaultName
-    val nameState by service::nameState
-
     fun onEnterAddress(v: Address?) {
         service.address = v
 
@@ -32,7 +29,4 @@ class WatchAddressViewModel(private val service: WatchAddressService) : ViewMode
         }
     }
 
-    fun onNameChange(name: String) {
-        service.name = name
-    }
 }

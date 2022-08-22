@@ -186,15 +186,6 @@ fun RestoreMnemonicScreen(navController: NavController) {
                     onEnabled = viewModel::onEnablePassphrase,
                     onEnterPassphrase = viewModel::onEnterPassphrase
                 )
-                Spacer(Modifier.height(24.dp))
-                HeaderText(text = stringResource(R.string.Restore_Name))
-                FormsInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    hint = uiState.defaultName,
-                    singleLine = true,
-                    pasteEnabled = false,
-                    onValueChange = viewModel::onEnterName
-                )
                 Spacer(Modifier.height(32.dp))
             }
 
@@ -233,7 +224,7 @@ fun RestoreMnemonicScreen(navController: NavController) {
         navController.slideFromRight(
             R.id.restoreSelectCoinsFragment,
             bundleOf(
-                RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.resolvedName,
+                RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.defaultName,
                 RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType
             )
         )

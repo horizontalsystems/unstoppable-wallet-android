@@ -112,7 +112,6 @@
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
     <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase.</string>
     <string name="Restore_Title">Choose Blockchains</string>
-    <string name="Restore_Name">Name (Optional)</string>
     <string name="Restore_Key">Key</string>
 
     <string name="Select_Coins">Choose Coins</string>
