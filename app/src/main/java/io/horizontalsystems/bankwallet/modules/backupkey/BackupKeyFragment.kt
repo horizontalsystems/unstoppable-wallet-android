@@ -84,7 +84,7 @@ fun RecoveryPhraseScreen(
                     wordsNumbered = viewModel.wordsNumbered,
                     hidden = hidden
                 ) {
-                    hidden = false
+                    hidden = !hidden
                 }
                 Spacer(Modifier.height(24.dp))
                 PassphraseCell(viewModel.passphrase, hidden)
