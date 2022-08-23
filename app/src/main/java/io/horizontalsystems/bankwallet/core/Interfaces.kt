@@ -33,6 +33,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.Subject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
@@ -116,6 +117,7 @@ interface IAccountManager {
     val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
     val accountsDeletedFlowable: Flowable<Unit>
+    val newAccountBackupRequiredFlow: StateFlow<Account?>
 
     fun setActiveAccountId(activeAccountId: String?)
     fun account(id: String): Account?
@@ -125,6 +127,7 @@ interface IAccountManager {
     fun delete(id: String)
     fun clear()
     fun clearAccounts()
+    fun onHandledBackupRequiredNewAccount()
 }
 
 interface IBackupManager {

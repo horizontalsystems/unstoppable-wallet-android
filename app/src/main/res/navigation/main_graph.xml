@@ -293,6 +293,9 @@
         android:id="@+id/backupRequiredDialog"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />
     <dialog
+        android:id="@+id/backupRecoveryPhraseDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.backupalert.BackupRecoveryPhraseDialog" />
+    <dialog
         android:id="@+id/syncErrorDialog"
         android:name="io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog" />
     <dialog

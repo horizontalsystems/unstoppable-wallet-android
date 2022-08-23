@@ -9,6 +9,9 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -40,6 +43,9 @@ class AccountManager(
     override val accountsDeletedFlowable: Flowable<Unit>
         get() = accountsDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
+    private val _newAccountBackupRequiredFlow = MutableStateFlow<Account?>(null)
+    override val newAccountBackupRequiredFlow = _newAccountBackupRequiredFlow.asStateFlow()
+
     override fun setActiveAccountId(activeAccountId: String?) {
         if (cache.activeAccountId != activeAccountId) {
             storage.activeAccountId = activeAccountId
@@ -57,6 +63,10 @@ class AccountManager(
         cache.activeAccountId = storage.activeAccountId
     }
 
+    override fun onHandledBackupRequiredNewAccount() {
+        _newAccountBackupRequiredFlow.update { null }
+    }
+
     override fun save(account: Account) {
         storage.save(account)
 
@@ -64,6 +74,11 @@ class AccountManager(
         accountsSubject.onNext(accounts)
 
         setActiveAccountId(account.id)
+        if (!account.isBackedUp) {
+            _newAccountBackupRequiredFlow.update {
+                account
+            }
+        }
     }
 
     override fun update(account: Account) {

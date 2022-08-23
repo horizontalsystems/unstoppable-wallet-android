@@ -24,6 +24,8 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.backupalert.BackupAlert
+import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
@@ -52,6 +54,8 @@ class ManageAccountsFragment : BaseFragment() {
 
 @Composable
 fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModule.Mode) {
+    BackupAlert(navController)
+
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
 
     val viewItems = viewModel.viewItems
@@ -108,7 +112,13 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 
                     val actions = listOf(
                         ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
-                            navController.slideFromRight(R.id.createAccountFragment)
+                            val args = when (mode) {
+                                ManageAccountsModule.Mode.Manage -> null
+                                ManageAccountsModule.Mode.Switcher -> {
+                                    CreateAccountFragment.prepareParams(R.id.manageAccountsFragment)
+                                }
+                            }
+                            navController.slideFromRight(R.id.createAccountFragment, args)
                         },
                         ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
                             navController.slideFromRight(R.id.restoreMnemonicFragment)

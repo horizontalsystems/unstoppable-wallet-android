@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.backupalert.BackupAlert
 import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
@@ -30,6 +31,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 @Composable
 fun BalanceForAccount(navController: NavController, accountViewItem: AccountViewItem) {
     val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
+
+    BackupAlert(navController)
 
     Column {
         TopAppBar(
