@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import kotlinx.coroutines.launch
@@ -14,7 +13,6 @@ import kotlinx.coroutines.reactive.asFlow
 
 class ManageAccountsViewModel(
     private val accountManager: IAccountManager,
-    private val walletManager: IWalletManager,
     private val mode: ManageAccountsModule.Mode
 ) : ViewModel() {
 
@@ -51,17 +49,7 @@ class ManageAccountsViewModel(
         AccountViewItem(
             accountId = account.id,
             title = account.name,
-            subtitle = if (account.isWatchAccount) {
-                account.type.description
-            } else {
-                val coinCodes = walletManager
-                    .getWallets(account)
-                    .sortedBy { it.coin.marketCapRank }
-                    .map { it.coin.code }
-                    .distinct()
-
-                coinCodes.joinToString()
-            },
+            subtitle = account.type.description,
             selected = account == activeAccount,
             backupRequired = !account.isBackedUp,
             isWatchAccount = account.isWatchAccount
