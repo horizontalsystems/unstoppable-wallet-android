@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.createaccount
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -35,6 +34,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hdwalletkit.Language
+import kotlinx.coroutines.delay
 
 class CreateAccountFragment : BaseFragment() {
 
@@ -48,25 +48,39 @@ class CreateAccountFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                CreateAccountScreen(findNavController())
+                val popUpToInclusiveId = arguments?.getInt(popOffOnSuccessKey, -1) ?: -1
+                CreateAccountScreen(findNavController(), popUpToInclusiveId)
             }
         }
     }
+
+    companion object {
+        private const val popOffOnSuccessKey = "popOffOnSuccessKey"
+
+        fun prepareParams(popOffOnSuccess: Int) = bundleOf(popOffOnSuccessKey to popOffOnSuccess)
+    }
+
 }
 
 @Composable
 private fun CreateAccountScreen(
     navController: NavController,
-    viewModel: CreateAccountViewModel = viewModel(factory = CreateAccountModule.Factory())
+    popUpToInclusiveId: Int,
 ) {
+    val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
+    val view = LocalView.current
 
-    viewModel.successMessage?.let {
-        HudHelper.showSuccessMessage(LocalView.current, it)
-        viewModel.onSuccessMessageShown()
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            navController.popBackStack()
-        }, 1000)
+    LaunchedEffect(viewModel.successMessage) {
+        viewModel.successMessage?.let {
+            HudHelper.showSuccessMessage(view, it)
+            delay(300)
+            if (popUpToInclusiveId != -1) {
+                navController.popBackStack(popUpToInclusiveId, true)
+            } else {
+                navController.popBackStack()
+            }
+            viewModel.onSuccessMessageShown()
+        }
     }
 
     var showMnemonicSizeSelectorDialog by remember { mutableStateOf(false) }
