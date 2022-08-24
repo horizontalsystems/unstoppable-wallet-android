@@ -238,7 +238,7 @@ private fun MnemonicNumberCell(
 }
 
 @Composable
-private fun MnemonicLanguageCell(
+fun MnemonicLanguageCell(
     language: Language,
     showLanguageSelectorDialog: () -> Unit
 ) {

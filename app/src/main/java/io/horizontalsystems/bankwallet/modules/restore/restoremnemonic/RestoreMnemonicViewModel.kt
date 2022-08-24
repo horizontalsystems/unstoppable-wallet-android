@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.RestoreMn
 import io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.RestoreMnemonicModule.WordItem
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.IThirdKeyboard
+import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
 
 class RestoreMnemonicViewModel(
@@ -21,6 +22,8 @@ class RestoreMnemonicViewModel(
     private val thirdKeyboardStorage: IThirdKeyboard,
     private val helper: RestoreMnemonicHelper
 ) : ViewModel() {
+
+    val mnemonicLanguages = Language.values().toList()
 
     private var passphraseEnabled: Boolean = false
     private var passphrase: String = ""
@@ -31,6 +34,9 @@ class RestoreMnemonicViewModel(
     private var error: String? = null
     private var accountType: AccountType? = null
     private var wordSuggestions: RestoreMnemonicModule.WordSuggestions? = null
+    private var language = Language.English
+    private var text = ""
+    private var cursorPosition = 0
 
     var uiState by mutableStateOf(
         UiState(
@@ -40,6 +46,7 @@ class RestoreMnemonicViewModel(
             error = error,
             accountType = accountType,
             wordSuggestions = wordSuggestions,
+            language = language,
         )
     )
         private set
@@ -58,7 +65,27 @@ class RestoreMnemonicViewModel(
             error = error,
             accountType = accountType,
             wordSuggestions = wordSuggestions,
+            language = language,
         )
+    }
+
+    private fun processText() {
+        wordItems = wordItems(text)
+        invalidWordItems = wordItems.filter { !wordsManager.isWordValid(it.word) }
+
+        val wordItemWithCursor = wordItems.find {
+            it.range.contains(cursorPosition - 1)
+        }
+
+        val invalidWordItemsExcludingCursoredPartiallyValid = when {
+            wordItemWithCursor != null && wordsManager.isWordPartiallyValid(wordItemWithCursor.word) -> {
+                invalidWordItems.filter { it != wordItemWithCursor }
+            }
+            else -> invalidWordItems
+        }
+
+        invalidWordRanges = invalidWordItemsExcludingCursoredPartiallyValid.map { it.range }
+        wordSuggestions = helper.getWordSuggestions(wordItems, cursorPosition, language)
     }
 
     fun onTogglePassphrase(enabled: Boolean) {
@@ -77,22 +104,16 @@ class RestoreMnemonicViewModel(
     }
 
     fun onEnterMnemonicPhrase(text: String, cursorPosition: Int) {
-        wordItems = wordItems(text)
-        invalidWordItems = wordItems.filter { !wordsManager.isWordValid(it.word) }
+        this.text = text
+        this.cursorPosition = cursorPosition
+        processText()
 
-        val wordItemWithCursor = wordItems.find {
-            it.range.contains(cursorPosition - 1)
-        }
+        emitState()
+    }
 
-        val invalidWordItemsExcludingCursoredPartiallyValid = when {
-            wordItemWithCursor != null && wordsManager.isWordPartiallyValid(wordItemWithCursor.word) -> {
-                invalidWordItems.filter { it != wordItemWithCursor }
-            }
-            else -> invalidWordItems
-        }
-
-        invalidWordRanges = invalidWordItemsExcludingCursoredPartiallyValid.map { it.range }
-        wordSuggestions = helper.getWordSuggestions(wordItems, cursorPosition)
+    fun setMnemonicLanguage(language: Language) {
+        this.language = language
+        processText()
 
         emitState()
     }
