@@ -842,6 +842,7 @@
     <string name="Hud_Text_Restored">Restored</string>
     <string name="Hud_Text_AddressAdded">Address Added</string>
     <string name="Hud_Text_Done">Done</string>
+    <string name="Hud_Text_Verified">Verified</string>
     <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
     <string name="Hud_Added_To_Watchlist">Added To Watchlist</string>
     <string name="Hud_Added_To_Wallet">Added To Wallet</string>
