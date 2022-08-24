@@ -65,8 +65,13 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
 
     LaunchedEffect(uiState.confirmed) {
         if (uiState.confirmed) {
-            HudHelper.showSuccessMessage(contenView, R.string.Hud_Text_Done)
-            delay(200)
+            HudHelper.showSuccessMessage(
+                contenView = contenView,
+                resId = R.string.Hud_Text_Verified,
+                icon = R.drawable.icon_check_1_24,
+                iconTint = R.color.white
+            )
+            delay(300)
             navController.popBackStack(R.id.backupKeyFragment, true)
         }
     }
