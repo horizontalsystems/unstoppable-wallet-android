@@ -32,14 +32,13 @@
             tools:text="Snackbar Text" />
 
         <ImageView
-            android:id="@+id/warningIcon"
+            android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_attention_24"
+            tools:src="@drawable/ic_attention_24"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="24dp"
-            android:visibility="gone"
-            android:tint="@color/jacob" />
+            android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/snackbarProgressbar"
