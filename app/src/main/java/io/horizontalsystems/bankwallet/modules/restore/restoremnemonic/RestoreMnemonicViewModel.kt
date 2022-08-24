@@ -25,8 +25,8 @@ class RestoreMnemonicViewModel(
     private var passphraseEnabled: Boolean = false
     private var passphrase: String = ""
     private var passphraseError: String? = null
-    private var words: List<WordItem> = listOf()
-    private var invalidWords: List<WordItem> = listOf()
+    private var wordItems: List<WordItem> = listOf()
+    private var invalidWordItems: List<WordItem> = listOf()
     private var invalidWordRanges: List<IntRange> = listOf()
     private var error: String? = null
     private var accountType: AccountType? = null
@@ -77,36 +77,40 @@ class RestoreMnemonicViewModel(
     }
 
     fun onEnterMnemonicPhrase(text: String, cursorPosition: Int) {
-        words = wordItems(text)
-        invalidWords = words.filter {
-            !wordsManager.isWordValid(it.word)
+        wordItems = wordItems(text)
+        invalidWordItems = wordItems.filter { !wordsManager.isWordValid(it.word) }
+
+        val wordItemWithCursor = wordItems.find {
+            it.range.contains(cursorPosition - 1)
         }
-        invalidWordRanges = invalidWords.filter {
-            val hasCursor = it.range.contains(cursorPosition - 1)
-            !hasCursor || !wordsManager.isWordPartiallyValid(it.word)
-        }.map {
-            it.range
+
+        val invalidWordItemsExcludingCursoredPartiallyValid = when {
+            wordItemWithCursor != null && wordsManager.isWordPartiallyValid(wordItemWithCursor.word) -> {
+                invalidWordItems.filter { it != wordItemWithCursor }
+            }
+            else -> invalidWordItems
         }
-        wordSuggestions = helper.getWordSuggestions(words, cursorPosition)
+
+        invalidWordRanges = invalidWordItemsExcludingCursoredPartiallyValid.map { it.range }
+        wordSuggestions = helper.getWordSuggestions(wordItems, cursorPosition)
 
         emitState()
     }
 
     fun onProceed() {
-        val words = words.map { it.word }
-
         when {
-            invalidWords.isNotEmpty() -> {
-                invalidWordRanges = invalidWords.map { it.range }
+            invalidWordItems.isNotEmpty() -> {
+                invalidWordRanges = invalidWordItems.map { it.range }
             }
-            words.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount }) -> {
-                error = Translator.getString(R.string.Restore_Error_MnemonicWordCount, words.size)
+            wordItems.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount }) -> {
+                error = Translator.getString(R.string.Restore_Error_MnemonicWordCount, wordItems.size)
             }
             passphraseEnabled && passphrase.isBlank() -> {
                 passphraseError = Translator.getString(R.string.Restore_Error_EmptyPassphrase)
             }
             else -> {
                 try {
+                    val words = wordItems.map { it.word }
                     wordsManager.validateChecksum(words)
 
                     accountType = AccountType.Mnemonic(words, passphrase)
