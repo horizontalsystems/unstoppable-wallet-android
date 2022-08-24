@@ -35,10 +35,7 @@ class RestoreMnemonicViewModel(
     var uiState by mutableStateOf(
         UiState(
             passphraseEnabled = passphraseEnabled,
-            passphrase = passphrase,
             passphraseError = passphraseError,
-            words = words,
-            invalidWords = invalidWords,
             invalidWordRanges = invalidWordRanges,
             error = error,
             accountType = accountType,
@@ -56,10 +53,7 @@ class RestoreMnemonicViewModel(
     private fun emitState() {
         uiState = UiState(
             passphraseEnabled = passphraseEnabled,
-            passphrase = passphrase,
             passphraseError = passphraseError,
-            words = words,
-            invalidWords = invalidWords,
             invalidWordRanges = invalidWordRanges,
             error = error,
             accountType = accountType,
