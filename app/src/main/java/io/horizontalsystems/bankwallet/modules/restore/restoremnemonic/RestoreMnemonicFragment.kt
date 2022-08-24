@@ -262,12 +262,12 @@ private fun SuggestionsBar(
 ) {
     Box(modifier = modifier) {
         BoxTyler44(borderTop = true) {
-            LazyRow(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(start = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                wordSuggestions?.let { wordSuggestions ->
+            if (wordSuggestions != null) {
+                LazyRow(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(start = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     items(wordSuggestions.options) { suggestion ->
                         val wordItem = wordSuggestions.wordItem
                         ButtonSecondary(
@@ -280,6 +280,13 @@ private fun SuggestionsBar(
                         Spacer(modifier = Modifier.width(12.dp))
                     }
                 }
+            } else {
+                Icon(
+                    modifier = Modifier.align(Alignment.Center),
+                    painter = painterResource(R.drawable.ic_more_24),
+                    tint = ComposeAppTheme.colors.grey,
+                    contentDescription = null
+                )
             }
         }
     }
