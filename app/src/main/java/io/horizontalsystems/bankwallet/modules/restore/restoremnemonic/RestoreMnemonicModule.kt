@@ -20,15 +20,15 @@ object RestoreMnemonicModule {
     }
 
     data class UiState(
-        val passphraseEnabled: Boolean = false,
-        val passphrase: String = "",
-        val passphraseError: String? = null,
-        val words: List<WordItem> = listOf(),
-        val invalidWords: List<WordItem> = listOf(),
-        val invalidWordRanges: List<IntRange> = listOf(),
-        val error: String? = null,
-        val accountType: AccountType? = null,
-        val wordSuggestions: WordSuggestions? = null,
+        val passphraseEnabled: Boolean,
+        val passphrase: String,
+        val passphraseError: String?,
+        val words: List<WordItem>,
+        val invalidWords: List<WordItem>,
+        val invalidWordRanges: List<IntRange>,
+        val error: String?,
+        val accountType: AccountType?,
+        val wordSuggestions: WordSuggestions?,
     )
 
     data class WordItem(val word: String, val range: IntRange)

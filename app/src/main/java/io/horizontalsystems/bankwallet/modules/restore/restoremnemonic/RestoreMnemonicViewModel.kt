@@ -22,88 +22,120 @@ class RestoreMnemonicViewModel(
     private val helper: RestoreMnemonicHelper
 ) : ViewModel() {
 
+    private var passphraseEnabled: Boolean = false
+    private var passphrase: String = ""
+    private var passphraseError: String? = null
+    private var words: List<WordItem> = listOf()
+    private var invalidWords: List<WordItem> = listOf()
+    private var invalidWordRanges: List<IntRange> = listOf()
+    private var error: String? = null
+    private var accountType: AccountType? = null
+    private var wordSuggestions: RestoreMnemonicModule.WordSuggestions? = null
+
+    var uiState by mutableStateOf(
+        UiState(
+            passphraseEnabled = passphraseEnabled,
+            passphrase = passphrase,
+            passphraseError = passphraseError,
+            words = words,
+            invalidWords = invalidWords,
+            invalidWordRanges = invalidWordRanges,
+            error = error,
+            accountType = accountType,
+            wordSuggestions = wordSuggestions,
+        )
+    )
+        private set
+
     private val regex = Regex("\\S+")
     val defaultName = accountFactory.getNextAccountName()
 
     val isThirdPartyKeyboardAllowed: Boolean
         get() = CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed
 
-    var uiState by mutableStateOf(UiState())
-        private set
+    private fun emitState() {
+        uiState = UiState(
+            passphraseEnabled = passphraseEnabled,
+            passphrase = passphrase,
+            passphraseError = passphraseError,
+            words = words,
+            invalidWords = invalidWords,
+            invalidWordRanges = invalidWordRanges,
+            error = error,
+            accountType = accountType,
+            wordSuggestions = wordSuggestions,
+        )
+    }
 
-    fun onEnablePassphrase(enabled: Boolean) {
-        uiState = uiState.copy(passphraseEnabled = enabled, passphrase = "", passphraseError = null)
+    fun onTogglePassphrase(enabled: Boolean) {
+        passphraseEnabled = enabled
+        passphrase = ""
+        passphraseError = null
+
+        emitState()
     }
 
     fun onEnterPassphrase(passphrase: String) {
-        uiState = uiState.copy(passphrase = passphrase, passphraseError = null)
+        this.passphrase = passphrase
+        passphraseError = null
+
+        emitState()
     }
 
     fun onEnterMnemonicPhrase(text: String, cursorPosition: Int) {
-        val allItems = wordItems(text)
-        val invalidItems = allItems.filter {
+        words = wordItems(text)
+        invalidWords = words.filter {
             !wordsManager.isWordValid(it.word)
         }
-
-        val invalidWordRanges = invalidItems.filter {
+        invalidWordRanges = invalidWords.filter {
             val hasCursor = it.range.contains(cursorPosition - 1)
             !hasCursor || !wordsManager.isWordPartiallyValid(it.word)
         }.map {
             it.range
         }
+        wordSuggestions = helper.getWordSuggestions(words, cursorPosition)
 
-        uiState = uiState.copy(
-            words = allItems,
-            invalidWords = invalidItems,
-            invalidWordRanges = invalidWordRanges,
-            wordSuggestions = helper.getWordSuggestions(allItems, cursorPosition)
-        )
+        emitState()
     }
 
     fun onProceed() {
-        val passphrase = uiState.passphrase
-        val words = uiState.words.map { it.word }
-        val invalidWords = uiState.invalidWords
+        val words = words.map { it.word }
 
-        uiState = when {
+        when {
             invalidWords.isNotEmpty() -> {
-                uiState.copy(invalidWordRanges = invalidWords.map { it.range })
+                invalidWordRanges = invalidWords.map { it.range }
             }
             words.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount }) -> {
-                uiState.copy(
-                    error = Translator.getString(R.string.Restore_Error_MnemonicWordCount, words.size)
-                )
+                error = Translator.getString(R.string.Restore_Error_MnemonicWordCount, words.size)
             }
-            uiState.passphraseError != null -> {
-                uiState
-            }
-            uiState.passphraseEnabled && passphrase.isBlank() -> {
-                uiState.copy(
-                    passphraseError = Translator.getString(R.string.Restore_Error_EmptyPassphrase)
-                )
+            passphraseEnabled && passphrase.isBlank() -> {
+                passphraseError = Translator.getString(R.string.Restore_Error_EmptyPassphrase)
             }
             else -> {
                 try {
                     wordsManager.validateChecksum(words)
-                    val accountType = AccountType.Mnemonic(words, passphrase)
 
-                    uiState.copy(error = null, accountType = accountType)
-
+                    accountType = AccountType.Mnemonic(words, passphrase)
+                    error = null
                 } catch (checksumException: Exception) {
-                    uiState.copy(
-                        error = Translator.getString(R.string.Restore_InvalidChecksum)
-                    )
+                    error = Translator.getString(R.string.Restore_InvalidChecksum)
                 }
             }
         }
+
+        emitState()
     }
 
     fun onSelectCoinsShown() {
-        uiState = uiState.copy(accountType = null)
+        accountType = null
+
+        emitState()
     }
 
     fun onErrorShown() {
-        uiState = uiState.copy(error = null)
+        error = null
+
+        emitState()
     }
 
     fun onAllowThirdPartyKeyboard() {

@@ -185,7 +185,7 @@ fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int)
                 Passphrase(
                     enabled = uiState.passphraseEnabled,
                     error = uiState.passphraseError,
-                    onEnabled = viewModel::onEnablePassphrase,
+                    onEnabled = viewModel::onTogglePassphrase,
                     onEnterPassphrase = viewModel::onEnterPassphrase
                 )
                 Spacer(Modifier.height(32.dp))
