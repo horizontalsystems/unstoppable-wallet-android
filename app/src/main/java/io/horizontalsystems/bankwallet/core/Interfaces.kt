@@ -146,6 +146,7 @@ interface IWalletStorage {
     fun wallets(account: Account): List<Wallet>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
+    fun handle(newEnabledWallets: List<EnabledWallet>)
     fun clear()
 }
 
@@ -334,6 +335,7 @@ interface IWalletManager {
 
     fun loadWallets()
     fun save(wallets: List<Wallet>)
+    fun saveEnabledWallets(enabledWallets: List<EnabledWallet>)
     fun delete(wallets: List<Wallet>)
     fun clear()
     fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>)

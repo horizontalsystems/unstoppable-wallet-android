@@ -45,10 +45,6 @@ class WatchAddressBlockchainManager(
         }
 
         try {
-            disabledBlockchains.forEach { blockchain ->
-                evmBlockchainManager.getEvmAccountManager(blockchain.type).markAutoEnable(account)
-            }
-
             val tokenQueries = disabledBlockchains.map { TokenQuery(it.type, TokenType.Native) }
             walletActivator.activateWallets(account, tokenQueries)
         } catch (e: Exception) {

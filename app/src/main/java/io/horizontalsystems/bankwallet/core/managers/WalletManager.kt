@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -80,4 +81,10 @@ class WalletManager(
         walletsSet.addAll(activeWallets)
         notifyActiveWallets()
     }
+
+    override fun saveEnabledWallets(enabledWallets: List<EnabledWallet>) {
+        storage.handle(enabledWallets)
+        loadWallets()
+    }
+
 }

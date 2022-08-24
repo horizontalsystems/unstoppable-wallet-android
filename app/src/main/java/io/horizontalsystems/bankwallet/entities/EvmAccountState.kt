@@ -6,5 +6,6 @@ import androidx.room.Entity
 data class EvmAccountState(
     val accountId: String,
     val chainId: Int,
-    val transactionsSyncedBlockNumber: Long
+    val transactionsSyncedBlockNumber: Long,
+    val restored: Boolean = false
 )
