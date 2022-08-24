@@ -22,12 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.displayNameStringRes
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -48,18 +48,11 @@ class CreateAccountFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val popUpToInclusiveId = arguments?.getInt(popOffOnSuccessKey, -1) ?: -1
+                val popUpToInclusiveId = arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, -1) ?: -1
                 CreateAccountScreen(findNavController(), popUpToInclusiveId)
             }
         }
     }
-
-    companion object {
-        private const val popOffOnSuccessKey = "popOffOnSuccessKey"
-
-        fun prepareParams(popOffOnSuccess: Int) = bundleOf(popOffOnSuccessKey to popOffOnSuccess)
-    }
-
 }
 
 @Composable
