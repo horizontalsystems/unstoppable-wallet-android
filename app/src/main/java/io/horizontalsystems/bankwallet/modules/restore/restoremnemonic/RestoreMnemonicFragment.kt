@@ -48,9 +48,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.displayNameStringRes
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.createaccount.MnemonicLanguageCell
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment
 import io.horizontalsystems.bankwallet.ui.compose.*
@@ -117,9 +119,40 @@ fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int)
             )
         )
 
+        var showLanguageSelectorDialog by remember { mutableStateOf(false) }
+
+        if (showLanguageSelectorDialog) {
+            SelectorDialogCompose(
+                title = stringResource(R.string.CreateWallet_Wordlist),
+                items = viewModel.mnemonicLanguages.map {
+                    TabItem(
+                        stringResource(it.displayNameStringRes),
+                        it == uiState.language,
+                        it
+                    )
+                },
+                onDismissRequest = {
+                    showLanguageSelectorDialog = false
+                },
+                onSelectItem = {
+                    viewModel.setMnemonicLanguage(it)
+                }
+            )
+        }
+
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(Modifier.height(12.dp))
+                CellSingleLineLawrenceSection {
+                    MnemonicLanguageCell(
+                        language = uiState.language,
+                        showLanguageSelectorDialog = {
+                            showLanguageSelectorDialog = true
+                        }
+                    )
+                }
+
+                Spacer(Modifier.height(24.dp))
                 HeaderText(text = stringResource(R.string.Restore_Key))
                 Row(
                     modifier = Modifier
