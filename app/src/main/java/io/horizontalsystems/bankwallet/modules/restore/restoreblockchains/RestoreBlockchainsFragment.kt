@@ -138,7 +138,12 @@ private fun ManageWalletsScreen(
 
     LaunchedEffect(restored) {
         if (restored) {
-            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Restored)
+            HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = R.string.Hud_Text_Restored,
+                icon = R.drawable.icon_add_to_wallet_2_24,
+                iconTint = R.color.white
+            )
             delay(300)
             if (popUpToInclusiveId != -1) {
                 navController.popBackStack(popUpToInclusiveId, true)

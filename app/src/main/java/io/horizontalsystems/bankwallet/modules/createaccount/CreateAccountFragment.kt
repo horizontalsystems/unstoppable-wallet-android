@@ -65,7 +65,12 @@ private fun CreateAccountScreen(
 
     LaunchedEffect(viewModel.successMessage) {
         viewModel.successMessage?.let {
-            HudHelper.showSuccessMessage(view, it)
+            HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = it,
+                icon = R.drawable.icon_add_to_wallet_24,
+                iconTint = R.color.white
+            )
             delay(300)
             if (popUpToInclusiveId != -1) {
                 navController.popBackStack(popUpToInclusiveId, true)
