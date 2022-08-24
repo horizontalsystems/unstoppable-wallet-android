@@ -20,16 +20,14 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -59,6 +57,8 @@ import io.horizontalsystems.bankwallet.ui.compose.*
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class RestoreMnemonicFragment : BaseFragment() {
 
@@ -81,6 +81,7 @@ class RestoreMnemonicFragment : BaseFragment() {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int) {
     val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
@@ -118,6 +119,8 @@ fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int)
                 )
             )
         )
+        val coroutineScope = rememberCoroutineScope()
+        val keyboardController = LocalSoftwareKeyboardController.current
 
         var showLanguageSelectorDialog by remember { mutableStateOf(false) }
 
@@ -132,7 +135,11 @@ fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int)
                     )
                 },
                 onDismissRequest = {
-                    showLanguageSelectorDialog = false
+                    coroutineScope.launch {
+                        showLanguageSelectorDialog = false
+                        delay(300)
+                        keyboardController?.show()
+                    }
                 },
                 onSelectItem = {
                     viewModel.setMnemonicLanguage(it)
