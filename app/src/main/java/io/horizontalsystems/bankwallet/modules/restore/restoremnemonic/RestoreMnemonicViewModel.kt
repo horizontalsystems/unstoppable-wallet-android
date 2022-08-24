@@ -15,12 +15,12 @@ import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.hdwalletkit.WordList
 
 class RestoreMnemonicViewModel(
     accountFactory: IAccountFactory,
     private val wordsManager: WordsManager,
     private val thirdKeyboardStorage: IThirdKeyboard,
-    private val helper: RestoreMnemonicHelper
 ) : ViewModel() {
 
     val mnemonicLanguages = Language.values().toList()
@@ -85,7 +85,9 @@ class RestoreMnemonicViewModel(
         }
 
         invalidWordRanges = invalidWordItemsExcludingCursoredPartiallyValid.map { it.range }
-        wordSuggestions = helper.getWordSuggestions(wordItems, cursorPosition, language)
+        wordSuggestions = wordItemWithCursor?.let {
+            RestoreMnemonicModule.WordSuggestions(it, WordList.wordList(language).fetchSuggestions(it.word))
+        }
     }
 
     fun onTogglePassphrase(enabled: Boolean) {

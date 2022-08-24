@@ -15,7 +15,6 @@ object RestoreMnemonicModule {
                 App.accountFactory,
                 App.wordsManager,
                 App.thirdKeyboardStorage,
-                RestoreMnemonicHelper()
             ) as T
         }
     }
