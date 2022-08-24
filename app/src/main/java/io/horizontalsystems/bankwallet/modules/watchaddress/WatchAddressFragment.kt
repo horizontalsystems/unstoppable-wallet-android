@@ -68,7 +68,12 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
 
     LaunchedEffect(accountCreated) {
         if (accountCreated) {
-            HudHelper.showSuccessMessage(view, R.string.Hud_Text_AddressAdded)
+            HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = R.string.Hud_Text_AddressAdded,
+                icon = R.drawable.icon_binocule_24,
+                iconTint = R.color.white
+            )
             delay(300)
 
             if (popUpToInclusiveId != -1) {

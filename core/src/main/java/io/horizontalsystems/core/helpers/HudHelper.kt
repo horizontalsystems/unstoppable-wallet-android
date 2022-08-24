@@ -35,7 +35,9 @@ object HudHelper {
         contenView: View,
         resId: Int,
         duration: SnackbarDuration = SnackbarDuration.SHORT,
-        gravity: SnackbarGravity = SnackbarGravity.BOTTOM
+        gravity: SnackbarGravity = SnackbarGravity.BOTTOM,
+        @DrawableRes icon: Int? = null,
+        iconTint: Int? = null,
     ): CustomSnackbar? {
         return showHudNotification(
             contentView = contenView,
@@ -43,6 +45,8 @@ object HudHelper {
             backgroundColor = R.color.green_d,
             duration = duration,
             gravity = gravity,
+            icon = icon,
+            iconTint = iconTint
         )
     }
 
