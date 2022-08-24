@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment
 import io.horizontalsystems.bankwallet.ui.compose.*
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -70,7 +71,8 @@ class RestoreMnemonicFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    RestoreMnemonicScreen(findNavController())
+                    val popUpToInclusiveId = arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreMnemonicFragment) ?: R.id.restoreMnemonicFragment
+                    RestoreMnemonicScreen(findNavController(), popUpToInclusiveId)
                 }
             }
         }
@@ -78,7 +80,7 @@ class RestoreMnemonicFragment : BaseFragment() {
 }
 
 @Composable
-fun RestoreMnemonicScreen(navController: NavController) {
+fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int) {
     val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
     val uiState = viewModel.uiState
     val context = LocalContext.current
@@ -225,7 +227,8 @@ fun RestoreMnemonicScreen(navController: NavController) {
             R.id.restoreSelectCoinsFragment,
             bundleOf(
                 RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.defaultName,
-                RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType
+                RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType,
+                ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
             )
         )
 

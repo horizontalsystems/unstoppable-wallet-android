@@ -11,6 +11,10 @@ import kotlinx.parcelize.Parcelize
 
 object ManageAccountsModule {
     const val MODE = "mode"
+    const val popOffOnSuccessKey = "popOffOnSuccessKey"
+
+    fun prepareParams(mode: Mode) = bundleOf(MODE to mode)
+    fun prepareParams(popOffOnSuccess: Int) = bundleOf(popOffOnSuccessKey to popOffOnSuccess)
 
     class Factory(private val mode: Mode) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -18,8 +22,6 @@ object ManageAccountsModule {
             return ManageAccountsViewModel(App.accountManager, mode) as T
         }
     }
-
-    fun prepareParams(mode: Mode) = bundleOf(MODE to mode)
 
     data class AccountViewItem(
         val accountId: String,

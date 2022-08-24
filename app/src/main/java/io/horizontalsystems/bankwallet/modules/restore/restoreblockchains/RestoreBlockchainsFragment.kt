@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -74,8 +75,10 @@ class RestoreBlockchainsFragment : BaseFragment() {
     }
 
     private fun observe() {
+        val popUpToInclusiveId = arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, -1) ?: -1
+
         viewModel.successLiveEvent.observe(viewLifecycleOwner) {
-            findNavController().popBackStack(R.id.restoreMnemonicFragment, true)
+            findNavController().popBackStack(popUpToInclusiveId, true)
         }
 
         coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner) { config ->

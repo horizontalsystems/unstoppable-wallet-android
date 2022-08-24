@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.backupalert.BackupAlert
-import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
@@ -110,21 +109,22 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         }
                     }
 
+                    val args = when (mode) {
+                        ManageAccountsModule.Mode.Manage -> null
+                        ManageAccountsModule.Mode.Switcher -> {
+                            ManageAccountsModule.prepareParams(R.id.manageAccountsFragment)
+                        }
+                    }
+
                     val actions = listOf(
                         ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
-                            val args = when (mode) {
-                                ManageAccountsModule.Mode.Manage -> null
-                                ManageAccountsModule.Mode.Switcher -> {
-                                    CreateAccountFragment.prepareParams(R.id.manageAccountsFragment)
-                                }
-                            }
                             navController.slideFromRight(R.id.createAccountFragment, args)
                         },
                         ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
-                            navController.slideFromRight(R.id.restoreMnemonicFragment)
+                            navController.slideFromRight(R.id.restoreMnemonicFragment, args)
                         },
                         ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
-                            navController.slideFromRight(R.id.watchAddressFragment)
+                            navController.slideFromRight(R.id.watchAddressFragment, args)
                         }
                     )
                     CellSingleLineLawrenceSection(actions) {

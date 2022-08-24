@@ -25,6 +25,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -46,7 +47,8 @@ class WatchAddressFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    WatchAddressScreen(findNavController())
+                    val popUpToInclusiveId = arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, -1) ?: -1
+                    WatchAddressScreen(findNavController(), popUpToInclusiveId)
                 }
             }
         }
@@ -54,11 +56,15 @@ class WatchAddressFragment : BaseFragment() {
 }
 
 @Composable
-fun WatchAddressScreen(navController: NavController) {
+fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
     val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
 
     if (viewModel.accountCreated) {
-        navController.popBackStack()
+        if (popUpToInclusiveId != -1) {
+            navController.popBackStack(popUpToInclusiveId, true)
+        } else {
+            navController.popBackStack()
+        }
     }
 
     ComposeAppTheme {
