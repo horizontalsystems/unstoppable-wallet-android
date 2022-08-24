@@ -1,379 +1,341 @@
 package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
-import android.content.Context
-import android.util.AttributeSet
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.view.isVisible
-import androidx.core.widget.NestedScrollView
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
-import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.databinding.*
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.marketkit.models.*
 
-class SendEvmTransactionView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : NestedScrollView(context, attrs, defStyleAttr) {
+@Composable
+fun SendEvmTransactionView(
+    transactionViewModel: SendEvmTransactionViewModel,
+    feeCellViewModel: EvmFeeCellViewModel,
+    navController: NavController,
+    parentNavGraphId: Int,
+    description: String? = null
+) {
+    ComposeAppTheme {
 
-    private val binding = ViewSendEvmTransactionBinding.inflate(LayoutInflater.from(context), this)
+        val items by transactionViewModel.viewItemsLiveData.observeAsState(listOf())
+        val fee by feeCellViewModel.feeLiveData.observeAsState("")
+        val viewState by feeCellViewModel.viewStateLiveData.observeAsState()
+        val loading by feeCellViewModel.loadingLiveData.observeAsState(false)
 
-    fun init(
-        transactionViewModel: SendEvmTransactionViewModel,
-        feeCellViewModel: EvmFeeCellViewModel,
-        viewLifecycleOwner: LifecycleOwner,
-        navController: NavController,
-        parentNavGraphId: Int,
-        description: String? = null
+        Column {
+            description?.let {
+                subhead2_grey(
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+                    text = it
+                )
+            }
+            items.forEach { sectionViewItem ->
+                SectionView(sectionViewItem.viewItems)
+            }
+
+            Spacer(Modifier.height(12.dp))
+            EvmFeeCell(
+                title = stringResource(R.string.FeeSettings_Fee),
+                value = fee,
+                loading = loading,
+                highlightEditButton = feeCellViewModel.highlightEditButton,
+                viewState = viewState
+            ) {
+                navController.slideFromBottom(
+                    resId = R.id.sendEvmFeeSettingsFragment,
+                    args = EvmFeeSettingsFragment.prepareParams(parentNavGraphId)
+                )
+            }
+
+            val cautions by transactionViewModel.cautionsLiveData.observeAsState()
+            cautions?.let {
+                Cautions(it)
+            }
+        }
+    }
+}
+
+@Composable
+private fun SectionView(viewItems: List<ViewItem>) {
+    Spacer(Modifier.height(12.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(ComposeAppTheme.colors.lawrence)
     ) {
-        binding.description.isVisible = description != null
-        binding.description.text = description
-
-        val adapter = SendEvmTransactionAdapter()
-        binding.recyclerView.adapter = adapter
-
-        transactionViewModel.viewItemsLiveData.observe(viewLifecycleOwner) {
-            adapter.items = flattenSectionViewItems(it)
-            adapter.notifyDataSetChanged()
+        viewItems.forEachIndexed { index, item ->
+            if (index != 0) {
+                Divider(
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel10,
+                )
+            }
+            when (item) {
+                is ViewItem.Subhead -> Subhead(item)
+                is ViewItem.Value -> TitleValue(item)
+                is ViewItem.AmountMulti -> AmountMulti(item)
+                is ViewItem.Amount -> Amount(item)
+                is ViewItem.Address -> TitleValueHex(item.title, item.valueTitle, item.value)
+                is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
+            }
         }
+    }
 
-        binding.feeViewCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+}
+
+@Composable
+private fun Subhead(item: ViewItem.Subhead) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        item.iconRes?.let {
+            Icon(
+                modifier = Modifier.padding(end = 16.dp),
+                painter = painterResource(id = it),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey
+            )
+        }
+        headline2_leah(
+            text = item.title
         )
+        Spacer(Modifier.weight(1f))
+        subhead1_grey(
+            text = item.value
+        )
+    }
+}
 
-        binding.feeViewCompose.setContent {
-            ComposeAppTheme {
-                val fee by feeCellViewModel.feeLiveData.observeAsState("")
-                val viewState by feeCellViewModel.viewStateLiveData.observeAsState()
-                val loading by feeCellViewModel.loadingLiveData.observeAsState(false)
+@Composable
+private fun TitleValue(item: ViewItem.Value) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        subhead2_grey(
+            text = item.title
+        )
+        Spacer(Modifier.weight(1f))
+        Text(
+            text = item.value,
+            maxLines = 1,
+            style = ComposeAppTheme.typography.subhead1,
+            color = setColorByType(item.type)
+        )
+    }
+}
 
-                EvmFeeCell(
-                    title = stringResource(R.string.FeeSettings_Fee),
-                    value = fee,
-                    loading = loading,
-                    highlightEditButton = feeCellViewModel.highlightEditButton,
-                    viewState = viewState
+@Composable
+private fun AmountMulti(item: ViewItem.AmountMulti) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height(60.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CoinImage(
+            modifier = Modifier.size(24.dp),
+            iconUrl = item.token.coin.iconUrl,
+            placeholder = item.token.iconPlaceholder
+        )
+        Column(
+            modifier = Modifier
+                .padding(start = 16.dp)
+                .fillMaxWidth()
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = item.amounts[0].coinAmount,
+                    maxLines = 1,
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = setColorByType(item.type)
+                )
+                Spacer(Modifier.weight(1f))
+                subhead2_grey(
+                    text = item.amounts[0].fiatAmount ?: ""
+                )
+            }
+            if (item.amounts.size > 1) {
+                Spacer(Modifier.height(3.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    navController.slideFromBottom(
-                        resId = R.id.sendEvmFeeSettingsFragment,
-                        args = EvmFeeSettingsFragment.prepareParams(parentNavGraphId)
+                    caption_grey(
+                        text = item.amounts[1].coinAmount
+                    )
+                    Spacer(Modifier.weight(1f))
+                    caption_grey(
+                        text = item.amounts[1].fiatAmount ?: ""
                     )
                 }
             }
         }
+    }
+}
 
-        binding.cautionsViewCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+@Composable
+private fun Amount(item: ViewItem.Amount) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CoinImage(
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp),
+            iconUrl = item.token.coin.iconUrl,
+            placeholder = item.token.iconPlaceholder
         )
-
-        binding.cautionsViewCompose.setContent {
-            ComposeAppTheme {
-                val cautions by transactionViewModel.cautionsLiveData.observeAsState()
-                cautions?.let {
-                    Cautions(it)
-                }
-            }
-        }
-    }
-
-    private fun flattenSectionViewItems(sections: List<SectionViewItem>): List<ViewItemWithPosition> {
-        val viewItems = mutableListOf<ViewItemWithPosition>()
-
-        sections.forEach { section ->
-            section.viewItems.forEachIndexed { index, viewItem ->
-                viewItems.add(
-                    ViewItemWithPosition(
-                        viewItem,
-                        ListPosition.getListPosition(section.viewItems.size, index)
-                    )
-                )
-            }
-            viewItems.add(ViewItemWithPosition(null, ListPosition.First))
-        }
-
-        return viewItems
+        Text(
+            text = item.coinAmount,
+            maxLines = 1,
+            style = ComposeAppTheme.typography.subhead1,
+            color = setColorByType(item.type)
+        )
+        Spacer(Modifier.weight(1f))
+        subhead2_grey(
+            text = item.fiatAmount ?: ""
+        )
     }
 }
 
-data class ViewItemWithPosition(
-    val viewItem: ViewItem?,
-    val listPosition: ListPosition
-)
-
-class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var items: List<ViewItemWithPosition> = listOf()
-
-    enum class ViewType {
-        Subhead, Value, AmountMulti, Amount, Address, Input, Space, Warning
-    }
-
-    private val viewTypes = ViewType.values()
-
-    override fun getItemCount() = items.size
-
-    override fun getItemViewType(position: Int): Int {
-        return when (items[position].viewItem) {
-            is ViewItem.Subhead -> ViewType.Subhead.ordinal
-            is ViewItem.Address -> ViewType.Address.ordinal
-            is ViewItem.Value -> ViewType.Value.ordinal
-            is ViewItem.AmountMulti -> ViewType.AmountMulti.ordinal
-            is ViewItem.Amount -> ViewType.Amount.ordinal
-            is ViewItem.Input -> ViewType.Input.ordinal
-            is ViewItem.Warning -> ViewType.Warning.ordinal
-            null -> ViewType.Space.ordinal
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewTypes[viewType]) {
-            ViewType.Subhead -> SubheadViewHolder(
-                ViewHolderEvmConfirmationSubheadBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
-            ViewType.Space -> SpaceViewHolder(
-                ViewSendEvmSpaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            )
-            ViewType.Address -> TitleValueHexViewHolder(
-                ViewHolderTitleValueHexBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
-            ViewType.Value -> TitleValueViewHolder(
-                ViewHolderTitleValueBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
-            ViewType.AmountMulti -> AmountMultiViewHolder(
-                ViewHolderAmountMultiBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            )
-            ViewType.Amount -> AmountViewHolder(
-                ViewHolderAmountBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            )
-            ViewType.Input -> TitleValueHexViewHolder(
-                ViewHolderTitleValueHexBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
-            ViewType.Warning -> WarningViewHolder.create(parent)
-        }
-    }
-
-    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
-        if (holder is WarningViewHolder) {
-            holder.composeView.disposeComposition()
-        }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val listPosition = items[position].listPosition
-        when (val item = items[position].viewItem) {
-            is ViewItem.Subhead -> (holder as? SubheadViewHolder)?.bind(item, listPosition)
-            is ViewItem.Address -> (holder as? TitleValueHexViewHolder)?.bind(
-                item.title,
-                item.valueTitle,
-                item.value,
-                listPosition
-            )
-            is ViewItem.Value -> (holder as? TitleValueViewHolder)?.bind(item, listPosition)
-            is ViewItem.AmountMulti -> (holder as? AmountMultiViewHolder)?.bind(
-                item.amounts,
-                item.type,
-                item.token,
-                listPosition
-            )
-            is ViewItem.Amount -> (holder as? AmountViewHolder)?.bind(
-                item.fiatAmount,
-                item.coinAmount,
-                item.type,
-                item.token,
-                listPosition
-            )
-            is ViewItem.Input -> (holder as? TitleValueHexViewHolder)?.bind(
-                "Input",
-                item.value.shorten(),
-                item.value,
-                listPosition
-            )
-            is ViewItem.Warning -> (holder as? WarningViewHolder)?.bind(item)
-            null -> {}
-        }
-    }
-
-    class SpaceViewHolder(private val binding: ViewSendEvmSpaceBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-    }
-
-    class SubheadViewHolder(private val binding: ViewHolderEvmConfirmationSubheadBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ViewItem.Subhead, position: ListPosition) {
-            binding.titleTextView.text = item.title
-            binding.valueTextView.text = item.value
-            item.iconRes?.let { binding.icon.setImageResource(it) }
-            binding.icon.isVisible = item.iconRes != null
-
-            binding.backgroundView.setBackgroundResource(position.getBackground())
-        }
-    }
-
-    class WarningViewHolder(val composeView: ComposeView) : RecyclerView.ViewHolder(composeView) {
-        init {
-            composeView.setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
-            )
-        }
-
-        fun bind(item: ViewItem.Warning) {
-            composeView.setContent {
-                ComposeAppTheme {
-                    TextImportantWarning(text = item.description, title = item.title, icon = item.icon)
-                }
+@Composable
+private fun TitleValueHex(
+    title: String,
+    valueTitle: String,
+    value: String,
+) {
+    val localView = LocalView.current
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        subhead2_grey(
+            text = title
+        )
+        Spacer(Modifier.weight(1f))
+        ButtonSecondaryDefault(
+            title = valueTitle,
+            onClick = {
+                TextHelper.copyText(value)
+                HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
             }
-        }
-
-        companion object {
-            fun create(parent: ViewGroup) = WarningViewHolder(ComposeView(parent.context))
-        }
-    }
-
-    class TitleValueHexViewHolder(private val binding: ViewHolderTitleValueHexBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(title: String, valueTitle: String, value: String, position: ListPosition) {
-            binding.titleTextView.text = title
-            binding.valueCompose.setContent {
-                ComposeAppTheme {
-                    ButtonSecondaryDefault(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        title = valueTitle,
-                        onClick = {
-                            TextHelper.copyText(value)
-                            HudHelper.showSuccessMessage(binding.wrapper, R.string.Hud_Text_Copied)
-                        }
-                    )
-                }
-            }
-
-            binding.backgroundView.setBackgroundResource(position.getBackground())
-        }
-
-    }
-
-    class TitleValueViewHolder(private val binding: ViewHolderTitleValueBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ViewItem.Value, position: ListPosition) {
-            binding.titleTextView.text = item.title
-            binding.valueTextView.text = item.value
-
-            binding.valueTextView.setTextColor(binding.wrapper.context.getColor(getTypeColor(item.type)))
-
-            binding.backgroundView.setBackgroundResource(position.getBackground())
-        }
-    }
-
-    class AmountMultiViewHolder(private val binding: ViewHolderAmountMultiBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(amounts: List<AmountValues>, type: ValueType, token: Token, position: ListPosition) {
-            binding.wrapper.layoutParams.height = LayoutHelper.dp(if (amounts.size == 2) 60f else 48f, binding.wrapper.context)
-            binding.coinIcon.setRemoteImage(token.coin.iconUrl, token.iconPlaceholder)
-
-            binding.coinTextView.text = amounts[0].coinAmount
-            binding.fiatTextView.text = amounts[0].fiatAmount
-
-            if (amounts.size == 2) {
-                binding.coinSecondaryTextView.text = amounts[1].coinAmount
-                binding.fiatSecondaryTextView.text = amounts[1].fiatAmount
-            }
-
-            binding.coinSecondaryTextView.isVisible = amounts.size == 2
-            binding.fiatSecondaryTextView.isVisible = amounts.size == 2
-
-            binding.coinTextView.setTextColor(binding.wrapper.context.getColor(getTypeColor(type)))
-
-            binding.backgroundView.setBackgroundResource(position.getBackground())
-        }
-
-    }
-
-    class AmountViewHolder(private val binding: ViewHolderAmountBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(fiatAmount: String?, coinAmount: String, type: ValueType, token: Token, position: ListPosition) {
-            binding.coinIcon.setRemoteImage(token.coin.iconUrl, token.iconPlaceholder)
-            binding.fiatTextView.text = fiatAmount
-            binding.coinTextView.text = coinAmount
-
-            binding.coinTextView.setTextColor(binding.wrapper.context.getColor(getTypeColor(type)))
-
-            binding.backgroundView.setBackgroundResource(position.getBackground())
-        }
-
-    }
-
-    companion object{
-        private fun getTypeColor(type: ValueType): Int = when (type) {
-            ValueType.Regular -> R.color.bran
-            ValueType.Disabled -> R.color.grey
-            ValueType.Outgoing -> R.color.leah
-            ValueType.Incoming -> R.color.remus
-        }
+        )
     }
 }
 
-enum class ListPosition(val id: Int) {
-    Single(0),
-    First(1),
-    Middle(2),
-    Last(3);
-
-    fun getBackground(): Int {
-        return when (this) {
-            First -> io.horizontalsystems.views.R.drawable.rounded_lawrence_background_top
-            Middle -> io.horizontalsystems.views.R.drawable.rounded_lawrence_background_middle
-            Last -> io.horizontalsystems.views.R.drawable.rounded_lawrence_background_bottom
-            Single -> io.horizontalsystems.views.R.drawable.rounded_lawrence_background_single
-        }
+@Composable
+private fun setColorByType(type: ValueType) =
+    when (type) {
+        ValueType.Regular -> ComposeAppTheme.colors.bran
+        ValueType.Disabled -> ComposeAppTheme.colors.grey
+        ValueType.Outgoing -> ComposeAppTheme.colors.leah
+        ValueType.Incoming -> ComposeAppTheme.colors.remus
     }
 
-    companion object {
-        private val map = values().associateBy(ListPosition::id)
+@Preview
+@Composable
+private fun Preview_Subhead() {
+    val item = ViewItem.Subhead("Title", "Value", R.drawable.ic_arrow_down_left_24)
+    ComposeAppTheme {
+        Subhead(item)
+    }
+}
 
-        fun getListPosition(id: Int): ListPosition = map[id] ?: Middle
-        fun getListPosition(size: Int, position: Int): ListPosition {
-            return when {
-                size == 1 -> Single
-                position == 0 -> First
-                position == size - 1 -> Last
-                else -> Middle
-            }
-        }
+@Preview
+@Composable
+private fun Preview_TitleValue() {
+    val item = ViewItem.Value("Title", "Value", ValueType.Incoming)
+    ComposeAppTheme {
+        TitleValue(item)
+    }
+}
+
+@Preview
+@Composable
+private fun Preview_AmountMulti() {
+    val token = Token(
+        coin = Coin("uid", "KuCoin", "KCS"),
+        blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
+        type = TokenType.Eip20("eef"),
+        decimals = 18
+    )
+    val item = ViewItem.AmountMulti(
+        listOf(
+            AmountValues("0.104 KCS (est)", "$0.99"),
+            AmountValues("0.103 KCS (min)", "$0.95"),
+        ),
+        ValueType.Incoming,
+        token
+    )
+    ComposeAppTheme {
+        AmountMulti(item)
+    }
+}
+
+@Preview
+@Composable
+private fun Preview_Amount() {
+    val token = Token(
+        coin = Coin("uid", "KuCoin", "KCS"),
+        blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
+        type = TokenType.Eip20("eef"),
+        decimals = 18
+    )
+    val item = ViewItem.Amount(
+        "$0.99",
+        "0.104 KCS (est)",
+        ValueType.Outgoing,
+        token
+    )
+    ComposeAppTheme {
+        Amount(item)
+    }
+}
+
+@Preview
+@Composable
+private fun Preview_TitleValueHex() {
+    ComposeAppTheme {
+        TitleValueHex("Title", "ValueShort", "ValueLong")
     }
 }
