@@ -102,11 +102,6 @@ fun SendEthRequestScreen(
                                     item.type,
                                     item.token
                                 )
-                                is ViewItem.Warning -> TextImportantWarning(
-                                    text = item.description,
-                                    title = item.title,
-                                    icon = item.icon
-                                )
                             }
                         }
                         Spacer(Modifier.height(12.dp))

@@ -756,8 +756,6 @@ sealed class ViewItem {
 
     class Address(val title: String, val valueTitle: String, val value: String) : ViewItem()
     class Input(val value: String) : ViewItem()
-    class Warning(val title: String, val description: String, @DrawableRes val icon: Int) :
-        ViewItem()
 }
 
 data class AmountValues(val coinAmount: String, val fiatAmount: String?)
