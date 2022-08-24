@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.icon24
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.BackpressureStrategy
 import io.reactivex.disposables.CompositeDisposable
@@ -21,7 +23,8 @@ class RestoreBlockchainsViewModel(
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Blockchain>>>()
     val disableBlockchainLiveData = MutableLiveData<String>()
-    val successLiveEvent = SingleLiveEvent<Unit>()
+    var restored by mutableStateOf(false)
+        private set
     val restoreEnabledLiveData: LiveData<Boolean>
         get() = LiveDataReactiveStreams.fromPublisher(
             service.canRestore.toFlowable(BackpressureStrategy.DROP)
@@ -70,7 +73,7 @@ class RestoreBlockchainsViewModel(
 
     fun onRestore() {
         service.restore()
-        successLiveEvent.postValue(Unit)
+        restored = true
     }
 
     override fun onCleared() {

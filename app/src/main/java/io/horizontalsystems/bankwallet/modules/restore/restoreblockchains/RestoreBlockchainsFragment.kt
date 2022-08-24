@@ -12,11 +12,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -33,7 +35,9 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
+import kotlinx.coroutines.delay
 
 class RestoreBlockchainsFragment : BaseFragment() {
 
@@ -60,9 +64,11 @@ class RestoreBlockchainsFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
+                    val popUpToInclusiveId = arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, -1) ?: -1
                     ManageWalletsScreen(
                         findNavController(),
-                        viewModel
+                        viewModel,
+                        popUpToInclusiveId
                     )
                     ZCashBirthdayHeightDialogWrapper(restoreSettingsViewModel)
                 }
@@ -75,12 +81,6 @@ class RestoreBlockchainsFragment : BaseFragment() {
     }
 
     private fun observe() {
-        val popUpToInclusiveId = arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, -1) ?: -1
-
-        viewModel.successLiveEvent.observe(viewLifecycleOwner) {
-            findNavController().popBackStack(popUpToInclusiveId, true)
-        }
-
         coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner) { config ->
             showBottomSelectorDialog(
                 config,
@@ -127,10 +127,26 @@ class RestoreBlockchainsFragment : BaseFragment() {
 @Composable
 private fun ManageWalletsScreen(
     navController: NavController,
-    viewModel: RestoreBlockchainsViewModel
+    viewModel: RestoreBlockchainsViewModel,
+    popUpToInclusiveId: Int
 ) {
+    val view = LocalView.current
+
     val coinItems by viewModel.viewItemsLiveData.observeAsState()
     val doneButtonEnabled by viewModel.restoreEnabledLiveData.observeAsState(false)
+    val restored = viewModel.restored
+
+    LaunchedEffect(restored) {
+        if (restored) {
+            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Restored)
+            delay(300)
+            if (popUpToInclusiveId != -1) {
+                navController.popBackStack(popUpToInclusiveId, true)
+            } else {
+                navController.popBackStack()
+            }
+        }
+    }
 
     Column(
         modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
