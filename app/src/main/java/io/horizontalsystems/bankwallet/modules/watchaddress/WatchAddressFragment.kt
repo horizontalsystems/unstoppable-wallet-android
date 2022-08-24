@@ -10,12 +10,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,9 +32,11 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.delay
 
 class WatchAddressFragment : BaseFragment() {
 
@@ -57,13 +61,21 @@ class WatchAddressFragment : BaseFragment() {
 
 @Composable
 fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
-    val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
+    val view = LocalView.current
 
-    if (viewModel.accountCreated) {
-        if (popUpToInclusiveId != -1) {
-            navController.popBackStack(popUpToInclusiveId, true)
-        } else {
-            navController.popBackStack()
+    val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
+    val accountCreated = viewModel.accountCreated
+
+    LaunchedEffect(accountCreated) {
+        if (accountCreated) {
+            HudHelper.showSuccessMessage(view, R.string.Hud_Text_AddressAdded)
+            delay(300)
+
+            if (popUpToInclusiveId != -1) {
+                navController.popBackStack(popUpToInclusiveId, true)
+            } else {
+                navController.popBackStack()
+            }
         }
     }
 
