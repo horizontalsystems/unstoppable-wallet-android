@@ -67,6 +67,10 @@ class WalletStorage(
         storage.delete(wallets.map { enabledWallet(it) })
     }
 
+    override fun handle(newEnabledWallets: List<EnabledWallet>) {
+        storage.save(newEnabledWallets)
+    }
+
     override fun clear() {
         storage.deleteAll()
     }

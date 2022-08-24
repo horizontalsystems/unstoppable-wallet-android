@@ -19,7 +19,10 @@ import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.*
-import io.horizontalsystems.bankwallet.core.providers.*
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.bankwallet.core.providers.EvmLabelProvider
+import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
+import io.horizontalsystems.bankwallet.core.providers.FeeTokenProvider
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
@@ -211,11 +214,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         walletActivator = WalletActivator(walletManager, marketKit)
 
-        val tokenBalanceProvider = TokenBalanceProvider()
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
-            tokenBalanceProvider,
-            walletActivator,
+            walletManager,
+            marketKit,
             appDatabase.evmAccountStateDao()
         )
         evmBlockchainManager = EvmBlockchainManager(
