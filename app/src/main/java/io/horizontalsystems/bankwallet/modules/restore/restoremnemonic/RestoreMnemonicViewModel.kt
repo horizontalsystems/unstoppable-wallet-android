@@ -37,6 +37,7 @@ class RestoreMnemonicViewModel(
     private var language = Language.English
     private var text = ""
     private var cursorPosition = 0
+    private var mnemonicWordList = WordList.wordList(language)
 
     var uiState by mutableStateOf(
         UiState(
@@ -71,14 +72,14 @@ class RestoreMnemonicViewModel(
 
     private fun processText() {
         wordItems = wordItems(text)
-        invalidWordItems = wordItems.filter { !wordsManager.isWordValid(it.word) }
+        invalidWordItems = wordItems.filter { !mnemonicWordList.validWord(it.word, false) }
 
         val wordItemWithCursor = wordItems.find {
             it.range.contains(cursorPosition - 1)
         }
 
         val invalidWordItemsExcludingCursoredPartiallyValid = when {
-            wordItemWithCursor != null && wordsManager.isWordPartiallyValid(wordItemWithCursor.word) -> {
+            wordItemWithCursor != null && mnemonicWordList.validWord(wordItemWithCursor.word, true) -> {
                 invalidWordItems.filter { it != wordItemWithCursor }
             }
             else -> invalidWordItems
@@ -86,7 +87,7 @@ class RestoreMnemonicViewModel(
 
         invalidWordRanges = invalidWordItemsExcludingCursoredPartiallyValid.map { it.range }
         wordSuggestions = wordItemWithCursor?.let {
-            RestoreMnemonicModule.WordSuggestions(it, WordList.wordList(language).fetchSuggestions(it.word))
+            RestoreMnemonicModule.WordSuggestions(it, mnemonicWordList.fetchSuggestions(it.word))
         }
     }
 
@@ -115,6 +116,7 @@ class RestoreMnemonicViewModel(
 
     fun setMnemonicLanguage(language: Language) {
         this.language = language
+        mnemonicWordList = WordList.wordList(language)
         processText()
 
         emitState()
