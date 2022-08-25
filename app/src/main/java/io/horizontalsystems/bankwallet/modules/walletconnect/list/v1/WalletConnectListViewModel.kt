@@ -17,6 +17,7 @@ import java.net.UnknownHostException
 class WalletConnectListViewModel(
     private val service: WalletConnectListService
 ) : ViewModel() {
+    var initialConnectionPrompted = false
 
     private val disposables = CompositeDisposable()
     var sectionItem by mutableStateOf<Section?>(null)
