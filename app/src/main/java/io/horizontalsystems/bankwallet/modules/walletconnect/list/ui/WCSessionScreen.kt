@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -30,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListView
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import kotlinx.coroutines.delay
 
 @Composable
 fun WCSessionsScreen(
@@ -61,6 +63,14 @@ fun WCSessionsContent(
 ) {
     val context = LocalContext.current
     val noSessions = viewModel.sectionItem == null && viewModelWc2.sectionItem == null
+
+    LaunchedEffect(Unit) {
+        if (!viewModel.initialConnectionPrompted && noSessions) {
+            delay(300)
+            viewModel.initialConnectionPrompted = true
+            qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
+        }
+    }
 
     Column(
         modifier = Modifier
