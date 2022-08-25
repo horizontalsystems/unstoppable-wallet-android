@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.version2
 import android.util.Log
 import com.walletconnect.walletconnectv2.client.WalletConnect
 import com.walletconnect.walletconnectv2.client.WalletConnectClient
-import com.walletconnect.walletconnectv2.storage.history.model.JsonRpcStatus
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -35,15 +34,17 @@ class WC2Service : WalletConnectClient.WalletDelegate {
         get() = pendingRequestUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     val activeSessions: List<WalletConnect.Model.SettledSession>
-        get() = WalletConnectClient.getListOfSettledSessions()
+//        get() = WalletConnectClient.getListOfSettledSessions()
+        get() = listOf()
 
     init {
-        WalletConnectClient.setWalletDelegate(this)
+//        WalletConnectClient.setWalletDelegate(this)
     }
 
     fun pendingRequests(topic: String): List<WalletConnect.Model.JsonRpcHistory.HistoryEntry> {
-        val history = WalletConnectClient.getJsonRpcHistory(topic)
-        return history.listOfRequests.filter { it.jsonRpcStatus == JsonRpcStatus.PENDING && it.method == "wc_sessionPayload" }
+        return listOf()
+//        val history = WalletConnectClient.getJsonRpcHistory(topic)
+//        return history.listOfRequests.filter { it.jsonRpcStatus == JsonRpcStatus.PENDING && it.method == "wc_sessionPayload" }
     }
 
     var event: Event = Event.Default

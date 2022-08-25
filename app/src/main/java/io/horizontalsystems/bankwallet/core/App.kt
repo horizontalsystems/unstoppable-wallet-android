@@ -12,7 +12,6 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
 import com.walletconnect.walletconnectv2.client.WalletConnect
-import com.walletconnect.walletconnectv2.client.WalletConnectClient
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
@@ -344,7 +343,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             )
         )
 
-        WalletConnectClient.initialize(initWallet)
+//        WalletConnectClient.initialize(initWallet)
     }
 
     private fun setAppTheme() {

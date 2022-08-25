@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionsScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -42,10 +41,11 @@ class WCListFragment : BaseFragment() {
                 WCSessionModule.prepareParams(null, connectUri)
             )
         } else if (wcVersion == 2) {
-            findNavController().slideFromBottom(
-                R.id.wc2SessionFragment,
-                WC2SessionModule.prepareParams(null, connectUri)
-            )
+            HudHelper.showErrorMessage(requireView(), R.string.WalletConnect_NotSupportedV2)
+//            findNavController().slideFromBottom(
+//                R.id.wc2SessionFragment,
+//                WC2SessionModule.prepareParams(null, connectUri)
+//            )
         } else {
             HudHelper.showErrorMessage(requireView(), R.string.WalletConnect_Error_InvalidUrl)
         }
