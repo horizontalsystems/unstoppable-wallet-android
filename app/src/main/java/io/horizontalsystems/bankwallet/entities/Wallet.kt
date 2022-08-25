@@ -31,7 +31,7 @@ data class Wallet(
             BlockchainType.Litecoin,
             -> coinSettings.derivation?.value?.uppercase()
             BlockchainType.BitcoinCash -> coinSettings.bitcoinCashCoinType?.value?.uppercase()
-            else -> token.protocolType
+            else -> token.protocolType?.uppercase()
         }
 
     val transactionSource get() = TransactionSource(token.blockchain, account, coinSettings)
