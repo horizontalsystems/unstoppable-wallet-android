@@ -93,13 +93,13 @@ class SwapCoinCardView @JvmOverloads constructor(
         viewModel.isEstimatedLiveData().observe(lifecycleOwner, { setEstimated(it) })
 
         viewModel.amountLiveData().observe(lifecycleOwner, { amount ->
-            if (!amountsEqual(
-                    amount?.toBigDecimalOrNull(),
-                    binding.amountInput.getAmount()?.toBigDecimalOrNull()
-                )
-            ) {
-                binding.amountInput.setAmount(amount)
-            }
+//            if (!amountsEqual(
+//                    amount?.toBigDecimalOrNull(),
+//                    binding.amountInput.getAmount()?.toBigDecimalOrNull()
+//                )
+//            ) {
+//                binding.amountInput.setAmount(amount)
+//            }
         })
 
         viewModel.resetAmountLiveEvent().observe(lifecycleOwner) {

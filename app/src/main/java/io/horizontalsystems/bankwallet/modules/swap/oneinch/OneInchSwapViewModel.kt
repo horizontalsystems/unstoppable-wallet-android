@@ -11,10 +11,8 @@ import io.horizontalsystems.bankwallet.modules.evmfee.GasDataError
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ApproveStep
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
-import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -31,8 +29,6 @@ class OneInchSwapViewModel(
     private val swapErrorLiveData = MutableLiveData<String?>(null)
     private val buttonsLiveData = MutableLiveData<Buttons>()
     private val approveStepLiveData = MutableLiveData(ApproveStep.NA)
-    private val openApproveLiveEvent = SingleLiveEvent<SwapAllowanceService.ApproveData>()
-    private val openConfirmationLiveEvent = SingleLiveEvent<OneInchSwapParameters>()
 
     init {
         subscribeToServices()
@@ -46,25 +42,21 @@ class OneInchSwapViewModel(
     fun swapErrorLiveData(): LiveData<String?> = swapErrorLiveData
     fun buttonsLiveData(): LiveData<Buttons> = buttonsLiveData
     fun approveStepLiveData(): LiveData<ApproveStep> = approveStepLiveData
-    fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
-    fun openConfirmationLiveEvent(): LiveData<OneInchSwapParameters> = openConfirmationLiveEvent
+
+    val approveData by service::approveData
+
+    val proceedParams: OneInchSwapParameters?
+        get() {
+            val serviceState = service.state
+            val tradeServiceState = tradeService.state
+            if (serviceState is OneInchSwapService.State.Ready && tradeServiceState is OneInchTradeService.State.Ready) {
+                return tradeServiceState.params
+            }
+            return null
+        }
 
     fun onTapSwitch() {
         tradeService.switchCoins()
-    }
-
-    fun onTapApprove() {
-        service.approveData?.let { approveData ->
-            openApproveLiveEvent.postValue(approveData)
-        }
-    }
-
-    fun onTapProceed() {
-        val serviceState = service.state
-        val tradeServiceState = tradeService.state
-        if (serviceState is OneInchSwapService.State.Ready && tradeServiceState is OneInchTradeService.State.Ready) {
-            openConfirmationLiveEvent.postValue(tradeServiceState.params)
-        }
     }
 
     fun didApprove() {
