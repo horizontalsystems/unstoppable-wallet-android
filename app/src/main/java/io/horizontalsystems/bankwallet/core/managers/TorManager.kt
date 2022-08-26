@@ -13,6 +13,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import java.util.concurrent.Executors
 
 class TorManager(
     context: Context,
@@ -28,6 +29,7 @@ class TorManager(
     override val isTorNotificationEnabled: Boolean
         get() = kit.notificationsEnabled
 
+    private val executorService = Executors.newCachedThreadPool()
     private val disposables = CompositeDisposable()
     private var listener: Listener? = null
     private val kit: TorKit by lazy {
@@ -50,7 +52,9 @@ class TorManager(
                     Log.e("TorManager", "Tor exception", it)
                 })
         )
-        kit.startTor(false)
+        executorService.execute {
+            kit.startTor(false)
+        }
     }
 
     override fun stop(): Single<Boolean> {
