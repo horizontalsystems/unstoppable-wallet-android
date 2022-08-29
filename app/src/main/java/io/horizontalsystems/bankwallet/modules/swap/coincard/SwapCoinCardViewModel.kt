@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -50,24 +49,20 @@ class SwapCoinCardViewModel(
         get() = UUID.randomUUID().leastSignificantBits.toString()
 
     private val amountLiveData = MutableLiveData<Pair<String?, String?>>(Pair(null, null))
-    private val resetAmountLiveEvent = SingleLiveEvent<Unit>()
     private val balanceLiveData = MutableLiveData<String?>(null)
     private val balanceErrorLiveData = MutableLiveData(false)
     private val tokenCodeLiveData = MutableLiveData<Token?>()
     private val isEstimatedLiveData = MutableLiveData(false)
-    private val inputParamsLiveData = MutableLiveData<AmountInputView.InputParams>()
     private val secondaryInfoLiveData = MutableLiveData<String?>(null)
     private val warningInfoLiveData = MutableLiveData<String?>(null)
     private val maxEnabledLiveData = MutableLiveData(false)
 
     //region outputs
     fun amountLiveData(): LiveData<Pair<String?, String?>> = amountLiveData
-    fun resetAmountLiveEvent(): LiveData<Unit> = resetAmountLiveEvent
     fun balanceLiveData(): LiveData<String?> = balanceLiveData
     fun balanceErrorLiveData(): LiveData<Boolean> = balanceErrorLiveData
     fun tokenCodeLiveData(): LiveData<Token?> = tokenCodeLiveData
     fun isEstimatedLiveData(): LiveData<Boolean> = isEstimatedLiveData
-    fun inputParamsLiveData(): LiveData<AmountInputView.InputParams> = inputParamsLiveData
     fun secondaryInfoLiveData(): LiveData<String?> = secondaryInfoLiveData
     fun warningInfoLiveData(): LiveData<String?> = warningInfoLiveData
     fun maxEnabledLiveData(): LiveData<Boolean> = maxEnabledLiveData
@@ -81,7 +76,8 @@ class SwapCoinCardViewModel(
         coinCardService.onSelectCoin(token)
         fiatService.set(token)
         if (resetAmountOnCoinSelect) {
-            resetAmountLiveEvent.postValue(Unit)
+            amountLiveData.postValue(Pair(uuidString, ""))
+            onChangeAmount("")
         }
     }
 
@@ -255,7 +251,6 @@ class SwapCoinCardViewModel(
         val prefix = if (switchService.amountType == AmountType.Currency) fiatService.currency.symbol else null
         val inputParams = AmountInputView.InputParams(switchService.amountType, prefix, switchAvailable)
         this.inputParams = inputParams
-//        inputParamsLiveData.postValue(inputParams)
     }
 
     private fun setCoinValueToService(coinAmount: BigDecimal?, force: Boolean) {
