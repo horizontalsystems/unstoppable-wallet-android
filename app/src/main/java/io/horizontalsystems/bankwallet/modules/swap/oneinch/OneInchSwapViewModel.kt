@@ -8,6 +8,8 @@ import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.evmfee.GasDataError
+import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
+import io.horizontalsystems.bankwallet.modules.swap.SwapButtons
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ApproveStep
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
@@ -27,7 +29,7 @@ class OneInchSwapViewModel(
 
     private val isLoadingLiveData = MutableLiveData(false)
     private val swapErrorLiveData = MutableLiveData<String?>(null)
-    private val buttonsLiveData = MutableLiveData<Buttons>()
+    private val buttonsLiveData = MutableLiveData<SwapButtons>()
     private val approveStepLiveData = MutableLiveData(ApproveStep.NA)
 
     init {
@@ -40,7 +42,7 @@ class OneInchSwapViewModel(
     //region outputs
     fun isLoadingLiveData(): LiveData<Boolean> = isLoadingLiveData
     fun swapErrorLiveData(): LiveData<String?> = swapErrorLiveData
-    fun buttonsLiveData(): LiveData<Buttons> = buttonsLiveData
+    fun buttonsLiveData(): LiveData<SwapButtons> = buttonsLiveData
     fun approveStepLiveData(): LiveData<ApproveStep> = approveStepLiveData
 
     val approveData by service::approveData
@@ -140,50 +142,50 @@ class OneInchSwapViewModel(
         val approveAction = getApproveActionState()
         val proceedAction = getProceedActionState()
         val approveStep = getApproveStep()
-        buttonsLiveData.postValue(Buttons(approveAction, proceedAction))
+        buttonsLiveData.postValue(SwapButtons(approveAction, proceedAction))
         approveStepLiveData.postValue(approveStep)
     }
 
-    private fun getProceedActionState(): ActionState {
+    private fun getProceedActionState(): SwapActionState {
         return when {
             service.state is OneInchSwapService.State.Ready -> {
-                ActionState.Enabled(Translator.getString(R.string.Swap_Proceed))
+                SwapActionState.Enabled(Translator.getString(R.string.Swap_Proceed))
             }
             tradeService.state is OneInchTradeService.State.Ready -> {
                 when {
                     service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
-                        ActionState.Disabled(Translator.getString(R.string.Swap_ErrorInsufficientBalance))
+                        SwapActionState.Disabled(Translator.getString(R.string.Swap_ErrorInsufficientBalance))
                     }
                     pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
-                        ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
+                        SwapActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
                     }
                     else -> {
-                        ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
+                        SwapActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
                     }
                 }
             }
             else -> {
-                ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
+                SwapActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
             }
         }
     }
 
-    private fun getApproveActionState(): ActionState {
+    private fun getApproveActionState(): SwapActionState {
         return when {
             pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
-                ActionState.Disabled(Translator.getString(R.string.Swap_Approving))
+                SwapActionState.Disabled(Translator.getString(R.string.Swap_Approving))
             }
             tradeService.state is OneInchTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
-                ActionState.Hidden
+                SwapActionState.Hidden
             }
             service.errors.any { it == SwapError.InsufficientAllowance } -> {
-                ActionState.Enabled(Translator.getString(R.string.Swap_Approve))
+                SwapActionState.Enabled(Translator.getString(R.string.Swap_Approve))
             }
             pendingAllowanceService.state == SwapPendingAllowanceState.Approved -> {
-                ActionState.Disabled(Translator.getString(R.string.Swap_Approve))
+                SwapActionState.Disabled(Translator.getString(R.string.Swap_Approve))
             }
             else -> {
-                ActionState.Hidden
+                SwapActionState.Hidden
             }
         }
     }
@@ -208,13 +210,4 @@ class OneInchSwapViewModel(
         }
     }
 
-    //region models
-    sealed class ActionState {
-        object Hidden : ActionState()
-        class Enabled(val title: String) : ActionState()
-        class Disabled(val title: String) : ActionState()
-    }
-
-    data class Buttons(val approve: ActionState, val proceed: ActionState)
-    //endregion
 }
