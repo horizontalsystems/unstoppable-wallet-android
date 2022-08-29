@@ -258,3 +258,18 @@ object SwapMainModule {
 
 
 }
+
+sealed class SwapActionState {
+    object Hidden : SwapActionState()
+    class Enabled(val buttonTitle: String) : SwapActionState()
+    class Disabled(val buttonTitle: String) : SwapActionState();
+
+    val title: String
+        get() = when (this) {
+            is Enabled -> this.buttonTitle
+            is Disabled -> this.buttonTitle
+            else -> ""
+        }
+}
+
+data class SwapButtons(val approve: SwapActionState, val proceed: SwapActionState)

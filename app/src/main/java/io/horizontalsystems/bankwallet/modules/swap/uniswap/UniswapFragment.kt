@@ -1,34 +1,51 @@
 package io.horizontalsystems.bankwallet.modules.swap.uniswap
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.databinding.FragmentUniswapBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ApproveStep
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
+import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewComposable
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.ui.*
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.AdditionalDataCell2
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
+import java.util.*
+
+private val uuidFrom = UUID.randomUUID().leastSignificantBits
+private val uuidTo = UUID.randomUUID().leastSignificantBits
 
 class UniswapFragment : SwapBaseFragment() {
 
@@ -49,6 +66,20 @@ class UniswapFragment : SwapBaseFragment() {
         )
     }
 
+    private val fromCoinCardViewModel by lazy {
+        ViewModelProvider(this, coinCardViewModelFactory).get(
+            SwapMainModule.coinCardTypeFrom,
+            SwapCoinCardViewModel::class.java
+        )
+    }
+
+    private val toCoinCardViewModel by lazy {
+        ViewModelProvider(this, coinCardViewModelFactory).get(
+            SwapMainModule.coinCardTypeTo,
+            SwapCoinCardViewModel::class.java
+        )
+    }
+
     override fun restoreProviderState(providerState: SwapMainModule.SwapProviderState) {
         uniswapViewModel.restoreProviderState(providerState)
     }
@@ -57,22 +88,27 @@ class UniswapFragment : SwapBaseFragment() {
         return uniswapViewModel.getProviderState()
     }
 
-    private var _binding: FragmentUniswapBinding? = null
-    private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentUniswapBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+
+            setContent {
+                UniswapScreen(
+                    viewModel = uniswapViewModel,
+                    fromCoinCardViewModel = fromCoinCardViewModel,
+                    toCoinCardViewModel = toCoinCardViewModel,
+                    allowanceViewModel = allowanceViewModel,
+                    navController = findNavController(),
+                )
+            }
+        }
     }
 
     override fun onStart() {
@@ -87,195 +123,136 @@ class UniswapFragment : SwapBaseFragment() {
         uniswapViewModel.onStop()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+}
 
-        val fromCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(
-            SwapMainModule.coinCardTypeFrom,
-            SwapCoinCardViewModel::class.java
-        )
-        binding.fromCoinCard.initialize(
-            getString(R.string.Swap_FromAmountTitle),
-            fromCoinCardViewModel,
-            this,
-            viewLifecycleOwner
-        )
+@Composable
+private fun UniswapScreen(
+    viewModel: UniswapViewModel,
+    fromCoinCardViewModel: SwapCoinCardViewModel,
+    toCoinCardViewModel: SwapCoinCardViewModel,
+    allowanceViewModel: SwapAllowanceViewModel,
+    navController: NavController
+) {
+    val buttons by viewModel.buttonsLiveData().observeAsState()
+    val showProgressbar by viewModel.isLoadingLiveData().observeAsState(false)
+    val swapError by viewModel.swapErrorLiveData().observeAsState()
+    val approveStep by viewModel.approveStepLiveData().observeAsState()
+    val tradeViewItem by viewModel.tradeViewItemLiveData().observeAsState()
 
-        val toCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(
-            SwapMainModule.coinCardTypeTo,
-            SwapCoinCardViewModel::class.java
-        )
-        binding.toCoinCard.initialize(
-            getString(R.string.Swap_ToAmountTitle),
-            toCoinCardViewModel,
-            this,
-            viewLifecycleOwner
-        )
-
-        binding.allowanceView.initialize(allowanceViewModel, viewLifecycleOwner)
-
-        observeViewModel()
-
-        binding.switchButton.setOnClickListener {
-            uniswapViewModel.onTapSwitch()
-        }
-
-        binding.buttonsCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-    }
-
-    private fun subscribeToApproveResult() {
-        getNavigationResult(SwapApproveModule.requestKey) {
-            if (it.getBoolean(SwapApproveModule.resultKey)) {
-                uniswapViewModel.didApprove()
-            }
+    navController.getNavigationResult(SwapApproveModule.requestKey) {
+        if (it.getBoolean(SwapApproveModule.resultKey)) {
+            viewModel.didApprove()
         }
     }
 
-    private fun observeViewModel() {
-        uniswapViewModel.isLoadingLiveData().observe(viewLifecycleOwner, { isLoading ->
-            binding.progressBar.isVisible = isLoading
-        })
+    ComposeAppTheme {
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState())
+        ) {
 
-        uniswapViewModel.swapErrorLiveData().observe(viewLifecycleOwner, { error ->
-            binding.commonError.text = error
-            binding.commonError.isVisible = error != null
-        })
+            Spacer(Modifier.height(12.dp))
 
-        uniswapViewModel.tradeViewItemLiveData().observe(viewLifecycleOwner, { tradeViewItem ->
-            setTradeViewItem(tradeViewItem)
-        })
-
-        uniswapViewModel.buttonsLiveData().observe(viewLifecycleOwner, { buttons ->
-            setButtons(buttons)
-        })
-
-        uniswapViewModel.openApproveLiveEvent().observe(viewLifecycleOwner) { approveData ->
-            subscribeToApproveResult()
-            findNavController().slideFromBottom(
-                R.id.swapApproveFragment,
-                SwapApproveModule.prepareParams(approveData)
+            SwapCoinCardViewComposable(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = stringResource(R.string.Swap_FromAmountTitle),
+                viewModel = fromCoinCardViewModel,
+                uuid = uuidFrom,
+                amountEnabled = true,
+                navController = navController
             )
-        }
 
-        uniswapViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
-            requireParentFragment().findNavController().slideFromRight(
-                R.id.uniswapConfirmationFragment,
-                UniswapConfirmationModule.prepareParams(sendEvmData)
+            SwitchCoinsSection(showProgressbar) { viewModel.onTapSwitch() }
+
+            SwapCoinCardViewComposable(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = stringResource(R.string.Swap_ToAmountTitle),
+                viewModel = toCoinCardViewModel,
+                uuid = uuidTo,
+                amountEnabled = false,
+                navController = navController
             )
-        })
 
-        uniswapViewModel.approveStepLiveData().observe(viewLifecycleOwner, { approveStep ->
-            when (approveStep) {
-                ApproveStep.ApproveRequired, ApproveStep.Approving -> {
-                    binding.approveStepsView.setStepOne()
-                }
-                ApproveStep.Approved -> {
-                    binding.approveStepsView.setStepTwo()
-                }
-                ApproveStep.NA, null -> {
-                    binding.approveStepsView.hide()
-                }
-            }
-        })
-    }
+            SwapAllowance(allowanceViewModel)
 
-    private fun setButtons(buttons: UniswapViewModel.Buttons) {
-        val approveButtonVisible = buttons.approve != UniswapViewModel.ActionState.Hidden
-        binding.buttonsCompose.setContent {
-            ComposeAppTheme {
-                Row(
-                    modifier = Modifier
-                        .width(IntrinsicSize.Max)
-                        .padding(top = 28.dp, bottom = 24.dp)
-                ) {
-                    if (approveButtonVisible) {
-                        ButtonPrimaryDefault(
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(end = 4.dp),
-                            title = getTitle(buttons.approve),
-                            onClick = {
-                                uniswapViewModel.onTapApprove()
-                            },
-                            enabled = buttons.approve is UniswapViewModel.ActionState.Enabled
+            TradeView(tradeViewItem)
+
+            SwapError(swapError)
+
+            ActionButtons(
+                buttons = buttons,
+                onTapApprove = {
+                    viewModel.approveData?.let { data ->
+                        navController.slideFromBottom(
+                            R.id.swapApproveFragment,
+                            SwapApproveModule.prepareParams(data)
                         )
                     }
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .weight(1f)
-                            .then(getProceedButtonModifier(approveButtonVisible)),
-                        title = getTitle(buttons.proceed),
-                        onClick = {
-                            uniswapViewModel.onTapProceed()
-                        },
-                        enabled = buttons.proceed is UniswapViewModel.ActionState.Enabled
-                    )
+                },
+                onTapProceed = {
+                    viewModel.proceedParams?.let { sendEvmData ->
+                        navController.slideFromRight(
+                            R.id.uniswapConfirmationFragment,
+                            UniswapConfirmationModule.prepareParams(sendEvmData)
+                        )
+                    }
                 }
+            )
+
+            SwapAllowanceSteps(approveStep)
+
+            Spacer(Modifier.height(32.dp))
+        }
+    }
+}
+
+@Composable
+private fun TradeView(data: UniswapViewModel.TradeViewItem?) {
+    data?.let { tradeViewItem ->
+        Spacer(Modifier.height(12.dp))
+        if (tradeViewItem.buyPrice != null && tradeViewItem.sellPrice != null) {
+            AdditionalDataCell2 {
+                subhead2_grey(text = stringResource(R.string.Swap_BuyPrice))
+                Spacer(Modifier.weight(1f))
+                subhead2_grey(text = tradeViewItem.buyPrice)
+            }
+            AdditionalDataCell2 {
+                subhead2_grey(text = stringResource(R.string.Swap_SellPrice))
+                Spacer(Modifier.weight(1f))
+                subhead2_grey(text = tradeViewItem.sellPrice)
+            }
+        }
+        tradeViewItem.priceImpact?.let { priceImpact ->
+            AdditionalDataCell2 {
+                subhead2_grey(text = stringResource(R.string.Swap_PriceImpact))
+                Spacer(Modifier.weight(1f))
+                Text(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = priceImpact.value,
+                    style = ComposeAppTheme.typography.subhead2,
+                    color = getPriceImpactColor(priceImpact.level),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+        tradeViewItem.guaranteedAmount?.let { guaranteedAmount ->
+            AdditionalDataCell2 {
+                subhead2_grey(text = guaranteedAmount.title)
+                Spacer(Modifier.weight(1f))
+                subhead2_grey(text = guaranteedAmount.value)
             }
         }
     }
+}
 
-    private fun getProceedButtonModifier(approveButtonVisible: Boolean): Modifier {
-        return if (approveButtonVisible) {
-            Modifier.padding(start = 4.dp)
-        } else {
-            Modifier.fillMaxWidth()
-        }
+@Composable
+private fun getPriceImpactColor(
+    priceImpactLevel: PriceImpactLevel?
+): Color {
+    return when (priceImpactLevel) {
+        PriceImpactLevel.Normal -> ComposeAppTheme.colors.remus
+        PriceImpactLevel.Warning -> ComposeAppTheme.colors.jacob
+        PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
+        else -> ComposeAppTheme.colors.grey
     }
-
-    private fun getTitle(action: UniswapViewModel.ActionState?): String {
-        return when (action) {
-            is UniswapViewModel.ActionState.Enabled -> action.title
-            is UniswapViewModel.ActionState.Disabled -> action.title
-            else -> ""
-        }
-    }
-
-    private fun setTradeViewItem(tradeViewItem: UniswapViewModel.TradeViewItem?) {
-        if (tradeViewItem?.buyPrice != null && tradeViewItem.sellPrice != null) {
-            binding.priceViews.isVisible = true
-            binding.buyPriceValue.text = tradeViewItem.buyPrice
-            binding.sellPriceValue.text = tradeViewItem.sellPrice
-        } else {
-            binding.priceViews.isVisible = false
-        }
-
-        if (tradeViewItem?.priceImpact != null) {
-            binding.priceImpactViews.isVisible = true
-            binding.priceImpactValue.text = tradeViewItem.priceImpact.value
-            binding.priceImpactValue.setTextColor(
-                priceImpactColor(
-                    requireContext(),
-                    tradeViewItem.priceImpact.level
-                )
-            )
-        } else {
-            binding.priceImpactViews.isVisible = false
-        }
-
-        if (tradeViewItem?.guaranteedAmount != null) {
-            binding.guaranteedAmountViews.isVisible = true
-            binding.minMaxTitle.text = tradeViewItem.guaranteedAmount.title
-            binding.minMaxValue.text = tradeViewItem.guaranteedAmount.value
-        } else {
-            binding.guaranteedAmountViews.isVisible = false
-        }
-    }
-
-    private fun priceImpactColor(
-        ctx: Context,
-        priceImpactLevel: UniswapTradeService.PriceImpactLevel?
-    ): Int {
-        val color = when (priceImpactLevel) {
-            UniswapTradeService.PriceImpactLevel.Normal -> R.color.remus
-            UniswapTradeService.PriceImpactLevel.Warning -> R.color.jacob
-            UniswapTradeService.PriceImpactLevel.Forbidden -> R.color.lucian
-            else -> R.color.grey
-        }
-
-        return ctx.getColor(color)
-    }
-
 }
