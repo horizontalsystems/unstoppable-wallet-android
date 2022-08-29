@@ -179,8 +179,10 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
-                CellSingleLineLawrenceSection(actionItems)
+                if (actionItems.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(32.dp))
+                    CellSingleLineLawrenceSection(actionItems)
+                }
 
                 if (additionalItems.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(32.dp))
