@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import io.horizontalsystems.bankwallet.core.order
 import java.math.BigDecimal
 
 class BalanceSorter {
@@ -17,11 +18,13 @@ class BalanceSorter {
                 compareByDescending<BalanceModule.BalanceItem> {
                     it.balanceData.available > BigDecimal.ZERO
                 }.thenByDescending {
-                    it.fiatValue ?: BigDecimal.ZERO > BigDecimal.ZERO
+                    (it.fiatValue ?: BigDecimal.ZERO) > BigDecimal.ZERO
                 }.thenByDescending {
                     it.fiatValue
                 }.thenByDescending {
                     it.balanceData.available
+                }.thenBy {
+                    it.wallet.token.blockchainType.order
                 }.thenBy {
                     it.wallet.coin.name
                 }
