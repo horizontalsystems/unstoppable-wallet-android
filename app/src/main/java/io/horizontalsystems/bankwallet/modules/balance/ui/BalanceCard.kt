@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
@@ -121,27 +122,36 @@ fun BalanceCard(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        headline2_leah(
-                            text = viewItem.coinCode,
-                            maxLines = 1,
-                        )
-                        if (!viewItem.badge.isNullOrBlank()) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(start = 8.dp, end = 16.dp)
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .background(ComposeAppTheme.colors.jeremy)
-                            ) {
-                                Text(
-                                    modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),
-                                    text = viewItem.badge,
-                                    color = ComposeAppTheme.colors.bran,
-                                    style = ComposeAppTheme.typography.microSB,
-                                    maxLines = 1,
-                                )
+                        Row(
+                            modifier = Modifier.weight(weight = 1f),
+                        ) {
+                            headline2_leah(
+                                text = viewItem.coinCode,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            if (!viewItem.badge.isNullOrBlank()) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(start = 8.dp)
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .background(ComposeAppTheme.colors.jeremy)
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(
+                                            start = 4.dp,
+                                            end = 4.dp,
+                                            bottom = 1.dp
+                                        ),
+                                        text = viewItem.badge,
+                                        color = ComposeAppTheme.colors.bran,
+                                        style = ComposeAppTheme.typography.microSB,
+                                        maxLines = 1,
+                                    )
+                                }
                             }
                         }
-                        Spacer(modifier = Modifier.weight(1f))
+                        Spacer(Modifier.width(24.dp))
                         if (viewItem.primaryValue.visible) {
                             Text(
                                 text = viewItem.primaryValue.value,
