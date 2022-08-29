@@ -11,8 +11,10 @@ import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BalanceViewModel(
     private val service: BalanceService,
@@ -74,20 +76,20 @@ class BalanceViewModel(
         service.start()
     }
 
-    private fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
+    private suspend fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
         this.balanceViewType = balanceViewType
 
         service.balanceItemsFlow.value?.let {
             refreshViewItems(it)
-
-            emitState()
         }
     }
 
-    private fun handleUpdatedTotalState(totalState: TotalService.State) {
-        this.totalState = createTotalUIState(totalState)
+    private suspend fun handleUpdatedTotalState(totalState: TotalService.State) {
+        withContext(Dispatchers.IO) {
+            this@BalanceViewModel.totalState = createTotalUIState(totalState)
 
-        emitState()
+            emitState()
+        }
     }
 
     private fun emitState() {
@@ -104,23 +106,24 @@ class BalanceViewModel(
     }
 
 
-    private fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>) {
-        viewState = ViewState.Success
+    private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>) {
+        withContext(Dispatchers.IO) {
+            viewState = ViewState.Success
 
-        balanceViewItems = balanceItems.map { balanceItem ->
-            balanceViewItemFactory.viewItem(
-                balanceItem,
-                service.baseCurrency,
-                balanceItem.wallet == expandedWallet,
-                balanceHiddenManager.balanceHidden,
-                service.isWatchAccount,
-                balanceViewType
-            )
+            balanceViewItems = balanceItems.map { balanceItem ->
+                balanceViewItemFactory.viewItem(
+                    balanceItem,
+                    service.baseCurrency,
+                    balanceItem.wallet == expandedWallet,
+                    balanceHiddenManager.balanceHidden,
+                    service.isWatchAccount,
+                    balanceViewType
+                )
+            }
+
+            emitState()
         }
-
-        emitState()
     }
-
 
     override fun onCleared() {
         totalService.stop()
@@ -128,9 +131,10 @@ class BalanceViewModel(
     }
 
     fun onBalanceClick() {
-        balanceHiddenManager.toggleBalanceHidden()
-
-        service.balanceItemsFlow.value?.let { refreshViewItems(it) }
+        viewModelScope.launch {
+            balanceHiddenManager.toggleBalanceHidden()
+            service.balanceItemsFlow.value?.let { refreshViewItems(it) }
+        }
     }
 
     fun toggleTotalType() {
@@ -138,12 +142,14 @@ class BalanceViewModel(
     }
 
     fun onItem(viewItem: BalanceViewItem) {
-        expandedWallet = when {
-            viewItem.wallet == expandedWallet -> null
-            else -> viewItem.wallet
-        }
+        viewModelScope.launch {
+            expandedWallet = when {
+                viewItem.wallet == expandedWallet -> null
+                else -> viewItem.wallet
+            }
 
-        service.balanceItemsFlow.value?.let { refreshViewItems(it) }
+            service.balanceItemsFlow.value?.let { refreshViewItems(it) }
+        }
     }
 
     fun getWalletForReceive(viewItem: BalanceViewItem) = when {
