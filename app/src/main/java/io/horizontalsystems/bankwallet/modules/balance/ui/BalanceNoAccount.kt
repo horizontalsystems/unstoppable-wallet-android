@@ -12,13 +12,13 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageNoAccount
+import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 
 @Composable
 fun BalanceNoAccount(navController: NavController) {
     ComposeAppTheme {
         Column(modifier = Modifier.fillMaxSize()) {
-            ScreenMessageNoAccount(
+            ScreenMessageWithAction(
                 text = stringResource(id = R.string.Balance_NoWalletAlert),
                 icon = R.drawable.ic_wallet_48,
             ){

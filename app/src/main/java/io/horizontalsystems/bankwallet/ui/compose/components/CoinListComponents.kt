@@ -30,14 +30,11 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
-import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -166,44 +163,9 @@ fun ScreenMessageWithAction(
     @DrawableRes icon: Int,
     actionsComposable: (@Composable () -> Unit)? = null
 ) {
-    Column {
-        Spacer(Modifier.weight(22f))
-
-        Row(
-            modifier = Modifier.weight(78f),
-            verticalAlignment = Alignment.Top
-        ) {
-            MessageWithActionContent(icon, text, actionsComposable)
-        }
-    }
-}
-
-@Composable
-fun ScreenMessageNoAccount(
-    text: String,
-    @DrawableRes icon: Int,
-    actionsComposable: (@Composable () -> Unit)? = null
-) {
-    Column {
-        Spacer(Modifier.weight(30f))
-
-        Row(
-            modifier = Modifier.weight(70f),
-            verticalAlignment = Alignment.Top
-        ) {
-            MessageWithActionContent(icon, text, actionsComposable)
-        }
-    }
-}
-
-@Composable
-private fun MessageWithActionContent(
-    icon: Int,
-    text: String,
-    actionsComposable: @Composable() (() -> Unit)?
-) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
@@ -222,16 +184,17 @@ private fun MessageWithActionContent(
                 tint = ComposeAppTheme.colors.grey
             )
         }
+        Spacer(Modifier.height(32.dp))
         subhead2_grey(
-            modifier = Modifier
-                .padding(top = 32.dp)
-                .padding(horizontal = 48.dp),
+            modifier = Modifier.padding(horizontal = 48.dp),
             text = text,
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
         )
-        Spacer(Modifier.height(32.dp))
-        actionsComposable?.let { it() }
+        actionsComposable?.let { composable ->
+            Spacer(Modifier.height(32.dp))
+            composable.invoke()
+        }
     }
 }
 
