@@ -40,6 +40,7 @@
     <string name="Button_Switch">Switch</string>
     <string name="Button_Remove">Remove</string>
     <string name="Button_Save">Save</string>
+    <string name="Button_IAgree">I Agree</string>
 
 
     <string name="Error">Error</string>
@@ -772,16 +773,12 @@
 \n\nIt\'s a non-custodial, peer-to-peer wallet where only the user has control over the funds. It doesn\'t collect any data and keeps the user independent by not locking the user\'s funds to a specific wallet app.
 \n\nThe Unstoppable wallet is fully open-source and anyone can confirm the app works exactly as it claims to.
 \n\nWe built Unstoppable for ourselves as the other available solutions were not up to par. Both from an engineering and usability perspective, we believe this wallet to be significantly ahead of alternative products.</string>
-    <string name="SettingsTerms_TermAcademy">I went through the Academy section of this app and got familiar with the fundamental aspects of storing cryptocurrencies.</string>
-    <string name="SettingsTerms_TermBackup">I have backed up the private key(s) for my wallets that were shown to me in a form of 12-24 words. I understand that these private keys are stored on my smartphone and not elsewhere.</string>
-    <string name="SettingsTerms_TermOwner">I understand that passing my phone to untrusted entities and leaving the wallet app without a safe PIN lock may potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermRecover">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, and keeping the operating system outdated can potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermPhone">I understand there may be undiscovered software issues in the code powering this wallet app, which may potentially lead to unexpected behavior or the app malfunctioning.</string>
-    <string name="SettingsTerms_TermRoot">I understand that I will need my private keys in order to restore access to my funds should I lose my phone or if the app malfunctions. Without my private keys, it will be impossible to recover access to my wallet.</string>
-    <string name="SettingsTerms_TermBugs">I understand that disabling the phone unlock PIN(or its equivalent) in Settings of Android OS will erase the wallet\'s private keys from my device. I will need my private keys to regain access to my funds.</string>
-    <string name="Settings_TermsPin"> I understand that only I myself am responsible for the safety of my funds, and no other entity.</string>
-    <string name="SettingsTerms_BottomThankYou">Thank you \nfor choosing \nthis wallet!</string>
-
+    <string name="SettingsTerms_Backup">Back up your wallet recovery phrases to regain access to the funds.</string>
+    <string name="SettingsTerms_PrivateKeys">Private keys and recovery phrases are stored only on your device.</string>
+    <string name="SettingsTerms_DisablingPin">Disabling smartphone unlock PIN deletes all wallets from app. Recovery phrases will be needed to regain access to funds.</string>
+    <string name="SettingsTerms_JailBraking">Jail breaking (rooting), installing apps from unknown sources, and using outdated OS can endanger safety of funds.</string>
+    <string name="SettingsTerms_Bugs">There may be undiscovered software issues in the code powering this app which may lead to unexpected behavior or the app malfunctioning.</string>
+    <string name="SettingsTerms_Responsibility">Only user is responsible for safety of funds and no other entity.</string>
 
     <!--Setting_Tell Friends-->
 
