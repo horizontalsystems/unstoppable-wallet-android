@@ -9,6 +9,11 @@ Unsoppable is a powerful non-custodial multi-wallet for Bitcoin, Ethereum, Binan
 - It is built with care and adheres to best programming practices and implementation standards in cryptocurrency world. Fully implemented on Kotlin.
 - It is fully peer-to-peer and works without any centrally managed servers. It can't be stopped, blocked or taken down.
 
+Unstoppable is a powerful non-custodial multi-wallet for Bitcoin, Ethereum, Binance Smart Chain, Avalanche, Solana and other blockchains.It provides non-custodial crypto and NFT storage, on-chain decentralized swaps, institutional grade analytics for cryptcurrency and NFT markets, extensive privacy controls and human oriented design. 
+
+ - It is built with care and adheres to best programming practices and implementation standards in cryptocurrency world. Fully implemented on Kotlin.
+ - It is fully peer-to-peer and works without any centrally managed servers. It can't be stopped, blocked or taken down.
+
 Such approach enables the wallet to operate anywhere and remain censorship-resistant. Only the user is in control of the money.
 
 More at [https://unstoppable.money](https://unstoppable.money)
