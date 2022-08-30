@@ -31,14 +31,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 
@@ -90,8 +88,13 @@ fun AboutContent(
     aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory()),
 ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Spacer(Modifier.height(12.dp))
         AboutHeader(aboutViewModel.appVersion)
+        Spacer(Modifier.height(24.dp))
+        InfoTextBody(text = stringResource(R.string.SettingsTerms_Text))
+        Spacer(Modifier.height(24.dp))
         SettingSections(aboutViewModel, navController)
+        Spacer(Modifier.height(36.dp))
     }
 }
 
@@ -130,7 +133,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                 R.drawable.ic_terms_20,
                 showAlert = termsShowAlert,
                 onClick = {
-                    navController.slideFromRight(R.id.termsFragment)
+                    navController.slideFromBottom(R.id.termsFragment)
                 }
             )
         }, {
@@ -191,8 +194,6 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
             )
         }
     )
-
-    Spacer(Modifier.height(92.dp))
 }
 
 @Composable
@@ -200,7 +201,7 @@ fun AboutHeader(appVersion: String) {
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(start = 26.dp, top = 24.dp, end = 16.dp, bottom = 32.dp)
+            .padding(horizontal = 24.dp)
     ) {
         Image(
             modifier = Modifier.size(72.dp),
@@ -249,13 +250,6 @@ private fun sendEmail(recipient: String, context: Context) {
         context.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
         TextHelper.copyText(recipient)
-
-//        activity?.let {
-//            HudHelper.showSuccessMessage(
-//                it.findViewById(android.R.id.content),
-//                R.string.Hud_Text_EmailAddressCopied
-//            )
-//        }
     }
 }
 
