@@ -104,13 +104,11 @@ class EnableCoinService(
     }
 
     fun configure(fullCoin: FullCoin, configuredTokens: List<ConfiguredToken>) {
-        val supportedTokens = fullCoin.supportedTokens
-        if (supportedTokens.size == 1) {
-            val token = supportedTokens.first()
-            if (token.blockchainType.coinSettingTypes.isNotEmpty()) {
-                val settings = configuredTokens.map { it.coinSettings }
-                coinSettingsService.approveSettings(token, settings, true)
-            }
+        val singleToken = fullCoin.supportedTokens.singleOrNull()
+
+        if (singleToken != null && singleToken.blockchainType.coinSettingTypes.isNotEmpty()) {
+            val settings = configuredTokens.map { it.coinSettings }
+            coinSettingsService.approveSettings(singleToken, settings, true)
         } else {
             val currentTokens = configuredTokens.map { it.token }
             coinTokensService.approveTokens(fullCoin, currentTokens, true)

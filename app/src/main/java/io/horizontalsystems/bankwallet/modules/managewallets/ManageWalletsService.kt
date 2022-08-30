@@ -116,25 +116,10 @@ class ManageWalletsService(
         val itemState = if (fullCoin.supportedTokens.isEmpty()) {
             ItemState.Unsupported
         } else {
-            val enabled = isEnabled(fullCoin.coin)
-            ItemState.Supported(
-                enabled = enabled,
-                hasSettings = enabled && hasSettingsOrPlatforms(fullCoin)
-            )
+            ItemState.Supported(isEnabled(fullCoin.coin))
         }
 
         return Item(fullCoin, itemState)
-    }
-
-    private fun hasSettingsOrPlatforms(fullCoin: FullCoin): Boolean {
-        val supportedTokens = fullCoin.supportedTokens
-
-        return if (supportedTokens.size == 1) {
-            val token = supportedTokens[0]
-            token.blockchainType.coinSettingTypes.isNotEmpty()
-        } else {
-            true
-        }
     }
 
     private fun syncState() {
@@ -220,6 +205,6 @@ class ManageWalletsService(
 
     sealed class ItemState {
         object Unsupported : ItemState()
-        class Supported(val enabled: Boolean, val hasSettings: Boolean) : ItemState()
+        class Supported(val enabled: Boolean) : ItemState()
     }
 }
