@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
@@ -116,10 +117,25 @@ class ManageWalletsService(
         val itemState = if (fullCoin.supportedTokens.isEmpty()) {
             ItemState.Unsupported
         } else {
-            ItemState.Supported(isEnabled(fullCoin.coin))
+            val enabled = isEnabled(fullCoin.coin)
+            ItemState.Supported(
+                enabled = enabled,
+                hasSettings = enabled && hasSettingsOrPlatforms(fullCoin)
+            )
         }
 
         return Item(fullCoin, itemState)
+    }
+
+    private fun hasSettingsOrPlatforms(fullCoin: FullCoin): Boolean {
+        val supportedTokens = fullCoin.supportedTokens
+
+        return if (supportedTokens.size == 1) {
+            val token = supportedTokens[0]
+            token.blockchainType.coinSettingTypes.isNotEmpty() || token.type !is TokenType.Native
+        } else {
+            true
+        }
     }
 
     private fun syncState() {
@@ -205,6 +221,6 @@ class ManageWalletsService(
 
     sealed class ItemState {
         object Unsupported : ItemState()
-        class Supported(val enabled: Boolean) : ItemState()
+        class Supported(val enabled: Boolean, val hasSettings: Boolean) : ItemState()
     }
 }

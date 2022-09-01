@@ -47,7 +47,7 @@ class ManageWalletsViewModel(
         val state = when (item.state) {
             is Supported -> CoinViewItemState.ToggleVisible(
                 item.state.enabled,
-                item.state.enabled
+                item.state.hasSettings
             )
             is Unsupported -> CoinViewItemState.ToggleHidden
         }
