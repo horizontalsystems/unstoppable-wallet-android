@@ -204,7 +204,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
             val icon: Int
             val iconTint: Color
             if (accountViewItem.backupRequired) {
-                icon = R.drawable.ic_attention_20
+                icon = R.drawable.icon_warning_2_20
                 iconTint = ComposeAppTheme.colors.lucian
             } else {
                 icon = R.drawable.ic_more2_20
