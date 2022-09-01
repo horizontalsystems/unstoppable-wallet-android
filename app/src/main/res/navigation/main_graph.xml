@@ -22,8 +22,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCDisplayTypedMessageFragment"/>
     <fragment
         android:id="@+id/sendEvmConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_send_evm" />
+        android:name="io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment"/>
     <fragment
         android:id="@+id/sendEvmFeeSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment" />
@@ -35,8 +34,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment" />
     <fragment
         android:id="@+id/transactionSpeedUpCancelFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"
-        tools:layout="@layout/fragment_confirmation_send_evm" />
+        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"/>
     <fragment
         android:id="@+id/manageWalletsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment"/>
@@ -174,16 +172,13 @@
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment" />
     <fragment
         android:id="@+id/uniswapConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_send_evm" />
+        android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment"/>
     <fragment
         android:id="@+id/oneInchConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_send_evm" />
+        android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment"/>
     <fragment
         android:id="@+id/swapApproveConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"
-        tools:layout="@layout/fragment_confirmation_send_evm" />
+        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
     <fragment
         android:id="@+id/swapInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.SwapInfoFragment" />
