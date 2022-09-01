@@ -21,4 +21,9 @@ object T {
 
         Log.e("Displayed", format("elapsed: %4d, all: %5d, %s", elapsedTimeFromLast, elapsedTimeFromStart, traceElement))
     }
+
+    fun e(tag: String, msg: String) {
+        val traceElement = Thread.currentThread().stackTrace[3]
+        Log.e(tag, "$msg $traceElement")
+    }
 }
