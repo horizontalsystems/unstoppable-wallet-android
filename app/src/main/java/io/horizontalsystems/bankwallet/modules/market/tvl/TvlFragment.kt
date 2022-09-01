@@ -70,7 +70,7 @@ class TvlFragment : BaseFragment() {
             val arguments = CoinFragment.prepareParams(coinUid)
             findNavController().slideFromRight(R.id.coinFragment, arguments)
         } else {
-            HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_CoinNotSupported)
+            HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_NoCoin)
         }
     }
 
