@@ -69,6 +69,16 @@ private fun TermsScreen(
     viewModel: TermsViewModel = viewModel(factory = TermsModule.Factory())
 ) {
 
+    if (viewModel.closeWithTermsAgreed) {
+        viewModel.closedWithTermsAgreed()
+
+        navController.setNavigationResult(
+            TermsFragment.resultBundleKey,
+            bundleOf(TermsFragment.requestResultKey to TermsFragment.RESULT_OK)
+        )
+        navController.popBackStack()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -106,10 +116,12 @@ private fun TermsScreen(
                 viewModel.termsViewItems.forEach { item ->
                     CellLawrence(
                         borderBottom = true,
+                        enabled = !viewModel.readOnlyState,
                         onClick = { viewModel.onTapTerm(item.termType, !item.checked) }
                     ) {
                         HsCheckbox(
                             checked = item.checked,
+                            enabled = !viewModel.readOnlyState,
                             onCheckedChange = { checked ->
                                 viewModel.onTapTerm(item.termType, checked)
                             },
@@ -123,21 +135,17 @@ private fun TermsScreen(
             Spacer(Modifier.height(60.dp))
         }
 
-        ButtonsGroupWithShade {
-            ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                title = stringResource(R.string.Button_IAgree),
-                onClick = {
-                    navController.setNavigationResult(
-                        TermsFragment.resultBundleKey,
-                        bundleOf(TermsFragment.requestResultKey to TermsFragment.RESULT_OK)
-                    )
-                    navController.popBackStack()
-                },
-                enabled = viewModel.buttonEnabled
-            )
+        if (viewModel.buttonVisible) {
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    title = stringResource(R.string.Button_IAgree),
+                    onClick = { viewModel.onAgreeClick() },
+                    enabled = viewModel.buttonEnabled
+                )
+            }
         }
     }
 

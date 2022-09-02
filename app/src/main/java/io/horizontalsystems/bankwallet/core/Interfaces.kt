@@ -3,7 +3,10 @@ package io.horizontalsystems.bankwallet.core
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.RateUsType
+import io.horizontalsystems.bankwallet.core.managers.TokenInfoService
+import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -16,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
@@ -72,7 +76,7 @@ interface ILocalStorage {
     var rateAppLastRequestTime: Long
     var balanceHidden: Boolean
     var balanceTotalCoinUid: String?
-    var checkedTerms: List<Term>
+    var termsAccepted: Boolean
     var mainShowedOnce: Boolean
     var notificationId: String?
     var notificationServerTime: Long
@@ -422,11 +426,10 @@ interface ICoinManager {
 }
 
 interface ITermsManager {
-    val termsAcceptedSignal: Subject<Boolean>
     val termsAcceptedSignalFlow: Flow<Boolean>
-    val terms: List<Term>
-    val termsAccepted: Boolean
-    fun update(term: Term)
+    val terms: List<TermsModule.TermType>
+    val allTermsAccepted: Boolean
+    fun acceptTerms()
 }
 
 sealed class FeeRatePriority(val titleRes: Int) {

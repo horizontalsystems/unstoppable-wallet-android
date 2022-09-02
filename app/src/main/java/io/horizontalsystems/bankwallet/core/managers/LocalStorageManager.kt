@@ -51,7 +51,7 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
     private val APP_LAUNCH_COUNT = "app_launch_count"
     private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
     private val BALANCE_HIDDEN = "balance_hidden"
-    private val CHECKED_TERMS = "checked_terms"
+    private val TERMS_AGREED = "terms_agreed"
     private val MARKET_CURRENT_TAB = "market_current_tab"
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
     private val PIN = "lock_pin"
@@ -316,15 +316,10 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
             preferences.edit().putString("balanceTotalCoinUid", value).apply()
         }
 
-    override var checkedTerms: List<Term>
-        get() {
-            val termsString = preferences.getString(CHECKED_TERMS, null) ?: return listOf()
-            val type = object : TypeToken<ArrayList<Term>>() {}.type
-            return gson.fromJson(termsString, type)
-        }
+    override var termsAccepted: Boolean
+        get() = preferences.getBoolean(TERMS_AGREED, false)
         set(value) {
-            val termsString = gson.toJson(value)
-            preferences.edit().putString(CHECKED_TERMS, termsString).apply()
+            preferences.edit().putBoolean(TERMS_AGREED, value).apply()
         }
 
     override var currentMarketTab: MarketModule.Tab?

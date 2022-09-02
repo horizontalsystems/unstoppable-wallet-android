@@ -32,7 +32,7 @@ class AboutViewModel(
             return appVersion
         }
 
-    var termsShowAlert by mutableStateOf(!termsManager.termsAccepted)
+    var termsShowAlert by mutableStateOf(!termsManager.allTermsAccepted)
         private set
 
     init {

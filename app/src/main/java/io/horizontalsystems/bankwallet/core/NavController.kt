@@ -5,6 +5,7 @@ import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
@@ -42,6 +43,21 @@ fun NavController.authorizedAction(action: () -> Unit) {
             }
         }
         slideFromBottom(R.id.pinFragment, PinModule.forUnlock())
+    } else {
+        action.invoke()
+    }
+}
+
+fun NavController.navigateWithTermsAccepted(action: () -> Unit) {
+    if (!App.termsManager.allTermsAccepted) {
+        getNavigationResult(TermsFragment.resultBundleKey) { bundle ->
+            val agreedToTerms = bundle.getInt(TermsFragment.requestResultKey)
+
+            if (agreedToTerms == TermsFragment.RESULT_OK) {
+                action.invoke()
+            }
+        }
+        slideFromBottom(R.id.termsFragment)
     } else {
         action.invoke()
     }

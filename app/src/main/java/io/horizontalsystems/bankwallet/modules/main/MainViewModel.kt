@@ -51,11 +51,13 @@ class MainViewModel(
         updateBadgeVisibility()
         updateTransactionsTabEnabled()
 
-        disposables.add(backupManager.allBackedUpFlowable.subscribe {
-            updateBadgeVisibility()
-        })
+        viewModelScope.launch {
+            termsManager.termsAcceptedSignalFlow.collect {
+                updateBadgeVisibility()
+            }
+        }
 
-        disposables.add(termsManager.termsAcceptedSignal.subscribe {
+        disposables.add(backupManager.allBackedUpFlowable.subscribe {
             updateBadgeVisibility()
         })
 
@@ -138,7 +140,7 @@ class MainViewModel(
     }
 
     private fun updateBadgeVisibility() {
-        val visible = !(backupManager.allBackedUp && termsManager.termsAccepted && pinComponent.isPinSet)
+        val visible = !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet)
         setBadgeVisibleLiveData.postValue(visible)
     }
 

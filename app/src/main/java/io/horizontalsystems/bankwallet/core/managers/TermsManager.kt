@@ -3,34 +3,22 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule
-import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class TermsManager(private val localStorage: ILocalStorage) : ITermsManager {
 
-    override val termsAcceptedSignal = PublishSubject.create<Boolean>()
-    override val termsAcceptedSignalFlow = termsAcceptedSignal.asFlow()
-    override val terms: List<Term>
-        get() = TermsModule.TermType.values().map { term(it.key) }
+    private val _termsAcceptedFlow = MutableStateFlow(localStorage.termsAccepted)
+    override val termsAcceptedSignalFlow = _termsAcceptedFlow.asStateFlow()
+    override val terms = TermsModule.TermType.values().toList()
 
-    override val termsAccepted: Boolean
-        get() = terms.all { it.checked }
+    override val allTermsAccepted: Boolean
+        get() = localStorage.termsAccepted
 
-    override fun update(term: Term) {
-        val oldTermsAccepted = termsAccepted
-        val currentTerms = terms
-        currentTerms.firstOrNull { it.id == term.id }?.checked = term.checked
-        localStorage.checkedTerms = currentTerms
-        val newTermsAccepted = termsAccepted
-
-        if (oldTermsAccepted != newTermsAccepted) {
-            termsAcceptedSignal.onNext(newTermsAccepted)
-        }
+    override fun acceptTerms() {
+        localStorage.termsAccepted = true
+        _termsAcceptedFlow.update { localStorage.termsAccepted }
     }
 
-    private fun term(id: String): Term {
-        return Term(id, localStorage.checkedTerms.firstOrNull { it.id == id }?.checked ?: false)
-    }
 }
-
-data class Term(val id: String, var checked: Boolean)
