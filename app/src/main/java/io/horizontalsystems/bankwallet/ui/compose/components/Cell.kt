@@ -412,6 +412,7 @@ fun CellFooterPreview() {
 fun CellLawrence(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
+    enabled: Boolean = true,
     onClick: () -> Unit,
     content: @Composable RowScope.() -> Unit,
 ) {
@@ -419,7 +420,10 @@ fun CellLawrence(
         modifier = Modifier
             .fillMaxWidth()
             .background(ComposeAppTheme.colors.lawrence)
-            .clickable { onClick() }
+            .clickable(
+                enabled = enabled,
+                onClick = onClick
+            )
     ) {
         if (borderTop) {
             Divider(

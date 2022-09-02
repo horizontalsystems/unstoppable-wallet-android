@@ -35,8 +35,8 @@ class MainSettingsService(
     private val pinSetSubject = BehaviorSubject.create<Boolean>()
     val pinSetObservable: Observable<Boolean> get() = pinSetSubject
 
-    private val termsAcceptedSubject = BehaviorSubject.create<Boolean>()
-    val termsAcceptedObservable: Observable<Boolean> get() = termsAcceptedSubject
+    val termsAccepted by termsManager::allTermsAccepted
+    val termsAcceptedFlow by termsManager::termsAcceptedSignalFlow
 
     private val baseCurrencySubject = BehaviorSubject.create<Currency>()
     val baseCurrencyObservable: Observable<Currency> get() = baseCurrencySubject
@@ -68,9 +68,6 @@ class MainSettingsService(
     val baseCurrency: Currency
         get() = currencyManager.baseCurrency
 
-    val termsAccepted: Boolean
-        get() = termsManager.termsAccepted
-
     val isPinSet: Boolean
         get() = pinComponent.isPinSet
 
@@ -89,10 +86,6 @@ class MainSettingsService(
 
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
             baseCurrencySubject.onNext(currencyManager.baseCurrency)
-        })
-
-        disposables.add(termsManager.termsAcceptedSignal.subscribe {
-            termsAcceptedSubject.onNext(it)
         })
 
         disposables.add(pinComponent.pinSetFlowable.subscribe {
