@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings
 
+import android.os.Parcelable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,14 +9,16 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.parcelize.Parcelize
 
 class RestoreSettingsViewModel(
     private val service: RestoreSettingsService,
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    var openBirthdayAlertSignal by mutableStateOf<Token?>(null)
+    var openZcashConfigure by mutableStateOf<Token?>(null)
         private set
+
     private var disposables = CompositeDisposable()
 
     private var currentRequest: RestoreSettingsService.Request? = null
@@ -35,13 +38,12 @@ class RestoreSettingsViewModel(
 
         when (request.requestType) {
             RestoreSettingsService.RequestType.BirthdayHeight -> {
-                openBirthdayAlertSignal = request.token
+                openZcashConfigure = request.token
             }
         }
     }
 
     fun onEnter(zcashConfig: ZCashConfig) {
-        openBirthdayAlertSignal = null
         val request = currentRequest ?: return
 
         when (request.requestType) {
@@ -52,7 +54,6 @@ class RestoreSettingsViewModel(
     }
 
     fun onCancelEnterBirthdayHeight() {
-        openBirthdayAlertSignal = null
         val request = currentRequest ?: return
 
         service.cancel(request.token)
@@ -62,6 +63,11 @@ class RestoreSettingsViewModel(
         clearables.forEach(Clearable::clear)
         disposables.clear()
     }
+
+    fun zcashConfigureOpened() {
+        openZcashConfigure = null
+    }
 }
 
-data class ZCashConfig(val birthdayHeight: String?, val restoreAsNew: Boolean)
+@Parcelize
+data class ZCashConfig(val birthdayHeight: String?, val restoreAsNew: Boolean) : Parcelable

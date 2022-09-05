@@ -234,6 +234,9 @@
         android:id="@+id/restoreSelectCoinsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment"/>
     <fragment
+        android:id="@+id/zcashConfigure"
+        android:name="io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure"/>
+    <fragment
         android:id="@+id/receiveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment"
         android:label="ReceiveFragment" />

@@ -41,6 +41,7 @@
     <string name="Button_Remove">Remove</string>
     <string name="Button_Save">Save</string>
     <string name="Button_IAgree">I Agree</string>
+    <string name="Button_Continue">Continue</string>
 
 
     <string name="Error">Error</string>
@@ -120,9 +121,14 @@
     <string name="Restore_BirthdayHeight">Birthday Height</string>
     <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">For quick synchronization you can enter the wallet\'s birthday height.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
     <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
+    <string name="Restore_ZCash_NewWallet">New Wallet</string>
+    <string name="Restore_ZCash_NewWallet_Description">Don\'t have any transaction before</string>
+    <string name="Restore_ZCash_OldWallet">Old Wallet</string>
+    <string name="Restore_ZCash_OldWallet_Description">Used before and has transactions</string>
+    <string name="Restore_ZCash_SlowSyncWarningText">The initial synchronization with the blockchain can consume a lot of internet traffic.</string>
 
     <!--Backup-->
 
