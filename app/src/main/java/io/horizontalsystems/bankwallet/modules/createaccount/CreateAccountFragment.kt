@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.displayNameStringRes
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -138,70 +139,85 @@ private fun CreateAccountScreen(
                     )
                 )
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Spacer(Modifier.height(12.dp))
-                    CellSingleLineLawrenceSection(
-                        listOf(
-                            {
-                                MnemonicNumberCell(
-                                    kind = viewModel.selectedKind,
-                                    showMnemonicSizeSelectorDialog = {
-                                        showMnemonicSizeSelectorDialog = true
-                                    }
-                                )
-                            },
-                            {
-                                MnemonicLanguageCell(
-                                    language = viewModel.selectedLanguage,
-                                    showLanguageSelectorDialog = {
-                                        showLanguageSelectorDialog = true
-                                    }
-                                )
-                            },
-                        )
-                    )
-
-                    Spacer(Modifier.height(32.dp))
-                    PassphraseCell(
-                        enabled = viewModel.passphraseEnabled,
-                        onCheckedChange = { viewModel.setPassphraseEnabledState(it) }
-                    )
-                    if (viewModel.passphraseEnabled) {
-                        Spacer(Modifier.height(24.dp))
-                        FormsInput(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            hint = stringResource(R.string.EnterPassphrase),
-                            onValueChange = {
-                                viewModel.onChangePassphrase(it)
-                            },
-                            pasteEnabled = false,
-                            state = viewModel.passphraseState,
-                            visualTransformation = PasswordVisualTransformation(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        )
-                        Spacer(Modifier.height(24.dp))
-                        FormsInput(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            hint = stringResource(R.string.CreateWallet_PassphraseConfirm),
-                            onValueChange = {
-                                viewModel.onChangePassphraseConfirmation(it)
-                            },
-                            pasteEnabled = false,
-                            state = viewModel.passphraseConfirmState,
-                            visualTransformation = PasswordVisualTransformation(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        )
+                Column {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState())
+                    ) {
                         Spacer(Modifier.height(12.dp))
-                        D1(
-                            modifier = Modifier.padding(horizontal = 24.dp),
-                            text = stringResource(R.string.CreateWallet_PassphraseDescription)
+                        CellSingleLineLawrenceSection(
+                            listOf(
+                                {
+                                    MnemonicNumberCell(
+                                        kind = viewModel.selectedKind,
+                                        showMnemonicSizeSelectorDialog = {
+                                            showMnemonicSizeSelectorDialog = true
+                                        }
+                                    )
+                                },
+                                {
+                                    MnemonicLanguageCell(
+                                        language = viewModel.selectedLanguage,
+                                        showLanguageSelectorDialog = {
+                                            showLanguageSelectorDialog = true
+                                        }
+                                    )
+                                },
+                            )
+                        )
+
+                        Spacer(Modifier.height(32.dp))
+                        PassphraseCell(
+                            enabled = viewModel.passphraseEnabled,
+                            onCheckedChange = { viewModel.setPassphraseEnabledState(it) }
+                        )
+                        if (viewModel.passphraseEnabled) {
+                            Spacer(Modifier.height(24.dp))
+                            FormsInput(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                hint = stringResource(R.string.EnterPassphrase),
+                                onValueChange = {
+                                    viewModel.onChangePassphrase(it)
+                                },
+                                pasteEnabled = false,
+                                state = viewModel.passphraseState,
+                                visualTransformation = PasswordVisualTransformation(),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            )
+                            Spacer(Modifier.height(24.dp))
+                            FormsInput(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                hint = stringResource(R.string.CreateWallet_PassphraseConfirm),
+                                onValueChange = {
+                                    viewModel.onChangePassphraseConfirmation(it)
+                                },
+                                pasteEnabled = false,
+                                state = viewModel.passphraseConfirmState,
+                                visualTransformation = PasswordVisualTransformation(),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            )
+                            Spacer(Modifier.height(12.dp))
+                            D1(
+                                modifier = Modifier.padding(horizontal = 24.dp),
+                                text = stringResource(R.string.CreateWallet_PassphraseDescription)
+                            )
+                        }
+                        Spacer(Modifier.height(32.dp))
+                    }
+
+                    ButtonsGroupWithShade {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp),
+                            title = stringResource(R.string.Button_Create),
+                            onClick = {
+                                viewModel.createAccount()
+                            },
                         )
                     }
-                    Spacer(Modifier.height(32.dp))
                 }
             }
         }
