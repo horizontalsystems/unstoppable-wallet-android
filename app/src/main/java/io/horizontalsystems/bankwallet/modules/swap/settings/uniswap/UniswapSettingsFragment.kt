@@ -134,7 +134,7 @@ private fun UniswapSettingsScreen(
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 24.dp, end = 24.dp, bottom = 32.dp),
+                        .padding(horizontal = 24.dp),
                     title = buttonTitle,
                     onClick = {
                         if (uniswapSettinsViewModel.onDoneClick()) {
