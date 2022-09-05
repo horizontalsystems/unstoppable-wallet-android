@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -114,24 +115,40 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
 
             val focusRequester = remember { FocusRequester() }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                HeaderText(text = stringResource(R.string.Watch_Address_Title))
-
-                HSAddressInput(
+            Column {
+                Column(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .focusRequester(focusRequester),
-                    tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
-                    coinCode = "ETH",
-                    onValueChange = viewModel::onEnterAddress
-                )
-                InfoText(text = stringResource(R.string.Watch_Address_Description))
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    HeaderText(text = stringResource(R.string.Watch_Address_Title))
 
-                Spacer(Modifier.height(32.dp))
+                    HSAddressInput(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .focusRequester(focusRequester),
+                        tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+                        coinCode = "ETH",
+                        onValueChange = viewModel::onEnterAddress
+                    )
+                    InfoText(text = stringResource(R.string.Watch_Address_Description))
+
+                    Spacer(Modifier.height(32.dp))
+                }
+
+                ButtonsGroupWithShade {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
+                        title = stringResource(R.string.Watch_Address_Watch),
+                        onClick = {
+                            viewModel.onClickWatch()
+                        },
+                        enabled = viewModel.submitEnabled
+                    )
+                }
             }
 
             SideEffect {
