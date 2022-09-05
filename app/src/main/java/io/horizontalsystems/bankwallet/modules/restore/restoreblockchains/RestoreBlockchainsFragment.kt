@@ -26,15 +26,19 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.ZCashConfig
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.delay
@@ -68,9 +72,9 @@ class RestoreBlockchainsFragment : BaseFragment() {
                     ManageWalletsScreen(
                         findNavController(),
                         viewModel,
+                        restoreSettingsViewModel,
                         popUpToInclusiveId
                     )
-                    ZCashBirthdayHeightDialogWrapper(restoreSettingsViewModel)
                 }
             }
         }
@@ -128,6 +132,7 @@ class RestoreBlockchainsFragment : BaseFragment() {
 private fun ManageWalletsScreen(
     navController: NavController,
     viewModel: RestoreBlockchainsViewModel,
+    restoreSettingsViewModel: RestoreSettingsViewModel,
     popUpToInclusiveId: Int
 ) {
     val view = LocalView.current
@@ -135,6 +140,25 @@ private fun ManageWalletsScreen(
     val coinItems by viewModel.viewItemsLiveData.observeAsState()
     val doneButtonEnabled by viewModel.restoreEnabledLiveData.observeAsState(false)
     val restored = viewModel.restored
+
+    if (restoreSettingsViewModel.openZcashConfigure != null) {
+        restoreSettingsViewModel.zcashConfigureOpened()
+
+        navController.getNavigationResult(ZcashConfigure.resultBundleKey) { bundle ->
+            val requestResult = bundle.getInt(ZcashConfigure.requestResultKey)
+
+            if (requestResult == ZcashConfigure.RESULT_OK) {
+                val zcashConfig = bundle.getParcelable<ZCashConfig>(ZcashConfigure.zcashConfigKey)
+                zcashConfig?.let { config ->
+                    restoreSettingsViewModel.onEnter(config)
+                }
+            } else {
+                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+            }
+        }
+
+        navController.slideFromBottom(R.id.zcashConfigure)
+    }
 
     LaunchedEffect(restored) {
         if (restored) {
