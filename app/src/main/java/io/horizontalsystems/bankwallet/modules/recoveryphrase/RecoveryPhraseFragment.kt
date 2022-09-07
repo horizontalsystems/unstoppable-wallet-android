@@ -8,17 +8,20 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import io.horizontalsystems.bankwallet.R
@@ -28,10 +31,11 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.launch
 
 class RecoveryPhraseFragment : BaseFragment() {
 
@@ -47,9 +51,8 @@ class RecoveryPhraseFragment : BaseFragment() {
             )
             setContent {
                 RecoveryPhraseScreen(
-                    account = arguments?.getParcelable(RecoveryPhraseModule.ACCOUNT)!!,
-                    onBackPress = { findNavController().popBackStack() },
-                    showKeyWarning = { key -> showPrivateKeyCopyWarning(key) },
+                    navController = findNavController(),
+                    account = arguments?.getParcelable(RecoveryPhraseModule.ACCOUNT)!!
                 )
             }
         }
@@ -59,73 +62,121 @@ class RecoveryPhraseFragment : BaseFragment() {
         allowScreenshot()
         super.onDestroyView()
     }
+}
 
-    private fun showPrivateKeyCopyWarning(key: String) {
-        ConfirmationDialog.show(
-            title = getString(R.string.RecoveryPhrase_CopyWarning_Title),
-            warningText = getString(R.string.ShowKey_PrivateKeyCopyWarning_Text),
-            actionButtonTitle = getString(R.string.Button_Ok),
-            transparentButtonTitle = getString(R.string.ShowKey_PrivateKeyCopyWarning_Proceed),
-            fragmentManager = childFragmentManager,
-            listener = object : ConfirmationDialog.Listener {
-                override fun onTransparentButtonClick() {
-                    TextHelper.copyText(key)
-                    HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
-                }
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun RecoveryPhraseScreen(
+    navController: NavController,
+    account: Account,
+) {
+    val viewModel = viewModel<RecoveryPhraseViewModel>(factory = RecoveryPhraseModule.Factory(account))
 
+    val view = LocalView.current
+    val coroutineScope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+    )
+
+    ComposeAppTheme {
+        ModalBottomSheetLayout(
+            sheetState = sheetState,
+            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+            sheetContent = {
+                ConfirmCopyBottomSheet(
+                    onConfirm = {
+                        coroutineScope.launch {
+                            TextHelper.copyText(viewModel.words.joinToString(" "))
+                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                            sheetState.hide()
+                        }
+                    },
+                    onCancel = {
+                        coroutineScope.launch {
+                            sheetState.hide()
+                        }
+                    }
+                )
             }
-        )
+        ) {
+            Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+                AppBar(
+                    title = TranslatableString.ResString(R.string.RecoveryPhrase_Title),
+                    navigationIcon = {
+                        HsIconButton(onClick = navController::popBackStack) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_back),
+                                contentDescription = "back button",
+                                tint = ComposeAppTheme.colors.jacob
+                            )
+                        }
+                    },
+                )
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    Spacer(Modifier.height(12.dp))
+                    TextImportantWarning(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = stringResource(R.string.RecoveryPhrase_Warning)
+                    )
+                    Spacer(Modifier.height(24.dp))
+                    var hidden by remember { mutableStateOf(true) }
+                    SeedPhraseList(viewModel.wordsNumbered, hidden) {
+                        hidden = !hidden
+                    }
+                    Spacer(Modifier.height(24.dp))
+                    PassphraseCell(viewModel.passphrase, hidden)
+                }
+                ActionButton(R.string.Alert_Copy) {
+                    coroutineScope.launch {
+                        sheetState.show()
+                    }
+                }
+            }
+        }
     }
 }
 
 @Composable
-private fun RecoveryPhraseScreen(
-    account: Account,
-    onBackPress: () -> Unit,
-    showKeyWarning: (String) -> Unit,
-    viewModel: RecoveryPhraseViewModel = viewModel(
-        factory = RecoveryPhraseModule.Factory(account)
-    )
-) {
+fun ConfirmCopyBottomSheet(onConfirm: () -> Unit, onCancel: () -> Unit) {
+    BottomSheetHeader(
+        iconPainter = painterResource(R.drawable.ic_attention_24),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+        title = stringResource(R.string.RecoveryPhrase_CopyWarning_Title),
+        onCloseClick = onCancel
+    ) {
+        Spacer(modifier = Modifier.height(12.dp))
+        TextImportantWarning(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Text)
+        )
 
-    ComposeAppTheme {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = TranslatableString.ResString(R.string.RecoveryPhrase_Title),
-                navigationIcon = {
-                    HsIconButton(onClick = onBackPress) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "back button",
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                    }
-                },
-            )
+        Spacer(modifier = Modifier.height(32.dp))
 
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.Top
-            ) {
-                Spacer(Modifier.height(12.dp))
-                TextImportantWarning(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(R.string.RecoveryPhrase_Warning)
-                )
-                Spacer(Modifier.height(24.dp))
-                var hidden by remember { mutableStateOf(true) }
-                SeedPhraseList(viewModel.wordsNumbered, hidden) {
-                    hidden = !hidden
-                }
-                Spacer(Modifier.height(24.dp))
-                PassphraseCell(viewModel.passphrase, hidden)
-            }
-            ActionButton(R.string.Alert_Copy) {
-                showKeyWarning.invoke(viewModel.words.joinToString(" "))
-            }
-        }
+        ButtonPrimaryRed(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            title = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Proceed),
+            onClick = onConfirm
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        ButtonPrimaryTransparent(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            title = stringResource(R.string.ShowKey_PrivateKeyCopyWarning_Cancel),
+            onClick = onCancel
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
