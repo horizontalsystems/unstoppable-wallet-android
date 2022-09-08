@@ -1,5 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.nft
-
+/*
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Address
@@ -37,12 +37,12 @@ class NftManager(
         map(assets, collections)
     }
 
-    fun nftAssetPriceToCoinValue(nftAssetPrice: NftAssetPrice?): CoinValue? {
-        if (nftAssetPrice == null) return null
-        val tokenQuery = TokenQuery.fromId(nftAssetPrice.tokenQueryId) ?: return null
+    fun nftAssetPriceToCoinValue(nftPriceRecord: NftPriceRecord?): CoinValue? {
+        if (nftPriceRecord == null) return null
+        val tokenQuery = TokenQuery.fromId(nftPriceRecord.tokenQueryId) ?: return null
         val token = marketKit.token(tokenQuery) ?: return null
 
-        return CoinValue(token, nftAssetPrice.value)
+        return CoinValue(token, nftPriceRecord.value)
     }
 
     fun assetItem(
@@ -50,10 +50,10 @@ class NftManager(
         collectionName: String,
         collectionLinks: CollectionLinks?,
         totalSupply: Int,
-        averagePrice7d: NftAssetPrice? = null,
-        averagePrice30d: NftAssetPrice? = null,
-        floorPrice: NftAssetPrice? = null,
-        bestOffer: NftAssetPrice? = null,
+        averagePrice7d: NftPriceRecord? = null,
+        averagePrice30d: NftPriceRecord? = null,
+        floorPrice: NftPriceRecord? = null,
+        bestOffer: NftPriceRecord? = null,
         sale: NftAssetModuleAssetItem.Sale? = null
     ) = NftAssetModuleAssetItem(
         name = assetRecord.name,
@@ -89,10 +89,10 @@ class NftManager(
         collectionName: String,
         collectionLinks: CollectionLinks?,
         totalSupply: Int,
-        averagePrice7d: NftAssetPrice? = null,
-        averagePrice30d: NftAssetPrice? = null,
-        floorPrice: NftAssetPrice? = null,
-        bestOffer: NftAssetPrice? = null,
+        averagePrice7d: NftPriceRecord? = null,
+        averagePrice30d: NftPriceRecord? = null,
+        floorPrice: NftPriceRecord? = null,
+        bestOffer: NftPriceRecord? = null,
         sale: NftAssetModuleAssetItem.Sale? = null
     ) = NftAssetModuleAssetItem(
         name = asset.name,
@@ -107,7 +107,7 @@ class NftManager(
         ),
         collectionLinks = collectionLinks,
         stats = NftAssetModuleAssetItem.Stats(
-            lastSale = priceItem(asset.lastSalePrice?.nftAssetPrice),
+            lastSale = priceItem(asset.lastSalePrice?.nftPriceRecord),
             average7d = priceItem(averagePrice7d),
             average30d = priceItem(averagePrice30d),
             collectionFloor = priceItem(floorPrice),
@@ -127,14 +127,15 @@ class NftManager(
 
     private fun collectionRecord(nftCollection: NftCollection, account: Account): NftCollectionRecord =
         NftCollectionRecord(
+            blockchainType = BlockchainType.Ethereum,
             accountId = account.id,
             uid = nftCollection.uid,
             name = nftCollection.name,
             imageUrl = nftCollection.imageUrl,
             totalSupply = nftCollection.stats.totalSupply,
-            averagePrice7d = nftCollection.stats.averagePrice7d?.nftAssetPrice,
-            averagePrice30d = nftCollection.stats.averagePrice30d?.nftAssetPrice,
-            floorPrice = nftCollection.stats.floorPrice?.nftAssetPrice,
+            averagePrice7d = nftCollection.stats.averagePrice7d?.nftPriceRecord,
+            averagePrice30d = nftCollection.stats.averagePrice30d?.nftPriceRecord,
+            floorPrice = nftCollection.stats.floorPrice?.nftPriceRecord,
             links = CollectionLinks(nftCollection.externalUrl, nftCollection.discordUrl, nftCollection.twitterUsername)
         )
 
@@ -148,7 +149,7 @@ class NftManager(
             asset.imagePreviewUrl,
             asset.description,
             asset.onSale,
-            asset.lastSalePrice?.nftAssetPrice,
+            asset.lastSalePrice?.nftPriceRecord,
             NftAssetContract(asset.contract.address, asset.contract.schemaName),
             AssetLinks(asset.externalLink, asset.permalink ?: ""),
             asset.traits.map { it.nftAssetAttribute }
@@ -166,7 +167,7 @@ class NftManager(
         }.toSortedMap { o1, o2 -> o1.name.compareTo(o2.name, ignoreCase = true) }
     }
 
-    private fun priceItem(price: NftAssetPrice?) =
+    private fun priceItem(price: NftPriceRecord?) =
         nftAssetPriceToCoinValue(price)?.let { NftAssetModuleAssetItem.Price(it) }
 
     private fun getAttributeSearchUrl(attribute: NftAssetAttribute, collectionUid: String): String {
@@ -187,3 +188,4 @@ class NftManager(
             null
         }
 }
+*/

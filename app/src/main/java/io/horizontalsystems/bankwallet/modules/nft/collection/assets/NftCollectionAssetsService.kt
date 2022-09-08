@@ -4,7 +4,6 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.bankwallet.modules.nft.NftManager
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.NftAsset
@@ -18,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class NftCollectionAssetsService(
     private val collectionUid: String,
     private val marketKit: MarketKitWrapper,
-    private val nftManager: NftManager,
+//    private val nftManager: NftManager,
     private val xRateRepository: BalanceXRateRepository
 ) {
     private val _items = MutableStateFlow<Result<List<CollectionAsset>>?>(null)
@@ -95,8 +94,8 @@ class NftCollectionAssetsService(
     ): Result<List<CollectionAsset>> {
         this.cursor = cursor
 
-        val assetItems = assets.map { asset -> collectionAsset(asset) }
-        val newCoinUids = assetItems.mapNotNull { it.price?.coinValue?.coin?.uid }
+        val assetItems = listOf<CollectionAsset>()//assets.map { asset -> collectionAsset(asset) }
+        val newCoinUids = listOf<String>()//assetItems.mapNotNull { it.price?.coinValue?.coin?.uid }
 
         coinUidsSet.addAll(newCoinUids)
 
@@ -121,17 +120,17 @@ class NftCollectionAssetsService(
         asset.copy(price = NftAssetModuleAssetItem.Price(coinValue, currencyValue), xRate = coinPrice)
     }
 
-    private fun collectionAsset(asset: NftAsset) =
-        nftManager.assetItem(
-            asset,
-            collectionName = "",
-            collectionLinks = null,
-            averagePrice7d = null,
-            averagePrice30d = null,
-            totalSupply = 0
-        ).let {
-            CollectionAsset(it, it.stats.lastSale)
-        }
+//    private fun collectionAsset(asset: NftAsset) =
+//        nftManager.assetItem(
+//            asset,
+//            collectionName = "",
+//            collectionLinks = null,
+//            averagePrice7d = null,
+//            averagePrice30d = null,
+//            totalSupply = 0
+//        ).let {
+//            CollectionAsset(it, it.stats.lastSale)
+//        }
 }
 
 data class CollectionAsset(

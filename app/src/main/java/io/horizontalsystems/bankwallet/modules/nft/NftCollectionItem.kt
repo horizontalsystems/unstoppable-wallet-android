@@ -69,8 +69,8 @@ val NftCollection.oneDayFloorPriceChange: BigDecimal?
         return diff(firstValue, lastValue)
     }
 
-val NftPrice.nftAssetPrice: NftAssetPrice
-    get() = NftAssetPrice(token.tokenQuery.id, value)
+val NftPrice.nftPriceRecord: NftPriceRecord
+    get() = NftPriceRecord(token.tokenQuery.id, value)
 
 private fun diff(firstValue: BigDecimal?, lastValue: BigDecimal?) =
     if (firstValue != null && lastValue != null) {

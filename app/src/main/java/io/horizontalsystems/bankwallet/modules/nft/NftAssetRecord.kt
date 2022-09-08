@@ -4,10 +4,13 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import io.horizontalsystems.bankwallet.core.storage.AccountRecord
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.NftPrice
 import java.math.BigDecimal
 
 @Entity(
-    primaryKeys = ["accountId", "tokenId", "contract_address"],
+    primaryKeys = ["blockchainType", "accountId", "nftUid"],
     foreignKeys = [ForeignKey(
         entity = AccountRecord::class,
         parentColumns = ["id"],
@@ -18,31 +21,24 @@ import java.math.BigDecimal
     ]
 )
 data class NftAssetRecord(
+    val blockchainType: BlockchainType,
     val accountId: String,
+    val nftUid: NftUid,
     val collectionUid: String,
-    val tokenId: String,
     val name: String?,
-    val imageUrl: String?,
     val imagePreviewUrl: String?,
-    val description: String?,
     val onSale: Boolean,
 
-    @Embedded
-    val lastSale: NftAssetPrice?,
-
-    @Embedded(prefix = "contract_")
-    val contract: NftAssetContract,
-
-    @Embedded
-    val links: AssetLinks?,
-
-    val attributes: List<NftAssetAttribute>
+    @Embedded(prefix = "lastSale_")
+    val lastSale: NftPriceRecord?
 )
 
-data class NftAssetPrice(
+data class NftPriceRecord(
     val tokenQueryId: String,
     val value: BigDecimal
-)
+) {
+    constructor(nftPrice: NftPrice) : this(nftPrice.token.tokenQuery.id, nftPrice.value)
+}
 
 data class NftAssetContract(
     val address: String,

@@ -16,7 +16,6 @@ class NftCollectionEventsModule {
                 eventListType,
                 defaultEventType,
                 App.marketKit,
-                App.nftManager,
                 BalanceXRateRepository(App.currencyManager, App.marketKit)
             )
             return NftCollectionEventsViewModel(service) as T

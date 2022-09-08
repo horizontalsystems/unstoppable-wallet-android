@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.modules.nft.NftDao
+import io.horizontalsystems.bankwallet.modules.nft.NftMetadataSyncRecord
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesDao
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSessionKey
 import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession
@@ -17,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnec
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 47, exportSchema = false, entities = [
+@Database(version = 48, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -31,6 +32,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionD
     EvmAccountState::class,
     NftCollectionRecord::class,
     NftAssetRecord::class,
+    NftMetadataSyncRecord::class,
     ProFeaturesSessionKey::class,
     EvmAddressLabel::class,
     EvmMethodLabel::class,
@@ -50,7 +52,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun wc1SessionDao(): WC1SessionDao
     abstract fun wc2SessionDao(): WC2SessionDao
     abstract fun evmAccountStateDao(): EvmAccountStateDao
-    abstract fun nftCollectionDao(): NftDao
+    abstract fun nftDao(): NftDao
     abstract fun proFeaturesDao(): ProFeaturesDao
     abstract fun evmAddressLabelDao(): EvmAddressLabelDao
     abstract fun evmMethodLabelDao(): EvmMethodLabelDao

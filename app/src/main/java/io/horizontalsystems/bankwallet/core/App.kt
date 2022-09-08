@@ -31,8 +31,6 @@ import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesM
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
-import io.horizontalsystems.bankwallet.modules.nft.NftManager
-import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
@@ -112,7 +110,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
         lateinit var evmBlockchainManager: EvmBlockchainManager
-        lateinit var nftManager: NftManager
+        lateinit var nftMetadataManager: NftMetadataManager
+        lateinit var nftAdapterManager: NftAdapterManager
+        lateinit var nftMetadataSyncer: NftMetadataSyncer
         lateinit var evmLabelManager: EvmLabelManager
         lateinit var baseTokenManager: BaseTokenManager
         lateinit var balanceViewTypeManager: BalanceViewTypeManager
@@ -296,9 +296,12 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
 
-        startTasks()
 
-        nftManager = NftManager(appDatabase.nftCollectionDao(), marketKit)
+
+        val nftStorage = NftStorage(appDatabase.nftDao(), marketKit)
+        nftMetadataManager = NftMetadataManager(marketKit, nftStorage)
+        nftAdapterManager = NftAdapterManager(walletManager, evmBlockchainManager)
+        nftMetadataSyncer = NftMetadataSyncer(nftAdapterManager, nftMetadataManager, nftStorage)
 
         initializeWalletConnectV2(appConfig)
 
@@ -314,6 +317,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmBlockchainManager,
             walletActivator
         )
+
+        startTasks()
     }
 
     override fun newImageLoader(): ImageLoader {
@@ -379,6 +384,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     private fun startTasks() {
         Thread {
             rateAppManager.onAppLaunch()
+            nftMetadataSyncer.start()
             accountManager.loadAccounts()
             walletManager.loadWallets()
             adapterManager.preloadAdapters()

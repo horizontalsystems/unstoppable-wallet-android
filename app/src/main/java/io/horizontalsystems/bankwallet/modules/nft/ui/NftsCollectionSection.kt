@@ -83,10 +83,10 @@ fun LazyListScope.nftsCollectionSection(
                         val price = collectionAsset.price
                         Box(modifier = Modifier.weight(1f)) {
                             NftAssetPreview(
-                                name = asset.name,
+                                name = asset.name ?: "",
                                 imageUrl = asset.imageUrl,
                                 onSale = asset.onSale,
-                                tokenId = asset.tokenId,
+//                                tokenId = asset.tokenId,
                                 coinPrice = price?.coinValue,
                                 currencyPrice = price?.currencyValue,
                                 onClick = {

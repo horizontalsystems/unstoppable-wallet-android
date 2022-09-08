@@ -14,7 +14,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
@@ -24,13 +23,11 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeRatingD
 import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_leah
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun NftAssetPreview(
-    name: String?,
+    name: String,
     imageUrl: String?,
     onSale: Boolean,
-    tokenId: String,
     coinPrice: CoinValue?,
     currencyPrice: CurrencyValue?,
     onClick: () -> Unit
@@ -52,16 +49,14 @@ fun NftAssetPreview(
         ) {
             val painter = rememberAsyncImagePainter(imageUrl)
             if (painter.state !is AsyncImagePainter.State.Success) {
-                name?.let {
-                    Text(
-                        modifier = Modifier
-                            .padding(start = 12.dp, end = 12.dp)
-                            .align(Alignment.Center),
-                        text = it,
-                        style = ComposeAppTheme.typography.microSB,
-                        color = ComposeAppTheme.colors.grey
-                    )
-                }
+                Text(
+                    modifier = Modifier
+                        .padding(start = 12.dp, end = 12.dp)
+                        .align(Alignment.Center),
+                    text = name,
+                    style = ComposeAppTheme.typography.microSB,
+                    color = ComposeAppTheme.colors.grey
+                )
             }
             Image(
                 modifier = Modifier.matchParentSize(),
@@ -80,7 +75,7 @@ fun NftAssetPreview(
         }
         Text(
             modifier = Modifier.padding(start = 12.dp, top = 12.dp, end = 12.dp),
-            text = name ?: "#$tokenId",
+            text = name,
             style = ComposeAppTheme.typography.microSB,
             color = ComposeAppTheme.colors.grey,
             maxLines = 1,

@@ -68,10 +68,9 @@ private fun NftAssets(
                         val price = collectionAsset.price
                         Box(modifier = Modifier.weight(1f)) {
                             NftAssetPreview(
-                                name = asset.name,
+                                name = asset.name ?: "",
                                 imageUrl = asset.imageUrl,
                                 onSale = asset.onSale,
-                                tokenId = asset.tokenId,
                                 coinPrice = price?.coinValue,
                                 currencyPrice = price?.currencyValue
                             ) {

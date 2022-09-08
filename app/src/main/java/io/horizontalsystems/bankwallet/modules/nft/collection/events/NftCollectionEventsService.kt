@@ -2,14 +2,14 @@ package io.horizontalsystems.bankwallet.modules.nft.collection.events
 
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.bankwallet.modules.nft.NftManager
+import io.horizontalsystems.bankwallet.modules.nft.NftPriceRecord
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
-import io.horizontalsystems.bankwallet.modules.nft.nftAssetPrice
 import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.NftAsset
 import io.horizontalsystems.marketkit.models.NftEvent
+import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.rx2.asFlow
@@ -20,7 +20,7 @@ class NftCollectionEventsService(
     private val eventListType: NftEventListType,
     var eventType: NftEvent.EventType,
     private val marketKit: MarketKitWrapper,
-    private val nftManager: NftManager,
+//    private val nftManager: NftManager,
     private val xRateRepository: BalanceXRateRepository
 ) {
     var items: Result<List<CollectionEvent>>? = null
@@ -102,18 +102,28 @@ class NftCollectionEventsService(
         }
     }
 
+    fun nftAssetPriceToCoinValue(nftPriceRecord: NftPriceRecord?): CoinValue? {
+        if (nftPriceRecord == null) return null
+        val tokenQuery = TokenQuery.fromId(nftPriceRecord.tokenQueryId) ?: return null
+        val token = marketKit.token(tokenQuery) ?: return null
+
+        return CoinValue(token, nftPriceRecord.value)
+    }
+
     private fun handleEvents(
         events: List<NftEvent>,
         cursor: String?
     ): Result<List<CollectionEvent>> {
         this.cursor = cursor
 
-        val items = events.map { event ->
-            val assetItem = assetItem(event.asset)
-            val coinValue = nftManager.nftAssetPriceToCoinValue(event.amount?.nftAssetPrice)
-            val amount = coinValue?.let { NftAssetModuleAssetItem.Price(it) }
-            CollectionEvent(event.type ?: NftEvent.EventType.All, event.date, assetItem, amount)
-        }
+//        val items = events.map { event ->
+//            val assetItem = assetItem(event.asset)
+//            val coinValue = nftAssetPriceToCoinValue(event.amount?.nftPriceRecord)
+//            val amount = coinValue?.let { NftAssetModuleAssetItem.Price(it) }
+//            CollectionEvent(event.type ?: NftEvent.EventType.All, event.date, assetItem, amount)
+//        }
+        val items = listOf<CollectionEvent>()
+
         val newCoinUids = items.mapNotNull { it.amount?.coinValue?.coin?.uid }
 
         coinUidsSet.addAll(newCoinUids)
@@ -147,15 +157,15 @@ class NftCollectionEventsService(
         asset.copy(amount = NftAssetModuleAssetItem.Price(coinValue, currencyValue))
     }
 
-    private fun assetItem(asset: NftAsset) =
-        nftManager.assetItem(
-            asset,
-            collectionName = "",
-            collectionLinks = null,
-            averagePrice7d = null,
-            averagePrice30d = null,
-            totalSupply = 0
-        )
+//    private fun assetItem(asset: NftAsset) =
+//        nftManager.assetItem(
+//            asset,
+//            collectionName = "",
+//            collectionLinks = null,
+//            averagePrice7d = null,
+//            averagePrice30d = null,
+//            totalSupply = 0
+//        )
 
 }
 

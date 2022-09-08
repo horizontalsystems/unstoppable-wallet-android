@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.nftkit.models.NftType
 
 val Token.protocolType: String?
     get() = tokenQuery.protocolType
@@ -220,6 +221,16 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.Optimism -> R.drawable.optimism_erc20
         BlockchainType.ArbitrumOne -> R.drawable.arbitrum_erc20
         else -> R.drawable.coin_placeholder
+    }
+
+val BlockchainType.supportedNftTypes: List<NftType>
+    get() = when (this) {
+        BlockchainType.Ethereum -> listOf(NftType.Eip721, NftType.Eip1155)
+        BlockchainType.BinanceSmartChain -> listOf(NftType.Eip721)
+        BlockchainType.Polygon -> listOf(NftType.Eip721, NftType.Eip1155)
+        BlockchainType.Avalanche -> listOf(NftType.Eip721)
+        BlockchainType.ArbitrumOne -> listOf(NftType.Eip721)
+        else -> listOf()
     }
 
 val BlockchainType.feePriceScale: FeePriceScale

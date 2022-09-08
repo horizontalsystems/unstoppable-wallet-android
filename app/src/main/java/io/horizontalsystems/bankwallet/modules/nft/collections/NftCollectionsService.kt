@@ -23,7 +23,7 @@ class NftCollectionsService(
     private val itemsPricedRepository: NftAssetItemsPricedRepository,
     private val itemsPricedWithCurrencyRepository: NftAssetItemsPricedWithCurrencyRepository
 ) {
-    val priceType by itemsPricedRepository::priceType
+    val priceType: PriceType by itemsPricedRepository::priceType
 
     private val _serviceItemDataFlow = MutableSharedFlow<DataWithError<Map<NftCollectionRecord, List<CollectionAsset>>?>>(
         replay = 1,

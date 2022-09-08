@@ -31,7 +31,7 @@ object NftAssetModule {
                 contractAddress,
                 tokenId,
                 App.marketKit,
-                App.nftManager,
+//                App.nftManager,
                 repository
             )
             return NftAssetViewModel(service) as T

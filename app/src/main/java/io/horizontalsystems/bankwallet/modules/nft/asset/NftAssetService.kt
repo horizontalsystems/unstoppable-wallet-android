@@ -3,12 +3,8 @@ package io.horizontalsystems.bankwallet.modules.nft.asset
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.nft.CollectionLinks
-import io.horizontalsystems.bankwallet.modules.nft.NftManager
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Price
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale.PriceType
-import io.horizontalsystems.bankwallet.modules.nft.nftAssetPrice
 import io.horizontalsystems.marketkit.models.AssetOrder
 import io.horizontalsystems.marketkit.models.NftPrice
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +18,7 @@ class NftAssetService(
     private val contractAddress: String,
     private val tokenId: String,
     private val marketKit: MarketKitWrapper,
-    private val nftManager: NftManager,
+//    private val nftManager: NftManager,
     private val repository: NftAssetRepository
 ) {
     private val _serviceDataFlow =
@@ -45,28 +41,28 @@ class NftAssetService(
 
     private suspend fun loadAsset() {
         try {
-            val collection = marketKit.nftCollection(collectionUid)
-            val nftAsset = marketKit.nftAsset(contractAddress, tokenId)
-
-            val (bestOffer, sale) = getOrderStats(nftAsset.orders)
-
-            val asset = nftManager.assetItem(
-                nftAsset,
-                collectionName = collection.name,
-                collectionLinks = CollectionLinks(
-                    collection.externalUrl,
-                    collection.discordUrl,
-                    collection.twitterUsername
-                ),
-                totalSupply = collection.stats.totalSupply,
-                averagePrice7d = collection.stats.averagePrice7d?.nftAssetPrice,
-                averagePrice30d = collection.stats.averagePrice30d?.nftAssetPrice,
-                floorPrice = collection.stats.floorPrice?.nftAssetPrice,
-                bestOffer = bestOffer?.nftAssetPrice,
-                sale = sale
-            )
-
-            repository.set(asset)
+//            val collection = marketKit.nftCollection(collectionUid)
+//            val nftAsset = marketKit.nftAsset(contractAddress, tokenId)
+//
+//            val (bestOffer, sale) = getOrderStats(nftAsset.orders)
+//
+//            val asset = nftManager.assetItem(
+//                nftAsset,
+//                collectionName = collection.name,
+//                collectionLinks = CollectionLinks(
+//                    collection.externalUrl,
+//                    collection.discordUrl,
+//                    collection.twitterUsername
+//                ),
+//                totalSupply = collection.stats.totalSupply,
+//                averagePrice7d = collection.stats.averagePrice7d?.nftPriceRecord,
+//                averagePrice30d = collection.stats.averagePrice30d?.nftPriceRecord,
+//                floorPrice = collection.stats.floorPrice?.nftPriceRecord,
+//                bestOffer = bestOffer?.nftPriceRecord,
+//                sale = sale
+//            )
+//
+//            repository.set(asset)
         } catch (error: Exception) {
             _serviceDataFlow.tryEmit(
                 Result.failure(error)
@@ -88,26 +84,26 @@ class NftAssetService(
             val type: PriceType
             val nftPrice: CoinValue?
 
-            when (val bidOrder = bidOrders.firstOrNull()) {
-                null -> {
-                    type = PriceType.MinimumBid
-                    nftPrice = auctionOrder.price?.let { nftManager.nftAssetPriceToCoinValue(it.nftAssetPrice) }
-                }
-                else -> {
-                    type = PriceType.TopBid
-                    nftPrice = bidOrder.price?.let { nftManager.nftAssetPriceToCoinValue(it.nftAssetPrice) }
-                    hasTopBid = true
-                }
-            }
+//            when (val bidOrder = bidOrders.firstOrNull()) {
+//                null -> {
+//                    type = PriceType.MinimumBid
+//                    nftPrice = auctionOrder.price?.let { nftManager.nftAssetPriceToCoinValue(it.nftPriceRecord) }
+//                }
+//                else -> {
+//                    type = PriceType.TopBid
+//                    nftPrice = bidOrder.price?.let { nftManager.nftAssetPriceToCoinValue(it.nftPriceRecord) }
+//                    hasTopBid = true
+//                }
+//            }
 
-            sale = Sale(auctionOrder.closingDate, type, nftPrice?.let { Price(it) })
+//            sale = Sale(auctionOrder.closingDate, type, nftPrice?.let { Price(it) })
         } else {
-            val buyNowOrders = orders.filter { it.side == 1 && it.v != null }.sortedBy { it.ethValue }
-
-            sale = buyNowOrders.firstOrNull()?.let { buyNowOrder ->
-                val price = buyNowOrder.price?.let { nftManager.nftAssetPriceToCoinValue(it.nftAssetPrice) }?.let { Price(it) }
-                Sale(buyNowOrder.closingDate, PriceType.BuyNow, price)
-            }
+//            val buyNowOrders = orders.filter { it.side == 1 && it.v != null }.sortedBy { it.ethValue }
+//
+//            sale = buyNowOrders.firstOrNull()?.let { buyNowOrder ->
+//                val price = buyNowOrder.price?.let { nftManager.nftAssetPriceToCoinValue(it.nftPriceRecord) }?.let { Price(it) }
+//                Sale(buyNowOrder.closingDate, PriceType.BuyNow, price)
+//            }
         }
 
         if (!hasTopBid) {
@@ -116,7 +112,7 @@ class NftAssetService(
             bestOffer = offerOrders.firstOrNull()?.price
         }
 
-        return Pair(bestOffer, sale)
+        return Pair(bestOffer, null)
     }
 
     fun stop() {

@@ -13,7 +13,6 @@ object NftCollectionAssetsModule {
             val service = NftCollectionAssetsService(
                 collectionUid,
                 App.marketKit,
-                App.nftManager,
                 BalanceXRateRepository(App.currencyManager, App.marketKit)
             )
             return NftCollectionAssetsViewModel(service) as T

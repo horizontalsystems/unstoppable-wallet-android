@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import io.horizontalsystems.bankwallet.core.storage.AccountRecord
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Entity(
     primaryKeys = ["accountId", "uid"],
@@ -17,23 +18,17 @@ import io.horizontalsystems.bankwallet.core.storage.AccountRecord
     ]
 )
 data class NftCollectionRecord(
+    val blockchainType: BlockchainType,
     val accountId: String,
     val uid: String,
     val name: String,
     val imageUrl: String?,
-    val totalSupply: Int,
 
     @Embedded(prefix = "averagePrice7d_")
-    val averagePrice7d: NftAssetPrice?,
+    val averagePrice7d: NftPriceRecord?,
 
     @Embedded(prefix = "averagePrice30d_")
-    val averagePrice30d: NftAssetPrice?,
-
-    @Embedded(prefix = "floorPrice_")
-    val floorPrice: NftAssetPrice?,
-
-    @Embedded
-    val links: CollectionLinks?,
+    val averagePrice30d: NftPriceRecord?
 )
 
 data class CollectionLinks(
