@@ -363,14 +363,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             .setMinimumLoggingLevel(Log.VERBOSE)
             .build()
 
-    override fun onTrimMemory(level: Int) {
-        if (level >= TRIM_MEMORY_COMPLETE) {
-            val logger = AppLogger("low memory")
-            logger.info("onTrimMemory level: $level")
-        }
-        super.onTrimMemory(level)
-    }
-
     override fun localizedContext(): Context {
         return localeAwareContext(this)
     }
