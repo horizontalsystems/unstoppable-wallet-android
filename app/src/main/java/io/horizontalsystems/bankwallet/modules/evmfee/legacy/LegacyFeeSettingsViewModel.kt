@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
+import io.horizontalsystems.bankwallet.core.feePriceScale
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -24,7 +25,6 @@ class LegacyFeeSettingsViewModel(
 
     private val disposable = CompositeDisposable()
 
-    private val gasPriceUnit: String = "gwei"
     val sliderViewItemLiveData = MutableLiveData<SliderViewItem>()
     val feeViewItemLiveData = MutableLiveData<FeeViewItem>()
     val feeViewItemStateLiveData = MutableLiveData<ViewState>()
@@ -53,7 +53,7 @@ class LegacyFeeSettingsViewModel(
     }
 
     fun onSelectGasPrice(gasPrice: Long) {
-        gasPriceService.setGasPrice(wei(gasPrice))
+        gasPriceService.setGasPrice(gasPrice)
     }
 
     fun onClickReset() {
@@ -109,23 +109,17 @@ class LegacyFeeSettingsViewModel(
         if (state is DataState.Success) {
             sliderViewItemLiveData.postValue(
                 SliderViewItem(
-                    initialValue = gwei(state.data.gasPrice.max),
-                    range = gwei(gasPriceService.gasPriceRange ?: gasPriceService.defaultGasPriceRange),
-                    unit = gasPriceUnit
+                    initialWeiValue = state.data.gasPrice.max,
+                    weiRange = gasPriceService.gasPriceRange
+                        ?: gasPriceService.defaultGasPriceRange,
+                    stepSize = EvmFeeModule.stepSize(
+                        gasPriceService.recommendedGasPrice
+                            ?: gasPriceService.defaultGasPriceRange.first
+                    ),
+                    scale = coinService.token.blockchainType.feePriceScale
                 )
             )
         }
     }
 
-    private fun wei(gwei: Long): Long {
-        return gwei * 1_000_000_000
-    }
-
-    private fun gwei(wei: Long): Long {
-        return wei / 1_000_000_000
-    }
-
-    private fun gwei(range: LongRange): LongRange {
-        return LongRange(gwei(range.first), gwei(range.last))
-    }
 }

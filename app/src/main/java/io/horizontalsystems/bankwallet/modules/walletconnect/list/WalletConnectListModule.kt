@@ -14,7 +14,7 @@ object WalletConnectListModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = WalletConnectListService(App.wc1SessionManager)
+            val service = WalletConnectListService(App.wc1SessionManager, App.evmBlockchainManager)
 
             return WalletConnectListViewModel(service) as T
         }
@@ -25,7 +25,7 @@ object WalletConnectListModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = WC2ListService(App.wc2SessionManager)
 
-            return WC2ListViewModel(service) as T
+            return WC2ListViewModel(service, App.evmBlockchainManager) as T
         }
     }
 
@@ -50,8 +50,8 @@ object WalletConnectListModule {
 
     fun getVersionFromUri(scannedText: String): Int {
         return when {
-            scannedText.contains("@1?") -> 1
-            scannedText.contains("@2?") -> 2
+            scannedText.contains("@1") -> 1
+            scannedText.contains("@2") -> 2
             else -> 0
         }
     }

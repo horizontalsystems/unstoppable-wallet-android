@@ -6,7 +6,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.ITorManager
-import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsFragment
+import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsFragment
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 
 class ActivityLifecycleCallbacks(
@@ -44,7 +45,7 @@ class ActivityLifecycleCallbacks(
     override fun onStatusChange(torStatus: TorStatus) {
         if (torManager.isTorEnabled) {
             (foregroundActivity as? FragmentActivity)?.supportFragmentManager?.primaryNavigationFragment?.childFragmentManager?.fragments?.lastOrNull()?.let { fragment ->
-                if (fragment !is PrivacySettingsFragment) {
+                if (fragment !is SecuritySettingsFragment) {
                     foregroundActivity?.let { activity ->
                         val intent = Intent(activity, TorConnectionActivity::class.java)
                         activity.startActivity(intent)

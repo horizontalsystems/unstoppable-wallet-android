@@ -116,12 +116,6 @@ class UniswapFragment : SwapBaseFragment() {
 
         observeViewModel()
 
-        getNavigationResult(SwapApproveModule.requestKey)?.let {
-            if (it.getBoolean(SwapApproveModule.resultKey)) {
-                uniswapViewModel.didApprove()
-            }
-        }
-
         binding.switchButton.setOnClickListener {
             uniswapViewModel.onTapSwitch()
         }
@@ -129,6 +123,14 @@ class UniswapFragment : SwapBaseFragment() {
         binding.buttonsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
+    }
+
+    private fun subscribeToApproveResult() {
+        getNavigationResult(SwapApproveModule.requestKey) {
+            if (it.getBoolean(SwapApproveModule.resultKey)) {
+                uniswapViewModel.didApprove()
+            }
+        }
     }
 
     private fun observeViewModel() {
@@ -149,16 +151,17 @@ class UniswapFragment : SwapBaseFragment() {
             setButtons(buttons)
         })
 
-        uniswapViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
+        uniswapViewModel.openApproveLiveEvent().observe(viewLifecycleOwner) { approveData ->
+            subscribeToApproveResult()
             findNavController().slideFromBottom(
-                R.id.swapFragment_to_swapApproveFragment,
+                R.id.swapApproveFragment,
                 SwapApproveModule.prepareParams(approveData)
             )
-        })
+        }
 
         uniswapViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
             requireParentFragment().findNavController().slideFromRight(
-                R.id.swapFragment_to_uniswapConfirmationFragment,
+                R.id.uniswapConfirmationFragment,
                 UniswapConfirmationModule.prepareParams(sendEvmData)
             )
         })

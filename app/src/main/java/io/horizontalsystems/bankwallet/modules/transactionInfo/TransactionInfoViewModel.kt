@@ -1,57 +1,34 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoViewItem
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.core.SingleLiveEvent
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class TransactionInfoViewModel(
     private val service: TransactionInfoService,
-    private val factory: TransactionInfoViewItemFactory,
-    private val clearables: List<Clearable>
+    private val factory: TransactionInfoViewItemFactory
 ) : ViewModel() {
+
     val source: TransactionSource by service::source
 
-    val showShareLiveEvent = SingleLiveEvent<String>()
-    val copyRawTransactionLiveEvent = SingleLiveEvent<String>()
-    val openTransactionOptionsModule = SingleLiveEvent<Pair<TransactionInfoOption.Type, String>>()
-
-    val viewItemsLiveData = MutableLiveData<List<TransactionInfoViewItem?>>()
-
-    private val disposables = CompositeDisposable()
+    var viewItems by mutableStateOf<List<List<TransactionInfoViewItem>>>(listOf())
+        private set
 
     init {
-        service.transactionInfoItemObservable
-            .subscribeIO {
-                updateViewItems(it)
+        viewModelScope.launch {
+            service.transactionInfoItemFlow.collect { transactionInfoItem ->
+                viewItems = factory.getViewItemSections(transactionInfoItem)
             }
-            .let {
-                disposables.add(it)
-            }
-    }
+        }
 
-    private fun updateViewItems(transactionItem: TransactionInfoItem) {
-        val viewItems = factory.getMiddleSectionItems(transactionItem.record, transactionItem.rates, transactionItem.lastBlockInfo, transactionItem.explorerData)
-        viewItemsLiveData.postValue(viewItems)
-    }
-
-    override fun onCleared() {
-        clearables.forEach(Clearable::clear)
-    }
-
-    fun onActionButtonClick(actionButton: TransactionInfoActionButton) {
-        when (actionButton) {
-            is TransactionInfoActionButton.ShareButton -> showShareLiveEvent.postValue(actionButton.value)
-            is TransactionInfoActionButton.CopyButton -> copyRawTransactionLiveEvent.postValue(service.getRaw())
+        viewModelScope.launch {
+            service.start()
         }
     }
 
-    fun onOptionButtonClick(optionType: TransactionInfoOption.Type) {
-        openTransactionOptionsModule.postValue(Pair(optionType, service.transactionHash))
-    }
-
+    fun getRawTransaction(): String? = service.getRawTransaction()
 }

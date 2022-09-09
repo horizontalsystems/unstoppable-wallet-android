@@ -5,11 +5,17 @@ import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
+import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule.WCRequestWrapper
+import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.Chain
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -21,7 +27,8 @@ class WC1Service(
     private val manager: WC1Manager,
     private val sessionManager: WC1SessionManager,
     private val requestManager: WC1RequestManager,
-    private val connectivityManager: ConnectivityManager
+    private val connectivityManager: ConnectivityManager,
+    private val evmBlockchainManager: EvmBlockchainManager
 ) : WalletConnectInteractor.Delegate, Clearable {
 
     sealed class State {
@@ -33,10 +40,9 @@ class WC1Service(
     }
 
     data class SessionData(
-            val peerId: String,
-            val peerMeta: WCPeerMeta,
-            val account: Account,
-            val evmKitWrapper: EvmKitWrapper
+        val peerId: String,
+        val peerMeta: WCPeerMeta,
+        val account: Account
     )
 
     open class SessionError(message: String) : Throwable(message) {
@@ -56,7 +62,16 @@ class WC1Service(
         get() = sessionData?.peerMeta
 
     val evmKitWrapper: EvmKitWrapper?
-        get() = sessionData?.evmKitWrapper
+        get() = sessionData?.account?.let { account ->
+                manager.getEvmKitWrapper(evmBlockchainManager.getChain(selectedBlockchain.type).id, account)
+            }
+
+    val evmAddress: Address?
+        get() = evmKitWrapper?.evmKit?.receiveAddress
+
+    var selectedBlockchain: Blockchain = evmBlockchainManager.getBlockchain(Chain.Ethereum.id)!!
+    val availableBlockchains: List<Blockchain>
+        get() = evmBlockchainManager.allBlockchains.sortedBy { it.type.order }
 
     private val stateSubject = PublishSubject.create<State>()
     val stateObservable: Flowable<State>
@@ -75,8 +90,8 @@ class WC1Service(
     val connectionState: WalletConnectInteractor.State
         get() = interactor?.state ?: WalletConnectInteractor.State.Idle
 
-    private val requestSubject = PublishSubject.create<WC1Request>()
-    val requestObservable: Flowable<WC1Request>
+    private val requestSubject = PublishSubject.create<WCRequestWrapper>()
+    val requestObservable: Flowable<WCRequestWrapper>
         get() = requestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     fun start() {
@@ -119,16 +134,18 @@ class WC1Service(
             interactor?.connect()
 
             state = State.Ready
+
+            processNextRequest()
         } catch (error: Throwable) {
             state = State.Invalid(error)
         }
     }
 
     private fun initSession(peerId: String, peerMeta: WCPeerMeta, chainId: Int) {
-        val account = manager.activeAccount ?: throw SessionError.NoSuitableAccount
-        val evmKitWrapper = manager.evmKitWrapper(chainId, account) ?: throw SessionError.UnsupportedChainId
+        selectedBlockchain = evmBlockchainManager.getBlockchain(chainId) ?: throw SessionError.UnsupportedChainId
 
-        sessionData = SessionData(peerId, peerMeta, account, evmKitWrapper)
+        val account = manager.activeAccount ?: throw SessionError.NoSuitableAccount
+        sessionData = SessionData(peerId, peerMeta, account)
     }
 
     private fun getSessionFromUri(uri: String): WalletConnectSession? {
@@ -156,22 +173,23 @@ class WC1Service(
     fun approveSession() {
         sessionData?.let { sessionData ->
             interactor?.let { interactor ->
-                val evmKitWrapper = sessionData.evmKitWrapper
-                val chainId = evmKitWrapper.evmKit.chain.id
-                interactor.approveSession(evmKitWrapper.evmKit.receiveAddress.eip55, chainId)
+                evmKitWrapper?.let { evmKitWrapper ->
+                    val chainId = evmKitWrapper.evmKit.chain.id
+                    interactor.approveSession(evmKitWrapper.evmKit.receiveAddress.eip55, chainId)
 
-                val session = WalletConnectSession(
+                    val session = WalletConnectSession(
                         chainId = chainId,
                         accountId = sessionData.account.id,
                         session = interactor.session,
                         peerId = interactor.peerId,
                         remotePeerId = sessionData.peerId,
                         remotePeerMeta = sessionData.peerMeta
-                )
+                    )
 
-                sessionManager.save(session)
+                    sessionManager.save(session)
 
-                state = State.Ready
+                    state = State.Ready
+                }
             }
         }
     }
@@ -268,7 +286,7 @@ class WC1Service(
 
         peerId?.let { peerId ->
             requestManager.getNextRequest(peerId)?.let { request ->
-                requestSubject.onNext(request)
+                requestSubject.onNext(WCRequestWrapper(request, remotePeerMeta?.name))
                 requestIsProcessing = true
             }
         }

@@ -1,186 +1,280 @@
 package io.horizontalsystems.bankwallet.modules.restore.restoremnemonic
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.TextWatcher
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.Utils
-import io.horizontalsystems.bankwallet.databinding.FragmentRestoreMnemonicBinding
-import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment.Companion.ACCOUNT_TYPE_KEY
-import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment
+import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.helpers.KeyboardHelper
-import io.horizontalsystems.hdwalletkit.Mnemonic
 
 class RestoreMnemonicFragment : BaseFragment() {
-    private val viewModel by viewModels<RestoreMnemonicViewModel> { RestoreMnemonicModule.Factory() }
-
-    private val textWatcher = object : TextWatcher {
-        override fun afterTextChanged(s: Editable) {
-            if (s.isNotEmpty()) {
-                viewModel.onTextChange(s.toString(), binding.wordsInput.selectionStart)
-            }
-        }
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            isUsingNativeKeyboard()
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        }
-    }
-
-    private var _binding: FragmentRestoreMnemonicBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRestoreMnemonicBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.next -> {
-                    viewModel.onProceed()
-                    true
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    RestoreMnemonicScreen(findNavController())
                 }
-                else -> false
             }
         }
+    }
+}
 
-        bindListeners()
-        observeEvents()
+@Composable
+fun RestoreMnemonicScreen(navController: NavController) {
+    val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
+    val uiState = viewModel.uiState
+    val context = LocalContext.current
 
-        KeyboardHelper.showKeyboardDelayed(requireActivity(), binding.wordsInput, 200)
+    var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(""))
+    }
+    val focusRequester = remember { FocusRequester() }
+    var showCustomKeyboardDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
     }
 
-    private fun observeEvents() {
-        viewModel.proceedLiveEvent.observe(viewLifecycleOwner, Observer { accountType ->
-            hideKeyboard()
-            findNavController().slideFromRight(
-                R.id.restoreSelectCoinsFragment,
-                bundleOf(ACCOUNT_TYPE_KEY to accountType)
-            )
-        })
-
-        viewModel.invalidRangesLiveData.observe(viewLifecycleOwner, Observer { invalidRanges ->
-            binding.wordsInput.removeTextChangedListener(textWatcher)
-
-            val cursor = binding.wordsInput.selectionStart
-            val spannableString = SpannableString(binding.wordsInput.text.toString())
-
-            invalidRanges.forEach { range ->
-                val spannableColorSpan =
-                    ForegroundColorSpan(requireContext().getColor(R.color.lucian))
-                if (range.last < binding.wordsInput.text.length) {
-                    spannableString.setSpan(
-                        spannableColorSpan,
-                        range.first,
-                        range.last + 1,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        AppBar(
+            title = TranslatableString.ResString(R.string.Restore_Enter_Key_Title),
+            navigationIcon = {
+                HsIconButton(onClick = navController::popBackStack) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back),
+                        contentDescription = "back",
+                        tint = ComposeAppTheme.colors.jacob
                     )
                 }
-            }
-
-            binding.wordsInput.setText(spannableString)
-            binding.wordsInput.setSelection(cursor)
-            binding.wordsInput.addTextChangedListener(textWatcher)
-        })
-
-        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
-            val errorMessage = when (it) {
-                is RestoreMnemonicService.ValidationError.InvalidWordCountException -> getString(
-                    R.string.Restore_Error_MnemonicWordCount,
-                    it.count
+            },
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Button_Next),
+                    onClick = viewModel::onProceed
                 )
-                is Mnemonic.ChecksumException -> getString(R.string.Restore_InvalidChecksum)
-                else -> getString(R.string.Restore_ValidationFailed)
+            )
+        )
+
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Spacer(Modifier.height(12.dp))
+            HeaderText(text = stringResource(R.string.Restore_Key))
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(8.dp))
+                    .background(ComposeAppTheme.colors.lawrence),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                val style = SpanStyle(
+                    color = ComposeAppTheme.colors.lucian,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp,
+                    letterSpacing = 0.sp
+                )
+
+                BasicTextField(
+                    modifier = Modifier
+                        .focusRequester(focusRequester)
+                        .defaultMinSize(minHeight = 93.dp)
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .weight(1f),
+                    enabled = true,
+                    value = textState,
+                    onValueChange = {
+                        textState = it
+
+                        viewModel.onEnterMnemonicPhrase(it.text, it.selection.max)
+
+                        showCustomKeyboardDialog = !viewModel.isThirdPartyKeyboardAllowed && Utils.isUsingCustomKeyboard(context)
+                    },
+                    textStyle = ColoredTextStyle(
+                        color = ComposeAppTheme.colors.leah,
+                        textStyle = ComposeAppTheme.typography.body
+                    ),
+                    maxLines = 6,
+                    cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                    visualTransformation = {
+                        try {
+                            val annotatedString = buildAnnotatedString {
+                                append(it.text)
+
+                                uiState.invalidWordRanges.forEach { range ->
+                                    addStyle(style = style, range.first, range.last + 1)
+                                }
+                            }
+                            TransformedText(annotatedString, OffsetMapping.Identity)
+                        } catch (error: Throwable) {
+                            error.printStackTrace()
+                            TransformedText(it, OffsetMapping.Identity)
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions.Default,
+                )
             }
-            HudHelper.showErrorMessage(this.requireView(), errorMessage)
-        })
-
-        viewModel.inputsVisibleLiveData.observe(viewLifecycleOwner) {
-            binding.passphraseToggle.setChecked(it)
-            binding.passphrase.isVisible = it
-            binding.passphraseDescription.isVisible = it
-        }
-
-        viewModel.passphraseCautionLiveData.observe(viewLifecycleOwner) {
-            binding.passphrase.setError(it)
-        }
-
-        viewModel.clearInputsLiveEvent.observe(viewLifecycleOwner) {
-            binding.passphrase.setText(null)
+            InfoText(text = stringResource(R.string.Restore_Mnemonic_Description))
+            Spacer(Modifier.height(24.dp))
+            Passphrase(
+                enabled = uiState.passphraseEnabled,
+                error = uiState.passphraseError,
+                onEnabled = viewModel::onEnablePassphrase,
+                onEnterPassphrase = viewModel::onEnterPassphrase
+            )
+            Spacer(Modifier.height(24.dp))
+            HeaderText(text = stringResource(R.string.Restore_Name))
+            FormsInput(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                hint = uiState.defaultName,
+                singleLine = true,
+                pasteEnabled = false,
+                onValueChange = viewModel::onEnterName
+            )
+            Spacer(Modifier.height(32.dp))
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun bindListeners() {
-        binding.wordsInput.addTextChangedListener(textWatcher)
+    uiState.error?.let {
+        HudHelper.showErrorMessage(LocalView.current, it)
 
-        //fixes scrolling in EditText when it's inside NestedScrollView
-        binding.wordsInput.setOnTouchListener { v, event ->
-            if (binding.wordsInput.hasFocus()) {
-                v.parent.requestDisallowInterceptTouchEvent(true)
-                when (event.action and MotionEvent.ACTION_MASK) {
-                    MotionEvent.ACTION_SCROLL -> {
-                        v.parent.requestDisallowInterceptTouchEvent(false)
-                        return@setOnTouchListener true
-                    }
-                }
+        viewModel.onErrorShown()
+    }
+
+    uiState.accountType?.let { accountType ->
+        navController.slideFromRight(
+            R.id.restoreSelectCoinsFragment,
+            bundleOf(
+                RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.resolvedName,
+                RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType
+            )
+        )
+
+        viewModel.onSelectCoinsShown()
+    }
+
+    if (showCustomKeyboardDialog) {
+        CustomKeyboardWarningDialog(
+            onSelect = {
+                val imeManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imeManager.showInputMethodPicker()
+                showCustomKeyboardDialog = false
+            },
+            onSkip = {
+                viewModel.onAllowThirdPartyKeyboard()
+                showCustomKeyboardDialog = false
+            },
+            onCancel = {
+                showCustomKeyboardDialog = false
             }
-            return@setOnTouchListener false
-        }
+        )
+    }
 
-        binding.passphraseToggle.setOnCheckedChangeListenerSingle {
-            viewModel.onTogglePassphrase(it)
-        }
+}
 
-        binding.passphrase.onTextChange { old, new ->
-            if (viewModel.validatePassphrase(new)) {
-                viewModel.onChangePassphrase(new ?: "")
-            } else {
-                binding.passphrase.revertText(old)
-            }
+@Composable
+fun Passphrase(
+    enabled: Boolean,
+    error: String?,
+    onEnabled: (Boolean) -> Unit,
+    onEnterPassphrase: (String) -> Unit
+) {
+    CellSingleLineLawrenceSection {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_key_phrase_20),
+                tint = ComposeAppTheme.colors.grey,
+                contentDescription = null,
+            )
+            Spacer(Modifier.width(16.dp))
+            body_leah(
+                text = stringResource(R.string.Passphrase),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp)
+            )
+            HsSwitch(
+                checked = enabled,
+                onCheckedChange = onEnabled
+            )
         }
     }
 
-    private fun isUsingNativeKeyboard(): Boolean {
-        if (Utils.isUsingCustomKeyboard(requireContext()) && !CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed) {
-            showCustomKeyboardAlert()
-            return false
-        }
-
-        return true
+    if (enabled) {
+        Spacer(modifier = Modifier.height(12.dp))
+        FormsInput(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            hint = stringResource(R.string.Passphrase),
+            state = error?.let { DataState.Error(Exception(it)) },
+            pasteEnabled = false,
+            singleLine = true,
+            onValueChange = onEnterPassphrase,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        )
+        InfoText(text = stringResource(R.string.Restore_PassphraseDescription))
     }
+
 }

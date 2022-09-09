@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.coin.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -11,6 +10,8 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 
 @Composable
 fun CoinScreenTitle(
@@ -26,23 +27,19 @@ fun CoinScreenTitle(
             modifier = Modifier.size(24.dp)
         )
 
-        Text(
+        body_grey(
             text = coinName,
             modifier = Modifier
                 .padding(start = 16.dp)
                 .weight(1f),
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.body,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
 
         marketCapRank?.let { marketCapRank ->
-            Text(
+            subhead1_grey(
                 text = "#$marketCapRank",
                 modifier = Modifier.padding(start = 16.dp),
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead1
             )
         }
     }

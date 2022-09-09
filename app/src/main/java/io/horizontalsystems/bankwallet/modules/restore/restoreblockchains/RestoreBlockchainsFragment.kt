@@ -11,8 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -26,29 +24,29 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
-import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
-import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.Blockchain
 
 class RestoreBlockchainsFragment : BaseFragment() {
 
     val vmFactory by lazy {
-        RestoreBlockchainsModule.Factory(arguments?.getParcelable(ACCOUNT_TYPE_KEY)!!)
+        RestoreBlockchainsModule.Factory(
+            arguments?.getString(ACCOUNT_NAME_KEY)!!,
+            arguments?.getParcelable(ACCOUNT_TYPE_KEY)!!
+        )
     }
 
     private val viewModel by viewModels<RestoreBlockchainsViewModel> { vmFactory }
     private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
     private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
-    private val coinPlatformsViewModel by viewModels<CoinPlatformsViewModel> { vmFactory }
+    private val coinTokensViewModel by viewModels<CoinTokensViewModel> { vmFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +63,7 @@ class RestoreBlockchainsFragment : BaseFragment() {
                         findNavController(),
                         viewModel
                     )
+                    ZCashBirthdayHeightDialogWrapper(restoreSettingsViewModel)
                 }
             }
         }
@@ -87,26 +86,11 @@ class RestoreBlockchainsFragment : BaseFragment() {
             )
         }
 
-        restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
-            val zcashBirthdayHeightDialog = ZcashBirthdayHeightDialog()
-            zcashBirthdayHeightDialog.onEnter = {
-                restoreSettingsViewModel.onEnter(it)
-            }
-            zcashBirthdayHeightDialog.onCancel = {
-                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-            }
-
-            zcashBirthdayHeightDialog.show(
-                requireActivity().supportFragmentManager,
-                "ZcashBirthdayHeightDialog"
-            )
-        }
-
-        coinPlatformsViewModel.openPlatformsSelectorEvent.observe(viewLifecycleOwner) { config ->
+        coinTokensViewModel.openSelectorEvent.observe(viewLifecycleOwner) { config ->
             showBottomSelectorDialog(
                 config,
-                onSelect = { indexes -> coinPlatformsViewModel.onSelect(indexes) },
-                onCancel = { coinPlatformsViewModel.onCancelSelect() }
+                onSelect = { indexes -> coinTokensViewModel.onSelect(indexes) },
+                onCancel = { coinTokensViewModel.onCancelSelect() }
             )
         }
     }
@@ -119,18 +103,20 @@ class RestoreBlockchainsFragment : BaseFragment() {
         BottomSheetSelectorMultipleDialog.show(
             fragmentManager = childFragmentManager,
             title = config.title,
-            subtitle = config.subtitle,
             icon = config.icon,
             items = config.viewItems,
             selected = config.selectedIndexes,
-            notifyUnchanged = true,
             onItemSelected = { onSelect(it) },
             onCancelled = { onCancel() },
-            warning = config.description
+            warningTitle = config.descriptionTitle,
+            warning = config.description,
+            notifyUnchanged = true,
+            allowEmpty = config.allowEmpty
         )
     }
 
     companion object {
+        const val ACCOUNT_NAME_KEY = "account_name_key"
         const val ACCOUNT_TYPE_KEY = "account_type_key"
     }
 }
@@ -149,7 +135,7 @@ private fun ManageWalletsScreen(
         AppBar(
             title = TranslatableString.ResString(R.string.Restore_Title),
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                HsIconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_back),
                         contentDescription = "back",
@@ -194,16 +180,12 @@ private fun ManageWalletsScreen(
                                     .size(24.dp)
                             )
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(
+                                body_leah(
                                     text = viewItem.title,
-                                    color = ComposeAppTheme.colors.leah,
-                                    style = ComposeAppTheme.typography.body,
                                     maxLines = 1,
                                 )
-                                Text(
+                                subhead2_grey(
                                     text = viewItem.subtitle,
-                                    color = ComposeAppTheme.colors.grey,
-                                    style = ComposeAppTheme.typography.subhead2,
                                     maxLines = 1,
                                     modifier = Modifier.padding(top = 1.dp)
                                 )
@@ -211,8 +193,8 @@ private fun ManageWalletsScreen(
                             if (viewItem.state is CoinViewItemState.ToggleVisible) {
                                 Spacer(Modifier.width(12.dp))
                                 if (viewItem.state.hasSettings) {
-                                    IconButton(
-                                        onClick = { viewModel.onClickSettings(viewItem.uid) }
+                                    HsIconButton(
+                                        onClick = { viewModel.onClickSettings(viewItem.item) }
                                     ) {
                                         Icon(
                                             painter = painterResource(R.drawable.ic_edit_20),
@@ -234,12 +216,12 @@ private fun ManageWalletsScreen(
     }
 }
 
-private fun onItemClick(viewItem: CoinViewItem, viewModel: RestoreBlockchainsViewModel) {
+private fun onItemClick(viewItem: CoinViewItem<Blockchain>, viewModel: RestoreBlockchainsViewModel) {
     if (viewItem.state is CoinViewItemState.ToggleVisible) {
         if (viewItem.state.enabled) {
-            viewModel.disable(viewItem.uid)
+            viewModel.disable(viewItem.item)
         } else {
-            viewModel.enable(viewItem.uid)
+            viewModel.enable(viewItem.item)
         }
     }
 }

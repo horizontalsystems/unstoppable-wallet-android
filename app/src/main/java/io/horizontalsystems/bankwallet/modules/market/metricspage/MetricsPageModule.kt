@@ -4,8 +4,8 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
-import io.horizontalsystems.bankwallet.modules.chart.ChartNumberFormatterShortened
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
@@ -29,7 +29,7 @@ object MetricsPageModule {
                 }
                 ChartViewModel::class.java -> {
                     val chartService = MetricsPageChartService(App.currencyManager, metricsType, globalMarketRepository)
-                    val chartNumberFormatter = ChartNumberFormatterShortened()
+                    val chartNumberFormatter = ChartCurrencyValueFormatterShortened()
                     ChartModule.createViewModel(chartService, chartNumberFormatter) as T
                 }
                 else -> throw IllegalArgumentException()

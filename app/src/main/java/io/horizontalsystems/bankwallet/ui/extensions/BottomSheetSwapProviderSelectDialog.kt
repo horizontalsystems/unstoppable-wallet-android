@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,11 +21,11 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSectionFramed
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 class BottomSheetSwapProviderSelectDialog() : BaseComposableBottomSheetFragment() {
 
-    var subtitle: String? = null
     var items: List<SwapMainModule.ISwapProvider>? = null
     var selectedItem: SwapMainModule.ISwapProvider? = null
     var onSelectListener: ((SwapMainModule.ISwapProvider) -> Unit)? = null
@@ -44,11 +42,10 @@ class BottomSheetSwapProviderSelectDialog() : BaseComposableBottomSheetFragment(
             setContent {
                 ComposeAppTheme {
                     BottomSheetScreen(
-                        subtitle,
-                        items,
-                        selectedItem,
-                        onSelectListener,
-                        { close() }
+                        swapProviders = items,
+                        selectedItem = selectedItem,
+                        onSelectListener = onSelectListener,
+                        onCloseClick = { close() }
                     )
                 }
             }
@@ -59,8 +56,7 @@ class BottomSheetSwapProviderSelectDialog() : BaseComposableBottomSheetFragment(
 
 @Composable
 private fun BottomSheetScreen(
-    subtitle: String?,
-    items: List<SwapMainModule.ISwapProvider>?,
+    swapProviders: List<SwapMainModule.ISwapProvider>?,
     selectedItem: SwapMainModule.ISwapProvider?,
     onSelectListener: ((SwapMainModule.ISwapProvider) -> Unit)?,
     onCloseClick: () -> Unit
@@ -70,19 +66,12 @@ private fun BottomSheetScreen(
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_swap_24),
         title = stringResource(R.string.Swap_SelectSwapProvider_Title),
-        subtitle = subtitle,
         onCloseClick = onCloseClick,
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
     ) {
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
-        items?.forEach { item ->
-            CellMultilineLawrence(
-                borderBottom = true
-            ) {
+        Spacer(Modifier.height(12.dp))
+        swapProviders?.let { items ->
+            CellSingleLineLawrenceSectionFramed(items) { item ->
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
@@ -102,11 +91,7 @@ private fun BottomSheetScreen(
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(16.dp))
-                    Text(
-                        text = item.title,
-                        style = ComposeAppTheme.typography.body,
-                        color = ComposeAppTheme.colors.leah
-                    )
+                    body_leah(text = item.title)
                     Spacer(modifier = Modifier.weight(1f))
                     if (item == selectedItem) {
                         Image(
@@ -120,7 +105,7 @@ private fun BottomSheetScreen(
                 }
             }
         }
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(44.dp))
     }
 }
 

@@ -4,98 +4,90 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Icon
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.databinding.FragmentMarkdownBinding
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.core.findNavController
 
-class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
-
-    private lateinit var contentAdapter: MarkdownContentAdapter
-
-    private var _binding: FragmentMarkdownBinding? = null
-    private val binding get() = _binding!!
+class MarkdownFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMarkdownBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        if (arguments?.getBoolean(showAsClosablePopupKey) == true) {
-            binding.toolbar.inflateMenu(R.menu.close_menu)
-            binding.toolbar.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.menuClose -> {
-                        findNavController().popBackStack()
-                        true
-                    }
-                    else -> false
+            setContent {
+                ComposeAppTheme {
+                    MarkdownScreen(
+                        handleRelativeUrl = arguments?.getBoolean(handleRelativeUrlKey) ?: false,
+                        markdownUrl = arguments?.getString(markdownUrlKey) ?: "",
+                        onCloseClick = { findNavController().popBackStack() },
+                        onUrlClick = { url ->
+                            findNavController().slideFromRight(
+                                R.id.markdownFragment, bundleOf(markdownUrlKey to url)
+                            )
+                        }
+                    )
                 }
             }
-        } else {
-            binding.toolbar.setNavigationIcon(R.drawable.ic_back)
-            binding.toolbar.setNavigationOnClickListener {
-                findNavController().popBackStack()
-            }
         }
-
-        val handleRelativeUrl = arguments?.getBoolean(handleRelativeUrlKey) ?: false
-        val markdownUrl = arguments?.getString(markdownUrlKey)
-        val gitReleaseUrl = arguments?.getString(gitReleaseNotesUrlKey)
-        val viewModel by viewModels<MarkdownViewModel> {
-            MarkdownModule.Factory(
-                markdownUrl,
-                gitReleaseUrl
-            )
-        }
-
-        contentAdapter = MarkdownContentAdapter(this, handleRelativeUrl)
-        binding.rvBlocks.adapter = contentAdapter
-
-        observe(viewModel)
-    }
-
-    private fun observe(viewModel: MarkdownViewModel) {
-        viewModel.blocks.observe(viewLifecycleOwner, Observer {
-            contentAdapter.submitList(it)
-        })
-
-        viewModel.statusLiveData.observe(viewLifecycleOwner, Observer {
-            binding.error.isVisible = it is LoadStatus.Failed
-        })
-    }
-
-    //  MarkdownContentAdapter listener
-
-    override fun onClick(url: String) {
-        findNavController().slideFromRight(
-            R.id.markdownFragment_markdownFragment,
-            bundleOf(markdownUrlKey to url)
-        )
     }
 
     companion object {
         const val markdownUrlKey = "urlKey"
         const val handleRelativeUrlKey = "handleRelativeUrlKey"
-        const val gitReleaseNotesUrlKey = "gitReleaseNotesUrlKey"
-        const val showAsClosablePopupKey = "showAsClosablePopupKey"
+    }
+}
+
+@Composable
+private fun MarkdownScreen(
+    handleRelativeUrl: Boolean,
+    markdownUrl: String,
+    onCloseClick: () -> Unit,
+    onUrlClick: (String) -> Unit,
+    viewModel: MarkdownViewModel = viewModel(factory = MarkdownModule.Factory(markdownUrl))
+) {
+
+    Surface(color = ComposeAppTheme.colors.tyler) {
+        Column {
+            AppBar(
+                navigationIcon = {
+                    HsIconButton(onClick = onCloseClick) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = "back button",
+                            tint = ComposeAppTheme.colors.jacob
+                        )
+                    }
+                }
+            )
+
+            MarkdownContent(
+                viewState = viewModel.viewState,
+                markdownBlocks = viewModel.markdownBlocks,
+                handleRelativeUrl = handleRelativeUrl,
+                onRetryClick = { viewModel.retry() },
+                onUrlClick = onUrlClick
+            )
+
+        }
     }
 }

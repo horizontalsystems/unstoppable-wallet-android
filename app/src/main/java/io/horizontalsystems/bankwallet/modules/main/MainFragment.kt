@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -38,8 +39,17 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().moveTaskToBack(true)
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -100,12 +110,12 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
             }
         })
 
-        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, {
+        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner) {
             findNavController().slideFromBottom(
-                R.id.mainFragment_to_releaseNotesFragment,
+                R.id.releaseNotesFragment,
                 bundleOf(ReleaseNotesFragment.showAsClosablePopupKey to true)
             )
-        })
+        }
 
         viewModel.openPlayMarketLiveEvent.observe(viewLifecycleOwner, Observer {
             openAppInPlayMarket()
@@ -140,7 +150,8 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
         onSelectListener: (account: Account) -> Unit
     ) {
         val dialog = BottomSheetWalletSelectDialog()
-        dialog.items = items
+        dialog.wallets = items.filter { !it.isWatchAccount }
+        dialog.watchingAddresses = items.filter { it.isWatchAccount }
         dialog.selectedItem = selectedItem
         dialog.onSelectListener = { onSelectListener(it) }
 

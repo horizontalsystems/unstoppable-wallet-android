@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
@@ -22,10 +23,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.AmountCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.SubheadCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleHexValueCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleTypedValueCell
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -41,7 +39,6 @@ fun SendEthRequestScreen(
     close: () -> Unit,
 ) {
 
-    val title by sendEvmTransactionViewModel.transactionTitleLiveData.observeAsState("")
     val transactionInfoItems by sendEvmTransactionViewModel.viewItemsLiveData.observeAsState()
     val approveEnabled by sendEvmTransactionViewModel.sendEnabledLiveData.observeAsState(false)
     val cautions by sendEvmTransactionViewModel.cautionsLiveData.observeAsState()
@@ -54,7 +51,7 @@ fun SendEthRequestScreen(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
-                title = TranslatableString.PlainString(title),
+                title = TranslatableString.ResString(R.string.WalletConnect_UnknownRequest_Title),
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
@@ -74,7 +71,11 @@ fun SendEthRequestScreen(
                     sections.forEach { section ->
                         CellSingleLineLawrenceSection(section.viewItems) { item ->
                             when (item) {
-                                is ViewItem.Subhead -> SubheadCell(item.title, item.value)
+                                is ViewItem.Subhead -> SubheadCell(
+                                    item.title,
+                                    item.value,
+                                    item.iconRes
+                                )
                                 is ViewItem.Value -> TitleTypedValueCell(
                                     item.title,
                                     item.value,
@@ -87,13 +88,19 @@ fun SendEthRequestScreen(
                                 )
                                 is ViewItem.Input -> TitleHexValueCell(
                                     Translator.getString(R.string.WalletConnect_Input),
-                                    item.value,
+                                    item.value.shorten(),
                                     item.value
                                 )
                                 is ViewItem.Amount -> AmountCell(
                                     item.fiatAmount,
                                     item.coinAmount,
-                                    item.type
+                                    item.type,
+                                    item.token
+                                )
+                                is ViewItem.AmountMulti -> AmountMultiCell(
+                                    item.amounts,
+                                    item.type,
+                                    item.token
                                 )
                                 is ViewItem.Warning -> TextImportantWarning(
                                     text = item.description,

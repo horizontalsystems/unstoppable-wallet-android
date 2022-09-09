@@ -89,6 +89,11 @@ class BalanceAdapterRepository(
         }
     }
 
+    fun isMainNet(wallet: Wallet): Boolean {
+        val adapter = adapterManager.getBalanceAdapterForWallet(wallet)
+        return adapter?.isMainnet ?: true
+    }
+
     fun state(wallet: Wallet): AdapterState {
         return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceState
             ?: AdapterState.Syncing()
@@ -104,7 +109,4 @@ class BalanceAdapterRepository(
         adapterManager.refresh()
     }
 
-    fun refreshByWallet(wallet: Wallet) {
-        adapterManager.refreshByWallet(wallet)
-    }
 }

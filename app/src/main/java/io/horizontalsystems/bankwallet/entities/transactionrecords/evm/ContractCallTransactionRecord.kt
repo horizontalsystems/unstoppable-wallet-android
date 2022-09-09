@@ -2,24 +2,28 @@ package io.horizontalsystems.bankwallet.entities.transactionrecords.evm
 
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.ethereumkit.models.FullTransaction
-import io.horizontalsystems.marketkit.models.PlatformCoin
-import java.math.BigDecimal
+import io.horizontalsystems.ethereumkit.models.Transaction
+import io.horizontalsystems.marketkit.models.Token
 
 class ContractCallTransactionRecord(
-    fullTransaction: FullTransaction,
-    baseCoin: PlatformCoin,
+    transaction: Transaction,
+    baseToken: Token,
+    source: TransactionSource,
     val contractAddress: String,
     val method: String?,
-    value: BigDecimal,
-    val incomingInternalETHs: List<AddressTransactionValue>,
-    val incomingEip20Events: List<AddressTransactionValue>,
-    val outgoingEip20Events: List<AddressTransactionValue>,
-    source: TransactionSource
-) : EvmTransactionRecord(fullTransaction, baseCoin, source) {
+    val incomingEvents: List<TransferEvent>,
+    val outgoingEvents: List<TransferEvent>
+) : EvmTransactionRecord(transaction, baseToken, source) {
 
-    val value = TransactionValue.CoinValue(baseCoin, value)
+    override val mainValue: TransactionValue?
+        get() {
+            val (incomingValues, outgoingValues) = combined(incomingEvents, outgoingEvents)
+
+            return when {
+                (incomingValues.isEmpty() && outgoingValues.size == 1) -> outgoingValues.first()
+                (incomingValues.size == 1 && outgoingValues.isEmpty()) -> incomingValues.first()
+                else -> null
+            }
+        }
 
 }
-
-data class AddressTransactionValue(val address: String, val value: TransactionValue)

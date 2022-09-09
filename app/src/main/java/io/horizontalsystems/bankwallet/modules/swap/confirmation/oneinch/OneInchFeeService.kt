@@ -1,14 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
 
 import io.horizontalsystems.bankwallet.core.EvmError
-import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.*
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.oneinchkit.Swap
 import io.reactivex.Observable
@@ -76,42 +74,26 @@ class OneInchFeeService(
         retryDisposable?.dispose()
 
         oneInchKitHelper.getSwapAsync(
-            fromCoin = parameters.coinFrom,
-            toCoin = parameters.coinTo,
+            fromToken = parameters.tokenFrom,
+            toToken = parameters.tokenTo,
             fromAmount = parameters.amountFrom,
             recipient = parameters.recipient?.hex,
             slippagePercentage = parameters.slippage.toFloat(),
             gasPrice = gasPriceInfo.gasPrice
         )
             .subscribeIO({ swap ->
-                sync(swap, gasPriceInfo.warnings, gasPriceInfo.errors)
+                sync(swap, gasPriceInfo)
             }, { error ->
                 onError(error, gasPriceInfo)
             })
             .let { gasPriceInfoDisposable = it }
     }
 
-    private fun sync(swap: Swap, warnings: List<Warning>, errors: List<Throwable>) {
+    private fun sync(swap: Swap, gasPriceInfo: GasPriceInfo) {
         val swapTx = swap.transaction
-
-        val gasPrice = if (swapTx.gasPrice != null) {
-            GasPrice.Legacy(swapTx.gasPrice!!)
-        } else if (swapTx.maxFeePerGas != null && swapTx.maxPriorityFeePerGas != null) {
-            GasPrice.Eip1559(swapTx.maxFeePerGas!!, swapTx.maxPriorityFeePerGas!!)
-        } else {
-            null
-        }
-
-        if (gasPrice == null) {
-            transactionStatus = DataState.Error(
-                FeeSettingsError.InvalidGasPriceType("No GasPrice returned from 1inch API")
-            )
-            return
-        }
-
         val gasData = GasData(
             gasLimit = getSurchargedGasLimit(swapTx.gasLimit),
-            gasPrice = gasPrice
+            gasPrice = gasPriceInfo.gasPrice
         )
 
         parameters = parameters.copy(
@@ -119,13 +101,13 @@ class OneInchFeeService(
         )
 
         val transactionData = TransactionData(swapTx.to, swapTx.value, swapTx.data)
-        val transaction = Transaction(transactionData, gasData, warnings, errors)
+        val transaction = Transaction(transactionData, gasData, gasPriceInfo.warnings, gasPriceInfo.errors)
 
         transactionStatus = if (transaction.totalAmount > evmBalance) {
             DataState.Success(
                 transaction.copy(
-                    warnings = warnings,
-                    errors = errors + FeeSettingsError.InsufficientBalance
+                    warnings = gasPriceInfo.warnings,
+                    errors = gasPriceInfo.errors + FeeSettingsError.InsufficientBalance
                 )
             )
         } else {

@@ -10,7 +10,6 @@ object MainSettingsModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MainSettingsService(
-                App.localStorage,
                 App.backupManager,
                 App.languageManager,
                 App.systemInfoManager,

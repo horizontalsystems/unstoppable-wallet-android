@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Surface
@@ -94,6 +95,7 @@ class MarketTopCoinsFragment : BaseFragment() {
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TopCoinsScreen(
     viewModel: MarketTopCoinsViewModel,
@@ -113,9 +115,6 @@ fun TopCoinsScreen(
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             TopCloseButton(interactionSource, onCloseButtonClick)
-            header?.let { header ->
-                DescriptionCard(header.title, header.description, header.icon)
-            }
 
             HSSwipeRefresh(
                 state = rememberSwipeRefreshState(isRefreshing),
@@ -132,31 +131,39 @@ fun TopCoinsScreen(
                             ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
                         is ViewState.Success -> {
-                            Column {
-                                menu?.let { menu ->
-                                    HeaderWithSorting(
-                                        menu.sortingFieldSelect.selected.titleResId,
-                                        menu.topMarketSelect,
-                                        { topMarket ->
-                                            scrollToTopAfterUpdate = true
-                                            viewModel.onSelectTopMarket(topMarket)
-                                        },
-                                        menu.marketFieldSelect,
-                                        viewModel::onSelectMarketField,
-                                        viewModel::showSelectorMenu
-                                    )
-                                }
-                                viewItems?.let {
-                                    CoinList(
-                                        items = it,
-                                        scrollToTop = scrollToTopAfterUpdate,
-                                        onAddFavorite = { uid -> viewModel.onAddFavorite(uid) },
-                                        onRemoveFavorite = { uid -> viewModel.onRemoveFavorite(uid) },
-                                        onCoinClick = onCoinClick
-                                    )
-                                    if (scrollToTopAfterUpdate) {
-                                        scrollToTopAfterUpdate = false
+                            viewItems?.let {
+                                CoinList(
+                                    items = it,
+                                    scrollToTop = scrollToTopAfterUpdate,
+                                    onAddFavorite = { uid -> viewModel.onAddFavorite(uid) },
+                                    onRemoveFavorite = { uid -> viewModel.onRemoveFavorite(uid) },
+                                    onCoinClick = onCoinClick,
+                                    preItems = {
+                                        header?.let { header ->
+                                            item {
+                                                DescriptionCard(header.title, header.description, header.icon)
+                                            }
+                                        }
+
+                                        menu?.let { menu ->
+                                            stickyHeader {
+                                                HeaderWithSorting(
+                                                    menu.sortingFieldSelect.selected.titleResId,
+                                                    menu.topMarketSelect,
+                                                    { topMarket ->
+                                                        scrollToTopAfterUpdate = true
+                                                        viewModel.onSelectTopMarket(topMarket)
+                                                    },
+                                                    menu.marketFieldSelect,
+                                                    viewModel::onSelectMarketField,
+                                                    viewModel::showSelectorMenu
+                                                )
+                                            }
+                                        }
                                     }
+                                )
+                                if (scrollToTopAfterUpdate) {
+                                    scrollToTopAfterUpdate = false
                                 }
                             }
                         }

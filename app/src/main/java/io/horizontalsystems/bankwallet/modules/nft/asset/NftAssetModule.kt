@@ -9,46 +9,64 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.bankwallet.modules.hsnft.HsNftApiV1Response
+import io.horizontalsystems.bankwallet.modules.nft.AssetLinks
+import io.horizontalsystems.bankwallet.modules.nft.CollectionLinks
+import io.horizontalsystems.bankwallet.modules.nft.NftAssetAttribute
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
+import io.horizontalsystems.marketkit.models.NftAsset
 import java.util.*
 
 object NftAssetModule {
+
     @Suppress("UNCHECKED_CAST")
     class Factory(
-        private val accountId: String,
-        private val tokenId: String,
-        private val contractAddress: String
-    ) :
-        ViewModelProvider.Factory {
+        private val collectionUid: String,
+        private val contractAddress: String,
+        private val tokenId: String
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val repository = NftAssetRepository(BalanceXRateRepository(App.currencyManager, App.marketKit))
-            val service = NftAssetService(accountId, tokenId, contractAddress, App.nftManager, repository)
+            val service = NftAssetService(
+                collectionUid,
+                contractAddress,
+                tokenId,
+                App.marketKit,
+                App.nftManager,
+                repository
+            )
             return NftAssetViewModel(service) as T
         }
     }
 
-    internal const val accountIdKey = "accountIdKey"
-    internal const val tokenIdKey = "tokenIdKey"
-    internal const val contractAddressKey = "contractAddressKey"
+    const val collectionUidKey = "collectionUidKey"
+    const val contractAddressKey = "contractAddressKey"
+    const val tokenIdKey = "tokenIdKey"
 
-    fun prepareParams(accountId: String, tokenId: String, contractAddress: String) = bundleOf(
-        accountIdKey to accountId,
-        tokenIdKey to tokenId,
+    fun prepareParams(collectionUid: String, contractAddress: String, tokenId: String) = bundleOf(
+        collectionUidKey to collectionUid,
         contractAddressKey to contractAddress,
+        tokenIdKey to tokenId,
     )
+
+    enum class Tab(@StringRes val titleResId: Int) {
+        Overview(R.string.NftAsset_Overview),
+        Activity(R.string.NftAsset_Activity);
+    }
+
 }
 
 data class NftAssetModuleAssetItem(
     val name: String?,
     val imageUrl: String?,
     val collectionName: String,
+    val collectionUid: String,
     val description: String?,
     val contract: NftAssetContract,
     val tokenId: String,
-    val assetLinks: HsNftApiV1Response.Asset.Links?,
-    val collectionLinks: HsNftApiV1Response.Collection.Links?,
+    val assetLinks: AssetLinks?,
+    val collectionLinks: CollectionLinks?,
     val stats: Stats,
+    val onSale: Boolean,
     val attributes: List<Attribute>
 ) {
     data class Price(
@@ -58,8 +76,8 @@ data class NftAssetModuleAssetItem(
 
     data class Stats(
         val lastSale: Price?,
-        val average7d: Price?,
-        val average30d: Price?,
+        val average7d: Price? = null,
+        val average30d: Price? = null,
         val collectionFloor: Price? = null,
         val sale: Sale? = null,
         val bestOffer: Price? = null
@@ -87,3 +105,8 @@ data class NftAssetModuleAssetItem(
         Save(R.string.NftAsset_Action_Save)
     }
 }
+
+val NftAsset.Trait.nftAssetAttribute: NftAssetAttribute
+    get() =
+        NftAssetAttribute(traitType, value, count)
+

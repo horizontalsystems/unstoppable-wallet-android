@@ -113,11 +113,6 @@ class InputView @JvmOverloads constructor(
         binding.input.isEnabled = isEditable
     }
 
-    fun bindPrefix(prefix: String?) {
-        binding.txtPrefix.text = prefix
-        binding.txtPrefix.isVisible = !prefix.isNullOrBlank()
-    }
-
     fun revertText(text: String?) {
         setText(text)
         val shake = AnimationUtils.loadAnimation(context, R.anim.shake_edittext)
@@ -129,7 +124,7 @@ class InputView @JvmOverloads constructor(
             if (visible) {
                 ComposeAppTheme {
                     ButtonSecondaryCircle(
-                        modifier = Modifier.padding(end = 8.dp),
+                        modifier = Modifier.padding(end = 16.dp),
                         icon = R.drawable.ic_delete_20,
                         onClick = {
                             binding.input.text = null

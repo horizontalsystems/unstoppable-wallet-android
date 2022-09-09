@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,7 +57,7 @@ fun SemiCircleChart(
             }
         }
 
-        Text(
+        title3_jacob(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
@@ -66,8 +65,6 @@ fun SemiCircleChart(
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
             text = title,
-            color = ComposeAppTheme.colors.jacob,
-            style = ComposeAppTheme.typography.title3
         )
     }
 }
@@ -83,26 +80,22 @@ fun SemiCircleChartPreview() {
                 "38.95%"
             )
 
-            Text(
+            subhead1_grey(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 32.dp, end = 32.dp, top = 12.dp),
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis,
                 text = "Топ-10 кошельков Ethereum",
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead1
             )
 
-            Text(
+            subhead1_grey(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 24.dp, end = 24.dp, top = 38.dp),
                 textAlign = TextAlign.Start,
                 overflow = TextOverflow.Ellipsis,
                 text = "Chart above shows the % of all tokens in circulation held by top 10 wallets. The lower the % the more distributed the coin is.",
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead1
             )
         }
     }

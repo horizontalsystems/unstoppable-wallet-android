@@ -17,12 +17,11 @@ class TorStatusInteractor(private val torManager: ITorManager) : TorStatusModule
     }
 
     override fun restartTor() {
-        torManager.enableTor()
         torManager.start()
     }
 
     override fun disableTor() {
-        torManager.disableTor()
+        torManager.setTorAsDisabled()
         disposables.add(torManager.stop()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

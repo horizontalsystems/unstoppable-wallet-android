@@ -11,13 +11,14 @@ class Colors(
     jacob: Color,
     remus: Color,
     lucian: Color,
-    oz: Color,
     tyler: Color,
     bran: Color,
     leah: Color,
     claude: Color,
     lawrence: Color,
-    jeremy: Color
+    jeremy: Color,
+    laguna: Color,
+    raina: Color,
 ) {
 
     //base colors
@@ -25,7 +26,7 @@ class Colors(
     val dark = Dark
     val light = Light
     val white = Color.White
-    val black50 = Color(0x80000000)
+    val black50 = Black50
     val issykBlue = Color(0xFF3372FF)
     val lightGrey = LightGrey
     val steelLight = SteelLight
@@ -41,6 +42,7 @@ class Colors(
     val yellowL = YellowL
     val greenD = GreenD
     val greenL = GreenL
+    val green50 = Green50
     val redD = RedD
     val redL = RedL
     val elenaD = Color(0xFF6E7899)
@@ -54,8 +56,6 @@ class Colors(
         private set
     var lucian by mutableStateOf(lucian)
         private set
-    var oz by mutableStateOf(oz)
-        private set
     var tyler by mutableStateOf(tyler)
         private set
     var bran by mutableStateOf(bran)
@@ -68,30 +68,36 @@ class Colors(
         private set
     var jeremy by mutableStateOf(jeremy)
         private set
+    var laguna by mutableStateOf(laguna)
+        private set
+    var raina by mutableStateOf(raina)
+        private set
 
     fun update(other: Colors) {
         jacob = other.jacob
         remus = other.remus
         lucian = other.lucian
-        oz = other.oz
         tyler = other.tyler
         bran = other.bran
         leah = other.leah
         claude = other.claude
         lawrence = other.lawrence
         jeremy = other.jeremy
+        laguna = other.laguna
+        raina = other.raina
     }
 
     fun copy(): Colors = Colors(
         jacob = jacob,
         remus = remus,
         lucian = lucian,
-        oz = oz,
         tyler = tyler,
         bran = bran,
         leah = leah,
         claude = claude,
         lawrence = lawrence,
-        jeremy = jeremy
+        jeremy = jeremy,
+        laguna = laguna,
+        raina = raina,
     )
 }

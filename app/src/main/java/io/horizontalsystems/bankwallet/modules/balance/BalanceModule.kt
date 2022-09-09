@@ -20,17 +20,22 @@ object BalanceModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val balanceService = BalanceService(
-                BalanceActiveWalletRepository(App.walletManager, App.accountSettingManager),
+                BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager),
                 BalanceXRateRepository(App.currencyManager, App.marketKit),
                 BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
-                NetworkTypeChecker(App.accountSettingManager),
                 App.localStorage,
                 App.connectivityManager,
                 BalanceSorter(),
                 App.accountManager
             )
 
-            return BalanceViewModel(balanceService, BalanceViewItemFactory()) as T
+            return BalanceViewModel(
+                balanceService,
+                BalanceViewItemFactory(),
+                TotalService(App.currencyManager, App.marketKit, App.baseTokenManager, App.balanceHiddenManager),
+                App.balanceViewTypeManager,
+                App.balanceHiddenManager
+            ) as T
         }
     }
 
@@ -42,5 +47,6 @@ object BalanceModule {
         val coinPrice: CoinPrice? = null
     ) {
         val fiatValue get() = coinPrice?.value?.let { balanceData.available.times(it) }
+        val balanceFiatTotal get() = coinPrice?.value?.let { balanceData.total.times(it) }
     }
 }

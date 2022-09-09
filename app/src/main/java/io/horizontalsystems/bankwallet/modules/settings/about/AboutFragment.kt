@@ -13,12 +13,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +37,8 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 
@@ -70,7 +69,7 @@ private fun AboutScreen(navController: NavController) {
             AppBar(
                 TranslatableString.ResString(R.string.SettingsAboutApp_Title),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             tint = ComposeAppTheme.colors.jacob,
@@ -100,8 +99,7 @@ fun AboutContent(
 private fun SettingSections(viewModel: AboutViewModel, navController: NavController) {
 
     val context = LocalContext.current
-
-    val termsShowAlert by viewModel.termsShowAlertLiveData.observeAsState(false)
+    val termsShowAlert = viewModel.termsShowAlert
 
     CellSingleLineLawrenceSection(
         listOf {
@@ -109,7 +107,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                 R.string.SettingsAboutApp_WhatsNew,
                 R.drawable.ic_info_20,
                 onClick = {
-                    navController.slideFromRight(R.id.aboutAppFragment_to_releaseNotesFragment)
+                    navController.slideFromRight(R.id.releaseNotesFragment)
                 }
             )
         }
@@ -123,7 +121,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                 R.string.Settings_AppStatus,
                 R.drawable.ic_app_status,
                 onClick = {
-                    navController.slideFromRight(R.id.aboutAppFragment_to_appStatusFragment)
+                    navController.slideFromRight(R.id.appStatusFragment)
                 }
             )
         }, {
@@ -132,7 +130,15 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
                 R.drawable.ic_terms_20,
                 showAlert = termsShowAlert,
                 onClick = {
-                    navController.slideFromRight(R.id.aboutAppFragment_to_termsFragment)
+                    navController.slideFromRight(R.id.termsFragment)
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_Privacy,
+                R.drawable.ic_user_20,
+                onClick = {
+                    navController.slideFromRight(R.id.privacyFragment)
                 }
             )
         })
@@ -212,10 +218,8 @@ fun AboutHeader(appVersion: String) {
                 maxLines = 1,
             )
             Spacer(Modifier.height(12.dp))
-            Text(
+            subhead2_grey(
                 text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion),
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey,
                 maxLines = 1,
             )
         }

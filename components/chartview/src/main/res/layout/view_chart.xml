@@ -5,6 +5,15 @@
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <io.horizontalsystems.chartview.ChartView
+        android:id="@+id/chartGrid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/chartMain"
+        app:layout_constraintStart_toStartOf="@id/chartMain"
+        app:layout_constraintEnd_toEndOf="@id/chartMain"
+        app:layout_constraintBottom_toBottomOf="@id/chartBottom" />
+
+    <io.horizontalsystems.chartview.ChartView
         android:id="@+id/chartMain"
         android:layout_width="0dp"
         android:layout_height="160dp"
@@ -23,8 +32,8 @@
     <io.horizontalsystems.chartview.ChartView
         android:id="@+id/chartBottom"
         android:layout_width="0dp"
-        android:layout_height="56dp"
-        app:layout_constraintBottom_toBottomOf="@+id/chartMain"
+        android:layout_height="48dp"
+        app:layout_constraintTop_toBottomOf="@+id/chartMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -34,7 +43,7 @@
         android:layout_height="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chartMain" />
+        app:layout_constraintTop_toBottomOf="@+id/chartBottom" />
 
     <io.horizontalsystems.chartview.ChartTouchArea
         android:id="@+id/chartTouch"

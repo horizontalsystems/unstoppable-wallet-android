@@ -98,7 +98,11 @@ class SwapMainFragment : BaseFragment() {
                     ButtonSecondaryCircle(
                         icon = R.drawable.ic_manage_2,
                         onClick = {
-                            findNavController().slideFromBottom(R.id.swapFragment_to_swapSettingsMainFragment)
+                            val destination = when(mainViewModel.provider){
+                                SwapMainModule.OneInchProvider -> R.id.oneinchSettingsFragment
+                                else -> R.id.uniswapSettingsFragment
+                            }
+                            findNavController().slideFromBottom(destination)
                         }
                     )
                 }
@@ -108,7 +112,6 @@ class SwapMainFragment : BaseFragment() {
 
     private fun showSwapProviderSelectorDialog() {
         val dialog = BottomSheetSwapProviderSelectDialog()
-        dialog.subtitle = mainViewModel.blockchainTitle
         dialog.items = mainViewModel.providerItems
         dialog.selectedItem = mainViewModel.selectedProviderItem
         dialog.onSelectListener = { mainViewModel.setProvider(it) }

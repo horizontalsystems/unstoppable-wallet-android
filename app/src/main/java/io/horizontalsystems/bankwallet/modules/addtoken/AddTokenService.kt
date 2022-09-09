@@ -1,115 +1,103 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.entities.CustomToken
+import io.horizontalsystems.bankwallet.core.customCoinUid
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
-import java.util.*
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
 
 class AddTokenService(
     private val coinManager: ICoinManager,
     private val blockchainServices: List<IAddTokenBlockchainService>,
     private val walletManager: IWalletManager,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
+    private val marketKit: MarketKit
 ) {
-    private val stateSubject = PublishSubject.create<AddTokenModule.State>()
 
-    private var disposable: Disposable? = null
+    suspend fun getTokens(reference: String): List<TokenInfo> {
+        if (reference.isEmpty()) return listOf()
 
-    val stateObservable: Observable<AddTokenModule.State> = stateSubject
+        val validServices = blockchainServices.filter { it.isValid(reference) }
 
-    var state: AddTokenModule.State = AddTokenModule.State.Idle
-        private set(value) {
-            field = value
-            stateSubject.onNext(value)
-        }
+        if (validServices.isEmpty()) throw TokenError.InvalidReference
 
-    fun set(reference: String?) {
-        disposable?.dispose()
-
-        val referenceNonNull = if (reference.isNullOrEmpty()) {
-            state = AddTokenModule.State.Idle
-            return
-        } else {
-            reference
-        }
-
-        val validServices = blockchainServices.filter { it.isValid(referenceNonNull) }
-
-        if (validServices.isEmpty()) {
-            state = AddTokenModule.State.Failed(TokenError.InvalidReference)
-            return
-        }
-        val existingPlatformCoins = mutableListOf<PlatformCoin>()
-
+        val tokenInfos = mutableListOf<TokenInfo>()
+        val activeWallets = walletManager.activeWallets
         validServices.forEach { service ->
-            val coinType = service.coinType(referenceNonNull)
-            coinManager.getPlatformCoin(coinType)?.let {
-                existingPlatformCoins.add(it)
+            val token = coinManager.getToken(service.tokenQuery(reference))
+
+            if (token != null) {
+                val inWallet = activeWallets.any { it.token == token }
+                tokenInfos.add(TokenInfo.Local(token, inWallet))
+            } else {
+                try {
+                    val customCoin = service.customCoin(reference)
+                    tokenInfos.add(TokenInfo.Remote(customCoin))
+                } catch (e: Exception) {
+                }
             }
         }
 
-        if (existingPlatformCoins.isNotEmpty()) {
-            state = AddTokenModule.State.AlreadyExists(existingPlatformCoins)
-            return
-        }
+        if (tokenInfos.isEmpty()) throw TokenError.NotFound
 
-        state = AddTokenModule.State.Loading
-
-        disposable = joinedCustomTokensSingle(validServices, reference)
-            .subscribeOn(Schedulers.io())
-            .subscribe({ customTokens ->
-                state = if (customTokens.isEmpty()) {
-                    AddTokenModule.State.Failed(TokenError.NotFound)
-                } else {
-                    AddTokenModule.State.Fetched(customTokens)
-                }
-            }, { error ->
-                state = AddTokenModule.State.Failed(error)
-            })
+        return tokenInfos
     }
 
-    fun save() {
-        val customTokens = (state as? AddTokenModule.State.Fetched)?.customTokens ?: return
-        coinManager.save(customTokens)
-
+    fun addTokens(tokens: List<TokenInfo>) {
         val account = accountManager.activeAccount ?: return
-        val wallets = customTokens.map { customToken -> Wallet(customToken.platformCoin, account) }
+        val platformCoins = tokens.mapNotNull { tokenInfo ->
+            when (tokenInfo) {
+                is TokenInfo.Local -> {
+                    tokenInfo.token
+                }
+                is TokenInfo.Remote -> {
+                    val tokenQuery = tokenInfo.tokenQuery
+                    marketKit.blockchain(tokenQuery.blockchainType.uid)?.let { blockchain ->
+                        val coinUid = tokenQuery.customCoinUid
+                        Token(
+                            coin = io.horizontalsystems.marketkit.models.Coin(coinUid, tokenInfo.coinName, tokenInfo.coinCode),
+                            blockchain = blockchain,
+                            type = tokenQuery.tokenType,
+                            decimals = tokenInfo.decimals
+                        )
+                    }
+                }
+            }
+        }
 
+        val wallets = platformCoins.map { Wallet(it, account) }
         walletManager.save(wallets)
-    }
-
-    fun onCleared() {
-        disposable?.dispose()
-    }
-
-    private fun joinedCustomTokensSingle(
-        services: List<IAddTokenBlockchainService>,
-        reference: String
-    ): Single<List<CustomToken>> {
-        val singles: List<Single<Optional<CustomToken>>> = services.map { service ->
-            service.customTokenAsync(reference)
-                .map { Optional.of(it) }
-                .onErrorReturn { Optional.empty<CustomToken>() }
-        }
-
-        return Single.zip(singles) { array ->
-            val customTokens = array.map { it as? Optional<CustomToken> }
-            customTokens.mapNotNull { it?.orElse(null) }
-        }
     }
 
     sealed class TokenError : Exception() {
         object InvalidReference : TokenError()
         object NotFound : TokenError()
     }
+}
 
+sealed class TokenInfo {
+    abstract val coinName: String
+    abstract val coinCode: String
+    abstract val decimals: Int
+    abstract val tokenQuery: TokenQuery
+    abstract val inWallet: Boolean
+
+    data class Local(val token: Token, override val inWallet: Boolean) : TokenInfo() {
+        override val coinName = token.coin.name
+        override val coinCode = token.coin.code
+        override val decimals = token.decimals
+        override val tokenQuery = token.tokenQuery
+    }
+
+    data class Remote(val customCoin: AddTokenModule.CustomCoin) : TokenInfo() {
+        override val inWallet = false
+        override val coinName = customCoin.name
+        override val coinCode = customCoin.code
+        override val decimals = customCoin.decimals
+        override val tokenQuery = customCoin.tokenQuery
+    }
 }

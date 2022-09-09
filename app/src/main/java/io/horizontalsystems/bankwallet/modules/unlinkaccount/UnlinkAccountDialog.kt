@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -24,10 +22,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
-import io.horizontalsystems.bankwallet.ui.compose.components.CellCheckboxLawrence
-import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
@@ -62,50 +57,50 @@ class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
 
 @Composable
 private fun UnlinkAccountScreen(navController: NavController, account: Account) {
-    val viewModel = viewModel<UnlinkAccountViewModel>(factory = UnlinkAccountModule.Factory(account))
+    val viewModel =
+        viewModel<UnlinkAccountViewModel>(factory = UnlinkAccountModule.Factory(account))
 
     val confirmations = viewModel.confirmations
     val unlinkEnabled = viewModel.unlinkEnabled
-    val accountName = viewModel.accountName
     val showDeleteWarning = viewModel.showDeleteWarning
 
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_red_24),
         title = stringResource(R.string.ManageKeys_Delete_Title),
-        subtitle = accountName,
         onCloseClick = {
             navController.popBackStack()
         }
     ) {
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
 
-        confirmations.forEach { item ->
-            CellCheckboxLawrence(
-                borderBottom = true,
-                onClick = { viewModel.toggleConfirm(item) }
-            ) {
-                HsCheckbox(
-                    checked = item.confirmed,
-                    onCheckedChange = {
-                        viewModel.toggleConfirm(item)
-                    },
-                )
-                Spacer(Modifier.width(16.dp))
-                Text(
-                    text = item.confirmationType.title.getString(),
-                    style = ComposeAppTheme.typography.subhead2,
-                    color = ComposeAppTheme.colors.leah
-                )
+        Spacer(Modifier.height(12.dp))
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
+        ) {
+            confirmations.forEach { item ->
+                CellLawrence(
+                    borderBottom = true,
+                    onClick = { viewModel.toggleConfirm(item) }
+                ) {
+                    HsCheckbox(
+                        checked = item.confirmed,
+                        onCheckedChange = {
+                            viewModel.toggleConfirm(item)
+                        },
+                    )
+                    Spacer(Modifier.width(16.dp))
+                    subhead2_leah(
+                        text = item.confirmationType.title.getString(),
+                    )
+                }
             }
         }
 
         if (showDeleteWarning) {
             TextImportantWarning(
-                modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 text = stringResource(id = R.string.ManageAccount_DeleteWarning)
             )
         }
@@ -113,11 +108,12 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
         val view = LocalView.current
         val doneConfirmationMessage = stringResource(R.string.Hud_Text_Done)
 
+        Spacer(Modifier.height(32.dp))
         ButtonPrimaryRed(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(horizontal = 24.dp)
                 .fillMaxWidth(),
-            title = stringResource(R.string.ManageKeys_Delete_FromPhone),
+            title = stringResource(viewModel.deleteButtonText),
             onClick = {
                 viewModel.onUnlink()
                 HudHelper.showSuccessMessage(view, doneConfirmationMessage)
@@ -125,6 +121,6 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
             },
             enabled = unlinkEnabled
         )
+        Spacer(Modifier.height(32.dp))
     }
 }
-

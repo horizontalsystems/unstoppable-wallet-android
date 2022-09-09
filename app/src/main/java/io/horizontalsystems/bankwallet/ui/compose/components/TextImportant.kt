@@ -67,10 +67,10 @@ fun TextImportant(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(12.dp))
+            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
             .background(backgroundColor)
-            .padding(12.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         if (title != null || icon != null) {
@@ -93,10 +93,8 @@ fun TextImportant(
                 }
             }
         }
-        Text(
-            text = text,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.subhead2
-        )
+        if (text.isNotEmpty()) {
+            subhead2_leah(text = text)
+        }
     }
 }

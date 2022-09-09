@@ -4,154 +4,144 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.databinding.FragmentSwapSettings1inchBinding
-import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.info.SwapInfoFragment
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchModule
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
+import io.horizontalsystems.bankwallet.modules.swap.settings.ui.RecipientAddress
+import io.horizontalsystems.bankwallet.modules.swap.settings.ui.SlippageAmount
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.Header
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class OneInchSettingsFragment : SwapSettingsBaseFragment() {
 
     private val oneInchViewModel by navGraphViewModels<OneInchSwapViewModel>(R.id.swapFragment) {
-        OneInchModule.Factory(
-            dex
-        )
+        OneInchModule.Factory(dex)
     }
 
     private val vmFactory by lazy {
-        OneInchSwapSettingsModule.Factory(
-            oneInchViewModel.tradeService,
-            dex.blockchain
-        )
+        OneInchSwapSettingsModule.Factory(oneInchViewModel.tradeService)
     }
-    private val oneInchSettingsViewModel by viewModels<OneInchSettingsViewModel> { vmFactory }
-    private val recipientAddressViewModel by viewModels<RecipientAddressViewModel> { vmFactory }
-    private val slippageViewModel by viewModels<SwapSlippageViewModel> { vmFactory }
-
-    private var _binding: FragmentSwapSettings1inchBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSwapSettings1inchBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        oneInchSettingsViewModel.actionStateLiveData.observe(viewLifecycleOwner) { actionState ->
-            when (actionState) {
-                is OneInchSettingsViewModel.ActionState.Enabled -> {
-                    setButton(getString(R.string.SwapSettings_Apply), true)
-                }
-                is OneInchSettingsViewModel.ActionState.Disabled -> {
-                    setButton(actionState.title, false)
-                }
-            }
-        }
-
-        binding.slippageInputView.setViewModel(slippageViewModel, viewLifecycleOwner)
-
-        binding.buttonApplyCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        binding.recipientAddressCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-        )
-
-        setRecipientAddressCompose()
-    }
-
-    private fun setRecipientAddressCompose() {
-        binding.recipientAddressCompose.setContent {
-            ComposeAppTheme {
-                dex.blockchain.coin?.let { platformCoin ->
-                    Column {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Header {
-                            Text(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                text = stringResource(R.string.SwapSettings_RecipientAddressTitle),
-                                style = ComposeAppTheme.typography.subhead1,
-                                color = ComposeAppTheme.colors.grey
-                            )
-                        }
-
-                        HSAddressInput(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            initial = recipientAddressViewModel.initialAddress,
-                            coinType = platformCoin.coinType,
-                            coinCode = platformCoin.coin.code,
-                            onStateChange = {
-                                recipientAddressViewModel.setAddressWithError(it?.dataOrNull, it?.errorOrNull)
-                            }
-                        )
-
-                        Text(
-                            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-                            text = stringResource(R.string.SwapSettings_RecipientAddressDescription),
-                            style = ComposeAppTheme.typography.subhead2,
-                            color = ComposeAppTheme.colors.grey
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setButton(title: String, enabled: Boolean = false) {
-        binding.buttonApplyCompose.setContent {
-            ComposeAppTheme {
-                ButtonPrimaryYellow(
-                    modifier = Modifier.padding(
-                        top = 28.dp,
-                        bottom = 24.dp
-                    ),
-                    title = title,
-                    onClick = {
-                        if (oneInchSettingsViewModel.onDoneClick()) {
+            setContent {
+                ComposeAppTheme {
+                    OneInchSettingsScreen(
+                        onCloseClick = {
                             findNavController().popBackStack()
-                        } else {
-                            HudHelper.showErrorMessage(
-                                this.requireView(),
-                                getString(R.string.default_error_msg)
+                        },
+                        onInfoClick = {
+                            findNavController().slideFromRight(
+                                R.id.swapInfoFragment,
+                                SwapInfoFragment.prepareParams(dex)
                             )
+                        },
+                        dex = dex,
+                        factory = vmFactory,
+                    )
+                }
+            }
+        }
+    }
+
+}
+
+@Composable
+private fun OneInchSettingsScreen(
+    onCloseClick: () -> Unit,
+    onInfoClick: () -> Unit,
+    factory: OneInchSwapSettingsModule.Factory,
+    dex: SwapMainModule.Dex,
+    oneInchSettinsViewModel: OneInchSettingsViewModel = viewModel(factory = factory),
+    recipientAddressViewModel: RecipientAddressViewModel = viewModel(factory = factory),
+    slippageViewModel: SwapSlippageViewModel = viewModel(factory = factory),
+) {
+    val (buttonTitle, buttonEnabled) = oneInchSettinsViewModel.buttonState
+    val localview = LocalView.current
+
+    Surface(color = ComposeAppTheme.colors.tyler) {
+        Column {
+            AppBar(
+                title = TranslatableString.ResString(R.string.SwapSettings_Title),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Info_Title),
+                        icon = R.drawable.ic_info_24,
+                        onClick = onInfoClick
+                    ),
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = onCloseClick
+                    )
+                )
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+
+                Column {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    RecipientAddress(dex.blockchainType, recipientAddressViewModel)
+
+                    Spacer(modifier = Modifier.height(24.dp))
+                    SlippageAmount(slippageViewModel)
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+            }
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 24.dp, end = 24.dp, bottom = 32.dp),
+                    title = buttonTitle,
+                    onClick = {
+                        if (oneInchSettinsViewModel.onDoneClick()) {
+                            onCloseClick()
+                        } else {
+                            HudHelper.showErrorMessage(localview, R.string.default_error_msg)
                         }
                     },
-                    enabled = enabled
+                    enabled = buttonEnabled
                 )
             }
         }
     }
-
 }

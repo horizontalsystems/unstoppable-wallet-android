@@ -23,7 +23,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.*
@@ -38,18 +37,27 @@ import androidx.core.app.ShareCompat
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
-import coil.size.OriginalSize
-import coil.size.Scale
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.shortenedAddress
+import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.*
+import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
+import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsModule
+import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsViewModel
+import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftEventListType
+import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftEvents
+import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -58,6 +66,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.NftEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -71,17 +80,16 @@ class NftAssetFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        val accountId = requireArguments().getString(NftAssetModule.accountIdKey)
-        val tokenId = requireArguments().getString(NftAssetModule.tokenIdKey)
+        val collectionUid = requireArguments().getString(NftAssetModule.collectionUidKey)
         val contractAddress = requireArguments().getString(NftAssetModule.contractAddressKey)
+        val tokenId = requireArguments().getString(NftAssetModule.tokenIdKey)
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                NftAssetScreen(findNavController(), accountId, tokenId, contractAddress)
+                NftAssetScreen(findNavController(), collectionUid, contractAddress, tokenId)
             }
         }
     }
@@ -90,14 +98,14 @@ class NftAssetFragment : BaseFragment() {
 @Composable
 fun NftAssetScreen(
     navController: NavController,
-    accountId: String?,
-    tokenId: String?,
-    contractAddress: String?
+    collectionUid: String?,
+    contractAddress: String?,
+    tokenId: String?
 ) {
-    if (accountId == null || tokenId == null || contractAddress == null) return
+    if (collectionUid == null || contractAddress == null || tokenId == null) return
 
     val viewModel =
-        viewModel<NftAssetViewModel>(factory = NftAssetModule.Factory(accountId, tokenId, contractAddress))
+        viewModel<NftAssetViewModel>(factory = NftAssetModule.Factory(collectionUid, contractAddress, tokenId))
     val viewState = viewModel.viewState
     val errorMessage = viewModel.errorMessage
 
@@ -126,7 +134,7 @@ fun NftAssetScreen(
                         }
                         ViewState.Success -> {
                             viewModel.nftAssetItem?.let { asset ->
-                                NftAsset(asset, viewModel.viewModelScope)
+                                NftAsset(asset, viewModel, navController)
                             }
                         }
                     }
@@ -134,16 +142,55 @@ fun NftAssetScreen(
             }
         }
 
-        ErrorMessageHud(errorMessage)
+        errorMessage?.let {
+            SnackbarError(it.getString())
+            viewModel.errorShown()
+        }
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun NftAsset(
     asset: NftAssetModuleAssetItem,
-    coroutineScope: CoroutineScope
+    viewModel: NftAssetViewModel,
+    navController: NavController
 ) {
+    val pagerState = rememberPagerState(initialPage = 0)
+    val coroutineScope = viewModel.viewModelScope
+
+    val tabs = viewModel.tabs
+    val selectedTab = tabs[pagerState.currentPage]
+    val tabItems = tabs.map {
+        TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+    }
+
+    Column {
+        Tabs(tabItems, onClick = {
+            coroutineScope.launch {
+                pagerState.scrollToPage(it.ordinal)
+            }
+        })
+
+        HorizontalPager(
+                count = tabs.size,
+                state = pagerState,
+                userScrollEnabled = false
+        ) { page ->
+            when (tabs[page]) {
+                NftAssetModule.Tab.Overview -> {
+                    NftAssrtInfo(asset, navController, coroutineScope)
+                }
+                NftAssetModule.Tab.Activity -> {
+                    NftAssetEvents(asset.contract.address, asset.tokenId)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NftAssrtInfo(asset: NftAssetModuleAssetItem, navController: NavController, coroutineScope: CoroutineScope) {
     val context = LocalContext.current
     val view = LocalView.current
 
@@ -161,18 +208,20 @@ private fun NftAsset(
             }
         }
 
+    Spacer(modifier = Modifier.height(12.dp))
+
     LazyColumn {
         item {
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Box {
-                    val painter = rememberImagePainter(
-                        data = asset.imageUrl,
-                        builder = {
-                            size(OriginalSize)
-                            scale(Scale.FIT)
-                        })
-                    if (painter.state !is ImagePainter.State.Success) {
+                    val model = ImageRequest.Builder(LocalContext.current)
+                        .data(asset.imageUrl)
+                        .size(Size.ORIGINAL)
+                        .crossfade(true)
+                        .build()
+                    val painter = rememberAsyncImagePainter(model)
+                    if (painter.state !is AsyncImagePainter.State.Success) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -198,14 +247,29 @@ private fun NftAsset(
                     style = ComposeAppTheme.typography.headline1
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = asset.collectionName,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead1
-                )
+                CellSingleLine {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                navController.slideFromRight(
+                                    R.id.nftCollectionFragment,
+                                    NftCollectionFragment.prepareParams(asset.collectionUid)
+                                )
+                            },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        subhead1_jacob(text = asset.collectionName)
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_arrow_right),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                    }
+                }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 Row {
                     var showActionSelectorDialog by remember { mutableStateOf(false) }
 
@@ -282,7 +346,6 @@ private fun NftAsset(
 
                                                 pickerLauncher.launch(intent)
                                             } catch (e: Exception) {
-                                                e.printStackTrace()
                                                 HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                                             }
                                         }
@@ -367,17 +430,12 @@ private fun NftAsset(
                                     .padding(horizontal = 16.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = stringResource(id = R.string.NftAsset_ContractAddress),
-                                    style = ComposeAppTheme.typography.body,
-                                    color = ComposeAppTheme.colors.leah
-                                )
+                                body_leah(text = stringResource(id = R.string.NftAsset_ContractAddress))
                                 Spacer(modifier = Modifier.weight(1f))
 
                                 val contractAddress = asset.contract.address
 
                                 val clipboardManager = LocalClipboardManager.current
-                                val view = LocalView.current
                                 ButtonSecondaryCircle(
                                     icon = R.drawable.ic_copy_20,
                                     onClick = {
@@ -386,7 +444,6 @@ private fun NftAsset(
                                     }
                                 )
                                 Spacer(modifier = Modifier.width(16.dp))
-                                val context = LocalContext.current
                                 ButtonSecondaryCircle(
                                     icon = R.drawable.ic_share_20,
                                     onClick = {
@@ -402,7 +459,7 @@ private fun NftAsset(
                         add {
                             DetailItem(
                                 stringResource(id = R.string.NftAsset_TokenId),
-                                asset.tokenId.shortenedAddress()
+                                asset.tokenId.shorten()
                             )
                         }
                         add {
@@ -478,10 +535,10 @@ private fun NftAsset(
 }
 
 @Composable
-private fun ErrorMessageHud(errorMessage: TranslatableString?) {
-    errorMessage?.let {
-        HudHelper.showErrorMessage(LocalView.current, it.getString())
-    }
+private fun NftAssetEvents(contractAddress: String, tokenId: String) {
+    val viewModel = viewModel<NftCollectionEventsViewModel>(factory = NftCollectionEventsModule.Factory(NftEventListType.Asset(contractAddress, tokenId), NftEvent.EventType.All))
+
+    NftEvents(viewModel, null, true)
 }
 
 @Composable
@@ -523,7 +580,7 @@ private fun ChipVerticalGrid(
 }
 
 @Composable
-private fun NftAssetAttribute(context: Context, attribute: NftAssetModuleAssetItem.Attribute) {
+private fun NftAssetAttribute(context: Context, attribute: Attribute) {
     Box(
         modifier = Modifier
             .height(60.dp)
@@ -538,11 +595,7 @@ private fun NftAssetAttribute(context: Context, attribute: NftAssetModuleAssetIt
                 .padding(horizontal = 16.dp, vertical = 10.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = attribute.value,
-                    color = ComposeAppTheme.colors.leah,
-                    style = ComposeAppTheme.typography.body,
-                )
+                body_leah(text = attribute.value)
                 attribute.percent?.let { percent ->
                     Box(
                         modifier = Modifier
@@ -560,11 +613,7 @@ private fun NftAssetAttribute(context: Context, attribute: NftAssetModuleAssetIt
                     }
                 }
             }
-            Text(
-                text = attribute.type,
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
-            )
+            subhead2_grey(text = attribute.type)
         }
     }
 }
@@ -586,18 +635,12 @@ private fun NftAssetSale(sale: Sale) {
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 10.dp)
         ) {
-            Text(
-                text = stringResource(R.string.Nfts_Asset_OnSale),
-                color = ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.body,
-            )
+            body_leah(text = stringResource(R.string.Nfts_Asset_OnSale))
 
-            Text(
+            subhead2_grey(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.Nfts_Asset_OnSaleUntil,
                     sale.untilDate?.let { DateHelper.getFullDate(it) } ?: "---"),
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
             )
         }
     }
@@ -615,36 +658,6 @@ private fun NftAssetSale(sale: Sale) {
 }
 
 @Composable
-private fun CellLink(icon: Painter, title: String, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Icon(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            painter = icon,
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
-        )
-        Text(
-            modifier = Modifier.weight(1f),
-            text = title,
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
-        )
-        Icon(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
-        )
-    }
-}
-
-@Composable
 private fun DetailItem(title: String, value: String) {
     Row(
         modifier = Modifier
@@ -652,17 +665,9 @@ private fun DetailItem(title: String, value: String) {
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah
-        )
+        body_leah(text = title)
         Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = value,
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.grey,
-        )
+        subhead1_grey(text = value)
     }
 }
 
@@ -671,11 +676,7 @@ private fun NftAssetSectionBlock(text: String, content: @Composable () -> Unit) 
     Column {
         Spacer(modifier = Modifier.height(24.dp))
         CellSingleLineClear(borderTop = true) {
-            Text(
-                text = text,
-                style = ComposeAppTheme.typography.body,
-                color = ComposeAppTheme.colors.leah
-            )
+            body_leah(text = text)
         }
         content.invoke()
     }
@@ -692,26 +693,18 @@ private fun NftAssetPriceCell(
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.body,
-        )
+        body_leah(text = title)
         Spacer(modifier = Modifier.weight(1f))
         Column {
-            Text(
+            body_jacob(
                 modifier = Modifier.fillMaxWidth(),
-                text = price?.coinValue?.getFormatted(4) ?: "---",
-                color = ComposeAppTheme.colors.jacob,
-                style = ComposeAppTheme.typography.body,
+                text = price?.coinValue?.getFormattedFull() ?: "---",
                 textAlign = TextAlign.End,
             )
             Spacer(modifier = Modifier.height(1.dp))
-            Text(
+            subhead2_grey(
                 modifier = Modifier.fillMaxWidth(),
-                text = price?.currencyValue?.getFormatted() ?: "---",
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
+                text = price?.currencyValue?.getFormattedFull() ?: "---",
                 textAlign = TextAlign.End,
             )
         }

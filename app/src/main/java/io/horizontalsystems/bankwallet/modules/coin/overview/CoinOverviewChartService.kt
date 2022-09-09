@@ -53,7 +53,7 @@ class CoinOverviewChartService(
         currency: Currency,
     ): Single<ChartPointsWrapper> {
         val newKey = chartInterval.name + currency.code
-        if (newKey != updatesSubscriptionKey) {
+        if (forceRefresh || newKey != updatesSubscriptionKey) {
             unsubscribeFromUpdates()
             subscribeForUpdates(currency, chartInterval)
             updatesSubscriptionKey = newKey

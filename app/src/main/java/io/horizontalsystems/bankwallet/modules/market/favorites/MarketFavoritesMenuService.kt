@@ -3,19 +3,24 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.list.IMarketListMenu
+import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 
-class MarketFavoritesMenuService(private val localStorage: ILocalStorage): IMarketListMenu {
+class MarketFavoritesMenuService(
+    private val localStorage: ILocalStorage,
+    private val marketWidgetManager: MarketWidgetManager
+) {
 
-    override var sortingField: SortingField
+    var sortingField: SortingField
         get() = localStorage.marketFavoritesSortingField ?: SortingField.HighestCap
         set(value) {
             localStorage.marketFavoritesSortingField = value
+            marketWidgetManager.updateWatchListWidgets()
         }
 
-    override var marketField: MarketField
+    var marketField: MarketField
         get() = localStorage.marketFavoritesMarketField ?: MarketField.PriceDiff
         set(value) {
             localStorage.marketFavoritesMarketField = value
+            marketWidgetManager.updateWatchListWidgets()
         }
 }

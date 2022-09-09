@@ -2,23 +2,18 @@ package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
-import io.horizontalsystems.bankwallet.core.managers.EvmKitManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.ISystemInfoManager
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import java.util.*
-import kotlin.collections.LinkedHashMap
 
 class AppStatusService(
         private val systemInfoManager: ISystemInfoManager,
         private val localStorage: ILocalStorage,
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
-        private val adapterManager: IAdapterManager,
-        private val ethereumKitManager: EvmKitManager,
-        private val binanceSmartChainKitManager: EvmKitManager,
-        private val binanceKitManager: IBinanceKitManager
+        private val adapterManager: IAdapterManager
 ) {
 
     val status: LinkedHashMap<String, Any>
@@ -81,26 +76,23 @@ class AppStatusService(
         val blockchainStatus = LinkedHashMap<String, Any>()
 
         blockchainStatus.putAll(getBitcoinForkStatuses())
-        ethereumKitManager.statusInfo?.let { blockchainStatus["Ethereum"] = it }
-        binanceSmartChainKitManager.statusInfo?.let { blockchainStatus["Binance Smart Chain"] = it }
-        binanceKitManager.statusInfo?.let { blockchainStatus["Binance DEX"] = it }
 
         return blockchainStatus
     }
 
     private fun getBitcoinForkStatuses(): Map<String, Any> {
         val bitcoinChainStatus = LinkedHashMap<String, Any>()
-        val coinTypesToDisplay = listOf(CoinType.Bitcoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Litecoin)
+        val blockchainTypesToDisplay = listOf(BlockchainType.Bitcoin, BlockchainType.BitcoinCash, BlockchainType.Dash, BlockchainType.Litecoin)
 
         walletManager.activeWallets
-                .filter { coinTypesToDisplay.contains(it.coinType) }
-                .sortedBy { it.platformCoin.name }
+                .filter { blockchainTypesToDisplay.contains(it.token.blockchainType) }
+                .sortedBy { it.token.coin.name }
                 .forEach { wallet ->
                     (adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter)?.let { adapter ->
-                        val settings = wallet.configuredPlatformCoin.coinSettings
+                        val settings = wallet.configuredToken.coinSettings
                         val settingsValue = settings.derivation?.value
                                 ?: settings.bitcoinCashCoinType?.value
-                        val statusTitle = "${wallet.platformCoin.name}${settingsValue?.let { "-$it" } ?: ""}"
+                        val statusTitle = "${wallet.token.coin.name}${settingsValue?.let { "-$it" } ?: ""}"
                         bitcoinChainStatus[statusTitle] = adapter.statusInfo
                     }
                 }

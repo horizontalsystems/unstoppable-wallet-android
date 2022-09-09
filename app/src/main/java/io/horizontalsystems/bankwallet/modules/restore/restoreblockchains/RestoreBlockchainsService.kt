@@ -1,43 +1,62 @@
 package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.ConfiguredToken
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
-import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsModule.Blockchain
 import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsModule.InternalItem
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 class RestoreBlockchainsService(
+    private val accountName: String,
     private val accountType: AccountType,
     private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
-    private val coinManager: ICoinManager,
-    private val enableCoinService: EnableCoinService
+    private val marketKit: MarketKit,
+    private val enableCoinService: EnableCoinService,
+    private val evmBlockchainManager: EvmBlockchainManager
 ) : Clearable {
 
     private val disposables = CompositeDisposable()
 
     private var internalItems = listOf<InternalItem>()
-    val enabledCoins = mutableListOf<ConfiguredPlatformCoin>()
+    private val enabledCoins = mutableListOf<ConfiguredToken>()
 
-    private var restoreSettingsMap = mutableMapOf<PlatformCoin, RestoreSettings>()
-    private var enableCoinServiceIsBusy = false
+    private var restoreSettingsMap = mutableMapOf<Token, RestoreSettings>()
 
     val cancelEnableBlockchainObservable = PublishSubject.create<Blockchain>()
     val canRestore = BehaviorSubject.createDefault(false)
 
     val itemsObservable = BehaviorSubject.create<List<Item>>()
     var items: List<Item> = listOf()
-        set(value) {
+        private set(value) {
             field = value
             itemsObservable.onNext(value)
         }
+
+    private val blockchainTypes = listOf(
+        BlockchainType.Bitcoin,
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche,
+        BlockchainType.Optimism,
+        BlockchainType.ArbitrumOne,
+        BlockchainType.Zcash,
+        BlockchainType.Dash,
+        BlockchainType.BitcoinCash,
+        BlockchainType.Litecoin,
+        BlockchainType.BinanceChain,
+    )
 
     init {
         enableCoinService.enableCoinObservable
@@ -57,30 +76,34 @@ class RestoreBlockchainsService(
     }
 
     private fun syncInternalItems() {
-        val platformCoins = coinManager.getPlatformCoins(Blockchain.values().map { it.coinType })
-        internalItems = Blockchain.values().mapNotNull { blockchain ->
-            platformCoins.firstOrNull { it.coinType == blockchain.coinType }?.let { platformCoin ->
-                InternalItem(blockchain, platformCoin)
+        val blockchains = marketKit
+            .blockchains(blockchainTypes.map { it.uid })
+            .sortedBy { it.type.order }
+
+        val tokens = blockchainTypes
+            .map { TokenQuery(it, TokenType.Native) }
+            .let { marketKit.tokens(it) }
+
+        internalItems = blockchains.mapNotNull { blockchain ->
+            tokens.find { it.blockchain == blockchain }?.let {
+                InternalItem(blockchain, it)
             }
         }
     }
 
     private fun handleEnableCoin(
-        configuredPlatformCoins: List<ConfiguredPlatformCoin>,
+        configuredTokens: List<ConfiguredToken>,
         restoreSettings: RestoreSettings
     ) {
-        val platformCoin = configuredPlatformCoins.firstOrNull()?.platformCoin ?: return
+        val platformCoin = configuredTokens.firstOrNull()?.token ?: return
 
         if (restoreSettings.isNotEmpty()) {
             restoreSettingsMap[platformCoin] = restoreSettings
         }
 
-        val existingConfiguredPlatformCoins =
-            enabledCoins.filter { it.platformCoin == platformCoin }
-        val newConfiguredPlatformCoins =
-            configuredPlatformCoins.minus(existingConfiguredPlatformCoins)
-        val removedConfiguredPlatformCoins =
-            existingConfiguredPlatformCoins.minus(configuredPlatformCoins)
+        val existingConfiguredPlatformCoins = enabledCoins.filter { it.token == platformCoin }
+        val newConfiguredPlatformCoins = configuredTokens.minus(existingConfiguredPlatformCoins)
+        val removedConfiguredPlatformCoins = existingConfiguredPlatformCoins.minus(configuredTokens)
 
         enabledCoins.addAll(newConfiguredPlatformCoins)
         enabledCoins.removeAll(removedConfiguredPlatformCoins)
@@ -91,7 +114,7 @@ class RestoreBlockchainsService(
 
     private fun handleCancelEnable(fullCoin: FullCoin) {
         val internalItem =
-            internalItems.firstOrNull { fullCoin.supportedPlatforms.contains(it.platformCoin.platform) }
+            internalItems.firstOrNull { fullCoin.supportedTokens.contains(it.token) }
                 ?: return
 
         if (!isEnabled(internalItem)) {
@@ -100,57 +123,64 @@ class RestoreBlockchainsService(
     }
 
     private fun isEnabled(internalItem: InternalItem): Boolean {
-        return enabledCoins.any { it.platformCoin == internalItem.platformCoin }
+        return enabledCoins.any { it.token == internalItem.token }
     }
 
     private fun item(internalItem: InternalItem): Item {
         val enabled = isEnabled(internalItem)
-        val state = ItemState.Supported(
-            enabled,
-            hasSettings = enabled && hasSettings(internalItem.platformCoin)
-        )
-        return Item(internalItem.blockchain, state)
+        val hasSettings = enabled && hasSettings(internalItem.token)
+        return Item(internalItem.blockchain, enabled, hasSettings)
     }
 
-    private fun hasSettings(platformCoin: PlatformCoin) =
-        platformCoin.coinType.coinSettingTypes.isNotEmpty()
+    private fun hasSettings(token: Token) =
+        token.blockchainType.coinSettingTypes.isNotEmpty()
 
     private fun syncState() {
         items = internalItems.map { item(it) }
     }
 
     private fun syncCanRestore() {
-        canRestore.onNext(enabledCoins.isNotEmpty() && !enableCoinServiceIsBusy)
+        canRestore.onNext(enabledCoins.isNotEmpty())
     }
 
-    fun enable(blockchain: Blockchain) {
-        val internalItem = internalItems.firstOrNull { it.blockchain == blockchain } ?: return
+    private fun getInternalItemByBlockchain(blockchain: Blockchain): InternalItem? =
+        internalItems.firstOrNull { it.blockchain == blockchain }
 
-        enableCoinService.enable(internalItem.platformCoin.fullCoin)
+    fun enable(blockchain: Blockchain) {
+        val internalItem = getInternalItemByBlockchain(blockchain) ?: return
+
+        enableCoinService.enable(internalItem.token.fullCoin)
     }
 
     fun disable(blockchain: Blockchain) {
-        val internalItem = internalItems.firstOrNull { it.blockchain == blockchain } ?: return
-        enabledCoins.removeIf { it.platformCoin == internalItem.platformCoin }
+        val internalItem = getInternalItemByBlockchain(blockchain) ?: return
+        enabledCoins.removeIf { it.token == internalItem.token }
 
         syncState()
         syncCanRestore()
     }
 
     fun configure(blockchain: Blockchain) {
-        val internalItem = internalItems.firstOrNull { it.blockchain == blockchain } ?: return
+        val internalItem = getInternalItemByBlockchain(blockchain) ?: return
 
         enableCoinService.configure(
-            internalItem.platformCoin.fullCoin,
-            enabledCoins.filter { it.platformCoin == internalItem.platformCoin })
+            internalItem.token.fullCoin,
+            enabledCoins.filter { it.token == internalItem.token })
     }
 
     fun restore() {
-        val account = accountFactory.account(accountType, AccountOrigin.Restored, true)
+        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, true)
         accountManager.save(account)
 
-        restoreSettingsMap.forEach { (platformCoin, settings) ->
-            enableCoinService.save(settings, account, platformCoin.coinType)
+        restoreSettingsMap.forEach { (token, settings) ->
+            enableCoinService.save(settings, account, token.blockchainType)
+        }
+
+        items.filter { it.enabled }.forEach { item ->
+            val isEvm = evmBlockchainManager.allBlockchainTypes.contains(item.blockchain.type)
+            if (isEvm) {
+                evmBlockchainManager.getEvmAccountManager(item.blockchain.type).markAutoEnable(account)
+            }
         }
 
         if (enabledCoins.isEmpty()) return
@@ -163,11 +193,8 @@ class RestoreBlockchainsService(
 
     data class Item(
         val blockchain: Blockchain,
-        val state: ItemState
+        val enabled: Boolean,
+        val hasSettings: Boolean
     )
 
-    sealed class ItemState {
-        object Unsupported : ItemState()
-        class Supported(val enabled: Boolean, val hasSettings: Boolean) : ItemState()
-    }
 }

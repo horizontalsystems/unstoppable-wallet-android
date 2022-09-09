@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,13 +15,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
 fun WCSessionCell(
@@ -75,28 +76,20 @@ fun WCSessionCell(
                 modifier = Modifier
                     .size(24.dp)
                     .clip(RoundedCornerShape(4.dp)),
-                painter = rememberImagePainter(
-                    data = session.imageUrl,
-                    builder = {
-                        error(R.drawable.coin_placeholder)
-                    }
+                painter = rememberAsyncImagePainter(
+                    model = session.imageUrl,
+                    error = painterResource(R.drawable.coin_placeholder)
                 ),
                 contentDescription = null,
             )
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(
+                body_leah(
                     text = session.title,
-                    style = ComposeAppTheme.typography.body,
-                    color = ComposeAppTheme.colors.leah,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Text(
-                    text = session.subtitle,
-                    style = ComposeAppTheme.typography.subhead2,
-                    color = ComposeAppTheme.colors.grey
-                )
+                subhead2_grey(text = session.subtitle)
             }
             Image(
                 modifier = Modifier.padding(start = 5.dp),

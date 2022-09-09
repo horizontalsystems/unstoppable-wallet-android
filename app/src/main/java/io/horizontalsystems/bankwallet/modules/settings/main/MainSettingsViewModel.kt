@@ -17,17 +17,14 @@ class MainSettingsViewModel(
     val securityCenterShowAlertLiveData = MutableLiveData(!service.isPinSet)
     val aboutAppShowAlertLiveData = MutableLiveData(!service.termsAccepted)
     val walletConnectSessionCountLiveData = MutableLiveData(service.walletConnectSessionCount)
-    val launchScreenLiveData = MutableLiveData(service.launchScreen)
     val baseCurrencyLiveData = MutableLiveData(service.baseCurrency)
     val languageLiveData = MutableLiveData(service.currentLanguageDisplayName)
-    val themeLiveData = MutableLiveData(service.themeName)
-
     val appVersion by service::appVersion
 
     init {
 
         service.backedUpObservable
-            .subscribeIO { securityCenterShowAlertLiveData.postValue(!it) }
+            .subscribeIO { manageWalletShowAlertLiveData.postValue(!it) }
             .let { disposables.add(it) }
 
         service.pinSetObservable
@@ -49,10 +46,6 @@ class MainSettingsViewModel(
         service.start()
     }
 
-    fun onLanguageChange() {
-        service.setAppRelaunchingFromSettings()
-    }
-
     // ViewModel
 
     override fun onCleared() {
@@ -63,9 +56,4 @@ class MainSettingsViewModel(
     fun getWalletConnectSupportState() : WC1Manager.SupportState {
         return service.getWalletConnectSupportState()
     }
-
-    fun onThemeChange() {
-        themeLiveData.postValue(service.themeName)
-    }
-
 }

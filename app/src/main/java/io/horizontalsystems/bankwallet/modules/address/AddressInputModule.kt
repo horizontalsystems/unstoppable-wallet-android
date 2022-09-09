@@ -2,33 +2,37 @@ package io.horizontalsystems.bankwallet.modules.address
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
 
 object AddressInputModule {
 
-    class Factory(private val coinType: CoinType, private val coinCode: String) : ViewModelProvider.Factory {
+    class Factory(private val tokenQuery: TokenQuery, private val coinCode: String) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val addressViewModel = AddressViewModel()
 
-            addressViewModel.addAddressHandler(AddressHandlerUdn(coinType, coinCode))
+            addressViewModel.addAddressHandler(AddressHandlerEns())
+            addressViewModel.addAddressHandler(AddressHandlerUdn(tokenQuery, coinCode))
 
-            when (coinType) {
-                CoinType.Bitcoin,
-                CoinType.BitcoinCash,
-                CoinType.Litecoin,
-                CoinType.Dash,
-                CoinType.Zcash,
-                is CoinType.Bep2 -> {
+            when (tokenQuery.blockchainType) {
+                BlockchainType.Bitcoin,
+                BlockchainType.BitcoinCash,
+                BlockchainType.Litecoin,
+                BlockchainType.Dash,
+                BlockchainType.Zcash,
+                BlockchainType.BinanceChain -> {
                     addressViewModel.addAddressHandler(AddressHandlerPure())
                 }
-                CoinType.Ethereum,
-                CoinType.BinanceSmartChain,
-                is CoinType.Erc20,
-                is CoinType.Bep20 -> {
+                BlockchainType.Ethereum,
+                BlockchainType.BinanceSmartChain,
+                BlockchainType.Polygon,
+                BlockchainType.Avalanche,
+                BlockchainType.Optimism,
+                BlockchainType.ArbitrumOne -> {
                     addressViewModel.addAddressHandler(AddressHandlerEvm())
                 }
-                else -> Unit
+                is BlockchainType.Unsupported -> Unit
             }
 
 

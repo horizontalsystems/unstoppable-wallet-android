@@ -38,7 +38,7 @@ fun <T : WithTranslatableTitle> AlertGroup(
                 ) {
                     Text(
                         option.title.getString(),
-                        color = if (option == select.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.oz,
+                        color = if (option == select.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.leah,
                         style = ComposeAppTheme.typography.body,
                     )
                 }
@@ -56,11 +56,7 @@ fun AlertHeader(@StringRes title: Int) {
             .background(ComposeAppTheme.colors.lawrence),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            stringResource(title),
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead1,
-        )
+        subhead1_grey(stringResource(title))
     }
 }
 

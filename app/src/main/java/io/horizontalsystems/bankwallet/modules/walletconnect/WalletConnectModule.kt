@@ -19,7 +19,8 @@ object WalletConnectModule {
                 App.wc1Manager,
                 App.wc1SessionManager,
                 App.wc1RequestManager,
-                App.connectivityManager
+                App.connectivityManager,
+                App.evmBlockchainManager
             )
 
             return WalletConnectViewModel(service, listOf(service)) as T

@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.ChartPointF
 
@@ -53,6 +54,7 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                (parent as? ViewGroup)?.requestDisallowInterceptTouchEvent(true)
                 listener.onTouchDown()
                 onMove(findNearest(event.x), listener)
             }
@@ -63,6 +65,7 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
 
             MotionEvent.ACTION_UP,
             MotionEvent.ACTION_CANCEL -> {
+                (parent as? ViewGroup)?.requestDisallowInterceptTouchEvent(false)
                 touchPoint = null
                 invalidate()
                 listener.onTouchUp()

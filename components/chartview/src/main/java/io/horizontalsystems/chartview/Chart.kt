@@ -30,7 +30,10 @@ class Chart @JvmOverloads constructor(
     }
 
     private val config = ChartConfig(context, attrs)
-    private val animatorMain = ChartAnimator { binding.chartMain.invalidate() }
+    private val animatorMain = ChartAnimator {
+        binding.chartMain.invalidate()
+        binding.chartGrid.invalidate()
+    }
     private val animatorBottom = ChartAnimator { binding.chartBottom.invalidate() }
     private val animatorTopBottomRange = ChartAnimator { binding.topLowRange.invalidate() }
 
@@ -66,6 +69,10 @@ class Chart @JvmOverloads constructor(
             mainCurveAnimator?.nextFrame(animatorMain.animatedFraction)
             dominanceCurveAnimator?.nextFrame(animatorMain.animatedFraction)
         }
+    }
+
+    fun setIndicatorLineVisible(v: Boolean) {
+        binding.chartBottom.isVisible = v
     }
 
     fun setListener(listener: Listener) {
@@ -166,7 +173,6 @@ class Chart @JvmOverloads constructor(
         setVisible(
             binding.chartMain,
             binding.topLowRange,
-            binding.chartBottom,
             binding.chartTimeline,
             isVisible = visible
         )
@@ -344,7 +350,7 @@ class Chart @JvmOverloads constructor(
         mainGradient.setShape(binding.chartMain.shape)
         mainGradient.setShader(config.curveGradient)
 
-        mainGrid.setShape(binding.chartMain.shape)
+        mainGrid.setShape(binding.chartGrid.shape)
         mainGrid.set(timeline)
 
         mainRange.setShape(binding.chartMain.shape)
@@ -364,9 +370,12 @@ class Chart @JvmOverloads constructor(
 
         binding.chartMain.clear()
         binding.chartMain.add(mainCurve, mainGradient)
-        binding.chartMain.add(mainGrid, emaLabel, dominanceLabel)
+        binding.chartMain.add(emaLabel, dominanceLabel)
         binding.chartMain.add(emaFastCurve, emaSlowCurve)
         binding.chartMain.add(dominanceCurve)
+
+        binding.chartGrid.clear()
+        binding.chartGrid.add(mainGrid)
 
         binding.topLowRange.clear()
         binding.topLowRange.add(mainRange)

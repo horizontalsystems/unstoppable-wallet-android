@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
@@ -147,17 +148,11 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
             WC2SessionModule.BlockchainViewItem(
                 it.chainId,
                 it.name,
-                getShortened(it.address),
+                it.address.shorten(),
                 it.selected,
                 showCheckbox = editable
             )
         }
-    }
-
-    private fun getShortened(address: String): String = if (address.length > 10) {
-        "${address.take(5)}...${address.takeLast(5)}"
-    } else {
-        address
     }
 
     private fun getStatus(connectionState: State): WCSessionViewModel.Status? {

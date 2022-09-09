@@ -3,26 +3,28 @@ package io.horizontalsystems.bankwallet.core.ethereum
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class EvmCoinServiceFactory(
-    private val basePlatformCoin: PlatformCoin,
+    private val baseToken: Token,
     private val marketKit: MarketKit,
     private val currencyManager: ICurrencyManager
 ) {
-    val baseCoinService = EvmCoinService(basePlatformCoin, currencyManager, marketKit)
+    val baseCoinService = EvmCoinService(baseToken, currencyManager, marketKit)
 
     fun getCoinService(contractAddress: Address) = getCoinService(contractAddress.hex)
 
-    fun getCoinService(contractAddress: String) = getPlatformCoin(contractAddress)?.let { coin ->
-        EvmCoinService(coin, currencyManager, marketKit)
+    fun getCoinService(contractAddress: String) = getToken(contractAddress)?.let { token ->
+        EvmCoinService(token, currencyManager, marketKit)
     }
 
-    private fun getPlatformCoin(contractAddress: String) = when (basePlatformCoin.coinType) {
-        CoinType.Ethereum -> marketKit.platformCoin(CoinType.Erc20(contractAddress))
-        CoinType.BinanceSmartChain -> marketKit.platformCoin(CoinType.Bep20(contractAddress))
-        else -> null
+    fun getCoinService(token: Token) = EvmCoinService(token, currencyManager, marketKit)
+
+    private fun getToken(contractAddress: String): Token? {
+        val tokenQuery = TokenQuery(baseToken.blockchainType, TokenType.Eip20(contractAddress))
+        return marketKit.token(tokenQuery)
     }
 
 }

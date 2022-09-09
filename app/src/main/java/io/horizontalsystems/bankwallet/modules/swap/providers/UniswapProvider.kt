@@ -2,10 +2,14 @@ package io.horizontalsystems.bankwallet.modules.swap.providers
 
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapKit
-import io.horizontalsystems.uniswapkit.models.*
+import io.horizontalsystems.uniswapkit.models.SwapData
+import io.horizontalsystems.uniswapkit.models.TradeData
+import io.horizontalsystems.uniswapkit.models.TradeOptions
+import io.horizontalsystems.uniswapkit.models.TradeType
 import io.reactivex.Single
 import java.math.BigDecimal
 
@@ -14,12 +18,12 @@ class UniswapProvider(private val uniswapKit: UniswapKit) {
     val routerAddress: Address
         get() = uniswapKit.routerAddress
 
-    fun swapDataSingle(coinIn: PlatformCoin, coinOut: PlatformCoin): Single<SwapData> {
+    fun swapDataSingle(tokenIn: Token?, tokenOut: Token?): Single<SwapData> {
         return try {
-            val tokenIn = uniswapToken(coinIn)
-            val tokenOut = uniswapToken(coinOut)
+            val uniswapTokenIn = uniswapToken(tokenIn)
+            val uniswapTokenOut = uniswapToken(tokenOut)
 
-            uniswapKit.swapData(tokenIn, tokenOut)
+            uniswapKit.swapData(uniswapTokenIn, uniswapTokenOut)
         } catch (error: Throwable) {
             Single.error(error)
         }
@@ -41,18 +45,16 @@ class UniswapProvider(private val uniswapKit: UniswapKit) {
     }
 
     @Throws
-    private fun uniswapToken(coin: PlatformCoin): Token {
-        return when (val coinType = coin.coinType) {
-            is CoinType.Erc20 -> {
-                uniswapKit.token(Address(coinType.address), coin.decimals)
-            }
-            is CoinType.Bep20 -> {
-                uniswapKit.token(Address(coinType.address), coin.decimals)
-            }
-            CoinType.Ethereum, CoinType.BinanceSmartChain -> {
-                uniswapKit.etherToken()
-            }
-            else -> throw Exception("Invalid coin for swap: $coin")
+    private fun uniswapToken(token: Token?) = when (val tokenType = token?.type) {
+        TokenType.Native -> when (token.blockchainType) {
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Optimism,
+            BlockchainType.ArbitrumOne -> uniswapKit.etherToken()
+            else -> throw Exception("Invalid coin for swap: $token")
         }
+        is TokenType.Eip20 -> uniswapKit.token(Address(tokenType.address), token.decimals)
+        else -> throw Exception("Invalid coin for swap: $token")
     }
 }

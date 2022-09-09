@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.bankwallet.modules.market.overview.TopMarketsRepository
 import io.horizontalsystems.bankwallet.ui.compose.Select
 
 object MarketTopCoinsModule {
@@ -18,7 +17,7 @@ object MarketTopCoinsModule {
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val topMarketsRepository = TopMarketsRepository(App.marketKit)
+            val topMarketsRepository = MarketTopMoversRepository(App.marketKit)
             val service = MarketTopCoinsService(
                 topMarketsRepository,
                 App.currencyManager,
@@ -34,7 +33,7 @@ object MarketTopCoinsModule {
 
         companion object {
             val defaultSortingField = SortingField.HighestCap
-            val defaultTopMarket = TopMarket.Top250
+            val defaultTopMarket = TopMarket.Top100
             val defaultMarketField = MarketField.PriceDiff
         }
     }

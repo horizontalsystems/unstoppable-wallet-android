@@ -4,6 +4,7 @@ import android.util.Range
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.ChartPointF
+import java.lang.Exception
 import java.math.BigDecimal
 import kotlin.math.abs
 
@@ -42,7 +43,11 @@ data class ChartData(
             return BigDecimal.ZERO
         }
 
-        return ((lastValue - firstValue) / firstValue * 100).toBigDecimal()
+        return try {
+            ((lastValue - firstValue) / firstValue * 100).toBigDecimal()
+        } catch(e: Exception) {
+            BigDecimal.ZERO
+        }
     }
 }
 
@@ -63,6 +68,20 @@ class ChartDataBuilder private constructor(
 ) {
 
     companion object {
+        val placeholder = ChartDataBuilder(
+            listOf(
+                ChartPoint(2.toFloat(), 100, mapOf()),
+                ChartPoint(2.toFloat(), 200, mapOf()),
+                ChartPoint(1.toFloat(), 300, mapOf()),
+                ChartPoint(3.toFloat(), 400, mapOf()),
+                ChartPoint(2.toFloat(), 500, mapOf()),
+                ChartPoint(2.toFloat(), 600, mapOf())
+            ),
+            100,
+            600,
+            true
+        ).build()
+
         fun buildFromPoints(
             points: List<ChartPoint>,
             startTimestamp: Long? = null,

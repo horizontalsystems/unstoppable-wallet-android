@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType
@@ -14,8 +14,8 @@ import java.math.RoundingMode
 
 class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
 
-    fun price(price: BigDecimal?, quoteCoin: PlatformCoin?, baseCoin: PlatformCoin?): String? {
-        if (price == null || quoteCoin == null || baseCoin == null)
+    fun price(price: BigDecimal?, quoteToken: Token?, baseToken: Token?): String? {
+        if (price == null || quoteToken == null || baseToken == null)
             return null
 
         val inversePrice = if (price.compareTo(BigDecimal.ZERO) == 0)
@@ -23,7 +23,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
         else
             BigDecimal.ONE.divide(price, price.scale(), RoundingMode.HALF_UP)
 
-        return "${baseCoin.code} = ${coinAmount(inversePrice, quoteCoin.code)} "
+        return "${baseToken.coin.code} = ${coinAmount(inversePrice, quoteToken.coin.code)} "
     }
 
     fun priceImpactViewItem(
@@ -42,26 +42,26 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
 
     fun guaranteedAmountViewItem(
         tradeData: TradeData,
-        coinIn: PlatformCoin?,
-        coinOut: PlatformCoin?
+        tokenIn: Token?,
+        tokenOut: Token?
     ): UniswapModule.GuaranteedAmountViewItem? {
         when (tradeData.type) {
             TradeType.ExactIn -> {
                 val amount = tradeData.amountOutMin ?: return null
-                val coin = coinOut ?: return null
+                val token = tokenOut ?: return null
 
                 return UniswapModule.GuaranteedAmountViewItem(
                     Translator.getString(R.string.Swap_MinimumGot),
-                    coinAmount(amount, coin.code)
+                    coinAmount(amount, token.coin.code)
                 )
             }
             TradeType.ExactOut -> {
                 val amount = tradeData.amountInMax ?: return null
-                val coin = coinIn ?: return null
+                val token = tokenIn ?: return null
 
                 return UniswapModule.GuaranteedAmountViewItem(
                     Translator.getString(R.string.Swap_MaximumPaid),
-                    coinAmount(amount, coin.code)
+                    coinAmount(amount, token.coin.code)
                 )
             }
         }
@@ -85,9 +85,8 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
         }
     }
 
-    fun coinAmount(amount: BigDecimal, coinCode: String, maxFraction: Int? = null): String {
-        val fraction = maxFraction ?: numberFormatter.getSignificantDecimalCoin(amount)
-        return numberFormatter.formatCoin(amount, coinCode, 0, fraction)
+    fun coinAmount(amount: BigDecimal, coinCode: String): String {
+        return numberFormatter.formatCoinFull(amount, coinCode, 8)
     }
 
 }

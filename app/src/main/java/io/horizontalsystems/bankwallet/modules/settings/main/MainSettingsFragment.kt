@@ -31,21 +31,15 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeSwitchFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 
 class MainSettingsFragment : BaseFragment() {
 
@@ -65,21 +59,6 @@ class MainSettingsFragment : BaseFragment() {
                     SettingsScreen(viewModel, findNavController())
                 }
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        subscribeFragmentResult()
-    }
-
-    private fun subscribeFragmentResult() {
-        getNavigationResult(LanguageSettingsFragment.LANGUAGE_CHANGE)?.let {
-            viewModel.onLanguageChange()
-            activity?.let { MainModule.startAsNewTask(it) }
-        }
-        getNavigationResult(ThemeSwitchFragment.THEME_CHANGE)?.let {
-            viewModel.onThemeChange()
         }
     }
 
@@ -116,11 +95,8 @@ private fun SettingSections(
     val showAlertSecurityCenter by viewModel.securityCenterShowAlertLiveData.observeAsState(false)
     val showAlertAboutApp by viewModel.aboutAppShowAlertLiveData.observeAsState(false)
     val walletConnectSessionCount by viewModel.walletConnectSessionCountLiveData.observeAsState(0)
-    val launchScreen by viewModel.launchScreenLiveData.observeAsState()
     val baseCurrency by viewModel.baseCurrencyLiveData.observeAsState()
     val language by viewModel.languageLiveData.observeAsState()
-    val theme by viewModel.themeLiveData.observeAsState()
-
 
     CellSingleLineLawrenceSection(
         listOf({
@@ -130,7 +106,7 @@ private fun SettingSections(
                 showAlert = showAlertManageWallet,
                 onClick = {
                     navController.slideFromRight(
-                        R.id.mainFragment_to_manageKeysFragment,
+                        R.id.manageAccountsFragment,
                         bundleOf(ManageAccountsModule.MODE to ManageAccountsModule.Mode.Manage)
                     )
                 }
@@ -141,7 +117,7 @@ private fun SettingSections(
                 R.drawable.ic_security,
                 showAlert = showAlertSecurityCenter,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_securitySettingsFragment)
+                    navController.slideFromRight(R.id.securitySettingsFragment)
                 }
             )
         })
@@ -158,7 +134,7 @@ private fun SettingSections(
                 onClick = {
                     when (viewModel.getWalletConnectSupportState()) {
                         WC1Manager.SupportState.Supported -> {
-                            navController.slideFromRight(R.id.mainFragment_to_walletConnect)
+                            navController.slideFromRight(R.id.wallet_connect_graph)
                         }
                         WC1Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
@@ -177,11 +153,10 @@ private fun SettingSections(
     CellSingleLineLawrenceSection(
         listOf({
             HsSettingCell(
-                R.string.Settings_LaunchScreen,
-                R.drawable.ic_screen_20,
-                value = launchScreen?.titleRes?.let { Translator.getString(it) },
+                R.string.Settings_Appearance,
+                R.drawable.ic_brush_20,
                 onClick = {
-                    navController.slideFromRight(R.id.launchScreenSettingsFragment)
+                    navController.slideFromRight(R.id.appearanceFragment)
                 }
             )
         }, {
@@ -190,7 +165,7 @@ private fun SettingSections(
                 R.drawable.ic_currency,
                 value = baseCurrency?.code,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_baseCurrencySettingsFragment)
+                    navController.slideFromRight(R.id.baseCurrencySettingsFragment)
                 }
             )
         }, {
@@ -199,16 +174,7 @@ private fun SettingSections(
                 R.drawable.ic_language,
                 value = language,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_languageSettingsFragment)
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_Theme,
-                R.drawable.ic_light_mode,
-                value = theme?.let { Translator.getString(it) },
-                onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_themeSwitchFragment)
+                    navController.slideFromRight(R.id.languageSettingsFragment)
                 }
             )
         }, {
@@ -216,7 +182,7 @@ private fun SettingSections(
                 R.string.Settings_ExperimentalFeatures,
                 R.drawable.ic_experimental,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_experimentalFeaturesFragment)
+                    navController.slideFromRight(R.id.experimentalFeaturesFragment)
                 }
             )
         })
@@ -230,7 +196,7 @@ private fun SettingSections(
                 R.string.Settings_Faq,
                 R.drawable.ic_faq_20,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_faqListFragment)
+                    navController.slideFromRight(R.id.faqListFragment)
                 }
             )
         }, {
@@ -238,7 +204,7 @@ private fun SettingSections(
                 R.string.Guides_Title,
                 R.drawable.ic_academy_20,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_academyFragment)
+                    navController.slideFromRight(R.id.academyFragment)
                 }
             )
         })
@@ -253,7 +219,7 @@ private fun SettingSections(
                 R.drawable.ic_about_app_20,
                 showAlert = showAlertAboutApp,
                 onClick = {
-                    navController.slideFromRight(R.id.mainFragment_to_aboutAppFragment)
+                    navController.slideFromRight(R.id.aboutAppFragment)
                 }
             )
         }
@@ -273,8 +239,8 @@ fun HsSettingCell(
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .clickable(onClick = { onClick.invoke() }),
+            .clickable(onClick = { onClick.invoke() })
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -282,19 +248,15 @@ fun HsSettingCell(
             painter = painterResource(id = icon),
             contentDescription = null,
         )
-        Text(
+        body_leah(
             text = stringResource(title),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
             maxLines = 1,
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         Spacer(Modifier.weight(1f))
         value?.let {
-            Text(
+            subhead1_grey(
                 text = it,
-                style = ComposeAppTheme.typography.subhead1,
-                color = ComposeAppTheme.colors.leah,
                 maxLines = 1,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
@@ -322,11 +284,7 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion).uppercase(),
-            style = ComposeAppTheme.typography.caption,
-            color = ComposeAppTheme.colors.grey,
-        )
+        caption_grey(text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion).uppercase())
         Divider(
             modifier = Modifier.width(100.dp).padding(top = 8.dp, bottom = 4.5.dp),
             thickness = 0.5.dp,
@@ -347,11 +305,9 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
             painter = painterResource(id = R.drawable.ic_company_logo),
             contentDescription = null,
         )
-        Text(
+        caption_grey(
             modifier = Modifier.padding(top = 12.dp, bottom = 32.dp),
             text = stringResource(R.string.Settings_CompanyName),
-            style = ComposeAppTheme.typography.caption,
-            color = ComposeAppTheme.colors.grey,
         )
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.walletconnect.walletconnectv2.client.WalletConnect
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule.Section
@@ -12,7 +13,8 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
 import io.reactivex.disposables.CompositeDisposable
 
 class WC2ListViewModel(
-    private val service: WC2ListService
+    private val service: WC2ListService,
+    private val evmBlockchainManager: EvmBlockchainManager
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -69,7 +71,11 @@ class WC2ListViewModel(
     }
 
     private fun getSubtitle(chains: List<String>): String {
-        val chainNames = chains.mapNotNull { WC2Parser.getChainName(it) }
+        val chainNames = chains.mapNotNull { chain ->
+            WC2Parser.getChainId(chain)?.let { chainId ->
+                evmBlockchainManager.getBlockchain(chainId)?.name
+            }
+        }
         return chainNames.joinToString(", ")
     }
 

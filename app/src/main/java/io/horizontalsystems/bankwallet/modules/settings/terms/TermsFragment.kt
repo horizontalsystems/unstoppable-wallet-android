@@ -11,8 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -30,9 +28,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellCheckboxLawrence
-import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 
 class TermsFragment : BaseFragment() {
@@ -65,7 +61,7 @@ class TermsFragment : BaseFragment() {
             AppBar(
                 title = TranslatableString.ResString(R.string.Settings_Terms),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    HsIconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             contentDescription = "back",
@@ -75,16 +71,12 @@ class TermsFragment : BaseFragment() {
                 }
             )
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                Spacer(modifier = Modifier.height(24.dp))
 
-                Text(
+                InfoTextBody(
                     text = stringResource(R.string.SettingsTerms_Text),
-                    style = ComposeAppTheme.typography.body,
-                    color = ComposeAppTheme.colors.bran,
-                    modifier = Modifier.padding(horizontal = 24.dp)
                 )
 
-                Spacer(modifier = Modifier.height(36.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Column(
                     modifier = Modifier
@@ -92,7 +84,7 @@ class TermsFragment : BaseFragment() {
                         .clip(RoundedCornerShape(12.dp))
                 ) {
                     terms?.forEachIndexed { index, item ->
-                        CellCheckboxLawrence(
+                        CellLawrence(
                             borderBottom = true,
                             onClick = { viewModel.onTapTerm(index, !item.checked) }
                         ) {
@@ -103,21 +95,15 @@ class TermsFragment : BaseFragment() {
                                 },
                             )
                             Spacer(Modifier.width(16.dp))
-                            Text(
-                                text = stringResource(item.termType.description),
-                                style = ComposeAppTheme.typography.subhead2,
-                                color = ComposeAppTheme.colors.leah
-                            )
+                            subhead2_leah(text = stringResource(item.termType.description))
                         }
                     }
                 }
 
                 Spacer(Modifier.height(46.dp))
 
-                Text(
+                title3_jacob(
                     text = stringResource(R.string.SettingsTerms_BottomThankYou),
-                    style = ComposeAppTheme.typography.title3,
-                    color = ComposeAppTheme.colors.jacob,
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
                         .align(Alignment.CenterHorizontally)
@@ -133,10 +119,8 @@ class TermsFragment : BaseFragment() {
 
                 Spacer(Modifier.height(12.dp))
 
-                Text(
+                caption_grey(
                     text = stringResource(R.string.FooterText),
-                    style = ComposeAppTheme.typography.caption,
-                    color = ComposeAppTheme.colors.grey,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .align(Alignment.CenterHorizontally)

@@ -4,65 +4,73 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
+import io.horizontalsystems.bankwallet.core.restoreSettingTypes
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
-import io.horizontalsystems.bankwallet.entities.restoreSettingTypes
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.subjects.PublishSubject
 
-class RestoreSettingsService(private val manager: RestoreSettingsManager) : Clearable {
+class RestoreSettingsService(
+    private val manager: RestoreSettingsManager,
+    private val zcashBirthdayProvider: ZcashBirthdayProvider
+    ) : Clearable {
 
-    val approveSettingsObservable = PublishSubject.create<CoinWithSettings>()
-    val rejectApproveSettingsObservable = PublishSubject.create<PlatformCoin>()
+    val approveSettingsObservable = PublishSubject.create<TokenWithSettings>()
+    val rejectApproveSettingsObservable = PublishSubject.create<Token>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approveSettings(platformCoin: PlatformCoin, account: Account? = null) {
-        val coinType = platformCoin.coinType
+    fun approveSettings(token: Token, account: Account? = null) {
+        val blockchainType = token.blockchainType
 
         if (account != null && account.origin == AccountOrigin.Created) {
             val settings = RestoreSettings()
-            coinType.restoreSettingTypes.forEach { settingType ->
-                manager.getSettingValueForCreatedAccount(settingType, coinType)?.let {
+            blockchainType.restoreSettingTypes.forEach { settingType ->
+                manager.getSettingValueForCreatedAccount(settingType, blockchainType)?.let {
                     settings[settingType] = it
                 }
             }
-            approveSettingsObservable.onNext(CoinWithSettings(platformCoin, settings))
+            approveSettingsObservable.onNext(TokenWithSettings(token, settings))
             return
         }
 
-        val existingSettings = account?.let { manager.settings(it, coinType) } ?: RestoreSettings()
+        val existingSettings = account?.let { manager.settings(it, blockchainType) } ?: RestoreSettings()
 
-        if (coinType.restoreSettingTypes.contains(RestoreSettingType.BirthdayHeight)
+        if (blockchainType.restoreSettingTypes.contains(RestoreSettingType.BirthdayHeight)
             && existingSettings.birthdayHeight == null
         ) {
-            requestObservable.onNext(Request(platformCoin, RequestType.BirthdayHeight))
+            requestObservable.onNext(Request(token, RequestType.BirthdayHeight))
             return
         }
 
-        approveSettingsObservable.onNext(CoinWithSettings(platformCoin, RestoreSettings()))
+        approveSettingsObservable.onNext(TokenWithSettings(token, RestoreSettings()))
     }
 
-    fun save(settings: RestoreSettings, account: Account, coinType: CoinType) {
-        manager.save(settings, account, coinType)
+    fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType) {
+        manager.save(settings, account, blockchainType)
     }
 
-    fun enter(birthdayHeight: String?, platformCoin: PlatformCoin) {
+    fun enter(zcashConfig: ZCashConfig, token: Token) {
         val settings = RestoreSettings()
-        settings.birthdayHeight = birthdayHeight?.toIntOrNull()
+        settings.birthdayHeight =
+            if (zcashConfig.restoreAsNew)
+                zcashBirthdayProvider.getNearestBirthdayHeight()
+            else
+                zcashConfig.birthdayHeight?.toIntOrNull()
 
-        val coinWithSettings = CoinWithSettings(platformCoin, settings)
-        approveSettingsObservable.onNext(coinWithSettings)
+        val tokenWithSettings = TokenWithSettings(token, settings)
+        approveSettingsObservable.onNext(tokenWithSettings)
     }
 
-    fun cancel(platformCoin: PlatformCoin) {
-        rejectApproveSettingsObservable.onNext(platformCoin)
+    fun cancel(token: Token) {
+        rejectApproveSettingsObservable.onNext(token)
     }
 
     override fun clear() = Unit
 
-    data class CoinWithSettings(val platformCoin: PlatformCoin, val settings: RestoreSettings)
-    data class Request(val platformCoin: PlatformCoin, val requestType: RequestType)
+    data class TokenWithSettings(val token: Token, val settings: RestoreSettings)
+    data class Request(val token: Token, val requestType: RequestType)
     enum class RequestType {
         BirthdayHeight
     }

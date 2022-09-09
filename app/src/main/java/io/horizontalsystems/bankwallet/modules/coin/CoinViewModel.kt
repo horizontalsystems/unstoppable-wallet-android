@@ -1,68 +1,67 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
-import androidx.lifecycle.LiveDataReactiveStreams
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.core.SingleLiveEvent
-import io.reactivex.BackpressureStrategy
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class CoinViewModel(
     private val service: CoinService,
     private val clearables: List<Clearable>,
 ) : ViewModel() {
 
-    val selectedTab = MutableLiveData(CoinModule.Tab.Overview)
     val tabs = CoinModule.Tab.values()
-
     val fullCoin by service::fullCoin
 
-    val titleLiveData = MutableLiveData(fullCoin.coin.code)
-    val isFavoriteLiveData = LiveDataReactiveStreams.fromPublisher(service.isFavorite.toFlowable(BackpressureStrategy.LATEST))
-    val coinStateLiveData = MutableLiveData<CoinState>()
-
-    val successMessageLiveEvent = SingleLiveEvent<Int>()
-    val warningMessageLiveEvent = SingleLiveEvent<Int>()
-
-    private val disposables = CompositeDisposable()
+    var isFavorite by mutableStateOf<Boolean>(false)
+        private set
+    var coinState by mutableStateOf<CoinState?>(null)
+        private set
+    var successMessage by mutableStateOf<Int?>(null)
+        private set
 
     init {
-        service.coinState
-            .subscribeIO {
-                coinStateLiveData.postValue(it)
+        viewModelScope.launch {
+            val coinStateFlow: Flow<CoinState> = service.coinState.asFlow()
+            coinStateFlow.collect {
+                coinState = it
+
                 if (it == CoinState.AddedToWallet) {
-                    successMessageLiveEvent.postValue(R.string.Hud_Added_To_Wallet)
+                    successMessage = R.string.Hud_Added_To_Wallet
                 }
             }
-            .let {
-                disposables.add(it)
+        }
+
+        viewModelScope.launch {
+            val isFavoriteFlow: Flow<Boolean> = service.isFavorite.asFlow()
+            isFavoriteFlow.collect {
+                isFavorite = it
             }
+        }
     }
 
     override fun onCleared() {
-        disposables.clear()
         clearables.forEach(Clearable::clear)
-    }
-
-    fun onSelect(tab: CoinModule.Tab) {
-        selectedTab.postValue(tab)
     }
 
     fun onFavoriteClick() {
         service.favorite()
-        successMessageLiveEvent.postValue(R.string.Hud_Added_To_Watchlist)
+        successMessage = R.string.Hud_Added_To_Watchlist
     }
 
     fun onUnfavoriteClick() {
         service.unfavorite()
-        successMessageLiveEvent.postValue(R.string.Hud_Removed_from_Watchlist)
+        successMessage = R.string.Hud_Removed_from_Watchlist
     }
 
-    fun onClickInWallet() {
-        warningMessageLiveEvent.postValue(R.string.Hud_Already_In_Wallet)
+    fun onSuccessMessageShown() {
+        successMessage = null
     }
 
 }

@@ -18,20 +18,20 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.databinding.*
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCell
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeSettingsFragment
-import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.views.ListPosition
+import io.horizontalsystems.views.helpers.LayoutHelper
 
 class SendEvmTransactionView @JvmOverloads constructor(
     context: Context,
@@ -127,7 +127,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     var items: List<ViewItemWithPosition> = listOf()
 
     enum class ViewType {
-        Subhead, Value, Amount, Address, Input, Space, Warning
+        Subhead, Value, AmountMulti, Amount, Address, Input, Space, Warning
     }
 
     private val viewTypes = ViewType.values()
@@ -139,6 +139,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             is ViewItem.Subhead -> ViewType.Subhead.ordinal
             is ViewItem.Address -> ViewType.Address.ordinal
             is ViewItem.Value -> ViewType.Value.ordinal
+            is ViewItem.AmountMulti -> ViewType.AmountMulti.ordinal
             is ViewItem.Amount -> ViewType.Amount.ordinal
             is ViewItem.Input -> ViewType.Input.ordinal
             is ViewItem.Warning -> ViewType.Warning.ordinal
@@ -172,6 +173,9 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
                     false
                 )
             )
+            ViewType.AmountMulti -> AmountMultiViewHolder(
+                ViewHolderAmountMultiBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            )
             ViewType.Amount -> AmountViewHolder(
                 ViewHolderAmountBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
@@ -203,15 +207,22 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
                 listPosition
             )
             is ViewItem.Value -> (holder as? TitleValueViewHolder)?.bind(item, listPosition)
+            is ViewItem.AmountMulti -> (holder as? AmountMultiViewHolder)?.bind(
+                item.amounts,
+                item.type,
+                item.token,
+                listPosition
+            )
             is ViewItem.Amount -> (holder as? AmountViewHolder)?.bind(
                 item.fiatAmount,
                 item.coinAmount,
                 item.type,
+                item.token,
                 listPosition
             )
             is ViewItem.Input -> (holder as? TitleValueHexViewHolder)?.bind(
                 "Input",
-                item.value,
+                item.value.shorten(),
                 item.value,
                 listPosition
             )
@@ -228,6 +239,8 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
         fun bind(item: ViewItem.Subhead, position: ListPosition) {
             binding.titleTextView.text = item.title
             binding.valueTextView.text = item.value
+            item.iconRes?.let { binding.icon.setImageResource(it) }
+            binding.icon.isVisible = item.iconRes != null
 
             binding.backgroundView.setBackgroundResource(position.getBackground())
         }
@@ -265,8 +278,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
                         onClick = {
                             TextHelper.copyText(value)
                             HudHelper.showSuccessMessage(binding.wrapper, R.string.Hud_Text_Copied)
-                        },
-                        ellipsis = Ellipsis.Middle(10)
+                        }
                     )
                 }
             }
@@ -282,35 +294,56 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             binding.titleTextView.text = item.title
             binding.valueTextView.text = item.value
 
-            val textColor = when (item.type) {
-                ValueType.Regular -> item.color ?: R.color.bran
-                ValueType.Disabled -> R.color.grey
-                ValueType.Outgoing -> R.color.jacob
-                ValueType.Incoming -> R.color.remus
-            }
-            binding.valueTextView.setTextColor(binding.wrapper.context.getColor(textColor))
+            binding.valueTextView.setTextColor(binding.wrapper.context.getColor(getTypeColor(item.type)))
 
             binding.backgroundView.setBackgroundResource(position.getBackground())
         }
     }
 
-    class AmountViewHolder(private val binding: ViewHolderAmountBinding) :
+    class AmountMultiViewHolder(private val binding: ViewHolderAmountMultiBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(fiatAmount: String?, coinAmount: String, type: ValueType, position: ListPosition) {
-            binding.fiatTextView.text = fiatAmount
-            binding.coinTextView.text = coinAmount
+        fun bind(amounts: List<AmountValues>, type: ValueType, token: Token, position: ListPosition) {
+            binding.wrapper.layoutParams.height = LayoutHelper.dp(if (amounts.size == 2) 60f else 48f, binding.wrapper.context)
+            binding.coinIcon.setRemoteImage(token.coin.iconUrl, token.iconPlaceholder)
 
-            binding.coinTextView.setTextColor(binding.wrapper.context.getColor(getColor(type)))
+            binding.coinTextView.text = amounts[0].coinAmount
+            binding.fiatTextView.text = amounts[0].fiatAmount
+
+            if (amounts.size == 2) {
+                binding.coinSecondaryTextView.text = amounts[1].coinAmount
+                binding.fiatSecondaryTextView.text = amounts[1].fiatAmount
+            }
+
+            binding.coinSecondaryTextView.isVisible = amounts.size == 2
+            binding.fiatSecondaryTextView.isVisible = amounts.size == 2
+
+            binding.coinTextView.setTextColor(binding.wrapper.context.getColor(getTypeColor(type)))
 
             binding.backgroundView.setBackgroundResource(position.getBackground())
         }
 
-        private fun getColor(type: ValueType): Int = when (type) {
-            ValueType.Regular -> R.color.bran
-            ValueType.Disabled -> R.color.grey
-            ValueType.Outgoing -> R.color.jacob
-            ValueType.Incoming -> R.color.remus
+    }
+
+    class AmountViewHolder(private val binding: ViewHolderAmountBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(fiatAmount: String?, coinAmount: String, type: ValueType, token: Token, position: ListPosition) {
+            binding.coinIcon.setRemoteImage(token.coin.iconUrl, token.iconPlaceholder)
+            binding.fiatTextView.text = fiatAmount
+            binding.coinTextView.text = coinAmount
+
+            binding.coinTextView.setTextColor(binding.wrapper.context.getColor(getTypeColor(type)))
+
+            binding.backgroundView.setBackgroundResource(position.getBackground())
         }
 
+    }
+
+    companion object{
+        private fun getTypeColor(type: ValueType): Int = when (type) {
+            ValueType.Regular -> R.color.bran
+            ValueType.Disabled -> R.color.grey
+            ValueType.Outgoing -> R.color.leah
+            ValueType.Incoming -> R.color.remus
+        }
     }
 }

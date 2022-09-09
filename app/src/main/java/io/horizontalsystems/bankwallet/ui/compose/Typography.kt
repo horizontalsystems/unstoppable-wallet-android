@@ -22,6 +22,7 @@ class Typography internal constructor(
     val subhead1: TextStyle,
     val subhead2: TextStyle,
     val subheadItalic: TextStyle,
+    val subhead1Italic: TextStyle,
     val caption: TextStyle,
     val captionSB: TextStyle,
     val micro: TextStyle,
@@ -66,7 +67,7 @@ class Typography internal constructor(
             letterSpacing = 0.sp,
         ),
         bodyItalic: TextStyle = TextStyle(
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
             fontStyle = FontStyle.Italic,
             letterSpacing = 0.sp,
@@ -83,6 +84,12 @@ class Typography internal constructor(
         ),
         subheadItalic: TextStyle = TextStyle(
             fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            fontStyle = FontStyle.Italic,
+            letterSpacing = 0.sp,
+        ),
+        subhead1Italic: TextStyle = TextStyle(
+            fontWeight = FontWeight.Medium,
             fontSize = 14.sp,
             fontStyle = FontStyle.Italic,
             letterSpacing = 0.sp,
@@ -119,6 +126,7 @@ class Typography internal constructor(
         subhead1 = subhead1.withFontFamily(defaultFontFamily),
         subhead2 = subhead2.withFontFamily(defaultFontFamily).copy(lineHeight = 20.sp),
         subheadItalic = subheadItalic.withFontFamily(defaultFontFamily),
+        subhead1Italic = subhead1Italic.withFontFamily(defaultFontFamily),
         caption = caption.withFontFamily(defaultFontFamily),
         captionSB = captionSB.withFontFamily(defaultFontFamily),
         micro = micro.withFontFamily(defaultFontFamily),

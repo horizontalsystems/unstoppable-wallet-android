@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.*
@@ -26,9 +24,11 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule
 import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
@@ -84,67 +84,54 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_red_24),
             title = stringResource(R.string.BalanceSyncError_Title),
-            subtitle = wallet.coin.name,
             onCloseClick = { navController.popBackStack() }
         ) {
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
-            )
-            Text(
-                text = stringResource(R.string.BalanceSyncError_ReportButtonExplanation),
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey,
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
-            )
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10
-            )
-            Spacer(Modifier.height(16.dp))
+
+            Spacer(Modifier.height(32.dp))
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 24.dp),
                 title = stringResource(R.string.BalanceSyncError_ButtonRetry),
                 onClick = {
                     viewModel.retry()
                     navController.popBackStack()
                 }
             )
-            viewModel.sourceType?.let { sourceType ->
-                Spacer(Modifier.height(16.dp))
+            if (viewModel.sourceChangeable) {
+                Spacer(Modifier.height(12.dp))
                 ButtonPrimaryDefault(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 24.dp),
                     title = stringResource(R.string.BalanceSyncError_ButtonChangeSource),
                     onClick = {
                         navController.popBackStack()
 
-                        when (sourceType) {
-                            is SyncErrorViewModel.SourceType.EvmNetworkSettings -> {
+                        val blockchainWrapper = viewModel.blockchainWrapper
+                        when (blockchainWrapper?.type) {
+                            SyncErrorModule.BlockchainWrapper.Type.Bitcoin -> {
+                                val params =
+                                    BtcBlockchainSettingsModule.args(blockchainWrapper.blockchain)
                                 navController.slideFromRight(
-                                    R.id.evmNetworkFragment,
-                                    EvmNetworkModule.args(sourceType.blockchain, sourceType.account)
+                                    R.id.btcBlockchainSettingsFragment,
+                                    params
                                 )
                             }
-                            SyncErrorViewModel.SourceType.PrivacySettings -> {
-                                navController.slideFromRight(
-                                    R.id.mainFragment_to_privacySettingsFragment
-                                )
+                            SyncErrorModule.BlockchainWrapper.Type.Evm -> {
+                                val params = EvmNetworkModule.args(blockchainWrapper.blockchain)
+                                navController.slideFromRight(R.id.evmNetworkFragment, params)
                             }
+                            else -> {}
                         }
                     }
                 )
             }
-            Spacer(Modifier.height(16.dp))
-            ButtonPrimaryDefault(
+            Spacer(Modifier.height(12.dp))
+            ButtonPrimaryTransparent(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 24.dp),
                 title = stringResource(R.string.BalanceSyncError_ButtonReport),
                 onClick = {
                     navController.popBackStack()
@@ -163,7 +150,8 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                     }
                 }
             )
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(32.dp))
         }
     }
 }
+

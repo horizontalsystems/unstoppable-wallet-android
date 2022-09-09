@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsService
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensService
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 
@@ -16,23 +16,23 @@ object ManageWalletsModule {
     class Factory : ViewModelProvider.Factory {
 
         private val restoreSettingsService by lazy {
-            RestoreSettingsService(App.restoreSettingsManager)
+            RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider)
         }
 
         private val coinSettingsService by lazy {
             CoinSettingsService()
         }
 
-        private val coinPlatformsService by lazy {
-            CoinPlatformsService()
+        private val coinTokensService by lazy {
+            CoinTokensService()
         }
 
         private val enableCoinService by lazy {
-            EnableCoinService(coinPlatformsService, restoreSettingsService, coinSettingsService)
+            EnableCoinService(coinTokensService, restoreSettingsService, coinSettingsService)
         }
 
         private val manageWalletsService by lazy {
-            ManageWalletsService(App.coinManager, App.walletManager, App.accountManager, enableCoinService)
+            ManageWalletsService(App.marketKit, App.walletManager, App.accountManager, enableCoinService)
         }
 
         @Suppress("UNCHECKED_CAST")
@@ -47,8 +47,8 @@ object ManageWalletsModule {
                 ManageWalletsViewModel::class.java -> {
                     ManageWalletsViewModel(manageWalletsService, listOf(manageWalletsService)) as T
                 }
-                CoinPlatformsViewModel::class.java -> {
-                    CoinPlatformsViewModel(coinPlatformsService) as T
+                CoinTokensViewModel::class.java -> {
+                    CoinTokensViewModel(coinTokensService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

@@ -14,11 +14,11 @@ import io.horizontalsystems.bankwallet.core.setRemoteImage
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.databinding.ViewCardSwapBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment
+import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.views.helpers.LayoutHelper
 import java.math.BigDecimal
 import java.util.*
@@ -52,7 +52,7 @@ class SwapCoinCardView @JvmOverloads constructor(
         observe(viewModel, lifecycleOwner)
 
         binding.selectedToken.setOnSingleClickListener {
-            val params = SelectSwapCoinDialogFragment.prepareParams(uuid, viewModel.dex)
+            val params = SelectSwapCoinFragment.prepareParams(uuid, viewModel.dex)
             fragment.findNavController().slideFromBottom(R.id.selectSwapCoinDialog, params)
         }
 
@@ -66,15 +66,15 @@ class SwapCoinCardView @JvmOverloads constructor(
             }
         }
 
-        fragment.getNavigationLiveData(SelectSwapCoinDialogFragment.resultBundleKey)
+        fragment.getNavigationLiveData(SelectSwapCoinFragment.resultBundleKey)
             ?.observe(lifecycleOwner, { bundle ->
-                val requestId = bundle.getLong(SelectSwapCoinDialogFragment.requestIdKey)
+                val requestId = bundle.getLong(SelectSwapCoinFragment.requestIdKey)
                 val coinBalanceItem =
                     bundle.getParcelable<SwapMainModule.CoinBalanceItem>(
-                        SelectSwapCoinDialogFragment.coinBalanceItemResultKey
+                        SelectSwapCoinFragment.coinBalanceItemResultKey
                     )
                 if (requestId == uuid && coinBalanceItem != null) {
-                    viewModel.onSelectCoin(coinBalanceItem.platformCoin)
+                    viewModel.onSelectCoin(coinBalanceItem.token)
                 }
             })
     }
@@ -130,13 +130,13 @@ class SwapCoinCardView @JvmOverloads constructor(
         }
     }
 
-    private fun setCoin(platformCoin: PlatformCoin?) {
-        if (platformCoin != null) {
+    private fun setCoin(token: Token?) {
+        if (token != null) {
             binding.iconCoin.setRemoteImage(
-                platformCoin.coin.iconUrl,
-                platformCoin.coinType.iconPlaceholder
+                token.coin.iconUrl,
+                token.iconPlaceholder
             )
-            binding.selectedToken.text = platformCoin.code
+            binding.selectedToken.text = token.coin.code
             binding.selectedToken.setTextColor(context.getColor(R.color.leah))
         } else {
             binding.iconCoin.setImageResource(R.drawable.coin_placeholder)

@@ -3,9 +3,10 @@ package io.horizontalsystems.bankwallet.modules.coin
 import androidx.annotation.DrawableRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.order
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
 import io.horizontalsystems.chartview.ChartData
@@ -38,42 +39,26 @@ data class MarketTickerViewItem(
     val pair: String,
     val rate: String,
     val volume: String,
-) {
-    fun areItemsTheSame(other: MarketTickerViewItem): Boolean {
-        return market == other.market && pair == other.pair
-    }
-
-    fun areContentsTheSame(other: MarketTickerViewItem): Boolean {
-        return rate == other.rate && volume == other.volume && marketImageUrl == other.marketImageUrl
-    }
-}
+    val tradeUrl: String?,
+)
 
 sealed class RoiViewItem {
-    abstract var listPosition: ListPosition?
     class HeaderRowViewItem(
         val title: String,
         val periods: List<HsTimePeriod>,
-        override var listPosition: ListPosition? = null
     ) : RoiViewItem()
 
     class RowViewItem(
         val title: String,
         val values: List<BigDecimal?>,
-        override var listPosition: ListPosition? = null
     ) : RoiViewItem()
 }
 open class ContractInfo(
     val rawValue: String,
     @DrawableRes val logoResId: Int,
-    val explorerUrl: String
+    val explorerUrl: String?
 ) {
-    val shortened = shortenAddress(rawValue)
-
-    private fun shortenAddress(address: String) = if (address.length >= 20) {
-        address.take(8) + "..." + address.takeLast(8)
-    } else {
-        address
-    }
+    val shortened = rawValue.shorten()
 }
 
 data class CoinDataItem(
@@ -97,16 +82,12 @@ sealed class InvestorItem {
     ) : InvestorItem()
 }
 
-sealed class MajorHolderItem {
-    object Header : MajorHolderItem()
-
-    class Item(
-        val index: Int,
-        val address: String,
-        val share: BigDecimal,
-        val sharePercent: String
-    ) : MajorHolderItem()
-}
+class MajorHolderItem(
+    val index: Int,
+    val address: String,
+    val share: BigDecimal,
+    val sharePercent: String
+)
 
 data class CoinLink(
     val url: String,
@@ -131,14 +112,13 @@ class CoinViewFactory(
         val rows = mutableListOf<RoiViewItem>()
 
         val timePeriods = performance.map { it.value.keys }.flatten().distinct()
-        rows.add(RoiViewItem.HeaderRowViewItem("ROI", timePeriods, ListPosition.First))
+        rows.add(RoiViewItem.HeaderRowViewItem("ROI", timePeriods))
         performance.forEach { (vsCurrency, performanceVsCurrency) ->
             if (performanceVsCurrency.isNotEmpty()) {
                 val values = timePeriods.map { performanceVsCurrency[it] }
-                rows.add(RoiViewItem.RowViewItem("vs ${vsCurrency.uppercase()}", values, ListPosition.Middle))
+                rows.add(RoiViewItem.RowViewItem("vs ${vsCurrency.uppercase()}", values))
             }
         }
-        rows.lastOrNull()?.listPosition = ListPosition.Last
 
         return rows
     }
@@ -149,7 +129,7 @@ class CoinViewFactory(
         return CoinOverviewViewItem(
             roi = getRoi(overview.performance),
             categories = overview.categories.map { it.name },
-            contracts = getContractInfo(overview.coinTypes),
+            contracts = getContractInfo(overview.fullCoin.tokens),
             links = getLinks(overview, item.guideUrl),
             about = overview.description,
             marketData = getMarketItems(item)
@@ -162,13 +142,12 @@ class CoinViewFactory(
             return list
         }
 
-        list.add(MajorHolderItem.Header)
         topTokenHolders
             .sortedByDescending { it.share }
             .forEachIndexed { index, holder ->
                 val shareFormatted = numberFormatter.format(holder.share, 0, 2, suffix = "%")
                 list.add(
-                    MajorHolderItem.Item(
+                    MajorHolderItem(
                         index + 1,
                         holder.address,
                         holder.share,
@@ -211,19 +190,17 @@ class CoinViewFactory(
         }
 
         overview.totalSupply?.let {
-            val totalSupplyString = numberFormatter.formatCoin(it,
+            val totalSupplyString = numberFormatter.formatCoinShort(it,
                 item.coinCode,
-                0,
-                numberFormatter.getSignificantDecimalCoin(it))
+                8)
             items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TotalSupply),
                 totalSupplyString))
         }
 
         overview.circulatingSupply?.let {
-            val supplyString = numberFormatter.formatCoin(it,
+            val supplyString = numberFormatter.formatCoinShort(it,
                 item.coinCode,
-                0,
-                numberFormatter.getSignificantDecimalCoin(it))
+                8)
             items.add(CoinDataItem(Translator.getString(R.string.CoinPage_inCirculation),
                 supplyString))
         }
@@ -237,27 +214,27 @@ class CoinViewFactory(
         return items
     }
 
+    private fun getContractInfo(tokens: List<Token>) = tokens
+        .sortedBy { it.blockchainType.order }
+        .mapNotNull { token ->
+            when (val tokenType = token.type) {
+                is TokenType.Eip20 -> when (token.blockchainType) {
+                    is BlockchainType.Ethereum -> ContractInfo(tokenType.address, R.drawable.logo_ethereum_24, explorerUrl(token, tokenType.address))
+                    is BlockchainType.BinanceSmartChain -> ContractInfo(tokenType.address, R.drawable.logo_binance_smart_chain_24, explorerUrl(token, tokenType.address))
+                    is BlockchainType.Polygon -> ContractInfo(tokenType.address, R.drawable.logo_polygon_24, explorerUrl(token, tokenType.address))
+                    is BlockchainType.Avalanche -> ContractInfo(tokenType.address, R.drawable.logo_avalanche_24, explorerUrl(token, tokenType.address))
+                    is BlockchainType.Optimism -> ContractInfo(tokenType.address, R.drawable.logo_optimism_24, explorerUrl(token, tokenType.address))
+                    is BlockchainType.ArbitrumOne -> ContractInfo(tokenType.address, R.drawable.logo_arbitrum_24, explorerUrl(token, tokenType.address))
+                    else -> null
+                }
+                is TokenType.Bep2 -> ContractInfo(tokenType.symbol, R.drawable.logo_binancecoin_24,explorerUrl(token, tokenType.symbol))
+                else -> null
+            }
+    }
 
-    private fun getContractInfo(coinTypes: List<CoinType>) = coinTypes.sortedBy { it.order }.mapNotNull { coinType ->
-        when (coinType) {
-            is CoinType.Erc20 -> ContractInfo(coinType.address, R.drawable.logo_ethereum_24,"https://etherscan.io/token/${coinType.address}")
-            is CoinType.Bep20 -> ContractInfo(coinType.address, R.drawable.logo_binancesmartchain_24,"https://bscscan.com/token/${coinType.address}")
-            is CoinType.Mrc20 -> ContractInfo(coinType.address, R.drawable.logo_polygon_24, "https://polygonscan.com/token/${coinType.address}")
-            is CoinType.OptimismErc20 -> ContractInfo(coinType.address, R.drawable.logo_optimism_24, "https://optimistic.etherscan.io/token/${coinType.address}")
-            is CoinType.ArbitrumOneErc20 -> ContractInfo(coinType.address, R.drawable.logo_arbitrum_24, "https://arbiscan.io/token/${coinType.address}")
-            is CoinType.Bep2 -> ContractInfo(coinType.symbol, R.drawable.logo_bep2_24,"https://explorer.binance.org/asset/${coinType.symbol}")
-            is CoinType.Avalanche -> ContractInfo(coinType.address, R.drawable.logo_avalanche_24, "https://avascan.info/blockchain/c/token/${coinType.address}")
-            is CoinType.Fantom -> ContractInfo(coinType.address, R.drawable.logo_fantom_24, "https://ftmscan.com/token/${coinType.address}")
-            is CoinType.HarmonyShard0 -> ContractInfo(coinType.address, R.drawable.logo_harmony_24, "https://explorer.harmony.one/address/${coinType.address}")
-            is CoinType.HuobiToken -> ContractInfo(coinType.address, R.drawable.logo_heco_24, "https://hecoinfo.com/token/${coinType.address}")
-            is CoinType.Iotex -> ContractInfo(coinType.address, R.drawable.logo_iotex_24, "https://iotexscan.io/token/${coinType.address}")
-            is CoinType.Moonriver -> ContractInfo(coinType.address, R.drawable.logo_moonriver_24, "https://blockscout.moonriver.moonbeam.network/address/${coinType.address}")
-            is CoinType.OkexChain -> ContractInfo(coinType.address, R.drawable.logo_okex_24, "https://www.oklink.com/oec/address/${coinType.address}")
-            is CoinType.Solana -> ContractInfo(coinType.address, R.drawable.logo_solana_24, "https://explorer.solana.com/address/${coinType.address}")
-            is CoinType.Sora -> ContractInfo(coinType.address, R.drawable.logo_sora_24, "https://sorascan.com/sora-mainnet/asset/${coinType.address}")
-            is CoinType.Tomochain -> ContractInfo(coinType.address, R.drawable.logo_tomochain_24, "https://scan.tomochain.com/tokens/${coinType.address}")
-            is CoinType.Xdai -> ContractInfo(coinType.address, R.drawable.logo_xdai_24, "https://blockscout.com/xdai/mainnet/address/${coinType.address}")
-            else -> null
+    private fun explorerUrl(token: Token, reference: String) : String? {
+        return token.blockchain.explorerUrl?.let{
+            it.replace("\$ref", reference)
         }
     }
 
@@ -328,13 +305,7 @@ class CoinViewFactory(
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
-        val shortCapValue = numberFormatter.shortenValue(value)
-        return numberFormatter.formatFiat(
-            shortCapValue.first,
-            symbol,
-            0,
-            2
-        ) + " " + shortCapValue.second
+        return numberFormatter.formatFiatShort(value, symbol, 2)
     }
 
 }

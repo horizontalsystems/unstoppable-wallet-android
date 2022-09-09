@@ -8,7 +8,12 @@ object ReleaseNotesModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReleaseNotesViewModel(App.appConfigProvider, App.releaseNotesManager) as T
+            return ReleaseNotesViewModel(
+                App.networkManager,
+                App.releaseNotesManager.releaseNotesUrl,
+                App.connectivityManager,
+                App.appConfigProvider
+            ) as T
         }
     }
 }

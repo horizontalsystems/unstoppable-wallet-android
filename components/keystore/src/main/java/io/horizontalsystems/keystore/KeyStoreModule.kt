@@ -22,7 +22,7 @@ object KeyStoreModule {
     }
 
     interface IInteractor {
-        fun resetApp()
+        fun resetApp(reason: String)
         fun removeKey()
     }
 

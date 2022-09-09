@@ -2,34 +2,23 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
 
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.managers.ActivateCoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.Transaction
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ISendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
-import io.horizontalsystems.bankwallet.modules.swap.oneinch.scaleUp
-import io.horizontalsystems.ethereumkit.contracts.Bytes32Array
 import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.horizontalsystems.oneinchkit.decorations.OneInchMethodDecoration
-import io.horizontalsystems.oneinchkit.decorations.OneInchSwapMethodDecoration
-import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapMethodDecoration
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
-import java.math.BigDecimal
-import java.math.BigInteger
 
 class OneInchSendEvmTransactionService(
     private val evmKitWrapper: EvmKitWrapper,
-    private val feeService: OneInchFeeService,
-    private val activateCoinManager: ActivateCoinManager
+    private val feeService: OneInchFeeService
 ) : ISendEvmTransactionService, Clearable {
 
     private val evmKit = evmKitWrapper.evmKit
@@ -48,7 +37,7 @@ class OneInchSendEvmTransactionService(
     override var txDataState: SendEvmTransactionService.TxDataState = SendEvmTransactionService.TxDataState(
         null,
         getAdditionalInfo(feeService.parameters),
-        buildDecorationFromParameters(feeService.parameters)
+        null
     )
         private set
 
@@ -106,56 +95,14 @@ class OneInchSendEvmTransactionService(
     private fun getAdditionalInfo(parameters: OneInchSwapParameters): SendEvmData.AdditionalInfo {
         return parameters.let {
             val swapInfo = SendEvmData.OneInchSwapInfo(
-                coinFrom = it.coinFrom,
-                coinTo = it.coinTo,
+                tokenFrom = it.tokenFrom,
+                tokenTo = it.tokenTo,
                 amountFrom = it.amountFrom,
                 estimatedAmountTo = it.amountTo,
                 slippage = it.slippage,
                 recipient = parameters.recipient
             )
             SendEvmData.AdditionalInfo.OneInchSwap(swapInfo)
-        }
-    }
-
-    private fun buildDecorationFromParameters(parameters: OneInchSwapParameters): OneInchMethodDecoration {
-        val fromToken = getSwapToken(parameters.coinFrom)
-        val toToken = getSwapToken(parameters.coinTo)
-        val fromAmount = parameters.amountFrom.scaleUp(parameters.coinFrom.decimals)
-        val minReturnAmount = parameters.amountTo - parameters.amountTo / BigDecimal("100") * parameters.slippage
-        val toAmountMin = minReturnAmount.scaleUp(parameters.coinTo.decimals)
-
-        return parameters.let {
-            if (parameters.recipient == null) {
-                OneInchUnoswapMethodDecoration(
-                    fromToken = fromToken,
-                    toToken = toToken,
-                    fromAmount = fromAmount,
-                    toAmountMin = toAmountMin,
-                    toAmount = null,
-                    params = Bytes32Array(arrayOf())
-                )
-            } else
-                OneInchSwapMethodDecoration(
-                    fromToken = fromToken,
-                    toToken = toToken,
-                    fromAmount = fromAmount,
-                    toAmountMin = toAmountMin,
-                    toAmount = null,
-                    flags = BigInteger.ZERO,
-                    permit = byteArrayOf(),
-                    data = byteArrayOf(),
-                    recipient = Address(parameters.recipient.hex)
-                )
-        }
-    }
-
-    private fun getSwapToken(coin: PlatformCoin): OneInchMethodDecoration.Token {
-        return when (val coinType = coin.coinType) {
-            CoinType.Ethereum,
-            CoinType.BinanceSmartChain -> OneInchMethodDecoration.Token.EvmCoin
-            is CoinType.Erc20 -> OneInchMethodDecoration.Token.Eip20(Address(coinType.address))
-            is CoinType.Bep20 -> OneInchMethodDecoration.Token.Eip20(Address(coinType.address))
-            else -> throw IllegalStateException("Not supported coin for swap")
         }
     }
 
@@ -175,7 +122,6 @@ class OneInchSendEvmTransactionService(
             transaction.gasData.gasLimit
         )
             .subscribeIO({ fullTransaction ->
-                activateSwapCoinOut()
                 sendState = SendEvmTransactionService.SendState.Sent(fullTransaction.transaction.hash)
                 logger.info("success")
             }, { error ->
@@ -185,9 +131,7 @@ class OneInchSendEvmTransactionService(
             .let { disposable.add(it) }
     }
 
-    private fun activateSwapCoinOut() {
-        activateCoinManager.activate(feeService.parameters.coinTo.coinType)
-    }
+    override fun methodName(input: ByteArray): String? = null
 
     override fun clear() {
         disposable.clear()

@@ -25,7 +25,7 @@ fun HSSwipeRefresh(
                 refreshTriggerDistance = trigger,
                 scale = true,
                 backgroundColor = ComposeAppTheme.colors.claude,
-                contentColor = ComposeAppTheme.colors.oz,
+                contentColor = ComposeAppTheme.colors.leah,
             )
         },
         content = content

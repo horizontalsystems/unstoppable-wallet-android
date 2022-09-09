@@ -9,3 +9,7 @@ data class Faq(
     val title: String,
     val markdown: String
 )
+
+data class FaqSection(
+    val section: String,
+    val faqItems: List<Faq>)

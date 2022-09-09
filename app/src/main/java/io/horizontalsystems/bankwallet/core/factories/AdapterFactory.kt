@@ -3,115 +3,132 @@ package io.horizontalsystems.bankwallet.core.factories
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.IInitialSyncModeSettingsManager
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
-import io.horizontalsystems.bankwallet.core.managers.EvmKitManager
-import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
-import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class AdapterFactory(
-        private val context: Context,
-        private val testMode: Boolean,
-        private val ethereumKitManager: EvmKitManager,
-        private val binanceSmartChainKitManager: EvmKitManager,
-        private val binanceKitManager: BinanceKitManager,
-        private val backgroundManager: BackgroundManager,
-        private val restoreSettingsManager: RestoreSettingsManager,
-        private val coinManager: ICoinManager) {
+    private val context: Context,
+    private val testMode: Boolean,
+    private val btcBlockchainManager: BtcBlockchainManager,
+    private val evmBlockchainManager: EvmBlockchainManager,
+    private val evmSyncSourceManager: EvmSyncSourceManager,
+    private val binanceKitManager: BinanceKitManager,
+    private val backgroundManager: BackgroundManager,
+    private val restoreSettingsManager: RestoreSettingsManager,
+    private val coinManager: ICoinManager,
+    private val evmLabelManager: EvmLabelManager,
+) {
 
-    var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager? = null
+    private fun getEvmAdapter(wallet: Wallet): IAdapter? {
+        val blockchainType = evmBlockchainManager.getBlockchain(wallet.token)?.type ?: return null
+        val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType).getEvmKitWrapper(
+            wallet.account,
+            blockchainType
+        )
 
-    fun ethereumTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
-        return coinManager.getPlatformCoin(CoinType.Ethereum)?.let { baseCoin ->
-            val evmKitWrapper = ethereumKitManager.evmKitWrapper(source.account)
-            EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source)
+        return EvmAdapter(evmKitWrapper, coinManager)
+    }
+
+    private fun getEip20Adapter(wallet: Wallet, address: String): IAdapter? {
+        val blockchainType = evmBlockchainManager.getBlockchain(wallet.token)?.type ?: return null
+        val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType).getEvmKitWrapper(wallet.account, blockchainType)
+        val baseToken = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
+
+        return Eip20Adapter(context, evmKitWrapper, address, baseToken, coinManager, wallet, evmLabelManager)
+    }
+
+    fun getAdapter(wallet: Wallet) = when (val tokenType = wallet.token.type) {
+        TokenType.Native -> when (wallet.token.blockchainType) {
+            BlockchainType.Bitcoin -> {
+                val syncMode = btcBlockchainManager.syncMode(BlockchainType.Bitcoin, wallet.account.origin)
+                BitcoinAdapter(wallet, syncMode, testMode, backgroundManager)
+            }
+            BlockchainType.BitcoinCash -> {
+                val syncMode = btcBlockchainManager.syncMode(BlockchainType.BitcoinCash, wallet.account.origin)
+                BitcoinCashAdapter(wallet, syncMode, testMode, backgroundManager)
+            }
+            BlockchainType.Litecoin -> {
+                val syncMode = btcBlockchainManager.syncMode(BlockchainType.Litecoin, wallet.account.origin)
+                LitecoinAdapter(wallet, syncMode, testMode, backgroundManager)
+            }
+            BlockchainType.Dash -> {
+                val syncMode = btcBlockchainManager.syncMode(BlockchainType.Dash, wallet.account.origin)
+                DashAdapter(wallet, syncMode, testMode, backgroundManager)
+            }
+            BlockchainType.Zcash -> {
+                ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType), testMode)
+            }
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Avalanche,
+            BlockchainType.Optimism,
+            BlockchainType.ArbitrumOne -> getEvmAdapter(wallet)
+            BlockchainType.BinanceChain -> getBinanceAdapter(wallet, "BNB")
+            is BlockchainType.Unsupported -> null
+        }
+        is TokenType.Eip20 -> getEip20Adapter(wallet, tokenType.address)
+        is TokenType.Bep2 -> getBinanceAdapter(wallet, tokenType.symbol)
+        is TokenType.Unsupported -> null
+    }
+
+    private fun getBinanceAdapter(
+        wallet: Wallet,
+        symbol: String
+    ): BinanceAdapter? {
+        val query = TokenQuery(BlockchainType.BinanceChain, TokenType.Native)
+        return coinManager.getToken(query)?.let { feeToken ->
+            BinanceAdapter(
+                binanceKitManager.binanceKit(wallet),
+                symbol, feeToken, wallet, testMode
+            )
         }
     }
 
-    fun bscTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
-        return coinManager.getPlatformCoin(CoinType.BinanceSmartChain)?.let { baseCoin ->
-            val evmKitWrapper = binanceSmartChainKitManager.evmKitWrapper(source.account)
-            EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source)
-        }
-    }
+    fun evmTransactionsAdapter(source: TransactionSource, blockchainType: BlockchainType): ITransactionsAdapter? {
+        val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType).getEvmKitWrapper(source.account, blockchainType)
+        val baseCoin = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
+        val syncSource = evmSyncSourceManager.getSyncSource(blockchainType)
 
-    fun adapter(wallet: Wallet): IAdapter? {
-        val syncMode = initialSyncModeSettingsManager?.setting(wallet.coinType, wallet.account.origin)?.syncMode ?: SyncMode.Fast
-
-        return when (val coinType = wallet.coinType) {
-            is CoinType.Zcash -> ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.coinType), testMode)
-            is CoinType.Bitcoin -> BitcoinAdapter(wallet, syncMode, testMode, backgroundManager)
-            is CoinType.Litecoin -> LitecoinAdapter(wallet, syncMode, testMode, backgroundManager)
-            is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, syncMode, testMode, backgroundManager)
-            is CoinType.Dash -> DashAdapter(wallet, syncMode, testMode, backgroundManager)
-            is CoinType.Bep2 -> {
-                coinManager.getPlatformCoin(CoinType.Bep2("BNB"))?.let { feePlatformCoin ->
-                    BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol, feePlatformCoin, wallet, testMode)
-                }
-            }
-            is CoinType.Ethereum -> EvmAdapter(ethereumKitManager.evmKitWrapper(wallet.account), coinManager)
-            is CoinType.Erc20 -> {
-                coinManager.getPlatformCoin(CoinType.Ethereum)?.let { baseCoin ->
-                    Eip20Adapter(context, ethereumKitManager.evmKitWrapper(wallet.account), coinType.address, baseCoin, coinManager, wallet)
-                }
-            }
-            is CoinType.BinanceSmartChain -> EvmAdapter(binanceSmartChainKitManager.evmKitWrapper(wallet.account), coinManager)
-            is CoinType.Bep20 -> {
-                coinManager.getPlatformCoin(CoinType.BinanceSmartChain)?.let { baseCoin ->
-                    Eip20Adapter(context, binanceSmartChainKitManager.evmKitWrapper(wallet.account), coinType.address, baseCoin, coinManager, wallet)
-                }
-            }
-            CoinType.Polygon,
-            CoinType.EthereumArbitrumOne,
-            is CoinType.Mrc20,
-            is CoinType.OptimismErc20,
-            is CoinType.ArbitrumOneErc20,
-            is CoinType.EthereumOptimism, //todo add new types support
-            is CoinType.Avalanche,
-            is CoinType.Fantom,
-            is CoinType.HarmonyShard0,
-            is CoinType.HuobiToken,
-            is CoinType.Iotex,
-            is CoinType.Moonriver,
-            is CoinType.OkexChain,
-            is CoinType.Solana,
-            is CoinType.Sora,
-            is CoinType.Tomochain,
-            is CoinType.Xdai,
-            is CoinType.Unsupported -> null
-        }
+        return EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source, syncSource.transactionSource, evmLabelManager)
     }
 
     fun unlinkAdapter(wallet: Wallet) {
-        when (wallet.coinType) {
-            CoinType.Ethereum, is CoinType.Erc20 -> {
-                ethereumKitManager.unlink(wallet.account)
+        when (val blockchainType = wallet.transactionSource.blockchain.type) {
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Optimism,
+            BlockchainType.ArbitrumOne -> {
+                val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
+                evmKitManager.unlink(wallet.account)
             }
-            CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
-                binanceSmartChainKitManager.unlink(wallet.account)
-            }
-            is CoinType.Bep2 -> {
-                binanceKitManager.unlink()
+            BlockchainType.BinanceChain -> {
+                binanceKitManager.unlink(wallet.account)
             }
             else -> Unit
         }
     }
 
     fun unlinkAdapter(transactionSource: TransactionSource) {
-        when (transactionSource.blockchain) {
-            TransactionSource.Blockchain.Ethereum -> {
-                ethereumKitManager.unlink(transactionSource.account)
+        when (val blockchainType = transactionSource.blockchain.type) {
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Optimism,
+            BlockchainType.ArbitrumOne -> {
+                val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
+                evmKitManager.unlink(transactionSource.account)
             }
-            TransactionSource.Blockchain.BinanceSmartChain -> {
-                binanceSmartChainKitManager.unlink(transactionSource.account)
-            }
+            else -> Unit
         }
     }
 }

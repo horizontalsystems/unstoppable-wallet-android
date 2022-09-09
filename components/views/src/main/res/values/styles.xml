@@ -45,11 +45,6 @@
         <item name="android:windowExitAnimation">@anim/slide_to_bottom</item>
     </style>
 
-    <style name="BottomDialogLargeAnimation">
-        <item name="android:windowEnterAnimation">@anim/slide_from_bottom_long</item>
-        <item name="android:windowExitAnimation">@anim/slide_to_bottom_long</item>
-    </style>
-
     <style name="RightDialogAnimations">
         <item name="android:windowEnterAnimation">@anim/slide_from_right</item>
         <item name="android:windowExitAnimation">@anim/slide_to_right</item>
@@ -74,69 +69,15 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="TabComponent">
-        <item name="android:background">@drawable/tab_rounded_background</item>
-        <item name="android:textColor">@color/stateful_tab_text_color</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:minWidth">0dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">6dp</item>
-        <item name="android:paddingStart">12dp</item>
-        <item name="android:paddingEnd">12dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textAlignment">center</item>
-    </style>
-
-    <style name="ButtonPrimaryGreen" parent="Button">
-        <item name="android:background">@drawable/button_green_background</item>
-    </style>
-
-    <style name="ButtonPrimarySteel" parent="Button">
-        <item name="android:background">@drawable/button_steel_background</item>
-    </style>
-
-    <style name="ButtonPrimaryYellow" parent="Button">
-        <item name="android:background">@drawable/button_yellow_background</item>
-    </style>
-
-    <style name="ButtonPrimaryDestructive" parent="Button">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/button_red_background</item>
-    </style>
-
     <style name="ImportantText">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">14sp</item>
         <item name="android:background">@drawable/background_important_text</item>
-        <item name="android:textColor">@color/oz</item>
+        <item name="android:textColor">@color/leah</item>
         <item name="android:paddingStart">12dp</item>
         <item name="android:paddingEnd">12dp</item>
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
     </style>
 
-    <style name="TextFlatButton">
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:textColor">@color/stateful_button_lightgrey_color</item>
-        <item name="android:background">@drawable/stateful_button_jeremy_color</item>
-    </style>
-
-    <style name="Checkbox">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:gravity">top</item>
-        <item name="android:buttonTint">@color/stateful_checkbox_color</item>
-        <item name="android:paddingTop">4dp</item>
-    </style>
-
-    <style name="TermsCheckbox" parent="Checkbox">
-        <item name="android:textColor">@color/leah</item>
-        <item name="android:paddingStart">24dp</item>
-    </style>
 </resources>

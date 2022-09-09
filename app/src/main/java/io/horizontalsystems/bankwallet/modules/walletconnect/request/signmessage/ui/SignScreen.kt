@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessag
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,40 +50,17 @@ fun SignMessageRequestScreen(
                 Spacer(Modifier.height(12.dp))
 
                 when (val message = viewModel.message) {
-                    is SignMessage.Message,
                     is SignMessage.PersonalMessage -> {
-                        Text(
+                        subhead2_grey(
                             modifier = Modifier.padding(horizontal = 24.dp),
                             text = message.data,
-                            color = ComposeAppTheme.colors.grey,
-                            style = ComposeAppTheme.typography.subhead2
                         )
                     }
+                    is SignMessage.Message -> {
+                        MessageContent(message, viewModel.dAppName, navController, viewModel)
+                    }
                     is SignMessage.TypedMessage -> {
-                        val composableItems: MutableList<@Composable () -> Unit> = mutableListOf({
-                            TitleTypedValueCell(
-                                stringResource(R.string.WalletConnect_SignMessageRequest_Domain),
-                                message.domain
-                            )
-                        }, {
-                            SignMessageButton(
-                                stringResource(R.string.WalletConnect_SignMessageRequest_ShowMessageTitle),
-                                message.data,
-                                navController
-                            )
-                        })
-                        message.dAppName?.let { dAppName ->
-                            composableItems.add {
-                                TitleTypedValueCell(
-                                    stringResource(R.string.WalletConnect_SignMessageRequest_dApp),
-                                    dAppName
-                                )
-                            }
-                        }
-
-                        CellSingleLineLawrenceSection(
-                            composableItems
-                        )
+                        TypedMessageContent(message, viewModel.dAppName, navController)
                     }
                 }
 
@@ -94,7 +70,8 @@ fun SignMessageRequestScreen(
                 ButtonPrimaryYellow(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.WalletConnect_SignMessageRequest_ButtonSign),
-                    onClick = { viewModel.sign() }
+                    enabled = viewModel.signEnabled,
+                    onClick = { viewModel.sign() },
                 )
                 Spacer(Modifier.height(16.dp))
                 ButtonPrimaryDefault(
@@ -109,6 +86,96 @@ fun SignMessageRequestScreen(
 }
 
 @Composable
+private fun TypedMessageContent(
+    message: SignMessage.TypedMessage,
+    dAppName: String?,
+    navController: NavController
+) {
+    val composableItems: MutableList<@Composable () -> Unit> = mutableListOf()
+    message.domain?.let { domain ->
+        composableItems.add {
+            TitleTypedValueCell(
+                stringResource(R.string.WalletConnect_SignMessageRequest_Domain),
+                domain
+            )
+        }
+    }
+    composableItems.add {
+        SignMessageButton(
+            stringResource(R.string.WalletConnect_SignMessageRequest_ShowMessageTitle),
+            message.data,
+            navController
+        )
+    }
+    dAppName?.let { dAppName ->
+        composableItems.add {
+            TitleTypedValueCell(
+                stringResource(R.string.WalletConnect_SignMessageRequest_dApp),
+                dAppName
+            )
+        }
+    }
+
+    CellSingleLineLawrenceSection(
+        composableItems
+    )
+}
+
+@Composable
+private fun MessageContent(
+    message: SignMessage.Message,
+    dAppName: String?,
+    navController: NavController,
+    viewModel: WCSignMessageRequestViewModel
+) {
+    val composableItems: MutableList<@Composable () -> Unit> = mutableListOf({
+        SignMessageButton(
+            stringResource(R.string.WalletConnect_SignMessageRequest_ShowMessageTitle),
+            message.data,
+            navController
+        )
+    })
+    dAppName?.let { dApp ->
+        composableItems.add { TitleTypedValueCell(stringResource(R.string.WalletConnect_SignMessageRequest_dApp), dApp) }
+    }
+
+    CellSingleLineLawrenceSection(
+        composableItems
+    )
+
+    if (message.showLegacySignWarning) {
+        Spacer(Modifier.height(12.dp))
+        TextImportantWarning(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = stringResource(R.string.WalletConnect_LegacySignWarning),
+            icon = R.drawable.ic_attention_20,
+            title = stringResource(R.string.WalletConnect_Note),
+        )
+        Spacer(Modifier.height(12.dp))
+        CellSingleLineLawrenceSection {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable {
+                        viewModel.onTrustChecked(!viewModel.trustCheckmarkChecked)
+                    }
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                HsCheckbox(
+                    checked = viewModel.trustCheckmarkChecked,
+                    onCheckedChange = { checked ->
+                        viewModel.onTrustChecked(checked)
+                    }
+                )
+                Spacer(Modifier.width(16.dp))
+                subhead2_leah(text = stringResource(R.string.WalletConnect_I_Trust))
+            }
+        }
+    }
+}
+
+@Composable
 private fun SignMessageButton(title: String, data: String, navController: NavController) {
     Row(
         modifier = Modifier
@@ -116,18 +183,14 @@ private fun SignMessageButton(title: String, data: String, navController: NavCon
             .height(48.dp)
             .clickable {
                 navController.slideFromBottom(
-                    R.id.wcSignMessageRequestFragment_to_wcDisplayTypedMessageFragment,
+                    R.id.wcDisplayTypedMessageFragment,
                     bundleOf(TYPED_MESSAGE to formatJson(data))
                 )
             }
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
-        )
+        subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
         Image(
             modifier = Modifier.padding(start = 8.dp),

@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 
 class CoinSettingsViewModel(
@@ -40,10 +40,10 @@ class CoinSettingsViewModel(
     private fun handle(request: CoinSettingsService.Request) {
         val config = when (request.type) {
             is CoinSettingsService.RequestType.Derivation -> {
-                derivationConfig(request.platformCoin, request.type.allDerivations, request.type.current)
+                derivationConfig(request.token, request.type.allDerivations, request.type.current, request.allowEmpty)
             }
             is CoinSettingsService.RequestType.BCHCoinType -> {
-                bitcoinCashCoinTypeConfig(request.platformCoin, request.type.allTypes, request.type.current)
+                bitcoinCashCoinTypeConfig(request.token, request.type.allTypes, request.type.current, request.allowEmpty,)
             }
         }
 
@@ -52,14 +52,14 @@ class CoinSettingsViewModel(
     }
 
     private fun derivationConfig(
-        platformCoin: PlatformCoin,
+        token: Token,
         allDerivations: List<AccountType.Derivation>,
-        current: List<AccountType.Derivation>
+        current: List<AccountType.Derivation>,
+        allowEmpty: Boolean
     ): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
-            icon = ImageSource.Remote(platformCoin.coin.iconUrl, platformCoin.coinType.iconPlaceholder),
-            title = Translator.getString(R.string.AddressFormatSettings_Title),
-            subtitle = platformCoin.name,
+            icon = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
+            title = token.coin.code,
             selectedIndexes = current.map { allDerivations.indexOf(it) }.filter { it > -1 },
             viewItems = allDerivations.map { derivation ->
                 BottomSheetSelectorViewItem(
@@ -67,19 +67,20 @@ class CoinSettingsViewModel(
                     subtitle = derivation.description
                 )
             },
-            description = Translator.getString(R.string.AddressFormatSettings_Description, platformCoin.name)
+            description = Translator.getString(R.string.AddressFormatSettings_Description, token.coin.name),
+            allowEmpty = allowEmpty,
         )
     }
 
     private fun bitcoinCashCoinTypeConfig(
-        platformCoin: PlatformCoin,
+        token: Token,
         types: List<BitcoinCashCoinType>,
-        current: List<BitcoinCashCoinType>
+        current: List<BitcoinCashCoinType>,
+        allowEmpty: Boolean
     ): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
-            icon = ImageSource.Remote(platformCoin.coin.iconUrl, platformCoin.coinType.iconPlaceholder),
-            title = Translator.getString(R.string.AddressFormatSettings_Title),
-            subtitle = platformCoin.name,
+            icon = ImageSource.Remote(token.coin.iconUrl, token.iconPlaceholder),
+            title = token.coin.code,
             selectedIndexes = current.map { types.indexOf(it) }.filter { it > -1 },
             viewItems = types.map { type ->
                 BottomSheetSelectorViewItem(
@@ -87,7 +88,9 @@ class CoinSettingsViewModel(
                     subtitle = Translator.getString(type.description)
                 )
             },
-            description = Translator.getString(R.string.AddressFormatSettings_Description, platformCoin.name)
+            descriptionTitle = null,
+            description = Translator.getString(R.string.AddressFormatSettings_Description, token.coin.name),
+            allowEmpty = allowEmpty,
         )
     }
 
@@ -96,10 +99,10 @@ class CoinSettingsViewModel(
 
         when (request.type) {
             is CoinSettingsService.RequestType.Derivation -> {
-                service.selectDerivations(indexes.map { request.type.allDerivations[it] }, request.platformCoin)
+                service.selectDerivations(indexes.map { request.type.allDerivations[it] }, request.token)
             }
             is CoinSettingsService.RequestType.BCHCoinType -> {
-                service.selectBchCoinTypes(indexes.map { request.type.allTypes[it] }, request.platformCoin)
+                service.selectBchCoinTypes(indexes.map { request.type.allTypes[it] }, request.token)
             }
         }
     }
@@ -107,7 +110,7 @@ class CoinSettingsViewModel(
     fun onCancelSelect() {
         val request = currentRequest ?: return
 
-        service.cancel(request.platformCoin)
+        service.cancel(request.token)
     }
 
     override fun onCleared() {

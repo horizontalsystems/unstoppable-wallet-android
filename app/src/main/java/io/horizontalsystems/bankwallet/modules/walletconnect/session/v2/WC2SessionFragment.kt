@@ -18,11 +18,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
@@ -98,7 +99,8 @@ fun WCSessionPage(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
                         onClick = { navController.popBackStack() },
-                        enabled = viewModel.closeEnabled
+                        enabled = viewModel.closeEnabled,
+                        tint = if (viewModel.closeEnabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey50
                     )
                 )
             )
@@ -141,11 +143,9 @@ private fun ColumnScope.WCSessionListContent(
                 modifier = Modifier
                     .size(72.dp)
                     .clip(RoundedCornerShape(15.dp)),
-                painter = rememberImagePainter(
-                    data = viewModel.peerMeta?.icon,
-                    builder = {
-                        error(R.drawable.coin_placeholder)
-                    }
+                painter = rememberAsyncImagePainter(
+                    model = viewModel.peerMeta?.icon,
+                    error = painterResource(R.drawable.coin_placeholder)
                 ),
                 contentDescription = null,
             )
@@ -164,7 +164,8 @@ private fun ColumnScope.WCSessionListContent(
             }
             add {
                 TitleValueCell(
-                    stringResource(R.string.WalletConnect_ActiveWallet), "Wallet1"
+                    stringResource(R.string.WalletConnect_ActiveWallet),
+                    viewModel.peerMeta?.accountName ?: ""
                 )
             }
             viewModel.blockchains.forEach {

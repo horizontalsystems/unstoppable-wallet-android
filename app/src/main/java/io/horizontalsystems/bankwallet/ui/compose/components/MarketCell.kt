@@ -3,13 +3,12 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
@@ -41,9 +40,9 @@ fun MarketCoinClear(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            MarketCoinFirstRow(coinName, coinRate)
+            MarketCoinFirstRow(coinCode, coinRate)
             Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(coinCode, marketDataValue, label)
+            MarketCoinSecondRow(coinName, marketDataValue, label)
         }
     }
 }
@@ -58,7 +57,10 @@ fun MultilineClear(
     Box(
         modifier = modifier
             .height(60.dp)
-            .clickable { onClick?.invoke() }
+            .clickable(
+                enabled = onClick != null,
+                onClick = { onClick?.invoke() }
+            )
     ) {
         if (borderBottom) {
             Divider(
@@ -111,31 +113,28 @@ fun MarketCoin(
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                MarketCoinFirstRow(coinName, coinRate)
+                MarketCoinFirstRow(coinCode, coinRate)
                 Spacer(modifier = Modifier.height(3.dp))
-                MarketCoinSecondRow(coinCode, marketDataValue, label)
+                MarketCoinSecondRow(coinName, marketDataValue, label)
             }
         }
     }
 }
 
 @Composable
-fun MarketCoinFirstRow(coinName: String, rate: String?) {
+fun MarketCoinFirstRow(title: String, rate: String?) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = coinName,
-            color = ComposeAppTheme.colors.oz,
-            style = ComposeAppTheme.typography.body,
+        body_leah(
+            modifier = Modifier.weight(1f).padding(end = 16.dp),
+            text = title,
             maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         rate?.let {
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
+            body_leah(
                 text = rate,
-                color = ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.body,
                 maxLines = 1,
             )
         }
@@ -144,33 +143,21 @@ fun MarketCoinFirstRow(coinName: String, rate: String?) {
 
 @Composable
 fun MarketCoinSecondRow(
-    coinCode: String,
+    subtitle: String,
     marketDataValue: MarketDataValue?,
     label: String?
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        label?.let { labelText ->
-            Box(
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(ComposeAppTheme.colors.jeremy)
-            ) {
-                Text(
-                    modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),
-                    text = labelText,
-                    color = ComposeAppTheme.colors.bran,
-                    style = ComposeAppTheme.typography.microSB,
-                    maxLines = 1,
-                )
-            }
+        label?.let {
+            Badge(
+                modifier = Modifier.padding(end = 8.dp),
+                text = it
+            )
         }
-        Text(
-            text = coinCode,
-            color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2,
+        subhead2_grey(
+            text = subtitle,
             maxLines = 1,
         )
         marketDataValue?.let {
@@ -181,38 +168,20 @@ fun MarketCoinSecondRow(
 }
 
 @Composable
-private fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
+fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
     when (marketDataValue) {
         is MarketDataValue.MarketCap -> {
             Row {
-                Text(
-                    text = "MCap",
-                    color = ComposeAppTheme.colors.jacob,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
+                subhead2_grey(
                     text = marketDataValue.value,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
                     maxLines = 1,
                 )
             }
         }
         is MarketDataValue.Volume -> {
             Row {
-                Text(
-                    text = "Vol",
-                    color = ComposeAppTheme.colors.jacob,
-                    style = ComposeAppTheme.typography.subhead2,
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
+                subhead2_grey(
                     text = marketDataValue.value,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
                     maxLines = 1,
                 )
             }

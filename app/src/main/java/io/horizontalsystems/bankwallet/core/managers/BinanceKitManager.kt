@@ -56,7 +56,9 @@ class BinanceKitManager(
         return kit
     }
 
-    override fun unlink() {
+    override fun unlink(account: Account) {
+        if (currentAccount != account) return
+
         useCount -= 1
 
         if (useCount < 1) {

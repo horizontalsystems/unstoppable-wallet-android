@@ -46,7 +46,8 @@ object PinModule {
         fun set(pin: String?)
         fun validate(pin: String): Boolean
         fun save(pin: String)
-        fun unlock(pin: String): Boolean
+        fun correctPin(pin: String): Boolean
+        fun unlock()
     }
 
     interface IInteractorDelegate {

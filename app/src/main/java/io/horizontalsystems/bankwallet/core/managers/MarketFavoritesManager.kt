@@ -3,10 +3,14 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.FavoriteCoin
 import io.horizontalsystems.bankwallet.core.storage.MarketFavoritesDao
+import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class MarketFavoritesManager(appDatabase: AppDatabase) {
+class MarketFavoritesManager(
+    appDatabase: AppDatabase,
+    private val marketWidgetManager: MarketWidgetManager
+) {
     val dataUpdatedAsync: Observable<Unit>
         get() = dataUpdatedSubject
 
@@ -19,11 +23,13 @@ class MarketFavoritesManager(appDatabase: AppDatabase) {
     fun add(coinUid: String) {
         dao.insert(FavoriteCoin(coinUid))
         dataUpdatedSubject.onNext(Unit)
+        marketWidgetManager.updateWatchListWidgets()
     }
 
     fun remove(coinUid: String) {
         dao.delete(coinUid)
         dataUpdatedSubject.onNext(Unit)
+        marketWidgetManager.updateWatchListWidgets()
     }
 
     fun getAll(): List<FavoriteCoin> {

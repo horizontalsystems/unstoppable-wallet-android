@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.storage.AccountRecord
 import java.math.BigDecimal
 
 @Entity(
-    primaryKeys = ["coinId", "coinSettingsId", "accountId"],
+    primaryKeys = ["tokenQueryId", "coinSettingsId", "accountId"],
     foreignKeys = [ForeignKey(
         entity = AccountRecord::class,
         parentColumns = ["id"],
@@ -17,7 +17,7 @@ import java.math.BigDecimal
     )]
 )
 data class EnabledWalletCache(
-    val coinId: String,
+    val tokenQueryId: String,
     val coinSettingsId: String,
     val accountId: String,
     val balance: BigDecimal,

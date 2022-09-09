@@ -28,14 +28,14 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
     var trendUpColor = context.getColor(R.color.green_d)
     var trendDownColor = context.getColor(R.color.red_d)
-    var trendUpGradient = GradientColor(Color.parseColor("#0D416BFF"), Color.parseColor("#4D13D670"))
-    var trendDownGradient = GradientColor(Color.parseColor("#0D7413D6"), Color.parseColor("#4DFF0303"))
-    var pressedGradient = GradientColor(context.getColor(R.color.oz), context.getColor(R.color.oz))
+    var trendUpGradient = GradientColor(Color.parseColor("#416BFF"), Color.parseColor("#13D670"))
+    var trendDownGradient = GradientColor(Color.parseColor("#7413D6"), Color.parseColor("#FF0303"))
+    var pressedGradient = GradientColor(context.getColor(R.color.leah), context.getColor(R.color.leah))
     var outdatedGradient = GradientColor(context.getColor(R.color.grey_50), context.getColor(R.color.grey_50))
 
     var curveColor = trendUpColor
     var curveGradient = trendUpGradient
-    var curvePressedColor = context.getColor(R.color.oz)
+    var curvePressedColor = context.getColor(R.color.leah)
     var curveOutdatedColor = context.getColor(R.color.grey_50)
     var curveVerticalOffset = dp2px(18f)
     var curveMinimalVerticalOffset = dp2px(10f)
@@ -44,7 +44,7 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
     var curveDominanceLabelColor = context.getColor(R.color.jacob)
 
-    var cursorColor = context.getColor(R.color.oz)
+    var cursorColor = context.getColor(R.color.leah)
 
     var volumeColor = context.getColor(R.color.steel_20)
     var volumeWidth = dp2px(4f)

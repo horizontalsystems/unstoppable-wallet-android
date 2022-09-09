@@ -10,8 +10,8 @@ android {
         applicationId "io.horizontalsystems.bankwallet"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 61
-        versionName "0.24.2"
+        versionCode 67
+        versionName "0.26.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
@@ -54,6 +54,10 @@ android {
             resValue "string", "infuraSecretKey", "fc479a9290b64a84a15fa6544a130218"
             resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
             resValue "string", "bscscanKey", "5ZGSHWYHZVA8XZHB8PF6UUTRNNB4KT43ZZ"
+            resValue "string", "polygonscanKey", "TNQ44BCF1MS3S75Y6A2B6SN88I8UYFJFRM"
+            resValue "string", "snowtraceApiKey", "DD8VX77TQ73KSNDFGBQQ31J7K5B51CXXPH"
+            resValue "string", "optimisticEtherscanApiKey", "A4E6DAX46FFFW4CGZP6IMZ64ADI3TIRBTS"
+            resValue "string", "arbiscanApiKey", "Z43JN5434XVNA5D73UGPWKF26G5D9MGDPZ"
             resValue "string", "defiyieldProviderApiKey", "87e8671e-8267-427c-92c3-4627833445ae"
             resValue "string", "is_release", "false"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/develop/index.json"
@@ -92,6 +96,10 @@ android {
             resValue "string", "infuraSecretKey", "7b81c992c98d4e60aaa8a0ef9acff2be"
             resValue "string", "etherscanKey", "TTH1114D5VD5ZMCJZ4B74SGIDRCGSKWGX9"
             resValue "string", "bscscanKey", "HBQQN4GTKCHYSRZCKFVQJ3FWGPY4T8237Y"
+            resValue "string", "polygonscanKey", "2JM7USE5YRI59RWFZQI2RECAZSNI5QEQGV"
+            resValue "string", "snowtraceApiKey", "47IXTRAAFT1E1J4RNSPZPNB5EWUIQR16FG"
+            resValue "string", "optimisticEtherscanApiKey", "745EUI4781T147M9QJRNS5G3Q5NFF2SJXP"
+            resValue "string", "arbiscanApiKey", "4QWW522BV13BJCZMXH1JIB2ESJ7MZTSJYI"
             resValue "string", "defiyieldProviderApiKey", "87e8671e-8267-427c-92c3-4627833445ae"
             resValue "string", "is_release", "true"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json"
@@ -119,7 +127,9 @@ android {
     }
 
     packagingOptions {
-        pickFirst("META-INF/atomicfu.kotlin_module")
+        resources {
+            pickFirsts += ['META-INF/atomicfu.kotlin_module']
+        }
     }
 
     kotlinOptions {
@@ -127,7 +137,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.1.1'
+        kotlinCompilerExtensionVersion '1.2.0-beta03'
     }
 }
 
@@ -147,11 +157,14 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
-    implementation "androidx.preference:preference-ktx:1.1.1"
+    implementation "androidx.preference:preference-ktx:1.2.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     //Splash screen
-    implementation "androidx.core:core-splashscreen:1.0.0-beta02"
+    implementation "androidx.core:core-splashscreen:1.0.0-rc01"
+
+    //AppWidgets
+    implementation 'androidx.glance:glance-appwidget:1.0.0-alpha03'
 
     // Room
     def room_version = '2.4.1'
@@ -178,7 +191,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson:2.9.0'
     implementation "androidx.biometric:biometric:$biometric_version"
 
     implementation 'com.squareup.picasso:picasso:2.71828'
@@ -213,27 +226,36 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:eb33b43'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:fe01dfa'
-    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:b4ebb16'
-    implementation 'com.github.horizontalsystems:binance-chain-kit-android:fe2a3be'
-    implementation 'com.github.horizontalsystems:market-kit-android:13d91b9c'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:a6b1402'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:bd432a3'
+    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:501cf1e'
+    implementation 'com.github.horizontalsystems:binance-chain-kit-android:2dc72ef'
+    implementation 'com.github.horizontalsystems:market-kit-android:42118e9'
 
     // Zcash SDK
-    implementation "cash.z.ecc.android:zcash-android-sdk:1.3.0-beta16"
+    implementation "cash.z.ecc.android:zcash-android-sdk:1.5.0-beta01"
 
     // WalletConnect
     implementation 'com.github.horizontalsystems:wallet-connect-kotlin:b9a50b8'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     // WalletConnect V2
     implementation "com.github.WalletConnect:WalletConnectKotlinV2:1.0.0-beta04"
 
     // Unstoppable Domains
-    implementation 'com.unstoppabledomains:resolution:4.0.0'
+    implementation 'com.unstoppabledomains:resolution:5.0.0'
+
+    // Ethereum Name Service
+    implementation 'com.github.komputing.kethereum:model:0.85.7'
+    implementation 'com.github.komputing.kethereum:rpc:0.85.7'
+    implementation 'com.github.komputing.kethereum:rpc_min3:0.85.7'
+    implementation 'com.github.komputing.kethereum:ens:0.85.7'
 
     // in case native file tor.so not loading, do full gradle clean and build.
     implementation 'com.github.horizontalsystems:tor-kit-android:6c775c1'
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.6.1'
 
     // UI modules
 
@@ -242,10 +264,8 @@ dependencies {
     implementation project(':components:snackbar')
     implementation project(':components:icons')
     implementation project(':components:chartview')
-    implementation project(':components:languageswitcher')
     implementation project(':components:keystore')
     implementation project(':components:pin')
-    implementation project(':components:seekbar')
 
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.4.0'
@@ -260,12 +280,15 @@ dependencies {
     implementation "com.google.accompanist:accompanist-swiperefresh:0.18.0"
 
     implementation "androidx.compose.runtime:runtime-livedata:1.1.1"
-    implementation "io.coil-kt:coil-compose:1.4.0"
-    implementation "io.coil-kt:coil-svg:1.4.0"
-    implementation("io.coil-kt:coil-gif:1.4.0")
+    implementation "io.coil-kt:coil-compose:2.1.0"
+    implementation "io.coil-kt:coil-svg:2.1.0"
+    implementation("io.coil-kt:coil-gif:2.1.0")
 
     // When using a AppCompat theme
     implementation "com.google.accompanist:accompanist-appcompat-theme:0.20.3"
+    implementation "com.google.accompanist:accompanist-pager:0.24.9-beta"
+
+    implementation "com.google.accompanist:accompanist-flowlayout:0.25.0"
 
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'

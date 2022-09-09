@@ -13,14 +13,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
-import coil.size.OriginalSize
-import coil.size.Scale
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
 import com.twitter.twittertext.Extractor
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.tweets.ReferencedTweetViewItem
@@ -98,7 +99,7 @@ private fun TweetReferencedTweet(referencedTweet: ReferencedTweetViewItem) {
     Column(Modifier
         .fillMaxWidth()
         .clip(RoundedCornerShape(8.dp))
-        .background(ComposeAppTheme.colors.steel20)
+        .background(ComposeAppTheme.colors.steel10)
         .padding(12.dp)
     ) {
         Text(
@@ -107,11 +108,7 @@ private fun TweetReferencedTweet(referencedTweet: ReferencedTweetViewItem) {
             style = ComposeAppTheme.typography.micro
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = referencedTweet.text,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.subhead2
-        )
+        subhead2_leah(text = referencedTweet.text)
     }
 }
 
@@ -119,7 +116,7 @@ private fun TweetReferencedTweet(referencedTweet: ReferencedTweetViewItem) {
 private fun TweetText(text: String, entities: List<Extractor.Entity>) {
     val spanStyles = entities.map {
         AnnotatedString.Range(
-            SpanStyle(color = ComposeAppTheme.colors.issykBlue), it.start, it.end
+            SpanStyle(color = ComposeAppTheme.colors.laguna), it.start, it.end
         )
     }
     Text(
@@ -139,37 +136,28 @@ private fun TweetTitle(tweet: TweetViewItem) {
             modifier = Modifier
                 .size(24.dp)
                 .clip(CircleShape),
-            painter = rememberImagePainter(tweet.titleImageUrl),
+            painter = rememberAsyncImagePainter(tweet.titleImageUrl),
             contentDescription = ""
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-            Text(
-                text = tweet.title,
-                color = ComposeAppTheme.colors.oz,
-                style = ComposeAppTheme.typography.body
-            )
+            body_leah(text = tweet.title)
             Spacer(modifier = Modifier.height(3.dp))
-            Text(
-                text = tweet.subtitle,
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.caption
-            )
+            caption_grey(text = tweet.subtitle)
         }
     }
 }
 
 @Composable
 private fun AttachmentPhoto(attachment: Tweet.Attachment.Photo) {
+    val model = ImageRequest.Builder(LocalContext.current)
+        .data(attachment.url)
+        .size(Size.ORIGINAL)
+        .crossfade(true)
+        .build()
     Image(
         modifier = Modifier.fillMaxWidth(),
-        painter = rememberImagePainter(
-            attachment.url,
-            builder = {
-                size(OriginalSize)
-                scale(Scale.FIT)
-            },
-        ),
+        painter = rememberAsyncImagePainter(model),
         contentDescription = "",
         contentScale = ContentScale.FillWidth
     )
@@ -178,15 +166,14 @@ private fun AttachmentPhoto(attachment: Tweet.Attachment.Photo) {
 @Composable
 private fun AttachmentVideo(attachment: Tweet.Attachment.Video) {
     Box {
+        val model = ImageRequest.Builder(LocalContext.current)
+            .data(attachment.previewImageUrl)
+            .size(Size.ORIGINAL)
+            .crossfade(true)
+            .build()
         Image(
             modifier = Modifier.fillMaxSize(),
-            painter = rememberImagePainter(
-                attachment.previewImageUrl,
-                builder = {
-                    size(OriginalSize)
-                    scale(Scale.FIT)
-                },
-            ),
+            painter = rememberAsyncImagePainter(model),
             contentDescription = null,
             contentScale = ContentScale.FillWidth
         )
@@ -215,9 +202,14 @@ private fun AttachmentPoll(attachment: Tweet.Attachment.Poll) {
         attachment.options.forEach { option ->
             val proportion = option.votes / totalVotes.toFloat()
             val color = if (option.votes == maxVotes) {
-                ComposeAppTheme.colors.issykBlue
+                ComposeAppTheme.colors.laguna
             } else {
                 ComposeAppTheme.colors.steel20
+            }
+            val textColor = if (option.votes == maxVotes) {
+                ComposeAppTheme.colors.claude
+            } else {
+                ComposeAppTheme.colors.leah
             }
             Box(
                 modifier = Modifier
@@ -242,15 +234,13 @@ private fun AttachmentPoll(attachment: Tweet.Attachment.Poll) {
                             .padding(horizontal = 12.dp)
                             .weight(1f),
                         text = option.label,
-                        color = ComposeAppTheme.colors.leah,
+                        color = textColor,
                         style = ComposeAppTheme.typography.caption
                     )
-                    Text(
+                    caption_leah(
                         modifier = Modifier
                             .padding(horizontal = 12.dp),
                         text = "${(proportion * 100).toInt()}%",
-                        color = ComposeAppTheme.colors.leah,
-                        style = ComposeAppTheme.typography.caption
                     )
                 }
             }

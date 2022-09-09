@@ -7,9 +7,8 @@ import android.widget.ImageView
 import androidx.annotation.CheckResult
 import coil.load
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.CustomToken
-import io.horizontalsystems.bankwallet.entities.label
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.*
@@ -27,7 +26,8 @@ val <T> Optional<T>.orNull: T?
         else -> null
     }
 
-val Coin.isCustom: Boolean get() = uid.startsWith(CustomToken.uidPrefix)
+val Platform.iconUrl: String
+    get() = "https://markets.nyc3.digitaloceanspaces.com/platform-icons/$uid@3x.png"
 
 val Coin.iconUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/$uid@3x.png"
@@ -43,13 +43,6 @@ val CoinTreasury.logoUrl: String
 
 val Auditor.logoUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/auditor-icons/$name@3x.png"
-
-val FullCoin.iconPlaceholder: Int
-    get() = if (platforms.size == 1) {
-        platforms.first().coinType.iconPlaceholder
-    } else {
-        R.drawable.coin_placeholder
-    }
 
 fun List<FullCoin>.sortedByFilter(filter: String, enabled: (FullCoin) -> Boolean): List<FullCoin> {
     var comparator: Comparator<FullCoin> = compareByDescending {
@@ -76,39 +69,13 @@ fun List<FullCoin>.sortedByFilter(filter: String, enabled: (FullCoin) -> Boolean
     return sortedWith(comparator)
 }
 
-val CoinType.iconPlaceholder: Int
-    get() = when (this) {
-        is CoinType.Erc20 -> R.drawable.erc20
-        is CoinType.Bep2 -> R.drawable.bep2
-        is CoinType.Bep20 -> R.drawable.bep20
-        else -> R.drawable.coin_placeholder
-    }
-
-val FullCoin.typeLabel: String?
-    get() = if (platforms.size == 1) {
-        platforms.first().coinType.label
-    } else {
-        null
-    }
-
-val CoinType.blockchainLogo: Int
-    get() = when (this) {
-        CoinType.Bitcoin -> R.drawable.logo_bitcoin_24
-        CoinType.Ethereum -> R.drawable.logo_ethereum_24
-        CoinType.BitcoinCash -> R.drawable.logo_bitcoincash_24
-        CoinType.Dash -> R.drawable.logo_dash_24
-        CoinType.BinanceSmartChain -> R.drawable.logo_binancesmartchain_24
-        is CoinType.Bep2 -> R.drawable.logo_bep2_24
-        CoinType.Litecoin -> R.drawable.logo_litecoin_24
-        CoinType.Zcash -> R.drawable.logo_zcash_24
-        else -> R.drawable.coin_placeholder
-    }
-
 // ImageView
 
-fun ImageView.setRemoteImage(url: String, placeholder: Int = R.drawable.ic_placeholder) {
+fun ImageView.setRemoteImage(url: String, placeholder: Int? = R.drawable.ic_placeholder) {
     load(url) {
-        error(placeholder)
+        if (placeholder != null) {
+            error(placeholder)
+        }
     }
 }
 
@@ -206,7 +173,19 @@ fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit): Disposable {
         .subscribe(onSuccess)
 }
 
-fun String.shortenedAddress(characters: Int = 6) = when {
-    length <= characters * 2 + 4 -> this
-    else -> take(characters) + "..." + takeLast(characters)
+fun String.shorten(): String {
+    val prefixes = listOf("0x", "bc", "bnb", "ltc", "bitcoincash:")
+
+    var prefix = ""
+    for (p in prefixes) {
+        if (this.startsWith(p)) {
+            prefix = p
+            break
+        }
+    }
+
+    val withoutPrefix = this.removePrefix(prefix)
+
+    val characters = 4
+    return prefix + withoutPrefix.take(characters) + "..." + withoutPrefix.takeLast(characters)
 }

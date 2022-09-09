@@ -4,11 +4,12 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.rx2.asFlow
 
 class TermsManager(private val localStorage: ILocalStorage) : ITermsManager {
 
     override val termsAcceptedSignal = PublishSubject.create<Boolean>()
-
+    override val termsAcceptedSignalFlow = termsAcceptedSignal.asFlow()
     override val terms: List<Term>
         get() = TermsModule.TermType.values().map { term(it.key) }
 

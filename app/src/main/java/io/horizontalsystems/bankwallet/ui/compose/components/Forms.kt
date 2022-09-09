@@ -9,7 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,13 +21,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
@@ -43,10 +46,21 @@ fun FormsInput(
     enabled: Boolean = true,
     initial: String? = null,
     hint: String,
+    prefix: String? = null,
+    textColor: Color = ComposeAppTheme.colors.leah,
+    textStyle: TextStyle = ComposeAppTheme.typography.body,
+    hintColor: Color = ComposeAppTheme.colors.grey50,
+    hintStyle: TextStyle = ComposeAppTheme.typography.body,
+    singleLine: Boolean = false,
     state: DataState<Any>? = null,
     qrScannerEnabled: Boolean = false,
+    pasteEnabled: Boolean = true,
+    maxLength: Int? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
     onChangeFocus: ((Boolean) -> Unit)? = null,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -77,8 +91,15 @@ fun FormsInput(
                 .background(ComposeAppTheme.colors.lawrence),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+            var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
                 mutableStateOf(TextFieldValue(initial ?: ""))
+            }
+
+            prefix?.let{
+                body_grey(
+                    modifier = Modifier.padding(start = 12.dp),
+                    text = prefix
+                )
             }
 
             BasicTextField(
@@ -86,18 +107,28 @@ fun FormsInput(
                     .onFocusChanged {
                         onChangeFocus?.invoke(it.isFocused)
                     }
-                    .padding(12.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
                     .weight(1f),
                 enabled = enabled,
                 value = textState,
-                onValueChange = {
-                    textState = it
-                    onValueChange.invoke(it.text)
+                onValueChange = { textFieldValue ->
+                    val textFieldValueProcessed = textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
+
+                    val text = textFieldValueProcessed.text
+                    if (maxLength == null || text.length <= maxLength) {
+                        textState = textFieldValueProcessed
+                        onValueChange.invoke(text)
+                    } else {
+                        // Need to set textState to new instance of TextFieldValue with the same values
+                        // Otherwise it getting set to empty string
+                        textState = TextFieldValue(text = textState.text, selection = textState.selection)
+                    }
                 },
                 textStyle = ColoredTextStyle(
-                    color = ComposeAppTheme.colors.oz,
-                    textStyle = ComposeAppTheme.typography.body
+                    color = textColor,
+                    textStyle = textStyle
                 ),
+                singleLine = singleLine,
                 cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
                 decorationBox = { innerTextField ->
                     if (textState.text.isEmpty()) {
@@ -105,25 +136,19 @@ fun FormsInput(
                             hint,
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
-                            color = ComposeAppTheme.colors.grey50,
-                            style = ComposeAppTheme.typography.body
+                            color = hintColor,
+                            style = hintStyle
                         )
                     }
                     innerTextField()
-                }
+                },
+                visualTransformation = visualTransformation,
+                keyboardOptions = keyboardOptions,
             )
 
             when (state) {
                 is DataState.Loading -> {
-                    // Todo: Need to find better solution
-                    // CircularProgressIndicator doesn't allow to change its size.
-                    // Resized it using modifier size with padding.
-                    // The ordering of modifiers is important.
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(28.dp).padding(top = 4.dp, end = 8.dp),
-                        color = ComposeAppTheme.colors.grey,
-                        strokeWidth = 2.dp
-                    )
+                    HSCircularProgressIndicator()
                 }
                 is DataState.Error -> {
                     Icon(
@@ -146,15 +171,14 @@ fun FormsInput(
                 }
             }
 
-            val clipboardManager = LocalClipboardManager.current
-
             if (textState.text.isNotEmpty()) {
                 ButtonSecondaryCircle(
-                    modifier = Modifier.padding(end = 8.dp),
+                    modifier = Modifier.padding(end = 16.dp),
                     icon = R.drawable.ic_delete_20,
                     onClick = {
-                        textState = textState.copy(text = "")
-                        onValueChange.invoke("")
+                        val text = textPreprocessor.process("")
+                        textState = textState.copy(text = text, selection = TextRange(0))
+                        onValueChange.invoke(text)
                     }
                 )
             } else {
@@ -163,13 +187,14 @@ fun FormsInput(
                         if (result.resultCode == Activity.RESULT_OK) {
                             val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-                            textState = textState.copy(text = scannedText, selection = TextRange(scannedText.length))
-                            onValueChange.invoke(scannedText)
+                            val textProcessed = textPreprocessor.process(scannedText)
+                            textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                            onValueChange.invoke(textProcessed)
                         }
                     }
 
                     ButtonSecondaryCircle(
-                        modifier = Modifier.padding(end = 8.dp),
+                        modifier = Modifier.padding(end = if(pasteEnabled) 8.dp else 16.dp),
                         icon = R.drawable.ic_qr_scan_20,
                         onClick = {
                             qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
@@ -177,18 +202,20 @@ fun FormsInput(
                     )
                 }
 
-                val textInClipboard = clipboardManager.getText()?.text
-                ButtonSecondaryDefault(
-                    modifier = Modifier.padding(end = 8.dp),
-                    title = stringResource(id = R.string.Send_Button_Paste),
-                    onClick = {
-                        textInClipboard?.let {
-                            textState = textState.copy(text = textInClipboard, selection = TextRange(textInClipboard.length))
-                            onValueChange.invoke(textInClipboard)
-                        }
-                    },
-                    enabled = textInClipboard != null
-                )
+                if (pasteEnabled) {
+                    val clipboardManager = LocalClipboardManager.current
+                    ButtonSecondaryDefault(
+                        modifier = Modifier.padding(end = 16.dp),
+                        title = stringResource(id = R.string.Send_Button_Paste),
+                        onClick = {
+                            clipboardManager.getText()?.text?.let { textInClipboard ->
+                                val textProcessed = textPreprocessor.process(textInClipboard)
+                                textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                                onValueChange.invoke(textProcessed)
+                            }
+                        },
+                    )
+                }
             }
         }
 
@@ -204,3 +231,11 @@ fun FormsInput(
 }
 
 class FormsInputStateWarning(override val message: String?) : Exception()
+
+interface TextPreprocessor {
+    fun process(text: String): String
+}
+
+object TextPreprocessorImpl : TextPreprocessor {
+    override fun process(text: String) = text
+}

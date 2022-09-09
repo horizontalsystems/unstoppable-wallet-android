@@ -11,19 +11,16 @@ import androidx.savedstate.SavedStateRegistryOwner
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
-import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.coincard.ISwapCoinCardService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapFromCoinCardService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapToCoinCardService
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchFragment
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFragment
-import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
-import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapFragment
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Observable
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -34,18 +31,17 @@ object SwapMainModule {
     const val coinCardTypeFrom = "coinCardTypeFrom"
     const val coinCardTypeTo = "coinCardTypeTo"
 
-    private const val coinFromKey = "coinFromKey"
+    private const val tokenFromKey = "tokenFromKey"
 
-    fun prepareParams(coinFrom: PlatformCoin) = bundleOf(coinFromKey to coinFrom)
+    fun prepareParams(tokenFrom: Token) = bundleOf(tokenFromKey to tokenFrom)
 
     interface ISwapProvider : Parcelable {
         val id: String
         val title: String
         val url: String
         val fragment: SwapBaseFragment
-        val settingsFragment: SwapSettingsBaseFragment
 
-        fun supports(blockchain: Blockchain): Boolean
+        fun supports(blockchainType: BlockchainType): Boolean
     }
 
     @Parcelize
@@ -55,11 +51,9 @@ object SwapMainModule {
         override val url = "https://uniswap.org/"
         override val fragment: SwapBaseFragment
             get() = UniswapFragment()
-        override val settingsFragment: SwapSettingsBaseFragment
-            get() = UniswapSettingsFragment()
 
-        override fun supports(blockchain: Blockchain): Boolean {
-            return blockchain == Blockchain.Ethereum
+        override fun supports(blockchainType: BlockchainType): Boolean {
+            return blockchainType == BlockchainType.Ethereum
         }
     }
 
@@ -70,11 +64,9 @@ object SwapMainModule {
         override val url = "https://pancakeswap.finance/"
         override val fragment: SwapBaseFragment
             get() = UniswapFragment()
-        override val settingsFragment: SwapSettingsBaseFragment
-            get() = UniswapSettingsFragment()
 
-        override fun supports(blockchain: Blockchain): Boolean {
-            return blockchain == Blockchain.BinanceSmartChain
+        override fun supports(blockchainType: BlockchainType): Boolean {
+            return blockchainType == BlockchainType.BinanceSmartChain
         }
     }
 
@@ -85,37 +77,35 @@ object SwapMainModule {
         override val url = "https://app.1inch.io/"
         override val fragment: SwapBaseFragment
             get() = OneInchFragment()
-        override val settingsFragment: SwapSettingsBaseFragment
-            get() = OneInchSettingsFragment()
 
-        override fun supports(blockchain: Blockchain): Boolean {
-            return blockchain.mainNet && (blockchain == Blockchain.Ethereum || blockchain == Blockchain.BinanceSmartChain)
+        override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Avalanche,
+            BlockchainType.Optimism,
+            BlockchainType.ArbitrumOne -> true
+            else -> false
         }
     }
 
     @Parcelize
-    enum class Blockchain(val id: String, val title: String) : Parcelable {
-        Ethereum("ethereum", "Ethereum"),
-        BinanceSmartChain("binanceSmartChain", "Binance Smart Chain");
+    object QuickSwapProvider : ISwapProvider {
+        override val id = "quickswap"
+        override val title = "QuickSwap"
+        override val url = "https://quickswap.exchange/"
+        override val fragment: SwapBaseFragment
+            get() = UniswapFragment()
 
-        val evmKitWrapper: EvmKitWrapper?
-            get() = when (this) {
-                Ethereum -> App.ethereumKitManager.evmKitWrapper
-                BinanceSmartChain -> App.binanceSmartChainKitManager.evmKitWrapper
-            }
-
-        val mainNet: Boolean
-            get() = evmKitWrapper?.evmKit?.chain?.isMainNet ?: false
-
-        val coin: PlatformCoin?
-            get() = when (this) {
-                Ethereum -> App.marketKit.platformCoin(CoinType.Ethereum)
-                BinanceSmartChain -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)
-            }
+        override fun supports(blockchainType: BlockchainType): Boolean {
+            return blockchainType == BlockchainType.Polygon
+        }
     }
 
     @Parcelize
-    class Dex(val blockchain: Blockchain, val provider: ISwapProvider) : Parcelable
+    class Dex(val blockchain: Blockchain, val provider: ISwapProvider) : Parcelable {
+        val blockchainType get() = blockchain.type
+    }
 
     @Parcelize
     enum class AmountType : Parcelable {
@@ -123,23 +113,23 @@ object SwapMainModule {
     }
 
     interface ISwapTradeService {
-        val coinFrom: PlatformCoin?
-        val coinFromObservable: Observable<Optional<PlatformCoin>>
+        val tokenFrom: Token?
+        val tokenFromObservable: Observable<Optional<Token>>
         val amountFrom: BigDecimal?
         val amountFromObservable: Observable<Optional<BigDecimal>>
 
-        val coinTo: PlatformCoin?
-        val coinToObservable: Observable<Optional<PlatformCoin>>
+        val tokenTo: Token?
+        val tokenToObservable: Observable<Optional<Token>>
         val amountTo: BigDecimal?
         val amountToObservable: Observable<Optional<BigDecimal>>
 
         val amountType: AmountType
         val amountTypeObservable: Observable<AmountType>
 
-        fun enterCoinFrom(coin: PlatformCoin?)
+        fun enterTokenFrom(token: Token?)
         fun enterAmountFrom(amount: BigDecimal?)
 
-        fun enterCoinTo(coin: PlatformCoin?)
+        fun enterTokenTo(token: Token?)
         fun enterAmountTo(amount: BigDecimal?)
 
         fun restoreState(swapProviderState: SwapProviderState)
@@ -168,7 +158,7 @@ object SwapMainModule {
 
     @Parcelize
     data class CoinBalanceItem(
-        val platformCoin: PlatformCoin,
+        val token: Token,
         val balance: BigDecimal?,
         val fiatBalanceValue: CurrencyValue?,
     ) : Parcelable
@@ -179,17 +169,17 @@ object SwapMainModule {
 
     @Parcelize
     data class SwapProviderState(
-        val coinFrom: PlatformCoin? = null,
-        val coinTo: PlatformCoin? = null,
+        val tokenFrom: Token? = null,
+        val tokenTo: Token? = null,
         val amountFrom: BigDecimal? = null,
         val amountTo: BigDecimal? = null,
         val amountType: AmountType = AmountType.ExactFrom
     ) : Parcelable
 
     class Factory(arguments: Bundle) : ViewModelProvider.Factory {
-        private val coinFrom: PlatformCoin? = arguments.getParcelable(coinFromKey)
+        private val tokenFrom: Token? = arguments.getParcelable(tokenFromKey)
         private val swapProviders: List<ISwapProvider> =
-            listOf(UniswapProvider, PancakeSwapProvider, OneInchProvider)
+            listOf(UniswapProvider, PancakeSwapProvider, OneInchProvider, QuickSwapProvider)
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -198,7 +188,7 @@ object SwapMainModule {
                 SwapMainViewModel::class.java -> {
                     SwapMainViewModel(
                         SwapMainService(
-                            coinFrom,
+                            tokenFrom,
                             swapProviders,
                             App.localStorage
                         )

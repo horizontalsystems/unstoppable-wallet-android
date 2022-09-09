@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -51,7 +51,7 @@ class SwapApproveViewModel(
         if (value.isEmpty()) return true
 
         return try {
-            BigDecimal(value).scale() <= coinService.platformCoin.decimals
+            BigDecimal(value).scale() <= coinService.token.decimals
         } catch (e: NumberFormatException) {
             false
         }

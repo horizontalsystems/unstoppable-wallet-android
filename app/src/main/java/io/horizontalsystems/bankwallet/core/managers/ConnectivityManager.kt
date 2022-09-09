@@ -8,13 +8,21 @@ import android.net.NetworkRequest
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.core.BackgroundManager
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 
-class ConnectivityManager(backgroundManager: BackgroundManager): BackgroundManager.Listener {
+class ConnectivityManager(backgroundManager: BackgroundManager) : BackgroundManager.Listener {
 
     private val connectivityManager: ConnectivityManager by lazy {
         App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
+
+    private val _networkAvailabilityFlow =
+        MutableSharedFlow<Boolean>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    val networkAvailabilityFlow = _networkAvailabilityFlow.asSharedFlow()
 
     var isConnected = getInitialConnectionStatus()
     val networkAvailabilitySignal = PublishSubject.create<Unit>()
@@ -52,6 +60,7 @@ class ConnectivityManager(backgroundManager: BackgroundManager): BackgroundManag
         hasValidInternet = false
         isConnected = getInitialConnectionStatus()
         networkAvailabilitySignal.onNext(Unit)
+        _networkAvailabilityFlow.tryEmit(isConnected)
     }
 
     private fun getInitialConnectionStatus(): Boolean {
@@ -100,6 +109,7 @@ class ConnectivityManager(backgroundManager: BackgroundManager): BackgroundManag
         isConnected = hasConnection && hasValidInternet
         if (oldValue != isConnected) {
             networkAvailabilitySignal.onNext(Unit)
+            _networkAvailabilityFlow.tryEmit(isConnected)
         }
     }
 

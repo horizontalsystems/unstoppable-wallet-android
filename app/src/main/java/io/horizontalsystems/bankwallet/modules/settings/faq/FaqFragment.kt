@@ -4,167 +4,129 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.databinding.FragmentFaqListBinding
-import io.horizontalsystems.bankwallet.databinding.ViewHolderFaqItemBinding
-import io.horizontalsystems.bankwallet.databinding.ViewHolderFaqSectionBinding
 import io.horizontalsystems.bankwallet.entities.Faq
+import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
-import io.horizontalsystems.bankwallet.modules.settings.guides.ErrorAdapter
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.views.ListPosition
+import java.net.UnknownHostException
 
-class FaqListFragment : BaseFragment(), FaqListAdapter.Listener {
-
-    private val viewModel by viewModels<FaqViewModel> { FaqModule.Factory() }
-    private val adapter = FaqListAdapter(this)
-    private val errorAdapter = ErrorAdapter()
-
-    private var _binding: FragmentFaqListBinding? = null
-    private val binding get() = _binding!!
+class FaqListFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFaqListBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding.faqListRecyclerview.adapter = null
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        binding.faqListRecyclerview.adapter = ConcatAdapter(errorAdapter, adapter)
-
-        observeLiveData()
-    }
-
-    private fun observeLiveData() {
-        viewModel.faqItemList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
-        })
-
-        viewModel.loading.observe(viewLifecycleOwner, Observer {
-            binding.toolbarSpinner.isVisible = it
-        })
-
-        viewModel.error.observe(viewLifecycleOwner, Observer {
-            errorAdapter.error = it
-        })
-    }
-
-    override fun onItemClicked(faqItem: FaqItem) {
-        val arguments = bundleOf(MarkdownFragment.markdownUrlKey to faqItem.faq.markdown)
-        findNavController().slideFromRight(R.id.faqFragment_to_markdownFragment, arguments)
-    }
-}
-
-open class FaqData
-data class FaqSection(val title: String) : FaqData()
-data class FaqItem(val faq: Faq, var listPosition: ListPosition) : FaqData()
-
-class FaqListAdapter(private val listener: Listener) :
-    ListAdapter<FaqData, RecyclerView.ViewHolder>(faqDiff) {
-
-    interface Listener {
-        fun onItemClicked(faqItem: FaqItem)
-    }
-
-    private val viewTypeSection = 0
-    private val viewTypeFaq = 1
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        when (viewType) {
-            viewTypeSection -> {
-                ViewHolderSection(
-                    ViewHolderFaqSectionBinding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    FaqScreen(
+                        onCloseClick = { findNavController().popBackStack() },
+                        onItemClick = { faqItem ->
+                            val arguments =
+                                bundleOf(MarkdownFragment.markdownUrlKey to faqItem.markdown)
+                            findNavController().slideFromRight(R.id.markdownFragment, arguments)
+                        }
                     )
-                )
-            }
-            else -> {
-                ViewHolderFaq(
-                    ViewHolderFaqItemBinding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
-                    ), listener)
-            }
-        }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = getItem(position)
-
-        if (holder is ViewHolderSection && item is FaqSection) {
-            holder.bind(item)
-        }
-        if (holder is ViewHolderFaq && item is FaqItem) {
-            holder.bind(item)
-        }
-    }
-
-    override fun getItemViewType(position: Int) = when (getItem(position)) {
-        is FaqSection -> viewTypeSection
-        else -> viewTypeFaq
-    }
-
-    companion object {
-        private val faqDiff = object : DiffUtil.ItemCallback<FaqData>() {
-            override fun areItemsTheSame(oldItem: FaqData, newItem: FaqData): Boolean {
-                return oldItem.equals(newItem)
-            }
-
-            override fun areContentsTheSame(oldItem: FaqData, newItem: FaqData): Boolean {
-                return oldItem.equals(newItem)
+                }
             }
         }
     }
 }
 
-class ViewHolderSection(private val binding: ViewHolderFaqSectionBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: FaqSection) {
-        binding.faqHeadText.text = item.title
-    }
-}
+@Composable
+private fun FaqScreen(
+    onCloseClick: () -> Unit,
+    onItemClick: (Faq) -> Unit,
+    viewModel: FaqViewModel = viewModel(factory = FaqModule.Factory())
+) {
+    val viewState = viewModel.viewState
+    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        AppBar(
+            title = TranslatableString.ResString(R.string.Settings_Faq),
+            navigationIcon = {
+                HsIconButton(onClick = onCloseClick) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back),
+                        contentDescription = "back",
+                        tint = ComposeAppTheme.colors.jacob
+                    )
+                }
+            }
+        )
+        Crossfade(viewState) { viewState ->
+            when (viewState) {
+                ViewState.Loading -> {
+                    Loading()
+                }
+                is ViewState.Error -> {
+                    val s = when (val error = viewState.t) {
+                        is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
+                        is LocalizedException -> stringResource(error.errorTextRes)
+                        else -> stringResource(R.string.Hud_UnknownError, error)
+                    }
 
-class ViewHolderFaq(
-    private val binding: ViewHolderFaqItemBinding,
-    listener: FaqListAdapter.Listener
-) : RecyclerView.ViewHolder(binding.root) {
-    private var faqItem: FaqItem? = null
+                    ScreenMessageWithAction(s, R.drawable.ic_error_48)
+                }
+                ViewState.Success -> {
+                    Column {
+                        val tabItems =
+                            viewModel.sections.map {
+                                TabItem(
+                                    it.section,
+                                    it == viewModel.selectedSection,
+                                    it
+                                )
+                            }
+                        ScrollableTabs(tabItems) { tab ->
+                            viewModel.onSelectSection(tab)
+                        }
 
-    init {
-        binding.wrapper.setOnClickListener {
-            faqItem?.let {
-                listener.onItemClicked(it)
+                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                            Spacer(Modifier.height(12.dp))
+                            HSSectionRounded {
+                                viewModel.faqItems.forEachIndexed { index, faq ->
+                                    CellLawrence(
+                                        borderTop = index != 0,
+                                        onClick = { onItemClick(faq) }
+                                    ) {
+                                        subhead1_leah(text = faq.title)
+                                    }
+                                }
+                            }
+                            Spacer(Modifier.height(32.dp))
+                        }
+                    }
+                }
             }
         }
-    }
-
-    fun bind(item: FaqItem) {
-        faqItem = item
-        binding.faqTitleText.text = item.faq.title
-        binding.wrapper.setBackgroundResource(item.listPosition.getBackground())
     }
 }

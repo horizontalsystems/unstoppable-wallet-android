@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.nft
 
 import androidx.room.*
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NftDao {

@@ -64,7 +64,7 @@ class CautionViewItemFactory(
                     Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
                     Translator.getString(
                         R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
-                        baseCoinService.platformCoin.coin.code
+                        baseCoinService.token.coin.code
                     ),
                     CautionViewItem.Type.Error
                 )
@@ -83,7 +83,7 @@ class CautionViewItemFactory(
                     Translator.getString(R.string.EthereumTransaction_Error_Title),
                     Translator.getString(
                         R.string.EthereumTransaction_Error_InsufficientBalance,
-                        baseCoinService.coinValue(convertedError.requiredBalance).getFormatted()
+                        baseCoinService.coinValue(convertedError.requiredBalance).getFormattedFull()
                     )
                 )
             }
@@ -93,7 +93,7 @@ class CautionViewItemFactory(
                     Translator.getString(R.string.EthereumTransaction_Error_Title),
                     Translator.getString(
                         R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
-                        baseCoinService.platformCoin.code
+                        baseCoinService.token.coin.code
                     )
                 )
             }
@@ -102,7 +102,7 @@ class CautionViewItemFactory(
                     Translator.getString(R.string.EthereumTransaction_Error_CannotEstimate_Title),
                     Translator.getString(
                         R.string.EthereumTransaction_Error_CannotEstimate,
-                        baseCoinService.platformCoin.code
+                        baseCoinService.token.coin.code
                     )
                 )
             }

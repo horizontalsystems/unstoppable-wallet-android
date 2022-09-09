@@ -14,6 +14,7 @@ object WCSignMessageRequestModule {
 
     class Factory(
         private val signMessageRequest: WC1SignMessageRequest,
+        private val dAppName: String?,
         private val baseService: WC1Service
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -22,6 +23,7 @@ object WCSignMessageRequestModule {
                 WCSignMessageRequestViewModel::class.java -> {
                     val service = WC1SignMessageRequestService(
                         signMessageRequest,
+                        dAppName,
                         baseService,
                         baseService.evmKitWrapper?.signer!!
                     )
@@ -49,7 +51,9 @@ object WCSignMessageRequestModule {
     }
 
     interface RequestAction {
-        val message: SignMessage?
+        val dAppName: String?
+        val message: SignMessage
+        val isLegacySignRequest: Boolean
         fun sign()
         fun reject()
         fun stop()
@@ -58,7 +62,7 @@ object WCSignMessageRequestModule {
 }
 
 sealed class SignMessage(val data: String) {
-    class Message(data: String) : SignMessage(data)
+    class Message(data: String, val showLegacySignWarning: Boolean = false) : SignMessage(data)
     class PersonalMessage(data: String) : SignMessage(data)
-    class TypedMessage(data: String, val domain: String, val dAppName: String?) : SignMessage(data)
+    class TypedMessage(data: String, val domain: String? = null) : SignMessage(data)
 }

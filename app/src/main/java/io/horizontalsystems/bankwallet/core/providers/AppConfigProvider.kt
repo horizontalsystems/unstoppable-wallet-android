@@ -12,7 +12,7 @@ class AppConfigProvider {
      val appTelegramLink: String = "https://t.me/unstoppable_announcements"
      val appRedditLink: String = "https://www.reddit.com/r/UNSTOPPABLEWallet/"
      val reportEmail = "support.unstoppable@protonmail.com"
-     val btcCoreRpcUrl: String = "https://btc.horizontalsystems.xyz/rpc"
+     val btcCoreRpcUrl: String = "https://btc.blocksdecoded.com/rpc"
      val releaseNotesUrl: String = "https://api.github.com/repos/horizontalsystems/unstoppable-wallet-android/releases/tags/"
      val walletConnectUrl = "relay.walletconnect.com"
      val walletConnectProjectId by lazy {
@@ -40,6 +40,18 @@ class AppConfigProvider {
      val bscscanApiKey by lazy {
         Translator.getString(R.string.bscscanKey)
     }
+     val polygonscanApiKey by lazy {
+        Translator.getString(R.string.polygonscanKey)
+    }
+     val snowtraceApiKey by lazy {
+        Translator.getString(R.string.snowtraceApiKey)
+    }
+     val optimisticEtherscanApiKey by lazy {
+        Translator.getString(R.string.optimisticEtherscanApiKey)
+    }
+     val arbiscanApiKey by lazy {
+        Translator.getString(R.string.arbiscanApiKey)
+    }
      val guidesUrl by lazy {
         Translator.getString(R.string.guidesUrl)
     }
@@ -62,7 +74,6 @@ class AppConfigProvider {
     }
 
      val fiatDecimal: Int = 2
-     val maxDecimal: Int = 8
      val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
      val currencies: List<Currency> = listOf(
@@ -79,6 +90,7 @@ class AppConfigProvider {
             Currency("RUB", "₽", 2),
             Currency("SGD", "S$", 2),
             Currency("USD", "$", 2),
+            Currency("ZAR", "R", 2),
     )
 
 }

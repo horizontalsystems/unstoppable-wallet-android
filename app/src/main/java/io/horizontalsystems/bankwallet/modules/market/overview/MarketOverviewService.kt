@@ -1,90 +1,63 @@
 package io.horizontalsystems.bankwallet.modules.market.overview
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
+import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopMoversRepository
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.MarketOverview
+import io.horizontalsystems.marketkit.models.TopMovers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 
 class MarketOverviewService(
-    private val topMarketsRepository: TopMarketsRepository,
-    private val marketMetricsRepository: MarketMetricsRepository,
+    private val marketTopMoversRepository: MarketTopMoversRepository,
+    private val marketKit: MarketKit,
     private val backgroundManager: BackgroundManager,
     private val currencyManager: ICurrencyManager
 ) : BackgroundManager.Listener {
 
-    private val topListSize = 5
     private var currencyManagerDisposable: Disposable? = null
-    private var gainersDisposable: Disposable? = null
-    private var losersDisposable: Disposable? = null
-    private var metricsDisposable: Disposable? = null
-
-    var gainersTopMarket: TopMarket = TopMarket.Top250
-        private set
-    var losersTopMarket: TopMarket = TopMarket.Top250
-        private set
+    private var topMoversDisposable: Disposable? = null
+    private var marketOverviewDisposable: Disposable? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     val topMarketOptions: List<TopMarket> = TopMarket.values().toList()
-    val topGainersObservable: BehaviorSubject<Result<List<MarketItem>>> = BehaviorSubject.create()
-    val topLosersObservable: BehaviorSubject<Result<List<MarketItem>>> = BehaviorSubject.create()
-    val marketMetricsObservable: BehaviorSubject<Result<MarketMetricsItem>> =
-        BehaviorSubject.create()
+    val timeDurationOptions: List<TimeDuration> = TimeDuration.values().toList()
+    val topMoversObservable: BehaviorSubject<Result<TopMovers>> = BehaviorSubject.create()
+    val marketOverviewObservable: BehaviorSubject<Result<MarketOverview>> = BehaviorSubject.create()
 
-    private fun updateGainers(forceRefresh: Boolean) {
-        gainersDisposable?.dispose()
+    private fun updateTopMovers() {
+        topMoversDisposable?.dispose()
 
-        topMarketsRepository
-            .get(
-                gainersTopMarket.value,
-                SortingField.TopGainers,
-                topListSize,
-                currencyManager.baseCurrency,
-                forceRefresh
-            )
+        marketTopMoversRepository
+            .getTopMovers(currencyManager.baseCurrency)
             .subscribeIO(
-                { topGainersObservable.onNext(Result.success(it)) },
-                { topGainersObservable.onNext(Result.failure(it)) }
+                { topMoversObservable.onNext(Result.success(it)) },
+                { topMoversObservable.onNext(Result.failure(it)) }
             )
-            .let { gainersDisposable = it }
+            .let { topMoversDisposable = it }
     }
 
-    private fun updateLosers(forceRefresh: Boolean) {
-        losersDisposable?.dispose()
+    private fun updateMarketOverview() {
+        marketOverviewDisposable?.dispose()
 
-        topMarketsRepository
-            .get(
-                losersTopMarket.value,
-                SortingField.TopLosers,
-                topListSize,
-                currencyManager.baseCurrency,
-                forceRefresh
-            )
+        marketKit.marketOverviewSingle(currencyManager.baseCurrency.code)
             .subscribeIO(
-                { topLosersObservable.onNext(Result.success(it)) },
-                { topLosersObservable.onNext(Result.failure(it)) }
+                { marketOverviewObservable.onNext(Result.success(it)) },
+                { marketOverviewObservable.onNext(Result.failure(it)) }
             )
-            .let { losersDisposable = it }
-    }
-
-    private fun updateMarketMetrics() {
-        metricsDisposable?.dispose()
-
-        marketMetricsRepository.get(currencyManager.baseCurrency, true)
-            .subscribeIO(
-                { marketMetricsObservable.onNext(Result.success(it)) },
-                { marketMetricsObservable.onNext(Result.failure(it)) }
-            )
-            .let { metricsDisposable = it }
+            .let { marketOverviewDisposable = it }
     }
 
     private fun forceRefresh() {
-        updateGainers(true)
-        updateLosers(true)
-        updateMarketMetrics()
+        updateTopMovers()
+        updateMarketOverview()
     }
 
     fun start() {
@@ -98,10 +71,10 @@ class MarketOverviewService(
 
     fun stop() {
         currencyManagerDisposable?.dispose()
-        gainersDisposable?.dispose()
-        losersDisposable?.dispose()
-        metricsDisposable?.dispose()
+        topMoversDisposable?.dispose()
+        marketOverviewDisposable?.dispose()
         backgroundManager.unregisterListener(this)
+        coroutineScope.cancel()
     }
 
     override fun willEnterForeground() {
@@ -112,13 +85,4 @@ class MarketOverviewService(
         forceRefresh()
     }
 
-    fun setGainersTopMarket(topMarket: TopMarket) {
-        gainersTopMarket = topMarket
-        updateGainers(false)
-    }
-
-    fun setLosersTopMarket(topMarket: TopMarket) {
-        losersTopMarket = topMarket
-        updateLosers(false)
-    }
 }

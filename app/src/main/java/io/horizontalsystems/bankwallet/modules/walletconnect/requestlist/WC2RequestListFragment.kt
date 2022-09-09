@@ -47,13 +47,13 @@ class WC2RequestListFragment : BaseFragment() {
             when (wcRequest) {
                 is WC2SignMessageRequest -> {
                     findNavController().slideFromBottom(
-                        R.id.wc2RequestListFragment_to_wcSignMessageRequestFragment,
+                        R.id.wc2SignMessageRequestFragment,
                         WC2SignMessageRequestFragment.prepareParams(wcRequest.id)
                     )
                 }
                 is WC2SendEthereumTransactionRequest -> {
                     findNavController().slideFromBottom(
-                        R.id.wc2RequestListFragment_to_wcSendEthRequestFragment,
+                        R.id.wc2SendEthereumTransactionRequestFragment,
                         WC2SendEthereumTransactionRequestFragment.prepareParams(wcRequest.id)
                     )
                 }

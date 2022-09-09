@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords.evm
 
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.ethereumkit.models.FullTransaction
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.ethereumkit.models.Transaction
+import io.horizontalsystems.marketkit.models.Token
 
 class ContractCreationTransactionRecord(
-    fullTransaction: FullTransaction,
-    baseCoin: PlatformCoin,
+    transaction: Transaction,
+    baseToken: Token,
     source: TransactionSource
-) : EvmTransactionRecord(fullTransaction, baseCoin, source)
+) : EvmTransactionRecord(transaction, baseToken, source)

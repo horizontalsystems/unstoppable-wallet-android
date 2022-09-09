@@ -1,0 +1,27 @@
+package io.horizontalsystems.bankwallet.core.providers
+
+import io.horizontalsystems.bankwallet.core.protocolType
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
+
+class FeeTokenProvider(private val marketKit: MarketKit) {
+
+    fun feeTokenData(token: Token): Pair<Token, String>? {
+        val tokenQuery = when (token.type) {
+            is TokenType.Eip20,
+            is TokenType.Bep2 -> {
+                TokenQuery(token.blockchainType, TokenType.Native)
+            }
+            TokenType.Native,
+            is TokenType.Unsupported -> null
+        }
+
+        return tokenQuery?.let {
+            marketKit.token(it)?.let { feeToken ->
+                Pair(feeToken, feeToken.protocolType!!)
+            }
+        }
+    }
+}

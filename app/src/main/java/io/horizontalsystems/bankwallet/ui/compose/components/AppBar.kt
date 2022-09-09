@@ -5,7 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +22,7 @@ data class MenuItem(
     val title: TranslatableString,
     @DrawableRes val icon: Int? = null,
     val enabled: Boolean = true,
+    val tint: Color = Color.Unspecified,
     val onClick: () -> Unit,
 )
 
@@ -28,11 +32,11 @@ fun AppBarMenuButton(
     onClick: () -> Unit,
     description: String? = null,
     enabled: Boolean = true,
-    tint: Color = ComposeAppTheme.colors.jacob,
+    tint: Color = Color.Unspecified,
 ) {
-    IconButton(
-        onClick = { onClick() },
-        enabled = enabled
+    HsIconButton(
+        onClick = onClick,
+        enabled = enabled,
     ) {
         Icon(
             painter = painterResource(id = icon),
@@ -53,10 +57,8 @@ fun AppBar(
         modifier = Modifier.height(56.dp),
         title = {
             title?.let {
-                Text(
+                title3_leah(
                     text = title.getString(),
-                    style = ComposeAppTheme.typography.title3,
-                    color = ComposeAppTheme.colors.oz,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -69,7 +71,7 @@ fun AppBar(
             }
         },
         actions = {
-            if (showSpinner){
+            if (showSpinner) {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(start = 24.dp, end = 16.dp)
@@ -83,7 +85,8 @@ fun AppBar(
                     AppBarMenuButton(
                         icon = menuItem.icon,
                         onClick = menuItem.onClick,
-                        enabled = menuItem.enabled
+                        enabled = menuItem.enabled,
+                        tint = menuItem.tint,
                     )
                 } else {
                     val color = if (menuItem.enabled) {

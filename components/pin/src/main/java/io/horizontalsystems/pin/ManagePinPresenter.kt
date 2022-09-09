@@ -74,7 +74,7 @@ open class ManagePinPresenter(
     }
 
     private fun onEnterFromUnlock(pin: String) {
-        if (interactor.unlock(pin)) {
+        if (interactor.correctPin(pin)) {
             show(Page.ENTER)
         } else {
             val pageUnlockIndex = pages.indexOfFirst { it == Page.UNLOCK }
@@ -92,6 +92,7 @@ open class ManagePinPresenter(
     private fun onEnterFromConfirmPage(pin: String) {
         if (interactor.validate(pin)) {
             interactor.save(pin)
+            interactor.unlock()
         } else {
             showEnterPage()
             isShowingPinMismatchError = true

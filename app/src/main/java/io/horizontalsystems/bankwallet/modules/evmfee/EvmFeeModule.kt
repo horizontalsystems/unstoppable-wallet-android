@@ -6,12 +6,15 @@ import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.FeePriceScale
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
+import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -47,6 +50,25 @@ object EvmFeeModule {
             }
         }
     }
+
+    fun scaledString(wei: Long, scale: FeePriceScale): String {
+        val gwei = wei.toDouble() / scale.scaleValue
+
+        return "${gwei.toBigDecimal().toPlainString()} ${scale.unit}"
+    }
+
+    fun stepSize(weiValue: Long): Long {
+        var digitsCount = 0
+        var value = weiValue
+
+        while (value > 0) {
+            value /= 10
+            digitsCount += 1
+        }
+
+        return 1L * 10.toBigDecimal().pow(Integer.max(digitsCount - 2, 0)).toLong()
+    }
+
 }
 
 interface IEvmFeeService {
@@ -77,12 +99,18 @@ data class GasPriceInfo(
     val errors: List<Throwable>
 )
 
-data class GasData(
-    val gasLimit: Long,
-    val gasPrice: GasPrice
-) {
-    val fee: BigInteger
+open class GasData(val gasLimit: Long, val gasPrice: GasPrice) {
+
+    open val fee: BigInteger
         get() = gasLimit.toBigInteger() * gasPrice.max.toBigInteger()
+
+}
+
+class RollupGasData(gasLimit: Long, gasPrice: GasPrice, val l1Fee: BigInteger): GasData(gasLimit, gasPrice) {
+
+    override val fee: BigInteger
+        get() = super.fee + l1Fee
+
 }
 
 data class Transaction(
@@ -123,4 +151,32 @@ sealed class GasDataError : Error() {
 
 data class FeeViewItem(val fee: String, val gasLimit: String)
 
-data class SliderViewItem(val initialValue: Long, val range: LongRange, val unit: String)
+data class SliderViewItem(
+    private val initialWeiValue: Long,
+    private val weiRange: LongRange,
+    private val stepSize: Long,
+    private val scale: FeePriceScale
+) {
+
+    val initialSliderValue: Long = sliderValue(initialWeiValue)
+    val range: LongRange = LongRange(sliderValue(weiRange.first), sliderValue(weiRange.last))
+    val initialValueScaledString = EvmFeeModule.scaledString(initialWeiValue, scale)
+
+    fun wei(sliderValue: Long): Long {
+        return sliderValue * stepSize
+    }
+
+    fun sliderValue(wei: Long): Long {
+        return wei / stepSize
+    }
+
+    fun scaledString(sliderValue: Long): String = EvmFeeModule.scaledString(wei(sliderValue), scale)
+
+}
+
+internal val BlockchainType.l1GasFeeContractAddress: Address?
+    get() =
+        when (this) {
+            BlockchainType.Optimism -> Address("0x420000000000000000000000000000000000000F")
+            else -> null
+        }

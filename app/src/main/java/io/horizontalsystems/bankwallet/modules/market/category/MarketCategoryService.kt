@@ -19,10 +19,11 @@ class MarketCategoryService(
     private val languageManager: ILanguageManager,
     private val favoritesManager: MarketFavoritesManager,
     private val coinCategory: CoinCategory,
-    topMarket: TopMarket = TopMarket.Top250,
+    topMarket: TopMarket = TopMarket.Top100,
     sortingField: SortingField = SortingField.HighestCap,
 ) {
     private var disposables = CompositeDisposable()
+    private var favoriteDisposables = CompositeDisposable()
 
     private var marketItems: List<MarketItem> = listOf()
 
@@ -82,7 +83,7 @@ class MarketCategoryService(
             .subscribeIO {
                 syncItems()
             }.let {
-                disposables.add(it)
+                favoriteDisposables.add(it)
             }
     }
 
@@ -92,6 +93,7 @@ class MarketCategoryService(
 
     fun stop() {
         disposables.clear()
+        favoriteDisposables.clear()
     }
 
     fun addFavorite(coinUid: String) {

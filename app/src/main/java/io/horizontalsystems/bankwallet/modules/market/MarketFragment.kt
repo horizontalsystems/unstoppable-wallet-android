@@ -4,80 +4,95 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.navigation.navGraphViewModels
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.databinding.FragmentMarketBinding
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewScreen
+import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.core.findNavController
 
-class MarketFragment : BaseWithSearchFragment() {
-    private val marketViewModel by navGraphViewModels<MarketViewModel>(R.id.mainFragment) { MarketModule.Factory() }
-
-    private var _binding: FragmentMarketBinding? = null
-    private val binding get() = _binding!!
-
+class MarketFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMarketBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.viewPager.adapter =
-            MarketTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
-        binding.viewPager.isUserInputEnabled = false
-
-        marketViewModel.selectedTab.observe(viewLifecycleOwner) { selectedTab ->
-            setTabs(selectedTab)
-            binding.viewPager.setCurrentItem(marketViewModel.tabs.indexOf(selectedTab), false)
-        }
-
-        binding.toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.search -> {
-                    findNavController().slideFromRight(R.id.mainFragment_to_marketSearchFragment)
-                    true
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    MarketFragmentScreen(findNavController())
                 }
-                else -> false
             }
         }
+    }
+}
 
-        binding.tabsCompose.setViewCompositionStrategy(
-            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun MarketFragmentScreen(navController: NavController) {
+    val marketViewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
+    val tabs = marketViewModel.tabs
+    val selectedTab = marketViewModel.selectedTab
+
+    val pagerState = rememberPagerState(initialPage = selectedTab.ordinal)
+
+    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        AppBar(
+            title = TranslatableString.ResString(R.string.Market_Title),
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Market_Search),
+                    icon = R.drawable.ic_search_discovery_24,
+                    onClick = {
+                        navController.slideFromRight(R.id.marketSearchFragment)
+                    }
+                )
+            )
         )
-    }
 
-    private fun setTabs(selectedTab: MarketModule.Tab) {
-        val tabItems = marketViewModel.tabs.map {
-            TabItem(getString(it.titleResId), it == selectedTab, it)
+        LaunchedEffect(key1 = selectedTab, block = {
+            pagerState.scrollToPage(selectedTab.ordinal)
+        })
+        val tabItems = tabs.map {
+            TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
         }
-        binding.tabsCompose.setContent {
-            ComposeAppTheme {
-                Tabs(tabItems) { item ->
-                    marketViewModel.onSelect(item)
-                }
+        Tabs(tabItems, onClick = {
+            marketViewModel.onSelect(it)
+        })
+
+        HorizontalPager(
+            count = tabs.size,
+            state = pagerState,
+            userScrollEnabled = false
+        ) { page ->
+            when (tabs[page]) {
+                MarketModule.Tab.Overview -> MarketOverviewScreen(navController)
+                MarketModule.Tab.Posts -> MarketPostsScreen()
+                MarketModule.Tab.Watchlist -> MarketFavoritesScreen(navController)
             }
         }
     }
-
-    override fun updateFilter(query: String) {
-
-    }
-
 }

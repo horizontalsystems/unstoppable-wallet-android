@@ -2,12 +2,12 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,12 +29,60 @@ fun ButtonPrimaryDefault(
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        colors = ButtonDefaults.textButtonColors(
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.leah,
+            contentColor = ComposeAppTheme.colors.claude,
+            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
     )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ButtonPrimaryTransparent(
+    modifier: Modifier = Modifier,
+    title: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val contentColor = when {
+        !enabled -> ComposeAppTheme.colors.grey50
+        isPressed -> ComposeAppTheme.colors.grey
+        else -> ComposeAppTheme.colors.leah
+    }
+
+    Surface(
+        modifier = modifier,
+        color = ComposeAppTheme.colors.transparent,
+        contentColor = contentColor,
+        onClick = onClick,
+        enabled = enabled,
+        role = Role.Button,
+        interactionSource = interactionSource,
+        indication = null
+    ) {
+        ProvideTextStyle(
+            value = ComposeAppTheme.typography.headline2
+        ) {
+            Row(
+                Modifier
+                    .defaultMinSize(
+                        minWidth = ButtonPrimaryDefaults.MinWidth,
+                        minHeight = ButtonPrimaryDefaults.MinHeight
+                    )
+                    .padding(ButtonPrimaryDefaults.ContentPadding),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+            )
+        }
+    }
 }
 
 @Composable
@@ -47,9 +95,11 @@ fun ButtonPrimaryYellow(
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        colors = ButtonDefaults.textButtonColors(
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
-            contentColor = ComposeAppTheme.colors.dark
+            contentColor = ComposeAppTheme.colors.dark,
+            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = {
             Text(
@@ -72,8 +122,11 @@ fun ButtonPrimaryRed(
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        colors = ButtonDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.redD,
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
+            backgroundColor = ComposeAppTheme.colors.lucian,
+            contentColor = ComposeAppTheme.colors.claude,
+            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
@@ -92,9 +145,11 @@ fun ButtonPrimaryYellowWithSpinner(
     ButtonPrimary(
         modifier = modifier,
         onClick = onClick,
-        colors = ButtonDefaults.textButtonColors(
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
-            contentColor = ComposeAppTheme.colors.dark
+            contentColor = ComposeAppTheme.colors.dark,
+            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
         ),
         content = {
             if (showSpinner) {
@@ -116,49 +171,45 @@ fun ButtonPrimaryYellowWithSpinner(
 fun ButtonPrimary(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    buttonColors: ButtonColors,
     enabled: Boolean = true,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = RoundedCornerShape(25.dp),
     border: BorderStroke? = null,
-    colors: ButtonColors = ButtonDefaults.textButtonColors(),
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    contentPadding: PaddingValues = ButtonPrimaryDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
 ) {
-    val contentColor by colors.contentColor(enabled)
+
     Surface(
         modifier = modifier,
         shape = shape,
-        color = colors.backgroundColor(enabled).value,
-        contentColor = contentColor.copy(alpha = 1f),
+        color = buttonColors.backgroundColor(enabled).value,
+        contentColor = buttonColors.contentColor(enabled).value,
         border = border,
-        elevation = 0.dp,
         onClick = onClick,
         enabled = enabled,
         role = Role.Button,
-        interactionSource = interactionSource,
+        interactionSource = remember { MutableInteractionSource() },
         indication = rememberRipple()
     ) {
-        CompositionLocalProvider(LocalContentAlpha provides contentColor.alpha) {
-            ProvideTextStyle(
-                value = ComposeAppTheme.typography.headline2
-            ) {
-                Row(
-                    Modifier
-                        .defaultMinSize(
-                            minWidth = ButtonDefaults.MinWidth,
-                            minHeight = ButtonDefaults.MinHeight
-                        )
-                        .padding(contentPadding),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    content = content
-                )
-            }
+        ProvideTextStyle(
+            value = ComposeAppTheme.typography.headline2
+        ) {
+            Row(
+                Modifier
+                    .defaultMinSize(
+                        minWidth = ButtonPrimaryDefaults.MinWidth,
+                        minHeight = ButtonPrimaryDefaults.MinHeight
+                    )
+                    .padding(contentPadding),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                content = content
+            )
         }
     }
 }
 
-object ButtonDefaults {
+object ButtonPrimaryDefaults {
     private val ButtonHorizontalPadding = 16.dp
 
     val ContentPadding = PaddingValues(
@@ -181,14 +232,14 @@ object ButtonDefaults {
 
     @Composable
     fun textButtonColors(
-        backgroundColor: Color = ComposeAppTheme.colors.transparent,
-        contentColor: Color = ComposeAppTheme.colors.claude,
-        disabledBackgroundColor: Color = ComposeAppTheme.colors.steel20,
-        disabledContentColor: Color = ComposeAppTheme.colors.grey50,
-    ): ButtonColors = DefaultButtonColors(
+        backgroundColor: Color,
+        contentColor: Color,
+        disabledBackgroundColor: Color,
+        disabledContentColor: Color,
+    ): ButtonColors = HsButtonColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,
         disabledBackgroundColor = disabledBackgroundColor,
-        disabledContentColor = disabledContentColor
+        disabledContentColor = disabledContentColor,
     )
 }

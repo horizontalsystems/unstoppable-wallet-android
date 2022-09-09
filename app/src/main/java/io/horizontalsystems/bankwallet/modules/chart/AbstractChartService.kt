@@ -48,6 +48,7 @@ abstract class AbstractChartService {
 
     private var fetchItemsDisposable: Disposable? = null
     private val disposables = CompositeDisposable()
+    protected var forceRefresh = false
 
     fun start() {
         currencyManager.baseCurrencyUpdatedSignal
@@ -83,6 +84,12 @@ abstract class AbstractChartService {
         this.indicator = indicator
 
         fetchItems()
+    }
+
+    fun refresh() {
+        forceRefresh = true
+        fetchItems()
+        forceRefresh = false
     }
 
     @Synchronized

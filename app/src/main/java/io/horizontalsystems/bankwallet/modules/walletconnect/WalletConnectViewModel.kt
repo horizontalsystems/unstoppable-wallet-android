@@ -13,6 +13,7 @@ class WalletConnectViewModel(
 
     var sharedSendEthereumTransactionRequest: WC1SendEthereumTransactionRequest? = null
     var sharedSignMessageRequest: WC1SignMessageRequest? = null
+    var dAppName: String? = null
 
     override fun onCleared() {
         clearables.forEach {

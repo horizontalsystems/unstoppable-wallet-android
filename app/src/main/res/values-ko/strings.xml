@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
     <string name="Alert_Close">가까운, 닫힌</string>
@@ -31,11 +32,13 @@
     <string name="Button_Understand">이해합니다</string>
     <string name="Button_Switch">전환</string>
     <string name="Button_Remove">삭제</string>
+    <string name="Button_Save">저장</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Any">어떤</string>
     <string name="SyncError">동기화 오류입니다. 다시 시도하십시오</string>
     <string name="PercentTitle">퍼센트율</string>
+    <string name="Keyboard">키보드</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">풀린 자산</string>
@@ -57,7 +60,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">암호에는 라틴 문자 및 숫자만 사용하십시오</string>
     <string name="CreateWallet_Error_InvalidConfirmation">암호 확인이 일치하지 않습니다</string>
-    <string name="EnterPassphrase">암호문구</string>
+    <string name="EnterPassphrase">암호 문구 입력</string>
     <string name="CreateWallet_PassphraseDescription">암호 문구는 사용자가 하나의 연상 기호 복구 문구를 사용하여 여러 개의 독립적인 멀티코인 지갑을 만들 수 있도록 지갑에 보안 계층을 추가합니다.\n\n이러한 지갑을 복원하려면 사용자가 복원하기 위해 각 지갑에 대한 비밀번호와 연상 기호 복구 문구가 필요합니다.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
@@ -65,17 +68,23 @@
     <string name="RateApp_Button_RateIt">평가 하기</string>
     <string name="RateApp_Button_NotNow">다음에 확인</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">암호를 입력하세요</string>
-    <string name="Restore_Mnemonic_Description">12 또는 24개의 단어로 구성된 연상 기호를 입력합니다. 단어는 올바른 순서로 입력하고 공백으로 구분해야 합니다.</string>
+    <string name="Restore_Enter_Key_Title">복구</string>
+    <string name="Restore_Mnemonic_Description">12, 15, 18, 21 또는 24단어로 구성되고 추가 영숫자 비밀번호가 포함될 수 있는 지갑 복구 문구(니모닉이라고도 함)를 입력하십시오.</string>
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_Error_MnemonicWordCount">단어 수가 틀렸습니다. 12 개 와 24개 사이여야 합니다. 이렇게 입력했습니다: %d</string>
     <string name="Restore_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
     <string name="Restore_InvalidChecksum">유효하지 않은 체크섬</string>
     <string name="Restore_PassphraseDescription">이 연상 부호를 만들 때 사용한 암호 문구 입력.</string>
     <string name="Restore_Title">블록체인 선택</string>
+    <string name="Restore_Name">이름 (선택 사항)</string>
+    <string name="Restore_Key">키</string>
     <string name="Select_Coins">코인 선택하기</string>
-    <string name="Restore_ZCash_BirthdayHeight">생일 신장</string>
+    <string name="Restore_BirthdayHeight">생일 신장</string>
+    <string name="Restore_ZCash">Zcash</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">지갑의 생일 높이를 알고 있다면 빠른 동기화를 위해 입력하십시오.</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000(선택 사항)</string>
+    <string name="Restore_ZCash_RestoreAsNew">새 것으로 복원</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <!--Market-->
@@ -100,12 +109,22 @@
     <string name="Market_TvlDeFi">TVL in DeFi</string>
     <string name="Market_DeFiCap">DeFi Cap</string>
     <string name="Market_SeeAll">See All</string>
+    <string name="Market_PoweredByHorizontalApi">Powered By Horizontal API</string>
     <string name="Market_Tab_Overview">Overview</string>
     <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
+    <!--Market Overview-->
+    <string name="Market_Overview_TopSectors">Top Sectors</string>
+    <!--Market Top Platforms-->
+    <string name="MarketTopPlatforms_Title">Top Platforms</string>
+    <string name="MarketTopPlatforms_PlatofrmsRank">Top Blockchain Platforms</string>
+    <string name="MarketTopPlatforms_Description">Leading blockchain platforms by the cumulative market of projects built on top.</string>
+    <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
@@ -117,20 +136,21 @@
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">The historical change in daily aggregate trading market volume for all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_VolumeDescriptionCoin">The historical change in daily aggregate trading volume for %s</string>
-    <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in cumulative market value of tokens in Decentralized Finance sector.</string>
+    <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in the cumulative market value of tokens in the Decentralized Finance sector.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in the cumulative value of all cryptocurrency managed by decentralized protocols.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
-    <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
+    <string name="MarketGlobalMetrics_ChainSelectorAll">모든</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
     <string name="Market_Filters">Filters</string>
     <string name="Market_AdvancedSearch_Results">Results</string>
-    <string name="Market_Search_Hint">Search</string>
+    <string name="Market_Search_Hint">검색</string>
     <string name="Market_Search_BrowseCategories">Browse Categories</string>
     <string name="Market_Filter_ChooseSet">Choose Set</string>
-    <string name="Market_Filter_MarketCap">Market Cap</string>
+    <string name="Market_Filter_MarketCap">시가총액</string>
     <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Volume24h">Trading Volume (24h)</string>
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
@@ -139,11 +159,11 @@
     <string name="Market_Filter_OutperformedBnb">Outperformed BNB</string>
     <string name="Market_Filter_PriceCloseToAth">Price Close To ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Price Close To ATL</string>
-    <string name="Market_Filter_Top_100">Top 100</string>
-    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_100">상위 100</string>
+    <string name="Market_Filter_Top_250">상위 250</string>
     <string name="Market_Filter_Top_500">Top 500</string>
-    <string name="Market_Filter_Top_1000">Top 1000</string>
-    <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_Top_1000">상위 1000</string>
+    <string name="Market_Filter_Top_1500">상위 1500</string>
     <string name="Market_Filter_ShowResults">Show Results</string>
     <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
@@ -151,24 +171,24 @@
     <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
     <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
     <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
-    <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
     <string name="Market_Filter_Range_0_10M">&lt; 10</string>
     <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
     <string name="Market_Filter_Range_40M_200M">40M - 200M</string>
     <string name="Market_Filter_Range_200M_2B">200M - 2B</string>
     <string name="Market_Filter_Range_2B_10B">2B - 10B</string>
-    <string name="Market_Filter_Range_10B_More">&gt; 10BN</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10B</string>
     <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
     <string name="Market_Filter_Range_50M_200M">50M - 200M</string>
     <string name="Market_Filter_Range_200M_1B">200M - 1B</string>
     <string name="Market_Filter_Range_1B_10B">1B - 10B</string>
     <string name="Market_Filter_Range_10B_50B">10B - 50B</string>
-    <string name="Market_Filter_Range_50B_More">&gt; 50BN</string>
+    <string name="Market_Filter_Range_50B_More">&gt; 50B</string>
     <string name="Market_Filter_Range_0_500M">&lt; 500M</string>
     <string name="Market_Filter_Range_500M_2B">500M - 2B</string>
     <string name="Market_Filter_Range_10B_100B">10B - 100B</string>
     <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
-    <string name="Market_Filter_Range_500B_More">&gt; 500BN</string>
+    <string name="Market_Filter_Range_500B_More">&gt; 500B</string>
     <string name="Market_Filter_TimePeriod_1D">1 Day</string>
     <string name="Market_Filter_TimePeriod_1W">1 Week</string>
     <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
@@ -183,7 +203,7 @@
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
     <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
-    <string name="TimePeriod_24h">24h</string>
+    <string name="TimePeriod_24h">24 시간</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Markets</string>
     <!--TVL Rank-->
@@ -261,8 +281,11 @@
     <string name="Send_LockTime_HalfYear">6개월</string>
     <string name="Send_LockTime_Year">1 년</string>
     <string name="Send_Sending">전송중</string>
+    <string name="Send_FeeRate">수수료율</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <string name="Send_Warning_LowFee">경고! 갇힐 위험</string>
+    <string name="Send_Warning_LowFee_Description">트랜잭션이 중단되거나 실패할 수 있습니다</string>
+    <string name="Send_Error_FetchFeeRateFailed">수수료율을 가져오는 동안 오류가 발생했습니다</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_Title">수수료 설정</string>
     <string name="FeeSettings_Reset">초기화</string>
@@ -319,7 +342,7 @@
     <string name="WalletConnect_SignMessageRequest_ButtonSign">가입</string>
     <string name="WalletConnect_Error_NoWallet">적합한 지갑이 없습니다. 기존 지갑을 생성하거나 복원해야 합니다.</string>
     <string name="WalletConnect_Error_WatchAccount">이 기능은 시계 전용 지갑에서는 작동하지 않으므로 복원 또는 생성된 지갑으로 전환해야 합니다 </string>
-    <string name="WalletConnect_Error_UnsupportedChainId">지원되지 않는 체인 ID</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">적합한 계정이 없습니다.</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">적합한 evm 키트가 없습니다.</string>
     <string name="WalletConnect_Error_DataParsingError">데이터 파싱 오류</string>
@@ -327,9 +350,14 @@
     <string name="WalletConnect_NoConnection">연결된 dapp이 없습니다.</string>
     <string name="WalletConnect_PendingRequests">보류 중인 요청</string>
     <string name="WalletConnect_ActiveWallet">지갑 활성화</string>
+    <string name="WalletConnect_Address">주소</string>
+    <string name="WalletConnect_Network">회로망</string>
     <string name="WalletConnect_Input">입력</string>
     <string name="WalletConnect_Version1">버전 1.0</string>
     <string name="WalletConnect_Version2">버전 2.0</string>
+    <string name="WalletConnect_I_Trust">내가 신뢰</string>
+    <string name="WalletConnect_Note">참고</string>
+    <string name="WalletConnect_LegacySignWarning">Signing this message can be dangerous. This signature could potentially perform any operation on behalf of your account, including giving full control of your account and all of its assets to the requesting site. Sign this message only if you know what you are doing or fully trust the requesting site.</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">경고</string>
     <string name="EthereumTransaction_Error_Title">오류</string>
@@ -370,7 +398,7 @@
     <string name="Swap_MaximumPaid">최대 지불액</string>
     <string name="Swap_MinimumGot">보증 금액</string>
     <string name="Swap_PoweredBy">제공</string>
-    <string name="Swap_SelectSwapProvider_Title">스왑 서비스</string>
+    <string name="Swap_SelectSwapProvider_Title">공급자 스왑</string>
     <string name="Swap_AmountEstimated">(추정)</string>
     <string name="Swap_AmountMin">(분)</string>
     <string name="Swap_AmountMax">(최대)</string>
@@ -409,18 +437,18 @@
     <string name="SwapInfo_Description">이 거래소 서비스는 %s 블록체인에 구축된 분산형 토큰 교환 프로토콜인 %s에 의해 구동됩니다.\n\n%s는 스마트 계약에 의해 완전 자동화되고 관리되므로 부정 행위 없이 토큰 교환을 안정적으로 수행할 수 있습니다.</string>
     <string name="SwapInfo_DexRelated">Uniswap 관련됨</string>
     <string name="SwapInfo_AllowanceTitle">허용량</string>
-    <string name="SwapInfo_AllowanceDescription">토큰 스왑을 실행할 때 서비스에서 사용자를 대신하여 사용할 수 있는 일부 통화의 양입니다. 스왑 작업을 수행하려면 충분한 허용량이 필요합니다.</string>
+    <string name="SwapInfo_AllowanceDescription">Unstoppable의 토큰 스왑은 Uniswap, 1inch, PancakeSwap, Quickswap 등과 같은 분산형 토큰 교환에 의해 구동됩니다. 이러한 서비스는 완전히 자동화되어 부정 행위 수단 없이 신뢰할 수 있는 방식으로 토큰 교환을 촉진합니다. \n\n허용량은 교환 서비스가 사용자를 대신하여 사용할 수 있는 권한이 있는 토큰의 양을 나타냅니다. 일반적으로 허용량은 거래 전에 \'승인\' 거래를 통해 설정됩니다. 스왑 작업이 수행되기 전에 충분한 여유가 필요합니다.</string>
     <string name="SwapInfo_PriceImpactTitle">가격 영향</string>
-    <string name="SwapInfo_PriceImpactDescription">표시된 가격과의 예상 가격 편차는 일반적으로 스왑 금액에 따라 증가합니다.</string>
+    <string name="SwapInfo_PriceImpactDescription">표시된 현물 가격과의 예상 가격 편차. 교환되는 토큰의 양이 많을수록 편차가 커집니다.</string>
     <string name="SwapInfo_SwapFeeTitle">스왑 비용</string>
     <string name="SwapInfo_SwapFeeDescription">플랫폼에서의 스왑 작업에 대한 서비스 수수료이며, 사용자가 판매하는 통화에 표시됩니다. 대부분의 주문의 경우 0.3% 또는 0.6%여야 합니다.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">보증 금액</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">스왑 행위로 인해 사용자가 받을 최소 금액.</string>
+    <string name="SwapInfo_GuaranteedAmountDescription">교환 작업의 결과로 토큰을 교환하는 사용자가 받을 것으로 예상되는 최소 금액입니다.</string>
     <string name="SwapInfo_MaxSpendTitle">최대 속도</string>
-    <string name="SwapInfo_MaxSpendDescription">스왑 행위로 인해 사용자가 사용할 최대 금액.</string>
+    <string name="SwapInfo_MaxSpendDescription">토큰을 교환하는 사용자가 교환 작업의 결과로 지출할 것으로 예상되는 최대 금액입니다.</string>
     <string name="SwapInfo_Other">기타</string>
     <string name="SwapInfo_TransactionFeeTitle">거래 비용</string>
-    <string name="SwapInfo_TransactionFeeDescription">%s블록체인에서 주어진 거래의 예상 처리 비용. %s 관련 거래는 일반적으로 일반 토큰 전송 거래보다 더 많은 비용이 듭니다.</string>
+    <string name="SwapInfo_TransactionFeeDescription">블록체인에서 트랜잭션을 실행하는 최대 비용. 거래 수수료는 블록체인 자체에서 거래를 실행하는 비용이며 탈중앙화 토큰 교환 프로토콜에 의해 부과되는 서비스 수수료는 포함하지 않습니다. \n\n탈중앙화 토큰 교환 프로토콜은 일반적으로 거래 금액의 0.3%(또는 0.6%)에 해당하는 스왑 수수료를 부과합니다. 이 수수료는 스왑 주문 내에서 적용됩니다.</string>
     <string name="SwapInfo_TransactionSpeedTitle">거래 속도</string>
     <string name="SwapInfo_TransactionSpeedDescription">거래 수수료가 높은 거래는 처리 속도가 빨라집니다. 반대로도 그렇습니다.</string>
     <string name="SwapInfo_Site">%s 사이트</string>
@@ -442,15 +470,23 @@
     <string name="Transactions_Swap">스왑</string>
     <string name="Transactions_Failed">실패</string>
     <string name="Transactions_ContractCall">계약 콜</string>
+    <string name="Transactions_ExternalContractCall">외부 콜</string>
     <string name="Transactions_ContractCreation">계약 생성</string>
     <string name="Transactions_To">%s에게</string>
     <string name="Transactions_From">%s부터</string>
     <string name="Transaction_Unlimited">무제한 %s</string>
     <string name="Transactions_All">모든</string>
+    <string name="Transactions_Filter_Blockchain">블록체인으로 필터링</string>
+    <string name="Transactions_Filter_AllBlockchains">모든 블록체인</string>
+    <string name="Transactions_Filter_AllCoins">모든코인</string>
+    <string name="Transactions_Filter_ChooseCoin">코인 선택</string>
     <string name="Transactions_Incoming">수령됨</string>
     <string name="Transactions_Outgoing">전송됨</string>
     <string name="Transactions_Swaps">스왑</string>
     <string name="Transactions_Approvals">승인</string>
+    <string name="Transactions_Unknown">알 수 없는 트랜잭션</string>
+    <string name="Transactions_Unknown_Description">트랜잭션을 구문 분석할 수 없습니다</string>
+    <string name="Transactions_Multiple">다수</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">거래기록</string>
     <string name="TransactionInfo_Title">거래 정보</string>
@@ -463,13 +499,14 @@
     <string name="TransactionInfo_RawTransaction">로우 트랜잭션</string>
     <string name="TransactionInfo_To">에게</string>
     <string name="TransactionInfo_From">로 부터</string>
+    <string name="TransactionInfo_Spender">스펜더</string>
     <string name="TransactionInfo_LockedUntil">까지 잠그기 %s</string>
     <string name="TransactionInfo_UnlockedAt">%s에서 잠금 해제됨</string>
     <string name="TransactionInfo_RecipientHash">수령인</string>
     <string name="TransactionInfo_HistoricalRate">과거 환율</string>
     <string name="TransactionInfo_Fee">수수료</string>
     <string name="TransactionInfo_FeeEstimated">수수료 (추정)</string>
-    <string name="TransactionInfo_SentToSelfNote">이 거래는 귀하의 주소로 전송이 되었습니다</string>
+    <string name="TransactionInfo_SentToSelfNote">이 거래는 자신의 주소로 전송됩니다</string>
     <string name="TransactionInfo_DoubleSpendNote">이중 지출 위험!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">%s에서 보기</string>
     <string name="TransactionInfo_Price">금액</string>
@@ -523,37 +560,54 @@
     <string name="Settings_Language">언어</string>
     <string name="Settings_Theme">테마</string>
     <string name="Settings_Terms">약관</string>
+    <string name="Settings_Privacy">개인정보</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_AppStatus">앱 상태</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">앱 평가</string>
     <string name="Settings_LaunchScreen">시작 화면</string>
+    <string name="Settings_Appearance">모양</string>
+    <string name="Appearance_Theme">주제</string>
+    <string name="Appearance_LaunchScreen">시작 화면</string>
+    <string name="Appearance_AppIcon">앱 아이콘</string>
+    <string name="Appearance_BalanceConversion">잔액 변환</string>
+    <string name="Appearance_BalanceValue">균형 가치</string>
+    <string name="Appearance_Warning_CloseApplication">아이콘을 변경하면 애플리케이션이 종료됩니다.</string>
+    <string name="BalanceViewType_CoinValue">코인 가치</string>
+    <string name="BalanceViewType_FiatValue">법정 가치</string>
     <string name="SettingsAboutApp_Title">앱 정보</string>
     <string name="SettingsAboutApp_Site">웹사이트</string>
     <string name="SettingsAboutApp_WhatsNew">새로운 기능</string>
-    <string name="SettingsPrivacy_Info">이 앱은 귀하의 데이터를 공유하지 않습니다. 하지만 앱이 블록체인과 통신할 때 IP 주소와 같은 일부 공개 데이터가 유출 될 수도 있습니다. 각 섹션에 대한 자세한 정보를 확인하려면 오른쪽 상단의 정보 버튼을 누르십시오.</string>
-    <string name="SettingsPrivacy_ConnectionSettingsTitle">인터넷</string>
-    <string name="SettingsPrivacy_WalletRestore">블록체인 복원</string>
-    <string name="SettingsPrivacy_WalletRestoreDescription">매매거래로 지갑을 복원 할 데이터 소스를 선택하세요</string>
-    <string name="SettingsPrivacy_Transactions">블록체인 매매거래</string>
-    <string name="SettingsPrivacy_TransactionsSettingText">입력/출력</string>
-    <string name="SettingsPrivacy_TransactionsDescription">매매거래 구성 방식을 변경하셔서 BTC, LTC, BCH 매매거래를 더 추적하기 어렵게 만들어 주세요.</string>
-    <string name="SettingsPrivacy_Info_Details">다음은 앱에서 사용할 수 있는 개인정보 설정에 관한 자세한 설명입니다. 강화된 개인정보 보호를 원하는 사용자를 위한 설정이라고 생각하시면 됩니다.</string>
-    <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain Transactions</string>
-    <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
-        \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
-        \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
-        \n\n1. Shuffle: The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
-        \n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
-    <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
-    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains when sending or receiving transactions.
-        \n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.
-        \n\nIn the case of Ethereum and Binance Smart Chain, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal Ethereum nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">블록체인 복원</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and calculate user\'s balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
-        \n\n1. from API Server : There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
-        \n\n2. from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening...</string>
-    <!--Settings-->
+    <!-- Privacy  -->
+    <string name="Privacy_Information">Unstoppable은 사용자에 대한 데이터를 노출할 수 있는 데이터를 수집하거나 분석 도구를 사용하지 않습니다. 지갑은 사용자에게 높은 수준의 개인 정보를 보장하도록 설계되었습니다.</string>
+    <string name="Privacy_BulletedText1">사용자 데이터는 항상 사용자의 장치에 남아 있습니다.</string>
+    <string name="Privacy_BulletedText2">지갑은 사용자에 대한 데이터를 수집하지 않습니다.</string>
+    <string name="Privacy_BulletedText3">지갑은 사용자에 대한 데이터를 공유하지 않습니다.</string>
+    <string name="Privacy_BulletedText4">사용자 데이터를 다른 곳에 보관하는 사용자 계정이나 데이터베이스가 없습니다.</string>
+    <!-- Security Center -->
+    <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN SETTINGS</string>
+    <string name="SecurityCenter_Internet">INTERNET</string>
+    <string name="SecurityCenter_BlockchainSettingsFooterDescription">지갑 복원 및 동기화를 위한 데이터 소스 선택</string>
+    <!--Evm Network-->
+    <string name="EvmNetwork_SyncMode">동기화 모드</string>
+    <string name="EvmNetwork_SyncModeDescription">This setting controls how this app interacts with blockchains when sending or receiving transactions.\n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.\n\nIn the case of Ethereum, Binance Smart Chain, and other EVM blockchains, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.\n\nRest assured, we are keeping this on the radar and will soon try to provide a decentralized way to sync. Patience.</string>
+    <!--Btc Blockchain Settings -->
+    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing Restore Source the wallet will have to resync itself with the Bitcoin blockchain.</string>
+    <string name="BtcBlockchainSettings_RestoreSource">매개 변수 복원</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">매매거래로 지갑을 복원 할 데이터 소스를 선택하세요.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.
+\n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:
+\n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
+\n\n2. from Blockchain: The app tries to restore directly from a network of the blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputs">트랜잭션 입력/출력</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">거래 구조를 변경하여 BTC, LTC, BCH 거래를 추적하기 어렵게 만드십시오.</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.
+\n\nThe Unstoppable wallet implements measures to make it harder for someone to figure out which output goes where.
+\n\nThere are two options available to Unstoppable users:
+\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.
+\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
+    <!--Info screen-->
+    <string name="Info_Title">인포</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">개인정보</string>
     <string name="SettingsSecurity_Biometric_Authentication">생체정보 인증</string>
@@ -572,10 +626,9 @@
     <string name="SettingsSecurity_SyncModeBlockchain">블록체인으로 부터</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">더 개인</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">The Unstoppable wallet is built for those looking to invest and store cryptocurrencies in a private and independent manner.
-\n\nIt\'s a non-custodial, peer-to-peer wallet where only the user has control over the funds. It doesn\'t collect any data and keeps the user independent by not locking the user\'s funds to a specific wallet app.
-\n\nThe Unstoppable wallet is fully open-source and anyone can confirm the app works exactly as it claims to.
-\n\nWe built Unstoppable for ourselves as the other available solutions were not up to par. Both from an engineering and usability perspective, we believe this wallet to be significantly ahead of alternative products.</string>
+    <string name="SettingsTerms_Text">Unstoppable 지갑은 개인적이고 독립적인 방식으로 암호화폐를 투자하고 보관하려는 사람들을 위해 만들어졌습니다.\n\n이는 오직 사용자만이 자금을 통제할 수 있는 비관세적인 P2P 지갑입니다. 데이터를 수집하지 않고 특정 지갑 앱에 지갑을 잠그지 않아 사용자의 독립성을 유지합니다.
+\n\nUnstoppable 지갑은 완전한 오픈소스여서 누구나 앱이 요구하는 대로 정확히 작동하는지 확인할 수 있습니다.
+\n\n귀사는 이용 가능한 해결책이 기대에 미치지 못했기 때문에 스스로 Unstoppable 을 구축했습니다. 엔지니어링과 사용 편의성 측면에서 모두 귀사는 이 지갑이 대체 제품보다 상당히 앞서 있다고 믿고 있습니다.</string>
     <string name="SettingsTerms_TermAcademy">나는 이 앱의 아카데미 부문을 거치면서 가상화폐 저장의 근본적인 측면에 대해 알게 되었다.</string>
     <string name="SettingsTerms_TermBackup">나는 12-24 단어 형식으로 보여 준 지갑의 개인 암호를 백업했습니다. 나는 이 개인 암호가 다른 곳이 아닌 내 스마트폰에 저장되어 있다는 것을 인지합니다.</string>
     <string name="SettingsTerms_TermOwner">신뢰할 수 없는 단체에게 핸드폰을 건네거나 안전한 PIN 잠금 없이 지갑 앱을 탈퇴하는 것은 잠재적으로 내 자금의 안전을 위협할 수 있다는 것을 알고 있습니다.</string>
@@ -649,8 +702,9 @@
     <string name="ManageAccounts_ImportWallet">다음에서 복원하기</string>
     <string name="ManageAccounts_WatchAddress">주소 관찰</string>
     <string name="ManageAccounts_Hint">중요! 기존 지갑을 복원하지만 새로운 암호를 사용하면 완전히 새로운 지갑이 생성됩니다. 여러 지갑에 대해 단일 12-24 단어 니모닉 복구 구문을 사용하려는 경우 편리합니다.</string>
-    <string name="Watch_Address_Title">주소</string>
+    <string name="Watch_Address_Title">주소 관찰</string>
     <string name="Watch_Address_Hint">주소 또는 도메인</string>
+    <string name="Watch_Address_Description">Ethereum 및 기타 지원되는 EVM 블록체인에만 사용할 수 있습니다.</string>
     <string name="Watch_Address_Watch">관찰</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">이름</string>
@@ -668,8 +722,10 @@
     <string name="ManageAccount_NWords">%s 단어</string>
     <string name="ManageAccount_NWordsWithPassphrase">암호 문구로 이루어진 %s 단어</string>
     <string name="ManageAccount_SwitchWallet_Title">지갑 변경</string>
+    <string name="ManageAccount_Wallets">지갑</string>
+    <string name="ManageAccount_WatchAddresses">관찰 주소</string>
     <string name="ManageAccount_SwitchWallet_Subtitle">빠른 전환을 위한 지갑 선택</string>
-    <string name="ManageAccount_DeleteWarning">이 지갑을 삭제하시겠습니까?</string>
+    <string name="ManageAccount_DeleteWarning">이 지갑 주소 보기를 중지하시겠습니까?</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">네트워크 설정</string>
     <string name="NetworkSettings_SwithesAutomatically">자동으로 전환</string>
@@ -683,10 +739,12 @@
     <string name="ShowKey_ButtonClose">가까운, 닫힌</string>
     <string name="ShowKey_TabMnemonicPhrase">복구 문구</string>
     <string name="ShowKey_TabPrivateKey">개인 암호</string>
+    <string name="ShowKey_TabPublicKeys">공개 키</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Title">경고</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">개인 키 복사의 위험</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">보안 조치로 개인 키에 복사 작업을 사용하지 않는 것이 좋습니다.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">위험을 감수하겠습니다</string>
+    <string name="ShowKey_PrivateKey_Warning">이 키는 모든 EVM 호환 블록체인용입니다.\n\n보안 조치로 개인 키에 복사 작업을 사용하지 않는 것이 좋습니다.</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">백업</string>
     <string name="BackupKey_Description">다음에 표시될 복구 문구는 휴대폰을 분실, 도난, 파손된 경우 자금을 복구할 수 있는 유일한 방법입니다.\n\n아무도 화면을 보고 있지 않은지 확인합니다.</string>
@@ -701,6 +759,7 @@
     <string name="ManageKeys_Delete_Title">지갑 삭제하기</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">이 작업은 기기에서 %s지갑을 삭제합니다.</string>
     <string name="ManageKeys_Delete_FromPhone">휴대전화에서 삭제</string>
+    <string name="ManageKeys_StopWatching">그만 보기</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Description">귀하께서는 %1$s 을 보내거나 받으시려면 %2$s 지갑을 설정하셔야 합니다.\n\n아래의 생성 버튼을 사용하여 새로운 %3$s 지갑을 설정하거나 복원 버튼을 사용하여 기존 지갑을 가져옵니다.\n\n귀하께서는 이 지갑을 %4$s 를 위해 사용하실 수 있습니다.</string>
     <string name="AddCoin_CreateKey">만들기</string>
@@ -736,7 +795,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">네이티브</string>
     <string name="CoinPlatformsSelector_Title">코인 유형</string>
-    <string name="CoinPlatformsSelector_Description">이 토큰은 여러 블록체인에 존재합니다. 사용하려는 버전을 선택하십시오.</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
@@ -746,6 +805,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018년 이후 공통</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">연결로</string>
+    <string name="Tor_Connection_Enable">토르 활성화</string>
+    <string name="Tor_Connection_Disable">토르 비활성화</string>
+    <string name="Tor_Alert_Title">인터넷</string>
     <string name="Tor_Status_Starting">토르 시작중...</string>
     <string name="Tor_Status_Error">토르 시작 오류 !</string>
     <string name="TorPage_Connecting">연결중...</string>
@@ -757,7 +819,7 @@
     <string name="CoinOption_bip49_Title">최신(권장)</string>
     <string name="CoinOption_bip84_Title">최신</string>
     <!--Coin Page-->
-    <string name="Coin_Tab_Overview">Price</string>
+    <string name="Coin_Tab_Overview">금액</string>
     <string name="Coin_Tab_Market">Markets</string>
     <string name="Coin_Tab_Details">Analytics</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
@@ -773,6 +835,7 @@
     <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
+    <string name="CoinPage_MajorHolders_InfoDescription">The number of tokens held by the top 10 wallets. Quality projects typically have a widely distributed token.</string>
     <string name="CoinPage_Audits">Audits</string>
     <string name="CoinPage_Audits_Empty">No audit reports</string>
     <string name="CoinPage_Audits_PoweredBy">Powered by Defiyield.app</string>
@@ -784,10 +847,13 @@
     <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_TokenDistribution">Token Distribution</string>
+    <string name="CoinPage_TokenDistribution_Description">Onchain token parameters. Typically, healthy projects have an active on-chain user base and well-distributed token.</string>
     <string name="CoinPage_TokenLiquidity">Token Liquidity</string>
+    <string name="CoinPage_TokenLiquidity_Description">The state of liquidity for the given asset on decentralized exchange markets.</string>
     <string name="CoinPage_TotalVolume">Total Volume</string>
     <string name="CoinPage_DetailsTvl">TVL</string>
     <string name="CoinPage_TokenTvl">Token TVL</string>
+    <string name="CoinPage_TokenTvl_Description">Total Value Locked (TVL) is a metric that shows the total value of crypto assets under automated management by the smart contracts powering the given protocol.</string>
     <string name="CoinPage_SecurityParams">Security Parameters</string>
     <string name="CoinPage_SecurityParams_Privacy">Privacy</string>
     <string name="CoinPage_SecurityParams_Low">Low</string>
@@ -801,15 +867,15 @@
     <string name="CoinPage_SecurityParams_Audits">Audits</string>
     <string name="CoinPage_SecurityParams_Yes">Yes</string>
     <string name="CoinPage_SecurityParams_No">No</string>
-    <string name="CoinPage_SecurityParams_Privacy_Low">Transactions with this token are fully public allowing 3rd party services to link different transactions to the same entity, see amounts transacted and view user balances.</string>
-    <string name="CoinPage_SecurityParams_Privacy_Medium">Transactions with this token are semi-anonymous. A 3rd party service is able to see the amounts transacted and partially link different transactions to the same entity.</string>
-    <string name="CoinPage_SecurityParams_Privacy_High">Transactions with this token are anonymous by default or provide such capabilities. No entity is able to link different transactions to the same individual or see the amounts transacted.</string>
-    <string name="CoinPage_SecurityParams_Issuance_Centralized">The amount of tokens in circulation can potentially be increased or decreased by a centralized entity at will.</string>
-    <string name="CoinPage_SecurityParams_Issuance_Decentralized">The amount of tokens in circulation controlled by an algorithm and works in a deterministic manner outside of centralized influence.</string>
-    <string name="CoinPage_SecurityParams_ConfiscationResistance_Yes">The tokens can\'t be confiscated when kept in a non-custodial wallet.</string>
-    <string name="CoinPage_SecurityParams_ConfiscationResistance_No">The tokens can be confiscated or tampered with by an issuing entity.</string>
-    <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">The token holder can\'t be censored from transacting.</string>
-    <string name="CoinPage_SecurityParams_CensorshipResistance_No">The token holder can be censored from transacting.</string>
+    <string name="CoinPage_SecurityParams_Privacy_Low">LOW:\nTransactions with this token are fully public allowing 3rd party services to link different transactions to the same entity, see amounts transacted and view user balances.</string>
+    <string name="CoinPage_SecurityParams_Privacy_Medium">MEDIUM:\nTransactions with this token are semi-anonymous. A 3rd party service is able to see the amounts transacted and partially link different transactions to the same entity.</string>
+    <string name="CoinPage_SecurityParams_Privacy_High">HIGH:\nTransactions with this token are anonymous by default or provide such capabilities. No entity is able to link different transactions to the same individual or see the amounts transacted.</string>
+    <string name="CoinPage_SecurityParams_Issuance_Centralized">CENTRALIZED:\nThe amount of tokens in circulation can potentially be increased or decreased by a centralized entity at will.</string>
+    <string name="CoinPage_SecurityParams_Issuance_Decentralized">DECENTRALIZED:\nThe number of tokens in circulation controlled by an algorithm and works in a deterministic manner outside of centralized influence.</string>
+    <string name="CoinPage_SecurityParams_ConfiscationResistance_Yes">YES:\nThe tokens can\'t be confiscated when kept in a non-custodial wallet.</string>
+    <string name="CoinPage_SecurityParams_ConfiscationResistance_No">NO:\nThe tokens can be confiscated or tampered with by an issuing entity.</string>
+    <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">YES:\nThe token holder can\'t be censored from transacting.</string>
+    <string name="CoinPage_SecurityParams_CensorshipResistance_No">NO:\nThe token holder can be censored from transacting.</string>
     <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited from external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk free and not doesn\'t have any exploits risks.</string>
     <string name="CoinPage_SecurityParams_Audited_No">There are no publicly announced audits for the code powering the project behind the token. Non audited projects are more likely to have security issues in the code.</string>
     <string name="CoinPage_SecurityParams_Info">Info</string>
@@ -836,6 +902,9 @@
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
+    <string name="CoinPage_MarketCap_Quadrillion">Q</string>
+    <string name="CoinPage_MarketCap_TvlRation">MCap / TVL Ratio</string>
+    <string name="CoinPage_MarketCap_TvlRation_Description">The ratio of the project token\'s market cap over its TVL.</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_NoData">No Data</string>
     <string name="CoinPage_NoDataAvailable">No data available</string>
@@ -850,7 +919,9 @@
     <string name="CoinPage_LaunchDate">Inception Date</string>
     <string name="CoinPage_Tvl">Total Value Locked</string>
     <string name="CoinPage_TvlRank">TVL Rank</string>
+    <string name="CoinPage_TvlRank_Description">The ranking among other protocols is based on the TVL value in USD terms.</string>
     <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
+    <string name="CoinPage_TvlMCapRatio_Description">The ratio of the project token\'s market cap over its TVL.</string>
     <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
@@ -858,6 +929,19 @@
     <string name="CoinPage_MajorHolders_Description">위의 차트는 상위 10개 지갑이 보유한 전체 토큰의 %를 보여줍니다. %가 낮을수록 코인이 더 많이 분배됩니다.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">상위 10위 이더리움 지갑</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
+    <string name="CoinPage_DetailsDexVolume">DEX Volume</string>
+    <string name="CoinPage_DetailsDexVolume_Description">The trading volume for the token on decentralized exchanges.</string>
+    <string name="CoinPage_DetailsDexLiquidity">DEX Liquidity</string>
+    <string name="CoinPage_DetailsDexLiquidity_Description">The total amount of available liquidity for the token on decentralized exchanges.</string>
+    <string name="CoinPage_DetailsTxCount">Tx Count</string>
+    <string name="CoinPage_DetailsTxCount_Description">The number of token transactions recorded on-chain over various periods.</string>
+    <string name="CoinPage_DetailsTxVolume">Tx Volume</string>
+    <string name="CoinPage_DetailsTxVolume_Description">The aggregate token transaction volume is recorded on-chain. The volume is measured in the actual tokens (not USD).</string>
+    <string name="CoinPage_DetailsActiveAddresses">Active Addresses</string>
+    <string name="CoinPage_DetailsActiveAddresses_Description">The number of unique wallet addresses involved in transactions over various periods.</string>
+    <string name="CoinPage_NftBannerTitle">Unstoppable NFT</string>
+    <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
     <string name="Nfts_Title">NFT</string>
     <string name="Nfts_PriceType_Days_7">평균 7일</string>
     <string name="Nfts_PriceType_Days_30">평균 30일</string>
@@ -865,6 +949,9 @@
     <string name="Nfts_Asset_OnSale">할인 중</string>
     <string name="Nfts_Asset_OnSaleUntil">%s 까지</string>
     <string name="Nfts_Empty">지갑에 NFT가 없습니다.</string>
+    <string name="Nfts_PriceMode">가격 모드</string>
+    <string name="NftAsset_Overview">개요</string>
+    <string name="NftAsset_Activity">활동</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">공유</string>
     <string name="NftAsset_Action_Save">저장</string>
@@ -890,6 +977,32 @@
     <string name="NftAsset_Links_Discord">Discord</string>
     <string name="NftAsset_Links_Twitter">Twitter</string>
     <string name="PoweredBy_OpenSeaAPI">OpenSea API 제공</string>
+    <string name="Nft_TopCollections">Top NFT Collections</string>
+    <string name="Nft_TopCollections_Description">Leading NFT collections by trading volume.</string>
+    <!-- NFT Collection -->
+    <string name="NftCollection_Overview">개요</string>
+    <string name="NftCollection_Items">항목</string>
+    <string name="NftCollection_Activity">활동</string>
+    <string name="NftCollection_Owners">소유자</string>
+    <string name="NftCollection_AveragePrice">모든 시간 평균</string>
+    <string name="NftCollection_ItemsCount">%d 아이템</string>
+    <string name="NftCollection_TodaysSales">오늘의 판매자</string>
+    <string name="NftCollection_AveragePriceDescription">~%s / Item</string>
+    <!-- NFT Collection Events -->
+    <string name="NftCollection_EventType_SelectorTitle">Select Event Type</string>
+    <string name="NftCollection_EventType_All">모든</string>
+    <string name="NftCollection_EventType_List">목록</string>
+    <string name="NftCollection_EventType_Sale">판매</string>
+    <string name="NftCollection_EventType_Cancelled">취소</string>
+    <string name="NftCollection_EventType_BidEntered">입력된 입찰가</string>
+    <string name="NftCollection_EventType_BidWithdrawn">입찰 철회</string>
+    <string name="NftCollection_EventType_Transfer">전송</string>
+    <string name="NftCollection_EventType_OfferEntered">입력된 제안</string>
+    <string name="NftCollection_EventType_Approve">승인</string>
+    <string name="NftCollection_EventType_Custom">사용자 지정</string>
+    <string name="NftCollection_EventType_Payout">지불</string>
+    <string name="NftCollection_EventType_BulkCancel">대량 취소</string>
+    <string name="NftCollection_EventType_Unknown">알 수 없음</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
@@ -905,4 +1018,22 @@
     <string name="BalanceSyncError_ReportButtonExplanation">나중에 보고할 수 있도록 에러 텍스트가 클립보드에 복사됩니다.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">팔로우</string>
+    <string name="CoinPage_Chart_Locked">Locked</string>
+    <string name="ProUsersInfo_Title">Pro Users</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable 패스</string>
+    <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
+    <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
+    <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
+    <string name="ProUsersInfo_Features_DesLiquidity">DEX Liquidity and Rank</string>
+    <string name="ProUsersInfo_Features_ActiveAddresses">Active Addresses</string>
+    <string name="ProUsersInfo_Features_TxCount">Transaction Count</string>
+    <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
+    <string name="ProUsersInfo_Features_Authenticating">Authenticating...</string>
+    <string name="Hud_Text_LearnMore">추후 공개</string>
+    <string name="Hud_Text_Activate">Activate</string>
+    <string name="ProUsersActivate_Title">Activate the Pass</string>
+    <string name="ProUsersActivate_Description">Mountain Yak - 경계 없이 사용. 중요한 시장 데이터, 분석 도구, 온체인 데이터를 기반으로 하는 유용한 차트를 보여줌으로써 프로젝트를 명확하게 볼 수 있습니다.</string>
+    <!--Widget-->
+    <string name="WidgetList_Config_Title">유형 선택</string>
+    <string name="NftAssetActivity_Empty">아직 항목 활동이 없습니다</string>
 </resources>

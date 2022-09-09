@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.guides
 
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.GuidesManager
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.horizontalsystems.bankwallet.entities.GuideCategoryMultiLang
 import io.horizontalsystems.core.ILanguageManager
@@ -18,10 +19,10 @@ class GuidesRepository(
         private val connectivityManager: ConnectivityManager,
         private val languageManager: ILanguageManager) {
 
-    val guideCategories: Observable<DataState<Array<GuideCategory>>>
+    val guideCategories: Observable<DataState<List<GuideCategory>>>
         get() = guideCategoriesSubject
 
-    private val guideCategoriesSubject = BehaviorSubject.create<DataState<Array<GuideCategory>>>()
+    private val guideCategoriesSubject = BehaviorSubject.create<DataState<List<GuideCategory>>>()
     private val disposables = CompositeDisposable()
     private val retryLimit = 3
 
@@ -45,7 +46,7 @@ class GuidesRepository(
     }
 
     private fun fetch() {
-        guideCategoriesSubject.onNext(DataState.Loading())
+        guideCategoriesSubject.onNext(DataState.Loading)
 
         guidesManager.getGuideCategories()
                 //retry on error java.lang.AssertionError: No System TLS
@@ -75,14 +76,11 @@ class GuidesRepository(
                 }
     }
 
-    private fun getCategoriesByLocalLanguage(categoriesMultiLanguage: Array<GuideCategoryMultiLang>, language: String, fallbackLanguage: String): Array<GuideCategory> {
-        val categories = categoriesMultiLanguage.map { categoriesMultiLang ->
+    private fun getCategoriesByLocalLanguage(categoriesMultiLanguage: Array<GuideCategoryMultiLang>, language: String, fallbackLanguage: String) =
+        categoriesMultiLanguage.map { categoriesMultiLang ->
             val categoryTitle = categoriesMultiLang.category[language] ?: categoriesMultiLang.category[fallbackLanguage] ?: ""
             val guides = categoriesMultiLang.guides.mapNotNull { it[language] ?: it[fallbackLanguage] }
 
             GuideCategory(categoriesMultiLang.id, categoryTitle, guides.sortedByDescending { it.updatedAt })
         }
-
-        return categories.toTypedArray()
-    }
 }

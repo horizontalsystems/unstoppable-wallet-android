@@ -18,36 +18,48 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_height="48dp" />
 
+    <ImageView
+        android:id="@+id/coinIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/backgroundView"
+        app:layout_constraintStart_toStartOf="@id/backgroundView"
+        app:layout_constraintTop_toTopOf="@id/backgroundView"
+        tools:src="@drawable/logo_ethereum_24"/>
+
     <TextView
-        android:id="@+id/fiatTextView"
-        style="@style/Subhead2"
+        android:id="@+id/coinTextView"
+        style="@style/Subhead1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
         android:includeFontPadding="false"
-        android:textColor="@color/grey"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="@id/backgroundView"
-        app:layout_constraintStart_toStartOf="@id/backgroundView"
+        app:layout_constraintStart_toEndOf="@+id/coinIcon"
         app:layout_constraintTop_toTopOf="@id/backgroundView"
-        tools:text="$ 35000" />
+        tools:text="23.453 BTC"
+        />
 
     <TextView
-        android:id="@+id/coinTextView"
-        style="@style/Subhead1"
+        android:id="@+id/fiatTextView"
+        style="@style/Subhead2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:ellipsize="middle"
         android:maxWidth="157dp"
         android:singleLine="true"
         android:textAlignment="textEnd"
+        android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="@id/backgroundView"
         app:layout_constraintEnd_toEndOf="@id/backgroundView"
-        app:layout_constraintStart_toEndOf="@id/fiatTextView"
+        app:layout_constraintStart_toEndOf="@id/coinTextView"
         app:layout_constraintTop_toTopOf="@id/backgroundView"
-        tools:text="23.453 BTC" />
+        tools:text="$ 35000"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

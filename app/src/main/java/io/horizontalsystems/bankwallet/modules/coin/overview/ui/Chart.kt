@@ -52,7 +52,7 @@ fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
 }
 
 @Composable
-fun Chart(chartViewModel: ChartViewModel, onChangeHoldingPointState: (Boolean) -> Unit = {}, onSelectChartInterval: ((HsTimePeriod) -> Unit)? = null) {
+fun Chart(chartViewModel: ChartViewModel, onSelectChartInterval: ((HsTimePeriod) -> Unit)? = null) {
     val chartDataWrapper by chartViewModel.dataWrapperLiveData.observeAsState()
     val chartTabs by chartViewModel.tabItemsLiveData.observeAsState(listOf())
     val chartIndicators by chartViewModel.indicatorsLiveData.observeAsState(listOf())
@@ -74,8 +74,7 @@ fun Chart(chartViewModel: ChartViewModel, onChangeHoldingPointState: (Boolean) -
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
             viewState = chartViewState,
-            itemToPointConverter = chartViewModel::getSelectedPoint,
-            onChangeHoldingPointState = onChangeHoldingPointState
+            itemToPointConverter = chartViewModel::getSelectedPoint
         )
     }
 }
@@ -89,15 +88,19 @@ fun <T> Chart(
     chartInfoData: ChartInfoData?,
     chartLoading: Boolean,
     viewState: ViewState?,
-    itemToPointConverter: (ChartDataItemImmutable) -> SelectedPoint?,
-    onChangeHoldingPointState: (Boolean) -> Unit
+    itemToPointConverter: (ChartDataItemImmutable) -> SelectedPoint?
 ) {
     Column {
         var selectedPoint by remember { mutableStateOf<SelectedPoint?>(null) }
         HsChartLinePeriodsAndPoint(tabItems, selectedPoint, onSelectTab)
         val chartIndicator = indicators.firstOrNull { it.selected && it.enabled }?.item
-        PriceVolChart(chartInfoData, chartIndicator, chartLoading, viewState) { item ->
-            onChangeHoldingPointState.invoke(item != null)
+        PriceVolChart(
+            chartInfoData = chartInfoData,
+            chartIndicator = chartIndicator,
+            loading = chartLoading,
+            viewState = viewState,
+            showIndicatorLine = indicators.isNotEmpty()
+        ) { item ->
             selectedPoint = item?.let { itemToPointConverter.invoke(it) }
         }
         if (indicators.isNotEmpty()) {
@@ -132,47 +135,33 @@ private fun <T> HsChartLinePeriodsAndPoint(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
-                    Text(
-                        text = selectedPoint.value,
-                        style = ComposeAppTheme.typography.captionSB,
-                        color = ComposeAppTheme.colors.leah
-                    )
+                    captionSB_leah(text = selectedPoint.value)
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = selectedPoint.date,
-                        style = ComposeAppTheme.typography.caption,
-                        color = ComposeAppTheme.colors.grey
-                    )
+                    caption_grey(text = selectedPoint.date)
                 }
 
                 when (val extraData = selectedPoint.extraData) {
                     is SelectedPoint.ExtraData.Macd -> {
                         Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                             extraData.histogram?.let {
-                                Text(
+                                caption_lucian(
                                     modifier = Modifier.fillMaxWidth(),
                                     text = extraData.histogram,
-                                    style = ComposeAppTheme.typography.caption,
-                                    color = ComposeAppTheme.colors.lucian,
                                     textAlign = TextAlign.End
                                 )
                             }
                             Spacer(modifier = Modifier.height(4.dp))
                             Row(modifier = Modifier.fillMaxWidth()) {
                                 extraData.macd?.let {
-                                    Text(
+                                    caption_issykBlue(
                                         text = it,
-                                        style = ComposeAppTheme.typography.caption,
-                                        color = ComposeAppTheme.colors.issykBlue,
                                         textAlign = TextAlign.End
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(4.dp))
                                 extraData.signal?.let {
-                                    Text(
+                                    caption_jacob(
                                         text = it,
-                                        style = ComposeAppTheme.typography.caption,
-                                        color = ComposeAppTheme.colors.jacob,
                                         textAlign = TextAlign.End
                                     )
                                 }
@@ -181,38 +170,30 @@ private fun <T> HsChartLinePeriodsAndPoint(
                     }
                     is SelectedPoint.ExtraData.Volume -> {
                         Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                            Text(
+                            caption_grey(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = stringResource(R.string.CoinPage_Volume),
-                                style = ComposeAppTheme.typography.caption,
-                                color = ComposeAppTheme.colors.grey,
                                 textAlign = TextAlign.End
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(
+                            caption_grey(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = extraData.volume,
-                                style = ComposeAppTheme.typography.caption,
-                                color = ComposeAppTheme.colors.grey,
                                 textAlign = TextAlign.End
                             )
                         }
                     }
                     is SelectedPoint.ExtraData.Dominance -> {
                         Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                            Text(
+                            caption_grey(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = stringResource(R.string.Market_BtcDominance),
-                                style = ComposeAppTheme.typography.caption,
-                                color = ComposeAppTheme.colors.grey,
                                 textAlign = TextAlign.End
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(
+                            caption_jacob(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = extraData.dominance,
-                                style = ComposeAppTheme.typography.caption,
-                                color = ComposeAppTheme.colors.jacob,
                                 textAlign = TextAlign.End
                             )
                         }
@@ -256,11 +237,13 @@ fun PriceVolChart(
     chartIndicator: ChartIndicator?,
     loading: Boolean,
     viewState: ViewState?,
+    showIndicatorLine: Boolean,
     onSelectPoint: (ChartDataItemImmutable?) -> Unit,
 ) {
+    val height = if (showIndicatorLine) 228.dp else 180.dp
     Box(
         modifier = Modifier
-            .height(182.dp)
+            .height(height)
     ) {
         Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
 
@@ -296,6 +279,8 @@ fun PriceVolChart(
                     }
                     ViewState.Success -> {
                         chart.hideError()
+                        chart.setIndicatorLineVisible(showIndicatorLine)
+
                         chartInfoData?.let { chartInfoData ->
                             val chartType = ChartView.ChartType.fromString(chartInfoData.chartInterval.value)
                             chart.doOnLayout {

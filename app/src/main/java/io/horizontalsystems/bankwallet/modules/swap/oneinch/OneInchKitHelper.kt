@@ -4,8 +4,8 @@ import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.oneinchkit.Quote
 import io.horizontalsystems.oneinchkit.Swap
@@ -22,44 +22,41 @@ class OneInchKitHelper(
     // TODO take evmCoinAddress from oneInchKit
     private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
 
-    private fun getCoinAddress(coin: PlatformCoin): Address {
-        return when (val coinType = coin.coinType) {
-            CoinType.Ethereum, CoinType.BinanceSmartChain -> evmCoinAddress
-            is CoinType.Erc20 -> Address(coinType.address)
-            is CoinType.Bep20 -> Address(coinType.address)
-            else -> throw IllegalStateException("Unsupported coinType: $coinType")
-        }
+    private fun getTokenAddress(token: Token) = when (val tokenType = token.type) {
+        TokenType.Native -> evmCoinAddress
+        is TokenType.Eip20 -> Address(tokenType.address)
+        else -> throw IllegalStateException("Unsupported tokenType: $tokenType")
     }
 
     val smartContractAddress: Address
         get() = oneInchKit.getRouterAddress
 
     fun getQuoteAsync(
-        fromCoin: PlatformCoin,
-        toCoin: PlatformCoin,
+        fromToken: Token,
+        toToken: Token,
         fromAmount: BigDecimal
     ): Single<Quote> {
         return oneInchKit.getQuoteAsync(
-            fromToken = getCoinAddress(fromCoin),
-            toToken = getCoinAddress(toCoin),
-            amount = fromAmount.scaleUp(fromCoin.decimals)
+            fromToken = getTokenAddress(fromToken),
+            toToken = getTokenAddress(toToken),
+            amount = fromAmount.scaleUp(fromToken.decimals)
         ).onErrorResumeNext {
             Single.error(it.convertedError)
         }
     }
 
     fun getSwapAsync(
-        fromCoin: PlatformCoin,
-        toCoin: PlatformCoin,
+        fromToken: Token,
+        toToken: Token,
         fromAmount: BigDecimal,
         slippagePercentage: Float,
         recipient: String? = null,
         gasPrice: GasPrice? = null
     ): Single<Swap> {
         return oneInchKit.getSwapAsync(
-            fromToken = getCoinAddress(fromCoin),
-            toToken = getCoinAddress(toCoin),
-            amount = fromAmount.scaleUp(fromCoin.decimals),
+            fromToken = getTokenAddress(fromToken),
+            toToken = getTokenAddress(toToken),
+            amount = fromAmount.scaleUp(fromToken.decimals),
             slippagePercentage = slippagePercentage,
             recipient = recipient?.let { Address(it) },
             gasPrice = gasPrice

@@ -1,88 +1,52 @@
 package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
+import io.horizontalsystems.bankwallet.core.protocolType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
 data class Wallet(
-    val configuredPlatformCoin: ConfiguredPlatformCoin,
+    val configuredToken: ConfiguredToken,
     val account: Account
 ) : Parcelable {
-    private val blockchain: TransactionSource.Blockchain
-        get() = when (val coinType = coinType) {
-            CoinType.Bitcoin -> TransactionSource.Blockchain.Bitcoin
-            CoinType.BitcoinCash -> TransactionSource.Blockchain.BitcoinCash
-            CoinType.Dash -> TransactionSource.Blockchain.Dash
-            CoinType.Litecoin -> TransactionSource.Blockchain.Litecoin
-            CoinType.Ethereum -> TransactionSource.Blockchain.Ethereum
-            CoinType.BinanceSmartChain -> TransactionSource.Blockchain.BinanceSmartChain
-            CoinType.Zcash -> TransactionSource.Blockchain.Zcash
-            is CoinType.Bep2 -> TransactionSource.Blockchain.Bep2(coinType.symbol)
-            is CoinType.Erc20 -> TransactionSource.Blockchain.Ethereum
-            is CoinType.Bep20 -> TransactionSource.Blockchain.BinanceSmartChain
-            is CoinType.Avalanche,
-            is CoinType.Fantom,
-            is CoinType.HarmonyShard0,
-            is CoinType.HuobiToken,
-            is CoinType.Iotex,
-            is CoinType.Moonriver,
-            is CoinType.OkexChain,
-            CoinType.EthereumOptimism,
-            CoinType.EthereumArbitrumOne,
-            is CoinType.OptimismErc20,
-            is CoinType.ArbitrumOneErc20,
-            is CoinType.Polygon, is CoinType.Mrc20, //todo add new types support
-            is CoinType.Solana,
-            is CoinType.Sora,
-            is CoinType.Tomochain,
-            is CoinType.Xdai,
-            is CoinType.Unsupported -> throw IllegalArgumentException("Unsupported coin may not have transactions to show")
-        }
-
-    val platformCoin
-        get() = configuredPlatformCoin.platformCoin
+    val token
+        get() = configuredToken.token
 
     val coinSettings
-        get() = configuredPlatformCoin.coinSettings
+        get() = configuredToken.coinSettings
 
     val coin
-        get() = platformCoin.coin
-
-    val platform
-        get() = platformCoin.platform
-
-    val coinType
-        get() = platformCoin.coinType
+        get() = token.coin
 
     val decimal
-        get() = platform.decimals
+        get() = token.decimals
 
     val badge
-        get() = when (coinType) {
-            CoinType.Bitcoin,
-            CoinType.Litecoin,
+        get() = when (token.blockchainType) {
+            BlockchainType.Bitcoin,
+            BlockchainType.Litecoin,
             -> coinSettings.derivation?.value?.uppercase()
-            CoinType.BitcoinCash -> coinSettings.bitcoinCashCoinType?.value?.uppercase()
-            else -> coinType.blockchainType
+            BlockchainType.BitcoinCash -> coinSettings.bitcoinCashCoinType?.value?.uppercase()
+            else -> token.protocolType
         }
 
-    val transactionSource get() = TransactionSource(blockchain, account, coinSettings)
+    val transactionSource get() = TransactionSource(token.blockchain, account, coinSettings)
 
-    constructor(platformCoin: PlatformCoin, account: Account) : this(ConfiguredPlatformCoin(platformCoin), account)
+    constructor(token: Token, account: Account) : this(ConfiguredToken(token), account)
 
     override fun equals(other: Any?): Boolean {
         if (other is Wallet) {
-            return configuredPlatformCoin == other.configuredPlatformCoin && account == other.account
+            return configuredToken == other.configuredToken && account == other.account
         }
 
         return super.equals(other)
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(configuredPlatformCoin, account)
+        return Objects.hash(configuredToken, account)
     }
 }

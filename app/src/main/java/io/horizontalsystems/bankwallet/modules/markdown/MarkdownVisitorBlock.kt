@@ -3,7 +3,11 @@ package io.horizontalsystems.bankwallet.modules.markdown
 import org.commonmark.node.*
 import java.net.URL
 
-class MarkdownVisitorBlock(private var markdownUrl: String, val level: Int = 0, private val listItemMarkerGenerator: ListItemMarkerGenerator? = null) : AbstractVisitor() {
+class MarkdownVisitorBlock(
+    private var markdownUrl: String = "",
+    val level: Int = 0,
+    private val listItemMarkerGenerator: ListItemMarkerGenerator? = null
+) : AbstractVisitor() {
 
     val blocks = mutableListOf<MarkdownBlock>()
     private var quoted = false

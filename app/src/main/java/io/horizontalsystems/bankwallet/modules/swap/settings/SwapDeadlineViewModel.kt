@@ -1,12 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.swap.settings
 
 import android.util.Range
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.getState
+import io.horizontalsystems.bankwallet.modules.swap.settings.ui.InputButton
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
@@ -25,41 +28,43 @@ interface ISwapDeadlineService {
 }
 
 class SwapDeadlineViewModel(
-        private val service: ISwapDeadlineService
+    private val service: ISwapDeadlineService
 ) : ViewModel(), IVerifiedInputViewModel {
 
     private val disposable = CompositeDisposable()
 
-    override val inputFieldButtonItems: List<InputFieldButtonItem>
+    var errorState by mutableStateOf<DataState.Error?>(null)
+        private set
+
+    override val inputButtons: List<InputButton>
         get() {
             val bounds = service.recommendedDeadlineBounds
             val lowerMinutes = toMinutes(bounds.lower)
             val upperMinutes = toMinutes(bounds.upper)
 
             return listOf(
-                    InputFieldButtonItem(Translator.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes)) {
-                        setTextLiveData.postValue(lowerMinutes)
-                        onChangeText(lowerMinutes)
-                    },
-                    InputFieldButtonItem(Translator.getString(R.string.SwapSettings_DeadlineMinute, upperMinutes)) {
-                        setTextLiveData.postValue(upperMinutes)
-                        onChangeText(upperMinutes)
-                    },
+                InputButton(
+                    Translator.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes),
+                    lowerMinutes
+                ),
+                InputButton(
+                    Translator.getString(R.string.SwapSettings_DeadlineMinute, upperMinutes),
+                    upperMinutes
+                )
             )
         }
 
     override val inputFieldPlaceholder = toMinutes(service.defaultDeadline)
-    override val setTextLiveData = MutableLiveData<String?>()
-    override val cautionLiveData = MutableLiveData<Caution?>(null)
+
     override val initialValue: String?
         get() = service.initialDeadline?.let { toMinutes(it) }
 
     init {
         service.deadlineErrorObservable
-                .subscribe { sync() }
-                .let {
-                    disposable.add(it)
-                }
+            .subscribe { sync() }
+            .let {
+                disposable.add(it)
+            }
         sync()
     }
 
@@ -67,7 +72,7 @@ class SwapDeadlineViewModel(
         val caution = service.deadlineError?.localizedMessage?.let { localizedMessage ->
             Caution(localizedMessage, Caution.Type.Error)
         }
-        cautionLiveData.postValue(caution)
+        errorState = getState(caution)
     }
 
     override fun onChangeText(text: String?) {
@@ -82,26 +87,21 @@ class SwapDeadlineViewModel(
         return floor(seconds / 60.0).toLong().toString()
     }
 
+    override fun onCleared() {
+        disposable.clear()
+    }
 }
 
 
 interface IVerifiedInputViewModel {
-    val inputFieldMaximumNumberOfLines: Int get() = 1
-    val inputFieldCanEdit: Boolean get() = true
+    val inputButtons: List<InputButton> get() = listOf()
 
-    val inputFieldButtonItems: List<InputFieldButtonItem> get() = listOf()
     val initialValue: String? get() = null
     val inputFieldPlaceholder: String? get() = null
-
-    val setTextLiveData: LiveData<String?>
-    val cautionLiveData: LiveData<Caution?>
-    val isLoadingLiveData: LiveData<Boolean> get() = SingleLiveEvent<Boolean>()
 
     fun onChangeText(text: String?) = Unit
     fun isValid(text: String?): Boolean = true
 }
-
-data class InputFieldButtonItem(val title: String, val onClick: () -> Unit)
 
 data class Caution(val text: String, val type: Type) {
     enum class Type {

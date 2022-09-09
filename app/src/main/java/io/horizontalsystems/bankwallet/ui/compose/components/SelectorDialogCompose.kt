@@ -30,14 +30,12 @@ fun <T> SelectorDialogCompose(
         ) {
             title?.let {
                 Box(modifier = Modifier.height(40.dp)) {
-                    Text(
+                    subhead1_grey(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth()
                             .align(Alignment.Center),
                         text = title,
-                        style = ComposeAppTheme.typography.subhead1,
-                        color = ComposeAppTheme.colors.grey,
                         textAlign = TextAlign.Center
                     )
                 }

@@ -45,10 +45,8 @@ fun SearchBar(
     TopAppBar(
         modifier = Modifier.height(56.dp),
         title = {
-            Text(
+            title3_leah(
                 text = if (searchMode) "" else title,
-                style = ComposeAppTheme.typography.title3,
-                color = ComposeAppTheme.colors.oz,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -56,7 +54,7 @@ fun SearchBar(
         backgroundColor = ComposeAppTheme.colors.tyler,
         elevation = 0.dp,
         navigationIcon = {
-            IconButton(onClick = {
+            HsIconButton(onClick = {
                 if (searchMode) {
                     searchText = ""
                     onSearchTextChanged.invoke("")
@@ -87,11 +85,7 @@ fun SearchBar(
                         showClearButton = it.isNotEmpty()
                     },
                     placeholder = {
-                        Text(
-                            text = searchHintText,
-                            color = ComposeAppTheme.colors.grey50,
-                            style = ComposeAppTheme.typography.body
-                        )
+                        body_grey50(text = searchHintText)
                     },
                     textStyle = ComposeAppTheme.typography.body,
                     colors = TextFieldDefaults.textFieldColors(
@@ -113,7 +107,7 @@ fun SearchBar(
                             enter = fadeIn(),
                             exit = fadeOut()
                         ) {
-                            IconButton(onClick = {
+                            HsIconButton(onClick = {
                                 searchText = ""
                                 onSearchTextChanged.invoke("")
                                 showClearButton = false
@@ -147,7 +141,8 @@ fun SearchBar(
                             icon = menuItem.icon,
                             onClick = menuItem.onClick,
                             description = menuItem.title.getString(),
-                            enabled = menuItem.enabled
+                            enabled = menuItem.enabled,
+                            tint = menuItem.tint
                         )
                     } else {
                         Text(

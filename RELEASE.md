@@ -2,12 +2,18 @@
 
 This document describes the release process for `Unstoppable` app.
 
-### 1. Update Checkpoints in Kits
+### 1. Prepare dependent libraries
+
+#### 1.1. Update Checkpoints
 
 * `BitcoinKit`
 * `BitcoinCashKit`
 * `LitecoinKit`
 * `DashKit`
+
+#### 1.2. Update coins dump in `MarketKit`
+
+Initial coins dump `json` file should be updated to latest state of backend.
 
 ### 2. Update URL for Guides and FAQ
 

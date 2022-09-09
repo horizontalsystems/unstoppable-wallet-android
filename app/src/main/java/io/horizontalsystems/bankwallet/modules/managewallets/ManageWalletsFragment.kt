@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +31,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
@@ -42,7 +41,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
-import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.core.findNavController
 
 class ManageWalletsFragment : BaseFragment() {
@@ -51,7 +49,7 @@ class ManageWalletsFragment : BaseFragment() {
     private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
     private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
     private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
-    private val coinPlatformsViewModel by viewModels<CoinPlatformsViewModel> { vmFactory }
+    private val coinTokensViewModel by viewModels<CoinTokensViewModel> { vmFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,6 +66,7 @@ class ManageWalletsFragment : BaseFragment() {
                         findNavController(),
                         viewModel
                     )
+                    ZCashBirthdayHeightDialogWrapper(restoreSettingsViewModel)
                 }
             }
         }
@@ -87,26 +86,11 @@ class ManageWalletsFragment : BaseFragment() {
             )
         }
 
-        restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
-            val zcashBirhdayHeightDialog = ZcashBirthdayHeightDialog()
-            zcashBirhdayHeightDialog.onEnter = {
-                restoreSettingsViewModel.onEnter(it)
-            }
-            zcashBirhdayHeightDialog.onCancel = {
-                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-            }
-
-            zcashBirhdayHeightDialog.show(
-                requireActivity().supportFragmentManager,
-                "ZcashBirthdayHeightDialog"
-            )
-        }
-
-        coinPlatformsViewModel.openPlatformsSelectorEvent.observe(viewLifecycleOwner) { config ->
+        coinTokensViewModel.openSelectorEvent.observe(viewLifecycleOwner) { config ->
             showBottomSelectorDialog(
                 config,
-                onSelect = { indexes -> coinPlatformsViewModel.onSelect(indexes) },
-                onCancel = { coinPlatformsViewModel.onCancelSelect() }
+                onSelect = { indexes -> coinTokensViewModel.onSelect(indexes) },
+                onCancel = { coinTokensViewModel.onCancelSelect() }
             )
         }
     }
@@ -120,14 +104,15 @@ class ManageWalletsFragment : BaseFragment() {
         BottomSheetSelectorMultipleDialog.show(
             fragmentManager = childFragmentManager,
             title = config.title,
-            subtitle = config.subtitle,
             icon = config.icon,
             items = config.viewItems,
             selected = config.selectedIndexes,
             notifyUnchanged = true,
             onItemSelected = { onSelect(it) },
             onCancelled = { onCancel() },
-            warning = config.description
+            warningTitle = config.descriptionTitle,
+            warning = config.description,
+            allowEmpty= config.allowEmpty
         )
     }
 
@@ -153,7 +138,7 @@ private fun ManageWalletsScreen(
                     title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
                     icon = R.drawable.ic_add_yellow,
                     onClick = {
-                        findNavController.slideFromRight(R.id.manageWalletsFragment_to_addToken)
+                        findNavController.slideFromRight(R.id.addTokenFragment)
                     }
                 )
             ),
@@ -181,7 +166,7 @@ private fun ManageWalletsScreen(
                         CoinCell(
                             viewItem = viewItem,
                             onItemClick = { onItemClick(viewItem, viewModel) },
-                            onSettingClick = { viewModel.onClickSettings(viewItem.uid) },
+                            onSettingClick = { viewModel.onClickSettings(viewItem.item) },
                         )
                     }
                 }
@@ -192,7 +177,7 @@ private fun ManageWalletsScreen(
 
 @Composable
 private fun CoinCell(
-    viewItem: CoinViewItem,
+    viewItem: CoinViewItem<String>,
     onItemClick: () -> Unit,
     onSettingClick: () -> Unit,
 ) {
@@ -217,10 +202,8 @@ private fun CoinCell(
                 modifier = Modifier.weight(1f)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
+                    body_leah(
                         text = viewItem.title,
-                        color = ComposeAppTheme.colors.leah,
-                        style = ComposeAppTheme.typography.body,
                         maxLines = 1,
                     )
                     viewItem.label?.let { labelText ->
@@ -244,10 +227,8 @@ private fun CoinCell(
                         }
                     }
                 }
-                Text(
+                subhead2_grey(
                     text = viewItem.subtitle,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2,
                     maxLines = 1,
                     modifier = Modifier.padding(top = 1.dp)
                 )
@@ -255,7 +236,7 @@ private fun CoinCell(
             if (viewItem.state is CoinViewItemState.ToggleVisible) {
                 Spacer(Modifier.width(12.dp))
                 if (viewItem.state.hasSettings) {
-                    IconButton(
+                    HsIconButton(
                         onClick = onSettingClick
                     ) {
                         Icon(
@@ -274,12 +255,12 @@ private fun CoinCell(
     }
 }
 
-private fun onItemClick(viewItem: CoinViewItem, viewModel: ManageWalletsViewModel) {
+private fun onItemClick(viewItem: CoinViewItem<String>, viewModel: ManageWalletsViewModel) {
     if (viewItem.state is CoinViewItemState.ToggleVisible) {
         if (viewItem.state.enabled) {
-            viewModel.disable(viewItem.uid)
+            viewModel.disable(viewItem.item)
         } else {
-            viewModel.enable(viewItem.uid)
+            viewModel.enable(viewItem.item)
         }
     }
 }
@@ -290,8 +271,8 @@ fun PreviewCoinCell() {
     val viewItem = CoinViewItem(
         "arbitrum",
         ImageSource.Local(R.drawable.logo_arbitrum_24),
-        "Arbitrum",
         "ARB",
+        "Arbitrum",
         CoinViewItemState.ToggleVisible(true, true),
         "Arbitrum"
     )

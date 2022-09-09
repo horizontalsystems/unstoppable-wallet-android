@@ -6,15 +6,22 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Request
+import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule.WCRequestWrapper
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 
-class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
+class WCSessionViewModel(
+    private val service: WC1Service,
+    private val accountManager: IAccountManager
+) : ViewModel() {
 
     val connectingLiveData = MutableLiveData<Boolean>()
     val peerMetaLiveData = MutableLiveData<PeerMetaViewItem?>()
@@ -24,9 +31,12 @@ class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
     val errorLiveData = MutableLiveData<String?>()
     val statusLiveData = MutableLiveData<Status?>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
-    val openRequestLiveEvent = SingleLiveEvent<WC1Request>()
+    val openRequestLiveEvent = SingleLiveEvent<WCRequestWrapper>()
 
-    var invalidUrlError by mutableStateOf(false)
+    var blockchainSelect by mutableStateOf(Select(service.selectedBlockchain, service.availableBlockchains))
+    var blockchainSelectEnabled by mutableStateOf(false)
+
+    var invalidStateError by mutableStateOf<Int?>(null)
         private set
 
     enum class Status(val value: Int) {
@@ -52,35 +62,36 @@ class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
         sync(service.state, service.connectionState)
 
         service.stateObservable
-                .subscribe {
-                    sync(it, service.connectionState)
-                }
-                .let {
-                    disposables.add(it)
-                }
+            .subscribe {
+                sync(it, service.connectionState)
+            }
+            .let {
+                disposables.add(it)
+            }
 
         service.connectionStateObservable
-                .subscribe {
-                    sync(service.state, it)
-                }
-                .let {
-                    disposables.add(it)
-                }
+            .subscribe {
+                sync(service.state, it)
+            }
+            .let {
+                disposables.add(it)
+            }
 
 
         service.requestObservable
-                .subscribe {
-                    openRequestLiveEvent.postValue(it)
-                }
-                .let {
-                    disposables.add(it)
-                }
+            .subscribe {
+                openRequestLiveEvent.postValue(it)
+            }
+            .let {
+                disposables.add(it)
+            }
 
         service.start()
     }
 
     override fun onCleared() {
         service.stop()
+        disposables.clear()
     }
 
     fun cancel() {
@@ -89,6 +100,12 @@ class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
         } else {
             closeLiveEvent.postValue(Unit)
         }
+    }
+
+    fun onSelectBlockchain(blockchain: Blockchain) {
+        service.selectedBlockchain = blockchain
+
+        blockchainSelect = Select(blockchain, service.availableBlockchains)
     }
 
     fun connect() {
@@ -103,19 +120,37 @@ class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
         service.reconnect()
     }
 
+    private fun getErrorMessage(error: Throwable): Int? {
+        return when (error) {
+            is WC1Service.SessionError.UnsupportedChainId -> R.string.WalletConnect_Error_UnsupportedChainId
+            is WC1Service.SessionError.NoSuitableAccount -> R.string.WalletConnect_Error_NoSuitableAccount
+            else -> null
+        }
+    }
+
     private fun sync(state: WC1Service.State, connectionState: WalletConnectInteractor.State) {
         if (state == WC1Service.State.Killed) {
             closeLiveEvent.postValue(Unit)
             return
         } else if (state is WC1Service.State.Invalid) {
-            invalidUrlError = true
+            invalidStateError = getErrorMessage(state.error)
             return
         }
 
         val peerMetaViewItem = service.remotePeerMeta?.let { peerMeta ->
-            PeerMetaViewItem(peerMeta.name, peerMeta.url, peerMeta.description, peerMeta.icons.lastOrNull())
+            PeerMetaViewItem(
+                peerMeta.name,
+                peerMeta.url,
+                peerMeta.description,
+                accountManager.activeAccount?.name,
+                service.evmAddress?.eip55?.shorten(),
+                peerMeta.icons.lastOrNull()
+            )
         }
         peerMetaLiveData.postValue(peerMetaViewItem)
+
+        blockchainSelect = Select(service.selectedBlockchain, service.availableBlockchains)
+        blockchainSelectEnabled = state == WC1Service.State.WaitingForApproveSession
 
         connectingLiveData.postValue(connectionState == WalletConnectInteractor.State.Connecting)
         closeEnabledLiveData.postValue(state == WC1Service.State.Ready)
@@ -164,7 +199,7 @@ class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
     }
 
     private fun getCancelButtonState(state: WC1Service.State): ButtonState {
-        return if (state != WC1Service.State.Ready){
+        return if (state != WC1Service.State.Ready) {
             ButtonState.Enabled
         } else {
             ButtonState.Hidden
@@ -197,4 +232,11 @@ class WCSessionViewModel(private val service: WC1Service) : ViewModel() {
 
 }
 
-data class PeerMetaViewItem(val name: String, val url: String, val description: String?, val icon: String?)
+data class PeerMetaViewItem(
+    val name: String,
+    val url: String,
+    val description: String?,
+    val activeWallet: String?,
+    val address: String?,
+    val icon: String?
+)

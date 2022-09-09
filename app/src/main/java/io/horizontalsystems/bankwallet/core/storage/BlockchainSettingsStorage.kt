@@ -1,61 +1,65 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import io.horizontalsystems.bankwallet.core.IBlockchainSettingsStorage
-import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
+import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
+import io.horizontalsystems.marketkit.models.BlockchainType
 
-class BlockchainSettingsStorage(private val appDatabase: AppDatabase) : IBlockchainSettingsStorage {
+class BlockchainSettingsStorage(appDatabase: AppDatabase) {
 
     companion object {
-        const val syncModeSettingKey: String = "sync_mode"
-        const val derivationSettingKey: String = "derivation"
-        const val ethereumRpcModeSettingKey: String = "communication"
-        const val networkCoinTypeKey: String = "network_coin_type"
+        const val keyBtcRestore: String = "btc-restore"
+        const val keyBtcTransactionSort: String = "btc-transaction-sort"
+        const val keyEvmSyncSource: String = "evm-sync-source"
     }
 
-    override var bitcoinCashCoinType: BitcoinCashCoinType?
-        get() {
-            val blockchainSetting = appDatabase.blockchainSettingDao().getSetting(CoinType.BitcoinCash, networkCoinTypeKey)
-            return blockchainSetting?.let { BitcoinCashCoinType.valueOf(it.value) }
+    private val dao = appDatabase.blockchainSettingDao()
+
+    fun btcRestoreMode(blockchainType: BlockchainType): BtcRestoreMode? {
+        return dao.getBlockchainSetting(blockchainType.uid, keyBtcRestore)?.let { storedSetting ->
+            BtcRestoreMode.values().firstOrNull { it.raw == storedSetting.value }
         }
-        set(newValue) {
-            newValue ?: run {
-                appDatabase.blockchainSettingDao().deleteDerivationSettings(networkCoinTypeKey)
-                return
+    }
+
+    fun save(btcRestoreMode: BtcRestoreMode, blockchainType: BlockchainType) {
+        dao.insert(
+            BlockchainSettingRecord(
+                blockchainUid = blockchainType.uid,
+                key = keyBtcRestore,
+                value = btcRestoreMode.raw
+            )
+        )
+    }
+
+    fun btcTransactionSortMode(blockchainType: BlockchainType): TransactionDataSortMode? {
+        return dao.getBlockchainSetting(blockchainType.uid, keyBtcTransactionSort)
+            ?.let { sortSetting ->
+                TransactionDataSortMode.values().firstOrNull { it.raw == sortSetting.value }
             }
-
-            appDatabase.blockchainSettingDao().insert(BlockchainSetting(CoinType.BitcoinCash, networkCoinTypeKey, newValue.value))
-        }
-
-
-    override fun derivationSetting(coinType: CoinType): DerivationSetting? {
-        val blockchainSetting = appDatabase.blockchainSettingDao().getSetting(coinType, derivationSettingKey)
-        return blockchainSetting?.let { DerivationSetting(coinType, AccountType.Derivation.valueOf(it.value)) }
     }
 
-    override fun saveDerivationSetting(derivationSetting: DerivationSetting) {
-        appDatabase.blockchainSettingDao().insert(BlockchainSetting(derivationSetting.coinType, derivationSettingKey, derivationSetting.derivation.value))
+    fun save(transactionDataSortMode: TransactionDataSortMode, blockchainType: BlockchainType) {
+        dao.insert(
+            BlockchainSettingRecord(
+                blockchainUid = blockchainType.uid,
+                key = keyBtcTransactionSort,
+                value = transactionDataSortMode.raw
+            )
+        )
     }
 
-    override fun deleteDerivationSettings() {
-        appDatabase.blockchainSettingDao().deleteDerivationSettings(derivationSettingKey)
+    fun evmSyncSourceName(blockchainType: BlockchainType): String? {
+        return dao.getBlockchainSetting(blockchainType.uid, keyEvmSyncSource)?.value
     }
 
-    override fun initialSyncSetting(coinType: CoinType): InitialSyncSetting? {
-        val blockchainSetting = appDatabase.blockchainSettingDao().getSetting(coinType, syncModeSettingKey)
-        return blockchainSetting?.let { InitialSyncSetting(coinType, SyncMode.valueOf(it.value)) }
+    fun save(evmSyncSourceName: String, blockchainType: BlockchainType) {
+        dao.insert(
+            BlockchainSettingRecord(
+                blockchainUid = blockchainType.uid,
+                key = keyEvmSyncSource,
+                value = evmSyncSourceName
+            )
+        )
     }
 
-    override fun saveInitialSyncSetting(initialSyncSetting: InitialSyncSetting) {
-        appDatabase.blockchainSettingDao().insert(BlockchainSetting(initialSyncSetting.coinType, syncModeSettingKey, initialSyncSetting.syncMode.value))
-    }
-
-    override fun ethereumRpcModeSetting(coinType: CoinType): EthereumRpcMode? {
-        val setting = appDatabase.blockchainSettingDao().getSetting(coinType, ethereumRpcModeSettingKey)
-        return setting?.let { EthereumRpcMode(coinType, CommunicationMode.valueOf(it.value)) }
-    }
-
-    override fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode) {
-        appDatabase.blockchainSettingDao().insert(BlockchainSetting(ethereumRpcModeSetting.coinType, syncModeSettingKey, ethereumRpcModeSetting.communicationMode.value))
-    }
 }

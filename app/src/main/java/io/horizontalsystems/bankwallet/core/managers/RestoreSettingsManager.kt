@@ -5,15 +5,15 @@ import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 
 class RestoreSettingsManager(
         private val storage: IRestoreSettingsStorage,
         private val zcashBirthdayProvider: ZcashBirthdayProvider
 ) {
-    fun settings(account: Account, coin: CoinType): RestoreSettings {
-        val records = storage.restoreSettings(account.id, coin.id)
+    fun settings(account: Account, blockchainType: BlockchainType): RestoreSettings {
+        val records = storage.restoreSettings(account.id, blockchainType.uid)
 
         val settings = RestoreSettings()
         records.forEach { record ->
@@ -25,28 +25,28 @@ class RestoreSettingsManager(
         return settings
     }
 
-    fun accountSettingsInfo(account: Account): List<Triple<CoinType, RestoreSettingType, String>> {
+    fun accountSettingsInfo(account: Account): List<Triple<BlockchainType, RestoreSettingType, String>> {
         return storage.restoreSettings(account.id).mapNotNull { record ->
             RestoreSettingType.fromString(record.key)?.let { settingType ->
-                val coinType = CoinType.fromId(record.coinId)
-                Triple(coinType, settingType, record.value)
+                val blockchainType = BlockchainType.fromUid(record.blockchainTypeUid)
+                Triple(blockchainType, settingType, record.value)
             }
         }
     }
 
-    fun save(settings: RestoreSettings, account: Account, coinType: CoinType) {
+    fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType) {
         val records = settings.values.map { (type, value) ->
-            RestoreSettingRecord(account.id, coinType.id, type.name, value)
+            RestoreSettingRecord(account.id, blockchainType.uid, type.name, value)
         }
 
         storage.save(records)
     }
 
-    fun getSettingValueForCreatedAccount(settingType: RestoreSettingType, coinType: CoinType): String? {
+    fun getSettingValueForCreatedAccount(settingType: RestoreSettingType, blockchainType: BlockchainType): String? {
         return when (settingType) {
             RestoreSettingType.BirthdayHeight -> {
-                when (coinType) {
-                    CoinType.Zcash -> {
+                when (blockchainType) {
+                    BlockchainType.Zcash -> {
                         return zcashBirthdayProvider.getNearestBirthdayHeight().toString()
                     }
                     else -> null
@@ -55,9 +55,9 @@ class RestoreSettingsManager(
         }
     }
 
-    fun getSettingsTitle(settingType: RestoreSettingType, platformCoin: PlatformCoin): String {
+    fun getSettingsTitle(settingType: RestoreSettingType, token: Token): String {
         return when (settingType) {
-            RestoreSettingType.BirthdayHeight -> Translator.getString(R.string.ManageAccount_BirthdayHeight, platformCoin.code)
+            RestoreSettingType.BirthdayHeight -> Translator.getString(R.string.ManageAccount_BirthdayHeight, token.coin.code)
         }
     }
 

@@ -1,12 +1,15 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
@@ -36,6 +39,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCa
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -45,12 +49,15 @@ fun CoinList(
     onAddFavorite: (String) -> Unit,
     onRemoveFavorite: (String) -> Unit,
     onCoinClick: (String) -> Unit,
+    userScrollEnabled: Boolean = true,
+    preItems: LazyListScope.() -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
-    LazyColumn(state = listState) {
+    LazyColumn(state = listState, userScrollEnabled = userScrollEnabled) {
+        preItems.invoke(this)
         itemsIndexed(items, key = { _, item -> item.coinUid }) { index, item ->
             Box(
                 modifier = Modifier
@@ -69,6 +76,10 @@ fun CoinList(
                                         onRemoveFavorite(item.coinUid)
                                     } else {
                                         onAddFavorite(item.coinUid)
+                                    }
+                                    coroutineScope.launch {
+                                        delay(200)
+                                        revealedCardId = null
                                     }
                                 },
                             contentAlignment = Alignment.Center
@@ -130,8 +141,15 @@ fun ListErrorView(
     ScreenMessageWithAction(
         text = errorText,
         icon = R.drawable.ic_sync_error,
-        action = Pair(stringResource(id = R.string.Button_Retry), onClick)
-    )
+    ) {
+        ButtonPrimaryYellow(
+            modifier = Modifier
+                .padding(horizontal = 48.dp)
+                .fillMaxWidth(),
+            title = stringResource(R.string.Button_Retry),
+            onClick = onClick
+        )
+    }
 }
 
 @Composable
@@ -139,56 +157,81 @@ fun ListEmptyView(
     text: String,
     @DrawableRes icon: Int
 ) {
-    ScreenMessageWithAction(text = text, icon = icon, action = null)
+    ScreenMessageWithAction(text = text, icon = icon)
 }
 
 @Composable
 fun ScreenMessageWithAction(
     text: String,
     @DrawableRes icon: Int,
-    action: Pair<String, (() -> Unit)>?
+    actionsComposable: (@Composable () -> Unit)? = null
 ) {
     Column {
-        Row(Modifier.weight(22f)) {}
+        Spacer(Modifier.weight(22f))
 
-        Row(modifier = Modifier.weight(78f), verticalAlignment = Alignment.Top) {
-            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .background(ComposeAppTheme.colors.steel20, shape = CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        modifier = Modifier.size(48.dp),
-                        painter = painterResource(icon),
-                        contentDescription = text,
-                        tint = ComposeAppTheme.colors.grey
-                    )
-                }
-                Text(
-                    modifier = Modifier
-                        .padding(top = 32.dp)
-                        .padding(horizontal = 48.dp),
-                    text = text,
-                    textAlign = TextAlign.Center,
-                    overflow = TextOverflow.Ellipsis,
-                    color = ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2
-                )
-                action?.let { (name, onClick) ->
-                    Spacer(Modifier.height(32.dp))
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(horizontal = 48.dp)
-                            .fillMaxWidth()
-                            .height(50.dp),
-                        title = name,
-                        onClick = onClick
-                    )
-                }
-            }
+        Row(
+            modifier = Modifier.weight(78f),
+            verticalAlignment = Alignment.Top
+        ) {
+            MessageWithActionContent(icon, text, actionsComposable)
         }
+    }
+}
+
+@Composable
+fun ScreenMessageNoAccount(
+    text: String,
+    @DrawableRes icon: Int,
+    actionsComposable: (@Composable () -> Unit)? = null
+) {
+    Column {
+        Spacer(Modifier.weight(30f))
+
+        Row(
+            modifier = Modifier.weight(70f),
+            verticalAlignment = Alignment.Top
+        ) {
+            MessageWithActionContent(icon, text, actionsComposable)
+        }
+    }
+}
+
+@Composable
+private fun MessageWithActionContent(
+    icon: Int,
+    text: String,
+    actionsComposable: @Composable() (() -> Unit)?
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .background(
+                    color = ComposeAppTheme.colors.raina,
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                modifier = Modifier.size(48.dp),
+                painter = painterResource(icon),
+                contentDescription = text,
+                tint = ComposeAppTheme.colors.grey
+            )
+        }
+        subhead2_grey(
+            modifier = Modifier
+                .padding(top = 32.dp)
+                .padding(horizontal = 48.dp),
+            text = text,
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(Modifier.height(32.dp))
+        actionsComposable?.let { it() }
     }
 }
 
@@ -216,7 +259,7 @@ fun HeaderWithSorting(
     onSelectMarketField: (MarketField) -> Unit,
     onSortMenuClick: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth().background(ComposeAppTheme.colors.tyler)) {
         Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
         Row(
             modifier = Modifier
@@ -234,7 +277,7 @@ fun HeaderWithSorting(
                 Box(modifier = Modifier.padding(start = 8.dp)) {
                     ButtonSecondaryToggle(
                         select = topMarketSelect,
-                        onSelect = onSelectTopMarket ?: {}) //TODO
+                        onSelect = onSelectTopMarket ?: {})
                 }
             }
 
@@ -294,13 +337,11 @@ fun DescriptionCard(title: String, description: String, image: ImageSource) {
                 Text(
                     text = title,
                     style = ComposeAppTheme.typography.headline1,
-                    color = ComposeAppTheme.colors.oz,
+                    color = ComposeAppTheme.colors.leah,
                 )
-                Text(
+                subhead2_grey(
                     text = description,
                     modifier = Modifier.padding(top = 6.dp),
-                    style = ComposeAppTheme.typography.subhead2,
-                    color = ComposeAppTheme.colors.grey,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -320,7 +361,7 @@ fun DescriptionCard(title: String, description: String, image: ImageSource) {
 @Composable
 fun RowScope.CategoryCard(
     type: DiscoveryItem,
-    onClick: (DiscoveryItem) -> Unit
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -330,13 +371,11 @@ fun RowScope.CategoryCard(
         shape = RoundedCornerShape(12.dp),
         elevation = 0.dp,
         backgroundColor = ComposeAppTheme.colors.lawrence,
-        onClick = {
-            onClick.invoke(type)
-        }
+        onClick = onClick
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             when (type) {
-                DiscoveryItem.TopCoins -> {
+                is DiscoveryItem.TopCoins -> {
                     Image(
                         painter = painterResource(R.drawable.ic_top_coins),
                         contentDescription = "category image",
@@ -349,33 +388,61 @@ fun RowScope.CategoryCard(
                         modifier = Modifier.padding(12.dp),
                     ) {
                         Spacer(modifier = Modifier.weight(1f))
-                        Text(
+                        subhead1_leah(
                             text = stringResource(R.string.Market_Category_TopCoins),
-                            style = ComposeAppTheme.typography.subhead1,
-                            color = ComposeAppTheme.colors.oz,
                             maxLines = 1
                         )
                     }
                 }
                 is DiscoveryItem.Category -> {
-                    Image(
-                        painter = rememberImagePainter(type.coinCategory.imageUrl),
-                        contentDescription = "category image",
+                    Crossfade(
+                        targetState = type.coinCategory.imageUrl,
+                        animationSpec = tween(500),
                         modifier = Modifier
                             .height(108.dp)
                             .width(76.dp)
-                            .align(Alignment.TopEnd),
-                    )
+                            .align(Alignment.TopEnd)) { imageRes ->
+                        Image(
+                            painter = rememberAsyncImagePainter(imageRes),
+                            contentDescription = "category image",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                     Column(
                         modifier = Modifier.padding(12.dp),
                     ) {
                         Spacer(modifier = Modifier.weight(1f))
-                        Text(
+                        subhead1_leah(
                             text = type.coinCategory.name,
-                            style = ComposeAppTheme.typography.subhead1,
-                            color = ComposeAppTheme.colors.oz,
                             maxLines = 1
                         )
+                        AnimatedVisibility(
+                            visible = type.marketData != null,
+                        ) {
+                            type.marketData?.let { marketData ->
+                                Row(modifier = Modifier.padding(top = 8.dp)) {
+                                    caption_grey(
+                                        text = marketData.marketCap ?: "",
+                                        maxLines = 1
+                                    )
+                                    AnimatedVisibility(
+                                        visible = marketData.diff != null,
+                                        enter = fadeIn() + expandHorizontally(),
+                                        exit = fadeOut() + shrinkHorizontally()
+                                    ) {
+                                        marketData.diff?.let { diff ->
+                                            Text(
+                                                text = RateText(diff),
+                                                color = RateColor(diff),
+                                                style = ComposeAppTheme.typography.caption,
+                                                maxLines = 1,
+                                                modifier = Modifier.padding(start = 6.dp)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -43,6 +43,7 @@ fun Eip1559FeeSettings(
     val settingsViewItems = mutableListOf<@Composable () -> Unit>()
     var maxBaseFee by remember { mutableStateOf(0L) }
     var maxPriorityFee by remember { mutableStateOf(1L) }
+    var valueChanged by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -95,49 +96,52 @@ fun Eip1559FeeSettings(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            maxBaseFeeSlider?.let { slider ->
-                maxBaseFee = slider.initialValue
+            maxBaseFeeSlider?.let { baseFeeSlider ->
+                maxPriorityFeeSlider?.let { priorityFeeSlider ->
+                    maxBaseFee = baseFeeSlider.initialSliderValue
 
-                settingsViewItems.add {
-                    FeeInfoCell(
-                        title = stringResource(R.string.FeeSettings_MaxBaseFee),
-                        value = "$maxBaseFee ${slider.unit}",
-                        infoTitle = Translator.getString(R.string.FeeSettings_MaxBaseFee),
-                        infoText = Translator.getString(R.string.FeeSettings_MaxBaseFee_Info),
-                        navController = navController
-                    )
-                }
+                    settingsViewItems.add {
+                        FeeInfoCell(
+                                title = stringResource(R.string.FeeSettings_MaxBaseFee),
+                                value = baseFeeSlider.scaledString(maxBaseFee),
+                                infoTitle = Translator.getString(R.string.FeeSettings_MaxBaseFee),
+                                infoText = Translator.getString(R.string.FeeSettings_MaxBaseFee_Info),
+                                navController = navController
+                        )
+                    }
 
-                settingsViewItems.add {
-                    HsSlider(
-                        value = slider.initialValue,
-                        onValueChange = { maxBaseFee = it },
-                        valueRange = slider.range.first..slider.range.last,
-                        onValueChangeFinished = { viewModel.onSelectGasPrice(maxBaseFee, maxPriorityFee) }
-                    )
-                }
-            }
+                    settingsViewItems.add {
+                        HsSlider(
+                                value = baseFeeSlider.initialSliderValue,
+                                onValueChange = { maxBaseFee = it },
+                                valueRange = baseFeeSlider.range.first..baseFeeSlider.range.last,
+                                onValueChangeFinished = { viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee)) }
+                        )
+                    }
 
-            maxPriorityFeeSlider?.let { slider ->
-                maxPriorityFee = slider.initialValue
+                    settingsViewItems.add {
+                        FeeInfoCell(
+                                title = stringResource(R.string.FeeSettings_MaxMinerTips),
+                                value = if (valueChanged) priorityFeeSlider.scaledString(maxPriorityFee) else priorityFeeSlider.initialValueScaledString,
+                                infoTitle = Translator.getString(R.string.FeeSettings_MaxMinerTips),
+                                infoText = Translator.getString(R.string.FeeSettings_MaxMinerTips_Info),
+                                navController = navController
+                        )
+                    }
 
-                settingsViewItems.add {
-                    FeeInfoCell(
-                        title = stringResource(R.string.FeeSettings_MaxMinerTips),
-                        value = "$maxPriorityFee ${slider.unit}",
-                        infoTitle = Translator.getString(R.string.FeeSettings_MaxMinerTips),
-                        infoText = Translator.getString(R.string.FeeSettings_MaxMinerTips_Info),
-                        navController = navController
-                    )
-                }
-
-                settingsViewItems.add {
-                    HsSlider(
-                        value = slider.initialValue,
-                        onValueChange = { maxPriorityFee = it },
-                        valueRange = slider.range.first..slider.range.last,
-                        onValueChangeFinished = { viewModel.onSelectGasPrice(maxBaseFee, maxPriorityFee) }
-                    )
+                    settingsViewItems.add {
+                        HsSlider(
+                                value = priorityFeeSlider.initialSliderValue,
+                                onValueChange = {
+                                    valueChanged = true
+                                    maxPriorityFee = it
+                                                },
+                                valueRange = priorityFeeSlider.range.first..priorityFeeSlider.range.last,
+                                onValueChangeFinished = {
+                                    viewModel.onSelectGasPrice(baseFeeSlider.wei(maxBaseFee), priorityFeeSlider.wei(maxPriorityFee))
+                                }
+                        )
+                    }
                 }
             }
 
@@ -244,13 +248,13 @@ fun LegacyFeeSettings(
                 )
             }
 
-            sliderViewItem?.let { slider ->
-                selectedGasPrice = slider.initialValue
+            selectedGasPrice = sliderViewItem?.initialSliderValue ?: 0
 
+            sliderViewItem?.let { slider ->
                 settingsViewItems.add {
                     FeeInfoCell(
                         title = stringResource(R.string.FeeSettings_GasPrice),
-                        value = "$selectedGasPrice ${slider.unit}",
+                        value = slider.scaledString(selectedGasPrice),
                         infoTitle = Translator.getString(R.string.FeeSettings_GasPrice),
                         infoText = Translator.getString(R.string.FeeSettings_GasPrice_Info),
                         navController = navController
@@ -259,10 +263,10 @@ fun LegacyFeeSettings(
 
                 settingsViewItems.add {
                     HsSlider(
-                        value = slider.initialValue,
+                        value = slider.initialSliderValue,
                         onValueChange = { selectedGasPrice = it },
                         valueRange = slider.range.first..slider.range.last,
-                        onValueChangeFinished = { viewModel.onSelectGasPrice(selectedGasPrice) }
+                        onValueChangeFinished = { viewModel.onSelectGasPrice(slider.wei(selectedGasPrice)) }
                     )
                 }
             }
@@ -326,16 +330,10 @@ fun FeeCell(title: String, value: String?) {
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey
-        )
-        Text(
+        subhead2_grey(text = title)
+        subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value ?: "",
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.leah,
             textAlign = TextAlign.End,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -367,16 +365,10 @@ fun FeeInfoCell(
             modifier = Modifier.padding(end = 16.dp),
             painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
         )
-        Text(
-            text = title,
-            style = ComposeAppTheme.typography.subhead2,
-            color = ComposeAppTheme.colors.grey
-        )
-        Text(
+        subhead1_grey(text = title)
+        subhead1_leah(
             modifier = Modifier.weight(1f),
             text = value ?: "",
-            style = ComposeAppTheme.typography.subhead1,
-            color = ComposeAppTheme.colors.leah,
             textAlign = TextAlign.End,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -387,61 +379,86 @@ fun FeeInfoCell(
 @Composable
 fun EvmFeeCell(
     title: String,
-    value: String,
+    value: String?,
     loading: Boolean,
     viewState: ViewState?,
     highlightEditButton: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
     CellSingleLineLawrenceSection {
+        HSFeeCell(
+            title = title,
+            value = value,
+            loading = loading,
+            viewState = viewState,
+            highlightEditButton = highlightEditButton,
+            enabled = onClick != null,
+            onClick = { onClick?.invoke() }
+        )
+    }
+}
+
+@Composable
+fun HSFeeCell(
+    title: String,
+    value: String?,
+    loading: Boolean,
+    viewState: ViewState?,
+    highlightEditButton: Boolean = false,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(enabled = enabled, onClick = { onClick.invoke() })
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        subhead2_grey(text = title)
+
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable(enabled = onClick != null, onClick = { onClick?.invoke() })
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.End
         ) {
-            Text(
-                text = title,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey
-            )
-
-            Row(
-                modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.End
-            ) {
-                if (loading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(16.dp),
-                        color = ComposeAppTheme.colors.grey,
-                        strokeWidth = 1.5.dp
-                    )
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    color = ComposeAppTheme.colors.grey,
+                    strokeWidth = 1.5.dp
+                )
+            } else {
+                val color = if (viewState is ViewState.Error) {
+                    ComposeAppTheme.colors.lucian
+                } else if (value == null) {
+                    ComposeAppTheme.colors.grey50
                 } else {
-                    Text(
-                        text = value,
-                        style = ComposeAppTheme.typography.subhead1,
-                        color = if (viewState is ViewState.Error) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    ComposeAppTheme.colors.leah
                 }
+
+                Text(
+                    text = value ?: stringResource(R.string.NotAvailable),
+                    style = ComposeAppTheme.typography.subhead1,
+                    color = color,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
+        }
 
-            onClick?.let {
-                Box(modifier = Modifier.padding(start = 8.dp)) {
-                    val tintColor = if (highlightEditButton)
-                        ComposeAppTheme.colors.jacob
-                    else
-                        ComposeAppTheme.colors.grey
+        if (enabled) {
+            Box(modifier = Modifier.padding(start = 8.dp)) {
+                val tintColor = if (highlightEditButton)
+                    ComposeAppTheme.colors.jacob
+                else
+                    ComposeAppTheme.colors.grey
 
-                    Image(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(id = R.drawable.ic_edit_20),
-                        colorFilter = ColorFilter.tint(tintColor),
-                        contentDescription = ""
-                    )
-                }
+                Image(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.ic_edit_20),
+                    colorFilter = ColorFilter.tint(tintColor),
+                    contentDescription = ""
+                )
             }
         }
     }
@@ -476,11 +493,7 @@ fun MaxFeeCell(
                 modifier = Modifier.padding(end = 16.dp),
                 painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
             )
-            Text(
-                text = title,
-                style = ComposeAppTheme.typography.subhead2,
-                color = ComposeAppTheme.colors.grey
-            )
+            subhead2_grey(text = title)
 
             Row(
                 modifier = Modifier.weight(1f),

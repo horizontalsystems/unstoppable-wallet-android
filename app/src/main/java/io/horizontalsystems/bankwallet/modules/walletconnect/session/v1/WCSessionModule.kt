@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.session.v1
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Request
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
 
 object WCSessionModule {
@@ -10,7 +12,7 @@ object WCSessionModule {
     class Factory(private val service: WC1Service) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCSessionViewModel(service) as T
+            return WCSessionViewModel(service, App.accountManager) as T
         }
     }
 
@@ -27,7 +29,13 @@ object WCSessionModule {
         val url: String,
         val description: String?,
         val icon: String?,
+        val accountName: String?,
         val editable: Boolean,
+    )
+
+    data class WCRequestWrapper(
+        val wC1Request: WC1Request,
+        val dAppName: String?
     )
 
 }

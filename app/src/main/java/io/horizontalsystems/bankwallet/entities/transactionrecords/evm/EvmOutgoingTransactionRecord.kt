@@ -2,17 +2,17 @@ package io.horizontalsystems.bankwallet.entities.transactionrecords.evm
 
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.ethereumkit.models.FullTransaction
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.ethereumkit.models.Transaction
+import io.horizontalsystems.marketkit.models.Token
 
 class EvmOutgoingTransactionRecord(
-    fullTransaction: FullTransaction,
-    baseCoin: PlatformCoin,
-    val value: TransactionValue,
+    transaction: Transaction,
+    baseToken: Token,
+    source: TransactionSource,
     val to: String,
-    val sentToSelf: Boolean,
-    source: TransactionSource
-) : EvmTransactionRecord(fullTransaction, baseCoin, source) {
+    val value: TransactionValue,
+    val sentToSelf: Boolean
+) : EvmTransactionRecord(transaction, baseToken, source) {
 
     override val mainValue = value
 
