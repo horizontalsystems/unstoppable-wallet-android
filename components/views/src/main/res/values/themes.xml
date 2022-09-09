@@ -41,7 +41,6 @@
         <item name="BottomSendImageButtonTint">@color/black</item>
         <item name="BottomDialogTextColor">@color/black</item>
         <item name="ConfirmationDialogBackground">@color/light</item>
-        <item name="AddressBackground">@color/address_background_light</item>
         <item name="ProgressbarSpinnerColor">@color/light</item>
         <item name="SwipeRefreshBackgroundColor">@color/light</item>
         <item name="InputBackground">@color/white</item>
