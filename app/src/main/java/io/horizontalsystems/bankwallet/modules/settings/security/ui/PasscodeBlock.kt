@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.core.getNavigationResult
 
 @Composable
 fun PasscodeBlock(
@@ -81,6 +82,9 @@ fun PasscodeBlock(
                     modifier = Modifier
                         .fillMaxSize()
                         .clickable {
+                            navController.getNavigationResult(PinModule.requestKey) {
+                                //just clean result in backStackEntry
+                            }
                             navController.slideFromRight(
                                 R.id.pinFragment,
                                 PinModule.forEditPin()
