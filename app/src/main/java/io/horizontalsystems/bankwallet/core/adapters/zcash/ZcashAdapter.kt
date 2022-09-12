@@ -294,6 +294,12 @@ class ZcashAdapter(
         syncState = when (status) {
             Synchronizer.Status.STOPPED -> AdapterState.NotSynced(Exception("stopped"))
             Synchronizer.Status.DISCONNECTED -> AdapterState.NotSynced(Exception("disconnected"))
+            Synchronizer.Status.DOWNLOADING -> AdapterState.Zcash(
+                ZcashState.DownloadingBlocks(BlockProgress(null, null))
+            )
+            Synchronizer.Status.SCANNING -> AdapterState.Zcash(
+                ZcashState.ScanningBlocks(BlockProgress(null, null))
+            )
             Synchronizer.Status.SYNCED -> AdapterState.Synced
             else -> syncState
         }
