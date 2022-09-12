@@ -16,7 +16,6 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
-import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -68,7 +67,7 @@ class SwapCoinCardViewModel(
     fun maxEnabledLiveData(): LiveData<Boolean> = maxEnabledLiveData
 
     private val prefix = if (switchService.amountType == AmountType.Currency) fiatService.currency.symbol else null
-    var inputParams by mutableStateOf(AmountInputView.InputParams(
+    var inputParams by mutableStateOf(InputParams(
         switchService.amountType, prefix, switchService.toggleAvailable
     ))
 
@@ -249,7 +248,7 @@ class SwapCoinCardViewModel(
     private fun updateInputFields() {
         val switchAvailable = switchService.toggleAvailable
         val prefix = if (switchService.amountType == AmountType.Currency) fiatService.currency.symbol else null
-        val inputParams = AmountInputView.InputParams(switchService.amountType, prefix, switchAvailable)
+        val inputParams = InputParams(switchService.amountType, prefix, switchAvailable)
         this.inputParams = inputParams
     }
 
@@ -266,5 +265,10 @@ class SwapCoinCardViewModel(
     companion object {
         private const val maxValidDecimals = 8
     }
-
 }
+
+class InputParams(
+    val amountType: AmountType,
+    val primaryPrefix: String?,
+    val switchEnabled: Boolean
+)
