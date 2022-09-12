@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
 import cash.z.ecc.android.sdk.model.BlockHeight
-import cash.z.ecc.android.sdk.type.ZcashNetwork
+import cash.z.ecc.android.sdk.model.ZcashNetwork
 import kotlinx.coroutines.runBlocking
 
 class ZcashBirthdayProvider(

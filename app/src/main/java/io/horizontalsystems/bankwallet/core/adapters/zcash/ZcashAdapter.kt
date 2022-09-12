@@ -11,12 +11,9 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
 import cash.z.ecc.android.sdk.ext.fromHex
-import cash.z.ecc.android.sdk.model.BlockHeight
-import cash.z.ecc.android.sdk.model.WalletBalance
-import cash.z.ecc.android.sdk.model.Zatoshi
+import cash.z.ecc.android.sdk.model.*
 import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.type.AddressType
-import cash.z.ecc.android.sdk.type.ZcashNetwork
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
@@ -52,8 +49,10 @@ class ZcashAdapter(
     private val decimalCount = 8
     private val network: ZcashNetwork = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
     private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
-    private val lightWalletDHost = if (testMode) network.defaultHost else "zcash.horizontalsystems.xyz"
-    private val lightWalletDPort = 9067
+    private val lightWalletEndpoint = when {
+        testMode -> LightWalletEndpoint.defaultForNetwork(network)
+        else -> LightWalletEndpoint("zcash.horizontalsystems.xyz", 9067, false)
+    }
 
     private val synchronizer: Synchronizer
     private val transactionsProvider: ZcashTransactionsProvider
@@ -80,8 +79,7 @@ class ZcashAdapter(
                     config.newWallet(
                         viewingKey = viewingKey,
                         network = network,
-                        host = lightWalletDHost,
-                        port = lightWalletDPort,
+                        lightWalletEndpoint = lightWalletEndpoint,
                         alias = getValidAliasFromAccountId(wallet.account.id)
                     )
                 }
@@ -95,8 +93,7 @@ class ZcashAdapter(
                         viewingKey = viewingKey,
                         birthday = birthdayHeight?.let { BlockHeight.new(network, it) },
                         network = network,
-                        host = lightWalletDHost,
-                        port = lightWalletDPort,
+                        lightWalletEndpoint = lightWalletEndpoint,
                         alias = getValidAliasFromAccountId(wallet.account.id)
                     )
                 }
