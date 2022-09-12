@@ -1313,5 +1313,27 @@
     <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled.\n\n You may enable it in Android settings.\n\nPlease note that when you disabled the PIN on the OS level the security measures in safe storage of your phonе made the previously stored data invalid. You will need to Restore your wallet keys to get back to your wallet.</string>
     <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
 
+    <!--Unlock-->
+    <string name="Unlock_Passcode">Passcode</string>
+    <string name="Unlock_Incorrect">Incorrect</string>
+    <string name="Unlock_BiometricScanner">Biometrics Scanner</string>
+    <string name="Unlock_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
+    <string name="Unlock_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
+    <string name="Unlock_WalletDisabledUntil">Disabled until: %s</string>
+
+    <!--Set Pin-->
+    <string name="PinSet_Title">Set Passcode</string>
+    <string name="PinSet_Info">Your passcode will be used to unlock your wallet</string>
+    <string name="PinSet_ConfirmInfo">Confirm</string>
+    <string name="PinSet_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="PinSet_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+
+    <!--Edit Pin-->
+    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_UnlockInfo">Current Passcode</string>
+    <string name="EditPin_NewPinInfo">New Passcode</string>
+
+    <!--Biometric Auth texts-->
+    <string name="BiometricAuth_DialogTitle">Biometrics Scanner</string>
 
 </resources>

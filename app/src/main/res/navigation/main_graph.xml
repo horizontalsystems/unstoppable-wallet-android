@@ -151,8 +151,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment" />
     <fragment
         android:id="@+id/pinFragment"
-        android:name="io.horizontalsystems.pin.PinFragment"
-        tools:layout="@layout/fragment_pin" />
+        android:name="io.horizontalsystems.bankwallet.modules.pin.PinFragment" />
     <fragment
         android:id="@+id/releaseNotesFragment"
         android:name="io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment" />

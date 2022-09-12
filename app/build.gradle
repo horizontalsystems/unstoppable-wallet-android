@@ -264,7 +264,6 @@ dependencies {
     implementation project(':components:snackbar')
     implementation project(':components:icons')
     implementation project(':components:chartview')
-    implementation project(':components:pin')
 
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.5.1'

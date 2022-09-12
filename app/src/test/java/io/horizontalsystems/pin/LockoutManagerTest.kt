@@ -3,10 +3,10 @@ package io.horizontalsystems.pin
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.core.IPinStorage
-import io.horizontalsystems.pin.core.ILockoutUntilDateFactory
-import io.horizontalsystems.pin.core.LockoutManager
-import io.horizontalsystems.pin.core.LockoutState
-import io.horizontalsystems.pin.core.UptimeProvider
+import io.horizontalsystems.bankwallet.modules.pin.core.ILockoutUntilDateFactory
+import io.horizontalsystems.bankwallet.modules.pin.core.LockoutManager
+import io.horizontalsystems.bankwallet.modules.pin.core.LockoutState
+import io.horizontalsystems.bankwallet.modules.pin.core.UptimeProvider
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito

@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCo
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
 import io.horizontalsystems.bankwallet.modules.nft.NftManager
+import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
@@ -53,7 +54,6 @@ import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.pin.PinComponent
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
 import java.util.logging.Logger
