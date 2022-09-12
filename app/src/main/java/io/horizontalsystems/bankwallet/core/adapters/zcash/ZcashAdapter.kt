@@ -51,7 +51,7 @@ class ZcashAdapter(
     private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
     private val lightWalletEndpoint = when {
         testMode -> LightWalletEndpoint.defaultForNetwork(network)
-        else -> LightWalletEndpoint("zcash.horizontalsystems.xyz", 9067, false)
+        else -> LightWalletEndpoint("zcash.blocksdecoded.com", 9067, true)
     }
 
     private val synchronizer: Synchronizer
