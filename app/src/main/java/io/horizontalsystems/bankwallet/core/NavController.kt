@@ -5,10 +5,10 @@ import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.pin.PinInteractionType
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.pin.PinInteractionType
-import io.horizontalsystems.pin.PinModule
 
 fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
     val navOptions = NavOptions.Builder()

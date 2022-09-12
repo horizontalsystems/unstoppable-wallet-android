@@ -16,12 +16,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.navigateToSetPin
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.pin.PinModule
 
 @Composable
 fun PasscodeBlock(
@@ -116,7 +116,7 @@ fun PasscodeBlock(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_fingerprint),
+                        painter = painterResource(R.drawable.icon_touch_id_24),
                         tint = ComposeAppTheme.colors.grey,
                         contentDescription = null,
                     )

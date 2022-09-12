@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 class LockScreenActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_lock_screen)
     }
 
