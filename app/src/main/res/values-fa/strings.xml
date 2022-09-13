@@ -716,7 +716,7 @@
     <string name="ManageAccount_Unlink">جدا کردن</string>
     <string name="ManageAccount_BackupRequired_Title">تهیه نسخه پشتیبان لازم است</string>
     <string name="ManageAccount_BackupRequired_Description">قبل از دریافت بودجه %2$s، باید از کیف پول%1$s نسخه پشتیبان تهیه کنید.</string>
-    <string name="ManageAccount_Delete_ConfirmationRemove">این عمل کیف پول %s را از این دستگاه پاک خواهد کرد.</string>
+    <string name="ManageAccount_Delete_ConfirmationRemove">این عمل کیف پول را از این دستگاه پاک خواهد کرد.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">تمام سکه های متعلق به این کیف پول در تب تعادل غیرفعال می شوند.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">اگر از کلید خصوصی این کیف پول نسخه پشتیبان تهیه نکرده اید، دسترسی به بودجه خود را از دست خواهید داد.</string>
     <string name="ManageAccount_BirthdayHeight">%s قد تولد</string>
