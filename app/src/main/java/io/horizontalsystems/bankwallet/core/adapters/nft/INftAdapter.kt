@@ -14,8 +14,10 @@ interface INftAdapter {
 
 interface INftProvider {
     val title: String
+    val icon: Int
     suspend fun addressMetadata(blockchainType: BlockchainType, address: String): NftAddressMetadata
     suspend fun extendedAssetMetadata(nftUid: NftUid, providerCollectionUid: String): Pair<NftAssetMetadata, NftCollectionMetadata>
+    suspend fun collectionMetadata(blockchainType: BlockchainType, providerUid: String): NftCollectionMetadata
 }
 
 /*

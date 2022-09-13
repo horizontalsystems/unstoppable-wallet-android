@@ -2,12 +2,10 @@ package io.horizontalsystems.bankwallet.modules.nft.collection.overview
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,8 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.doOnLayout
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
@@ -27,13 +23,10 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.About
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Contracts
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionOverviewViewItem
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionViewModel
 import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.chartview.ChartMinimal
 
 @Composable
 fun NftCollectionOverviewScreen(
@@ -112,7 +105,7 @@ private fun Links(links: List<NftCollectionOverviewViewItem.Link>, onClick: (Str
                     add {
                         CellLink(
                             icon = painterResource(link.icon),
-                            title = stringResource(link.title),
+                            title = link.title.getString(),
                             onClick = { onClick(link.url) }
                         )
                     }
@@ -193,7 +186,7 @@ private fun Stats(collection: NftCollectionOverviewViewItem) {
         }
     }
 
-    val chartCards = buildList {
+   /* val chartCards = buildList {
         collection.volumeChartDataWrapper?.let { add(it) }
         collection.salesChartDataWrapper?.let { add(it) }
         collection.floorPriceChartDataWrapper?.let { add(it) }
@@ -212,9 +205,10 @@ private fun Stats(collection: NftCollectionOverviewViewItem) {
                 ChartCard(row[0])
             }
         }
-    }
+    }*/
 }
 
+/*
 @Composable
 private fun RowScope.ChartCard(chartDataWrapper: NftCollectionOverviewViewItem.ChartDataWrapper) {
     Column(
@@ -272,3 +266,4 @@ private fun RowScope.ChartCard(chartDataWrapper: NftCollectionOverviewViewItem.C
         )
     }
 }
+*/

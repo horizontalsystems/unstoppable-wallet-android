@@ -9,10 +9,7 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
-import io.horizontalsystems.bankwallet.entities.nft.NftCollectionMetadata
-import io.horizontalsystems.bankwallet.entities.nft.SaleType
-import io.horizontalsystems.bankwallet.entities.nft.Trait
+import io.horizontalsystems.bankwallet.entities.nft.*
 import io.horizontalsystems.bankwallet.entities.viewState
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
@@ -52,6 +49,7 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
         val collection = item.collection
 
         return ViewItem(
+            nftUid = asset.nftUid,
             imageUrl = asset.imageUrl,
             name = asset.displayName,
             providerCollectionUid = asset.providerCollectionUid,
@@ -78,12 +76,12 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
             viewItems.add(LinkViewItem(LinkType.Website, it))
         }
         asset.providerLink?.let {
-            viewItems.add(LinkViewItem(LinkType.Provider(service.providerTitle), it))
+            viewItems.add(LinkViewItem(LinkType.Provider(service.providerTitle, service.providerIcon), it))
         }
         collection.discordUrl?.let {
             viewItems.add(LinkViewItem(LinkType.Discord, it))
         }
-        collection.twitterUserName?.let {
+        collection.twitterUsername?.let {
             viewItems.add(LinkViewItem(LinkType.Twitter, "https://twitter.com/$it"))
         }
         return viewItems
@@ -155,6 +153,7 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
     }
 
     data class ViewItem(
+        val nftUid: NftUid,
         val imageUrl: String?,
         val name: String,
         val providerCollectionUid: String,
@@ -200,7 +199,7 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
     data class LinkViewItem(val type: LinkType, val url: String)
 
     sealed class LinkType {
-        class Provider(val title: String) : LinkType()
+        class Provider(val title: String, val icon: Int) : LinkType()
         object Website : LinkType()
         object Discord : LinkType()
         object Twitter : LinkType()

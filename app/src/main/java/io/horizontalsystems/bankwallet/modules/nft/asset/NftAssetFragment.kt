@@ -195,15 +195,15 @@ private fun NftAssetInfo(asset: NftAssetViewModel.ViewItem, navController: NavCo
     var nftFileByteArray by remember { mutableStateOf(byteArrayOf()) }
 
     val pickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.data?.let { uri ->
-                    context.contentResolver.openOutputStream(uri).use { outputStream ->
-                        outputStream?.write(nftFileByteArray)
-                    }
-                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                context.contentResolver.openOutputStream(uri).use { outputStream ->
+                    outputStream?.write(nftFileByteArray)
                 }
+                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
             }
         }
+    }
 
     Spacer(modifier = Modifier.height(12.dp))
 
@@ -251,7 +251,7 @@ private fun NftAssetInfo(asset: NftAssetViewModel.ViewItem, navController: NavCo
                             .clickable {
                                 navController.slideFromRight(
                                     R.id.nftCollectionFragment,
-                                    NftCollectionFragment.prepareParams(asset.providerCollectionUid)
+                                    NftCollectionFragment.prepareParams(asset.providerCollectionUid, asset.nftUid.blockchainType)
                                 )
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -493,7 +493,7 @@ private fun NftAssetInfo(asset: NftAssetViewModel.ViewItem, navController: NavCo
                                 title = stringResource(id = R.string.NftAsset_Links_Website)
                             }
                             is NftAssetViewModel.LinkType.Provider -> {
-                                icon = painterResource(id = R.drawable.ic_opensea_20)
+                                icon = painterResource(id = link.type.icon)
                                 title = link.type.title
                             }
                             NftAssetViewModel.LinkType.Discord -> {

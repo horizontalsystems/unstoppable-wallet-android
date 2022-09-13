@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.providers.nft
 
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.nft.*
@@ -9,13 +10,14 @@ import io.horizontalsystems.marketkit.models.NftAsset
 import io.horizontalsystems.marketkit.models.NftCollection
 
 class OpenSeaNftProvider(
-    private val marketKitWrapper: MarketKitWrapper
+    private val marketKit: MarketKitWrapper
 ) : INftProvider {
 
     override val title = "OpenSea"
+    override val icon = R.drawable.ic_opensea_20
 
     override suspend fun addressMetadata(blockchainType: BlockchainType, address: String): NftAddressMetadata {
-        val assetCollection = marketKitWrapper.nftAssetCollection(address)
+        val assetCollection = marketKit.nftAssetCollection(address)
         val collections = assetCollection.collections.map {
             NftCollectionShortMetadata(
                 providerUid = it.uid,
@@ -40,10 +42,16 @@ class OpenSeaNftProvider(
     }
 
     override suspend fun extendedAssetMetadata(nftUid: NftUid, providerCollectionUid: String): Pair<NftAssetMetadata, NftCollectionMetadata> {
-        val asset = marketKitWrapper.nftAsset(nftUid.contractAddress, nftUid.tokenId)
-        val collection = marketKitWrapper.nftCollection(providerCollectionUid)
+        val asset = marketKit.nftAsset(nftUid.contractAddress, nftUid.tokenId)
+        val collection = marketKit.nftCollection(providerCollectionUid)
 
         return Pair(assetMetadata(asset, nftUid.blockchainType, providerCollectionUid), collectionMetadata(collection, nftUid.blockchainType))
+    }
+
+    override suspend fun collectionMetadata(blockchainType: BlockchainType, providerUid: String): NftCollectionMetadata {
+        val nftCollection = marketKit.nftCollection(providerUid)
+
+        return collectionMetadata(nftCollection, blockchainType)
     }
 
     private fun assetMetadata(asset: NftAsset, blockchainType: BlockchainType, providerCollectionUid: String): NftAssetMetadata {
@@ -80,8 +88,9 @@ class OpenSeaNftProvider(
             imageUrl = collection.featuredImageUrl,
             thumbnailImageUrl = collection.imageUrl,
             externalUrl = collection.externalUrl,
+            providerUrl = "https://opensea.io/collection/${collection.uid}",
             discordUrl = collection.discordUrl,
-            twitterUserName = collection.twitterUsername,
+            twitterUsername = collection.twitterUsername,
             count = collection.stats.count,
             ownerCount = collection.stats.ownersCount,
             totalSupply = collection.stats.totalSupply,

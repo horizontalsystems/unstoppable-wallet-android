@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.nft.collection.assets.NftCollectionAssetsScreen
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsScreen
 import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionOverviewScreen
+import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -35,6 +36,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
 
 class NftCollectionFragment : BaseFragment() {
@@ -54,9 +56,10 @@ class NftCollectionFragment : BaseFragment() {
                     activity?.intent?.data = null
                 }
                 val nftCollectionUid = requireArguments().getString(collectionUidKey, uid ?: "")
+                val blockchainType = requireArguments().getParcelable<BlockchainType>(blockchainTypeKey) ?: return@setContent
 
                 val viewModel by navGraphViewModels<NftCollectionViewModel>(R.id.nftCollectionFragment) {
-                    NftCollectionModule.Factory(nftCollectionUid)
+                    NftCollectionModule.Factory(blockchainType, nftCollectionUid)
                 }
 
                 NftCollectionScreen(
@@ -68,9 +71,11 @@ class NftCollectionFragment : BaseFragment() {
     }
 
     companion object {
-        private const val collectionUidKey = "collection_uid"
+        private const val collectionUidKey = "collectionUid"
+        private const val blockchainTypeKey = "blockchainType"
 
-        fun prepareParams(collectionUid: String) = bundleOf(collectionUidKey to collectionUid)
+        fun prepareParams(collectionUid: String, blockchainType: BlockchainType) =
+            bundleOf(collectionUidKey to collectionUid, blockchainTypeKey to blockchainType)
     }
 }
 

@@ -15,8 +15,9 @@ data class NftCollectionMetadata(
     val imageUrl: String?,
     val thumbnailImageUrl: String?,
     val externalUrl: String?,
+    val providerUrl: String?,
     val discordUrl: String?,
-    val twitterUserName: String?,
+    val twitterUsername: String?,
 
     val count: Int?,
     val ownerCount: Int?,

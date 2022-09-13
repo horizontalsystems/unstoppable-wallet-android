@@ -33,6 +33,7 @@ class NftAssetService(
     val serviceDataFlow = _serviceDataFlow.filterNotNull()
 
     val providerTitle = provider.title
+    val providerIcon = provider.icon
 
     suspend fun start() = withContext(Dispatchers.IO) {
         launch {
