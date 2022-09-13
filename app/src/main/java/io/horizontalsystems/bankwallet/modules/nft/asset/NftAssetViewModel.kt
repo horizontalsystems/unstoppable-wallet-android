@@ -63,9 +63,7 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
             traits = asset.traits.map { traitViewItem(it, collection.totalSupply) },
             description = asset.description,
             contractAddress = asset.nftUid.contractAddress,
-            tokenId = asset.nftUid.tokenId,
             schemaName = asset.nftType,
-            blockchain = asset.nftUid.blockchainType.uid,
             links = linkViewItems(asset, collection)
         )
     }
@@ -167,9 +165,7 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
         val traits: List<TraitViewItem>,
         val description: String?,
         val contractAddress: String,
-        val tokenId: String,
         val schemaName: String,
-        val blockchain: String,
         val links: List<LinkViewItem>
     ) {
 

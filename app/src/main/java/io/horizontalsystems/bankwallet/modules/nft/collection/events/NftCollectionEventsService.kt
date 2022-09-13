@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection.events
 
 import cash.z.ecc.android.sdk.ext.collectWith
+import io.horizontalsystems.bankwallet.core.adapters.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -19,6 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class NftCollectionEventsService(
     private val eventListType: NftEventListType,
     var eventType: NftEvent.EventType,
+    private val nftProvider: INftProvider,
     private val marketKit: MarketKitWrapper,
 //    private val nftManager: NftManager,
     private val xRateRepository: BalanceXRateRepository
@@ -86,8 +88,12 @@ class NftCollectionEventsService(
                 } else {
                     val type = if (eventType == NftEvent.EventType.All) null else eventType
                     val (events, cursor) = when (eventListType) {
-                        is NftEventListType.Collection -> marketKit.nftCollectionEvents(eventListType.uid, type, cursor)
-                        is NftEventListType.Asset -> marketKit.nftAssetEvents(eventListType.contractAddress, eventListType.tokenId, type, cursor)
+                        is NftEventListType.Collection -> {
+                            TODO()
+                        }
+                        is NftEventListType.Asset -> {
+                            nftProvider.assetEvents(eventListType.nftUid.contractAddress, eventListType.nftUid.tokenId, type, cursor)
+                        }
                     }
 
                     updateItems(handleEvents(events, cursor))

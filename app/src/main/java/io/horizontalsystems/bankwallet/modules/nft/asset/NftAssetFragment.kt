@@ -180,7 +180,7 @@ private fun NftAsset(
                     NftAssetInfo(asset, navController, coroutineScope)
                 }
                 NftAssetModule.Tab.Activity -> {
-                    NftAssetEvents(asset.contractAddress, asset.tokenId)
+                    NftAssetEvents(asset.nftUid)
                 }
             }
         }
@@ -306,7 +306,7 @@ private fun NftAssetInfo(asset: NftAssetViewModel.ViewItem, navController: NavCo
                                         coroutineScope.launch(Dispatchers.IO) {
                                             try {
                                                 val url = asset.imageUrl ?: throw IllegalStateException("No URL!")
-                                                val fileName = "${asset.collectionName}-${asset.tokenId}"
+                                                val fileName = "${asset.collectionName}-${asset.nftUid.tokenId}"
                                                 var extension: String?
 
                                                 val connection = URL(url).openConnection()
@@ -463,7 +463,7 @@ private fun NftAssetInfo(asset: NftAssetViewModel.ViewItem, navController: NavCo
                         add {
                             DetailItem(
                                 stringResource(id = R.string.NftAsset_TokenId),
-                                asset.tokenId.shorten()
+                                asset.nftUid.tokenId.shorten()
                             )
                         }
                         add {
@@ -526,10 +526,10 @@ private fun NftAssetInfo(asset: NftAssetViewModel.ViewItem, navController: NavCo
 }
 
 @Composable
-private fun NftAssetEvents(contractAddress: String, tokenId: String) {
+private fun NftAssetEvents(nftUid: NftUid) {
     val viewModel = viewModel<NftCollectionEventsViewModel>(
         factory = NftCollectionEventsModule.Factory(
-            NftEventListType.Asset(contractAddress, tokenId),
+            NftEventListType.Asset(nftUid),
             NftEvent.EventType.All
         )
     )

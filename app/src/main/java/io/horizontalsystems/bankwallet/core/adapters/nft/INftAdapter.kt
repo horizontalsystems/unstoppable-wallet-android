@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.core.adapters.nft
 
 import io.horizontalsystems.bankwallet.entities.nft.*
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.NftEvent
+import io.horizontalsystems.marketkit.models.PagedNftEvents
 import kotlinx.coroutines.flow.Flow
 
 
@@ -18,6 +20,7 @@ interface INftProvider {
     suspend fun addressMetadata(blockchainType: BlockchainType, address: String): NftAddressMetadata
     suspend fun extendedAssetMetadata(nftUid: NftUid, providerCollectionUid: String): Pair<NftAssetMetadata, NftCollectionMetadata>
     suspend fun collectionMetadata(blockchainType: BlockchainType, providerUid: String): NftCollectionMetadata
+    suspend fun assetEvents(contractAddress: String, tokenId: String, eventType: NftEvent.EventType?, cursor: String? = null): PagedNftEvents
 }
 
 /*

@@ -4,10 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.nft.*
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.horizontalsystems.marketkit.models.NftAsset
-import io.horizontalsystems.marketkit.models.NftCollection
+import io.horizontalsystems.marketkit.models.*
 
 class OpenSeaNftProvider(
     private val marketKit: MarketKitWrapper
@@ -52,6 +49,15 @@ class OpenSeaNftProvider(
         val nftCollection = marketKit.nftCollection(providerUid)
 
         return collectionMetadata(nftCollection, blockchainType)
+    }
+
+    override suspend fun assetEvents(
+        contractAddress: String,
+        tokenId: String,
+        eventType: NftEvent.EventType?,
+        cursor: String?
+    ): PagedNftEvents {
+        return marketKit.nftAssetEvents(contractAddress, tokenId, eventType, cursor)
     }
 
     private fun assetMetadata(asset: NftAsset, blockchainType: BlockchainType, providerCollectionUid: String): NftAssetMetadata {
