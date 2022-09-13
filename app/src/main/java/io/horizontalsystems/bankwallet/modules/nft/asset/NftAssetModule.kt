@@ -8,12 +8,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.nft.AssetLinks
 import io.horizontalsystems.bankwallet.modules.nft.CollectionLinks
-import io.horizontalsystems.bankwallet.modules.nft.NftAssetAttribute
 import io.horizontalsystems.bankwallet.modules.nft.NftAssetContract
-import io.horizontalsystems.marketkit.models.NftAsset
 import java.util.*
 
 object NftAssetModule {
@@ -21,31 +20,25 @@ object NftAssetModule {
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val collectionUid: String,
-        private val contractAddress: String,
-        private val tokenId: String
+        private val nftUid: NftUid
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val repository = NftAssetRepository(BalanceXRateRepository(App.currencyManager, App.marketKit))
             val service = NftAssetService(
                 collectionUid,
-                contractAddress,
-                tokenId,
-                App.marketKit,
-//                App.nftManager,
-                repository
+                nftUid,
+                App.nftMetadataManager.provider(nftUid.blockchainType),
+                BalanceXRateRepository(App.currencyManager, App.marketKit)
             )
             return NftAssetViewModel(service) as T
         }
     }
 
     const val collectionUidKey = "collectionUidKey"
-    const val contractAddressKey = "contractAddressKey"
-    const val tokenIdKey = "tokenIdKey"
+    const val nftUidKey = "nftUidKey"
 
-    fun prepareParams(collectionUid: String, contractAddress: String, tokenId: String) = bundleOf(
+    fun prepareParams(collectionUid: String?, nftUid: String) = bundleOf(
         collectionUidKey to collectionUid,
-        contractAddressKey to contractAddress,
-        tokenIdKey to tokenId,
+        nftUidKey to nftUid
     )
 
     enum class Tab(@StringRes val titleResId: Int) {
@@ -105,8 +98,3 @@ data class NftAssetModuleAssetItem(
         Save(R.string.NftAsset_Action_Save)
     }
 }
-
-val NftAsset.Trait.nftAssetAttribute: NftAssetAttribute
-    get() =
-        NftAssetAttribute(traitType, value, count)
-

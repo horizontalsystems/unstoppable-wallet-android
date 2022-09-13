@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesM
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
+import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType

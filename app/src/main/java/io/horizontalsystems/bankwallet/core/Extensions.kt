@@ -189,5 +189,8 @@ fun String.shorten(): String {
     val withoutPrefix = this.removePrefix(prefix)
 
     val characters = 4
-    return prefix + withoutPrefix.take(characters) + "..." + withoutPrefix.takeLast(characters)
+    return if (withoutPrefix.length > characters * 2)
+        prefix + withoutPrefix.take(characters) + "..." + withoutPrefix.takeLast(characters)
+    else
+        this
 }

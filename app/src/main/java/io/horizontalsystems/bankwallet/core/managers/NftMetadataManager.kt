@@ -36,7 +36,7 @@ class NftMetadataManager(
         _addressMetadataFlow.tryEmit(Pair(nftKey, nftAddressMetadata))
     }
 
-    private fun provider(blockchainType: BlockchainType): INftProvider {
+    fun provider(blockchainType: BlockchainType): INftProvider {
         return providerMap[blockchainType] ?: throw ProviderError.NoProviderForBlockchainType(blockchainType)
     }
 

@@ -31,9 +31,11 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
 import io.horizontalsystems.bankwallet.modules.nft.collections.PriceType
 import io.horizontalsystems.bankwallet.modules.nft.ui.NftAssetPreview
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -161,14 +163,13 @@ fun NftHoldingsScreen(navController: NavController) {
                                     LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
                                         collections.forEach { collection ->
                                             nftsCollectionSection(collection, viewModel) { asset ->
-//                                                  TODO
-//                                                    R.id.nftAssetFragment,
-//                                                    NftAssetModule.prepareParams(
-//                                                        asset.collectionUid,
-//                                                        asset.contract.address,
-//                                                        asset.tokenId
-//                                                    )
-//                                                )
+                                                navController.slideFromBottom(
+                                                    R.id.nftAssetFragment,
+                                                    NftAssetModule.prepareParams(
+                                                        asset.collectionUid,
+                                                        asset.nftUid.uid
+                                                    )
+                                                )
                                             }
                                         }
                                     }

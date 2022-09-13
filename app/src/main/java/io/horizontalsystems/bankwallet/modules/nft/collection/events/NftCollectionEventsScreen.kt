@@ -18,10 +18,8 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.OnBottomReached
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -81,7 +79,7 @@ fun NftEvents(
                         currencyValue = event.amount?.currencyValue?.getFormattedFull(),
                         onClick = navController?.let {
                             {
-                                val asset = event.asset
+                               /* val asset = event.asset
                                 navController.slideFromBottom(
                                         R.id.nftAssetFragment,
                                         NftAssetModule.prepareParams(
@@ -89,7 +87,7 @@ fun NftEvents(
                                                 asset.contract.address,
                                                 asset.tokenId
                                         )
-                                )
+                                )*/
                             }
                         }
                     )

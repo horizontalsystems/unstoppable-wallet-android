@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters.nft
 
-import io.horizontalsystems.bankwallet.entities.nft.NftAddressMetadata
-import io.horizontalsystems.bankwallet.entities.nft.NftRecord
+import io.horizontalsystems.bankwallet.entities.nft.*
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.flow.Flow
 
@@ -13,9 +12,10 @@ interface INftAdapter {
     fun sync()
 }
 
-interface   INftProvider {
+interface INftProvider {
+    val title: String
     suspend fun addressMetadata(blockchainType: BlockchainType, address: String): NftAddressMetadata
-//    suspend fun assetInfo(providerCollectionUid: String, nftUid: NftUid): NftAssetInfo
+    suspend fun extendedAssetMetadata(nftUid: NftUid, providerCollectionUid: String): Pair<NftAssetMetadata, NftCollectionMetadata>
 }
 
 /*

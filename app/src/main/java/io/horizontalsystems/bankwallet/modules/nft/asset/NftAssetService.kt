@@ -1,38 +1,54 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
-import cash.z.ecc.android.sdk.ext.collectWith
-import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import android.util.Log
+import io.horizontalsystems.bankwallet.core.adapters.nft.INftProvider
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftCollectionMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
+import io.horizontalsystems.bankwallet.entities.nft.SaleType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale.PriceType
 import io.horizontalsystems.marketkit.models.AssetOrder
+import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.NftPrice
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.collect
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class NftAssetService(
-    private val collectionUid: String,
-    private val contractAddress: String,
-    private val tokenId: String,
-    private val marketKit: MarketKitWrapper,
-//    private val nftManager: NftManager,
-    private val repository: NftAssetRepository
+    private val providerCollectionUid: String,
+    private val nftUid: NftUid,
+    private val provider: INftProvider,
+    private val xRateRepository: BalanceXRateRepository
 ) {
-    private val _serviceDataFlow =
-        MutableSharedFlow<Result<NftAssetModuleAssetItem>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _serviceDataFlow = MutableStateFlow<Result<Item>?>(null)
+    val serviceDataFlow = _serviceDataFlow.filterNotNull()
 
-    val serviceDataFlow = _serviceDataFlow.asSharedFlow()
+    val providerTitle = provider.title
 
     suspend fun start() = withContext(Dispatchers.IO) {
-        repository.dataFlow.collectWith(this) { assetData ->
-            _serviceDataFlow.tryEmit(Result.success(assetData))
+        launch {
+            xRateRepository.itemObservable.collect {
+                Log.e("AAA", "rates updated")
+                handleXRateUpdate(it)
+            }
         }
-
         loadAsset()
-        repository.start()
+    }
+
+    private fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) {
+        val currentItem = _serviceDataFlow.value?.getOrNull() ?: return
+        _serviceDataFlow.update {
+            Result.success(currentItem.updateRates(latestRates))
+        }
     }
 
     suspend fun refresh() = withContext(Dispatchers.IO) {
@@ -41,32 +57,74 @@ class NftAssetService(
 
     private suspend fun loadAsset() {
         try {
-//            val collection = marketKit.nftCollection(collectionUid)
-//            val nftAsset = marketKit.nftAsset(contractAddress, tokenId)
-//
-//            val (bestOffer, sale) = getOrderStats(nftAsset.orders)
-//
-//            val asset = nftManager.assetItem(
-//                nftAsset,
-//                collectionName = collection.name,
-//                collectionLinks = CollectionLinks(
-//                    collection.externalUrl,
-//                    collection.discordUrl,
-//                    collection.twitterUsername
-//                ),
-//                totalSupply = collection.stats.totalSupply,
-//                averagePrice7d = collection.stats.averagePrice7d?.nftPriceRecord,
-//                averagePrice30d = collection.stats.averagePrice30d?.nftPriceRecord,
-//                floorPrice = collection.stats.floorPrice?.nftPriceRecord,
-//                bestOffer = bestOffer?.nftPriceRecord,
-//                sale = sale
-//            )
-//
-//            repository.set(asset)
+            val (assetMetadata, collectionMetadata) = provider.extendedAssetMetadata(nftUid, providerCollectionUid)
+
+            handle(item(assetMetadata, collectionMetadata))
         } catch (error: Exception) {
             _serviceDataFlow.tryEmit(
                 Result.failure(error)
             )
+        }
+    }
+
+    private fun item(asset: NftAssetMetadata, collection: NftCollectionMetadata): Item {
+        return Item(
+            asset = asset,
+            collection = collection,
+            lastSale = PriceItem(asset.lastSalePrice),
+            average7d = PriceItem(collection.stats7d?.averagePrice),
+            average30d = PriceItem(collection.stats30d?.averagePrice),
+            collectionFloor = PriceItem(collection.floorPrice),
+            offers = asset.offers.map { PriceItem(it) },
+            sale = asset.saleInfo?.let { saleInfo ->
+                SaleItem(
+                    saleInfo.type,
+                    saleInfo.listings.map { listing -> SaleListingItem(listing.untilDate, PriceItem(listing.price)) })
+            }
+        )
+    }
+
+    private fun allCoinUids(item: Item): List<String> {
+        val priceItems = mutableListOf(item.lastSale, item.average7d, item.average30d, item.collectionFloor)
+
+        priceItems.addAll(item.offers)
+
+        item.sale?.let { saleItem ->
+            priceItems.addAll(saleItem.listings.map { it.price })
+        }
+
+        return priceItems.mapNotNull { it?.price?.token?.coin?.uid }.distinct()
+    }
+
+    private fun handle(item: Item) {
+        val coinUids = allCoinUids(item)
+        xRateRepository.setCoinUids(coinUids)
+
+        val latestRates = xRateRepository.getLatestRates()
+        _serviceDataFlow.tryEmit(Result.success(item.updateRates(latestRates)))
+    }
+
+    private fun Item.updateRates(latestRates: Map<String, CoinPrice?>): Item = copy(
+        lastSale = lastSale?.setCurrencyValue(latestRates),
+        average7d = average7d?.setCurrencyValue(latestRates),
+        average30d = average30d?.setCurrencyValue(latestRates),
+        collectionFloor = collectionFloor?.setCurrencyValue(latestRates),
+        offers = offers.map { it.setCurrencyValue(latestRates) },
+        sale = sale?.let { saleItem ->
+            saleItem.copy(listings = saleItem.listings.map { saleListingItem ->
+                saleListingItem.copy(
+                    price = saleListingItem.price.setCurrencyValue(latestRates)
+                )
+            })
+        }
+    )
+
+    private fun PriceItem.setCurrencyValue(latestRates: Map<String, CoinPrice?>): PriceItem {
+        return if (price == null) this
+        else {
+            copy(priceInFiat = latestRates[price.token.coin.uid]?.let { latestRate ->
+                CurrencyValue(xRateRepository.baseCurrency, price.value.multiply(latestRate.value))
+            })
         }
     }
 
@@ -115,7 +173,36 @@ class NftAssetService(
         return Pair(bestOffer, null)
     }
 
-    fun stop() {
-        repository.stop()
+    data class Item(
+        val asset: NftAssetMetadata,
+        val collection: NftCollectionMetadata,
+
+        val lastSale: PriceItem?,
+        val average7d: PriceItem?,
+        val average30d: PriceItem?,
+        val collectionFloor: PriceItem?,
+        val offers: List<PriceItem>,
+        val sale: SaleItem?
+    ) {
+        val bestOffer: PriceItem?
+            get() = null // TODO()
     }
+
+    data class PriceItem(
+        val price: NftPrice?,
+        val priceInFiat: CurrencyValue? = null
+    )
+
+    data class SaleItem(
+        val type: SaleType,
+        val listings: List<SaleListingItem>
+    ) {
+        val bestListing: SaleListingItem?
+            get() = null // TODO()
+    }
+
+    data class SaleListingItem(
+        val untilDate: Date,
+        val price: PriceItem
+    )
 }

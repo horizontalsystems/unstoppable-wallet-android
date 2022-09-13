@@ -2,14 +2,14 @@ package io.horizontalsystems.bankwallet.entities.nft
 
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-sealed class NftUid(val tokenId: String) {
-    class Evm(val blockchainType: BlockchainType, val contractAddress: String, tokenId: String) : NftUid(tokenId)
-    class Solana(val contactAddress: String, tokenId: String) : NftUid(tokenId)
+sealed class NftUid(val contractAddress: String, val tokenId: String, val blockchainType: BlockchainType) {
+    class Evm(blockchainType: BlockchainType, contractAddress: String, tokenId: String) : NftUid(contractAddress, tokenId, blockchainType)
+    class Solana(contractAddress: String, tokenId: String) : NftUid(contractAddress, tokenId, BlockchainType.Unsupported("solana"))
 
     val uid: String
         get() = when (this) {
             is Evm -> "evm|${blockchainType.uid}|${contractAddress}|${tokenId}"
-            is Solana -> "solana|${contactAddress}|${tokenId}"
+            is Solana -> "solana|${contractAddress}|${tokenId}"
         }
 
     override fun equals(other: Any?): Boolean {

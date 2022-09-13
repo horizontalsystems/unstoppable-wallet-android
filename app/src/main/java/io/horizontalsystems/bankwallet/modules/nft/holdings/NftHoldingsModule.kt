@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.balance.TotalService
 
@@ -15,18 +16,6 @@ object NftHoldingsModule {
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//            val assetItemsRepository = NftAssetItemsRepository(App.nftManager)
-//            val assetItemsPricedRepository = NftAssetItemsPricedRepository()
-//            val assetItemsPricedWithCurrencyRepository = NftAssetItemsPricedWithCurrencyRepository(
-//                BalanceXRateRepository(App.currencyManager, App.marketKit)
-//            )
-//
-//            val service = NftCollectionsService(
-//                App.accountManager,
-//                assetItemsRepository,
-//                assetItemsPricedRepository,
-//                assetItemsPricedWithCurrencyRepository
-//            )
             val totalService = TotalService(App.currencyManager, App.marketKit, App.baseTokenManager, App.balanceHiddenManager)
             val xRateRepository = BalanceXRateRepository(App.currencyManager, App.marketKit)
             val service = NftHoldingsService(account, App.nftAdapterManager, App.nftMetadataManager, App.nftMetadataSyncer, xRateRepository)
@@ -46,9 +35,10 @@ data class NftCollectionViewItem(
 )
 
 data class NftAssetViewItem(
+    val collectionUid: String?,
+    val nftUid: NftUid,
     val name: String,
     val imageUrl: String?,
-    val collectionUid: String?,
     val count: Int,
     val onSale: Boolean,
     val priceInCoin: CoinValue?,

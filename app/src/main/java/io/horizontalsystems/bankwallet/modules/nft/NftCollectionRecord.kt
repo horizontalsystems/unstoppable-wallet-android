@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.storage.AccountRecord
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Entity(
-    primaryKeys = ["accountId", "uid"],
+    primaryKeys = ["blockchainType", "accountId", "uid"],
     foreignKeys = [ForeignKey(
         entity = AccountRecord::class,
         parentColumns = ["id"],

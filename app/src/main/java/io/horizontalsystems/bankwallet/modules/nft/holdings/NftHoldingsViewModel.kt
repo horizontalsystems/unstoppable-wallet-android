@@ -90,9 +90,10 @@ class NftHoldingsViewModel(
 
     private fun assetViewItem(assetItem: NftHoldingsService.AssetItem, item: NftHoldingsService.Item) =
         NftAssetViewItem(
+            collectionUid = item.providerCollectionUid,
+            nftUid = assetItem.nftUid,
             name = assetItem.name,
             imageUrl = assetItem.imageUrl,
-            collectionUid = item.providerCollectionUid,
             onSale = assetItem.onSale,
             count = assetItem.count,
             priceInCoin = assetItem.price?.let { CoinValue(it.token, it.value) },
