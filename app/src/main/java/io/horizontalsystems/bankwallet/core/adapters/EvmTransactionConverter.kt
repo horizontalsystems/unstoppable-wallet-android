@@ -44,7 +44,7 @@ class EvmTransactionConverter(
     fun transactionRecord(fullTransaction: FullTransaction): EvmTransactionRecord {
         val transaction = fullTransaction.transaction
 
-        return when (val decoration = fullTransaction.decoration) {
+        val transactionRecord =  when (val decoration = fullTransaction.decoration) {
             is ContractCreationDecoration -> {
                 ContractCreationTransactionRecord(transaction, baseToken, source)
             }
@@ -96,7 +96,7 @@ class EvmTransactionConverter(
             }
 
             is OneInchUnknownDecoration -> {
-                return UnknownSwapTransactionRecord(
+                UnknownSwapTransactionRecord(
                     transaction, baseToken, source,
                     decoration.contractAddress.eip55,
                     decoration.tokenAmountIn?.let { convertToTransactionValue(it.token, it.value, true) },
@@ -115,29 +115,35 @@ class EvmTransactionConverter(
                 val contractAddress = transaction.to
                 val value = transaction.value
 
-                return if (transaction.from == address && contractAddress != null && value != null) {
-                    ContractCallTransactionRecord(
-                        transaction, baseToken, source,
-                        contractAddress.eip55,
-                        transaction.input?.let { evmLabelManager.methodLabel(it) },
-                        getInternalEvents(internalTransactions) + getIncomingEvents(incomingTransfers),
-                        getTransactionValueEvents(transaction) + getOutgoingEvents(outgoingTransfers)
-                    )
-                } else {
-                    ExternalContractCallTransactionRecord(
-                        transaction, baseToken, source,
-                        getInternalEvents(internalTransactions) + getIncomingEvents(incomingTransfers),
-                        getOutgoingEvents(outgoingTransfers)
-                    )
+                when {
+                    transaction.from == address && contractAddress != null && value != null -> {
+                        ContractCallTransactionRecord(
+                            transaction, baseToken, source,
+                            contractAddress.eip55,
+                            transaction.input?.let { evmLabelManager.methodLabel(it) },
+                            getInternalEvents(internalTransactions) + getIncomingEvents(incomingTransfers),
+                            getTransactionValueEvents(transaction) + getOutgoingEvents(outgoingTransfers)
+                        )
+                    }
+                    transaction.from != address && transaction.to != address -> {
+                        ExternalContractCallTransactionRecord(
+                            transaction, baseToken, source,
+                            getInternalEvents(internalTransactions) + getIncomingEvents(incomingTransfers),
+                            getOutgoingEvents(outgoingTransfers)
+                        )
+                    }
+                    else -> null
                 }
-
             }
-
-            else -> {
-                EvmTransactionRecord(transaction, baseToken, source)
-            }
-
+            else -> null
         }
+
+        return transactionRecord ?: EvmTransactionRecord(
+            transaction = transaction,
+            baseToken = baseToken,
+            source = source,
+            foreignTransaction = transaction.from != evmKit.receiveAddress
+        )
     }
 
     private fun convertAmount(amount: BigInteger, decimal: Int, negative: Boolean): BigDecimal {
