@@ -20,16 +20,6 @@ class MarketMetricSmallView @JvmOverloads constructor(
 
     private val binding = ViewMarketMetricSmallBinding.inflate(LayoutInflater.from(context), this)
 
-    init {
-        val ta = context.obtainStyledAttributes(attrs, R.styleable.MarketMetricSmallView)
-        try {
-            binding.title.text = ta.getString(R.styleable.MarketMetricSmallView_title)
-            binding.value.text = ta.getString(R.styleable.MarketMetricSmallView_value)
-        } finally {
-            ta.recycle()
-        }
-    }
-
     fun setMetricData(data: MetricData) {
         binding.title.text = context.getString(data.type.title)
         binding.title.isVisible = true
