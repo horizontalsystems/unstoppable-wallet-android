@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.address.AmountUnique
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.animations.shake
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
@@ -82,6 +83,8 @@ fun HSAmountInput(
         mutableStateOf(TextFieldValue(""))
     }
 
+    var playShakeAnimation by remember { mutableStateOf(false) }
+
     LaunchedEffect(inputType) {
         viewModel.setInputType(inputType)
 
@@ -131,7 +134,11 @@ fun HSAmountInput(
                     modifier = Modifier
                         .padding(start = 16.dp)
                         .weight(1f)
-                        .focusRequester(focusRequester),
+                        .focusRequester(focusRequester)
+                        .shake(
+                            enabled = playShakeAnimation,
+                            onAnimationFinish = { playShakeAnimation = false }
+                        ),
                     value = textState,
                     singleLine = true,
                     onValueChange = { textFieldValue ->
@@ -142,7 +149,7 @@ fun HSAmountInput(
                             viewModel.onEnterAmount(text)
                             onValueChange.invoke(viewModel.coinAmount)
                         } else {
-                            // todo: shake animation
+                            playShakeAnimation = true
                         }
                     },
                     textStyle = ColoredTextStyle(
