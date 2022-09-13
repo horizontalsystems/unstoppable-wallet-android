@@ -158,6 +158,12 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
             )
         }, {
             HsSettingCell(
+                R.string.SettingsAboutApp_Twitter,
+                R.drawable.ic_twitter_20,
+                onClick = { LinkHelper.openLinkInAppBrowser(context, viewModel.twitterLink) }
+            )
+        }, {
+            HsSettingCell(
                 R.string.SettingsAboutApp_Site,
                 R.drawable.ic_globe,
                 onClick = { LinkHelper.openLinkInAppBrowser(context, viewModel.appWebPageLink) }

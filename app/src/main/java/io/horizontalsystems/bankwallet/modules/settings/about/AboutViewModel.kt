@@ -21,6 +21,7 @@ class AboutViewModel(
 
     val githubLink = appConfigProvider.appGithubLink
     val appWebPageLink = appConfigProvider.appWebPageLink
+    val twitterLink = appConfigProvider.appTwitterLink
     val reportEmail = appConfigProvider.reportEmail
     val appVersion: String
         get() {
