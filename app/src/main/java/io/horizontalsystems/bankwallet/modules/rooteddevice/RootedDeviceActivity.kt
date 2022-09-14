@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.rooteddevice
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -23,11 +23,18 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 class RootedDeviceActivity : AppCompatActivity() {
 
+    private val viewModel by viewModels<RootedDeviceViewModel> { RootedDeviceModule.Factory() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            RootedDeviceScreen(onClose = { finish() })
+            RootedDeviceScreen(
+                onIgnoreWarningClicked = {
+                    viewModel.ignoreRootedDeviceWarning()
+                    finish()
+                },
+            )
         }
     }
 
@@ -39,8 +46,7 @@ class RootedDeviceActivity : AppCompatActivity() {
 
 @Composable
 private fun RootedDeviceScreen(
-    onClose: () -> Unit,
-    viewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory())
+    onIgnoreWarningClicked: () -> Unit
 ) {
     ComposeAppTheme {
         Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -74,10 +80,7 @@ private fun RootedDeviceScreen(
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                     title = stringResource(R.string.RootedDevice_Button_Understand),
-                    onClick = {
-                        viewModel.ignoreRootedDeviceWarning()
-                        onClose.invoke()
-                    },
+                    onClick = onIgnoreWarningClicked,
                 )
             }
         }
