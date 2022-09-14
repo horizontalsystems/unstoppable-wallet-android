@@ -8,35 +8,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.icon24
-import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.nft.NftCollectionMetadata
 import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
-import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionModule.Tab
-import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class NftCollectionViewModel(
+class NftCollectionOverviewViewModel(
     private val service: NftCollectionOverviewService,
-    private val numberFormatter: IAppNumberFormatter,
-    xRateService: XRateService,
-    marketKit: MarketKitWrapper
+    private val numberFormatter: IAppNumberFormatter
 ) : ViewModel() {
 
-    private val baseToken = marketKit.token(TokenQuery(service.blockchainType, TokenType.Native))!!
     private var result: Result<NftCollectionMetadata>? = null
-    private var rate: CurrencyValue? = xRateService.getRate(baseToken.coin.uid)
 
     val tabs = Tab.values()
 
@@ -56,11 +44,6 @@ class NftCollectionViewModel(
         service.nftCollection.collectWith(viewModelScope) { result ->
             this.result = result
             sync()
-        }
-
-        xRateService.getRateFlow(baseToken.coin.uid).collectWith(viewModelScope) { rate ->
-            this.rate = rate
-            syncRate()
         }
 
         viewModelScope.launch {
@@ -85,32 +68,6 @@ class NftCollectionViewModel(
             delay(1000)
             isRefreshing = false
         }
-    }
-
-    private fun coinValue(value: BigDecimal) =
-        numberFormatter.formatCoinShort(value, baseToken.coin.code, baseToken.decimals)
-
-    private fun currencyValue(value: BigDecimal?, rate: CurrencyValue?): String? {
-        if (value == null || rate == null) return null
-
-        return App.numberFormatter.formatFiatShort(value * rate.value, rate.currency.symbol, 2)
-    }
-
-    private fun syncRate() {
-        val collection = result?.getOrNull() ?: return
-        val item = overviewViewItem ?: return
-
-//        overviewViewItem = item.copy(
-//            volumeChartDataWrapper = item.volumeChartDataWrapper?.copy(
-//                secondaryValue = currencyValue(collection.stats.volumes[HsTimePeriod.Day1]?.value, rate)
-//            ),
-//            averagePriceChartDataWrapper = item.averagePriceChartDataWrapper?.copy(
-//                secondaryValue = currencyValue(collection.stats.averagePrice1d?.value, rate)
-//            ),
-//            floorPriceChartDataWrapper = item.floorPriceChartDataWrapper?.copy(
-//                secondaryValue = currencyValue(collection.stats.floorPrice?.value, rate),
-//            )
-//        )
     }
 
     private fun sync() {
@@ -193,14 +150,6 @@ data class NftCollectionOverviewViewItem(
     val links: List<Link>,
     val contracts: List<ContractInfo>
 ) {
-    data class ChartDataWrapper(
-        val title: String,
-        val chartData: ChartData,
-        val primaryValue: String,
-        val secondaryValue: String?,
-        val diff: Value?
-    )
-
     data class Link(
         val url: String,
         val title: TranslatableString,

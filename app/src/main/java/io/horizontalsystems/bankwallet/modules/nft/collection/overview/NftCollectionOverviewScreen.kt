@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
 fun NftCollectionOverviewScreen(
-    viewModel: NftCollectionViewModel,
+    viewModel: NftCollectionOverviewViewModel,
     onCopyText: (String) -> Unit,
     onOpenUrl: (String) -> Unit
 ) {
@@ -185,85 +185,4 @@ private fun Stats(collection: NftCollectionOverviewViewItem) {
             }
         }
     }
-
-   /* val chartCards = buildList {
-        collection.volumeChartDataWrapper?.let { add(it) }
-        collection.salesChartDataWrapper?.let { add(it) }
-        collection.floorPriceChartDataWrapper?.let { add(it) }
-        collection.averagePriceChartDataWrapper?.let { add(it) }
-    }
-
-    val rows = chartCards.chunked(2)
-    for (row in rows) {
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(Modifier.padding(horizontal = 16.dp)) {
-            if (row.size == 2) {
-                ChartCard(row[0])
-                Spacer(modifier = Modifier.width(8.dp))
-                ChartCard(row[1])
-            } else {
-                ChartCard(row[0])
-            }
-        }
-    }*/
 }
-
-/*
-@Composable
-private fun RowScope.ChartCard(chartDataWrapper: NftCollectionOverviewViewItem.ChartDataWrapper) {
-    Column(
-        modifier = Modifier
-            .weight(1f)
-            .clip(RoundedCornerShape(12.dp))
-            .background(ComposeAppTheme.colors.lawrence)
-            .padding(12.dp)
-    ) {
-        caption_grey(text = chartDataWrapper.title)
-        Divider(
-            modifier = Modifier.padding(top = 10.dp),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = chartDataWrapper.primaryValue,
-                style = ComposeAppTheme.typography.subhead1,
-                color = ComposeAppTheme.colors.bran
-            )
-            chartDataWrapper.diff?.let { diff ->
-                Text(
-                    text = formatValueAsDiff(diff),
-                    style = ComposeAppTheme.typography.subhead1,
-                    color = diffColor(diff.raw())
-                )
-            }
-        }
-        Text(
-            modifier = Modifier.padding(top = 8.dp),
-            text = chartDataWrapper.secondaryValue ?: "",
-            style = ComposeAppTheme.typography.micro,
-            color = ComposeAppTheme.colors.grey
-        )
-        AndroidView(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 17.dp)
-                .height(32.dp),
-            factory = { context ->
-                ChartMinimal(context)
-            },
-            update = { view ->
-                view.doOnLayout {
-                    view.setData(chartDataWrapper.chartData)
-                }
-            }
-        )
-    }
-}
-*/

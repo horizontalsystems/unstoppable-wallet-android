@@ -26,7 +26,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.nft.collection.assets.NftCollectionAssetsScreen
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsScreen
 import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionOverviewScreen
-import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionViewModel
+import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionOverviewViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -58,7 +58,7 @@ class NftCollectionFragment : BaseFragment() {
                 val nftCollectionUid = requireArguments().getString(collectionUidKey, uid ?: "")
                 val blockchainType = requireArguments().getParcelable<BlockchainType>(blockchainTypeKey) ?: return@setContent
 
-                val viewModel by navGraphViewModels<NftCollectionViewModel>(R.id.nftCollectionFragment) {
+                val viewModel by navGraphViewModels<NftCollectionOverviewViewModel>(R.id.nftCollectionFragment) {
                     NftCollectionModule.Factory(blockchainType, nftCollectionUid)
                 }
 
@@ -81,7 +81,7 @@ class NftCollectionFragment : BaseFragment() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun NftCollectionScreen(navController: NavController, viewModel: NftCollectionViewModel) {
+private fun NftCollectionScreen(navController: NavController, viewModel: NftCollectionOverviewViewModel) {
     ComposeAppTheme {
         val pagerState = rememberPagerState(initialPage = 0)
         val coroutineScope = rememberCoroutineScope()

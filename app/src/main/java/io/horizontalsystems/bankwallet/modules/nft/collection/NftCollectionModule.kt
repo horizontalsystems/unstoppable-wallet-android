@@ -6,8 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionOverviewService
-import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionViewModel
-import io.horizontalsystems.bankwallet.modules.xrate.XRateService
+import io.horizontalsystems.bankwallet.modules.nft.collection.overview.NftCollectionOverviewViewModel
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object NftCollectionModule {
@@ -20,12 +19,7 @@ object NftCollectionModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = NftCollectionOverviewService(blockchainType, collectionUid, App.nftMetadataManager.provider(blockchainType), App.marketKit)
-            return NftCollectionViewModel(
-                service,
-                App.numberFormatter,
-                XRateService(App.marketKit, App.currencyManager.baseCurrency),
-                App.marketKit,
-            ) as T
+            return NftCollectionOverviewViewModel(service, App.numberFormatter) as T
         }
 
     }
