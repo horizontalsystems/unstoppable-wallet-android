@@ -1,103 +1,119 @@
 package io.horizontalsystems.bankwallet.modules.tor
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.view.isInvisible
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.databinding.ActivityTorConnectionBinding
 import io.horizontalsystems.bankwallet.modules.launcher.LaunchModule
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
+import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import kotlin.system.exitProcess
 
-@SuppressLint("SetTextI18n")
 class TorConnectionActivity : AppCompatActivity() {
-
-    private lateinit var presenter: TorStatusPresenter
-    private lateinit var binding: ActivityTorConnectionBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityTorConnectionBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
-        presenter =
-            ViewModelProvider(this, TorStatusModule.Factory()).get(TorStatusPresenter::class.java)
-        presenter.viewDidLoad()
-
-        observeView(presenter.view)
-        observeRouter(presenter.router)
-
-        setStatus(false, getString(R.string.Tor_Status_Starting))
+        setContent {
+            TorConnectionScreen(
+                closeScreen = {
+                    finish()
+                },
+                restartApp = {
+                    finishAffinity()
+                    LaunchModule.start(this)
+                    exitProcess(0)
+                },
+            )
+        }
     }
 
     override fun onBackPressed() {
         //do nothing
     }
 
-    private fun observeRouter(router: TorStatusRouter) {
-        router.closeEvent.observe(this, Observer {
-            finish()
-        })
+}
 
-        router.restartAppEvent.observe(this, Observer {
-            finishAffinity()
-            LaunchModule.start(this)
-            exitProcess(0)
-        })
+@Composable
+private fun TorConnectionScreen(
+    closeScreen: () -> Unit,
+    restartApp: () -> Unit,
+    viewModel: TorConnectionViewModel = viewModel(factory = TorConnectionModule.Factory())
+) {
+    if (viewModel.closeView) {
+        viewModel.viewClosed()
+        closeScreen.invoke()
     }
 
-    private fun observeView(torStatusView: TorStatusView) {
-        torStatusView.torConnectionStatus.observe(this, Observer { status ->
-
-            val isError = status == TorStatus.Failed
-            val text = if (status == TorStatus.Connecting)
-                getString(R.string.Tor_Status_Starting)
-            else getString(R.string.Tor_Status_Error)
-            setStatus(isError, text)
-        })
+    if (viewModel.restartApp) {
+        viewModel.restartAppCalled()
+        restartApp.invoke()
     }
 
-    private fun setStatus(isError: Boolean, statusText: String) {
-        binding.pgTorStatus.isInvisible = isError
-        binding.imgTorStatusError.isInvisible = !isError
-        binding.txTorStatus.text = statusText
-
-        setButtons(isError)
+    val textRes = if (viewModel.torStatus == TorStatus.Failed) {
+        R.string.Tor_Status_Error
+    } else {
+        R.string.Tor_Status_Starting
     }
 
-    private fun setButtons(retryEnabled: Boolean) {
-        binding.btnsCompose.setContent {
-            ComposeAppTheme {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    ButtonSecondaryDefault(
-                        modifier = Modifier.padding(top = 40.dp),
-                        title = getString(R.string.Button_Retry),
-                        onClick = {
-                            presenter.restartTor()
-                        },
-                        enabled = retryEnabled
-                    )
-                    ButtonSecondaryTransparent(
-                        modifier = Modifier.padding(top = 22.dp),
-                        title = "${getString(R.string.Button_Disable)} Tor",
-                        onClick = {
-                            presenter.disableTor()
-                        }
-                    )
+    ComposeAppTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = ComposeAppTheme.colors.tyler),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier.size(48.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (viewModel.torStatus == TorStatus.Failed) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_tor_connection_error_24),
+                            contentDescription = null,
+                            modifier = Modifier.size(48.dp)
+                        )
+                    } else {
+                        HSCircularProgressIndicator()
+                    }
                 }
+
+                Spacer(Modifier.height(16.dp))
+                subhead1_grey(
+                    modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp),
+                    textAlign = TextAlign.Center,
+                    text = stringResource(textRes)
+                )
+                Spacer(Modifier.height(40.dp))
+                ButtonSecondaryDefault(
+                    title = stringResource(R.string.Button_Retry),
+                    onClick = { viewModel.restartTor() },
+                    enabled = viewModel.torStatus == TorStatus.Failed
+                )
+                Spacer(Modifier.height(20.dp))
+                ButtonSecondaryTransparent(
+                    title = stringResource(R.string.Button_Disable) + " Tor",
+                    onClick = { viewModel.stopTor() }
+                )
             }
         }
     }

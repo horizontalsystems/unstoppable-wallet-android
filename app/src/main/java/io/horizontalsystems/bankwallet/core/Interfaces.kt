@@ -409,6 +409,7 @@ interface ITorManager {
     fun setListener(listener: TorManager.Listener)
     val isTorEnabled: Boolean
     val isTorNotificationEnabled: Boolean
+    val torStatusFlow: Flow<TorStatus>
     val torObservable: Subject<TorStatus>
 }
 
