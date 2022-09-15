@@ -22,7 +22,6 @@ object NftHoldingsModule {
             return NftHoldingsViewModel(service, totalService, App.balanceHiddenManager) as T
         }
     }
-
 }
 
 data class NftCollectionViewItem(

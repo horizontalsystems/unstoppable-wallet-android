@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.balance.TotalService
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
-import io.horizontalsystems.bankwallet.modules.nft.collections.PriceType
+import io.horizontalsystems.bankwallet.modules.nft.PriceType
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.coroutines.launch
 

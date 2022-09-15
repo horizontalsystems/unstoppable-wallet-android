@@ -35,8 +35,8 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.nft.PriceType
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
-import io.horizontalsystems.bankwallet.modules.nft.collections.PriceType
 import io.horizontalsystems.bankwallet.modules.nft.ui.NftAssetPreview
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
