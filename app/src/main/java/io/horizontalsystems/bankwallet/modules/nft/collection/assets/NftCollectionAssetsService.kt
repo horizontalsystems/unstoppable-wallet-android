@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.nft.collection.assets
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.PaginationData
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
+import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.NftPrice
@@ -114,7 +114,7 @@ class NftCollectionAssetsService(
         assets: List<Item>,
         latestRates: Map<String, CoinPrice?>
     ) = assets.map { asset ->
-        val coinValue = asset.price?.let { CoinValue(it.token, it.value) } ?: return@map asset
+        val coinValue = asset.price?.coinValue ?: return@map asset
         val coinPrice = latestRates[coinValue.coin.uid] ?: return@map asset
 
         val currencyValue = CurrencyValue(baseCurrency, coinValue.value.times(coinPrice.value))

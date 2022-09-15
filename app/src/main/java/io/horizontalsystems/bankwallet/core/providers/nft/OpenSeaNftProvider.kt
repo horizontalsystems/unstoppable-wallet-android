@@ -62,13 +62,29 @@ class OpenSeaNftProvider(
         return Pair(assetsMetadata, response.cursor?.let { PaginationData.Cursor(it) })
     }
 
-    override suspend fun assetEvents(
-        contractAddress: String,
-        tokenId: String,
+    override suspend fun collectionEventsMetadata(
+        blockchainType: BlockchainType,
+        providerUid: String,
         eventType: NftEvent.EventType?,
-        cursor: String?
-    ): PagedNftEvents {
-        return marketKit.nftAssetEvents(contractAddress, tokenId, eventType, cursor)
+        paginationData: PaginationData?
+    ): Pair<List<NftEventMetadata>, PaginationData?> {
+        val response = marketKit.nftCollectionEvents(providerUid, eventType, paginationData?.cursor)
+        val eventsMetadata = response.assets.mapNotNull { event ->
+            event.type?.let { NftEventMetadata(assetMetadata(event.asset, blockchainType), it, event.date, event.amount) }
+        }
+        return Pair(eventsMetadata, response.cursor?.let { PaginationData.Cursor(it) })
+    }
+
+    override suspend fun assetEventsMetadata(
+        nftUid: NftUid,
+        eventType: NftEvent.EventType?,
+        paginationData: PaginationData?
+    ): Pair<List<NftEventMetadata>, PaginationData?> {
+        val response = marketKit.nftAssetEvents(nftUid.contractAddress, nftUid.tokenId, eventType, paginationData?.cursor)
+        val eventsMetadata = response.assets.mapNotNull { event ->
+            event.type?.let { NftEventMetadata(assetMetadata(event.asset, nftUid.blockchainType), it, event.date, event.amount) }
+        }
+        return Pair(eventsMetadata, response.cursor?.let { PaginationData.Cursor(it) })
     }
 
     private fun assetMetadata(asset: NftAsset, blockchainType: BlockchainType): NftAssetMetadata {

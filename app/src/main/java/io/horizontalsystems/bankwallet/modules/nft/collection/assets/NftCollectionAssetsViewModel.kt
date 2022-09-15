@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
 import io.horizontalsystems.bankwallet.modules.nft.holdings.NftAssetViewItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -51,7 +51,7 @@ class NftCollectionAssetsViewModel(
             imageUrl = item.asset.imageUrl,
             count = 1,
             onSale = item.asset.saleInfo != null,
-            price = item.price?.let { CoinValue(it.token, it.value) },
+            price = item.price?.coinValue,
             priceInFiat = item.priceInFiat
         )
 

@@ -18,16 +18,26 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.OnBottomReached
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
-fun NftCollectionEventsScreen(navController: NavController, collectionUid: String) {
-    val viewModel = viewModel<NftCollectionEventsViewModel>(factory = NftCollectionEventsModule.Factory(NftEventListType.Collection(collectionUid)))
+fun NftCollectionEventsScreen(navController: NavController, blockchainType: BlockchainType, collectionUid: String) {
+    val viewModel = viewModel<NftCollectionEventsViewModel>(
+        factory = NftCollectionEventsModule.Factory(
+            NftEventListType.Collection(
+                blockchainType,
+                collectionUid
+            )
+        )
+    )
 
     HSSwipeRefresh(
         state = rememberSwipeRefreshState(viewModel.isRefreshing),
@@ -72,22 +82,17 @@ fun NftEvents(
             viewItem.events?.forEachIndexed { index, event ->
                 item(key = "content-row-$index") {
                     NftEvent(
-                        name = NftEventTypeWrapper.title(event.eventType).getString(),
+                        name = NftEventTypeWrapper.title(event.type).getString(),
                         subtitle = event.date?.let { DateHelper.getFullDate(it) } ?: "",
-                        iconUrl = if (hideEventIcon) null else event.asset.imageUrl ?: "",
-                        coinValue = event.amount?.coinValue?.getFormattedFull(),
-                        currencyValue = event.amount?.currencyValue?.getFormattedFull(),
+                        iconUrl = if (hideEventIcon) null else event.imageUrl ?: "",
+                        coinValue = event.price?.getFormattedFull(),
+                        currencyValue = event.priceInFiat?.getFormattedFull(),
                         onClick = navController?.let {
                             {
-                               /* val asset = event.asset
-                                navController.slideFromBottom(
-                                        R.id.nftAssetFragment,
-                                        NftAssetModule.prepareParams(
-                                                asset.collectionUid,
-                                                asset.contract.address,
-                                                asset.tokenId
-                                        )
-                                )*/
+                                 navController.slideFromBottom(
+                                         R.id.nftAssetFragment,
+                                         NftAssetModule.prepareParams(event.providerCollectionUid,event.nftUid.uid)
+                                 )
                             }
                         }
                     )
@@ -114,8 +119,8 @@ fun NftEvents(
 
         if (viewItem.events != null && viewItem.events.isEmpty()) {
             ListEmptyView(
-                    text = stringResource(R.string.NftAssetActivity_Empty),
-                    icon = R.drawable.ic_outgoingraw
+                text = stringResource(R.string.NftAssetActivity_Empty),
+                icon = R.drawable.ic_outgoingraw
             )
         }
     }
@@ -152,15 +157,15 @@ fun NftEvent(
     ) {
         iconUrl?.let {
             Image(
-                    painter = rememberAsyncImagePainter(
-                            model = iconUrl,
-                            error = painterResource(R.drawable.coin_placeholder)
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                            .padding(end = 16.dp)
-                            .size(24.dp)
-                            .clip(RoundedCornerShape(4.dp)),
+                painter = rememberAsyncImagePainter(
+                    model = iconUrl,
+                    error = painterResource(R.drawable.coin_placeholder)
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .size(24.dp)
+                    .clip(RoundedCornerShape(4.dp)),
             )
         }
         Column(

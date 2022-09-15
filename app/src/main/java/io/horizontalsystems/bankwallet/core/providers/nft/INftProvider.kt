@@ -1,12 +1,8 @@
 package io.horizontalsystems.bankwallet.core.providers.nft
 
-import io.horizontalsystems.bankwallet.entities.nft.NftAddressMetadata
-import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
-import io.horizontalsystems.bankwallet.entities.nft.NftCollectionMetadata
-import io.horizontalsystems.bankwallet.entities.nft.NftUid
+import io.horizontalsystems.bankwallet.entities.nft.*
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.NftEvent
-import io.horizontalsystems.marketkit.models.PagedNftEvents
 
 interface INftProvider {
     val title: String
@@ -20,7 +16,18 @@ interface INftProvider {
         paginationData: PaginationData?
     ): Pair<List<NftAssetMetadata>, PaginationData?>
 
-    suspend fun assetEvents(contractAddress: String, tokenId: String, eventType: NftEvent.EventType?, cursor: String? = null): PagedNftEvents
+    suspend fun collectionEventsMetadata(
+        blockchainType: BlockchainType,
+        providerUid: String,
+        eventType: NftEvent.EventType?,
+        paginationData: PaginationData?
+    ): Pair<List<NftEventMetadata>, PaginationData?>
+
+    suspend fun assetEventsMetadata(
+        nftUid: NftUid,
+        eventType: NftEvent.EventType?,
+        paginationData: PaginationData?
+    ): Pair<List<NftEventMetadata>, PaginationData?>
 }
 
 sealed class PaginationData {

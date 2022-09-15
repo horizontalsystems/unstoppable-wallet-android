@@ -7,22 +7,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
+import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.NftEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.*
 
 class NftCollectionEventsViewModel(
     private val service: NftCollectionEventsService
 ) : ViewModel() {
 
     var viewItem by mutableStateOf<ViewItem?>(null)
-        private set
-
-    var events by mutableStateOf<List<CollectionEvent>?>(null)
         private set
 
     var viewState by mutableStateOf<ViewState>(ViewState.Loading)
@@ -52,7 +54,7 @@ class NftCollectionEventsViewModel(
 
     init {
         service.itemsUpdatedFlow.collectWith(viewModelScope) {
-            viewItem = ViewItem(eventTypeSelect, service.items?.getOrNull())
+            viewItem = ViewItem(eventTypeSelect, service.items?.getOrNull()?.map { eventViewItem(it) })
 
             loadingMore = false
             viewState = service.items?.exceptionOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
@@ -62,6 +64,17 @@ class NftCollectionEventsViewModel(
             service.start()
         }
     }
+
+    private fun eventViewItem(item: NftCollectionEventsService.Item) =
+        EventViewItem(
+            providerCollectionUid = item.event.assetMetadata.providerCollectionUid,
+            nftUid = item.event.assetMetadata.nftUid,
+            date = item.event.date,
+            type = item.event.eventType,
+            imageUrl = item.event.assetMetadata.imageUrl,
+            price = item.event.amount?.coinValue,
+            priceInFiat = item.priceInFiat
+        )
 
     fun onBottomReached() {
         loadingMore = !isRefreshing
@@ -105,6 +118,20 @@ class NftCollectionEventsViewModel(
         eventTypeSelectorState = SelectorDialogState.Closed
     }
 
+    data class ViewItem(
+        val eventTypeSelect: Select<NftEventTypeWrapper>,
+        val events: List<EventViewItem>?
+    )
+
+    data class EventViewItem(
+        val providerCollectionUid: String,
+        val nftUid: NftUid,
+        val type: NftEvent.EventType,
+        val date: Date?,
+        val imageUrl: String?,
+        val price: CoinValue?,
+        val priceInFiat: CurrencyValue?
+    )
 }
 
 data class NftEventTypeWrapper(

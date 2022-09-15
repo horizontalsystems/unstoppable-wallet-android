@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.balance.TotalService
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
+import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
 import io.horizontalsystems.bankwallet.modules.nft.PriceType
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.coroutines.launch
@@ -94,7 +94,7 @@ class NftHoldingsViewModel(
             imageUrl = assetItem.imageUrl,
             onSale = assetItem.onSale,
             count = assetItem.count,
-            price = assetItem.price?.let { CoinValue(it.token, it.value) },
+            price = assetItem.price?.coinValue,
             priceInFiat = assetItem.priceInFiat
         )
 
