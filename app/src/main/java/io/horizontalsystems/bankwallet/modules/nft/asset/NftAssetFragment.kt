@@ -53,7 +53,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.NftAssetAction
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule.NftAssetAction
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsModule
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsViewModel

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft
+package io.horizontalsystems.bankwallet.modules.nft.holdings
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString

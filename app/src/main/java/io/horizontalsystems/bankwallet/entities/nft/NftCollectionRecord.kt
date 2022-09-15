@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft
+package io.horizontalsystems.bankwallet.entities.nft
 
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -29,10 +29,4 @@ data class NftCollectionRecord(
 
     @Embedded(prefix = "averagePrice30d_")
     val averagePrice30d: NftPriceRecord?
-)
-
-data class CollectionLinks(
-    val external_url: String?,
-    val discord_url: String?,
-    val twitter_username: String?
 )

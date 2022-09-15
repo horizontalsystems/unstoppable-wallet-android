@@ -1,6 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.nft
+package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.*
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetRecord
+import io.horizontalsystems.bankwallet.entities.nft.NftCollectionRecord
+import io.horizontalsystems.bankwallet.entities.nft.NftMetadataSyncRecord
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Dao
@@ -10,9 +13,6 @@ interface NftDao {
 
     @Query("SELECT * FROM NftAssetRecord WHERE  blockchainType = :blockchainType AND accountId = :accountId")
     fun getAssets(blockchainType: BlockchainType, accountId: String): List<NftAssetRecord>
-
-//    @Query("SELECT * FROM NftAssetRecord WHERE accountId = :accountId AND tokenId = :tokenId AND contract_address = :contractAddress")
-//    suspend fun getAsset(accountId: String, tokenId: String, contractAddress: String): NftAssetRecord?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCollections(collectionRecords: List<NftCollectionRecord>)

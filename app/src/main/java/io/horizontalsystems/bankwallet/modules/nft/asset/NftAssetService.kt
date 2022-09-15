@@ -2,16 +2,12 @@ package io.horizontalsystems.bankwallet.modules.nft.asset
 
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftCollectionMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.nft.SaleType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem.Sale.PriceType
-import io.horizontalsystems.marketkit.models.AssetOrder
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.NftPrice
 import kotlinx.coroutines.Dispatchers
@@ -129,6 +125,7 @@ class NftAssetService(
         }
     }
 
+/*
     private fun getOrderStats(orders: List<AssetOrder>): Pair<NftPrice?, Sale?> {
         var hasTopBid = false
         val sale: Sale?
@@ -173,6 +170,7 @@ class NftAssetService(
 
         return Pair(bestOffer, null)
     }
+*/
 
     data class Item(
         val asset: NftAssetMetadata,

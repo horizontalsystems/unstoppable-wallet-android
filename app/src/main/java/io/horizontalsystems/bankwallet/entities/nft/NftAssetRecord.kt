@@ -1,13 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.nft
+package io.horizontalsystems.bankwallet.entities.nft
 
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import io.horizontalsystems.bankwallet.core.storage.AccountRecord
-import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.NftPrice
-import java.math.BigDecimal
 
 @Entity(
     primaryKeys = ["blockchainType", "accountId", "nftUid"],
@@ -31,27 +28,4 @@ data class NftAssetRecord(
 
     @Embedded(prefix = "lastSale_")
     val lastSale: NftPriceRecord?
-)
-
-data class NftPriceRecord(
-    val tokenQueryId: String,
-    val value: BigDecimal
-) {
-    constructor(nftPrice: NftPrice) : this(nftPrice.token.tokenQuery.id, nftPrice.value)
-}
-
-data class NftAssetContract(
-    val address: String,
-    val type: String
-)
-
-data class NftAssetAttribute(
-    val type: String,
-    val value: String,
-    val count: Int
-)
-
-data class AssetLinks(
-    val external_link: String?,
-    val permalink: String,
 )

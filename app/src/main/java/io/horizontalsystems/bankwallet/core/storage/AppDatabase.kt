@@ -7,10 +7,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import io.horizontalsystems.bankwallet.core.storage.migrations.*
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.nft.NftAssetRecord
-import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
-import io.horizontalsystems.bankwallet.modules.nft.NftDao
-import io.horizontalsystems.bankwallet.modules.nft.NftMetadataSyncRecord
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetRecord
+import io.horizontalsystems.bankwallet.entities.nft.NftCollectionRecord
+import io.horizontalsystems.bankwallet.entities.nft.NftMetadataSyncRecord
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesDao
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSessionKey
 import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectSession

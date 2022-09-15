@@ -2,11 +2,7 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
-import io.horizontalsystems.bankwallet.entities.nft.NftAddressMetadata
-import io.horizontalsystems.bankwallet.entities.nft.NftAssetShortMetadata
-import io.horizontalsystems.bankwallet.entities.nft.NftCollectionShortMetadata
-import io.horizontalsystems.bankwallet.entities.nft.NftKey
-import io.horizontalsystems.bankwallet.modules.nft.*
+import io.horizontalsystems.bankwallet.entities.nft.*
 import io.horizontalsystems.marketkit.models.NftPrice
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -15,7 +11,7 @@ class NftStorage(
     private val nftDao: NftDao,
     private val marketKit: MarketKitWrapper
 ) {
-     fun addressInfo(nftKey: NftKey): NftAddressMetadata? = try {
+    fun addressInfo(nftKey: NftKey): NftAddressMetadata? = try {
         val collectionRecords = nftDao.getCollections(nftKey.blockchainType, nftKey.account.id)
         val assetRecords = nftDao.getAssets(nftKey.blockchainType, nftKey.account.id)
         val priceRecords =

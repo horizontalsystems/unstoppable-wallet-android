@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.nft
+package io.horizontalsystems.bankwallet.entities.nft
 
 import androidx.room.Entity
 import io.horizontalsystems.marketkit.models.BlockchainType
