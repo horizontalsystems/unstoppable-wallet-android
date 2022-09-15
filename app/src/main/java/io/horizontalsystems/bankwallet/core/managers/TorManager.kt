@@ -13,6 +13,9 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.update
 import java.util.concurrent.Executors
 
 class TorManager(
@@ -25,7 +28,11 @@ class TorManager(
     }
 
     private val logger = AppLogger("tor status")
+    private val _torStatusFlow = MutableStateFlow<TorStatus?>(null)
+
+    override val torStatusFlow = _torStatusFlow.filterNotNull()
     override val torObservable = BehaviorSubject.create<TorStatus>()
+
     override val isTorNotificationEnabled: Boolean
         get() = kit.notificationsEnabled
 
@@ -45,9 +52,10 @@ class TorManager(
     override fun start() {
         disposables.add(kit.torInfoSubject
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    listener?.onStatusChange(getStatus(it))
-                    torObservable.onNext(getStatus(it))
+                .subscribe({ torInfo ->
+                    listener?.onStatusChange(getStatus(torInfo))
+                    torObservable.onNext(getStatus(torInfo))
+                    _torStatusFlow.update { getStatus(torInfo) }
                 }, {
                     Log.e("TorManager", "Tor exception", it)
                 })
