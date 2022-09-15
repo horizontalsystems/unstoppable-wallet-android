@@ -145,6 +145,13 @@ class EvmKitManager(
             nftKit = nftKitInstance
         }
 
+        nftKit?.let {
+            NftKit.addEip721TransactionSyncer(nftKit, evmKit)
+            NftKit.addEip1155TransactionSyncer(nftKit, evmKit)
+            NftKit.addEip721Decorators(nftKit, evmKit)
+            NftKit.addEip1155Decorators(nftKit, evmKit)
+        }
+
         evmKit.start()
 
         return EvmKitWrapper(evmKit, nftKit, blockchainType, signer)
