@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection.overview
 
-import io.horizontalsystems.bankwallet.core.adapters.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
 import io.horizontalsystems.bankwallet.entities.nft.NftCollectionMetadata
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType

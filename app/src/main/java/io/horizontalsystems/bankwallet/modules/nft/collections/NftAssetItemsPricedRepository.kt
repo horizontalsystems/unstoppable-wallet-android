@@ -3,13 +3,13 @@ package io.horizontalsystems.bankwallet.modules.nft.collections
 import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModuleAssetItem
-import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
+import io.horizontalsystems.bankwallet.modules.nft.collection.assets.NftCollectionAssetsService
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 class NftAssetItemsPricedRepository {
-    private val _itemsDataFlow = MutableSharedFlow<DataWithError<Map<NftCollectionRecord, List<CollectionAsset>>?>>(
+    private val _itemsDataFlow = MutableSharedFlow<DataWithError<Map<NftCollectionRecord, List<NftCollectionAssetsService.Item>>?>>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
@@ -21,28 +21,28 @@ class NftAssetItemsPricedRepository {
     fun setPriceType(priceType: PriceType) {
         this.priceType = priceType
 
-        _itemsDataFlow.replayCache.lastOrNull()?.let { data ->
-            val list = data.value?.map { (collectionItem, assets) ->
-                collectionItem to assets.map { asset ->
-                    asset.copy(price = getAssetPrice(asset.asset, priceType))
-                }
-            }?.toMap()
-
-            _itemsDataFlow.tryEmit(DataWithError(list, null))
-        }
+//        _itemsDataFlow.replayCache.lastOrNull()?.let { data ->
+//            val list = data.value?.map { (collectionItem, assets) ->
+//                collectionItem to assets.map { asset ->
+//                    asset.copy(price = getAssetPrice(asset.asset, priceType))
+//                }
+//            }?.toMap()
+//
+//            _itemsDataFlow.tryEmit(DataWithError(list, null))
+//        }
     }
 
     fun setAssetItems(data: DataWithError<Map<NftCollectionRecord, List<NftAssetModuleAssetItem>>?>) {
-        val items = data.value?.map { (collectionRecord, assetItems) ->
-            collectionRecord to assetItems.map { assetItem ->
-                CollectionAsset(
-                    asset = assetItem,
-                    price = getAssetPrice(assetItem, priceType)
-                )
-            }
-        }?.toMap()
-
-        _itemsDataFlow.tryEmit(DataWithError(items, data.error))
+//        val items = data.value?.map { (collectionRecord, assetItems) ->
+//            collectionRecord to assetItems.map { assetItem ->
+//                Item(
+//                    asset = assetItem,
+//                    price = getAssetPrice(assetItem, priceType)
+//                )
+//            }
+//        }?.toMap()
+//
+//        _itemsDataFlow.tryEmit(DataWithError(items, data.error))
     }
 
     private fun getAssetPrice(

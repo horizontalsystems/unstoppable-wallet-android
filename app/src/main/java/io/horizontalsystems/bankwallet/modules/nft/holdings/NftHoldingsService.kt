@@ -239,7 +239,7 @@ class NftHoldingsService(
         val onSale: Boolean,
         val price: NftPrice?,
         val priceInFiat: CurrencyValue? = null,
-        val coinPrice: CoinPrice? = null,
+        val coinPrice: CoinPrice? = null
     )
 
 }

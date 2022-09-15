@@ -41,6 +41,6 @@ data class NftAssetViewItem(
     val imageUrl: String?,
     val count: Int,
     val onSale: Boolean,
-    val priceInCoin: CoinValue?,
+    val price: CoinValue?,
     val priceInFiat: CurrencyValue?
 )

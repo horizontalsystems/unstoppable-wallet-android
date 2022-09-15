@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.nft.collection.events
 
 import cash.z.ecc.android.sdk.ext.collectWith
-import io.horizontalsystems.bankwallet.core.adapters.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
@@ -58,7 +58,7 @@ class NftCollectionEventsService(
     }
 
     suspend fun refresh() {
-       restart()
+        restart()
     }
 
     private suspend fun updateItems(items: Result<List<CollectionEvent>>?) {

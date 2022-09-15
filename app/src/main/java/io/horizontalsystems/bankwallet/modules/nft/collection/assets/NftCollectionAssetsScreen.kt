@@ -14,15 +14,17 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
+import io.horizontalsystems.bankwallet.modules.nft.holdings.NftAssetViewItem
 import io.horizontalsystems.bankwallet.modules.nft.ui.NftAssetPreview
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.OnBottomReached
 import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
-fun NftCollectionAssetsScreen(navController: NavController, collectionUid: String) {
-    val viewModel = viewModel<NftCollectionAssetsViewModel>(factory = NftCollectionAssetsModule.Factory(collectionUid))
+fun NftCollectionAssetsScreen(navController: NavController, blockchainType: BlockchainType, collectionUid: String) {
+    val viewModel = viewModel<NftCollectionAssetsViewModel>(factory = NftCollectionAssetsModule.Factory(blockchainType, collectionUid))
 
     HSSwipeRefresh(
         state = rememberSwipeRefreshState(viewModel.isRefreshing),
@@ -49,7 +51,7 @@ fun NftCollectionAssetsScreen(navController: NavController, collectionUid: Strin
 @Composable
 private fun NftAssets(
     navController: NavController,
-    assets: List<CollectionAsset>?,
+    assets: List<NftAssetViewItem>?,
     onBottomReached: () -> Unit, loadingMore: Boolean
 ) {
     val listState = rememberLazyListState()
@@ -61,16 +63,14 @@ private fun NftAssets(
                     modifier = Modifier.padding(start = 16.dp, top = 12.dp, end = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    assets.forEach { collectionAsset ->
-                        val asset = collectionAsset.asset
-                        val price = collectionAsset.price
+                    assets.forEach { asset ->
                         Box(modifier = Modifier.weight(1f)) {
                             NftAssetPreview(
                                 name = asset.name ?: "",
                                 imageUrl = asset.imageUrl,
                                 onSale = asset.onSale,
-                                coinPrice = price?.coinValue,
-                                currencyPrice = price?.currencyValue
+                                coinPrice = asset.price,
+                                currencyPrice = asset.priceInFiat
                             ) {
 /*
                                 navController.slideFromBottom(

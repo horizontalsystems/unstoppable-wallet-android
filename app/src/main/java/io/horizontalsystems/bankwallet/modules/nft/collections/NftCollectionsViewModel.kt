@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.modules.balance.TotalService
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
-import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
+import io.horizontalsystems.bankwallet.modules.nft.collection.assets.NftCollectionAssetsService.Item
 import io.horizontalsystems.bankwallet.modules.nft.viewState
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.coroutines.launch
@@ -58,7 +58,7 @@ class NftCollectionsViewModel(
         }
     }
 
-    private fun handleNftCollections(dataWithError: DataWithError<Map<NftCollectionRecord, List<CollectionAsset>>?>) {
+    private fun handleNftCollections(dataWithError: DataWithError<Map<NftCollectionRecord, List<Item>>?>) {
         val data = dataWithError.value
         val error = dataWithError.error
 
@@ -79,7 +79,7 @@ class NftCollectionsViewModel(
     }
 
     private fun syncItems(
-        collectionItems: Map<NftCollectionRecord, List<CollectionAsset>>
+        collectionItems: Map<NftCollectionRecord, List<Item>>
     ) {
         val expandedStates = collectionViewItems.associate { it.slug to it.expanded }
         collectionViewItems = collectionItems.map { (collectionRecord, assetItems) ->
@@ -92,13 +92,13 @@ class NftCollectionsViewModel(
             )
         }
 
-        totalService.setItems(
-            collectionItems.map { it.value }.flatten().mapNotNull { asset ->
-                asset.price?.let { price ->
-                    TotalService.BalanceItem(price.coinValue.value, isValuePending = false, coinPrice = asset.xRate)
-                }
-            }
-        )
+//        totalService.setItems(
+//            collectionItems.map { it.value }.flatten().mapNotNull { asset ->
+//                asset.price?.let { price ->
+//                    TotalService.BalanceItem(price.coinValue.value, isValuePending = false, coinPrice = asset.xRate)
+//                }
+//            }
+//        )
     }
 
     private fun createTotalUIState(totalState: TotalService.State) = when (totalState) {

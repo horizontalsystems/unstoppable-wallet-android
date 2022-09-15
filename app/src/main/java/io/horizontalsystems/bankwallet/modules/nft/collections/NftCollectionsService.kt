@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.nft.DataWithError
 import io.horizontalsystems.bankwallet.modules.nft.NftCollectionRecord
-import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
+import io.horizontalsystems.bankwallet.modules.nft.collection.assets.NftCollectionAssetsService.Item
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +25,7 @@ class NftCollectionsService(
 ) {
     val priceType: PriceType by itemsPricedRepository::priceType
 
-    private val _serviceItemDataFlow = MutableSharedFlow<DataWithError<Map<NftCollectionRecord, List<CollectionAsset>>?>>(
+    private val _serviceItemDataFlow = MutableSharedFlow<DataWithError<Map<NftCollectionRecord, List<Item>>?>>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )

@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
 import android.util.Log
-import io.horizontalsystems.bankwallet.core.adapters.nft.INftProvider
+import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata

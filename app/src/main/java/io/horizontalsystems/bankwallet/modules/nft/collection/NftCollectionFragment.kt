@@ -131,7 +131,7 @@ private fun NftCollectionScreen(navController: NavController, viewModel: NftColl
                         )
                     }
                     NftCollectionModule.Tab.Items -> {
-                        NftCollectionAssetsScreen(navController, viewModel.collectionUid)
+                        NftCollectionAssetsScreen(navController, viewModel.blockchainType, viewModel.collectionUid)
                     }
                     NftCollectionModule.Tab.Activity -> {
                         NftCollectionEventsScreen(navController, viewModel.collectionUid)

@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.providers.nft
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.adapters.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.nft.*
 import io.horizontalsystems.marketkit.models.*
@@ -42,13 +41,25 @@ class OpenSeaNftProvider(
         val asset = marketKit.nftAsset(nftUid.contractAddress, nftUid.tokenId)
         val collection = marketKit.nftCollection(providerCollectionUid)
 
-        return Pair(assetMetadata(asset, nftUid.blockchainType, providerCollectionUid), collectionMetadata(collection, nftUid.blockchainType))
+        return Pair(assetMetadata(asset, nftUid.blockchainType), collectionMetadata(collection, nftUid.blockchainType))
     }
 
     override suspend fun collectionMetadata(blockchainType: BlockchainType, providerUid: String): NftCollectionMetadata {
         val nftCollection = marketKit.nftCollection(providerUid)
 
         return collectionMetadata(nftCollection, blockchainType)
+    }
+
+    override suspend fun collectionAssetsMetadata(
+        blockchainType: BlockchainType,
+        providerUid: String,
+        paginationData: PaginationData?
+    ): Pair<List<NftAssetMetadata>, PaginationData?> {
+        val response = marketKit.nftAssets(providerUid, paginationData?.cursor)
+        val assetsMetadata = response.assets.map {
+            assetMetadata(it, blockchainType)
+        }
+        return Pair(assetsMetadata, response.cursor?.let { PaginationData.Cursor(it) })
     }
 
     override suspend fun assetEvents(
@@ -60,7 +71,7 @@ class OpenSeaNftProvider(
         return marketKit.nftAssetEvents(contractAddress, tokenId, eventType, cursor)
     }
 
-    private fun assetMetadata(asset: NftAsset, blockchainType: BlockchainType, providerCollectionUid: String): NftAssetMetadata {
+    private fun assetMetadata(asset: NftAsset, blockchainType: BlockchainType): NftAssetMetadata {
         return NftAssetMetadata(
             nftUid = NftUid.Evm(blockchainType, asset.contract.address, asset.tokenId),
             providerCollectionUid = asset.collectionUid,
@@ -71,7 +82,7 @@ class OpenSeaNftProvider(
             nftType = asset.contract.schemaName,
             externalLink = asset.externalLink,
             providerLink = asset.permalink,
-            traits = asset.traits.map { Trait(it.traitType, it.value, it.count, traitSearchUrl(it.traitType, it.value, providerCollectionUid)) },
+            traits = asset.traits.map { Trait(it.traitType, it.value, it.count, traitSearchUrl(it.traitType, it.value, asset.collectionUid)) },
             lastSalePrice = asset.lastSalePrice,
             offers = listOf(), // TODO
             saleInfo = null // TODO

@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.balance.TotalService
-import io.horizontalsystems.bankwallet.modules.nft.collection.assets.CollectionAsset
+import io.horizontalsystems.bankwallet.modules.nft.collection.assets.NftCollectionAssetsService.Item
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 
@@ -45,7 +45,7 @@ data class NftCollectionViewItem(
     val name: String,
     val imageUrl: String?,
     val expanded: Boolean,
-    val assets: List<CollectionAsset>
+    val assets: List<Item>
 ) {
     val ownedAssetCount = assets.size
 }

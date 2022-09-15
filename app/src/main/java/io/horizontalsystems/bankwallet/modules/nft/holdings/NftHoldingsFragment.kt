@@ -249,7 +249,7 @@ fun LazyListScope.nftsCollectionSection(
                                 name = asset.name,
                                 imageUrl = asset.imageUrl,
                                 onSale = asset.onSale,
-                                coinPrice = asset.priceInCoin,
+                                coinPrice = asset.price,
                                 currencyPrice = asset.priceInFiat,
                                 onClick = {
                                     onClickAsset.invoke(asset)

@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.entities.nft.NftCollectionMetadata
 import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionModule.Tab
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -39,6 +40,9 @@ class NftCollectionOverviewViewModel(
 
     val collectionUid: String
         get() = service.providerCollectionUid
+
+    val blockchainType: BlockchainType
+        get() = service.blockchainType
 
     init {
         service.nftCollection.collectWith(viewModelScope) { result ->

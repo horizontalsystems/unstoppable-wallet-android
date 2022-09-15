@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.util.Log
-import io.horizontalsystems.bankwallet.core.adapters.nft.INftProvider
+import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.OpenSeaNftProvider
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.entities.nft.NftAddressMetadata

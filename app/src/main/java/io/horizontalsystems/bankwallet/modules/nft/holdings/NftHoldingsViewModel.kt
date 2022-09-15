@@ -64,8 +64,6 @@ class NftHoldingsViewModel(
     private fun sync(items: List<NftHoldingsService.Item>) {
         viewState = ViewState.Success
 
-
-
         val expandedStates = viewItems.associate { it.uid to it.expanded }
         viewItems = items.map { viewItem(it, expandedStates[it.uid] ?: false) }
 
@@ -96,7 +94,7 @@ class NftHoldingsViewModel(
             imageUrl = assetItem.imageUrl,
             onSale = assetItem.onSale,
             count = assetItem.count,
-            priceInCoin = assetItem.price?.let { CoinValue(it.token, it.value) },
+            price = assetItem.price?.let { CoinValue(it.token, it.value) },
             priceInFiat = assetItem.priceInFiat
         )
 
