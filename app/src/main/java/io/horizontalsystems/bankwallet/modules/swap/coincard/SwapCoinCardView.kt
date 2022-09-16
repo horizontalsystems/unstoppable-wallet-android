@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.getNavigationResult
+import java.math.BigDecimal
 
 
 @Composable
@@ -157,7 +158,7 @@ fun SwapAmountInput(
     amountEnabled: Boolean
 ) {
 
-    val amount by viewModel.amountLiveData().observeAsState()
+    val amountData by viewModel.amountLiveData().observeAsState()
     val estimated by viewModel.isEstimatedLiveData().observeAsState(false)
     val maxVisible by viewModel.maxEnabledLiveData().observeAsState(false)
     val warningInfo by viewModel.warningInfoLiveData().observeAsState()
@@ -182,9 +183,15 @@ fun SwapAmountInput(
         }
     }
 
-    LaunchedEffect(amount?.first) {
-        val text = amount?.second ?: ""
-        textState = textState.copy(text = text, selection = TextRange(text.length))
+    LaunchedEffect(amountData?.first) {
+        val amount = amountData?.second ?: ""
+        if (!amountsEqual(
+                amount.toBigDecimalOrNull(),
+                textState.text.toBigDecimalOrNull()
+            )
+        ) {
+            textState = textState.copy(text = amount, selection = TextRange(amount.length))
+        }
     }
 
     Column(modifier = modifier) {
@@ -312,6 +319,14 @@ fun SwapAmountInput(
                 text = caution
             )
         }
+    }
+}
+
+private fun amountsEqual(amount1: BigDecimal?, amount2: BigDecimal?): Boolean {
+    return when {
+        amount1 == null && amount2 == null -> true
+        amount1 != null && amount2 != null && amount2.compareTo(amount1) == 0 -> true
+        else -> false
     }
 }
 
