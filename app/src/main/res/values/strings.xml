@@ -336,8 +336,11 @@
 
     <string name="Send_Success">\u2713 Sent</string>
 
+    <string name="ScanQr_CameraPermission_Title">Camera permission</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
     <string name="ScanQr_NoCameraPermission">No camera permission</string>
+    <string name="ScanQr_CameraPermissionDeniedText">Access to your camera for this app was denied, you can go to settings and allow access</string>
+    <string name="ScanQr_GoToSettings">Go to Settings</string>
 
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
     <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
