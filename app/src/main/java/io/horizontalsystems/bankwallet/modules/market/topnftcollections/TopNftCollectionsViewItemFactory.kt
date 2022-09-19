@@ -37,6 +37,7 @@ class TopNftCollectionsViewItemFactory(
         } ?: "---"
 
         return TopNftCollectionViewItem(
+            blockchainType = collection.blockchainType,
             uid = collection.uid,
             name = collection.name,
             imageUrl = collection.imageUrl,

@@ -21,25 +21,25 @@ data class NftAssetMetadata(
     val saleInfo: SaleInfo?
 ) {
     val displayName = name ?: "#${nftUid.tokenId}"
+
+    data class Trait(
+        val type: String,
+        val value: String,
+        val count: Int,
+        val searchUrl: String?
+    )
+
+    data class SaleInfo(
+        val type: SaleType,
+        val listings: List<SaleListing>
+    )
+
+    enum class SaleType {
+        OnSale, OnAuction
+    }
+
+    data class SaleListing(
+        val untilDate: Date,
+        val price: NftPrice
+    )
 }
-
-data class Trait(
-    val type: String,
-    val value: String,
-    val count: Int,
-    val searchUrl: String?
-)
-
-data class SaleInfo(
-    val type: SaleType,
-    val listings: List<SaleListing>
-)
-
-enum class SaleType {
-    OnSale, OnAuction
-}
-
-data class SaleListing(
-    val untilDate: Date,
-    val price: NftPrice
-)

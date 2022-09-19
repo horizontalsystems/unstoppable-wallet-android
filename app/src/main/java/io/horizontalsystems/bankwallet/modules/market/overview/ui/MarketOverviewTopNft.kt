@@ -17,12 +17,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinSecondRow
 import io.horizontalsystems.bankwallet.ui.compose.components.MultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.NftIcon
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
 fun TopNftCollectionsBoardView(
     board: MarketOverviewModule.TopNftCollectionsBoard,
     onSelectTimeDuration: (TimeDuration) -> Unit,
-    onClickCollection: (String) -> Unit,
+    onClickCollection: (BlockchainType, String) -> Unit,
     onClickSeeAll: () -> Unit
 ) {
     TopBoardHeader(
@@ -42,7 +43,7 @@ fun TopNftCollectionsBoardView(
     ) {
         board.collections.forEach { collection ->
             TopNftCollectionView(collection) {
-                onClickCollection(collection.uid)
+                onClickCollection(collection.blockchainType, collection.uid)
             }
         }
 

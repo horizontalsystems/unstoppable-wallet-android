@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.providers.nft
 
 import io.horizontalsystems.bankwallet.entities.nft.*
+import io.horizontalsystems.bankwallet.entities.nft.NftEventMetadata.EventType
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.NftEvent
 
 interface INftProvider {
     val title: String
@@ -19,13 +19,13 @@ interface INftProvider {
     suspend fun collectionEventsMetadata(
         blockchainType: BlockchainType,
         providerUid: String,
-        eventType: NftEvent.EventType?,
+        eventType: EventType?,
         paginationData: PaginationData?
     ): Pair<List<NftEventMetadata>, PaginationData?>
 
     suspend fun assetEventsMetadata(
         nftUid: NftUid,
-        eventType: NftEvent.EventType?,
+        eventType: EventType?,
         paginationData: PaginationData?
     ): Pair<List<NftEventMetadata>, PaginationData?>
 }
@@ -46,14 +46,3 @@ sealed class PaginationData {
             is Page -> value
         }
 }
-
-/*
-interface INftProvider {
-    fun collectionLink(providerUid: String) -> ProviderLink?
-    fun addressMetadataSingle(blockchainType: BlockchainType, address: String) -> Single<NftAddressMetadata>
-    fun assetMetadataSingle(nftUid: NftUid) -> Single<NftAssetMetadata>
-    fun collectionAssetsMetadataSingle(blockchainType: BlockchainType, providerCollectionUid: String, paginationData: PaginationData?) -> Single<([NftAssetMetadata], PaginationData?)>
-    fun collectionMetadataSingle(blockchainType: BlockchainType, providerUid: String) -> Single<NftCollectionMetadata>
-    fun assetEventsMetadataSingle(nftUid: NftUid, eventType: NftEventMetadata.EventType?, paginationData: PaginationData?) -> Single<([NftEventMetadata], PaginationData?)>
-    fun collectionEventsMetadataSingle(blockchainType: BlockchainType, providerUid: String, eventType: NftEventMetadata.EventType?, paginationData: PaginationData?) -> Single<([NftEventMetadata], PaginationData?)>
-}*/

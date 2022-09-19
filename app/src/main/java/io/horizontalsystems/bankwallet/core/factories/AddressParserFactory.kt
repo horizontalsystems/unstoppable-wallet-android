@@ -17,6 +17,7 @@ class AddressParserFactory {
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.ArbitrumOne,
+        BlockchainType.Solana,
         is BlockchainType.Unsupported -> AddressParser("", false)
     }
 

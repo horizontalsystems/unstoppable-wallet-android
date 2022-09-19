@@ -9,7 +9,11 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.entities.nft.*
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata.SaleType
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata.Trait
+import io.horizontalsystems.bankwallet.entities.nft.NftCollectionMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.viewState
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
@@ -85,14 +89,13 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
         return viewItems
     }
 
-    private fun traitViewItem(trait: Trait, totalSupply: Int): TraitViewItem {
-        return TraitViewItem(
+    private fun traitViewItem(trait: Trait, totalSupply: Int) =
+        TraitViewItem(
             type = trait.type,
             value = trait.value,
             percent = getAttributePercentage(trait, totalSupply),
             searchUrl = trait.searchUrl
         )
-    }
 
     private fun getAttributePercentage(trait: Trait, totalSupply: Int): String? =
         if (trait.count > 0 && totalSupply > 0) {
@@ -118,15 +121,13 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
             }
         }
 
-    private fun priceViewItem(priceItem: NftAssetService.PriceItem?): PriceViewItem? {
-        return priceItem?.let {
+    private fun priceViewItem(priceItem: NftAssetService.PriceItem?): PriceViewItem? =
+        priceItem?.let {
             PriceViewItem(coinValue(it), fiatValue(it))
         }
-    }
 
-    private fun fiatValue(priceItem: NftAssetService.PriceItem): String {
-        return priceItem.priceInFiat?.getFormattedFull() ?: "---"
-    }
+    private fun fiatValue(priceItem: NftAssetService.PriceItem): String =
+        priceItem.priceInFiat?.getFormattedFull() ?: "---"
 
     private fun coinValue(priceItem: NftAssetService.PriceItem) =
         priceItem.price?.let {
@@ -139,12 +140,11 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
         }
     }
 
-    private fun errorText(error: Throwable): TranslatableString {
-        return when (error) {
+    private fun errorText(error: Throwable): TranslatableString =
+        when (error) {
             is UnknownHostException -> TranslatableString.ResString(R.string.Hud_Text_NoInternet)
             else -> TranslatableString.PlainString(error.message ?: error.javaClass.simpleName)
         }
-    }
 
     fun errorShown() {
         errorMessage = null

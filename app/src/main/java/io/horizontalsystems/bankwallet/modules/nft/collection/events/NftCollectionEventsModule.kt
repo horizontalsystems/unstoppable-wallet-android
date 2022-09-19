@@ -3,17 +3,17 @@ package io.horizontalsystems.bankwallet.modules.nft.collection.events
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.nft.NftEventMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.NftEvent
 
 class NftCollectionEventsModule {
 
     class Factory(
         private val eventListType: NftEventListType,
-        private val defaultEventType: NftEvent.EventType = NftEvent.EventType.Sale
+        private val defaultEventType: NftEventMetadata.EventType = NftEventMetadata.EventType.Sale
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

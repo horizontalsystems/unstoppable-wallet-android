@@ -170,26 +170,8 @@ class MarketKitWrapper(
 
     // NFT
 
-    suspend fun nftAssetCollection(address: String): NftAssetCollection =
-        marketKit.nftAssetCollection(address)
-
-    suspend fun nftCollection(uid: String): NftCollection =
-        marketKit.nftCollection(uid)
-
-    suspend fun nftCollections(): List<NftCollection> =
-        marketKit.nftCollections()
-
-    suspend fun nftAsset(contractAddress: String, tokenId: String): NftAsset =
-        marketKit.nftAsset(contractAddress, tokenId)
-
-    suspend fun nftAssets(collectionUid: String, cursor: String? = null): PagedNftAssets =
-        marketKit.nftAssets(collectionUid, cursor)
-
-    suspend fun nftCollectionEvents(collectionUid: String, eventType: NftEvent.EventType?, cursor: String? = null): PagedNftEvents =
-        marketKit.nftCollectionEvents(collectionUid, eventType, cursor)
-
-    suspend fun nftAssetEvents(contractAddress: String, tokenId: String, eventType: NftEvent.EventType?, cursor: String? = null): PagedNftEvents =
-        marketKit.nftAssetEvents(contractAddress, tokenId, eventType, cursor)
+    suspend fun nftCollections(): List<NftTopCollection> =
+        marketKit.nftTopCollections()
 
     // Misc
 

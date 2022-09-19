@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.entities.nft.NftEventMetadata
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
 import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.NftEvent
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.rx2.asFlow
@@ -16,13 +15,14 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class NftCollectionEventsService(
     private val eventListType: NftEventListType,
-    var eventType: NftEvent.EventType,
+    eventType: NftEventMetadata.EventType,
     private val nftProvider: INftProvider,
     private val xRateRepository: BalanceXRateRepository
 ) {
     var items: Result<List<Item>>? = null
     val itemsUpdatedFlow = MutableSharedFlow<Unit>()
-
+    var eventType: NftEventMetadata.EventType = eventType
+        private set
     private var paginationData: PaginationData? = null
     private val loading = AtomicBoolean(false)
     private val started = AtomicBoolean(false)
@@ -45,7 +45,7 @@ class NftCollectionEventsService(
         load()
     }
 
-    suspend fun setEventType(eventType: NftEvent.EventType) {
+    suspend fun setEventType(eventType: NftEventMetadata.EventType) {
         if (this.eventType == eventType) return
         this.eventType = eventType
 
@@ -81,13 +81,12 @@ class NftCollectionEventsService(
                 if (!initialLoad && paginationData == null) {
                     updateItems(items)
                 } else {
-                    val type = if (eventType == NftEvent.EventType.All) null else eventType
                     val (events, cursor) = when (eventListType) {
                         is NftEventListType.Collection -> {
-                            nftProvider.collectionEventsMetadata(eventListType.blockchainType, eventListType.providerUid, type, null)
+                            nftProvider.collectionEventsMetadata(eventListType.blockchainType, eventListType.providerUid, eventType, paginationData)
                         }
                         is NftEventListType.Asset -> {
-                            nftProvider.assetEventsMetadata(eventListType.nftUid, type, paginationData)
+                            nftProvider.assetEventsMetadata(eventListType.nftUid, eventType, paginationData)
                         }
                     }
 

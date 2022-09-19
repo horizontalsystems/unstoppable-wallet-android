@@ -177,6 +177,7 @@ val BlockchainType.icon24: Int
         BlockchainType.ArbitrumOne -> R.drawable.logo_arbitrum_24
         BlockchainType.Zcash -> R.drawable.logo_zcash_24
         BlockchainType.BinanceChain -> R.drawable.logo_binancecoin_24
+        BlockchainType.Solana -> R.drawable.logo_solana_24
         is BlockchainType.Unsupported -> {
             when (this._uid) {
                 "fantom" -> R.drawable.logo_fantom_24

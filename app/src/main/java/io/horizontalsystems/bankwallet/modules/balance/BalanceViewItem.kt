@@ -114,6 +114,7 @@ class BalanceViewItemFactory {
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
+        BlockchainType.Solana,
         BlockchainType.ArbitrumOne -> 50
         is BlockchainType.Unsupported -> 0
     }

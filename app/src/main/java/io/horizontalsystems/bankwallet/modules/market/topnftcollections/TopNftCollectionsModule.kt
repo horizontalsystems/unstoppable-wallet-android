@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 
 object TopNftCollectionsModule {
@@ -28,6 +29,7 @@ data class Menu(
 )
 
 data class TopNftCollectionViewItem(
+    val blockchainType: BlockchainType,
     val uid: String,
     val name: String,
     val imageUrl: String?,

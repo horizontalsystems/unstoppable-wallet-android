@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.modules.market.platform.MarketPlatformFra
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsFragment
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsFragment
+import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 
@@ -103,9 +104,9 @@ fun MarketOverviewScreen(
                                 onSelectTimeDuration = { timeDuration ->
                                     viewModel.onSelectTopNftsTimeDuration(timeDuration)
                                 },
-                                onClickCollection = { collectionUid ->
-//                                    val args = NftCollectionFragment.prepareParams(collectionUid)
-//                                    navController.slideFromBottom(R.id.nftCollectionFragment, args)
+                                onClickCollection = { blockchainType, collectionUid ->
+                                    val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType)
+                                    navController.slideFromBottom(R.id.nftCollectionFragment, args)
                                 },
                                 onClickSeeAll = {
                                     val (sortingField, timeDuration) = viewModel.topNftCollectionsParams

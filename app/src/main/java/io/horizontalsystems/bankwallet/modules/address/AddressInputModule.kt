@@ -32,6 +32,7 @@ object AddressInputModule {
                 BlockchainType.ArbitrumOne -> {
                     addressViewModel.addAddressHandler(AddressHandlerEvm())
                 }
+                BlockchainType.Solana,
                 is BlockchainType.Unsupported -> Unit
             }
 

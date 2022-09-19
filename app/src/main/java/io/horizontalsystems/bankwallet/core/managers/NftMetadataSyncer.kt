@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.adapters.nft.INftAdapter
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.entities.nft.NftAddressMetadata
@@ -28,8 +27,6 @@ class NftMetadataSyncer(
     }
 
     fun refresh() {
-        Log.e("AAA", "NftMetadataSyncer refresh()")
-
         coroutineScope.launch {
             sync(nftAdapterManager.adaptersUpdatedFlow.value, true)
         }
@@ -54,13 +51,11 @@ class NftMetadataSyncer(
         } catch (noProviderError: NftMetadataManager.ProviderError.NoProviderForBlockchainType) {
             //TODO
         } catch (error: Throwable) {
-            Log.e("AAA", "NftMetadataSyncer: ${error.message}, blockchainType: ${nftKey.blockchainType}", error)
+            error.printStackTrace()
         }
     }
 
     private fun handle(addressMetadata: NftAddressMetadata, nftKey: NftKey, currentTimestamp: Long) {
-        Log.e("AAA", "NftMetadataSyncer: handle addressMetadata")
-
         nftStorage.save(currentTimestamp, nftKey)
         nftMetadataManager.handle(addressMetadata, nftKey)
     }

@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftCollectionMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
-import io.horizontalsystems.bankwallet.entities.nft.SaleType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.NftPrice
@@ -17,6 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.collect
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 import java.util.*
 
 class NftAssetService(
@@ -34,7 +33,6 @@ class NftAssetService(
     suspend fun start() = withContext(Dispatchers.IO) {
         launch {
             xRateRepository.itemObservable.collect {
-                Log.e("AAA", "rates updated")
                 handleXRateUpdate(it)
             }
         }
@@ -125,53 +123,6 @@ class NftAssetService(
         }
     }
 
-/*
-    private fun getOrderStats(orders: List<AssetOrder>): Pair<NftPrice?, Sale?> {
-        var hasTopBid = false
-        val sale: Sale?
-        var bestOffer: NftPrice? = null
-
-        val auctionOrders = orders.filter { it.side == 1 && it.v == null }.sortedBy { it.ethValue }
-        val auctionOrder = auctionOrders.firstOrNull()
-
-        if (auctionOrder != null) {
-            val bidOrders = orders.filter { it.side == 0 && !it.emptyTaker }.sortedByDescending { it.ethValue }
-
-            val type: PriceType
-            val nftPrice: CoinValue?
-
-//            when (val bidOrder = bidOrders.firstOrNull()) {
-//                null -> {
-//                    type = PriceType.MinimumBid
-//                    nftPrice = auctionOrder.price?.let { nftManager.nftAssetPriceToCoinValue(it.nftPriceRecord) }
-//                }
-//                else -> {
-//                    type = PriceType.TopBid
-//                    nftPrice = bidOrder.price?.let { nftManager.nftAssetPriceToCoinValue(it.nftPriceRecord) }
-//                    hasTopBid = true
-//                }
-//            }
-
-//            sale = Sale(auctionOrder.closingDate, type, nftPrice?.let { Price(it) })
-        } else {
-//            val buyNowOrders = orders.filter { it.side == 1 && it.v != null }.sortedBy { it.ethValue }
-//
-//            sale = buyNowOrders.firstOrNull()?.let { buyNowOrder ->
-//                val price = buyNowOrder.price?.let { nftManager.nftAssetPriceToCoinValue(it.nftPriceRecord) }?.let { Price(it) }
-//                Sale(buyNowOrder.closingDate, PriceType.BuyNow, price)
-//            }
-        }
-
-        if (!hasTopBid) {
-            val offerOrders = orders.filter { it.side == 0 }.sortedByDescending { it.ethValue }
-
-            bestOffer = offerOrders.firstOrNull()?.price
-        }
-
-        return Pair(bestOffer, null)
-    }
-*/
-
     data class Item(
         val asset: NftAssetMetadata,
         val collection: NftCollectionMetadata,
@@ -184,7 +135,12 @@ class NftAssetService(
         val sale: SaleItem?
     ) {
         val bestOffer: PriceItem?
-            get() = null // TODO()
+            get() {
+                if (offers.isEmpty() || offers.any { it.priceInFiat == null }) return null
+
+                val sortedOffers = offers.sortedByDescending { it.priceInFiat?.value ?: BigDecimal.ZERO }
+                return sortedOffers.first()
+            }
     }
 
     data class PriceItem(
@@ -193,11 +149,16 @@ class NftAssetService(
     )
 
     data class SaleItem(
-        val type: SaleType,
+        val type: NftAssetMetadata.SaleType,
         val listings: List<SaleListingItem>
     ) {
         val bestListing: SaleListingItem?
-            get() = null // TODO()
+            get() {
+                if (listings.isEmpty() || listings.any { it.price.priceInFiat == null }) return null
+
+                val sortedListings = listings.sortedBy { it.price.priceInFiat?.value ?: BigDecimal.ZERO }
+                return sortedListings.first()
+            }
     }
 
     data class SaleListingItem(

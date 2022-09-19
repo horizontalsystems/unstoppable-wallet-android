@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.nft.*
 import io.horizontalsystems.marketkit.models.NftPrice
@@ -74,13 +73,13 @@ class NftStorage(
             assetRecords = assetRecords
         )
     } catch (exception: Exception) {
-        Log.e("AAA", "Could not save NftAddressInfo")
+        exception.printStackTrace()
     }
 
     fun lastSyncTimestamp(nftKey: NftKey): Long? = try {
         nftDao.getNftMetadataSyncRecord(nftKey.blockchainType, nftKey.account.id)?.lastSyncTimestamp
     } catch (exception: Exception) {
-        Log.e("AAA", "Could not fetch NftMetadataSyncRecord: ${exception.message ?: exception.javaClass.simpleName}")
+        exception.printStackTrace()
         null
     }
 
@@ -88,7 +87,7 @@ class NftStorage(
         val record = NftMetadataSyncRecord(nftKey.blockchainType, nftKey.account.id, lastSyncTimestamp)
         nftDao.insertNftMetadataSyncRecord(record)
     } catch (exception: Exception) {
-        Log.e("AAA", "Could not save NftMetadataSyncRecord: ${exception.message ?: exception.javaClass.simpleName}")
+        exception.printStackTrace()
     }
 
     private fun tokenQueries(priceRecords: List<NftPriceRecord>): List<TokenQuery> =

@@ -300,7 +300,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
 
         val nftStorage = NftStorage(appDatabase.nftDao(), marketKit)
-        nftMetadataManager = NftMetadataManager(marketKit, nftStorage)
+        nftMetadataManager = NftMetadataManager(marketKit, appConfigProvider, nftStorage)
         nftAdapterManager = NftAdapterManager(walletManager, evmBlockchainManager)
         nftMetadataSyncer = NftMetadataSyncer(nftAdapterManager, nftMetadataManager, nftStorage)
 

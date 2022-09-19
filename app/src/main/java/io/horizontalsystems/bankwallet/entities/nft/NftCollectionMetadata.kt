@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.entities.nft
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.NftPrice
 import java.math.BigDecimal
+import java.util.*
 
 data class NftCollectionMetadata(
     val blockchainType: BlockchainType,
@@ -25,6 +26,9 @@ data class NftCollectionMetadata(
     val totalVolume: BigDecimal?,
     val floorPrice: NftPrice?,
     val marketCap: NftPrice?,
+
+    val royalty: BigDecimal?,
+    val inceptionDate: Date?,
 
     val stats1d: Stats?,
     val stats7d: Stats?,

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.util.Log
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.OpenSeaNftProvider
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
@@ -13,10 +13,11 @@ import kotlinx.coroutines.flow.filterNotNull
 
 class NftMetadataManager(
     marketKit: MarketKitWrapper,
+    appConfigProvider: AppConfigProvider,
     private val storage: NftStorage
 ) {
     private val providerMap = mapOf<BlockchainType, INftProvider>(
-        BlockchainType.Ethereum to OpenSeaNftProvider(marketKit)
+        BlockchainType.Ethereum to OpenSeaNftProvider(marketKit, appConfigProvider)
     )
 
     private val _addressMetadataFlow = MutableStateFlow<Pair<NftKey, NftAddressMetadata>?>(null)
@@ -32,7 +33,6 @@ class NftMetadataManager(
 
     fun handle(nftAddressMetadata: NftAddressMetadata, nftKey: NftKey) {
         storage.save(nftAddressMetadata, nftKey)
-        Log.e("AAA", "NftMetadataManager: collections=${nftAddressMetadata.collections.size}, assets=${nftAddressMetadata.assets.size}")
         _addressMetadataFlow.tryEmit(Pair(nftKey, nftAddressMetadata))
     }
 

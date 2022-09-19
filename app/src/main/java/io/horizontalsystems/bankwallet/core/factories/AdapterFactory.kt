@@ -73,7 +73,7 @@ class AdapterFactory(
             BlockchainType.Optimism,
             BlockchainType.ArbitrumOne -> getEvmAdapter(wallet)
             BlockchainType.BinanceChain -> getBinanceAdapter(wallet, "BNB")
-            is BlockchainType.Unsupported -> null
+            else -> null
         }
         is TokenType.Eip20 -> getEip20Adapter(wallet, tokenType.address)
         is TokenType.Bep2 -> getBinanceAdapter(wallet, tokenType.symbol)

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.nft.holdings
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.adapters.nft.INftAdapter
 import io.horizontalsystems.bankwallet.core.managers.NftAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
@@ -40,14 +39,12 @@ class NftHoldingsService(
     suspend fun start() = withContext(Dispatchers.IO) {
         launch {
             nftAdapterManager.adaptersUpdatedFlow.collect {
-                Log.e("AAA", "adaptersUpdated")
                 handle(it)
             }
         }
 
         launch {
             xRateRepository.itemObservable.collect {
-                Log.e("AAA", "rates updated")
                 handleXRateUpdate(it)
             }
         }
@@ -108,8 +105,6 @@ class NftHoldingsService(
     private fun handleUpdated(addressMetadata: NftAddressMetadata, nftKey: NftKey) {
         if (account != nftKey.account) return
 
-        Log.e("AAA", "handleUpdated(addressMetadata) nftKey: ${nftKey.blockchainType}")
-
         metadataMap[nftKey.blockchainType] = addressMetadata
 
         syncNftItemMap()
@@ -117,9 +112,6 @@ class NftHoldingsService(
 
     @Synchronized
     private fun handleUpdated(records: List<NftRecord>, blockchainType: BlockchainType) {
-
-        Log.e("AAA", "handleUpdated(records")
-
         recordMap[blockchainType] = records
 
         syncNftItemMap()

@@ -125,7 +125,7 @@ fun NftEvents(
         }
     }
 
-    listState.OnBottomReached(buffer = 6) {
+    listState.OnBottomReached {
         viewModel.onBottomReached()
     }
 

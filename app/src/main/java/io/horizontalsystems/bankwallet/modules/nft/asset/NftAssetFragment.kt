@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.entities.nft.NftEventMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule.NftAssetAction
@@ -67,7 +68,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.NftEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -530,7 +530,7 @@ private fun NftAssetEvents(nftUid: NftUid) {
     val viewModel = viewModel<NftCollectionEventsViewModel>(
         factory = NftCollectionEventsModule.Factory(
             NftEventListType.Asset(nftUid),
-            NftEvent.EventType.All
+            NftEventMetadata.EventType.All
         )
     )
 
