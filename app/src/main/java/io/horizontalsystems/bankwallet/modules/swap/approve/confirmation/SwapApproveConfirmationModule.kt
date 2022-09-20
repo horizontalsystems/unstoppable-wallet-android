@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
@@ -76,9 +76,10 @@ object SwapApproveConfirmationModule {
         }
     }
 
-    fun prepareParams(sendEvmData: SendEvmData) = bundleOf(
+    fun prepareParams(sendEvmData: SendEvmData, blockchainType: BlockchainType) = bundleOf(
         SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
-        SendEvmModule.additionalInfoKey to sendEvmData.additionalInfo
+        SendEvmModule.additionalInfoKey to sendEvmData.additionalInfo,
+        SendEvmModule.blockchainTypeKey to blockchainType
     )
 
 }

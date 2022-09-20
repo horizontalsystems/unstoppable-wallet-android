@@ -19,15 +19,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.dataKey
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.requestKey
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.resultKey
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
@@ -40,12 +40,6 @@ import io.horizontalsystems.core.setNavigationResult
 
 class SwapApproveFragment : BaseFragment() {
 
-    private val vmFactory by lazy {
-        val approveData = requireArguments().getParcelable<SwapAllowanceService.ApproveData>(dataKey)!!
-        SwapApproveModule.Factory(approveData)
-    }
-    private val viewModel by navGraphViewModels<SwapApproveViewModel>(R.id.swapApproveFragment) { vmFactory }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,14 +50,33 @@ class SwapApproveFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                SwapApproveScreen(findNavController(), viewModel)
+                val navController = findNavController()
+                val routerViewModel by viewModels<SwapApproveRouterViewModel> {SwapApproveRouterViewModel.Factory(arguments)}
+
+                when (val page = routerViewModel.getPage()) {
+                    SwapApproveRouterViewModel.Page.NoArguments -> {
+                        navController.popBackStack()
+                    }
+                    is SwapApproveRouterViewModel.Page.RevokeAndApprove -> {
+                        SwapRevokeAndApproveScreen(navController, page.approveData)
+                    }
+                    is SwapApproveRouterViewModel.Page.Approve -> {
+                        SwapApproveScreen(navController, page.approveData)
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun SwapApproveScreen(navController: NavController, swapApproveViewModel: SwapApproveViewModel) {
+fun SwapApproveScreen(
+    navController: NavController,
+    approveData: SwapAllowanceService.ApproveData
+) {
+    val swapApproveViewModel =
+        viewModel<SwapApproveViewModel>(factory = SwapApproveModule.Factory(approveData))
+
     val approveAllowed = swapApproveViewModel.approveAllowed
     val amountError = swapApproveViewModel.amountError
     val openConfirmation = swapApproveViewModel.openConfirmation
@@ -80,7 +93,7 @@ fun SwapApproveScreen(navController: NavController, swapApproveViewModel: SwapAp
 
         navController.slideFromRight(
             R.id.swapApproveConfirmationFragment,
-            SwapApproveConfirmationModule.prepareParams(sendEvmData)
+            SwapApproveConfirmationModule.prepareParams(sendEvmData, swapApproveViewModel.dex.blockchainType)
         )
     }
 
