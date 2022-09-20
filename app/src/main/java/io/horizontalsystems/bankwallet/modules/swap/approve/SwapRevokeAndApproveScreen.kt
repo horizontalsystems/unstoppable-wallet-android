@@ -61,7 +61,7 @@ fun SwapRevokeAndApproveScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 TextImportantWarning(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(R.string.Approve_RevokeAndApproveInfo)
+                    text = stringResource(R.string.Approve_RevokeAndApproveInfo, viewModel.allowanceValue.getFormattedFull())
                 )
 
                 AnimatedVisibility(uiState.showAmountInput) {
@@ -106,7 +106,7 @@ fun SwapRevokeAndApproveScreen(
                         enabled = uiState.revokeEnabled
                     )
                     Spacer(Modifier.width(4.dp))
-                    ButtonPrimaryDefault(
+                    ButtonPrimaryYellow(
                         modifier = Modifier.weight(1f),
                         title = stringResource(R.string.Approve_ButtonApprove),
                         onClick = {

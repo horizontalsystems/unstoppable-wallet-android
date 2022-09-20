@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
+import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.ethereumkit.models.Address
@@ -30,6 +31,7 @@ class SwapRevokeAndApproveViewModel(private val approveData: SwapAllowanceServic
     val blockchainType: BlockchainType = approveData.dex.blockchainType
     val requiredAmountStr = approveData.amount.toString()
     val steps = listOf("1", "2")
+    val allowanceValue = CoinValue(approveData.token, approveData.allowance)
 
     private var revokeEnabled = true
     private var revokeInProgress = false
