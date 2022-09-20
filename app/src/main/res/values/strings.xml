@@ -535,7 +535,7 @@
     <!--Approve-->
 
     <string name="Approve_Title">Swap Approve</string>
-    <string name="Approve_RevokeAndApproveInfo">You already have grant to a smart contract XXX USDT tokens, to give another amount you should first revoke it then approve new amount </string>
+    <string name="Approve_RevokeAndApproveInfo">You already have grant to a smart contract %s tokens. To give another amount you should first revoke it then approve new amount </string>
     <string name="Approve_ButtonRevoke">Revoke</string>
     <string name="Approve_ButtonRevoking">Revoking</string>
     <string name="Approve_ButtonApprove">Approve</string>
