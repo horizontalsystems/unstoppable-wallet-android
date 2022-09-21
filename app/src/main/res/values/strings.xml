@@ -1198,6 +1198,7 @@
     <string name="Nfts_PriceType_Days_30">30D avg.</string>
     <string name="Nfts_PriceType_LastSale">Last Sale</string>
     <string name="Nfts_Asset_OnSale">On Sale</string>
+    <string name="Nfts_Asset_OnAuction">On Auction</string>
     <string name="Nfts_Asset_OnSaleUntil">until %s</string>
     <string name="Nfts_Empty">You don\'t have an NFT in your wallet</string>
     <string name="Nfts_PriceMode">Price Mode</string>

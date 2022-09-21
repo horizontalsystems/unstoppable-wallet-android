@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftEventMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
@@ -631,7 +632,12 @@ private fun NftAssetSale(sale: NftAssetViewModel.SaleViewItem) {
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 10.dp)
         ) {
-            body_leah(text = stringResource(R.string.Nfts_Asset_OnSale))
+            val title = when (sale.type) {
+                NftAssetMetadata.SaleType.OnSale -> stringResource(R.string.Nfts_Asset_OnSale)
+                NftAssetMetadata.SaleType.OnAuction ->  stringResource(R.string.Nfts_Asset_OnAuction)
+            }
+
+            body_leah(text = title)
 
             subhead2_grey(
                 modifier = Modifier.fillMaxWidth(),
@@ -640,14 +646,13 @@ private fun NftAssetSale(sale: NftAssetViewModel.SaleViewItem) {
         }
     }
 
-//    saleComposables.add {
-//        val title = when (sale.type) {
-//            Sale.PriceType.BuyNow -> stringResource(R.string.NftAsset_Price_BuyNow)
-//            Sale.PriceType.TopBid -> stringResource(R.string.NftAsset_Price_TopBid)
-//            Sale.PriceType.MinimumBid -> stringResource(R.string.NftAsset_Price_MinimumBid)
-//        }
-//        NftAssetPriceCell(title, sale.price)
-//    }
+    saleComposables.add {
+        val title = when (sale.type) {
+            NftAssetMetadata.SaleType.OnSale -> stringResource(R.string.NftAsset_Price_BuyNow)
+            NftAssetMetadata.SaleType.OnAuction ->  stringResource(R.string.NftAsset_Price_MinimumBid)
+        }
+        NftAssetPriceCell(title, sale.price)
+    }
 
     CellMultilineLawrenceSection(saleComposables)
 }
