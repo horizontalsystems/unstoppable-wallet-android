@@ -4,7 +4,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 sealed class NftUid(val contractAddress: String, val tokenId: String, val blockchainType: BlockchainType) {
     class Evm(blockchainType: BlockchainType, contractAddress: String, tokenId: String) : NftUid(contractAddress, tokenId, blockchainType)
-    class Solana(contractAddress: String, tokenId: String) : NftUid(contractAddress, tokenId, BlockchainType.Unsupported("solana"))
+    class Solana(contractAddress: String, tokenId: String) : NftUid(contractAddress, tokenId, BlockchainType.Solana)
 
     val uid: String
         get() = when (this) {

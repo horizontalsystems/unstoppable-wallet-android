@@ -26,15 +26,18 @@ import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
+import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 class TopNftCollectionsFragment : BaseFragment() {
 
@@ -62,9 +65,9 @@ class TopNftCollectionsFragment : BaseFragment() {
                     TopNftCollectionsScreen(
                         viewModel,
                         { findNavController().popBackStack() },
-                        { collectionUid ->
-//                            val args = NftCollectionFragment.prepareParams(collectionUid)
-//                            findNavController().slideFromBottom(R.id.nftCollectionFragment, args)
+                        { blockchainType, collectionUid ->
+                            val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType)
+                            findNavController().slideFromBottom(R.id.nftCollectionFragment, args)
                         }
                     )
                 }
@@ -93,7 +96,7 @@ class TopNftCollectionsFragment : BaseFragment() {
 fun TopNftCollectionsScreen(
     viewModel: TopNftCollectionsViewModel,
     onCloseButtonClick: () -> Unit,
-    onClickCollection: (String) -> Unit,
+    onClickCollection: (BlockchainType, String) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val menu = viewModel.menu
@@ -172,7 +175,7 @@ private fun TopNftCollectionsList(
     collections: List<TopNftCollectionViewItem>,
     sortingField: SortingField,
     timeDuration: TimeDuration,
-    onClickCollection: (String) -> Unit,
+    onClickCollection: (BlockchainType, String) -> Unit,
     preItems: LazyListScope.() -> Unit
 ) {
     val state = rememberSaveable(sortingField, timeDuration, saver = LazyListState.Saver) {
@@ -183,7 +186,7 @@ private fun TopNftCollectionsList(
         preItems.invoke(this)
         items(collections) { collection ->
             MultilineClear(
-                onClick = { onClickCollection(collection.uid) },
+                onClick = { onClickCollection(collection.blockchainType, collection.uid) },
                 borderBottom = true
             ) {
                 NftIcon(
