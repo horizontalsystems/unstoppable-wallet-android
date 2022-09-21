@@ -336,8 +336,11 @@
 
     <string name="Send_Success">\u2713 Sent</string>
 
+    <string name="ScanQr_CameraPermission_Title">Camera permission</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
     <string name="ScanQr_NoCameraPermission">No camera permission</string>
+    <string name="ScanQr_CameraPermissionDeniedText">Access to your camera for this app was denied, you can go to settings and allow access</string>
+    <string name="ScanQr_GoToSettings">Go to Settings</string>
 
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
     <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
@@ -532,6 +535,10 @@
     <!--Approve-->
 
     <string name="Approve_Title">Swap Approve</string>
+    <string name="Approve_RevokeAndApproveInfo">You already have grant to a smart contract %s tokens. To give another amount you should first revoke it then approve new amount </string>
+    <string name="Approve_ButtonRevoke">Revoke</string>
+    <string name="Approve_ButtonRevoking">Revoking</string>
+    <string name="Approve_ButtonApprove">Approve</string>
     <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
     <string name="Approve_Error_AlreadyApproved">You already have an allowance for this amount</string>
     <string name="Approve_Spender">Spender</string>

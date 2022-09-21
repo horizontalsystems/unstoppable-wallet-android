@@ -222,9 +222,6 @@ dependencies {
     apptestnetImplementation leakCanary
     debugImplementation leakCanary
 
-    // Permission
-    implementation 'pub.devrel:easypermissions:3.0.0'
-
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:22060df'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:309b65a'
@@ -286,6 +283,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager:0.25.0"
     implementation "com.google.accompanist:accompanist-flowlayout:0.25.0"
     implementation "com.google.accompanist:accompanist-swiperefresh:0.25.0"
+    implementation "com.google.accompanist:accompanist-permissions:0.25.0"
 
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.2.0'

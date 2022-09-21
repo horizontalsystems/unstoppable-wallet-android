@@ -34,11 +34,11 @@ import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.additionalInfoKey
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.blockchainTypeKey
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -50,19 +50,22 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
 
 class SwapApproveConfirmationFragment : BaseFragment() {
     private val logger = AppLogger("swap-approve")
-    private val mainViewModel by navGraphViewModels<SwapApproveViewModel>(R.id.swapApproveFragment)
     private val additionalItems: SendEvmData.AdditionalInfo?
         get() = arguments?.getParcelable(additionalInfoKey)
+
+    private val blockchainType: BlockchainType?
+        get() = arguments?.getParcelable(blockchainTypeKey)
 
     private val vmFactory by lazy {
         SwapApproveConfirmationModule.Factory(
             SendEvmData(transactionData, additionalItems),
-            mainViewModel.dex.blockchainType
+            blockchainType!!
         )
     }
     private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }

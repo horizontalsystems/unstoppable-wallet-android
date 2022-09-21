@@ -86,6 +86,7 @@ object SendEvmModule {
 
     const val transactionDataKey = "transactionData"
     const val additionalInfoKey = "additionalInfo"
+    const val blockchainTypeKey = "blockchainType"
 
     @Parcelize
     data class TransactionDataParcelable(
