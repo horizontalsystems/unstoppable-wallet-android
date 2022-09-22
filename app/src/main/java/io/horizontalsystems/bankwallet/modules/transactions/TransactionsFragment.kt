@@ -29,9 +29,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -45,7 +45,7 @@ import io.horizontalsystems.core.findNavController
 
 class TransactionsFragment : BaseFragment() {
 
-    private val viewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
+    private val viewModel by viewModels<TransactionsViewModel> { TransactionsModule.Factory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,

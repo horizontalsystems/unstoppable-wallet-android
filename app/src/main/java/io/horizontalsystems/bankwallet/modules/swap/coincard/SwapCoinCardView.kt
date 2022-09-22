@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.weakReference
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -53,6 +54,7 @@ fun SwapCoinCardViewComposable(
     val token by viewModel.tokenCodeLiveData().observeAsState()
     val balance by viewModel.balanceLiveData().observeAsState()
     val balanceError by viewModel.balanceErrorLiveData().observeAsState(false)
+    val weakViewModel: SwapCoinCardViewModel? by weakReference(viewModel)
 
     navController.getNavigationResult(SelectSwapCoinFragment.resultBundleKey) { bundle ->
         val requestId = bundle.getLong(SelectSwapCoinFragment.requestIdKey)
@@ -60,7 +62,7 @@ fun SwapCoinCardViewComposable(
             SelectSwapCoinFragment.coinBalanceItemResultKey
         )
         if (requestId == uuid && coinBalanceItem != null) {
-            viewModel.onSelectCoin(coinBalanceItem.token)
+            weakViewModel?.onSelectCoin(coinBalanceItem.token)
         }
     }
 

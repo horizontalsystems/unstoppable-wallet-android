@@ -17,7 +17,10 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.lang.ref.WeakReference
 import java.util.*
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 val <T> Optional<T>.orNull: T?
     get() = when {
@@ -193,4 +196,17 @@ fun String.shorten(): String {
         prefix + withoutPrefix.take(characters) + "..." + withoutPrefix.takeLast(characters)
     else
         this
+}
+
+fun <T>weakReference(tIn: T? = null): ReadWriteProperty<Any?, T?> {
+    return object : ReadWriteProperty<Any?, T?> {
+        var t = WeakReference<T?>(tIn)
+        override fun getValue(thisRef: Any?, property: KProperty<*>): T? {
+            return t.get()
+        }
+
+        override fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
+            t = WeakReference(value)
+        }
+    }
 }
