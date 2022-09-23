@@ -36,7 +36,7 @@ class OpenSeaService(
     suspend fun allAssets(address: String): List<OpenSeaNftApiResponse.Asset> {
         val assets = mutableListOf<OpenSeaNftApiResponse.Asset>()
         var cursor: String? = null
-        val limit = 50
+        val limit = 30
         do {
             val response = service.assets(owner = address, cursor = cursor, limit = limit)
             assets.addAll(response.assets)
@@ -52,7 +52,7 @@ class OpenSeaService(
         service.asset(contractAddress, tokenId)
 
     suspend fun collectionAssets(uid: String, cursor: String?): OpenSeaNftApiResponse.Assets =
-        service.assets(collectionUid = uid, cursor = cursor, limit = 50)
+        service.assets(collectionUid = uid, cursor = cursor, limit = 30)
 
     suspend fun collectionEvents(uid: String, type: String?, cursor: String?): OpenSeaNftApiResponse.Events =
         hsService.events(collectionUid = uid, eventType = type, cursor = cursor)
