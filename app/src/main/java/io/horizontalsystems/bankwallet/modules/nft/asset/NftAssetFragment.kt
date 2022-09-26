@@ -45,7 +45,6 @@ import coil.size.Size
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.shorten
@@ -63,7 +62,6 @@ import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftEventLis
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftEvents
 import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -105,7 +103,6 @@ fun NftAssetScreen(
     if (collectionUid == null || nftUid == null) return
 
     val viewModel = viewModel<NftAssetViewModel>(factory = NftAssetModule.Factory(collectionUid, nftUid))
-    val viewState = viewModel.viewState
     val errorMessage = viewModel.errorMessage
 
     ComposeAppTheme {
@@ -119,26 +116,7 @@ fun NftAssetScreen(
                     }
                 )
             )
-            HSSwipeRefresh(
-                state = rememberSwipeRefreshState(false),
-                onRefresh = viewModel::refresh
-            ) {
-                Crossfade(viewState) { viewState ->
-                    when (viewState) {
-                        ViewState.Loading -> {
-                            Loading()
-                        }
-                        is ViewState.Error -> {
-                            ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
-                        }
-                        ViewState.Success -> {
-                            viewModel.viewItem?.let { asset ->
-                                NftAsset(asset, viewModel, navController)
-                            }
-                        }
-                    }
-                }
-            }
+            NftAsset(viewModel, navController)
         }
 
         errorMessage?.let {
@@ -151,7 +129,6 @@ fun NftAssetScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun NftAsset(
-    asset: NftAssetViewModel.ViewItem,
     viewModel: NftAssetViewModel,
     navController: NavController
 ) {
@@ -178,10 +155,10 @@ private fun NftAsset(
         ) { page ->
             when (tabs[page]) {
                 NftAssetModule.Tab.Overview -> {
-                    NftAssetInfo(asset, navController, coroutineScope)
+                    NftAssetInfo(viewModel, navController, coroutineScope)
                 }
                 NftAssetModule.Tab.Activity -> {
-                    NftAssetEvents(asset.nftUid)
+                    NftAssetEvents(viewModel)
                 }
             }
         }
@@ -189,45 +166,71 @@ private fun NftAsset(
 }
 
 @Composable
-private fun NftAssetInfo(asset: NftAssetViewModel.ViewItem, navController: NavController, coroutineScope: CoroutineScope) {
+private fun NftAssetInfo(
+    viewModel: NftAssetViewModel,
+    navController: NavController,
+    coroutineScope: CoroutineScope
+) {
+    var combinedState = viewModel.viewState
+
+    val model = ImageRequest.Builder(LocalContext.current)
+        .data(viewModel.viewItem?.imageUrl)
+        .size(Size.ORIGINAL)
+        .crossfade(true)
+        .build()
+    val painter = rememberAsyncImagePainter(model)
+
+    if (combinedState !is ViewState.Error) {
+        if (painter.state is AsyncImagePainter.State.Loading) {
+            combinedState = ViewState.Loading
+        }
+    }
+
+    Crossfade(combinedState) { state ->
+        when (state) {
+            is ViewState.Loading -> {
+                Loading()
+            }
+            is ViewState.Error -> {
+                ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
+            }
+            else -> {
+                AssetContent(painter, viewModel.viewItem, navController, coroutineScope)
+            }
+        }
+    }
+}
+
+@Composable
+private fun AssetContent(
+    painter: AsyncImagePainter,
+    viewItem: NftAssetViewModel.ViewItem?,
+    navController: NavController,
+    coroutineScope: CoroutineScope,
+) {
+    val asset = viewItem ?: return
     val context = LocalContext.current
     val view = LocalView.current
 
     var nftFileByteArray by remember { mutableStateOf(byteArrayOf()) }
 
-    val pickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.data?.let { uri ->
-                context.contentResolver.openOutputStream(uri).use { outputStream ->
-                    outputStream?.write(nftFileByteArray)
+    val pickerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { uri ->
+                    context.contentResolver.openOutputStream(uri).use { outputStream ->
+                        outputStream?.write(nftFileByteArray)
+                    }
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                 }
-                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
             }
         }
-    }
-
-    Spacer(modifier = Modifier.height(12.dp))
 
     LazyColumn {
         item {
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Spacer(modifier = Modifier.height(12.dp))
-                Box {
-                    val model = ImageRequest.Builder(LocalContext.current)
-                        .data(asset.imageUrl)
-                        .size(Size.ORIGINAL)
-                        .crossfade(true)
-                        .build()
-                    val painter = rememberAsyncImagePainter(model)
-                    if (painter.state !is AsyncImagePainter.State.Success) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(328.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(ComposeAppTheme.colors.steel20)
-                        )
-                    }
+                if (painter.state is AsyncImagePainter.State.Success) {
                     Image(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -236,9 +239,9 @@ private fun NftAssetInfo(asset: NftAssetViewModel.ViewItem, navController: NavCo
                         contentDescription = null,
                         contentScale = ContentScale.FillWidth
                     )
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = asset.name,
                     color = ComposeAppTheme.colors.leah,
@@ -527,15 +530,25 @@ private fun NftAssetInfo(asset: NftAssetViewModel.ViewItem, navController: NavCo
 }
 
 @Composable
-private fun NftAssetEvents(nftUid: NftUid) {
-    val viewModel = viewModel<NftCollectionEventsViewModel>(
-        factory = NftCollectionEventsModule.Factory(
-            NftEventListType.Asset(nftUid),
-            NftEventMetadata.EventType.All
-        )
-    )
+private fun NftAssetEvents(nftAssetViewModel: NftAssetViewModel) {
+    Crossfade(nftAssetViewModel.viewState) { viewState ->
+        when (viewState) {
+            is ViewState.Error -> {
+                ListErrorView(stringResource(R.string.SyncError), nftAssetViewModel::refresh)
+            }
+            else -> {
+                val nftUid = nftAssetViewModel.viewItem?.nftUid ?: return@Crossfade
+                val viewModel = viewModel<NftCollectionEventsViewModel>(
+                    factory = NftCollectionEventsModule.Factory(
+                        NftEventListType.Asset(nftUid),
+                        NftEventMetadata.EventType.All
+                    )
+                )
 
-    NftEvents(viewModel, null, true)
+                NftEvents(viewModel, null, true)
+            }
+        }
+    }
 }
 
 @Composable
