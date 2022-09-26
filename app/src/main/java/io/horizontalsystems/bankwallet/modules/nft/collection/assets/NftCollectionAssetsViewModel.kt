@@ -48,7 +48,7 @@ class NftCollectionAssetsViewModel(
             collectionUid = item.asset.providerCollectionUid,
             nftUid = item.asset.nftUid,
             name = item.asset.displayName,
-            imageUrl = item.asset.imageUrl,
+            imageUrl = item.asset.previewImageUrl,
             count = 1,
             onSale = item.asset.saleInfo != null,
             price = item.price?.coinValue,
