@@ -76,13 +76,12 @@ class NftCollectionOverviewViewModel(
 
     private fun sync() {
         overviewViewItem = result?.getOrNull()?.let { collection ->
-
             NftCollectionOverviewViewItem(
                 name = collection.name,
                 imageUrl = collection.imageUrl,
                 description = collection.description,
                 ownersCount = collection.ownerCount?.let { shortenValue(it.toBigDecimal()) } ?: "",
-                totalSupply = shortenValue(collection.totalSupply.toBigDecimal()),
+                totalSupply = collection.totalSupply?.toBigDecimal()?.let { shortenValue(it) } ?: "",
                 links = links(collection),
                 contracts = contracts(collection)
             )

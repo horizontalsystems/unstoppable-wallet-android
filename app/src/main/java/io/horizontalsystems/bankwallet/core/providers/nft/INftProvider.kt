@@ -28,6 +28,8 @@ interface INftProvider {
         eventType: EventType?,
         paginationData: PaginationData?
     ): Pair<List<NftEventMetadata>, PaginationData?>
+
+    suspend fun assetsBriefMetadata(blockchainType: BlockchainType, nftUids: List<NftUid>): List<NftAssetBriefMetadata>
 }
 
 sealed class PaginationData {

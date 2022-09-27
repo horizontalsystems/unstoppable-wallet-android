@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import io.horizontalsystems.bankwallet.core.storage.migrations.*
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadataRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftCollectionRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftMetadataSyncRecord
@@ -17,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnec
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC1SessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 48, exportSchema = false, entities = [
+@Database(version = 49, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -32,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionD
     NftCollectionRecord::class,
     NftAssetRecord::class,
     NftMetadataSyncRecord::class,
+    NftAssetBriefMetadataRecord::class,
     ProFeaturesSessionKey::class,
     EvmAddressLabel::class,
     EvmMethodLabel::class,
@@ -90,6 +92,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_45_46,
                             Migration_46_47,
                             Migration_47_48,
+                            Migration_48_49,
                     )
                     .build()
         }

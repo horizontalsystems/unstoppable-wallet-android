@@ -64,7 +64,8 @@ fun CoinImage(
             ),
             contentDescription = null,
             modifier = modifier,
-            colorFilter = colorFilter
+            colorFilter = colorFilter,
+            contentScale = ContentScale.FillBounds
         )
         else -> Image(
             painter = painterResource(fallback),

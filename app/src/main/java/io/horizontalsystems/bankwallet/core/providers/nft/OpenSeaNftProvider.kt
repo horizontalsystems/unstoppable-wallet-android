@@ -21,6 +21,84 @@ class OpenSeaNftProvider(
     override val title = "OpenSea"
     override val icon = R.drawable.ic_opensea_20
 
+    override suspend fun addressMetadata(blockchainType: BlockchainType, address: String): NftAddressMetadata {
+        val collectionsResponse = service.allCollections(address)
+        val collections = collections(blockchainType, collectionsResponse)
+
+        val assetsResponse = service.allAssets(address)
+        val assets = assets(blockchainType, assetsResponse)
+
+        return NftAddressMetadata(
+            collections = collections.map {
+                NftCollectionShortMetadata(
+                    providerUid = it.providerUid,
+                    name = it.name,
+                    thumbnailImageUrl = it.imageUrl ?: it.thumbnailImageUrl,
+                    averagePrice7d = it.stats7d?.averagePrice,
+                    averagePrice30 = it.stats30d?.averagePrice
+                )
+            },
+            assets = assets.map {
+                NftAssetShortMetadata(
+                    nftUid = it.nftUid,
+                    providerCollectionUid = it.providerCollectionUid,
+                    name = it.name,
+                    previewImageUrl = it.previewImageUrl,
+                    onSale = it.saleInfo != null,
+                    lastSalePrice = it.lastSalePrice
+                )
+            }
+        )
+    }
+
+    override suspend fun extendedAssetMetadata(nftUid: NftUid, providerCollectionUid: String): Pair<NftAssetMetadata, NftCollectionMetadata> {
+        val asset = service.asset(nftUid.contractAddress, nftUid.tokenId)
+        val collection = service.collection(providerCollectionUid)
+
+        return Pair(assetMetadata(nftUid.blockchainType, asset), collectionMetadata(nftUid.blockchainType, collection))
+    }
+
+    override suspend fun collectionMetadata(blockchainType: BlockchainType, providerUid: String): NftCollectionMetadata {
+        val response = service.collection(providerUid)
+        return collectionMetadata(blockchainType, response)
+    }
+
+    override suspend fun collectionAssetsMetadata(
+        blockchainType: BlockchainType,
+        providerUid: String,
+        paginationData: PaginationData?
+    ): Pair<List<NftAssetMetadata>, PaginationData?> {
+        val response = service.collectionAssets(providerUid, paginationData?.cursor)
+        val assetsMetadata = assets(blockchainType, response.assets)
+        return Pair(assetsMetadata, response.next?.let { PaginationData.Cursor(it) })
+    }
+
+    override suspend fun collectionEventsMetadata(
+        blockchainType: BlockchainType,
+        providerUid: String,
+        eventType: EventType?,
+        paginationData: PaginationData?
+    ): Pair<List<NftEventMetadata>, PaginationData?> {
+        val response = service.collectionEvents(providerUid, openSeaEventType(eventType), paginationData?.cursor)
+        val eventsMetadata = events(blockchainType, response.asset_events)
+        return Pair(eventsMetadata, response.next?.let { PaginationData.Cursor(it) })
+    }
+
+    override suspend fun assetEventsMetadata(
+        nftUid: NftUid,
+        eventType: EventType?,
+        paginationData: PaginationData?
+    ): Pair<List<NftEventMetadata>, PaginationData?> {
+        val response = service.assetEvents(nftUid.contractAddress, nftUid.tokenId, openSeaEventType(eventType), paginationData?.cursor)
+        val eventsMetadata = events(nftUid.blockchainType, response.asset_events)
+        return Pair(eventsMetadata, response.next?.let { PaginationData.Cursor(it) })
+    }
+
+    override suspend fun assetsBriefMetadata(blockchainType: BlockchainType, nftUids: List<NftUid>): List<NftAssetBriefMetadata> {
+        val response = service.assets(contractAddresses = nftUids.map { it.contractAddress }, tokenIds = nftUids.map { it.tokenId })
+        return assetsBrief(blockchainType, response.assets)
+    }
+
     private fun nftPrice(token: Token?, value: BigDecimal?, shift: Boolean): NftPrice? {
         token ?: return null
         value ?: return null
@@ -59,31 +137,31 @@ class OpenSeaNftProvider(
             providerUrl = "https://opensea.io/collection/${response.slug}",
             discordUrl = response.discord_url,
             twitterUsername = response.twitter_username,
-            count = response.stats.count,
-            ownerCount = response.stats.num_owners,
-            totalSupply = response.stats.total_supply,
-            totalVolume = response.stats.total_volume,
-            floorPrice = nftPrice(baseToken, response.stats.floor_price, false),
-            marketCap = nftPrice(baseToken, response.stats.market_cap, false),
+            count = response.stats?.count,
+            ownerCount = response.stats?.num_owners,
+            totalSupply = response.stats?.total_supply,
+            totalVolume = response.stats?.total_volume,
+            floorPrice = nftPrice(baseToken, response.stats?.floor_price, false),
+            marketCap = nftPrice(baseToken, response.stats?.market_cap, false),
             royalty = response.dev_seller_fee_basis_points?.divide(BigDecimal(100)),
             inceptionDate = response.primary_asset_contracts?.firstOrNull()?.create_date?.let { stringToDate(it) },
             stats1d = NftCollectionMetadata.Stats(
-                volume = nftPrice(baseToken, response.stats.one_day_volume, false),
-                change = response.stats.one_day_change,
-                sales = response.stats.one_day_sales,
-                averagePrice = nftPrice(baseToken, response.stats.one_day_average_price, false),
+                volume = nftPrice(baseToken, response.stats?.one_day_volume, false),
+                change = response.stats?.one_day_change,
+                sales = response.stats?.one_day_sales,
+                averagePrice = nftPrice(baseToken, response.stats?.one_day_average_price, false),
             ),
             stats7d = NftCollectionMetadata.Stats(
-                volume = nftPrice(baseToken, response.stats.seven_day_volume, false),
-                change = response.stats.seven_day_change,
-                sales = response.stats.seven_day_sales,
-                averagePrice = nftPrice(baseToken, response.stats.seven_day_average_price, false),
+                volume = nftPrice(baseToken, response.stats?.seven_day_volume, false),
+                change = response.stats?.seven_day_change,
+                sales = response.stats?.seven_day_sales,
+                averagePrice = nftPrice(baseToken, response.stats?.seven_day_average_price, false),
             ),
             stats30d = NftCollectionMetadata.Stats(
-                volume = nftPrice(baseToken, response.stats.thirty_day_volume, false),
-                change = response.stats.thirty_day_change,
-                sales = response.stats.thirty_day_sales,
-                averagePrice = nftPrice(baseToken, response.stats.thirty_day_average_price, false),
+                volume = nftPrice(baseToken, response.stats?.thirty_day_volume, false),
+                change = response.stats?.thirty_day_change,
+                sales = response.stats?.thirty_day_sales,
+                averagePrice = nftPrice(baseToken, response.stats?.thirty_day_average_price, false),
             )
         )
     }
@@ -234,77 +312,14 @@ class OpenSeaNftProvider(
         }
     }
 
-    override suspend fun addressMetadata(blockchainType: BlockchainType, address: String): NftAddressMetadata {
-        val collectionsResponse = service.allCollections(address)
-        val collections = collections(blockchainType, collectionsResponse)
-
-        val assetsResponse = service.allAssets(address)
-        val assets = assets(blockchainType, assetsResponse)
-
-        return NftAddressMetadata(
-            collections = collections.map {
-                NftCollectionShortMetadata(
-                    providerUid = it.providerUid,
-                    name = it.name,
-                    thumbnailImageUrl = it.imageUrl ?: it.thumbnailImageUrl,
-                    averagePrice7d = it.stats7d?.averagePrice,
-                    averagePrice30 = it.stats30d?.averagePrice
-                )
-            },
-            assets = assets.map {
-                NftAssetShortMetadata(
-                    nftUid = it.nftUid,
-                    providerCollectionUid = it.providerCollectionUid,
-                    name = it.name,
-                    previewImageUrl = it.previewImageUrl,
-                    onSale = it.saleInfo != null,
-                    lastSalePrice = it.lastSalePrice
-                )
-            }
+    private fun assetsBrief(blockchainType: BlockchainType, assets: List<OpenSeaNftApiResponse.Asset>): List<NftAssetBriefMetadata> = assets.map {
+        NftAssetBriefMetadata(
+            nftUid = NftUid.Evm(blockchainType, it.asset_contract.address, it.token_id),
+            providerCollectionUid = it.collection.slug,
+            name = it.name,
+            it.image_url,
+            it.image_preview_url
         )
-    }
-
-    override suspend fun extendedAssetMetadata(nftUid: NftUid, providerCollectionUid: String): Pair<NftAssetMetadata, NftCollectionMetadata> {
-        val asset = service.asset(nftUid.contractAddress, nftUid.tokenId)
-        val collection = service.collection(providerCollectionUid)
-
-        return Pair(assetMetadata(nftUid.blockchainType, asset), collectionMetadata(nftUid.blockchainType, collection))
-    }
-
-    override suspend fun collectionMetadata(blockchainType: BlockchainType, providerUid: String): NftCollectionMetadata {
-        val response = service.collection(providerUid)
-        return collectionMetadata(blockchainType, response)
-    }
-
-    override suspend fun collectionAssetsMetadata(
-        blockchainType: BlockchainType,
-        providerUid: String,
-        paginationData: PaginationData?
-    ): Pair<List<NftAssetMetadata>, PaginationData?> {
-        val response = service.collectionAssets(providerUid, paginationData?.cursor)
-        val assetsMetadata = assets(blockchainType, response.assets)
-        return Pair(assetsMetadata, response.next?.let { PaginationData.Cursor(it) })
-    }
-
-    override suspend fun collectionEventsMetadata(
-        blockchainType: BlockchainType,
-        providerUid: String,
-        eventType: EventType?,
-        paginationData: PaginationData?
-    ): Pair<List<NftEventMetadata>, PaginationData?> {
-        val response = service.collectionEvents(providerUid, openSeaEventType(eventType), paginationData?.cursor)
-        val eventsMetadata = events(blockchainType, response.asset_events)
-        return Pair(eventsMetadata, response.next?.let { PaginationData.Cursor(it) })
-    }
-
-    override suspend fun assetEventsMetadata(
-        nftUid: NftUid,
-        eventType: EventType?,
-        paginationData: PaginationData?
-    ): Pair<List<NftEventMetadata>, PaginationData?> {
-        val response = service.assetEvents(nftUid.contractAddress, nftUid.tokenId, openSeaEventType(eventType), paginationData?.cursor)
-        val eventsMetadata = events(nftUid.blockchainType, response.asset_events)
-        return Pair(eventsMetadata, response.next?.let { PaginationData.Cursor(it) })
     }
 
     private fun openSeaEventType(eventType: EventType?): String? =

@@ -8,6 +8,8 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.core.helpers.DateHelper
@@ -125,7 +127,8 @@ class TransactionsViewModel(
 data class TransactionItem(
     val record: TransactionRecord,
     val currencyValue: CurrencyValue?,
-    val lastBlockInfo: LastBlockInfo?
+    val lastBlockInfo: LastBlockInfo?,
+    val nftMetadata: Map<NftUid, NftAssetBriefMetadata>
 ) {
     val createdAt = System.currentTimeMillis()
 }
@@ -146,8 +149,8 @@ data class TransactionViewItem(
 
     sealed class Icon {
         class ImageResource(val resourceId: Int) : Icon()
-        class Regular(val url: String?, val placeholder: Int?) : Icon()
-        class Swap(val iconIn: Regular, val iconOut: Regular) : Icon()
+        class Regular(val url: String?, val placeholder: Int?, val rectangle: Boolean = false) : Icon()
+        class Double(val back: Regular, val front: Regular): Icon()
         object Failed : Icon()
         class Platform(source: TransactionSource) : Icon() {
             val iconRes = when (source.blockchain.type) {

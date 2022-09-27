@@ -7,11 +7,18 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.nftUids
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
@@ -21,7 +28,8 @@ class TransactionsService(
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val transactionAdapterManager: TransactionAdapterManager,
     private val walletManager: IWalletManager,
-    private val transactionFilterService: TransactionFilterService
+    private val transactionFilterService: TransactionFilterService,
+    private val nftMetadataService: NftMetadataService
 ) : Clearable {
     val filterResetEnabled by transactionFilterService::resetEnabled
 
@@ -41,6 +49,8 @@ class TransactionsService(
 
     private val disposables = CompositeDisposable()
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
+
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     init {
         handleUpdatedWallets(walletManager.activeWallets)
@@ -84,6 +94,31 @@ class TransactionsService(
             .let {
                 disposables.add(it)
             }
+
+        coroutineScope.launch {
+            nftMetadataService.assetsBriefMetadataFlow.collect {
+                handle(it)
+            }
+        }
+    }
+
+    @Synchronized
+    private fun handle(assetBriefMetadataMap: Map<NftUid, NftAssetBriefMetadata>) {
+        var updated = false
+        transactionItems.forEachIndexed { index, item ->
+            val tmpMetadata = item.nftMetadata.toMutableMap()
+            item.record.nftUids.forEach { nftUid ->
+                assetBriefMetadataMap[nftUid]?.let {
+                    tmpMetadata[nftUid] = it
+                }
+            }
+            transactionItems[index] = item.copy(nftMetadata = tmpMetadata)
+            updated = true
+        }
+
+        if (updated) {
+            itemsSubject.onNext(transactionItems)
+        }
     }
 
     @Synchronized
@@ -140,6 +175,16 @@ class TransactionsService(
     private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>, pageNumber: Int) {
         val tmpList = mutableListOf<TransactionItem>()
 
+        val nftUids = transactionRecords.nftUids
+        val nftMetadata = nftMetadataService.assetsBriefMetadata(nftUids)
+
+        val missingNftUids = nftUids.subtract(nftMetadata.keys)
+        if (missingNftUids.isNotEmpty()) {
+            coroutineScope.launch {
+                nftMetadataService.fetch(missingNftUids)
+            }
+        }
+
         transactionRecords.forEach { record ->
             if (record.spam) return@forEach
             var transactionItem = transactionItems.find { it.record == record }
@@ -148,7 +193,7 @@ class TransactionsService(
                 val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
                 val currencyValue = getCurrencyValue(record)
 
-                TransactionItem(record, currencyValue, lastBlockInfo)
+                TransactionItem(record, currencyValue, lastBlockInfo, nftMetadata)
             } else {
                 transactionItem.copy(record = record)
             }
@@ -198,6 +243,7 @@ class TransactionsService(
         transactionRecordRepository.clear()
         rateRepository.clear()
         transactionSyncStateRepository.clear()
+        coroutineScope.cancel()
     }
 
     private val executorService = Executors.newCachedThreadPool()

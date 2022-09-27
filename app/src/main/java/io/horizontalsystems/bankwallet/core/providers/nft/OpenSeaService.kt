@@ -59,6 +59,9 @@ class OpenSeaService(
 
     suspend fun assetEvents(contractAddress: String, tokenId: String, type: String?, cursor: String?): OpenSeaNftApiResponse.Events =
         hsService.events(contractAddress = contractAddress, tokenId = tokenId, eventType = type, cursor = cursor)
+
+    suspend fun assets(contractAddresses: List<String>, tokenIds: List<String>): OpenSeaNftApiResponse.Assets =
+        service.assets(contractAddresses = contractAddresses, tokenIds = tokenIds)
 }
 
 interface HsNftApi {
@@ -95,6 +98,8 @@ interface OpenSeaApi {
         @Query("owner") owner: String? = null,
         @Query("collection") collectionUid: String? = null,
         @Query("cursor") cursor: String? = null,
+        @Query("asset_contract_addresses") contractAddresses: List<String>? = null,
+        @Query("token_ids") tokenIds: List<String>? = null,
         @Query("limit") limit: Int? = null,
         @Query("include_orders") includeOrders: Boolean = true,
         @Query("format") format: String = "json"
@@ -122,7 +127,7 @@ object OpenSeaNftApiResponse {
         val discord_url: String?,
         val twitter_username: String?,
         val dev_seller_fee_basis_points: BigDecimal?,
-        val stats: Stats
+        val stats: Stats?
     ) {
         data class Links(
             val external_url: String?,
@@ -180,7 +185,6 @@ object OpenSeaNftApiResponse {
         val orders: List<Order>
             get() = seaport_sell_orders ?: listOf()
 
-        data class Collection(val slug: String)
         data class Trait(
             val trait_type: String,
             val value: String,

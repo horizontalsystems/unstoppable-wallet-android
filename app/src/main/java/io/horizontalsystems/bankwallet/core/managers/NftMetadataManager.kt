@@ -5,7 +5,9 @@ import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.OpenSeaNftProvider
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.entities.nft.NftAddressMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftKey
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,6 +41,21 @@ class NftMetadataManager(
     fun provider(blockchainType: BlockchainType): INftProvider {
         return providerMap[blockchainType] ?: throw ProviderError.NoProviderForBlockchainType(blockchainType)
     }
+
+    fun save(assetsBriefMetadata: List<NftAssetBriefMetadata>) {
+        storage.save(assetsBriefMetadata)
+    }
+
+    fun assetsBriefMetadata(nftUids: Set<NftUid>): List<NftAssetBriefMetadata> {
+        return storage.assetsBriefMetadata(nftUids)
+    }
+
+    suspend fun fetchAssetsBriefMetadata(nftUids: Set<NftUid>): List<NftAssetBriefMetadata> =
+        nftUids.groupBy { it.blockchainType }
+            .mapNotNull { (blockchainType, nftUids) ->
+                providerMap[blockchainType]?.assetsBriefMetadata(blockchainType, nftUids)
+            }
+            .flatten()
 
     sealed class ProviderError(message: String?) : Throwable(message) {
         class NoProviderForBlockchainType(blockchainType: BlockchainType) : ProviderError("blockchainType: ${blockchainType.uid}")

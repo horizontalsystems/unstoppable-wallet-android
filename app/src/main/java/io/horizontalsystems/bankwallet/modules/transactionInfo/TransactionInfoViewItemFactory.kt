@@ -50,7 +50,7 @@ class TransactionInfoViewItemFactory(
             is EvmIncomingTransactionRecord ->
                 itemSections.add(
                     getReceiveSectionItems(
-                        transaction.value.coinName,
+                        transaction.value.fullName,
                         transaction.value,
                         transaction.from,
                         rates[transaction.value.coinUid]
@@ -61,7 +61,7 @@ class TransactionInfoViewItemFactory(
                 sentToSelf = transaction.sentToSelf
                 itemSections.add(
                     getSendSectionItems(
-                        transaction.value.coinName,
+                        transaction.value.fullName,
                         transaction.value,
                         transaction.to,
                         rates[transaction.value.coinUid],
@@ -123,28 +123,28 @@ class TransactionInfoViewItemFactory(
                 itemSections.add(getContractMethodSectionItems(transaction))
 
                 for (event in transaction.outgoingEvents) {
-                    itemSections.add(getSendSectionItems(event.value.coinName, event.value, event.address, rates[event.value.coinUid]))
+                    itemSections.add(getSendSectionItems(event.value.fullName, event.value, event.address, rates[event.value.coinUid]))
                 }
 
                 for (event in transaction.incomingEvents) {
-                    itemSections.add(getReceiveSectionItems(event.value.coinName, event.value, event.address, rates[event.value.coinUid]))
+                    itemSections.add(getReceiveSectionItems(event.value.fullName, event.value, event.address, rates[event.value.coinUid]))
                 }
             }
 
             is ExternalContractCallTransactionRecord -> {
                 for (event in transaction.outgoingEvents) {
-                    itemSections.add(getSendSectionItems(event.value.coinName, event.value, event.address, rates[event.value.coinUid]))
+                    itemSections.add(getSendSectionItems(event.value.fullName, event.value, event.address, rates[event.value.coinUid]))
                 }
 
                 for (event in transaction.incomingEvents) {
-                    itemSections.add(getReceiveSectionItems(event.value.coinName, event.value, event.address, rates[event.value.coinUid]))
+                    itemSections.add(getReceiveSectionItems(event.value.fullName, event.value, event.address, rates[event.value.coinUid]))
                 }
             }
 
             is BitcoinIncomingTransactionRecord -> {
                 itemSections.add(
                     getReceiveSectionItems(
-                        transaction.value.coinName,
+                        transaction.value.fullName,
                         transaction.value,
                         transaction.from,
                         rates[transaction.value.coinUid]
@@ -159,7 +159,7 @@ class TransactionInfoViewItemFactory(
                 sentToSelf = transaction.sentToSelf
                 itemSections.add(
                     getSendSectionItems(
-                        transaction.value.coinName,
+                        transaction.value.fullName,
                         transaction.value,
                         transaction.to,
                         rates[transaction.value.coinUid],
@@ -174,7 +174,7 @@ class TransactionInfoViewItemFactory(
             is BinanceChainIncomingTransactionRecord -> {
                 itemSections.add(
                     getReceiveSectionItems(
-                        transaction.value.coinName,
+                        transaction.value.fullName,
                         transaction.value,
                         transaction.from,
                         rates[transaction.value.coinUid]
@@ -188,7 +188,7 @@ class TransactionInfoViewItemFactory(
                 sentToSelf = transaction.sentToSelf
                 itemSections.add(
                     getSendSectionItems(
-                        transaction.value.coinName,
+                        transaction.value.fullName,
                         transaction.value,
                         transaction.to,
                         rates[transaction.value.coinUid],
@@ -289,7 +289,7 @@ class TransactionInfoViewItemFactory(
         listOf(
             Transaction(
                 title,
-                value.coinName,
+                value.fullName,
                 icon = if (incoming) R.drawable.ic_arrow_down_left_12 else R.drawable.ic_arrow_up_right_12
             ),
             getAmount(rate, value, incoming, amount)
@@ -387,7 +387,7 @@ class TransactionInfoViewItemFactory(
         )
 
         return listOf(
-            Transaction(getString(R.string.Transactions_Approve), value.coinName, R.drawable.ic_checkmark_24),
+            Transaction(getString(R.string.Transactions_Approve), value.fullName, R.drawable.ic_checkmark_24),
             Amount(coinAmountColoredValue, fiatAmountColoredValue, value.coinIconUrl, value.coinIconPlaceholder),
             Address(getString(R.string.TransactionInfo_Spender), spenderAddress, evmLabelManager.mapped(spenderAddress))
         )

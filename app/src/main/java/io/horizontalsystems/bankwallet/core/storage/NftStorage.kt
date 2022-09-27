@@ -90,6 +90,19 @@ class NftStorage(
         exception.printStackTrace()
     }
 
+    fun save(assetsBriefMetadata: List<NftAssetBriefMetadata>) = try {
+        nftDao.insertNftAssetBriefMetadataRecords(assetsBriefMetadata.map {
+            NftAssetBriefMetadataRecord(it.nftUid, it.providerCollectionUid, it.name, it.imageUrl, it.previewImageUrl)
+        })
+    } catch (exception: Exception) {
+        exception.printStackTrace()
+    }
+
+    fun assetsBriefMetadata(nftUids: Set<NftUid>): List<NftAssetBriefMetadata> =
+        nftDao.getNftAssetBriefMetadataRecords(nftUids.toList()).map {
+        NftAssetBriefMetadata(it.nftUid, it.providerCollectionUid, it.name, it.imageUrl, it.previewImageUrl)
+    }
+
     private fun tokenQueries(priceRecords: List<NftPriceRecord>): List<TokenQuery> =
         priceRecords.map { it.tokenQueryId }.distinct().mapNotNull { TokenQuery.fromId(it) }
 
