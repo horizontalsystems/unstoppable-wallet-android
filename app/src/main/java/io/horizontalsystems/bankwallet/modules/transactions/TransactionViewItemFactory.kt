@@ -6,6 +6,8 @@ import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
@@ -33,6 +35,101 @@ class TransactionViewItemFactory(
         return transactionViewItem
     }
 
+    private fun singleValueIconType(
+        value: TransactionValue,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf()
+    ): TransactionViewItem.Icon =
+        when (value) {
+            is TransactionValue.NftValue -> {
+                TransactionViewItem.Icon.Regular(nftMetadata[value.nftUid]?.previewImageUrl, R.drawable.icon_24_nft_placeholder, rectangle = true)
+            }
+            is TransactionValue.CoinValue,
+            is TransactionValue.RawValue,
+            is TransactionValue.TokenValue -> {
+                TransactionViewItem.Icon.Regular(value.coinIconUrl, value.coinIconPlaceholder)
+            }
+        }
+
+    private fun doubleValueIconType(
+        primaryValue: TransactionValue?,
+        secondaryValue: TransactionValue?,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf()
+    ): TransactionViewItem.Icon {
+        var backUrl: String? = null
+        var backPlaceHolder: Int? = null
+        var backRectangle = false
+        var frontUrl: String? = null
+        var frontPlaceHolder: Int? = null
+        var frontRectangle = false
+
+        if (primaryValue != null) {
+            when (primaryValue) {
+                is TransactionValue.NftValue -> {
+                    frontRectangle = true
+                    frontUrl = nftMetadata[primaryValue.nftUid]?.previewImageUrl
+                    frontPlaceHolder = R.drawable.icon_24_nft_placeholder
+                }
+                is TransactionValue.CoinValue,
+                is TransactionValue.RawValue,
+                is TransactionValue.TokenValue -> {
+                    frontRectangle = false
+                    frontUrl = primaryValue.coinIconUrl
+                    frontPlaceHolder = primaryValue.coinIconPlaceholder
+                }
+            }
+        } else {
+            frontRectangle = false
+            frontUrl = null
+            frontPlaceHolder = R.drawable.coin_placeholder
+        }
+
+        if (secondaryValue != null) {
+            when (secondaryValue) {
+                is TransactionValue.NftValue -> {
+                    backRectangle = true
+                    backUrl = nftMetadata[secondaryValue.nftUid]?.previewImageUrl
+                    backPlaceHolder = R.drawable.icon_24_nft_placeholder
+                }
+                is TransactionValue.CoinValue,
+                is TransactionValue.RawValue,
+                is TransactionValue.TokenValue -> {
+                    backRectangle = false
+                    backUrl = secondaryValue.coinIconUrl
+                    backPlaceHolder = secondaryValue.coinIconPlaceholder
+                }
+            }
+        } else {
+            backRectangle = false
+            backUrl = null
+            backPlaceHolder = R.drawable.coin_placeholder
+        }
+
+        return TransactionViewItem.Icon.Double(
+            back = TransactionViewItem.Icon.Regular(backUrl, backPlaceHolder, backRectangle),
+            front = TransactionViewItem.Icon.Regular(frontUrl, frontPlaceHolder, frontRectangle)
+        )
+    }
+
+    private fun iconType(
+        source: TransactionSource,
+        incomingValues: List<TransactionValue>,
+        outgoingValues: List<TransactionValue>,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata>
+    ): TransactionViewItem.Icon = when {
+        incomingValues.size == 1 && outgoingValues.isEmpty() -> {
+            singleValueIconType(incomingValues[0], nftMetadata)
+        }
+        incomingValues.isEmpty() && outgoingValues.size == 1 -> {
+            singleValueIconType(outgoingValues[0], nftMetadata)
+        }
+        incomingValues.size == 1 && outgoingValues.size == 1 -> {
+            doubleValueIconType(incomingValues[0], outgoingValues[0], nftMetadata)
+        }
+        else -> {
+            TransactionViewItem.Icon.Platform(source)
+        }
+    }
+
     private fun convertToViewItem(transactionItem: TransactionItem): TransactionViewItem {
         val record = transactionItem.record
         val status = record.status(transactionItem.lastBlockInfo?.height)
@@ -47,15 +144,49 @@ class TransactionViewItemFactory(
 
         return when (record) {
             is ApproveTransactionRecord -> createViewItemFromApproveTransactionRecord(record, transactionItem.currencyValue, progress, icon)
-            is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(record, transactionItem.currencyValue, progress, icon)
-            is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, icon)
-            is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
-            is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
-            is ContractCallTransactionRecord -> createViewItemFromContractCallTransactionRecord(record, transactionItem.currencyValue, progress, icon)
-            is ExternalContractCallTransactionRecord -> createViewItemFromExternalContractCallTransactionRecord(record, transactionItem.currencyValue, progress, icon)
+            is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(
+                record,
+                transactionItem.currencyValue,
+                progress,
+                icon
+            )
+            is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(
+                record,
+                transactionItem.currencyValue,
+                progress,
+                icon
+            )
+            is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(
+                record,
+                transactionItem.currencyValue,
+                progress,
+                lastBlockTimestamp,
+                icon
+            )
+            is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(
+                record,
+                transactionItem.currencyValue,
+                progress,
+                lastBlockTimestamp,
+                icon
+            )
+            is ContractCallTransactionRecord -> createViewItemFromContractCallTransactionRecord(
+                record,
+                transactionItem.currencyValue,
+                progress,
+                icon,
+                transactionItem.nftMetadata
+            )
+            is ExternalContractCallTransactionRecord -> createViewItemFromExternalContractCallTransactionRecord(
+                record,
+                transactionItem.currencyValue,
+                progress,
+                icon,
+                transactionItem.nftMetadata
+            )
             is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, progress, icon)
             is EvmIncomingTransactionRecord -> createViewItemFromEvmIncomingTransactionRecord(record, transactionItem.currencyValue, progress, icon)
-            is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, icon)
+            is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, icon, transactionItem.nftMetadata)
             is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, progress, icon)
             is UnknownSwapTransactionRecord -> createViewItemFromUnknownSwapTransactionRecord(record, progress, icon)
             is EvmTransactionRecord -> createViewItemFromEvmTransactionRecord(record, progress, icon)
@@ -81,10 +212,7 @@ class TransactionViewItemFactory(
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: TransactionViewItem.Icon.Swap(
-                iconIn = TransactionViewItem.Icon.Regular(record.valueIn.coinIconUrl, record.valueIn.coinIconPlaceholder),
-                iconOut = TransactionViewItem.Icon.Regular(record.valueOut?.coinIconUrl, record.valueOut?.coinIconPlaceholder),
-            )
+            icon = icon ?: doubleValueIconType(record.valueOut, record.valueIn)
         )
     }
 
@@ -104,14 +232,15 @@ class TransactionViewItemFactory(
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: TransactionViewItem.Icon.Swap(
-                iconIn = TransactionViewItem.Icon.Regular(record.valueIn?.coinIconUrl, record.valueIn?.coinIconPlaceholder),
-                iconOut = TransactionViewItem.Icon.Regular(record.valueOut?.coinIconUrl, record.valueOut?.coinIconPlaceholder),
-            )
+            icon = icon ?: doubleValueIconType(record.valueOut, record.valueIn)
         )
     }
 
-    private fun createViewItemFromEvmTransactionRecord(record: EvmTransactionRecord, progress: Float?, icon: TransactionViewItem.Icon?): TransactionViewItem {
+    private fun createViewItemFromEvmTransactionRecord(
+        record: EvmTransactionRecord,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
         return TransactionViewItem(
             uid = record.uid,
             progress = progress,
@@ -128,7 +257,8 @@ class TransactionViewItemFactory(
         record: EvmOutgoingTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
-        icon: TransactionViewItem.Icon?
+        icon: TransactionViewItem.Icon?,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
         val primaryValue = if (record.sentToSelf) {
             ColoredValue(getCoinString(record.value, true), ColorName.Leah)
@@ -136,9 +266,7 @@ class TransactionViewItemFactory(
             getColoredValue(record.value, ColorName.Lucian)
         }
 
-        val secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
+        val secondaryValue = singleValueSecondaryValue(record.value, currencyValue, nftMetadata)
 
         return TransactionViewItem(
             uid = record.uid,
@@ -149,7 +277,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
             sentToSelf = record.sentToSelf,
-            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
+            icon = icon ?: singleValueIconType(record.value, nftMetadata)
         )
     }
 
@@ -182,7 +310,7 @@ class TransactionViewItemFactory(
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
+            icon = icon ?: singleValueIconType(record.value)
         )
     }
 
@@ -207,10 +335,11 @@ class TransactionViewItemFactory(
         record: ContractCallTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
-        icon: TransactionViewItem.Icon?
+        icon: TransactionViewItem.Icon?,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
         val (incomingValues, outgoingValues) = record.combined(record.incomingEvents, record.outgoingEvents)
-        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?, _) = getValues(incomingValues, outgoingValues, currencyValue)
+        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(incomingValues, outgoingValues, currencyValue, nftMetadata)
         val title = record.method ?: Translator.getString(R.string.Transactions_ContractCall)
 
         return TransactionViewItem(
@@ -221,7 +350,7 @@ class TransactionViewItemFactory(
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: TransactionViewItem.Icon.Platform(record.source)
+            icon = icon ?: iconType(record.source, incomingValues, outgoingValues, nftMetadata)
         )
     }
 
@@ -229,10 +358,17 @@ class TransactionViewItemFactory(
         record: ExternalContractCallTransactionRecord,
         currencyValue: CurrencyValue?,
         progress: Float?,
-        icon: TransactionViewItem.Icon?
+        icon: TransactionViewItem.Icon?,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
         val (incomingValues, outgoingValues) = record.combined(record.incomingEvents, record.outgoingEvents)
-        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?, eventIcon) = getValues(incomingValues, outgoingValues, currencyValue)
+
+        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(
+            incomingValues,
+            outgoingValues,
+            currencyValue,
+            nftMetadata
+        )
 
         val title: String
         val subTitle: String
@@ -254,7 +390,7 @@ class TransactionViewItemFactory(
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: eventIcon ?: TransactionViewItem.Icon.Platform(record.source)
+            icon = icon ?: iconType(record.source, incomingValues, outgoingValues, nftMetadata)
         )
     }
 
@@ -300,7 +436,7 @@ class TransactionViewItemFactory(
             sentToSelf = record.sentToSelf,
             doubleSpend = record.conflictingHash != null,
             locked = locked,
-            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
+            icon = icon ?: singleValueIconType(record.value)
         )
     }
 
@@ -341,7 +477,7 @@ class TransactionViewItemFactory(
             sentToSelf = false,
             doubleSpend = record.conflictingHash != null,
             locked = locked,
-            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
+            icon = icon ?: singleValueIconType(record.value)
         )
     }
 
@@ -370,7 +506,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
             sentToSelf = record.sentToSelf,
-            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
+            icon = icon ?: singleValueIconType(record.value)
         )
     }
 
@@ -396,7 +532,7 @@ class TransactionViewItemFactory(
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
+            icon = icon ?: singleValueIconType(record.value)
         )
     }
 
@@ -428,40 +564,49 @@ class TransactionViewItemFactory(
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: TransactionViewItem.Icon.Regular(record.value.coinIconUrl, record.value.coinIconPlaceholder)
+            icon = icon ?: singleValueIconType(record.value)
         )
     }
 
-    private fun getValues(incomingValues: List<TransactionValue>, outgoingValues: List<TransactionValue>, currencyValue: CurrencyValue?): Triple<ColoredValue, ColoredValue?, TransactionViewItem.Icon?> {
+    private fun singleValueSecondaryValue(
+        value: TransactionValue,
+        currencyValue: CurrencyValue?,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata>
+    ): ColoredValue? =
+        when (value) {
+            is TransactionValue.NftValue -> {
+                val text = nftMetadata[value.nftUid]?.name ?: value.tokenName?.let { "$it #${value.nftUid.tokenId}" } ?: "#${value.nftUid.tokenId}"
+                getColoredValue(text, ColorName.Grey)
+            }
+            is TransactionValue.CoinValue,
+            is TransactionValue.RawValue,
+            is TransactionValue.TokenValue -> {
+                currencyValue?.let { getColoredValue(it, ColorName.Grey) }
+            }
+        }
+
+    private fun getValues(
+        incomingValues: List<TransactionValue>,
+        outgoingValues: List<TransactionValue>,
+        currencyValue: CurrencyValue?,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata>
+    ): Pair<ColoredValue, ColoredValue?> {
         val primaryValue: ColoredValue?
         val secondaryValue: ColoredValue?
-        var icon: TransactionViewItem.Icon? = null
 
         when {
             // incoming
             (incomingValues.size == 1 && outgoingValues.isEmpty()) -> {
                 val transactionValue = incomingValues.first()
                 primaryValue = getColoredValue(transactionValue, ColorName.Remus)
-                secondaryValue = currencyValue?.let {
-                    getColoredValue(it, ColorName.Grey)
-                }
-                icon = TransactionViewItem.Icon.Regular(
-                    url = transactionValue.coinIconUrl,
-                    placeholder = transactionValue.coinIconPlaceholder
-                )
+                secondaryValue = singleValueSecondaryValue(transactionValue, currencyValue, nftMetadata)
             }
 
             // outgoing
             (incomingValues.isEmpty() && outgoingValues.size == 1) -> {
                 val transactionValue = outgoingValues.first()
                 primaryValue = getColoredValue(transactionValue, ColorName.Lucian)
-                secondaryValue = currencyValue?.let {
-                    getColoredValue(it, ColorName.Grey)
-                }
-                icon = TransactionViewItem.Icon.Regular(
-                    url = transactionValue.coinIconUrl,
-                    placeholder = transactionValue.coinIconPlaceholder
-                )
+                secondaryValue = singleValueSecondaryValue(transactionValue, currencyValue, nftMetadata)
             }
 
             // swap
@@ -485,11 +630,19 @@ class TransactionViewItemFactory(
             }
 
             else -> {
-                primaryValue = getColoredValue(incomingValues.joinToString(", ") { it.coinCode }, ColorName.Remus)
-                secondaryValue = getColoredValue(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Lucian)
+                primaryValue = if (incomingValues.size == 1) {
+                    getColoredValue(incomingValues.first(), ColorName.Remus)
+                } else {
+                    getColoredValue(incomingValues.joinToString(", ") { it.coinCode }, ColorName.Remus)
+                }
+                secondaryValue = if (outgoingValues.size == 1) {
+                    getColoredValue(outgoingValues.first(), ColorName.Remus)
+                } else {
+                    getColoredValue(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Lucian)
+                }
             }
         }
-        return Triple(primaryValue, secondaryValue, icon)
+        return Pair(primaryValue, secondaryValue)
     }
 
     private fun getCurrencyString(currencyValue: CurrencyValue): String {

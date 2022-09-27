@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.*
-import io.horizontalsystems.bankwallet.entities.nft.NftAssetRecord
-import io.horizontalsystems.bankwallet.entities.nft.NftCollectionRecord
-import io.horizontalsystems.bankwallet.entities.nft.NftMetadataSyncRecord
+import io.horizontalsystems.bankwallet.entities.nft.*
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Dao
@@ -48,5 +46,11 @@ interface NftDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNftMetadataSyncRecord(syncRecord: NftMetadataSyncRecord)
+
+    @Query("SELECT * FROM NftAssetBriefMetadataRecord WHERE nftUid IN (:nftUids)")
+    fun getNftAssetBriefMetadataRecords(nftUids: List<NftUid>): List<NftAssetBriefMetadataRecord>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertNftAssetBriefMetadataRecords(records: List<NftAssetBriefMetadataRecord>)
 }
 

@@ -14,6 +14,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -300,22 +302,27 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                         )
                     }
                     is TransactionViewItem.Icon.Regular -> {
+                        val shape = if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
                         CoinImage(
                             modifier = Modifier
                                 .align(Alignment.Center)
-                                .size(24.dp),
+                                .size(24.dp)
+                                .clip(shape),
                             iconUrl = icon.url,
                             placeholder = icon.placeholder
                         )
                     }
-                    is TransactionViewItem.Icon.Swap -> {
+                    is TransactionViewItem.Icon.Double -> {
+                        val backShape = if (icon.back.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
+                        val frontShape = if (icon.front.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
                         CoinImage(
                             modifier = Modifier
                                 .align(Alignment.TopStart)
                                 .padding(top = 6.dp, start = 6.dp)
-                                .size(20.dp),
-                            iconUrl = icon.iconIn.url,
-                            placeholder = icon.iconIn.placeholder,
+                                .size(20.dp)
+                                .clip(backShape),
+                            iconUrl = icon.back.url,
+                            placeholder = icon.back.placeholder,
                         )
 
                         Box(
@@ -323,7 +330,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                                 .align(Alignment.BottomEnd)
                                 .padding(bottom = 6.5.dp, end = 6.5.dp)
                                 .size(20.dp)
-                                .clip(CircleShape)
+                                .clip(frontShape)
                                 .background(ComposeAppTheme.colors.tyler)
                         )
 
@@ -331,9 +338,10 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
                                 .padding(bottom = 6.dp, end = 6.dp)
-                                .size(20.dp),
-                            iconUrl = icon.iconOut.url,
-                            placeholder = icon.iconOut.placeholder,
+                                .size(20.dp)
+                                .clip(frontShape),
+                            iconUrl = icon.front.url,
+                            placeholder = icon.front.placeholder,
                         )
                     }
                     is TransactionViewItem.Icon.ImageResource -> {}

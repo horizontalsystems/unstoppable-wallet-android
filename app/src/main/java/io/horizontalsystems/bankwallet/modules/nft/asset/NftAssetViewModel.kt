@@ -92,11 +92,11 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
         return viewItems
     }
 
-    private fun traitViewItem(trait: Trait, totalSupply: Int) =
+    private fun traitViewItem(trait: Trait, totalSupply: Int?) =
         TraitViewItem(
             type = trait.type,
             value = trait.value,
-            percent = getAttributePercentage(trait, totalSupply),
+            percent = totalSupply?.let { getAttributePercentage(trait, it) },
             searchUrl = trait.searchUrl
         )
 

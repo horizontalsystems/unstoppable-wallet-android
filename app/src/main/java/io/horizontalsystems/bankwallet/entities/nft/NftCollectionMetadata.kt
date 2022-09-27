@@ -22,7 +22,7 @@ data class NftCollectionMetadata(
 
     val count: Int?,
     val ownerCount: Int?,
-    val totalSupply: Int,
+    val totalSupply: Int?,
     val totalVolume: BigDecimal?,
     val floorPrice: NftPrice?,
     val marketCap: NftPrice?,
