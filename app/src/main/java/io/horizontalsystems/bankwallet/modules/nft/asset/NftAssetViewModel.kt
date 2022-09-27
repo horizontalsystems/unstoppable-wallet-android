@@ -31,6 +31,8 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
     var errorMessage by mutableStateOf<TranslatableString?>(null)
         private set
 
+    val nftUid by service::nftUid
+
     val tabs = NftAssetModule.Tab.values()
 
     init {
@@ -68,7 +70,8 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
             description = asset.description,
             contractAddress = asset.nftUid.contractAddress,
             schemaName = asset.nftType,
-            links = linkViewItems(asset, collection)
+            links = linkViewItems(asset, collection),
+            showSend = item.owned,
         )
     }
 
@@ -166,7 +169,8 @@ class NftAssetViewModel(private val service: NftAssetService) : ViewModel() {
         val description: String?,
         val contractAddress: String,
         val schemaName: String,
-        val links: List<LinkViewItem>
+        val links: List<LinkViewItem>,
+        val showSend: Boolean,
     ) {
 
         val providerUrl: Pair<String, String>?

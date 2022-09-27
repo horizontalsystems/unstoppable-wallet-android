@@ -42,6 +42,7 @@
     <string name="Button_Save">Save</string>
     <string name="Button_IAgree">I Agree</string>
     <string name="Button_Continue">Continue</string>
+    <string name="Button_Send">Send</string>
 
 
     <string name="Error">Error</string>

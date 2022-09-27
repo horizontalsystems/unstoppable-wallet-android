@@ -1,9 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.nft.asset
 
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.adapters.nft.INftAdapter
+import io.horizontalsystems.bankwallet.core.managers.NftAdapterManager
 import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftCollectionMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftKey
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.marketkit.models.CoinPrice
@@ -20,11 +24,15 @@ import java.util.*
 
 class NftAssetService(
     private val providerCollectionUid: String,
-    private val nftUid: NftUid,
+    val nftUid: NftUid,
+    private val accountManager: IAccountManager,
+    private val nftAdapterManager: NftAdapterManager,
     private val provider: INftProvider,
     private val xRateRepository: BalanceXRateRepository
 ) {
     private val _serviceDataFlow = MutableStateFlow<Result<Item>?>(null)
+    private var adapter: INftAdapter? = null
+    private var isOwned = false
     val serviceDataFlow = _serviceDataFlow.filterNotNull()
 
     val providerTitle = provider.title
@@ -37,6 +45,25 @@ class NftAssetService(
             }
         }
         loadAsset()
+        accountManager.activeAccount?.let { account ->
+            if (!account.isWatchAccount) {
+                val nftKey = NftKey(account, nftUid.blockchainType)
+                nftAdapterManager.adapter(nftKey)?.let { nftAdapter ->
+                    adapter = nftAdapter
+                    launch {
+                        nftAdapter.nftRecordsFlow.collect {
+                            handleUpdated()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun handleUpdated() {
+        val currentItem = _serviceDataFlow.value?.getOrNull() ?: return
+        isOwned = isOwned(currentItem.asset.nftUid)
+        loadAsset()
     }
 
     private fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) {
@@ -44,6 +71,10 @@ class NftAssetService(
         _serviceDataFlow.update {
             Result.success(currentItem.updateRates(latestRates))
         }
+    }
+
+    private fun isOwned(nftUid: NftUid): Boolean {
+        return adapter?.nftRecord(nftUid) != null
     }
 
     suspend fun refresh() = withContext(Dispatchers.IO) {
@@ -75,7 +106,8 @@ class NftAssetService(
                 SaleItem(
                     saleInfo.type,
                     saleInfo.listings.map { listing -> SaleListingItem(listing.untilDate, PriceItem(listing.price)) })
-            }
+            },
+            owned = isOwned
         )
     }
 
@@ -132,7 +164,8 @@ class NftAssetService(
         val average30d: PriceItem?,
         val collectionFloor: PriceItem?,
         val offers: List<PriceItem>,
-        val sale: SaleItem?
+        val sale: SaleItem?,
+        val owned: Boolean
     ) {
         val bestOffer: PriceItem?
             get() {

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters.nft
 
 import io.horizontalsystems.bankwallet.entities.nft.EvmNftRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftRecord
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.nftkit.core.NftKit
@@ -25,6 +26,18 @@ class EvmNftAdapter(
 
     override fun sync() {
         nftKit.sync()
+    }
+
+    override fun nftRecord(nftUid: NftUid): NftRecord? {
+        val evm = (nftUid as? NftUid.Evm) ?: return null
+
+        val tokenId = evm.tokenId.toBigIntegerOrNull() ?: return null
+
+        val contractAddress = Address(evm.contractAddress)
+
+        val nftBalance = nftKit.nftBalance(contractAddress, tokenId) ?: return null
+
+        return record(nftBalance)
     }
 
     private fun record(nftBalance: NftBalance): EvmNftRecord {

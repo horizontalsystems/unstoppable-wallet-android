@@ -54,7 +54,6 @@ import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftEventMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule.NftAssetAction
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsModule
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsViewModel
@@ -211,6 +210,7 @@ private fun AssetContent(
     val asset = viewItem ?: return
     val context = LocalContext.current
     val view = LocalView.current
+    var showActionSelectorDialog by remember { mutableStateOf(false) }
 
     var nftFileByteArray by remember { mutableStateOf(byteArrayOf()) }
 
@@ -271,17 +271,36 @@ private fun AssetContent(
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
-                Row {
-                    var showActionSelectorDialog by remember { mutableStateOf(false) }
-                    asset.providerUrl?.let { (title, url) ->
-                        ButtonPrimaryDefault(
-                            modifier = Modifier.weight(1f),
-                            title = title,
-                            onClick = {
-                                LinkHelper.openLinkInAppBrowser(context, url)
+                Row(horizontalArrangement = Arrangement.End) {
+                    Crossfade(
+                        targetState = asset.showSend,
+                        modifier = Modifier.weight(1f)
+                    ) { showSend ->
+                        if (showSend) {
+                            Row {
+                                ButtonPrimaryYellow(
+                                    modifier = Modifier.weight(1f),
+                                    title = stringResource(R.string.Button_Send),
+                                    onClick = {
+
+                                    }
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
                             }
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        } else {
+                            asset.providerUrl?.let { (title, url) ->
+                                Row {
+                                    ButtonPrimaryDefault(
+                                        modifier = Modifier.weight(1f),
+                                        title = title,
+                                        onClick = {
+                                            LinkHelper.openLinkInAppBrowser(context, url)
+                                        }
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                }
+                            }
+                        }
                     }
                     ButtonPrimaryCircle(
                         icon = R.drawable.ic_more_24,
@@ -289,71 +308,6 @@ private fun AssetContent(
                             showActionSelectorDialog = true
                         }
                     )
-
-                    if (showActionSelectorDialog) {
-                        SelectorDialogCompose(
-                            items = NftAssetAction.values().map { (TabItem(stringResource(it.title), false, it)) },
-                            onDismissRequest = {
-                                showActionSelectorDialog = false
-                            },
-                            onSelectItem = { selectedOption ->
-                                when (selectedOption) {
-                                    NftAssetAction.Share -> {
-                                        asset.providerUrl?.second?.let {
-                                            ShareCompat.IntentBuilder(context)
-                                                .setType("text/plain")
-                                                .setText(it)
-                                                .startChooser()
-                                        }
-                                    }
-                                    NftAssetAction.Save -> {
-                                        coroutineScope.launch(Dispatchers.IO) {
-                                            try {
-                                                val url = asset.imageUrl ?: throw IllegalStateException("No URL!")
-                                                val fileName = "${asset.collectionName}-${asset.nftUid.tokenId}"
-                                                var extension: String?
-
-                                                val connection = URL(url).openConnection()
-                                                connection.connect()
-                                                connection.getInputStream().use { input ->
-                                                    val disposition = try {
-                                                        connection.getHeaderField("Content-Disposition")
-                                                    } catch (e: Exception) {
-                                                        null
-                                                    }
-                                                    val headerFileName = if (disposition != null) {
-                                                        val index = disposition.indexOf("filename=")
-                                                        if (index > 0) {
-                                                            disposition.substring(index + 10, disposition.length - 1)
-                                                        } else {
-                                                            null
-                                                        }
-                                                    } else {
-                                                        url.substring(url.lastIndexOf("/") + 1, url.length)
-                                                    }
-
-                                                    extension = headerFileName?.split(".")?.lastOrNull()
-                                                    nftFileByteArray = input.readBytes()
-                                                }
-
-                                                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                                                    addCategory(Intent.CATEGORY_OPENABLE)
-                                                    type = connection.contentType
-                                                    putExtra(
-                                                        Intent.EXTRA_TITLE,
-                                                        "$fileName${extension?.let { ".$it" } ?: ""}")
-                                                }
-
-                                                pickerLauncher.launch(intent)
-                                            } catch (e: Exception) {
-                                                HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        )
-                    }
                 }
             }
         }
@@ -526,6 +480,71 @@ private fun AssetContent(
                 CellFooter(text = stringResource(id = R.string.PoweredBy_OpenSeaAPI))
             }
         }
+    }
+
+    if (showActionSelectorDialog) {
+        SelectorDialogCompose(
+            items = NftAssetModule.NftAssetAction.values().map { (TabItem(stringResource(it.title), false, it)) },
+            onDismissRequest = {
+                showActionSelectorDialog = false
+            },
+            onSelectItem = { selectedOption ->
+                when (selectedOption) {
+                    NftAssetModule.NftAssetAction.Share -> {
+                        asset.providerUrl?.second?.let {
+                            ShareCompat.IntentBuilder(context)
+                                .setType("text/plain")
+                                .setText(it)
+                                .startChooser()
+                        }
+                    }
+                    NftAssetModule.NftAssetAction.Save -> {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            try {
+                                val url = asset.imageUrl ?: throw IllegalStateException("No URL!")
+                                val fileName = "${asset.collectionName}-${asset.nftUid.tokenId}"
+                                var extension: String?
+
+                                val connection = URL(url).openConnection()
+                                connection.connect()
+                                connection.getInputStream().use { input ->
+                                    val disposition = try {
+                                        connection.getHeaderField("Content-Disposition")
+                                    } catch (e: Exception) {
+                                        null
+                                    }
+                                    val headerFileName = if (disposition != null) {
+                                        val index = disposition.indexOf("filename=")
+                                        if (index > 0) {
+                                            disposition.substring(index + 10, disposition.length - 1)
+                                        } else {
+                                            null
+                                        }
+                                    } else {
+                                        url.substring(url.lastIndexOf("/") + 1, url.length)
+                                    }
+
+                                    extension = headerFileName?.split(".")?.lastOrNull()
+                                    nftFileByteArray = input.readBytes()
+                                }
+
+                                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                                    addCategory(Intent.CATEGORY_OPENABLE)
+                                    type = connection.contentType
+                                    putExtra(
+                                        Intent.EXTRA_TITLE,
+                                        "$fileName${extension?.let { ".$it" } ?: ""}")
+                                }
+
+                                pickerLauncher.launch(intent)
+                            } catch (e: Exception) {
+                                HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
+                            }
+                        }
+                    }
+                }
+            }
+        )
     }
 }
 
