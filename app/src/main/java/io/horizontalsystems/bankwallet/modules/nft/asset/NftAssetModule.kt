@@ -20,6 +20,8 @@ object NftAssetModule {
             val service = NftAssetService(
                 collectionUid,
                 nftUid,
+                App.accountManager,
+                App.nftAdapterManager,
                 App.nftMetadataManager.provider(nftUid.blockchainType),
                 BalanceXRateRepository(App.currencyManager, App.marketKit)
             )

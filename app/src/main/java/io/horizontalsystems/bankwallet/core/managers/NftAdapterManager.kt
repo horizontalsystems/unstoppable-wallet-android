@@ -33,6 +33,10 @@ class NftAdapterManager(
         }
     }
 
+    fun adapter(nftKey: NftKey): INftAdapter? {
+        return adaptersMap[nftKey]
+    }
+
     fun refresh() {
         coroutineScope.launch {
             adaptersMap.values.forEach { it.sync() }
