@@ -135,21 +135,16 @@ class EvmKitManager(
             supportedNftTypes.forEach {
                 when (it) {
                     NftType.Eip721 -> {
-                        NftKit.addEip721TransactionSyncer(nftKitInstance, evmKit)
+                        nftKitInstance.addEip721TransactionSyncer()
+                        nftKitInstance.addEip721Decorators()
                     }
                     NftType.Eip1155 -> {
-                        NftKit.addEip1155TransactionSyncer(nftKitInstance, evmKit)
+                        nftKitInstance.addEip1155TransactionSyncer()
+                        nftKitInstance.addEip1155Decorators()
                     }
                 }
             }
             nftKit = nftKitInstance
-        }
-
-        nftKit?.let {
-            NftKit.addEip721TransactionSyncer(nftKit, evmKit)
-            NftKit.addEip1155TransactionSyncer(nftKit, evmKit)
-            NftKit.addEip721Decorators(nftKit, evmKit)
-            NftKit.addEip1155Decorators(nftKit, evmKit)
         }
 
         evmKit.start()
