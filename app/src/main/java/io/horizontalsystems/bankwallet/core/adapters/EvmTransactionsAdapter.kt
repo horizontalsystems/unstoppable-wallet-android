@@ -94,11 +94,11 @@ class EvmTransactionsAdapter(
         val filterTag = when (filter) {
             FilterTransactionType.All -> null
             FilterTransactionType.Incoming -> when {
-                token != null -> TransactionTag.eip20Incoming(coinTagName(token))
+                token != null -> TransactionTag.tokenIncoming(coinTagName(token))
                 else -> TransactionTag.INCOMING
             }
             FilterTransactionType.Outgoing -> when {
-                token != null -> TransactionTag.eip20Outgoing(coinTagName(token))
+                token != null -> TransactionTag.tokenOutgoing(coinTagName(token))
                 else -> TransactionTag.OUTGOING
             }
             FilterTransactionType.Swap -> TransactionTag.SWAP
