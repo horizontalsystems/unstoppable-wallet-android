@@ -76,10 +76,11 @@ object SwapApproveConfirmationModule {
         }
     }
 
-    fun prepareParams(sendEvmData: SendEvmData, blockchainType: BlockchainType) = bundleOf(
+    fun prepareParams(sendEvmData: SendEvmData, blockchainType: BlockchainType, backButton: Boolean = true) = bundleOf(
         SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
         SendEvmModule.additionalInfoKey to sendEvmData.additionalInfo,
-        SendEvmModule.blockchainTypeKey to blockchainType
+        SendEvmModule.blockchainTypeKey to blockchainType,
+        SendEvmModule.backButtonKey to backButton,
     )
 
 }
