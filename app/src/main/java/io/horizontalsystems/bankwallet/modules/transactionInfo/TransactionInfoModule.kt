@@ -8,7 +8,10 @@ import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -26,6 +29,7 @@ object TransactionInfoModule {
                 adapter,
                 App.marketKit,
                 App.currencyManager,
+                NftMetadataService(App.nftMetadataManager)
             )
             val factory = TransactionInfoViewItemFactory(
                 App.numberFormatter,
@@ -56,7 +60,8 @@ data class TransactionInfoItem(
     val record: TransactionRecord,
     val lastBlockInfo: LastBlockInfo?,
     val explorerData: TransactionInfoModule.ExplorerData,
-    val rates: Map<String, CurrencyValue>
+    val rates: Map<String, CurrencyValue>,
+    val nftMetadata: Map<NftUid, NftAssetBriefMetadata>
 )
 
 val BlockchainType.resendable: Boolean

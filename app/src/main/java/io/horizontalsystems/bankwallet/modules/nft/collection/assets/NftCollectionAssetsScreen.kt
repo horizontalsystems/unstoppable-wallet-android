@@ -78,7 +78,7 @@ private fun NftAssets(
                                     R.id.nftAssetFragment,
                                     NftAssetModule.prepareParams(
                                         asset.collectionUid,
-                                        asset.nftUid.uid
+                                        asset.nftUid
                                     )
                                 )
                             }

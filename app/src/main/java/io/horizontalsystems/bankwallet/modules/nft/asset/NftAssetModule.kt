@@ -32,9 +32,9 @@ object NftAssetModule {
     const val collectionUidKey = "collectionUidKey"
     const val nftUidKey = "nftUidKey"
 
-    fun prepareParams(collectionUid: String?, nftUid: String) = bundleOf(
+    fun prepareParams(collectionUid: String?, nftUid: NftUid) = bundleOf(
         collectionUidKey to collectionUid,
-        nftUidKey to nftUid
+        nftUidKey to nftUid.uid
     )
 
     enum class Tab(@StringRes val titleResId: Int) {

@@ -166,7 +166,7 @@ fun NftHoldingsScreen(navController: NavController) {
                                                     R.id.nftAssetFragment,
                                                     NftAssetModule.prepareParams(
                                                         asset.collectionUid,
-                                                        asset.nftUid.uid
+                                                        asset.nftUid
                                                     )
                                                 )
                                             }
