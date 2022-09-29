@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import androidx.compose.runtime.Composable
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import java.util.*
@@ -9,6 +10,8 @@ sealed class TransactionInfoViewItem {
     class Transaction(val leftValue: String, val rightValue: String, val icon: Int?) : TransactionInfoViewItem()
 
     class Amount(val coinValue: ColoredValue, val fiatValue: ColoredValue, val coinIconUrl: String?, val coinIconPlaceholder: Int?) : TransactionInfoViewItem()
+
+    class NftAmount(val nftValue: ColoredValue, val iconUrl: String?, val iconPlaceholder: Int?, val nftUid: NftUid, val providerCollectionUid: String?) : TransactionInfoViewItem()
 
     class Value(val title: String, val value: String) : TransactionInfoViewItem()
 

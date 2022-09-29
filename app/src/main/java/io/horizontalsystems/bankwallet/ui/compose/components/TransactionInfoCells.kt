@@ -4,10 +4,13 @@ import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -20,8 +23,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
 import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment
+import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
@@ -65,6 +70,49 @@ fun SectionTitleCell(
             textAlign = TextAlign.End,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+fun TransactionNftAmountCell(
+    amount: ColoredValue,
+    iconUrl: String?,
+    iconPlaceholder: Int?,
+    nftUid: NftUid,
+    providerCollectionUid: String?,
+    navController: NavController
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable {
+                navController.slideFromBottom(
+                    R.id.nftAssetFragment,
+                    NftAssetModule.prepareParams(
+                        providerCollectionUid,
+                        nftUid
+                    )
+                )
+            }
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CoinImage(
+            iconUrl = iconUrl,
+            placeholder = iconPlaceholder,
+            modifier = Modifier
+                .size(24.dp)
+                .clip(RoundedCornerShape(CornerSize(4.dp)))
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        SubHead1ColoredValue(value = amount)
+        Spacer(Modifier.weight(1f))
+        Icon(
+            modifier = Modifier.size(20.dp),
+            painter = painterResource(R.drawable.ic_info_20),
+            tint = ComposeAppTheme.colors.grey,
+            contentDescription = null
         )
     }
 }

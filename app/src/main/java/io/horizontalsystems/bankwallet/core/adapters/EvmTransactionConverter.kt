@@ -181,8 +181,8 @@ class EvmTransactionConverter(
                                     getIncomingEip721Events(incomingEip721Transfers) +
                                     getIncomingEip1155Events(incomingEip1155Transfers),
                             getOutgoingEip20Events(outgoingEip20Transfers) +
-                                    getIncomingEip721Events(incomingEip721Transfers) +
-                                    getIncomingEip1155Events(incomingEip1155Transfers)
+                                    getOutgoingEip721Events(outgoingEip721Transfers) +
+                                    getOutgoingEip1155Events(outgoingEip1155Transfers)
                         )
                     }
                     else -> null

@@ -90,10 +90,10 @@ fun NftEvents(
                         currencyValue = event.priceInFiat?.getFormattedFull(),
                         onClick = navController?.let {
                             {
-                                 navController.slideFromBottom(
-                                         R.id.nftAssetFragment,
-                                         NftAssetModule.prepareParams(event.providerCollectionUid,event.nftUid.uid)
-                                 )
+                                navController.slideFromBottom(
+                                    R.id.nftAssetFragment,
+                                    NftAssetModule.prepareParams(event.providerCollectionUid, event.nftUid)
+                                )
                             }
                         }
                     )
