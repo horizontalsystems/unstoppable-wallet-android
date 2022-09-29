@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -28,6 +27,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.dataKey
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.requestKey
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.resultKey
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
@@ -50,20 +50,8 @@ class SwapApproveFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-                val routerViewModel by viewModels<SwapApproveRouterViewModel> {SwapApproveRouterViewModel.Factory(arguments)}
-
-                when (val page = routerViewModel.getPage()) {
-                    SwapApproveRouterViewModel.Page.NoArguments -> {
-                        navController.popBackStack()
-                    }
-                    is SwapApproveRouterViewModel.Page.RevokeAndApprove -> {
-                        SwapRevokeAndApproveScreen(navController, page.approveData)
-                    }
-                    is SwapApproveRouterViewModel.Page.Approve -> {
-                        SwapApproveScreen(navController, page.approveData)
-                    }
-                }
+                val approveData = requireArguments().getParcelable<SwapAllowanceService.ApproveData>(dataKey)!!
+                SwapApproveScreen(findNavController(), approveData)
             }
         }
     }
