@@ -568,7 +568,7 @@ class SendEvmTransactionViewModel(
                         Translator.getString(R.string.Approve_YouRevoke),
                         coinService.token.coin.name,
                     ),
-                    ViewItem.TokenX(coinService.token),
+                    ViewItem.TokenItem(coinService.token),
                     ViewItem.Address(
                         Translator.getString(R.string.Approve_Spender),
                         addressTitle,
@@ -777,7 +777,7 @@ sealed class ViewItem {
 
     class Address(val title: String, val valueTitle: String, val value: String) : ViewItem()
     class Input(val value: String) : ViewItem()
-    class TokenX(val token: Token) : ViewItem()
+    class TokenItem(val token: Token) : ViewItem()
 }
 
 data class AmountValues(val coinAmount: String, val fiatAmount: String?)
