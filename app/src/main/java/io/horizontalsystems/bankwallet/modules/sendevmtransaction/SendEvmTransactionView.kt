@@ -105,6 +105,7 @@ private fun SectionView(viewItems: List<ViewItem>) {
                 is ViewItem.Amount -> Amount(item)
                 is ViewItem.Address -> TitleValueHex(item.title, item.valueTitle, item.value)
                 is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
+                is ViewItem.TokenX -> Token(item)
             }
         }
     }
@@ -233,6 +234,25 @@ private fun Amount(item: ViewItem.Amount) {
         subhead2_grey(
             text = item.fiatAmount ?: ""
         )
+    }
+}
+
+@Composable
+private fun Token(item: ViewItem.TokenX) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CoinImage(
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp),
+            iconUrl = item.token.coin.iconUrl,
+            placeholder = item.token.iconPlaceholder
+        )
+        subhead1_leah(item.token.coin.code)
     }
 }
 

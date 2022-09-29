@@ -4,6 +4,7 @@ import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
@@ -16,6 +17,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.*
 
 class SwapAllowanceService(
@@ -42,6 +44,13 @@ class SwapAllowanceService(
     fun set(token: Token?) {
         this.token = token
         sync()
+    }
+
+    fun revokeEvmData(): SendEvmData? {
+        val token = token
+        val adapter = token?.let { adapterManager.getAdapterForToken(it) } as? Eip20Adapter ?: return null
+
+        return SendEvmData(adapter.eip20Kit.buildApproveTransactionData(spenderAddress, BigInteger.ZERO))
     }
 
     fun approveData(dex: SwapMainModule.Dex, amount: BigDecimal): ApproveData? {

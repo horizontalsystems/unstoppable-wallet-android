@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
+import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewComposable
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationModule
@@ -136,12 +137,6 @@ private fun UniswapScreen(
     val approveStep by viewModel.approveStepLiveData().observeAsState()
     val tradeViewItem by viewModel.tradeViewItemLiveData().observeAsState()
 
-    navController.getNavigationResult(SwapApproveModule.requestKey) {
-        if (it.getBoolean(SwapApproveModule.resultKey)) {
-            viewModel.didApprove()
-        }
-    }
-
     ComposeAppTheme {
         Column(
             modifier = Modifier
@@ -179,7 +174,27 @@ private fun UniswapScreen(
 
             ActionButtons(
                 buttons = buttons,
+                onTapRevoke = {
+                    navController.getNavigationResult(SwapApproveModule.requestKey) {
+                        if (it.getBoolean(SwapApproveModule.resultKey)) {
+                            viewModel.didApprove()
+                        }
+                    }
+
+                    viewModel.revokeEvmData?.let { revokeEvmData ->
+                        navController.slideFromBottom(
+                            R.id.swapApproveConfirmationFragment,
+                            SwapApproveConfirmationModule.prepareParams(revokeEvmData, viewModel.blockchainType)
+                        )
+                    }
+                },
                 onTapApprove = {
+                    navController.getNavigationResult(SwapApproveModule.requestKey) {
+                        if (it.getBoolean(SwapApproveModule.resultKey)) {
+                            viewModel.didApprove()
+                        }
+                    }
+
                     viewModel.approveData?.let { data ->
                         navController.slideFromBottom(
                             R.id.swapApproveFragment,

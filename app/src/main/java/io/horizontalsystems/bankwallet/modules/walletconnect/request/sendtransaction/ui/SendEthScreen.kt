@@ -97,6 +97,7 @@ fun SendEthRequestScreen(
                                     item.type,
                                     item.token
                                 )
+                                is ViewItem.TokenX -> TokenCell(item.token)
                                 is ViewItem.AmountMulti -> AmountMultiCell(
                                     item.amounts,
                                     item.type,

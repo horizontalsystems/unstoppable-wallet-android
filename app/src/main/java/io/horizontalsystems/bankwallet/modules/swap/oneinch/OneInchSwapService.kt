@@ -3,12 +3,14 @@ package io.horizontalsystems.bankwallet.modules.swap.oneinch
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -60,6 +62,10 @@ class OneInchSwapService(
             balanceToSubject.onNext(Optional.ofNullable(value))
         }
     override val balanceToObservable: Observable<Optional<BigDecimal>> = balanceToSubject
+
+    val blockchainType = dex.blockchainType
+    val revokeEvmData : SendEvmData?
+        get() = allowanceService.revokeEvmData()
 
     val approveData: SwapAllowanceService.ApproveData?
         get() = balanceFrom?.let { amount ->
@@ -172,7 +178,11 @@ class OneInchSwapService(
             is SwapAllowanceService.State.Ready -> {
                 tradeService.amountFrom?.let { amountFrom ->
                     if (amountFrom > state.allowance.value) {
-                        allErrors.add(SwapError.InsufficientAllowance)
+                        if (revokeRequired()) {
+                            allErrors.add(SwapError.RevokeAllowanceRequired)
+                        } else {
+                            allErrors.add(SwapError.InsufficientAllowance)
+                        }
                     }
                 }
             }
@@ -189,7 +199,7 @@ class OneInchSwapService(
             }
         }
 
-        if (pendingAllowanceService.state == SwapPendingAllowanceState.Pending) {
+        if (pendingAllowanceService.state.loading()) {
             loading = true
         }
 
@@ -200,6 +210,21 @@ class OneInchSwapService(
             errors.isEmpty() && tradeService.state is OneInchTradeService.State.Ready -> State.Ready
             else -> State.NotReady
         }
+    }
+
+    private fun revokeRequired(): Boolean {
+        val tokenFrom = tradeService.tokenFrom ?: return false
+        val allowance = approveData?.allowance ?: return false
+
+        return allowance.compareTo(BigDecimal.ZERO) != 0 && isUsdt(tokenFrom)
+    }
+
+    private fun isUsdt(token: Token): Boolean {
+        val tokenType = token.type
+
+        return token.blockchainType is BlockchainType.Ethereum
+            && tokenType is TokenType.Eip20
+            && tokenType.address.lowercase() == "0xdac17f958d2ee523a2206206994597c13d831ec7"
     }
 
     private fun balance(token: Token): BigDecimal? =

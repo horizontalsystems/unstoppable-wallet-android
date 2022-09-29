@@ -19,8 +19,13 @@ fun View.hideKeyboard(context: Context) {
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
-fun NavController.setNavigationResult(key: String, bundle: Bundle) {
-    previousBackStackEntry?.savedStateHandle?.set(key, bundle)
+fun NavController.setNavigationResult(key: String, bundle: Bundle, destinationId: Int? = null) {
+    val backStackEntry = when (destinationId) {
+        null -> previousBackStackEntry
+        else -> backStack.findLast { it.destination.id == destinationId }
+    }
+
+    backStackEntry?.savedStateHandle?.set(key, bundle)
 }
 
 fun NavController.getNavigationResult(keyResult: String, onResult: (Bundle) -> Unit) {

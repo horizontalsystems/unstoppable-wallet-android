@@ -45,6 +45,8 @@ class OneInchSwapViewModel(
     fun buttonsLiveData(): LiveData<SwapButtons> = buttonsLiveData
     fun approveStepLiveData(): LiveData<ApproveStep> = approveStepLiveData
 
+    val revokeEvmData by service::revokeEvmData
+    val blockchainType by service::blockchainType
     val approveData by service::approveData
 
     val proceedParams: OneInchSwapParameters?
@@ -139,15 +141,19 @@ class OneInchSwapViewModel(
     }
 
     private fun syncState() {
-        val approveAction = getApproveActionState()
-        val proceedAction = getProceedActionState()
-        val approveStep = getApproveStep()
-        buttonsLiveData.postValue(SwapButtons(approveAction, proceedAction))
+        val revokeAction = getRevokeActionState()
+        val approveAction = getApproveActionState(revokeAction)
+        val proceedAction = getProceedActionState(revokeAction)
+        val approveStep = getApproveStep(revokeAction)
+        buttonsLiveData.postValue(SwapButtons(revokeAction, approveAction, proceedAction))
         approveStepLiveData.postValue(approveStep)
     }
 
-    private fun getProceedActionState(): SwapActionState {
+    private fun getProceedActionState(revokeAction: SwapActionState): SwapActionState {
         return when {
+            revokeAction !is SwapActionState.Hidden -> {
+                SwapActionState.Hidden
+            }
             service.state is OneInchSwapService.State.Ready -> {
                 SwapActionState.Enabled(Translator.getString(R.string.Swap_Proceed))
             }
@@ -156,7 +162,7 @@ class OneInchSwapViewModel(
                     service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
                         SwapActionState.Disabled(Translator.getString(R.string.Swap_ErrorInsufficientBalance))
                     }
-                    pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
+                    pendingAllowanceService.state == SwapPendingAllowanceState.Approving -> {
                         SwapActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
                     }
                     else -> {
@@ -170,9 +176,24 @@ class OneInchSwapViewModel(
         }
     }
 
-    private fun getApproveActionState(): SwapActionState {
+    private fun getRevokeActionState() = when {
+        pendingAllowanceService.state == SwapPendingAllowanceState.Revoking -> {
+            SwapActionState.Disabled(Translator.getString(R.string.Swap_Revoking))
+        }
+        service.errors.any { it == SwapError.RevokeAllowanceRequired } -> {
+            SwapActionState.Enabled(Translator.getString(R.string.Swap_Revoke))
+        }
+        else -> {
+            SwapActionState.Hidden
+        }
+    }
+
+    private fun getApproveActionState(revokeAction: SwapActionState): SwapActionState {
         return when {
-            pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
+            revokeAction !is SwapActionState.Hidden -> {
+                SwapActionState.Hidden
+            }
+            pendingAllowanceService.state == SwapPendingAllowanceState.Approving -> {
                 SwapActionState.Disabled(Translator.getString(R.string.Swap_Approving))
             }
             tradeService.state is OneInchTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
@@ -190,9 +211,12 @@ class OneInchSwapViewModel(
         }
     }
 
-    private fun getApproveStep(): ApproveStep {
+    private fun getApproveStep(revokeAction: SwapActionState): ApproveStep {
         return when {
-            pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
+            revokeAction !is SwapActionState.Hidden -> {
+                ApproveStep.NA
+            }
+            pendingAllowanceService.state == SwapPendingAllowanceState.Approving -> {
                 ApproveStep.Approving
             }
             tradeService.state is OneInchTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
