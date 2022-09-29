@@ -418,6 +418,8 @@
     <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_Proceed">Next</string>
+    <string name="Swap_Revoke">Revoke</string>
+    <string name="Swap_Revoking">Revoking...</string>
     <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving...</string>
     <string name="Swap_Swapping">Swapping</string>
@@ -455,7 +457,7 @@
     <string name="Swap_Confirmation_Estimated">Estimated</string>
     <!--Approve-->
     <string name="Approve_Title">Swap Approve</string>
-    <string name="Approve_RevokeAndApproveInfo">You already have grant to a smart contract %s tokens. To give another amount you should first revoke it then approve new amount </string>
+    <string name="Approve_RevokeAndApproveInfo">You can exchange %s, or you need to revoke and approve the new amount</string>
     <string name="Approve_ButtonRevoke">Revoke</string>
     <string name="Approve_ButtonRevoking">Revoking</string>
     <string name="Approve_ButtonApprove">Approve</string>
@@ -463,6 +465,7 @@
     <string name="Approve_Error_AlreadyApproved">You already have an allowance for this amount</string>
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">You Approve</string>
+    <string name="Approve_YouRevoke">You Revoke</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_Description">This exchange service is powered by %1$s, a decentralized token exchange protocol built on the %2$s blockchain. \n\n%3$s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="SwapInfo_DexRelated">%s Related</string>
@@ -497,6 +500,8 @@
     <string name="Transactions_Completed">Completed</string>
     <string name="Transactions_Processing">Processing</string>
     <string name="Transactions_Send">Send</string>
+    <string name="Transactions_Burn">Burn</string>
+    <string name="Transactions_Mint">Mint</string>
     <string name="Transactions_Approve">Approve</string>
     <string name="Transactions_Swap">Swap</string>
     <string name="Transactions_Failed">Failed</string>
