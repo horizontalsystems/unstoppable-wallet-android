@@ -105,7 +105,7 @@ private fun SectionView(viewItems: List<ViewItem>) {
                 is ViewItem.Amount -> Amount(item)
                 is ViewItem.Address -> TitleValueHex(item.title, item.valueTitle, item.value)
                 is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
-                is ViewItem.TokenX -> Token(item)
+                is ViewItem.TokenItem -> Token(item)
             }
         }
     }
@@ -238,7 +238,7 @@ private fun Amount(item: ViewItem.Amount) {
 }
 
 @Composable
-private fun Token(item: ViewItem.TokenX) {
+private fun Token(item: ViewItem.TokenItem) {
     Row(
         modifier = Modifier
             .padding(horizontal = 16.dp)
