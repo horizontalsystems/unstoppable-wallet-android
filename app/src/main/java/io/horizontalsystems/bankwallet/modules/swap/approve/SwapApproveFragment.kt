@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -28,15 +27,11 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.dataKey
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.requestKey
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.resultKey
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.core.setNavigationResult
 
 class SwapApproveFragment : BaseFragment() {
 
@@ -67,23 +62,6 @@ fun SwapApproveScreen(
 
     val approveAllowed = swapApproveViewModel.approveAllowed
     val amountError = swapApproveViewModel.amountError
-    val openConfirmation = swapApproveViewModel.openConfirmation
-
-    openConfirmation?.let { sendEvmData ->
-        swapApproveViewModel.openConfirmationProcessed()
-
-        navController.getNavigationResult(requestKey) { result ->
-            if (result.getBoolean(resultKey)) {
-                navController.setNavigationResult(requestKey, bundleOf(resultKey to true))
-                navController.popBackStack(R.id.swapFragment, false)
-            }
-        }
-
-        navController.slideFromRight(
-            R.id.swapApproveConfirmationFragment,
-            SwapApproveConfirmationModule.prepareParams(sendEvmData, swapApproveViewModel.dex.blockchainType)
-        )
-    }
 
     ComposeAppTheme {
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -138,7 +116,14 @@ fun SwapApproveScreen(
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                     title = stringResource(R.string.Swap_Proceed),
-                    onClick = swapApproveViewModel::onProceed,
+                    onClick = {
+                        swapApproveViewModel.getSendEvmData()?.let { sendEvmData ->
+                            navController.slideFromRight(
+                                R.id.swapApproveConfirmationFragment,
+                                SwapApproveConfirmationModule.prepareParams(sendEvmData, swapApproveViewModel.dex.blockchainType)
+                            )
+                        }
+                    },
                     enabled = approveAllowed
                 )
             }

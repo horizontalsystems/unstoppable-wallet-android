@@ -494,6 +494,8 @@
     <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_Proceed">Next</string>
+    <string name="Swap_Revoke">Revoke</string>
+    <string name="Swap_Revoking">Revoking...</string>
     <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving...</string>
     <string name="Swap_Swapping">Swapping</string>
@@ -536,10 +538,15 @@
     <!--Approve-->
 
     <string name="Approve_Title">Swap Approve</string>
+    <string name="Approve_RevokeAndApproveInfo">You can exchange %s, or you need to revoke and approve the new amount</string>
+    <string name="Approve_ButtonRevoke">Revoke</string>
+    <string name="Approve_ButtonRevoking">Revoking</string>
+    <string name="Approve_ButtonApprove">Approve</string>
     <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
     <string name="Approve_Error_AlreadyApproved">You already have an allowance for this amount</string>
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">You Approve</string>
+    <string name="Approve_YouRevoke">You Revoke</string>
 
     <!--Uniswap Info -->
 

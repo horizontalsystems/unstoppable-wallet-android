@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
 import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
@@ -560,22 +559,44 @@ class SendEvmTransactionViewModel(
         val addressValue = spender.eip55
         val addressTitle = evmLabelManager.mapped(addressValue)
 
-        val viewItems = mutableListOf(
-            ViewItem.Subhead(
-                Translator.getString(R.string.Approve_YouApprove),
-                coinService.token.coin.name,
-            ),
-            getAmount(
-                coinService.amountData(value),
-                ValueType.Regular,
-                coinService.token
-            ),
-            ViewItem.Address(
-                Translator.getString(R.string.Approve_Spender),
-                addressTitle,
-                addressValue
+        val viewItems = mutableListOf<ViewItem>()
+
+        if (value.compareTo(BigInteger.ZERO) == 0) {
+            viewItems.addAll(
+                listOf(
+                    ViewItem.Subhead(
+                        Translator.getString(R.string.Approve_YouRevoke),
+                        coinService.token.coin.name,
+                    ),
+                    ViewItem.TokenX(coinService.token),
+                    ViewItem.Address(
+                        Translator.getString(R.string.Approve_Spender),
+                        addressTitle,
+                        addressValue
+                    )
+                )
             )
-        )
+        } else {
+            viewItems.addAll(
+                listOf(
+                    ViewItem.Subhead(
+                        Translator.getString(R.string.Approve_YouApprove),
+                        coinService.token.coin.name,
+                    ),
+                    getAmount(
+                        coinService.amountData(value),
+                        ValueType.Regular,
+                        coinService.token
+                    ),
+                    ViewItem.Address(
+                        Translator.getString(R.string.Approve_Spender),
+                        addressTitle,
+                        addressValue
+                    )
+                )
+            )
+        }
+
         nonce?.let {
             viewItems.add(
                 ViewItem.Value(
@@ -756,6 +777,7 @@ sealed class ViewItem {
 
     class Address(val title: String, val valueTitle: String, val value: String) : ViewItem()
     class Input(val value: String) : ViewItem()
+    class TokenX(val token: Token) : ViewItem()
 }
 
 data class AmountValues(val coinAmount: String, val fiatAmount: String?)

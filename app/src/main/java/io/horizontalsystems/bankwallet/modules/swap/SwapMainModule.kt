@@ -154,6 +154,7 @@ object SwapMainModule {
     sealed class SwapError : Throwable() {
         object InsufficientBalanceFrom : SwapError()
         object InsufficientAllowance : SwapError()
+        object RevokeAllowanceRequired : SwapError()
     }
 
     @Parcelize
@@ -272,4 +273,8 @@ sealed class SwapActionState {
         }
 }
 
-data class SwapButtons(val approve: SwapActionState, val proceed: SwapActionState)
+data class SwapButtons(
+    val revoke: SwapActionState,
+    val approve: SwapActionState,
+    val proceed: SwapActionState
+)

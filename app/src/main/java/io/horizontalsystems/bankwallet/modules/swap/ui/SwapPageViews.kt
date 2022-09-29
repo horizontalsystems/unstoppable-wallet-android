@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -62,20 +60,29 @@ fun SwitchCoinsSection(
 
 @Composable
 fun SwapAllowance(viewModel: SwapAllowanceViewModel) {
-    val error by viewModel.isErrorLiveData().observeAsState(false)
-    val allowanceAmount by viewModel.allowanceLiveData().observeAsState()
-    val visible by viewModel.isVisibleLiveData().observeAsState(false)
+    val uiState = viewModel.uiState
+    val isError = uiState.isError
+    val revokeRequired = uiState.revokeRequired
+    val allowanceAmount = uiState.allowance
+    val visible = uiState.isVisible
 
     if (visible) {
         Spacer(Modifier.height(12.dp))
-        AdditionalDataCell2 {
-            subhead2_grey(text = stringResource(R.string.Swap_Allowance))
-            Spacer(Modifier.weight(1f))
-            allowanceAmount?.let { amount ->
-                if (error) {
-                    subhead2_lucian(text = amount)
-                } else {
-                    subhead2_grey(text = amount)
+        if (revokeRequired) {
+            TextImportantWarning(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = stringResource(R.string.Approve_RevokeAndApproveInfo, allowanceAmount ?: "")
+            )
+        } else {
+            AdditionalDataCell2 {
+                subhead2_grey(text = stringResource(R.string.Swap_Allowance))
+                Spacer(Modifier.weight(1f))
+                allowanceAmount?.let { amount ->
+                    if (isError) {
+                        subhead2_lucian(text = amount)
+                    } else {
+                        subhead2_grey(text = amount)
+                    }
                 }
             }
         }
@@ -120,6 +127,7 @@ fun SwapAllowanceSteps(approveStep: SwapMainModule.ApproveStep?) {
 @Composable
 fun ActionButtons(
     buttons: SwapButtons?,
+    onTapRevoke: () -> Unit,
     onTapApprove: () -> Unit,
     onTapProceed: () -> Unit,
 ) {
@@ -130,6 +138,15 @@ fun ActionButtons(
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth()
         ) {
+            if (actionButtons.revoke != SwapActionState.Hidden) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.weight(1f),
+                    title = actionButtons.revoke.title,
+                    onClick = onTapRevoke,
+                    enabled = actionButtons.revoke is SwapActionState.Enabled
+                )
+            }
+
             if (actionButtons.approve != SwapActionState.Hidden) {
                 ButtonPrimaryDefault(
                     modifier = Modifier.weight(1f),
@@ -139,12 +156,15 @@ fun ActionButtons(
                 )
                 Spacer(Modifier.width(4.dp))
             }
-            ButtonPrimaryYellow(
-                modifier = Modifier.weight(1f),
-                title = actionButtons.proceed.title,
-                onClick = onTapProceed,
-                enabled = actionButtons.proceed is SwapActionState.Enabled
-            )
+
+            if (actionButtons.proceed != SwapActionState.Hidden) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.weight(1f),
+                    title = actionButtons.proceed.title,
+                    onClick = onTapProceed,
+                    enabled = actionButtons.proceed is SwapActionState.Enabled
+                )
+            }
         }
     }
 }
@@ -155,10 +175,11 @@ fun ActionButtons(
 fun Preview_ActionButtons() {
     ComposeAppTheme {
         val buttons = SwapButtons(
+            SwapActionState.Enabled("Revoke"),
             SwapActionState.Enabled("Approve"),
-            SwapActionState.Enabled("Proceed")
+            SwapActionState.Enabled("Proceed"),
         )
-        ActionButtons(buttons, {}, {})
+        ActionButtons(buttons, {}, {}, {})
     }
 }
 

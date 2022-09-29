@@ -125,11 +125,12 @@ class SwapApproveConfirmationFragment : BaseFragment() {
                 R.string.Hud_Text_Done
             )
             Handler(Looper.getMainLooper()).postDelayed({
-                setNavigationResult(
+                findNavController().setNavigationResult(
                     SwapApproveModule.requestKey,
-                    bundleOf(SwapApproveModule.resultKey to true)
+                    bundleOf(SwapApproveModule.resultKey to true),
+                    R.id.swapFragment
                 )
-                findNavController().popBackStack(R.id.swapApproveFragment, false)
+                findNavController().popBackStack(R.id.swapFragment, false)
             }, 1200)
         }
 
@@ -172,7 +173,7 @@ private fun SwapApproveConfirmationScreen(
                             title = TranslatableString.ResString(R.string.Button_Close),
                             icon = R.drawable.ic_close,
                             onClick = {
-                                navController.popBackStack(R.id.swapApproveFragment, true)
+                                navController.popBackStack(R.id.swapFragment, false)
                             }
                         )
                     )

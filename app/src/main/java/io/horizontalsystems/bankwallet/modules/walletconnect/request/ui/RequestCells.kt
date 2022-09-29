@@ -82,6 +82,26 @@ fun AmountCell(
 }
 
 @Composable
+fun TokenCell(token: Token) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .height(48.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        CoinImage(
+            iconUrl = token.coin.iconUrl,
+            placeholder = token.iconPlaceholder,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp)
+        )
+        subhead1_leah(token.coin.code)
+    }
+}
+
+@Composable
 fun AmountMultiCell(amounts: List<AmountValues>, type: ValueType, token: Token) {
     val coinAmountColor = when (type) {
         ValueType.Regular -> ComposeAppTheme.colors.bran

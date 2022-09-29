@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
+import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewComposable
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchConfirmationModule
@@ -129,12 +130,6 @@ private fun OneInchScreen(
     val swapError by viewModel.swapErrorLiveData().observeAsState()
     val approveStep by viewModel.approveStepLiveData().observeAsState()
 
-    navController.getNavigationResult(SwapApproveModule.requestKey) {
-        if (it.getBoolean(SwapApproveModule.resultKey)) {
-            viewModel.didApprove()
-        }
-    }
-
     ComposeAppTheme {
         Column(
             modifier = Modifier
@@ -170,7 +165,27 @@ private fun OneInchScreen(
 
             ActionButtons(
                 buttons = buttons,
+                onTapRevoke = {
+                    navController.getNavigationResult(SwapApproveModule.requestKey) {
+                        if (it.getBoolean(SwapApproveModule.resultKey)) {
+                            viewModel.didApprove()
+                        }
+                    }
+
+                    viewModel.revokeEvmData?.let { revokeEvmData ->
+                        navController.slideFromBottom(
+                            R.id.swapApproveConfirmationFragment,
+                            SwapApproveConfirmationModule.prepareParams(revokeEvmData, viewModel.blockchainType)
+                        )
+                    }
+                },
                 onTapApprove = {
+                    navController.getNavigationResult(SwapApproveModule.requestKey) {
+                        if (it.getBoolean(SwapApproveModule.resultKey)) {
+                            viewModel.didApprove()
+                        }
+                    }
+
                     viewModel.approveData?.let { data ->
                         navController.slideFromBottom(
                             R.id.swapApproveFragment,

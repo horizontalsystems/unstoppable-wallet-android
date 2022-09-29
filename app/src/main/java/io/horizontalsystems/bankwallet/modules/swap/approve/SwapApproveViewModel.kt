@@ -23,7 +23,6 @@ class SwapApproveViewModel(
     private val disposables = CompositeDisposable()
 
     var approveAllowed by mutableStateOf(false)
-    var openConfirmation by mutableStateOf<SendEvmData?>(null)
     var amountError by mutableStateOf<Throwable?>(null)
 
     init {
@@ -58,18 +57,14 @@ class SwapApproveViewModel(
         amountError = (approveState as? SwapApproveService.State.ApproveNotAllowed)?.error
     }
 
-    fun onProceed() {
-        val serviceState = service.state
-        if (serviceState is SwapApproveService.State.ApproveAllowed) {
-            openConfirmation = SendEvmData(serviceState.transactionData)
-        }
+    fun getSendEvmData(): SendEvmData? {
+        return (service.state as? SwapApproveService.State.ApproveAllowed)
+            ?.let {
+                SendEvmData(it.transactionData)
+            }
     }
 
     override fun onCleared() {
         disposables.dispose()
-    }
-
-    fun openConfirmationProcessed() {
-        openConfirmation = null
     }
 }
