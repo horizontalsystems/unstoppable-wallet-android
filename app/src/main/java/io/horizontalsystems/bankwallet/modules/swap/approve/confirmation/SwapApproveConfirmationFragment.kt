@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.additionalInfoKey
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.backButtonKey
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.blockchainTypeKey
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
@@ -61,6 +62,9 @@ class SwapApproveConfirmationFragment : BaseFragment() {
 
     private val blockchainType: BlockchainType?
         get() = arguments?.getParcelable(blockchainTypeKey)
+
+    private val backButton: Boolean
+        get() = arguments?.getBoolean(backButtonKey) ?: true
 
     private val vmFactory by lazy {
         SwapApproveConfirmationModule.Factory(
@@ -103,7 +107,9 @@ class SwapApproveConfirmationFragment : BaseFragment() {
                     onSendClick = {
                         logger.info("click approve button")
                         sendEvmTransactionViewModel.send(logger)
-                    })
+                    },
+                    backButton = backButton
+                )
             }
         }
     }
@@ -149,7 +155,8 @@ private fun SwapApproveConfirmationScreen(
     feeViewModel: EvmFeeCellViewModel,
     parentNavGraphId: Int,
     navController: NavController,
-    onSendClick: () -> Unit
+    onSendClick: () -> Unit,
+    backButton: Boolean
 ) {
     val enabled by sendEvmTransactionViewModel.sendEnabledLiveData.observeAsState(false)
 
@@ -157,9 +164,8 @@ private fun SwapApproveConfirmationScreen(
         Scaffold(
             backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
-                AppBar(
-                    title = TranslatableString.ResString(R.string.Send_Confirmation_Title),
-                    navigationIcon = {
+                val navigationIcon: @Composable (() -> Unit)? = if (backButton) {
+                    {
                         HsIconButton(onClick = { navController.popBackStack() }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_back),
@@ -167,7 +173,14 @@ private fun SwapApproveConfirmationScreen(
                                 tint = ComposeAppTheme.colors.jacob
                             )
                         }
-                    },
+                    }
+                } else {
+                    null
+                }
+
+                AppBar(
+                    title = TranslatableString.ResString(R.string.Send_Confirmation_Title),
+                    navigationIcon = navigationIcon,
                     menuItems = listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),

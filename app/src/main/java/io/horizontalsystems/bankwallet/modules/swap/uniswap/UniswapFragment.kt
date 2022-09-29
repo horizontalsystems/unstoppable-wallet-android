@@ -184,7 +184,7 @@ private fun UniswapScreen(
                     viewModel.revokeEvmData?.let { revokeEvmData ->
                         navController.slideFromBottom(
                             R.id.swapApproveConfirmationFragment,
-                            SwapApproveConfirmationModule.prepareParams(revokeEvmData, viewModel.blockchainType)
+                            SwapApproveConfirmationModule.prepareParams(revokeEvmData, viewModel.blockchainType, false)
                         )
                     }
                 },
