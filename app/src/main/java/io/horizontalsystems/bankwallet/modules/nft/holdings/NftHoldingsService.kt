@@ -172,7 +172,7 @@ class NftHoldingsService(
                     AssetItem(
                         nftUid = record.nftUid,
                         imageUrl = metadata?.previewImageUrl,
-                        name = record.blockchainType.uid + " - " + (metadata?.displayName ?: ""),
+                        name = metadata?.displayName ?: "#${record.nftUid.tokenId}",
                         count = record.balance,
                         onSale = metadata?.onSale ?: false,
                         price = price
