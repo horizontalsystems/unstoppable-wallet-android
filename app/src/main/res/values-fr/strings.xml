@@ -1044,8 +1044,11 @@
     <string name="NftCollection_Owners">Propriétaires</string>
     <string name="NftCollection_AveragePrice">Moyenne du temps</string>
     <string name="NftCollection_ItemsCount">%d éléments</string>
-    <string name="NftCollection_TodaysSales">Vendeurs d\'aujourd\'hui</string>
-    <string name="NftCollection_AveragePriceDescription">~%s / Élément</string>
+    <string name="NftCollection_TodaysSales">Today\'s Sellers</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
+    <string name="NftCollection_AveragePriceDescription">~%s per NFT</string>
+    <string name="NftCollection_Royalty">Royalty</string>
+    <string name="NftCollection_InceptionDate">Inception Date</string>
     <!-- NFT Collection Events -->
     <string name="NftCollection_EventType_SelectorTitle">Sélectionnez le type d\'événement</string>
     <string name="NftCollection_EventType_All">Tout</string>
