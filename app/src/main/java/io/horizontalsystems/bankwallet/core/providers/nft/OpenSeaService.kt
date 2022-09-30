@@ -162,7 +162,7 @@ object OpenSeaNftApiResponse {
 
     data class AssetContract(
         val address: String,
-        val create_date: String,
+        val created_date: String,
         val schema_name: String
     )
 
