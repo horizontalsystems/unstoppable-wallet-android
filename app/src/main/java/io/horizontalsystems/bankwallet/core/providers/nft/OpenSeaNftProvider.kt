@@ -144,7 +144,7 @@ class OpenSeaNftProvider(
             floorPrice = nftPrice(baseToken, response.stats?.floor_price, false),
             marketCap = nftPrice(baseToken, response.stats?.market_cap, false),
             royalty = response.dev_seller_fee_basis_points?.divide(BigDecimal(100)),
-            inceptionDate = response.primary_asset_contracts?.firstOrNull()?.create_date?.let { stringToDate(it) },
+            inceptionDate = response.primary_asset_contracts?.firstOrNull()?.created_date?.let { stringToDate(it) },
             stats1d = NftCollectionMetadata.Stats(
                 volume = nftPrice(baseToken, response.stats?.one_day_volume, false),
                 change = response.stats?.one_day_change,
