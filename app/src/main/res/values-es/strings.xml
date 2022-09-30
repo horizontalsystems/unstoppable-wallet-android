@@ -33,6 +33,9 @@
     <string name="Button_Switch">Cambiar</string>
     <string name="Button_Remove">Eliminar</string>
     <string name="Button_Save">Salvar</string>
+    <string name="Button_IAgree">Acepto</string>
+    <string name="Button_Continue">Continuar</string>
+    <string name="Button_Send">Enviar</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Cualquier</string>
@@ -54,14 +57,25 @@
     <!--Create Wallet-->
     <string name="CreateWallet_Title">Nueva cartera</string>
     <string name="CreateWallet_Mnemonic">Mnemotécnica</string>
+    <string name="CreateWallet_Wordlist">Lista de palabras</string>
     <string name="Passphrase">Frase de contraseña</string>
     <string name="CreateWallet_N_Words">%s palabras</string>
     <string name="CreateWallet_PassphraseConfirm">Confirmar</string>
     <string name="CreateWallet_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor, utiliza solo letras del alfabeto latino y números para la frase de contraseña</string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmación de la frase de contraseña no coincide</string>
     <string name="EnterPassphrase">Introduzca su frase de contraseña</string>
     <string name="CreateWallet_PassphraseDescription">La frase de contraseña añade una capa de seguridad adicional a los monederos permitiendo a los usuarios crear múltiples monederos multi-monedas independientes usando una sola frase de recuperación mnemotécnica pero asociada con diferentes contraseñas.\n\nPara restaurar estos monederos un usuario necesitará una frase de recuperación mnemotécnica, así como una contraseña para cada monedero restaurado.</string>
+    <!--Languages-->
+    <string name="Language_English">Inglés</string>
+    <string name="Language_Japanese">Japonés</string>
+    <string name="Language_Korean">Coreano</string>
+    <string name="Language_Spanish">Español</string>
+    <string name="Language_SimplifiedChinese">Chino (simplificado)</string>
+    <string name="Language_TraditionalChinese">Chino (tradicional)</string>
+    <string name="Language_French">Francés</string>
+    <string name="Language_Italian">Italiano</string>
+    <string name="Language_Czech">Checo</string>
+    <string name="Language_Portuguese">Portugués</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">¡GM!</string>
     <string name="RateApp_Description_Rate_This_App">¿Disfrutas de Unstoppable? Comparte comentarios e ideas para mejorarlo.</string>
@@ -76,7 +90,6 @@
     <string name="Restore_InvalidChecksum">Suma de verificación inválida</string>
     <string name="Restore_PassphraseDescription">Introduzca su frase de contraseña que utilizó al crear esta frase mnemotécnica.</string>
     <string name="Restore_Title">Elegir Blockchain</string>
-    <string name="Restore_Name">Nombre (opcional)</string>
     <string name="Restore_Key">Clave</string>
     <string name="Select_Coins">Elegir monedas</string>
     <string name="Restore_BirthdayHeight">Altura de Cumpleaños</string>
@@ -85,6 +98,11 @@
     <string name="Restore_ZCash_BirthdayHeight_Hint">Si conoces la altura de tu cumpleaños de la billetera introdúzcala para una rápida sincronización.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (opcional)</string>
     <string name="Restore_ZCash_RestoreAsNew">Restaurar como nuevo</string>
+    <string name="Restore_ZCash_NewWallet">Nuevo monedero</string>
+    <string name="Restore_ZCash_NewWallet_Description">No tienes ninguna transacción antes</string>
+    <string name="Restore_ZCash_OldWallet">Monedero antiguo</string>
+    <string name="Restore_ZCash_OldWallet_Description">Usado antes y tiene transacciones</string>
+    <string name="Restore_ZCash_SlowSyncWarningText">La sincronización inicial con el blockchain puede consumir mucho tráfico de Internet.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
     <!--Market-->
@@ -141,6 +159,7 @@
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtrar por cadena</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Todo</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">Esta moneda no es compatible todavía</string>
+    <string name="MarketGlobalMetrics_NoCoin">Este proyecto no tiene una moneda</string>
     <!--Market Search-->
     <string name="EmptyResults">No se han encontrado resultados</string>
     <string name="Market_Filters">Filtros</string>
@@ -222,6 +241,7 @@
     <string name="Balance_Title">Saldo</string>
     <string name="Balance_Send">Enviar</string>
     <string name="Balance_Receive">Recibir</string>
+    <string name="Balance_Address">Dirección</string>
     <string name="Balance_RatePerCoin">%s por %s</string>
     <string name="Balance_SyncedUntil">hasta %s</string>
     <string name="Balance_Syncing">Sincronizando ...</string>
@@ -236,6 +256,8 @@
     <string name="Balance_Sort_Az">Nombre</string>
     <string name="Balance_Sort_24hPriceChange">Cambio de Precio</string>
     <string name="Balance_Hidden">oculto</string>
+    <string name="Balance_DownloadingBlocks">Descargando bloques</string>
+    <string name="Balance_ScanningBlocks">Bloques de escaneo</string>
     <string name="Balance_Backup_Alert">Necesita respaldar el monedero %s antes de poder recibir %s.</string>
     <string name="Balance_NoWalletAlert">Aún no tiene ninguna cartera instalada.\nCrear una nueva cartera o restaurar una existente </string>
     <string name="Balance_NoCoinsAlert">No tienes monedas añadidas.\nAñade las monedas que usarás</string>
@@ -256,8 +278,11 @@
     <string name="Send_Confirmation_EstimateTime">Tiempo estimado:</string>
     <string name="Send_Confirmation_Send_Button">Enviar</string>
     <string name="Send_Success">\u2713 Enviado</string>
+    <string name="ScanQr_CameraPermission_Title">Permisos de cámara</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Por favor, autorice acceso a la camara</string>
     <string name="ScanQr_NoCameraPermission">No hay permiso de cámara</string>
+    <string name="ScanQr_CameraPermissionDeniedText">Se ha denegado el acceso a tu cámara para esta aplicación, puedes ir a ajustes y permitir el acceso</string>
+    <string name="ScanQr_GoToSettings">Ir a Ajustes</string>
     <string name="Send_Error_IncorrectAddress">Código incorrecto</string>
     <string name="Send_Error_UnsupportedAddress">El bloqueo del tiempo solo funciona con direcciones P2PKH (a partir de 1)</string>
     <string name="Send_Error_BalanceAmount">Saldo %s</string>
@@ -327,6 +352,7 @@
     <string name="WalletConnect_Ready_Hint">Puede ir al navegador. No cierre esta página mientras interactúa en el navegador.</string>
     <string name="WalletConnect_Reconnect_Hint">Error al establecer la conexión. Intenta volver a conectarte.</string>
     <string name="WalletConnect_Error_InvalidUrl">Dirección URL inválida</string>
+    <string name="WalletConnect_NotSupportedV2">Wallet Connect v2 no es compatible</string>
     <string name="WalletConnect_Requirement">Requisitos</string>
     <string name="WalletConnect_Alert">Alerta</string>
     <string name="WalletConnect_Status_Offline">Desconectado</string>
@@ -392,6 +418,8 @@
     <string name="Swap_ErrorNoLiquidity">No se pueden permutar estos tokens</string>
     <string name="Swap_ErrorHighPriceImpact">Impacto de precio alto</string>
     <string name="Swap_Proceed">Siguiente</string>
+    <string name="Swap_Revoke">Revocar</string>
+    <string name="Swap_Revoking">Revocando...</string>
     <string name="Swap_Approve">Aprobar</string>
     <string name="Swap_Approving">Aprobando...</string>
     <string name="Swap_Swapping">Intercambio</string>
@@ -429,10 +457,15 @@
     <string name="Swap_Confirmation_Estimated">Estimado</string>
     <!--Approve-->
     <string name="Approve_Title">Aprobación de Swap</string>
+    <string name="Approve_RevokeAndApproveInfo">Puedes cambiar %so necesitas revocar y aprobar la nueva cantidad</string>
+    <string name="Approve_ButtonRevoke">Revocar</string>
+    <string name="Approve_ButtonRevoking">Revocando</string>
+    <string name="Approve_ButtonApprove">Aprobar</string>
     <string name="Approve_Info">Para intercambiar un token dado en tu nombre debes conceder permiso a un contrato inteligente. Este permiso establece la cantidad que puede ser utilizada por un contrato inteligente. Esto no afecta su saldo, requiere una pequeña comisión para ejecutar la transacción de aprobación.\n\nSi bien se puede hacer bajo demanda antes de cada operación, para nosotros es más barato aprobar una cantidad más alta por adelantado en operaciones futuras.</string>
     <string name="Approve_Error_AlreadyApproved">Usted ya tiene una concesión para esta cantidad</string>
     <string name="Approve_Spender">Gastador</string>
     <string name="Approve_YouApprove">Apruebas</string>
+    <string name="Approve_YouRevoke">Revocas</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_Description">Este servicio de intercambio está impulsado por %s, un intercambio de token descentralizado construido en %s blockchain.\n\n%s está completamente automatizado y administrado por contratos inteligentes que facilitan los intercambios de token de una manera conflaible y sin ninguna intención para hacer estafas.</string>
     <string name="SwapInfo_DexRelated">Uniswap Relacionado</string>
@@ -456,6 +489,7 @@
     <string name="Deposit_Title">Recibir %s</string>
     <string name="Deposit_Share">Compartir</string>
     <string name="Deposit_Your_Address">Su dirección</string>
+    <string name="Deposit_Address">Dirección</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transacciones</string>
     <string name="Transactions_FilterAll">TODO</string>
@@ -466,6 +500,8 @@
     <string name="Transactions_Completed">Finalizado</string>
     <string name="Transactions_Processing">Procesando</string>
     <string name="Transactions_Send">Enviar</string>
+    <string name="Transactions_Burn">Burn</string>
+    <string name="Transactions_Mint">Mint</string>
     <string name="Transactions_Approve">Aprobar</string>
     <string name="Transactions_Swap">Permutar</string>
     <string name="Transactions_Failed">Falla</string>
@@ -629,16 +665,12 @@
 \n\nEl monedero Unstoppable es completamente de código abierto y cualquiera puede verificar que la aplicación funciona exactamente como se afirma.
 
 \n\nDesarrollamos Unstoppable para nosotros mismos ya que las soluciones disponibles no estaban a la altura. Desde una perspectiva de ingenieria y practicidad, creemos que este monedero está significativamente por delante de los productos alternativos.</string>
-    <string name="SettingsTerms_TermAcademy">He pasado por la sección Academia de esta aplicación y me he familiarizado con los aspectos fundamentales del almacenamiento de criptomonedas.</string>
-    <string name="SettingsTerms_TermBackup">He respaldado la(s) clave(s) privada(s) para mis monederos que se me mostraron en forma de 12-24 palabras. Entiendo que estas claves privadas se almacenan en mi smartphone y no en ningún otro lugar.</string>
-    <string name="SettingsTerms_TermOwner">Entiendo que dar mi teléfono a entidades no fiables o dejar la aplicación de monedero sin bloqueo seguro por PIN podría, potencialmente, poner en peligro la seguridad de mis fondos.</string>
-    <string name="SettingsTerms_TermRecover">Entiendo que rootear mi teléfono (rooting), instalando aplicaciones de terceros de fuentes desconocidas o mantener el sistema operativo desactualizado puede, potencialmente,
-poner en peligro la seguridad de mis fondos.</string>
-    <string name="SettingsTerms_TermPhone">Entiendo que puede haber problemas de software sin descubrir en el código que hace funcionar esta aplicación, lo que puede llevar a un comportamiento inesperado o al mal funcionamiento de la aplicación.</string>
-    <string name="SettingsTerms_TermRoot">Entiendo que necesitaré mis claves privadas para restaurar el acceso a mis fondos si pierdo mi teléfono o si la aplicación no funciona correctamente. Sin mis claves privadas será imposible recuperar el acceso a mi monedero.</string>
-    <string name="SettingsTerms_TermBugs">Entiendo que deshabilitar el teléfono desbloqueará el código de acceso en la Configuración del Android y esto borrará las claves privadas de mi dispositivo. Necesitaré mis claves privadas para recuperar el acceso a mi monedero.</string>
-    <string name="Settings_TermsPin"> Entiendo que sólo yo mismo soy responsable de la seguridad de mis fondos y ninguna otra entidad.</string>
-    <string name="SettingsTerms_BottomThankYou">¡Gracias \npor elegir \neste monedero!</string>
+    <string name="SettingsTerms_Backup">Copia de seguridad las frases de recuperación del monedero para recuperar el acceso a los fondos.</string>
+    <string name="SettingsTerms_PrivateKeys">Las claves privadas y las frases de recuperación sólo se almacenan en su dispositivo.</string>
+    <string name="SettingsTerms_DisablingPin">Desactivar el teléfono inteligente desbloquea el PIN elimina todas las carteras de la aplicación. Las frases de recuperación serán necesarias para recuperar el acceso a los fondos.</string>
+    <string name="SettingsTerms_JailBraking">Rompiendo la cárcel (rooting), instalando aplicaciones de fuentes desconocidas y usando un sistema operativo desactualizado puede poner en peligro la seguridad de los fondos.</string>
+    <string name="SettingsTerms_Bugs">Entiendo que puede haber problemas de software sin descubrir en el código que hace funcionar esta aplicación, lo que puede llevar a un comportamiento inesperado o al mal funcionamiento de la aplicación.</string>
+    <string name="SettingsTerms_Responsibility">Sólo el usuario es responsable de la seguridad de los fondos y ninguna otra entidad.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
@@ -679,7 +711,10 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Hud_Text_NoInternet">Sin conexión a Internet</string>
     <string name="Hud_Text_Copied">Copiado</string>
     <string name="Hud_Text_Created">Creado</string>
+    <string name="Hud_Text_Restored">Restaurado </string>
+    <string name="Hud_Text_AddressAdded">Dirección añadida</string>
     <string name="Hud_Text_Done">Listo</string>
+    <string name="Hud_Text_Verified">Verificado</string>
     <string name="Hud_Text_EmailAddressCopied">Dirección de correo electrónico copiada</string>
     <string name="Hud_Added_To_Watchlist">Añadido a tu Lista de Seguimiento</string>
     <string name="Hud_Added_To_Wallet">Agregar a Wallet</string>
@@ -717,7 +752,6 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="ManageAccount_BackupRequired_Title">Se requiere una copia de seg</string>
     <string name="ManageAccount_BackupRequired_Description">Necesita una Copia de seguridad %1$s antes de poder recibir %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Esta acción eliminará los monederos de este dispositivo.</string>
-    <string name="ManageAccount_Delete_ConfirmationDisable">Todas las monedas que pertenezcan a esta cartera se desactivarán en la pestaña de saldo.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Si usted no respaldó la clave privada para este monedero, perderá el acceso a sus fondos.</string>
     <string name="ManageAccount_BirthdayHeight">%s Altura de Cumpleaños</string>
     <string name="ManageAccount_NWords">%s palabras</string>
@@ -745,7 +779,29 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Riesgo de copia de la clave privada</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Como medida de seguridad recomendamos no utilizar la acción de copia en la clave privada.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Lo arriesgaré</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Cancel">No copiar</string>
     <string name="ShowKey_PrivateKey_Warning">Esta clave es para todas las blockchains compatibles con EVM.\n\nComo una medida de seguridad recomendamos no utilizar la acción de copia en la clave privada.</string>
+    <!-- Backup Recovery Phrase -->
+    <string name="BackupRecoveryPhrase_Title">Frase de copia de seguridad</string>
+    <string name="BackupRecoveryPhrase_Description">Crear una copia de seguridad de la frase de recuperación y la contraseña asociada que le permitirá recuperar su cartera si su teléfono está perdido, robado, roto, etc.</string>
+    <string name="BackupRecoveryPhrase_Backup">Copia de seguridad</string>
+    <string name="BackupRecoveryPhrase_Later">Más tarde</string>
+    <!-- Recovery Phrase -->
+    <string name="RecoveryPhrase_Title">Frase de Recuperación</string>
+    <string name="RecoveryPhrase_Description">Escriba estas palabras en el orden correcto y guárdelas en un lugar seguro</string>
+    <string name="RecoveryPhrase_ShowPhrase">Toca para mostrar la frase de recuperación</string>
+    <string name="RecoveryPhrase_Verify">Verificar</string>
+    <string name="RecoveryPhrase_Warning">Nunca comparta su frase de recuperación con nadie. El equipo imparable nunca pedirá su frase de recuperación.</string>
+    <string name="RecoveryPhrase_CopyWarning_Title">Riesgo de Copia</string>
+    <!-- Evm Private Key -->
+    <string name="EvmPrivateKey_Title">Clave Privada EVM</string>
+    <string name="EvmPrivateKey_Warning">Esta clave es para todas las blockchains compatibles con EVM. No la comparta con nadie.</string>
+    <string name="EvmPrivateKey_ShowPrivateKey">Toca para mostrar la clave privada</string>
+    <!-- Public Keys -->
+    <string name="PublicKeys_Title">Claves públicas</string>
+    <!-- Recovery Phrase Verify -->
+    <string name="RecoveryPhraseVerify_Title">Verificar</string>
+    <string name="RecoveryPhraseVerify_Description">Seleccione dos palabras solicitadas de su frase de recuperación de cartera</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Copia de seguridad</string>
     <string name="BackupKey_Description">Las frase de recuperación que se mostrará a continuación es la única forma de restaurar sus fondos en caso de que su teléfono se pierda, lo roben, se averíe, etc.\n\nAsegúrese de que nadie está viendo su pantalla.</string>
@@ -948,6 +1004,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Nfts_PriceType_Days_30">Promedio 30D.</string>
     <string name="Nfts_PriceType_LastSale">Última venta</string>
     <string name="Nfts_Asset_OnSale">En venta</string>
+    <string name="Nfts_Asset_OnAuction">En subasta</string>
     <string name="Nfts_Asset_OnSaleUntil">hasta %s</string>
     <string name="Nfts_Empty">No tiene un NFT en su cartera</string>
     <string name="Nfts_PriceMode">Modo precio</string>
@@ -1037,4 +1094,33 @@ poner en peligro la seguridad de mis fondos.</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Elegir tipo</string>
     <string name="NftAssetActivity_Empty">Aún no hay actividad de artículo</string>
+    <!--Alert-->
+    <string name="Alert_KeysInvalidatedTitle">Error de almacenamiento de claves de Android</string>
+    <string name="Alert_KeysInvalidatedDescription">Los datos encriptados de su monedero han sido recientemente  invalidados porque se cambió la pantalla de bloqueo de Android</string>
+    <string name="Alert_TitleWarning">Aviso</string>
+    <string name="Alert_CustomKeyboardIsUsed">Parece que su dispositivo utiliza un teclado no predeterminado. Unstoppable recomienda seleccionar el teclado por defecto en su dispositivo ya que los teclados de terceros potencialmente pueden recopilar y exponer los datos de entrada de los usuarios. \n\nHaga clic en el botón \'Saltar\' si desea seguir usando su teclado preferido.</string>
+    <string name="Alert_DeviceIsRootedWarning">El equipo de Unstoppable recomienda ejecutar la aplicación sólo en teléfonos no rooteados (no jailbrokes).\n\nTenga en cuenta que cuando utilice un dispositivo con root, la aplicación ya no puede garantizar la seguridad de su criptomoneda con el software malicioso.</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">PIN de teléfono</string>
+    <string name="OSPin_Confirm_Desciption">Esta aplicación require que el teléfono tenga el código de acceso (bloqueo de pantalla) habilitado.\n\nLo puedes habilitar en los ajustes de Android.\n\nTome en cuenta que cuando desahabilita el PIN en el nivel OS, las medidas de seguridad en el alacenamiento seguro de su teléfono hace que la información previamente almacenada no sea válida. Usted necesita restaurar las claves de sus monederos para poder volver a su monedero.</string>
+    <string name="OSPin_Prompt_Desciption">Esta aplicación requiere el PIN de tu teléfono para mantener datos sensibles de tu monedero en el almacenamiento seguro de Android y no en la propia aplicación.</string>
+    <!--Unlock-->
+    <string name="Unlock_Passcode">Código de acceso</string>
+    <string name="Unlock_Incorrect">Incorrecto</string>
+    <string name="Unlock_BiometricScanner">Escáner biométrico</string>
+    <string name="Unlock_BiometricScannerDisabled_Description">Introduzca el código de acceso o vuelva a intentarlo más tarde</string>
+    <string name="Unlock_BiometricScannerDisabled_Info">Autenticación biométrica desactivada</string>
+    <string name="Unlock_WalletDisabledUntil">Inhabilitado hasta: %s</string>
+    <!--Set Pin-->
+    <string name="PinSet_Title">Establezca una contraseña</string>
+    <string name="PinSet_Info">Su código servirá para abrir su monedero y enviar dinero</string>
+    <string name="PinSet_ConfirmInfo">Confirmar</string>
+    <string name="PinSet_ErrorPinsDontMatch">El código no coincide. Inténtelo de nuevo.</string>
+    <string name="PinSet_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su código. Inténtelo de nuevo.</string>
+    <!--Edit Pin-->
+    <string name="EditPin_Title">Editar el código </string>
+    <string name="EditPin_UnlockInfo">Código Actual</string>
+    <string name="EditPin_NewPinInfo">Código Nuevo</string>
+    <!--Biometric Auth texts-->
+    <string name="BiometricAuth_DialogTitle">Escáner biométrico</string>
 </resources>

@@ -33,6 +33,9 @@
     <string name="Button_Switch">Перекл.</string>
     <string name="Button_Remove">Удалить</string>
     <string name="Button_Save">Сохранить</string>
+    <string name="Button_IAgree">Я принимаю</string>
+    <string name="Button_Continue">Продолжить</string>
+    <string name="Button_Send">Отправить</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет Данных</string>
     <string name="Any">Любые</string>
@@ -40,7 +43,7 @@
     <string name="PercentTitle">Процент</string>
     <string name="Keyboard">Клавиатура</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">Двигайтесь вперед</string>
+    <string name="Intro_Wallet_Screen1Description">Продолжить</string>
     <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
     <string name="Intro_Wallet_Screen2Description">Распоряжайтесь активами свободно и без ограничений.</string>
     <string name="Intro_Wallet_Screen3Title">Избавьтесь от Границ</string>
@@ -54,16 +57,27 @@
     <!--Create Wallet-->
     <string name="CreateWallet_Title">Создать Кошелек</string>
     <string name="CreateWallet_Mnemonic">Мнемоническая Фраза</string>
+    <string name="CreateWallet_Wordlist">Список Слов</string>
     <string name="Passphrase">Кодовая Фраза</string>
     <string name="CreateWallet_N_Words">%s слов</string>
     <string name="CreateWallet_PassphraseConfirm">Подтвердить</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только латинские буквы и цифры для кодовой фразы</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
     <string name="EnterPassphrase">Введите кодовую фразу</string>
     <string name="CreateWallet_PassphraseDescription">Кодовые фразы обеспечивают дополнительную защиту для кошельков, позволяя пользователям создавать несколько независимых мультивалютных кошельков, использующих одну мнемоническую фразу для восстановления, но имеющих разные пароли.\n\nДля восстановления этих кошельков пользователю потребуются мнемоническая фраза для восстановления, а также пароль для каждого восстанавливаемого кошелька.</string>
+    <!--Languages-->
+    <string name="Language_English">Английский</string>
+    <string name="Language_Japanese">Японский</string>
+    <string name="Language_Korean">Корейский</string>
+    <string name="Language_Spanish">Испанский</string>
+    <string name="Language_SimplifiedChinese">Китайский (Упрощенный)</string>
+    <string name="Language_TraditionalChinese">Китайский (Традиционный)</string>
+    <string name="Language_French">Французский</string>
+    <string name="Language_Italian">Итальянский</string>
+    <string name="Language_Czech">Чешский</string>
+    <string name="Language_Portuguese">Португальский</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">GM!</string>
+    <string name="RateApp_Title_Rate_This_App">ДД!</string>
     <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable? Поделитесь отзывами и идеями для дальнейшего развития кошелька.</string>
     <string name="RateApp_Button_RateIt">Оценить</string>
     <string name="RateApp_Button_NotNow">Не сейчас</string>
@@ -76,15 +90,19 @@
     <string name="Restore_InvalidChecksum">Неверная Контрольная Сумма</string>
     <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
     <string name="Restore_Title">Выбрать Блокчейны</string>
-    <string name="Restore_Name">Имя (опционально)</string>
     <string name="Restore_Key">Ключ</string>
     <string name="Select_Coins">Выберите Токены</string>
     <string name="Restore_BirthdayHeight">Блок Создания</string>
-    <string name="Restore_ZCash">ZCash</string>
+    <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Блок Создания Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете дату создания вашего кошелька, укажите ее для быстрой синхронизации.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (необязательно)</string>
     <string name="Restore_ZCash_RestoreAsNew">Вставить как новое</string>
+    <string name="Restore_ZCash_NewWallet">Создать Кошелек</string>
+    <string name="Restore_ZCash_NewWallet_Description">Не было транзакций до</string>
+    <string name="Restore_ZCash_OldWallet">Старый Кошелёк</string>
+    <string name="Restore_ZCash_OldWallet_Description">Использовался до и есть транзакции</string>
+    <string name="Restore_ZCash_SlowSyncWarningText">Первоначальная синхронизация с блокчейном может потреблять много интернет-трафика.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <!--Market-->
@@ -141,6 +159,7 @@
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Сортировать по блокчейну</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Все</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">Этот токен еще не поддерживается</string>
+    <string name="MarketGlobalMetrics_NoCoin">У этого проекта нет токена</string>
     <!--Market Search-->
     <string name="EmptyResults">Ничего не найдено</string>
     <string name="Market_Filters">Фильтры</string>
@@ -222,6 +241,7 @@
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
     <string name="Balance_Receive">Получить</string>
+    <string name="Balance_Address">Адрес</string>
     <string name="Balance_RatePerCoin">%s за %s</string>
     <string name="Balance_SyncedUntil">до %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
@@ -236,6 +256,8 @@
     <string name="Balance_Sort_Az">По Названию</string>
     <string name="Balance_Sort_24hPriceChange">По Изменение Цены (%)</string>
     <string name="Balance_Hidden">скрытое</string>
+    <string name="Balance_DownloadingBlocks">Загрузка Блоков</string>
+    <string name="Balance_ScanningBlocks">Сканирование Блоков</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <string name="Balance_NoWalletAlert">У вас пока нет установленных кошельков.\nСоздайте новый кошелек или восстановите существующий кошелек </string>
     <string name="Balance_NoCoinsAlert">У вас нет добавленных монет.\nДобавьте монеты, которые вы будете использовать</string>
@@ -256,8 +278,11 @@
     <string name="Send_Confirmation_EstimateTime">Приблизительное Время:</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_Success">\u2713 Отправлено</string>
+    <string name="ScanQr_CameraPermission_Title">Разрешение камеры</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Пожалуйста, дайте разрешение на доступ к камере</string>
     <string name="ScanQr_NoCameraPermission">Нет разрешения для камеры</string>
+    <string name="ScanQr_CameraPermissionDeniedText">Доступ к камере для этого приложения запрещен, вы можете перейти в настройки и разрешить доступ</string>
+    <string name="ScanQr_GoToSettings">Перейти в настройки</string>
     <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
     <string name="Send_Error_UnsupportedAddress">Блокировка по времени работает только с адресами P2PKH (начиная с 1)</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
@@ -327,6 +352,7 @@
     <string name="WalletConnect_Ready_Hint">Вы можете перейти в браузер. Не закрывайте эту страницу во время использования браузера.</string>
     <string name="WalletConnect_Reconnect_Hint">Не удалось установить соединение. Попробуйте переподключиться снова.</string>
     <string name="WalletConnect_Error_InvalidUrl">Неверный URL-адрес</string>
+    <string name="WalletConnect_NotSupportedV2">Подключение к Wallet Connect v2 не поддерживается</string>
     <string name="WalletConnect_Requirement">Требования</string>
     <string name="WalletConnect_Alert">Предупреждение</string>
     <string name="WalletConnect_Status_Offline">Не доступен</string>
@@ -392,6 +418,8 @@
     <string name="Swap_ErrorNoLiquidity">Невозможно обменять эти токены</string>
     <string name="Swap_ErrorHighPriceImpact">Высокое отклонение цены</string>
     <string name="Swap_Proceed">Далее</string>
+    <string name="Swap_Revoke">Отменить</string>
+    <string name="Swap_Revoking">Отмена...</string>
     <string name="Swap_Approve">Разрешить</string>
     <string name="Swap_Approving">Подтверждение...</string>
     <string name="Swap_Swapping">Обмен</string>
@@ -429,10 +457,15 @@
     <string name="Swap_Confirmation_Estimated">Ориентировочно</string>
     <!--Approve-->
     <string name="Approve_Title">Разрешить Обмен</string>
+    <string name="Approve_RevokeAndApproveInfo">Вы можете обменять %s, или вы должны отменить и одобрить новую сумму</string>
+    <string name="Approve_ButtonRevoke">Отменить</string>
+    <string name="Approve_ButtonRevoking">Отмена</string>
+    <string name="Approve_ButtonApprove">Разрешить</string>
     <string name="Approve_Info">Вы должны предоставить разрешение на смарт-контракт, чтобы обменять этот токен от своего имени. С помощью этого разрешения задается сумма, которая может быть использована в рамках смарт-контракта. Это не повлияет на ваш баланс, но вам придется заплатить небольшой сбор за исполнение транзакции.\n\nРазрешение может быть запрошено перед каждой сделкой, но дешевле заранее задать более высокую сумму для будущих сделок.</string>
     <string name="Approve_Error_AlreadyApproved">У вас уже есть разрешение на эту сумму</string>
     <string name="Approve_Spender">Покупатель</string>
     <string name="Approve_YouApprove">Вы Разрешаете</string>
+    <string name="Approve_YouRevoke">Вы Отменяете</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_Description">Этот обменный сервис работает при поддержке %s - децентрализованного протокола обмена токенов, созданного в блокчейне %s.\n\n%s полностью автоматизирован и управляется смарт-контрактами, которые надежным способом упрощают обмен токенами без осуществления каких-либо махинаций.</string>
     <string name="SwapInfo_DexRelated">o %s</string>
@@ -456,6 +489,7 @@
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
+    <string name="Deposit_Address">Адрес</string>
     <!--Transactions-->
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
@@ -466,6 +500,8 @@
     <string name="Transactions_Completed">Завершено</string>
     <string name="Transactions_Processing">В процессе</string>
     <string name="Transactions_Send">Отправлено</string>
+    <string name="Transactions_Burn">Сжигание</string>
+    <string name="Transactions_Mint">Минт</string>
     <string name="Transactions_Approve">Разрешение</string>
     <string name="Transactions_Swap">Обмен</string>
     <string name="Transactions_Failed">Не удалось</string>
@@ -626,15 +662,12 @@
 \n\nКошелек Unstoppable имеет открытый исходный программный код, и любой может убедиться в том, что приложение работает должным образом.
 
 \n\nМы создали кошелек Unstoppable для себя, так как доступные в сети решения не предлагают необходимый функционал на должном уровне. С точки зрения инженерии и простоты использования, мы считаем, что этот кошелек значительно опережает альтернативные продукты.</string>
-    <string name="SettingsTerms_TermAcademy">Я зашел в раздел \"Академия\" в этом приложении и ознакомился с базовыми аспектами хранения криптовалют.</string>
-    <string name="SettingsTerms_TermBackup">Я создал резервную копию приватного ключа (-ей) для своих кошельков, показанных мне в виде 12-24 слов. Я понимаю, что эти приватные ключи хранятся на моем смартфоне, а не в другом месте.</string>
-    <string name="SettingsTerms_TermOwner">Я понимаю, что передача моего телефона ненадежным лицам и отсутствие безопасной блокировки кошелька с помощью PIN-кода может поставить под угрозу безопасность моих средств.</string>
-    <string name="SettingsTerms_TermRecover">Я понимаю, что джейлбрейк (или рутинг) моего телефона, установка приложений из неизвестных источников и устаревшая операционная система могут поставить под угрозу безопасность моих средств.</string>
-    <string name="SettingsTerms_TermPhone">Я понимаю, что в коде этого кошелька могут быть не обнаруженные проблемы с программным обеспечением, что может привести к неожиданному поведению или сбоям в работе приложения.</string>
-    <string name="SettingsTerms_TermRoot">Я понимаю, что в случае если я потеряю телефон или не будет работать приложение, для восстановления доступа к моим средствам мне понадобятся приватные ключи. Я не смогу восстановить доступ к моему кошельку без персональных ключей.</string>
-    <string name="SettingsTerms_TermBugs">Я понимаю, что отключение секретного кода разблокировки телефона (или его эквивалента) в настройках iOS удалит приватные ключи кошелька с моего устройства. Мне понадобятся приватные ключи для восстановления доступа к моему кошельку.</string>
-    <string name="Settings_TermsPin"> Я понимаю, что только я один полностью несу ответственность за безопасность своих средств.</string>
-    <string name="SettingsTerms_BottomThankYou">Благодарим вас \nза выбор \nэтого кошелька!</string>
+    <string name="SettingsTerms_Backup">Сделайте резервную копию фраз восстановления кошелька, чтобы восстановить доступ к средствам.</string>
+    <string name="SettingsTerms_PrivateKeys">Приватные ключи и фразы восстановления хранятся только на вашем устройстве.</string>
+    <string name="SettingsTerms_DisablingPin">Отключение PIN-кода для разблокировки смартфона приводит к удалению всех кошельков из приложения. Фразы восстановления потребуются для восстановления доступа к средствам.</string>
+    <string name="SettingsTerms_JailBraking">Jailbreaking(rooting), установка приложений из неизвестных источников и использование устаревшей ОС могут поставить под угрозу безопасность средств.</string>
+    <string name="SettingsTerms_Bugs">В процессе работы кода могут возникнуть проблемы с программным обеспечением, которые могут привести к неожиданному поведению или неисправности приложения.</string>
+    <string name="SettingsTerms_Responsibility">Только пользователь несет ответственность за сохранность средств и никто другой.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
@@ -675,7 +708,10 @@
     <string name="Hud_Text_NoInternet">Нет Интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
     <string name="Hud_Text_Created">Создан</string>
+    <string name="Hud_Text_Restored">Восстановлен</string>
+    <string name="Hud_Text_AddressAdded">Адрес Добавлен</string>
     <string name="Hud_Text_Done">Готово</string>
+    <string name="Hud_Text_Verified">Подтверждено</string>
     <string name="Hud_Text_EmailAddressCopied">Адрес электронной почты скопирован</string>
     <string name="Hud_Added_To_Watchlist">Добавлено в Избранное</string>
     <string name="Hud_Added_To_Wallet">Добавлено в Кошелек</string>
@@ -713,7 +749,6 @@
     <string name="ManageAccount_BackupRequired_Title">Необходима Резервная Копия</string>
     <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию %1$s перед получением %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Это действие удалит ваш кошелек с этого устройства.</string>
-    <string name="ManageAccount_Delete_ConfirmationDisable">Все монеты, принадлежащие этому кошельку, будут отключены на вкладке баланса.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Если вы не сделали резервную копию приватного ключа для этого кошелька, вы потеряете доступ к вашим средствам.</string>
     <string name="ManageAccount_BirthdayHeight">%s Блок Создания</string>
     <string name="ManageAccount_NWords">%s слов</string>
@@ -741,7 +776,29 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Риск Копирования Секретного Ключа</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">В целях безопасности мы не рекомендуем копировать секретный ключ.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Я рискну</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Не копировать</string>
     <string name="ShowKey_PrivateKey_Warning">Этот ключ для всех EVM-совместимых блокчейнов.\n\nВ качестве меры безопасности мы не рекомендуем использовать действие копирования на закрытом ключе.</string>
+    <!-- Backup Recovery Phrase -->
+    <string name="BackupRecoveryPhrase_Title">Резервная Копия</string>
+    <string name="BackupRecoveryPhrase_Description">Создайте резервную копию вашей фразы восстановления и пароля, которые позволят вам восстановить ваш кошелек, если телефон потерян, украден, сломал и т.д.</string>
+    <string name="BackupRecoveryPhrase_Backup">Резервная Копия</string>
+    <string name="BackupRecoveryPhrase_Later">Позже</string>
+    <!-- Recovery Phrase -->
+    <string name="RecoveryPhrase_Title">Фраза Восстановления</string>
+    <string name="RecoveryPhrase_Description">Напишите эти слова в правильном порядке и храните их в безопасном месте</string>
+    <string name="RecoveryPhrase_ShowPhrase">Нажмите, чтобы показать фразу восстановления</string>
+    <string name="RecoveryPhrase_Verify">Подтвердить</string>
+    <string name="RecoveryPhrase_Warning">Никогда ни с кем не делитесь вашей фразой восстановления. Команда Unstoppable никогда не запросит вашу фразу восстановления.</string>
+    <string name="RecoveryPhrase_CopyWarning_Title">Риск Копирования</string>
+    <!-- Evm Private Key -->
+    <string name="EvmPrivateKey_Title">Приватный Ключ EVM</string>
+    <string name="EvmPrivateKey_Warning">Этот ключ предназначен для всех EVM-совместимых блокчейнов. Не передавайте его никому.</string>
+    <string name="EvmPrivateKey_ShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
+    <!-- Public Keys -->
+    <string name="PublicKeys_Title">Публичные Ключи</string>
+    <!-- Recovery Phrase Verify -->
+    <string name="RecoveryPhraseVerify_Title">Подтвердить</string>
+    <string name="RecoveryPhraseVerify_Description">Выберите запрошенные слова из вашей фразы восстановления</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Резервная Копия</string>
     <string name="BackupKey_Description">Показанные далее фразы для восстановления являются единственным способом восстановления ваших средств в случае потери, кражи или поломки вашего телефона.\n\nУбедитесь, что никто не смотрит на ваш экран.</string>
@@ -944,6 +1001,7 @@
     <string name="Nfts_PriceType_Days_30">30Д сред.</string>
     <string name="Nfts_PriceType_LastSale">Последняя Продажа</string>
     <string name="Nfts_Asset_OnSale">В Продаже</string>
+    <string name="Nfts_Asset_OnAuction">На Аукционе</string>
     <string name="Nfts_Asset_OnSaleUntil">до %s</string>
     <string name="Nfts_Empty">У вас нет NFT в вашем кошельке</string>
     <string name="Nfts_PriceMode">Режим Цены</string>
@@ -1033,4 +1091,33 @@
     <!--Widget-->
     <string name="WidgetList_Config_Title">Выберите Тип</string>
     <string name="NftAssetActivity_Empty">Нет активности</string>
+    <!--Alert-->
+    <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
+    <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
+    <string name="Alert_TitleWarning">Внимание</string>
+    <string name="Alert_CustomKeyboardIsUsed">Кажется, ваше устройство использует клавиатуру, не являющуюся по умолчанию. Unstoppable рекомендует выбрать на вашем устройстве клавиатуру по умолчанию, поскольку сторонние клавиатуры потенциально могут собирать и раскрывать информацию о пользователях. \n\nНажмите кнопку \'Пропустить\', если вы хотите продолжать использовать предпочитаемую вами клавиатуру.</string>
+    <string name="Alert_DeviceIsRootedWarning">Команда Unstoppable рекомендует запускать приложение только на нерутированных телефонах (без джейлбрейка).\n\nОбратите внимание, что при использовании рутированного устройства приложение больше не будет защищать вашу криптовалюту от вредоносного ПО.</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">PIN-код телефона</string>
+    <string name="OSPin_Confirm_Desciption">Это приложение требует, чтобы на телефоне был включен пароль (экран блокировки).\n\nВы можете включить его в настройках Android.\n\nПожалуйста, обратите внимание, что после того, как вы отключили PIN-код на уровне ОС,  в безопасном хранилище вашего телефона ранее сохраненные данные стали недействительными. Поэтому Вам нужно восстановить ключи, чтобы вернуться к вашему кошельку.</string>
+    <string name="OSPin_Prompt_Desciption">Это приложение требует PIN-код вашего телефона, чтобы сохранить конфиденциальные данные  вашего кошелька в безопасном хранилище Android, а не в самом приложении.</string>
+    <!--Unlock-->
+    <string name="Unlock_Passcode">Код Доступа</string>
+    <string name="Unlock_Incorrect">Неправильно</string>
+    <string name="Unlock_BiometricScanner">Биометрический Сканер</string>
+    <string name="Unlock_BiometricScannerDisabled_Description">Введите код доступа или повторите попытку позже</string>
+    <string name="Unlock_BiometricScannerDisabled_Info">Биометрическая аутентификация отключена</string>
+    <string name="Unlock_WalletDisabledUntil">Отключено до: %s</string>
+    <!--Set Pin-->
+    <string name="PinSet_Title">Установить код доступа</string>
+    <string name="PinSet_Info">Код доступа будет использоваться для разблокировки вашего кошелька</string>
+    <string name="PinSet_ConfirmInfo">Подтвердить</string>
+    <string name="PinSet_ErrorPinsDontMatch">Код не совпадает. Попробуйте еще раз.</string>
+    <string name="PinSet_ErrorFailedToSavePin">При сохранении вашего кода произошла ошибка. Повторите попытку.</string>
+    <!--Edit Pin-->
+    <string name="EditPin_Title">Изменить Код</string>
+    <string name="EditPin_UnlockInfo">Текущий Код</string>
+    <string name="EditPin_NewPinInfo">Новый Код</string>
+    <!--Biometric Auth texts-->
+    <string name="BiometricAuth_DialogTitle">Биометрический Сканер</string>
 </resources>
