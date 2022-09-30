@@ -1041,8 +1041,11 @@
     <string name="NftCollection_Owners">Владельцы</string>
     <string name="NftCollection_AveragePrice">Средняя оценка за все время</string>
     <string name="NftCollection_ItemsCount">%d Элементов</string>
-    <string name="NftCollection_TodaysSales">Продажи за сегодня</string>
-    <string name="NftCollection_AveragePriceDescription">~%s / Элемент</string>
+    <string name="NftCollection_TodaysSales">Today\'s Sellers</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
+    <string name="NftCollection_AveragePriceDescription">~%s per NFT</string>
+    <string name="NftCollection_Royalty">Royalty</string>
+    <string name="NftCollection_InceptionDate">Inception Date</string>
     <!-- NFT Collection Events -->
     <string name="NftCollection_EventType_SelectorTitle">Выберите тип события</string>
     <string name="NftCollection_EventType_All">Все</string>
