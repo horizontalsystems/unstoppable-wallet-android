@@ -1045,8 +1045,11 @@
     <string name="NftCollection_Owners">所有者</string>
     <string name="NftCollection_AveragePrice">全部时间平均值</string>
     <string name="NftCollection_ItemsCount">%d条新闻</string>
-    <string name="NftCollection_TodaysSales">今天的卖家</string>
-    <string name="NftCollection_AveragePriceDescription">~%s / 物品</string>
+    <string name="NftCollection_TodaysSales">Today\'s Sellers</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
+    <string name="NftCollection_AveragePriceDescription">~%s per NFT</string>
+    <string name="NftCollection_Royalty">Royalty</string>
+    <string name="NftCollection_InceptionDate">Inception Date</string>
     <!-- NFT Collection Events -->
     <string name="NftCollection_EventType_SelectorTitle">选择事件类型</string>
     <string name="NftCollection_EventType_All">所有</string>
