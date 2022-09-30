@@ -6,27 +6,25 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import org.kethereum.eip137.model.ENSName
-import org.kethereum.ens.ENS
-import org.kethereum.ens.isPotentialENSDomain
-import org.kethereum.rpc.min3.getMin3RPC
+import org.web3j.ens.EnsResolver
 
 interface IAddressHandler {
     fun isSupported(value: String): Boolean
     fun parseAddress(value: String): Address
 }
 
-class AddressHandlerEns : IAddressHandler {
-    private val ens = ENS(getMin3RPC())
-
+class AddressHandlerEns(private val ensResolver: EnsResolver) : IAddressHandler {
     private val cache = mutableMapOf<String, Address>()
 
     override fun isSupported(value: String): Boolean {
-        if (!ENSName(value).isPotentialENSDomain()) return false
-        val address = ens.getAddress(ENSName(value)) ?: return false
+        if (!EnsResolver.isValidEnsName(value)) return false
 
-        cache[value] = Address(address.hex, value)
-        return true
+        try {
+            cache[value] = Address(ensResolver.resolve(value), value)
+            return true
+        } catch (e: Exception) {
+            return false
+        }
     }
 
     override fun parseAddress(value: String): Address {

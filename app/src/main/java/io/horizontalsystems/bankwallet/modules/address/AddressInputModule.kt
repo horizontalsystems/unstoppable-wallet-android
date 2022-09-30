@@ -12,7 +12,7 @@ object AddressInputModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val addressViewModel = AddressViewModel()
 
-            addressViewModel.addAddressHandler(AddressHandlerEns())
+            addressViewModel.addAddressHandler(AddressHandlerEns(EnsResolverHolder.resolver))
             addressViewModel.addAddressHandler(AddressHandlerUdn(tokenQuery, coinCode))
 
             when (tokenQuery.blockchainType) {

@@ -242,10 +242,7 @@ dependencies {
     implementation 'com.unstoppabledomains:resolution:5.0.0'
 
     // Ethereum Name Service
-    implementation 'com.github.komputing.kethereum:model:0.85.7'
-    implementation 'com.github.komputing.kethereum:rpc:0.85.7'
-    implementation 'com.github.komputing.kethereum:rpc_min3:0.85.7'
-    implementation 'com.github.komputing.kethereum:ens:0.85.7'
+    implementation "org.web3j:core:4.9.0"
 
     // in case native file tor.so not loading, do full gradle clean and build.
     implementation 'com.github.horizontalsystems:tor-kit-android:6c775c1'
