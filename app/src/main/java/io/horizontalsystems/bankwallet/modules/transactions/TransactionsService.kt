@@ -65,7 +65,7 @@ class TransactionsService(
 
         transactionRecordRepository.itemsObservable
             .subscribeIO {
-                handleUpdatedRecords(it.first, it.second)
+                handleUpdatedRecords(it)
             }
             .let {
                 disposables.add(it)
@@ -172,7 +172,7 @@ class TransactionsService(
     }
 
     @Synchronized
-    private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>, pageNumber: Int) {
+    private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
         val tmpList = mutableListOf<TransactionItem>()
 
         val nftUids = transactionRecords.nftUids
@@ -185,9 +185,14 @@ class TransactionsService(
             }
         }
 
+        val newRecords = mutableListOf<TransactionRecord>()
         transactionRecords.forEach { record ->
-            if (record.spam) return@forEach
             var transactionItem = transactionItems.find { it.record == record }
+            if (transactionItem == null) {
+                newRecords.add(record)
+            }
+
+            if (record.spam) return@forEach
 
             transactionItem = if (transactionItem == null) {
                 val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
@@ -201,12 +206,12 @@ class TransactionsService(
             tmpList.add(transactionItem)
         }
 
-        if (tmpList.size > transactionItems.size || pageNumber == 1) {
+        if (newRecords.isNotEmpty() && newRecords.all { it.spam }) {
+            loadNext()
+        } else {
             transactionItems.clear()
             transactionItems.addAll(tmpList)
             itemsSubject.onNext(transactionItems)
-        } else {
-            loadNext()
         }
     }
 
