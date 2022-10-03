@@ -103,6 +103,7 @@ private fun SectionView(viewItems: List<ViewItem>) {
                 is ViewItem.Value -> TitleValue(item)
                 is ViewItem.AmountMulti -> AmountMulti(item)
                 is ViewItem.Amount -> Amount(item)
+                is ViewItem.NftAmount -> NftAmount(item)
                 is ViewItem.Address -> TitleValueHex(item.title, item.valueTitle, item.value)
                 is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
                 is ViewItem.TokenItem -> Token(item)
@@ -233,6 +234,29 @@ private fun Amount(item: ViewItem.Amount) {
         Spacer(Modifier.weight(1f))
         subhead2_grey(
             text = item.fiatAmount ?: ""
+        )
+    }
+}
+
+@Composable
+private fun NftAmount(item: ViewItem.NftAmount) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        NftIcon(
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp),
+            iconUrl = item.iconUrl,
+        )
+        Text(
+            text = item.amount,
+            maxLines = 1,
+            style = ComposeAppTheme.typography.subhead2,
+            color = setColorByType(item.type)
         )
     }
 }

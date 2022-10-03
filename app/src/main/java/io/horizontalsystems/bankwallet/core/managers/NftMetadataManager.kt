@@ -4,10 +4,7 @@ import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.OpenSeaNftProvider
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
-import io.horizontalsystems.bankwallet.entities.nft.NftAddressMetadata
-import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
-import io.horizontalsystems.bankwallet.entities.nft.NftKey
-import io.horizontalsystems.bankwallet.entities.nft.NftUid
+import io.horizontalsystems.bankwallet.entities.nft.*
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +41,10 @@ class NftMetadataManager(
 
     fun save(assetsBriefMetadata: List<NftAssetBriefMetadata>) {
         storage.save(assetsBriefMetadata)
+    }
+
+    fun assetShortMetadata(nftUid: NftUid) : NftAssetShortMetadata? {
+        return storage.assetShortMetadata(nftUid)
     }
 
     fun assetsBriefMetadata(nftUids: Set<NftUid>): List<NftAssetBriefMetadata> {

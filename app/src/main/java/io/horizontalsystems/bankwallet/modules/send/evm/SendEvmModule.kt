@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
+import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -51,7 +52,14 @@ data class SendEvmData(
 
     @Parcelize
     data class SendInfo(
-        val domain: String?
+        val domain: String?,
+        val nftShortMeta: NftShortMeta? = null
+    ) : Parcelable
+
+    @Parcelize
+    data class NftShortMeta(
+        val nftName: String,
+        val previewImageUrl: String?
     ) : Parcelable
 
     @Parcelize
@@ -88,6 +96,7 @@ object SendEvmModule {
     const val additionalInfoKey = "additionalInfo"
     const val blockchainTypeKey = "blockchainType"
     const val backButtonKey = "backButton"
+    const val sendNavGraphIdKey = "sendNavGraphId_key"
 
     @Parcelize
     data class TransactionDataParcelable(
@@ -106,27 +115,41 @@ object SendEvmModule {
 
 
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+        val adapter by lazy {
+            App.adapterManager.getAdapterForWallet(wallet) as ISendEthereumAdapter
+        }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val adapter = App.adapterManager.getAdapterForWallet(wallet) as ISendEthereumAdapter
-            val amountValidator = AmountValidator()
-            val coinMaxAllowedDecimals = wallet.token.decimals
+            return when (modelClass) {
+                EvmKitWrapperHoldingViewModel::class.java -> {
+                    EvmKitWrapperHoldingViewModel(adapter.evmKitWrapper) as T
+                }
+                SendEvmViewModel::class.java -> {
+                    val amountValidator = AmountValidator()
+                    val coinMaxAllowedDecimals = wallet.token.decimals
 
-            val amountService = SendEvmAmountService(adapter, wallet.token, amountValidator, coinMaxAllowedDecimals)
-            val addressService = SendEvmAddressService()
-            val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
+                    val amountService = SendEvmAmountService(
+                        adapter,
+                        wallet.token,
+                        amountValidator,
+                        coinMaxAllowedDecimals
+                    )
+                    val addressService = SendEvmAddressService()
+                    val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
-            return SendEvmViewModel(
-                wallet,
-                wallet.token,
-                adapter,
-                xRateService,
-                amountService,
-                addressService,
-                coinMaxAllowedDecimals
-            ) as T
+                    SendEvmViewModel(
+                        wallet,
+                        wallet.token,
+                        adapter,
+                        xRateService,
+                        amountService,
+                        addressService,
+                        coinMaxAllowedDecimals
+                    ) as T
+                }
+                else -> throw IllegalArgumentException()
+            }
         }
     }
-
 }

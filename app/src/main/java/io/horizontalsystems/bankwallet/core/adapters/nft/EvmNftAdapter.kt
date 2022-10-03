@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.entities.nft.EvmNftRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.nftkit.core.NftKit
 import io.horizontalsystems.nftkit.models.NftBalance
@@ -38,6 +39,16 @@ class EvmNftAdapter(
         val nftBalance = nftKit.nftBalance(contractAddress, tokenId) ?: return null
 
         return record(nftBalance)
+    }
+
+    override fun transferEip721TransactionData(
+        contractAddress: String,
+        to: Address,
+        tokenId: String
+    ): TransactionData? {
+        val address = Address(contractAddress)
+        val tokenIdBigInt = tokenId.toBigIntegerOrNull() ?: return null
+        return nftKit.transferEip721TransactionData(address, to, tokenIdBigInt)
     }
 
     private fun record(nftBalance: NftBalance): EvmNftRecord {
