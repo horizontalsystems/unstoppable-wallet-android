@@ -13,7 +13,8 @@ class ExternalContractCallTransactionRecord(
     val outgoingEvents: List<TransferEvent>
 ) : EvmTransactionRecord(
     transaction, baseToken, source, true,
-    !incomingEvents.any { it.value is TransactionValue.CoinValue } && !outgoingEvents.any { it.value is TransactionValue.CoinValue }
+    !incomingEvents.any { it.value is TransactionValue.CoinValue || it.value is TransactionValue.NftValue } &&
+            !outgoingEvents.any { it.value is TransactionValue.CoinValue || it.value is TransactionValue.NftValue }
 ) {
 
     override val mainValue: TransactionValue?
