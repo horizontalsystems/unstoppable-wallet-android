@@ -39,6 +39,10 @@ class PinComponent(
         get() = pinManager.isPinSet
 
     override fun store(pin: String) {
+        if (appLockManager.isLocked) {
+            appLockManager.onUnlock()
+        }
+
         pinManager.store(pin)
     }
 
