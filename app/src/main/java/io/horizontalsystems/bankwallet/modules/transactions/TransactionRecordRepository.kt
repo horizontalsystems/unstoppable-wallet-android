@@ -23,8 +23,8 @@ class TransactionRecordRepository(
     private var selectedWallet: TransactionWallet? = null
     private var selectedBlockchain: Blockchain? = null
 
-    private val itemsSubject = PublishSubject.create<Pair<List<TransactionRecord>, Int>>()
-    override val itemsObservable: Observable<Pair<List<TransactionRecord>, Int>> get() = itemsSubject
+    private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
+    override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
 
     private var loadedPageNumber = 0
     private val items = CopyOnWriteArrayList<TransactionRecord>()
@@ -232,7 +232,7 @@ class TransactionRecordRepository(
 
                 items.clear()
                 items.addAll(it)
-                itemsSubject.onNext(Pair(items, page))
+                itemsSubject.onNext(items)
 
                 loadedPageNumber = page
             }

@@ -6,7 +6,7 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Observable
 
 interface ITransactionRecordRepository : Clearable {
-    val itemsObservable: Observable<Pair<List<TransactionRecord>, Int>>
+    val itemsObservable: Observable<List<TransactionRecord>>
 
     fun setWallets(
         transactionWallets: List<TransactionWallet>,
