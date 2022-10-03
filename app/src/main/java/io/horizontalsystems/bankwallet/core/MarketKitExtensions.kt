@@ -227,10 +227,10 @@ val BlockchainType.tokenIconPlaceholder: Int
 val BlockchainType.supportedNftTypes: List<NftType>
     get() = when (this) {
         BlockchainType.Ethereum -> listOf(NftType.Eip721, NftType.Eip1155)
-        BlockchainType.BinanceSmartChain -> listOf(NftType.Eip721)
-        BlockchainType.Polygon -> listOf(NftType.Eip721, NftType.Eip1155)
-        BlockchainType.Avalanche -> listOf(NftType.Eip721)
-        BlockchainType.ArbitrumOne -> listOf(NftType.Eip721)
+//        BlockchainType.BinanceSmartChain -> listOf(NftType.Eip721)
+//        BlockchainType.Polygon -> listOf(NftType.Eip721, NftType.Eip1155)
+//        BlockchainType.Avalanche -> listOf(NftType.Eip721)
+//        BlockchainType.ArbitrumOne -> listOf(NftType.Eip721)
         else -> listOf()
     }
 
