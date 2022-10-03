@@ -103,6 +103,7 @@ fun SendEthRequestScreen(
                                     item.type,
                                     item.token
                                 )
+                                is ViewItem.NftAmount -> {}
                             }
                         }
                         Spacer(Modifier.height(12.dp))

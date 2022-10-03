@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -51,11 +50,11 @@ import io.horizontalsystems.snackbar.SnackbarDuration
 class SendEvmConfirmationFragment : BaseFragment() {
 
     private val logger = AppLogger("send-evm")
-    private val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment)
 
     private val vmFactory by lazy {
+        val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(sendNavGraphId)
         SendEvmConfirmationModule.Factory(
-            sendEvmViewModel.adapter.evmKitWrapper,
+            evmKitWrapperViewModel.evmKitWrapper,
             SendEvmData(transactionData, additionalInfo)
         )
     }
@@ -63,6 +62,8 @@ class SendEvmConfirmationFragment : BaseFragment() {
     private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.sendEvmConfirmationFragment) { vmFactory }
 
     private var snackbarInProcess: CustomSnackbar? = null
+
+    private val sendNavGraphId: Int by lazy { arguments?.getInt(SendEvmModule.sendNavGraphIdKey)!! }
 
     private val transactionData: TransactionData
         get() {
@@ -93,6 +94,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
                     sendEvmTransactionViewModel = sendEvmTransactionViewModel,
                     feeViewModel = feeViewModel,
                     parentNavGraphId = R.id.sendEvmConfirmationFragment,
+                    sendNavGraphId = sendNavGraphId,
                     navController = findNavController(),
                     onSendClick = {
                         logger.info("click send button")
@@ -137,6 +139,7 @@ private fun SendEvmConfirmationScreen(
     sendEvmTransactionViewModel: SendEvmTransactionViewModel,
     feeViewModel: EvmFeeCellViewModel,
     parentNavGraphId: Int,
+    sendNavGraphId: Int,
     navController: NavController,
     onSendClick: () -> Unit
 ) {
@@ -162,7 +165,7 @@ private fun SendEvmConfirmationScreen(
                             title = TranslatableString.ResString(R.string.Button_Close),
                             icon = R.drawable.ic_close,
                             onClick = {
-                                navController.popBackStack(R.id.sendXFragment, true)
+                                navController.popBackStack(sendNavGraphId, true)
                             }
                         )
                     )

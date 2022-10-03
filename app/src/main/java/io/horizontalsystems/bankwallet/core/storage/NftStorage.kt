@@ -26,16 +26,7 @@ class NftStorage(
                 averagePrice30 = nftPrice(it.averagePrice30d, tokens)
             )
         }
-        val assets = assetRecords.map {
-            NftAssetShortMetadata(
-                nftUid = it.nftUid,
-                providerCollectionUid = it.collectionUid,
-                name = it.name,
-                previewImageUrl = it.imagePreviewUrl,
-                onSale = it.onSale,
-                lastSalePrice = nftPrice(it.lastSale, tokens)
-            )
-        }
+        val assets = assetRecords.map { getAsset(it, tokens) }
         NftAddressMetadata(collections, assets)
     } catch (exception: Exception) {
         null
@@ -101,6 +92,26 @@ class NftStorage(
     fun assetsBriefMetadata(nftUids: Set<NftUid>): List<NftAssetBriefMetadata> =
         nftDao.getNftAssetBriefMetadataRecords(nftUids.toList()).map {
         NftAssetBriefMetadata(it.nftUid, it.providerCollectionUid, it.name, it.imageUrl, it.previewImageUrl)
+    }
+
+    fun assetShortMetadata(nftUid: NftUid) : NftAssetShortMetadata? {
+        return try {
+            val assetRecord = nftDao.getAsset(nftUid) ?: return null
+            getAsset(assetRecord, emptyList())
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun getAsset(record: NftAssetRecord, tokens: List<Token>): NftAssetShortMetadata {
+        return NftAssetShortMetadata(
+            nftUid = record.nftUid,
+            providerCollectionUid = record.collectionUid,
+            name = record.name,
+            previewImageUrl = record.imagePreviewUrl,
+            onSale = record.onSale,
+            lastSalePrice = nftPrice(record.lastSale, tokens)
+        )
     }
 
     private fun tokenQueries(priceRecords: List<NftPriceRecord>): List<TokenQuery> =

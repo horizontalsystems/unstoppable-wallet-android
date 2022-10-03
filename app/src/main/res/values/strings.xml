@@ -312,6 +312,9 @@
     <string name="Balance_NoCoinsAlert">You don\'t have an added coins.\nAdd the coins you will be using</string>
     <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
 
+    <!--Send NFT-->
+    <string name="SendNft_Title">Send</string>
+
     <!--Send-->
 
     <string name="Send_Title">Send %s</string>

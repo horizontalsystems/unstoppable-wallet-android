@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.core.adapters.nft
 
 import io.horizontalsystems.bankwallet.entities.nft.NftRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
+import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import kotlinx.coroutines.flow.Flow
 
 
@@ -11,4 +13,5 @@ interface INftAdapter {
     val nftRecords: List<NftRecord>
     fun nftRecord(nftUid: NftUid): NftRecord?
     fun sync()
+    fun transferEip721TransactionData(contractAddress: String, to: Address, tokenId: String) : TransactionData?
 }

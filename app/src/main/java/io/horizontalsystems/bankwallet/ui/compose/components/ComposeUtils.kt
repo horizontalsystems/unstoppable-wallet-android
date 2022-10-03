@@ -83,7 +83,7 @@ fun NftIcon(
     modifier: Modifier,
     colorFilter: ColorFilter? = null
 ) {
-    val fallback = placeholder ?: R.drawable.coin_placeholder
+    val fallback = placeholder ?: R.drawable.ic_platform_placeholder_24
     when {
         iconUrl != null -> Image(
             painter = rememberAsyncImagePainter(

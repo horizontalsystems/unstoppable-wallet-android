@@ -256,6 +256,9 @@
         android:id="@+id/nftAssetFragment"
         android:name="io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetFragment" />
     <fragment
+        android:id="@+id/nftSendFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.nft.send.SendNftFragment" />
+    <fragment
         android:id="@+id/nftCollectionFragment"
         android:name="io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment">
         <deepLink

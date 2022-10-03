@@ -48,6 +48,7 @@ import com.google.accompanist.pager.rememberPagerState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetMetadata
@@ -59,6 +60,7 @@ import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollecti
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftCollectionEventsViewModel
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftEventListType
 import io.horizontalsystems.bankwallet.modules.nft.collection.events.NftEvents
+import io.horizontalsystems.bankwallet.modules.nft.send.SendNftModule
 import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -194,7 +196,7 @@ private fun NftAssetInfo(
                 ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
             }
             else -> {
-                AssetContent(painter, viewModel.viewItem, navController, coroutineScope)
+                AssetContent(painter, viewModel.viewItem, viewModel.nftUid, navController, coroutineScope)
             }
         }
     }
@@ -204,6 +206,7 @@ private fun NftAssetInfo(
 private fun AssetContent(
     painter: AsyncImagePainter,
     viewItem: NftAssetViewModel.ViewItem?,
+    nftUid: NftUid,
     navController: NavController,
     coroutineScope: CoroutineScope,
 ) {
@@ -282,7 +285,10 @@ private fun AssetContent(
                                     modifier = Modifier.weight(1f),
                                     title = stringResource(R.string.Button_Send),
                                     onClick = {
-
+                                        navController.slideFromBottom(
+                                            R.id.nftSendFragment,
+                                            SendNftModule.prepareParams(nftUid.uid)
+                                        )
                                     }
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))

@@ -26,6 +26,7 @@ import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.nftkit.decorations.OutgoingEip721Decoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapDecoration
@@ -176,8 +177,68 @@ class SendEvmTransactionViewModel(
 
             is OneInchDecoration -> additionalInfo?.oneInchSwapInfo?.let { getOneInchViewItems(it) }
 
+            is OutgoingEip721Decoration -> getNftTransferItems(
+                decoration.to,
+                BigInteger.ONE,
+                transactionData?.nonce,
+                additionalInfo?.sendInfo,
+                decoration.tokenId,
+            )
+
             else -> null
         }
+
+    private fun getNftTransferItems(
+        recipient: Address,
+        value: BigInteger,
+        nonce: Long?,
+        sendInfo: SendEvmData.SendInfo?,
+        tokenId: BigInteger
+    ) : List<SectionViewItem> {
+
+        val sections = mutableListOf<SectionViewItem>()
+        val otherViewItems = mutableListOf<ViewItem>()
+        val addressValue = recipient.eip55
+        val addressTitle = sendInfo?.domain ?: evmLabelManager.mapped(addressValue)
+
+        sections.add(
+            SectionViewItem(
+                listOf(
+                    ViewItem.Subhead(
+                        Translator.getString(R.string.Send_Confirmation_YouSend),
+                        sendInfo?.nftShortMeta?.nftName ?: tokenId.toString(),
+                        R.drawable.ic_arrow_up_right_12
+                    ),
+                    getNftAmount(
+                        value,
+                        ValueType.Regular,
+                        sendInfo?.nftShortMeta?.previewImageUrl
+                    ),
+                    ViewItem.Address(
+                        Translator.getString(R.string.Send_Confirmation_To),
+                        addressTitle,
+                        addressValue
+                    )
+                )
+            )
+        )
+
+        nonce?.let {
+            otherViewItems.add(
+                ViewItem.Value(
+                    Translator.getString(R.string.Send_Confirmation_Nonce),
+                    "$it",
+                    ValueType.Regular
+                ),
+            )
+        }
+
+        if (otherViewItems.isNotEmpty()) {
+            sections.add(SectionViewItem(otherViewItems))
+        }
+
+        return sections
+    }
 
     private fun getUniswapViewItems(
         amountIn: SwapDecoration.Amount,
@@ -693,6 +754,9 @@ class SendEvmTransactionViewModel(
     private fun getCoinService(token: Token) =
         coinServiceFactory.getCoinService(token)
 
+    private fun getNftAmount(value: BigInteger, valueType: ValueType, previewImageUrl: String?): ViewItem.NftAmount =
+        ViewItem.NftAmount(previewImageUrl, "$value NFT", valueType)
+
     private fun getAmount(amountData: SendModule.AmountData, valueType: ValueType, token: Token) =
         ViewItem.Amount(
             amountData.secondary?.getFormatted(),
@@ -773,6 +837,12 @@ sealed class ViewItem {
         val coinAmount: String,
         val type: ValueType,
         val token: Token
+    ) : ViewItem()
+
+    class NftAmount(
+        val iconUrl: String?,
+        val amount: String,
+        val type: ValueType,
     ) : ViewItem()
 
     class Address(val title: String, val valueTitle: String, val value: String) : ViewItem()
