@@ -41,7 +41,7 @@ class OpenSeaService(
             val response = service.assets(owner = address, cursor = cursor, limit = limit)
             assets.addAll(response.assets)
             cursor = response.next
-        } while (response.assets.size >= limit)
+        } while (response.assets.size >= limit && cursor != null)
         return assets
     }
 
