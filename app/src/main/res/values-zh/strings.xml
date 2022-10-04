@@ -262,6 +262,9 @@
     <string name="Balance_NoWalletAlert">尚无钱包</string>
     <string name="Balance_NoCoinsAlert">您没有添加的硬币。\n添加您将使用的硬币</string>
     <string name="Balance_WatchAccount_NoBalance">此钱包地址没有任何余额</string>
+    <!--Send NFT-->
+    <string name="SendNft_Title">Send</string>
+    <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址或域名</string>
