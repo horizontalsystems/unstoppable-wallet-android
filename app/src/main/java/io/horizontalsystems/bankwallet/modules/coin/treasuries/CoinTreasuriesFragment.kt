@@ -97,7 +97,7 @@ class CoinTreasuriesFragment : BaseFragment() {
                             ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
                         ViewState.Success -> {
-                            LazyColumn {
+                            LazyColumn(modifier = Modifier.fillMaxSize()) {
                                 treasuriesData?.let { treasuriesData ->
                                     item {
                                         CoinTreasuriesMenu(

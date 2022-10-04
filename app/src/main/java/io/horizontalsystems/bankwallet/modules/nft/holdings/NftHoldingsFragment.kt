@@ -155,7 +155,10 @@ fun NftHoldingsScreen(navController: NavController) {
                                         )
                                     }
 
-                                    LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
+                                    LazyColumn(
+                                        contentPadding = PaddingValues(bottom = 32.dp),
+                                        modifier = Modifier.weight(1f)
+                                    ) {
                                         collections.forEach { collection ->
                                             nftsCollectionSection(collection, viewModel) { asset ->
                                                 navController.slideFromBottom(

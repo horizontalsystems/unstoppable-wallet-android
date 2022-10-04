@@ -128,6 +128,7 @@ class TvlFragment : BaseFragment() {
 
                             LazyColumn(
                                 state = listState,
+                                modifier = Modifier.fillMaxSize(),
                                 contentPadding = PaddingValues(bottom = 32.dp),
                             ) {
                                 item {

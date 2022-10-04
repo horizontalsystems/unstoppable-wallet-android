@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.balance.TotalService
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class NftHoldingsViewModel(
@@ -95,6 +96,7 @@ class NftHoldingsViewModel(
         viewModelScope.launch {
             refreshing = true
             service.refresh()
+            delay(1000)
             refreshing = false
         }
     }

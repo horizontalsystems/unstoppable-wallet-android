@@ -58,7 +58,10 @@ private fun NftAssets(
 ) {
     val listState = rememberLazyListState()
 
-    LazyColumn(state = listState) {
+    LazyColumn(
+        state = listState,
+        modifier = Modifier.fillMaxSize()
+    ) {
         assets?.chunked(2)?.forEachIndexed { index, assets ->
             item(key = "content-row-$index") {
                 Row(

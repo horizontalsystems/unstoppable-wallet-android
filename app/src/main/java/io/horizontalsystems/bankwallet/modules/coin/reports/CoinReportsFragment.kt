@@ -8,6 +8,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -111,7 +112,7 @@ private fun CoinReportsScreen(
                         ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                     }
                     ViewState.Success -> {
-                        LazyColumn {
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
                             reportViewItems?.let {
                                 items(it) { report ->
                                     Spacer(modifier = Modifier.height(12.dp))

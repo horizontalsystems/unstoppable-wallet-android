@@ -131,7 +131,6 @@ private fun PlatformScreen(
                         }
                         ViewState.Success -> {
                             viewModel.viewItems.let { viewItems ->
-
                                 CoinList(
                                     items = viewItems,
                                     scrollToTop = scrollToTopAfterUpdate,

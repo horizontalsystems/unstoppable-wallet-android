@@ -50,7 +50,9 @@ fun CoinTweetsScreen(
                         )
                     } else {
                         LazyColumn(
-                            modifier = Modifier.padding(horizontal = 16.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxSize(),
                         ) {
                             items(items) { tweet: TweetViewItem ->
                                 Spacer(modifier = Modifier.height(12.dp))
