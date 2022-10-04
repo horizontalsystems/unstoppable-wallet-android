@@ -262,6 +262,9 @@
     <string name="Balance_NoWalletAlert">Henüz cüzdan yok</string>
     <string name="Balance_NoCoinsAlert">Eklenmiş jetonunuz yok.\nKullanacağınız jetonları ekleyin</string>
     <string name="Balance_WatchAccount_NoBalance">Bu cüzdan adresinde bakiye bulunmuyor</string>
+    <!--Send NFT-->
+    <string name="SendNft_Title">Send</string>
+    <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
     <!--Send-->
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres veya Domain</string>
