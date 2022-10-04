@@ -26,19 +26,23 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
+import io.horizontalsystems.bankwallet.modules.address.AddressViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
+import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 
 @Composable
 fun SendEip1155Screen(
     navController: NavController,
-    viewModel: SendEip721ViewModel,
+    viewModel: SendEip1155ViewModel,
+    addressViewModel: AddressViewModel,
+    addressParserViewModel: AddressParserViewModel,
+    nftSendFragment: Int,
 ) {
 
     ComposeAppTheme {
@@ -80,14 +84,21 @@ fun SendEip1155Screen(
                     headline1_leah(
                         text = viewModel.uiState.name
                     )
-                    Spacer(Modifier.height(24.dp))
+                    Spacer(Modifier.height(12.dp))
+                    AvailableNftBalance(viewModel.availableNftBalance)
+                    Spacer(Modifier.height(12.dp))
+                    ItemCountInput(
+                        state = viewModel.uiState.amountState,
+                        onValueChange = { amount ->
+                            viewModel.onAmountChange(amount)
+                        }
+                    )
+                    Spacer(Modifier.height(12.dp))
                     HSAddressInput(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        tokenQuery = TokenQuery(
-                            BlockchainType.BinanceChain,
-                            TokenType.Eip20("afs")
-                        ),
-                        coinCode = "Coin Code",
+                        viewModel = addressViewModel,
+                        error = viewModel.uiState.addressError,
+                        textPreprocessor = addressParserViewModel,
                     ) { address ->
                         viewModel.onEnterAddress(address)
                     }
@@ -98,7 +109,15 @@ fun SendEip1155Screen(
                             .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                         title = stringResource(R.string.Button_Next),
                         onClick = {
-                            //openConfirm
+                            viewModel.getSendData()?.let { sendData ->
+                                navController.slideFromRight(
+                                    R.id.sendEvmConfirmationFragment,
+                                    SendEvmConfirmationModule.prepareParams(
+                                        sendData,
+                                        nftSendFragment
+                                    )
+                                )
+                            }
                         },
                         enabled = viewModel.uiState.canBeSend
                     )
@@ -110,8 +129,19 @@ fun SendEip1155Screen(
 }
 
 @Composable
+private fun AvailableNftBalance(availableBalance: String) {
+    AdditionalDataCell2 {
+        subhead2_grey(text = stringResource(R.string.Send_DialogAvailableBalance))
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        subhead2_leah(text = availableBalance)
+    }
+}
+
+@Composable
 private fun ItemCountInput(
-    initial: Int,
+    initial: Int = 1,
     state: DataState<Any>? = null,
     onValueChange: (Int) -> Unit,
 ) {
@@ -175,6 +205,15 @@ private fun ItemCountInput(
                     textState.copy(text = stringNumber, selection = TextRange(stringNumber.length))
                 onValueChange.invoke(number)
             }
+        )
+    }
+
+    if (state is DataState.Error) {
+        caption_lucian(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, top = 8.dp, end = 16.dp),
+            text = stringResource(R.string.SendNft_Error_NotEnoughtBalance),
         )
     }
 }

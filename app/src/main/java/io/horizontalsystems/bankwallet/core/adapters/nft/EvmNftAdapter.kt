@@ -10,6 +10,7 @@ import io.horizontalsystems.nftkit.core.NftKit
 import io.horizontalsystems.nftkit.models.NftBalance
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.math.BigInteger
 
 class EvmNftAdapter(
     private val blockchainType: BlockchainType,
@@ -49,6 +50,17 @@ class EvmNftAdapter(
         val address = Address(contractAddress)
         val tokenIdBigInt = tokenId.toBigIntegerOrNull() ?: return null
         return nftKit.transferEip721TransactionData(address, to, tokenIdBigInt)
+    }
+
+    override fun transferEip1155TransactionData(
+        contractAddress: String,
+        to: Address,
+        tokenId: String,
+        value: BigInteger,
+    ): TransactionData? {
+        val address = Address(contractAddress)
+        val tokenIdBigInt = tokenId.toBigIntegerOrNull() ?: return null
+        return nftKit.transferEip1155TransactionData(address, to, tokenIdBigInt, value)
     }
 
     private fun record(nftBalance: NftBalance): EvmNftRecord {

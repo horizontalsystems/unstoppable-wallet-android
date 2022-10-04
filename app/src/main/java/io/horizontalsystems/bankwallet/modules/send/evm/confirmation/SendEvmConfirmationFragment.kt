@@ -121,7 +121,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
                 R.string.Hud_Text_Done
             )
             Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().popBackStack(R.id.sendXFragment, true)
+                findNavController().popBackStack(sendNavGraphId, true)
             }, 1200)
         }
 

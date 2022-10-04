@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.adapters.nft.INftAdapter
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.nft.EvmNftRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
@@ -19,6 +20,7 @@ object SendNftModule {
     class Factory(
         val evmNftRecord: EvmNftRecord,
         val nftUid: NftUid,
+        val nftBalance: Int,
         private val adapter: INftAdapter,
         private val sendEvmAddressService: SendEvmAddressService,
         private val nftMetadataManager: NftMetadataManager,
@@ -38,6 +40,7 @@ object SendNftModule {
                 SendEip1155ViewModel::class.java -> {
                     SendEip1155ViewModel(
                         nftUid,
+                        nftBalance,
                         adapter,
                         sendEvmAddressService,
                         nftMetadataManager
@@ -65,6 +68,14 @@ object SendNftModule {
         val name: String,
         val imageUrl: String?,
         val addressError: Throwable?,
+        val canBeSend: Boolean
+    )
+
+    data class SendEip1155UiState(
+        val name: String,
+        val imageUrl: String?,
+        val addressError: Throwable?,
+        val amountState: DataState<Int>?,
         val canBeSend: Boolean
     )
 

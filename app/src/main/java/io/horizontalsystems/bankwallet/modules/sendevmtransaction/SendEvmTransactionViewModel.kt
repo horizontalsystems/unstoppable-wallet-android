@@ -26,6 +26,7 @@ import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.nftkit.decorations.OutgoingEip1155Decoration
 import io.horizontalsystems.nftkit.decorations.OutgoingEip721Decoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
@@ -180,6 +181,14 @@ class SendEvmTransactionViewModel(
             is OutgoingEip721Decoration -> getNftTransferItems(
                 decoration.to,
                 BigInteger.ONE,
+                transactionData?.nonce,
+                additionalInfo?.sendInfo,
+                decoration.tokenId,
+            )
+
+            is OutgoingEip1155Decoration -> getNftTransferItems(
+                decoration.to,
+                decoration.value,
                 transactionData?.nonce,
                 additionalInfo?.sendInfo,
                 decoration.tokenId,
