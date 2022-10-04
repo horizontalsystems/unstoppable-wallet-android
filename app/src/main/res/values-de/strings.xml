@@ -262,6 +262,9 @@
     <string name="Balance_NoWalletAlert">Sie haben noch keine installierten Wallets.\nErstellen Sie eine neue Wallet oder stellen Sie eine vorhandene wieder her </string>
     <string name="Balance_NoCoinsAlert">Sie haben keine Münzen hinzugefügt.\nFügen Sie die Münzen hinzu, die Sie verwenden werden</string>
     <string name="Balance_WatchAccount_NoBalance">Diese Wallet-Adresse hat keinen Kontostand</string>
+    <!--Send NFT-->
+    <string name="SendNft_Title">Send</string>
+    <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
     <!--Send-->
     <string name="Send_Title">%s senden</string>
     <string name="Send_Hint_Address">Adresse oder Domäne</string>
