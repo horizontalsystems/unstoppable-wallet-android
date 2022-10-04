@@ -263,8 +263,8 @@
     <string name="Balance_NoCoinsAlert">Vous n\'avez pas de pièces ajoutées.\nAjoutez les pièces que vous utiliserez</string>
     <string name="Balance_WatchAccount_NoBalance">Cette adresse de portefeuille n\'a pas de solde</string>
     <!--Send NFT-->
-    <string name="SendNft_Title">Send</string>
-    <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
+    <string name="SendNft_Title">Envoyer</string>
+    <string name="SendNft_Error_NotEnoughtBalance">Solde insuffisant</string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse ou domaine</string>
@@ -1047,11 +1047,11 @@
     <string name="NftCollection_Owners">Propriétaires</string>
     <string name="NftCollection_AveragePrice">Moyenne du temps</string>
     <string name="NftCollection_ItemsCount">%d éléments</string>
-    <string name="NftCollection_TodaysSales">Today\'s Sellers</string>
+    <string name="NftCollection_TodaysSales">Vendeurs d\'aujourd\'hui</string>
     <string name="NftCollection_TodaysSalesCount">%s NFT</string>
-    <string name="NftCollection_AveragePriceDescription">~%s per NFT</string>
-    <string name="NftCollection_Royalty">Royalty</string>
-    <string name="NftCollection_InceptionDate">Inception Date</string>
+    <string name="NftCollection_AveragePriceDescription">~%s par NFT</string>
+    <string name="NftCollection_Royalty">Redevance</string>
+    <string name="NftCollection_InceptionDate">Date de création</string>
     <!-- NFT Collection Events -->
     <string name="NftCollection_EventType_SelectorTitle">Sélectionnez le type d\'événement</string>
     <string name="NftCollection_EventType_All">Tout</string>

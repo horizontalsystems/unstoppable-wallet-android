@@ -263,8 +263,8 @@
     <string name="Balance_NoCoinsAlert">추가된 코인이 없습니다.\n사용할 코인을 추가하세요.</string>
     <string name="Balance_WatchAccount_NoBalance">이 지갑 주소에는 잔액이 없습니다</string>
     <!--Send NFT-->
-    <string name="SendNft_Title">Send</string>
-    <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
+    <string name="SendNft_Title">전송</string>
+    <string name="SendNft_Error_NotEnoughtBalance">잔고 부족</string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
@@ -1047,11 +1047,11 @@
     <string name="NftCollection_Owners">소유자</string>
     <string name="NftCollection_AveragePrice">모든 시간 평균</string>
     <string name="NftCollection_ItemsCount">%d 아이템</string>
-    <string name="NftCollection_TodaysSales">Today\'s Sellers</string>
+    <string name="NftCollection_TodaysSales">오늘의 판매자</string>
     <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s per NFT</string>
-    <string name="NftCollection_Royalty">Royalty</string>
-    <string name="NftCollection_InceptionDate">Inception Date</string>
+    <string name="NftCollection_Royalty">고귀함</string>
+    <string name="NftCollection_InceptionDate">개시일</string>
     <!-- NFT Collection Events -->
     <string name="NftCollection_EventType_SelectorTitle">Select Event Type</string>
     <string name="NftCollection_EventType_All">모든</string>
