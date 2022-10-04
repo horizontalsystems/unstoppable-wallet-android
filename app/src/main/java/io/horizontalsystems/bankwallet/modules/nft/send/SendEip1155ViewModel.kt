@@ -9,26 +9,31 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.adapters.nft.INftAdapter
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmAddressService
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 
 class SendEip1155ViewModel(
     private val nftUid: NftUid,
+    private val nftBalance: Int,
     private val adapter: INftAdapter,
     private val addressService: SendEvmAddressService,
     nftMetadataManager: NftMetadataManager
 ) : ViewModel() {
 
     private var addressState = addressService.stateFlow.value
-
+    private var amountState by mutableStateOf<DataState<Int>?>(DataState.Success(1))
     private val assetShortMetadata = nftMetadataManager.assetShortMetadata(nftUid)
 
+    val availableNftBalance = "$nftBalance NFT"
+
     var uiState by mutableStateOf(
-        SendNftModule.SendEip721UiState(
+        SendNftModule.SendEip1155UiState(
             name = assetShortMetadata?.name ?: "",
-            imageUrl = assetShortMetadata?.previewImageUrl?: "",
+            imageUrl = assetShortMetadata?.previewImageUrl ?: "",
             addressError = addressState.addressError,
+            amountState = amountState,
             canBeSend = addressState.canBeSend,
         )
     )
@@ -36,8 +41,19 @@ class SendEip1155ViewModel(
 
     init {
         addressService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAddressState(it)
+            addressState = it
+            syncState()
         }
+    }
+
+    fun onAmountChange(amount: Int) {
+        amountState = try {
+            val validAmount = validEvmAmount(amount)
+            DataState.Success(validAmount)
+        } catch (e: InsufficientNftBalance) {
+            DataState.Error(e)
+        }
+        syncState()
     }
 
     fun onEnterAddress(address: Address?) {
@@ -47,28 +63,51 @@ class SendEip1155ViewModel(
     fun getSendData(): SendEvmData? {
         val evmAddress = addressState.evmAddress ?: return null
         val domain = addressState.address?.domain
+        val amount = amountState?.dataOrNull?.toBigInteger() ?: return null
 
-        val transactionData = adapter.transferEip721TransactionData(nftUid.contractAddress, evmAddress, nftUid.tokenId) ?: return null
-        val additionalInfo = SendEvmData.AdditionalInfo.Send(SendEvmData.SendInfo(domain))
+        val transactionData = adapter.transferEip1155TransactionData(
+            nftUid.contractAddress,
+            evmAddress,
+            nftUid.tokenId,
+            amount
+        ) ?: return null
+
+        val nftShortMeta = assetShortMetadata?.let {
+            SendEvmData.NftShortMeta(it.displayName, it.previewImageUrl)
+        }
+
+        val additionalInfo =
+            SendEvmData.AdditionalInfo.Send(SendEvmData.SendInfo(domain, nftShortMeta))
 
         return SendEvmData(transactionData, additionalInfo)
     }
 
-    private fun handleUpdatedAddressState(addressState: SendEvmAddressService.State) {
-        this.addressState = addressState
+    private fun syncState() {
         val sendEvmData = getSendData()
         emitState(
             canBeSend = sendEvmData != null,
+            amountState = amountState,
             addressError = addressState.addressError
         )
     }
 
-    private fun emitState(canBeSend: Boolean, addressError: Throwable? = null) {
-        uiState = SendNftModule.SendEip721UiState(
+    private fun emitState(canBeSend: Boolean, amountState: DataState<Int>?, addressError: Throwable? = null) {
+        uiState = SendNftModule.SendEip1155UiState(
             name = assetShortMetadata?.name ?: "",
-            imageUrl = assetShortMetadata?.previewImageUrl?: "",
+            imageUrl = assetShortMetadata?.previewImageUrl ?: "",
             addressError = addressError,
+            amountState = amountState,
             canBeSend = canBeSend,
         )
     }
+
+    private fun validEvmAmount(amount: Int): Int {
+        if (amount > nftBalance) {
+            throw InsufficientNftBalance()
+        }
+
+        return amount
+    }
+
+    class InsufficientNftBalance : Exception()
 }

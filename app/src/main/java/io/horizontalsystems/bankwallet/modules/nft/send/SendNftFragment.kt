@@ -62,19 +62,33 @@ class SendNftFragment : BaseFragment() {
                         val addressViewModel by viewModels<AddressViewModel> {
                             AddressInputModule.FactoryNft(factory.nftUid.blockchainType)
                         }
-                        val paymentAddressViewModel by viewModels<AddressParserViewModel> { factory }
+                        val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
                         SendEip721Screen(
                             findNavController(),
                             eip721ViewModel,
                             addressViewModel,
-                            paymentAddressViewModel,
+                            addressParserViewModel,
                             R.id.nftSendFragment,
                         )
                     }
                     NftType.Eip1155 -> {
-                        //todo implement Eip1155
-                        val viewModel by viewModels<SendEip1155ViewModel> { factory }
-//                        SendEip721Screen(findNavController(), viewModel)
+                        val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
+                            R.id.nftSendFragment
+                        ) { factory }
+                        val initiateLazyViewModel = evmKitWrapperViewModel
+
+                        val eip1155ViewModel by viewModels<SendEip1155ViewModel> { factory }
+                        val addressViewModel by viewModels<AddressViewModel> {
+                            AddressInputModule.FactoryNft(factory.nftUid.blockchainType)
+                        }
+                        val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
+                        SendEip1155Screen(
+                            findNavController(),
+                            eip1155ViewModel,
+                            addressViewModel,
+                            addressParserViewModel,
+                            R.id.nftSendFragment,
+                        )
                     }
                     else -> {
                         ShowErrorMessage(findNavController())
@@ -109,6 +123,7 @@ private fun getFactory(requireArguments: Bundle): SendNftModule.Factory? {
     return SendNftModule.Factory(
         evmNftRecord,
         nftUid,
+        nftRecord.balance,
         adapter,
         SendEvmAddressService(),
         App.nftMetadataManager,
