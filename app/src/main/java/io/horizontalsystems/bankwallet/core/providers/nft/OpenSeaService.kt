@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core.providers.nft
 
-import io.horizontalsystems.marketkit.providers.RetrofitUtils
+import io.horizontalsystems.bankwallet.core.managers.APIClient
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -11,14 +11,14 @@ class OpenSeaService(
     apiKey: String
 ) {
     private val service by lazy {
-        RetrofitUtils.build(
+        APIClient.build(
             baseUrl = "https://api.opensea.io/api/v1/",
             headers = mapOf("User-Agent" to "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36")
         ).create(OpenSeaApi::class.java)
     }
 
     private val hsService by lazy {
-        RetrofitUtils.build("${hsBaseUrl}/v1/nft/", mapOf("apikey" to apiKey))
+        APIClient.build("${hsBaseUrl}/v1/nft/", mapOf("apikey" to apiKey))
             .create(HsNftApi::class.java)
     }
 

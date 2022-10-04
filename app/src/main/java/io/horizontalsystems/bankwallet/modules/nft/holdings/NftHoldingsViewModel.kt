@@ -128,6 +128,7 @@ class NftHoldingsViewModel(
     }
 
     override fun onCleared() {
+        service.stop()
         totalService.stop()
     }
 
