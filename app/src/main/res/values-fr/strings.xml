@@ -262,6 +262,9 @@
     <string name="Balance_NoWalletAlert">Vous n\'avez pas encore de portefeuilles installés.\nCréez un nouveau portefeuille ou restaurez un portefeuille existant </string>
     <string name="Balance_NoCoinsAlert">Vous n\'avez pas de pièces ajoutées.\nAjoutez les pièces que vous utiliserez</string>
     <string name="Balance_WatchAccount_NoBalance">Cette adresse de portefeuille n\'a pas de solde</string>
+    <!--Send NFT-->
+    <string name="SendNft_Title">Send</string>
+    <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse ou domaine</string>
