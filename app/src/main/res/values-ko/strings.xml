@@ -262,6 +262,9 @@
     <string name="Balance_NoWalletAlert">아직 지갑이 없습니다</string>
     <string name="Balance_NoCoinsAlert">추가된 코인이 없습니다.\n사용할 코인을 추가하세요.</string>
     <string name="Balance_WatchAccount_NoBalance">이 지갑 주소에는 잔액이 없습니다</string>
+    <!--Send NFT-->
+    <string name="SendNft_Title">Send</string>
+    <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
