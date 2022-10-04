@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.entities.nft.NftKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NftMetadataSyncer(
     private val nftAdapterManager: NftAdapterManager,
@@ -22,6 +23,9 @@ class NftMetadataSyncer(
                 launch {
                     sync(adaptersMap)
                 }
+                launch {
+                    subscribeToAdapterRecords(adaptersMap)
+                }
             }
         }
     }
@@ -29,6 +33,14 @@ class NftMetadataSyncer(
     fun refresh() {
         coroutineScope.launch {
             sync(nftAdapterManager.adaptersUpdatedFlow.value, true)
+        }
+    }
+
+    private suspend fun subscribeToAdapterRecords(adaptersMap: Map<NftKey, INftAdapter>) = withContext(Dispatchers.IO) {
+        adaptersMap.forEach { (nftKey, adapter) ->
+            launch {
+                adapter.nftRecordsFlow.collect { sync(nftKey, adapter, true) }
+            }
         }
     }
 
