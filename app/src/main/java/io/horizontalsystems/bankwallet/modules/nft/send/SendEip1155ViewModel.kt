@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmAddressService
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
+import java.math.BigInteger
 
 class SendEip1155ViewModel(
     private val nftUid: NftUid,
@@ -64,6 +65,9 @@ class SendEip1155ViewModel(
         val evmAddress = addressState.evmAddress ?: return null
         val domain = addressState.address?.domain
         val amount = amountState?.dataOrNull?.toBigInteger() ?: return null
+        if (amount <= BigInteger.ZERO) {
+            return null
+        }
 
         val transactionData = adapter.transferEip1155TransactionData(
             nftUid.contractAddress,
