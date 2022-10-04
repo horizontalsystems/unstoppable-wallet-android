@@ -170,9 +170,9 @@ private fun ItemCountInput(
                 .weight(1f),
             value = textState,
             onValueChange = { textFieldValue ->
-                val intValue = textFieldValue.text.toIntOrNull() ?: 1
-                textState = textFieldValue
-                onValueChange.invoke(intValue)
+                val filtered = textFieldValue.text.filter { it.isDigit() }
+                textState = textState.copy(text = filtered, selection = TextRange(filtered.length))
+                onValueChange.invoke(filtered.toIntOrNull() ?: 0)
             },
             singleLine = true,
             cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
@@ -198,7 +198,7 @@ private fun ItemCountInput(
             modifier = Modifier.padding(end = 16.dp),
             icon = R.drawable.ic_plus_20,
             onClick = {
-                var number = textState.text.toIntOrNull() ?: 1
+                var number = textState.text.toIntOrNull() ?: 0
                 number += 1
                 val stringNumber = number.toString()
                 textState =
