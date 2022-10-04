@@ -262,6 +262,9 @@
     <string name="Balance_NoWalletAlert">You don\'t have any installed wallets yet.\nCreate a new wallet or restore an existing one </string>
     <string name="Balance_NoCoinsAlert">شما سکه اضافه ای ندارید.\nسکه هایی را که استفاده می کنید اضافه کنید</string>
     <string name="Balance_WatchAccount_NoBalance">این آدرس کیف پول موجودی ندارد</string>
+    <!--Send NFT-->
+    <string name="SendNft_Title">Send</string>
+    <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
     <!--Send-->
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">آدرس یا دامنه</string>
@@ -1045,8 +1048,11 @@
     <string name="NftCollection_Owners">ویژگی</string>
     <string name="NftCollection_AveragePrice">میانگین تمام دوران</string>
     <string name="NftCollection_ItemsCount">%d مورد</string>
-    <string name="NftCollection_TodaysSales">فروش امروز</string>
-    <string name="NftCollection_AveragePriceDescription">~%s / مورد</string>
+    <string name="NftCollection_TodaysSales">Today\'s Sellers</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
+    <string name="NftCollection_AveragePriceDescription">~%s per NFT</string>
+    <string name="NftCollection_Royalty">Royalty</string>
+    <string name="NftCollection_InceptionDate">Inception Date</string>
     <!-- NFT Collection Events -->
     <string name="NftCollection_EventType_SelectorTitle">نوع رویداد را انتخاب کنید</string>
     <string name="NftCollection_EventType_All">همه</string>
