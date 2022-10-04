@@ -95,8 +95,13 @@ class OpenSeaNftProvider(
     }
 
     override suspend fun assetsBriefMetadata(blockchainType: BlockchainType, nftUids: List<NftUid>): List<NftAssetBriefMetadata> {
-        val response = service.assets(contractAddresses = nftUids.map { it.contractAddress }, tokenIds = nftUids.map { it.tokenId })
-        return assetsBrief(blockchainType, response.assets)
+        val chunkedNftUids = nftUids.chunked(30)
+        val assetsBriefList =  mutableListOf<NftAssetBriefMetadata>()
+        for (nftUidsChunk in chunkedNftUids) {
+            val response = service.assets(contractAddresses = nftUidsChunk.map { it.contractAddress }, tokenIds = nftUidsChunk.map { it.tokenId })
+            assetsBriefList.addAll(assetsBrief(blockchainType, response.assets))
+        }
+        return assetsBriefList
     }
 
     private fun nftPrice(token: Token?, value: BigDecimal?, shift: Boolean): NftPrice? {
