@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.adapters.nft.EvmNftAdapter
 import io.horizontalsystems.bankwallet.core.adapters.nft.INftAdapter
+import io.horizontalsystems.bankwallet.core.supportedNftTypes
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.nft.NftKey
 import kotlinx.coroutines.CoroutineScope
@@ -51,6 +52,8 @@ class NftAdapterManager(
         val nftKeys = wallets.map { NftKey(it.account, it.token.blockchainType) }.distinct()
 
         for (nftKey in nftKeys) {
+            if (nftKey.blockchainType.supportedNftTypes.isEmpty()) continue
+
             val adapter = currentAdapters[nftKey]
 
             if (adapter != null) {
@@ -67,6 +70,6 @@ class NftAdapterManager(
             }
         }
 
-        _adaptersUpdatedFlow.update { adaptersMap }
+        _adaptersUpdatedFlow.update { adaptersMap.toMap() }
     }
 }
