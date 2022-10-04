@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.reactivex.Flowable
 import io.reactivex.Single
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -169,6 +170,36 @@ object APIClient {
 
     private val logger = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BASIC
+    }
+
+    private fun buildClient(headers: Map<String, String>): OkHttpClient {
+        val headersInterceptor = Interceptor { chain ->
+            val requestBuilder = chain.request().newBuilder()
+            headers.forEach { (name, value) ->
+                requestBuilder.header(name, value)
+            }
+            chain.proceed(requestBuilder.build())
+        }
+
+        return OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(logger)
+            .addInterceptor(headersInterceptor)
+            .build()
+    }
+
+    fun build(baseUrl: String, headers: Map<String, String> = mapOf()): Retrofit {
+        val client = buildClient(headers)
+
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(client)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(
+                GsonConverterFactory.create(GsonBuilder().setLenient().create())
+            )
+            .build()
     }
 
     //share OkHttpClient

@@ -203,6 +203,10 @@ class NftHoldingsService(
         syncItems()
     }
 
+    fun stop() {
+        adaptersMapScope?.cancel()
+    }
+
     data class NftCollectionItem(
         val metadata: NftCollectionShortMetadata?,
         val nftItems: List<NftItem>

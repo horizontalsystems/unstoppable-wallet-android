@@ -6,9 +6,9 @@ import io.horizontalsystems.bankwallet.core.providers.nft.OpenSeaNftProvider
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.entities.nft.*
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class NftMetadataManager(
     marketKit: MarketKitWrapper,
@@ -19,8 +19,8 @@ class NftMetadataManager(
         BlockchainType.Ethereum to OpenSeaNftProvider(marketKit, appConfigProvider)
     )
 
-    private val _addressMetadataFlow = MutableStateFlow<Pair<NftKey, NftAddressMetadata>?>(null)
-    val addressMetadataFlow: Flow<Pair<NftKey, NftAddressMetadata>> = _addressMetadataFlow.filterNotNull()
+    private val _addressMetadataFlow = MutableSharedFlow<Pair<NftKey, NftAddressMetadata>?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val addressMetadataFlow: Flow<Pair<NftKey, NftAddressMetadata>?> = _addressMetadataFlow
 
     suspend fun addressMetadata(blockchainType: BlockchainType, address: String): NftAddressMetadata {
         return provider(blockchainType).addressMetadata(blockchainType, address)
