@@ -124,35 +124,37 @@ fun TopNftCollectionsScreen(
                             )
                         }
                         ViewState.Success -> {
-                            Column {
-                                TopNftCollectionsList(
-                                    collections = viewModel.viewItems,
-                                    sortingField = viewModel.sortingField,
-                                    timeDuration = viewModel.timeDuration,
-                                    onClickCollection = onClickCollection,
-                                    preItems = {
-                                        item {
-                                            DescriptionCard(header.title, header.description, header.icon)
-                                        }
+                            TopNftCollectionsList(
+                                collections = viewModel.viewItems,
+                                sortingField = viewModel.sortingField,
+                                timeDuration = viewModel.timeDuration,
+                                onClickCollection = onClickCollection,
+                                preItems = {
+                                    item {
+                                        DescriptionCard(
+                                            header.title,
+                                            header.description,
+                                            header.icon
+                                        )
+                                    }
 
-                                        stickyHeader {
-                                            HeaderSorting(borderTop = true, borderBottom = true) {
-                                                SortMenu(menu.sortingFieldSelect.selected.title) {
-                                                    viewModel.onClickSortingFieldMenu()
-                                                }
-                                                Spacer(modifier = Modifier.weight(1f))
-                                                ButtonSecondaryToggle(
-                                                    select = menu.timeDurationSelect,
-                                                    onSelect = { timeDuration ->
-                                                        viewModel.onSelectTimeDuration(timeDuration)
-                                                    }
-                                                )
-                                                Spacer(modifier = Modifier.width(16.dp))
+                                    stickyHeader {
+                                        HeaderSorting(borderTop = true, borderBottom = true) {
+                                            SortMenu(menu.sortingFieldSelect.selected.title) {
+                                                viewModel.onClickSortingFieldMenu()
                                             }
+                                            Spacer(modifier = Modifier.weight(1f))
+                                            ButtonSecondaryToggle(
+                                                select = menu.timeDurationSelect,
+                                                onSelect = { timeDuration ->
+                                                    viewModel.onSelectTimeDuration(timeDuration)
+                                                }
+                                            )
+                                            Spacer(modifier = Modifier.width(16.dp))
                                         }
                                     }
-                                )
-                            }
+                                }
+                            )
                         }
                     }
                 }
@@ -182,7 +184,10 @@ private fun TopNftCollectionsList(
         LazyListState(0, 0)
     }
 
-    LazyColumn(state = state) {
+    LazyColumn(
+        state = state,
+        modifier = Modifier.fillMaxSize()
+    ) {
         preItems.invoke(this)
         items(collections) { collection ->
             MultilineClear(

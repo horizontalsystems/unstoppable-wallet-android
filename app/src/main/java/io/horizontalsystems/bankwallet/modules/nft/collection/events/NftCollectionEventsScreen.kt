@@ -79,7 +79,10 @@ fun NftEvents(
                 }
             }
         }
-        LazyColumn(state = listState) {
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize()
+        ) {
             viewItem.events?.forEachIndexed { index, event ->
                 item(key = "content-row-$index") {
                     NftEvent(

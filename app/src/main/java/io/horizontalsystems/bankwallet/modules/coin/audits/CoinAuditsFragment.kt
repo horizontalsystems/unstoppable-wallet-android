@@ -115,7 +115,7 @@ private fun CoinAuditsScreen(
                                 icon = R.drawable.ic_not_available
                             )
                         } else {
-                            LazyColumn {
+                            LazyColumn(modifier = Modifier.fillMaxSize()) {
                                 viewItems?.forEach { viewItem ->
                                     item {
                                         CoinAuditHeader(viewItem.name, viewItem.logoUrl)

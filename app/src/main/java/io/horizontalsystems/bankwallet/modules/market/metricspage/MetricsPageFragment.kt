@@ -7,10 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -129,6 +126,7 @@ class MetricsPageFragment : BaseFragment() {
                             }
 
                             LazyColumn(
+                                modifier = Modifier.fillMaxSize(),
                                 state = listState,
                                 contentPadding = PaddingValues(bottom = 32.dp),
                             ) {

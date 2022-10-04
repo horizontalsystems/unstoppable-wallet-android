@@ -113,52 +113,53 @@ fun TopPlatformsScreen(
                             )
                         }
                         ViewState.Success -> {
-                            Column {
-                                viewModel.viewItems.let { viewItems ->
-                                    TopPlatformsList(
-                                        viewItems = viewItems,
-                                        sortingField = viewModel.sortingField,
-                                        timeDuration = viewModel.timePeriod,
-                                        onItemClick = {
-                                            val args = MarketPlatformFragment.prepareParams(it)
-                                            navController.slideFromRight(R.id.marketPlatformFragment, args)
-                                        },
-                                        preItems = {
-                                            item {
-                                                DescriptionCard(
-                                                    stringResource(R.string.MarketTopPlatforms_PlatofrmsRank),
-                                                    stringResource(R.string.MarketTopPlatforms_Description),
-                                                    ImageSource.Local(R.drawable.ic_platforms)
-                                                )
+                            viewModel.viewItems.let { viewItems ->
+                                TopPlatformsList(
+                                    viewItems = viewItems,
+                                    sortingField = viewModel.sortingField,
+                                    timeDuration = viewModel.timePeriod,
+                                    onItemClick = {
+                                        val args = MarketPlatformFragment.prepareParams(it)
+                                        navController.slideFromRight(
+                                            R.id.marketPlatformFragment,
+                                            args
+                                        )
+                                    },
+                                    preItems = {
+                                        item {
+                                            DescriptionCard(
+                                                stringResource(R.string.MarketTopPlatforms_PlatofrmsRank),
+                                                stringResource(R.string.MarketTopPlatforms_Description),
+                                                ImageSource.Local(R.drawable.ic_platforms)
+                                            )
+                                        }
+
+                                        stickyHeader {
+                                            var timePeriodMenu by remember {
+                                                mutableStateOf(viewModel.timePeriodSelect)
                                             }
 
-                                            stickyHeader {
-                                                var timePeriodMenu by remember {
-                                                    mutableStateOf(viewModel.timePeriodSelect)
-                                                }
-
-                                                HeaderSorting(borderTop = true, borderBottom = true) {
-                                                    SortMenu(
-                                                        viewModel.sortingSelect.selected.titleResId,
-                                                        viewModel::showSelectorMenu
-                                                    )
-                                                    Spacer(modifier = Modifier.weight(1f))
-                                                    ButtonSecondaryToggle(
-                                                        select = timePeriodMenu,
-                                                        onSelect = {
-                                                            viewModel.onTimePeriodSelect(it)
-                                                            timePeriodMenu = Select(
-                                                                it,
-                                                                viewModel.periodOptions
-                                                            )
-                                                        }
-                                                    )
-                                                    Spacer(modifier = Modifier.width(16.dp))
-                                                }
+                                            HeaderSorting(borderTop = true, borderBottom = true) {
+                                                SortMenu(
+                                                    viewModel.sortingSelect.selected.titleResId,
+                                                    viewModel::showSelectorMenu
+                                                )
+                                                Spacer(modifier = Modifier.weight(1f))
+                                                ButtonSecondaryToggle(
+                                                    select = timePeriodMenu,
+                                                    onSelect = {
+                                                        viewModel.onTimePeriodSelect(it)
+                                                        timePeriodMenu = Select(
+                                                            it,
+                                                            viewModel.periodOptions
+                                                        )
+                                                    }
+                                                )
+                                                Spacer(modifier = Modifier.width(16.dp))
                                             }
                                         }
-                                    )
-                                }
+                                    }
+                                )
                             }
                         }
                     }
@@ -194,7 +195,10 @@ private fun TopPlatformsList(
         LazyListState(0, 0)
     }
 
-    LazyColumn(state = state) {
+    LazyColumn(
+        state = state,
+        modifier = Modifier.fillMaxSize()
+    ) {
         preItems.invoke(this)
         items(viewItems) { item ->
             TopPlatformItem(item, onItemClick)

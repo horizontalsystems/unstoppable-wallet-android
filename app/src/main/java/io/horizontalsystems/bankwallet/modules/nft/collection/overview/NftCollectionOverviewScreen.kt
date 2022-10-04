@@ -52,7 +52,7 @@ fun NftCollectionOverviewScreen(
                 }
                 ViewState.Success -> {
                     collection?.let { collection ->
-                        LazyColumn {
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
                             item {
                                 Header(collection.name, collection.imageUrl)
                             }

@@ -129,7 +129,7 @@ fun CoinDetailsScreen(
                     }
 
                     if (detailBlocks.size > 0) {
-                        LazyColumn {
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
                             items(detailBlocks.size) { index ->
                                 detailBlocks[index].invoke(index != 0)
                             }

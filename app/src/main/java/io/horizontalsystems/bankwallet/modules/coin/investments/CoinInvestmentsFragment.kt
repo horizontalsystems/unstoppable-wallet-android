@@ -112,7 +112,7 @@ private fun CoinInvestmentsScreen(
                         ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                     }
                     ViewState.Success -> {
-                        LazyColumn {
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
                             viewItems?.forEach { viewItem ->
                                 item {
                                     CoinInvestmentHeader(viewItem.amount, viewItem.info)
