@@ -57,7 +57,7 @@ val Token.typeInfo: String
         }
         is TokenType.Eip20 -> type.address.shorten()
         is TokenType.Bep2 -> type.symbol
-        is TokenType.Spl,
+        is TokenType.Spl -> type.address
         is TokenType.Unsupported -> ""
     }
 
@@ -65,6 +65,7 @@ val Token.copyableTypeInfo: String?
     get() = when (val type = type) {
         is TokenType.Eip20 -> type.address
         is TokenType.Bep2 -> type.symbol
+        is TokenType.Spl -> type.address
         else -> null
     }
 
@@ -120,6 +121,9 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.BinanceChain -> {
             tokenType is TokenType.Native || tokenType is TokenType.Bep2
         }
+        BlockchainType.Solana -> {
+            tokenType is TokenType.Native || tokenType is TokenType.Spl
+        }
         else -> false
     }
 
@@ -137,6 +141,7 @@ val Blockchain.description: String
         BlockchainType.Avalanche -> "AVAX, ERC20 tokens"
         BlockchainType.Optimism -> "L2 chain"
         BlockchainType.ArbitrumOne -> "L2 chain"
+        BlockchainType.Solana -> "SOL, SPL tokens"
         else -> ""
     }
 
@@ -217,6 +222,7 @@ val BlockchainType.order: Int
         BlockchainType.BinanceChain -> 10
         BlockchainType.ArbitrumOne -> 11
         BlockchainType.Optimism -> 12
+        BlockchainType.Solana -> 13
         else -> Int.MAX_VALUE
     }
 

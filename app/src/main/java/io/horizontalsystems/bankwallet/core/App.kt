@@ -53,6 +53,7 @@ import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.solanakit.models.RpcSource
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -91,6 +92,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var binanceKitManager: BinanceKitManager
+        lateinit var solanaKitManager: SolanaKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeTokenProvider
@@ -165,6 +167,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
 
         binanceKitManager = BinanceKitManager(testMode)
+
+        solanaKitManager = SolanaKitManager(RpcSource.TritonOne, backgroundManager)
 
         accountsStorage = AccountsStorage(appDatabase)
         restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
@@ -245,7 +249,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             appDatabase.syncerStateDao()
         )
 
-        val adapterFactory = AdapterFactory(instance, testMode, btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager, evmLabelManager)
+        val adapterFactory = AdapterFactory(instance, testMode, btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, solanaKitManager, backgroundManager, restoreSettingsManager, coinManager, evmLabelManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 

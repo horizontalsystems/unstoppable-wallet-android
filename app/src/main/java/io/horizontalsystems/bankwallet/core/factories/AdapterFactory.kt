@@ -21,6 +21,7 @@ class AdapterFactory(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val binanceKitManager: BinanceKitManager,
+    private val solanaKitManager: SolanaKitManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
@@ -43,6 +44,12 @@ class AdapterFactory(
         val baseToken = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
 
         return Eip20Adapter(context, evmKitWrapper, address, baseToken, coinManager, wallet, evmLabelManager)
+    }
+
+    private fun getSplAdapter(wallet: Wallet, address: String): IAdapter? {
+        val solanaKitWrapper = solanaKitManager.getSolanaKitWrapper(wallet.account)
+
+        return SplAdapter(solanaKitWrapper, wallet, address)
     }
 
     fun getAdapter(wallet: Wallet) = when (val tokenType = wallet.token.type) {
@@ -73,11 +80,15 @@ class AdapterFactory(
             BlockchainType.Optimism,
             BlockchainType.ArbitrumOne -> getEvmAdapter(wallet)
             BlockchainType.BinanceChain -> getBinanceAdapter(wallet, "BNB")
+            BlockchainType.Solana -> {
+                val evmKitWrapper = solanaKitManager.getSolanaKitWrapper(wallet.account)
+                SolanaAdapter(evmKitWrapper)
+            }
             else -> null
         }
         is TokenType.Eip20 -> getEip20Adapter(wallet, tokenType.address)
         is TokenType.Bep2 -> getBinanceAdapter(wallet, tokenType.symbol)
-        is TokenType.Spl,
+        is TokenType.Spl -> getSplAdapter(wallet, tokenType.address)
         is TokenType.Unsupported -> null
     }
 
@@ -102,6 +113,14 @@ class AdapterFactory(
         return EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source, syncSource.transactionSource, evmLabelManager)
     }
 
+    fun solanaTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
+        val solanaKitWrapper = solanaKitManager.getSolanaKitWrapper(source.account)
+        val baseToken = coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: return null
+        val solanaTransactionConverter = SolanaTransactionConverter(coinManager, source, baseToken, solanaKitWrapper)
+
+        return SolanaTransactionsAdapter(solanaKitWrapper, solanaTransactionConverter)
+    }
+
     fun unlinkAdapter(wallet: Wallet) {
         when (val blockchainType = wallet.transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
@@ -114,6 +133,9 @@ class AdapterFactory(
             }
             BlockchainType.BinanceChain -> {
                 binanceKitManager.unlink(wallet.account)
+            }
+            BlockchainType.Solana -> {
+                solanaKitManager.unlink(wallet.account)
             }
             else -> Unit
         }
@@ -128,6 +150,9 @@ class AdapterFactory(
             BlockchainType.ArbitrumOne -> {
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
                 evmKitManager.unlink(transactionSource.account)
+            }
+            BlockchainType.Solana -> {
+                solanaKitManager.unlink(transactionSource.account)
             }
             else -> Unit
         }

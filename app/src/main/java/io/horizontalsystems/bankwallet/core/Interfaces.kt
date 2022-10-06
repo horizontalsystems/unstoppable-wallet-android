@@ -32,6 +32,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.solanakit.models.FullTransaction
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -309,6 +310,10 @@ interface IAdapter {
 
 interface IBaseAdapter {
     val isMainnet: Boolean
+}
+
+interface ISendSolanaAdapter {
+    fun send(amount: BigInteger, to: String): Single<FullTransaction>
 }
 
 interface IAccountsStorage {
