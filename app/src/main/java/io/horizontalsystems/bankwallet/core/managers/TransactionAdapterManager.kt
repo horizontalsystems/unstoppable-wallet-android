@@ -55,6 +55,9 @@ class TransactionAdapterManager(
                     BlockchainType.ArbitrumOne -> {
                         adapterFactory.evmTransactionsAdapter(wallet.transactionSource, blockchainType)
                     }
+                    BlockchainType.Solana -> {
+                        adapterFactory.solanaTransactionsAdapter(wallet.transactionSource)
+                    }
                     else -> adapter as? ITransactionsAdapter
                 }
             }
