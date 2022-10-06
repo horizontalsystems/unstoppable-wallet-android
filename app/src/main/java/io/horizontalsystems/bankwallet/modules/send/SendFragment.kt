@@ -69,8 +69,7 @@ class SendFragment : BaseFragment() {
                     BlockchainType.Polygon,
                     BlockchainType.Avalanche,
                     BlockchainType.Optimism,
-                    BlockchainType.ArbitrumOne,
-                    -> {
+                    BlockchainType.ArbitrumOne -> {
                         val factory = SendEvmModule.Factory(wallet)
                         val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(R.id.sendXFragment) { factory }
                         val initiateLazyViewModel = evmKitWrapperViewModel

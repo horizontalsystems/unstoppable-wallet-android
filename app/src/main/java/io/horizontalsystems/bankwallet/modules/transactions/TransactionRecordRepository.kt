@@ -68,12 +68,12 @@ class TransactionRecordRepository(
                 BlockchainType.Polygon,
                 BlockchainType.Avalanche,
                 BlockchainType.Optimism,
-                BlockchainType.ArbitrumOne-> {
+                BlockchainType.ArbitrumOne,
+                BlockchainType.Solana -> {
                     if (mergedWallets.none { it.source == wallet.source }) {
                         mergedWallets.add(TransactionWallet(null, wallet.source, null))
                     }
                 }
-                BlockchainType.Solana,
                 is BlockchainType.Unsupported -> Unit
             }
         }
