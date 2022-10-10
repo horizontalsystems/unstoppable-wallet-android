@@ -137,8 +137,9 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.2.0'
+        kotlinCompilerExtensionVersion '1.3.2'
     }
+    namespace 'io.horizontalsystems.bankwallet'
 }
 
 dependencies {
@@ -164,7 +165,7 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.0"
 
     //AppWidgets
-    implementation 'androidx.glance:glance-appwidget:1.0.0-alpha03'
+    implementation 'androidx.glance:glance-appwidget:1.0.0-alpha04'
 
     // Room
     def room_version = '2.4.3'
@@ -234,7 +235,7 @@ dependencies {
 
     // WalletConnect
     implementation 'com.github.horizontalsystems:wallet-connect-kotlin:b9a50b8'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     // WalletConnect V2
     implementation "com.github.WalletConnect:WalletConnectKotlinV2:1.0.0-beta04"
 
@@ -248,8 +249,8 @@ dependencies {
     implementation 'com.github.horizontalsystems:tor-kit-android:6c775c1'
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.6.4'
 
     // UI modules
 
@@ -260,17 +261,17 @@ dependencies {
     implementation project(':components:chartview')
 
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.5.1'
+    implementation 'androidx.activity:activity-compose:1.6.0'
     // Compose Material Design
-    implementation 'androidx.compose.material:material:1.2.0'
+    implementation 'androidx.compose.material:material:1.2.1'
     // Animations
-    implementation 'androidx.compose.animation:animation:1.2.0'
+    implementation 'androidx.compose.animation:animation:1.2.1'
     // Tooling support (Previews, etc.)
-    implementation 'androidx.compose.ui:ui-tooling:1.2.0'
+    implementation 'androidx.compose.ui:ui-tooling:1.2.1'
     // Integration with ViewModels
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
 
-    implementation "androidx.compose.runtime:runtime-livedata:1.2.0"
+    implementation "androidx.compose.runtime:runtime-livedata:1.2.1"
     implementation "io.coil-kt:coil-compose:2.1.0"
     implementation "io.coil-kt:coil-svg:2.1.0"
     implementation("io.coil-kt:coil-gif:2.1.0")
@@ -283,7 +284,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-permissions:0.25.0"
 
     // UI Tests
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.2.0'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.2.1'
 
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
