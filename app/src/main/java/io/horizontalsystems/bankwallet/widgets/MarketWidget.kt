@@ -341,7 +341,7 @@ class MarketWidget : GlanceAppWidget() {
 }
 
 class UpdateMarketAction : ActionCallback {
-    override suspend fun onRun(
+    override suspend fun onAction(
         context: Context,
         glanceId: GlanceId,
         parameters: ActionParameters

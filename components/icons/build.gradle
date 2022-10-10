@@ -30,6 +30,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    namespace 'io.horizontalsystems.icons'
 }
 
 dependencies {
