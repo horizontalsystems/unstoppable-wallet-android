@@ -2,9 +2,12 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
+import io.horizontalsystems.bankwallet.core.ISendSolanaAdapter
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.solanakit.SolanaKit
+import io.horizontalsystems.solanakit.models.Address
+import io.horizontalsystems.solanakit.models.FullTransaction
 import io.reactivex.Flowable
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
@@ -13,8 +16,10 @@ import java.math.BigDecimal
 class SplAdapter(
         solanaKitWrapper: SolanaKitWrapper,
         wallet: Wallet,
-        private val address: String
-) : BaseSolanaAdapter(solanaKitWrapper, wallet.decimal) {
+        private val mintAddressString: String
+) : BaseSolanaAdapter(solanaKitWrapper, wallet.decimal), ISendSolanaAdapter {
+
+    val mintAddress = Address(mintAddressString)
 
     // IAdapter
 
@@ -27,7 +32,7 @@ class SplAdapter(
     }
 
     override fun refresh() {
-        // refreshed via EthereumKitManager
+        solanaKit.refresh()
     }
 
     // IBalanceAdapter
@@ -39,11 +44,20 @@ class SplAdapter(
         get() = solanaKit.tokenBalanceSyncStateFlow.map { }.asFlowable()
 
     override val balanceData: BalanceData
-        get() = BalanceData(solanaKit.tokenBalance(address) ?: BigDecimal.ZERO)
+        get() = BalanceData(solanaKit.tokenBalance(mintAddressString) ?: BigDecimal.ZERO)
 
     override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = solanaKit.tokenBalanceFlow(address).map { }.asFlowable()
+        get() = solanaKit.tokenBalanceFlow(mintAddressString).map { }.asFlowable()
 
+    // ISendSolanaAdapter
+    override val availableBalance: BigDecimal
+        get() = solanaKit.tokenBalance(mintAddressString) ?: BigDecimal.ZERO
+
+    override suspend fun send(amount: BigDecimal, to: Address): FullTransaction {
+        if (signer == null) throw Exception()
+
+        return solanaKit.sendSpl(mintAddress, to, amount, signer)
+    }
 
     private fun convertToAdapterState(syncState: SolanaKit.SyncState): AdapterState = when (syncState) {
         is SolanaKit.SyncState.Synced -> AdapterState.Synced

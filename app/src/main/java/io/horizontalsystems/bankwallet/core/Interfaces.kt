@@ -33,6 +33,7 @@ import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.solanakit.models.FullTransaction
+import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -313,7 +314,8 @@ interface IBaseAdapter {
 }
 
 interface ISendSolanaAdapter {
-    fun send(amount: BigInteger, to: String): Single<FullTransaction>
+    val availableBalance: BigDecimal
+    suspend fun send(amount: BigDecimal, to: SolanaAddress): FullTransaction
 }
 
 interface IAccountsStorage {
