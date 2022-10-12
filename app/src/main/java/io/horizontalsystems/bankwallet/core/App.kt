@@ -168,7 +168,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         binanceKitManager = BinanceKitManager(testMode)
 
-        solanaKitManager = SolanaKitManager(RpcSource.TritonOne, backgroundManager)
+        solanaKitManager = SolanaKitManager(RpcSource.Serum, backgroundManager)
 
         accountsStorage = AccountsStorage(appDatabase)
         restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
