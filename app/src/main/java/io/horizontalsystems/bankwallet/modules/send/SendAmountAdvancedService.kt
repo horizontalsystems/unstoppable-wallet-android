@@ -1,8 +1,7 @@
-package io.horizontalsystems.bankwallet.modules.send.evm
+package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
-import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Token
@@ -12,19 +11,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.math.RoundingMode
 
-class SendEvmAmountService(
-    private val adapter: ISendEthereumAdapter,
+class SendAmountAdvancedService(
+    private val availableBalance: BigDecimal,
     private val token: Token,
-    private val amountValidator: AmountValidator,
-    private val coinMaxAllowedDecimals: Int
+    private val amountValidator: AmountValidator
 ) {
     private var amount: BigDecimal? = null
     private var amountCaution: HSCaution? = null
     private var evmAmount: BigInteger? = null
-
-    private var availableBalance: BigDecimal = adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN)
 
     private val _stateFlow = MutableStateFlow(
         State(

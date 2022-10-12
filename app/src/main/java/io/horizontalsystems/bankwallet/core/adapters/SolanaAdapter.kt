@@ -6,13 +6,11 @@ import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.ISendSolanaAdapter
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitWrapper
 import io.horizontalsystems.solanakit.SolanaKit
+import io.horizontalsystems.solanakit.models.Address
 import io.horizontalsystems.solanakit.models.FullTransaction
 import io.reactivex.Flowable
-import io.reactivex.Single
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
-import kotlinx.coroutines.rx2.rxSingle
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -29,7 +27,7 @@ class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper
     }
 
     override fun refresh() {
-        // refreshed via EthereumKitManager
+        solanaKit.refresh()
     }
 
     // IBalanceAdapter
@@ -47,12 +45,13 @@ class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper
         get() = solanaKit.balanceFlow.map {}.asFlowable()
 
     // ISendSolanaAdapter
-    override fun send(amount: BigInteger, to: String): Single<FullTransaction> {
-        if (signer == null) return Single.error(Exception())
+    override val availableBalance: BigDecimal
+        get() = solanaKit.balance?.toBigDecimal()?.movePointLeft(decimal) ?: BigDecimal.ZERO
 
-        return rxSingle(Dispatchers.IO) {
-            solanaKit.sendSol(to, amount.toBigDecimal().movePointLeft(decimal).toLong(), signer)
-        }
+    override suspend fun send(amount: BigDecimal, to: Address): FullTransaction {
+        if (signer == null) throw Exception()
+
+        return solanaKit.sendSol(to, amount.movePointRight(decimal).toLong(), signer)
     }
 
     private fun convertToAdapterState(syncState: SolanaKit.SyncState): AdapterState =

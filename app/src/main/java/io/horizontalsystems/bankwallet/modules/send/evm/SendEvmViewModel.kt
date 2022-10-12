@@ -7,22 +7,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.send.SendAmountAdvancedService
+import io.horizontalsystems.bankwallet.modules.send.SendUiState
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 class SendEvmViewModel(
-    val wallet: Wallet,
-    val sendToken: Token,
-    val adapter: ISendEthereumAdapter,
-    private val xRateService: XRateService,
-    private val amountService: SendEvmAmountService,
-    private val addressService: SendEvmAddressService,
-    val coinMaxAllowedDecimals: Int
+        val wallet: Wallet,
+        val sendToken: Token,
+        val adapter: ISendEthereumAdapter,
+        private val xRateService: XRateService,
+        private val amountService: SendAmountAdvancedService,
+        private val addressService: SendEvmAddressService,
+        val coinMaxAllowedDecimals: Int
 ) : ViewModel() {
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -30,7 +31,7 @@ class SendEvmViewModel(
     private var addressState = addressService.stateFlow.value
 
     var uiState by mutableStateOf(
-        SendEvmUiState(
+        SendUiState(
             availableBalance = amountState.availableBalance,
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
@@ -62,7 +63,7 @@ class SendEvmViewModel(
         addressService.setAddress(address)
     }
 
-    private fun handleUpdatedAmountState(amountState: SendEvmAmountService.State) {
+    private fun handleUpdatedAmountState(amountState: SendAmountAdvancedService.State) {
         this.amountState = amountState
 
         emitState()
@@ -75,7 +76,7 @@ class SendEvmViewModel(
     }
 
     private fun emitState() {
-        uiState = SendEvmUiState(
+        uiState = SendUiState(
             availableBalance = amountState.availableBalance,
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
@@ -94,10 +95,3 @@ class SendEvmViewModel(
         return SendEvmData(transactionData, additionalInfo)
     }
 }
-
-data class SendEvmUiState(
-    val availableBalance: BigDecimal,
-    val amountCaution: HSCaution?,
-    val addressError: Throwable?,
-    val canBeSend: Boolean
-)
