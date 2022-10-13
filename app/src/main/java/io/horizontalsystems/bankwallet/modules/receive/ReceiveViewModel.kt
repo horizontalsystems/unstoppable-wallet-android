@@ -1,29 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.addressType
 
 class ReceiveViewModel(
     val wallet: Wallet,
-    adapterManager: IAdapterManager
+    receiveAdapter: IReceiveAdapter
 ) : ViewModel() {
 
-    val receiveAddress: String
-    val addressType: String?
-    val testNet: Boolean
+    val receiveAddress  = receiveAdapter.receiveAddress
+    val addressType = wallet.coinSettings.derivation?.addressType
+    val testNet = !receiveAdapter.isMainnet
     val watchAccount = wallet.account.isWatchAccount
-
-    init {
-        val receiveAdapter =
-            adapterManager.getReceiveAdapterForWallet(wallet) ?: throw NoReceiverAdapter()
-
-        testNet = !receiveAdapter.isMainnet
-        receiveAddress = receiveAdapter.receiveAddress
-        addressType = wallet.coinSettings.derivation?.addressType
-    }
-
-    class NoReceiverAdapter : Error("No Receiver Adapter")
-
 }

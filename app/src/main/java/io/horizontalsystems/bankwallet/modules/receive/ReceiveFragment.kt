@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,9 +27,11 @@ import androidx.core.app.ShareCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString.ResString
@@ -49,10 +52,11 @@ class ReceiveFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             try {
+                val wallet = arguments?.getParcelable<Wallet>(WALLET_KEY)!!
+                val receiveAdapter = App.adapterManager.getReceiveAdapterForWallet(wallet)
+                    ?: throw ReceiveModule.NoReceiverAdapter()
                 val viewModel by viewModels<ReceiveViewModel> {
-                    ReceiveModule.Factory(
-                        arguments?.getParcelable(WALLET_KEY)!!
-                    )
+                    ReceiveModule.Factory(wallet, receiveAdapter)
                 }
                 setContent {
                     ReceiveScreen(
@@ -61,7 +65,9 @@ class ReceiveFragment : BaseFragment() {
                     )
                 }
             } catch (t: Throwable) {
-                HudHelper.showErrorMessage(requireView(), t.message ?: t.javaClass.simpleName)
+                Toast.makeText(
+                    App.instance, t.message ?: t.javaClass.simpleName, Toast.LENGTH_SHORT
+                ).show()
                 findNavController().popBackStack()
             }
         }
