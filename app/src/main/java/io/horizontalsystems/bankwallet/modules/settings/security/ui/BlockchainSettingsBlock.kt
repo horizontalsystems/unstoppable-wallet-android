@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -41,6 +42,9 @@ fun BlockchainSettingsBlock(
                 is BlockchainSettingsModule.BlockchainItem.Evm -> {
                     val params = EvmNetworkModule.args(item.blockchainItem.blockchain)
                     navController.slideFromRight(R.id.evmNetworkFragment, params)
+                }
+                is BlockchainSettingsModule.BlockchainItem.Solana -> {
+                    navController.slideFromRight(R.id.solanaNetworkFragment, bundleOf())
                 }
             }
         }

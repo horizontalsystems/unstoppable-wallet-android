@@ -32,7 +32,7 @@ class SplAdapter(
     }
 
     override fun refresh() {
-        solanaKit.refresh()
+        // refreshed via EthereumKitManager
     }
 
     // IBalanceAdapter

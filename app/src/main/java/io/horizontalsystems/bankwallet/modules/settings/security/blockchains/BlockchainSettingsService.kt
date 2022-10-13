@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security.blockchains
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsModule.BlockchainItem
 import io.reactivex.Observable
@@ -13,6 +14,7 @@ class BlockchainSettingsService(
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
+    private val solanaRpcSourceManager: SolanaRpcSourceManager,
 ) {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -50,6 +52,13 @@ class BlockchainSettingsService(
                 disposables.add(it)
             }
 
+        solanaRpcSourceManager.rpcSourceUpdateObservable
+            .subscribeIO {
+                syncBlockchainItems()
+            }.let {
+                disposables.add(it)
+            }
+
         syncBlockchainItems()
     }
 
@@ -69,7 +78,13 @@ class BlockchainSettingsService(
             BlockchainItem.Evm(blockchain, syncSource)
         }
 
-        blockchainItems = (btcBlockchainItems + evmBlockchainItems).sortedBy { it.order }
+        val solanaBlockchainItems = mutableListOf<BlockchainItem>()
+
+        solanaRpcSourceManager.blockchain?.let {
+            solanaBlockchainItems.add(BlockchainItem.Solana(it, solanaRpcSourceManager.rpcSource))
+        }
+
+        blockchainItems = (btcBlockchainItems + evmBlockchainItems + solanaBlockchainItems).sortedBy { it.order }
     }
 
 }

@@ -4,34 +4,23 @@ import android.os.Handler
 import android.os.Looper
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.SolanaKit
-import io.horizontalsystems.solanakit.models.RpcSource
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 class SolanaKitManager(
-    val rpcSource: RpcSource,
+    private val rpcSourceManager: SolanaRpcSourceManager,
     backgroundManager: BackgroundManager
 ) : BackgroundManager.Listener {
 
     private val disposables = CompositeDisposable()
-
-    init {
-        backgroundManager.registerListener(this)
-    }
-
-    private fun handleUpdateNetwork(blockchainType: BlockchainType) {
-        stopKit()
-
-        solanaKitUpdatedSubject.onNext(Unit)
-    }
 
     private val kitStartedSubject = BehaviorSubject.createDefault(false)
     val kitStartedObservable: Observable<Boolean> = kitStartedSubject
@@ -46,14 +35,31 @@ class SolanaKitManager(
     private var useCount = 0
     var currentAccount: Account? = null
         private set
-    private val solanaKitUpdatedSubject = PublishSubject.create<Unit>()
+    private val solanaKitStoppedSubject = PublishSubject.create<Unit>()
 
-    val kitUpdatedObservable: Observable<Unit>
-        get() = solanaKitUpdatedSubject
+    val kitStoppedObservable: Observable<Unit>
+        get() = solanaKitStoppedSubject
 
     val statusInfo: Map<String, Any>?
-        get() = LinkedHashMap<String, Any>()
-//        get() = solanaKitWrapper?.solanaKit?.statusInfo()
+        get() = solanaKitWrapper?.solanaKit?.statusInfo()
+
+    init {
+        backgroundManager.registerListener(this)
+
+        rpcSourceManager.rpcSourceUpdateObservable
+                .subscribeIO {
+                    handleUpdateNetwork()
+                }
+                .let {
+                    disposables.add(it)
+                }
+    }
+
+    private fun handleUpdateNetwork() {
+        stopKit()
+
+        solanaKitStoppedSubject.onNext(Unit)
+    }
 
     @Synchronized
     fun getSolanaKitWrapper(account: Account): SolanaKitWrapper {
@@ -91,7 +97,7 @@ class SolanaKitManager(
         val kit = SolanaKit.getInstance(
             App.instance,
             publicKey,
-            rpcSource,
+            rpcSourceManager.rpcSource,
             account.id
         )
 
@@ -109,7 +115,7 @@ class SolanaKitManager(
         val kit = SolanaKit.getInstance(
             App.instance,
             address,
-            rpcSource,
+            rpcSourceManager.rpcSource,
             account.id
         )
 

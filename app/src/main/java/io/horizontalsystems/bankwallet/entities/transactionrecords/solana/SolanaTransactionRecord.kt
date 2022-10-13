@@ -12,10 +12,10 @@ open class SolanaTransactionRecord(transaction: Transaction, baseToken: Token, s
                 uid = transaction.hash,
                 transactionHash = transaction.hash,
                 transactionIndex = 0,
-                blockHeight = 0,
+                blockHeight = if (transaction.pending) null else 0,
                 confirmationsThreshold = BaseSolanaAdapter.confirmationsThreshold,
-                timestamp = transaction.blockTime,
-                failed = false, // TODO: "err" field in 'getSignaturesForAddress' request must be used
+                timestamp = transaction.timestamp,
+                failed = transaction.error != null,
                 spam = spam,
                 source = source
         ) {
