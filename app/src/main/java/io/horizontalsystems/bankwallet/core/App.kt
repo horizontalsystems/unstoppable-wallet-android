@@ -113,6 +113,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
         lateinit var evmBlockchainManager: EvmBlockchainManager
+        lateinit var solanaRpcSourceManager: SolanaRpcSourceManager
         lateinit var nftMetadataManager: NftMetadataManager
         lateinit var nftAdapterManager: NftAdapterManager
         lateinit var nftMetadataSyncer: NftMetadataSyncer
@@ -168,7 +169,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         binanceKitManager = BinanceKitManager(testMode)
 
-        solanaKitManager = SolanaKitManager(RpcSource.Serum, backgroundManager)
+        solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
+        solanaKitManager = SolanaKitManager(solanaRpcSourceManager, backgroundManager)
 
         accountsStorage = AccountsStorage(appDatabase)
         restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
@@ -250,7 +252,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
 
         val adapterFactory = AdapterFactory(instance, testMode, btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager, binanceKitManager, solanaKitManager, backgroundManager, restoreSettingsManager, coinManager, evmLabelManager)
-        adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager)
+        adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager, solanaKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
         feeCoinProvider = FeeTokenProvider(marketKit)

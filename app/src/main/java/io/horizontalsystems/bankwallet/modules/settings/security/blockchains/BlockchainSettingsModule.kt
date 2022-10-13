@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.EvmSyncSource
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.solanakit.models.RpcSource
 
 object BlockchainSettingsModule {
 
@@ -18,7 +19,8 @@ object BlockchainSettingsModule {
                 BlockchainSettingsService(
                     App.btcBlockchainManager,
                     App.evmBlockchainManager,
-                    App.evmSyncSourceManager
+                    App.evmSyncSourceManager,
+                    App.solanaRpcSourceManager
                 )
             return BlockchainSettingsViewModel(service) as T
         }
@@ -43,6 +45,11 @@ object BlockchainSettingsModule {
         class Evm(
             override val blockchain: Blockchain,
             val syncSource: EvmSyncSource
+        ) : BlockchainItem()
+
+        class Solana(
+            override val blockchain: Blockchain,
+            val rpcSource: RpcSource
         ) : BlockchainItem()
 
         val order

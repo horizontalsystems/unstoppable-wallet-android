@@ -55,6 +55,12 @@ class BlockchainSettingsViewModel(
                         icon = item.blockchain.type.icon24,
                         blockchainItem = item
                     )
+                    is BlockchainSettingsModule.BlockchainItem.Solana -> BlockchainSettingsModule.BlockchainViewItem(
+                        title = item.blockchain.name,
+                        subtitle = item.rpcSource.name,
+                        icon = item.blockchain.type.icon24,
+                        blockchainItem = item
+                    )
                 }
             }
         }

@@ -27,7 +27,7 @@ class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper
     }
 
     override fun refresh() {
-        solanaKit.refresh()
+        // refreshed via EthereumKitManager
     }
 
     // IBalanceAdapter
