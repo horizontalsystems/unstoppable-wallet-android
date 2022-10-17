@@ -10,12 +10,13 @@ import java.math.BigInteger
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 class NumberFormatter(
         private val languageManager: ILanguageManager
         ) : IAppNumberFormatter {
 
-    private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
+    private var formatters = ConcurrentHashMap<String, NumberFormat>()
     private val numberRounding = NumberRounding()
 
     override fun format(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int, prefix: String, suffix: String): String {
