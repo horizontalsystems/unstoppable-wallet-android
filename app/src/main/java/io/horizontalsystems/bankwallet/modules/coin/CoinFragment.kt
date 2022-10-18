@@ -72,7 +72,12 @@ class CoinFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val uid = activity?.intent?.data?.getQueryParameter("uid")
+                val uid = try {
+                    activity?.intent?.data?.getQueryParameter("uid")
+                } catch (e: UnsupportedOperationException) {
+                    null
+                }
+
                 val coinUid = requireArguments().getString(COIN_UID_KEY, uid ?: "")
                 if (uid != null) {
                     activity?.intent?.data = null
