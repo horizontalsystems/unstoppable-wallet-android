@@ -20,6 +20,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val MNEMONIC = "mnemonic"
         private const val PRIVATE_KEY = "private_key"
         private const val ADDRESS = "address"
+        private const val XPUB_KEY = "xpubkey"
     }
 
     override var activeAccountId: String?
@@ -43,6 +44,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.passphrase?.value ?: "")
                             PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
                             ADDRESS -> AccountType.Address(record.key!!.value)
+                            XPUB_KEY -> AccountType.XPubKey(record.key!!.value)
                             else -> null
                         }
                         Account(record.id, record.name, accountType!!, AccountOrigin.valueOf(record.origin), record.isBackedUp)
@@ -100,7 +102,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 key = SecretString(account.type.address)
                 accountType = ADDRESS
             }
-            else -> throw Exception("Unsupported AccountType: ${account.type}")
+            is AccountType.XPubKey -> {
+                key = SecretString(account.type.xPubKey)
+                accountType = XPUB_KEY
+            }
         }
 
         return AccountRecord(
