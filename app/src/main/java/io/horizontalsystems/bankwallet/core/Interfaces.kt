@@ -141,7 +141,7 @@ interface IBackupManager {
 
 interface IAccountFactory {
     fun account(name: String, type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
-    fun watchAccount(name: String, address: String, domain: String?): Account
+    fun watchAccount(name: String, type: AccountType): Account
     fun getNextWatchAccountName(): String
     fun getNextAccountName(): String
 }

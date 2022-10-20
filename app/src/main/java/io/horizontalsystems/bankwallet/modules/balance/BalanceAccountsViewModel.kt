@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.reactivex.disposables.CompositeDisposable
 
 class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
@@ -29,7 +28,7 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
 
     private fun handleAccount(activeAccount: Account?) {
         accountViewItem = activeAccount?.let { account ->
-            AccountViewItem(account.type !is AccountType.Address, account.type is AccountType.Address, account.name, account.id)
+            AccountViewItem(!account.isWatchAccount, account.isWatchAccount, account.name, account.id)
         }
     }
 

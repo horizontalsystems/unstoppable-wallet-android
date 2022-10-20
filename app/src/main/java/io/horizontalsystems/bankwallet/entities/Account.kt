@@ -18,7 +18,7 @@ data class Account(
 ) : Parcelable {
 
     @IgnoredOnParcel
-    val isWatchAccount = type is AccountType.Address
+    val isWatchAccount = type.isWatchAccount
 
     override fun equals(other: Any?): Boolean {
         if (other is Account) {
@@ -34,12 +34,16 @@ data class Account(
 }
 
 @Parcelize
-open class AccountType : Parcelable {
-    @Parcelize
-    data class Address(val address: String) : AccountType()
+sealed class AccountType(val isWatchAccount: Boolean) : Parcelable {
 
     @Parcelize
-    data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
+    data class Address(val address: String) : AccountType(true)
+
+    @Parcelize
+    data class XPubKey(val xPubKey: String) : AccountType(true)
+
+    @Parcelize
+    data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType(false) {
         @IgnoredOnParcel
         val seed by lazy { Mnemonic().toSeed(words, passphrase) }
 
@@ -55,7 +59,7 @@ open class AccountType : Parcelable {
     }
 
     @Parcelize
-    data class PrivateKey(val key: ByteArray) : AccountType() {
+    data class PrivateKey(val key: ByteArray) : AccountType(false) {
         override fun equals(other: Any?): Boolean {
             return other is PrivateKey && key.contentEquals(other.key)
         }
@@ -90,7 +94,8 @@ open class AccountType : Parcelable {
                 }
             }
             is Address -> this.address.shorten()
-            else -> ""
+            is XPubKey -> this.xPubKey.shorten()
+            is PrivateKey -> ""
         }
 }
 

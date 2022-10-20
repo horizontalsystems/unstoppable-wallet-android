@@ -67,10 +67,9 @@ class AppStatusService(
 
         accountDetails["Origin"] = account.origin.value
 
-        when (val accountType = account.type) {
-            is AccountType.Mnemonic -> {
-                accountDetails["Mnemonic"] = accountType.words.count()
-            }
+        val accountType = account.type
+        if (accountType is AccountType.Mnemonic) {
+            accountDetails["Mnemonic"] = accountType.words.count()
         }
         return accountDetails
     }

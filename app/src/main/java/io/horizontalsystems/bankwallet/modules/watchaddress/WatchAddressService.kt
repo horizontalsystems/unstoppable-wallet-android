@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.watchaddress
 
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Address
 
 class WatchAddressService(
@@ -25,7 +26,7 @@ class WatchAddressService(
     fun createAccount() {
         val tmpAddress = address ?: throw EmptyAddressException()
         val accountName = name.ifBlank { accountFactory.getNextWatchAccountName() }
-        val account = accountFactory.watchAccount(accountName, tmpAddress.hex, tmpAddress.domain)
+        val account = accountFactory.watchAccount(accountName, AccountType.Address(tmpAddress.hex))
 
         accountManager.save(account)
     }
