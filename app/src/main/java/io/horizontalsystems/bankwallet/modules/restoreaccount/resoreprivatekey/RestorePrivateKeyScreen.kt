@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,8 +54,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 fun ResorePrivateKey(
     navController: NavController,
     restoreViewModel: RestoreViewModel,
-    viewModel: RestorePrivateKeyViewModel = viewModel(factory = RestorePrivateKeyModule.Factory())
 ) {
+    val viewModel =
+        viewModel<RestorePrivateKeyViewModel>(factory = RestorePrivateKeyModule.Factory())
     val context = LocalContext.current
 
     var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {
@@ -72,137 +74,143 @@ fun ResorePrivateKey(
             }
         }
 
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-        AppBar(
-            title = TranslatableString.ResString(R.string.Restore_Enter_Key_Title),
-            navigationIcon = {
-                HsIconButton(onClick = navController::popBackStack) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_back),
-                        contentDescription = "back",
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                }
-            },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Next),
-                    onClick = {
-                        viewModel::onProceed
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = TranslatableString.ResString(R.string.Restore_Enter_Key_Title),
+                navigationIcon = {
+                    HsIconButton(onClick = navController::popBackStack) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = "back",
+                            tint = ComposeAppTheme.colors.jacob
+                        )
                     }
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Next),
+                        onClick = {
+                            viewModel::onProceed
+                        }
+                    )
                 )
             )
-        )
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                Spacer(Modifier.height(12.dp))
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(Modifier.height(12.dp))
 
-                RestoreByMenu(restoreViewModel)
+            RestoreByMenu(restoreViewModel)
 
-                Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(24.dp))
 
-                Column(
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(8.dp))
+                    .background(ComposeAppTheme.colors.lawrence),
+            ) {
+
+                val style = SpanStyle(
+                    color = ComposeAppTheme.colors.lucian,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp,
+                    letterSpacing = 0.sp
+                )
+
+                BasicTextField(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(8.dp))
-                        .background(ComposeAppTheme.colors.lawrence),
-                ) {
-
-                    val style = SpanStyle(
-                        color = ComposeAppTheme.colors.lucian,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        letterSpacing = 0.sp
-                    )
-
-                    BasicTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .defaultMinSize(minHeight = 68.dp)
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        enabled = true,
-                        value = textState,
-                        onValueChange = {
-                            textState = it
-                            viewModel.onEnterPrivateKey(it.text)
-                        },
-                        textStyle = ColoredTextStyle(
-                            color = ComposeAppTheme.colors.leah,
-                            textStyle = ComposeAppTheme.typography.body
-                        ),
-                        maxLines = 6,
-                        cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
-                        visualTransformation = {
-                            try {
-                                val annotatedString = buildAnnotatedString {
-                                    append(it.text)
+                        .defaultMinSize(minHeight = 68.dp)
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    enabled = true,
+                    value = textState,
+                    onValueChange = {
+                        textState = it
+                        viewModel.onEnterPrivateKey(it.text)
+                    },
+                    textStyle = ColoredTextStyle(
+                        color = ComposeAppTheme.colors.leah,
+                        textStyle = ComposeAppTheme.typography.body
+                    ),
+                    maxLines = 6,
+                    cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                    visualTransformation = {
+                        try {
+                            val annotatedString = buildAnnotatedString {
+                                append(it.text)
 
 //                                    uiState.invalidWordRanges.forEach { range ->
 //                                        addStyle(style = style, range.first, range.last + 1)
 //                                    }
-                                }
-                                TransformedText(annotatedString, OffsetMapping.Identity)
-                            } catch (error: Throwable) {
-                                error.printStackTrace()
-                                TransformedText(it, OffsetMapping.Identity)
                             }
-                        },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        decorationBox = { innerTextField ->
-                            if (textState.text.isEmpty()) {
-                                body_grey50(
-                                    stringResource(R.string.Restore_PrivateKeyHint),
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                            }
-                            innerTextField()
-                        },
-                    )
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(52.dp),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        if (textState.text.isNotEmpty()) {
-                            ButtonSecondaryCircle(
-                                modifier = Modifier.padding(end = 16.dp),
-                                icon = R.drawable.ic_delete_20,
-                                onClick = {
-                                    textState = textState.copy(text = "", selection = TextRange(0))
-                                    viewModel.onEnterPrivateKey("")
-                                }
-                            )
-                        } else {
-                            ButtonSecondaryCircle(
-                                modifier = Modifier.padding(end = 8.dp),
-                                icon = R.drawable.ic_qr_scan_20,
-                                onClick = {
-                                    qrScannerLauncher.launch(
-                                        QRScannerActivity.getScanQrIntent(context)
-                                    )
-                                }
-                            )
-
-                            val clipboardManager = LocalClipboardManager.current
-                            ButtonSecondaryDefault(
-                                modifier = Modifier.padding(end = 16.dp),
-                                title = stringResource(id = R.string.Send_Button_Paste),
-                                onClick = {
-                                    clipboardManager.getText()?.text?.let { textInClipboard ->
-                                        textState = textState.copy(
-                                            text = textInClipboard,
-                                            selection = TextRange(textInClipboard.length)
-                                        )
-                                        viewModel.onEnterPrivateKey(textInClipboard)
-                                    }
-                                },
+                            TransformedText(annotatedString, OffsetMapping.Identity)
+                        } catch (error: Throwable) {
+                            error.printStackTrace()
+                            TransformedText(it, OffsetMapping.Identity)
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    decorationBox = { innerTextField ->
+                        if (textState.text.isEmpty()) {
+                            body_grey50(
+                                stringResource(R.string.Restore_PrivateKeyHint),
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
+                        innerTextField()
+                    },
+                )
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (textState.text.isNotEmpty()) {
+                        ButtonSecondaryCircle(
+                            modifier = Modifier.padding(end = 16.dp),
+                            icon = R.drawable.ic_delete_20,
+                            onClick = {
+                                textState = textState.copy(text = "", selection = TextRange(0))
+                                viewModel.onEnterPrivateKey("")
+                            }
+                        )
+                    } else {
+                        ButtonSecondaryCircle(
+                            modifier = Modifier.padding(end = 8.dp),
+                            icon = R.drawable.ic_qr_scan_20,
+                            onClick = {
+                                qrScannerLauncher.launch(
+                                    QRScannerActivity.getScanQrIntent(context)
+                                )
+                            }
+                        )
+
+                        val clipboardManager = LocalClipboardManager.current
+                        ButtonSecondaryDefault(
+                            modifier = Modifier.padding(end = 16.dp),
+                            title = stringResource(id = R.string.Send_Button_Paste),
+                            onClick = {
+                                clipboardManager.getText()?.text?.let { textInClipboard ->
+                                    textState = textState.copy(
+                                        text = textInClipboard,
+                                        selection = TextRange(textInClipboard.length)
+                                    )
+                                    viewModel.onEnterPrivateKey(textInClipboard)
+                                }
+                            },
+                        )
                     }
                 }
             }

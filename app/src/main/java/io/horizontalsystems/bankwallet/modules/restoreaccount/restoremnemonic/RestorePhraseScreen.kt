@@ -71,8 +71,8 @@ fun RestorePhrase(
     navController: NavController,
     popUpToInclusiveId: Int,
     restoreViewModel: RestoreViewModel,
-    viewModel: RestoreMnemonicViewModel = viewModel(factory = RestoreMnemonicModule.Factory())
 ) {
+    val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
