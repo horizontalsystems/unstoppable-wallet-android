@@ -9,9 +9,7 @@ object WatchAddressModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = WatchAddressService(App.accountFactory, App.accountManager)
-
-            return WatchAddressViewModel(service) as T
+            return WatchAddressViewModel(App.accountFactory, App.accountManager) as T
         }
     }
 }

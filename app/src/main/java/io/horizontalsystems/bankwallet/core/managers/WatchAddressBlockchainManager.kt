@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
@@ -35,20 +36,23 @@ class WatchAddressBlockchainManager(
             return
         }
 
-        val wallets = walletManager.getWallets(account)
-        val enabledBlockchains = wallets.map { it.token.blockchain }
-        val disabledBlockchains = evmBlockchainManager.allBlockchains
-            .filter { !enabledBlockchains.contains(it) }
+        if (account.type is AccountType.Address) {
+            val wallets = walletManager.getWallets(account)
+            val enabledBlockchains = wallets.map { it.token.blockchain }
+            val disabledBlockchains = evmBlockchainManager.allBlockchains
+                .filter { !enabledBlockchains.contains(it) }
 
-        if (disabledBlockchains.isEmpty()) {
-            return
+            if (disabledBlockchains.isEmpty()) {
+                return
+            }
+
+            try {
+                val tokenQueries = disabledBlockchains.map { TokenQuery(it.type, TokenType.Native) }
+                walletActivator.activateWallets(account, tokenQueries)
+            } catch (e: Exception) {
+
+            }
         }
 
-        try {
-            val tokenQueries = disabledBlockchains.map { TokenQuery(it.type, TokenType.Native) }
-            walletActivator.activateWallets(account, tokenQueries)
-        } catch (e: Exception) {
-
-        }
     }
 }

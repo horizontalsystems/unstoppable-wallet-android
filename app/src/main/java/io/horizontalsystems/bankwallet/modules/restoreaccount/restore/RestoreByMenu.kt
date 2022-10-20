@@ -20,24 +20,41 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 fun RestoreByMenu(
     viewModel: RestoreViewModel
 ) {
-    var showRestoreBySelectorDialog by remember { mutableStateOf(false) }
+    ByMenu(
+        menuTitle = stringResource(R.string.Restore_By),
+        menuValue = stringResource(viewModel.restoreOption.titleRes),
+        selectorDialogTitle = stringResource(R.string.Restore_RestoreBy),
+        selectorItems = viewModel.restoreOptions.map {
+            TabItem(
+                stringResource(it.titleRes),
+                it == viewModel.restoreOption,
+                it
+            )
+        },
+        onSelectItem = {
+            viewModel.onRestoreOptionSelected(it)
+        }
+    )
+}
 
-    if (showRestoreBySelectorDialog) {
+@Composable
+fun <T> ByMenu(
+    menuTitle: String,
+    menuValue: String,
+    selectorDialogTitle: String,
+    selectorItems: List<TabItem<T>>,
+    onSelectItem: (T) -> Unit
+) {
+    var showSelectorDialog by remember { mutableStateOf(false) }
+
+    if (showSelectorDialog) {
         SelectorDialogCompose(
-            title = stringResource(R.string.Restore_RestoreBy),
-            items = viewModel.restoreOptions.map {
-                TabItem(
-                    stringResource(it.titleRes),
-                    it == viewModel.restoreOption,
-                    it
-                )
-            },
+            title = selectorDialogTitle,
+            items = selectorItems,
             onDismissRequest = {
-                showRestoreBySelectorDialog = false
+                showSelectorDialog = false
             },
-            onSelectItem = {
-                viewModel.onRestoreOptionSelected(it)
-            }
+            onSelectItem = onSelectItem
         )
     }
 
@@ -47,18 +64,14 @@ fun RestoreByMenu(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-                    showRestoreBySelectorDialog = true
+                    showSelectorDialog = true
                 }
                 .padding(horizontal = 16.dp)
         ) {
-            B2(
-                text = stringResource(R.string.Restore_By),
-            )
+            B2(text = menuTitle)
             Spacer(Modifier.weight(1f))
             Row {
-                subhead1_grey(
-                    text = stringResource(viewModel.restoreOption.titleRes),
-                )
+                subhead1_grey(text = menuValue)
                 Icon(
                     modifier = Modifier.padding(start = 4.dp),
                     painter = painterResource(id = R.drawable.ic_down_arrow_20),
