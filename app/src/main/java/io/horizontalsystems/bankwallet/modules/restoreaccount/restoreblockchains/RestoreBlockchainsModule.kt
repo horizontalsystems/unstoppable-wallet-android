@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
+package io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
