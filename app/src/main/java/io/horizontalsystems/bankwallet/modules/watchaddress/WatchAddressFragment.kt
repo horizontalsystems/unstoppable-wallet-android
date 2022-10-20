@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.ByMenu
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -65,7 +66,10 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
     val view = LocalView.current
 
     val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
-    val accountCreated = viewModel.accountCreated
+    val uiState = viewModel.uiState
+    val accountCreated = uiState.accountCreated
+    val submitEnabled = uiState.submitEnabled
+    val type = uiState.type
 
     LaunchedEffect(accountCreated) {
         if (accountCreated) {
@@ -108,7 +112,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                         onClick = {
                             viewModel.onClickWatch()
                         },
-                        enabled = viewModel.submitEnabled
+                        enabled = submitEnabled
                     )
                 )
             )
@@ -122,17 +126,44 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                         .weight(1f)
                         .verticalScroll(rememberScrollState())
                 ) {
-                    HeaderText(text = stringResource(R.string.Watch_Address_Title))
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                    HSAddressInput(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .focusRequester(focusRequester),
-                        tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
-                        coinCode = "ETH",
-                        onValueChange = viewModel::onEnterAddress
+                    ByMenu(
+                        menuTitle = stringResource(R.string.Watch_By),
+                        menuValue = stringResource(type.titleResId),
+                        selectorDialogTitle = stringResource(R.string.Watch_WatchBy),
+                        selectorItems = WatchAddressViewModel.Type.values().map {
+                            TabItem(stringResource(it.titleResId), it == type, it)
+                        },
+                        onSelectItem = {
+                            viewModel.onSetType(it)
+                        }
                     )
-                    InfoText(text = stringResource(R.string.Watch_Address_Description))
+
+                    Spacer(modifier = Modifier.height(32.dp))
+                    when (type) {
+                        WatchAddressViewModel.Type.Address -> {
+                            HSAddressInput(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .focusRequester(focusRequester),
+                                tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+                                coinCode = "ETH",
+                                onValueChange = viewModel::onEnterAddress
+                            )
+                        }
+                        WatchAddressViewModel.Type.XPubKey -> {
+                            FormsInput(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp),
+                                hint = stringResource(id = R.string.Watch_XPubKey_Hint),
+                                qrScannerEnabled = true,
+                            ) {
+                                viewModel.onEnterXPubKey(it)
+                            }
+                        }
+                    }
+
 
                     Spacer(Modifier.height(32.dp))
                 }
@@ -146,7 +177,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                         onClick = {
                             viewModel.onClickWatch()
                         },
-                        enabled = viewModel.submitEnabled
+                        enabled = submitEnabled
                     )
                 }
             }

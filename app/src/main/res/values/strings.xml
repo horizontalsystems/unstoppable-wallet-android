@@ -908,8 +908,13 @@
 
     <string name="Watch_Address_Title">Watch Address</string>
     <string name="Watch_Address_Hint">Address or Domain</string>
+    <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
     <string name="Watch_Address_Watch">Watch</string>
+    <string name="Watch_By">By</string>
+    <string name="Watch_WatchBy">Watch By</string>
+    <string name="Watch_TypeAddress">EVM Address</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
 
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
