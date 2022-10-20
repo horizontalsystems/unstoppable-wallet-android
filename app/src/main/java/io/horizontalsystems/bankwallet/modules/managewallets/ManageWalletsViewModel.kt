@@ -9,8 +9,8 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Supported
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService.ItemState.Unsupported
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItem
-import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.CoinViewItemState
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItemState
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.disposables.CompositeDisposable
 

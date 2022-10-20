@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
+package io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains
 
 import android.os.Bundle
 import android.view.LayoutInflater

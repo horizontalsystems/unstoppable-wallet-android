@@ -116,6 +116,13 @@
     <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase.</string>
     <string name="Restore_Title">Choose Blockchains</string>
     <string name="Restore_Key">Key</string>
+    <string name="Restore_By">By</string>
+    <string name="Restore_RestoreBy">Restore By</string>
+    <string name="Restore_RecoveryPhrase">Recovery Phrase</string>
+    <string name="Restore_PrivateKey">Private Key</string>
+    <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key or Account Extended Private Key</string>
+    <string name="Restore_PhraseHint">Enter 12, 15, 18, 21 or 24 words</string>
+
 
     <string name="Select_Coins">Choose Coins</string>
 

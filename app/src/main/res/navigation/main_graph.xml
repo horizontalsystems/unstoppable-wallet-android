@@ -225,13 +225,13 @@
         android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment" />
     <fragment
         android:id="@+id/restoreMnemonicFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.RestoreMnemonicFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreMnemonicFragment" />
     <fragment
         android:id="@+id/watchAddressFragment"
         android:name="io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment" />
     <fragment
         android:id="@+id/restoreSelectCoinsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment"/>
+        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment"/>
     <fragment
         android:id="@+id/zcashConfigure"
         android:name="io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure"/>

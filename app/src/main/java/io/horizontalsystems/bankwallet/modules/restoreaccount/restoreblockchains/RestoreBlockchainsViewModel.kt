@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restore.restoreblockchains
+package io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

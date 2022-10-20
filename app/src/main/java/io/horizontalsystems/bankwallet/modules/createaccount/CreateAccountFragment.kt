@@ -259,7 +259,10 @@ fun MnemonicLanguageCell(
     showLanguageSelectorDialog: () -> Unit
 ) {
     Row(
-        modifier = Modifier.padding(start = 16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable { showLanguageSelectorDialog.invoke() }
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
@@ -272,10 +275,14 @@ fun MnemonicLanguageCell(
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         Spacer(Modifier.weight(1f))
-        ButtonSecondaryTransparent(
-            title = stringResource(language.displayNameStringRes),
-            iconRight = R.drawable.ic_down_arrow_20,
-            onClick = showLanguageSelectorDialog
+        subhead1_grey(
+            text = stringResource(language.displayNameStringRes),
+        )
+        Icon(
+            modifier = Modifier.padding(start = 4.dp),
+            painter = painterResource(id = R.drawable.ic_down_arrow_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
         )
     }
 }

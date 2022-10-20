@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.restore.restoremnemonic
+package io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic
 
+import android.app.Activity
 import android.content.Context
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -27,7 +27,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.*
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -45,46 +48,31 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.displayNameStringRes
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.createaccount.MnemonicLanguageCell
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.restore.restoreblockchains.RestoreBlockchainsFragment
+import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreByMenu
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreViewModel
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment
 import io.horizontalsystems.bankwallet.ui.compose.*
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class RestoreMnemonicFragment : BaseFragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    val popUpToInclusiveId = arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreMnemonicFragment) ?: R.id.restoreMnemonicFragment
-                    RestoreMnemonicScreen(findNavController(), popUpToInclusiveId)
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int) {
-    val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
+fun RestorePhrase(
+    navController: NavController,
+    popUpToInclusiveId: Int,
+    restoreViewModel: RestoreViewModel,
+    viewModel: RestoreMnemonicViewModel = viewModel(factory = RestoreMnemonicModule.Factory())
+) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
@@ -100,6 +88,18 @@ fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int)
         focusRequester.requestFocus()
     }
 
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+
+                textState =
+                    textState.copy(text = scannedText, selection = TextRange(scannedText.length))
+                viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
+            }
+        }
+
+    val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
             title = TranslatableString.ResString(R.string.Restore_Enter_Key_Title),
@@ -119,56 +119,21 @@ fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int)
                 )
             )
         )
-        val coroutineScope = rememberCoroutineScope()
-        val keyboardController = LocalSoftwareKeyboardController.current
-
-        var showLanguageSelectorDialog by remember { mutableStateOf(false) }
-
-        if (showLanguageSelectorDialog) {
-            SelectorDialogCompose(
-                title = stringResource(R.string.CreateWallet_Wordlist),
-                items = viewModel.mnemonicLanguages.map {
-                    TabItem(
-                        stringResource(it.displayNameStringRes),
-                        it == uiState.language,
-                        it
-                    )
-                },
-                onDismissRequest = {
-                    coroutineScope.launch {
-                        showLanguageSelectorDialog = false
-                        delay(300)
-                        keyboardController?.show()
-                    }
-                },
-                onSelectItem = {
-                    viewModel.setMnemonicLanguage(it)
-                }
-            )
-        }
-
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(Modifier.height(12.dp))
-                CellSingleLineLawrenceSection {
-                    MnemonicLanguageCell(
-                        language = uiState.language,
-                        showLanguageSelectorDialog = {
-                            showLanguageSelectorDialog = true
-                        }
-                    )
-                }
+
+                RestoreByMenu(restoreViewModel)
 
                 Spacer(Modifier.height(24.dp))
                 HeaderText(text = stringResource(R.string.Restore_Key))
-                Row(
+                Column(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(8.dp))
                         .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(8.dp))
                         .background(ComposeAppTheme.colors.lawrence),
-                    verticalAlignment = Alignment.CenterVertically
                 ) {
 
                     val style = SpanStyle(
@@ -180,13 +145,13 @@ fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int)
 
                     BasicTextField(
                         modifier = Modifier
+                            .fillMaxWidth()
                             .onFocusChanged {
                                 isMnemonicPhraseInputFocused = it.isFocused
                             }
                             .focusRequester(focusRequester)
-                            .defaultMinSize(minHeight = 93.dp)
-                            .padding(horizontal = 16.dp, vertical = 12.dp)
-                            .weight(1f),
+                            .defaultMinSize(minHeight = 68.dp)
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
                         enabled = true,
                         value = textState,
                         onValueChange = {
@@ -194,7 +159,10 @@ fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int)
 
                             viewModel.onEnterMnemonicPhrase(it.text, it.selection.max)
 
-                            showCustomKeyboardDialog = !viewModel.isThirdPartyKeyboardAllowed && Utils.isUsingCustomKeyboard(context)
+                            showCustomKeyboardDialog =
+                                !viewModel.isThirdPartyKeyboardAllowed && Utils.isUsingCustomKeyboard(
+                                    context
+                                )
                         },
                         textStyle = ColoredTextStyle(
                             color = ComposeAppTheme.colors.leah,
@@ -218,16 +186,72 @@ fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int)
                             }
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        decorationBox = { innerTextField ->
+                            if (textState.text.isEmpty()) {
+                                body_grey50(
+                                    stringResource(R.string.Restore_PhraseHint),
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                            }
+                            innerTextField()
+                        },
                     )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        if (textState.text.isNotEmpty()) {
+                            ButtonSecondaryCircle(
+                                modifier = Modifier.padding(end = 16.dp),
+                                icon = R.drawable.ic_delete_20,
+                                onClick = {
+                                    textState = textState.copy(text = "", selection = TextRange(0))
+                                    viewModel.onEnterMnemonicPhrase("", "".length)
+                                }
+                            )
+                        } else {
+                            ButtonSecondaryCircle(
+                                modifier = Modifier.padding(end = 8.dp),
+                                icon = R.drawable.ic_qr_scan_20,
+                                onClick = {
+                                    qrScannerLauncher.launch(
+                                        QRScannerActivity.getScanQrIntent(context)
+                                    )
+                                }
+                            )
+
+                            val clipboardManager = LocalClipboardManager.current
+                            ButtonSecondaryDefault(
+                                modifier = Modifier.padding(end = 16.dp),
+                                title = stringResource(id = R.string.Send_Button_Paste),
+                                onClick = {
+                                    clipboardManager.getText()?.text?.let { textInClipboard ->
+                                        textState = textState.copy(
+                                            text = textInClipboard,
+                                            selection = TextRange(textInClipboard.length)
+                                        )
+                                        viewModel.onEnterMnemonicPhrase(
+                                            textInClipboard,
+                                            textInClipboard.length
+                                        )
+                                    }
+                                },
+                            )
+
+                        }
+
+                    }
                 }
-                InfoText(text = stringResource(R.string.Restore_Mnemonic_Description))
-                Spacer(Modifier.height(24.dp))
-                Passphrase(
-                    enabled = uiState.passphraseEnabled,
-                    error = uiState.passphraseError,
-                    onEnabled = viewModel::onTogglePassphrase,
-                    onEnterPassphrase = viewModel::onEnterPassphrase
-                )
+
+                Spacer(Modifier.height(32.dp))
+
+                BottomSection(viewModel, uiState, coroutineScope)
+
                 Spacer(Modifier.height(32.dp))
             }
 
@@ -278,7 +302,8 @@ fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int)
     if (showCustomKeyboardDialog) {
         CustomKeyboardWarningDialog(
             onSelect = {
-                val imeManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imeManager =
+                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imeManager.showInputMethodPicker()
                 showCustomKeyboardDialog = false
             },
@@ -292,6 +317,93 @@ fun RestoreMnemonicScreen(navController: NavController, popUpToInclusiveId: Int)
         )
     }
 
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun BottomSection(
+    viewModel: RestoreMnemonicViewModel,
+    uiState: RestoreMnemonicModule.UiState,
+    coroutineScope: CoroutineScope,
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var showLanguageSelectorDialog by remember { mutableStateOf(false) }
+
+    if (showLanguageSelectorDialog) {
+        SelectorDialogCompose(
+            title = stringResource(R.string.CreateWallet_Wordlist),
+            items = viewModel.mnemonicLanguages.map {
+                TabItem(
+                    stringResource(it.displayNameStringRes),
+                    it == uiState.language,
+                    it
+                )
+            },
+            onDismissRequest = {
+                coroutineScope.launch {
+                    showLanguageSelectorDialog = false
+                    delay(300)
+                    keyboardController?.show()
+                }
+            },
+            onSelectItem = {
+                viewModel.setMnemonicLanguage(it)
+            }
+        )
+    }
+
+    CellSingleLineLawrenceSection(
+        listOf({
+            MnemonicLanguageCell(
+                language = uiState.language,
+                showLanguageSelectorDialog = {
+                    showLanguageSelectorDialog = true
+                }
+            )
+        },
+            {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_key_phrase_20),
+                        tint = ComposeAppTheme.colors.grey,
+                        contentDescription = null,
+                    )
+                    Spacer(Modifier.width(16.dp))
+                    body_leah(
+                        text = stringResource(R.string.Passphrase),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 8.dp)
+                    )
+                    HsSwitch(
+                        checked = uiState.passphraseEnabled,
+                        onCheckedChange = viewModel::onTogglePassphrase
+                    )
+                }
+            }
+        )
+    )
+
+    if (uiState.passphraseEnabled) {
+        Spacer(modifier = Modifier.height(12.dp))
+        FormsInput(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            hint = stringResource(R.string.Passphrase),
+            state = uiState.passphraseError?.let { DataState.Error(Exception(it)) },
+            pasteEnabled = false,
+            singleLine = true,
+            onValueChange = viewModel::onEnterPassphrase,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        )
+        InfoText(text = stringResource(R.string.Restore_PassphraseDescription))
+    }
 }
 
 @Composable
@@ -330,55 +442,4 @@ private fun SuggestionsBar(
             }
         }
     }
-}
-
-@Composable
-fun Passphrase(
-    enabled: Boolean,
-    error: String?,
-    onEnabled: (Boolean) -> Unit,
-    onEnterPassphrase: (String) -> Unit
-) {
-    CellSingleLineLawrenceSection {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_key_phrase_20),
-                tint = ComposeAppTheme.colors.grey,
-                contentDescription = null,
-            )
-            Spacer(Modifier.width(16.dp))
-            body_leah(
-                text = stringResource(R.string.Passphrase),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp)
-            )
-            HsSwitch(
-                checked = enabled,
-                onCheckedChange = onEnabled
-            )
-        }
-    }
-
-    if (enabled) {
-        Spacer(modifier = Modifier.height(12.dp))
-        FormsInput(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            hint = stringResource(R.string.Passphrase),
-            state = error?.let { DataState.Error(Exception(it)) },
-            pasteEnabled = false,
-            singleLine = true,
-            onValueChange = onEnterPassphrase,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        )
-        InfoText(text = stringResource(R.string.Restore_PassphraseDescription))
-    }
-
 }
