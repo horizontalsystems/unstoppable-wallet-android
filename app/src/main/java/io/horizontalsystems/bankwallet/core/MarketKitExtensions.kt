@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.marketkit.models.*
 import io.horizontalsystems.nftkit.models.NftType
 
@@ -141,18 +142,23 @@ val Blockchain.description: String
 val BlockchainType.imageUrl: String
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
 
-val BlockchainType.coinSettingTypes: List<CoinSettingType>
+val BlockchainType.coinSettingType: CoinSettingType?
     get() = when (this) {
         BlockchainType.Bitcoin,
-        BlockchainType.Litecoin -> listOf(CoinSettingType.derivation)
-        BlockchainType.BitcoinCash -> listOf(CoinSettingType.bitcoinCashCoinType)
-        else -> listOf()
+        BlockchainType.Litecoin -> CoinSettingType.derivation
+        BlockchainType.BitcoinCash -> CoinSettingType.bitcoinCashCoinType
+        else -> null
     }
 
-val BlockchainType.defaultSettingsArray: List<CoinSettings>
-    get() = when (this) {
+fun BlockchainType.defaultSettingsArray(accountType: AccountType): List<CoinSettings> = when (this) {
         BlockchainType.Bitcoin,
-        BlockchainType.Litecoin -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to AccountType.Derivation.bip49.value)))
+        BlockchainType.Litecoin -> {
+            when(accountType) {
+                is AccountType.Mnemonic -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to AccountType.Derivation.bip49.value)))
+                is AccountType.HdExtendedKey -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to accountType.hdExtendedKey.info.purpose.derivation.value)))
+                else -> listOf()
+            }
+        }
         BlockchainType.BitcoinCash -> listOf(CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to BitcoinCashCoinType.type145.value)))
         else -> listOf()
     }
@@ -240,6 +246,33 @@ val BlockchainType.feePriceScale: FeePriceScale
         else -> FeePriceScale.Gwei
     }
 
+fun BlockchainType.supports(accountType: AccountType): Boolean {
+    return when (accountType) {
+        is AccountType.Mnemonic -> true
+        is AccountType.HdExtendedKey -> {
+            val info = accountType.hdExtendedKey.info
+            when (this) {
+                BlockchainType.Bitcoin -> info.coinType == ExtendedKeyCoinType.Bitcoin
+                BlockchainType.Litecoin -> info.coinType == ExtendedKeyCoinType.Bitcoin
+                BlockchainType.Litecoin -> info.coinType == ExtendedKeyCoinType.Litecoin && info.purpose == HDWallet.Purpose.BIP44 || info.purpose == HDWallet.Purpose.BIP49
+                BlockchainType.BitcoinCash -> info.coinType == ExtendedKeyCoinType.Bitcoin && info.purpose == HDWallet.Purpose.BIP44
+                BlockchainType.Dash -> info.coinType == ExtendedKeyCoinType.Bitcoin && info.purpose == HDWallet.Purpose.BIP44
+                else -> false
+            }
+        }
+        is AccountType.EvmAddress,
+        is AccountType.EvmPrivateKey -> {
+            this == BlockchainType.Ethereum
+                    || this == BlockchainType.BinanceSmartChain
+                    || this == BlockchainType.Polygon
+                    || this == BlockchainType.Avalanche
+                    || this == BlockchainType.Optimism
+                    || this == BlockchainType.ArbitrumOne
+        }
+        else -> false
+    }
+}
+
 val TokenType.order: Int
     get() = when (this) {
         TokenType.Native -> 0
@@ -267,3 +300,7 @@ val FullCoin.iconPlaceholder: Int
     } else {
         R.drawable.coin_placeholder
     }
+
+fun FullCoin.eligibleTokens(accountType: AccountType) : List<Token> {
+    return supportedTokens.filter { it.blockchainType.supports(accountType) }
+}

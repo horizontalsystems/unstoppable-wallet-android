@@ -76,8 +76,9 @@ class RestoreBlockchainsService(
     }
 
     private fun syncInternalItems() {
+        val allowedBlockchainTypes = blockchainTypes.filter { it.supports(accountType) }
         val blockchains = marketKit
-            .blockchains(blockchainTypes.map { it.uid })
+            .blockchains(allowedBlockchainTypes.map { it.uid })
             .sortedBy { it.type.order }
 
         val tokens = blockchainTypes
@@ -132,8 +133,7 @@ class RestoreBlockchainsService(
         return Item(internalItem.blockchain, enabled, hasSettings)
     }
 
-    private fun hasSettings(token: Token) =
-        token.blockchainType.coinSettingTypes.isNotEmpty()
+    private fun hasSettings(token: Token) = token.blockchainType.coinSettingType != null
 
     private fun syncState() {
         items = internalItems.map { item(it) }
@@ -149,7 +149,7 @@ class RestoreBlockchainsService(
     fun enable(blockchain: Blockchain) {
         val internalItem = getInternalItemByBlockchain(blockchain) ?: return
 
-        enableCoinService.enable(internalItem.token.fullCoin)
+        enableCoinService.enable(internalItem.token.fullCoin, accountType)
     }
 
     fun disable(blockchain: Blockchain) {
@@ -165,6 +165,7 @@ class RestoreBlockchainsService(
 
         enableCoinService.configure(
             internalItem.token.fullCoin,
+            accountType,
             enabledCoins.filter { it.token == internalItem.token })
     }
 

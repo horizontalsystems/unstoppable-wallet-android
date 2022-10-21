@@ -86,12 +86,12 @@ class WatchAddressViewModel(
                 val tmpAddress = address ?: throw Exception()
                 accountName = address?.domain
 
-                accountType = AccountType.Address(tmpAddress.hex)
+                accountType = AccountType.EvmAddress(tmpAddress.hex)
             }
             Type.XPubKey -> {
                 val tmpXPubKey = xPubKey ?: throw Exception()
 
-                accountType = AccountType.XPubKey(tmpXPubKey)
+                accountType = AccountType.HdExtendedKey(tmpXPubKey)
             }
         }
 

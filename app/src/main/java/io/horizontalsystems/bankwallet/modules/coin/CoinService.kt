@@ -43,7 +43,7 @@ class CoinService(
         _coinState.onNext(when {
             activeAccount == null -> CoinState.NoActiveAccount
             activeAccount.isWatchAccount -> CoinState.WatchAccount
-            fullCoin.supportedTokens.isEmpty() -> CoinState.Unsupported
+            fullCoin.eligibleTokens(activeAccount.type).isEmpty() -> CoinState.Unsupported
             walletManager.activeWallets.any { it.coin.uid == fullCoin.coin.uid } -> {
                 if (initialCoinInWallet) {
                     CoinState.InWallet
