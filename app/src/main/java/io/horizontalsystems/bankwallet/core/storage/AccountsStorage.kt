@@ -20,7 +20,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val MNEMONIC = "mnemonic"
         private const val PRIVATE_KEY = "private_key"
         private const val ADDRESS = "address"
-        private const val XPUB_KEY = "xpubkey"
+        private const val HD_EXTENDED_LEY = "hd_extended_key"
     }
 
     override var activeAccountId: String?
@@ -42,9 +42,9 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                     try {
                         val accountType = when (record.type) {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.passphrase?.value ?: "")
-                            PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
-                            ADDRESS -> AccountType.Address(record.key!!.value)
-                            XPUB_KEY -> AccountType.XPubKey(record.key!!.value)
+                            PRIVATE_KEY -> AccountType.EvmPrivateKey(record.key!!.value.hexToByteArray())
+                            ADDRESS -> AccountType.EvmAddress(record.key!!.value)
+                            HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
                             else -> null
                         }
                         Account(record.id, record.name, accountType!!, AccountOrigin.valueOf(record.origin), record.isBackedUp)
@@ -94,18 +94,19 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 passphrase = SecretString(account.type.passphrase)
                 accountType = MNEMONIC
             }
-            is AccountType.PrivateKey -> {
+            is AccountType.EvmPrivateKey -> {
                 key = SecretString(account.type.key.toRawHexString())
                 accountType = PRIVATE_KEY
             }
-            is AccountType.Address -> {
+            is AccountType.EvmAddress -> {
                 key = SecretString(account.type.address)
                 accountType = ADDRESS
             }
-            is AccountType.XPubKey -> {
-                key = SecretString(account.type.xPubKey)
-                accountType = XPUB_KEY
+            is AccountType.HdExtendedKey -> {
+                key = SecretString(account.type.keySerialized)
+                accountType = HD_EXTENDED_LEY
             }
+            else -> throw Exception("Unsupported AccountType: ${account.type}")
         }
 
         return AccountRecord(

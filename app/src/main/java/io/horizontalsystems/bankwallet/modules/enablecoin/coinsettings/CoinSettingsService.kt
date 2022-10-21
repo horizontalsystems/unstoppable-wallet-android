@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.coinSettingTypes
+import io.horizontalsystems.bankwallet.core.coinSettingType
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
 import io.horizontalsystems.bankwallet.entities.CoinSettingType
@@ -14,20 +14,20 @@ class CoinSettingsService : Clearable {
     val rejectApproveSettingsObservable = PublishSubject.create<Token>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approveSettings(token: Token, settings: List<CoinSettings>, allowEmpty: Boolean = false) {
-        if (token.blockchainType.coinSettingTypes.contains(CoinSettingType.derivation)) {
+    fun approveSettings(token: Token, accountType: AccountType, settings: List<CoinSettings>, allowEmpty: Boolean = false) {
+        if (token.blockchainType.coinSettingType == CoinSettingType.derivation) {
             val currentDerivations = settings.mapNotNull {
                 it.settings[CoinSettingType.derivation]?.let {
                     AccountType.Derivation.fromString(it)
                 }
             }
-            val type = RequestType.Derivation(AccountType.Derivation.values().toList(), currentDerivations)
+            val type = RequestType.Derivation(accountType.supportedDerivations, currentDerivations)
             val request = Request(token, type, allowEmpty)
             requestObservable.onNext(request)
             return
         }
 
-        if (token.blockchainType.coinSettingTypes.contains(CoinSettingType.bitcoinCashCoinType)) {
+        if (token.blockchainType.coinSettingType == CoinSettingType.bitcoinCashCoinType) {
             val currentTypes = settings.mapNotNull {
                 it.settings[CoinSettingType.bitcoinCashCoinType]?.let {
                     BitcoinCashCoinType.fromString(it)

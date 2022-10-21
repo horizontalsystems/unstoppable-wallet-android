@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -76,8 +77,10 @@ class ManageWalletsService(
 
     private fun fetchFullCoins(): List<FullCoin> {
         return if (filter.isBlank()) {
+            val account = this.account ?: return emptyList()
             val featuredFullCoins =
-                marketKit.fullCoins("", 100).toMutableList().filter { it.supportedTokens.isNotEmpty() }
+                marketKit.fullCoins("", 100).toMutableList()
+                    .filter { it.eligibleTokens(account.type).isNotEmpty() }
 
             val featuredCoins = featuredFullCoins.map { it.coin }
             val enabledFullCoins = marketKit.fullCoins(
@@ -114,25 +117,28 @@ class ManageWalletsService(
     }
 
     private fun item(fullCoin: FullCoin): Item {
-        val itemState = if (fullCoin.supportedTokens.isEmpty()) {
+        val account = account ?: return Item(fullCoin, ItemState.Unsupported)
+
+        val eligibleTokens = fullCoin.eligibleTokens(account.type)
+        val fullCoinWithEligibleTokens = FullCoin(fullCoin.coin, eligibleTokens)
+
+        val itemState = if (eligibleTokens.isEmpty()) {
             ItemState.Unsupported
         } else {
             val enabled = isEnabled(fullCoin.coin)
             ItemState.Supported(
                 enabled = enabled,
-                hasSettings = enabled && hasSettingsOrPlatforms(fullCoin)
+                hasSettings = enabled && hasSettingsOrPlatforms(eligibleTokens)
             )
         }
 
-        return Item(fullCoin, itemState)
+        return Item(fullCoinWithEligibleTokens, itemState)
     }
 
-    private fun hasSettingsOrPlatforms(fullCoin: FullCoin): Boolean {
-        val supportedTokens = fullCoin.supportedTokens
-
-        return if (supportedTokens.size == 1) {
-            val token = supportedTokens[0]
-            token.blockchainType.coinSettingTypes.isNotEmpty() || token.type !is TokenType.Native
+    private fun hasSettingsOrPlatforms(tokens: List<Token>): Boolean {
+        return if (tokens.size == 1) {
+            val token = tokens[0]
+            token.blockchainType.coinSettingType != null || token.type !is TokenType.Native
         } else {
             true
         }
@@ -196,7 +202,8 @@ class ManageWalletsService(
     }
 
     fun enable(fullCoin: FullCoin) {
-        enableCoinService.enable(fullCoin)
+        val account = this.account ?: return
+        enableCoinService.enable(fullCoin, account.type, account)
     }
 
     fun disable(uid: String) {
@@ -205,9 +212,10 @@ class ManageWalletsService(
     }
 
     fun configure(uid: String) {
+        val account = this.account ?: return
         val fullCoin = fullCoins.firstOrNull { it.coin.uid == uid } ?: return
         val coinWallets = wallets.filter { it.coin == fullCoin.coin }
-        enableCoinService.configure(fullCoin, coinWallets.map { it.configuredToken })
+        enableCoinService.configure(fullCoin, account.type, coinWallets.map { it.configuredToken })
     }
 
     override fun clear() {
