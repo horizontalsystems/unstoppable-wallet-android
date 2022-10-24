@@ -59,7 +59,7 @@ class ProFeaturesAuthorizationManager(
                 when (account.type) {
                     is AccountType.EvmPrivateKey -> {
                         val privateKey = Signer.privateKey(account.type.key, Chain.Ethereum)
-                        val address = Signer.ethereumAddress(privateKey)
+                        val address = Signer.address(privateKey)
                         AccountData(account.id, address)
                     }
 

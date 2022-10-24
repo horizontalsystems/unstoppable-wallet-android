@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.hdwalletkit.ExtendedKeyCoinType
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.marketkit.models.*
 import io.horizontalsystems.nftkit.models.NftType

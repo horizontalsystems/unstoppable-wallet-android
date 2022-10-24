@@ -12,10 +12,10 @@ import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionTyp
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
-import io.horizontalsystems.bitcoincore.core.Bip
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.models.*
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.hdwalletkit.HDWallet.Purpose
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.horizontalsystems.marketkit.models.Token
@@ -356,10 +356,10 @@ abstract class BitcoinBaseAdapter(
             else -> TransactionDataSortType.Shuffle
         }
 
-        fun getBip(derivation: AccountType.Derivation): Bip = when (derivation) {
-            AccountType.Derivation.bip44 -> Bip.BIP44
-            AccountType.Derivation.bip49 -> Bip.BIP49
-            AccountType.Derivation.bip84 -> Bip.BIP84
+        fun getPurpose(derivation: AccountType.Derivation): Purpose = when (derivation) {
+            AccountType.Derivation.bip44 -> Purpose.BIP44
+            AccountType.Derivation.bip49 -> Purpose.BIP49
+            AccountType.Derivation.bip84 -> Purpose.BIP84
         }
 
     }
