@@ -7,7 +7,10 @@ import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
 import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
 import io.horizontalsystems.bitcoinkit.MainNet
 import io.horizontalsystems.dashkit.MainNetDash
+import io.horizontalsystems.hdwalletkit.ExtendedKeyCoinType
+import io.horizontalsystems.hdwalletkit.HDExtendedKeyVersion
 import io.horizontalsystems.hdwalletkit.HDKeychain
+import io.horizontalsystems.hdwalletkit.HDWallet.Purpose
 import io.horizontalsystems.litecoinkit.MainNetLitecoin
 
 class PublicKeysViewModel(
@@ -39,7 +42,7 @@ class PublicKeysViewModel(
             BitcoinCashCoinType.type0 -> MainNetBitcoinCash(MainNetBitcoinCash.CoinType.Type0)
             BitcoinCashCoinType.type145 -> MainNetBitcoinCash(MainNetBitcoinCash.CoinType.Type145)
         }
-        return keysJson(keychain, 44, network.coinType)
+        return keysJson(keychain, Purpose.BIP44, network.coinType)
     }
 
     fun litecoinPublicKeys(derivation: AccountType.Derivation): String? {
@@ -47,7 +50,12 @@ class PublicKeysViewModel(
         val network = MainNetLitecoin()
         val keychain = HDKeychain(seed)
 
-        return keysJson(keychain, purpose(derivation), network.coinType)
+        return keysJson(
+            keychain,
+            purpose(derivation),
+            network.coinType,
+            ExtendedKeyCoinType.Litecoin
+        )
     }
 
     fun dashKeys(): String? {
@@ -55,25 +63,28 @@ class PublicKeysViewModel(
         val network = MainNetDash()
         val keychain = HDKeychain(seed)
 
-        return keysJson(keychain, 44, network.coinType)
+        return keysJson(keychain, Purpose.BIP44, network.coinType)
     }
 
     private fun keysJson(
         keychain: HDKeychain,
-        purpose: Int,
+        purpose: Purpose,
         coinType: Int,
+        extendedKeyCoinType: ExtendedKeyCoinType = ExtendedKeyCoinType.Bitcoin,
     ): String {
-        val publicKeys = (0..4).map { accountIndex ->
-            val key = keychain.getKeyByPath("m/$purpose'/$coinType'/$accountIndex'")
-            key.serializePubB58()
+        val publicKeys = (0..4).mapNotNull { accountIndex ->
+            val key = keychain.getKeyByPath("m/${purpose.value}'/$coinType'/$accountIndex'")
+            val version =
+                HDExtendedKeyVersion.initFrom(purpose, extendedKeyCoinType, isPrivate = false)
+            version?.let { key.serializePublic(it.value) }
         }
         return publicKeys.toString()
     }
 
-    private fun purpose(derivation: AccountType.Derivation): Int = when (derivation) {
-        AccountType.Derivation.bip44 -> 44
-        AccountType.Derivation.bip49 -> 49
-        AccountType.Derivation.bip84 -> 84
+    private fun purpose(derivation: AccountType.Derivation): Purpose = when (derivation) {
+        AccountType.Derivation.bip44 -> Purpose.BIP44
+        AccountType.Derivation.bip49 -> Purpose.BIP49
+        AccountType.Derivation.bip84 -> Purpose.BIP84
     }
 
 }
