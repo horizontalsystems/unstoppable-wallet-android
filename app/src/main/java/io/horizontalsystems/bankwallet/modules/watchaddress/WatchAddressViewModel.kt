@@ -80,7 +80,7 @@ class WatchAddressViewModel(
 
     private fun calculateIfSubmitEnabled() = when (this.type) {
         Type.Address -> address != null
-        Type.XPubKey -> !xPubKey.isNullOrBlank()
+        Type.XPubKey -> xPubKey != null
     }
 
     private fun createAccount() {
