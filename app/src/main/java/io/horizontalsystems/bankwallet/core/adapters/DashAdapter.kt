@@ -86,18 +86,31 @@ class DashAdapter(
 
         private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode, testMode: Boolean): DashKit {
             val account = wallet.account
-            val accountType = account.type
-            if (accountType is AccountType.Mnemonic) {
-                return DashKit(context = App.instance,
+
+            when (val accountType = account.type) {
+                is AccountType.HdExtendedKey -> {
+                    return DashKit(
+                        context = App.instance,
+                        extendedKey = accountType.hdExtendedKey,
+                        walletId = account.id,
+                        syncMode = syncMode,
+                        networkType = getNetworkType(testMode),
+                        confirmationsThreshold = confirmationsThreshold
+                    )
+                }
+                is AccountType.Mnemonic -> {
+                    return DashKit(
+                        context = App.instance,
                         words = accountType.words,
                         passphrase = accountType.passphrase,
                         walletId = account.id,
                         syncMode = syncMode,
                         networkType = getNetworkType(testMode),
-                        confirmationsThreshold = confirmationsThreshold)
+                        confirmationsThreshold = confirmationsThreshold
+                    )
+                }
+                else -> throw UnsupportedAccountException()
             }
-
-            throw UnsupportedAccountException()
         }
 
         fun clear(walletId: String, testMode: Boolean) {

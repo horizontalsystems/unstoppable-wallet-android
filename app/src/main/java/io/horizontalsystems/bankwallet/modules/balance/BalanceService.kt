@@ -38,11 +38,12 @@ class BalanceService(
 
     var isWatchAccount = false
         private set
+    private var hideZeroBalances = false
 
     private val allBalanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
 
     /* getBalanceItems should return new immutable list */
-    private fun getBalanceItems(): List<BalanceModule.BalanceItem> = if (isWatchAccount) {
+    private fun getBalanceItems(): List<BalanceModule.BalanceItem> = if (hideZeroBalances) {
         allBalanceItems.filter { it.balanceData.total > BigDecimal.ZERO }
     } else {
         allBalanceItems.toList()
@@ -142,6 +143,7 @@ class BalanceService(
     @Synchronized
     private fun handleWalletsUpdate(wallets: List<Wallet>) {
         isWatchAccount = accountManager.activeAccount?.isWatchAccount == true
+        hideZeroBalances = accountManager.activeAccount?.type?.hideZeroBalances == true
 
         adapterRepository.setWallet(wallets)
         xRateRepository.setCoinUids(wallets.map { it.coin.uid })
