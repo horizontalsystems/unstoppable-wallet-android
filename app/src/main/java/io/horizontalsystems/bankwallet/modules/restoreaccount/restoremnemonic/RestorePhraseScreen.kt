@@ -151,7 +151,7 @@ fun RestorePhrase(
                             }
                             .focusRequester(focusRequester)
                             .defaultMinSize(minHeight = 68.dp)
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                            .padding(start = 16.dp, end = 16.dp, top = 12.dp),
                         enabled = true,
                         value = textState,
                         onValueChange = {
@@ -200,7 +200,7 @@ fun RestorePhrase(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(52.dp),
+                            .height(48.dp),
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically
                     ) {

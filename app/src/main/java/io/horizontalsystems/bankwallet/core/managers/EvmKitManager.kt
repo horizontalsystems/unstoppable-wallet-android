@@ -108,7 +108,7 @@ class EvmKitManager(
                 signer = Signer.getInstance(seed, chain)
             }
             is AccountType.EvmPrivateKey -> {
-                address = Signer.address(accountType.key, chain)
+                address = Signer.address(accountType.key)
                 signer = Signer.getInstance(accountType.key, chain)
             }
             is AccountType.EvmAddress -> {

@@ -58,8 +58,7 @@ class ProFeaturesAuthorizationManager(
             return accounts.mapNotNull { account ->
                 when (account.type) {
                     is AccountType.EvmPrivateKey -> {
-                        val privateKey = Signer.privateKey(account.type.key, Chain.Ethereum)
-                        val address = Signer.address(privateKey)
+                        val address = Signer.address(account.type.key)
                         AccountData(account.id, address)
                     }
 
@@ -104,7 +103,7 @@ class ProFeaturesAuthorizationManager(
         val account = accountManager.account(accountData.id) ?: throw Exception("Account not found")
         val privateKey = when (account.type) {
             is AccountType.EvmPrivateKey -> {
-                BigInteger(account.type.key)
+                account.type.key
             }
 
             is AccountType.Mnemonic -> {

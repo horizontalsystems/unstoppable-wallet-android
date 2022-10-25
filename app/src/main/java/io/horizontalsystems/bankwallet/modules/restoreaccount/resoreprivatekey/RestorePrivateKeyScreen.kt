@@ -27,24 +27,25 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreByMenu
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreViewModel
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -53,6 +54,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 @Composable
 fun ResorePrivateKey(
     navController: NavController,
+    popUpToInclusiveId: Int,
     restoreViewModel: RestoreViewModel,
 ) {
     val viewModel =
@@ -74,6 +76,12 @@ fun ResorePrivateKey(
             }
         }
 
+    val borderColor = if (viewModel.error != null) {
+        ComposeAppTheme.colors.red50
+    } else {
+        ComposeAppTheme.colors.steel20
+    }
+
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
@@ -92,7 +100,16 @@ fun ResorePrivateKey(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Next),
                         onClick = {
-                            viewModel::onProceed
+                            viewModel.resolveAccountType()?.let { accountType ->
+                                navController.slideFromRight(
+                                    R.id.restoreSelectCoinsFragment,
+                                    bundleOf(
+                                        RestoreBlockchainsFragment.ACCOUNT_NAME_KEY to viewModel.defaultName,
+                                        RestoreBlockchainsFragment.ACCOUNT_TYPE_KEY to accountType,
+                                        ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
+                                    )
+                                )
+                            }
                         }
                     )
                 )
@@ -115,22 +132,15 @@ fun ResorePrivateKey(
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp))
-                    .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(8.dp))
+                    .border(1.dp, borderColor, RoundedCornerShape(8.dp))
                     .background(ComposeAppTheme.colors.lawrence),
             ) {
-
-                val style = SpanStyle(
-                    color = ComposeAppTheme.colors.lucian,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    letterSpacing = 0.sp
-                )
 
                 BasicTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .defaultMinSize(minHeight = 68.dp)
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                        .padding(start = 16.dp, end = 16.dp, top = 12.dp),
                     enabled = true,
                     value = textState,
                     onValueChange = {
@@ -147,10 +157,6 @@ fun ResorePrivateKey(
                         try {
                             val annotatedString = buildAnnotatedString {
                                 append(it.text)
-
-//                                    uiState.invalidWordRanges.forEach { range ->
-//                                        addStyle(style = style, range.first, range.last + 1)
-//                                    }
                             }
                             TransformedText(annotatedString, OffsetMapping.Identity)
                         } catch (error: Throwable) {
@@ -173,7 +179,7 @@ fun ResorePrivateKey(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(52.dp),
+                        .height(48.dp),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -214,6 +220,14 @@ fun ResorePrivateKey(
                     }
                 }
             }
+            viewModel.error?.let { errorText ->
+                caption_lucian(
+                    modifier = Modifier.padding(top = 8.dp, start = 32.dp, end = 32.dp),
+                    text = errorText
+                )
+            }
+
+            Spacer(Modifier.height(32.dp))
         }
     }
 }
