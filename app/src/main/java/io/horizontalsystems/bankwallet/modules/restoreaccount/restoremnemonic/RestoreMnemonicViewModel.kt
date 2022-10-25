@@ -107,6 +107,7 @@ class RestoreMnemonicViewModel(
     }
 
     fun onEnterMnemonicPhrase(text: String, cursorPosition: Int) {
+        error = null
         this.text = text
         this.cursorPosition = cursorPosition
         processText()
@@ -151,12 +152,6 @@ class RestoreMnemonicViewModel(
 
     fun onSelectCoinsShown() {
         accountType = null
-
-        emitState()
-    }
-
-    fun onErrorShown() {
-        error = null
 
         emitState()
     }
