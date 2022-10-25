@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -99,6 +98,12 @@ fun RestorePhrase(
             }
         }
 
+    val borderColor = if (uiState.error != null) {
+        ComposeAppTheme.colors.red50
+    } else {
+        ComposeAppTheme.colors.steel20
+    }
+
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
@@ -125,14 +130,14 @@ fun RestorePhrase(
 
                 RestoreByMenu(restoreViewModel)
 
-                Spacer(Modifier.height(24.dp))
-                HeaderText(text = stringResource(R.string.Restore_Key))
+                Spacer(Modifier.height(32.dp))
+
                 Column(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(8.dp))
-                        .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(8.dp))
+                        .border(1.dp, borderColor, RoundedCornerShape(8.dp))
                         .background(ComposeAppTheme.colors.lawrence),
                 ) {
 
@@ -248,7 +253,16 @@ fun RestorePhrase(
                     }
                 }
 
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(8.dp))
+
+                uiState.error?.let { errorText ->
+                    caption_lucian(
+                        modifier = Modifier.padding(horizontal = 32.dp),
+                        text = errorText
+                    )
+                }
+
+                Spacer(Modifier.height(24.dp))
 
                 BottomSection(viewModel, uiState, coroutineScope)
 
@@ -278,12 +292,6 @@ fun RestorePhrase(
                 }
             }
         }
-    }
-
-    uiState.error?.let {
-        HudHelper.showErrorMessage(LocalView.current, it)
-
-        viewModel.onErrorShown()
     }
 
     uiState.accountType?.let { accountType ->
