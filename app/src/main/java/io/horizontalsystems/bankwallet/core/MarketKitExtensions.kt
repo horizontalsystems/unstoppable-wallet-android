@@ -139,7 +139,7 @@ val Blockchain.description: String
 
 
 val BlockchainType.imageUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/platform-icons/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
 
 val BlockchainType.coinSettingTypes: List<CoinSettingType>
     get() = when (this) {
@@ -248,10 +248,10 @@ val TokenType.order: Int
 
 
 val Coin.imageUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png"
 
 val TopPlatform.imageUrl
-    get() = "https://markets.nyc3.digitaloceanspaces.com/platform-icons/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
 
 val FullCoin.typeLabel: String?
     get() = tokens.singleOrNull()?.protocolType

@@ -26,22 +26,22 @@ val <T> Optional<T>.orNull: T?
     }
 
 val Platform.iconUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/platform-icons/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
 
 val Coin.iconUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png"
 
 val CoinCategory.imageUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/category-icons/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/category-icons/$uid@3x.png"
 
 val CoinInvestment.Fund.logoUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/fund-icons/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/fund-icons/$uid@3x.png"
 
 val CoinTreasury.logoUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/treasury-icons/$fundUid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/treasury-icons/$fundUid@3x.png"
 
 val Auditor.logoUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/auditor-icons/$name@3x.png"
+    get() = "https://cdn.blocksdecoded.com/auditor-icons/$name@3x.png"
 
 fun List<FullCoin>.sortedByFilter(filter: String, enabled: (FullCoin) -> Boolean): List<FullCoin> {
     var comparator: Comparator<FullCoin> = compareByDescending {
