@@ -80,6 +80,12 @@ class ManageWalletsViewModel(
         service.setFilter(filter)
     }
 
+    val accountTypeDescription: String
+        get() = service.accountType?.description ?: ""
+
+    val addTokenEnabled: Boolean
+        get() = service.accountType?.canAddTokens ?: false
+
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
         disposables.clear()

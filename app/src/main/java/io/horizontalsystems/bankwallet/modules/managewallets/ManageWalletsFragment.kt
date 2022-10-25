@@ -125,7 +125,7 @@ class ManageWalletsFragment : BaseFragment() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ManageWalletsScreen(
-    findNavController: NavController,
+    navController: NavController,
     viewModel: ManageWalletsViewModel,
     restoreSettingsViewModel: RestoreSettingsViewModel
 ) {
@@ -134,7 +134,7 @@ private fun ManageWalletsScreen(
     if (restoreSettingsViewModel.openZcashConfigure != null) {
         restoreSettingsViewModel.zcashConfigureOpened()
 
-        findNavController.getNavigationResult(ZcashConfigure.resultBundleKey) { bundle ->
+        navController.getNavigationResult(ZcashConfigure.resultBundleKey) { bundle ->
             val requestResult = bundle.getInt(ZcashConfigure.requestResultKey)
 
             if (requestResult == ZcashConfigure.RESULT_OK) {
@@ -147,7 +147,7 @@ private fun ManageWalletsScreen(
             }
         }
 
-        findNavController.slideFromBottom(R.id.zcashConfigure)
+        navController.slideFromBottom(R.id.zcashConfigure)
     }
 
     Column(
@@ -156,16 +156,19 @@ private fun ManageWalletsScreen(
         SearchBar(
             title = stringResource(R.string.ManageCoins_title),
             searchHintText = stringResource(R.string.ManageCoins_Search),
-            navController = findNavController,
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
-                    icon = R.drawable.ic_add_yellow,
-                    onClick = {
-                        findNavController.slideFromRight(R.id.addTokenFragment)
-                    }
-                )
-            ),
+            navController = navController,
+            menuItems = if (viewModel.addTokenEnabled) {
+                listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
+                        icon = R.drawable.ic_add_yellow,
+                        onClick = {
+                            navController.slideFromRight(R.id.addTokenFragment)
+                        }
+                    ))
+            } else {
+                listOf()
+            },
             onSearchTextChanged = { text ->
                 viewModel.updateFilter(text)
             }
@@ -189,7 +192,20 @@ private fun ManageWalletsScreen(
                     items(it) { viewItem ->
                         CoinCell(
                             viewItem = viewItem,
-                            onItemClick = { onItemClick(viewItem, viewModel) },
+                            onItemClick = {
+                                if (viewItem.state is CoinViewItemState.ToggleVisible) {
+                                    if (viewItem.state.enabled) {
+                                        viewModel.disable(viewItem.item)
+                                    } else {
+                                        viewModel.enable(viewItem.item)
+                                    }
+                                } else {
+                                    navController.slideFromBottom(
+                                        R.id.coinNotSupportedDialog,
+                                        CoinNotSupportedDialog.prepareParams(viewModel.accountTypeDescription, viewItem.subtitle)
+                                    )
+                                }
+                            },
                             onSettingClick = { viewModel.onClickSettings(viewItem.item) },
                         )
                     }
@@ -275,16 +291,6 @@ private fun CoinCell(
                     onCheckedChange = { onItemClick.invoke() },
                 )
             }
-        }
-    }
-}
-
-private fun onItemClick(viewItem: CoinViewItem<String>, viewModel: ManageWalletsViewModel) {
-    if (viewItem.state is CoinViewItemState.ToggleVisible) {
-        if (viewItem.state.enabled) {
-            viewModel.disable(viewItem.item)
-        } else {
-            viewModel.enable(viewItem.item)
         }
     }
 }

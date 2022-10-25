@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.ConfiguredToken
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
@@ -30,6 +31,8 @@ class ManageWalletsService(
         }
 
     val cancelEnableCoinObservable = PublishSubject.create<Coin>()
+    val accountType: AccountType?
+        get() = account?.type
 
     private val account: Account? = accountManager.activeAccount
     private var wallets = setOf<Wallet>()
