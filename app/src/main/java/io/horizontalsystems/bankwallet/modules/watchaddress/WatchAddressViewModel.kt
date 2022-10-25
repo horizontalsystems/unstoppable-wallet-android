@@ -48,12 +48,8 @@ class WatchAddressViewModel(
 
     fun onEnterXPubKey(v: String) {
         xPubKey = try {
-            val hdExtendedKey = HDExtendedKey(v)
-            if (hdExtendedKey.info.isPublic) {
-                v
-            } else {
-                null
-            }
+            HDExtendedKey.validate(v, true)
+            v
         } catch (t: Throwable) {
             null
         }
