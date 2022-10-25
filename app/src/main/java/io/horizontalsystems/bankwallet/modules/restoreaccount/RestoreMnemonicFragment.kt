@@ -55,7 +55,7 @@ fun RestoreScreen(
             RestorePhrase(navController, popUpToInclusiveId, restoreViewModel)
         }
         RestoreOption.PrivateKey -> {
-            ResorePrivateKey(navController, restoreViewModel)
+            ResorePrivateKey(navController, popUpToInclusiveId, restoreViewModel)
         }
     }
 }

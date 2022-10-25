@@ -9,6 +9,7 @@ import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import java.math.BigInteger
 
 @Parcelize
 data class Account(
@@ -62,13 +63,13 @@ sealed class AccountType : Parcelable {
     }
 
     @Parcelize
-    data class EvmPrivateKey(val key: ByteArray) : AccountType() {
+    data class EvmPrivateKey(val key: BigInteger) : AccountType() {
         override fun equals(other: Any?): Boolean {
-            return other is EvmPrivateKey && key.contentEquals(other.key)
+            return other is EvmPrivateKey && key == other.key
         }
 
         override fun hashCode(): Int {
-            return key.contentHashCode()
+            return key.hashCode()
         }
     }
 

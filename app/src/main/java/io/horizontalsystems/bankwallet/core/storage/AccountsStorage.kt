@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.core.IAccountsStorage
-import io.horizontalsystems.bankwallet.core.hexToByteArray
-import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -42,7 +40,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                     try {
                         val accountType = when (record.type) {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.passphrase?.value ?: "")
-                            PRIVATE_KEY -> AccountType.EvmPrivateKey(record.key!!.value.hexToByteArray())
+                            PRIVATE_KEY -> AccountType.EvmPrivateKey(record.key!!.value.toBigInteger())
                             ADDRESS -> AccountType.EvmAddress(record.key!!.value)
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
                             else -> null
@@ -95,7 +93,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 accountType = MNEMONIC
             }
             is AccountType.EvmPrivateKey -> {
-                key = SecretString(account.type.key.toRawHexString())
+                key = SecretString(account.type.key.toString())
                 accountType = PRIVATE_KEY
             }
             is AccountType.EvmAddress -> {
