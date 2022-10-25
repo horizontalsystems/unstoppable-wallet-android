@@ -153,7 +153,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                             )
                         }
                         WatchAddressViewModel.Type.XPubKey -> {
-                            FormsInput(
+                            FormsInputMultiline(
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp),
                                 hint = stringResource(id = R.string.Watch_XPubKey_Hint),

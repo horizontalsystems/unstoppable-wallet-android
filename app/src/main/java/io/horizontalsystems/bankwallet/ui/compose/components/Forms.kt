@@ -230,6 +230,198 @@ fun FormsInput(
     }
 }
 
+@Composable
+fun FormsInputMultiline(
+    modifier: Modifier = Modifier,
+    initial: String? = null,
+    enabled: Boolean = true,
+    hint: String,
+    textColor: Color = ComposeAppTheme.colors.leah,
+    textStyle: TextStyle = ComposeAppTheme.typography.body,
+    hintColor: Color = ComposeAppTheme.colors.grey50,
+    hintStyle: TextStyle = ComposeAppTheme.typography.body,
+    state: DataState<Any>? = null,
+    pasteEnabled: Boolean = true,
+    qrScannerEnabled: Boolean = false,
+    textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
+    onChangeFocus: ((Boolean) -> Unit)? = null,
+    maxLength: Int? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    onValueChange: (String) -> Unit,
+) {
+    val context = LocalContext.current
+
+    val borderColor = when (state) {
+        is DataState.Error -> {
+            if (state.error is FormsInputStateWarning) {
+                ComposeAppTheme.colors.yellow50
+            } else {
+                ComposeAppTheme.colors.red50
+            }
+        }
+        else -> ComposeAppTheme.colors.steel20
+    }
+
+    val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
+        ComposeAppTheme.colors.jacob
+    } else {
+        ComposeAppTheme.colors.lucian
+    }
+
+    Column(modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .defaultMinSize(minHeight = 124.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+                .background(ComposeAppTheme.colors.lawrence),
+            verticalArrangement = Arrangement.Center
+        ) {
+            var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
+                mutableStateOf(TextFieldValue(initial ?: ""))
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            BasicTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        onChangeFocus?.invoke(it.isFocused)
+                    }
+                    .weight(1f)
+                    .padding(horizontal = 16.dp),
+                enabled = enabled,
+                value = textState,
+                onValueChange = { textFieldValue ->
+                    val textFieldValueProcessed = textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
+
+                    val text = textFieldValueProcessed.text
+                    if (maxLength == null || text.length <= maxLength) {
+                        textState = textFieldValueProcessed
+                        onValueChange.invoke(text)
+                    } else {
+                        // Need to set textState to new instance of TextFieldValue with the same values
+                        // Otherwise it getting set to empty string
+                        textState = TextFieldValue(text = textState.text, selection = textState.selection)
+                    }
+                },
+                textStyle = ColoredTextStyle(
+                    color = textColor,
+                    textStyle = textStyle
+                ),
+                cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                decorationBox = { innerTextField ->
+                    if (textState.text.isEmpty()) {
+                        Text(
+                            hint,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            color = hintColor,
+                            style = hintStyle
+                        )
+                    }
+                    innerTextField()
+                },
+                visualTransformation = visualTransformation,
+                keyboardOptions = keyboardOptions,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                when (state) {
+                    is DataState.Loading -> {
+                        HSCircularProgressIndicator()
+                    }
+                    is DataState.Error -> {
+                        Icon(
+                            modifier = Modifier.padding(end = 8.dp),
+                            painter = painterResource(id = R.drawable.ic_attention_20),
+                            contentDescription = null,
+                            tint = cautionColor
+                        )
+                    }
+                    is DataState.Success -> {
+                        Icon(
+                            modifier = Modifier.padding(end = 8.dp),
+                            painter = painterResource(id = R.drawable.ic_check_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.remus
+                        )
+                    }
+                    else -> {
+
+                    }
+                }
+
+                if (textState.text.isNotEmpty()) {
+                    ButtonSecondaryCircle(
+                        modifier = Modifier.padding(end = 16.dp),
+                        icon = R.drawable.ic_delete_20,
+                        onClick = {
+                            val text = textPreprocessor.process("")
+                            textState = textState.copy(text = text, selection = TextRange(0))
+                            onValueChange.invoke(text)
+                        }
+                    )
+                } else {
+                    if (qrScannerEnabled) {
+                        val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                            if (result.resultCode == Activity.RESULT_OK) {
+                                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+
+                                val textProcessed = textPreprocessor.process(scannedText)
+                                textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                                onValueChange.invoke(textProcessed)
+                            }
+                        }
+
+                        ButtonSecondaryCircle(
+                            modifier = Modifier.padding(end = if(pasteEnabled) 8.dp else 16.dp),
+                            icon = R.drawable.ic_qr_scan_20,
+                            onClick = {
+                                qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
+                            }
+                        )
+                    }
+
+                    if (pasteEnabled) {
+                        val clipboardManager = LocalClipboardManager.current
+                        ButtonSecondaryDefault(
+                            modifier = Modifier.padding(end = 16.dp),
+                            title = stringResource(id = R.string.Send_Button_Paste),
+                            onClick = {
+                                clipboardManager.getText()?.text?.let { textInClipboard ->
+                                    val textProcessed = textPreprocessor.process(textInClipboard)
+                                    textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                                    onValueChange.invoke(textProcessed)
+                                }
+                            },
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+
+        state?.errorOrNull?.localizedMessage?.let {
+            Text(
+                modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
+                text = it,
+                color = cautionColor,
+                style = ComposeAppTheme.typography.caption
+            )
+        }
+    }
+}
+
 class FormsInputStateWarning(override val message: String?) : Exception()
 
 interface TextPreprocessor {
