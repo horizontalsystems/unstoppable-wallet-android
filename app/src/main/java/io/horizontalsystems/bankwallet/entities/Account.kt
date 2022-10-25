@@ -41,7 +41,7 @@ data class Account(
 }
 
 @Parcelize
-open class AccountType : Parcelable {
+sealed class AccountType : Parcelable {
     @Parcelize
     data class EvmAddress(val address: String) : AccountType()
 
@@ -138,6 +138,8 @@ open class AccountType : Parcelable {
             }
             else -> emptyList()
         }
+
+    val hideZeroBalances = this is EvmAddress
 }
 
 val HDWallet.Purpose.derivation: AccountType.Derivation

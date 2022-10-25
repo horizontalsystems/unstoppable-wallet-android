@@ -87,6 +87,7 @@ class WatchAddressBlockchainManager(
                     enableBtcBlockchains(account, type.hdExtendedKey.info.purpose.derivation)
                 }
             }
+            else -> Unit
         }
     }
 }

@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.hdwalletkit.HDExtendedKey
 
 class WatchAddressViewModel(
     private val accountFactory: IAccountFactory,
@@ -46,7 +47,16 @@ class WatchAddressViewModel(
     }
 
     fun onEnterXPubKey(v: String) {
-        xPubKey = v
+        xPubKey = try {
+            val hdExtendedKey = HDExtendedKey(v)
+            if (hdExtendedKey.info.isPublic) {
+                v
+            } else {
+                null
+            }
+        } catch (t: Throwable) {
+            null
+        }
 
         submitEnabled = calculateIfSubmitEnabled()
         emitState()
