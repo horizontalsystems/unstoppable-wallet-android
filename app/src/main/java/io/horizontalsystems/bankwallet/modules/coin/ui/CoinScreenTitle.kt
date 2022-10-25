@@ -52,7 +52,7 @@ fun CoinScreenTitlePreviewNoRank() {
         CoinScreenTitle(
             coinName = "Synthetix Network TokenSynthetix Network Token",
             marketCapRank = null,
-            coinIconUrl = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/bitcoin@3x.png",
+            coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png",
             iconPlaceholder = null
         )
     }
@@ -65,7 +65,7 @@ fun CoinScreenTitlePreviewLongTitle() {
         CoinScreenTitle(
             coinName = "Synthetix Network Token Synthetix Network Token Synthetix Network Token Synthetix Network Token",
             marketCapRank = 123,
-            coinIconUrl = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/bitcoin@3x.png",
+            coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png",
             iconPlaceholder = null
         )
     }
@@ -78,7 +78,7 @@ fun CoinScreenTitlePreviewShortTitle() {
         CoinScreenTitle(
             coinName = "Bitcoin",
             marketCapRank = 1,
-            coinIconUrl = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/bitcoin@3x.png",
+            coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png",
             iconPlaceholder = null
         )
     }
