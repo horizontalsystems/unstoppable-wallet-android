@@ -887,6 +887,8 @@
     <string name="ManageCoins_Search">Token code or name</string>
     <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
+    <string name="ManageCoins_NotSupported">Not Supported</string>
+    <string name="ManageCoins_NotSupportedDescription">Your current wallet type %1$s does not support %2$s</string>
 
     <!-- Experimental Feature -->
 

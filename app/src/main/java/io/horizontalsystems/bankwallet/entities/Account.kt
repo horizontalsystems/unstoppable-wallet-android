@@ -141,6 +141,12 @@ sealed class AccountType : Parcelable {
         }
 
     val hideZeroBalances = this is EvmAddress
+
+    val canAddTokens: Boolean
+        get() = when (this) {
+            is Mnemonic, is EvmPrivateKey -> true
+            else -> false
+        }
 }
 
 val HDWallet.Purpose.derivation: AccountType.Derivation
