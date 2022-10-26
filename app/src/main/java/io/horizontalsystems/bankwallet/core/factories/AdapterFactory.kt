@@ -77,6 +77,7 @@ class AdapterFactory(
         }
         is TokenType.Eip20 -> getEip20Adapter(wallet, tokenType.address)
         is TokenType.Bep2 -> getBinanceAdapter(wallet, tokenType.symbol)
+        is TokenType.Spl,
         is TokenType.Unsupported -> null
     }
 

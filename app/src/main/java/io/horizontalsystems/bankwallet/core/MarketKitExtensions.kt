@@ -57,6 +57,7 @@ val Token.typeInfo: String
         }
         is TokenType.Eip20 -> type.address.shorten()
         is TokenType.Bep2 -> type.symbol
+        is TokenType.Spl,
         is TokenType.Unsupported -> ""
     }
 
