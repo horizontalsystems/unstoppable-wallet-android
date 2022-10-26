@@ -30,7 +30,6 @@ object CoinDetailsModule {
         val proChartsActivated: Boolean,
         val tokenLiquidityViewItem: TokenLiquidityViewItem?,
         val tokenDistributionViewItem: TokenDistributionViewItem?,
-        val volumeChart: ChartViewItem?,
         val tvlChart: ChartViewItem?,
         val tvlRank: String?,
         val tvlRatio: String?,
@@ -43,7 +42,6 @@ object CoinDetailsModule {
 
     @Immutable
     data class ChartViewItem(
-        val badge: String?,
         val value: String,
         val diff: String,
         val chartData: ChartData,
