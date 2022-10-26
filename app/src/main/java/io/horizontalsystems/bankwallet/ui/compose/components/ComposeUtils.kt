@@ -19,7 +19,7 @@ import java.math.BigDecimal
 
 @Composable
 fun RateColor(diff: BigDecimal?) =
-    if (diff ?: BigDecimal.ZERO >= BigDecimal.ZERO) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
+    if ((diff ?: BigDecimal.ZERO) >= BigDecimal.ZERO) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
 
 @Composable
 fun diffColor(value: BigDecimal) =
