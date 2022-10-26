@@ -27,9 +27,11 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
+import io.horizontalsystems.bankwallet.modules.evmprivatekey.EvmPrivateKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
 import io.horizontalsystems.bankwallet.modules.publickeys.PublicKeysModule
+import io.horizontalsystems.bankwallet.modules.showextendedkey.account.ShowExtendedKeyModule
 import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -103,11 +105,11 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                     }
                 )
 
-                val actionItems = mutableListOf<@Composable () -> Unit>()
-
                 when (viewModel.keyActionState) {
                     KeyActionState.ShowRecoveryPhrase -> {
-                        actionItems.add {
+                        Spacer(modifier = Modifier.height(32.dp))
+
+                        CellSingleLineLawrenceSection {
                             AccountActionItem(
                                 title = stringResource(id = R.string.RecoveryPhrase_Title),
                                 icon = painterResource(id = R.drawable.icon_paper_contract_20)
@@ -120,39 +122,119 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 }
                             }
                         }
-                        actionItems.add {
-                            AccountActionItem(
-                                title = stringResource(id = R.string.EvmPrivateKey_Title),
-                                icon = painterResource(id = R.drawable.ic_key_20)
-                            ) {
-                                navController.authorizedAction {
-                                    navController.slideFromRight(
-                                        R.id.evmPrivateKeyFragment,
-                                        PublicKeysModule.prepareParams(viewModel.account)
-                                    )
+                        if (viewModel.showEvmPrivateKey) {
+                            Spacer(modifier = Modifier.height(32.dp))
+                            CellSingleLineLawrenceSection {
+                                AccountActionItem(
+                                    title = stringResource(id = R.string.EvmPrivateKey_Title),
+                                    icon = painterResource(id = R.drawable.ic_key_20)
+                                ) {
+                                    navController.authorizedAction {
+                                        navController.slideFromRight(
+                                            R.id.evmPrivateKeyFragment,
+                                            EvmPrivateKeyModule.prepareParams(viewModel.account)
+                                        )
+                                    }
                                 }
                             }
                         }
-                        actionItems.add {
-                            AccountActionItem(
-                                title = stringResource(id = R.string.PublicKeys_Title),
-                                icon = painterResource(id = R.drawable.icon_link_20)
-                            ) {
-                                navController.authorizedAction {
-                                    navController.slideFromRight(
-                                        R.id.publicKeysFragment,
-                                        PublicKeysModule.prepareParams(viewModel.account)
-                                    )
+                        Spacer(modifier = Modifier.height(32.dp))
+                        CellSingleLineLawrenceSection(
+                            buildList<@Composable () -> Unit> {
+
+                                if (viewModel.bip32RootKey != null) {
+                                    add {
+                                        AccountActionItem(
+                                            title = stringResource(id = R.string.Bip32RootKey),
+                                            icon = painterResource(id = R.drawable.ic_key_20)
+                                        ) {
+                                            navController.authorizedAction {
+                                                navController.slideFromRight(
+                                                    R.id.accountExtendedKeyFragment,
+                                                    ShowExtendedKeyModule.prepareParams(
+                                                        viewModel.bip32RootKey,
+                                                        ShowExtendedKeyModule.DisplayKeyType.Bip32RootKey
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (viewModel.bip32RootKey != null || viewModel.accountExtendedPrivateKey != null) {
+                                    add {
+                                        AccountActionItem(
+                                            title = stringResource(id = R.string.AccountExtendedPrivateKey),
+                                            icon = painterResource(id = R.drawable.ic_key_20)
+                                        ) {
+                                            navController.authorizedAction {
+                                                if (viewModel.bip32RootKey != null) {
+                                                    navController.slideFromRight(
+                                                        R.id.accountExtendedKeyFragment,
+                                                        ShowExtendedKeyModule.prepareParams(
+                                                            viewModel.bip32RootKey,
+                                                            ShowExtendedKeyModule.DisplayKeyType.AccountPrivateKey(true)
+                                                        )
+                                                    )
+                                                } else if (viewModel.accountExtendedPrivateKey != null) {
+                                                    navController.slideFromRight(
+                                                        R.id.accountExtendedKeyFragment,
+                                                        ShowExtendedKeyModule.prepareParams(
+                                                            viewModel.accountExtendedPrivateKey,
+                                                            ShowExtendedKeyModule.DisplayKeyType.AccountPrivateKey(false)
+                                                        )
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (viewModel.bip32RootKey != null || viewModel.accountExtendedPublicKey != null || viewModel.accountExtendedPrivateKey != null) {
+                                    add {
+                                        AccountActionItem(
+                                            title = stringResource(id = R.string.AccountExtendedPublicKey),
+                                            icon = painterResource(id = R.drawable.ic_key_20)
+                                        ) {
+                                            navController.authorizedAction {
+                                                if (viewModel.bip32RootKey != null) {
+                                                    navController.slideFromRight(
+                                                        R.id.accountExtendedKeyFragment,
+                                                        ShowExtendedKeyModule.prepareParams(
+                                                            viewModel.bip32RootKey,
+                                                            ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(true)
+                                                        )
+                                                    )
+                                                } else if (viewModel.accountExtendedPublicKey != null) {
+                                                    navController.slideFromRight(
+                                                        R.id.accountExtendedKeyFragment,
+                                                        ShowExtendedKeyModule.prepareParams(
+                                                            viewModel.accountExtendedPublicKey,
+                                                            ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(false)
+                                                        )
+                                                    )
+                                                } else if (viewModel.accountExtendedPrivateKey != null) {
+                                                    navController.slideFromRight(
+                                                        R.id.accountExtendedKeyFragment,
+                                                        ShowExtendedKeyModule.prepareParams(
+                                                            viewModel.accountExtendedPrivateKey,
+                                                            ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(false)
+                                                        )
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
-                        }
+                        )
                     }
                     KeyActionState.BackupRecoveryPhrase -> {
-                        actionItems.add {
+                        Spacer(modifier = Modifier.height(32.dp))
+                        CellSingleLineLawrenceSection {
                             RedActionItem(
                                 title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
                                 icon = painterResource(id = R.drawable.icon_warning_2_20)
-                            ){
+                            ) {
                                 navController.authorizedAction {
                                     navController.slideFromBottom(
                                         R.id.backupKeyFragment,
@@ -179,18 +261,13 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                     }
                 }
 
-                if (actionItems.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(32.dp))
-                    CellSingleLineLawrenceSection(actionItems)
-                }
-
                 if (additionalItems.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(32.dp))
                     CellSingleLineLawrenceSection(additionalItems)
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
-                CellSingleLineLawrenceSection(listOf {
+                CellSingleLineLawrenceSection {
                     CellSingleLineLawrence {
                         RedActionItem(
                             title = stringResource(id = R.string.ManageAccount_Unlink),
@@ -202,7 +279,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             )
                         }
                     }
-                })
+                }
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }

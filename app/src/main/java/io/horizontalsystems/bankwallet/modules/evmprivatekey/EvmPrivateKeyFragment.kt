@@ -121,7 +121,7 @@ private fun EvmPrivateKeyScreen(
                     )
                     Spacer(Modifier.height(24.dp))
                     var hidden by remember { mutableStateOf(true) }
-                    HidableContent(viewModel.ethereumPrivateKey, hidden) {
+                    HidableContent(viewModel.ethereumPrivateKey, hidden, stringResource(R.string.EvmPrivateKey_ShowPrivateKey)) {
                         hidden = it
                     }
                 }
@@ -136,7 +136,7 @@ private fun EvmPrivateKeyScreen(
 }
 
 @Composable
-private fun ActionButton(title: Int, onClick: () -> Unit) {
+fun ActionButton(title: Int, onClick: () -> Unit) {
     ButtonsGroupWithShade {
         ButtonPrimaryYellow(
             modifier = Modifier
@@ -152,7 +152,8 @@ private fun ActionButton(title: Int, onClick: () -> Unit) {
 fun HidableContent(
     content: String,
     hidden: Boolean,
-    onClickToggle: (Boolean) -> Unit
+    title: String,
+    onClickToggle: ((Boolean) -> Unit)?
 ) {
     Box(
         modifier = Modifier
@@ -160,7 +161,7 @@ fun HidableContent(
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
             .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
-            .clickable(onClick = { onClickToggle.invoke(!hidden) })
+            .clickable(enabled = onClickToggle != null, onClick = { onClickToggle?.invoke(!hidden) })
     ) {
 
         D2(
@@ -177,7 +178,7 @@ fun HidableContent(
                     .background(ComposeAppTheme.colors.tyler),
                 contentAlignment = Alignment.Center
             ) {
-                subhead2_grey(text = stringResource(R.string.EvmPrivateKey_ShowPrivateKey))
+                subhead2_grey(title)
             }
         }
     }
