@@ -111,7 +111,7 @@ sealed class AccountType : Parcelable {
                     Translator.getString(R.string.ManageAccount_NWords, count)
                 }
             }
-            is EvmAddress -> this.address.shorten()
+            is EvmAddress -> "EVM Address"
             is EvmPrivateKey -> "EVM Private Key"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {
@@ -142,7 +142,19 @@ sealed class AccountType : Parcelable {
 
     val hideZeroBalances = this is EvmAddress
 
+    val detailedDescription: String
+        get() = when (this) {
+            is EvmAddress -> this.address.shorten()
+            else -> this.description
+        }
+
     val canAddTokens: Boolean
+        get() = when (this) {
+            is Mnemonic, is EvmPrivateKey -> true
+            else -> false
+        }
+
+    val supportsWalletConnect: Boolean
         get() = when (this) {
             is Mnemonic, is EvmPrivateKey -> true
             else -> false

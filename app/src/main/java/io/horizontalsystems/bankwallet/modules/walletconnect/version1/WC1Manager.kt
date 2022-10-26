@@ -9,8 +9,10 @@ class WC1Manager(
         private val accountManager: IAccountManager,
         private val evmBlockchainManager: EvmBlockchainManager
 ) {
-    enum class SupportState {
-        Supported, NotSupportedDueToNoActiveAccount, NotSupportedDueToWatchAccount
+    sealed class SupportState {
+        object Supported : SupportState()
+        object NotSupportedDueToNoActiveAccount : SupportState()
+        class NotSupported(val accountTypeDescription: String) : SupportState()
     }
 
     val activeAccount: Account?
@@ -32,12 +34,10 @@ class WC1Manager(
     fun getWalletConnectSupportState(): SupportState {
         val tmpAccount = accountManager.activeAccount
 
-        return if (tmpAccount == null) {
-            SupportState.NotSupportedDueToNoActiveAccount
-        } else if (tmpAccount.isWatchAccount) {
-            SupportState.NotSupportedDueToWatchAccount
-        } else {
-            SupportState.Supported
+        return when {
+            tmpAccount == null -> SupportState.NotSupportedDueToNoActiveAccount
+            tmpAccount.type.supportsWalletConnect -> SupportState.Supported
+            else -> SupportState.NotSupported(tmpAccount.type.description)
         }
     }
 

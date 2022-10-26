@@ -49,7 +49,7 @@ class ManageAccountsViewModel(
         AccountViewItem(
             accountId = account.id,
             title = account.name,
-            subtitle = account.type.description,
+            subtitle = account.type.detailedDescription,
             selected = account == activeAccount,
             backupRequired = !account.isBackedUp,
             isWatchAccount = account.isWatchAccount
