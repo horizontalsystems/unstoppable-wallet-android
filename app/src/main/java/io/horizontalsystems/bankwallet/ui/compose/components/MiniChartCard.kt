@@ -30,44 +30,30 @@ fun MiniChartCard(
             .clip(RoundedCornerShape(12.dp))
             .clickable { onClick() }
             .background(ComposeAppTheme.colors.lawrence)
+            .height(105.dp)
             .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            caption_grey(
-                modifier = Modifier.weight(1f),
-                text = title,
-            )
-            chartViewItem.badge?.let {
-                Badge(text = it)
-            }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = chartViewItem.value,
-                style = ComposeAppTheme.typography.subhead1,
-                color = ComposeAppTheme.colors.bran
-            )
+        caption_grey(text = title)
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = chartViewItem.value,
+            style = ComposeAppTheme.typography.headline1,
+            color = ComposeAppTheme.colors.bran,
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Row(verticalAlignment = Alignment.Bottom) {
             Text(
                 text = chartViewItem.diff,
                 style = ComposeAppTheme.typography.subhead1,
-                color = diffColor(chartViewItem.movementTrend)
+                color = diffColor(chartViewItem.movementTrend),
             )
-        }
-        Row {
+            Spacer(modifier = Modifier.width(12.dp))
             AndroidView(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(32.dp),
-                factory = { context ->
-                    ChartMinimal(context)
+                    .weight(1f)
+                    .height(24.dp),
+                factory = {
+                    ChartMinimal(it)
                 },
                 update = { view ->
                     view.doOnLayout {
@@ -76,6 +62,6 @@ fun MiniChartCard(
                 }
             )
         }
-
+        Spacer(modifier = Modifier.height(4.dp))
     }
 }

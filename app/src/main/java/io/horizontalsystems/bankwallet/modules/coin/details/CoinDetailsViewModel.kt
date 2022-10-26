@@ -82,11 +82,10 @@ class CoinDetailsViewModel(
 
     private fun viewItem(item: CoinDetailsService.Item): ViewItem {
         return ViewItem(
-            item.proCharts.activated,
-            getTokenLiquidityViewItem(item.proCharts),
-            getTokenDistributionViewItem(item.proCharts, service.hasMajorHolders),
-            volumeChart = chart(values = item.totalVolumes, badge = service.coin.marketCapRank?.let { "#$it" }, currencyValueFormatter),
-            tvlChart = chart(item.tvls, valueFormatter = numberFormatter),
+            proChartsActivated = item.proCharts.activated,
+            tokenLiquidityViewItem = getTokenLiquidityViewItem(item.proCharts),
+            tokenDistributionViewItem = getTokenDistributionViewItem(item.proCharts, service.hasMajorHolders),
+            tvlChart = chart(item.tvls, numberFormatter),
             tvlRank = item.marketInfoDetails.tvlRank?.let { "#$it" },
             tvlRatio = item.marketInfoDetails.tvlRatio?.let { App.numberFormatter.format(it, 2, 2) },
             treasuries = item.marketInfoDetails.totalTreasuries?.let {
@@ -120,7 +119,7 @@ class CoinDetailsViewModel(
         return CoinDetailsModule.TokenDistributionViewItem(txCount, txVolume, activeAddresses, hasMajorHolders)
     }
 
-    private fun chart(values: List<ChartPoint>?, badge: String? = null, valueFormatter: ChartModule.ChartNumberFormatter): CoinDetailsModule.ChartViewItem? {
+    private fun chart(values: List<ChartPoint>?, valueFormatter: ChartModule.ChartNumberFormatter): CoinDetailsModule.ChartViewItem? {
         if (values.isNullOrEmpty()) return null
 
         val first = values.first()
@@ -140,7 +139,6 @@ class CoinDetailsViewModel(
         val percentDiff = Value.Percent(diff)
 
         return CoinDetailsModule.ChartViewItem(
-            badge = badge,
             value = value,
             diff = App.numberFormatter.formatValueAsDiff(percentDiff),
             chartData = chartData,
@@ -154,12 +152,11 @@ class CoinDetailsViewModel(
             is CoinDetailsService.ProData.Forbidden -> CoinDetailsModule.ChartViewItem(
                 "***",
                 Translator.getString(R.string.CoinPage_Chart_Locked),
-                "***",
                 ChartDataBuilder.placeholder,
                 CoinDetailsModule.ChartMovementTrend.Neutral
             )
 
-            is CoinDetailsService.ProData.Completed -> chart(proData.chartPoints, valueFormatter = valueFormatter)
+            is CoinDetailsService.ProData.Completed -> chart(proData.chartPoints, valueFormatter)
         }
 
     private fun securityViewItems(marketInfoDetails: MarketInfoDetails): List<SecurityViewItem> {
