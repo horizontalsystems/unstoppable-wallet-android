@@ -91,6 +91,13 @@
     <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase.</string>
     <string name="Restore_Title">Choose Blockchains</string>
     <string name="Restore_Key">Key</string>
+    <string name="Restore_By">By</string>
+    <string name="Restore_RestoreBy">Restore By</string>
+    <string name="Restore_RecoveryPhrase">Recovery Phrase</string>
+    <string name="Restore_PrivateKey">Private Key</string>
+    <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key or Account Extended Private Key</string>
+    <string name="Restore_PhraseHint">Enter 12, 15, 18, 21 or 24 words</string>
+    <string name="Restore_PrivateKey_InvalidKey">Invalid Key</string>
     <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_BirthdayHeight">Birthday Height</string>
     <string name="Restore_ZCash">ZCash</string>
@@ -387,6 +394,7 @@
     <string name="WalletConnect_I_Trust">I trust</string>
     <string name="WalletConnect_Note">Note</string>
     <string name="WalletConnect_LegacySignWarning">Signing this message can be dangerous. This signature could potentially perform any operation on behalf of your account, including giving full control of your account and all of its assets to the requesting site. Sign this message only if you know what you are doing or fully trust the requesting site.</string>
+    <string name="WalletConnect_NotSupportedDescription">You current wallet type %s does not support WalletConnect</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>
     <string name="EthereumTransaction_Error_Title">Error</string>
@@ -730,6 +738,8 @@
     <string name="ManageCoins_Search">Token code or name</string>
     <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
+    <string name="ManageCoins_NotSupported">Not Supported</string>
+    <string name="ManageCoins_NotSupportedDescription">Your current wallet type %1$s does not support %2$s</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have thoroughly tested these features using our own crypto funds, we cannot guarantee they will work as expected in all possible cases.</string>
@@ -744,8 +754,13 @@
     <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. This is handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
     <string name="Watch_Address_Title">Watch Address</string>
     <string name="Watch_Address_Hint">Address or Domain</string>
+    <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
     <string name="Watch_Address_Watch">Watch</string>
+    <string name="Watch_By">By</string>
+    <string name="Watch_WatchBy">Watch By</string>
+    <string name="Watch_TypeAddress">EVM Address</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
@@ -801,6 +816,16 @@
     <string name="EvmPrivateKey_Title">EVM Private Key</string>
     <string name="EvmPrivateKey_Warning">This key is for all EVM-compatible blockchains. Do not share it with anyone.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Tap to show private key</string>
+    <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Blockchain">Blockchain</string>
+    <string name="ExtendedKey_Purpose">Purpose</string>
+    <string name="ExtendedKey_Account">Account</string>
+    <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
+    <string name="ExtendedKey_TapToShowPublicKey">Tap to show public key</string>
+    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Public Keys</string>
     <!-- Recovery Phrase Verify -->
