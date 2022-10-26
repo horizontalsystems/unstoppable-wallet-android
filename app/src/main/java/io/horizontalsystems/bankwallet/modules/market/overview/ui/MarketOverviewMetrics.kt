@@ -61,7 +61,7 @@ private fun RowScope.ChartView(metricsData: MetricData, navController: NavContro
             modifier = Modifier.padding(12.dp)
         ) {
             caption_grey(text = stringResource(metricsData.type.title))
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(10.dp))
             if (metricsData.value != null) {
                 Text(
                     text = metricsData.value,
@@ -96,6 +96,7 @@ private fun RowScope.ChartView(metricsData: MetricData, navController: NavContro
                     AndroidView(
                         modifier = Modifier
                             .weight(1f)
+                            .padding(top = 3.dp, bottom = 6.dp)
                             .height(24.dp),
                         factory = {
                             ChartMinimal(it)

@@ -34,7 +34,7 @@ fun MiniChartCard(
             .padding(12.dp),
     ) {
         caption_grey(text = title)
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = chartViewItem.value,
             style = ComposeAppTheme.typography.headline1,
@@ -51,6 +51,7 @@ fun MiniChartCard(
             AndroidView(
                 modifier = Modifier
                     .weight(1f)
+                    .padding(top = 3.dp, bottom = 6.dp)
                     .height(24.dp),
                 factory = {
                     ChartMinimal(it)
