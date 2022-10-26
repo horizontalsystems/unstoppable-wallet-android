@@ -102,7 +102,7 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
                 Spacer(Modifier.width(16.dp))
                 Column(Modifier.weight(1f)) {
                     body_leah(text = item.name)
-                    subhead2_grey(text = item.type.description)
+                    subhead2_grey(text = item.type.detailedDescription)
                 }
                 if (item.isWatchAccount) {
                     Icon(

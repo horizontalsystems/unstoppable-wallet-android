@@ -287,8 +287,8 @@
         android:id="@+id/wcErrorNoAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment" />
     <dialog
-        android:id="@+id/wcErrorWatchAccountFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorWatchAccountFragment" />
+        android:id="@+id/wcAccountTypeNotSupportedDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
     <dialog
         android:id="@+id/backupRequiredDialog"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />

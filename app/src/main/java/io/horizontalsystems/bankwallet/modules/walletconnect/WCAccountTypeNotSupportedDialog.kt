@@ -28,7 +28,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFr
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 
-class WCErrorWatchAccountFragment : BaseComposableBottomSheetFragment() {
+class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,7 +40,8 @@ class WCErrorWatchAccountFragment : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    WalletConnectErrorWatchAccount(
+                    WCAccountTypeNotSupportedScreen(
+                        requireArguments().getString(ACCOUNT_TYPE_DESC) ?: "",
                         onCloseClick = { findNavController().popBackStack() },
                         onSwitchClick = {
                             findNavController().popBackStack()
@@ -54,10 +55,19 @@ class WCErrorWatchAccountFragment : BaseComposableBottomSheetFragment() {
             }
         }
     }
+
+    companion object {
+        private const val ACCOUNT_TYPE_DESC = "account_type_desc"
+
+        fun prepareParams(accountTypeDescription: String) = bundleOf(
+            ACCOUNT_TYPE_DESC to accountTypeDescription,
+        )
+    }
 }
 
 @Composable
-fun WalletConnectErrorWatchAccount(
+fun WCAccountTypeNotSupportedScreen(
+    accountTypeDescription: String,
     onCloseClick: () -> Unit,
     onSwitchClick: () -> Unit
 ) {
@@ -69,7 +79,7 @@ fun WalletConnectErrorWatchAccount(
     ) {
         TextImportantWarning(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-            text = stringResource(id = R.string.WalletConnect_Error_WatchAccount)
+            text = stringResource(id = R.string.WalletConnect_NotSupportedDescription, accountTypeDescription)
         )
         ButtonPrimaryYellow(
             modifier = Modifier
@@ -86,6 +96,6 @@ fun WalletConnectErrorWatchAccount(
 @Composable
 private fun WalletConnectErrorWatchAccountPreview() {
     ComposeAppTheme {
-        WalletConnectErrorWatchAccount({}, {})
+        WCAccountTypeNotSupportedScreen("Account Type Desc", {}, {})
     }
 }
