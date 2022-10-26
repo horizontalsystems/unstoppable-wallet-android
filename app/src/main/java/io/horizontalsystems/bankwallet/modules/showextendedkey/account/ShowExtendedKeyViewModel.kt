@@ -49,13 +49,9 @@ class ShowExtendedKeyViewModel(
                 keyChain.getKeyByPath("m/${purpose.value}'/${blockchain.coinType}'/$account'")
             else
                 keyChain.getKeyByPath("m")
-
             val version = HDExtendedKeyVersion.initFrom(purpose, blockchain.extendedKeyCoinType, displayKeyType.isPrivate)
-                ?: return "" // TODO won't be optional after hdwallet update
-
             return if (displayKeyType.isPrivate) key.serializePrivate(version.value) else key.serializePublic(version.value)
         }
-
 
     fun set(purpose: HDWallet.Purpose) {
         this.purpose = purpose
