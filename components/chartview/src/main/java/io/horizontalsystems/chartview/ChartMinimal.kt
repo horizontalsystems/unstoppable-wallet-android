@@ -19,7 +19,6 @@ class ChartMinimal @JvmOverloads constructor(
     private val config = ChartConfig(context, attrs)
 
     private val mainCurve = ChartCurve2(config)
-    private val mainGradient = ChartGradient()
 
     fun setData(data: ChartData) {
         config.setTrendColor(data)
@@ -38,7 +37,7 @@ class ChartMinimal @JvmOverloads constructor(
             binding.chartMain.shape.right,
             binding.chartMain.shape.bottom,
             0f,
-            config.curveMinimalVerticalOffset,
+            0f,
         )
         mainCurveAnimator.nextFrame(1f)
 
@@ -46,12 +45,8 @@ class ChartMinimal @JvmOverloads constructor(
         mainCurve.setCurveAnimator(mainCurveAnimator)
         mainCurve.setColor(config.curveColor)
 
-        mainGradient.setCurveAnimator(mainCurveAnimator)
-        mainGradient.setShape(binding.chartMain.shape)
-        mainGradient.setShader(config.curveGradient)
-
         binding.chartMain.clear()
-        binding.chartMain.add(mainCurve, mainGradient)
+        binding.chartMain.add(mainCurve)
 
         binding.chartMain.invalidate()
     }
