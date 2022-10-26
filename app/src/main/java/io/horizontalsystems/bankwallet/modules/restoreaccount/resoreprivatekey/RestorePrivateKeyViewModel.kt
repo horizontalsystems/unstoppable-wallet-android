@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.restoreaccount.resoreprivatekey.RestorePrivateKeyModule.RestoreError.*
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -19,20 +20,22 @@ class RestorePrivateKeyViewModel(
     val defaultName = accountFactory.getNextAccountName()
     private var text = ""
 
-    var error by mutableStateOf<String?>(null)
+    var inputState by mutableStateOf<DataState.Error?>(null)
         private set
 
     fun onEnterPrivateKey(input: String) {
-        error = null
+        inputState = null
         text = input
     }
 
     fun resolveAccountType(): AccountType? {
-        error = null
+        inputState = null
         return try {
             accountType(text)
         } catch (e: Throwable) {
-            error = Translator.getString(R.string.Restore_PrivateKey_InvalidKey)
+            inputState = DataState.Error(
+                Exception(Translator.getString(R.string.Restore_PrivateKey_InvalidKey))
+            )
             null
         }
     }

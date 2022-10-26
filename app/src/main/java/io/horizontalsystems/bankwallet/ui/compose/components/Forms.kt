@@ -273,11 +273,9 @@ fun FormsInputMultiline(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .defaultMinSize(minHeight = 124.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .border(1.dp, borderColor, RoundedCornerShape(8.dp))
                 .background(ComposeAppTheme.colors.lawrence),
-            verticalArrangement = Arrangement.Center
         ) {
             var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
                 mutableStateOf(TextFieldValue(initial ?: ""))
@@ -288,10 +286,10 @@ fun FormsInputMultiline(
             BasicTextField(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .defaultMinSize(minHeight = 64.dp)
                     .onFocusChanged {
                         onChangeFocus?.invoke(it.isFocused)
                     }
-                    .weight(1f)
                     .padding(horizontal = 16.dp),
                 enabled = enabled,
                 value = textState,
@@ -318,7 +316,6 @@ fun FormsInputMultiline(
                         Text(
                             hint,
                             overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
                             color = hintColor,
                             style = hintStyle
                         )
@@ -328,10 +325,11 @@ fun FormsInputMultiline(
                 visualTransformation = visualTransformation,
                 keyboardOptions = keyboardOptions,
             )
-            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(44.dp),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -408,7 +406,7 @@ fun FormsInputMultiline(
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(4.dp))
         }
 
         state?.errorOrNull?.localizedMessage?.let {

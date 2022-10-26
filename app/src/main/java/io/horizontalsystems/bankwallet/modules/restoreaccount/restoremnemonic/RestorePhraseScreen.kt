@@ -205,7 +205,7 @@ fun RestorePhrase(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(48.dp),
+                            .height(44.dp),
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -247,10 +247,10 @@ fun RestorePhrase(
                                     }
                                 },
                             )
-
                         }
-
                     }
+
+                    Spacer(modifier = Modifier.height(4.dp))
                 }
 
                 Spacer(Modifier.height(8.dp))
