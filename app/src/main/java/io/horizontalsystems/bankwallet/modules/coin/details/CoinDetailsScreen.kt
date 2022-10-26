@@ -107,10 +107,6 @@ fun CoinDetailsScreen(
                             }
                         }
 
-                        if (viewItem.treasuries != null || viewItem.fundsInvested != null || viewItem.reportsCount != null) {
-                            detailBlocks.add { borderTop -> InvestorData(fullCoin.coin, viewItem, borderTop, navController) }
-                        }
-
                         if (viewItem.tvlChart != null || viewItem.tvlRank != null || viewItem.tvlRatio != null) {
                             detailBlocks.add { borderTop ->
                                 TokenTvl(viewItem, borderTop, navController) {
@@ -121,6 +117,10 @@ fun CoinDetailsScreen(
                                     )
                                 }
                             }
+                        }
+
+                        if (viewItem.treasuries != null || viewItem.fundsInvested != null || viewItem.reportsCount != null) {
+                            detailBlocks.add { borderTop -> InvestorData(fullCoin.coin, viewItem, borderTop, navController) }
                         }
 
                         if (viewItem.securityViewItems.isNotEmpty() || viewItem.auditAddresses.isNotEmpty()) {

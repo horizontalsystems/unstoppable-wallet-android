@@ -85,7 +85,7 @@ class CoinDetailsViewModel(
             proChartsActivated = item.proCharts.activated,
             tokenLiquidityViewItem = getTokenLiquidityViewItem(item.proCharts),
             tokenDistributionViewItem = getTokenDistributionViewItem(item.proCharts, service.hasMajorHolders),
-            tvlChart = chart(item.tvls, numberFormatter),
+            tvlChart = chart(item.tvls, currencyValueFormatter),
             tvlRank = item.marketInfoDetails.tvlRank?.let { "#$it" },
             tvlRatio = item.marketInfoDetails.tvlRatio?.let { App.numberFormatter.format(it, 2, 2) },
             treasuries = item.marketInfoDetails.totalTreasuries?.let {
