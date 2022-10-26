@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.evmprivatekey.EvmPrivateKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
-import io.horizontalsystems.bankwallet.modules.publickeys.PublicKeysModule
+import io.horizontalsystems.bankwallet.modules.recoveryphrase.RecoveryPhraseModule
 import io.horizontalsystems.bankwallet.modules.showextendedkey.account.ShowExtendedKeyModule
 import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -107,18 +107,19 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
 
                 when (viewModel.keyActionState) {
                     KeyActionState.ShowRecoveryPhrase -> {
-                        Spacer(modifier = Modifier.height(32.dp))
-
-                        CellSingleLineLawrenceSection {
-                            AccountActionItem(
-                                title = stringResource(id = R.string.RecoveryPhrase_Title),
-                                icon = painterResource(id = R.drawable.icon_paper_contract_20)
-                            ) {
-                                navController.authorizedAction {
-                                    navController.slideFromRight(
-                                        R.id.recoveryPhraseFragment,
-                                        PublicKeysModule.prepareParams(viewModel.account)
-                                    )
+                        if (viewModel.showRecoveryPhrase) {
+                            Spacer(modifier = Modifier.height(32.dp))
+                            CellSingleLineLawrenceSection {
+                                AccountActionItem(
+                                    title = stringResource(id = R.string.RecoveryPhrase_Title),
+                                    icon = painterResource(id = R.drawable.icon_paper_contract_20)
+                                ) {
+                                    navController.authorizedAction {
+                                        navController.slideFromRight(
+                                            R.id.recoveryPhraseFragment,
+                                            RecoveryPhraseModule.prepareParams(viewModel.account)
+                                        )
+                                    }
                                 }
                             }
                         }
