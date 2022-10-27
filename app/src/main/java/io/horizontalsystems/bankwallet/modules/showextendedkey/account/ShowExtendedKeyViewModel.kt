@@ -35,8 +35,8 @@ class ShowExtendedKeyViewModel(
 
     val title: TranslatableString
         get() = when (displayKeyType) {
-            is DisplayKeyType.AccountPrivateKey -> TranslatableString.ResString(R.string.AccountExtendedPrivateKey)
-            is DisplayKeyType.AccountPublicKey -> TranslatableString.ResString(R.string.AccountExtendedPublicKey)
+            is DisplayKeyType.AccountPrivateKey -> TranslatableString.ResString(R.string.AccountExtendedPrivateKey_Short)
+            is DisplayKeyType.AccountPublicKey -> TranslatableString.ResString(R.string.AccountExtendedPublicKey_Short)
             DisplayKeyType.Bip32RootKey -> TranslatableString.ResString(R.string.Bip32RootKey)
         }
 
