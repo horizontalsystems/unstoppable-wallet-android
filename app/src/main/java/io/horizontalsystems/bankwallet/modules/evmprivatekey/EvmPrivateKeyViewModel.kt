@@ -5,10 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.ethereumkit.core.signer.Signer
-import io.horizontalsystems.ethereumkit.core.toHexString
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class EvmPrivateKeyViewModel(
@@ -30,7 +30,7 @@ class EvmPrivateKeyViewModel(
                 it.copyOfRange(1, it.size)
             } else {
                 it
-            }.toHexString()
+            }.toRawHexString()
         }
 
     init {
