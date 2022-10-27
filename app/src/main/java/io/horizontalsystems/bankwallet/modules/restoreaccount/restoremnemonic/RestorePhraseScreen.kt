@@ -23,8 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -78,14 +76,9 @@ fun RestorePhrase(
     var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(""))
     }
-    val focusRequester = remember { FocusRequester() }
     var showCustomKeyboardDialog by remember { mutableStateOf(false) }
     var isMnemonicPhraseInputFocused by remember { mutableStateOf(false) }
     val keyboardState by observeKeyboardState()
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
 
     val qrScannerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -154,7 +147,6 @@ fun RestorePhrase(
                             .onFocusChanged {
                                 isMnemonicPhraseInputFocused = it.isFocused
                             }
-                            .focusRequester(focusRequester)
                             .defaultMinSize(minHeight = 68.dp)
                             .padding(start = 16.dp, end = 16.dp, top = 12.dp),
                         enabled = true,
