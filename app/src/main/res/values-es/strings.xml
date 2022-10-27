@@ -91,6 +91,13 @@
     <string name="Restore_PassphraseDescription">Introduzca su frase de contraseña que utilizó al crear esta frase mnemotécnica.</string>
     <string name="Restore_Title">Elegir Blockchain</string>
     <string name="Restore_Key">Clave</string>
+    <string name="Restore_By">Por</string>
+    <string name="Restore_RestoreBy">Restaurar por</string>
+    <string name="Restore_RecoveryPhrase">Frase de Recuperación</string>
+    <string name="Restore_PrivateKey">Clave privada</string>
+    <string name="Restore_PrivateKeyHint">Introduzca la clave privada EVM, BIP32 Root Key o Account Extended Private Key</string>
+    <string name="Restore_PhraseHint">Introduzca 12, 15, 18, 21 o 24 palabras</string>
+    <string name="Restore_PrivateKey_InvalidKey">Clave no válida</string>
     <string name="Select_Coins">Elegir monedas</string>
     <string name="Restore_BirthdayHeight">Altura de Cumpleaños</string>
     <string name="Restore_ZCash">Zcash</string>
@@ -222,7 +229,7 @@
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
     <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
-    <string name="TimePeriod_24h">24h</string>
+    <string name="TimePeriod_24h">24 horas</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Mercados</string>
     <!--TVL Rank-->
@@ -387,6 +394,7 @@
     <string name="WalletConnect_I_Trust">Confío en</string>
     <string name="WalletConnect_Note">Nota</string>
     <string name="WalletConnect_LegacySignWarning">Firmar este mensaje puede ser peligroso. Esta firma podría potencialmente realizar cualquier operación en nombre de tu cuenta, incluyendo dar el control total de su cuenta y todos sus activos al sitio solicitado. Firma este mensaje sólo si sabes lo que estás haciendo o confía plenamente en el sitio solicitante.</string>
+    <string name="WalletConnect_NotSupportedDescription">El tipo de cartera actual %s no es compatible con WalletConnect</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
@@ -599,7 +607,7 @@
     <string name="Settings_Language">Idioma</string>
     <string name="Settings_Theme">Tema</string>
     <string name="Settings_Terms">Términos</string>
-    <string name="Settings_Privacy">Privacy</string>
+    <string name="Settings_Privacy">Privacidad</string>
     <string name="Settings_ShareThisWallet">Recomendar a un amigo</string>
     <string name="Settings_AppStatus">Estado de la aplicación</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
@@ -637,7 +645,7 @@
     <string name="BtcBlockchainSettings_RestoreSourceDescription">This setting is only relevant when restoring an existing wallet. It is a process of getting transaction history for a given cryptocurrency so the wallet app is able to display past transactions and calculate the user\'s balance. This needs to happen only once when the user restores previously created wallets.
 \n\nAt this point, there are two potential ways for a mobile wallet like Unstoppable to do this:
 \n\n1. from the API Server: There is a third-party predefined server that hosts the entire blockchain and has all the data processed and optimized to provide that data in a fast manner. This method is fast but potentially (not necessarily) less private. It\'s also a centralized method to restore a wallet as it depends on the availability of a 3rd party server. This option is recommended due to its speed of getting data (5-10 minutes).
-\n\n2. from Blockchain: The app tries to restore directly from a network of the blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
+\n\n2. from Blockchain: The app tries to restore directly from a network of blockchain nodes. This is a decentralized way to restore wallet balance and past transactions. The app pings many of the network nodes and requests data from them without addressing some nodes specifically. This option is slow and can easily take 2-3 hours, the app needs to be open while restoring is happening. This restore method doesn\'t depend on any entity and should work in all conditions.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Transaction Inputs / Outputs</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Haga que sus transacciones BTC, LTC, BCH sean más difíciles de rastrear cambiando la forma en que las transacciones están estructuradas.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.\n\nThe Unstoppable wallet implements measures to make it harder for someone to figure out which output goes where.\n\nThere are two options available to Unstoppable users:\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
@@ -729,6 +737,8 @@
     <string name="ManageCoins_Search">Código o nombre del token</string>
     <string name="ManageCoins_AddToken">Añadir Token</string>
     <string name="ManageCoins_NoResults">No se han encontrado resultados. Intente añadir un token manualmente si conoce su dirección de contrato inteligente.</string>
+    <string name="ManageCoins_NotSupported">No soportado</string>
+    <string name="ManageCoins_NotSupportedDescription">Su tipo de cartera actual %1$s no soporta %2$s</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Las siguientes características son experimentales y deben utilizarse con precaución. Aunque hemos probado a fondo estas características usando nuestros propios fondos criptográficos, no podemos garantizar que funcionen como se espera en todos los casos posibles.</string>
@@ -743,8 +753,13 @@
     <string name="ManageAccounts_Hint">¡Sugerencia! Restaurar un monedero existente pero con una nueva contraseña generará un nuevo monedero. Esto puede ser útil si quieres usar una sola frase de recuperación mnemónica de 12-24 palabras para múltiples monederos.</string>
     <string name="Watch_Address_Title">Ver Dirección</string>
     <string name="Watch_Address_Hint">Dominio o dirección</string>
+    <string name="Watch_XPubKey_Hint">Introduzca Account Extended Public Key</string>
     <string name="Watch_Address_Description">Disponible sólo para Ethereum y otras blockchains EVM soportadas.</string>
     <string name="Watch_Address_Watch">Ver</string>
+    <string name="Watch_By">Por</string>
+    <string name="Watch_WatchBy">Ver por</string>
+    <string name="Watch_TypeAddress">Dirección EVM</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nombre</string>
     <string name="ManageAccount_Save">Guardar</string>
@@ -800,6 +815,18 @@
     <string name="EvmPrivateKey_Title">Clave Privada EVM</string>
     <string name="EvmPrivateKey_Warning">Esta clave es para todas las blockchains compatibles con EVM. No la comparta con nadie.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Toca para mostrar la clave privada</string>
+    <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Blockchain">Blockchain</string>
+    <string name="ExtendedKey_Purpose">Propósito</string>
+    <string name="ExtendedKey_Account">Account</string>
+    <string name="ExtendedKey_TapToShowPrivateKey">Toca para mostrar la clave privada</string>
+    <string name="ExtendedKey_TapToShowPublicKey">Pulse para mostrar la clave pública</string>
+    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrv Key</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPub Key</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Claves públicas</string>
     <!-- Recovery Phrase Verify -->

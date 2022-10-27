@@ -91,6 +91,13 @@
     <string name="Restore_PassphraseDescription">输入您在创建此助记词时使用的密码.</string>
     <string name="Restore_Title">选择区块链</string>
     <string name="Restore_Key">密钥</string>
+    <string name="Restore_By">由</string>
+    <string name="Restore_RestoreBy">还原方式</string>
+    <string name="Restore_RecoveryPhrase">恢复码</string>
+    <string name="Restore_PrivateKey">私钥</string>
+    <string name="Restore_PrivateKeyHint">輸入 EVM 私鑰、BIP32 Root Key 或  Account Extended Private Key</string>
+    <string name="Restore_PhraseHint">输入12、15、18、21或24个单词</string>
+    <string name="Restore_PrivateKey_InvalidKey">错误密钥</string>
     <string name="Select_Coins">选择货币</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
     <string name="Restore_ZCash">ZCash</string>
@@ -387,6 +394,7 @@
     <string name="WalletConnect_I_Trust">我信赖的</string>
     <string name="WalletConnect_Note">备注</string>
     <string name="WalletConnect_LegacySignWarning">签名此消息可能是危险的。 此签名可能代表您的帐户执行任何操作。 包括让您的帐户及其所有资产完全控制到请求站点。 只有当您知道正在做什么或完全信任请求站点时，才能签署此消息。</string>
+    <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
     <string name="EthereumTransaction_Error_Title">出错</string>
@@ -730,6 +738,8 @@
     <string name="ManageCoins_Search">代币代码或名称</string>
     <string name="ManageCoins_AddToken">添加代币</string>
     <string name="ManageCoins_NoResults">找不到结果。如果您知道智能合约地址，请尝试手动添加代币。</string>
+    <string name="ManageCoins_NotSupported">不支持</string>
+    <string name="ManageCoins_NotSupportedDescription">您当前的钱包类型 %1$s 不支持 %2$s</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">实验功能</string>
     <string name="ExperimentalFeatures_Description">以下功能为实验性功能，应谨慎使用。虽然我们已使用自己的加密货币资金对这些功能进行了彻底测试，但是我们不保证它们在所有情况下都能如常工作。</string>
@@ -744,8 +754,13 @@
     <string name="ManageAccounts_Hint">注意：使用一个新密码恢复现有的钱包将生成一个全新的钱包。如果您希望对多个钱包使用单个12-24个单词的助记词恢复码，这将非常方便。</string>
     <string name="Watch_Address_Title">观察地址</string>
     <string name="Watch_Address_Hint">地址或域名</string>
+    <string name="Watch_XPubKey_Hint">輸入 Account Extended Public Key</string>
     <string name="Watch_Address_Description">仅供以太坊和其他支持 EVM 区块链使用。</string>
     <string name="Watch_Address_Watch">观察</string>
+    <string name="Watch_By">由</string>
+    <string name="Watch_WatchBy">观看者</string>
+    <string name="Watch_TypeAddress">EVM 地址</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
     <string name="ManageAccount_Save">保存</string>
@@ -801,6 +816,18 @@
     <string name="EvmPrivateKey_Title">EVM 私钥</string>
     <string name="EvmPrivateKey_Warning">此密钥适用于所有EVM兼容的区块链。请不要与任何人分享。</string>
     <string name="EvmPrivateKey_ShowPrivateKey">点击显示私钥</string>
+    <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Blockchain">Blockchain</string>
+    <string name="ExtendedKey_Purpose">目的</string>
+    <string name="ExtendedKey_Account">账户</string>
+    <string name="ExtendedKey_TapToShowPrivateKey">点击显示私钥</string>
+    <string name="ExtendedKey_TapToShowPublicKey">点击显示公钥</string>
+    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrv Key</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPub Key</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">公钥</string>
     <!-- Recovery Phrase Verify -->

@@ -77,7 +77,7 @@
     <string name="Language_Czech">Tschechisch</string>
     <string name="Language_Portuguese">Portugiesisch</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">GM!</string>
+    <string name="RateApp_Title_Rate_This_App">GT!</string>
     <string name="RateApp_Description_Rate_This_App">Gefällt Ihnen Unstoppable? Teilen Sie uns Ihr Feedback und Ihre Ideen zur Weiterentwicklung mit.</string>
     <string name="RateApp_Button_RateIt">Bewerten</string>
     <string name="RateApp_Button_NotNow">Nicht jetzt</string>
@@ -91,6 +91,13 @@
     <string name="Restore_PassphraseDescription">Geben Sie Ihre Passphrase ein, die Sie beim Erstellen dieser Eselsbrücke verwendet haben.</string>
     <string name="Restore_Title">Blockchain auswählen</string>
     <string name="Restore_Key">Schlüssel</string>
+    <string name="Restore_By">Von</string>
+    <string name="Restore_RestoreBy">Wiederherstellen von</string>
+    <string name="Restore_RecoveryPhrase">Wiederherstellungsphrase</string>
+    <string name="Restore_PrivateKey">Privater Schlüssel</string>
+    <string name="Restore_PrivateKeyHint">Geben Sie EVM privaten Schlüssel, BIP32 Root-Schlüssel oder  Account Extended Private Key ein</string>
+    <string name="Restore_PhraseHint">12, 15, 18, 21 oder 24 Wörter eingeben</string>
+    <string name="Restore_PrivateKey_InvalidKey">Ungültiger Schlüssel</string>
     <string name="Select_Coins">Coins auswählen</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
     <string name="Restore_ZCash">Zcash</string>
@@ -387,6 +394,7 @@
     <string name="WalletConnect_I_Trust">Ich vertraue</string>
     <string name="WalletConnect_Note">Hinweis</string>
     <string name="WalletConnect_LegacySignWarning">Die Unterschrift dieser Nachricht kann gefährlich sein. Diese Signatur könnte möglicherweise jede Operation im Namen Ihres Kontos ausführen einschließlich der vollen Kontrolle über Ihr Konto und alle seine Assets an die anfragende Website. Signieren Sie diese Nachricht nur, wenn Sie wissen, was Sie tun oder vertrauen Sie der anfragenden Website.</string>
+    <string name="WalletConnect_NotSupportedDescription">Ihr aktueller Wallet-Typ %s unterstützt WalletConnect nicht</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warnung</string>
     <string name="EthereumTransaction_Error_Title">Fehler</string>
@@ -733,6 +741,8 @@
     <string name="ManageCoins_Search">Token-Code oder Name</string>
     <string name="ManageCoins_AddToken">Token hinzufügen</string>
     <string name="ManageCoins_NoResults">Keine Ergebnisse gefunden. Versuchen Sie, den Token manuell hinzuzufügen, wenn Sie die Adresse des Smart Contracts kennen.</string>
+    <string name="ManageCoins_NotSupported">Nicht unterstützt</string>
+    <string name="ManageCoins_NotSupportedDescription">Ihr aktueller Wallet-Typ %1$s unterstützt %2$s nicht</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Experimentell</string>
     <string name="ExperimentalFeatures_Description">Die unten aufgeführten Funktionen sind experimentell und sollten mit Vorsicht eingesetzt werden. Wir haben sie zwar ausführlich mit unserem eigenen Kryptoguthaben getestet, aber wir können noch nicht garantieren, dass sie in allen denkbaren Fällen funktionieren.</string>
@@ -747,8 +757,13 @@
     <string name="ManageAccounts_Hint">Tipp! Wenn Sie ein bestehendes Wallet mit einer neuen Passphrase wiederherstellen, wird ein brandneues Wallet erzeugt. Praktisch, wenn Sie eine einzelne 12-24-Wörter-Wiederherstellungsphrase für mehrere Wallets verwenden möchten.</string>
     <string name="Watch_Address_Title">Watch-Adresse</string>
     <string name="Watch_Address_Hint">Adresse oder Domäne</string>
+    <string name="Watch_XPubKey_Hint">Account Extended Public Key eingeben</string>
     <string name="Watch_Address_Description">Nur für Ethereum und andere unterstützte EVM Blockchains verfügbar.</string>
     <string name="Watch_Address_Watch">Beobachten</string>
+    <string name="Watch_By">Von</string>
+    <string name="Watch_WatchBy">Beobachten von</string>
+    <string name="Watch_TypeAddress">EVM-Adresse</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Speichern</string>
@@ -804,6 +819,18 @@
     <string name="EvmPrivateKey_Title">EVM privater Schlüssel</string>
     <string name="EvmPrivateKey_Warning">Dieser Schlüssel ist für alle EVM-kompatiblen Blockchains. Teilen Sie ihn niemandem mit.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Tippen um privaten Schlüssel anzuzeigen</string>
+    <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Blockchain">Blockchain</string>
+    <string name="ExtendedKey_Purpose">Purpose</string>
+    <string name="ExtendedKey_Account">Account</string>
+    <string name="ExtendedKey_TapToShowPrivateKey">Tippen um privaten Schlüssel anzuzeigen</string>
+    <string name="ExtendedKey_TapToShowPublicKey">Tippen um den öffentlichen Schlüssel anzuzeigen</string>
+    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrv Key</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPub Key</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Öffentliche Schlüssel</string>
     <!-- Recovery Phrase Verify -->
@@ -917,7 +944,7 @@
     <string name="CoinPage_TotalVolume">Total Volume</string>
     <string name="CoinPage_DetailsTvl">TVL</string>
     <string name="CoinPage_TokenTvl">Token TVL</string>
-    <string name="CoinPage_TokenTvl_Description">Total Value Locked (TVL) is a metric that shows the total value of crypto assets under automated management by the smart contracts powering the given protocol.</string>
+    <string name="CoinPage_TokenTvl_Description">Total Value Locked (TVL) ist eine Metrik, die den Gesamtwert von Krypto-Assets unter automatisierter Verwaltung durch die Smart-Verträge mit dem angegebenen Protokoll anzeigt.</string>
     <string name="CoinPage_SecurityParams">Security Parameters</string>
     <string name="CoinPage_SecurityParams_Privacy">Privacy</string>
     <string name="CoinPage_SecurityParams_Low">Low</string>

@@ -91,6 +91,13 @@
     <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız şifreyi girin.</string>
     <string name="Restore_Title">Blok Zincirleri Seç</string>
     <string name="Restore_Key">Anahtar</string>
+    <string name="Restore_By">İçerik</string>
+    <string name="Restore_RestoreBy">Geri Yükle</string>
+    <string name="Restore_RecoveryPhrase">Kurtarma cümlesi</string>
+    <string name="Restore_PrivateKey">Gizli Anahtar</string>
+    <string name="Restore_PrivateKeyHint">EVM Özel Anahtarını, BIP32 Root Key veya Account Extended Private Key girin</string>
+    <string name="Restore_PhraseHint">12, 15, 18, 21 veya 24 kelime girin</string>
+    <string name="Restore_PrivateKey_InvalidKey">Geçersiz Anahtar</string>
     <string name="Select_Coins">Kripto Parayı Seç</string>
     <string name="Restore_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
     <string name="Restore_ZCash">Zcash</string>
@@ -387,6 +394,7 @@
     <string name="WalletConnect_I_Trust">güveniyorum</string>
     <string name="WalletConnect_Note">Not</string>
     <string name="WalletConnect_LegacySignWarning">Signing this message can be dangerous. This signature could potentially perform any operation on behalf of your account, including giving full control of your account and all of its assets to the requesting site. Sign this message only if you know what you are doing or fully trust the requesting site.</string>
+    <string name="WalletConnect_NotSupportedDescription">Mevcut cüzdan türünüz %s WalletConnect\'i desteklemiyor</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Uyarı</string>
     <string name="EthereumTransaction_Error_Title">Hata</string>
@@ -726,6 +734,8 @@
     <string name="ManageCoins_Search">Jeton kodu veya adı</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
     <string name="ManageCoins_NoResults">Hiçbir sonuç bulunamadı. Akıllı sözleşme adresini biliyorsanız tokeni manüel olarak eklemeyi deneyin.</string>
+    <string name="ManageCoins_NotSupported">Not Supported</string>
+    <string name="ManageCoins_NotSupportedDescription">Mevcut cüzdan türünüz %1$s, %2$s\'yi desteklemiyor</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Deneysel</string>
     <string name="ExperimentalFeatures_Description">Aşağıdaki özellikler deneyseldir ve dikkatli kullanılmalıdır. Bu özellikleri kendi kripto fonlarımızı kullanarak baştan sona test etmemize rağmen, olası tüm durumlarda beklendiği gibi çalışmalarını garanti edemeyiz.</string>
@@ -740,8 +750,13 @@
     <string name="ManageAccounts_Hint">İpucu! Mevcut bir cüzdanı geri yüklemek, yeni bir şifre ile en baştan bir cüzdan oluşturur. Birden fazla cüzdan için 12-24 kelimelik tek bir hatırlatıcı kurtarma öbeği kullanmak istiyorsanız kullanışlıdır.</string>
     <string name="Watch_Address_Title">Adresi İzle</string>
     <string name="Watch_Address_Hint">Adres veya Domain</string>
+    <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
     <string name="Watch_Address_Description">Yalnızca Ethereum ve diğer desteklenen EVM blok zincirleri için kullanılabilir.</string>
     <string name="Watch_Address_Watch">İzle</string>
+    <string name="Watch_By">İçerik</string>
+    <string name="Watch_WatchBy">İzle</string>
+    <string name="Watch_TypeAddress">EVM Adresi</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">İsim</string>
     <string name="ManageAccount_Save">Kaydet</string>
@@ -797,6 +812,18 @@
     <string name="EvmPrivateKey_Title">EVM Özel anahtar</string>
     <string name="EvmPrivateKey_Warning">Bu anahtar, tüm EVM uyumlu blok zincirleri içindir. Onu kimseyle paylaşmayın.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Özel anahtarı göstermek için dokunun</string>
+    <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Blockchain">Blockchains</string>
+    <string name="ExtendedKey_Purpose">Purpose</string>
+    <string name="ExtendedKey_Account">Account</string>
+    <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
+    <string name="ExtendedKey_TapToShowPublicKey">Tap to show public key</string>
+    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrv Key</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPub Key</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Genel Anahtarlar</string>
     <!-- Recovery Phrase Verify -->
@@ -933,7 +960,7 @@
     <string name="CoinPage_SecurityParams_ConfiscationResistance_No">NO:\nThe tokens can be confiscated or tampered with by an issuing entity.</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">YES:\nThe token holder can\'t be censored from transacting.</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance_No">NO:\nThe token holder can be censored from transacting.</string>
-    <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited from external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk free and not doesn\'t have any exploits risks.</string>
+    <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited by an external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk-free and not doesn\'t have any exploits risks.</string>
     <string name="CoinPage_SecurityParams_Audited_No">There are no publicly announced audits for the code powering the project behind the token. Non-audited projects are more likely to have security issues in the code.</string>
     <string name="CoinPage_SecurityParams_Info">Info</string>
     <string name="CoinPage_Range24">24h Range</string>

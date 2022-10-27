@@ -91,6 +91,13 @@
     <string name="Restore_PassphraseDescription">이 연상 부호를 만들 때 사용한 암호 문구 입력.</string>
     <string name="Restore_Title">블록체인 선택</string>
     <string name="Restore_Key">키</string>
+    <string name="Restore_By">By</string>
+    <string name="Restore_RestoreBy">Restore By</string>
+    <string name="Restore_RecoveryPhrase">Recovery Phrase</string>
+    <string name="Restore_PrivateKey">Private Key</string>
+    <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key or Account Extended Private Key</string>
+    <string name="Restore_PhraseHint">Enter 12, 15, 18, 21 or 24 words</string>
+    <string name="Restore_PrivateKey_InvalidKey">Invalid Key</string>
     <string name="Select_Coins">코인 선택하기</string>
     <string name="Restore_BirthdayHeight">생일 신장</string>
     <string name="Restore_ZCash">Zcash</string>
@@ -387,6 +394,7 @@
     <string name="WalletConnect_I_Trust">내가 신뢰</string>
     <string name="WalletConnect_Note">참고</string>
     <string name="WalletConnect_LegacySignWarning">Signing this message can be dangerous. This signature could potentially perform any operation on behalf of your account, including giving full control of your account and all of its assets to the requesting site. Sign this message only if you know what you are doing or fully trust the requesting site.</string>
+    <string name="WalletConnect_NotSupportedDescription">You current wallet type %s does not support WalletConnect</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">경고</string>
     <string name="EthereumTransaction_Error_Title">오류</string>
@@ -729,6 +737,8 @@
     <string name="ManageCoins_Search">토큰 코드 또는 이름</string>
     <string name="ManageCoins_AddToken">토큰 추가</string>
     <string name="ManageCoins_NoResults">검색 결과가 없습니다. 스마트 계약 주소를 알고 있는 경우 토큰을 수동으로 추가해 보십시오.</string>
+    <string name="ManageCoins_NotSupported">Not Supported</string>
+    <string name="ManageCoins_NotSupportedDescription">Your current wallet type %1$s does not support %2$s</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">실험적인</string>
     <string name="ExperimentalFeatures_Description">아래 기능은 실험용이므로 주의해서 사용해 주세요. 자체 암호화된 자금을 사용하여 이러한 기능을 철저히 실험하였지만 가능한 모든 경우에 예상대로 작독한다고 보장 드릴 수는 없습니다.</string>
@@ -743,8 +753,13 @@
     <string name="ManageAccounts_Hint">중요! 기존 지갑을 복원하지만 새로운 암호를 사용하면 완전히 새로운 지갑이 생성됩니다. 여러 지갑에 대해 단일 12-24 단어 니모닉 복구 구문을 사용하려는 경우 편리합니다.</string>
     <string name="Watch_Address_Title">주소 관찰</string>
     <string name="Watch_Address_Hint">주소 또는 도메인</string>
+    <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
     <string name="Watch_Address_Description">Ethereum 및 기타 지원되는 EVM 블록체인에만 사용할 수 있습니다.</string>
     <string name="Watch_Address_Watch">관찰</string>
+    <string name="Watch_By">By</string>
+    <string name="Watch_WatchBy">Watch By</string>
+    <string name="Watch_TypeAddress">EVM Address</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">이름</string>
     <string name="ManageAccount_Save">저장</string>
@@ -800,6 +815,18 @@
     <string name="EvmPrivateKey_Title">EVM 개인 키</string>
     <string name="EvmPrivateKey_Warning">이 키는 모든 EVM 호환 블록체인용입니다. 누구와도 공유하지 마십시오.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">개인 키 보기</string>
+    <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Blockchain">Blockchain</string>
+    <string name="ExtendedKey_Purpose">Purpose</string>
+    <string name="ExtendedKey_Account">Account</string>
+    <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
+    <string name="ExtendedKey_TapToShowPublicKey">Tap to show public key</string>
+    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrv Key</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPub Key</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">공개 키</string>
     <!-- Recovery Phrase Verify -->

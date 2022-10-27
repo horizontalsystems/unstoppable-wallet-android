@@ -91,6 +91,13 @@
     <string name="Restore_PassphraseDescription">Entrez la phrase d\'authentification que vous avez utilisée pour créer cette phrase mnémonique.</string>
     <string name="Restore_Title">Choisir la blockchain</string>
     <string name="Restore_Key">Clé</string>
+    <string name="Restore_By">Par</string>
+    <string name="Restore_RestoreBy">Restaurer par</string>
+    <string name="Restore_RecoveryPhrase">Phrase de récupération</string>
+    <string name="Restore_PrivateKey">Clé privée</string>
+    <string name="Restore_PrivateKeyHint">Entrez clé privée EVM, BIP32 Root Key ou Account Extended Private Key</string>
+    <string name="Restore_PhraseHint">Entrez 12, 15, 18, 21 ou 24 mots</string>
+    <string name="Restore_PrivateKey_InvalidKey">Clé invalide</string>
     <string name="Select_Coins">Crypto Monnaie</string>
     <string name="Restore_BirthdayHeight">Hauteur de l\'anniversaire</string>
     <string name="Restore_ZCash">ZCash</string>
@@ -387,6 +394,7 @@
     <string name="WalletConnect_I_Trust">Je fais confiance à</string>
     <string name="WalletConnect_Note">Remarque</string>
     <string name="WalletConnect_LegacySignWarning">Signer ce message peut être dangereux. Cette signature peut potentiellement effectuer toute opération au nom de votre compte, y compris en donnant le contrôle total de votre compte et de tous ses actifs au site requérant. Ne signez ce message que si vous savez ce que vous faites ou si vous faites entièrement confiance au site requérant.</string>
+    <string name="WalletConnect_NotSupportedDescription">Votre type de portefeuille actuel %s ne prend pas en charge WalletConnect</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Attention</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
@@ -729,6 +737,8 @@
     <string name="ManageCoins_Search">Code ou nom du jeton</string>
     <string name="ManageCoins_AddToken">Ajouter le token</string>
     <string name="ManageCoins_NoResults">Aucun résultat trouvé. Essayez d\'ajouter le token manuellement si vous connaissez son adresse de contrat intelligent.</string>
+    <string name="ManageCoins_NotSupported">Pas supporté</string>
+    <string name="ManageCoins_NotSupportedDescription">Votre type de portefeuille actuel %1$s ne prend pas en charge %2$s</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Expérimental</string>
     <string name="ExperimentalFeatures_Description">Les fonctionnalités ci-dessous sont expérimentales et doivent être utilisées avec prudence. Bien que nous ayons entièrement testé ces fonctionnalités en utilisant nos propres fonds crypto, nous ne pouvons pas garantir qu\'elles fonctionnent comme prévu dans tous les cas de figure possible.</string>
@@ -743,8 +753,13 @@
     <string name="ManageAccounts_Hint">Astuce ! La restauration d\'un portefeuille existant, mais avec une nouvelle phrase d\'authentification, génère un tout nouveau portefeuille. Pratique si vous souhaitez utiliser une seule phrase de réinitialisation mnémonique de 12 à 24 mots pour plusieurs portefeuilles.</string>
     <string name="Watch_Address_Title">Adresse à suivre</string>
     <string name="Watch_Address_Hint">Adresse ou domaine</string>
+    <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
     <string name="Watch_Address_Description">Disponible uniquement pour Ethereum et autres blockchains EVM prises en charge.</string>
     <string name="Watch_Address_Watch">Suivi</string>
+    <string name="Watch_By">Par</string>
+    <string name="Watch_WatchBy">Regarder par</string>
+    <string name="Watch_TypeAddress">Adresse EVM</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
     <string name="ManageAccount_Save">Sauvegarder</string>
@@ -800,6 +815,18 @@
     <string name="EvmPrivateKey_Title">Clé privée EVM</string>
     <string name="EvmPrivateKey_Warning">Cette clé est pour toutes les blockchains compatibles EVM. Ne la partagez avec personne.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Appuyez pour afficher la clé privée</string>
+    <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <!-- Account Extended Keys -->
+    <string name="ExtendedKey_Blockchain">Blockchain</string>
+    <string name="ExtendedKey_Purpose">Objectif</string>
+    <string name="ExtendedKey_Account">Compte </string>
+    <string name="ExtendedKey_TapToShowPrivateKey">Appuyez pour afficher la clé privée</string>
+    <string name="ExtendedKey_TapToShowPublicKey">Appuyez pour afficher la clé publique</string>
+    <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPubKey</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Clés publiques</string>
     <!-- Recovery Phrase Verify -->
