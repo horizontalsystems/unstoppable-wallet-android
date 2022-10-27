@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Timestamp_Today">Тoday</string>
-    <string name="Timestamp_Yesterday">Yesterday</string>
-    <string name="Duration_instant">instant</string>
-    <string name="Duration_Within">within %s</string>
-    <string name="Duration_Hours">%d h.</string>
-    <string name="Duration_Minutes">%d min.</string>
-    <string name="Duration_Seconds">%d sec.</string>
+    <string name="Timestamp_Today">Сегодня</string>
+    <string name="Timestamp_Yesterday">Вчера</string>
+    <string name="Duration_instant">Мгновенно</string>
+    <string name="Duration_Within">в течение %s</string>
+    <string name="Duration_Hours">%d ч.</string>
+    <string name="Duration_Minutes">%d мин.</string>
+    <string name="Duration_Seconds">%d сек.</string>
 </resources>
