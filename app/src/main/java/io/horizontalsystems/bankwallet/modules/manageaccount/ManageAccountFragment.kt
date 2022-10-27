@@ -191,7 +191,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 add {
                                     AccountActionItem(
                                         title = stringResource(id = R.string.AccountExtendedPublicKey),
-                                        icon = painterResource(id = R.drawable.ic_key_20)
+                                        icon = painterResource(id = R.drawable.icon_link_20)
                                     ) {
                                         navController.authorizedAction {
                                             if (viewModel.bip32RootKey != null) {
