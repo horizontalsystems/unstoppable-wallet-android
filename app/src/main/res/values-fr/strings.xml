@@ -820,12 +820,12 @@
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_Blockchain">Blockchain</string>
     <string name="ExtendedKey_Purpose">Objectif</string>
-    <string name="ExtendedKey_Account">Compte </string>
+    <string name="ExtendedKey_Account">Compte</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Appuyez pour afficher la clé privée</string>
     <string name="ExtendedKey_TapToShowPublicKey">Appuyez pour afficher la clé publique</string>
     <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
-    <string name="AccountExtendedPrivateKey_Short">Account xPubKey</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Clés publiques</string>
