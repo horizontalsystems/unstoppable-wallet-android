@@ -997,6 +997,9 @@
     <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
 
+    <string name="AccountExtendedPrivateKey_Short">Account Xprv Key</string>
+    <string name="AccountExtendedPublicKey_Short">Account Xpub Key</string>
+
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Public Keys</string>
 
