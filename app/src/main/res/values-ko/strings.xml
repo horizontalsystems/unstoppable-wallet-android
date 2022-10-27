@@ -825,8 +825,8 @@
     <string name="ExtendedKey_TapToShowPublicKey">Tap to show public key</string>
     <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
-    <string name="AccountExtendedPrivateKey_Short">Account xPrv Key</string>
-    <string name="AccountExtendedPublicKey_Short">Account xPub Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">공개 키</string>
     <!-- Recovery Phrase Verify -->
