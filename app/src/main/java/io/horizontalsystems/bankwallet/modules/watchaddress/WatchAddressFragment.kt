@@ -11,11 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -117,8 +113,6 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                 )
             )
 
-            val focusRequester = remember { FocusRequester() }
-
             Column {
                 Column(
                     modifier = Modifier
@@ -144,9 +138,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                     when (type) {
                         WatchAddressViewModel.Type.Address -> {
                             HSAddressInput(
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                                    .focusRequester(focusRequester),
+                                modifier = Modifier.padding(horizontal = 16.dp),
                                 tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
                                 coinCode = "ETH",
                                 onValueChange = viewModel::onEnterAddress
@@ -180,10 +172,6 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
                         enabled = submitEnabled
                     )
                 }
-            }
-
-            SideEffect {
-                focusRequester.requestFocus()
             }
         }
     }
