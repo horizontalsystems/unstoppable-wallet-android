@@ -89,7 +89,7 @@
     <string name="Restore_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="Restore_InvalidChecksum">Неверная Контрольная Сумма</string>
     <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
-    <string name="Restore_Title">Выбрать Блокчейны</string>
+    <string name="Restore_Title">Блокчейны</string>
     <string name="Restore_Key">Ключ</string>
     <string name="Restore_By">Из</string>
     <string name="Restore_RestoreBy">Восстановить из</string>
@@ -683,7 +683,7 @@
     <string name="SettingsShare_Title">Поделиться</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">Kонтакты</string>
+    <string name="SettingsContact_Title">Связаться с нами</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">Установите уведомления об изменении курса отслеживаемых вами монет.\n\nВы получите уведомление, когда изменение курса за последние 24 часа превысит выбранный порог.\n\n Уведомление о тенденции цен предупреждает об изменениях в движении цен в краткосрочной перспективе (1 неделя), и долгосрочной перспективе (6 месяцев).</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Кошелек отключены. Вам нужно включить уведомления и разрешить фоновое обновление для приложения, чтобы иметь возможность получать уведомления о смене цен.</string>
@@ -822,7 +822,7 @@
     <string name="ExtendedKey_TapToShowPublicKey">Нажмите, чтобы показать публичный ключ</string>
     <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
-    <string name="AccountExtendedPrivateKey_Short">Account xPrv Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Публичные Ключи</string>

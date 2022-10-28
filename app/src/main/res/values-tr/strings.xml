@@ -734,7 +734,7 @@
     <string name="ManageCoins_Search">Jeton kodu veya adı</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
     <string name="ManageCoins_NoResults">Hiçbir sonuç bulunamadı. Akıllı sözleşme adresini biliyorsanız tokeni manüel olarak eklemeyi deneyin.</string>
-    <string name="ManageCoins_NotSupported">Not Supported</string>
+    <string name="ManageCoins_NotSupported">Desteklenmiyor</string>
     <string name="ManageCoins_NotSupportedDescription">Mevcut cüzdan türünüz %1$s, %2$s\'yi desteklemiyor</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Deneysel</string>
@@ -750,7 +750,7 @@
     <string name="ManageAccounts_Hint">İpucu! Mevcut bir cüzdanı geri yüklemek, yeni bir şifre ile en baştan bir cüzdan oluşturur. Birden fazla cüzdan için 12-24 kelimelik tek bir hatırlatıcı kurtarma öbeği kullanmak istiyorsanız kullanışlıdır.</string>
     <string name="Watch_Address_Title">Adresi İzle</string>
     <string name="Watch_Address_Hint">Adres veya Domain</string>
-    <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
+    <string name="Watch_XPubKey_Hint">Account Extended Public Key girin</string>
     <string name="Watch_Address_Description">Yalnızca Ethereum ve diğer desteklenen EVM blok zincirleri için kullanılabilir.</string>
     <string name="Watch_Address_Watch">İzle</string>
     <string name="Watch_By">İçerik</string>
@@ -818,12 +818,12 @@
     <string name="ExtendedKey_Blockchain">Blockchains</string>
     <string name="ExtendedKey_Purpose">Purpose</string>
     <string name="ExtendedKey_Account">Account</string>
-    <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
-    <string name="ExtendedKey_TapToShowPublicKey">Tap to show public key</string>
+    <string name="ExtendedKey_TapToShowPrivateKey">Özel anahtarı göstermek için dokunun</string>
+    <string name="ExtendedKey_TapToShowPublicKey">Genel anahtarı göstermek için dokunun</string>
     <string name="AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey">Account Extended Public Key</string>
-    <string name="AccountExtendedPrivateKey_Short">Account xPrv Key</string>
-    <string name="AccountExtendedPublicKey_Short">Account xPub Key</string>
+    <string name="AccountExtendedPrivateKey_Short">Account xPrivKey</string>
+    <string name="AccountExtendedPublicKey_Short">Account xPubKey</string>
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Genel Anahtarlar</string>
     <!-- Recovery Phrase Verify -->
