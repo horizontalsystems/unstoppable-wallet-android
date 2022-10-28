@@ -19,7 +19,8 @@ import io.horizontalsystems.litecoinkit.MainNetLitecoin
 class ShowExtendedKeyViewModel(
     private val keyChain: HDKeychain,
     val displayKeyType: DisplayKeyType,
-    purpose: HDWallet.Purpose = HDWallet.Purpose.BIP44
+    purpose: HDWallet.Purpose,
+    extendedKeyCoinType: ExtendedKeyCoinType
 ) : ViewModel() {
     val purposes = HDWallet.Purpose.values()
     val blockchains: Array<Blockchain>
@@ -28,7 +29,7 @@ class ShowExtendedKeyViewModel(
 
     var purpose: HDWallet.Purpose by mutableStateOf(purpose)
         private set
-    var blockchain: Blockchain by mutableStateOf(Blockchain.Bitcoin)
+    var blockchain: Blockchain by mutableStateOf(extendedKeyCoinType.blockchain)
         private set
     var account: Int by mutableStateOf(0)
         private set
@@ -75,6 +76,12 @@ class ShowExtendedKeyViewModel(
             Blockchain.Bitcoin,
             Blockchain.BitcoinCash,
             Blockchain.Dash -> ExtendedKeyCoinType.Bitcoin
+        }
+
+    private val ExtendedKeyCoinType.blockchain: Blockchain
+        get() =  when(this) {
+            ExtendedKeyCoinType.Bitcoin -> Blockchain.Bitcoin
+            ExtendedKeyCoinType.Litecoin -> Blockchain.Litecoin
         }
 
     enum class Blockchain(val title: String, val coinType: Int) {

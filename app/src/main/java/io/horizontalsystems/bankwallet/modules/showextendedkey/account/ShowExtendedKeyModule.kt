@@ -18,7 +18,7 @@ object ShowExtendedKeyModule {
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ShowExtendedKeyViewModel(HDKeychain(extendedRootKey.key), displayKeyType, extendedRootKey.info.purpose) as T
+            return ShowExtendedKeyViewModel(HDKeychain(extendedRootKey.key), displayKeyType, extendedRootKey.info.purpose, extendedRootKey.info.coinType) as T
         }
     }
 
