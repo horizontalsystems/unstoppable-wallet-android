@@ -20,13 +20,17 @@ class AddressViewModel : ViewModel() {
         val vTrimmed = value.trim()
 
         val handler = addressHandlers.firstOrNull {
-            it.isSupported(vTrimmed)
+            try {
+                it.isSupported(vTrimmed)
+            } catch (t: Throwable) {
+                false
+            }
         } ?: throw AddressValidationException.Unsupported()
 
         try {
             handler.parseAddress(vTrimmed)
-        } catch (e: Exception) {
-            throw AddressValidationException.Invalid(e)
+        } catch (t: Throwable) {
+            throw AddressValidationException.Invalid(t)
         }
     }
 }
