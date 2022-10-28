@@ -193,32 +193,30 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                         title = stringResource(id = R.string.AccountExtendedPublicKey),
                                         icon = painterResource(id = R.drawable.icon_link_20)
                                     ) {
-                                        navController.authorizedAction {
-                                            if (viewModel.bip32RootKey != null) {
-                                                navController.slideFromRight(
-                                                    R.id.accountExtendedKeyFragment,
-                                                    ShowExtendedKeyModule.prepareParams(
-                                                        viewModel.bip32RootKey,
-                                                        ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(true)
-                                                    )
+                                        if (viewModel.bip32RootKey != null) {
+                                            navController.slideFromRight(
+                                                R.id.accountExtendedKeyFragment,
+                                                ShowExtendedKeyModule.prepareParams(
+                                                    viewModel.bip32RootKey,
+                                                    ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(true)
                                                 )
-                                            } else if (viewModel.accountExtendedPublicKey != null) {
-                                                navController.slideFromRight(
-                                                    R.id.accountExtendedKeyFragment,
-                                                    ShowExtendedKeyModule.prepareParams(
-                                                        viewModel.accountExtendedPublicKey,
-                                                        ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(false)
-                                                    )
+                                            )
+                                        } else if (viewModel.accountExtendedPublicKey != null) {
+                                            navController.slideFromRight(
+                                                R.id.accountExtendedKeyFragment,
+                                                ShowExtendedKeyModule.prepareParams(
+                                                    viewModel.accountExtendedPublicKey,
+                                                    ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(false)
                                                 )
-                                            } else if (viewModel.accountExtendedPrivateKey != null) {
-                                                navController.slideFromRight(
-                                                    R.id.accountExtendedKeyFragment,
-                                                    ShowExtendedKeyModule.prepareParams(
-                                                        viewModel.accountExtendedPrivateKey,
-                                                        ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(false)
-                                                    )
+                                            )
+                                        } else if (viewModel.accountExtendedPrivateKey != null) {
+                                            navController.slideFromRight(
+                                                R.id.accountExtendedKeyFragment,
+                                                ShowExtendedKeyModule.prepareParams(
+                                                    viewModel.accountExtendedPrivateKey,
+                                                    ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey(false)
                                                 )
-                                            }
+                                            )
                                         }
                                     }
                                 }

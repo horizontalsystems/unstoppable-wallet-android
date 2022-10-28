@@ -255,8 +255,8 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
             val info = accountType.hdExtendedKey.info
             when (this) {
                 BlockchainType.Bitcoin -> info.coinType == ExtendedKeyCoinType.Bitcoin
-                BlockchainType.Litecoin -> info.coinType == ExtendedKeyCoinType.Bitcoin
-                BlockchainType.Litecoin -> info.coinType == ExtendedKeyCoinType.Litecoin && info.purpose == HDWallet.Purpose.BIP44 || info.purpose == HDWallet.Purpose.BIP49
+                BlockchainType.Litecoin -> info.coinType == ExtendedKeyCoinType.Litecoin && (info.purpose == HDWallet.Purpose.BIP44 || info.purpose == HDWallet.Purpose.BIP49)
+                        || info.coinType == ExtendedKeyCoinType.Bitcoin && (info.purpose == HDWallet.Purpose.BIP44 || info.purpose == HDWallet.Purpose.BIP49 || info.purpose == HDWallet.Purpose.BIP84)
                 BlockchainType.BitcoinCash -> info.coinType == ExtendedKeyCoinType.Bitcoin && info.purpose == HDWallet.Purpose.BIP44
                 BlockchainType.Dash -> info.coinType == ExtendedKeyCoinType.Bitcoin && info.purpose == HDWallet.Purpose.BIP44
                 else -> false
