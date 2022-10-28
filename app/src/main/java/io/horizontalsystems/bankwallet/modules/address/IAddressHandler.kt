@@ -57,14 +57,14 @@ class AddressHandlerUdn(private val tokenQuery: TokenQuery, private val coinCode
             chainCoinCode?.let { resolution.getAddress(value, it) }
         }
 
-        var lastError: Exception? = null
+        var lastError: Throwable? = null
         for (fetcher in fetchers) {
             try {
                 fetcher.invoke()?.let { resolvedAddress ->
                     return resolvedAddress
                 }
-            } catch (e: Exception) {
-                lastError = e
+            } catch (t: Throwable) {
+                lastError = t
             }
         }
 
