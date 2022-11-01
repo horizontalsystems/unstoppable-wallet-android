@@ -41,7 +41,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                         val accountType = when (record.type) {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.passphrase?.value ?: "")
                             PRIVATE_KEY -> AccountType.EvmPrivateKey(record.key!!.value.toBigInteger())
-                            ADDRESS -> AccountType.EvmAddress(record.key!!.value)
+                            ADDRESS -> AccountType.Address(record.key!!.value)
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
                             else -> null
                         }
@@ -96,7 +96,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 key = SecretString(account.type.key.toString())
                 accountType = PRIVATE_KEY
             }
-            is AccountType.EvmAddress -> {
+            is AccountType.Address -> {
                 key = SecretString(account.type.address)
                 accountType = ADDRESS
             }

@@ -81,7 +81,7 @@ class WatchAddressBlockchainManager(
         account ?: return
 
         when(val type = account.type) {
-            is AccountType.EvmAddress -> enableEvmBlockchains(account)
+            is AccountType.Address -> enableEvmBlockchains(account)
             is AccountType.HdExtendedKey -> {
                 if (type.hdExtendedKey.info.isPublic) {
                     enableBtcBlockchains(account, type.hdExtendedKey.info.purpose.derivation)
