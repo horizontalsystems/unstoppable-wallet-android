@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitWrapper
 import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaTransactionRecord
@@ -13,6 +14,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.models.FullTransaction
+import java.math.BigDecimal
 
 class SolanaTransactionConverter(
         private val coinManager: ICoinManager,
@@ -28,7 +30,7 @@ class SolanaTransactionConverter(
         val outgoingTransfers = mutableListOf<SolanaTransactionRecord.Transfer>()
 
         transaction.amount?.let {
-            val transactionValue = TransactionValue.CoinValue(baseToken, it)
+            val transactionValue = TransactionValue.CoinValue(baseToken, it.movePointLeft(baseToken.decimals))
 
             if (transaction.from == userAddress) {
                 outgoingTransfers.add(SolanaTransactionRecord.Transfer(transaction.to, transactionValue))
@@ -37,12 +39,20 @@ class SolanaTransactionConverter(
             } else {}
         }
 
-        for (tokenTransfer in fullTransaction.tokenTransfers) {
+        for (fullTokenTransfer in fullTransaction.tokenTransfers) {
+            val tokenTransfer = fullTokenTransfer.tokenTransfer
+            val mintAccount = fullTokenTransfer.mintAccount
             val query = TokenQuery(BlockchainType.Solana, TokenType.Spl(tokenTransfer.mintAddress))
             val token = coinManager.getToken(query)
 
             val transactionValue = when {
-                token != null -> TransactionValue.CoinValue(token, tokenTransfer.amount)
+                token != null -> TransactionValue.CoinValue(token, tokenTransfer.amount.movePointLeft(token.decimals))
+                mintAccount.isNft -> TransactionValue.NftValue(
+                    NftUid.Solana(mintAccount.address),
+                    BigDecimal.valueOf(if (tokenTransfer.incoming) 1 else -1),
+                    mintAccount.name,
+                    mintAccount.symbol
+                )
                 else -> TransactionValue.RawValue(value = tokenTransfer.amount.toBigInteger())
             }
 

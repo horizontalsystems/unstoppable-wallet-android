@@ -111,7 +111,7 @@ class EvmKitManager(
                 address = Signer.address(accountType.key)
                 signer = Signer.getInstance(accountType.key, chain)
             }
-            is AccountType.EvmAddress -> {
+            is AccountType.Address -> {
                 address = Address(accountType.address)
             }
             else -> throw UnsupportedAccountException()

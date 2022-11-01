@@ -23,7 +23,7 @@ data class Account(
     @IgnoredOnParcel
     val isWatchAccount: Boolean
         get() = when (this.type) {
-            is AccountType.EvmAddress -> true
+            is AccountType.Address -> true
             is AccountType.HdExtendedKey -> this.type.hdExtendedKey.info.isPublic
             else -> false
         }
@@ -44,7 +44,7 @@ data class Account(
 @Parcelize
 sealed class AccountType : Parcelable {
     @Parcelize
-    data class EvmAddress(val address: String) : AccountType()
+    data class Address(val address: String) : AccountType()
 
     @Parcelize
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
@@ -111,7 +111,7 @@ sealed class AccountType : Parcelable {
                     Translator.getString(R.string.ManageAccount_NWords, count)
                 }
             }
-            is EvmAddress -> "EVM Address"
+            is Address -> "EVM Address"
             is EvmPrivateKey -> "EVM Private Key"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {
@@ -140,11 +140,11 @@ sealed class AccountType : Parcelable {
             else -> emptyList()
         }
 
-    val hideZeroBalances = this is EvmAddress
+    val hideZeroBalances = this is Address
 
     val detailedDescription: String
         get() = when (this) {
-            is EvmAddress -> this.address.shorten()
+            is Address -> this.address.shorten()
             else -> this.description
         }
 

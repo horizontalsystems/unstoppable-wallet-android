@@ -40,7 +40,8 @@ val Token.protocolInfo: String
     get() = when (type) {
         TokenType.Native -> blockchain.name
         is TokenType.Eip20,
-        is TokenType.Bep2 -> protocolType ?: ""
+        is TokenType.Bep2,
+        is TokenType.Spl -> protocolType ?: ""
         else -> ""
     }
 
@@ -57,7 +58,7 @@ val Token.typeInfo: String
         }
         is TokenType.Eip20 -> type.address.shorten()
         is TokenType.Bep2 -> type.symbol
-        is TokenType.Spl -> type.address
+        is TokenType.Spl -> type.address.shorten()
         is TokenType.Unsupported -> ""
     }
 
@@ -92,6 +93,7 @@ val TokenQuery.protocolType: String?
             }
         }
         is TokenType.Bep2 -> "BEP2"
+        is TokenType.Spl -> "Solana"
         else -> null
     }
 
@@ -268,7 +270,14 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                 else -> false
             }
         }
-        is AccountType.EvmAddress,
+        is AccountType.Address ->
+            this == BlockchainType.Ethereum
+                    || this == BlockchainType.BinanceSmartChain
+                    || this == BlockchainType.Polygon
+                    || this == BlockchainType.Avalanche
+                    || this == BlockchainType.Optimism
+                    || this == BlockchainType.ArbitrumOne
+                    || this == BlockchainType.Solana
         is AccountType.EvmPrivateKey -> {
             this == BlockchainType.Ethereum
                     || this == BlockchainType.BinanceSmartChain

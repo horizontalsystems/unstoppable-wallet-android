@@ -4,12 +4,12 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 sealed class NftUid(val contractAddress: String, val tokenId: String, val blockchainType: BlockchainType) {
     class Evm(blockchainType: BlockchainType, contractAddress: String, tokenId: String) : NftUid(contractAddress, tokenId, blockchainType)
-    class Solana(contractAddress: String, tokenId: String) : NftUid(contractAddress, tokenId, BlockchainType.Solana)
+    class Solana(mintAccountAddress: String) : NftUid(mintAccountAddress, "", BlockchainType.Solana)
 
     val uid: String
         get() = when (this) {
             is Evm -> "evm|${blockchainType.uid}|${contractAddress}|${tokenId}"
-            is Solana -> "solana|${contractAddress}|${tokenId}"
+            is Solana -> "solana|${contractAddress}"
         }
 
     override fun equals(other: Any?): Boolean {
@@ -30,7 +30,7 @@ sealed class NftUid(val contractAddress: String, val tokenId: String, val blockc
                         Evm(BlockchainType.fromUid(parts[1]), parts[2], parts[3])
                     }
                     "sol" -> {
-                        Solana(parts[1], parts[2])
+                        Solana(parts[1])
                     }
                     else -> {
                         throw IllegalStateException()
