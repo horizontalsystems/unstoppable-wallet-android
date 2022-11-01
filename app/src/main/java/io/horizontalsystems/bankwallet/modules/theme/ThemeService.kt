@@ -17,7 +17,6 @@ class ThemeService(private val localStorage: ILocalStorage) {
 
     fun setThemeType(themeType: ThemeType) {
         localStorage.currentTheme = themeType
-        localStorage.relaunchBySettingChange = true
 
         _optionsFlow.update {
             Select(themeType, themes)
