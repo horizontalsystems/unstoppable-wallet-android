@@ -17,6 +17,9 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.*
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
@@ -177,6 +180,38 @@ class TransactionInfoViewItemFactory(
                 )
 
                 addMemoItem(transaction.memo, miscItemsSection)
+            }
+
+            is SolanaIncomingTransactionRecord ->
+                itemSections.add(
+                    getReceiveSectionItems(
+                        transaction.value,
+                        transaction.from,
+                        rates[transaction.value.coinUid]
+                    )
+                )
+
+            is SolanaOutgoingTransactionRecord -> {
+                sentToSelf = transaction.sentToSelf
+                itemSections.add(
+                    getSendSectionItems(
+                        transaction.value,
+                        transaction.to,
+                        rates[transaction.value.coinUid],
+                        transaction.sentToSelf,
+                        nftMetadata
+                    )
+                )
+            }
+
+            is SolanaUnknownTransactionRecord -> {
+                for (transfer in transaction.outgoingTransfers) {
+                    itemSections.add(getSendSectionItems(transfer.value, transfer.address, rates[transfer.value.coinUid], nftMetadata = nftMetadata))
+                }
+
+                for (transfer in transaction.incomingTransfers) {
+                    itemSections.add(getReceiveSectionItems(transfer.value, transfer.address, rates[transfer.value.coinUid], nftMetadata = nftMetadata))
+                }
             }
 
             else -> {}
