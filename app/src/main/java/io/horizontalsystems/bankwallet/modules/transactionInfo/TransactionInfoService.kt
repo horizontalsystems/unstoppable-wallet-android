@@ -12,6 +12,9 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.nftUids
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -78,6 +81,14 @@ class TransactionInfoService(
                 is BitcoinOutgoingTransactionRecord -> listOf(tx.fee, tx.value).map { it?.coinUid }
                 is BinanceChainIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is BinanceChainOutgoingTransactionRecord -> listOf(tx.fee, tx.value).map { it.coinUid }
+                is SolanaIncomingTransactionRecord -> listOf(tx.value.coinUid)
+                is SolanaOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
+                is SolanaUnknownTransactionRecord -> {
+                    val tempCoinUidList = mutableListOf<String>()
+                    tempCoinUidList.addAll(tx.incomingTransfers.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.outgoingTransfers.map { it.value.coinUid })
+                    tempCoinUidList
+                }
                 else -> emptyList()
             }
 
