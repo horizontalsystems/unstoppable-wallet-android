@@ -65,7 +65,7 @@ class TopPlatformsRepository(
                 }
 
                 TopPlatformItem(
-                        Platform(platform.uid, platform.name),
+                        Platform(platform.blockchain.uid, platform.blockchain.name),
                         platform.rank,
                         platform.protocols,
                         platform.marketCap,
