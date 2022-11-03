@@ -301,7 +301,7 @@ val Coin.imageUrl: String
     get() = "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png"
 
 val TopPlatform.imageUrl
-    get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
+    get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/${blockchain.uid}@3x.png"
 
 val FullCoin.typeLabel: String?
     get() = tokens.singleOrNull()?.protocolType
