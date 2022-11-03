@@ -21,6 +21,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,11 +30,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.zxing.client.android.Intents
-import com.journeyapps.barcodescanner.CaptureManager
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 import com.journeyapps.barcodescanner.ScanOptions
 import io.horizontalsystems.bankwallet.R
@@ -107,8 +110,6 @@ private fun QRScannerScreen(
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     var showPermissionNeededDialog by remember { mutableStateOf(cameraPermissionState.status != PermissionStatus.Granted) }
 
-    var scanFlag by remember { mutableStateOf(false) }
-
     if (showPermissionNeededDialog) {
         PermissionNeededDialog(
             onOkClick = {
@@ -122,6 +123,17 @@ private fun QRScannerScreen(
         )
     }
 
+    val context = LocalContext.current
+    val barcodeView = CompoundBarcodeView(context).apply {
+        this.initializeFromIntent((context as Activity).intent)
+        this.setStatusText("")
+        this.decodeSingle { result ->
+            result.text?.let { barCodeOrQr ->
+                onScan.invoke(barCodeOrQr)
+            }
+        }
+    }
+
     ComposeAppTheme {
         Box(
             Modifier
@@ -130,32 +142,7 @@ private fun QRScannerScreen(
             contentAlignment = Alignment.Center
         ) {
             if (cameraPermissionState.status == PermissionStatus.Granted) {
-                AndroidView(
-                    factory = { context ->
-                        CompoundBarcodeView(context).apply {
-                            val capture = CaptureManager(context as Activity, this)
-                            capture.initializeFromIntent(context.intent, null)
-                            this.setStatusText("")
-                            capture.decode()
-                            this.decodeSingle { result ->
-                                if (scanFlag) {
-                                    return@decodeSingle
-                                }
-                                println("scanFlag true")
-                                scanFlag = true
-                                result.text?.let { barCodeOrQr ->
-                                    onScan.invoke(barCodeOrQr)
-                                    //Do something and when you finish this something
-                                    //put scanFlag = false to scan another item
-                                    scanFlag = false
-                                }
-                                //If you don't put this scanFlag = false, it will never work again.
-                                //you can put a delay over 2 seconds and then scanFlag = false to prevent multiple scanning
-                            }
-                            this.resume()
-                        }
-                    },
-                )
+                AndroidView(factory = { barcodeView })
             } else {
                 Spacer(
                     Modifier
@@ -200,6 +187,25 @@ private fun QRScannerScreen(
                 )
                 Spacer(Modifier.height(48.dp))
             }
+        }
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> {
+                    barcodeView.resume()
+                }
+                Lifecycle.Event.ON_PAUSE -> {
+                    barcodeView.pause()
+                }
+                else -> {}
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 }
