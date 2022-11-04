@@ -1,13 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.ui
 
-import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,22 +22,6 @@ fun TorBlock(
     if (viewModel.showRestartAlert) {
         showAppRestartAlert()
         viewModel.restartAppAlertShown()
-    }
-
-    if (viewModel.showTorNotificationNotEnabledAlert) {
-        val context = LocalContext.current
-        TorEnableNotificationsDialog(
-            onEnable = {
-                viewModel.torNotificationNotEnabledAlertShown()
-                val intent = Intent()
-                intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-                intent.putExtra("android.provider.extra.APP_PACKAGE", context.packageName)
-                context.startActivity(intent)
-            },
-            onCancel = {
-                viewModel.torNotificationNotEnabledAlertShown()
-            }
-        )
     }
 
     val connectionState = viewModel.torConnectionStatus
