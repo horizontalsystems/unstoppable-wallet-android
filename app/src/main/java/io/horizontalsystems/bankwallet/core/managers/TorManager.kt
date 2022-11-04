@@ -33,9 +33,6 @@ class TorManager(
     override val torStatusFlow = _torStatusFlow.filterNotNull()
     override val torObservable = BehaviorSubject.create<TorStatus>()
 
-    override val isTorNotificationEnabled: Boolean
-        get() = kit.notificationsEnabled
-
     private val executorService = Executors.newCachedThreadPool()
     private val disposables = CompositeDisposable()
     private var listener: Listener? = null

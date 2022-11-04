@@ -254,7 +254,7 @@ dependencies {
     implementation "org.web3j:core:4.9.0"
 
     // in case native file tor.so not loading, do full gradle clean and build.
-    implementation 'com.github.horizontalsystems:tor-kit-android:6c775c1'
+    implementation 'com.github.horizontalsystems:tor-kit-android:9237dab'
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
