@@ -56,7 +56,7 @@ class SplAdapter(
     override suspend fun send(amount: BigDecimal, to: Address): FullTransaction {
         if (signer == null) throw Exception()
 
-        return solanaKit.sendSpl(mintAddress, to, amount, signer)
+        return solanaKit.sendSpl(mintAddress, to, amount.movePointRight(decimal).toLong(), signer)
     }
 
     private fun convertToAdapterState(syncState: SolanaKit.SyncState): AdapterState = when (syncState) {
