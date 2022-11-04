@@ -123,17 +123,6 @@ private fun QRScannerScreen(
         )
     }
 
-    val context = LocalContext.current
-    val barcodeView = CompoundBarcodeView(context).apply {
-        this.initializeFromIntent((context as Activity).intent)
-        this.setStatusText("")
-        this.decodeSingle { result ->
-            result.text?.let { barCodeOrQr ->
-                onScan.invoke(barCodeOrQr)
-            }
-        }
-    }
-
     ComposeAppTheme {
         Box(
             Modifier
@@ -142,7 +131,7 @@ private fun QRScannerScreen(
             contentAlignment = Alignment.Center
         ) {
             if (cameraPermissionState.status == PermissionStatus.Granted) {
-                AndroidView(factory = { barcodeView })
+                ScannerView(onScan)
             } else {
                 Spacer(
                     Modifier
@@ -189,7 +178,21 @@ private fun QRScannerScreen(
             }
         }
     }
+}
 
+@Composable
+private fun ScannerView(onScan: (String) -> Unit) {
+    val context = LocalContext.current
+    val barcodeView = CompoundBarcodeView(context).apply {
+        this.initializeFromIntent((context as Activity).intent)
+        this.setStatusText("")
+        this.decodeSingle { result ->
+            result.text?.let { barCodeOrQr ->
+                onScan.invoke(barCodeOrQr)
+            }
+        }
+    }
+    AndroidView(factory = { barcodeView })
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
