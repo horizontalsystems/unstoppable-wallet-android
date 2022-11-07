@@ -6,9 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -18,10 +21,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.launcher.LaunchModule
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
-import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import kotlin.system.exitProcess
 
 class TorConnectionActivity : AppCompatActivity() {
@@ -83,7 +85,10 @@ private fun TorConnectionScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape)
+                        .background(color = ComposeAppTheme.colors.raina),
                     contentAlignment = Alignment.Center
                 ) {
                     if (viewModel.torStatus == TorStatus.Failed) {
@@ -93,25 +98,36 @@ private fun TorConnectionScreen(
                             modifier = Modifier.size(48.dp)
                         )
                     } else {
-                        HSCircularProgressIndicator()
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(40.dp),
+                            color = ComposeAppTheme.colors.grey,
+                            strokeWidth = 4.dp
+                        )
                     }
                 }
 
-                Spacer(Modifier.height(16.dp))
-                subhead1_grey(
-                    modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp),
+                subhead2_grey(
+                    modifier = Modifier.padding(32.dp),
                     textAlign = TextAlign.Center,
                     text = stringResource(textRes)
                 )
-                Spacer(Modifier.height(40.dp))
-                ButtonSecondaryDefault(
+
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 48.dp),
                     title = stringResource(R.string.Button_Retry),
                     onClick = { viewModel.restartTor() },
                     enabled = viewModel.torStatus == TorStatus.Failed
                 )
-                Spacer(Modifier.height(20.dp))
-                ButtonSecondaryTransparent(
-                    title = stringResource(R.string.Button_Disable) + " Tor",
+
+                Spacer(Modifier.height(16.dp))
+
+                ButtonPrimaryTransparent(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 48.dp),
+                    title = stringResource(R.string.Button_Disable),
                     onClick = { viewModel.stopTor() }
                 )
             }
