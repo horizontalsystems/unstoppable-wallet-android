@@ -758,7 +758,7 @@
     <string name="Watch_Address_Watch">Ver</string>
     <string name="Watch_By">Por</string>
     <string name="Watch_WatchBy">Ver por</string>
-    <string name="Watch_TypeAddress">Dirección EVM</string>
+    <string name="Watch_TypeEvmAddress">Dirección EVM</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nombre</string>

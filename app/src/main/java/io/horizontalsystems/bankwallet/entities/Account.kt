@@ -23,9 +23,18 @@ data class Account(
     @IgnoredOnParcel
     val isWatchAccount: Boolean
         get() = when (this.type) {
-            is AccountType.Address -> true
+            is AccountType.EvmAddress -> true
+            is AccountType.SolanaAddress -> true
             is AccountType.HdExtendedKey -> this.type.hdExtendedKey.info.isPublic
             else -> false
+        }
+
+    @IgnoredOnParcel
+    val manageCoinsAllowed: Boolean
+        get() = when (this.type) {
+            is AccountType.EvmAddress -> false
+            is AccountType.SolanaAddress -> false
+            else -> true
         }
 
     override fun equals(other: Any?): Boolean {
@@ -44,7 +53,10 @@ data class Account(
 @Parcelize
 sealed class AccountType : Parcelable {
     @Parcelize
-    data class Address(val address: String) : AccountType()
+    data class EvmAddress(val address: String) : AccountType()
+
+    @Parcelize
+    data class SolanaAddress(val address: String) : AccountType()
 
     @Parcelize
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
@@ -111,7 +123,8 @@ sealed class AccountType : Parcelable {
                     Translator.getString(R.string.ManageAccount_NWords, count)
                 }
             }
-            is Address -> "EVM Address"
+            is EvmAddress -> "EVM Address"
+            is SolanaAddress -> "Solana Address"
             is EvmPrivateKey -> "EVM Private Key"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {
@@ -140,11 +153,12 @@ sealed class AccountType : Parcelable {
             else -> emptyList()
         }
 
-    val hideZeroBalances = this is Address
+    val hideZeroBalances = this is EvmAddress || this is SolanaAddress
 
     val detailedDescription: String
         get() = when (this) {
-            is Address -> this.address.shorten()
+            is EvmAddress -> this.address.shorten()
+            is SolanaAddress -> this.address.shorten()
             else -> this.description
         }
 

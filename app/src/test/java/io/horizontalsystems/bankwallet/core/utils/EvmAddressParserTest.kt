@@ -5,7 +5,7 @@ import org.junit.Assert
 import org.junit.Test
 import java.math.BigDecimal
 
-class AddressParserTest {
+class EvmAddressParserTest {
     private lateinit var addressParser: AddressParser
 
     @Test

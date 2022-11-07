@@ -26,7 +26,10 @@ fun HSAddressInput(
     onStateChange: ((DataState<Address>?) -> Unit)? = null,
     onValueChange: ((Address?) -> Unit)? = null
 ) {
-    val viewModel = viewModel<AddressViewModel>(factory = AddressInputModule.FactoryToken(tokenQuery, coinCode))
+    val viewModel = viewModel<AddressViewModel>(
+            factory = AddressInputModule.FactoryToken(tokenQuery, coinCode),
+            key = "address_view_model_${tokenQuery.id}"
+    )
 
     HSAddressInput(
         modifier = modifier,

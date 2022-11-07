@@ -73,7 +73,7 @@ class SolanaKitManager(
                 is AccountType.Mnemonic -> {
                     createKitInstance(accountType, account)
                 }
-                is AccountType.Address -> {
+                is AccountType.SolanaAddress -> {
                     createKitInstance(accountType, account)
                 }
                 else -> throw UnsupportedAccountException()
@@ -107,8 +107,8 @@ class SolanaKitManager(
     }
 
     private fun createKitInstance(
-        accountType: AccountType.Address,
-        account: Account
+            accountType: AccountType.SolanaAddress,
+            account: Account
     ): SolanaKitWrapper {
         val address = accountType.address
 

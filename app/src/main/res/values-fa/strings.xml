@@ -759,7 +759,7 @@
     <string name="Watch_Address_Watch">مشاهده</string>
     <string name="Watch_By">By</string>
     <string name="Watch_WatchBy">Watch By</string>
-    <string name="Watch_TypeAddress">EVM Address</string>
+    <string name="Watch_TypeEvmAddress">EVM Address</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">نام</string>

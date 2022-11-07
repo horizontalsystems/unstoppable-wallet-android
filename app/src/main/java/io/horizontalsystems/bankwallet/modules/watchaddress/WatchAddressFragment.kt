@@ -136,11 +136,19 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int) {
 
                     Spacer(modifier = Modifier.height(32.dp))
                     when (type) {
-                        WatchAddressViewModel.Type.Address -> {
+                        WatchAddressViewModel.Type.EvmAddress -> {
                             HSAddressInput(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 tokenQuery = TokenQuery(BlockchainType.Ethereum, TokenType.Native),
                                 coinCode = "ETH",
+                                onValueChange = viewModel::onEnterAddress
+                            )
+                        }
+                        WatchAddressViewModel.Type.SolanaAddress -> {
+                            HSAddressInput(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                tokenQuery = TokenQuery(BlockchainType.Solana, TokenType.Native),
+                                coinCode = "SOL",
                                 onValueChange = viewModel::onEnterAddress
                             )
                         }
