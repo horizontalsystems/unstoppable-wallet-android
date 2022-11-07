@@ -1,11 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.main
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -141,6 +144,30 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
         viewModel.transactionTabEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
             binding.bottomNavigation.menu.getItem(2).isEnabled = enabled
         })
+
+        viewModel.torIsActiveLiveData.observe(viewLifecycleOwner) { torIsActive ->
+            binding.torIsActiveState.isVisible = torIsActive
+        }
+        viewModel.playTorActiveAnimationLiveData.observe(viewLifecycleOwner) { playAnimation ->
+            if (playAnimation) {
+                context?.let { ctx ->
+                    ValueAnimator().apply {
+                        setIntValues(
+                            ContextCompat.getColor(ctx, R.color.remus),
+                            ContextCompat.getColor(ctx, R.color.lawrence)
+                        )
+                        setEvaluator(ArgbEvaluator())
+                        addUpdateListener { valueAnimator ->
+                            binding.torIsActiveState.setBackgroundColor((valueAnimator.animatedValue as Int))
+                        }
+
+                        duration = 1000
+                        start()
+                    }
+                }
+                viewModel.animationPlayed()
+            }
+        }
 
     }
 

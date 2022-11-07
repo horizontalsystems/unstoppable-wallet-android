@@ -3,14 +3,12 @@ package io.horizontalsystems.bankwallet.modules.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IBackupManager
-import io.horizontalsystems.bankwallet.core.IRateAppManager
-import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -26,6 +24,7 @@ class MainViewModel(
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
     private val service: MainService,
+    private val torManager: ITorManager
 ) : ViewModel() {
 
     val showRootedDeviceWarningLiveEvent = SingleLiveEvent<Unit>()
@@ -36,6 +35,8 @@ class MainViewModel(
     val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
     val transactionTabEnabledLiveData = MutableLiveData<Boolean>()
     val openWalletSwitcherLiveEvent = SingleLiveEvent<Pair<List<Account>, Account?>>()
+    val torIsActiveLiveData = MutableLiveData(false)
+    val playTorActiveAnimationLiveData = MutableLiveData(false)
 
     private val disposables = CompositeDisposable()
     private var contentHidden = pinComponent.isLocked
@@ -54,6 +55,15 @@ class MainViewModel(
         viewModelScope.launch {
             termsManager.termsAcceptedSignalFlow.collect {
                 updateBadgeVisibility()
+            }
+        }
+
+        viewModelScope.launch {
+            torManager.torStatusFlow.collect { connectionStatus ->
+                if (torIsActiveLiveData.value == false && connectionStatus == TorStatus.Connected) {
+                    playTorActiveAnimationLiveData.postValue(true)
+                }
+                torIsActiveLiveData.postValue(connectionStatus == TorStatus.Connected)
             }
         }
 
@@ -121,6 +131,10 @@ class MainViewModel(
 
     fun updateTransactionsTabEnabled() {
         transactionTabEnabledLiveData.postValue(!accountManager.isAccountsEmpty)
+    }
+
+    fun animationPlayed() {
+        playTorActiveAnimationLiveData.postValue(false)
     }
 
     private fun showWhatsNew() {

@@ -25,6 +25,7 @@ object MainModule {
                 App.accountManager,
                 App.releaseNotesManager,
                 service,
+                App.torKitManager
             ) as T
         }
     }
