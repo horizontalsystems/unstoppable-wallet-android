@@ -18,7 +18,7 @@ class WatchAddressViewModel(
 
     private var accountCreated = false
     private var submitEnabled = false
-    private var type = Type.Address
+    private var type = Type.EvmAddress
     private var address: Address? = null
     private var xPubKey: String? = null
 
@@ -79,7 +79,8 @@ class WatchAddressViewModel(
     }
 
     private fun calculateIfSubmitEnabled() = when (this.type) {
-        Type.Address -> address != null
+        Type.EvmAddress -> address != null
+        Type.SolanaAddress -> address != null
         Type.XPubKey -> xPubKey != null
     }
 
@@ -88,11 +89,17 @@ class WatchAddressViewModel(
         val accountType: AccountType
 
         when (type) {
-            Type.Address -> {
+            Type.EvmAddress -> {
                 val tmpAddress = address ?: throw Exception()
                 accountName = address?.domain
 
-                accountType = AccountType.Address(tmpAddress.hex)
+                accountType = AccountType.EvmAddress(tmpAddress.hex)
+            }
+            Type.SolanaAddress -> {
+                val tmpAddress = address ?: throw Exception()
+                accountName = address?.domain
+
+                accountType = AccountType.SolanaAddress(tmpAddress.hex)
             }
             Type.XPubKey -> {
                 val tmpXPubKey = xPubKey ?: throw Exception()
@@ -111,7 +118,8 @@ class WatchAddressViewModel(
     }
 
     enum class Type(val titleResId: Int) {
-        Address(R.string.Watch_TypeAddress),
+        EvmAddress(R.string.Watch_TypeEvmAddress),
+        SolanaAddress(R.string.Watch_TypeSolanaAddress),
         XPubKey(R.string.Watch_TypeXPubKey),
     }
 }

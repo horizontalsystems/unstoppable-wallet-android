@@ -758,7 +758,7 @@
     <string name="Watch_Address_Watch">Suivi</string>
     <string name="Watch_By">Par</string>
     <string name="Watch_WatchBy">Regarder par</string>
-    <string name="Watch_TypeAddress">Adresse EVM</string>
+    <string name="Watch_TypeEvmAddress">Adresse EVM</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>

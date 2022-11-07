@@ -759,7 +759,7 @@
     <string name="Watch_Address_Watch">观察</string>
     <string name="Watch_By">由</string>
     <string name="Watch_WatchBy">观看者</string>
-    <string name="Watch_TypeAddress">EVM 地址</string>
+    <string name="Watch_TypeEvmAddress">EVM 地址</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>

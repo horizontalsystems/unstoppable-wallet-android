@@ -270,14 +270,13 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                 else -> false
             }
         }
-        is AccountType.Address ->
+        is AccountType.EvmAddress ->
             this == BlockchainType.Ethereum
                     || this == BlockchainType.BinanceSmartChain
                     || this == BlockchainType.Polygon
                     || this == BlockchainType.Avalanche
                     || this == BlockchainType.Optimism
                     || this == BlockchainType.ArbitrumOne
-                    || this == BlockchainType.Solana
         is AccountType.EvmPrivateKey -> {
             this == BlockchainType.Ethereum
                     || this == BlockchainType.BinanceSmartChain
@@ -286,6 +285,8 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                     || this == BlockchainType.Optimism
                     || this == BlockchainType.ArbitrumOne
         }
+        is AccountType.SolanaAddress ->
+            this == BlockchainType.Solana
         else -> false
     }
 }

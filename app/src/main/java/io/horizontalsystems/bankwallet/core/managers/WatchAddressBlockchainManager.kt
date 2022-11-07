@@ -50,6 +50,20 @@ class WatchAddressBlockchainManager(
         }
     }
 
+    private fun enableSolanaBlockchains(account: Account) {
+        val wallets = walletManager.getWallets(account)
+        val enabledBlockchains = wallets.map { it.token.blockchain.type }
+
+        if (enabledBlockchains.contains(BlockchainType.Solana)) {
+            return
+        }
+
+        try {
+            val tokenQueries = listOf(TokenQuery(BlockchainType.Solana, TokenType.Native))
+            walletActivator.activateWallets(account, tokenQueries)
+        } catch (e: Exception) {}
+    }
+
     private fun enableBtcBlockchains(account: Account, mnemonicDerivation: AccountType.Derivation) {
         val blockchainTypes: List<BlockchainType> = listOf(
             BlockchainType.Bitcoin,
@@ -81,7 +95,8 @@ class WatchAddressBlockchainManager(
         account ?: return
 
         when(val type = account.type) {
-            is AccountType.Address -> enableEvmBlockchains(account)
+            is AccountType.EvmAddress -> enableEvmBlockchains(account)
+            is AccountType.SolanaAddress -> enableSolanaBlockchains(account)
             is AccountType.HdExtendedKey -> {
                 if (type.hdExtendedKey.info.isPublic) {
                     enableBtcBlockchains(account, type.hdExtendedKey.info.purpose.derivation)

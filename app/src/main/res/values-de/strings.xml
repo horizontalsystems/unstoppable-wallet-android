@@ -762,7 +762,7 @@
     <string name="Watch_Address_Watch">Beobachten</string>
     <string name="Watch_By">Von</string>
     <string name="Watch_WatchBy">Beobachten von</string>
-    <string name="Watch_TypeAddress">EVM-Adresse</string>
+    <string name="Watch_TypeEvmAddress">EVM-Adresse</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>

@@ -758,7 +758,7 @@
     <string name="Watch_Address_Watch">관찰</string>
     <string name="Watch_By">으로</string>
     <string name="Watch_WatchBy">지켜보다</string>
-    <string name="Watch_TypeAddress">EVM 주소</string>
+    <string name="Watch_TypeEvmAddress">EVM 주소</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">이름</string>

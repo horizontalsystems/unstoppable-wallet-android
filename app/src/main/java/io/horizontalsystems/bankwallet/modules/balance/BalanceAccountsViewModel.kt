@@ -29,7 +29,7 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
 
     private fun handleAccount(activeAccount: Account?) {
         accountViewItem = activeAccount?.let { account ->
-            AccountViewItem(account.type !is AccountType.Address, account.type is AccountType.Address, account.name, account.id)
+            AccountViewItem(account.manageCoinsAllowed, account.isWatchAccount, account.name, account.id)
         }
     }
 

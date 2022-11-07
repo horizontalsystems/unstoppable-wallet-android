@@ -18,6 +18,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val MNEMONIC = "mnemonic"
         private const val PRIVATE_KEY = "private_key"
         private const val ADDRESS = "address"
+        private const val SOLANA_ADDRESS = "solana_address"
         private const val HD_EXTENDED_LEY = "hd_extended_key"
     }
 
@@ -41,7 +42,8 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                         val accountType = when (record.type) {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.passphrase?.value ?: "")
                             PRIVATE_KEY -> AccountType.EvmPrivateKey(record.key!!.value.toBigInteger())
-                            ADDRESS -> AccountType.Address(record.key!!.value)
+                            ADDRESS -> AccountType.EvmAddress(record.key!!.value)
+                            SOLANA_ADDRESS -> AccountType.SolanaAddress(record.key!!.value)
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
                             else -> null
                         }
@@ -96,9 +98,13 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 key = SecretString(account.type.key.toString())
                 accountType = PRIVATE_KEY
             }
-            is AccountType.Address -> {
+            is AccountType.EvmAddress -> {
                 key = SecretString(account.type.address)
                 accountType = ADDRESS
+            }
+            is AccountType.SolanaAddress -> {
+                key = SecretString(account.type.address)
+                accountType = SOLANA_ADDRESS
             }
             is AccountType.HdExtendedKey -> {
                 key = SecretString(account.type.keySerialized)

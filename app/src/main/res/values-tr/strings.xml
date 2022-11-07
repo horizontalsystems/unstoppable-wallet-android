@@ -755,7 +755,7 @@
     <string name="Watch_Address_Watch">İzle</string>
     <string name="Watch_By">İçerik</string>
     <string name="Watch_WatchBy">İzle</string>
-    <string name="Watch_TypeAddress">EVM Adresi</string>
+    <string name="Watch_TypeEvmAddress">EVM Adresi</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">İsim</string>
