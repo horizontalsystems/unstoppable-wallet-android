@@ -12,25 +12,20 @@ import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.SolanaKit
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.rx2.asObservable
 
 class SolanaKitManager(
     private val rpcSourceManager: SolanaRpcSourceManager,
+    private val walletManager: SolanaWalletManager,
     backgroundManager: BackgroundManager
 ) : BackgroundManager.Listener {
 
     private val disposables = CompositeDisposable()
-
-    private val kitStartedSubject = BehaviorSubject.createDefault(false)
-    val kitStartedObservable: Observable<Boolean> = kitStartedSubject
+    private var tokenAccountDisposable: Disposable? = null
 
     var solanaKitWrapper: SolanaKitWrapper? = null
-        private set(value) {
-            field = value
-
-            kitStartedSubject.onNext(value != null)
-        }
 
     private var useCount = 0
     var currentAccount: Account? = null
@@ -78,6 +73,7 @@ class SolanaKitManager(
                 }
                 else -> throw UnsupportedAccountException()
             }
+            startKit()
             useCount = 0
             currentAccount = account
         }
@@ -101,8 +97,6 @@ class SolanaKitManager(
             account.id
         )
 
-        kit.start()
-
         return SolanaKitWrapper(kit, signer)
     }
 
@@ -116,10 +110,9 @@ class SolanaKitManager(
             App.instance,
             address,
             rpcSourceManager.rpcSource,
-            account.id
+            account.id,
+            debug = true
         )
-
-        kit.start()
 
         return SolanaKitWrapper(kit, null)
     }
@@ -139,6 +132,22 @@ class SolanaKitManager(
         solanaKitWrapper?.solanaKit?.stop()
         solanaKitWrapper = null
         currentAccount = null
+        tokenAccountDisposable?.dispose()
+    }
+
+    private fun startKit() {
+        solanaKitWrapper?.solanaKit?.let { kit ->
+            kit.start()
+            kit.tokenBalanceSyncStateFlow.asObservable()
+                    .subscribeIO {
+                        if (it is SolanaKit.SyncState.Synced) {
+                            walletManager.add(kit.tokenAccounts())
+                        }
+                    }
+                    .let {
+                        tokenAccountDisposable = it
+                    }
+        }
     }
 
     //

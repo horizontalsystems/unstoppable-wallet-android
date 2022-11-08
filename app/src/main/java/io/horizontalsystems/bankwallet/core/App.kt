@@ -169,9 +169,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         binanceKitManager = BinanceKitManager(testMode)
 
-        solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
-        solanaKitManager = SolanaKitManager(solanaRpcSourceManager, backgroundManager)
-
         accountsStorage = AccountsStorage(appDatabase)
         restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
 
@@ -188,6 +185,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         walletManager = WalletManager(accountManager, walletStorage)
         coinManager = CoinManager(marketKit, walletManager)
+
+        solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
+        val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
+        solanaKitManager = SolanaKitManager(solanaRpcSourceManager, solanaWalletManager, backgroundManager)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
 
