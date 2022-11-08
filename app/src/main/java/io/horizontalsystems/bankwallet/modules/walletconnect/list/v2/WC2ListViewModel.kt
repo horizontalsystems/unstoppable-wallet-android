@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.walletconnect.walletconnectv2.client.WalletConnect
+import com.walletconnect.sign.client.Sign
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
@@ -51,7 +51,7 @@ class WC2ListViewModel(
         sectionItem = Section(WalletConnectListModule.Version.Version2, sessions, count)
     }
 
-    private fun sync(sessions: List<WalletConnect.Model.SettledSession>) {
+    private fun sync(sessions: List<Sign.Model.Session>) {
         if (sessions.isEmpty() && service.pendingRequestsCount == 0) {
             sectionItem = null
             return
@@ -60,10 +60,10 @@ class WC2ListViewModel(
         val sessionItems = sessions.map { session ->
             WalletConnectListModule.SessionViewItem(
                 sessionId = session.topic,
-                title = session.peerAppMetaData?.name ?: "",
-                subtitle = getSubtitle(session.accounts),
-                url = session.peerAppMetaData?.url ?: "",
-                imageUrl = session.peerAppMetaData?.icons?.lastOrNull(),
+                title = session.metaData?.name ?: "",
+                subtitle = getSubtitle(session.namespaces.values.map { it.accounts }.flatten()),
+                url = session.metaData?.url ?: "",
+                imageUrl = session.metaData?.icons?.lastOrNull(),
             )
         }
 

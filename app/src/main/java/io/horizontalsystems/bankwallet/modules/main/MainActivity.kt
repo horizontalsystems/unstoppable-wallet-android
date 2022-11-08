@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
-import com.walletconnect.walletconnectv2.client.WalletConnectClient
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -48,7 +47,6 @@ class MainActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-
-        WalletConnectClient.shutdown()
+        // todo: check if we need to shutdown wallet connect related stuff
     }
 }

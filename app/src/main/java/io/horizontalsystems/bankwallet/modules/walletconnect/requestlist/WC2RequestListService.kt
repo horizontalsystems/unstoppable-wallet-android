@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.requestlist
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Request
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.reactivex.BackpressureStrategy
@@ -107,9 +106,9 @@ class WC2RequestListService(
                         pendingRequests.map { request ->
                             WC2RequestListModule.RequestItem(
                                 id = request.requestId,
-                                sessionName = allSessions.firstOrNull { it.topic == request.topic }?.peerAppMetaData?.name
+                                sessionName = allSessions.firstOrNull { it.topic == request.topic }?.metaData?.name
                                     ?: "",
-                                method = WC2Parser.getSessionRequestMethod(request.body),
+                                method = request.method,
                                 chainId = null
                             )
                         }
