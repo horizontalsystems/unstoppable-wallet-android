@@ -11,7 +11,11 @@ import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
-import com.walletconnect.walletconnectv2.client.WalletConnect
+import com.walletconnect.android.Core
+import com.walletconnect.android.CoreClient
+import com.walletconnect.android.relay.ConnectionType
+import com.walletconnect.sign.client.Sign
+import com.walletconnect.sign.client.SignClient
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
@@ -53,7 +57,6 @@ import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.solanakit.models.RpcSource
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -344,19 +347,28 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     }
 
     private fun initializeWalletConnectV2(appConfig: AppConfigProvider) {
-        val initWallet = WalletConnect.Params.Init(
-            application = this,
-            relayServerUrl = "wss://${appConfig.walletConnectUrl}?projectId=${appConfig.walletConnectProjectId}",
-            isController = true,
-            metadata = WalletConnect.Model.AppMetaData(
-                name = "Unstoppable Wallet",
-                description = "Wallet description",
-                url = "example.wallet",
-                icons = listOf("https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media")
-            )
+        val projectId = appConfig.walletConnectProjectId
+        val serverUrl = "wss://${appConfig.walletConnectUrl}?projectId=$projectId"
+        val connectionType = ConnectionType.AUTOMATIC
+        val appMetaData = Core.Model.AppMetaData(
+            name = "Unstoppable",
+            description = "",
+            url = "unstoppable.money",
+            icons = listOf("https://raw.githubusercontent.com/horizontalsystems/HS-Design/master/PressKit/UW-AppIcon-on-light.png"),
+            redirect = null,
         )
 
-//        WalletConnectClient.initialize(initWallet)
+        CoreClient.initialize(
+            relayServerUrl = serverUrl,
+            connectionType = connectionType,
+            application = this,
+            metaData = appMetaData
+        )
+
+        val init = Sign.Params.Init(core = CoreClient)
+        SignClient.initialize(init) { error ->
+            Log.w("AAA", "error", error.throwable)
+        }
     }
 
     private fun setAppTheme() {

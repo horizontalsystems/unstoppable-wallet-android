@@ -130,6 +130,10 @@ android {
         resources {
             pickFirsts += ['META-INF/atomicfu.kotlin_module']
         }
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/NOTICE.md'
     }
 
     kotlinOptions {
@@ -145,6 +149,13 @@ android {
         c.resolutionStrategy.dependencySubstitution {
             substitute module('org.bouncycastle:bcprov-jdk15to18:1.68') using module('org.bouncycastle:bcprov-jdk15on:1.65')
             substitute module('com.google.protobuf:protobuf-java:3.6.1') using module('com.google.protobuf:protobuf-javalite:3.21.1')
+            substitute module('net.jcip:jcip-annotations:1.0') using module('com.github.stephenc.jcip:jcip-annotations:1.0-1')
+
+            substitute module('com.tinder.scarlet:scarlet:0.1.12') using module('com.github.WalletConnect.Scarlet:scarlet:1.0.0')
+            substitute module('com.tinder.scarlet:websocket-okhttp:0.1.12') using module('com.github.WalletConnect.Scarlet:websocket-okhttp:1.0.0')
+            substitute module('com.tinder.scarlet:stream-adapter-rxjava2:0.1.12') using module('com.github.WalletConnect.Scarlet:stream-adapter-rxjava2:1.0.0')
+            substitute module('com.tinder.scarlet:message-adapter-gson:0.1.12') using module('com.github.WalletConnect.Scarlet:message-adapter-gson:1.0.0')
+            substitute module('com.tinder.scarlet:lifecycle-android:0.1.12') using module('com.github.WalletConnect.Scarlet:lifecycle-android:1.0.0')
         }
     }
 }
@@ -245,7 +256,9 @@ dependencies {
     implementation 'com.github.horizontalsystems:wallet-connect-kotlin:b9a50b8'
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     // WalletConnect V2
-    implementation "com.github.WalletConnect:WalletConnectKotlinV2:1.0.0-beta04"
+    implementation 'com.walletconnect:sign:2.1.0'
+    implementation 'com.walletconnect:android-core:1.3.0'
+    implementation 'com.walletconnect:android-core-impl:1.3.0'
 
     // Unstoppable Domains
     implementation 'com.unstoppabledomains:resolution:5.0.0'

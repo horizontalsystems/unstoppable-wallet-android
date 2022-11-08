@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session.v2
 
-import com.walletconnect.walletconnectv2.client.WalletConnect
+import com.walletconnect.sign.client.Sign
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
@@ -39,8 +39,8 @@ class WC2SessionService(
             stateSubject.onNext(value)
         }
 
-    private var proposal: WalletConnect.Model.SessionProposal? = null
-    private var session: WalletConnect.Model.SettledSession? = null
+    private var proposal: Sign.Model.SessionProposal? = null
+    private var session: Sign.Model.Session? = null
 
     private val networkConnectionErrorSubject = PublishSubject.create<Unit>()
     val networkConnectionErrorObservable: Flowable<Unit>
@@ -58,12 +58,12 @@ class WC2SessionService(
 
     val appMetaItem: PeerMetaItem?
         get() {
-            session?.peerAppMetaData?.let {
+            session?.metaData?.let {
                 return PeerMetaItem(
                     it.name,
                     it.url,
                     it.description,
-                    it.icons.last(),
+                    it.icons.lastOrNull(),
                     accountManager.activeAccount?.name,
                     false
                 )
@@ -130,10 +130,12 @@ class WC2SessionService(
                         pingService.receiveResponse()
                     }
                     is WC2Service.Event.SessionDeleted -> {
-                        session?.topic?.let { topic ->
-                            if (topic == event.deletedSession.topic) {
-                                state = State.Killed
-                                pingService.disconnect()
+                        if (event.deletedSession is Sign.Model.DeletedSession.Success) {
+                            session?.topic?.let { topic ->
+                                if (topic == event.deletedSession.topic) {
+                                    state = State.Killed
+                                    pingService.disconnect()
+                                }
                             }
                         }
                     }
@@ -189,11 +191,7 @@ class WC2SessionService(
             return
         }
 
-        val accounts: List<String> = blockchains.filter { it.selected }.map { blockchain ->
-            "eip155:${blockchain.chainId}:${blockchain.address}"
-        }
-
-        service.approve(proposal, accounts)
+        service.approve(proposal, blockchains.filter { it.selected })
     }
 
     fun disconnect() {
@@ -253,11 +251,17 @@ class WC2SessionService(
             val account = accountManager.activeAccount ?: return emptyList()
 
             session?.let { session ->
-                return getBlockchains(session.accounts, account)
+                val accounts = session.namespaces.map {
+                    it.value.accounts
+                }.flatten()
+                return getBlockchains(accounts, account)
             }
 
             proposal?.let { proposal ->
-                return getBlockchains(proposal.chains, account)
+                val chains = proposal.requiredNamespaces.values.map {
+                    it.chains
+                }.flatten()
+                return getBlockchains(chains, account)
             }
             return emptyList()
         }
