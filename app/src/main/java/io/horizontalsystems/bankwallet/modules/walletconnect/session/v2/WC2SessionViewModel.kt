@@ -110,7 +110,7 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
         }
 
         peerMeta = service.appMetaItem
-        blockchains = getBlockchainViewItems(allowedBlockchains, peerMeta?.editable ?: false)
+        blockchains = getBlockchainViewItems(allowedBlockchains)
         connecting = connection == State.Connecting
         closeEnabled = state == Ready
         status = getStatus(connection)
@@ -136,23 +136,12 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
         service.reconnect()
     }
 
-    fun toggle(chainId: Int) {
-        service.toggle(chainId)
-    }
-
-    private fun getBlockchainViewItems(
-        blockchains: List<WCBlockchain>,
-        editable: Boolean
-    ): List<WC2SessionModule.BlockchainViewItem> {
-        return blockchains.map {
-            WC2SessionModule.BlockchainViewItem(
-                it.chainId,
-                it.name,
-                it.address.shorten(),
-                it.selected,
-                showCheckbox = editable
-            )
-        }
+    private fun getBlockchainViewItems(blockchains: List<WCBlockchain>) = blockchains.map {
+        WC2SessionModule.BlockchainViewItem(
+            it.chainId,
+            it.name,
+            it.address.shorten(),
+        )
     }
 
     private fun getStatus(connectionState: State): WCSessionViewModel.Status? {

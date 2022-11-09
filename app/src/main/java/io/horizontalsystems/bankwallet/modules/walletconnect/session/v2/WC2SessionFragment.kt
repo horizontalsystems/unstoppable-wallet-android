@@ -169,7 +169,7 @@ private fun ColumnScope.WCSessionListContent(
                 )
             }
             viewModel.blockchains.forEach {
-                add { BlockchainCell(it.name, it.address, it.selected, it.showCheckbox) { viewModel.toggle(it.chainId) } }
+                add { BlockchainCell(it.name, it.address) }
             }
         }
 

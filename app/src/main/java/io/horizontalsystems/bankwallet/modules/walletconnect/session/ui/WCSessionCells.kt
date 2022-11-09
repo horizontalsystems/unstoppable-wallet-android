@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -23,9 +22,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 fun BlockchainCell(
     title: String,
     value: String,
-    checked: Boolean,
-    showCheckbox: Boolean,
-    onCheckClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -34,13 +30,6 @@ fun BlockchainCell(
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (showCheckbox) {
-            HsCheckbox(
-                checked = checked,
-                onCheckedChange = { onCheckClick.invoke() }
-            )
-            Spacer(Modifier.width(16.dp))
-        }
         subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
         Spacer(Modifier.width(8.dp))

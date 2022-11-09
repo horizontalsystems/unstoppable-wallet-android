@@ -30,7 +30,6 @@ object WCSessionModule {
         val description: String?,
         val icon: String?,
         val accountName: String?,
-        val editable: Boolean,
     )
 
     data class WCRequestWrapper(

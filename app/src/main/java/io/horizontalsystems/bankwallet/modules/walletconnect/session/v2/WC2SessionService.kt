@@ -65,7 +65,6 @@ class WC2SessionService(
                     it.description,
                     it.icons.lastOrNull(),
                     accountManager.activeAccount?.name,
-                    false
                 )
             }
             proposal?.let {
@@ -75,7 +74,6 @@ class WC2SessionService(
                     it.description,
                     it.icons.lastOrNull()?.toString(),
                     accountManager.activeAccount?.name,
-                    true
                 )
             }
             return null
@@ -191,7 +189,7 @@ class WC2SessionService(
             return
         }
 
-        service.approve(proposal, blockchains.filter { it.selected })
+        service.approve(proposal, blockchains)
     }
 
     fun disconnect() {
@@ -215,35 +213,6 @@ class WC2SessionService(
         session?.let {
             pingService.ping(it.topic)
         }
-    }
-
-    fun toggle(chainId: Int) {
-        val blockchain = blockchains.firstOrNull { it.chainId == chainId } ?: return
-
-        if (blockchain.selected && blockchains.filter { it.selected }.size < 2) {
-            return
-        }
-        val toggledBlockchain = WCBlockchain(
-            blockchain.chainId,
-            blockchain.name,
-            blockchain.address,
-            !blockchain.selected,
-        )
-        updateItemInBlockchains(toggledBlockchain)
-        allowedBlockchainsSubject.onNext(allowedBlockchains)
-    }
-
-    private fun updateItemInBlockchains(toggledBlockchain: WCBlockchain) {
-        val indexToUpdate = blockchains.indexOf(toggledBlockchain)
-        val updatedList = mutableListOf<WCBlockchain>()
-        blockchains.forEachIndexed { index, item ->
-            if (index == indexToUpdate) {
-                updatedList.add(toggledBlockchain)
-            } else {
-                updatedList.add(item)
-            }
-        }
-        blockchains = updatedList
     }
 
     private val initialBlockchains: List<WCBlockchain>
@@ -272,7 +241,7 @@ class WC2SessionService(
             wcManager.getEvmKitWrapper(data.chain.id, account)?.let { evmKitWrapper ->
                 val address = evmKitWrapper.evmKit.receiveAddress.eip55
                 val chainName = evmBlockchainManager.getBlockchain(data.chain.id)?.name ?: data.chain.name
-                WCBlockchain(data.chain.id, chainName, address, true)
+                WCBlockchain(data.chain.id, chainName, address)
             }
         }
     }
