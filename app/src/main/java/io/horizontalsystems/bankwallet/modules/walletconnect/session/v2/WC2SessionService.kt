@@ -50,39 +50,10 @@ class WC2SessionService(
     val stateObservable: Flowable<State>
         get() = stateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val allowedBlockchainsSubject = PublishSubject.create<List<WCBlockchain>>()
-    val allowedBlockchainsObservable: Flowable<List<WCBlockchain>>
-        get() = allowedBlockchainsSubject.toFlowable(BackpressureStrategy.BUFFER)
-
     var blockchains = listOf<WCBlockchain>()
-
-    val appMetaItem: PeerMetaItem?
-        get() {
-            session?.metaData?.let {
-                return PeerMetaItem(
-                    it.name,
-                    it.url,
-                    it.description,
-                    it.icons.lastOrNull(),
-                    accountManager.activeAccount?.name,
-                )
-            }
-            proposal?.let {
-                return PeerMetaItem(
-                    it.name,
-                    it.url,
-                    it.description,
-                    it.icons.lastOrNull()?.toString(),
-                    accountManager.activeAccount?.name,
-                )
-            }
-            return null
-        }
-
+    var appMetaItem: PeerMetaItem? = null
     val connectionState by pingService::state
     val connectionStateObservable by pingService::stateObservable
-    val allowedBlockchains: List<WCBlockchain>
-        get() = blockchains.sortedBy { it.chainId }
 
     private val disposables = CompositeDisposable()
 
@@ -91,9 +62,18 @@ class WC2SessionService(
             val existingSession =
                 sessionManager.sessions.firstOrNull { it.topic == topic } ?: return@let
             pingService.ping(existingSession.topic)
+            appMetaItem = existingSession.metaData?.let {
+                PeerMetaItem(
+                    it.name,
+                    it.url,
+                    it.description,
+                    it.icons.lastOrNull()?.toString(),
+                    accountManager.activeAccount?.name,
+                )
+            }
+
             session = existingSession
-            blockchains = initialBlockchains
-            allowedBlockchainsSubject.onNext(allowedBlockchains)
+            blockchains = getBlockchainsBySession(existingSession)
             state = State.Ready
         }
 
@@ -116,21 +96,31 @@ class WC2SessionService(
             .subscribe { event ->
                 when (event) {
                     is WC2Service.Event.WaitingForApproveSession -> {
-                        proposal = event.proposal
-                        blockchains = initialBlockchains
-                        allowedBlockchainsSubject.onNext(allowedBlockchains)
-                        if (blockchains.isEmpty()) {
-                            state =
-                                State.Invalid(WC2SessionManager.RequestDataError.UnsupportedChainId)
-                            return@subscribe
+                        val sessionProposal = event.proposal
+                        appMetaItem = PeerMetaItem(
+                            sessionProposal.name,
+                            sessionProposal.url,
+                            sessionProposal.description,
+                            sessionProposal.icons.lastOrNull()?.toString(),
+                            accountManager.activeAccount?.name,
+                        )
+
+                        proposal = sessionProposal
+
+                        try {
+                            blockchains = getBlockchainsByProposal(sessionProposal)
+
+                            state = State.WaitingForApproveSession
+                            pingService.receiveResponse()
+                        } catch (e: WC2SessionManager.RequestDataError) {
+                            state = State.Invalid(e)
                         }
-                        state = State.WaitingForApproveSession
-                        pingService.receiveResponse()
                     }
                     is WC2Service.Event.SessionDeleted -> {
-                        if (event.deletedSession is Sign.Model.DeletedSession.Success) {
+                        val deletedSession = event.deletedSession
+                        if (deletedSession is Sign.Model.DeletedSession.Success) {
                             session?.topic?.let { topic ->
-                                if (topic == event.deletedSession.topic) {
+                                if (topic == deletedSession.topic) {
                                     state = State.Killed
                                     pingService.disconnect()
                                 }
@@ -138,9 +128,19 @@ class WC2SessionService(
                         }
                     }
                     is WC2Service.Event.SessionSettled -> {
-                        session = event.session
-                        blockchains = initialBlockchains
-                        allowedBlockchainsSubject.onNext(allowedBlockchains)
+                        val session = event.session
+                        appMetaItem = session.metaData?.let {
+                            PeerMetaItem(
+                                it.name,
+                                it.url,
+                                it.description,
+                                it.icons.lastOrNull()?.toString(),
+                                accountManager.activeAccount?.name,
+                            )
+                        }
+
+                        this.session = session
+                        blockchains = getBlockchainsBySession(session)
                         state = State.Ready
                         pingService.receiveResponse()
                     }
@@ -165,15 +165,16 @@ class WC2SessionService(
     }
 
     fun reject() {
+        val proposal = proposal ?: return
+
         if (!connectivityManager.isConnected) {
             networkConnectionErrorSubject.onNext(Unit)
             return
         }
-        proposal?.let {
-            service.reject(it)
-            pingService.disconnect()
-            state = State.Killed
-        }
+
+        service.reject(proposal)
+        pingService.disconnect()
+        state = State.Killed
     }
 
     fun approve() {
@@ -215,25 +216,21 @@ class WC2SessionService(
         }
     }
 
-    private val initialBlockchains: List<WCBlockchain>
-        get() {
-            val account = accountManager.activeAccount ?: return emptyList()
-
-            session?.let { session ->
-                val accounts = session.namespaces.map {
-                    it.value.accounts
-                }.flatten()
-                return getBlockchains(accounts, account)
-            }
-
-            proposal?.let { proposal ->
-                val chains = proposal.requiredNamespaces.values.map {
-                    it.chains
-                }.flatten()
-                return getBlockchains(chains, account)
-            }
-            return emptyList()
+    private fun getBlockchainsByProposal(proposal: Sign.Model.SessionProposal): List<WCBlockchain> {
+        val account = accountManager.activeAccount ?: throw WC2SessionManager.RequestDataError.NoSuitableAccount
+        val chains = proposal.requiredNamespaces.values.map { it.chains }.flatten()
+        val blockchains = getBlockchains(chains, account)
+        if (blockchains.size < chains.size) {
+            throw WC2SessionManager.RequestDataError.UnsupportedChainId
         }
+        return blockchains
+    }
+
+    private fun getBlockchainsBySession(session: Sign.Model.Session): List<WCBlockchain> {
+        val account = accountManager.activeAccount ?: return emptyList()
+        val accounts = session.namespaces.map { it.value.accounts }.flatten()
+        return getBlockchains(accounts, account)
+    }
 
     private fun getBlockchains(accounts: List<String>, account: Account): List<WCBlockchain> {
         val sessionAccountData = accounts.mapNotNull { WC2Parser.getAccountData(it) }

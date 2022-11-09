@@ -71,14 +71,6 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
                 disposables.add(it)
             }
 
-        service.allowedBlockchainsObservable
-            .subscribeIO {
-                sync(allowedBlockchainList = it)
-            }
-            .let {
-                disposables.add(it)
-            }
-
         service.networkConnectionErrorObservable
             .subscribeIO {
                 showErrorLiveEvent.postValue(Unit)
@@ -97,12 +89,11 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
 
     private fun sync(
         sessionState: WC2SessionService.State? = null,
-        connectionState: State? = null,
-        allowedBlockchainList: List<WCBlockchain>? = null
+        connectionState: State? = null
     ) {
         val state = sessionState ?: service.state
         val connection = connectionState ?: service.connectionState
-        val allowedBlockchains = allowedBlockchainList ?: service.allowedBlockchains
+        val allowedBlockchains = service.blockchains.sortedBy { it.chainId }
 
         if (state == Killed) {
             closeLiveEvent.postValue(Unit)
