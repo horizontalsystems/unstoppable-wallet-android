@@ -40,8 +40,6 @@ object WC2SessionModule {
         val chainId: Int,
         val name: String,
         val address: String,
-        val selected: Boolean,
-        val showCheckbox: Boolean
     )
 
     const val SESSION_TOPIC_KEY = "session_topic_id"
@@ -66,7 +64,6 @@ data class WCBlockchain(
     val chainId: Int,
     val name: String,
     val address: String,
-    val selected: Boolean
 ) {
     val chainNamespace = "eip155"
 
