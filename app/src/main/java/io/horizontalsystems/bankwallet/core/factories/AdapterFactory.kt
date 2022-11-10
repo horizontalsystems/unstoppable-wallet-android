@@ -81,8 +81,8 @@ class AdapterFactory(
             BlockchainType.ArbitrumOne -> getEvmAdapter(wallet)
             BlockchainType.BinanceChain -> getBinanceAdapter(wallet, "BNB")
             BlockchainType.Solana -> {
-                val evmKitWrapper = solanaKitManager.getSolanaKitWrapper(wallet.account)
-                SolanaAdapter(evmKitWrapper)
+                val solanaKitWrapper = solanaKitManager.getSolanaKitWrapper(wallet.account)
+                SolanaAdapter(solanaKitWrapper)
             }
             else -> null
         }

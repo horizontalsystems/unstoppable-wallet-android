@@ -187,7 +187,8 @@ class TransactionInfoViewItemFactory(
                     getReceiveSectionItems(
                         transaction.value,
                         transaction.from,
-                        rates[transaction.value.coinUid]
+                        rates[transaction.value.coinUid],
+                        nftMetadata
                     )
                 )
 
@@ -292,8 +293,12 @@ class TransactionInfoViewItemFactory(
             is TransactionValue.CoinValue -> transactionValue.coin.name
             is TransactionValue.TokenValue -> transactionValue.tokenName
             is TransactionValue.NftValue -> {
-                nftMetadata?.name ?: transactionValue.tokenName?.let { "$it #${transactionValue.nftUid.tokenId}" }
-                ?: "#${transactionValue.nftUid.tokenId}"
+                nftMetadata?.name ?: transactionValue.tokenName?.let {
+                    when (transactionValue.nftUid) {
+                        is NftUid.Evm -> "$it #${transactionValue.nftUid.tokenId}"
+                        is NftUid.Solana -> it
+                    }
+                } ?: "#${transactionValue.nftUid.tokenId}"
             }
             is TransactionValue.RawValue -> ""
         }

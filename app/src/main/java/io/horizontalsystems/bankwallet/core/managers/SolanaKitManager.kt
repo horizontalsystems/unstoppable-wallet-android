@@ -87,12 +87,12 @@ class SolanaKitManager(
         account: Account
     ): SolanaKitWrapper {
         val seed = accountType.seed
-        val publicKey = Signer.address(seed)
+        val address = Signer.address(seed)
         val signer = Signer.getInstance(seed)
 
         val kit = SolanaKit.getInstance(
             App.instance,
-            publicKey,
+            address,
             rpcSourceManager.rpcSource,
             account.id
         )
@@ -110,8 +110,7 @@ class SolanaKitManager(
             App.instance,
             address,
             rpcSourceManager.rpcSource,
-            account.id,
-            debug = true
+            account.id
         )
 
         return SolanaKitWrapper(kit, null)
@@ -138,11 +137,9 @@ class SolanaKitManager(
     private fun startKit() {
         solanaKitWrapper?.solanaKit?.let { kit ->
             kit.start()
-            kit.tokenBalanceSyncStateFlow.asObservable()
+            kit.fungibleTokenAccountsFlow.asObservable()
                     .subscribeIO {
-                        if (it is SolanaKit.SyncState.Synced) {
-                            walletManager.add(kit.tokenAccounts())
-                        }
+                        walletManager.add(it)
                     }
                     .let {
                         tokenAccountDisposable = it
