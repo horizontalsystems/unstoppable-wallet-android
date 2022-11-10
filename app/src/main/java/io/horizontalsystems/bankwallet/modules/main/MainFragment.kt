@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -128,18 +129,9 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
             binding.screenSecureDim.isVisible = hide
         })
 
-        viewModel.setBadgeVisibleLiveData.observe(viewLifecycleOwner, Observer { visible ->
-            val bottomMenu = binding.bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
-            val settingsNavigationViewItem = bottomMenu?.getChildAt(3) as? BottomNavigationItemView
-
-            if (visible) {
-                if (bottomBadgeView?.parent == null) {
-                    settingsNavigationViewItem?.addView(getBottomBadge())
-                }
-            } else {
-                settingsNavigationViewItem?.removeView(bottomBadgeView)
-            }
-        })
+        viewModel.settingsBadgeLiveData.observe(viewLifecycleOwner) {
+            setSettingsBadge(it)
+        }
 
         viewModel.transactionTabEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
             binding.bottomNavigation.menu.getItem(2).isEnabled = enabled
@@ -202,15 +194,24 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
         }
     }
 
-    private fun getBottomBadge(): View? {
-        if (bottomBadgeView != null) {
-            return bottomBadgeView
-        }
-
+    private fun setSettingsBadge(badgeType: MainModule.BadgeType?) {
         val bottomMenu = binding.bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
-        bottomBadgeView = LayoutInflater.from(activity)
-            .inflate(R.layout.view_bottom_navigation_badge, bottomMenu, false)
-
-        return bottomBadgeView
+        val settingsNavigationViewItem = bottomMenu?.getChildAt(3) as? BottomNavigationItemView
+        settingsNavigationViewItem?.removeView(bottomBadgeView)
+        when (val type = badgeType) {
+            MainModule.BadgeType.BadgeDot -> {
+                bottomBadgeView = LayoutInflater.from(activity)
+                    .inflate(R.layout.view_bottom_navigation_badge, bottomMenu, false)
+                settingsNavigationViewItem?.addView(bottomBadgeView)
+            }
+            is MainModule.BadgeType.BadgeNumber -> {
+                bottomBadgeView = LayoutInflater.from(activity)
+                    .inflate(R.layout.view_bottom_navigation_badge_with_number, bottomMenu, false)
+                bottomBadgeView?.findViewById<TextView>(R.id.badgeNumber)?.text = type.number.toString()
+                settingsNavigationViewItem?.addView(bottomBadgeView)
+            }
+            else -> { }
+        }
     }
+
 }

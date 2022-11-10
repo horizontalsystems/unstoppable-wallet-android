@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.CounterType
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -95,7 +96,7 @@ private fun SettingSections(
     val showAlertManageWallet by viewModel.manageWalletShowAlertLiveData.observeAsState(false)
     val showAlertSecurityCenter by viewModel.securityCenterShowAlertLiveData.observeAsState(false)
     val showAlertAboutApp by viewModel.aboutAppShowAlertLiveData.observeAsState(false)
-    val walletConnectSessionCount by viewModel.walletConnectSessionCountLiveData.observeAsState(0)
+    val wcCounter by viewModel.wcCounterLiveData.observeAsState()
     val baseCurrency by viewModel.baseCurrencyLiveData.observeAsState()
     val language by viewModel.languageLiveData.observeAsState()
 
@@ -131,7 +132,8 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.Settings_WalletConnect,
                 R.drawable.ic_wallet_connect_20,
-                value = if (walletConnectSessionCount > 0) walletConnectSessionCount.toString() else null,
+                value = (wcCounter as? CounterType.SessionCounter)?.number?.toString(),
+                counterBadge = (wcCounter as? CounterType.PendingRequestCounter)?.number?.toString(),
                 onClick = {
                     when (val state = viewModel.getWalletConnectSupportState()) {
                         WC1Manager.SupportState.Supported -> {
@@ -237,6 +239,7 @@ fun HsSettingCell(
     @StringRes title: Int,
     @DrawableRes icon: Int,
     value: String? = null,
+    counterBadge: String? = null,
     showAlert: Boolean = false,
     onClick: () -> Unit
 ) {
@@ -258,13 +261,20 @@ fun HsSettingCell(
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         Spacer(Modifier.weight(1f))
-        value?.let {
+
+        if (counterBadge != null) {
+            BadgeCount(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                text = counterBadge
+            )
+        } else if (value != null) {
             subhead1_grey(
-                text = it,
+                text = value,
                 maxLines = 1,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
+
         if (showAlert) {
             Image(
                 modifier = Modifier.size(20.dp),
@@ -345,7 +355,7 @@ private fun previewSettingsScreen() {
                     HsSettingCell(
                         R.string.Settings_WalletConnect,
                         R.drawable.ic_wallet_connect_20,
-                        value = "value",
+                        counterBadge = "13",
                         onClick = { }
                     )
                 }
