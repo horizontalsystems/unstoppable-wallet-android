@@ -26,13 +26,14 @@ object WC2RequestListModule {
         val requestId: Long,
         val title: String,
         val subtitle: String,
+        val imageUrl: String?,
     )
 
     data class RequestItem(
         val id: Long,
-        val sessionName: String,
+        val chainName: String,
         val method: String?,
-        val chainId: String?
+        val imageUrl: String?
     )
 
     data class Item(

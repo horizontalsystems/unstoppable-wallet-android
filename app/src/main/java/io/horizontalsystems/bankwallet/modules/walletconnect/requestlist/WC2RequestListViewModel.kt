@@ -60,9 +60,10 @@ class WC2RequestListViewModel(
                 item.active,
                 requests = item.requests.map { request ->
                     WC2RequestListModule.RequestViewItem(
-                        request.id,
-                        title(request.method),
-                        request.sessionName,
+                        requestId = request.id,
+                        title = title(request.method),
+                        subtitle = request.chainName,
+                        imageUrl = request.imageUrl,
                     )
                 }
             )

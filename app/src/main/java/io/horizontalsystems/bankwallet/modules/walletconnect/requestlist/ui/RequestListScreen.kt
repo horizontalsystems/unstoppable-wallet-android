@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.WC2RequestListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.WC2RequestListViewModel
@@ -149,6 +150,17 @@ private fun RequestCell(
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Image(
+                modifier = Modifier
+                    .size(24.dp)
+                    .clip(RoundedCornerShape(4.dp)),
+                painter = rememberAsyncImagePainter(
+                    model = viewItem.imageUrl,
+                    error = painterResource(R.drawable.ic_platform_placeholder_24)
+                ),
+                contentDescription = null,
+            )
+            Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = viewItem.title,
@@ -179,8 +191,8 @@ private fun RequestCell(
 @Composable
 fun PreviewRequestList() {
     val items1 = listOf(
-        WC2RequestListModule.RequestViewItem(2L, "Title 2", "Subtitle"),
-        WC2RequestListModule.RequestViewItem(3L, "Title 3", "Subtitle"),
+        WC2RequestListModule.RequestViewItem(2L, "Title 2", "Subtitle", null),
+        WC2RequestListModule.RequestViewItem(3L, "Title 3", "Subtitle", null),
     )
     val sections = listOf(
         WC2RequestListModule.SectionViewItem("1", "Wallet 1", true, items1),
