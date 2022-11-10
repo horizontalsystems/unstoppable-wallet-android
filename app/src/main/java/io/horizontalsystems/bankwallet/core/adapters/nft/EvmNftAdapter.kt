@@ -42,7 +42,7 @@ class EvmNftAdapter(
         return record(nftBalance)
     }
 
-    override fun transferEip721TransactionData(
+    fun transferEip721TransactionData(
         contractAddress: String,
         to: Address,
         tokenId: String
@@ -52,7 +52,7 @@ class EvmNftAdapter(
         return nftKit.transferEip721TransactionData(address, to, tokenIdBigInt)
     }
 
-    override fun transferEip1155TransactionData(
+    fun transferEip1155TransactionData(
         contractAddress: String,
         to: Address,
         tokenId: String,

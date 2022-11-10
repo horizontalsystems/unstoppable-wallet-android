@@ -18,6 +18,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.adapters.nft.EvmNftAdapter
 import io.horizontalsystems.bankwallet.entities.nft.EvmNftRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftKey
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
@@ -110,7 +111,7 @@ private fun getFactory(requireArguments: Bundle): SendNftModule.Factory? {
 
     val nftKey = NftKey(account, nftUid.blockchainType)
 
-    val adapter = App.nftAdapterManager.adapter(nftKey) ?: return null
+    val adapter = App.nftAdapterManager.adapter(nftKey) as? EvmNftAdapter ?: return null
 
     val nftRecord = adapter.nftRecord(nftUid) ?: return null
 

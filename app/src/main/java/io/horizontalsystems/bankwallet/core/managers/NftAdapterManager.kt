@@ -1,11 +1,14 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.adapters.nft.EvmNftAdapter
 import io.horizontalsystems.bankwallet.core.adapters.nft.INftAdapter
-import io.horizontalsystems.bankwallet.core.supportedNftTypes
+import io.horizontalsystems.bankwallet.core.adapters.nft.SolanaNftAdapter
+import io.horizontalsystems.bankwallet.core.nftSupported
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.nft.NftKey
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,7 +55,7 @@ class NftAdapterManager(
         val nftKeys = wallets.map { NftKey(it.account, it.token.blockchainType) }.distinct()
 
         for (nftKey in nftKeys) {
-            if (nftKey.blockchainType.supportedNftTypes.isEmpty()) continue
+            if (!nftKey.blockchainType.nftSupported) continue
 
             val adapter = currentAdapters[nftKey]
 
@@ -65,8 +68,9 @@ class NftAdapterManager(
                 evmKitWrapper.nftKit?.let { nftKit ->
                     adaptersMap[nftKey] = EvmNftAdapter(nftKey.blockchainType, nftKit, evmKitWrapper.evmKit.receiveAddress)
                 }
-            } else {
-                // Init other blockchain adapter here (e.g. Solana)
+            } else if (nftKey.blockchainType is BlockchainType.Solana) {
+                val solanaKitWrapper = App.solanaKitManager.getSolanaKitWrapper(nftKey.account)
+                adaptersMap[nftKey] = SolanaNftAdapter(nftKey.blockchainType, solanaKitWrapper.solanaKit)
             }
         }
 

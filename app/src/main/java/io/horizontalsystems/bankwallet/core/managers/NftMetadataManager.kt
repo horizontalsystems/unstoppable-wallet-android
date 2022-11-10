@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
+import io.horizontalsystems.bankwallet.core.providers.nft.MagicEdenNftProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.OpenSeaNftProvider
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.entities.nft.*
@@ -15,8 +16,9 @@ class NftMetadataManager(
     appConfigProvider: AppConfigProvider,
     private val storage: NftStorage
 ) {
-    private val providerMap = mapOf<BlockchainType, INftProvider>(
-        BlockchainType.Ethereum to OpenSeaNftProvider(marketKit, appConfigProvider)
+    private val providerMap = mapOf(
+        BlockchainType.Ethereum to OpenSeaNftProvider(marketKit, appConfigProvider),
+        BlockchainType.Solana to MagicEdenNftProvider(marketKit, appConfigProvider)
     )
 
     private val _addressMetadataFlow = MutableSharedFlow<Pair<NftKey, NftAddressMetadata>?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)

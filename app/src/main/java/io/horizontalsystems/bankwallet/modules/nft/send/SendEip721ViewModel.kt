@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
-import io.horizontalsystems.bankwallet.core.adapters.nft.INftAdapter
+import io.horizontalsystems.bankwallet.core.adapters.nft.EvmNftAdapter
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 
 class SendEip721ViewModel(
     private val nftUid: NftUid,
-    private val adapter: INftAdapter,
+    private val adapter: EvmNftAdapter,
     private val addressService: SendEvmAddressService,
     nftMetadataManager: NftMetadataManager
 ) : ViewModel() {

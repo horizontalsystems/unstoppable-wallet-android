@@ -6,6 +6,9 @@ import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 
@@ -73,6 +76,15 @@ val TransactionRecord.nftUids: Set<NftUid>
         }
         is ExternalContractCallTransactionRecord -> {
             ((incomingEvents + outgoingEvents).mapNotNull { it.value.nftUid }).toSet()
+        }
+        is SolanaIncomingTransactionRecord -> {
+            value.nftUid?.let { setOf(it) } ?: emptySet()
+        }
+        is SolanaOutgoingTransactionRecord -> {
+            value.nftUid?.let { setOf(it) } ?: emptySet()
+        }
+        is SolanaUnknownTransactionRecord -> {
+            ((incomingTransfers + outgoingTransfers).mapNotNull { it.value.nftUid }).toSet()
         }
         else -> emptySet()
     }

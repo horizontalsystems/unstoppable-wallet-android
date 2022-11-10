@@ -240,6 +240,12 @@ val BlockchainType.tokenIconPlaceholder: Int
         else -> R.drawable.coin_placeholder
     }
 
+val BlockchainType.nftSupported: Boolean
+    get() = when (this) {
+        BlockchainType.Solana -> true
+        else -> supportedNftTypes.isNotEmpty()
+    }
+
 val BlockchainType.supportedNftTypes: List<NftType>
     get() = when (this) {
         BlockchainType.Ethereum -> listOf(NftType.Eip721, NftType.Eip1155)
