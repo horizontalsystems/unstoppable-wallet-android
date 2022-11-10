@@ -49,7 +49,7 @@ class SolanaTransactionConverter(
                 token != null -> TransactionValue.CoinValue(token, tokenTransfer.amount.movePointLeft(token.decimals))
                 mintAccount.isNft -> TransactionValue.NftValue(
                     NftUid.Solana(mintAccount.address),
-                    BigDecimal.valueOf(if (tokenTransfer.incoming) 1 else -1),
+                    tokenTransfer.amount,
                     mintAccount.name,
                     mintAccount.symbol
                 )

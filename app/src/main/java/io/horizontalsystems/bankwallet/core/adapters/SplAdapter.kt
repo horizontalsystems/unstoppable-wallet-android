@@ -44,14 +44,18 @@ class SplAdapter(
         get() = solanaKit.tokenBalanceSyncStateFlow.map { }.asFlowable()
 
     override val balanceData: BalanceData
-        get() = BalanceData(solanaKit.tokenBalance(mintAddressString) ?: BigDecimal.ZERO)
+        get() = BalanceData(
+                solanaKit.tokenAccount(mintAddressString)?.let {
+                    it.tokenAccount.balance.movePointLeft(it.tokenAccount.decimals)
+                } ?: BigDecimal.ZERO
+        )
 
     override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = solanaKit.tokenBalanceFlow(mintAddressString).map { }.asFlowable()
+        get() = solanaKit.tokenAccountFlow(mintAddressString).map { }.asFlowable()
 
     // ISendSolanaAdapter
     override val availableBalance: BigDecimal
-        get() = solanaKit.tokenBalance(mintAddressString) ?: BigDecimal.ZERO
+        get() = balanceData.available
 
     override suspend fun send(amount: BigDecimal, to: Address): FullTransaction {
         if (signer == null) throw Exception()

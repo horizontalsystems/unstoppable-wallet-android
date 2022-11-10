@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
 fun SectionTitleCell(
@@ -83,19 +84,24 @@ fun TransactionNftAmountCell(
     providerCollectionUid: String?,
     navController: NavController
 ) {
-    Row(
-        modifier = Modifier
+    var modifier = Modifier
             .fillMaxSize()
-            .clickable {
-                navController.slideFromBottom(
+            .padding(horizontal = 16.dp)
+
+    if (nftUid.blockchainType !is BlockchainType.Solana) {
+        modifier = modifier.clickable {
+            navController.slideFromBottom(
                     R.id.nftAssetFragment,
                     NftAssetModule.prepareParams(
-                        providerCollectionUid,
-                        nftUid
+                            providerCollectionUid,
+                            nftUid
                     )
-                )
-            }
-            .padding(horizontal = 16.dp),
+            )
+        }
+    }
+
+    Row(
+        modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         CoinImage(
