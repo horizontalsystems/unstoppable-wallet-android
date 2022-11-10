@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.CounterType
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
@@ -18,10 +19,13 @@ class MainSettingsViewModel(
     val manageWalletShowAlertLiveData = MutableLiveData(!service.allBackedUp)
     val securityCenterShowAlertLiveData = MutableLiveData(!service.isPinSet)
     val aboutAppShowAlertLiveData = MutableLiveData(!service.termsAccepted)
-    val walletConnectSessionCountLiveData = MutableLiveData(service.walletConnectSessionCount)
+    val wcCounterLiveData = MutableLiveData<CounterType?>(null)
     val baseCurrencyLiveData = MutableLiveData(service.baseCurrency)
     val languageLiveData = MutableLiveData(service.currentLanguageDisplayName)
     val appVersion by service::appVersion
+
+    private var wcSessionsCount = service.walletConnectSessionCount
+    private var wc2PendingRequestCount = 0
 
     init {
         viewModelScope.launch {
@@ -43,13 +47,22 @@ class MainSettingsViewModel(
             .let { disposables.add(it) }
 
         service.walletConnectSessionCountObservable
-            .subscribeIO { walletConnectSessionCountLiveData.postValue(it) }
+            .subscribeIO {
+                wcSessionsCount = it
+                syncCounter()
+            }
             .let { disposables.add(it) }
 
+        service.wc2PendingRequestsCountObservable
+            .subscribeIO {
+                wc2PendingRequestCount = it
+                syncCounter()
+            }
+            .let { disposables.add(it) }
+
+        syncCounter()
         service.start()
     }
-
-    // ViewModel
 
     override fun onCleared() {
         service.stop()
@@ -58,5 +71,15 @@ class MainSettingsViewModel(
 
     fun getWalletConnectSupportState() : WC1Manager.SupportState {
         return service.getWalletConnectSupportState()
+    }
+
+    private fun syncCounter() {
+        if (wc2PendingRequestCount > 0) {
+            wcCounterLiveData.postValue(CounterType.PendingRequestCounter(wc2PendingRequestCount))
+        } else if (wcSessionsCount > 0) {
+            wcCounterLiveData.postValue(CounterType.SessionCounter(wcSessionsCount))
+        } else {
+            wcCounterLiveData.postValue(null)
+        }
     }
 }

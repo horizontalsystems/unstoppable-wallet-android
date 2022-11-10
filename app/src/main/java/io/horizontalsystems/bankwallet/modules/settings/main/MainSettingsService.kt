@@ -59,6 +59,8 @@ class MainSettingsService(
     val allBackedUp: Boolean
         get() = backupManager.allBackedUp
 
+    val wc2PendingRequestsCountObservable by wc2SessionManager::pendingRequestCountObservable
+
     val walletConnectSessionCount: Int
         get() = wc1SessionManager.sessions.count() + wc2SessionManager.sessions.count()
 

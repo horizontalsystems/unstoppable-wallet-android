@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -24,7 +25,8 @@ class MainViewModel(
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
     private val service: MainService,
-    private val torManager: ITorManager
+    private val torManager: ITorManager,
+    wc2SessionManager: WC2SessionManager
 ) : ViewModel() {
 
     val showRootedDeviceWarningLiveEvent = SingleLiveEvent<Unit>()
@@ -32,7 +34,7 @@ class MainViewModel(
     val showWhatsNewLiveEvent = SingleLiveEvent<Unit>()
     val openPlayMarketLiveEvent = SingleLiveEvent<Unit>()
     val hideContentLiveData = MutableLiveData<Boolean>()
-    val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
+    val settingsBadgeLiveData = MutableLiveData<MainModule.BadgeType?>(null)
     val transactionTabEnabledLiveData = MutableLiveData<Boolean>()
     val openWalletSwitcherLiveEvent = SingleLiveEvent<Pair<List<Account>, Account?>>()
     val torIsActiveLiveData = MutableLiveData(false)
@@ -40,6 +42,7 @@ class MainViewModel(
 
     private val disposables = CompositeDisposable()
     private var contentHidden = pinComponent.isLocked
+    private var wc2PendingRequestsCount = 0
 
     val initialTab = getTabToOpen()
 
@@ -49,12 +52,12 @@ class MainViewModel(
             showRootedDeviceWarningLiveEvent.call()
         }
 
-        updateBadgeVisibility()
+        updateSettingsBadge()
         updateTransactionsTabEnabled()
 
         viewModelScope.launch {
             termsManager.termsAcceptedSignalFlow.collect {
-                updateBadgeVisibility()
+                updateSettingsBadge()
             }
         }
 
@@ -67,12 +70,17 @@ class MainViewModel(
             }
         }
 
+        disposables.add(wc2SessionManager.pendingRequestCountObservable.subscribe {
+            wc2PendingRequestsCount = it
+            updateSettingsBadge()
+        })
+
         disposables.add(backupManager.allBackedUpFlowable.subscribe {
-            updateBadgeVisibility()
+            updateSettingsBadge()
         })
 
         disposables.add(pinComponent.pinSetFlowable.subscribe {
-            updateBadgeVisibility()
+            updateSettingsBadge()
         })
 
         disposables.add(accountManager.accountsFlowable.subscribe {
@@ -153,9 +161,17 @@ class MainViewModel(
         }
     }
 
-    private fun updateBadgeVisibility() {
-        val visible = !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet)
-        setBadgeVisibleLiveData.postValue(visible)
+    private fun updateSettingsBadge() {
+        val showDotBadge =
+            !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet)
+
+        if (wc2PendingRequestsCount > 0) {
+            settingsBadgeLiveData.postValue(MainModule.BadgeType.BadgeNumber(wc2PendingRequestsCount))
+        } else if (showDotBadge) {
+            settingsBadgeLiveData.postValue(MainModule.BadgeType.BadgeDot)
+        } else {
+            settingsBadgeLiveData.postValue(null)
+        }
     }
 
 }

@@ -25,7 +25,8 @@ object MainModule {
                 App.accountManager,
                 App.releaseNotesManager,
                 service,
-                App.torKitManager
+                App.torKitManager,
+                App.wc2SessionManager
             ) as T
         }
     }
@@ -49,6 +50,11 @@ object MainModule {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)
         context.overridePendingTransition(0, 0)
+    }
+
+    sealed class BadgeType {
+        object BadgeDot : BadgeType()
+        class BadgeNumber(val number: Int) : BadgeType()
     }
 
     @Parcelize
