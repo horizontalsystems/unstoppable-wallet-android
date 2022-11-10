@@ -88,6 +88,7 @@ class WalletConnectListViewModel(
 
     private fun getSuitableIcon(imageUrls: List<String>): String? {
         return imageUrls.lastOrNull { it.endsWith("png", ignoreCase = true) }
+            ?: imageUrls.lastOrNull()
     }
 
     override fun onCleared() {

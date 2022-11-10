@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -78,14 +79,19 @@ fun WCSessionCell(
                     .clip(RoundedCornerShape(4.dp)),
                 painter = rememberAsyncImagePainter(
                     model = session.imageUrl,
-                    error = painterResource(R.drawable.coin_placeholder)
+                    error = painterResource(R.drawable.ic_platform_placeholder_24)
                 ),
                 contentDescription = null,
             )
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
+                val title = when {
+                    session.title.isNotBlank() -> session.title
+                    else -> stringResource(id = R.string.WalletConnect_DAppUnknown)
+                }
+
                 body_leah(
-                    text = session.title,
+                    text = title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
