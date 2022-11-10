@@ -1,21 +1,26 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
-import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonDefaults
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import io.horizontalsystems.bankwallet.R
 
 @Composable
 fun HsRadioButton(
     selected: Boolean,
-    onClick: (() -> Unit)?,
+    onClick: () -> Unit,
 ) {
-    RadioButton(
-        selected = selected,
-        onClick = onClick,
-        colors = RadioButtonDefaults.colors(
-            selectedColor = ComposeAppTheme.colors.jacob,
-            unselectedColor = ComposeAppTheme.colors.grey
-        )
+    val painterResource = if (selected) {
+        painterResource(id = R.drawable.ic_radion)
+    } else {
+        painterResource(id = R.drawable.ic_radioff)
+    }
+
+    Image(
+        painter = painterResource,
+        modifier = Modifier.clickable(onClick = onClick),
+        contentDescription = null
     )
 }
