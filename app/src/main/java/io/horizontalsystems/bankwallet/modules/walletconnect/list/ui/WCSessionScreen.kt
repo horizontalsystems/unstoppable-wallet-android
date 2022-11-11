@@ -36,13 +36,14 @@ import kotlinx.coroutines.delay
 @Composable
 fun WCSessionsScreen(
     navController: NavController,
-    onAddressScanned: (String) -> Unit
+    deepLinkUri: String?,
+    openUri: (String) -> Unit
 ) {
     val qrScannerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
-                onAddressScanned(scannedText)
+                openUri(scannedText)
             }
         }
 
@@ -50,6 +51,8 @@ fun WCSessionsScreen(
         WCSessionsContent(
             navController,
             qrScannerLauncher,
+            deepLinkUri,
+            openUri
         )
     }
 }
@@ -58,14 +61,21 @@ fun WCSessionsScreen(
 fun WCSessionsContent(
     navController: NavController,
     qrScannerLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
-    viewModel: WalletConnectListViewModel = viewModel(factory = WalletConnectListModule.Factory()),
+    deepLinkUri: String?,
+    openUri: (String) -> Unit,
+    viewModel: WalletConnectListViewModel = viewModel(factory = WalletConnectListModule.Factory(deepLinkUri)),
     viewModelWc2: WC2ListViewModel = viewModel(factory = WalletConnectListModule.FactoryWC2())
 ) {
     val context = LocalContext.current
     val noSessions = viewModel.sectionItem == null && viewModelWc2.sectionItem == null
 
+    viewModel.openDeeplink?.let {
+        openUri.invoke(it)
+        viewModel.deeplinkOpened()
+    }
+
     LaunchedEffect(Unit) {
-        if (!viewModel.initialConnectionPrompted && noSessions) {
+        if (deepLinkUri == null && !viewModel.initialConnectionPrompted && noSessions) {
             delay(300)
             viewModel.initialConnectionPrompted = true
             qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))

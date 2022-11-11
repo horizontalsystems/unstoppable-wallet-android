@@ -13,7 +13,7 @@ import kotlinx.parcelize.Parcelize
 
 object MainModule {
 
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val wcDeepLink: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MainService(RootUtil, App.localStorage)
@@ -26,7 +26,9 @@ object MainModule {
                 App.releaseNotesManager,
                 service,
                 App.torKitManager,
-                App.wc2SessionManager
+                App.wc2SessionManager,
+                App.wc1Manager,
+                wcDeepLink
             ) as T
         }
     }

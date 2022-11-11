@@ -10,7 +10,15 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="io.horizontalsystems.bankwallet.modules.main.MainFragment"
-        tools:layout="@layout/fragment_main"/>
+        tools:layout="@layout/fragment_main">
+        <deepLink
+            app:action=""
+            android:id="@+id/deepLink"
+            app:uri="wc:{topic}"/>
+        <argument android:name="topic" app:argType="string"/>
+        <argument android:name="bridge" app:argType="string"/>
+        <argument android:name="key" app:argType="string"/>
+    </fragment>
     <fragment
         android:id="@+id/wc2SignMessageRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestFragment"/>

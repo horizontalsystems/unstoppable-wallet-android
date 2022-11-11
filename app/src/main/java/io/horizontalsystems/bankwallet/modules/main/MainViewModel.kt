@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
@@ -26,7 +27,9 @@ class MainViewModel(
     private val releaseNotesManager: ReleaseNotesManager,
     private val service: MainService,
     private val torManager: ITorManager,
-    wc2SessionManager: WC2SessionManager
+    wc2SessionManager: WC2SessionManager,
+    private val wc1Manager: WC1Manager,
+    private val wcDeepLink: String?
 ) : ViewModel() {
 
     val showRootedDeviceWarningLiveEvent = SingleLiveEvent<Unit>()
@@ -39,6 +42,7 @@ class MainViewModel(
     val openWalletSwitcherLiveEvent = SingleLiveEvent<Pair<List<Account>, Account?>>()
     val torIsActiveLiveData = MutableLiveData(false)
     val playTorActiveAnimationLiveData = MutableLiveData(false)
+    val walletConnectSupportState = MutableLiveData<WC1Manager.SupportState?>()
 
     private val disposables = CompositeDisposable()
     private var contentHidden = pinComponent.isLocked
@@ -95,11 +99,18 @@ class MainViewModel(
                     disposables.add(it)
                 }
 
+        wcDeepLink?.let {
+            val wcSupportState = wc1Manager.getWalletConnectSupportState()
+            walletConnectSupportState.postValue(wcSupportState)
+        }
+
         showWhatsNew()
     }
 
     private fun getTabToOpen(): MainModule.MainTab {
-        if(service.relaunchBySettingChange){
+        if (wcDeepLink != null) {
+            return MainModule.MainTab.Settings
+        } else if (service.relaunchBySettingChange) {
             service.relaunchBySettingChange = false
             return MainModule.MainTab.Settings
         }
@@ -143,6 +154,10 @@ class MainViewModel(
 
     fun animationPlayed() {
         playTorActiveAnimationLiveData.postValue(false)
+    }
+
+    fun wcSupportStateHandled() {
+        walletConnectSupportState.postValue(null)
     }
 
     private fun showWhatsNew() {

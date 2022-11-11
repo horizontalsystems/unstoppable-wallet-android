@@ -15,7 +15,8 @@ import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 
 class WalletConnectListViewModel(
-    private val service: WalletConnectListService
+    private val service: WalletConnectListService,
+    deepLinkUri: String?
 ) : ViewModel() {
     var initialConnectionPrompted = false
 
@@ -26,6 +27,9 @@ class WalletConnectListViewModel(
     val killingSessionInProcessLiveEvent = SingleLiveEvent<Unit>()
     val killingSessionCompletedLiveEvent = SingleLiveEvent<Unit>()
     val killingSessionFailedLiveEvent = SingleLiveEvent<String>()
+
+    var openDeeplink by mutableStateOf<String?>(deepLinkUri)
+        private set
 
     init {
         service.itemsObservable
@@ -39,6 +43,10 @@ class WalletConnectListViewModel(
         service.sessionKillingStateObservable
             .subscribeIO { sync(it) }
             .let { disposables.add(it) }
+    }
+
+    fun deeplinkOpened() {
+        openDeeplink = null
     }
 
     fun onDelete(sessionsId: String) {
