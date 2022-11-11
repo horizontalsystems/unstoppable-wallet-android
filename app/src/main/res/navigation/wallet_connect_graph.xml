@@ -5,15 +5,7 @@
     app:startDestination="@+id/wcListFragment">
     <fragment
         android:id="@+id/wcListFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment">
-        <deepLink
-            app:action=""
-            android:id="@+id/deepLink"
-            app:uri="wc:{topic}"/>
-        <argument android:name="topic" app:argType="string"/>
-        <argument android:name="bridge" app:argType="string"/>
-        <argument android:name="key" app:argType="string"/>
-    </fragment>
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment"/>
     <fragment
         android:id="@+id/wcSessionFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionFragment"/>

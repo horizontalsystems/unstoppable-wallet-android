@@ -21,17 +21,22 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.databinding.FragmentMainBinding
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
+import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Manager.SupportState
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetWalletSelectDialog
 import io.horizontalsystems.core.findNavController
 
 class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
 
-    private val viewModel by viewModels<MainViewModel> { MainModule.Factory() }
+    private val viewModel by viewModels<MainViewModel> {
+        MainModule.Factory(activity?.intent?.data?.toString())
+    }
     private var bottomBadgeView: View? = null
 
     private var _binding: FragmentMainBinding? = null
@@ -95,6 +100,28 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
                 viewModel.onLongPressBalanceTab()
                 true
             }
+
+        viewModel.walletConnectSupportState.observe(viewLifecycleOwner) { wcSupportState ->
+            viewModel.wcSupportStateHandled()
+            when (wcSupportState) {
+                SupportState.Supported -> {
+                    findNavController().slideFromRight(R.id.wallet_connect_graph)
+                }
+                SupportState.NotSupportedDueToNoActiveAccount -> {
+                    activity?.intent?.data = null
+                    findNavController().slideFromBottom(R.id.wcErrorNoAccountFragment)
+                }
+                is SupportState.NotSupported -> {
+                    activity?.intent?.data = null
+                    findNavController().slideFromBottom(
+                        R.id.wcAccountTypeNotSupportedDialog,
+                        WCAccountTypeNotSupportedDialog.prepareParams(wcSupportState.accountTypeDescription)
+                    )
+                }
+                null -> {}
+            }
+        }
+
 
         viewModel.openWalletSwitcherLiveEvent.observe(
             viewLifecycleOwner,

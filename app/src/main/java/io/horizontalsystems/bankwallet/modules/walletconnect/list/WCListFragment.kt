@@ -22,13 +22,17 @@ class WCListFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val deepLinkUri = activity?.intent?.data?.toString()
+        activity?.intent?.data = null
+
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
                 WCSessionsScreen(
-                    findNavController()
+                    findNavController(),
+                    deepLinkUri
                 ) { connectUri -> handleConnectionUri(connectUri) }
             }
         }
@@ -51,14 +55,4 @@ class WCListFragment : BaseFragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val deepLinkUri = activity?.intent?.data?.toString()
-
-        if (deepLinkUri != null) {
-            activity?.intent?.data = null
-
-            handleConnectionUri(deepLinkUri)
-        }
-    }
 }
