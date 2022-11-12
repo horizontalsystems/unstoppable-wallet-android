@@ -23,7 +23,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
         else
             BigDecimal.ONE.divide(price, price.scale(), RoundingMode.HALF_UP)
 
-        return "${baseToken.coin.code} = ${coinAmount(inversePrice, quoteToken.coin.code)} "
+        return "1 ${baseToken.coin.code} = ${coinAmount(inversePrice, quoteToken.coin.code)}"
     }
 
     fun priceImpactViewItem(

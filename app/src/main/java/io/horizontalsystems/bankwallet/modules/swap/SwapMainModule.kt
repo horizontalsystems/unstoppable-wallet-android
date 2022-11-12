@@ -46,9 +46,9 @@ object SwapMainModule {
 
     @Parcelize
     object UniswapProvider : ISwapProvider {
-        override val id = "uniswap"
-        override val title = "Uniswap"
-        override val url = "https://uniswap.org/"
+        override val id get() = "uniswap"
+        override val title get() = "Uniswap"
+        override val url get() = "https://uniswap.org/"
         override val fragment: SwapBaseFragment
             get() = UniswapFragment()
 
@@ -59,9 +59,9 @@ object SwapMainModule {
 
     @Parcelize
     object PancakeSwapProvider : ISwapProvider {
-        override val id = "pancake"
-        override val title = "PancakeSwap"
-        override val url = "https://pancakeswap.finance/"
+        override val id get() = "pancake"
+        override val title get() = "PancakeSwap"
+        override val url get() = "https://pancakeswap.finance/"
         override val fragment: SwapBaseFragment
             get() = UniswapFragment()
 
@@ -72,9 +72,9 @@ object SwapMainModule {
 
     @Parcelize
     object OneInchProvider : ISwapProvider {
-        override val id = "oneinch"
-        override val title = "1inch"
-        override val url = "https://app.1inch.io/"
+        override val id get() = "oneinch"
+        override val title get() = "1inch"
+        override val url get() = "https://app.1inch.io/"
         override val fragment: SwapBaseFragment
             get() = OneInchFragment()
 
@@ -91,9 +91,9 @@ object SwapMainModule {
 
     @Parcelize
     object QuickSwapProvider : ISwapProvider {
-        override val id = "quickswap"
-        override val title = "QuickSwap"
-        override val url = "https://quickswap.exchange/"
+        override val id get() = "quickswap"
+        override val title get() = "QuickSwap"
+        override val url get() = "https://quickswap.exchange/"
         override val fragment: SwapBaseFragment
             get() = UniswapFragment()
 
@@ -125,6 +125,8 @@ object SwapMainModule {
 
         val amountType: AmountType
         val amountTypeObservable: Observable<AmountType>
+
+        val timeoutProgressObservable: Observable<Float>
 
         fun enterTokenFrom(token: Token?)
         fun enterAmountFrom(amount: BigDecimal?)

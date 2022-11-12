@@ -29,6 +29,7 @@ class OneInchTradeService(
     private val amountFromSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val amountToSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val stateSubject = PublishSubject.create<State>()
+    private val tradeTimeoutSubject = PublishSubject.create<Float>()
     //endregion
 
     //region outputs
@@ -66,6 +67,9 @@ class OneInchTradeService(
             amountTypeSubject.onNext(value)
         }
     override val amountTypeObservable: Observable<AmountType> = amountTypeSubject
+
+    override val timeoutProgressObservable: Observable<Float>
+        get() = tradeTimeoutSubject
 
     var state: State = State.NotReady()
         private set(value) {

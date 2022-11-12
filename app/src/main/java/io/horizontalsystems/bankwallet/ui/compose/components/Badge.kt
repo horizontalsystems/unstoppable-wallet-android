@@ -117,8 +117,8 @@ fun BadgeStepCircle(
     text: String,
     active: Boolean = false
 ) {
-    val background = if (active) ComposeAppTheme.colors.bran else ComposeAppTheme.colors.steel20
-    val textColor = if (active) ComposeAppTheme.colors.claude else ComposeAppTheme.colors.grey
+    val background = if (active) ComposeAppTheme.colors.claude else ComposeAppTheme.colors.steel20
+    val textColor = if (active) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey50
 
     Text(
         text = text,
