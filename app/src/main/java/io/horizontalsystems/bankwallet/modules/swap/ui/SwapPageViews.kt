@@ -1,20 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.swap.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
 import io.horizontalsystems.bankwallet.modules.swap.SwapButtons
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -34,27 +32,35 @@ fun SwitchCoinsSection(
     showProgressbar: Boolean,
     onSwitchButtonClick: () -> Unit,
 ) {
-    Box(
+    Row(
         modifier = Modifier
-            .height(48.dp)
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
+            .height(28.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        if (showProgressbar) {
-            Box(Modifier.padding(top = 8.dp)) {
-                HSCircularProgressIndicator()
-            }
-        }
-        HsIconButton(
-            modifier = Modifier.align(Alignment.Center),
-            onClick = onSwitchButtonClick,
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_switch),
-                contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
-            )
-        }
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10
+        )
+//        if (showProgressbar) {
+//            Box(Modifier.padding(top = 8.dp)) {
+//                HSCircularProgressIndicator()
+//            }
+//        }
+        ButtonSecondaryCircle(
+            icon = R.drawable.ic_arrow_down_20,
+            onClick = onSwitchButtonClick
+        )
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10
+        )
     }
 }
 
@@ -90,41 +96,6 @@ fun SwapAllowance(viewModel: SwapAllowanceViewModel) {
 }
 
 @Composable
-fun SwapAllowanceSteps(approveStep: SwapMainModule.ApproveStep?) {
-    val step1Active: Boolean
-    val step2Active: Boolean
-    when (approveStep) {
-        SwapMainModule.ApproveStep.ApproveRequired, SwapMainModule.ApproveStep.Approving -> {
-            step1Active = true
-            step2Active = false
-        }
-        SwapMainModule.ApproveStep.Approved -> {
-            step1Active = false
-            step2Active = true
-        }
-        SwapMainModule.ApproveStep.NA, null -> {
-            return
-        }
-    }
-
-    Spacer(Modifier.height(24.dp))
-    Row(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        BadgeStepCircle(text = "1", active = step1Active)
-        Divider(
-            Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp)
-                .background(ComposeAppTheme.colors.steel20)
-                .height(2.dp)
-        )
-        BadgeStepCircle(text = "2", active = step2Active)
-    }
-}
-
-@Composable
 fun ActionButtons(
     buttons: SwapButtons?,
     onTapRevoke: () -> Unit,
@@ -132,7 +103,6 @@ fun ActionButtons(
     onTapProceed: () -> Unit,
 ) {
     buttons?.let { actionButtons ->
-        Spacer(Modifier.height(24.dp))
         Row(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -148,27 +118,75 @@ fun ActionButtons(
             }
 
             if (actionButtons.approve != SwapActionState.Hidden) {
-                ButtonPrimaryDefault(
+                ApproveButton(
                     modifier = Modifier.weight(1f),
                     title = actionButtons.approve.title,
                     onClick = onTapApprove,
-                    enabled = actionButtons.approve is SwapActionState.Enabled
+                    enabled = actionButtons.approve is SwapActionState.Enabled,
+                    step = if (actionButtons.proceed != SwapActionState.Hidden) 1 else null
                 )
-                Spacer(Modifier.width(4.dp))
+                if (actionButtons.proceed != SwapActionState.Hidden) {
+                    Spacer(Modifier.width(8.dp))
+                }
             }
 
             if (actionButtons.proceed != SwapActionState.Hidden) {
-                ButtonPrimaryYellow(
+                ProceedButton(
                     modifier = Modifier.weight(1f),
                     title = actionButtons.proceed.title,
                     onClick = onTapProceed,
-                    enabled = actionButtons.proceed is SwapActionState.Enabled
+                    enabled = actionButtons.proceed is SwapActionState.Enabled,
+                    step = if (actionButtons.approve != SwapActionState.Hidden) 2 else null
                 )
             }
         }
     }
 }
 
+@Composable
+fun ApproveButton(modifier: Modifier, title: String, onClick: () -> Unit, enabled: Boolean, step: Int? = null) {
+    ButtonPrimary(
+        modifier = modifier,
+        onClick = onClick,
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
+            backgroundColor = ComposeAppTheme.colors.leah,
+            contentColor = ComposeAppTheme.colors.claude,
+            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
+        ),
+        content = {
+            step?.let {
+                BadgeStepCircle(text = "$it", active = enabled)
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+
+        },
+        enabled = enabled
+    )
+}
+
+@Composable
+fun ProceedButton(modifier: Modifier, title: String, onClick: () -> Unit, enabled: Boolean, step: Int? = null) {
+    ButtonPrimary(
+        modifier = modifier,
+        onClick = onClick,
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
+            backgroundColor = ComposeAppTheme.colors.yellowD,
+            contentColor = ComposeAppTheme.colors.dark,
+            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
+            disabledContentColor = ComposeAppTheme.colors.grey50,
+        ),
+        content = {
+            step?.let {
+                BadgeStepCircle(text = "$it", active = enabled)
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        },
+        enabled = enabled
+    )
+}
 
 @Preview
 @Composable
@@ -196,13 +214,5 @@ private fun Preview_SwapError() {
 private fun Preview_SwitchCoinsSection() {
     ComposeAppTheme {
         SwitchCoinsSection(true, {})
-    }
-}
-
-@Preview
-@Composable
-private fun Preview_SwapAllowanceSteps() {
-    ComposeAppTheme {
-        SwapAllowanceSteps(SwapMainModule.ApproveStep.ApproveRequired)
     }
 }

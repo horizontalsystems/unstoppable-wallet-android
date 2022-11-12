@@ -59,9 +59,9 @@ class SwapMainFragment : BaseFragment() {
 
         setProviderView(mainViewModel.provider)
 
-        mainViewModel.providerLiveData.observe(viewLifecycleOwner, { provider ->
+        mainViewModel.providerLiveData.observe(viewLifecycleOwner) { provider ->
             setProviderView(provider)
-        })
+        }
 
         binding.topMenuCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)

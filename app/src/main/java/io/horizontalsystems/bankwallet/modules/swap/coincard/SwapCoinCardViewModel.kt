@@ -67,9 +67,11 @@ class SwapCoinCardViewModel(
     fun maxEnabledLiveData(): LiveData<Boolean> = maxEnabledLiveData
 
     private val prefix = if (switchService.amountType == AmountType.Currency) fiatService.currency.symbol else null
-    var inputParams by mutableStateOf(InputParams(
-        switchService.amountType, prefix, switchService.toggleAvailable
-    ))
+    var inputParams by mutableStateOf(
+        InputParams(
+            switchService.amountType, prefix, switchService.toggleAvailable
+        )
+    )
 
     fun onSelectCoin(token: Token) {
         coinCardService.onSelectCoin(token)
@@ -85,6 +87,15 @@ class SwapCoinCardViewModel(
         val fullAmountInfo = fiatService.buildAmountInfo(validAmount)
 
         syncFullAmountInfo(fullAmountInfo, true, validAmount)
+    }
+
+    fun onSetAmountInBalancePercent(percent: Int) {
+        val coinDecimals = coinCardService.token?.decimals ?: maxValidDecimals
+        val percentRatio = BigDecimal.valueOf(percent.toDouble() / 100)
+        val coinAmount = coinCardService.balance?.multiply(percentRatio)?.setScale(coinDecimals, RoundingMode.FLOOR) ?: return
+
+        val fullAmountInfo = fiatService.buildForCoin(coinAmount)
+        syncFullAmountInfo(fullAmountInfo, true, coinAmount)
     }
 
     fun isValid(amount: String?): Boolean {
@@ -226,9 +237,9 @@ class SwapCoinCardViewModel(
         updateInputFields()
 
         if (fullAmountInfo == null) {
-            if (!force && coinCardService.isEstimated) {
-                amountLiveData.postValue(Pair(uuidString, null))
-            }
+//            if (!force && coinCardService.isEstimated) {
+//            }
+            amountLiveData.postValue(Pair(uuidString, null))
             secondaryInfoLiveData.postValue(secondaryInfoPlaceHolder())
 
             setCoinValueToService(inputAmount, force)

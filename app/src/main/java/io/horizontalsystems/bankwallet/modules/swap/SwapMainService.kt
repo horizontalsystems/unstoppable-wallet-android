@@ -34,8 +34,7 @@ class SwapMainService(
 
     private fun getDex(tokenFrom: Token?): SwapMainModule.Dex {
         val blockchain = getBlockchainForToken(tokenFrom)
-        val provider = getSwapProvider(blockchain.type)
-            ?: throw IllegalStateException("No provider found for ${blockchain}")
+        val provider = getSwapProvider(blockchain.type) ?: throw IllegalStateException("No provider found for ${blockchain.name}")
 
         return SwapMainModule.Dex(blockchain, provider)
     }

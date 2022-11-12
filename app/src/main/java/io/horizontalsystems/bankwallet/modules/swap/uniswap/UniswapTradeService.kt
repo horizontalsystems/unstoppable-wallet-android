@@ -13,9 +13,11 @@ import io.horizontalsystems.uniswapkit.models.TradeType
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.*
+import kotlin.concurrent.schedule
 
 
 class UniswapTradeService(
@@ -26,6 +28,9 @@ class UniswapTradeService(
     private var swapDataDisposable: Disposable? = null
     private var lastBlockDisposable: Disposable? = null
     private var swapData: SwapData? = null
+    private var timer: Timer? = null
+    private val timeoutPeriodSeconds = evmKit.chain.syncInterval
+    private val timeoutProgressStep = 1f / (timeoutPeriodSeconds * 2)
 
     //region internal subjects
     private val amountTypeSubject = PublishSubject.create<AmountType>()
@@ -34,7 +39,7 @@ class UniswapTradeService(
     private val amountFromSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val amountToSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val stateSubject = PublishSubject.create<State>()
-    private val tradeOptionsSubject = PublishSubject.create<SwapTradeOptions>()
+    private val timeoutProgressSubject = BehaviorSubject.create<Float>()
     //endregion
 
     //region outputs
@@ -73,6 +78,9 @@ class UniswapTradeService(
         }
     override val amountTypeObservable: Observable<AmountType> = amountTypeSubject
 
+    override val timeoutProgressObservable: Observable<Float>
+        get() = timeoutProgressSubject
+
     var state: State = State.NotReady()
         private set(value) {
             field = value
@@ -83,11 +91,8 @@ class UniswapTradeService(
     var tradeOptions: SwapTradeOptions = SwapTradeOptions()
         set(value) {
             field = value
-            tradeOptionsSubject.onNext(value)
             syncTradeData()
         }
-
-    val tradeOptionsObservable: Observable<SwapTradeOptions> = tradeOptionsSubject
 
     @Throws
     fun transactionData(tradeData: TradeData): TransactionData {
@@ -177,12 +182,41 @@ class UniswapTradeService(
         enterTokenFrom(swapCoin)
     }
 
+    private fun startTimer() {
+        timer = Timer().apply {
+            schedule(0, 500) {
+                onFireTimer()
+            }
+        }
+    }
+
+    private fun stopTimer() {
+        timer?.cancel()
+        timer = null
+    }
+
+    private fun resetTimer() {
+        stopTimer()
+        startTimer()
+    }
+
+    private fun onFireTimer() {
+        val currentTimeoutProgress = timeoutProgressSubject.value ?: return
+        val newTimeoutProgress = currentTimeoutProgress - timeoutProgressStep
+
+        timeoutProgressSubject.onNext(newTimeoutProgress.coerceAtLeast(0f))
+    }
+
     fun start() {
+        sync()
         lastBlockDisposable = evmKit.lastBlockHeightFlowable
             .subscribeOn(Schedulers.io())
-            .subscribe {
-                syncSwapData()
-            }
+            .subscribe { sync() }
+    }
+
+    private fun sync() {
+        syncSwapData()
+        resetTimer()
     }
 
     fun stop() {
@@ -191,6 +225,7 @@ class UniswapTradeService(
 
     fun onCleared() {
         clearDisposables()
+        stopTimer()
     }
     //endregion
 
@@ -223,6 +258,7 @@ class UniswapTradeService(
             .subscribe({
                 swapData = it
                 syncTradeData()
+                timeoutProgressSubject.onNext(1f)
             }, { error ->
                 state = State.NotReady(listOf(error))
             })
@@ -243,8 +279,7 @@ class UniswapTradeService(
                 AmountType.ExactFrom -> TradeType.ExactIn
                 AmountType.ExactTo -> TradeType.ExactOut
             }
-            val tradeData =
-                uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
+            val tradeData = uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
             handle(tradeData)
         } catch (e: Throwable) {
             state = State.NotReady(listOf(e))
