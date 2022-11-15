@@ -30,11 +30,11 @@ class SolanaTransactionConverter(
         val outgoingTransfers = mutableListOf<SolanaTransactionRecord.Transfer>()
 
         transaction.amount?.let {
-            val transactionValue = TransactionValue.CoinValue(baseToken, it.movePointLeft(baseToken.decimals))
-
             if (transaction.from == userAddress) {
+                val transactionValue = TransactionValue.CoinValue(baseToken, it.multiply(BigDecimal.valueOf(-1)).movePointLeft(baseToken.decimals))
                 outgoingTransfers.add(SolanaTransactionRecord.Transfer(transaction.to, transactionValue))
             } else if (transaction.to == userAddress) {
+                val transactionValue = TransactionValue.CoinValue(baseToken, it.movePointLeft(baseToken.decimals))
                 incomingTransfers.add(SolanaTransactionRecord.Transfer(transaction.from, transactionValue))
             } else {}
         }
