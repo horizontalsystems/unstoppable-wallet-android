@@ -15,7 +15,7 @@ object WC2SessionModule {
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val sessionService = WC2SessionService(
+            return WC2SessionViewModel(
                 App.wc2Service,
                 App.wc2Manager,
                 App.wc2SessionManager,
@@ -25,9 +25,7 @@ object WC2SessionModule {
                 App.evmBlockchainManager,
                 sessionTopic,
                 connectionLink,
-            )
-
-            return WC2SessionViewModel(sessionService) as T
+            ) as T
         }
     }
 
