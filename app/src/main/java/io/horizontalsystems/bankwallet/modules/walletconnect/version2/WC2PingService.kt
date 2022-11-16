@@ -7,17 +7,12 @@ import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 
 class WC2PingService {
-    sealed class State {
-        object Connecting : State()
-        object Connected : State()
-        class Disconnected(val error: Throwable = Error("Disconnected")) : State()
-    }
 
-    private val stateSubject = PublishSubject.create<State>()
-    val stateObservable: Flowable<State>
+    private val stateSubject = PublishSubject.create<WC2PingServiceState>()
+    val stateObservable: Flowable<WC2PingServiceState>
         get() = stateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    var state: State = State.Disconnected()
+    var state: WC2PingServiceState = WC2PingServiceState.Disconnected()
         private set(value) {
             field = value
 
@@ -25,26 +20,26 @@ class WC2PingService {
         }
 
     fun ping(topic: String) {
-        state = State.Connecting
+        state = WC2PingServiceState.Connecting
         val ping = Sign.Params.Ping(topic)
 
         SignClient.ping(ping, object : Sign.Listeners.SessionPing {
             override fun onSuccess(pingSuccess: Sign.Model.Ping.Success) {
-                state = State.Connected
+                state = WC2PingServiceState.Connected
             }
 
             override fun onError(pingError: Sign.Model.Ping.Error) {
-                state = State.Disconnected(pingError.error)
+                state = WC2PingServiceState.Disconnected(pingError.error)
             }
         })
     }
 
     fun receiveResponse() {
-        state = State.Connected
+        state = WC2PingServiceState.Connected
     }
 
     fun disconnect() {
-        state = State.Disconnected()
+        state = WC2PingServiceState.Disconnected()
     }
 
 }
