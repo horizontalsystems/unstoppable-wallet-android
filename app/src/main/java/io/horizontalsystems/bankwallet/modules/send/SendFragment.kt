@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
+import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaScreen
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaViewModel
@@ -73,6 +74,8 @@ class SendFragment : BaseFragment() {
                     BlockchainType.Optimism,
                     BlockchainType.ArbitrumOne -> {
                         val factory = SendEvmModule.Factory(wallet)
+                        val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(R.id.sendXFragment) { factory }
+                        val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
                         val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment) { factory }
 
                         SendEvmScreen(findNavController(), sendEvmViewModel, amountInputModeViewModel)
