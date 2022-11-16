@@ -41,31 +41,25 @@ class WC2SessionViewModel(
 
     private val disposables = CompositeDisposable()
 
-    var peerMeta by mutableStateOf<WCSessionModule.PeerMetaItem?>(null)
-        private set
+    private var peerMeta: WCSessionModule.PeerMetaItem? = null
+    private var closeEnabled = false
+    private var connecting = false
+    private var buttonStates: WCSessionButtonStates? = null
+    private var hint: Int? = null
+    private var showError: String? = null
+    private var blockchains = listOf<WC2SessionModule.BlockchainViewItem>()
+    private var status: WCSessionViewModel.Status? = null
 
-    var invalidUrlError by mutableStateOf(false)
-        private set
-
-    var closeEnabled by mutableStateOf(false)
-        private set
-
-    var connecting by mutableStateOf(false)
-        private set
-
-    var buttonStates by mutableStateOf<WCSessionButtonStates?>(null)
-        private set
-
-    var hint by mutableStateOf<Int?>(null)
-        private set
-
-    var showError by mutableStateOf<String?>(null)
-        private set
-
-    var blockchains by mutableStateOf<List<WC2SessionModule.BlockchainViewItem>>(listOf())
-        private set
-
-    var status by mutableStateOf<WCSessionViewModel.Status?>(null)
+    var uiState by mutableStateOf(WC2SessionUiState(
+        peerMeta = peerMeta,
+        closeEnabled = closeEnabled,
+        connecting = connecting,
+        buttonStates = buttonStates,
+        hint = hint,
+        showError = showError,
+        blockchains = blockchains,
+        status = status,
+    ))
         private set
 
     private var sessionServiceState: WC2SessionServiceState = WC2SessionServiceState.Idle
@@ -218,6 +212,21 @@ class WC2SessionViewModel(
 
         setButtons(state, connection)
         setError(state)
+
+        emitState()
+    }
+
+    private fun emitState() {
+        uiState = WC2SessionUiState(
+            peerMeta = peerMeta,
+            closeEnabled = closeEnabled,
+            connecting = connecting,
+            buttonStates = buttonStates,
+            hint = hint,
+            showError = showError,
+            blockchains = blockchains,
+            status = status,
+        )
     }
 
     fun cancel() {
@@ -422,3 +431,14 @@ class WC2SessionViewModel(
 
 
 }
+
+data class WC2SessionUiState(
+    val peerMeta: WCSessionModule.PeerMetaItem?,
+    val closeEnabled: Boolean,
+    val connecting: Boolean,
+    val buttonStates: WCSessionButtonStates?,
+    val hint: Int?,
+    val showError: String?,
+    val blockchains: List<WC2SessionModule.BlockchainViewItem>,
+    val status: WCSessionViewModel.Status?
+)
