@@ -154,8 +154,7 @@ class WC2SessionViewModel(
                     is WC2Service.Event.Error -> {
                         sessionServiceState = Invalid(event.error)
                     }
-                    WC2Service.Event.Default,
-                    WC2Service.Event.Ready -> {
+                    WC2Service.Event.Default -> {
                     }
                 }
             }
