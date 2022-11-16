@@ -29,7 +29,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.WCSessionError
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.CONNECTION_LINK_KEY
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.SESSION_TOPIC_KEY
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -87,31 +86,26 @@ fun WCSessionPage(
     navController: NavController,
     viewModel: WC2SessionViewModel,
 ) {
+    val uiState = viewModel.uiState
+
     ComposeAppTheme {
         Column(
             modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
         ) {
             AppBar(
                 TranslatableString.ResString(R.string.WalletConnect_Title),
-                showSpinner = viewModel.connecting,
+                showSpinner = uiState.connecting,
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
                         onClick = { navController.popBackStack() },
-                        enabled = viewModel.closeEnabled,
-                        tint = if (viewModel.closeEnabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey50
+                        enabled = uiState.closeEnabled,
+                        tint = if (uiState.closeEnabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey50
                     )
                 )
             )
-            if (viewModel.invalidUrlError) {
-                WCSessionError(
-                    stringResource(R.string.WalletConnect_Error_InvalidUrl),
-                    navController
-                )
-            } else {
-                WCSessionListContent(viewModel)
-            }
+            WCSessionListContent(viewModel)
         }
     }
 }
@@ -120,9 +114,10 @@ fun WCSessionPage(
 private fun ColumnScope.WCSessionListContent(
     viewModel: WC2SessionViewModel
 ) {
+    val uiState = viewModel.uiState
 
     val view = LocalView.current
-    viewModel.showError?.let { HudHelper.showErrorMessage(view, it) }
+    uiState.showError?.let { HudHelper.showErrorMessage(view, it) }
 
     Column(
         modifier = Modifier
@@ -144,31 +139,31 @@ private fun ColumnScope.WCSessionListContent(
                     .size(72.dp)
                     .clip(RoundedCornerShape(15.dp)),
                 painter = rememberAsyncImagePainter(
-                    model = viewModel.peerMeta?.icon,
+                    model = uiState.peerMeta?.icon,
                     error = painterResource(R.drawable.coin_placeholder)
                 ),
                 contentDescription = null,
             )
             Text(
                 modifier = Modifier.padding(start = 16.dp),
-                text = viewModel.peerMeta?.name ?: "",
+                text = uiState.peerMeta?.name ?: "",
                 style = ComposeAppTheme.typography.headline1,
                 color = ComposeAppTheme.colors.leah
             )
         }
         val composableItems = mutableListOf<@Composable () -> Unit>().apply {
-            add { StatusCell(viewModel.status) }
+            add { StatusCell(uiState.status) }
             add {
-                val url = viewModel.peerMeta?.url?.let { TextHelper.getCleanedUrl(it) } ?: ""
+                val url = uiState.peerMeta?.url?.let { TextHelper.getCleanedUrl(it) } ?: ""
                 TitleValueCell(stringResource(R.string.WalletConnect_Url), url)
             }
             add {
                 TitleValueCell(
                     stringResource(R.string.WalletConnect_ActiveWallet),
-                    viewModel.peerMeta?.accountName ?: ""
+                    uiState.peerMeta?.accountName ?: ""
                 )
             }
-            viewModel.blockchains.forEach {
+            uiState.blockchains.forEach {
                 add { BlockchainCell(it.name, it.address) }
             }
         }
@@ -176,7 +171,7 @@ private fun ColumnScope.WCSessionListContent(
         CellSingleLineLawrenceSection(
             composableItems
         )
-        viewModel.hint?.let {
+        uiState.hint?.let {
             Spacer(Modifier.height(12.dp))
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -185,7 +180,7 @@ private fun ColumnScope.WCSessionListContent(
         }
         Spacer(Modifier.height(24.dp))
     }
-    viewModel.buttonStates?.let { ActionButtons(viewModel, it) }
+    uiState.buttonStates?.let { ActionButtons(viewModel, it) }
 }
 
 @Composable
