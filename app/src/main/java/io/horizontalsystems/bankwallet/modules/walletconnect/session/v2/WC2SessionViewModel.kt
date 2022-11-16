@@ -71,14 +71,6 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
                 disposables.add(it)
             }
 
-        service.networkConnectionErrorObservable
-            .subscribeIO {
-                showErrorLiveEvent.postValue(Unit)
-            }
-            .let {
-                disposables.add(it)
-            }
-
         service.start()
     }
 
@@ -112,19 +104,35 @@ class WC2SessionViewModel(private val service: WC2SessionService) : ViewModel() 
     }
 
     fun cancel() {
-        service.reject()
+        try {
+            service.reject()
+        } catch (e: NoInternetException) {
+            showErrorLiveEvent.postValue(Unit)
+        }
     }
 
     fun connect() {
-        service.approve()
+        try {
+            service.approve()
+        } catch (e: NoInternetException) {
+            showErrorLiveEvent.postValue(Unit)
+        }
     }
 
     fun disconnect() {
-        service.disconnect()
+        try {
+            service.disconnect()
+        } catch (e: NoInternetException) {
+            showErrorLiveEvent.postValue(Unit)
+        }
     }
 
     fun reconnect() {
-        service.reconnect()
+        try {
+            service.reconnect()
+        } catch (e: NoInternetException) {
+            showErrorLiveEvent.postValue(Unit)
+        }
     }
 
     private fun getBlockchainViewItems(blockchains: List<WCBlockchain>) = blockchains.map {

@@ -42,10 +42,6 @@ class WC2SessionService(
     private var proposal: Sign.Model.SessionProposal? = null
     private var session: Sign.Model.Session? = null
 
-    private val networkConnectionErrorSubject = PublishSubject.create<Unit>()
-    val networkConnectionErrorObservable: Flowable<Unit>
-        get() = networkConnectionErrorSubject.toFlowable(BackpressureStrategy.BUFFER)
-
     private val stateSubject = PublishSubject.create<State>()
     val stateObservable: Flowable<State>
         get() = stateSubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -168,8 +164,7 @@ class WC2SessionService(
         val proposal = proposal ?: return
 
         if (!connectivityManager.isConnected) {
-            networkConnectionErrorSubject.onNext(Unit)
-            return
+            throw NoInternetException()
         }
 
         service.reject(proposal)
@@ -181,8 +176,7 @@ class WC2SessionService(
         val proposal = proposal ?: return
 
         if (!connectivityManager.isConnected) {
-            networkConnectionErrorSubject.onNext(Unit)
-            return
+            throw NoInternetException()
         }
 
         if (accountManager.activeAccount == null) {
@@ -195,8 +189,7 @@ class WC2SessionService(
 
     fun disconnect() {
         if (!connectivityManager.isConnected) {
-            networkConnectionErrorSubject.onNext(Unit)
-            return
+            throw NoInternetException()
         }
 
         val sessionNonNull = session ?: return
@@ -208,8 +201,7 @@ class WC2SessionService(
 
     fun reconnect() {
         if (!connectivityManager.isConnected) {
-            networkConnectionErrorSubject.onNext(Unit)
-            return
+            throw NoInternetException()
         }
         session?.let {
             pingService.ping(it.topic)
@@ -243,3 +235,5 @@ class WC2SessionService(
         }
     }
 }
+
+class NoInternetException: Throwable("No Internet")
