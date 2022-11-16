@@ -197,15 +197,6 @@ private fun ActionButtons(
                 onClick = { viewModel.connect() }
             )
         }
-        if (buttonsStates.reconnect.visible) {
-            Spacer(Modifier.height(16.dp))
-            ButtonPrimaryYellow(
-                modifier = Modifier.fillMaxWidth(),
-                title = stringResource(R.string.Button_Reconnect),
-                enabled = buttonsStates.reconnect.enabled,
-                onClick = { viewModel.reconnect() }
-            )
-        }
         if (buttonsStates.disconnect.visible) {
             Spacer(Modifier.height(16.dp))
             ButtonPrimaryRed(
