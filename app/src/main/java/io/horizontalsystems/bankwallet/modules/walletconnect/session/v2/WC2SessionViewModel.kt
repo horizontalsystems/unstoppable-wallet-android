@@ -73,7 +73,6 @@ class WC2SessionViewModel(
     private var session: Sign.Model.Session? = null
 
     private var wcBlockchains = listOf<WCBlockchain>()
-    private var appMetaItem: WCSessionModule.PeerMetaItem? = null
 
     init {
         pingService.stateObservable
@@ -89,7 +88,7 @@ class WC2SessionViewModel(
             val existingSession =
                 sessionManager.sessions.firstOrNull { it.topic == topic } ?: return@let
             pingService.ping(existingSession.topic)
-            appMetaItem = existingSession.metaData?.let {
+            peerMeta = existingSession.metaData?.let {
                 WCSessionModule.PeerMetaItem(
                     it.name,
                     it.url,
@@ -124,7 +123,7 @@ class WC2SessionViewModel(
                 when (event) {
                     is WC2Service.Event.WaitingForApproveSession -> {
                         val sessionProposal = event.proposal
-                        appMetaItem = WCSessionModule.PeerMetaItem(
+                        peerMeta = WCSessionModule.PeerMetaItem(
                             sessionProposal.name,
                             sessionProposal.url,
                             sessionProposal.description,
@@ -156,7 +155,7 @@ class WC2SessionViewModel(
                     }
                     is WC2Service.Event.SessionSettled -> {
                         val session = event.session
-                        appMetaItem = session.metaData?.let {
+                        peerMeta = session.metaData?.let {
                             WCSessionModule.PeerMetaItem(
                                 it.name,
                                 it.url,
@@ -203,7 +202,6 @@ class WC2SessionViewModel(
             return
         }
 
-        peerMeta = appMetaItem
         blockchains = getBlockchainViewItems(allowedBlockchains)
         connecting = connection == WC2PingServiceState.Connecting
         closeEnabled = state == Ready
