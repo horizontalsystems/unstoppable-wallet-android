@@ -63,7 +63,6 @@ class WC2Service : SignClient.WalletDelegate {
         class WaitingForApproveSession(val proposal: Sign.Model.SessionProposal) : Event()
         class SessionSettled(val session: Sign.Model.Session) : Event()
         class SessionDeleted(val deletedSession: Sign.Model.DeletedSession) : Event()
-        object Ready : Event()
     }
 
     fun start() {
