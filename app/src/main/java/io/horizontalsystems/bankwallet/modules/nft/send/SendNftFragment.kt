@@ -56,7 +56,7 @@ class SendNftFragment : BaseFragment() {
                         val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
                             R.id.nftSendFragment
                         ) { factory }
-                        val initiateLazyViewModel = evmKitWrapperViewModel
+                        val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
 
                         val eip721ViewModel by viewModels<SendEip721ViewModel> { factory }
                         val addressViewModel by viewModels<AddressViewModel> {
@@ -75,7 +75,7 @@ class SendNftFragment : BaseFragment() {
                         val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
                             R.id.nftSendFragment
                         ) { factory }
-                        val initiateLazyViewModel = evmKitWrapperViewModel
+                        val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
 
                         val eip1155ViewModel by viewModels<SendEip1155ViewModel> { factory }
                         val addressViewModel by viewModels<AddressViewModel> {
