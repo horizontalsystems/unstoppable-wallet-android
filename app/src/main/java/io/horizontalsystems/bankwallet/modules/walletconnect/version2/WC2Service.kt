@@ -12,6 +12,10 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class WC2Service : SignClient.WalletDelegate {
@@ -163,8 +167,14 @@ class WC2Service : SignClient.WalletDelegate {
         }
     }
 
+    private val _connectionAvailableStateFlow: MutableStateFlow<Boolean?> = MutableStateFlow(null)
+    val connectionAvailableStateFlow: StateFlow<Boolean?>
+        get() = _connectionAvailableStateFlow.asStateFlow()
+
     override fun onConnectionStateChange(state: Sign.Model.ConnectionState) {
-//        TODO("Not yet implemented")
+        _connectionAvailableStateFlow.update {
+            state.isAvailable
+        }
     }
 
     override fun onError(error: Sign.Model.Error) {

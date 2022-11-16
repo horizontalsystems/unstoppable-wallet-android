@@ -5,29 +5,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.walletconnect.sign.client.Sign
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.shorten
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionServiceState.*
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.*
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager.RequestDataError.*
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 
 class WC2SessionViewModel(
     private val wc2service: WC2Service,
     private val wcManager: WC2Manager,
     private val sessionManager: WC2SessionManager,
     private val accountManager: IAccountManager,
-    private val pingService: WC2PingService,
     private val connectivityManager: ConnectivityManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val topic: String?,
@@ -66,7 +68,7 @@ class WC2SessionViewModel(
         set(value) {
             field = value
 
-            sync(state = value, connection = pingService.state)
+            sync(state = value, connection = wc2service.connectionAvailableStateFlow.value)
         }
 
     private var proposal: Sign.Model.SessionProposal? = null
@@ -75,19 +77,16 @@ class WC2SessionViewModel(
     private var wcBlockchains = listOf<WCBlockchain>()
 
     init {
-        pingService.stateObservable
-            .subscribeIO {
-                Log.e(TAG, "sync from connection change: $it")
-                sync(state = sessionServiceState, connection = it)
-            }
-            .let {
-                disposables.add(it)
-            }
+        viewModelScope.launch {
+            wc2service.connectionAvailableStateFlow
+                .collect {
+                    sync(state = sessionServiceState, connection = it)
+                }
+        }
 
         topic?.let { topic ->
             val existingSession =
                 sessionManager.sessions.firstOrNull { it.topic == topic } ?: return@let
-            pingService.ping(existingSession.topic)
             peerMeta = existingSession.metaData?.let {
                 WCSessionModule.PeerMetaItem(
                     it.name,
@@ -102,21 +101,6 @@ class WC2SessionViewModel(
             wcBlockchains = getBlockchainsBySession(existingSession)
             sessionServiceState = WC2SessionServiceState.Ready
         }
-
-        connectivityManager.networkAvailabilitySignal
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                if (!connectivityManager.isConnected) {
-                    pingService.disconnect()
-                } else {
-                    session?.let {
-                        pingService.ping(it.topic)
-                    }
-                }
-            }
-            .let {
-                disposables.add(it)
-            }
 
         wc2service.eventObservable
             .subscribe { event ->
@@ -137,7 +121,6 @@ class WC2SessionViewModel(
                             wcBlockchains = getBlockchainsByProposal(sessionProposal)
 
                             sessionServiceState = WC2SessionServiceState.WaitingForApproveSession
-                            pingService.receiveResponse()
                         } catch (e: WC2SessionManager.RequestDataError) {
                             sessionServiceState = Invalid(e)
                         }
@@ -148,7 +131,6 @@ class WC2SessionViewModel(
                             session?.topic?.let { topic ->
                                 if (topic == deletedSession.topic) {
                                     sessionServiceState = Killed
-                                    pingService.disconnect()
                                 }
                             }
                         }
@@ -168,7 +150,6 @@ class WC2SessionViewModel(
                         this.session = session
                         wcBlockchains = getBlockchainsBySession(session)
                         sessionServiceState = WC2SessionServiceState.Ready
-                        pingService.receiveResponse()
                     }
                     is WC2Service.Event.Error -> {
                         sessionServiceState = Invalid(event.error)
@@ -193,7 +174,7 @@ class WC2SessionViewModel(
 
     private fun sync(
         state: WC2SessionServiceState,
-        connection: WC2PingServiceState
+        connection: Boolean?
     ) {
         val allowedBlockchains = wcBlockchains.sortedBy { it.chainId }
 
@@ -203,7 +184,7 @@ class WC2SessionViewModel(
         }
 
         blockchains = getBlockchainViewItems(allowedBlockchains)
-        connecting = connection == WC2PingServiceState.Connecting
+        connecting = connection == null
         closeEnabled = state == Ready
         status = getStatus(connection)
         hint = getHint(connection, state)
@@ -236,7 +217,6 @@ class WC2SessionViewModel(
         }
 
         wc2service.reject(proposal)
-        pingService.disconnect()
         sessionServiceState = Killed
     }
 
@@ -266,17 +246,6 @@ class WC2SessionViewModel(
 
         sessionServiceState = Killed
         wc2service.disconnect(sessionNonNull.topic)
-        pingService.disconnect()
-    }
-
-    fun reconnect() {
-        if (!connectivityManager.isConnected) {
-            showErrorLiveEvent.postValue(Unit)
-            return
-        }
-        session?.let {
-            pingService.ping(it.topic)
-        }
     }
 
     private fun getBlockchainViewItems(blockchains: List<WCBlockchain>) = blockchains.map {
@@ -287,24 +256,23 @@ class WC2SessionViewModel(
         )
     }
 
-    private fun getStatus(connectionState: WC2PingServiceState): WCSessionViewModel.Status? {
+    private fun getStatus(connectionState: Boolean?): WCSessionViewModel.Status? {
         return when (connectionState) {
-            WC2PingServiceState.Connecting -> WCSessionViewModel.Status.CONNECTING
-            WC2PingServiceState.Connected -> WCSessionViewModel.Status.ONLINE
-            is WC2PingServiceState.Disconnected -> WCSessionViewModel.Status.OFFLINE
+            null -> WCSessionViewModel.Status.CONNECTING
+            true -> WCSessionViewModel.Status.ONLINE
+            false -> WCSessionViewModel.Status.OFFLINE
         }
     }
 
     private fun setButtons(
         state: WC2SessionServiceState,
-        connection: WC2PingServiceState
+        connection: Boolean?
     ) {
         Log.e(TAG, "setButtons: ${state}, ${connection}")
         buttonStates = WCSessionButtonStates(
             connect = getConnectButtonState(state, connection),
             disconnect = getDisconnectButtonState(state, connection),
             cancel = getCancelButtonState(state),
-            reconnect = getReconnectButtonState(state, connection),
             remove = getRemoveButtonState(state, connection),
         )
     }
@@ -319,43 +287,31 @@ class WC2SessionViewModel(
 
     private fun getConnectButtonState(
         state: WC2SessionServiceState,
-        connectionState: WC2PingServiceState
+        connectionState: Boolean?
     ): WCButtonState {
         return when {
-            state == WaitingForApproveSession && connectionState == WC2PingServiceState.Connected -> WCButtonState.Enabled
+            state == WaitingForApproveSession && connectionState == true -> WCButtonState.Enabled
             else -> WCButtonState.Hidden
         }
     }
 
     private fun getDisconnectButtonState(
         state: WC2SessionServiceState,
-        connectionState: WC2PingServiceState
+        connectionState: Boolean?
     ): WCButtonState {
         return when {
-            state == Ready && connectionState == WC2PingServiceState.Connected -> WCButtonState.Enabled
-            else -> WCButtonState.Hidden
-        }
-    }
-
-    private fun getReconnectButtonState(
-        state: WC2SessionServiceState,
-        connectionState: WC2PingServiceState
-    ): WCButtonState {
-        return when {
-            state is Invalid -> WCButtonState.Hidden
-            connectionState is WC2PingServiceState.Disconnected -> WCButtonState.Enabled
-            connectionState is WC2PingServiceState.Connecting -> WCButtonState.Disabled
+            state == Ready && connectionState == true -> WCButtonState.Enabled
             else -> WCButtonState.Hidden
         }
     }
 
     private fun getRemoveButtonState(
         state: WC2SessionServiceState,
-        connectionState: WC2PingServiceState
+        connectionState: Boolean?
     ): WCButtonState {
         return when {
             state is Invalid -> WCButtonState.Hidden
-            connectionState is WC2PingServiceState.Disconnected && state is Ready -> WCButtonState.Enabled
+            connectionState == false && state is Ready -> WCButtonState.Enabled
             else -> WCButtonState.Hidden
         }
     }
@@ -371,13 +327,13 @@ class WC2SessionViewModel(
         showError = error
     }
 
-    private fun getHint(connection: WC2PingServiceState, state: WC2SessionServiceState): Int? {
+    private fun getHint(connection: Boolean?, state: WC2SessionServiceState): Int? {
         when {
-            connection is WC2PingServiceState.Disconnected
+            connection == false
                 && (state == WaitingForApproveSession || state is Ready) -> {
                 return R.string.WalletConnect_Reconnect_Hint
             }
-            connection == WC2PingServiceState.Connecting -> return null
+            connection == null -> return null
             state is Invalid -> return getErrorMessage(state.error)
             state == WaitingForApproveSession -> R.string.WalletConnect_Approve_Hint
         }

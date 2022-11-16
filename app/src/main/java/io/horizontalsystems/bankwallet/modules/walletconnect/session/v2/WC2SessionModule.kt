@@ -4,7 +4,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2PingService
 import io.horizontalsystems.ethereumkit.models.Chain
 
 object WC2SessionModule {
@@ -20,7 +19,6 @@ object WC2SessionModule {
                 App.wc2Manager,
                 App.wc2SessionManager,
                 App.accountManager,
-                WC2PingService(),
                 App.connectivityManager,
                 App.evmBlockchainManager,
                 sessionTopic,
@@ -54,7 +52,6 @@ data class WCSessionButtonStates(
     val connect: WCButtonState,
     val disconnect: WCButtonState,
     val cancel: WCButtonState,
-    val reconnect: WCButtonState,
     val remove: WCButtonState,
 )
 
