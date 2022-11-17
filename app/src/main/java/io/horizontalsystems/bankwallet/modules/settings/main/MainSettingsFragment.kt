@@ -100,7 +100,7 @@ private fun SettingSections(
     val baseCurrency by viewModel.baseCurrencyLiveData.observeAsState()
     val language by viewModel.languageLiveData.observeAsState()
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.SettingsSecurity_ManageKeys,
@@ -127,7 +127,7 @@ private fun SettingSections(
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf {
             HsSettingCell(
                 R.string.Settings_WalletConnect,
@@ -156,7 +156,7 @@ private fun SettingSections(
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.Settings_Appearance,
@@ -196,7 +196,7 @@ private fun SettingSections(
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.Settings_Faq,
@@ -218,7 +218,7 @@ private fun SettingSections(
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf {
             HsSettingCell(
                 R.string.SettingsAboutApp_Title,
@@ -243,12 +243,9 @@ fun HsSettingCell(
     showAlert: Boolean = false,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = { onClick.invoke() })
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
     ) {
         Image(
             modifier = Modifier.size(20.dp),

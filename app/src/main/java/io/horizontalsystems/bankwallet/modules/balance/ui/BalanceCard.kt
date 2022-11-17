@@ -99,9 +99,8 @@ fun BalanceCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence)
-            .padding(vertical = 4.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
@@ -109,8 +108,8 @@ fun BalanceCard(
                 viewModel.onItem(viewItem)
             }
     ) {
-        CellMultilineClear {
-            Row {
+        CellMultilineClear(height = 64.dp) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 WalletIcon(viewItem, viewModel, navController)
                 Column(
                     modifier = Modifier
@@ -162,7 +161,7 @@ fun BalanceCard(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(1.dp))
+                    Spacer(modifier = Modifier.height(3.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -236,8 +235,9 @@ private fun ExpandableContent(
     ) {
         Column {
             LockedValueRow(viewItem)
+            Spacer(modifier = Modifier.height(5.dp))
             Divider(
-                modifier = Modifier.padding(horizontal = 14.dp),
+                modifier = Modifier.padding(horizontal = 12.dp),
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10
             )
@@ -331,8 +331,9 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
         enter = expandVertically() + fadeIn(),
         exit = shrinkVertically() + fadeOut()
     ) {
+        Spacer(modifier = Modifier.height(5.dp))
         Divider(
-            modifier = Modifier.padding(horizontal = 14.dp),
+            modifier = Modifier.padding(horizontal = 12.dp),
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10
         )
@@ -368,8 +369,9 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
 private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel, navController: NavController) {
     Box(
         modifier = Modifier
-            .width(56.dp)
+            .width(64.dp)
             .fillMaxHeight(),
+        contentAlignment = Alignment.Center
     ) {
         if (!viewItem.mainNet) {
             Image(
@@ -381,8 +383,7 @@ private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel, n
         viewItem.syncingProgress.progress?.let { progress ->
             AndroidView(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(41.dp),
+                    .size(52.dp),
                 factory = { context ->
                     RotatingCircleProgressView(context)
                 },
@@ -399,8 +400,7 @@ private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel, n
             val view = LocalView.current
             Image(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(24.dp)
+                    .size(32.dp)
                     .clickable {
                         onSyncErrorClicked(viewItem, viewModel, navController, view)
                     },
@@ -413,8 +413,7 @@ private fun WalletIcon(viewItem: BalanceViewItem, viewModel: BalanceViewModel, n
                 iconUrl = viewItem.coinIconUrl,
                 placeholder = viewItem.coinIconPlaceholder,
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(24.dp)
+                    .size(32.dp)
             )
         }
     }
