@@ -104,7 +104,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
     val context = LocalContext.current
     val termsShowAlert = viewModel.termsShowAlert
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf {
             HsSettingCell(
                 R.string.SettingsAboutApp_WhatsNew,
@@ -118,7 +118,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.Settings_AppStatus,
@@ -149,7 +149,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.SettingsAboutApp_Github,
@@ -173,7 +173,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.Settings_RateUs,
@@ -191,7 +191,7 @@ private fun SettingSections(viewModel: AboutViewModel, navController: NavControl
 
     Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf {
             HsSettingCell(
                 R.string.SettingsContact_Title,

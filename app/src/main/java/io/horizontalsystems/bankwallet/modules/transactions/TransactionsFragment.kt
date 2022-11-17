@@ -270,7 +270,11 @@ fun DateHeader(dateHeader: String) {
 
 @Composable
 fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
-    CellMultilineClear(borderBottom = true, onClick = onClick) {
+    CellMultilineClear(
+        borderBottom = true,
+        height = 64.dp,
+        onClick = onClick
+    ) {
         Row(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
@@ -278,7 +282,8 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
             Box(
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
-                    .size(40.dp)
+                    .size(42.dp),
+                contentAlignment = Alignment.Center
             ) {
                 item.progress?.let { progress ->
                     HSCircularProgressIndicator(progress)
@@ -287,7 +292,6 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                 when (icon) {
                     TransactionViewItem.Icon.Failed -> {
                         Icon(
-                            modifier = Modifier.align(Alignment.Center),
                             painter = painterResource(R.drawable.ic_attention_24),
                             tint = ComposeAppTheme.colors.lucian,
                             contentDescription = null
@@ -295,7 +299,6 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                     }
                     is TransactionViewItem.Icon.Platform -> {
                         Icon(
-                            modifier = Modifier.align(Alignment.Center),
                             painter = painterResource(icon.iconRes ?: R.drawable.coin_placeholder),
                             tint = ComposeAppTheme.colors.leah,
                             contentDescription = null
@@ -305,8 +308,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                         val shape = if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
                         CoinImage(
                             modifier = Modifier
-                                .align(Alignment.Center)
-                                .size(24.dp)
+                                .size(32.dp)
                                 .clip(shape),
                             iconUrl = icon.url,
                             placeholder = icon.placeholder
@@ -318,8 +320,8 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                         CoinImage(
                             modifier = Modifier
                                 .align(Alignment.TopStart)
-                                .padding(top = 6.dp, start = 6.dp)
-                                .size(20.dp)
+                                .padding(top = 4.dp, start = 6.dp)
+                                .size(24.dp)
                                 .clip(backShape),
                             iconUrl = icon.back.url,
                             placeholder = icon.back.placeholder,
@@ -328,8 +330,8 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                         Box(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(bottom = 6.5.dp, end = 6.5.dp)
-                                .size(20.dp)
+                                .padding(bottom = 4.5.dp, end = 6.5.dp)
+                                .size(24.dp)
                                 .clip(frontShape)
                                 .background(ComposeAppTheme.colors.tyler)
                         )
@@ -337,8 +339,8 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                         CoinImage(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(bottom = 6.dp, end = 6.dp)
-                                .size(20.dp)
+                                .padding(bottom = 4.dp, end = 6.dp)
+                                .size(24.dp)
                                 .clip(frontShape),
                             iconUrl = icon.front.url,
                             placeholder = icon.front.placeholder,

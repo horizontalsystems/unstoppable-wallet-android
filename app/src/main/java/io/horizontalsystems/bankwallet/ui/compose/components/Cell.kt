@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -307,6 +308,7 @@ fun CellData2(content: @Composable () -> Unit) {
 fun CellMultilineClear(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
+    height: Dp = 60.dp,
     onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
@@ -320,7 +322,7 @@ fun CellMultilineClear(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp)
+            .height(height)
             .then(clickableModifier)
     ) {
         if (borderTop) {
@@ -448,4 +450,90 @@ fun CellLawrence(
         )
     }
 
+}
+
+@Composable
+fun RowUniversal(
+    modifier: Modifier = Modifier,
+    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
+    onClick: (() -> Unit)? = null,
+    content: @Composable RowScope.() -> Unit,
+) {
+    val clickableModifier = when (onClick) {
+        null -> Modifier
+        else -> Modifier.clickable {
+            onClick.invoke()
+        }
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 24.dp)
+            .then(clickableModifier)
+            .then(modifier)
+            .padding(vertical = 12.dp),
+        verticalAlignment = verticalAlignment,
+        content = content
+    )
+}
+
+@Composable
+fun CellUniversalLawrenceSection(
+    composableItems: List<@Composable () -> Unit>
+) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+    ) {
+        composableItems.forEachIndexed { index, composable ->
+            SectionUniversalItem(
+                borderTop = index != 0,
+                color = ComposeAppTheme.colors.lawrence,
+            ) {
+                composable()
+            }
+        }
+    }
+}
+
+@Composable
+fun SectionUniversalItem(
+    borderTop: Boolean = false,
+    borderBottom: Boolean = false,
+    color: Color? = null,
+    content: @Composable () -> Unit,
+) {
+
+    //content items should use RowUniversal
+
+    val colorModifier = when {
+        color != null -> Modifier.background(color)
+        else -> Modifier
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(colorModifier)
+    ) {
+        if (borderTop) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
+
+        if (borderBottom) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+
+        content.invoke()
+    }
 }
