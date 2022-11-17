@@ -33,13 +33,6 @@ object MainModule {
         }
     }
 
-    class FactoryForActivityViewModel : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MainActivityViewModel(App.wc2SessionManager) as T
-        }
-    }
-
     fun start(context: Context, data: Uri? = null) {
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK

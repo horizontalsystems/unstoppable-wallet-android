@@ -14,11 +14,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SignMes
 
 class MainActivity : BaseActivity() {
 
-    val viewModel by viewModels<MainActivityViewModel>(){
-        MainModule.FactoryForActivityViewModel()
-    }
-
-    val wc2ViewModel by viewModels<WC2MainViewModel>() {
+    private val wc2MainViewModel by viewModels<WC2MainViewModel> {
         WC2MainViewModel.Factory()
     }
 
@@ -32,7 +28,10 @@ class MainActivity : BaseActivity() {
         navHost.navController.setGraph(R.navigation.main_graph, intent.extras)
         navHost.navController.addOnDestinationChangedListener(this)
 
-        viewModel.openWalletConnectRequestLiveEvent.observe(this) { wcRequest ->
+        wc2MainViewModel.sessionProposalLiveEvent.observe(this) { wcRequest ->
+            navHost.navController.slideFromBottom(R.id.wc2SessionFragment)
+        }
+        wc2MainViewModel.openWalletConnectRequestLiveEvent.observe(this) { wcRequest ->
             when (wcRequest) {
                 is WC2SignMessageRequest -> {
                     navHost.navController.slideFromBottom(
@@ -47,9 +46,6 @@ class MainActivity : BaseActivity() {
                     )
                 }
             }
-        }
-        wc2ViewModel.sessionProposalLiveEvent.observe(this) { wcRequest ->
-            navHost.navController.slideFromBottom(R.id.wc2SessionFragment)
         }
     }
 
