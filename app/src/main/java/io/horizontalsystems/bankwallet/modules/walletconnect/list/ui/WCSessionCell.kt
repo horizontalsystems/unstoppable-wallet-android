@@ -46,8 +46,7 @@ fun WCSessionCell(
                     navController.slideFromBottom(
                         R.id.wc2SessionFragment,
                         WC2SessionModule.prepareParams(
-                            session.sessionId,
-                            null,
+                            session.sessionId
                         )
                     )
                 } else {

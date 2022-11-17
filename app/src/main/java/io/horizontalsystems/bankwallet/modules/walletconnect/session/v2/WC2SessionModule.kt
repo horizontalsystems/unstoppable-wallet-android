@@ -10,7 +10,6 @@ object WC2SessionModule {
 
     class Factory(
         private val sessionTopic: String?,
-        private val connectionLink: String?,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -22,14 +21,12 @@ object WC2SessionModule {
                 App.connectivityManager,
                 App.evmBlockchainManager,
                 sessionTopic,
-                connectionLink,
             ) as T
         }
     }
 
-    fun prepareParams(sessionTopic: String?, connectionLink: String?) = bundleOf(
-        SESSION_TOPIC_KEY to sessionTopic,
-        CONNECTION_LINK_KEY to connectionLink,
+    fun prepareParams(sessionTopic: String?) = bundleOf(
+        SESSION_TOPIC_KEY to sessionTopic
     )
 
     data class BlockchainViewItem(
@@ -39,7 +36,6 @@ object WC2SessionModule {
     )
 
     const val SESSION_TOPIC_KEY = "session_topic_id"
-    const val CONNECTION_LINK_KEY = "connection_link"
 }
 
 enum class WCButtonState(val visible: Boolean, val enabled: Boolean) {

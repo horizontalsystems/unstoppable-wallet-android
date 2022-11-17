@@ -33,7 +33,6 @@ class WC2SessionViewModel(
     private val connectivityManager: ConnectivityManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val topic: String?,
-    private val connectionLink: String?
 ) : ViewModel() {
 
     private val TAG = "WC2SessionViewModel"
@@ -84,46 +83,51 @@ class WC2SessionViewModel(
                 }
         }
 
-        topic?.let { topic ->
+        val topic1 = topic
+        if (topic1 != null) {
             val existingSession =
-                sessionManager.sessions.firstOrNull { it.topic == topic } ?: return@let
-            peerMeta = existingSession.metaData?.let {
-                WCSessionModule.PeerMetaItem(
-                    it.name,
-                    it.url,
-                    it.description,
-                    it.icons.lastOrNull()?.toString(),
+                sessionManager.sessions.firstOrNull { it.topic == topic1 }
+            if (existingSession != null) {
+                peerMeta = existingSession.metaData?.let {
+                    WCSessionModule.PeerMetaItem(
+                        it.name,
+                        it.url,
+                        it.description,
+                        it.icons.lastOrNull()?.toString(),
+                        accountManager.activeAccount?.name,
+                    )
+                }
+
+                session = existingSession
+                wcBlockchains = getBlockchainsBySession(existingSession)
+                sessionServiceState = WC2SessionServiceState.Ready
+            }
+        } else {
+            wc2service.getNextSessionProposal()?.let { sessionProposal ->
+                peerMeta = WCSessionModule.PeerMetaItem(
+                    sessionProposal.name,
+                    sessionProposal.url,
+                    sessionProposal.description,
+                    sessionProposal.icons.lastOrNull()?.toString(),
                     accountManager.activeAccount?.name,
                 )
-            }
 
-            session = existingSession
-            wcBlockchains = getBlockchainsBySession(existingSession)
-            sessionServiceState = WC2SessionServiceState.Ready
+                proposal = sessionProposal
+
+                try {
+                    wcBlockchains = getBlockchainsByProposal(sessionProposal)
+
+                    sessionServiceState = WC2SessionServiceState.WaitingForApproveSession
+                } catch (e: WC2SessionManager.RequestDataError) {
+                    sessionServiceState = Invalid(e)
+                }
+            }
         }
 
         wc2service.eventObservable
             .subscribe { event ->
                 when (event) {
                     is WC2Service.Event.WaitingForApproveSession -> {
-                        val sessionProposal = event.proposal
-                        peerMeta = WCSessionModule.PeerMetaItem(
-                            sessionProposal.name,
-                            sessionProposal.url,
-                            sessionProposal.description,
-                            sessionProposal.icons.lastOrNull()?.toString(),
-                            accountManager.activeAccount?.name,
-                        )
-
-                        proposal = sessionProposal
-
-                        try {
-                            wcBlockchains = getBlockchainsByProposal(sessionProposal)
-
-                            sessionServiceState = WC2SessionServiceState.WaitingForApproveSession
-                        } catch (e: WC2SessionManager.RequestDataError) {
-                            sessionServiceState = Invalid(e)
-                        }
                     }
                     is WC2Service.Event.SessionDeleted -> {
                         val deletedSession = event.deletedSession
@@ -161,10 +165,6 @@ class WC2SessionViewModel(
             .let {
                 disposables.add(it)
             }
-
-        connectionLink?.let {
-            wc2service.pair(it)
-        }
     }
 
     override fun onCleared() {
