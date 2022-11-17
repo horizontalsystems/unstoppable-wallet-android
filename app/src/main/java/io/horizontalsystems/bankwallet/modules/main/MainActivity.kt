@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2MainViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SignMessageRequest
 
@@ -15,6 +16,10 @@ class MainActivity : BaseActivity() {
 
     val viewModel by viewModels<MainActivityViewModel>(){
         MainModule.FactoryForActivityViewModel()
+    }
+
+    val wc2ViewModel by viewModels<WC2MainViewModel>() {
+        WC2MainViewModel.Factory()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +47,9 @@ class MainActivity : BaseActivity() {
                     )
                 }
             }
+        }
+        wc2ViewModel.sessionProposalLiveEvent.observe(this) { wcRequest ->
+            navHost.navController.slideFromBottom(R.id.wc2SessionFragment)
         }
     }
 

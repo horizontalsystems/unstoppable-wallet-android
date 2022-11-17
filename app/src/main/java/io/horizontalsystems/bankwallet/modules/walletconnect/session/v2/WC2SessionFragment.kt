@@ -29,7 +29,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.CONNECTION_LINK_KEY
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.SESSION_TOPIC_KEY
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -41,10 +40,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 class WC2SessionFragment : BaseFragment() {
 
     private val viewModel by viewModels<WC2SessionViewModel> {
-        WC2SessionModule.Factory(
-            arguments?.getString(SESSION_TOPIC_KEY),
-            arguments?.getString(CONNECTION_LINK_KEY),
-        )
+        WC2SessionModule.Factory(arguments?.getString(SESSION_TOPIC_KEY))
     }
 
     override fun onCreateView(

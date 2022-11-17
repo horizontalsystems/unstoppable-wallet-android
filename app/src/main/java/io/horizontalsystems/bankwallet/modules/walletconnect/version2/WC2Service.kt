@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.concurrent.CopyOnWriteArrayList
 
 class WC2Service : SignClient.WalletDelegate {
 
@@ -60,7 +61,7 @@ class WC2Service : SignClient.WalletDelegate {
     sealed class Event {
         object Default : Event()
         class Error(val error: Throwable) : Event()
-        class WaitingForApproveSession(val proposal: Sign.Model.SessionProposal) : Event()
+        object WaitingForApproveSession : Event()
         class SessionSettled(val session: Sign.Model.Session) : Event()
         class SessionDeleted(val deletedSession: Sign.Model.DeletedSession) : Event()
     }
@@ -185,8 +186,15 @@ class WC2Service : SignClient.WalletDelegate {
         sessionsUpdatedSubject.onNext(Unit)
     }
 
+    private val sessionProposals = CopyOnWriteArrayList<Sign.Model.SessionProposal>()
+
+    fun getNextSessionProposal(): Sign.Model.SessionProposal? {
+        return sessionProposals.removeFirstOrNull()
+    }
+
     override fun onSessionProposal(sessionProposal: Sign.Model.SessionProposal) {
-        event = Event.WaitingForApproveSession(sessionProposal)
+        sessionProposals.add(sessionProposal)
+        event = Event.WaitingForApproveSession
     }
 
     override fun onSessionRequest(sessionRequest: Sign.Model.SessionRequest) {
