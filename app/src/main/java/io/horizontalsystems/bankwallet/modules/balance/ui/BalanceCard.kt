@@ -124,7 +124,7 @@ fun BalanceCard(
                         Row(
                             modifier = Modifier.weight(weight = 1f),
                         ) {
-                            headline2_leah(
+                            body_leah(
                                 text = viewItem.coinCode,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
@@ -235,9 +235,8 @@ private fun ExpandableContent(
     ) {
         Column {
             LockedValueRow(viewItem)
-            Spacer(modifier = Modifier.height(5.dp))
             Divider(
-                modifier = Modifier.padding(horizontal = 12.dp),
+                modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 5.dp, bottom = 6.dp),
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10
             )
@@ -263,9 +262,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
     }
 
     Row(
-        modifier = Modifier
-            .padding(start = 12.dp, end = 12.dp, bottom = 2.dp)
-            .height(70.dp),
+        modifier = Modifier.padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (viewItem.isWatchAccount) {
@@ -331,36 +328,37 @@ private fun LockedValueRow(viewItem: BalanceViewItem) {
         enter = expandVertically() + fadeIn(),
         exit = shrinkVertically() + fadeOut()
     ) {
-        Spacer(modifier = Modifier.height(5.dp))
-        Divider(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
-        Row(
-            modifier = Modifier
-                .height(36.dp)
-                .padding(start = 16.dp, end = 17.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_lock_16),
-                contentDescription = "lock icon"
+        Column {
+            Divider(
+                modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 5.dp, bottom = 6.dp),
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10
             )
-            Text(
-                modifier = Modifier.padding(start = 6.dp),
-                text = viewItem.coinValueLocked.value,
-                color = if (viewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
-                maxLines = 1,
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = viewItem.fiatValueLocked.value,
-                color = if (viewItem.fiatValueLocked.dimmed) ComposeAppTheme.colors.yellow50 else ComposeAppTheme.colors.jacob,
-                style = ComposeAppTheme.typography.subhead2,
-                maxLines = 1,
-            )
+            Row(
+                modifier = Modifier
+                    .height(25.dp)
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_lock_16),
+                    contentDescription = "lock icon"
+                )
+                Text(
+                    modifier = Modifier.padding(start = 6.dp),
+                    text = viewItem.coinValueLocked.value,
+                    color = if (viewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
+                    style = ComposeAppTheme.typography.subhead2,
+                    maxLines = 1,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = viewItem.fiatValueLocked.value,
+                    color = if (viewItem.fiatValueLocked.dimmed) ComposeAppTheme.colors.yellow50 else ComposeAppTheme.colors.jacob,
+                    style = ComposeAppTheme.typography.subhead2,
+                    maxLines = 1,
+                )
+            }
         }
     }
 }
