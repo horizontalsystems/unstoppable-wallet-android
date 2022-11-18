@@ -10,15 +10,20 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule.Section
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import io.reactivex.disposables.CompositeDisposable
 
 class WC2ListViewModel(
     private val service: WC2ListService,
-    private val evmBlockchainManager: EvmBlockchainManager
+    private val evmBlockchainManager: EvmBlockchainManager,
+    private val wc2Service: WC2Service
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
     var sectionItem by mutableStateOf<Section?>(null)
+        private set
+
+    var pairingsNumber by mutableStateOf(wc2Service.getPairings().size)
         private set
 
     init {

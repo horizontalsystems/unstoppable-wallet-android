@@ -25,7 +25,11 @@ object WalletConnectListModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = WC2ListService(App.wc2SessionManager)
 
-            return WC2ListViewModel(service, App.evmBlockchainManager) as T
+            return WC2ListViewModel(
+                service,
+                App.evmBlockchainManager,
+                App.wc2Service
+            ) as T
         }
     }
 
