@@ -78,6 +78,17 @@ class WC2Service : SignClient.WalletDelegate {
         }
     }
 
+    fun getPairings(): List<Core.Model.Pairing> {
+        return CoreClient.Pairing.getPairings()
+    }
+
+    fun deletePairing(topic: String) {
+        CoreClient.Pairing.disconnect(topic) { error ->
+            Log.e(TAG, "disconnect pair error: ", error.throwable)
+            event = Event.Error(error.throwable)
+        }
+    }
+
     fun approve(proposal: Sign.Model.SessionProposal, blockchains: List<WCBlockchain>) {
         val methods = proposal.requiredNamespaces.values.flatMap { it.methods }
         val events = proposal.requiredNamespaces.values.flatMap { it.events }

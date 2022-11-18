@@ -16,29 +16,49 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
 @Composable
 fun WCSessionsScreen(
     navController: NavController,
-    deepLinkUri: String?,
-    openUri: (String) -> Unit
+    deepLinkUri: String?
 ) {
+    val view = LocalView.current
+    val openUri: (String) -> Unit = { connectUri ->
+        val wcVersion: Int = WalletConnectListModule.getVersionFromUri(connectUri)
+        if (wcVersion == 1) {
+            navController.slideFromBottom(
+                R.id.wcSessionFragment,
+                WCSessionModule.prepareParams(null, connectUri)
+            )
+        } else if (wcVersion == 2) {
+            App.wc2Service.pair(connectUri)
+
+        } else {
+            HudHelper.showErrorMessage(view, R.string.WalletConnect_Error_InvalidUrl)
+        }
+    }
+
     val qrScannerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
