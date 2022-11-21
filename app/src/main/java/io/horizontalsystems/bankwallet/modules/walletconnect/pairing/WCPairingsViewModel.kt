@@ -48,6 +48,12 @@ class WCPairingsViewModel(private val wc2Service: WC2Service) : ViewModel() {
         updatePairings()
     }
 
+    fun deleteAll() {
+        wc2Service.deleteAllPairings()
+
+        updatePairings()
+    }
+
     private fun updatePairings() {
         pairings = wc2Service.getPairings()
             .map {
@@ -55,10 +61,6 @@ class WCPairingsViewModel(private val wc2Service: WC2Service) : ViewModel() {
             }
 
         emitState()
-    }
-
-    fun deleteAll() {
-        TODO("Not yet implemented")
     }
 
     class Factory : ViewModelProvider.Factory {
