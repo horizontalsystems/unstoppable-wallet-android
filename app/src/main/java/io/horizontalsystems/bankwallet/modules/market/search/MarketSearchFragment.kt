@@ -330,7 +330,7 @@ private fun MarketCoin(
     label: String? = null,
 ) {
 
-    MultilineClear(
+    SectionItemRowUniversalClear(
         borderBottom = true,
         onClick = onClick
     ) {
@@ -339,7 +339,7 @@ private fun MarketCoin(
             placeholder = coinIconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(24.dp)
+                .size(32.dp)
         )
         Column(
             modifier = Modifier.weight(1f)

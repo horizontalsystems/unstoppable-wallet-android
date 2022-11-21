@@ -156,7 +156,7 @@ fun CoinMarketCell(
     tradeUrl: String?,
 ) {
     val context = LocalContext.current
-    MultilineClear(
+    SectionItemRowUniversalClear(
         onClick = tradeUrl?.let {
             { LinkHelper.openLinkInAppBrowser(context, it) }
         },
@@ -165,13 +165,13 @@ fun CoinMarketCell(
         Image(
             painter = rememberAsyncImagePainter(
                 model = iconUrl,
-                error = painterResource(R.drawable.coin_placeholder)
+                error = painterResource(R.drawable.ic_platform_placeholder_24)
             ),
             contentDescription = null,
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(24.dp)
-                .clip(RoundedCornerShape(4.dp)),
+                .size(32.dp)
+                .clip(RoundedCornerShape(8.dp)),
         )
         Column(
             modifier = Modifier.fillMaxWidth()
