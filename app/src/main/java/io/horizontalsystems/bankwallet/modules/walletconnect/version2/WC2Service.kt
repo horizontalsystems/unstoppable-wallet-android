@@ -89,6 +89,12 @@ class WC2Service : SignClient.WalletDelegate {
         }
     }
 
+    fun deleteAllPairings() {
+        getPairings().forEach {
+            deletePairing(it.topic)
+        }
+    }
+
     fun approve(proposal: Sign.Model.SessionProposal, blockchains: List<WCBlockchain>) {
         val methods = proposal.requiredNamespaces.values.flatMap { it.methods }
         val events = proposal.requiredNamespaces.values.flatMap { it.events }
