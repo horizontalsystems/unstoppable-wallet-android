@@ -109,14 +109,14 @@ class CoinTreasuriesFragment : BaseFragment() {
                                     }
 
                                     items(treasuriesData.coinTreasuries) { item ->
-                                        MultilineClear(
+                                        SectionItemRowUniversalClear(
                                             borderBottom = true
                                         ) {
                                             CoinImage(
                                                 iconUrl = item.fundLogoUrl,
                                                 modifier = Modifier
                                                     .padding(end = 16.dp)
-                                                    .size(24.dp)
+                                                    .size(32.dp)
                                             )
                                             Column(
                                                 modifier = Modifier.fillMaxWidth()

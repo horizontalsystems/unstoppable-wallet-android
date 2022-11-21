@@ -190,7 +190,7 @@ private fun TopNftCollectionsList(
     ) {
         preItems.invoke(this)
         items(collections) { collection ->
-            MultilineClear(
+            SectionItemRowUniversalClear(
                 onClick = { onClickCollection(collection.blockchainType, collection.uid) },
                 borderBottom = true
             ) {
@@ -199,7 +199,7 @@ private fun TopNftCollectionsList(
                     placeholder = R.drawable.coin_placeholder,
                     modifier = Modifier
                         .padding(end = 16.dp)
-                        .size(24.dp)
+                        .size(32.dp)
                 )
                 Column(modifier = Modifier.fillMaxWidth()) {
                     MarketCoinFirstRow(collection.name, collection.volume)

@@ -30,7 +30,6 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -57,36 +56,33 @@ fun CoinList(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp)
+                    .height(IntrinsicSize.Max)
             ) {
-                ActionsRow(
-                    content = {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
-                                .width(100.dp)
-                                .clickable {
-                                    if (item.favorited) {
-                                        onRemoveFavorite(item.coinUid)
-                                    } else {
-                                        onAddFavorite(item.coinUid)
-                                    }
-                                    coroutineScope.launch {
-                                        delay(200)
-                                        revealedCardId = null
-                                    }
-                                },
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                painter = painterResource(id = if (item.favorited) R.drawable.ic_star_off_24 else R.drawable.ic_star_24),
-                                tint = ComposeAppTheme.colors.claude,
-                                contentDescription = "delete",
-                            )
-                        }
-                    }
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
+                        .align(Alignment.CenterEnd)
+                        .width(100.dp)
+                        .clickable {
+                            if (item.favorited) {
+                                onRemoveFavorite(item.coinUid)
+                            } else {
+                                onAddFavorite(item.coinUid)
+                            }
+                            coroutineScope.launch {
+                                delay(200)
+                                revealedCardId = null
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = if (item.favorited) R.drawable.ic_star_off_24 else R.drawable.ic_star_24),
+                        tint = ComposeAppTheme.colors.claude,
+                        contentDescription = "delete",
+                    )
+                }
                 DraggableCardSimple(
                     isRevealed = revealedCardId == item.coinUid,
                     cardOffset = 100f,

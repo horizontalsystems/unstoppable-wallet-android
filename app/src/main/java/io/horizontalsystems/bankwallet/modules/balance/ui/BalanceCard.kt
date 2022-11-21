@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -59,20 +58,17 @@ fun BalanceCardSwipable(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-        ActionsRow(
+        HsIconButton(
+            modifier = Modifier
+                .fillMaxHeight()
+                .align(Alignment.CenterEnd)
+                .width(88.dp),
+            onClick = { viewModel.disable(viewItem) },
             content = {
-                HsIconButton(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(88.dp),
-                    onClick = { viewModel.disable(viewItem) },
-                    content = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_circle_minus_24),
-                            tint = Color.Gray,
-                            contentDescription = "delete",
-                        )
-                    }
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_circle_minus_24),
+                    tint = Color.Gray,
+                    contentDescription = "delete",
                 )
             }
         )

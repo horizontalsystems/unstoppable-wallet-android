@@ -234,7 +234,7 @@ private fun TopPlatformSecondRow(
 
 @Composable
 fun TopPlatformItem(item: TopPlatformViewItem, onItemClick: (Platform) -> Unit) {
-    MultilineClear(
+    SectionItemRowUniversalClear(
         borderBottom = true,
         onClick = { onItemClick(item.platform) }
     ) {
@@ -243,7 +243,7 @@ fun TopPlatformItem(item: TopPlatformViewItem, onItemClick: (Platform) -> Unit) 
             placeholder = item.iconPlaceHolder,
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(24.dp)
+                .size(32.dp)
         )
         Column(modifier = Modifier.fillMaxWidth()) {
             MarketCoinFirstRow(item.platform.name, item.marketCap)

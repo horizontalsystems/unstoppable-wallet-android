@@ -6,21 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -234,16 +239,22 @@ class TvlFragment : BaseFragment() {
         label: String? = null,
         onClick: (() -> Unit)? = null
     ) {
-        MultilineClear(
+        SectionItemRowUniversalClear(
             onClick = onClick,
             borderBottom = true
         ) {
-            CoinImage(
-                iconUrl = iconUrl,
-                placeholder = iconPlaceholder,
+            Image(
+                painter = rememberAsyncImagePainter(
+                    model = iconUrl,
+                    error = painterResource(
+                        iconPlaceholder ?: R.drawable.ic_platform_placeholder_24
+                    )
+                ),
+                contentDescription = null,
                 modifier = Modifier
                     .padding(end = 16.dp)
-                    .size(24.dp)
+                    .size(32.dp)
+                    .clip(RoundedCornerShape(8.dp)),
             )
             Column(
                 modifier = Modifier.fillMaxWidth()

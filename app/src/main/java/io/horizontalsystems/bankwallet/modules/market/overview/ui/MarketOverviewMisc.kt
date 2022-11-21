@@ -1,13 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.market.overview.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -17,6 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 fun onItemClick(marketViewItem: MarketViewItem, navController: NavController) {
@@ -26,12 +23,9 @@ fun onItemClick(marketViewItem: MarketViewItem, navController: NavController) {
 
 @Composable
 fun SeeAllButton(onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .height(48.dp)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
     ) {
         body_leah(
             text = stringResource(R.string.Market_SeeAll),

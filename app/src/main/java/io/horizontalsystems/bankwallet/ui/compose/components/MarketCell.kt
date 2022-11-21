@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,7 +24,7 @@ fun MarketCoinClear(
     label: String? = null,
     onClick: (() -> Unit)? = null
 ) {
-    MultilineClear(
+    SectionItemRowUniversalClear(
         onClick = onClick,
         borderBottom = true
     ) {
@@ -35,7 +33,7 @@ fun MarketCoinClear(
             placeholder = coinIconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(24.dp)
+                .size(32.dp)
         )
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -43,39 +41,6 @@ fun MarketCoinClear(
             MarketCoinFirstRow(coinCode, coinRate)
             Spacer(modifier = Modifier.height(3.dp))
             MarketCoinSecondRow(coinName, marketDataValue, label)
-        }
-    }
-}
-
-@Composable
-fun MultilineClear(
-    modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
-    borderBottom: Boolean = false,
-    content: @Composable RowScope.() -> Unit
-) {
-    Box(
-        modifier = modifier
-            .height(60.dp)
-            .clickable(
-                enabled = onClick != null,
-                onClick = { onClick?.invoke() }
-            )
-    ) {
-        if (borderBottom) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            content()
         }
     }
 }
@@ -91,32 +56,25 @@ fun MarketCoin(
     label: String? = null,
     onClick: (() -> Unit)? = null
 ) {
-    Box(
+    RowUniversal(
         modifier = Modifier
-            .height(60.dp)
             .background(ComposeAppTheme.colors.tyler)
-            .clickable { onClick?.invoke() },
+            .padding(horizontal = 16.dp),
+        onClick = onClick
     ) {
-        Row(
+        CoinImage(
+            iconUrl = coinIconUrl,
+            placeholder = coinIconPlaceholder,
             modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(end = 16.dp)
+                .size(32.dp)
+        )
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            CoinImage(
-                iconUrl = coinIconUrl,
-                placeholder = coinIconPlaceholder,
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(24.dp)
-            )
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                MarketCoinFirstRow(coinCode, coinRate)
-                Spacer(modifier = Modifier.height(3.dp))
-                MarketCoinSecondRow(coinName, marketDataValue, label)
-            }
+            MarketCoinFirstRow(coinCode, coinRate)
+            Spacer(modifier = Modifier.height(3.dp))
+            MarketCoinSecondRow(coinName, marketDataValue, label)
         }
     }
 }

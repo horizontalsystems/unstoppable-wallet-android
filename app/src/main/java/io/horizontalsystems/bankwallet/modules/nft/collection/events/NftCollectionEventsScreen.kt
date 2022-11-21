@@ -155,7 +155,7 @@ fun NftEvent(
     currencyValue: String?,
     onClick: (() -> Unit)? = null
 ) {
-    MultilineClear(
+    SectionItemRowUniversalClear(
         borderBottom = true,
         onClick = onClick
     ) {
@@ -168,8 +168,8 @@ fun NftEvent(
                 contentDescription = null,
                 modifier = Modifier
                     .padding(end = 16.dp)
-                    .size(24.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+                    .size(32.dp)
+                    .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             )
         }

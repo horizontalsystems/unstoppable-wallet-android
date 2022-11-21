@@ -537,3 +537,31 @@ fun SectionUniversalItem(
         content.invoke()
     }
 }
+
+@Composable
+fun SectionItemRowUniversalClear(
+    borderTop: Boolean = false,
+    borderBottom: Boolean = false,
+    onClick: (() -> Unit)? = null,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Column {
+        if (borderTop) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+            )
+        }
+        RowUniversal(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            onClick = onClick,
+            content = content
+        )
+        if (borderBottom) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+            )
+        }
+    }
+}
