@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.list.ui
 
 import android.app.Activity
-import android.content.Intent
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -44,7 +41,14 @@ fun WCSessionsScreen(
     navController: NavController,
     deepLinkUri: String?
 ) {
+    val viewModel = viewModel<WalletConnectListViewModel>(
+        factory = WalletConnectListModule.Factory(deepLinkUri)
+    )
+    val viewModelWc2 = viewModel<WC2ListViewModel>(factory = WalletConnectListModule.FactoryWC2())
+
+    val context = LocalContext.current
     val view = LocalView.current
+
     val openUri: (String) -> Unit = { connectUri ->
         val wcVersion: Int = WalletConnectListModule.getVersionFromUri(connectUri)
         if (wcVersion == 1) {
@@ -59,35 +63,13 @@ fun WCSessionsScreen(
             HudHelper.showErrorMessage(view, R.string.WalletConnect_Error_InvalidUrl)
         }
     }
-
     val qrScannerLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
                 openUri(scannedText)
             }
         }
-
-    ComposeAppTheme {
-        WCSessionsContent(
-            navController,
-            qrScannerLauncher,
-            deepLinkUri,
-            openUri
-        )
-    }
-}
-
-@Composable
-fun WCSessionsContent(
-    navController: NavController,
-    qrScannerLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
-    deepLinkUri: String?,
-    openUri: (String) -> Unit,
-    viewModel: WalletConnectListViewModel = viewModel(factory = WalletConnectListModule.Factory(deepLinkUri)),
-    viewModelWc2: WC2ListViewModel = viewModel(factory = WalletConnectListModule.FactoryWC2())
-) {
-    val context = LocalContext.current
     val noSessions = viewModel.sectionItem == null && viewModelWc2.sectionItem == null
 
     viewModel.openDeeplink?.let {
