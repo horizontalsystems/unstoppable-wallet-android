@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +54,12 @@ class WC2PairingsFragment : BaseFragment() {
 fun WCPairingsScreen(navController: NavController) {
     val viewModel = viewModel<WCPairingsViewModel>(factory = WCPairingsViewModel.Factory())
     val uiState = viewModel.uiState
+
+    LaunchedEffect(uiState.closeScreen) {
+        if (uiState.closeScreen) {
+            navController.popBackStack()
+        }
+    }
 
     ComposeAppTheme {
         Scaffold(
