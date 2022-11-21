@@ -12,10 +12,12 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 class WCPairingsViewModel(private val wc2Service: WC2Service) : ViewModel() {
 
     private var pairings = listOf<PairingViewItem>()
+    private var closeScreen = false
 
     var uiState by mutableStateOf(
         WCPairingsUiState(
-            pairings = pairings
+            pairings = pairings,
+            closeScreen = closeScreen,
         )
     )
         private set
@@ -38,7 +40,8 @@ class WCPairingsViewModel(private val wc2Service: WC2Service) : ViewModel() {
 
     private fun emitState() {
         uiState = WCPairingsUiState(
-            pairings = pairings
+            pairings = pairings,
+            closeScreen = closeScreen
         )
     }
 
@@ -60,6 +63,8 @@ class WCPairingsViewModel(private val wc2Service: WC2Service) : ViewModel() {
                 getPairingViewItem(it)
             }
 
+        closeScreen = pairings.isEmpty()
+
         emitState()
     }
 
@@ -78,4 +83,7 @@ data class PairingViewItem(
     val topic: String
 )
 
-data class WCPairingsUiState(val pairings: List<PairingViewItem>)
+data class WCPairingsUiState(
+    val pairings: List<PairingViewItem>,
+    val closeScreen: Boolean
+)
