@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionsScreen
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.findNavController
 
 class WCListFragment : BaseFragment() {
@@ -25,10 +26,12 @@ class WCListFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                WCSessionsScreen(
-                    findNavController(),
-                    deepLinkUri
-                )
+                ComposeAppTheme {
+                    WCSessionsScreen(
+                        findNavController(),
+                        deepLinkUri
+                    )
+                }
             }
         }
     }
