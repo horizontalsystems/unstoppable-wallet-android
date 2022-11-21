@@ -38,6 +38,10 @@ class WC2ListViewModel(
         sync(service.sessions)
     }
 
+    fun resume() {
+        pairingsNumber = wc2Service.getPairings().size
+    }
+
     override fun onCleared() {
         disposables.clear()
     }

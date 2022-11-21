@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConne
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
@@ -93,6 +94,12 @@ fun WCSessionsContent(
         openUri.invoke(it)
         viewModel.deeplinkOpened()
     }
+
+    DisposableLifecycleCallbacks(
+        onResume = {
+            viewModelWc2.resume()
+        }
+    )
 
     LaunchedEffect(Unit) {
         if (deepLinkUri == null && !viewModel.initialConnectionPrompted && noSessions) {
