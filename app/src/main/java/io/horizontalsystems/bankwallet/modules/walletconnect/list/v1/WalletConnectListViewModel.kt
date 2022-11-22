@@ -25,17 +25,28 @@ class WalletConnectListViewModel(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val wc2Service: WC2Service
 ) : ViewModel() {
+    sealed class Route {
+        data class WC1Session(val uri: String) : Route()
+        object Error: Route()
+    }
+
+    var route by mutableStateOf<Route?>(null)
+        private set
+
     var initialConnectionPrompted = false
 
     private var v1SectionItem: Section? = null
     private var v2SectionItem: Section? = null
     private var pairingsNumber = wc2Service.getPairings().size
+    private val emptyScreen: Boolean
+        get() = v1SectionItem == null && v2SectionItem == null && pairingsNumber == 0
 
     var uiState by mutableStateOf(
         WalletConnectListUiState(
             v1SectionItem = v1SectionItem,
             v2SectionItem = v2SectionItem,
             pairingsNumber = pairingsNumber,
+            emptyScreen = emptyScreen,
         )
     )
         private set
@@ -77,11 +88,23 @@ class WalletConnectListViewModel(
         emitState()
     }
 
+    fun setConnectionUri(uri: String) {
+        route = when (WalletConnectListModule.getVersionFromUri(uri)) {
+            1 -> Route.WC1Session(uri)
+            2 -> {
+                wc2Service.pair(uri)
+                null
+            }
+            else -> Route.Error
+        }
+    }
+
     private fun emitState() {
         uiState = WalletConnectListUiState(
             v1SectionItem = v1SectionItem,
             v2SectionItem = v2SectionItem,
             pairingsNumber = pairingsNumber,
+            emptyScreen = emptyScreen
         )
     }
 
@@ -141,6 +164,7 @@ class WalletConnectListViewModel(
 
     fun refreshPairingsNumber() {
         pairingsNumber = wc2Service.getPairings().size
+        emitState()
     }
 
     private fun syncPendingRequestsCount(count: Int) {
@@ -188,10 +212,15 @@ class WalletConnectListViewModel(
     fun onDeleteV2(sessionId: String) {
         wc2ListService.delete(sessionId)
     }
+
+    fun onHandleRoute() {
+        route = null
+    }
 }
 
 data class WalletConnectListUiState(
     val v1SectionItem: Section?,
     val v2SectionItem: Section?,
-    val pairingsNumber: Int
+    val pairingsNumber: Int,
+    val emptyScreen: Boolean
 )
