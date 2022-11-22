@@ -395,6 +395,7 @@
     <string name="WalletConnect_Note">Примечание</string>
     <string name="WalletConnect_LegacySignWarning">Подписание этого сообщения может быть опасным. Эта подпись потенциально может выполнить любую операцию от имени вашей учетной записи, включая полное управление вашим счетом и всеми его активами на запрашиваемый сайт. Подпишите это сообщение только если вы знаете, что вы делаете или полностью доверяете запрашиваемому сайту.</string>
     <string name="WalletConnect_NotSupportedDescription">Ваш текущий тип кошелька %s не поддерживает WalletConnect</string>
+    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Внимание</string>
     <string name="EthereumTransaction_Error_Title">Ошибка</string>
@@ -756,6 +757,7 @@
     <string name="Watch_By">Из</string>
     <string name="Watch_WatchBy">Смотреть из</string>
     <string name="Watch_TypeEvmAddress">EVM адрес</string>
+    <string name="Watch_TypeSolanaAddress">Solana Address</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Названию</string>
@@ -898,6 +900,7 @@
     <string name="TorPage_Connected">Подключен</string>
     <string name="TorPage_Failed">Не удалось</string>
     <string name="TorPage_ConnectionClosed">Отсоединено</string>
+    <string name="Tor_TorIsActive">Tor is active</string>
     <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
     <!--Coin Option-->
     <string name="CoinOption_bip49_Title">Новые (рекомендуется)</string>
