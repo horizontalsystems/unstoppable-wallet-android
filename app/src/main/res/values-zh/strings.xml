@@ -395,6 +395,7 @@
     <string name="WalletConnect_Note">备注</string>
     <string name="WalletConnect_LegacySignWarning">签名此消息可能是危险的。 此签名可能代表您的帐户执行任何操作。 包括让您的帐户及其所有资产完全控制到请求站点。 只有当您知道正在做什么或完全信任请求站点时，才能签署此消息。</string>
     <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
+    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
     <string name="EthereumTransaction_Error_Title">出错</string>
@@ -760,6 +761,7 @@
     <string name="Watch_By">由</string>
     <string name="Watch_WatchBy">观看者</string>
     <string name="Watch_TypeEvmAddress">EVM 地址</string>
+    <string name="Watch_TypeSolanaAddress">Solana Address</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
@@ -902,6 +904,7 @@
     <string name="TorPage_Connected">已连接</string>
     <string name="TorPage_Failed">失败</string>
     <string name="TorPage_ConnectionClosed">已断开</string>
+    <string name="Tor_TorIsActive">Tor is active</string>
     <string name="Tor_PrerequisitesAlert_Content">如果激活了TOR，Ethereum区块链将重置为Infura</string>
     <!--Coin Option-->
     <string name="CoinOption_bip49_Title">较新（推荐)</string>
