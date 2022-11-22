@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -29,14 +28,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 
 @Composable
 fun WCSessionList(
-    viewModelWc2: WC2ListViewModel,
-    viewModelWc1: WalletConnectListViewModel,
+    viewModel: WalletConnectListViewModel,
     navController: NavController
 ) {
+    val uiState = viewModel.uiState
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
     LazyColumn(contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)) {
-        viewModelWc2.sectionItem?.let { section ->
+        uiState.v2SectionItem?.let { section ->
             WCSection(
                 section,
                 navController,
@@ -49,13 +48,13 @@ fun WCSessionList(
                 onConceal = {
                     revealedCardId = null
                 },
-                onDelete = { viewModelWc2.onDelete(it) }
+                onDelete = { viewModel.onDeleteV2(it) }
             )
             item {
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }
-        val pairingsNumber = viewModelWc2.pairingsNumber
+        val pairingsNumber = uiState.pairingsNumber
         if (pairingsNumber > 0) {
             item {
                 CellSingleLineLawrenceSection {
@@ -81,7 +80,7 @@ fun WCSessionList(
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }
-        viewModelWc1.sectionItem?.let { section ->
+        uiState.v1SectionItem?.let { section ->
             WCSection(
                 section,
                 navController,
@@ -94,7 +93,7 @@ fun WCSessionList(
                 onConceal = {
                     revealedCardId = null
                 },
-                onDelete = { viewModelWc1.onDelete(it) }
+                onDelete = { viewModel.onDelete(it) }
             )
         }
     }
