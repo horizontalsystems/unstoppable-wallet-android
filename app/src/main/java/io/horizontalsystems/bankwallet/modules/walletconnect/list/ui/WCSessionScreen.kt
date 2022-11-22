@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -41,45 +40,48 @@ fun WCSessionsScreen(
     navController: NavController,
     deepLinkUri: String?
 ) {
-    val viewModel = viewModel<WalletConnectListViewModel>(
-        factory = WalletConnectListModule.Factory(deepLinkUri)
-    )
-    val viewModelWc2 = viewModel<WC2ListViewModel>(factory = WalletConnectListModule.FactoryWC2())
+    val commonViewModel = viewModel<WalletConnectListCommonViewModel>(factory = WalletConnectListCommonViewModel.Factory())
 
     val context = LocalContext.current
     val view = LocalView.current
 
-    val openUri: (String) -> Unit = { connectUri ->
-        val wcVersion: Int = WalletConnectListModule.getVersionFromUri(connectUri)
-        if (wcVersion == 1) {
+    when (val page = commonViewModel.page) {
+        is WalletConnectListCommonViewModel.Page.WC1Session -> {
             navController.slideFromBottom(
                 R.id.wcSessionFragment,
-                WCSessionModule.prepareParams(null, connectUri)
+                WCSessionModule.prepareParams(null, page.uri)
             )
-        } else if (wcVersion == 2) {
-            App.wc2Service.pair(connectUri)
-
-        } else {
+        }
+        WalletConnectListCommonViewModel.Page.Error -> {
             HudHelper.showErrorMessage(view, R.string.WalletConnect_Error_InvalidUrl)
         }
+        null -> Unit
     }
-    val qrScannerLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
-                openUri(scannedText)
-            }
-        }
-    val noSessions = viewModel.sectionItem == null && viewModelWc2.sectionItem == null
 
-    viewModel.openDeeplink?.let {
-        openUri.invoke(it)
-        viewModel.deeplinkOpened()
+    LaunchedEffect(deepLinkUri) {
+        deepLinkUri?.let {
+            commonViewModel.setUri(it)
+        }
     }
+
+    val qrScannerLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            commonViewModel.setUri(result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "")
+        }
+    }
+
+    val viewModel = viewModel<WalletConnectListViewModel>(
+        factory = WalletConnectListModule.Factory()
+    )
+    val viewModelWc2 = viewModel<WC2ListViewModel>(factory = WalletConnectListModule.FactoryWC2())
+
+    val noSessions = viewModel.sectionItem == null && viewModelWc2.sectionItem == null
 
     DisposableLifecycleCallbacks(
         onResume = {
-            viewModelWc2.resume()
+            viewModelWc2.refreshPairingsNumber()
         }
     )
 

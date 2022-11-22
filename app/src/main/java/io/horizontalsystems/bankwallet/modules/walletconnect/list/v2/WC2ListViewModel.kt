@@ -38,7 +38,7 @@ class WC2ListViewModel(
         sync(service.sessions)
     }
 
-    fun resume() {
+    fun refreshPairingsNumber() {
         pairingsNumber = wc2Service.getPairings().size
     }
 
