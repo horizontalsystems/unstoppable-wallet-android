@@ -395,6 +395,7 @@
     <string name="WalletConnect_Note">Nota</string>
     <string name="WalletConnect_LegacySignWarning">Firmar este mensaje puede ser peligroso. Esta firma podría potencialmente realizar cualquier operación en nombre de tu cuenta, incluyendo dar el control total de su cuenta y todos sus activos al sitio solicitado. Firma este mensaje sólo si sabes lo que estás haciendo o confía plenamente en el sitio solicitante.</string>
     <string name="WalletConnect_NotSupportedDescription">El tipo de cartera actual %s no es compatible con WalletConnect</string>
+    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
@@ -759,6 +760,7 @@
     <string name="Watch_By">Por</string>
     <string name="Watch_WatchBy">Ver por</string>
     <string name="Watch_TypeEvmAddress">Dirección EVM</string>
+    <string name="Watch_TypeSolanaAddress">Solana Address</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nombre</string>
@@ -901,6 +903,7 @@
     <string name="TorPage_Connected">Conectado</string>
     <string name="TorPage_Failed">Falló</string>
     <string name="TorPage_ConnectionClosed">Desconectado</string>
+    <string name="Tor_TorIsActive">Tor is active</string>
     <string name="Tor_PrerequisitesAlert_Content">Activar TOR restablecerá la conexión del Blockchain de Ethereum de vuelta a Infura.</string>
     <!--Coin Option-->
     <string name="CoinOption_bip49_Title">Más reciente (recomendado)</string>
