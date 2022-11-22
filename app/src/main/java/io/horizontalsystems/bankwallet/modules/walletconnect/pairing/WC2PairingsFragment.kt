@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -99,7 +100,10 @@ fun WCPairingsScreen(navController: NavController) {
                             .padding(horizontal = 16.dp)
                             .fillMaxSize()
                             .clickable {
-                                viewModel.deleteAll()
+                                ConfirmDeleteAllPairingsDialog.onConfirm(navController) {
+                                    viewModel.deleteAll()
+                                }
+                                navController.slideFromBottom(R.id.confirmDeleteAllPairingsDialog)
                             },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
