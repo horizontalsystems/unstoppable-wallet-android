@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="LargeNumberFormat">%s%s</string>
-    <string name="Alert_Cancel">Cancelar</string>
-    <string name="Alert_Copy">Copiar</string>
-    <string name="Alert_Close">Fechar or Encerrar</string>
-    <string name="Alert_Loading">A Carregar...</string>
-    <string name="Alert_Restart">Reiniciar</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
+    <string name="Alert_Cancel">Cancel</string>
+    <string name="Alert_Copy">Copy</string>
+    <string name="Alert_Close">Close</string>
+    <string name="Alert_Loading">Loading...</string>
+    <string name="Alert_Restart">Restart</string>
     <string name="Action_Undo">UNDO</string>
-    <string name="Button_Cancel">Cancelar</string>
-    <string name="Button_Next">Próximo</string>
+    <string name="Button_Cancel">Cancel</string>
+    <string name="Button_Next">Next</string>
     <string name="Button_Enable">Enable</string>
-    <string name="Button_Disable">Desativar</string>
+    <string name="Button_Disable">Disable</string>
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Done">Done</string>
@@ -63,7 +63,7 @@
     <string name="CreateWallet_PassphraseConfirm">Confirm</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
-    <string name="EnterPassphrase">Passphrase</string>
+    <string name="EnterPassphrase">Enter the passphrase</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases add an additional security layer to the wallets, enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase, but associated with different passwords. \n\nTo restore these wallets, a user will require a mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Languages-->
     <string name="Language_English">English</string>
@@ -82,8 +82,8 @@
     <string name="RateApp_Button_RateIt">Rate It</string>
     <string name="RateApp_Button_NotNow">Not now</string>
     <!--Restore-->
-    <string name="Restore_Enter_Key_Title">Enter Key</string>
-    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words need to be entered in the correct order and separated by spaces.</string>
+    <string name="Restore_Enter_Key_Title">Restore</string>
+    <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 or 24 words. You entered: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
@@ -101,9 +101,9 @@
     <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_BirthdayHeight">Birthday Height</string>
     <string name="Restore_ZCash">ZCash</string>
-    <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing.</string>
-    <string name="Restore_ZCash_Birthday_Hint">000000000 (opcional)</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">For quick synchronization you can enter the wallet\'s birthday height.</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
     <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
     <string name="Restore_ZCash_NewWallet">New Wallet</string>
     <string name="Restore_ZCash_NewWallet_Description">Don\'t have any transaction before</string>
@@ -115,12 +115,12 @@
     <!--Market-->
     <string name="Market_Field_MarketCap">MCap</string>
     <string name="Market_Field_Volume">Vol</string>
-    <string name="Market_Field_PriceDiff">Preço</string>
-    <string name="Market_Title">Mercados</string>
-    <string name="Market_Search">Buscar</string>
-    <string name="Market_FilterSection_MarketParameters">PARÂMETROS DE MERCADO</string>
-    <string name="Market_FilterSection_PriceParameters">PARÂMETROS DE PREÇO</string>
-    <string name="Market_FilterSection_NetworkParameters">PARÂMETROS DE REDE</string>
+    <string name="Market_Field_PriceDiff">Price</string>
+    <string name="Market_Title">Markets</string>
+    <string name="Market_Search">Search</string>
+    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
+    <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
+    <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
@@ -378,7 +378,7 @@
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <string name="WalletConnect_Error_NoWallet">No suitable Wallet. You need to create or restore existing wallet</string>
     <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
-    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported chain id</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
     <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
@@ -444,7 +444,7 @@
     <string name="Swap_MaximumPaid">Maximum Amount</string>
     <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <string name="Swap_PoweredBy">Powered by</string>
-    <string name="Swap_SelectSwapProvider_Title">Swap Service</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
@@ -485,7 +485,7 @@
     <string name="Approve_YouApprove">You Approve</string>
     <string name="Approve_YouRevoke">You Revoke</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on the %s blockchain. \n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
+    <string name="SwapInfo_Description">This exchange service is powered by %1$s, a decentralized token exchange protocol built on the %2$s blockchain. \n\n%3$s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="SwapInfo_DexRelated">%s Related</string>
     <string name="SwapInfo_AllowanceTitle">Allowance</string>
     <string name="SwapInfo_AllowanceDescription">Token swaps on Unstoppable are powered by decentralized token exchanges i.e. Uniswap, 1inch, PancakeSwap, Quickswap etc. These services are fully automated and facilitate token exchanges in a reliable manner without any means to cheat. \n\nAllowance refers to the amount of token an exchange service has a permission to spend on user\'s behalf. Typically, the allowance amount is set using \'approval\' transaction before a trade. A sufficient allowance is required before a swap action can take place.</string>
@@ -759,7 +759,7 @@
     <string name="ManageAccounts_ImportWallet">Restore</string>
     <string name="ManageAccounts_WatchAddress">Watch Address</string>
     <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. This is handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
-    <string name="Watch_Address_Title">Address</string>
+    <string name="Watch_Address_Title">Watch Address</string>
     <string name="Watch_Address_Hint">Address or Domain</string>
     <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
     <string name="Watch_Address_Description">Available only for Ethereum and other supported EVM blockchains.</string>
@@ -772,7 +772,7 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Recovery Phrase</string>
     <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
     <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Unlink</string>
@@ -879,7 +879,7 @@
     <string name="AddToken_Symbol">Symbol</string>
     <string name="AddToken_Decimals">Decimals</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">Coin Type(s)</string>
+    <string name="AddToken_CoinTypes">COIN TYPES</string>
     <string name="AddToken_AddressOrSymbol">Contract Address</string>
     <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
     <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
@@ -891,7 +891,7 @@
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Native</string>
     <string name="CoinPlatformsSelector_Title">Coin Type</string>
-    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains. Select version(s) you would like to use.</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
@@ -1084,9 +1084,9 @@
     <string name="NftCollection_Owners">Owners</string>
     <string name="NftCollection_AveragePrice">All-time Average</string>
     <string name="NftCollection_ItemsCount">%d Items</string>
-    <string name="NftCollection_TodaysSales">Today\'s Sales</string>
+    <string name="NftCollection_TodaysSales">Today\'s Sellers</string>
     <string name="NftCollection_TodaysSalesCount">%s NFT</string>
-    <string name="NftCollection_AveragePriceDescription">~%s / Item</string>
+    <string name="NftCollection_AveragePriceDescription">~%s per NFT</string>
     <string name="NftCollection_Royalty">Royalty</string>
     <string name="NftCollection_InceptionDate">Inception Date</string>
     <!-- NFT Collection Events -->
@@ -1130,7 +1130,7 @@
     <string name="ProUsersInfo_Features_TxCount">Transaction Count</string>
     <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
     <string name="ProUsersInfo_Features_Authenticating">Authenticating...</string>
-    <string name="Hud_Text_LearnMore">Coming So Soon</string>
+    <string name="Hud_Text_LearnMore">Coming Soon</string>
     <string name="Hud_Text_Activate">Activate</string>
     <string name="ProUsersActivate_Title">Activate the Pass</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, useful charts based on on-chain data that will help give you a clear view of projects</string>
