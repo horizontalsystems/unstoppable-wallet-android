@@ -396,6 +396,12 @@
     <string name="WalletConnect_LegacySignWarning">Signer ce message peut être dangereux. Cette signature peut potentiellement effectuer toute opération au nom de votre compte, y compris en donnant le contrôle total de votre compte et de tous ses actifs au site requérant. Ne signez ce message que si vous savez ce que vous faites ou si vous faites entièrement confiance au site requérant.</string>
     <string name="WalletConnect_NotSupportedDescription">Votre type de portefeuille actuel %s ne prend pas en charge WalletConnect</string>
     <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
+    <string name="WalletConnect_Pairings">Pairings</string>
+    <string name="WalletConnect_PairedDApps">Paired dApps</string>
+    <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
+    <string name="WalletConnect_Pairings_Delete">Delete</string>
+    <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Attention</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
