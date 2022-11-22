@@ -103,7 +103,7 @@
     <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing.</string>
-    <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (opcional)</string>
     <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
     <string name="Restore_ZCash_NewWallet">New Wallet</string>
     <string name="Restore_ZCash_NewWallet_Description">Don\'t have any transaction before</string>
@@ -115,12 +115,12 @@
     <!--Market-->
     <string name="Market_Field_MarketCap">MCap</string>
     <string name="Market_Field_Volume">Vol</string>
-    <string name="Market_Field_PriceDiff">Price</string>
-    <string name="Market_Title">Markets</string>
-    <string name="Market_Search">Search</string>
-    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
-    <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
-    <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
+    <string name="Market_Field_PriceDiff">Preço</string>
+    <string name="Market_Title">Mercados</string>
+    <string name="Market_Search">Buscar</string>
+    <string name="Market_FilterSection_MarketParameters">PARÂMETROS DE MERCADO</string>
+    <string name="Market_FilterSection_PriceParameters">PARÂMETROS DE PREÇO</string>
+    <string name="Market_FilterSection_NetworkParameters">PARÂMETROS DE REDE</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
@@ -396,6 +396,12 @@
     <string name="WalletConnect_LegacySignWarning">Signing this message can be dangerous. This signature could potentially perform any operation on behalf of your account, including giving full control of your account and all of its assets to the requesting site. Sign this message only if you know what you are doing or fully trust the requesting site.</string>
     <string name="WalletConnect_NotSupportedDescription">You current wallet type %s does not support WalletConnect</string>
     <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
+    <string name="WalletConnect_Pairings">Pairings</string>
+    <string name="WalletConnect_PairedDApps">Paired dApps</string>
+    <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
+    <string name="WalletConnect_Pairings_Delete">Delete</string>
+    <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>
     <string name="EthereumTransaction_Error_Title">Error</string>
