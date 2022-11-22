@@ -39,59 +39,50 @@ fun WCSessionsScreen(
     navController: NavController,
     deepLinkUri: String?
 ) {
-    val commonViewModel = viewModel<WalletConnectListCommonViewModel>(factory = WalletConnectListCommonViewModel.Factory())
-
     val context = LocalContext.current
     val view = LocalView.current
-
-    when (val page = commonViewModel.page) {
-        is WalletConnectListCommonViewModel.Page.WC1Session -> {
-            navController.slideFromBottom(
-                R.id.wcSessionFragment,
-                WCSessionModule.prepareParams(null, page.uri)
-            )
-        }
-        WalletConnectListCommonViewModel.Page.Error -> {
-            HudHelper.showErrorMessage(view, R.string.WalletConnect_Error_InvalidUrl)
-        }
-        null -> Unit
-    }
-
-    LaunchedEffect(deepLinkUri) {
-        deepLinkUri?.let {
-            commonViewModel.setUri(it)
-        }
-    }
-
-    val qrScannerLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            commonViewModel.setUri(result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "")
-        }
-    }
 
     val viewModel = viewModel<WalletConnectListViewModel>(
         factory = WalletConnectListModule.Factory()
     )
-
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                viewModel.setConnectionUri(result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "")
+            }
+        }
     val uiState = viewModel.uiState
 
-    val noSessions = uiState.v1SectionItem == null && uiState.v2SectionItem == null
+    when (val route = viewModel.route) {
+        is WalletConnectListViewModel.Route.WC1Session -> {
+            navController.slideFromBottom(
+                R.id.wcSessionFragment,
+                WCSessionModule.prepareParams(null, route.uri)
+            )
+            viewModel.onHandleRoute()
+        }
+        WalletConnectListViewModel.Route.Error -> {
+            HudHelper.showErrorMessage(view, R.string.WalletConnect_Error_InvalidUrl)
+            viewModel.onHandleRoute()
+        }
+        null -> Unit
+    }
+
+    LaunchedEffect(Unit) {
+        if (deepLinkUri != null) {
+            viewModel.setConnectionUri(deepLinkUri)
+        } else if (!viewModel.initialConnectionPrompted && uiState.v1SectionItem == null && uiState.v2SectionItem == null) {
+            delay(300)
+            viewModel.initialConnectionPrompted = true
+            qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
+        }
+    }
 
     DisposableLifecycleCallbacks(
         onResume = {
             viewModel.refreshPairingsNumber()
         }
     )
-
-    LaunchedEffect(Unit) {
-        if (deepLinkUri == null && !viewModel.initialConnectionPrompted && noSessions) {
-            delay(300)
-            viewModel.initialConnectionPrompted = true
-            qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -122,19 +113,16 @@ fun WCSessionsScreen(
                     )
                 )
             )
-            when {
-                noSessions -> {
-                    ListEmptyView(
-                        text = stringResource(R.string.WalletConnect_NoConnection),
-                        icon = R.drawable.ic_wallet_connet_48
-                    )
-                }
-                else -> {
-                    WCSessionList(
-                        viewModel,
-                        navController
-                    )
-                }
+            if (uiState.emptyScreen) {
+                ListEmptyView(
+                    text = stringResource(R.string.WalletConnect_NoConnection),
+                    icon = R.drawable.ic_wallet_connet_48
+                )
+            } else {
+                WCSessionList(
+                    viewModel,
+                    navController
+                )
             }
         }
         ButtonsGroupWithShade {
