@@ -4,39 +4,85 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.walletconnect.sign.client.Sign
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule.Section
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListService
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionKillManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 
-class WalletConnectListViewModel(private val service: WalletConnectListService) : ViewModel() {
+class WalletConnectListViewModel(
+    private val service: WalletConnectListService,
+    private val wc2ListService: WC2ListService,
+    private val evmBlockchainManager: EvmBlockchainManager,
+    private val wc2Service: WC2Service
+) : ViewModel() {
     var initialConnectionPrompted = false
 
-    private val disposables = CompositeDisposable()
-    var sectionItem by mutableStateOf<Section?>(null)
+    private var v1SectionItem: Section? = null
+    private var v2SectionItem: Section? = null
+    private var pairingsNumber = wc2Service.getPairings().size
+
+    var uiState by mutableStateOf(
+        WalletConnectListUiState(
+            v1SectionItem = v1SectionItem,
+            v2SectionItem = v2SectionItem,
+            pairingsNumber = pairingsNumber,
+        )
+    )
         private set
 
     val killingSessionInProcessLiveEvent = SingleLiveEvent<Unit>()
     val killingSessionCompletedLiveEvent = SingleLiveEvent<Unit>()
     val killingSessionFailedLiveEvent = SingleLiveEvent<String>()
 
+    private val disposables = CompositeDisposable()
+
     init {
         service.itemsObservable
-            .subscribeIO { sync(it) }
+            .subscribeIO {
+                sync(it)
+                emitState()
+            }
             .let { disposables.add(it) }
-
-        if (service.items.isNotEmpty()) {
-            sync(service.items)
-        }
 
         service.sessionKillingStateObservable
             .subscribeIO { sync(it) }
             .let { disposables.add(it) }
+
+        wc2ListService.sessionsObservable
+            .subscribeIO {
+                syncV2(it)
+                emitState()
+            }
+            .let { disposables.add(it) }
+
+        wc2ListService.pendingRequestsObservable
+            .subscribeIO {
+                syncPendingRequestsCount(it)
+                emitState()
+            }
+            .let { disposables.add(it) }
+
+        sync(service.items)
+        syncV2(wc2ListService.sessions)
+        emitState()
+    }
+
+    private fun emitState() {
+        uiState = WalletConnectListUiState(
+            v1SectionItem = v1SectionItem,
+            v2SectionItem = v2SectionItem,
+            pairingsNumber = pairingsNumber,
+        )
     }
 
     fun onDelete(sessionsId: String) {
@@ -65,7 +111,7 @@ class WalletConnectListViewModel(private val service: WalletConnectListService) 
 
     private fun sync(items: List<WalletConnectListService.Item>) {
         if (items.isEmpty()) {
-            sectionItem = null
+            v1SectionItem = null
             return
         }
         val sessions = mutableListOf<WalletConnectListModule.SessionViewItem>()
@@ -81,7 +127,7 @@ class WalletConnectListViewModel(private val service: WalletConnectListService) 
             }
             sessions.addAll(itemSessions)
         }
-        sectionItem = Section(WalletConnectListModule.Version.Version1, sessions)
+        v1SectionItem = Section(WalletConnectListModule.Version.Version1, sessions)
     }
 
     private fun getSuitableIcon(imageUrls: List<String>): String? {
@@ -93,4 +139,59 @@ class WalletConnectListViewModel(private val service: WalletConnectListService) 
         disposables.clear()
     }
 
+    fun refreshPairingsNumber() {
+        pairingsNumber = wc2Service.getPairings().size
+    }
+
+    private fun syncPendingRequestsCount(count: Int) {
+        v2SectionItem?.let {
+            setSectionViewItem(it.sessions, count)
+        }
+    }
+
+    private fun setSectionViewItem(
+        sessions: List<WalletConnectListModule.SessionViewItem>,
+        pendingRequestsCount: Int
+    ) {
+        val count = if (pendingRequestsCount > 0) pendingRequestsCount else null
+        v2SectionItem = Section(WalletConnectListModule.Version.Version2, sessions, count)
+    }
+
+    private fun syncV2(sessions: List<Sign.Model.Session>) {
+        if (sessions.isEmpty() && wc2ListService.pendingRequestsCount == 0) {
+            v2SectionItem = null
+            return
+        }
+
+        val sessionItems = sessions.map { session ->
+            WalletConnectListModule.SessionViewItem(
+                sessionId = session.topic,
+                title = session.metaData?.name ?: "",
+                subtitle = getSubtitle(session.namespaces.values.map { it.accounts }.flatten()),
+                url = session.metaData?.url ?: "",
+                imageUrl = session.metaData?.icons?.lastOrNull(),
+            )
+        }
+
+        setSectionViewItem(sessionItems, wc2ListService.pendingRequestsCount)
+    }
+
+    private fun getSubtitle(chains: List<String>): String {
+        val chainNames = chains.mapNotNull { chain ->
+            WC2Parser.getChainId(chain)?.let { chainId ->
+                evmBlockchainManager.getBlockchain(chainId)?.name
+            }
+        }
+        return chainNames.joinToString(", ")
+    }
+
+    fun onDeleteV2(sessionId: String) {
+        wc2ListService.delete(sessionId)
+    }
 }
+
+data class WalletConnectListUiState(
+    val v1SectionItem: Section?,
+    val v2SectionItem: Section?,
+    val pairingsNumber: Int
+)

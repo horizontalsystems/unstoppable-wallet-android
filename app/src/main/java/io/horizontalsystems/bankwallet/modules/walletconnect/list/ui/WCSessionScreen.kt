@@ -26,7 +26,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
@@ -75,13 +74,14 @@ fun WCSessionsScreen(
     val viewModel = viewModel<WalletConnectListViewModel>(
         factory = WalletConnectListModule.Factory()
     )
-    val viewModelWc2 = viewModel<WC2ListViewModel>(factory = WalletConnectListModule.FactoryWC2())
 
-    val noSessions = viewModel.sectionItem == null && viewModelWc2.sectionItem == null
+    val uiState = viewModel.uiState
+
+    val noSessions = uiState.v1SectionItem == null && uiState.v2SectionItem == null
 
     DisposableLifecycleCallbacks(
         onResume = {
-            viewModelWc2.refreshPairingsNumber()
+            viewModel.refreshPairingsNumber()
         }
     )
 
@@ -131,7 +131,6 @@ fun WCSessionsScreen(
                 }
                 else -> {
                     WCSessionList(
-                        viewModelWc2,
                         viewModel,
                         navController
                     )
