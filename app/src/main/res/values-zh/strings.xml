@@ -396,6 +396,12 @@
     <string name="WalletConnect_LegacySignWarning">签名此消息可能是危险的。 此签名可能代表您的帐户执行任何操作。 包括让您的帐户及其所有资产完全控制到请求站点。 只有当您知道正在做什么或完全信任请求站点时，才能签署此消息。</string>
     <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
     <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
+    <string name="WalletConnect_Pairings">Pairings</string>
+    <string name="WalletConnect_PairedDApps">Paired dApps</string>
+    <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
+    <string name="WalletConnect_Pairings_Delete">Delete</string>
+    <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
     <string name="EthereumTransaction_Error_Title">出错</string>
