@@ -395,6 +395,7 @@
     <string name="WalletConnect_Note">참고</string>
     <string name="WalletConnect_LegacySignWarning">Signing this message can be dangerous. This signature could potentially perform any operation on behalf of your account, including giving full control of your account and all of its assets to the requesting site. Sign this message only if you know what you are doing or fully trust the requesting site.</string>
     <string name="WalletConnect_NotSupportedDescription">현재 지갑 유형 %s은(는) WalletConnect를 지원하지 않습니다.</string>
+    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">경고</string>
     <string name="EthereumTransaction_Error_Title">오류</string>
@@ -759,6 +760,7 @@
     <string name="Watch_By">으로</string>
     <string name="Watch_WatchBy">지켜보다</string>
     <string name="Watch_TypeEvmAddress">EVM 주소</string>
+    <string name="Watch_TypeSolanaAddress">Solana Address</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">이름</string>
@@ -901,6 +903,7 @@
     <string name="TorPage_Connected">연결됨</string>
     <string name="TorPage_Failed">실패</string>
     <string name="TorPage_ConnectionClosed">연결 해제</string>
+    <string name="Tor_TorIsActive">Tor is active</string>
     <string name="Tor_PrerequisitesAlert_Content">토르를 활성화하면 Infura의 이더리움 블록체인 연결이 초기화됩니다.</string>
     <!--Coin Option-->
     <string name="CoinOption_bip49_Title">최신(권장)</string>
