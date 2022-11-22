@@ -11,12 +11,12 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListView
 
 object WalletConnectListModule {
 
-    class Factory(private val deepLinkUri: String?) : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = WalletConnectListService(App.wc1SessionManager, App.evmBlockchainManager)
 
-            return WalletConnectListViewModel(service, deepLinkUri) as T
+            return WalletConnectListViewModel(service) as T
         }
     }
 
