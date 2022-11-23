@@ -8,6 +8,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,7 +76,7 @@ private fun BaseCurrencyScreen(
     }
 
     if (viewModel.showDisclaimer) {
-        scope.launch {
+        LaunchedEffect(null) {
             sheetState.show()
         }
     }
@@ -120,7 +121,7 @@ private fun BaseCurrencyScreen(
                     Modifier.verticalScroll(rememberScrollState())
                 ) {
                     Spacer(Modifier.height(12.dp))
-                    CellMultilineLawrenceSection(viewModel.popularItems) { item ->
+                    CellUniversalLawrenceSection(viewModel.popularItems) { item ->
                         CurrencyCell(
                             item.currency.code,
                             item.currency.symbol,
@@ -197,11 +198,8 @@ private fun CurrencyCell(
     checked: Boolean,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        onClick = onClick
     ) {
         Image(
             modifier = Modifier.padding(horizontal = 16.dp),

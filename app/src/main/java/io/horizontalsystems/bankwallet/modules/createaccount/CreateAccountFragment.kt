@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -12,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
@@ -49,7 +47,8 @@ class CreateAccountFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val popUpToInclusiveId = arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, -1) ?: -1
+                val popUpToInclusiveId =
+                    arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, -1) ?: -1
                 CreateAccountScreen(findNavController(), popUpToInclusiveId)
             }
         }
@@ -147,7 +146,7 @@ private fun CreateAccountScreen(
                             .verticalScroll(rememberScrollState())
                     ) {
                         Spacer(Modifier.height(12.dp))
-                        CellSingleLineLawrenceSection(
+                        CellUniversalLawrenceSection(
                             listOf(
                                 {
                                     MnemonicNumberCell(
@@ -229,11 +228,13 @@ private fun MnemonicNumberCell(
     kind: CreateAccountModule.Kind,
     showMnemonicSizeSelectorDialog: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.padding(start = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalPadding = 0.dp,
+        onClick = { showMnemonicSizeSelectorDialog() }
     ) {
         Icon(
+            modifier = Modifier.padding(vertical = 12.dp),
             painter = painterResource(id = R.drawable.ic_key_20),
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey
@@ -243,12 +244,14 @@ private fun MnemonicNumberCell(
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         Spacer(Modifier.weight(1f))
-        ButtonSecondaryTransparent(
-            title = kind.title,
-            iconRight = R.drawable.ic_down_arrow_20,
-            onClick = {
-                showMnemonicSizeSelectorDialog()
-            }
+        subhead1_grey(
+            text = kind.title,
+        )
+        Icon(
+            modifier = Modifier.padding(start = 4.dp),
+            painter = painterResource(id = R.drawable.ic_down_arrow_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
         )
     }
 }
@@ -258,12 +261,9 @@ fun MnemonicLanguageCell(
     language: Language,
     showLanguageSelectorDialog: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable { showLanguageSelectorDialog.invoke() }
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = showLanguageSelectorDialog
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_globe_20),
@@ -292,17 +292,15 @@ private fun PassphraseCell(
     enabled: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf {
-            Row(
-                modifier = Modifier
-                    .clickable {
-                        onCheckedChange(!enabled)
-                    }
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                verticalPadding = 0.dp,
+                onClick = { onCheckedChange(!enabled) },
             ) {
                 Icon(
+                    modifier = Modifier.padding(vertical = 12.dp),
                     painter = painterResource(id = R.drawable.ic_key_phrase_20),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey

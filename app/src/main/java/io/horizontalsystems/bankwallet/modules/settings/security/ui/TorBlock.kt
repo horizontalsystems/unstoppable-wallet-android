@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,13 +26,11 @@ fun TorBlock(
     val connectionState = viewModel.torConnectionStatus
 
 
-    CellMultilineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                verticalPadding = 0.dp,
             ) {
                 if (connectionState.showConnectionSpinner) {
                     CircularProgressIndicator(
@@ -51,7 +48,7 @@ fun TorBlock(
                     }
                 }
                 Spacer(Modifier.width(16.dp))
-                Column{
+                Column(Modifier.padding(vertical = 12.dp)){
                     body_leah(text = stringResource(R.string.Tor_Title))
                     Spacer(Modifier.height(1.dp))
                     subhead2_grey(text = stringResource(connectionState.value))

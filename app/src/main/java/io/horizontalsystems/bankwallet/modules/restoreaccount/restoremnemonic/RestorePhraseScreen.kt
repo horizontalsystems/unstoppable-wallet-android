@@ -352,7 +352,7 @@ private fun BottomSection(
         )
     }
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf({
             MnemonicLanguageCell(
                 language = uiState.language,
@@ -362,11 +362,9 @@ private fun BottomSection(
             )
         },
             {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+                RowUniversal(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalPadding = 0.dp,
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_key_phrase_20),

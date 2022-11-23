@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
@@ -112,14 +113,12 @@ private fun FaqScreen(
 
                         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                             Spacer(Modifier.height(12.dp))
-                            HSSectionRounded {
-                                viewModel.faqItems.forEachIndexed { index, faq ->
-                                    CellLawrence(
-                                        borderTop = index != 0,
-                                        onClick = { onItemClick(faq) }
-                                    ) {
-                                        subhead1_leah(text = faq.title)
-                                    }
+                            CellUniversalLawrenceSection(viewModel.faqItems) { faq ->
+                                RowUniversal(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    onClick =  { onItemClick(faq) }
+                                ) {
+                                    subhead1_leah(text = faq.title)
                                 }
                             }
                             Spacer(Modifier.height(32.dp))

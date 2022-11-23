@@ -221,25 +221,23 @@ private fun CoinCell(
     onItemClick: () -> Unit,
     onSettingClick: () -> Unit,
 ) {
-    CellMultilineClear(
-        borderBottom = true,
-        onClick = onItemClick
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
+    Column {
+        RowUniversal(
+            onClick = onItemClick,
+            modifier = Modifier.padding(horizontal = 16.dp),
+            verticalPadding = 0.dp
         ) {
             Image(
                 painter = viewItem.imageSource.painter(),
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(24.dp)
+                    .padding(end = 16.dp, top = 12.dp, bottom = 12.dp)
+                    .size(32.dp)
             )
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(vertical = 12.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     body_leah(
@@ -287,11 +285,16 @@ private fun CoinCell(
                     }
                 }
                 HsSwitch(
+                    modifier = Modifier.padding(0.dp),
                     checked = viewItem.state.enabled,
                     onCheckedChange = { onItemClick.invoke() },
                 )
             }
         }
+        Divider(
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10,
+        )
     }
 }
 

@@ -1,14 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -22,17 +18,14 @@ import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule
 import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
 fun BlockchainSettingsBlock(
     blockchainSettingsViewModel: BlockchainSettingsViewModel,
     navController: NavController
 ) {
-    CellMultilineLawrenceSection(blockchainSettingsViewModel.viewItems) { item ->
+    CellUniversalLawrenceSection(blockchainSettingsViewModel.viewItems) { item ->
         BlockchainSettingCell(item) {
             when(item.blockchainItem){
                 is BlockchainSettingsModule.BlockchainItem.Btc -> {
@@ -59,13 +52,9 @@ private fun BlockchainSettingCell(
     item: BlockchainSettingsModule.BlockchainViewItem,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        onClick = onClick
     ) {
-
         Image(
             modifier = Modifier.padding(horizontal = 16.dp),
             painter = painterResource(item.icon),
@@ -75,7 +64,6 @@ private fun BlockchainSettingCell(
             body_leah(text = item.title)
             subhead2_grey(text = item.subtitle)
         }
-
         Icon(
             modifier = Modifier.padding(horizontal = 16.dp),
             painter = painterResource(id = R.drawable.ic_arrow_right),

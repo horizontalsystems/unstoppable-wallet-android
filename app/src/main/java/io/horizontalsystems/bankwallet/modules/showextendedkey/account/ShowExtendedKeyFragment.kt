@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -166,7 +165,7 @@ private fun AccountExtendedKeyScreen(
                     }
 
                     if (menuItems.isNotEmpty()) {
-                        CellSingleLineLawrenceSection(menuItems)
+                        CellUniversalLawrenceSection(menuItems)
                     }
 
                     Spacer(Modifier.height(32.dp))
@@ -246,14 +245,9 @@ private fun MenuItem(
     value: String,
     onClick: (() -> Unit)?
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxHeight()
-            .clickable(enabled = onClick != null) {
-                onClick?.invoke()
-            }
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
     ) {
         body_leah(
             text = title,

@@ -455,6 +455,7 @@ fun CellLawrence(
 @Composable
 fun RowUniversal(
     modifier: Modifier = Modifier,
+    verticalPadding: Dp = 12.dp,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     onClick: (() -> Unit)? = null,
     content: @Composable RowScope.() -> Unit,
@@ -472,7 +473,7 @@ fun RowUniversal(
             .defaultMinSize(minHeight = 24.dp)
             .then(clickableModifier)
             .then(modifier)
-            .padding(vertical = 12.dp),
+            .padding(vertical = verticalPadding),
         verticalAlignment = verticalAlignment,
         content = content
     )
@@ -486,13 +487,34 @@ fun CellUniversalLawrenceSection(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(12.dp))
+            .background(ComposeAppTheme.colors.lawrence)
     ) {
         composableItems.forEachIndexed { index, composable ->
             SectionUniversalItem(
                 borderTop = index != 0,
-                color = ComposeAppTheme.colors.lawrence,
             ) {
                 composable()
+            }
+        }
+    }
+}
+
+@Composable
+fun <T> CellUniversalLawrenceSection(
+    items: Iterable<T>,
+    itemContent: @Composable (T) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+    ) {
+        items.forEachIndexed { index, itemData ->
+            SectionUniversalItem(
+                borderTop = index != 0,
+            ) {
+                itemContent(itemData)
             }
         }
     }
@@ -502,40 +524,27 @@ fun CellUniversalLawrenceSection(
 fun SectionUniversalItem(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
-    color: Color? = null,
     content: @Composable () -> Unit,
 ) {
 
     //content items should use RowUniversal
 
-    val colorModifier = when {
-        color != null -> Modifier.background(color)
-        else -> Modifier
+    if (borderTop) {
+        Divider(
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10,
+        )
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .then(colorModifier)
-    ) {
-        if (borderTop) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
-        }
+    content.invoke()
 
-        if (borderBottom) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
-
-        content.invoke()
+    if (borderBottom) {
+        Divider(
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10,
+        )
     }
+
 }
 
 @Composable
