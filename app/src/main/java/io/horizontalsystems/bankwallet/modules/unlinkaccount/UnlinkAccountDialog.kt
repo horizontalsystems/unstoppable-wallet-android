@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -73,28 +70,21 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
     ) {
 
         Spacer(Modifier.height(12.dp))
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
-        ) {
-            confirmations.forEach { item ->
-                CellLawrence(
-                    borderBottom = true,
-                    onClick = { viewModel.toggleConfirm(item) }
-                ) {
-                    HsCheckbox(
-                        checked = item.confirmed,
-                        onCheckedChange = {
-                            viewModel.toggleConfirm(item)
-                        },
-                    )
-                    Spacer(Modifier.width(16.dp))
-                    subhead2_leah(
-                        text = item.confirmationType.title.getString(),
-                    )
-                }
+        CellUniversalLawrenceSection(confirmations, showFrame = true) { item ->
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onClick = { viewModel.toggleConfirm(item) }
+            ) {
+                HsCheckbox(
+                    checked = item.confirmed,
+                    onCheckedChange = {
+                        viewModel.toggleConfirm(item)
+                    },
+                )
+                Spacer(Modifier.width(16.dp))
+                subhead2_leah(
+                    text = item.confirmationType.title.getString(),
+                )
             }
         }
 

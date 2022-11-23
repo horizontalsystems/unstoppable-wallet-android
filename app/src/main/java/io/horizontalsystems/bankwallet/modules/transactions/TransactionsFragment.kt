@@ -299,6 +299,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                     }
                     is TransactionViewItem.Icon.Platform -> {
                         Icon(
+                            modifier = Modifier.size(32.dp),
                             painter = painterResource(icon.iconRes ?: R.drawable.coin_placeholder),
                             tint = ComposeAppTheme.colors.leah,
                             contentDescription = null
