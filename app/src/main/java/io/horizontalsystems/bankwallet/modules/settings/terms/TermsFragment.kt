@@ -8,11 +8,9 @@ import androidx.activity.addCallback
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
@@ -108,27 +106,28 @@ private fun TermsScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(12.dp))
-            ) {
-                viewModel.termsViewItems.forEach { item ->
-                    CellLawrence(
-                        borderBottom = true,
+            CellUniversalLawrenceSection(viewModel.termsViewItems) { item ->
+                val onClick = if (!viewModel.readOnlyState) {
+                    { viewModel.onTapTerm(item.termType, !item.checked) }
+                } else {
+                    null
+                }
+
+                RowUniversal(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    onClick = onClick
+                ) {
+                    HsCheckbox(
+                        checked = item.checked,
                         enabled = !viewModel.readOnlyState,
-                        onClick = { viewModel.onTapTerm(item.termType, !item.checked) }
-                    ) {
-                        HsCheckbox(
-                            checked = item.checked,
-                            enabled = !viewModel.readOnlyState,
-                            onCheckedChange = { checked ->
-                                viewModel.onTapTerm(item.termType, checked)
-                            },
-                        )
-                        Spacer(Modifier.width(16.dp))
-                        subhead2_leah(text = stringResource(item.termType.description))
-                    }
+                        onCheckedChange = { checked ->
+                            viewModel.onTapTerm(item.termType, checked)
+                        },
+                    )
+                    Spacer(Modifier.width(16.dp))
+                    subhead2_leah(
+                        text = stringResource(item.termType.description)
+                    )
                 }
             }
 

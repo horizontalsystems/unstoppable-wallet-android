@@ -5,13 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.ComposeView
@@ -109,23 +107,25 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                     KeyActionState.ShowRecoveryPhrase -> {
                         if (viewModel.showRecoveryPhrase) {
                             Spacer(modifier = Modifier.height(32.dp))
-                            CellSingleLineLawrenceSection {
-                                AccountActionItem(
-                                    title = stringResource(id = R.string.RecoveryPhrase_Title),
-                                    icon = painterResource(id = R.drawable.icon_paper_contract_20)
-                                ) {
-                                    navController.authorizedAction {
-                                        navController.slideFromRight(
-                                            R.id.recoveryPhraseFragment,
-                                            RecoveryPhraseModule.prepareParams(viewModel.account)
-                                        )
+                            CellUniversalLawrenceSection(
+                                listOf {
+                                    AccountActionItem(
+                                        title = stringResource(id = R.string.RecoveryPhrase_Title),
+                                        icon = painterResource(id = R.drawable.icon_paper_contract_20)
+                                    ) {
+                                        navController.authorizedAction {
+                                            navController.slideFromRight(
+                                                R.id.recoveryPhraseFragment,
+                                                RecoveryPhraseModule.prepareParams(viewModel.account)
+                                            )
+                                        }
                                     }
-                                }
-                            }
+                                })
                         }
                         if (viewModel.showEvmPrivateKey) {
                             Spacer(modifier = Modifier.height(32.dp))
-                            CellSingleLineLawrenceSection {
+                            CellUniversalLawrenceSection(
+                                listOf {
                                 AccountActionItem(
                                     title = stringResource(id = R.string.EvmPrivateKey_Title),
                                     icon = painterResource(id = R.drawable.ic_key_20)
@@ -137,7 +137,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                         )
                                     }
                                 }
-                            }
+                            })
                         }
                         val keyActions = buildList<@Composable () -> Unit> {
                             if (viewModel.bip32RootKey != null) {
@@ -224,24 +224,25 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                         }
                         if (keyActions.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(32.dp))
-                            CellSingleLineLawrenceSection(keyActions)
+                            CellUniversalLawrenceSection(keyActions)
                         }
                     }
                     KeyActionState.BackupRecoveryPhrase -> {
                         Spacer(modifier = Modifier.height(32.dp))
-                        CellSingleLineLawrenceSection {
-                            RedActionItem(
-                                title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
-                                icon = painterResource(id = R.drawable.icon_warning_2_20)
-                            ) {
-                                navController.authorizedAction {
-                                    navController.slideFromBottom(
-                                        R.id.backupKeyFragment,
-                                        BackupKeyModule.prepareParams(viewModel.account)
-                                    )
+                        CellUniversalLawrenceSection(
+                            listOf {
+                                RedActionItem(
+                                    title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
+                                    icon = painterResource(id = R.drawable.icon_warning_2_20)
+                                ) {
+                                    navController.authorizedAction {
+                                        navController.slideFromBottom(
+                                            R.id.backupKeyFragment,
+                                            BackupKeyModule.prepareParams(viewModel.account)
+                                        )
+                                    }
                                 }
-                            }
-                        }
+                            })
                     }
                     KeyActionState.None -> Unit
                 }
@@ -262,12 +263,12 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
 
                 if (additionalItems.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(32.dp))
-                    CellSingleLineLawrenceSection(additionalItems)
+                    CellUniversalLawrenceSection(additionalItems)
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
-                CellSingleLineLawrenceSection {
-                    CellSingleLineLawrence {
+                CellUniversalLawrenceSection(
+                    listOf {
                         RedActionItem(
                             title = stringResource(id = R.string.ManageAccount_Unlink),
                             icon = painterResource(id = R.drawable.ic_delete_20)
@@ -277,8 +278,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                                 UnlinkAccountDialog.prepareParams(viewModel.account)
                             )
                         }
-                    }
-                }
+                    })
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }
@@ -295,15 +295,9 @@ private fun AccountActionItem(
     badge: String? = null,
     onClick: (() -> Unit)? = null
 ) {
-    val modifier = if (onClick != null) {
-        Modifier.clickable(onClick = onClick)
-    } else {
-        Modifier
-    }
 
-    Row(
-        modifier = modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        onClick = onClick
     ) {
         icon?.let {
             Icon(
@@ -371,11 +365,8 @@ private fun RedActionItem(
     onClick: () -> Unit
 ) {
 
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        onClick = onClick
     ) {
         Icon(
             modifier = Modifier.padding(horizontal = 16.dp),

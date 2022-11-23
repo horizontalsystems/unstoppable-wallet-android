@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -90,16 +91,12 @@ private fun ActivateCell(
     checked: Boolean,
     onChecked: (Boolean) -> Unit
 ) {
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable(onClick = {
-                        onChecked(!checked)
-                    })
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                verticalPadding = 0.dp,
+                onClick = { onChecked(!checked) }
             ) {
                 B2(
                     text = stringResource(R.string.Hud_Text_Activate),

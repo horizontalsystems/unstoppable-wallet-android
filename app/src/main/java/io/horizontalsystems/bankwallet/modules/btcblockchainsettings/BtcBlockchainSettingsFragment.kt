@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -165,7 +164,7 @@ private fun BlockchainSettingSection(
         onInfoClick = {
             navController.slideFromBottom(infoScreenId)
         })
-    CellMultilineLawrenceSection(restoreSources) { item ->
+    CellUniversalLawrenceSection(restoreSources) { item ->
         SettingCell(item.title, item.subtitle, item.selected) {
             onItemClick(item)
         }
@@ -182,11 +181,8 @@ private fun SettingCell(
     checked: Boolean,
     onClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        onClick = onClick
     ) {
         Column(modifier = Modifier.padding(start = 16.dp).weight(1f)) {
             body_leah(

@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -82,14 +84,11 @@ private fun ExperimentalScreen(
 
 @Composable
 private fun TimeLockButtonCell(openTimeLock: () -> Unit) {
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         listOf {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable(onClick = openTimeLock)
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onClick = openTimeLock
             ) {
                 B2(
                     text = stringResource(R.string.ExperimentalFeatures_BitcoinHodling),
