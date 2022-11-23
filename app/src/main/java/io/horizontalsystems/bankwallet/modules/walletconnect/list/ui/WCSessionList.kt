@@ -113,12 +113,6 @@ private fun LazyListScope.WCSection(
             text = stringResource(section.version.value),
         )
     }
-    section.pendingRequests?.let {
-        item {
-            PendingRequestsCell(it, navController)
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-    }
     itemsIndexed(section.sessions, key = { _, item -> item.sessionId }) { index, item ->
         val showDivider = showDivider(section.sessions.size, index)
         val shape = getShape(section.sessions.size, index)
