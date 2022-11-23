@@ -76,13 +76,6 @@ class WalletConnectListViewModel(
             }
             .let { disposables.add(it) }
 
-        wc2ListService.pendingRequestsObservable
-            .subscribeIO {
-                syncPendingRequestsCount(it)
-                emitState()
-            }
-            .let { disposables.add(it) }
-
         sync(service.items)
         syncV2(wc2ListService.sessions)
         emitState()
@@ -167,22 +160,8 @@ class WalletConnectListViewModel(
         emitState()
     }
 
-    private fun syncPendingRequestsCount(count: Int) {
-        v2SectionItem?.let {
-            setSectionViewItem(it.sessions, count)
-        }
-    }
-
-    private fun setSectionViewItem(
-        sessions: List<WalletConnectListModule.SessionViewItem>,
-        pendingRequestsCount: Int
-    ) {
-        val count = if (pendingRequestsCount > 0) pendingRequestsCount else null
-        v2SectionItem = Section(WalletConnectListModule.Version.Version2, sessions, count)
-    }
-
     private fun syncV2(sessions: List<Sign.Model.Session>) {
-        if (sessions.isEmpty() && wc2ListService.pendingRequestsCount == 0) {
+        if (sessions.isEmpty()) {
             v2SectionItem = null
             return
         }
@@ -197,7 +176,7 @@ class WalletConnectListViewModel(
             )
         }
 
-        setSectionViewItem(sessionItems, wc2ListService.pendingRequestsCount)
+        v2SectionItem = Section(WalletConnectListModule.Version.Version2, sessionItems)
     }
 
     private fun getSubtitle(chains: List<String>): String {

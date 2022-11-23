@@ -11,9 +11,4 @@ class WC2ListService(
 
     val sessions by sessionManager::sessions
     val sessionsObservable by sessionManager::sessionsObservable
-    val pendingRequestsObservable by sessionManager::pendingRequestCountObservable
-
-    val pendingRequestsCount: Int
-        get() = sessionManager.pendingRequests().size
-
 }

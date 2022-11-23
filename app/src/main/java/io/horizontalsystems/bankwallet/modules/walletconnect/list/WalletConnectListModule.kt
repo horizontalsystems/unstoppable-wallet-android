@@ -27,7 +27,6 @@ object WalletConnectListModule {
     data class Section(
         val version: Version,
         val sessions: List<SessionViewItem>,
-        val pendingRequests: Int? = null
     )
 
     data class SessionViewItem(
