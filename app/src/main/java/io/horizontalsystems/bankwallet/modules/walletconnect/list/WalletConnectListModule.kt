@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListService
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.v1.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListService
 
 object WalletConnectListModule {
 
@@ -17,7 +16,7 @@ object WalletConnectListModule {
 
             return WalletConnectListViewModel(
                 service,
-                WC2ListService(App.wc2SessionManager),
+                App.wc2SessionManager,
                 App.evmBlockchainManager,
                 App.wc2Service
             ) as T

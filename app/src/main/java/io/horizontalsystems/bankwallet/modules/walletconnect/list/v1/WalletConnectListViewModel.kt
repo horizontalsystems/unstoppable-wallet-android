@@ -11,17 +11,17 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule.Section
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.v2.WC2ListService
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SessionKillManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 
 class WalletConnectListViewModel(
     private val service: WalletConnectListService,
-    private val wc2ListService: WC2ListService,
+    private val wC2SessionManager: WC2SessionManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val wc2Service: WC2Service
 ) : ViewModel() {
@@ -69,7 +69,7 @@ class WalletConnectListViewModel(
             .subscribeIO { sync(it) }
             .let { disposables.add(it) }
 
-        wc2ListService.sessionsObservable
+        wC2SessionManager.sessionsObservable
             .subscribeIO {
                 syncV2(it)
                 emitState()
@@ -77,7 +77,7 @@ class WalletConnectListViewModel(
             .let { disposables.add(it) }
 
         sync(service.items)
-        syncV2(wc2ListService.sessions)
+        syncV2(wC2SessionManager.sessions)
         emitState()
     }
 
@@ -189,7 +189,7 @@ class WalletConnectListViewModel(
     }
 
     fun onDeleteV2(sessionId: String) {
-        wc2ListService.delete(sessionId)
+        wC2SessionManager.deleteSession(sessionId)
     }
 
     fun onHandleRoute() {
