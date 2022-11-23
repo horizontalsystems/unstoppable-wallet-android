@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
@@ -81,16 +79,13 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
 
     @Composable
     private fun Section(items: List<Account>) {
-        CellMultilineLawrenceSectionFramed(items) { item ->
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable {
-                        onSelectListener?.invoke(item)
-                        dismiss()
-                    }
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+        CellUniversalLawrenceSection(items, showFrame = true) { item ->
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onClick = {
+                    onSelectListener?.invoke(item)
+                    dismiss()
+                },
             ) {
                 HsRadioButton(
                     selected = item == selectedItem,
@@ -106,7 +101,7 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
                 }
                 if (item.isWatchAccount) {
                     Icon(
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier.padding(start = 16.dp),
                         painter = painterResource(id = R.drawable.ic_eye_20),
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.grey
@@ -115,5 +110,4 @@ class BottomSheetWalletSelectDialog : BaseComposableBottomSheetFragment() {
             }
         }
     }
-
 }
