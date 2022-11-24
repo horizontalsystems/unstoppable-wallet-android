@@ -16,10 +16,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionServiceState.*
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.*
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager.RequestDataError.*
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -50,6 +47,7 @@ class WC2SessionViewModel(
     private var showError: String? = null
     private var blockchains = listOf<WC2SessionModule.BlockchainViewItem>()
     private var status: WCSessionViewModel.Status? = null
+    private var pendingRequests = listOf<WC2RequestViewItem>()
 
     var uiState by mutableStateOf(WC2SessionUiState(
         peerMeta = peerMeta,
@@ -60,6 +58,7 @@ class WC2SessionViewModel(
         showError = showError,
         blockchains = blockchains,
         status = status,
+        pendingRequests = pendingRequests,
     ))
         private set
 
@@ -99,6 +98,15 @@ class WC2SessionViewModel(
                 }
 
                 session = existingSession
+                pendingRequests = wc2service.pendingRequests(existingSession.topic).map {
+                    WC2RequestViewItem(
+                        requestId = it.requestId,
+                        title = title(it.method),
+                        subtitle = it.chainId?.let {
+                            WC2Parser.getAccountData(it)
+                        }?.chain?.name ?: "",
+                    )
+                }
                 wcBlockchains = getBlockchainsBySession(existingSession)
                 sessionServiceState = WC2SessionServiceState.Ready
             }
@@ -167,6 +175,13 @@ class WC2SessionViewModel(
             }
     }
 
+    private fun title(method: String?): String = when (method) {
+        "personal_sign" -> "Personal Sign Request"
+        "eth_sign" -> "Standard Sign Request"
+        "eth_signTypedData" -> "Typed Sign Request"
+        "eth_sendTransaction" -> "Approve Transaction"
+        else -> "Unsupported"
+    }
     override fun onCleared() {
         disposables.clear()
     }
@@ -204,6 +219,7 @@ class WC2SessionViewModel(
             showError = showError,
             blockchains = blockchains,
             status = status,
+            pendingRequests = pendingRequests,
         )
     }
 
@@ -382,6 +398,11 @@ class WC2SessionViewModel(
         }
     }
 
+    fun xxx(request: WC2RequestViewItem): WC2SessionManager.RequestData? {
+        sessionManager.prepareRequestToOpen(request.requestId)
+        return sessionManager.pendingRequestDataToOpen[request.requestId]
+    }
+
 
 }
 
@@ -393,5 +414,6 @@ data class WC2SessionUiState(
     val hint: Int?,
     val showError: String?,
     val blockchains: List<WC2SessionModule.BlockchainViewItem>,
-    val status: WCSessionViewModel.Status?
+    val status: WCSessionViewModel.Status?,
+    val pendingRequests: List<WC2RequestViewItem>
 )

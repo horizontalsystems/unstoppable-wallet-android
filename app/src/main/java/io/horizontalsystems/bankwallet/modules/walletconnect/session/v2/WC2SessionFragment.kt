@@ -26,10 +26,16 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.ui.RequestCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.SESSION_TOPIC_KEY
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SendEthereumTransactionRequest
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SignMessageRequest
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -101,13 +107,14 @@ fun WCSessionPage(
                     )
                 )
             )
-            WCSessionListContent(viewModel)
+            WCSessionListContent(navController, viewModel)
         }
     }
 }
 
 @Composable
 private fun ColumnScope.WCSessionListContent(
+    navController: NavController,
     viewModel: WC2SessionViewModel
 ) {
     val uiState = viewModel.uiState
@@ -123,7 +130,7 @@ private fun ColumnScope.WCSessionListContent(
     ) {
         Row(
             modifier = Modifier.padding(
-                top = 16.dp,
+                top = 12.dp,
                 start = 24.dp,
                 end = 24.dp,
                 bottom = 24.dp
@@ -162,6 +169,31 @@ private fun ColumnScope.WCSessionListContent(
             uiState.blockchains.forEach {
                 add { BlockchainCell(it.name, it.address) }
             }
+        }
+
+        val pendingRequests = uiState.pendingRequests
+        if (pendingRequests.isNotEmpty()) {
+            HeaderText(text = stringResource(R.string.WalletConnect_PendingRequests))
+            CellMultilineLawrenceSection(pendingRequests) { request ->
+                RequestCell(viewItem = request) {
+                    val wcRequest = viewModel.xxx(request)
+                    when (val pendingRequest = wcRequest?.pendingRequest) {
+                        is WC2SignMessageRequest -> {
+                            navController.slideFromBottom(
+                                R.id.wc2SignMessageRequestFragment,
+                                WC2SignMessageRequestFragment.prepareParams(pendingRequest.id)
+                            )
+                        }
+                        is WC2SendEthereumTransactionRequest -> {
+                            navController.slideFromBottom(
+                                R.id.wc2SendEthereumTransactionRequestFragment,
+                                WC2SendEthereumTransactionRequestFragment.prepareParams(pendingRequest.id)
+                            )
+                        }
+                    }
+                }
+            }
+            Spacer(Modifier.height(32.dp))
         }
 
         CellSingleLineLawrenceSection(
