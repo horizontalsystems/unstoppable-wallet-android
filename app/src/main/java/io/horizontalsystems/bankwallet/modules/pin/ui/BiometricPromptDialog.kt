@@ -23,7 +23,7 @@ fun BiometricPromptDialog(
     val context = LocalContext.current as? FragmentActivity
 
     val biometricPrompt = context?.let { createBiometricPrompt(it, onSuccess, onError) }!!
-    LaunchedEffect(null) {
+    LaunchedEffect(Unit) {
         biometricPrompt.authenticate(promptInfo)
     }
 }

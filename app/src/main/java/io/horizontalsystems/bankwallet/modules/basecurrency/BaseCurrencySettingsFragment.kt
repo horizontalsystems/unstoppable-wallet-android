@@ -76,7 +76,7 @@ private fun BaseCurrencyScreen(
     }
 
     if (viewModel.showDisclaimer) {
-        LaunchedEffect(null) {
+        LaunchedEffect(Unit) {
             sheetState.show()
         }
     }

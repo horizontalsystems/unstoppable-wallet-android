@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -65,60 +64,66 @@ fun FeeSettingsScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            CellSingleLineLawrenceSection {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                            .clickable {
-                                navController.slideFromBottom(R.id.feePriorityInfo)
-                            },
-                        painter = painterResource(R.drawable.ic_info_20),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
-                    )
-                    subhead2_grey(
-                        modifier = Modifier.padding(start = 16.dp),
-                        text = stringResource(R.string.Send_DialogSpeed),
-                    )
+            CellUniversalLawrenceSection(
+                listOf {
+                    RowUniversal {
+                        Icon(
+                            modifier = Modifier
+                                .padding(start = 16.dp)
+                                .clickable {
+                                    navController.slideFromBottom(R.id.feePriorityInfo)
+                                },
+                            painter = painterResource(R.drawable.ic_info_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                        subhead2_grey(
+                            modifier = Modifier.padding(start = 16.dp),
+                            text = stringResource(R.string.Send_DialogSpeed),
+                        )
 
-                    Spacer(modifier = Modifier.weight(1f))
+                        Spacer(modifier = Modifier.weight(1f))
 
-                    var showSpeedSelectorDialog by remember { mutableStateOf(false) }
-                    if (showSpeedSelectorDialog) {
-                        SelectorDialogCompose(
-                            title = stringResource(R.string.Send_DialogSpeed),
-                            items = sendViewModel.feeRatePriorities.map {
-                                TabItem(stringResource(it.titleRes), it::class == feeRatePriority::class, it)
-                            },
-                            onDismissRequest = {
-                                showSpeedSelectorDialog = false
-                            },
-                            onSelectItem = {
-                                if (it is FeeRatePriority.Custom) {
-                                    feeRate?.let {
-                                        sendViewModel.onEnterFeeRatePriority(FeeRatePriority.Custom(feeRate))
+                        var showSpeedSelectorDialog by remember { mutableStateOf(false) }
+                        if (showSpeedSelectorDialog) {
+                            SelectorDialogCompose(
+                                title = stringResource(R.string.Send_DialogSpeed),
+                                items = sendViewModel.feeRatePriorities.map {
+                                    TabItem(
+                                        stringResource(it.titleRes),
+                                        it::class == feeRatePriority::class,
+                                        it
+                                    )
+                                },
+                                onDismissRequest = {
+                                    showSpeedSelectorDialog = false
+                                },
+                                onSelectItem = {
+                                    if (it is FeeRatePriority.Custom) {
+                                        feeRate?.let {
+                                            sendViewModel.onEnterFeeRatePriority(
+                                                FeeRatePriority.Custom(feeRate)
+                                            )
+                                        }
+                                    } else {
+                                        sendViewModel.onEnterFeeRatePriority(it)
                                     }
-                                } else {
-                                    sendViewModel.onEnterFeeRatePriority(it)
                                 }
+                            )
+                        }
+
+                        ButtonSecondaryWithIcon(
+                            modifier = Modifier
+                                .padding(end = 16.dp)
+                                .height(28.dp),
+                            title = stringResource(feeRatePriority.titleRes),
+                            iconRight = painterResource(R.drawable.ic_down_arrow_20),
+                            onClick = {
+                                showSpeedSelectorDialog = true
                             }
                         )
                     }
-
-                    ButtonSecondaryWithIcon(
-                        modifier = Modifier.padding(end = 16.dp),
-                        title = stringResource(feeRatePriority.titleRes),
-                        iconRight = painterResource(R.drawable.ic_down_arrow_20),
-                        onClick = {
-                            showSpeedSelectorDialog = true
-                        }
-                    )
-                }
-            }
+                })
 
             val valueRange = sendViewModel.feeRateRange
             if (feeRate != null && valueRange != null) {
@@ -126,38 +131,37 @@ fun FeeSettingsScreen(
 
                 var sliderValue by remember(feeRate) { mutableStateOf(feeRate) }
 
-                HSSectionRounded {
-                    CellSingleLineLawrence {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            subhead2_grey(text = stringResource(R.string.Send_FeeRate),)
+                CellUniversalLawrenceSection(
+                    listOf(
+                        {
+                            RowUniversal(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                            ) {
+                                subhead2_grey(text = stringResource(R.string.Send_FeeRate))
 
-                            Spacer(modifier = Modifier.weight(1f))
+                                Spacer(modifier = Modifier.weight(1f))
 
-                            subhead1_leah(
-                                text = "$sliderValue " + stringResource(R.string.Send_TxSpeed_CustomFeeHint),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
-                    CellSingleLineLawrence(borderTop = true) {
-                        HsSlider(
-                            value = feeRate,
-                            onValueChange = {
-                                sliderValue = it
-                            },
-                            valueRange = valueRange,
-                            onValueChangeFinished = {
-                                sendViewModel.onEnterFeeRatePriority(FeeRatePriority.Custom(sliderValue))
+                                subhead1_leah(
+                                    text = "$sliderValue " + stringResource(R.string.Send_TxSpeed_CustomFeeHint),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
                             }
-                        )
-                    }
-                }
+                        }, {
+                            HsSlider(
+                                value = feeRate,
+                                onValueChange = {
+                                    sliderValue = it
+                                },
+                                valueRange = valueRange,
+                                onValueChangeFinished = {
+                                    sendViewModel.onEnterFeeRatePriority(
+                                        FeeRatePriority.Custom(sliderValue)
+                                    )
+                                }
+                            )
+                        })
+                )
             }
 
             if (amountCaution is SendErrorInsufficientBalance) {

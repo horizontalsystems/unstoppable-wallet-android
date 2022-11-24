@@ -537,20 +537,26 @@ fun SectionUniversalItem(
 
     //content items should use RowUniversal
 
-    if (borderTop) {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
-        )
-    }
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        if (borderTop) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
 
-    content.invoke()
+        if (borderBottom) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
 
-    if (borderBottom) {
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
-        )
+        content.invoke()
     }
 
 }

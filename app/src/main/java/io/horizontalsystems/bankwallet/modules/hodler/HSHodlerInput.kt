@@ -2,10 +2,11 @@ package io.horizontalsystems.bankwallet.modules.hodler
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -13,10 +14,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
-import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.hodler.LockTimeInterval
 
 @Composable
@@ -54,11 +52,8 @@ fun HSHodlerInput(
         Modifier
     }
 
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .then(modifierClickable),
-        verticalAlignment = Alignment.CenterVertically,
+    RowUniversal(
+        modifier = Modifier.then(modifierClickable),
     ) {
         Icon(
             modifier = Modifier.padding(horizontal = 16.dp),
