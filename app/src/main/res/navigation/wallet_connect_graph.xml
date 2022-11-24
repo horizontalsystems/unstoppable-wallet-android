@@ -13,9 +13,6 @@
         android:id="@+id/wc2SessionFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionFragment"/>
     <fragment
-        android:id="@+id/wc2RequestListFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.WC2RequestListFragment"/>
-    <fragment
         android:id="@+id/wcSendEthereumTransactionRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v1.WCSendEthereumTransactionRequestFragment"/>
     <fragment
