@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectL
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v1.WCSessionModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.BadgeCount
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
@@ -96,8 +97,13 @@ fun WCSessionCell(
                 )
                 subhead2_grey(text = session.subtitle)
             }
+            if (session.pendingRequestsCount > 0) {
+                BadgeCount(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    text = session.pendingRequestsCount.toString()
+                )
+            }
             Image(
-                modifier = Modifier.padding(start = 5.dp),
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = null
             )

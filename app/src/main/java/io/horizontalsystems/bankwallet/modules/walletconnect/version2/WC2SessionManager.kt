@@ -11,6 +11,9 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class WC2SessionManager(
     private val accountManager: IAccountManager,
@@ -28,9 +31,9 @@ class WC2SessionManager(
     val sessionsObservable: Flowable<List<Sign.Model.Session>>
         get() = sessionsSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val pendingRequestCountSubject = PublishSubject.create<Int>()
-    val pendingRequestCountObservable: Flowable<Int>
-        get() = pendingRequestCountSubject.toFlowable(BackpressureStrategy.BUFFER)
+    private val _pendingRequestCountFlow = MutableStateFlow(0)
+    val pendingRequestCountFlow: StateFlow<Int>
+        get() = _pendingRequestCountFlow
 
     private val pendingRequestSubject = PublishSubject.create<WC2Request>()
     val pendingRequestObservable: Flowable<WC2Request>
@@ -152,11 +155,12 @@ class WC2SessionManager(
     }
 
     private fun syncPendingRequest() {
-        pendingRequestCountSubject.onNext(requests().size)
+        val requestsCount = accountManager.activeAccount?.let { requests(it.id).size } ?: 0
+        _pendingRequestCountFlow.update { requestsCount }
     }
 
-    private fun requests(accountId: String? = null): List<Sign.Model.PendingRequest> {
-        val sessions = accountId?.let { getSessions(it) } ?: allSessions
+    private fun requests(accountId: String): List<Sign.Model.PendingRequest> {
+        val sessions = getSessions(accountId)
         val pendingRequests = mutableListOf<Sign.Model.PendingRequest>()
         sessions.forEach { session ->
             pendingRequests.addAll(service.pendingRequests(session.topic))

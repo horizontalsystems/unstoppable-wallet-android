@@ -53,13 +53,12 @@ class MainSettingsViewModel(
             }
             .let { disposables.add(it) }
 
-        service.wc2PendingRequestsCountObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.pendingRequestCountFlow.collect {
                 wc2PendingRequestCount = it
                 syncCounter()
             }
-            .let { disposables.add(it) }
-
+        }
         syncCounter()
         service.start()
     }
