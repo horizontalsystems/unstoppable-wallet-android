@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -11,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -84,42 +80,24 @@ fun SendEvmTransactionView(
 @Composable
 private fun SectionView(viewItems: List<ViewItem>) {
     Spacer(Modifier.height(12.dp))
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(ComposeAppTheme.colors.lawrence)
-    ) {
-        viewItems.forEachIndexed { index, item ->
-            if (index != 0) {
-                Divider(
-                    thickness = 1.dp,
-                    color = ComposeAppTheme.colors.steel10,
-                )
-            }
-            when (item) {
-                is ViewItem.Subhead -> Subhead(item)
-                is ViewItem.Value -> TitleValue(item)
-                is ViewItem.AmountMulti -> AmountMulti(item)
-                is ViewItem.Amount -> Amount(item)
-                is ViewItem.NftAmount -> NftAmount(item)
-                is ViewItem.Address -> TitleValueHex(item.title, item.valueTitle, item.value)
-                is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
-                is ViewItem.TokenItem -> Token(item)
-            }
+    CellUniversalLawrenceSection(viewItems) { item ->
+        when (item) {
+            is ViewItem.Subhead -> Subhead(item)
+            is ViewItem.Value -> TitleValue(item)
+            is ViewItem.AmountMulti -> AmountMulti(item)
+            is ViewItem.Amount -> Amount(item)
+            is ViewItem.NftAmount -> NftAmount(item)
+            is ViewItem.Address -> TitleValueHex(item.title, item.valueTitle, item.value)
+            is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
+            is ViewItem.TokenItem -> Token(item)
         }
     }
-
 }
 
 @Composable
 private fun Subhead(item: ViewItem.Subhead) {
-    Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .height(48.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         item.iconRes?.let {
             Icon(
@@ -141,11 +119,8 @@ private fun Subhead(item: ViewItem.Subhead) {
 
 @Composable
 private fun TitleValue(item: ViewItem.Value) {
-    Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .height(48.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         subhead2_grey(
             text = item.title
@@ -162,14 +137,11 @@ private fun TitleValue(item: ViewItem.Value) {
 
 @Composable
 private fun AmountMulti(item: ViewItem.AmountMulti) {
-    Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .height(60.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         CoinImage(
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(32.dp),
             iconUrl = item.token.coin.iconUrl,
             placeholder = item.token.iconPlaceholder
         )
@@ -212,16 +184,13 @@ private fun AmountMulti(item: ViewItem.AmountMulti) {
 
 @Composable
 private fun Amount(item: ViewItem.Amount) {
-    Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .height(48.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         CoinImage(
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(24.dp),
+                .size(32.dp),
             iconUrl = item.token.coin.iconUrl,
             placeholder = item.token.iconPlaceholder
         )
@@ -240,11 +209,8 @@ private fun Amount(item: ViewItem.Amount) {
 
 @Composable
 private fun NftAmount(item: ViewItem.NftAmount) {
-    Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .height(48.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         NftIcon(
             modifier = Modifier
@@ -264,15 +230,12 @@ private fun NftAmount(item: ViewItem.NftAmount) {
 @Composable
 private fun Token(item: ViewItem.TokenItem) {
     Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .height(48.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         CoinImage(
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(24.dp),
+                .size(32.dp),
             iconUrl = item.token.coin.iconUrl,
             placeholder = item.token.iconPlaceholder
         )
@@ -287,17 +250,15 @@ private fun TitleValueHex(
     value: String,
 ) {
     val localView = LocalView.current
-    Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .height(48.dp),
-        verticalAlignment = Alignment.CenterVertically
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         subhead2_grey(
             text = title
         )
         Spacer(Modifier.weight(1f))
         ButtonSecondaryDefault(
+            modifier = Modifier.height(28.dp),
             title = valueTitle,
             onClick = {
                 TextHelper.copyText(value)

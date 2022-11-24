@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.evmfee.HSFeeCell
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import java.math.BigDecimal
 
 @Composable
@@ -21,18 +21,19 @@ fun HSFeeInput(
     rate: CurrencyValue?,
     onClick: (() -> Unit)? = null,
 ) {
-    CellSingleLineLawrenceSection {
-        HSFeeInputRaw(
-            coinCode = coinCode,
-            coinDecimal = coinDecimal,
-            fiatDecimal = fiatDecimal,
-            fee = fee,
-            amountInputType = amountInputType,
-            rate = rate,
-            enabled = onClick != null,
-            onClick = { onClick?.invoke() }
-        )
-    }
+    CellUniversalLawrenceSection(
+        listOf {
+            HSFeeInputRaw(
+                coinCode = coinCode,
+                coinDecimal = coinDecimal,
+                fiatDecimal = fiatDecimal,
+                fee = fee,
+                amountInputType = amountInputType,
+                rate = rate,
+                enabled = onClick != null,
+                onClick = { onClick?.invoke() }
+            )
+        })
 }
 @Composable
 fun HSFeeInputRaw(
