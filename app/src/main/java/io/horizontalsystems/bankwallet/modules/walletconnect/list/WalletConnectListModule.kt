@@ -34,6 +34,7 @@ object WalletConnectListModule {
         val subtitle: String,
         val url: String,
         val imageUrl: String?,
+        val pendingRequestsCount: Int = 0,
     )
 
     enum class Version(val value: Int) {

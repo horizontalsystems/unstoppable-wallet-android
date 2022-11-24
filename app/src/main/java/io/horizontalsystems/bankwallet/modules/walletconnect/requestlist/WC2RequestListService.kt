@@ -10,6 +10,10 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class WC2RequestListService(
     private val sessionManager: WC2SessionManager,
@@ -18,6 +22,7 @@ class WC2RequestListService(
 
     private val disposables = CompositeDisposable()
     private var accounts: List<Account> = listOf()
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val itemsSubject = PublishSubject.create<List<WC2RequestListModule.Item>>()
     val itemsObservable: Flowable<List<WC2RequestListModule.Item>>
@@ -48,10 +53,11 @@ class WC2RequestListService(
                 syncPendingRequests()
             }.let { disposables.add(it) }
 
-        sessionManager.pendingRequestCountObservable
-            .subscribeIO {
+        coroutineScope.launch {
+            sessionManager.pendingRequestCountFlow.collect {
                 syncPendingRequests()
-            }.let { disposables.add(it) }
+            }
+        }
 
         syncAccounts(accountManager.accounts)
         syncPendingRequests()
@@ -59,6 +65,7 @@ class WC2RequestListService(
 
     fun stop() {
         disposables.clear()
+        coroutineScope.cancel()
     }
 
     fun select(accountId: String) {

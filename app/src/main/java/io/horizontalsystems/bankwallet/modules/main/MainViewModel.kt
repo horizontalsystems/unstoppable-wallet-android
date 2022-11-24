@@ -74,10 +74,12 @@ class MainViewModel(
             }
         }
 
-        disposables.add(wc2SessionManager.pendingRequestCountObservable.subscribe {
-            wc2PendingRequestsCount = it
-            updateSettingsBadge()
-        })
+        viewModelScope.launch {
+            wc2SessionManager.pendingRequestCountFlow.collect {
+                wc2PendingRequestsCount = it
+                updateSettingsBadge()
+            }
+        }
 
         disposables.add(backupManager.allBackedUpFlowable.subscribe {
             updateSettingsBadge()

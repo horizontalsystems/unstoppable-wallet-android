@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.walletconnect.sign.client.Sign
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
@@ -17,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class WalletConnectListViewModel(
@@ -75,6 +77,14 @@ class WalletConnectListViewModel(
                 emitState()
             }
             .let { disposables.add(it) }
+
+        viewModelScope.launch {
+            wC2SessionManager.pendingRequestCountFlow
+                .collect {
+                    syncV2(wC2SessionManager.sessions)
+                    emitState()
+                }
+        }
 
         sync(service.items)
         syncV2(wC2SessionManager.sessions)
@@ -173,6 +183,7 @@ class WalletConnectListViewModel(
                 subtitle = getSubtitle(session.namespaces.values.map { it.accounts }.flatten()),
                 url = session.metaData?.url ?: "",
                 imageUrl = session.metaData?.icons?.lastOrNull(),
+                pendingRequestsCount = wc2Service.pendingRequests(session.topic).size,
             )
         }
 

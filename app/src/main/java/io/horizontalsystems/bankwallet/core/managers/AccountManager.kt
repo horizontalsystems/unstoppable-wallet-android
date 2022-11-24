@@ -61,6 +61,7 @@ class AccountManager(
     override fun loadAccounts() {
         cache.set(storage.allAccounts())
         cache.activeAccountId = storage.activeAccountId
+        activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
     }
 
     override fun onHandledBackupRequiredNewAccount() {
