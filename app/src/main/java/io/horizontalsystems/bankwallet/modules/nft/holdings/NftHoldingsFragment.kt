@@ -107,34 +107,35 @@ fun NftHoldingsScreen(navController: NavController) {
                                 Column {
                                     val context = LocalContext.current
 
-                                    when (val totalState = viewModel.totalState) {
+                                    when (val totalState = viewModel.totalUiState) {
                                         TotalUIState.Hidden -> {
                                             DoubleText(
                                                 title = "*****",
                                                 body = "*****",
                                                 dimmed = false,
                                                 onClickTitle = {
-                                                    viewModel.onBalanceClick()
+                                                    viewModel.toggleBalanceVisibility()
                                                     HudHelper.vibrate(context)
                                                 },
-                                                onClickBody = {
-
-                                                }
+                                                onClickSubtitle = {
+                                                    viewModel.toggleBalanceVisibility()
+                                                    HudHelper.vibrate(context)
+                                                },
                                             )
                                         }
                                         is TotalUIState.Visible -> {
                                             DoubleText(
-                                                title = totalState.currencyValueStr,
-                                                body = totalState.coinValueStr,
+                                                title = totalState.primaryAmountStr,
+                                                body = totalState.secondaryAmountStr,
                                                 dimmed = totalState.dimmed,
                                                 onClickTitle = {
-                                                    viewModel.onBalanceClick()
+                                                    viewModel.toggleBalanceVisibility()
                                                     HudHelper.vibrate(context)
                                                 },
-                                                onClickBody = {
-                                                    viewModel.toggleTotalType()
+                                                onClickSubtitle = {
+                                                    viewModel.toggleBalanceVisibility()
                                                     HudHelper.vibrate(context)
-                                                }
+                                                },
                                             )
                                         }
                                     }

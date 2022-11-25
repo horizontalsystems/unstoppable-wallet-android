@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
+import io.horizontalsystems.bankwallet.modules.balance.TotalBalance
 import io.horizontalsystems.bankwallet.modules.balance.TotalService
 
 object NftHoldingsModule {
@@ -19,7 +20,7 @@ object NftHoldingsModule {
             val totalService = TotalService(App.currencyManager, App.marketKit, App.baseTokenManager, App.balanceHiddenManager)
             val xRateRepository = BalanceXRateRepository(App.currencyManager, App.marketKit)
             val service = NftHoldingsService(account, App.nftAdapterManager, App.nftMetadataManager, App.nftMetadataSyncer, xRateRepository)
-            return NftHoldingsViewModel(service, totalService, App.balanceHiddenManager) as T
+            return NftHoldingsViewModel(service, TotalBalance(totalService, App.balanceViewTypeManager, App.balanceHiddenManager)) as T
         }
     }
 }
