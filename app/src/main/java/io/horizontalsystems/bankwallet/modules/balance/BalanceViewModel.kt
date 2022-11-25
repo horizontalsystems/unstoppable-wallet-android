@@ -6,8 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -19,22 +17,20 @@ import kotlinx.coroutines.withContext
 class BalanceViewModel(
     private val service: BalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
-    private val totalService: TotalService,
     private val balanceViewTypeManager: BalanceViewTypeManager,
-    private val balanceHiddenManager: BalanceHiddenManager
-) : ViewModel() {
-    private var totalState = createTotalUIState(totalService.stateFlow.value)
+    private val totalBalance: TotalBalance
+) : ViewModel(), ITotalBalance by totalBalance {
+
+    private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
     private var viewState: ViewState = ViewState.Loading
     private var balanceViewItems = listOf<BalanceViewItem>()
     private var isRefreshing = false
-    private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
 
     var uiState by mutableStateOf(
         BalanceUiState(
             balanceViewItems = balanceViewItems,
             viewState = viewState,
             isRefreshing = isRefreshing,
-            totalState = totalState
         )
     )
         private set
@@ -48,21 +44,16 @@ class BalanceViewModel(
         viewModelScope.launch {
             service.balanceItemsFlow
                 .collect { items ->
-                    totalService.setItems(items?.map {
+                    totalBalance.setTotalServiceItems(items?.map {
                         TotalService.BalanceItem(
                             it.balanceData.total,
                             it.state !is AdapterState.Synced,
                             it.coinPrice
                         )
                     })
+
                     items?.let { refreshViewItems(it) }
                 }
-        }
-
-        viewModelScope.launch {
-            totalService.stateFlow.collect {
-                handleUpdatedTotalState(it)
-            }
         }
 
         viewModelScope.launch {
@@ -71,9 +62,9 @@ class BalanceViewModel(
             }
         }
 
-        totalService.start()
-
         service.start()
+
+        totalBalance.start(viewModelScope)
     }
 
     private suspend fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
@@ -84,20 +75,11 @@ class BalanceViewModel(
         }
     }
 
-    private suspend fun handleUpdatedTotalState(totalState: TotalService.State) {
-        withContext(Dispatchers.IO) {
-            this@BalanceViewModel.totalState = createTotalUIState(totalState)
-
-            emitState()
-        }
-    }
-
     private fun emitState() {
         val newUiState = BalanceUiState(
             balanceViewItems = balanceViewItems,
             viewState = viewState,
             isRefreshing = isRefreshing,
-            totalState = totalState
         )
 
         viewModelScope.launch {
@@ -115,7 +97,7 @@ class BalanceViewModel(
                     balanceItem,
                     service.baseCurrency,
                     balanceItem.wallet == expandedWallet,
-                    balanceHiddenManager.balanceHidden,
+                    balanceHidden,
                     service.isWatchAccount,
                     balanceViewType
                 )
@@ -126,19 +108,15 @@ class BalanceViewModel(
     }
 
     override fun onCleared() {
-        totalService.stop()
+        totalBalance.stop()
         service.clear()
     }
 
-    fun onBalanceClick() {
+    override fun toggleBalanceVisibility() {
+        totalBalance.toggleBalanceVisibility()
         viewModelScope.launch {
-            balanceHiddenManager.toggleBalanceHidden()
             service.balanceItemsFlow.value?.let { refreshViewItems(it) }
         }
-    }
-
-    fun toggleTotalType() {
-        totalService.toggleType()
     }
 
     fun onItem(viewItem: BalanceViewItem) {
@@ -184,19 +162,6 @@ class BalanceViewModel(
         else -> SyncError.NetworkNotAvailable()
     }
 
-    private fun createTotalUIState(totalState: TotalService.State) = when (totalState) {
-        TotalService.State.Hidden -> TotalUIState.Hidden
-        is TotalService.State.Visible -> TotalUIState.Visible(
-            currencyValueStr = totalState.currencyValue?.let {
-                App.numberFormatter.formatFiatFull(it.value, it.currency.symbol)
-            } ?: "---",
-            coinValueStr = totalState.coinValue?.let {
-                "~" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
-            } ?: "---",
-            dimmed = totalState.dimmed
-        )
-    }
-
     sealed class SyncError {
         class NetworkNotAvailable : SyncError()
         class Dialog(val wallet: Wallet, val errorMessage: String?) : SyncError()
@@ -209,13 +174,12 @@ data class BalanceUiState(
     val balanceViewItems: List<BalanceViewItem>,
     val viewState: ViewState,
     val isRefreshing: Boolean,
-    val totalState: TotalUIState
 )
 
 sealed class TotalUIState {
     data class Visible(
-        val currencyValueStr: String,
-        val coinValueStr: String,
+        val primaryAmountStr: String,
+        val secondaryAmountStr: String,
         val dimmed: Boolean
     ) : TotalUIState()
 

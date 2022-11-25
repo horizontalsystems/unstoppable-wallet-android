@@ -5,11 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.balance.ITotalBalance
+import io.horizontalsystems.bankwallet.modules.balance.TotalBalance
 import io.horizontalsystems.bankwallet.modules.balance.TotalService
-import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.market.overview.coinValue
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.coroutines.delay
@@ -17,9 +16,8 @@ import kotlinx.coroutines.launch
 
 class NftHoldingsViewModel(
     private val service: NftHoldingsService,
-    private val totalService: TotalService,
-    private val balanceHiddenManager: BalanceHiddenManager
-) : ViewModel() {
+    private val totalBalance: TotalBalance
+) : ViewModel(), ITotalBalance by totalBalance {
 
     val priceType by service::priceType
 
@@ -35,24 +33,16 @@ class NftHoldingsViewModel(
     var viewItems by mutableStateOf<List<NftCollectionViewItem>>(listOf())
         private set
 
-    var totalState by mutableStateOf(createTotalUIState(totalService.stateFlow.value))
-        private set
-
     init {
         viewModelScope.launch {
             service.itemsFlow.collect { sync(it) }
         }
 
         viewModelScope.launch {
-            totalService.stateFlow.collect {
-                totalState = createTotalUIState(it)
-            }
-        }
-
-        viewModelScope.launch {
-            totalService.start()
             service.start()
         }
+
+        totalBalance.start(viewModelScope)
     }
 
     private fun sync(items: List<NftHoldingsService.Item>) {
@@ -61,10 +51,14 @@ class NftHoldingsViewModel(
         val expandedStates = viewItems.associate { it.uid to it.expanded }
         viewItems = items.map { viewItem(it, expandedStates[it.uid] ?: false) }
 
-        totalService.setItems(
+        totalBalance.setTotalServiceItems(
             items.map { it.assetItems }.flatten().mapNotNull { asset ->
                 asset.price?.let { price ->
-                    TotalService.BalanceItem(price.value, isValuePending = false, coinPrice = asset.coinPrice)
+                    TotalService.BalanceItem(
+                        price.value,
+                        isValuePending = false,
+                        coinPrice = asset.coinPrice
+                    )
                 }
             }
         )
@@ -101,14 +95,6 @@ class NftHoldingsViewModel(
         }
     }
 
-    fun onBalanceClick() {
-        balanceHiddenManager.toggleBalanceHidden()
-    }
-
-    fun toggleTotalType() {
-        totalService.toggleType()
-    }
-
     fun updatePriceType(priceType: PriceType) {
         service.updatePriceType(priceType)
     }
@@ -129,20 +115,7 @@ class NftHoldingsViewModel(
 
     override fun onCleared() {
         service.stop()
-        totalService.stop()
-    }
-
-    private fun createTotalUIState(totalState: TotalService.State) = when (totalState) {
-        TotalService.State.Hidden -> TotalUIState.Hidden
-        is TotalService.State.Visible -> TotalUIState.Visible(
-            currencyValueStr = totalState.currencyValue?.let {
-                App.numberFormatter.formatFiatFull(it.value, it.currency.symbol)
-            } ?: "---",
-            coinValueStr = totalState.coinValue?.let {
-                "~" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
-            } ?: "---",
-            dimmed = totalState.dimmed
-        )
+        totalBalance.stop()
     }
 
 }

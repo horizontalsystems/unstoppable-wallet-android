@@ -29,11 +29,6 @@ class BaseTokenManager(
     private val _baseTokenFlow = MutableStateFlow(token)
     val baseTokenFlow = _baseTokenFlow.asStateFlow()
 
-    fun toggleBaseToken() {
-        val indexOfNext = tokens.indexOf(token) + 1
-        setBaseToken(tokens.getOrNull(indexOfNext) ?: tokens.firstOrNull())
-    }
-
     fun setBaseToken(token: Token?) {
         this.token = token
         localStorage.balanceTotalCoinUid = token?.coin?.uid

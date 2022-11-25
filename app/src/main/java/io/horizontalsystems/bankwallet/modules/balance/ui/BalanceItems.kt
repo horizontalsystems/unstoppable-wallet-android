@@ -30,7 +30,8 @@ fun BalanceItems(
     viewModel: BalanceViewModel,
     accountViewItem: AccountViewItem,
     navController: NavController,
-    uiState: BalanceUiState
+    uiState: BalanceUiState,
+    totalState: TotalUIState
 ) {
     val rateAppViewModel = viewModel<RateAppViewModel>(factory = RateAppModule.Factory())
     DisposableEffect(true) {
@@ -43,34 +44,35 @@ fun BalanceItems(
     Column {
         val context = LocalContext.current
 
-        when (val totalState = uiState.totalState) {
+        when (totalState) {
             TotalUIState.Hidden -> {
                 DoubleText(
                     title = "*****",
                     body = "*****",
                     dimmed = false,
                     onClickTitle = {
-                        viewModel.onBalanceClick()
+                        viewModel.toggleBalanceVisibility()
                         HudHelper.vibrate(context)
                     },
-                    onClickBody = {
-
-                    }
+                    onClickSubtitle = {
+                        viewModel.toggleBalanceVisibility()
+                        HudHelper.vibrate(context)
+                    },
                 )
             }
             is TotalUIState.Visible -> {
                 DoubleText(
-                    title = totalState.currencyValueStr,
-                    body = totalState.coinValueStr,
+                    title = totalState.primaryAmountStr,
+                    body = totalState.secondaryAmountStr,
                     dimmed = totalState.dimmed,
                     onClickTitle = {
-                        viewModel.onBalanceClick()
+                        viewModel.toggleBalanceVisibility()
                         HudHelper.vibrate(context)
                     },
-                    onClickBody = {
-                        viewModel.toggleTotalType()
+                    onClickSubtitle = {
+                        viewModel.toggleBalanceVisibility()
                         HudHelper.vibrate(context)
-                    }
+                    },
                 )
             }
         }

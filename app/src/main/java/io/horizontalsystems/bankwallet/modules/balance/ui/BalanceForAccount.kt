@@ -90,7 +90,8 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                             viewModel,
                             accountViewItem,
                             navController,
-                            uiState
+                            uiState,
+                            viewModel.totalUiState
                         )
                     } else {
                         BalanceItemsEmpty(navController, accountViewItem)
