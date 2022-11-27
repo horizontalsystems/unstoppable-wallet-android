@@ -58,6 +58,7 @@ class KeyStoreActivity : BaseActivity() {
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(getString(R.string.OSPin_Confirm_Title))
             .setDescription(getString(R.string.OSPin_Prompt_Desciption))
+            .setNegativeButtonText("Cancel") // TODO further localization
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             promptInfo.setAllowedAuthenticators(BIOMETRIC_STRONG)
