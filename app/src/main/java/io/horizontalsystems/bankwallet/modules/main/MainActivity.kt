@@ -6,11 +6,8 @@ import androidx.navigation.fragment.NavHostFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WC2RequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2MainViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SendEthereumTransactionRequest
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SignMessageRequest
 
 class MainActivity : BaseActivity() {
 
@@ -31,21 +28,11 @@ class MainActivity : BaseActivity() {
         wc2MainViewModel.sessionProposalLiveEvent.observe(this) { wcRequest ->
             navHost.navController.slideFromBottom(R.id.wc2SessionFragment)
         }
-        wc2MainViewModel.openWalletConnectRequestLiveEvent.observe(this) { wcRequest ->
-            when (wcRequest) {
-                is WC2SignMessageRequest -> {
-                    navHost.navController.slideFromBottom(
-                        R.id.wc2SignMessageRequestFragment,
-                        WC2SignMessageRequestFragment.prepareParams(wcRequest.id)
-                    )
-                }
-                is WC2SendEthereumTransactionRequest -> {
-                    navHost.navController.slideFromBottom(
-                        R.id.wc2SendEthereumTransactionRequestFragment,
-                        WC2SendEthereumTransactionRequestFragment.prepareParams(wcRequest.id)
-                    )
-                }
-            }
+        wc2MainViewModel.openWalletConnectRequestLiveEvent.observe(this) { requestId ->
+            navHost.navController.slideFromBottom(
+                R.id.wc2RequestFragment,
+                WC2RequestFragment.prepareParams(requestId)
+            )
         }
     }
 

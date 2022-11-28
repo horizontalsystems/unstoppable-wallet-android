@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.version2
 
-import android.util.Log
 import com.walletconnect.sign.client.Sign
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
@@ -35,8 +34,8 @@ class WC2SessionManager(
     val pendingRequestCountFlow: StateFlow<Int>
         get() = _pendingRequestCountFlow
 
-    private val pendingRequestSubject = PublishSubject.create<WC2Request>()
-    val pendingRequestObservable: Flowable<WC2Request>
+    private val pendingRequestSubject = PublishSubject.create<Long>()
+    val pendingRequestObservable: Flowable<Long>
         get() = pendingRequestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     val sessions: List<Sign.Model.Session>
@@ -132,15 +131,7 @@ class WC2SessionManager(
     }
 
     private fun handleSessionRequest(sessionRequest: Sign.Model.SessionRequest) {
-        try {
-            prepareRequestToOpen(sessionRequest.request.id)
-        } catch (error: Throwable) {
-            Log.e(TAG, "handleSessionRequest error: ", error)
-        }
-
-        pendingRequestDataToOpen[sessionRequest.request.id]?.let {
-            pendingRequestSubject.onNext(it.pendingRequest)
-        }
+        pendingRequestSubject.onNext(sessionRequest.request.id)
     }
 
     private fun getSessions(accountId: String): List<Sign.Model.Session> {
