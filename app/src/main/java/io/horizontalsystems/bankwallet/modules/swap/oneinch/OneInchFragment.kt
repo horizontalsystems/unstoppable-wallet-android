@@ -4,13 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
@@ -27,14 +31,14 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
-import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
+import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewNew
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchConfirmationModule
-import io.horizontalsystems.bankwallet.modules.swap.ui.ActionButtons
-import io.horizontalsystems.bankwallet.modules.swap.ui.SwapAllowance
-import io.horizontalsystems.bankwallet.modules.swap.ui.SwapError
-import io.horizontalsystems.bankwallet.modules.swap.ui.SwitchCoinsSection
+import io.horizontalsystems.bankwallet.modules.swap.ui.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Keyboard
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
+import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import java.util.*
@@ -129,84 +133,140 @@ private fun OneInchScreen(
     navController: NavController
 ) {
     val buttons by viewModel.buttonsLiveData().observeAsState()
-    val showProgressbar by viewModel.isLoadingLiveData().observeAsState(false)
+    val tradeViewItem by viewModel.tradeViewItemLiveData().observeAsState()
+    val isLoading by viewModel.isLoadingLiveData().observeAsState(false)
     val swapError by viewModel.swapErrorLiveData().observeAsState()
-    val approveStep by viewModel.approveStepLiveData().observeAsState()
+    val availableBalance by fromCoinCardViewModel.balanceLiveData().observeAsState()
+    val keyboardState by observeKeyboardState()
+    val fromAmount by fromCoinCardViewModel.amountLiveData().observeAsState()
+    val tradeTimeoutProgress by viewModel.tradeTimeoutProgressLiveData().observeAsState()
 
     ComposeAppTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
+        val focusRequester = remember { FocusRequester() }
+        var showSuggestions by remember { mutableStateOf(false) }
 
-            Spacer(Modifier.height(12.dp))
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
+        Box {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
 
-            SwapCoinCardView(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.Swap_FromAmountTitle),
-                viewModel = fromCoinCardViewModel,
-                uuid = uuidFrom,
-                amountEnabled = true,
-                navController = navController
-            )
+                Spacer(Modifier.height(12.dp))
 
-            SwitchCoinsSection(showProgressbar) { viewModel.onTapSwitch() }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(ComposeAppTheme.colors.lawrence)
+                ) {
+                    SwapCoinCardViewNew(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                        viewModel = fromCoinCardViewModel,
+                        uuid = uuidFrom,
+                        amountEnabled = true,
+                        navController = navController,
+                        focusRequester = focusRequester
+                    ) { isFocused ->
+                        showSuggestions = isFocused
+                    }
 
-            SwapCoinCardView(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.Swap_ToAmountTitle),
-                viewModel = toCoinCardViewModel,
-                uuid = uuidTo,
-                amountEnabled = false,
-                navController = navController
-            )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    SwitchCoinsSection(isLoading) { viewModel.onTapSwitch() }
+                    Spacer(modifier = Modifier.height(2.dp))
 
-            SwapAllowance(allowanceViewModel)
+                    SwapCoinCardViewNew(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
+                        viewModel = toCoinCardViewModel,
+                        uuid = uuidTo,
+                        amountEnabled = false,
+                        navController = navController,
+                        amountExpired = isLoading
+                    )
+                }
 
-            SwapError(swapError)
-
-            ActionButtons(
-                buttons = buttons,
-                onTapRevoke = {
-                    navController.getNavigationResult(SwapApproveModule.requestKey) {
-                        if (it.getBoolean(SwapApproveModule.resultKey)) {
-                            viewModel.didApprove()
+                if (swapError != null) {
+                    swapError?.let {
+                        TextImportantError(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                            icon = R.drawable.ic_attention_20,
+                            title = stringResource(R.string.Error),
+                            text = it
+                        )
+                    }
+                } else {
+                    val infoItems = mutableListOf<@Composable () -> Unit>()
+                    tradeViewItem?.buyPrice?.let { buyPrice ->
+                        tradeViewItem?.sellPrice?.let { sellPrice ->
+                            infoItems.add { Price(buyPrice, sellPrice, tradeTimeoutProgress ?: 1f, tradeViewItem?.expired ?: false) }
                         }
                     }
-
-                    viewModel.revokeEvmData?.let { revokeEvmData ->
-                        navController.slideFromBottom(
-                            R.id.swapApproveConfirmationFragment,
-                            SwapApproveConfirmationModule.prepareParams(revokeEvmData, viewModel.blockchainType, false)
-                        )
+                    if (allowanceViewModel.uiState.isVisible) {
+                        infoItems.add { SwapAllowance(allowanceViewModel, navController) }
                     }
-                },
-                onTapApprove = {
-                    navController.getNavigationResult(SwapApproveModule.requestKey) {
-                        if (it.getBoolean(SwapApproveModule.resultKey)) {
-                            viewModel.didApprove()
-                        }
+                    if (infoItems.isEmpty()) {
+                        availableBalance?.let { infoItems.add { AvailableBalance(it) } }
                     }
-
-                    viewModel.approveData?.let { data ->
-                        navController.slideFromBottom(
-                            R.id.swapApproveFragment,
-                            SwapApproveModule.prepareParams(data)
-                        )
-                    }
-                },
-                onTapProceed = {
-                    viewModel.proceedParams?.let { params ->
-                        navController.slideFromRight(
-                            R.id.oneInchConfirmationFragment,
-                            OneInchConfirmationModule.prepareParams(params)
-                        )
+                    if (infoItems.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        SingleLineGroup(infoItems)
                     }
                 }
-            )
 
-            Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(32.dp))
+
+                ActionButtons(
+                    buttons = buttons,
+                    onTapRevoke = {
+                        navController.getNavigationResult(SwapApproveModule.requestKey) {
+                            if (it.getBoolean(SwapApproveModule.resultKey)) {
+                                viewModel.didApprove()
+                            }
+                        }
+
+                        viewModel.revokeEvmData?.let { revokeEvmData ->
+                            navController.slideFromBottom(
+                                R.id.swapApproveConfirmationFragment,
+                                SwapApproveConfirmationModule.prepareParams(revokeEvmData, viewModel.blockchainType, false)
+                            )
+                        }
+                    },
+                    onTapApprove = {
+                        navController.getNavigationResult(SwapApproveModule.requestKey) {
+                            if (it.getBoolean(SwapApproveModule.resultKey)) {
+                                viewModel.didApprove()
+                            }
+                        }
+
+                        viewModel.approveData?.let { data ->
+                            navController.slideFromBottom(
+                                R.id.swapApproveFragment,
+                                SwapApproveModule.prepareParams(data)
+                            )
+                        }
+                    },
+                    onTapProceed = {
+                        viewModel.proceedParams?.let { params ->
+                            navController.slideFromRight(
+                                R.id.oneInchConfirmationFragment,
+                                OneInchConfirmationModule.prepareParams(params)
+                            )
+                        }
+                    }
+                )
+
+                Spacer(Modifier.height(32.dp))
+            }
+
+            if (fromAmount?.second.isNullOrEmpty() && showSuggestions && keyboardState == Keyboard.Opened) {
+                SuggestionsBar(modifier = Modifier.align(Alignment.BottomCenter)) {
+                    fromCoinCardViewModel.onSetAmountInBalancePercent(it)
+                }
+            }
         }
     }
 }

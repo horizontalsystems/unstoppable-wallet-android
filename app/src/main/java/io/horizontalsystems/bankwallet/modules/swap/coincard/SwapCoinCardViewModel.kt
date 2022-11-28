@@ -245,10 +245,9 @@ class SwapCoinCardViewModel(
             setCoinValueToService(inputAmount, force)
         } else {
             val decimals = fullAmountInfo.primaryDecimal
-            val amountString = fullAmountInfo.primaryValue.setScale(decimals, RoundingMode.FLOOR)?.stripTrailingZeros()
-                ?.toPlainString()
-            amountLiveData.postValue(Pair(uuidString, amountString))
+            val amountString = fullAmountInfo.primaryValue.setScale(decimals, RoundingMode.FLOOR)?.stripTrailingZeros()?.toPlainString()
 
+            amountLiveData.postValue(Pair(uuidString, amountString))
             secondaryInfoLiveData.postValue(fullAmountInfo.secondaryInfo?.getFormatted())
 
             setCoinValueToService(fullAmountInfo.coinValue.value, force)

@@ -11,18 +11,20 @@ import io.horizontalsystems.bankwallet.modules.evmfee.GasDataError
 import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
 import io.horizontalsystems.bankwallet.modules.swap.SwapButtons
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ApproveStep
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
+import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.math.RoundingMode
 
 class OneInchSwapViewModel(
     val service: OneInchSwapService,
     val tradeService: OneInchTradeService,
-    private val pendingAllowanceService: SwapPendingAllowanceService
+    private val pendingAllowanceService: SwapPendingAllowanceService,
+    private val formatter: SwapViewItemHelper
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -30,12 +32,14 @@ class OneInchSwapViewModel(
     private val isLoadingLiveData = MutableLiveData(false)
     private val swapErrorLiveData = MutableLiveData<String?>(null)
     private val buttonsLiveData = MutableLiveData<SwapButtons>()
-    private val approveStepLiveData = MutableLiveData(ApproveStep.NA)
+    private val tradeViewItemLiveData = MutableLiveData<TradeViewItem?>(null)
+    private val tradeTimeoutProgressLiveData = MutableLiveData<Float>()
 
     init {
         subscribeToServices()
 
         sync(service.state)
+        sync(tradeService.state)
         sync(service.errors)
     }
 
@@ -43,7 +47,8 @@ class OneInchSwapViewModel(
     fun isLoadingLiveData(): LiveData<Boolean> = isLoadingLiveData
     fun swapErrorLiveData(): LiveData<String?> = swapErrorLiveData
     fun buttonsLiveData(): LiveData<SwapButtons> = buttonsLiveData
-    fun approveStepLiveData(): LiveData<ApproveStep> = approveStepLiveData
+    fun tradeViewItemLiveData(): LiveData<TradeViewItem?> = tradeViewItemLiveData
+    fun tradeTimeoutProgressLiveData(): LiveData<Float> = tradeTimeoutProgressLiveData
 
     val revokeEvmData by service::revokeEvmData
     val blockchainType by service::blockchainType
@@ -53,10 +58,10 @@ class OneInchSwapViewModel(
         get() {
             val serviceState = service.state
             val tradeServiceState = tradeService.state
-            if (serviceState is OneInchSwapService.State.Ready && tradeServiceState is OneInchTradeService.State.Ready) {
-                return tradeServiceState.params
-            }
-            return null
+            return if (serviceState is OneInchSwapService.State.Ready && tradeServiceState is OneInchTradeService.State.Ready) {
+                tradeServiceState.params
+            } else
+                null
         }
 
     fun onTapSwitch() {
@@ -67,15 +72,13 @@ class OneInchSwapViewModel(
         pendingAllowanceService.syncAllowance()
     }
 
-    fun getProviderState(): SwapMainModule.SwapProviderState {
-        return SwapMainModule.SwapProviderState(
-            tradeService.tokenFrom,
-            tradeService.tokenTo,
-            tradeService.amountFrom,
-            tradeService.amountTo,
-            tradeService.amountType
-        )
-    }
+    fun getProviderState() = SwapMainModule.SwapProviderState(
+        tradeService.tokenFrom,
+        tradeService.tokenTo,
+        tradeService.amountFrom,
+        tradeService.amountTo,
+        tradeService.amountType
+    )
 
     fun restoreProviderState(swapProviderState: SwapMainModule.SwapProviderState) {
         tradeService.restoreState(swapProviderState)
@@ -107,11 +110,55 @@ class OneInchSwapViewModel(
             .subscribe { sync(it) }
             .let { disposables.add(it) }
 
+        tradeService.stateObservable
+            .subscribeOn(Schedulers.io())
+            .subscribe { sync(it) }
+            .let { disposables.add(it) }
+
         pendingAllowanceService.stateObservable
             .subscribeOn(Schedulers.io())
             .subscribe {
                 syncState()
             }.let { disposables.add(it) }
+
+        tradeService.timeoutProgressObservable
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                tradeTimeoutProgressLiveData.postValue(it)
+            }
+            .let { disposables.add(it) }
+    }
+
+    private fun sync(tradeServiceState: OneInchTradeService.State) {
+
+        when (tradeServiceState) {
+            is OneInchTradeService.State.Ready -> {
+                tradeViewItemLiveData.postValue(tradeViewItem(tradeServiceState.params))
+            }
+            OneInchTradeService.State.Loading -> {
+                tradeViewItemLiveData.postValue(tradeViewItemLiveData.value?.copy(expired = true))
+            }
+            is OneInchTradeService.State.NotReady -> {
+                tradeViewItemLiveData.postValue(null)
+            }
+        }
+    }
+
+    private fun tradeViewItem(params: OneInchSwapParameters) = try {
+        TradeViewItem(
+            buyPrice = formatter.price(
+                params.amountTo.divide(params.amountFrom, params.tokenFrom.decimals, RoundingMode.HALF_UP).stripTrailingZeros(),
+                params.tokenFrom,
+                params.tokenTo
+            ),
+            sellPrice = formatter.price(
+                params.amountFrom.divide(params.amountTo, params.tokenTo.decimals, RoundingMode.HALF_UP).stripTrailingZeros(),
+                params.tokenTo,
+                params.tokenFrom
+            )
+        )
+    } catch (exception: ArithmeticException) {
+        null
     }
 
     private fun sync(serviceState: OneInchSwapService.State) {
@@ -133,8 +180,7 @@ class OneInchSwapViewModel(
         }
 
     private fun sync(errors: List<Throwable>) {
-        val filtered =
-            errors.filter { it !is GasDataError && it !is SwapError }
+        val filtered = errors.filter { it !is GasDataError && it !is SwapError }
         swapErrorLiveData.postValue(filtered.firstOrNull()?.let { convert(it) })
 
         syncState()
@@ -144,9 +190,7 @@ class OneInchSwapViewModel(
         val revokeAction = getRevokeActionState()
         val approveAction = getApproveActionState(revokeAction)
         val proceedAction = getProceedActionState(revokeAction)
-        val approveStep = getApproveStep(revokeAction)
         buttonsLiveData.postValue(SwapButtons(revokeAction, approveAction, proceedAction))
-        approveStepLiveData.postValue(approveStep)
     }
 
     private fun getProceedActionState(revokeAction: SwapActionState): SwapActionState {
@@ -211,27 +255,10 @@ class OneInchSwapViewModel(
         }
     }
 
-    private fun getApproveStep(revokeAction: SwapActionState): ApproveStep {
-        return when {
-            revokeAction !is SwapActionState.Hidden -> {
-                ApproveStep.NA
-            }
-            pendingAllowanceService.state == SwapPendingAllowanceState.Approving -> {
-                ApproveStep.Approving
-            }
-            tradeService.state is OneInchTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
-                ApproveStep.NA
-            }
-            service.errors.any { it == SwapError.InsufficientAllowance } -> {
-                ApproveStep.ApproveRequired
-            }
-            pendingAllowanceService.state == SwapPendingAllowanceState.Approved -> {
-                ApproveStep.Approved
-            }
-            else -> {
-                ApproveStep.NA
-            }
-        }
-    }
+    data class TradeViewItem(
+        val buyPrice: String? = null,
+        val sellPrice: String? = null,
+        val expired: Boolean = false
+    )
 
 }

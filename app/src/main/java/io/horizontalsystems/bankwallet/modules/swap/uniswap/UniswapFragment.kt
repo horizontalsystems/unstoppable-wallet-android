@@ -7,14 +7,12 @@ import android.view.ViewGroup
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
@@ -39,13 +37,12 @@ import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApp
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewNew
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationModule
-import io.horizontalsystems.bankwallet.modules.swap.ui.ActionButtons
-import io.horizontalsystems.bankwallet.modules.swap.ui.SwitchCoinsSection
+import io.horizontalsystems.bankwallet.modules.swap.ui.*
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
-import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults.buttonColors
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
@@ -133,31 +130,6 @@ class UniswapFragment : SwapBaseFragment() {
 }
 
 @Composable
-fun SuggestionsBar(
-    modifier: Modifier = Modifier,
-    percents: List<Int>,
-    onClick: (Int) -> Unit
-) {
-    Box(modifier = modifier) {
-        BoxTyler44(borderTop = true) {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                percents.forEach { percent ->
-                    ButtonSecondary(
-                        onClick = { onClick.invoke(percent) }
-                    ) {
-                        subhead1_leah(text = "$percent%")
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
 private fun UniswapScreen(
     viewModel: UniswapViewModel,
     fromCoinCardViewModel: SwapCoinCardViewModel,
@@ -240,7 +212,7 @@ private fun UniswapScreen(
                         }
                     }
                     if (allowanceViewModel.uiState.isVisible) {
-                        infoItems.add { SwapAllowanceNew(allowanceViewModel, navController) }
+                        infoItems.add { SwapAllowance(allowanceViewModel, navController) }
                     }
                     tradeViewItem?.priceImpact?.let {
                         infoItems.add { PriceImpact(it, navController) }
@@ -302,140 +274,10 @@ private fun UniswapScreen(
             }
 
             if (fromAmount?.second.isNullOrEmpty() && showSuggestions && keyboardState == Keyboard.Opened) {
-                SuggestionsBar(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                    percents = listOf(25, 50, 75, 100)
-                ) {
+                SuggestionsBar(modifier = Modifier.align(Alignment.BottomCenter)) {
                     fromCoinCardViewModel.onSetAmountInBalancePercent(it)
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun SingleLineGroup(
-    composableItems: List<@Composable () -> Unit>
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-        ) {
-            composableItems.forEach { composable ->
-                composable()
-            }
-        }
-    }
-}
-
-@Composable
-private fun AvailableBalance(value: String) {
-    Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically) {
-        subhead2_grey(text = stringResource(id = R.string.Swap_Balance))
-        Spacer(modifier = Modifier.weight(1f))
-        subhead2_leah(text = value)
-    }
-}
-
-@Composable
-fun SwapAllowanceNew(
-    viewModel: SwapAllowanceViewModel,
-    navController: NavController
-) {
-    val uiState = viewModel.uiState
-    val isError = uiState.isError
-    val revokeRequired = uiState.revokeRequired
-    val allowanceAmount = uiState.allowance
-    val visible = uiState.isVisible
-
-    if (visible) {
-        if (revokeRequired) {
-            TextImportantWarning(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(R.string.Approve_RevokeAndApproveInfo, allowanceAmount ?: "")
-            )
-        } else {
-            Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically) {
-                val infoTitle = stringResource(id = R.string.SwapInfo_AllowanceTitle)
-                val infoText = stringResource(id = R.string.SwapInfo_AllowanceDescription)
-                Image(
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .clickable {
-                            navController.slideFromBottom(
-                                R.id.feeSettingsInfoDialog,
-                                FeeSettingsInfoDialog.prepareParams(infoTitle, infoText)
-                            )
-                        },
-                    painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
-                )
-                subhead2_grey(text = stringResource(R.string.Swap_Allowance))
-                Spacer(Modifier.weight(1f))
-                allowanceAmount?.let { amount ->
-                    if (isError) {
-                        subhead2_lucian(text = amount)
-                    } else {
-                        subhead2_grey(text = amount)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun Price(
-    buyPrice: String,
-    sellPrice: String,
-    timeoutProgress: Float
-) {
-    var showBuyPrice by remember { mutableStateOf(true) }
-
-    Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically)
-    {
-        subhead2_grey(text = stringResource(R.string.Swap_Price))
-        Spacer(Modifier.weight(1f))
-
-        ButtonSecondary(
-            onClick = { showBuyPrice = !showBuyPrice },
-            buttonColors = buttonColors(
-                backgroundColor = ComposeAppTheme.colors.transparent,
-                contentColor = ComposeAppTheme.colors.leah,
-                disabledBackgroundColor = ComposeAppTheme.colors.transparent,
-                disabledContentColor = ComposeAppTheme.colors.grey50,
-            ),
-            contentPadding = PaddingValues(start = 8.dp, end = 8.dp),
-            content = {
-                subhead2_leah(
-                    text = if (showBuyPrice) buyPrice else sellPrice,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-        )
-        Box(modifier = Modifier.size(14.5.dp)) {
-            CircularProgressIndicator(
-                progress = 1f,
-                modifier = Modifier.size(14.5.dp),
-                color = ComposeAppTheme.colors.steel20,
-                strokeWidth = 1.5.dp
-            )
-            CircularProgressIndicator(
-                progress = timeoutProgress,
-                modifier = Modifier
-                    .size(14.5.dp)
-                    .scale(scaleX = -1f, scaleY = 1f),
-                color = ComposeAppTheme.colors.jacob,
-                strokeWidth = 1.5.dp
-            )
         }
     }
 }
