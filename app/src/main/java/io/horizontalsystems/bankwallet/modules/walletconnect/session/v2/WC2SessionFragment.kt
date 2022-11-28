@@ -27,15 +27,12 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WC2RequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.ui.RequestCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionModule.SESSION_TOPIC_KEY
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SendEthereumTransactionRequest
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SignMessageRequest
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -176,21 +173,10 @@ private fun ColumnScope.WCSessionListContent(
             HeaderText(text = stringResource(R.string.WalletConnect_PendingRequests))
             CellMultilineLawrenceSection(pendingRequests) { request ->
                 RequestCell(viewItem = request) {
-                    val wcRequest = viewModel.xxx(request)
-                    when (val pendingRequest = wcRequest?.pendingRequest) {
-                        is WC2SignMessageRequest -> {
-                            navController.slideFromBottom(
-                                R.id.wc2SignMessageRequestFragment,
-                                WC2SignMessageRequestFragment.prepareParams(pendingRequest.id)
-                            )
-                        }
-                        is WC2SendEthereumTransactionRequest -> {
-                            navController.slideFromBottom(
-                                R.id.wc2SendEthereumTransactionRequestFragment,
-                                WC2SendEthereumTransactionRequestFragment.prepareParams(pendingRequest.id)
-                            )
-                        }
-                    }
+                    navController.slideFromBottom(
+                        R.id.wc2RequestFragment,
+                        WC2RequestFragment.prepareParams(it.requestId)
+                    )
                 }
             }
             Spacer(Modifier.height(32.dp))
