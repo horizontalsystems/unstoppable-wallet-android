@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Request
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.SingleLiveEvent
@@ -17,7 +16,7 @@ class WC2MainViewModel(
 ) : ViewModel() {
 
     val sessionProposalLiveEvent = SingleLiveEvent<Unit>()
-    val openWalletConnectRequestLiveEvent = SingleLiveEvent<WC2Request>()
+    val openWalletConnectRequestLiveEvent = SingleLiveEvent<Long>()
 
     init {
         viewModelScope.launch {
