@@ -1,16 +1,27 @@
 package io.horizontalsystems.bankwallet.modules.swap.ui
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.swap.SwapActionState
 import io.horizontalsystems.bankwallet.modules.swap.SwapButtons
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
@@ -18,11 +29,156 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
-fun SwapError(swapError: String?) {
-    swapError?.let { error ->
-        Spacer(Modifier.height(12.dp))
-        AdditionalDataCell2 {
-            subhead2_lucian(text = error)
+fun SwapAllowance(
+    viewModel: SwapAllowanceViewModel,
+    navController: NavController
+) {
+    val uiState = viewModel.uiState
+    val isError = uiState.isError
+    val revokeRequired = uiState.revokeRequired
+    val allowanceAmount = uiState.allowance
+    val visible = uiState.isVisible
+
+    if (visible) {
+        if (revokeRequired) {
+            TextImportantWarning(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = stringResource(R.string.Approve_RevokeAndApproveInfo, allowanceAmount ?: "")
+            )
+        } else {
+            Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically) {
+                val infoTitle = stringResource(id = R.string.SwapInfo_AllowanceTitle)
+                val infoText = stringResource(id = R.string.SwapInfo_AllowanceDescription)
+                Image(
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .clickable {
+                            navController.slideFromBottom(
+                                R.id.feeSettingsInfoDialog,
+                                FeeSettingsInfoDialog.prepareParams(infoTitle, infoText)
+                            )
+                        },
+                    painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
+                )
+                subhead2_grey(text = stringResource(R.string.Swap_Allowance))
+                Spacer(Modifier.weight(1f))
+                allowanceAmount?.let { amount ->
+                    if (isError) {
+                        subhead2_lucian(text = amount)
+                    } else {
+                        subhead2_grey(text = amount)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun AvailableBalance(value: String) {
+    Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically) {
+        subhead2_grey(text = stringResource(id = R.string.Swap_Balance))
+        Spacer(modifier = Modifier.weight(1f))
+        subhead2_leah(text = value)
+    }
+}
+
+@Composable
+fun SuggestionsBar(
+    modifier: Modifier = Modifier,
+    percents: List<Int> = listOf(25, 50, 75, 100),
+    onClick: (Int) -> Unit
+) {
+    Box(modifier = modifier) {
+        BoxTyler44(borderTop = true) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                percents.forEach { percent ->
+                    ButtonSecondary(
+                        onClick = { onClick.invoke(percent) }
+                    ) {
+                        subhead1_leah(text = "$percent%")
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SingleLineGroup(
+    composableItems: List<@Composable () -> Unit>
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+        ) {
+            composableItems.forEach { composable ->
+                composable()
+            }
+        }
+    }
+}
+
+@Composable
+fun Price(
+    buyPrice: String,
+    sellPrice: String,
+    timeoutProgress: Float,
+    expired: Boolean = false
+) {
+    var showBuyPrice by remember { mutableStateOf(false) }
+
+    Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically)
+    {
+        subhead2_grey(text = stringResource(R.string.Swap_Price))
+        Spacer(Modifier.weight(1f))
+
+        ButtonSecondary(
+            onClick = { showBuyPrice = !showBuyPrice },
+            buttonColors = SecondaryButtonDefaults.buttonColors(
+                backgroundColor = ComposeAppTheme.colors.transparent,
+                contentColor = ComposeAppTheme.colors.leah,
+                disabledBackgroundColor = ComposeAppTheme.colors.transparent,
+                disabledContentColor = ComposeAppTheme.colors.grey50,
+            ),
+            contentPadding = PaddingValues(start = 8.dp, end = 8.dp),
+            content = {
+                Text(
+                    text = if (showBuyPrice) buyPrice else sellPrice,
+                    maxLines = 1,
+                    style = ComposeAppTheme.typography.subhead2,
+                    color = if (expired) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
+                )
+            }
+        )
+        Box(modifier = Modifier.size(14.5.dp)) {
+            CircularProgressIndicator(
+                progress = 1f,
+                modifier = Modifier.size(14.5.dp),
+                color = ComposeAppTheme.colors.steel20,
+                strokeWidth = 1.5.dp
+            )
+            CircularProgressIndicator(
+                progress = timeoutProgress,
+                modifier = Modifier
+                    .size(14.5.dp)
+                    .scale(scaleX = -1f, scaleY = 1f),
+                color = ComposeAppTheme.colors.jacob,
+                strokeWidth = 1.5.dp
+            )
         }
     }
 }
@@ -30,7 +186,7 @@ fun SwapError(swapError: String?) {
 @Composable
 fun SwitchCoinsSection(
     showProgressbar: Boolean,
-    onSwitchButtonClick: () -> Unit,
+    onSwitchButtonClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -61,37 +217,6 @@ fun SwitchCoinsSection(
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10
         )
-    }
-}
-
-@Composable
-fun SwapAllowance(viewModel: SwapAllowanceViewModel) {
-    val uiState = viewModel.uiState
-    val isError = uiState.isError
-    val revokeRequired = uiState.revokeRequired
-    val allowanceAmount = uiState.allowance
-    val visible = uiState.isVisible
-
-    if (visible) {
-        Spacer(Modifier.height(12.dp))
-        if (revokeRequired) {
-            TextImportantWarning(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(R.string.Approve_RevokeAndApproveInfo, allowanceAmount ?: "")
-            )
-        } else {
-            AdditionalDataCell2 {
-                subhead2_grey(text = stringResource(R.string.Swap_Allowance))
-                Spacer(Modifier.weight(1f))
-                allowanceAmount?.let { amount ->
-                    if (isError) {
-                        subhead2_lucian(text = amount)
-                    } else {
-                        subhead2_grey(text = amount)
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -198,14 +323,6 @@ fun Preview_ActionButtons() {
             SwapActionState.Enabled("Proceed"),
         )
         ActionButtons(buttons, {}, {}, {})
-    }
-}
-
-@Preview
-@Composable
-private fun Preview_SwapError() {
-    ComposeAppTheme {
-        SwapError("Swap Error text")
     }
 }
 

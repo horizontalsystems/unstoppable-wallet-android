@@ -58,7 +58,7 @@ object OneInchModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 OneInchSwapViewModel::class.java -> {
-                    OneInchSwapViewModel(service, tradeService, pendingAllowanceService) as T
+                    OneInchSwapViewModel(service, tradeService, pendingAllowanceService, formatter) as T
                 }
                 SwapAllowanceViewModel::class.java -> {
                     SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter) as T
