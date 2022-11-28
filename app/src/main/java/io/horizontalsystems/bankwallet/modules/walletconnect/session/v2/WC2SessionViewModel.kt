@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Session
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 
 class WC2SessionViewModel(
     private val wc2service: WC2Service,
@@ -82,6 +83,14 @@ class WC2SessionViewModel(
                 }
         }
 
+        viewModelScope.launch {
+            wc2service.pendingRequestUpdatedObservable.asFlow()
+                .collect {
+                    refreshPendingRequests()
+                    emitState()
+                }
+        }
+
         val topic1 = topic
         if (topic1 != null) {
             val existingSession =
@@ -98,15 +107,7 @@ class WC2SessionViewModel(
                 }
 
                 session = existingSession
-                pendingRequests = wc2service.pendingRequests(existingSession.topic).map {
-                    WC2RequestViewItem(
-                        requestId = it.requestId,
-                        title = title(it.method),
-                        subtitle = it.chainId?.let {
-                            WC2Parser.getAccountData(it)
-                        }?.chain?.name ?: "",
-                    )
-                }
+                refreshPendingRequests()
                 wcBlockchains = getBlockchainsBySession(existingSession)
                 sessionServiceState = WC2SessionServiceState.Ready
             }
@@ -173,6 +174,20 @@ class WC2SessionViewModel(
             .let {
                 disposables.add(it)
             }
+    }
+
+    private fun refreshPendingRequests() {
+        pendingRequests = session?.let { existingSession ->
+            wc2service.pendingRequests(existingSession.topic).map {
+                WC2RequestViewItem(
+                    requestId = it.requestId,
+                    title = title(it.method),
+                    subtitle = it.chainId?.let {
+                        WC2Parser.getAccountData(it)
+                    }?.chain?.name ?: "",
+                )
+            }
+        } ?: listOf()
     }
 
     private fun title(method: String?): String = when (method) {
