@@ -413,12 +413,6 @@ class WC2SessionViewModel(
         }
     }
 
-    fun xxx(request: WC2RequestViewItem): WC2SessionManager.RequestData? {
-        sessionManager.prepareRequestToOpen(request.requestId)
-        return sessionManager.pendingRequestDataToOpen[request.requestId]
-    }
-
-
 }
 
 data class WC2SessionUiState(
