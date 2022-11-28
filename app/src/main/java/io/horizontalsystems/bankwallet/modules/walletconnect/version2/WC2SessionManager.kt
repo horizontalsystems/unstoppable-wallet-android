@@ -82,10 +82,6 @@ class WC2SessionManager(
             .let { disposable.add(it) }
     }
 
-    fun pendingRequests(accountId: String? = null): List<Sign.Model.PendingRequest> {
-        return requests(accountId)
-    }
-
     fun sessionByTopic(topic: String): Sign.Model.Session? {
         return allSessions.firstOrNull { it.topic == topic }
     }
