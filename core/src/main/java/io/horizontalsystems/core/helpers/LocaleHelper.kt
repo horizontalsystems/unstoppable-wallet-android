@@ -65,14 +65,14 @@ object LocaleHelper {
         if (locale == null) return
         getPreferences(context)
             .edit()
-            .putString(SELECTED_LANGUAGE, locale.language)
+            .putString(SELECTED_LANGUAGE, locale.toLanguageTag())
             .apply()
     }
 
     private fun load(context: Context): Locale {
         val preferences = getPreferences(context)
-        val language = preferences.getString(SELECTED_LANGUAGE, null) ?: Locale.getDefault().language
-        return Locale(language)
+        val languageTag = preferences.getString(SELECTED_LANGUAGE, null) ?: Locale.getDefault().toLanguageTag()
+        return Locale.forLanguageTag(languageTag)
     }
 
 }

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.language
 
-import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -14,17 +13,17 @@ object LanguageSettingsModule {
         }
     }
 
-    enum class LocaleType(@DrawableRes val icon: Int) {
-        de(R.drawable.icon_24_flags_germany),
-        en(R.drawable.icon_24_flags_england),
-        es(R.drawable.icon_24_flags_spain),
-        pt(R.drawable.icon_24_flags_portugal),
-        fa(R.drawable.icon_24_flags_iran),
-        fr(R.drawable.icon_24_flags_france),
-        ko(R.drawable.icon_24_flags_korea),
-        ru(R.drawable.icon_24_flags_russia),
-        tr(R.drawable.icon_24_flags_turkey),
-        zh(R.drawable.icon_24_flags_china),
+    enum class LocaleType(val tag: String, val icon: Int) {
+        de("de", R.drawable.icon_24_flags_germany),
+        en("en", R.drawable.icon_24_flags_england),
+        es("es", R.drawable.icon_24_flags_spain),
+        pt_br("pt-BR", R.drawable.icon_24_flags_brazil),
+        fa("fa", R.drawable.icon_24_flags_iran),
+        fr("fr", R.drawable.icon_24_flags_france),
+        ko("ko", R.drawable.icon_24_flags_korea),
+        ru("ru", R.drawable.icon_24_flags_russia),
+        tr("tr", R.drawable.icon_24_flags_turkey),
+        zh("zh", R.drawable.icon_24_flags_china);
     }
 }
 
