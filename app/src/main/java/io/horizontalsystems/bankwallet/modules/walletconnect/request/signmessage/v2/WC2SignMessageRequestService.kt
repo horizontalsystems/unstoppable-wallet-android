@@ -8,15 +8,11 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SignMes
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 
 class WC2SignMessageRequestService(
-    private val requestId: Long,
+    private val requestData: WC2SessionManager.RequestData,
     private val sessionManager: WC2SessionManager,
 ) : WCSignMessageRequestModule.RequestAction {
 
     override val isLegacySignRequest = false
-
-    private val requestData by lazy {
-        sessionManager.pendingRequestDataToOpen[requestId]!!
-    }
 
     override val dAppName: String?
         get() = pendingRequest.dAppName
@@ -31,10 +27,6 @@ class WC2SignMessageRequestService(
 
     override val message: SignMessage by lazy {
         pendingRequest.message
-    }
-
-    override fun stop() {
-        sessionManager.pendingRequestDataToOpen.remove(requestId)
     }
 
     private fun signMessage(request: WC2SignMessageRequest): ByteArray? {

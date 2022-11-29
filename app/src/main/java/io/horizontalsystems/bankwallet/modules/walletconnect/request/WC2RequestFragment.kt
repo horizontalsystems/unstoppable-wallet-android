@@ -41,12 +41,13 @@ class WC2RequestFragment : BaseFragment() {
                 val navController = findNavController()
                 val wc2RequestViewModel = viewModel<WC2RequestViewModel>(factory = WC2RequestViewModel.Factory(requestId))
 
-                when (val pendingRequest = wc2RequestViewModel.requestData?.pendingRequest) {
+                val requestData = wc2RequestViewModel.requestData
+                when (requestData?.pendingRequest) {
                     is WC2SignMessageRequest -> {
-                        WC2SignMessageRequestScreen(navController, pendingRequest.id)
+                        WC2SignMessageRequestScreen(navController, requestData)
                     }
                     is WC2SendEthereumTransactionRequest -> {
-                        val vmFactory by lazy { WCRequestModule.FactoryV2(pendingRequest.id) }
+                        val vmFactory by lazy { WCRequestModule.FactoryV2(requestData) }
                         val viewModel by viewModels<WCSendEthereumTransactionRequestViewModel> { vmFactory }
                         val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
                         val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.wc2RequestFragment) { vmFactory }
