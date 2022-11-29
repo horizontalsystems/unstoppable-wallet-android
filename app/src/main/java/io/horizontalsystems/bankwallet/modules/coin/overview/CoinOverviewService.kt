@@ -51,7 +51,7 @@ class CoinOverviewService(
     }
 
     private fun fetchCoinOverview() {
-        marketKit.marketInfoOverviewSingle(fullCoin.coin.uid, currencyManager.baseCurrency.code, languageManager.currentLanguage)
+        marketKit.marketInfoOverviewSingle(fullCoin.coin.uid, currencyManager.baseCurrency.code, languageManager.currentLocaleTag)
             .subscribeIO({ marketInfoOverview ->
                 coinOverviewSubject.onNext(DataState.Success(CoinOverviewItem(fullCoin.coin.code, marketInfoOverview, guideUrl)))
             }, {
