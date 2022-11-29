@@ -22,7 +22,7 @@ object WC2Parser {
         request: Sign.Model.PendingRequest,
         address: String,
         dAppName: String
-    ): WC2Request? {
+    ): WC2Request {
         val params = JsonParser.parseString(request.params).asJsonArray
 
         when (request.method) {
@@ -59,7 +59,15 @@ object WC2Parser {
                 )
             }
             "eth_signTypedData" -> {
-                val dataString = params.firstOrNull { it.isJsonObject }?.asJsonObject ?: return null
+                val dataString = params.firstOrNull { it.isJsonObject }?.asJsonObject
+                if (dataString == null) {
+                    return WC2UnsupportedRequest(
+                        request.requestId,
+                        request.topic,
+                        dAppName
+                    )
+                }
+
                 val domain = dataString.get("domain")?.asJsonObject?.get("name")?.asString
                 val message = SignMessage.TypedMessage(dataString.toString(), domain)
                 return WC2SignMessageRequest(
@@ -70,8 +78,14 @@ object WC2Parser {
                     message
                 )
             }
+            else -> {
+                return WC2UnsupportedRequest(
+                    request.requestId,
+                    request.topic,
+                    dAppName
+                )
+            }
         }
-        return null
     }
 
     private fun hexStringToUtf8String(hexString: String) = try {
