@@ -475,6 +475,9 @@
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
     <string name="WalletConnect_Pairings_Delete">Delete</string>
     <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
+    <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>

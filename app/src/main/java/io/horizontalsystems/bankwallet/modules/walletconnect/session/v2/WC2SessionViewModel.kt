@@ -375,7 +375,6 @@ class WC2SessionViewModel(
             is UnsupportedChainId -> R.string.WalletConnect_Error_UnsupportedChainId
             is NoSuitableAccount -> R.string.WalletConnect_Error_NoSuitableAccount
             is NoSuitableEvmKit -> R.string.WalletConnect_Error_NoSuitableEvmKit
-            is DataParsingError -> R.string.WalletConnect_Error_DataParsingError
             is RequestNotFoundError -> R.string.WalletConnect_Error_RequestNotFoundError
             else -> null
         }

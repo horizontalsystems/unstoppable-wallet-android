@@ -100,7 +100,6 @@ class WC2SessionManager(
         val receiveAddress = evmKitWrapper.evmKit.receiveAddress.eip55
         val transactionRequest =
             WC2Parser.parseTransactionRequest(request, receiveAddress, dAppName)
-                ?: throw RequestDataError.DataParsingError
 
         return RequestData(transactionRequest, evmKitWrapper)
     }
@@ -172,7 +171,6 @@ class WC2SessionManager(
         object UnsupportedChainId : RequestDataError()
         object NoSuitableAccount : RequestDataError()
         object NoSuitableEvmKit : RequestDataError()
-        object DataParsingError : RequestDataError()
         object RequestNotFoundError : RequestDataError()
     }
 
