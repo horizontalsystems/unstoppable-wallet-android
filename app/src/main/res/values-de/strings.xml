@@ -371,7 +371,7 @@
     <string name="WalletConnect_NewConnect">Neue Verbindung</string>
     <string name="WalletConnect_Disconnecting">Verbindung wird getrennt</string>
     <string name="WalletConnect_SignMessageRequest_Title">Signaturanfrage</string>
-    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
+    <string name="WalletConnect_SignMessageRequest_Domain">Domäne</string>
     <string name="WalletConnect_SignMessageRequest_dApp">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Zu unterzeichnende Nachricht</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Bitte signieren Sie eine Nachricht zur Authentifizierung</string>
@@ -524,7 +524,7 @@
     <string name="Transactions_Burn">Burn</string>
     <string name="Transactions_Mint">Mint</string>
     <string name="Transactions_Approve">Bestätigen</string>
-    <string name="Transactions_Swap">Swap</string>
+    <string name="Transactions_Swap">Tauschen</string>
     <string name="Transactions_Failed">Fehlgeschlagen</string>
     <string name="Transactions_ContractCall">Vertragsaufruf</string>
     <string name="Transactions_ExternalContractCall">Externe Anrufe</string>
@@ -698,7 +698,7 @@
     <string name="SettingsTerms_Responsibility">Nur der Nutzer ist verantwortlich für die Sicherheit der Mittel und keine andere Einrichtung.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Teilen</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
+    <string name="SettingsShare_Text">Sei unaufhaltsam</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Kontakt</string>
     <!--Setting_Notifications-->
@@ -922,8 +922,8 @@
     <string name="CoinOption_bip49_Title">Neuere (empfohlen)</string>
     <string name="CoinOption_bip84_Title">Am neuesten</string>
     <!--Coin Page-->
-    <string name="Coin_Tab_Overview">Price</string>
-    <string name="Coin_Tab_Market">Markets</string>
+    <string name="Coin_Tab_Overview">Preis</string>
+    <string name="Coin_Tab_Market">Märkte</string>
     <string name="Coin_Tab_Details">Analytics</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">TDY</string>
@@ -935,7 +935,7 @@
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1Y</string>
     <string name="CoinPage_TimeDuration_Year2">2Y</string>
-    <string name="CoinPage_Markets">Markets</string>
+    <string name="CoinPage_Markets">Märkte</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_MajorHolders_InfoDescription">The number of tokens held by the top 10 wallets. Quality projects typically have a widely distributed token.</string>
@@ -945,7 +945,7 @@
     <string name="CoinPage_Audits_Issues">Issues: %d</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_Treasuries">Treasuries</string>
-    <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
+    <string name="CoinPage_Treasuries_FilterTitle">Filter</string>
     <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
@@ -959,9 +959,9 @@
     <string name="CoinPage_TokenTvl_Description">Total Value Locked (TVL) ist eine Metrik, die den Gesamtwert von Krypto-Assets unter automatisierter Verwaltung durch die Smart-Verträge mit dem angegebenen Protokoll anzeigt.</string>
     <string name="CoinPage_SecurityParams">Security Parameters</string>
     <string name="CoinPage_SecurityParams_Privacy">Privacy</string>
-    <string name="CoinPage_SecurityParams_Low">Low</string>
+    <string name="CoinPage_SecurityParams_Low">Niedrig</string>
     <string name="CoinPage_SecurityParams_Medium">Medium</string>
-    <string name="CoinPage_SecurityParams_High">High</string>
+    <string name="CoinPage_SecurityParams_High">Hoch</string>
     <string name="CoinPage_SecurityParams_Issuance">Issuance</string>
     <string name="CoinPage_SecurityParams_Centralized">Centralized</string>
     <string name="CoinPage_SecurityParams_Decentralized">Decentralized</string>
@@ -989,7 +989,7 @@
     <string name="CoinPage_Contracts">Contracts</string>
     <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Guide</string>
-    <string name="CoinPage_Website">Website</string>
+    <string name="CoinPage_Website">Webseite</string>
     <string name="CoinPage_Whitepaper">Whitepaper</string>
     <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
     <string name="CoinPage_Twitter_NoTweets">No tweets yet</string>
@@ -1008,7 +1008,7 @@
     <string name="CoinPage_MarketCap_Quadrillion">Q</string>
     <string name="CoinPage_MarketCap_TvlRation">MCap / TVL Ratio</string>
     <string name="CoinPage_MarketCap_TvlRation_Description">The ratio of the project token\'s market cap over its TVL.</string>
-    <string name="CoinPage_Volume">Vol</string>
+    <string name="CoinPage_Volume">Lautstärke</string>
     <string name="CoinPage_NoData">No Data</string>
     <string name="CoinPage_NoDataAvailable">No data available</string>
     <string name="CoinPage_AddToWallet">Zum Wallet hinzugefügt</string>
@@ -1106,7 +1106,7 @@
     <string name="NftCollection_EventType_Transfer">Transfer</string>
     <string name="NftCollection_EventType_OfferEntered">Angebot eingegeben</string>
     <string name="NftCollection_EventType_Approve">Genehmigen</string>
-    <string name="NftCollection_EventType_Custom">Custom</string>
+    <string name="NftCollection_EventType_Custom">Benutzerdefiniert</string>
     <string name="NftCollection_EventType_Payout">Auszahlung</string>
     <string name="NftCollection_EventType_BulkCancel">Massenabbruch</string>
     <string name="NftCollection_EventType_Unknown">Unbekannt</string>
