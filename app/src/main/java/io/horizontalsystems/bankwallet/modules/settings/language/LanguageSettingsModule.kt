@@ -18,6 +18,7 @@ object LanguageSettingsModule {
         de(R.drawable.icon_24_flags_germany),
         en(R.drawable.icon_24_flags_england),
         es(R.drawable.icon_24_flags_spain),
+        pt(R.drawable.icon_24_flags_portugal),
         fa(R.drawable.icon_24_flags_iran),
         fr(R.drawable.icon_24_flags_france),
         ko(R.drawable.icon_24_flags_korea),
