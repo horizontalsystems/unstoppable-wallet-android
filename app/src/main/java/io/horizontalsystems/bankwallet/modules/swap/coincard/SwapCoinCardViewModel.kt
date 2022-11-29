@@ -53,8 +53,6 @@ class SwapCoinCardViewModel(
     private val tokenCodeLiveData = MutableLiveData<Token?>()
     private val isEstimatedLiveData = MutableLiveData(false)
     private val secondaryInfoLiveData = MutableLiveData<String?>(null)
-    private val warningInfoLiveData = MutableLiveData<String?>(null)
-    private val maxEnabledLiveData = MutableLiveData(false)
 
     //region outputs
     fun amountLiveData(): LiveData<Pair<String?, String?>> = amountLiveData
@@ -63,8 +61,6 @@ class SwapCoinCardViewModel(
     fun tokenCodeLiveData(): LiveData<Token?> = tokenCodeLiveData
     fun isEstimatedLiveData(): LiveData<Boolean> = isEstimatedLiveData
     fun secondaryInfoLiveData(): LiveData<String?> = secondaryInfoLiveData
-    fun warningInfoLiveData(): LiveData<String?> = warningInfoLiveData
-    fun maxEnabledLiveData(): LiveData<Boolean> = maxEnabledLiveData
 
     private val prefix = if (switchService.amountType == AmountType.Currency) fiatService.currency.symbol else null
     var inputParams by mutableStateOf(
@@ -112,12 +108,6 @@ class SwapCoinCardViewModel(
         switchService.toggle()
     }
 
-    fun onTapMax() {
-        val balance = coinCardService.balance ?: return
-
-        val fullAmountInfo = fiatService.buildForCoin(balance)
-        syncFullAmountInfo(fullAmountInfo, true, balance)
-    }
     //endregion
 
     init {
@@ -133,11 +123,6 @@ class SwapCoinCardViewModel(
         coinCardService.isEstimatedObservable
             .subscribeOn(Schedulers.io())
             .subscribe { syncEstimated() }
-            .let { disposables.add(it) }
-
-        coinCardService.amountWarningObservable
-            .subscribeOn(Schedulers.io())
-            .subscribe { syncAmountWarning(it.orElse(null)) }
             .let { disposables.add(it) }
 
         coinCardService.amountObservable
@@ -171,17 +156,6 @@ class SwapCoinCardViewModel(
             .let { disposables.add(it) }
     }
 
-    private fun syncAmountWarning(warning: AmountWarning?) {
-        warningInfoLiveData.postValue(
-            when (warning) {
-                is AmountWarning.HighPriceImpact -> {
-                    "-" + Translator.getString(R.string.Swap_Percent, warning.priceImpact)
-                }
-                null -> null
-            }
-        )
-    }
-
     private fun syncEstimated() {
         isEstimatedLiveData.postValue(coinCardService.isEstimated)
     }
@@ -206,8 +180,6 @@ class SwapCoinCardViewModel(
             else -> formatter.coinAmount(balance, token.coin.code)
         }
         balanceLiveData.postValue(formattedBalance)
-        val balanceNonNull = balance ?: BigDecimal.ZERO
-        maxEnabledLiveData.postValue(balanceNonNull > BigDecimal.ZERO && maxButtonSupported)
     }
 
     private fun syncError(error: Throwable?) {

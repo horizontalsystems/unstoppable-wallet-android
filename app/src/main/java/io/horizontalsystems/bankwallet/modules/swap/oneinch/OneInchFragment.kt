@@ -17,7 +17,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -31,13 +30,12 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
-import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewNew
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.ui.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
@@ -164,7 +162,7 @@ private fun OneInchScreen(
                         .clip(RoundedCornerShape(12.dp))
                         .background(ComposeAppTheme.colors.lawrence)
                 ) {
-                    SwapCoinCardViewNew(
+                    SwapCoinCardView(
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
                         viewModel = fromCoinCardViewModel,
                         uuid = uuidFrom,
@@ -176,10 +174,10 @@ private fun OneInchScreen(
                     }
 
                     Spacer(modifier = Modifier.height(2.dp))
-                    SwitchCoinsSection(isLoading) { viewModel.onTapSwitch() }
+                    SwitchCoinsSection { viewModel.onTapSwitch() }
                     Spacer(modifier = Modifier.height(2.dp))
 
-                    SwapCoinCardViewNew(
+                    SwapCoinCardView(
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
                         viewModel = toCoinCardViewModel,
                         uuid = uuidTo,
@@ -191,12 +189,7 @@ private fun OneInchScreen(
 
                 if (swapError != null) {
                     swapError?.let {
-                        TextImportantError(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                            icon = R.drawable.ic_attention_20,
-                            title = stringResource(R.string.Error),
-                            text = it
-                        )
+                        SwapError(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp), text = it)
                     }
                 } else {
                     val infoItems = mutableListOf<@Composable () -> Unit>()

@@ -29,6 +29,16 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
+fun SwapError(modifier: Modifier = Modifier, text: String) {
+    TextImportantError(
+        modifier = modifier,
+        icon = R.drawable.ic_attention_20,
+        title = stringResource(R.string.Error),
+        text = text
+    )
+}
+
+@Composable
 fun SwapAllowance(
     viewModel: SwapAllowanceViewModel,
     navController: NavController
@@ -184,10 +194,7 @@ fun Price(
 }
 
 @Composable
-fun SwitchCoinsSection(
-    showProgressbar: Boolean,
-    onSwitchButtonClick: () -> Unit
-) {
+fun SwitchCoinsSection(onSwitchButtonClick: () -> Unit) {
     Row(
         modifier = Modifier
             .height(28.dp)
@@ -201,11 +208,6 @@ fun SwitchCoinsSection(
             thickness = 1.dp,
             color = ComposeAppTheme.colors.steel10
         )
-//        if (showProgressbar) {
-//            Box(Modifier.padding(top = 8.dp)) {
-//                HSCircularProgressIndicator()
-//            }
-//        }
         ButtonSecondaryCircle(
             icon = R.drawable.ic_arrow_down_20,
             onClick = onSwitchButtonClick
@@ -328,8 +330,16 @@ fun Preview_ActionButtons() {
 
 @Preview
 @Composable
+private fun Preview_SwapError() {
+    ComposeAppTheme {
+        SwapError(text = "Swap Error text")
+    }
+}
+
+@Preview
+@Composable
 private fun Preview_SwitchCoinsSection() {
     ComposeAppTheme {
-        SwitchCoinsSection(true, {})
+        SwitchCoinsSection {}
     }
 }
