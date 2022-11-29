@@ -158,6 +158,10 @@ android {
             substitute module('com.tinder.scarlet:lifecycle-android:0.1.12') using module('com.github.WalletConnect.Scarlet:lifecycle-android:1.0.0')
         }
     }
+
+    lintOptions {
+        disable 'LogNotTimber'
+    }
 }
 
 dependencies {
