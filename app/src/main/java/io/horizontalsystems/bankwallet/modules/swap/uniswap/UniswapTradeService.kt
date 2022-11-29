@@ -246,9 +246,7 @@ class UniswapTradeService(
             return
         }
 
-        if (swapData == null) {
-            state = State.Loading
-        }
+        state = State.Loading
 
         swapDataDisposable?.dispose()
         swapDataDisposable = null

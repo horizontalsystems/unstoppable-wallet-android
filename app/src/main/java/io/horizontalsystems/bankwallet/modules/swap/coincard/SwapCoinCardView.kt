@@ -51,10 +51,11 @@ fun SwapCoinCardViewNew(
     amountEnabled: Boolean,
     navController: NavController,
     focusRequester: FocusRequester = remember { FocusRequester() },
-    amountExpired: Boolean = false,
+    isLoading: Boolean = false,
     onFocusChanged: ((Boolean) -> Unit)? = null,
 ) {
     val token by viewModel.tokenCodeLiveData().observeAsState()
+    val isEstimated by viewModel.isEstimatedLiveData().observeAsState(false)
 
     Row(
         modifier = modifier
@@ -108,7 +109,7 @@ fun SwapCoinCardViewNew(
             viewModel = viewModel,
             amountEnabled = amountEnabled,
             focusRequester = focusRequester,
-            amountExpired = amountExpired,
+            amountDimming = isLoading && isEstimated,
             onFocusChanged = onFocusChanged
         )
     }
@@ -121,7 +122,7 @@ fun SwapAmountInputNew(
     viewModel: SwapCoinCardViewModel,
     amountEnabled: Boolean,
     focusRequester: FocusRequester,
-    amountExpired: Boolean,
+    amountDimming: Boolean,
     onFocusChanged: ((Boolean) -> Unit)?
 ) {
     val amountData by viewModel.amountLiveData().observeAsState()
@@ -134,7 +135,7 @@ fun SwapAmountInputNew(
     LaunchedEffect(amountData?.first) {
         val amount = amountData?.second ?: ""
         if (!amountsEqual(amount.toBigDecimalOrNull(), textState.text.toBigDecimalOrNull())) {
-            if (!amountExpired || amount.isNotEmpty())
+            if (!amountDimming || amount.isNotEmpty())
                 textState = textState.copy(text = amount, selection = TextRange(amount.length))
         }
     }
@@ -157,7 +158,7 @@ fun SwapAmountInputNew(
                 }
             },
             textStyle = ColoredTextStyle(
-                color = if (amountExpired) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
+                color = if (amountDimming) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
                 textStyle = ComposeAppTheme.typography.headline1,
                 textAlign = TextAlign.End
             ),
@@ -175,6 +176,7 @@ fun SwapAmountInputNew(
                         override fun originalToTransformed(offset: Int): Int {
                             return offset + prefixOffset
                         }
+
                         override fun transformedToOriginal(offset: Int): Int {
                             if (offset <= prefixOffset - 1) return prefixOffset
                             return offset - prefixOffset

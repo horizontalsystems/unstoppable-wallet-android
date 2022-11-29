@@ -183,7 +183,7 @@ class SwapCoinCardViewModel(
     }
 
     private fun syncEstimated() {
-        isEstimatedLiveData.postValue(coinCardService.isEstimated && coinCardService.amount != null)
+        isEstimatedLiveData.postValue(coinCardService.isEstimated)
     }
 
     private fun syncAmount(amount: BigDecimal?, force: Boolean = false) {

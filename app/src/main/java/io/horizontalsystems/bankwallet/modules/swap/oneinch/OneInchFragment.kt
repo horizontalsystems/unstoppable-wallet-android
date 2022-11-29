@@ -185,7 +185,7 @@ private fun OneInchScreen(
                         uuid = uuidTo,
                         amountEnabled = false,
                         navController = navController,
-                        amountExpired = isLoading
+                        isLoading = isLoading
                     )
                 }
 

@@ -188,7 +188,10 @@ class UniswapViewModel(
             is UniswapTradeService.State.Ready -> {
                 tradeViewItemLiveData.postValue(tradeViewItem(tradeServiceState.trade))
             }
-            else -> {
+            UniswapTradeService.State.Loading -> {
+                tradeViewItemLiveData.postValue(tradeViewItemLiveData.value?.copy(expired = true))
+            }
+            is UniswapTradeService.State.NotReady -> {
                 tradeViewItemLiveData.postValue(null)
             }
         }
@@ -293,7 +296,8 @@ class UniswapViewModel(
         val buyPrice: String? = null,
         val sellPrice: String? = null,
         val priceImpact: UniswapModule.PriceImpactViewItem? = null,
-        val guaranteedAmount: UniswapModule.GuaranteedAmountViewItem? = null
+        val guaranteedAmount: UniswapModule.GuaranteedAmountViewItem? = null,
+        val expired: Boolean = false
     )
 
     //endregion
