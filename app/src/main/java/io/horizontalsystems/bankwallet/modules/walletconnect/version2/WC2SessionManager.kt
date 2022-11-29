@@ -127,7 +127,9 @@ class WC2SessionManager(
     }
 
     private fun handleSessionRequest(sessionRequest: Sign.Model.SessionRequest) {
-        pendingRequestSubject.onNext(sessionRequest.request.id)
+        if (sessions.any { it.topic == sessionRequest.topic }) {
+            pendingRequestSubject.onNext(sessionRequest.request.id)
+        }
     }
 
     private fun getSessions(accountId: String): List<Sign.Model.Session> {
