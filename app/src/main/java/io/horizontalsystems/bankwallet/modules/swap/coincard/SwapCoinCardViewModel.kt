@@ -237,8 +237,6 @@ class SwapCoinCardViewModel(
         updateInputFields()
 
         if (fullAmountInfo == null) {
-//            if (!force && coinCardService.isEstimated) {
-//            }
             amountLiveData.postValue(Pair(uuidString, null))
             secondaryInfoLiveData.postValue(secondaryInfoPlaceHolder())
 

@@ -155,18 +155,10 @@ class OneInchTradeService(
     override fun restoreState(swapProviderState: SwapMainModule.SwapProviderState) {
         tokenFrom = swapProviderState.tokenFrom
         tokenTo = swapProviderState.tokenTo
-        amountType = swapProviderState.amountType
+        amountType = AmountType.ExactFrom
 
-        when (swapProviderState.amountType) {
-            AmountType.ExactFrom -> {
-                amountFrom = swapProviderState.amountFrom
-                amountTo = null
-            }
-            AmountType.ExactTo -> {
-                amountTo = swapProviderState.amountTo
-                amountFrom = null
-            }
-        }
+        amountFrom = swapProviderState.amountFrom
+        amountTo = null
 
         syncQuote()
     }
