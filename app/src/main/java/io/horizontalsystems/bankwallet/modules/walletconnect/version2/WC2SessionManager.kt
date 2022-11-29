@@ -23,8 +23,6 @@ class WC2SessionManager(
 
     private val TAG = "WC2SessionManager"
 
-    var pendingRequestDataToOpen = mutableMapOf<Long, RequestData>()
-
     private val disposable = CompositeDisposable()
     private val sessionsSubject = PublishSubject.create<List<Sign.Model.Session>>()
     val sessionsObservable: Flowable<List<Sign.Model.Session>>
@@ -90,7 +88,7 @@ class WC2SessionManager(
         service.disconnect(sessionId)
     }
 
-    fun prepareRequestToOpen(requestId: Long) {
+    fun createRequestData(requestId: Long): RequestData {
         val account = accountManager.activeAccount ?: throw RequestDataError.NoSuitableAccount
         val request = requests(account.id)
             .firstOrNull { it.requestId == requestId }
@@ -103,7 +101,8 @@ class WC2SessionManager(
         val transactionRequest =
             WC2Parser.parseTransactionRequest(request, receiveAddress, dAppName)
                 ?: throw RequestDataError.DataParsingError
-        pendingRequestDataToOpen[requestId] = RequestData(transactionRequest, evmKitWrapper)
+
+        return RequestData(transactionRequest, evmKitWrapper)
     }
 
     private fun syncSessions() {

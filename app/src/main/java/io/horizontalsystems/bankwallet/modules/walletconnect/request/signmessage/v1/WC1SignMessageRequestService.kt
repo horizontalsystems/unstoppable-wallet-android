@@ -49,8 +49,6 @@ class WC1SignMessageRequestService(
         baseService.rejectRequest(request.id)
     }
 
-    override fun stop() {}
-
     private fun hexStringToUtf8String(hexString: String) = try {
         String(hexString.hexStringToByteArray())
     } catch (_: Throwable) {

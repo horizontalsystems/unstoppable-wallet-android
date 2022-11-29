@@ -9,8 +9,11 @@ class WC2RequestViewModel(private val sessionManager: WC2SessionManager, private
     val requestData: WC2SessionManager.RequestData?
 
     init {
-        sessionManager.prepareRequestToOpen(requestId)
-        requestData = sessionManager.pendingRequestDataToOpen[requestId]
+        requestData = try {
+            sessionManager.createRequestData(requestId)
+        } catch (e: WC2SessionManager.RequestDataError) {
+            null
+        }
     }
 
     class Factory(private val requestId: Long) : ViewModelProvider.Factory {

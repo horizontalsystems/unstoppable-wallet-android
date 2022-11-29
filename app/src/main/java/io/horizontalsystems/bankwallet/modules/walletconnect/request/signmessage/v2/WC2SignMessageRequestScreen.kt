@@ -9,15 +9,16 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WCSignMessageRequestViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.ui.SignMessageRequestScreen
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 
 @Composable
 fun WC2SignMessageRequestScreen(
     navController: NavController,
-    requestId: Long
+    requestData: WC2SessionManager.RequestData
 ) {
     val viewModel = viewModel<WCSignMessageRequestViewModel>(
         factory = WCSignMessageRequestModule.FactoryWC2(
-            requestId
+            requestData
         )
     )
 

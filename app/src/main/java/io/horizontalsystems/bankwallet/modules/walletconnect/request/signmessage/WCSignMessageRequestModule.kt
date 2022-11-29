@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.v2.WC2SignMessageRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1Service
 import io.horizontalsystems.bankwallet.modules.walletconnect.version1.WC1SignMessageRequest
+import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
 
 object WCSignMessageRequestModule {
 
@@ -34,14 +35,14 @@ object WCSignMessageRequestModule {
         }
     }
 
-    class FactoryWC2(private val requestId: Long) : ViewModelProvider.Factory {
+    class FactoryWC2(private val requestData: WC2SessionManager.RequestData) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 WCSignMessageRequestViewModel::class.java -> {
                     val service = WC2SignMessageRequestService(
-                        requestId,
-                        App.wc2SessionManager,
+                        requestData,
+                        App.wc2SessionManager
                     )
                     WCSignMessageRequestViewModel(service) as T
                 }
@@ -56,7 +57,6 @@ object WCSignMessageRequestModule {
         val isLegacySignRequest: Boolean
         fun sign()
         fun reject()
-        fun stop()
     }
 
 }
