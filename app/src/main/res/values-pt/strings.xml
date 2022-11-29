@@ -711,7 +711,7 @@
     <string name="NotificationBottomMenu_Long">Long</string>
     <!-- Settings Launch Screen -->
     <string name="SettingsLaunchScreen_Auto">Automático</string>
-    <string name="SettingsLaunchScreen_Balance">Balance</string>
+    <string name="SettingsLaunchScreen_Balance">Saldo</string>
     <string name="SettingsLaunchScreen_MarketOverview">Visão geral do mercado</string>
     <string name="SettingsLaunchScreen_Watchlist">Lista de observação</string>
     <!--Settings-->
@@ -790,7 +790,7 @@
     <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP network uses the links listed below and switches automatically.</string>
     <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
     <!-- Show Key -->
-    <string name="ShowKey_Title">Key</string>
+    <string name="ShowKey_Title">Chave</string>
     <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken, etc.\n\nMake sure no one is watching your screen.</string>
     <string name="ShowKey_ButtonShow">Show</string>
     <string name="ShowKey_Passphrase">Senha</string>
