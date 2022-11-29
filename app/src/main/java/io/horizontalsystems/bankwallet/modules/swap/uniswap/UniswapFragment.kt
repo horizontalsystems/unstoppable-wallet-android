@@ -138,7 +138,7 @@ private fun UniswapScreen(
     navController: NavController
 ) {
     val buttons by viewModel.buttonsLiveData().observeAsState()
-    val showProgressbar by viewModel.isLoadingLiveData().observeAsState(false)
+    val isLoading by viewModel.isLoadingLiveData().observeAsState(false)
     val swapError by viewModel.swapErrorLiveData().observeAsState()
     val tradeViewItem by viewModel.tradeViewItemLiveData().observeAsState()
     val availableBalance by fromCoinCardViewModel.balanceLiveData().observeAsState()
@@ -177,13 +177,14 @@ private fun UniswapScreen(
                         uuid = uuidFrom,
                         amountEnabled = true,
                         navController = navController,
-                        focusRequester = focusRequester
+                        focusRequester = focusRequester,
+                        isLoading = isLoading
                     ) { isFocused ->
                         showSuggestions = isFocused
                     }
 
                     Spacer(modifier = Modifier.height(2.dp))
-                    SwitchCoinsSection(showProgressbar) { viewModel.onTapSwitch() }
+                    SwitchCoinsSection(isLoading) { viewModel.onTapSwitch() }
                     Spacer(modifier = Modifier.height(2.dp))
 
                     SwapCoinCardViewNew(
@@ -191,7 +192,8 @@ private fun UniswapScreen(
                         viewModel = toCoinCardViewModel,
                         uuid = uuidTo,
                         amountEnabled = true,
-                        navController = navController
+                        navController = navController,
+                        isLoading = isLoading
                     )
                 }
 
@@ -208,7 +210,7 @@ private fun UniswapScreen(
                     val infoItems = mutableListOf<@Composable () -> Unit>()
                     tradeViewItem?.buyPrice?.let { buyPrice ->
                         tradeViewItem?.sellPrice?.let { sellPrice ->
-                            infoItems.add { Price(buyPrice, sellPrice, tradeTimeoutProgress ?: 1f) }
+                            infoItems.add { Price(buyPrice, sellPrice, tradeTimeoutProgress ?: 1f, tradeViewItem?.expired ?: false) }
                         }
                     }
                     if (allowanceViewModel.uiState.isVisible) {
