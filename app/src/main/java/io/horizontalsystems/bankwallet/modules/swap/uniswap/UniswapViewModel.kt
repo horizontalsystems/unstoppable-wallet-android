@@ -176,8 +176,7 @@ class UniswapViewModel(
         }
 
     private fun sync(errors: List<Throwable>) {
-        val filtered =
-            errors.filter { it !is GasDataError && it !is SwapError }
+        val filtered = errors.filter { it !is GasDataError && it !is SwapError }
         swapErrorLiveData.postValue(filtered.firstOrNull()?.let { convert(it) })
 
         syncState()

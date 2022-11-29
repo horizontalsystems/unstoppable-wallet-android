@@ -34,14 +34,13 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
-import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewNew
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.ui.*
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.core.findNavController
@@ -171,7 +170,7 @@ private fun UniswapScreen(
                         .background(ComposeAppTheme.colors.lawrence)
                 ) {
 
-                    SwapCoinCardViewNew(
+                    SwapCoinCardView(
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
                         viewModel = fromCoinCardViewModel,
                         uuid = uuidFrom,
@@ -184,10 +183,10 @@ private fun UniswapScreen(
                     }
 
                     Spacer(modifier = Modifier.height(2.dp))
-                    SwitchCoinsSection(isLoading) { viewModel.onTapSwitch() }
+                    SwitchCoinsSection { viewModel.onTapSwitch() }
                     Spacer(modifier = Modifier.height(2.dp))
 
-                    SwapCoinCardViewNew(
+                    SwapCoinCardView(
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
                         viewModel = toCoinCardViewModel,
                         uuid = uuidTo,
@@ -199,12 +198,7 @@ private fun UniswapScreen(
 
                 if (swapError != null) {
                     swapError?.let {
-                        TextImportantError(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                            icon = R.drawable.ic_attention_20,
-                            title = stringResource(R.string.Error),
-                            text = it
-                        )
+                        SwapError(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp), text = it)
                     }
                 } else {
                     val infoItems = mutableListOf<@Composable () -> Unit>()

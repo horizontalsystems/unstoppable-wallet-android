@@ -44,7 +44,7 @@ import io.horizontalsystems.core.getNavigationResult
 import java.math.BigDecimal
 
 @Composable
-fun SwapCoinCardViewNew(
+fun SwapCoinCardView(
     modifier: Modifier = Modifier,
     viewModel: SwapCoinCardViewModel,
     uuid: Long,
@@ -104,7 +104,7 @@ fun SwapCoinCardViewNew(
                 tint = ComposeAppTheme.colors.grey
             )
         }
-        SwapAmountInputNew(
+        SwapAmountInput(
             modifier = Modifier.weight(1f),
             viewModel = viewModel,
             amountEnabled = amountEnabled,
@@ -117,7 +117,7 @@ fun SwapCoinCardViewNew(
 }
 
 @Composable
-fun SwapAmountInputNew(
+fun SwapAmountInput(
     modifier: Modifier = Modifier,
     viewModel: SwapCoinCardViewModel,
     amountEnabled: Boolean,
