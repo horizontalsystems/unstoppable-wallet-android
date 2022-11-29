@@ -138,10 +138,6 @@ private fun KeyStoreScreen(
         showBiometricPrompt.invoke()
     }
 
-    if (viewModel.showInvalidKeyWarning) {
-        KeysInvalidatedDialog { viewModel.onCloseInvalidKeyWarning() }
-    }
-
     ComposeAppTheme {
         if (viewModel.showSystemLockWarning) {
             Column(
@@ -152,6 +148,10 @@ private fun KeyStoreScreen(
             ) {
                 NoSystemLockWarning()
             }
+        }
+
+        if (viewModel.showInvalidKeyWarning) {
+            KeysInvalidatedDialog { viewModel.onCloseInvalidKeyWarning() }
         }
     }
 }
