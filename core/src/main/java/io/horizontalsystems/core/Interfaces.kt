@@ -57,11 +57,11 @@ interface IPinComponent {
 interface ILanguageManager {
     var fallbackLocale: Locale
     var currentLocale: Locale
-    var currentLanguage: String
+    var currentLocaleTag: String
     val currentLanguageName: String
 
-    fun getName(language: String): String
-    fun getNativeName(language: String): String
+    fun getName(tag: String): String
+    fun getNativeName(tag: String): String
 }
 
 interface ICurrencyManager {
