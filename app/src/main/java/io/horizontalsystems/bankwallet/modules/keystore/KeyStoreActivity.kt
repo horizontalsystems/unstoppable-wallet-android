@@ -61,7 +61,7 @@ class KeyStoreActivity : BaseActivity() {
             .setDescription(getString(R.string.OSPin_Prompt_Desciption))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            promptInfo.setAllowedAuthenticators(DEVICE_CREDENTIAL or BIOMETRIC_STRONG)
+            promptInfo.setAllowedAuthenticators(DEVICE_CREDENTIAL)
         } else {
             @Suppress("DEPRECATION")
             promptInfo.setDeviceCredentialAllowed(true)
