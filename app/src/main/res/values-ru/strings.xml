@@ -691,7 +691,7 @@
     <string name="SettingsTerms_Responsibility">Только пользователь несет ответственность за сохранность средств и никто другой.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
+    <string name="SettingsShare_Text">Продолжить</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Связаться с нами</string>
     <!--Setting_Notifications-->
