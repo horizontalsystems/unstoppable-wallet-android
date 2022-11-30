@@ -857,7 +857,7 @@
     <string name="AddCoin_CreateKey">Criar</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Add Token Dialog-->
-    <string name="AddTokenDialog_Title">Choose Blockchain</string>
+    <string name="AddTokenDialog_Title">Escolha Blockchain</string>
     <string name="AddTokenDialog_Subtitle">Adding Token</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 Tokens</string>
     <string name="AddTokenDialog_Bep20Tokens">BEP20 Tokens</string>
