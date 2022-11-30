@@ -919,7 +919,7 @@
     <string name="CoinOption_bip84_Title">Más nuevo</string>
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">Precio</string>
-    <string name="Coin_Tab_Market">Markets</string>
+    <string name="Coin_Tab_Market">Mercados</string>
     <string name="Coin_Tab_Details">Estadísticas</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">Hoy</string>

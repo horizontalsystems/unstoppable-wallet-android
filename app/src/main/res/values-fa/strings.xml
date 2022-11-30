@@ -152,9 +152,9 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">نمودار</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">آستانه کل</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
-    <string name="MarketGlobalMetrics_Volume">24h Volume</string>
+    <string name="MarketGlobalMetrics_Volume">۲۴ ساعته</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total M.Cap description</string>
@@ -270,7 +270,7 @@
     <string name="Balance_NoCoinsAlert">شما سکه اضافه ای ندارید.\nسکه هایی را که استفاده می کنید اضافه کنید</string>
     <string name="Balance_WatchAccount_NoBalance">این آدرس کیف پول موجودی ندارد</string>
     <!--Send NFT-->
-    <string name="SendNft_Title">Send</string>
+    <string name="SendNft_Title">ارسال</string>
     <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
     <!--Send-->
     <string name="Send_Title">ارسال %s</string>
@@ -955,10 +955,10 @@
     <string name="CoinPage_TokenTvl">Token TVL</string>
     <string name="CoinPage_TokenTvl_Description">Total Value Locked (TVL) is a metric that shows the total value of crypto assets under automated management by the smart contracts powering the given protocol.</string>
     <string name="CoinPage_SecurityParams">Security Parameters</string>
-    <string name="CoinPage_SecurityParams_Privacy">Privacy</string>
-    <string name="CoinPage_SecurityParams_Low">Low</string>
+    <string name="CoinPage_SecurityParams_Privacy">حریم خصوصی</string>
+    <string name="CoinPage_SecurityParams_Low">پایین</string>
     <string name="CoinPage_SecurityParams_Medium">Medium</string>
-    <string name="CoinPage_SecurityParams_High">High</string>
+    <string name="CoinPage_SecurityParams_High">بالا</string>
     <string name="CoinPage_SecurityParams_Issuance">Issuance</string>
     <string name="CoinPage_SecurityParams_Centralized">Centralized</string>
     <string name="CoinPage_SecurityParams_Decentralized">Decentralized</string>
@@ -978,7 +978,7 @@
     <string name="CoinPage_SecurityParams_CensorshipResistance_No">NO:\nThe token holder can be censored from transacting.</string>
     <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited from external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk free and not doesn\'t have any exploits risks.</string>
     <string name="CoinPage_SecurityParams_Audited_No">There are no publicly announced audits for the code powering the project behind the token. Non audited projects are more likely to have security issues in the code.</string>
-    <string name="CoinPage_SecurityParams_Info">Info</string>
+    <string name="CoinPage_SecurityParams_Info">اطلاعات</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
@@ -986,7 +986,7 @@
     <string name="CoinPage_Contracts">Contracts</string>
     <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Guide</string>
-    <string name="CoinPage_Website">Website</string>
+    <string name="CoinPage_Website">وب سایت پروژه</string>
     <string name="CoinPage_Whitepaper">Whitepaper</string>
     <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
     <string name="CoinPage_Twitter_NoTweets">هنوز توییتی وجود ندارد</string>
@@ -1110,7 +1110,7 @@
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
-    <string name="RateList_Posts">News</string>
+    <string name="RateList_Posts">اخبار</string>
     <string name="Market_DaysAgo">%d؜دقيقه پيش</string>
     <string name="Market_HoursAgo">%dساعتپيش</string>
     <string name="Market_MinutesAgo">%d؜دقيقه پيش</string>

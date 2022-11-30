@@ -237,7 +237,7 @@
     <string name="TvlRank_MultiChain">Multi-Chain</string>
     <string name="TvlRank_Field_HighestTvl">Highest TVL</string>
     <string name="TvlRank_Field_LowestTvl">Lowest TVL</string>
-    <string name="TvlRank_Field_All">All</string>
+    <string name="TvlRank_Field_All">모든</string>
     <string name="TvlRank_Field_Eth">Bitcoin Cash</string>
     <string name="TvlRank_Field_Bsc">Binance</string>
     <string name="TvlRank_Field_Sol">Solana</string>
@@ -954,10 +954,10 @@
     <string name="CoinPage_TokenTvl">Token TVL</string>
     <string name="CoinPage_TokenTvl_Description">Total Value Locked (TVL) is a metric that shows the total value of crypto assets under automated management by the smart contracts powering the given protocol.</string>
     <string name="CoinPage_SecurityParams">Security Parameters</string>
-    <string name="CoinPage_SecurityParams_Privacy">Privacy</string>
-    <string name="CoinPage_SecurityParams_Low">Low</string>
+    <string name="CoinPage_SecurityParams_Privacy">개인정보</string>
+    <string name="CoinPage_SecurityParams_Low">낮음</string>
     <string name="CoinPage_SecurityParams_Medium">Medium</string>
-    <string name="CoinPage_SecurityParams_High">High</string>
+    <string name="CoinPage_SecurityParams_High">높음</string>
     <string name="CoinPage_SecurityParams_Issuance">Issuance</string>
     <string name="CoinPage_SecurityParams_Centralized">Centralized</string>
     <string name="CoinPage_SecurityParams_Decentralized">Decentralized</string>
@@ -977,7 +977,7 @@
     <string name="CoinPage_SecurityParams_CensorshipResistance_No">NO:\nThe token holder can be censored from transacting.</string>
     <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited from external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk free and not doesn\'t have any exploits risks.</string>
     <string name="CoinPage_SecurityParams_Audited_No">There are no publicly announced audits for the code powering the project behind the token. Non audited projects are more likely to have security issues in the code.</string>
-    <string name="CoinPage_SecurityParams_Info">Info</string>
+    <string name="CoinPage_SecurityParams_Info">인포</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
@@ -985,7 +985,7 @@
     <string name="CoinPage_Contracts">Contracts</string>
     <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Guide</string>
-    <string name="CoinPage_Website">Website</string>
+    <string name="CoinPage_Website">웹사이트</string>
     <string name="CoinPage_Whitepaper">Whitepaper</string>
     <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
     <string name="CoinPage_Twitter_NoTweets">아직 트윗이 없습니다</string>
@@ -993,7 +993,7 @@
     <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
     <string name="CoinPage_Twitter_Replied">Replying to %s</string>
     <string name="CoinPage_Twitter_SeeOnTwitter">See on Twitter</string>
-    <string name="CoinPage_MarketCap">Market Cap</string>
+    <string name="CoinPage_MarketCap">시가총액</string>
     <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
