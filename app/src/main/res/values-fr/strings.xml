@@ -941,7 +941,7 @@
     <string name="CoinPage_Audits_Issues">Issues: %d</string>
     <string name="CoinPage_InvestorData">Données de l\'investisseur</string>
     <string name="CoinPage_Treasuries">Treasuries</string>
-    <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
+    <string name="CoinPage_Treasuries_FilterTitle">Filtres</string>
     <string name="CoinPage_Treasuries_PoweredBy">Propulsé par Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Rapports</string>
     <string name="CoinPage_FundsInvested">Fonds investis</string>
@@ -977,7 +977,7 @@
     <string name="CoinPage_SecurityParams_CensorshipResistance_No">NON:\nOn peut empêcher le porteur du token d\'effectuer des transactions.</string>
     <string name="CoinPage_SecurityParams_Audited_Yes">Le code du projet a été audité par une entité externe, soit intégralement, soit partiellement. La réalisation d\'un audit ne signifie pas que le projet est sans risque et qu\'il n\'y a pas de risque d\'exploit.</string>
     <string name="CoinPage_SecurityParams_Audited_No">Aucun audit du code du projet à l\'origine du token n\'a été annoncé publiquement. Les projets non audités sont plus susceptibles de présenter des problèmes de sécurité au niveau du code.</string>
-    <string name="CoinPage_SecurityParams_Info">Info</string>
+    <string name="CoinPage_SecurityParams_Info">Infos</string>
     <string name="CoinPage_Range24">Plage de 24h</string>
     <string name="CoinPage_About">À propos de</string>
     <string name="CoinPage_Category">Catégorie</string>
@@ -1004,7 +1004,7 @@
     <string name="CoinPage_MarketCap_Quadrillion">P</string>
     <string name="CoinPage_MarketCap_TvlRation">Ratio MCap / TVL</string>
     <string name="CoinPage_MarketCap_TvlRation_Description">Le ratio de la capitalisation boursière du token du projet par rapport à sa TVL.</string>
-    <string name="CoinPage_Volume">Vol</string>
+    <string name="CoinPage_Volume">Volume</string>
     <string name="CoinPage_NoData">Pas de données</string>
     <string name="CoinPage_NoDataAvailable">Aucune donnée disponible</string>
     <string name="CoinPage_AddToWallet">Ajouté au portefeuille</string>
@@ -1050,7 +1050,7 @@
     <string name="Nfts_Asset_OnSaleUntil">jusqu\'à: %s</string>
     <string name="Nfts_Empty">Vous n\'avez pas de NFT dans votre portefeuille</string>
     <string name="Nfts_PriceMode">Mode prix</string>
-    <string name="NftAsset_Overview">Overview</string>
+    <string name="NftAsset_Overview">Synthèse</string>
     <string name="NftAsset_Activity">Activité</string>
     <string name="NftAsset_OpenSea">OpenSea</string>
     <string name="NftAsset_Action_Share">Partager</string>
