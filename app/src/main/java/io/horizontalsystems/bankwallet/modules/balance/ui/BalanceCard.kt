@@ -119,6 +119,7 @@ fun BalanceCard(
                     ) {
                         Row(
                             modifier = Modifier.weight(weight = 1f),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             body_leah(
                                 text = viewItem.coinCode,
