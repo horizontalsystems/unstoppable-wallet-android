@@ -4,11 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
     private val disposables = CompositeDisposable()
@@ -20,7 +21,9 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
         handleAccount(accountManager.activeAccount)
         accountManager.activeAccountObservable
             .subscribeIO {
-                handleAccount(it.orElse(null))
+                viewModelScope.launch {
+                    handleAccount(it.orElse(null))
+                }
             }
             .let {
                 disposables.add(it)
