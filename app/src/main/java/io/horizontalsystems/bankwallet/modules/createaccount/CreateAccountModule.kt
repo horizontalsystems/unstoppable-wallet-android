@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 
@@ -17,6 +18,7 @@ object CreateAccountModule {
                 App.wordsManager,
                 App.accountManager,
                 App.walletActivator,
+                PassphraseValidator(),
                 PredefinedBlockchainSettingsProvider(
                     App.restoreSettingsManager,
                     App.zcashBirthdayProvider

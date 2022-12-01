@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountFactory
+import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -19,6 +20,7 @@ import io.horizontalsystems.hdwalletkit.WordList
 
 class RestoreMnemonicViewModel(
     accountFactory: IAccountFactory,
+    private val passphraseValidator: PassphraseValidator,
     private val wordsManager: WordsManager,
     private val thirdKeyboardStorage: IThirdKeyboard,
 ) : ViewModel() {
@@ -101,7 +103,12 @@ class RestoreMnemonicViewModel(
 
     fun onEnterPassphrase(passphrase: String) {
         this.passphrase = passphrase
-        passphraseError = null
+
+        if (passphraseValidator.validate(passphrase)) {
+            passphraseError = null
+        } else {
+            passphraseError = Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
+        }
 
         emitState()
     }
@@ -130,6 +137,8 @@ class RestoreMnemonicViewModel(
             }
             wordItems.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount }) -> {
                 error = Translator.getString(R.string.Restore_Error_MnemonicWordCount, wordItems.size)
+            }
+            passphraseError != null -> {
             }
             passphraseEnabled && passphrase.isBlank() -> {
                 passphraseError = Translator.getString(R.string.Restore_Error_EmptyPassphrase)
