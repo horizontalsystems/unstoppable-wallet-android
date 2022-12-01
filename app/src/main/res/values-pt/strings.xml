@@ -402,9 +402,9 @@
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Você deseja excluir todos os dApps pareados?</string>
     <string name="WalletConnect_Pairings_Delete">Deletar</string>
     <string name="WalletConnect_DeleteAllPairs">Deletar todos pareados</string>
-    <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
+    <string name="WalletConnect_UnsupportedRequest_Title">Solicitação não suportada</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Não suportado</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningDescription">Este formato de pedido não é suportado pela carteira</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
     <string name="EthereumTransaction_Error_Title">Erro</string>
@@ -424,7 +424,7 @@
     <string name="Swap_ToAmountTitle">Você recebe</string>
     <string name="Swap_Estimated">ESTIMADO</string>
     <string name="Swap_TokenSelectorTitle">Selecionar</string>
-    <string name="Swap_Balance">Available balance</string>
+    <string name="Swap_Balance">Saldo disponível</string>
     <string name="Swap_Allowance">Preço</string>
     <string name="Swap_Price">Preço</string>
     <string name="Swap_SellPrice">Preço de Venda</string>
@@ -467,14 +467,14 @@
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">É provável que sua transação falhe.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Tolerância do Slippage não pode ser maior que %s%%</string>
-    <string name="SwapSettings_Error_InvalidAddress">Invalid address</string>
+    <string name="SwapSettings_Error_InvalidAddress">Endereço inválido</string>
     <string name="SwapSettings_Error_InvalidSlippage">Slippage Inválido</string>
     <string name="SwapSettings_Error_InvalidDeadline">Prazo de tarefa inválido</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Sua operação pode ser de front-running</string>
     <!-- Swap Confirmation -->
-    <string name="Swap_Confirmation">Confirmation</string>
-    <string name="Swap_Confirmation_Guaranteed">Guaranteed</string>
-    <string name="Swap_Confirmation_Maximum">Maximum</string>
+    <string name="Swap_Confirmation">Confirmação</string>
+    <string name="Swap_Confirmation_Guaranteed">Garantido</string>
+    <string name="Swap_Confirmation_Maximum">Máximo</string>
     <string name="Swap_Confirmation_Estimated">Estimado</string>
     <!--Approve-->
     <string name="Approve_Title">Aprovar Troca</string>
@@ -491,18 +491,18 @@
     <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on the %s blockchain. \n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="SwapInfo_DexRelated">%s Relacionado</string>
     <string name="SwapInfo_AllowanceTitle">Preço</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">O montante que uma exchange pode gastar em nome do usuário na execução de trocas simbólicas. É necessária uma margem suficiente para que uma transação de troca efetiva possa ocorrer.</string>
     <string name="SwapInfo_PriceImpactTitle">Impacto de preço</string>
-    <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
+    <string name="SwapInfo_PriceImpactDescription">O desvio de preço esperado de um valor mostrado, normalmente aumenta com o montante de swap.</string>
     <string name="SwapInfo_SwapFeeTitle">Tarifas de troca</string>
     <string name="SwapInfo_SwapFeeDescription">Uma taxa de serviço para a ação de troca na plataforma, mostrada na moeda que o usuário vende. Para a maioria das encomendas, deve situar-se nos 0,3% ou nos 0,6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Valor garantido</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">The minimum amount a user swapping tokens is expected to receive as a result of a swap action.</string>
+    <string name="SwapInfo_GuaranteedAmountDescription">A quantia mínima esperada de um usuário que troca tokens deve receber como resultado de uma ação de troca.</string>
     <string name="SwapInfo_MaxSpendTitle">Gastos máximos</string>
-    <string name="SwapInfo_MaxSpendDescription">The maximum amount a user swapping tokens is expected to spend as a result of a swap action.</string>
+    <string name="SwapInfo_MaxSpendDescription">O valor máximo esperado de um usuário que troca tokens deve receber como resultado de uma ação de troca.</string>
     <string name="SwapInfo_Other">Outros</string>
     <string name="SwapInfo_TransactionFeeTitle">Taxa de Transação</string>
-    <string name="SwapInfo_TransactionFeeDescription">The maximum cost of executing a transaction on the blockchain. Note that, the transaction fee is the cost of executing a transaction on the blockchain itself and doesn\'t include service fees charged by decentralized token exchange protocols. \n\nDecentralized token exchange protocols typically charge a swap fee equivalent to 0.3% (or 0.6%) of the amount traded. This fee is applied within the swap order.</string>
+    <string name="SwapInfo_TransactionFeeDescription">O custo máximo de execução de uma transação na blockchain. Observe que a taxa de transação é o custo de execução de uma transação na própria blockchain e não inclui taxas de serviço cobradas por protocolos descentralizados de troca de tokens. \n\nOs protocolos de troca de tokens descentralizados normalmente cobram uma taxa de troca equivalente a 0,3% (ou 0,6%) do valor negociado. Esta taxa é aplicada dentro da ordem de swap.</string>
     <string name="SwapInfo_TransactionSpeedTitle">Velocidade da Transação</string>
     <string name="SwapInfo_TransactionSpeedDescription">Transações com uma taxa de transação maior resultarão em velocidades de processamento mais rápidas. O oposto também é verdade.</string>
     <string name="SwapInfo_Site">%s Site</string>
@@ -513,7 +513,7 @@
     <string name="Deposit_Address">Endereço</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transações</string>
-    <string name="Transactions_FilterAll">ALL</string>
+    <string name="Transactions_FilterAll">TODAS</string>
     <string name="Transactions_EmptyList">Você ainda não tem nenhuma transação pendente ou anterior</string>
     <string name="Transactions_WaitForSync">Por favor, aguarde a sincronização concluir.</string>
     <string name="Transactions_Pending">Pendente</string>
@@ -531,7 +531,7 @@
     <string name="Transactions_ContractCreation">Criação de contrato</string>
     <string name="Transactions_To">para %s</string>
     <string name="Transactions_From">de %s</string>
-    <string name="Transaction_Unlimited">unlimited %s</string>
+    <string name="Transaction_Unlimited">ilimitado %s</string>
     <string name="Transactions_All">Todas</string>
     <string name="Transactions_Filter_Blockchain">Filter by blockchain</string>
     <string name="Transactions_Filter_AllBlockchains">Todas Blockchains</string>
