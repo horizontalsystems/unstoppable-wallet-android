@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
@@ -26,6 +27,7 @@ class CreateAccountViewModel(
     private val wordsManager: WordsManager,
     private val accountManager: IAccountManager,
     private val walletActivator: WalletActivator,
+    private val passphraseValidator: PassphraseValidator,
     private val predefinedBlockchainSettingsProvider: PredefinedBlockchainSettingsProvider,
 ) : ViewModel() {
 
@@ -73,8 +75,16 @@ class CreateAccountViewModel(
     }
 
     fun onChangePassphrase(v: String) {
-        passphraseState = null
-        passphrase = v
+        if (passphraseValidator.validate(v)) {
+            passphraseState = null
+            passphrase = v
+        } else {
+            passphraseState = DataState.Error(
+                Exception(
+                    Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
+                )
+            )
+        }
     }
 
     fun onChangePassphraseConfirmation(v: String) {
@@ -103,6 +113,10 @@ class CreateAccountViewModel(
     }
 
     private fun passphraseIsInvalid(): Boolean {
+        if (passphraseState is DataState.Error) {
+            return true
+        }
+
         if (passphrase.isBlank()) {
             passphraseState = DataState.Error(
                 Exception(
