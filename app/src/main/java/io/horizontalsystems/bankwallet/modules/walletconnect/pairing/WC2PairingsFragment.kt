@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,7 +13,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
@@ -88,35 +86,35 @@ fun WCPairingsScreen(navController: NavController) {
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
                 val pairings = uiState.pairings
-                CellMultilineLawrenceSection(pairings) { pairing ->
+                CellUniversalLawrenceSection(pairings) { pairing ->
                     Pairing(pairing = pairing) {
                         viewModel.delete(pairing)
                     }
                 }
                 Spacer(modifier = Modifier.height(32.dp))
-                CellSingleLineLawrenceSection {
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxSize()
-                            .clickable {
+                CellUniversalLawrenceSection(
+                    listOf {
+                        RowUniversal(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth(),
+                            onClick = {
                                 ConfirmDeleteAllPairingsDialog.onConfirm(navController) {
                                     viewModel.deleteAll()
                                 }
                                 navController.slideFromBottom(R.id.confirmDeleteAllPairingsDialog)
-                            },
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_delete_20),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.lucian
-                        )
-                        Spacer(modifier = Modifier.width(16.dp))
-                        body_lucian(text = stringResource(id = R.string.WalletConnect_Pairings_DeleteAll))
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_delete_20),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.lucian
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            body_lucian(text = stringResource(id = R.string.WalletConnect_Pairings_DeleteAll))
+                        }
                     }
-
-                }
+                )
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }
@@ -125,15 +123,14 @@ fun WCPairingsScreen(navController: NavController) {
 
 @Composable
 fun Pairing(pairing: PairingViewItem, onDelete: () -> Unit) {
-    Row(
+    RowUniversal(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth(),
     ) {
         Image(
             modifier = Modifier
-                .size(24.dp)
+                .size(32.dp)
                 .clip(RoundedCornerShape(4.dp)),
             painter = rememberAsyncImagePainter(
                 model = pairing.icon,
@@ -153,9 +150,11 @@ fun Pairing(pairing: PairingViewItem, onDelete: () -> Unit) {
             Spacer(modifier = Modifier.height(1.dp))
             subhead2_grey(text = pairing.url ?: "")
         }
-        Spacer(modifier = Modifier
-            .defaultMinSize(minWidth = 16.dp)
-            .weight(1f))
+        Spacer(
+            modifier = Modifier
+                .defaultMinSize(minWidth = 16.dp)
+                .weight(1f)
+        )
         ButtonSecondaryCircle(
             icon = R.drawable.ic_delete_20,
             tint = ComposeAppTheme.colors.lucian,

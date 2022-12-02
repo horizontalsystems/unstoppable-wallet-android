@@ -62,25 +62,6 @@ fun <T> CellMultilineLawrenceSection(
 }
 
 @Composable
-fun <T> CellMultilineLawrenceSectionFramed(
-    items: Iterable<T>,
-    itemContent: @Composable (T) -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
-    ) {
-        items.forEachIndexed { index, marketDataLine ->
-            CellMultilineLawrence(borderTop = index != 0) {
-                itemContent(marketDataLine)
-            }
-        }
-    }
-}
-
-@Composable
 fun CellMultilineLawrence(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
@@ -206,20 +187,6 @@ fun CellSingleLineLawrence(
         borderTop = borderTop,
         borderBottom = borderBottom,
         color = ComposeAppTheme.colors.lawrence,
-        content = content
-    )
-}
-
-@Composable
-fun CellSingleLineTyler(
-    borderTop: Boolean = false,
-    borderBottom: Boolean = false,
-    content: @Composable () -> Unit,
-) {
-    CellSingleLine(
-        borderTop = borderTop,
-        borderBottom = borderBottom,
-        color = ComposeAppTheme.colors.tyler,
         content = content
     )
 }
@@ -408,48 +375,6 @@ fun CellFooterPreview() {
     ComposeAppTheme {
         CellFooter(text = stringResource(id = R.string.Market_PoweredByApi))
     }
-}
-
-@Composable
-fun CellLawrence(
-    borderTop: Boolean = false,
-    borderBottom: Boolean = false,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
-    content: @Composable RowScope.() -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable(
-                enabled = enabled,
-                onClick = onClick
-            )
-    ) {
-        if (borderTop) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
-        }
-
-        if (borderBottom) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
-
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            content = content
-        )
-    }
-
 }
 
 @Composable
