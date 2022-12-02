@@ -241,7 +241,7 @@ private fun ColumnScope.WCSessionListContent(
                 color = ComposeAppTheme.colors.leah
             )
         }
-        CellSingleLineLawrenceSection(
+        CellUniversalLawrenceSection(
             listOf(
                 {
                     StatusCell(status)

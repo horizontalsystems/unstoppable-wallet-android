@@ -63,13 +63,12 @@ fun SendEthRequestScreen(
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
-                    .weight(1f)
                     .fillMaxWidth()
             ) {
                 Spacer(Modifier.height(12.dp))
                 transactionInfoItems?.let { sections ->
                     sections.forEach { section ->
-                        CellSingleLineLawrenceSection(section.viewItems) { item ->
+                        CellUniversalLawrenceSection(section.viewItems) { item ->
                             when (item) {
                                 is ViewItem.Subhead -> SubheadCell(
                                     item.title,

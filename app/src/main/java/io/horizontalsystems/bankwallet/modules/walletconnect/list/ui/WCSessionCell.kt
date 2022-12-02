@@ -37,7 +37,6 @@ fun WCSessionCell(
 ) {
     Box(
         modifier = Modifier
-            .height(60.dp)
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(shape)
@@ -70,12 +69,12 @@ fun WCSessionCell(
             )
         }
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(32.dp)
                     .clip(RoundedCornerShape(4.dp)),
                 painter = rememberAsyncImagePainter(
                     model = session.imageUrl,

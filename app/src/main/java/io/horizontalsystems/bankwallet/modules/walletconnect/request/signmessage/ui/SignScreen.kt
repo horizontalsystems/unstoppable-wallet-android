@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.ui
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -116,7 +118,7 @@ private fun TypedMessageContent(
         }
     }
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         composableItems
     )
 }
@@ -139,7 +141,7 @@ private fun MessageContent(
         composableItems.add { TitleTypedValueCell(stringResource(R.string.WalletConnect_SignMessageRequest_dApp), dApp) }
     }
 
-    CellSingleLineLawrenceSection(
+    CellUniversalLawrenceSection(
         composableItems
     )
 
@@ -152,43 +154,42 @@ private fun MessageContent(
             title = stringResource(R.string.WalletConnect_Note),
         )
         Spacer(Modifier.height(12.dp))
-        CellSingleLineLawrenceSection {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable {
+        CellUniversalLawrenceSection(
+            listOf {
+                RowUniversal(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    onClick = {
                         viewModel.onTrustChecked(!viewModel.trustCheckmarkChecked)
                     }
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                HsCheckbox(
-                    checked = viewModel.trustCheckmarkChecked,
-                    onCheckedChange = { checked ->
-                        viewModel.onTrustChecked(checked)
-                    }
-                )
-                Spacer(Modifier.width(16.dp))
-                subhead2_leah(text = stringResource(R.string.WalletConnect_I_Trust))
+                ) {
+                    HsCheckbox(
+                        checked = viewModel.trustCheckmarkChecked,
+                        onCheckedChange = { checked ->
+                            viewModel.onTrustChecked(checked)
+                        }
+                    )
+                    Spacer(Modifier.width(16.dp))
+                    subhead2_leah(text = stringResource(R.string.WalletConnect_I_Trust))
+                }
             }
-        }
+        )
     }
 }
 
 @Composable
 private fun SignMessageButton(title: String, data: String, navController: NavController) {
-    Row(
+    RowUniversal(
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp)
-            .clickable {
-                navController.slideFromBottom(
-                    R.id.wcDisplayTypedMessageFragment,
-                    bundleOf(TYPED_MESSAGE to formatJson(data))
-                )
-            }
             .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        onClick = {
+            navController.slideFromBottom(
+                R.id.wcDisplayTypedMessageFragment,
+                bundleOf(TYPED_MESSAGE to formatJson(data))
+            )
+        }
     ) {
         subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
