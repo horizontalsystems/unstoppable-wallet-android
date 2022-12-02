@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.hdwalletkit.Language
 
 object RestoreMnemonicModule {
 
@@ -27,6 +28,7 @@ object RestoreMnemonicModule {
         val error: String?,
         val accountType: AccountType?,
         val wordSuggestions: WordSuggestions?,
+        val language: Language,
     )
 
     data class WordItem(val word: String, val range: IntRange)

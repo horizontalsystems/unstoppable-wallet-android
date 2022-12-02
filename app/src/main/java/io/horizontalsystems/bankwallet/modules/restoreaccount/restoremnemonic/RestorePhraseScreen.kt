@@ -27,6 +27,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -44,10 +45,12 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.displayNameStringRes
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.createaccount.MnemonicLanguageCell
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreByMenu
@@ -56,6 +59,9 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains
 import io.horizontalsystems.bankwallet.ui.compose.*
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun RestorePhrase(
@@ -250,7 +256,7 @@ fun RestorePhrase(
 
                 Spacer(Modifier.height(24.dp))
 
-                BottomSection(viewModel, uiState)
+                BottomSection(viewModel, uiState, coroutineScope)
 
                 Spacer(Modifier.height(32.dp))
             }
@@ -318,9 +324,43 @@ fun RestorePhrase(
 private fun BottomSection(
     viewModel: RestoreMnemonicViewModel,
     uiState: RestoreMnemonicModule.UiState,
+    coroutineScope: CoroutineScope,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var showLanguageSelectorDialog by remember { mutableStateOf(false) }
+
+    if (showLanguageSelectorDialog) {
+        SelectorDialogCompose(
+            title = stringResource(R.string.CreateWallet_Wordlist),
+            items = viewModel.mnemonicLanguages.map {
+                TabItem(
+                    stringResource(it.displayNameStringRes),
+                    it == uiState.language,
+                    it
+                )
+            },
+            onDismissRequest = {
+                coroutineScope.launch {
+                    showLanguageSelectorDialog = false
+                    delay(300)
+                    keyboardController?.show()
+                }
+            },
+            onSelectItem = {
+                viewModel.setMnemonicLanguage(it)
+            }
+        )
+    }
+
     CellSingleLineLawrenceSection(
-        listOf(
+        listOf({
+            MnemonicLanguageCell(
+                language = uiState.language,
+                showLanguageSelectorDialog = {
+                    showLanguageSelectorDialog = true
+                }
+            )
+        },
             {
                 Row(
                     modifier = Modifier

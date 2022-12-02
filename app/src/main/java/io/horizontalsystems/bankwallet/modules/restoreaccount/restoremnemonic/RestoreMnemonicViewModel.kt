@@ -36,9 +36,10 @@ class RestoreMnemonicViewModel(
     private var error: String? = null
     private var accountType: AccountType? = null
     private var wordSuggestions: RestoreMnemonicModule.WordSuggestions? = null
+    private var language = Language.English
     private var text = ""
     private var cursorPosition = 0
-    private var mnemonicWordList = WordList.wordList(Language.English)
+    private var mnemonicWordList = WordList.wordList(language)
 
     var uiState by mutableStateOf(
         UiState(
@@ -48,6 +49,7 @@ class RestoreMnemonicViewModel(
             error = error,
             accountType = accountType,
             wordSuggestions = wordSuggestions,
+            language = language,
         )
     )
         private set
@@ -66,6 +68,7 @@ class RestoreMnemonicViewModel(
             error = error,
             accountType = accountType,
             wordSuggestions = wordSuggestions,
+            language = language,
         )
     }
 
@@ -114,6 +117,14 @@ class RestoreMnemonicViewModel(
         error = null
         this.text = text
         this.cursorPosition = cursorPosition
+        processText()
+
+        emitState()
+    }
+
+    fun setMnemonicLanguage(language: Language) {
+        this.language = language
+        mnemonicWordList = WordList.wordList(language)
         processText()
 
         emitState()
