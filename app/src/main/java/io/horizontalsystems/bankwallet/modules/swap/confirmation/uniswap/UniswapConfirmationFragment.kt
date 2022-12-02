@@ -20,8 +20,7 @@ class UniswapConfirmationFragment(
 
     private val transactionData: TransactionData
         get() {
-            val transactionDataParcelable =
-                arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(SendEvmModule.transactionDataKey)!!
+            val transactionDataParcelable = arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(SendEvmModule.transactionDataKey)!!
             return TransactionData(
                 Address(transactionDataParcelable.toAddress),
                 transactionDataParcelable.value,
