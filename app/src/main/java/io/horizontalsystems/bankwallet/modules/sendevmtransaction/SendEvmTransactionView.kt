@@ -240,9 +240,7 @@ private fun NftAmount(item: ViewItem.NftAmount) {
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         NftIcon(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(24.dp),
+            modifier = Modifier.padding(end = 16.dp),
             iconUrl = item.iconUrl,
         )
         Text(
