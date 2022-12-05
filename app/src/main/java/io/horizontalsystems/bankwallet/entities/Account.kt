@@ -10,6 +10,7 @@ import io.horizontalsystems.hdwalletkit.Mnemonic
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
+import java.text.Normalizer
 
 @Parcelize
 data class Account(
@@ -201,3 +202,5 @@ enum class AccountOrigin(val value: String) : Parcelable {
     Created("Created"),
     Restored("Restored");
 }
+
+fun String.normalizeNFKD(): String = Normalizer.normalize(this, Normalizer.Form.NFKD)
