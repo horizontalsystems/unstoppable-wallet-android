@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.normalizeNFKD
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.UiState
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.WordItem
 import io.horizontalsystems.core.CoreApp
@@ -72,14 +73,14 @@ class RestoreMnemonicViewModel(
 
     private fun processText() {
         wordItems = wordItems(text)
-        invalidWordItems = wordItems.filter { !mnemonicWordList.validWord(it.word, false) }
+        invalidWordItems = wordItems.filter { !mnemonicWordList.validWord(it.word.normalizeNFKD(), false) }
 
         val wordItemWithCursor = wordItems.find {
             it.range.contains(cursorPosition - 1)
         }
 
         val invalidWordItemsExcludingCursoredPartiallyValid = when {
-            wordItemWithCursor != null && mnemonicWordList.validWord(wordItemWithCursor.word, true) -> {
+            wordItemWithCursor != null && mnemonicWordList.validWord(wordItemWithCursor.word.normalizeNFKD(), true) -> {
                 invalidWordItems.filter { it != wordItemWithCursor }
             }
             else -> invalidWordItems
@@ -87,7 +88,7 @@ class RestoreMnemonicViewModel(
 
         invalidWordRanges = invalidWordItemsExcludingCursoredPartiallyValid.map { it.range }
         wordSuggestions = wordItemWithCursor?.let {
-            RestoreMnemonicModule.WordSuggestions(it, mnemonicWordList.fetchSuggestions(it.word))
+            RestoreMnemonicModule.WordSuggestions(it, mnemonicWordList.fetchSuggestions(it.word.normalizeNFKD()))
         }
     }
 
@@ -136,10 +137,10 @@ class RestoreMnemonicViewModel(
             }
             else -> {
                 try {
-                    val words = wordItems.map { it.word }
+                    val words = wordItems.map { it.word.normalizeNFKD() }
                     wordsManager.validateChecksum(words)
 
-                    accountType = AccountType.Mnemonic(words, passphrase)
+                    accountType = AccountType.Mnemonic(words, passphrase.normalizeNFKD())
                     error = null
                 } catch (checksumException: Exception) {
                     error = Translator.getString(R.string.Restore_InvalidChecksum)
