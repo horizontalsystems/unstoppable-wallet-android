@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic
+package io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard
 
 import android.app.Activity
 import android.content.Context
@@ -6,13 +6,14 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -50,9 +51,8 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.createaccount.MnemonicLanguageCell
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreByMenu
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restore.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.RestoreBlockchainsFragment
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.SuggestionsBar
 import io.horizontalsystems.bankwallet.ui.compose.*
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.helpers.HudHelper
@@ -61,12 +61,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun RestorePhrase(
+fun RestorePhraseNonStandard(
     navController: NavController,
     popUpToInclusiveId: Int,
-    restoreViewModel: RestoreViewModel,
 ) {
-    val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
+    val viewModel =
+        viewModel<RestoreMnemonicNonStandardViewModel>(factory = RestoreMnemonicNonStandardModule.Factory())
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
@@ -97,7 +97,7 @@ fun RestorePhrase(
     val coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.Restore_Enter_Key_Title),
+            title = TranslatableString.ResString(R.string.Restore_NonStandardRestore),
             navigationIcon = {
                 HsIconButton(onClick = navController::popBackStack) {
                     Icon(
@@ -118,7 +118,12 @@ fun RestorePhrase(
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(Modifier.height(12.dp))
 
-                RestoreByMenu(restoreViewModel)
+                TextImportantWarning(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = stringResource(R.string.Restore_NonStandard_NoteDescription),
+                    title = stringResource(R.string.Restore_NonStandard_Note),
+                    icon = R.drawable.ic_attention_20
+                )
 
                 Spacer(Modifier.height(32.dp))
 
@@ -325,8 +330,8 @@ fun RestorePhrase(
 @Composable
 private fun BottomSection(
     navController: NavController,
-    viewModel: RestoreMnemonicViewModel,
-    uiState: RestoreMnemonicModule.UiState,
+    viewModel: RestoreMnemonicNonStandardViewModel,
+    uiState: RestoreMnemonicNonStandardModule.UiState,
     coroutineScope: CoroutineScope,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -406,65 +411,5 @@ private fun BottomSection(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         )
         InfoText(text = stringResource(R.string.Restore_PassphraseDescription))
-    }
-
-    Spacer(Modifier.height(32.dp))
-
-    CellSingleLineLawrenceSection {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable {
-                    navController.slideFromRight(R.id.restoreMnemonicNonStandardFragment)
-                }
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            body_jacob(text = stringResource(R.string.Restore_NonStandardRestore))
-            Spacer(modifier = Modifier.weight(1f))
-            Image(
-                modifier = Modifier.size(20.dp),
-                painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = null,
-            )
-        }
-    }
-}
-
-@Composable
-fun SuggestionsBar(
-    modifier: Modifier = Modifier,
-    wordSuggestions: RestoreMnemonicModule.WordSuggestions?,
-    onClick: (RestoreMnemonicModule.WordItem, String) -> Unit
-) {
-    Box(modifier = modifier) {
-        BoxTyler44(borderTop = true) {
-            if (wordSuggestions != null) {
-                LazyRow(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(start = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    items(wordSuggestions.options) { suggestion ->
-                        val wordItem = wordSuggestions.wordItem
-                        ButtonSecondary(
-                            onClick = {
-                                onClick.invoke(wordItem, suggestion)
-                            }
-                        ) {
-                            subhead1_leah(text = suggestion)
-                        }
-                        Spacer(modifier = Modifier.width(12.dp))
-                    }
-                }
-            } else {
-                Icon(
-                    modifier = Modifier.align(Alignment.Center),
-                    painter = painterResource(R.drawable.ic_more_24),
-                    tint = ComposeAppTheme.colors.grey,
-                    contentDescription = null
-                )
-            }
-        }
     }
 }

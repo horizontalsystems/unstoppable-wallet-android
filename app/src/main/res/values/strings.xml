@@ -123,6 +123,9 @@
     <string name="Restore_PrivateKey">Private Key</string>
     <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key or Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Enter 12, 15, 18, 21 or 24 words</string>
+    <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
+    <string name="Restore_NonStandard_Note">Note</string>
+    <string name="Restore_NonStandard_NoteDescription">Restore_NonStandard_NoteDescription</string>
 
     <string name="Restore_PrivateKey_InvalidKey">Invalid Key</string>
 
