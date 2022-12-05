@@ -12,10 +12,7 @@ import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountOrigin
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -138,8 +135,11 @@ class CreateAccountViewModel(
     }
 
     private fun mnemonicAccountType(wordCount: Int): AccountType {
-        val words = wordsManager.generateWords(wordCount)
-        return AccountType.Mnemonic(words, passphrase)
+        // A new account can be created only using an English wordlist and limited chars in the passphrase.
+        // Despite it, we add text normalizing.
+        // It is to avoid potential issues if we allow non-English wordlists on account creation.
+        val words = wordsManager.generateWords(wordCount).map { it.normalizeNFKD() }
+        return AccountType.Mnemonic(words, passphrase.normalizeNFKD())
     }
 
 }
