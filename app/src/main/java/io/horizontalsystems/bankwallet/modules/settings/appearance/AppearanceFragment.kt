@@ -105,6 +105,7 @@ fun AppearanceScreen(navController: NavController) {
                             RowSelect(
                                 imageContent = {
                                     Image(
+                                        modifier = Modifier.size(24.dp),
                                         painter = painterResource(id = option.iconRes),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
@@ -123,6 +124,7 @@ fun AppearanceScreen(navController: NavController) {
                             RowSelect(
                                 imageContent = {
                                     Image(
+                                        modifier = Modifier.size(24.dp),
                                         painter = painterResource(id = option.iconRes),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)

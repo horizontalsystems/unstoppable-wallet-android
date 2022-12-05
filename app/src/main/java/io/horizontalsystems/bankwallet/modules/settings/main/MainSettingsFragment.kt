@@ -248,7 +248,7 @@ fun HsSettingCell(
         onClick = onClick
     ) {
         Image(
-            modifier = Modifier.size(20.dp),
+            modifier = Modifier.size(24.dp),
             painter = painterResource(id = icon),
             contentDescription = null,
         )

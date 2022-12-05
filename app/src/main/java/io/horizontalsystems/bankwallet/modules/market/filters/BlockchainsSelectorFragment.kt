@@ -9,7 +9,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -118,47 +117,38 @@ private fun BlockchainCell(
     onCheck: (Blockchain) -> Unit,
     onUncheck: (Blockchain) -> Unit,
 ) {
-    CellSingleLineLawrence(borderTop = true) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable {
-                    if (item.checked) {
-                        onUncheck(item.blockchain)
-                    } else {
-                        onCheck(item.blockchain)
-                    }
-                },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(item.blockchain.type.icon24),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = 16.dp)
-                    .size(24.dp)
-            )
-            body_leah(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = item.blockchain.name,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Spacer(Modifier.weight(1f))
-            Box(
-                modifier = Modifier
-                    .width(52.dp)
-                    .fillMaxHeight(),
-                contentAlignment = Alignment.Center
-            ) {
+    CellBorderedRowUniversal(
+        borderTop = true,
+        modifier = Modifier
+            .clickable {
                 if (item.checked) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_checkmark_20),
-                        tint = ComposeAppTheme.colors.jacob,
-                        contentDescription = null,
-                    )
+                    onUncheck(item.blockchain)
+                } else {
+                    onCheck(item.blockchain)
                 }
             }
+            .fillMaxWidth(),
+        backgroundColor = ComposeAppTheme.colors.lawrence
+    ) {
+        Image(
+            painter = painterResource(item.blockchain.type.icon24),
+            contentDescription = null,
+            modifier = Modifier.size(32.dp)
+        )
+        body_leah(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .weight(1f),
+            text = item.blockchain.name,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        if (item.checked) {
+            Icon(
+                painter = painterResource(R.drawable.ic_checkmark_20),
+                tint = ComposeAppTheme.colors.jacob,
+                contentDescription = null,
+            )
         }
     }
 }
@@ -168,34 +158,26 @@ private fun AnyCell(
     checked: Boolean,
     onClick: () -> Unit
 ) {
-    CellSingleLineLawrence(borderTop = true) {
-        Row(
+    CellBorderedRowUniversal(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        backgroundColor = ComposeAppTheme.colors.lawrence
+    ) {
+        body_grey(
             modifier = Modifier
-                .fillMaxSize()
-                .clickable { onClick() },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            body_grey(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(R.string.Any),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+                .padding(end = 16.dp)
+                .weight(1f),
+            text = stringResource(R.string.Any),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        if (checked) {
+            Icon(
+                painter = painterResource(R.drawable.ic_checkmark_20),
+                tint = ComposeAppTheme.colors.jacob,
+                contentDescription = null,
             )
-            Box(
-                modifier = Modifier
-                    .width(52.dp)
-                    .fillMaxHeight(),
-                contentAlignment = Alignment.Center
-            ) {
-                if (checked) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_checkmark_20),
-                        tint = ComposeAppTheme.colors.jacob,
-                        contentDescription = null,
-                    )
-                }
-            }
         }
     }
 }
