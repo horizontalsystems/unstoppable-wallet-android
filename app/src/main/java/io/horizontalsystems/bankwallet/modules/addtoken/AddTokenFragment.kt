@@ -129,14 +129,20 @@ private fun AddTokenScreen(
                 AnimatedVisibility(tokens.isNotEmpty()) {
                     Column {
                         HeaderText(text = stringResource(id = R.string.AddToken_CoinTypes))
-                        CellSingleLineLawrenceSection(tokens) { tokenInfoUiState ->
-                            Row(
+                        CellUniversalLawrenceSection(tokens) { tokenInfoUiState ->
+                            RowUniversal(
                                 modifier = Modifier
-                                    .fillMaxSize()
+                                    .fillMaxWidth()
                                     .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalPadding = 0.dp,
                             ) {
-                                Image(painter = painterResource(id = tokenInfoUiState.image), contentDescription = null)
+                                Image(
+                                    modifier = Modifier
+                                        .padding(vertical = 12.dp)
+                                        .size(32.dp),
+                                    painter = painterResource(id = tokenInfoUiState.image),
+                                    contentDescription = null
+                                )
                                 Spacer(modifier = Modifier.width(16.dp))
                                 D2(text = tokenInfoUiState.title)
                                 Spacer(modifier = Modifier.weight(1f))

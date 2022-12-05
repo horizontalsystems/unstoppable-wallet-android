@@ -487,7 +487,7 @@ fun SectionUniversalItem(
 }
 
 @Composable
-fun SectionItemRowUniversalClear(
+fun SectionItemBorderedRowUniversalClear(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
     onClick: (() -> Unit)? = null,
@@ -511,5 +511,40 @@ fun SectionItemRowUniversalClear(
                 color = ComposeAppTheme.colors.steel10,
             )
         }
+    }
+}
+
+@Composable
+fun CellBorderedRowUniversalClear(
+    modifier: Modifier = Modifier,
+    borderTop: Boolean = false,
+    borderBottom: Boolean = false,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        if (borderTop) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
+
+        if (borderBottom) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+
+        RowUniversal(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            content = content
+        )
     }
 }

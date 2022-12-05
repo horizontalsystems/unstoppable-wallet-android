@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,15 +40,17 @@ fun Contracts(
             body_leah(text = stringResource(id = R.string.CoinPage_Contracts))
         }
 
-        CellSingleLineLawrenceSection(contracts) { contractInfo ->
-            Row(
+        CellUniversalLawrenceSection(contracts) { contractInfo ->
+            RowUniversal(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Image(painter = painterResource(id = contractInfo.logoResId), contentDescription = "platform")
+                Image(
+                    modifier = Modifier.size(32.dp),
+                    painter = painterResource(id = contractInfo.logoResId),
+                    contentDescription = "platform"
+                )
                 subhead2_leah(
                     text = contractInfo.shortened,
                     modifier = Modifier

@@ -79,7 +79,7 @@ private fun BottomSheetScreen(
                     modifier = Modifier.padding(horizontal = 16.dp),
                 ) {
                     Image(
-                        modifier = Modifier.size(24.dp),
+                        modifier = Modifier.size(32.dp),
                         painter = painterResource(
                             id = getDrawableResource(item.id, context)
                                 ?: R.drawable.coin_placeholder
