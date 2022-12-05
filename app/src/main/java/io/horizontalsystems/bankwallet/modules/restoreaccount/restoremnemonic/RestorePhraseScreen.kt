@@ -260,7 +260,7 @@ fun RestorePhrase(
                     coroutineScope
                 )
 
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(44.dp))
             }
 
             if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
@@ -323,7 +323,7 @@ fun RestorePhrase(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun BottomSection(
+private fun ColumnScope.BottomSection(
     navController: NavController,
     viewModel: RestoreMnemonicViewModel,
     uiState: RestoreMnemonicModule.UiState,
@@ -408,27 +408,30 @@ private fun BottomSection(
         InfoText(text = stringResource(R.string.Restore_PassphraseDescription))
     }
 
-    Spacer(Modifier.height(32.dp))
+    if (uiState.proposeNonStandard) {
+        Spacer(Modifier.height(32.dp))
 
-    CellSingleLineLawrenceSection {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable {
-                    navController.slideFromRight(R.id.restoreMnemonicNonStandardFragment)
-                }
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            body_jacob(text = stringResource(R.string.Restore_NonStandardRestore))
-            Spacer(modifier = Modifier.weight(1f))
-            Image(
-                modifier = Modifier.size(20.dp),
-                painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = null,
-            )
+        CellSingleLineLawrenceSection {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable {
+                        navController.slideFromRight(R.id.restoreMnemonicNonStandardFragment)
+                    }
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                body_jacob(text = stringResource(R.string.Restore_NonStandardRestore))
+                Spacer(modifier = Modifier.weight(1f))
+                Image(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.ic_arrow_right),
+                    contentDescription = null,
+                )
+            }
         }
     }
+    Spacer(Modifier.height(32.dp))
 }
 
 @Composable
