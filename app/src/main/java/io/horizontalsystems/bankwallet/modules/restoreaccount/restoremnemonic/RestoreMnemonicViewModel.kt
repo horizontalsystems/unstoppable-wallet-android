@@ -39,8 +39,6 @@ class RestoreMnemonicViewModel(
     private var text = ""
     private var cursorPosition = 0
     private var mnemonicWordList = WordList.wordList(language)
-    private val proposeNonStandard: Boolean
-        get() = language != Language.English || passphraseEnabled
 
 
     var uiState by mutableStateOf(
@@ -52,7 +50,6 @@ class RestoreMnemonicViewModel(
             accountType = accountType,
             wordSuggestions = wordSuggestions,
             language = language,
-            proposeNonStandard = proposeNonStandard,
         )
     )
         private set
@@ -72,7 +69,6 @@ class RestoreMnemonicViewModel(
             accountType = accountType,
             wordSuggestions = wordSuggestions,
             language = language,
-            proposeNonStandard = proposeNonStandard,
         )
     }
 

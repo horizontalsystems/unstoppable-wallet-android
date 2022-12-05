@@ -27,7 +27,6 @@ object RestoreMnemonicModule {
         val accountType: AccountType?,
         val wordSuggestions: WordSuggestions?,
         val language: Language,
-        val proposeNonStandard: Boolean,
     )
 
     data class WordItem(val word: String, val range: IntRange)
