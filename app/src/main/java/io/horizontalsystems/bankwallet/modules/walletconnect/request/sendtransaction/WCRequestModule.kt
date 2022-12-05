@@ -30,8 +30,6 @@ import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 import java.math.BigInteger
 
 object WCRequestModule {
@@ -57,7 +55,7 @@ object WCRequestModule {
         }
 
         private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(token, App.marketKit, App.currencyManager)
+            EvmCoinServiceFactory(token, App.marketKit, App.currencyManager, App.evmTestnetManager)
         }
         private val feeService by lazy {
             val gasDataService = EvmCommonGasDataService(evmKitWrapper.evmKit, 10)
@@ -116,7 +114,7 @@ object WCRequestModule {
         }
 
         private val coinServiceFactory by lazy {
-            EvmCoinServiceFactory(token, App.marketKit, App.currencyManager)
+            EvmCoinServiceFactory(token, App.marketKit, App.currencyManager, App.evmTestnetManager)
         }
         private val feeService by lazy {
             val evmKitWrapper = service.evmKitWrapper
@@ -170,7 +168,7 @@ object WCRequestModule {
             Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
             else -> BlockchainType.Ethereum
         }
-        return App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))!!
+        return App.evmBlockchainManager.getBaseToken(blockchainType)!!
     }
 
     private fun getGasPrice(transaction: WalletConnectTransaction): GasPrice? = when {

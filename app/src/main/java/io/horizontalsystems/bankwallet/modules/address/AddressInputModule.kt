@@ -26,6 +26,7 @@ object AddressInputModule {
                     addressViewModel.addAddressHandler(AddressHandlerPure())
                 }
                 BlockchainType.Ethereum,
+                BlockchainType.EthereumGoerli,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Polygon,
                 BlockchainType.Avalanche,
@@ -35,7 +36,6 @@ object AddressInputModule {
                 }
                 is BlockchainType.Unsupported -> Unit
             }
-
 
             return addressViewModel as T
         }
@@ -58,6 +58,7 @@ object AddressInputModule {
                     addressViewModel.addAddressHandler(AddressHandlerPure())
                 }
                 BlockchainType.Ethereum,
+                BlockchainType.EthereumGoerli,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Polygon,
                 BlockchainType.Avalanche,
@@ -68,7 +69,6 @@ object AddressInputModule {
                 BlockchainType.Solana,
                 is BlockchainType.Unsupported -> Unit
             }
-
 
             return addressViewModel as T
         }

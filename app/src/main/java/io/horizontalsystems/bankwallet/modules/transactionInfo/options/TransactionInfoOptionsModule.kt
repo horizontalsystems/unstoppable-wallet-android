@@ -24,8 +24,6 @@ import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
 
@@ -59,7 +57,7 @@ object TransactionInfoOptionsModule {
                 Chain.ArbitrumOne -> BlockchainType.ArbitrumOne
                 else -> BlockchainType.Ethereum
             }
-            App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))!!
+            App.evmBlockchainManager.getBaseToken(blockchainType)!!
         }
 
         private val fullTransaction by lazy {
@@ -105,7 +103,7 @@ object TransactionInfoOptionsModule {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
 
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(baseToken, App.marketKit, App.currencyManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(baseToken, App.marketKit, App.currencyManager, App.evmTestnetManager) }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
 
         private val sendService by lazy {

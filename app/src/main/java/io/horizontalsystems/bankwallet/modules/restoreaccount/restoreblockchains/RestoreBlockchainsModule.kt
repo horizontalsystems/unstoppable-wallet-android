@@ -44,7 +44,8 @@ object RestoreBlockchainsModule {
                 App.walletManager,
                 App.marketKit,
                 enableCoinService,
-                App.evmBlockchainManager
+                App.evmBlockchainManager,
+                App.evmTestnetManager
             )
         }
 

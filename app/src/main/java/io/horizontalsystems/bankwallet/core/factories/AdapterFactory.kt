@@ -74,6 +74,7 @@ class AdapterFactory(
                 ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType), testMode)
             }
             BlockchainType.Ethereum,
+            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Avalanche,
@@ -124,6 +125,7 @@ class AdapterFactory(
     fun unlinkAdapter(wallet: Wallet) {
         when (val blockchainType = wallet.transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
+            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Optimism,
@@ -144,6 +146,7 @@ class AdapterFactory(
     fun unlinkAdapter(transactionSource: TransactionSource) {
         when (val blockchainType = transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
+            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Optimism,

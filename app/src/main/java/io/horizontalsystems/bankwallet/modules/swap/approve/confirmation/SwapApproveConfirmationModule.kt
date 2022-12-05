@@ -19,8 +19,6 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransac
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 
 object SwapApproveConfirmationModule {
 
@@ -29,7 +27,7 @@ object SwapApproveConfirmationModule {
         private val blockchainType: BlockchainType
     ) : ViewModelProvider.Factory {
 
-        private val token by lazy { App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))!! }
+        private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
         private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
@@ -49,7 +47,8 @@ object SwapApproveConfirmationModule {
             EvmCoinServiceFactory(
                 token,
                 App.marketKit,
-                App.currencyManager
+                App.currencyManager,
+                App.evmTestnetManager
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
