@@ -156,7 +156,7 @@ fun CoinMarketCell(
     tradeUrl: String?,
 ) {
     val context = LocalContext.current
-    SectionItemRowUniversalClear(
+    SectionItemBorderedRowUniversalClear(
         onClick = tradeUrl?.let {
             { LinkHelper.openLinkInAppBrowser(context, it) }
         },

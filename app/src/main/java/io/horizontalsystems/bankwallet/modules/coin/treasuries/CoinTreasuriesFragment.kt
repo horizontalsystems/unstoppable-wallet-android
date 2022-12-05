@@ -109,7 +109,7 @@ class CoinTreasuriesFragment : BaseFragment() {
                                     }
 
                                     items(treasuriesData.coinTreasuries) { item ->
-                                        SectionItemRowUniversalClear(
+                                        SectionItemBorderedRowUniversalClear(
                                             borderBottom = true
                                         ) {
                                             CoinImage(

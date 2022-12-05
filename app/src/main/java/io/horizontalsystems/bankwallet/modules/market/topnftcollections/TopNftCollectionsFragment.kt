@@ -190,7 +190,7 @@ private fun TopNftCollectionsList(
     ) {
         preItems.invoke(this)
         items(collections) { collection ->
-            SectionItemRowUniversalClear(
+            SectionItemBorderedRowUniversalClear(
                 onClick = { onClickCollection(collection.blockchainType, collection.uid) },
                 borderBottom = true
             ) {

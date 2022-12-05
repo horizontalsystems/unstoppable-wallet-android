@@ -155,7 +155,7 @@ fun NftEvent(
     currencyValue: String?,
     onClick: (() -> Unit)? = null
 ) {
-    SectionItemRowUniversalClear(
+    SectionItemBorderedRowUniversalClear(
         borderBottom = true,
         onClick = onClick
     ) {

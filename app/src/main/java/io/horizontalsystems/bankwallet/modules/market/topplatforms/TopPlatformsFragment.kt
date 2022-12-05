@@ -234,7 +234,7 @@ private fun TopPlatformSecondRow(
 
 @Composable
 fun TopPlatformItem(item: TopPlatformViewItem, onItemClick: (Platform) -> Unit) {
-    SectionItemRowUniversalClear(
+    SectionItemBorderedRowUniversalClear(
         borderBottom = true,
         onClick = { onItemClick(item.platform) }
     ) {
