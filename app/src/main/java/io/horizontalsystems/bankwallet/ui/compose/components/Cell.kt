@@ -113,26 +113,6 @@ fun <T> CellSingleLineLawrenceSection(
 }
 
 @Composable
-fun <T> CellSingleLineLawrenceSectionFramed(
-    items: List<T>,
-    itemContent: @Composable (T) -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
-    ) {
-        items.forEachIndexed { index, marketDataLine ->
-            CellSingleLineLawrence(borderTop = index != 0) {
-                itemContent(marketDataLine)
-            }
-        }
-    }
-
-}
-
-@Composable
 fun CellSingleLineLawrenceSection(
     content: @Composable () -> Unit
 ) {
@@ -515,14 +495,17 @@ fun SectionItemBorderedRowUniversalClear(
 }
 
 @Composable
-fun CellBorderedRowUniversalClear(
+fun CellBorderedRowUniversal(
     modifier: Modifier = Modifier,
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
+    backgroundColor: Color = Color.Transparent,
     content: @Composable RowScope.() -> Unit,
 ) {
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(backgroundColor)
     ) {
         if (borderTop) {
             Divider(

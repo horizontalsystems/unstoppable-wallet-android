@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -56,7 +57,9 @@ private fun BlockchainSettingCell(
         onClick = onClick
     ) {
         Image(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .size(32.dp),
             painter = painterResource(item.icon),
             contentDescription = null,
         )

@@ -193,7 +193,7 @@ fun LazyListScope.nftsCollectionSection(
     onClickAsset: (NftAssetViewItem) -> Unit
 ) {
     item(key = "${collection.uid}-header") {
-        CellBorderedRowUniversalClear(
+        CellBorderedRowUniversal(
             modifier = Modifier
                 .clickable(
                     indication = null,

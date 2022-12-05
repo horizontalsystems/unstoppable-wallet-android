@@ -40,7 +40,9 @@ fun PasscodeBlock(
                 Icon(
                     painter = painterResource(R.drawable.ic_passcode),
                     tint = ComposeAppTheme.colors.grey,
-                    modifier = Modifier.padding(vertical = 12.dp),
+                    modifier = Modifier
+                        .padding(vertical = 12.dp)
+                        .size(24.dp),
                     contentDescription = null,
                 )
                 Spacer(Modifier.width(16.dp))
