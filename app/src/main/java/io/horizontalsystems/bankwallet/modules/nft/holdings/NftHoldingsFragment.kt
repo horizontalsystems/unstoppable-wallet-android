@@ -204,7 +204,6 @@ fun LazyListScope.nftsCollectionSection(
             borderTop = true
         ) {
             NftIcon(
-                modifier = Modifier.size(32.dp),
                 iconUrl = collection.imageUrl,
             )
             headline2_leah(

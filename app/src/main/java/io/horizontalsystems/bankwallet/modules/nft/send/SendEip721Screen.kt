@@ -66,7 +66,7 @@ fun SendEip721Screen(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
                                 .heightIn(0.dp, 100.dp)
-                                .clip(RoundedCornerShape(4.dp)),
+                                .clip(RoundedCornerShape(8.dp)),
                             contentScale = ContentScale.Crop
                         )
                     }

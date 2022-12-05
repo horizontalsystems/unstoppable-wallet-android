@@ -131,7 +131,7 @@ fun Pairing(pairing: PairingViewItem, onDelete: () -> Unit) {
         Image(
             modifier = Modifier
                 .size(32.dp)
-                .clip(RoundedCornerShape(4.dp)),
+                .clip(RoundedCornerShape(8.dp)),
             painter = rememberAsyncImagePainter(
                 model = pairing.icon,
                 error = painterResource(R.drawable.ic_platform_placeholder_24)
