@@ -421,7 +421,7 @@ private fun ColumnScope.BottomSection(
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                body_jacob(text = stringResource(R.string.Restore_NonStandardRestore))
+                body_leah(text = stringResource(R.string.Restore_NonStandardRestore))
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
                     modifier = Modifier.size(20.dp),
