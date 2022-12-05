@@ -8,6 +8,7 @@ import io.horizontalsystems.ethereumkit.models.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import java.net.URL
 
 class EvmSyncSourceManager(
     appConfigProvider: AppConfigProvider,
@@ -33,6 +34,15 @@ class EvmSyncSourceManager(
                     "MainNet HTTP",
                     RpcSource.ethereumInfuraHttp(appConfigProvider.infuraProjectId, appConfigProvider.infuraProjectSecret),
                     TransactionSource.ethereumEtherscan(appConfigProvider.etherscanApiKey)
+                )
+            ),
+
+            BlockchainType.EthereumGoerli to listOf(
+                getSyncSource(
+                    BlockchainType.EthereumGoerli,
+                    "Goerli Ankr",
+                    RpcSource.Http(listOf(URL("https://rpc.ankr.com/eth_goerli")), null),
+                    TransactionSource.goerliEtherscan(appConfigProvider.etherscanApiKey)
                 )
             ),
 

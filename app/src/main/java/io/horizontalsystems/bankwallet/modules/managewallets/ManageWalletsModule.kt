@@ -32,7 +32,7 @@ object ManageWalletsModule {
         }
 
         private val manageWalletsService by lazy {
-            ManageWalletsService(App.marketKit, App.walletManager, App.accountManager, enableCoinService)
+            ManageWalletsService(App.marketKit, App.walletManager, App.accountManager, enableCoinService, App.evmTestnetManager)
         }
 
         @Suppress("UNCHECKED_CAST")

@@ -9,12 +9,14 @@ class EvmBlockchainManager(
     private val backgroundManager: BackgroundManager,
     private val syncSourceManager: EvmSyncSourceManager,
     private val marketKit: MarketKitWrapper,
-    private val accountManagerFactory: EvmAccountManagerFactory
+    private val accountManagerFactory: EvmAccountManagerFactory,
+    private val evmTestnetManager: EvmTestnetManager
 ) {
     private val evmKitManagersMap = mutableMapOf<BlockchainType, Pair<EvmKitManager, EvmAccountManager>>()
 
     val allBlockchainTypes = listOf(
             BlockchainType.Ethereum,
+            BlockchainType.EthereumGoerli,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Avalanche,
@@ -22,7 +24,7 @@ class EvmBlockchainManager(
             BlockchainType.ArbitrumOne,
     )
 
-    val allBlockchains = marketKit.blockchains(allBlockchainTypes.map { it.uid })
+    val allBlockchains = marketKit.blockchains(allBlockchainTypes.map { it.uid }) + evmTestnetManager.allBlockchains
 
     private fun getEvmKitManagers(blockchainType: BlockchainType): Pair<EvmKitManager, EvmAccountManager> {
         val evmKitManagers = evmKitManagersMap[blockchainType]
@@ -43,6 +45,7 @@ class EvmBlockchainManager(
 
     fun getChain(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Ethereum -> Chain.Ethereum
+        BlockchainType.EthereumGoerli -> Chain.EthereumGoerli
         BlockchainType.BinanceSmartChain -> Chain.BinanceSmartChain
         BlockchainType.Polygon -> Chain.Polygon
         BlockchainType.Avalanche -> Chain.Avalanche
@@ -67,6 +70,6 @@ class EvmBlockchainManager(
         getEvmKitManagers(blockchainType).second
 
     fun getBaseToken(blockchainType: BlockchainType): Token? =
-        marketKit.token(TokenQuery(blockchainType, TokenType.Native))
+        marketKit.token(TokenQuery(blockchainType, TokenType.Native)) ?: evmTestnetManager.getNativeToken(blockchainType)
 
 }

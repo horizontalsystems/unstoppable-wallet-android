@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.managewallets
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.EvmTestnetManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.Account
@@ -20,7 +21,8 @@ class ManageWalletsService(
     private val marketKit: MarketKitWrapper,
     private val walletManager: IWalletManager,
     accountManager: IAccountManager,
-    private val enableCoinService: EnableCoinService
+    private val enableCoinService: EnableCoinService,
+    private val evmTestnetManager: EvmTestnetManager,
 ) : Clearable {
 
     val itemsObservable = PublishSubject.create<List<Item>>()
@@ -81,11 +83,11 @@ class ManageWalletsService(
     private fun fetchFullCoins(): List<FullCoin> {
         return if (filter.isBlank()) {
             val account = this.account ?: return emptyList()
-            val featuredFullCoins =
-                marketKit.fullCoins("", 100).toMutableList()
-                    .filter { it.eligibleTokens(account.type).isNotEmpty() }
+            val testnetFullCoins = evmTestnetManager.nativeTokens.map { it.fullCoin }
+            val featuredFullCoins = marketKit.fullCoins("", 100).toMutableList()
+                .filter { it.eligibleTokens(account.type).isNotEmpty() }
 
-            val featuredCoins = featuredFullCoins.map { it.coin }
+            val featuredCoins = featuredFullCoins.map { it.coin } + testnetFullCoins
             val enabledFullCoins = marketKit.fullCoins(
                 coinUids = wallets.filter { !featuredCoins.contains(it.coin) }.map { it.coin.uid }
             )
