@@ -118,14 +118,9 @@ fun RestorePhraseNonStandard(
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(Modifier.height(12.dp))
 
-                TextImportantWarning(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(R.string.Restore_NonStandard_NoteDescription),
-                    title = stringResource(R.string.Restore_NonStandard_Note),
-                    icon = R.drawable.ic_attention_20
-                )
+                InfoText(text = stringResource(R.string.Restore_NonStandard_Description))
 
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(20.dp))
 
                 Column(
                     modifier = Modifier
