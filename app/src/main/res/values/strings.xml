@@ -56,6 +56,10 @@
 
     <string name="Keyboard">Keyboard</string>
 
+    <string name="AccountRecovery_Note">Note</string>
+    <string name="AccountRecovery_MigrationRecommended">Migration Recommended Description</string>
+    <string name="AccountRecovery_MigrationRequired">Migration Required Description</string>
+
     <!--Intro-->
 
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>

@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.disposables.CompositeDisposable
@@ -38,6 +39,10 @@ class BalanceService(
 
     var isWatchAccount = false
         private set
+
+    val account: Account?
+        get() = accountManager.activeAccount
+
     private var hideZeroBalances = false
 
     private val allBalanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
