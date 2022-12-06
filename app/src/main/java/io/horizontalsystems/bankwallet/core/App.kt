@@ -184,19 +184,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val proFeaturesStorage = ProFeaturesStorage(appDatabase)
         proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
-        evmTestnetManager = EvmTestnetManager()
-        enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
-        walletStorage = WalletStorage(marketKit, enabledWalletsStorage, evmTestnetManager)
-
-        walletManager = WalletManager(accountManager, walletStorage)
-        coinManager = CoinManager(marketKit, walletManager)
-
-        solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
-        val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
-        solanaKitManager = SolanaKitManager(solanaRpcSourceManager, solanaWalletManager, backgroundManager)
-
-        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-
         LocalStorageManager(preferences).apply {
             localStorage = this
             chartTypeStorage = this
@@ -204,6 +191,19 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             thirdKeyboardStorage = this
             marketStorage = this
         }
+
+        evmTestnetManager = EvmTestnetManager(localStorage)
+        enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
+        walletStorage = WalletStorage(marketKit, enabledWalletsStorage, evmTestnetManager)
+
+        walletManager = WalletManager(accountManager, walletStorage, evmTestnetManager)
+        coinManager = CoinManager(marketKit, walletManager)
+
+        solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
+        val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
+        solanaKitManager = SolanaKitManager(solanaRpcSourceManager, solanaWalletManager, backgroundManager)
+
+        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
 
         torKitManager = TorManager(instance, localStorage)
 

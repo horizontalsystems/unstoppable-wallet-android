@@ -94,6 +94,7 @@ interface ILocalStorage {
     var marketFavoritesSortingField: SortingField?
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
+    var testnetEnabled: Boolean
 
     fun getSwapProviderId(blockchainType: BlockchainType): String?
     fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)

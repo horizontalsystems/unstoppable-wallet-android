@@ -70,6 +70,7 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
     private val MARKET_FAVORITES_SORTING_FIELD = "market_favorites_sorting_field"
     private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
+    private val TESTNET_ENABLED = "testnet_enabled"
 
     private val gson by lazy { Gson() }
 
@@ -416,6 +417,12 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
         get() = preferences.getBoolean(RELAUNCH_BY_SETTING_CHANGE, false)
         set(value) {
             preferences.edit().putBoolean(RELAUNCH_BY_SETTING_CHANGE, value).commit()
+        }
+
+    override var testnetEnabled: Boolean
+        get() = preferences.getBoolean(TESTNET_ENABLED, true)
+        set(enabled) {
+            preferences.edit().putBoolean(TESTNET_ENABLED, enabled).apply()
         }
 
     override fun getSwapProviderId(blockchainType: BlockchainType): String? {

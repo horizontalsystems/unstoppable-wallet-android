@@ -17,7 +17,7 @@ class WalletStorage(
         val enabledWallets = storage.enabledWallets(account.id)
 
         val queries = enabledWallets.mapNotNull { TokenQuery.fromId(it.tokenQueryId) }
-        val tokens = marketKit.tokens(queries) + evmTestnetManager.nativeTokens
+        val tokens = marketKit.tokens(queries) + evmTestnetManager.tokens(queries)
 
         val blockchainUids = queries.map { it.blockchainType.uid }
         val testnetBlockchains = queries.map { it.blockchainType }.mapNotNull { evmTestnetManager.blockchain(it) }

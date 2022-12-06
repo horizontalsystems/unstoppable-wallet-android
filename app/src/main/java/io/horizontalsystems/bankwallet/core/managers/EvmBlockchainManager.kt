@@ -24,7 +24,7 @@ class EvmBlockchainManager(
             BlockchainType.ArbitrumOne,
     )
 
-    val allBlockchains = marketKit.blockchains(allBlockchainTypes.map { it.uid }) + evmTestnetManager.allBlockchains
+    val allBlockchains = marketKit.blockchains(allBlockchainTypes.map { it.uid }) + evmTestnetManager.blockchains()
 
     private fun getEvmKitManagers(blockchainType: BlockchainType): Pair<EvmKitManager, EvmAccountManager> {
         val evmKitManagers = evmKitManagersMap[blockchainType]

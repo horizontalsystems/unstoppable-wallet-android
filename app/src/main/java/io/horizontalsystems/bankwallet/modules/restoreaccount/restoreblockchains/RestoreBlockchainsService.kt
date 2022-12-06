@@ -94,7 +94,7 @@ class RestoreBlockchainsService(
             }
         }
 
-        val testnetTokens = evmTestnetManager.nativeTokens
+        val testnetTokens = evmTestnetManager.nativeTokens()
             .filter { it.blockchainType.supports(accountType) }
             .map { InternalItem(it.blockchain, it) }
 
