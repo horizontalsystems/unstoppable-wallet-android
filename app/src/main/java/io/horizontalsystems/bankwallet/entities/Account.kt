@@ -36,13 +36,16 @@ data class Account(
             val normalizedWords = words.normalizeNFKD()
             val normalizedPassphrase = passphrase.normalizeNFKD()
 
-            val validWords = try {
-                Mnemonic().validateStrict(type.words.map { it.normalizeNFKD() })
-                true
-            } catch (exception: Exception) {
-                false
+            when {
+                words != normalizedWords -> true
+                passphrase != normalizedPassphrase -> true
+                else -> try {
+                    Mnemonic().validateStrict(type.words)
+                    false
+                } catch (exception: Exception) {
+                    true
+                }
             }
-            !validWords || words != normalizedWords || passphrase != normalizedPassphrase
         } else {
             false
         }
