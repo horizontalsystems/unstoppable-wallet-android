@@ -116,9 +116,9 @@ class BalanceViewModel(
 
     private fun headerNote(): HeaderNote {
         val account = service.account ?: return HeaderNote.None
-        val dismissed = localStorage.nonRecommendedAccountAlertDismissedAccounts.contains(account.id)
+        val nonRecommendedDismissed = localStorage.nonRecommendedAccountAlertDismissedAccounts.contains(account.id)
 
-        return account.headerNote(dismissed)
+        return account.headerNote(nonRecommendedDismissed)
     }
 
     private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>) {
@@ -269,9 +269,8 @@ fun HeaderNote.faqUrl(language: String) = when (this) {
     HeaderNote.None -> null
 }
 
-fun Account.headerNote(dismissed: Boolean): HeaderNote = when {
-    dismissed -> HeaderNote.None
+fun Account.headerNote(nonRecommendedDismissed: Boolean): HeaderNote = when {
     nonStandard -> HeaderNote.NonStandardAccount
-    nonRecommended -> HeaderNote.NonRecommendedAccount
+    nonRecommended -> if (nonRecommendedDismissed) HeaderNote.None else HeaderNote.NonRecommendedAccount
     else -> HeaderNote.None
 }
