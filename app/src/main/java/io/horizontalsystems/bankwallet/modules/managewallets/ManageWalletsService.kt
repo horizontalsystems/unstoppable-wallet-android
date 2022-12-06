@@ -83,24 +83,24 @@ class ManageWalletsService(
     private fun fetchFullCoins(): List<FullCoin> {
         return if (filter.isBlank()) {
             val account = this.account ?: return emptyList()
-            val testnetFullCoins = evmTestnetManager.nativeTokens.map { it.fullCoin }
+            val testnetFullCoins = evmTestnetManager.nativeTokens(filter).map { it.fullCoin }
             val featuredFullCoins = marketKit.fullCoins("", 100).toMutableList()
                 .filter { it.eligibleTokens(account.type).isNotEmpty() }
 
-            val featuredCoins = featuredFullCoins.map { it.coin } + testnetFullCoins
+            val featuredCoins = featuredFullCoins.map { it.coin }
             val enabledFullCoins = marketKit.fullCoins(
                 coinUids = wallets.filter { !featuredCoins.contains(it.coin) }.map { it.coin.uid }
             )
             val customFullCoins = wallets.filter { it.token.isCustom }.map { it.token.fullCoin }
 
-            featuredFullCoins + enabledFullCoins + customFullCoins
+            featuredFullCoins + enabledFullCoins + customFullCoins + testnetFullCoins
         } else if (isContractAddress(filter)) {
-            val tokens = marketKit.tokens(filter)
+            val tokens = marketKit.tokens(filter) + evmTestnetManager.nativeTokens(filter)
             val coinUids = tokens.map { it.coin.uid }
 
             marketKit.fullCoins(coinUids).toMutableList()
         } else {
-            marketKit.fullCoins(filter, 20).toMutableList()
+            marketKit.fullCoins(filter, 20).toMutableList() + evmTestnetManager.nativeTokens(filter).map { it.fullCoin }
         }
     }
 

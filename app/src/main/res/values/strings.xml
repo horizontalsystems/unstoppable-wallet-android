@@ -763,6 +763,7 @@
     <!-- Security Center -->
 
     <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN SETTINGS</string>
+    <string name="SecurityCenter_TestnetSettings">TESTNET SETTINGS</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
     <string name="SecurityCenter_BlockchainSettingsFooterDescription">Select data source for restoring and synchronizing wallet</string>
 
@@ -1094,6 +1095,10 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommended)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Common before 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
+
+    <!-- Testnet Settings -->
+
+    <string name="Testnet_Enable">Enable Testnet</string>
 
     <!-- Tor -->
 
