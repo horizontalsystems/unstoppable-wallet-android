@@ -52,7 +52,9 @@ class ManageAccountsViewModel(
             subtitle = account.type.detailedDescription,
             selected = account == activeAccount,
             backupRequired = !account.isBackedUp,
-            isWatchAccount = account.isWatchAccount
+            isWatchAccount = account.isWatchAccount,
+            migrationRequired = account.nonStandard,
+            migrationRecommended = account.nonRecommended,
         )
 
     fun onSelect(accountViewItem: AccountViewItem) {
