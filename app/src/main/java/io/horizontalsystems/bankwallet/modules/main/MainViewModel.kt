@@ -67,6 +67,7 @@ class MainViewModel(
 
         disposables.add(accountManager.accountsFlowable.subscribe {
             updateTransactionsTabEnabled()
+            updateBadgeVisibility()
         })
 
         rateAppManager.showRateAppObservable
@@ -140,7 +141,7 @@ class MainViewModel(
     }
 
     private fun updateBadgeVisibility() {
-        val visible = !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet)
+        val visible = !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet) || accountManager.hasNonStandardAccount
         setBadgeVisibleLiveData.postValue(visible)
     }
 
