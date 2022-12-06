@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -26,7 +27,8 @@ class MainSettingsService(
     private val pinComponent: IPinComponent,
     private val wc1SessionManager: WC1SessionManager,
     private val wc2SessionManager: WC2SessionManager,
-    private val wc1Manager: WC1Manager
+    private val wc1Manager: WC1Manager,
+    private val accountManager: IAccountManager
 ) {
 
     private val backedUpSubject = BehaviorSubject.create<Boolean>()
@@ -43,6 +45,9 @@ class MainSettingsService(
 
     private val walletConnectSessionCountSubject = BehaviorSubject.create<Int>()
     val walletConnectSessionCountObservable: Observable<Int> get() = walletConnectSessionCountSubject
+
+    val hasNonStandardAccount: Boolean
+        get() = accountManager.hasNonStandardAccount
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 

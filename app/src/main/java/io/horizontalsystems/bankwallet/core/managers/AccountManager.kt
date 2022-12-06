@@ -25,6 +25,9 @@ class AccountManager(
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
     private val activeAccountSubject = PublishSubject.create<Optional<Account>>()
 
+    override val hasNonStandardAccount: Boolean
+        get() = cache.accountsMap.any { it.value.nonStandard }
+
     override val activeAccount: Account?
         get() = cache.activeAccount
 

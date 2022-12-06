@@ -115,6 +115,7 @@ interface IMarketStorage {
 }
 
 interface IAccountManager {
+    val hasNonStandardAccount: Boolean
     val activeAccount: Account?
     val activeAccountObservable: Flowable<Optional<Account>>
     val isAccountsEmpty: Boolean
