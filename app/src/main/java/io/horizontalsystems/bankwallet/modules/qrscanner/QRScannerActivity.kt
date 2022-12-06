@@ -181,12 +181,14 @@ private fun QRScannerScreen(
 @Composable
 private fun ScannerView(onScan: (String) -> Unit) {
     val context = LocalContext.current
-    val barcodeView = CompoundBarcodeView(context).apply {
-        this.initializeFromIntent((context as Activity).intent)
-        this.setStatusText("")
-        this.decodeSingle { result ->
-            result.text?.let { barCodeOrQr ->
-                onScan.invoke(barCodeOrQr)
+    val barcodeView = remember {
+        CompoundBarcodeView(context).apply {
+            this.initializeFromIntent((context as Activity).intent)
+            this.setStatusText("")
+            this.decodeSingle { result ->
+                result.text?.let { barCodeOrQr ->
+                    onScan.invoke(barCodeOrQr)
+                }
             }
         }
     }
