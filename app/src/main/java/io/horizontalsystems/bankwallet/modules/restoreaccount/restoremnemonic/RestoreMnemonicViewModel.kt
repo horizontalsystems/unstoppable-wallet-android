@@ -38,7 +38,7 @@ class RestoreMnemonicViewModel(
     private var language = Language.English
     private var text = ""
     private var cursorPosition = 0
-    private var mnemonicWordList = WordList.wordList(language)
+    private var mnemonicWordList = WordList.wordListStrict(language)
 
 
     var uiState by mutableStateOf(
@@ -119,7 +119,7 @@ class RestoreMnemonicViewModel(
 
     fun setMnemonicLanguage(language: Language) {
         this.language = language
-        mnemonicWordList = WordList.wordList(language)
+        mnemonicWordList = WordList.wordListStrict(language)
         processText()
 
         emitState()
@@ -139,7 +139,7 @@ class RestoreMnemonicViewModel(
             else -> {
                 try {
                     val words = wordItems.map { it.word.normalizeNFKD() }
-                    wordsManager.validateChecksum(words)
+                    wordsManager.validateChecksumStrict(words)
 
                     accountType = AccountType.Mnemonic(words, passphrase.normalizeNFKD())
                     error = null

@@ -13,6 +13,11 @@ class WordsManager(
         mnemonic.validate(words)
     }
 
+    @Throws
+    override fun validateChecksumStrict(words: List<String>) {
+        mnemonic.validateStrict(words)
+    }
+
     override fun isWordValid(word: String): Boolean {
         return mnemonic.isWordValid(word, false)
     }
