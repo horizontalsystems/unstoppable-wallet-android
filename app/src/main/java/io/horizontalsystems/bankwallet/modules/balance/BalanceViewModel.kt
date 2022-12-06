@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -21,7 +22,8 @@ class BalanceViewModel(
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val totalService: TotalService,
     private val balanceViewTypeManager: BalanceViewTypeManager,
-    private val balanceHiddenManager: BalanceHiddenManager
+    private val balanceHiddenManager: BalanceHiddenManager,
+    private val localStorage: ILocalStorage
 ) : ViewModel() {
     private var totalState = createTotalUIState(totalService.stateFlow.value)
     private var viewState: ViewState = ViewState.Loading
@@ -34,7 +36,8 @@ class BalanceViewModel(
             balanceViewItems = balanceViewItems,
             viewState = viewState,
             isRefreshing = isRefreshing,
-            totalState = totalState
+            totalState = totalState,
+            headerNote = HeaderNote.None
         )
     )
         private set
@@ -97,7 +100,8 @@ class BalanceViewModel(
             balanceViewItems = balanceViewItems,
             viewState = viewState,
             isRefreshing = isRefreshing,
-            totalState = totalState
+            totalState = totalState,
+            headerNote = headerNote()
         )
 
         viewModelScope.launch {
@@ -105,6 +109,15 @@ class BalanceViewModel(
         }
     }
 
+    private fun headerNote(): HeaderNote {
+        val account = service.account
+        return when {
+            account == null || localStorage.nonRecommendedAccountAlertDismissedAccounts.contains(account.id) -> HeaderNote.None
+            account.nonStandard -> HeaderNote.NonStandardAccount
+            account.nonRecommended -> HeaderNote.NonRecommendedAccount
+            else -> HeaderNote.None
+        }
+    }
 
     private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>) {
         withContext(Dispatchers.IO) {
@@ -175,6 +188,22 @@ class BalanceViewModel(
         }
     }
 
+    fun onCloseHeaderNote(headerNote: HeaderNote) {
+        when (headerNote) {
+            HeaderNote.NonRecommendedAccount -> {
+                service.account?.let { account ->
+                    localStorage.nonRecommendedAccountAlertDismissedAccounts += account.id
+                    emitState()
+                }
+            }
+            else -> Unit
+        }
+    }
+
+    fun onClickHeaderNote(headerNote: HeaderNote) {
+
+    }
+
     fun disable(viewItem: BalanceViewItem) {
         service.disable(viewItem.wallet)
     }
@@ -209,7 +238,8 @@ data class BalanceUiState(
     val balanceViewItems: List<BalanceViewItem>,
     val viewState: ViewState,
     val isRefreshing: Boolean,
-    val totalState: TotalUIState
+    val totalState: TotalUIState,
+    val headerNote: HeaderNote
 )
 
 sealed class TotalUIState {
@@ -221,4 +251,10 @@ sealed class TotalUIState {
 
     object Hidden : TotalUIState()
 
+}
+
+enum class HeaderNote {
+    None,
+    NonStandardAccount,
+    NonRecommendedAccount
 }

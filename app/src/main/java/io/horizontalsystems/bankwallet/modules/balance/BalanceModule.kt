@@ -34,7 +34,8 @@ object BalanceModule {
                 BalanceViewItemFactory(),
                 TotalService(App.currencyManager, App.marketKit, App.baseTokenManager, App.balanceHiddenManager),
                 App.balanceViewTypeManager,
-                App.balanceHiddenManager
+                App.balanceHiddenManager,
+                App.localStorage
             ) as T
         }
     }
