@@ -33,11 +33,11 @@ data class Account(
         if (type is AccountType.Mnemonic) {
             val words = type.words.joinToString(separator = " ")
             val passphrase = type.passphrase
-            val normalizedWords = normalize(words)
-            val normalizedPassphrase = normalize(passphrase)
+            val normalizedWords = words.normalizeNFKD()
+            val normalizedPassphrase = passphrase.normalizeNFKD()
 
             val validWords = try {
-                Mnemonic().validateStrict(type.words.map { normalize(it) })
+                Mnemonic().validateStrict(type.words.map { it.normalizeNFKD() })
                 true
             } catch (exception: Exception) {
                 false
@@ -58,8 +58,6 @@ data class Account(
             false
         }
     }
-
-    private fun normalize(words: String): String = Normalizer.normalize(words, Normalizer.Form.NFKD)
 
     override fun equals(other: Any?): Boolean {
         if (other is Account) {
@@ -233,13 +231,6 @@ val AccountType.Derivation.description: String
 enum class AccountOrigin(val value: String) : Parcelable {
     Created("Created"),
     Restored("Restored");
-}
-
-@Parcelize
-sealed class AccountCompliance : Parcelable {
-    object Compliant : AccountCompliance()
-    data class MigrationRecommended(val dismissed: Boolean) : AccountCompliance()
-    object MigrationRequired : AccountCompliance()
 }
 
 fun String.normalizeNFKD(): String = Normalizer.normalize(this, Normalizer.Form.NFKD)
