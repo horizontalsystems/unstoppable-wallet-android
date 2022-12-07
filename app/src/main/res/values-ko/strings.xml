@@ -437,6 +437,7 @@
     <string name="Swap_Fee">수수료</string>
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
     <string name="Swap_ErrorNoLiquidity">이 토큰을 스왑할 수 없습니다</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
     <string name="Swap_ErrorHighPriceImpact">높은 가격 영향</string>
     <string name="Swap_Proceed">다음</string>
     <string name="Swap_Revoke">취소</string>
