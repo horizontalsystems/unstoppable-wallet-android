@@ -643,6 +643,7 @@
     <string name="Privacy_BulletedText4">No hay cuentas de usuario o bases de datos que conserven los datos del usuario en otros lugares.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">SETINGOS DE BLOQUEÑA</string>
+    <string name="SecurityCenter_TestnetSettings">TESTNET SETTINGS</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
     <string name="SecurityCenter_BlockchainSettingsFooterDescription">Seleccionar fuente de datos para restaurar y sincronizar cartera</string>
     <!--Evm Network-->
@@ -901,6 +902,8 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">Dirección de caja (recomendado)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Común antes de 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Común después de 2018</string>
+    <!-- Testnet Settings -->
+    <string name="Testnet_Enable">Enable Testnet</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Conexión</string>
     <string name="Tor_Connection_Enable">Activar Tor</string>
