@@ -437,6 +437,7 @@
     <string name="Swap_Fee">Frais</string>
     <string name="Swap_ErrorInsufficientBalance">Solde insuffisant</string>
     <string name="Swap_ErrorNoLiquidity">Impossible d\'échanger ces tokens</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
     <string name="Swap_ErrorHighPriceImpact">Impact élevé sur les prix</string>
     <string name="Swap_Proceed">Suivant</string>
     <string name="Swap_Revoke">Révoquer</string>
