@@ -57,8 +57,8 @@
     <string name="Keyboard">Keyboard</string>
 
     <string name="AccountRecovery_Note">Note</string>
-    <string name="AccountRecovery_MigrationRecommended">Migration Recommended Description</string>
-    <string name="AccountRecovery_MigrationRequired">Migration Required Description</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its secret word list and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRequired">This is non-standard compliant wallet. Please read below for details.\n\nCLICK TO GET MORE INFO</string>
 
     <!--Intro-->
 
