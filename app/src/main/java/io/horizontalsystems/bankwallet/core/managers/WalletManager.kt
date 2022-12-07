@@ -44,8 +44,7 @@ class WalletManager(
     override fun loadWallets() {
         val activeWallets = accountManager.activeAccount?.let { storage.wallets(it) } ?: listOf()
 
-        walletsSet.clear()
-        walletsSet.addAll(activeWallets)
+        setWallets(activeWallets)
         notifyActiveWallets()
     }
 
@@ -87,9 +86,14 @@ class WalletManager(
     private fun handleUpdated(activeAccount: Account?) {
         val activeWallets = activeAccount?.let { storage.wallets(it) } ?: listOf()
 
+        setWallets(activeWallets)
+        notifyActiveWallets()
+    }
+
+    @Synchronized
+    private fun setWallets(activeWallets: List<Wallet>) {
         walletsSet.clear()
         walletsSet.addAll(activeWallets)
-        notifyActiveWallets()
     }
 
     @Synchronized
