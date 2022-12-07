@@ -3,10 +3,7 @@ package io.horizontalsystems.bankwallet.core
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
-import io.horizontalsystems.bankwallet.core.managers.RateUsType
-import io.horizontalsystems.bankwallet.core.managers.TokenInfoService
-import io.horizontalsystems.bankwallet.core.managers.TorManager
+import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -33,7 +30,6 @@ import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.solanakit.models.FullTransaction
-import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -43,6 +39,7 @@ import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
+import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 
 interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>>
@@ -119,6 +116,7 @@ interface IMarketStorage {
 
 interface IAccountManager {
     val activeAccount: Account?
+    val activeAccountStateFlow: Flow<ActiveAccountState>
     val activeAccountObservable: Flowable<Optional<Account>>
     val isAccountsEmpty: Boolean
     val accounts: List<Account>
