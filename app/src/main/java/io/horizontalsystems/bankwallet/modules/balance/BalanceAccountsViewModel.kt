@@ -43,7 +43,7 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
 
 data class AccountViewItem(val manageCoinsAllowed: Boolean, val isWatchAccount: Boolean, val name: String = "", val id: String)
 
-sealed class BalanceScreenState(){
-    class HasAccount(val accountViewItem: AccountViewItem): BalanceScreenState()
-    object NoAccount: BalanceScreenState()
+sealed class BalanceScreenState() {
+    class HasAccount(val accountViewItem: AccountViewItem) : BalanceScreenState()
+    object NoAccount : BalanceScreenState()
 }

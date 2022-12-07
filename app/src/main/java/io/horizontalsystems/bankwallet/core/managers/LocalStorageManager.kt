@@ -420,7 +420,7 @@ class LocalStorageManager(private val preferences: SharedPreferences) : ILocalSt
         }
 
     override var testnetEnabled: Boolean
-        get() = preferences.getBoolean(TESTNET_ENABLED, true)
+        get() = preferences.getBoolean(TESTNET_ENABLED, false)
         set(enabled) {
             preferences.edit().putBoolean(TESTNET_ENABLED, enabled).apply()
         }
