@@ -24,6 +24,9 @@ class AccountManager(
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
     private val activeAccountSubject = PublishSubject.create<Optional<Account>>()
+    private val _activeAccountStateFlow = MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
+
+    override val activeAccountStateFlow = _activeAccountStateFlow
 
     override val activeAccount: Account?
         get() = cache.activeAccount
@@ -51,6 +54,7 @@ class AccountManager(
             storage.activeAccountId = activeAccountId
             cache.activeAccountId = activeAccountId
             activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
+            _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
         }
     }
 
@@ -62,6 +66,7 @@ class AccountManager(
         cache.set(storage.allAccounts())
         cache.activeAccountId = storage.activeAccountId
         activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
+        _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
     }
 
     override fun onHandledBackupRequiredNewAccount() {
@@ -91,6 +96,7 @@ class AccountManager(
         activeAccount?.id?.let {
             if (account.id == it) {
                 activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
+                _activeAccountStateFlow.update { ActiveAccountState.ActiveAccount(activeAccount) }
             }
         }
     }
@@ -151,3 +157,8 @@ class AccountManager(
 }
 
 class NoActiveAccount : Exception()
+
+sealed class ActiveAccountState() {
+    class ActiveAccount(val account: Account?) : ActiveAccountState()
+    object NotLoaded : ActiveAccountState()
+}

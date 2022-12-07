@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.balance.BalanceAccountsViewModel
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
+import io.horizontalsystems.bankwallet.modules.balance.BalanceScreenState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -178,7 +179,7 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
                                     filterCoin,
                                     filterType,
                                     filterBlockchain,
-                                    accountsViewModel.accountViewItem?.id,
+                                    (accountsViewModel.balanceScreenState as? BalanceScreenState.HasAccount)?.accountViewItem?.id,
                                     saver = LazyListState.Saver
                                 ) {
                                     LazyListState(0, 0)
