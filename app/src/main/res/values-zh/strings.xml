@@ -437,6 +437,7 @@
     <string name="Swap_Fee">费用</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <string name="Swap_ErrorNoLiquidity">订单深度不足</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
     <string name="Swap_ErrorHighPriceImpact">高价格影响</string>
     <string name="Swap_Proceed">继续</string>
     <string name="Swap_Revoke">撤回</string>
