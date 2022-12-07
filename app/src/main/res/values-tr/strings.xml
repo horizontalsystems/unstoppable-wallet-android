@@ -437,6 +437,7 @@
     <string name="Swap_Fee">Masraf</string>
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
     <string name="Swap_ErrorNoLiquidity">Bu token swap edilemez</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
     <string name="Swap_ErrorHighPriceImpact">Yüksek fiyat etkisi</string>
     <string name="Swap_Proceed">İleri</string>
     <string name="Swap_Revoke">İptal et</string>
