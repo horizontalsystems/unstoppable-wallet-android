@@ -7,6 +7,8 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOp
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.uniswapkit.TradeError
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeType
@@ -280,9 +282,27 @@ class UniswapTradeService(
             val tradeData = uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
             handle(tradeData)
         } catch (e: Throwable) {
-            state = State.NotReady(listOf(e))
+            val error = when {
+                e is TradeError.TradeNotFound && isEthWrapping(tokenFrom, tokenTo) -> TradeServiceError.WrapUnwrapNotAllowed
+                else -> e
+            }
+            state = State.NotReady(listOf(error))
         }
     }
+
+    private val wethAddressHex = uniswapProvider.wethAddress.hex
+    private val Token.isWeth: Boolean
+        get() = (type as? TokenType.Eip20)?.address?.equals(wethAddressHex, ignoreCase = true) ?: false
+    private val Token.isNative: Boolean
+        get() = type == TokenType.Native
+
+    private fun isEthWrapping(tokenFrom: Token?, tokenTo: Token?) =
+        when {
+            tokenFrom == null || tokenTo == null -> false
+            else -> {
+                tokenFrom.isNative && tokenTo.isWeth || tokenTo.isNative && tokenFrom.isWeth
+            }
+        }
 
     private fun handle(tradeData: TradeData) {
         when (tradeData.type) {
@@ -305,6 +325,10 @@ class UniswapTradeService(
         object Loading : State()
         class Ready(val trade: Trade) : State()
         class NotReady(val errors: List<Throwable> = listOf()) : State()
+    }
+
+    sealed class TradeServiceError : Throwable() {
+        object WrapUnwrapNotAllowed : TradeServiceError()
     }
 
     enum class PriceImpactLevel {

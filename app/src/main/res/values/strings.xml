@@ -515,6 +515,7 @@
     <string name="Swap_Fee">Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
     <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
     <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_Proceed">Next</string>
     <string name="Swap_Revoke">Revoke</string>
