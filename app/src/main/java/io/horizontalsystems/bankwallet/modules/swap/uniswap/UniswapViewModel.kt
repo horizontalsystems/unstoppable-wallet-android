@@ -170,6 +170,9 @@ class UniswapViewModel(
             is TradeError.TradeNotFound -> {
                 Translator.getString(R.string.Swap_ErrorNoLiquidity)
             }
+            UniswapTradeService.TradeServiceError.WrapUnwrapNotAllowed -> {
+                Translator.getString(R.string.Swap_ErrorWrapUnwrapNotAllowed)
+            }
             else -> {
                 convertedError.message ?: convertedError.javaClass.simpleName
             }
