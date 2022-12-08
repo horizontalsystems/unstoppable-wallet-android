@@ -66,7 +66,9 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
             try {
                 val tokens = addTokenService.getTokens(text)
 
-                this@AddTokenViewModel.tokens = tokens.map {
+                val filteredTokens = tokens.filter { it.supported }
+
+                this@AddTokenViewModel.tokens = filteredTokens.map {
                     TokenInfoUiState(
                         tokenInfo = it,
                         title = it.tokenQuery.protocolType ?: "",
@@ -80,6 +82,16 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                 coinName = tokenInfo?.coinName
                 coinCode = tokenInfo?.coinCode
                 decimals = tokenInfo?.decimals
+
+                if (filteredTokens.isEmpty() && tokenInfo?.supported == false) {
+                    caution = Caution(
+                        Translator.getString(
+                            R.string.ManageCoins_NotSupportedDescription,
+                            addTokenService.accountType?.description ?: "",
+                            coinName ?: "",
+                        ), Caution.Type.Warning
+                    )
+                }
             } catch (e: Exception) {
                 caution = Caution(getErrorText(e), Caution.Type.Error)
             }

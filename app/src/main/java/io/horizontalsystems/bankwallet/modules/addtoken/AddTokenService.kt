@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.customCoinUid
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 
@@ -17,6 +15,8 @@ class AddTokenService(
     private val accountManager: IAccountManager,
     private val marketKit: MarketKitWrapper
 ) {
+
+    val accountType = accountManager.activeAccount?.type
 
     suspend fun getTokens(reference: String): List<TokenInfo> {
         if (reference.isEmpty()) return listOf()
@@ -32,11 +32,13 @@ class AddTokenService(
 
             if (token != null) {
                 val inWallet = activeWallets.any { it.token == token }
-                tokenInfos.add(TokenInfo.Local(token, inWallet))
+                val supported = isSupported(token.blockchainType)
+                tokenInfos.add(TokenInfo.Local(token, inWallet, supported))
             } else {
                 try {
                     val customCoin = service.customCoin(reference)
-                    tokenInfos.add(TokenInfo.Remote(customCoin))
+                    val supported = isSupported(customCoin.tokenQuery.blockchainType)
+                    tokenInfos.add(TokenInfo.Remote(customCoin, supported))
                 } catch (e: Exception) {
                 }
             }
@@ -73,6 +75,9 @@ class AddTokenService(
         walletManager.save(wallets)
     }
 
+    private fun isSupported(blockchainType: BlockchainType) =
+        accountType?.let { blockchainType.supports(it) } ?: false
+
     sealed class TokenError : Exception() {
         object InvalidReference : TokenError()
         object NotFound : TokenError()
@@ -85,15 +90,23 @@ sealed class TokenInfo {
     abstract val decimals: Int
     abstract val tokenQuery: TokenQuery
     abstract val inWallet: Boolean
+    abstract val supported: Boolean
 
-    data class Local(val token: Token, override val inWallet: Boolean) : TokenInfo() {
+    data class Local(
+        val token: Token,
+        override val inWallet: Boolean,
+        override val supported: Boolean
+    ) : TokenInfo() {
         override val coinName = token.coin.name
         override val coinCode = token.coin.code
         override val decimals = token.decimals
         override val tokenQuery = token.tokenQuery
     }
 
-    data class Remote(val customCoin: AddTokenModule.CustomCoin) : TokenInfo() {
+    data class Remote(
+        val customCoin: AddTokenModule.CustomCoin,
+        override val supported: Boolean
+    ) : TokenInfo() {
         override val inWallet = false
         override val coinName = customCoin.name
         override val coinCode = customCoin.code
