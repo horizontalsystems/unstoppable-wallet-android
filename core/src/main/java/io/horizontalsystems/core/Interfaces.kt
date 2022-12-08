@@ -59,6 +59,7 @@ interface ILanguageManager {
     var currentLocale: Locale
     var currentLocaleTag: String
     val currentLanguageName: String
+    val currentLanguage: String
 
     fun getName(tag: String): String
     fun getNativeName(tag: String): String
