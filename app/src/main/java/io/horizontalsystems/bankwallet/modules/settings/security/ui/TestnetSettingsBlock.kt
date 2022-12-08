@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,7 +21,6 @@ fun TestnetSettingsBlock(viewModel: TestnetSettingsViewModel) {
                 modifier = Modifier.padding(horizontal = 16.dp),
                 verticalPadding = 0.dp,
             ) {
-                Spacer(Modifier.width(16.dp))
                 Column(Modifier.padding(vertical = 12.dp)) {
                     body_leah(text = stringResource(R.string.Testnet_Enable))
                     Spacer(Modifier.height(1.dp))
