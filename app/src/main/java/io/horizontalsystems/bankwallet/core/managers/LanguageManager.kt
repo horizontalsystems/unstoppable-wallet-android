@@ -24,6 +24,9 @@ class LanguageManager : ILanguageManager {
     override val currentLanguageName: String
         get() = getName(currentLocaleTag)
 
+    override val currentLanguage: String
+        get() = currentLocale.language
+
     override fun getName(tag: String): String {
         return Locale.forLanguageTag(tag)
             .getDisplayName(currentLocale)
