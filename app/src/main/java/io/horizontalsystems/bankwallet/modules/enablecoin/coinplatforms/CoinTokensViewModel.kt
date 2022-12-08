@@ -11,7 +11,8 @@ import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 
 class CoinTokensViewModel(
-    private val service: CoinTokensService
+    private val service: CoinTokensService,
+    private val accountManager: IAccountManager
 ) : ViewModel() {
     val openSelectorEvent = SingleLiveEvent<BottomSheetSelectorMultipleDialog.Config>()
 
@@ -28,14 +29,26 @@ class CoinTokensViewModel(
     private fun handle(request: CoinTokensService.Request) {
         currentRequest = request
         val fullCoin = request.fullCoin
-        val selectedTokenIndexes = if (request.currentTokens.isEmpty()) listOf(0) else request.currentTokens.map { fullCoin.supportedTokens.indexOf(it) }
+
+        val supportedTokens = fullCoin.supportedTokens.filter { token ->
+            accountManager.activeAccount?.type?.let {
+                token.blockchainType.supports(it)
+            } ?: false
+        }
+
+        val selectedTokenIndexes =
+            if (request.currentTokens.isEmpty())
+                listOf(0)
+            else
+                request.currentTokens.map { supportedTokens.indexOf(it) }
+
         val config = BottomSheetSelectorMultipleDialog.Config(
             icon = ImageSource.Remote(fullCoin.coin.iconUrl, fullCoin.iconPlaceholder),
             title = fullCoin.coin.code,
             description = if (fullCoin.supportedTokens.size > 1) Translator.getString(R.string.CoinPlatformsSelector_Description) else null,
             selectedIndexes = selectedTokenIndexes,
             allowEmpty = request.allowEmpty,
-            viewItems = fullCoin.supportedTokens.map { token ->
+            viewItems = supportedTokens.map { token ->
                 BottomSheetSelectorViewItem(
                     title = token.protocolInfo,
                     subtitle = token.typeInfo,
