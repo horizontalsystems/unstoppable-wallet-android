@@ -29,14 +29,10 @@ import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityViewItem
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
-import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartTvlFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
-import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.ProFeaturesBanner
 import io.horizontalsystems.bankwallet.modules.profeatures.yakauthorization.YakAuthorizationViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -70,42 +66,42 @@ fun CoinDetailsScreen(
                     val detailBlocks: MutableList<@Composable (borderTop: Boolean) -> Unit> = mutableListOf()
 
                     viewItem?.let { viewItem ->
-                        if (!viewItem.proChartsActivated) {
-                            detailBlocks.add {
-                                ProFeaturesBanner(
-                                    stringResource(R.string.CoinPage_NftBannerTitle),
-                                    stringResource(R.string.CoinPage_NftBannerDescription)
-                                ) { authorizationViewModel.onBannerClick() }
-                            }
-                        }
-
-                        viewItem.tokenLiquidityViewItem?.let {
-                            detailBlocks.add { borderTop ->
-                                TokenLiquidity(
-                                    coinUid = fullCoin.coin.uid,
-                                    viewItem = viewItem,
-                                    tokenLiquidityViewItem = it,
-                                    borderTop = borderTop,
-                                    navController = navController,
-                                    fragmentManager = fragmentManager,
-                                    onBannerClick = { authorizationViewModel.onBannerClick() }
-                                )
-                            }
-                        }
-
-                        viewItem.tokenDistributionViewItem?.let {
-                            detailBlocks.add { borderTop ->
-                                TokenDistribution(
-                                    coinUid = fullCoin.coin.uid,
-                                    viewItem = viewItem,
-                                    tokenDistributionViewItem = it,
-                                    borderTop = borderTop,
-                                    navController = navController,
-                                    fragmentManager = fragmentManager,
-                                    onBannerClick = { authorizationViewModel.onBannerClick() }
-                                )
-                            }
-                        }
+//                        if (!viewItem.proChartsActivated) {
+//                            detailBlocks.add {
+//                                ProFeaturesBanner(
+//                                    stringResource(R.string.CoinPage_NftBannerTitle),
+//                                    stringResource(R.string.CoinPage_NftBannerDescription)
+//                                ) { authorizationViewModel.onBannerClick() }
+//                            }
+//                        }
+//
+//                        viewItem.tokenLiquidityViewItem?.let {
+//                            detailBlocks.add { borderTop ->
+//                                TokenLiquidity(
+//                                    coinUid = fullCoin.coin.uid,
+//                                    viewItem = viewItem,
+//                                    tokenLiquidityViewItem = it,
+//                                    borderTop = borderTop,
+//                                    navController = navController,
+//                                    fragmentManager = fragmentManager,
+//                                    onBannerClick = { authorizationViewModel.onBannerClick() }
+//                                )
+//                            }
+//                        }
+//
+//                        viewItem.tokenDistributionViewItem?.let {
+//                            detailBlocks.add { borderTop ->
+//                                TokenDistribution(
+//                                    coinUid = fullCoin.coin.uid,
+//                                    viewItem = viewItem,
+//                                    tokenDistributionViewItem = it,
+//                                    borderTop = borderTop,
+//                                    navController = navController,
+//                                    fragmentManager = fragmentManager,
+//                                    onBannerClick = { authorizationViewModel.onBannerClick() }
+//                                )
+//                            }
+//                        }
 
                         if (viewItem.tvlChart != null || viewItem.tvlRank != null || viewItem.tvlRatio != null) {
                             detailBlocks.add { borderTop ->
@@ -265,186 +261,186 @@ private fun SecurityParameters(
     Spacer(modifier = Modifier.height(24.dp))
 }
 
-@Composable
-private fun TokenLiquidity(
-    coinUid: String,
-    viewItem: ViewItem,
-    tokenLiquidityViewItem: CoinDetailsModule.TokenLiquidityViewItem,
-    borderTop: Boolean,
-    navController: NavController,
-    fragmentManager: FragmentManager,
-    onBannerClick: () -> Unit
-) {
-    if (tokenLiquidityViewItem.liquidity == null && tokenLiquidityViewItem.volume == null) return
-
-    CellSingleLineClear(borderTop = borderTop) {
-        Text(
-            text = stringResource(R.string.CoinPage_TokenLiquidity),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
-        )
-        Spacer(Modifier.weight(1f))
-        HsIconButton(
-            modifier = Modifier.size(20.dp),
-            onClick = {
-                navController.slideFromBottom(R.id.tokenLiquidityInfoFragment)
-            }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = "info button",
-                tint = ComposeAppTheme.colors.grey
-            )
-        }
-    }
-
-    Spacer(modifier = Modifier.height(12.dp))
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 12.dp, end = 12.dp)
-    ) {
-        tokenLiquidityViewItem.volume?.let {
-            MiniProChartCard(
-                chartType = ProChartModule.ChartType.DexVolume,
-                halfWidth = tokenLiquidityViewItem.liquidity != null,
-                proChartsActivated = viewItem.proChartsActivated,
-                chartViewItem = it,
-                title = stringResource(id = R.string.CoinPage_DetailsDexVolume),
-                description = stringResource(id = R.string.CoinPage_DetailsDexVolume_Description),
-                fragmentManager = fragmentManager,
-                coinUid = coinUid,
-                onBannerClick = onBannerClick
-            )
-        }
-
-        tokenLiquidityViewItem.liquidity?.let {
-            MiniProChartCard(
-                chartType = ProChartModule.ChartType.DexLiquidity,
-                halfWidth = false,
-                proChartsActivated = viewItem.proChartsActivated,
-                chartViewItem = it,
-                title = stringResource(id = R.string.CoinPage_DetailsDexLiquidity),
-                description = stringResource(id = R.string.CoinPage_DetailsDexLiquidity_Description),
-                fragmentManager = fragmentManager,
-                coinUid = coinUid,
-                onBannerClick = onBannerClick
-            )
-        }
-    }
-
-    Spacer(modifier = Modifier.height(24.dp))
-}
-
-@Composable
-private fun TokenDistribution(
-    coinUid: String,
-    viewItem: ViewItem,
-    tokenDistributionViewItem: CoinDetailsModule.TokenDistributionViewItem,
-    borderTop: Boolean,
-    navController: NavController,
-    fragmentManager: FragmentManager,
-    onBannerClick: () -> Unit
-) {
-    if (!tokenDistributionViewItem.hasMajorHolders && tokenDistributionViewItem.txCount == null && tokenDistributionViewItem.txVolume == null && tokenDistributionViewItem.activeAddresses == null) return
-
-    CellSingleLineClear(borderTop = borderTop) {
-        Text(
-            text = stringResource(R.string.CoinPage_TokenDistribution),
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.leah,
-        )
-        Spacer(Modifier.weight(1f))
-        HsIconButton(
-            modifier = Modifier.size(20.dp),
-            onClick = {
-                navController.slideFromBottom(R.id.tokenDistributionInfoFragment)
-            }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = "info button",
-                tint = ComposeAppTheme.colors.grey
-            )
-        }
-    }
-
-    if (tokenDistributionViewItem.txCount != null || tokenDistributionViewItem.txVolume != null) {
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp)
-        ) {
-            tokenDistributionViewItem.txCount?.let {
-                MiniProChartCard(
-                    chartType = ProChartModule.ChartType.TxCount,
-                    halfWidth = tokenDistributionViewItem.txVolume != null,
-                    proChartsActivated = viewItem.proChartsActivated,
-                    chartViewItem = it,
-                    title = stringResource(id = R.string.CoinPage_DetailsTxCount),
-                    description = stringResource(id = R.string.CoinPage_DetailsTxCount_Description),
-                    fragmentManager = fragmentManager,
-                    coinUid = coinUid,
-                    onBannerClick = onBannerClick
-                )
-            }
-
-            tokenDistributionViewItem.txVolume?.let {
-                MiniProChartCard(
-                    ProChartModule.ChartType.TxVolume,
-                    false,
-                    viewItem.proChartsActivated,
-                    it,
-                    stringResource(id = R.string.CoinPage_DetailsTxVolume),
-                    stringResource(id = R.string.CoinPage_DetailsTxVolume_Description),
-                    fragmentManager = fragmentManager,
-                    coinUid = coinUid,
-                    onBannerClick = onBannerClick
-                )
-            }
-        }
-    }
-
-    tokenDistributionViewItem.activeAddresses?.let {
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp)
-        ) {
-            MiniProChartCard(
-                chartType = ProChartModule.ChartType.AddressesCount,
-                halfWidth = false,
-                proChartsActivated = viewItem.proChartsActivated,
-                chartViewItem = it,
-                title = stringResource(id = R.string.CoinPage_DetailsActiveAddresses),
-                description = stringResource(id = R.string.CoinPage_DetailsActiveAddresses_Description),
-                fragmentManager = fragmentManager,
-                coinUid = coinUid,
-                onBannerClick = onBannerClick
-            )
-        }
-    }
-
-    if (tokenDistributionViewItem.hasMajorHolders) {
-        Spacer(modifier = Modifier.height(12.dp))
-
-        CellSingleLineLawrenceSection {
-            CoinDetailsCell(
-                title = stringResource(R.string.CoinPage_MajorHolders),
-                value = null,
-                onClick = {
-                    val arguments = CoinMajorHoldersFragment.prepareParams(coinUid)
-                    navController.slideFromRight(R.id.coinMajorHoldersFragment, arguments)
-                }
-            )
-        }
-    }
-
-    Spacer(modifier = Modifier.height(24.dp))
-}
+//@Composable
+//private fun TokenLiquidity(
+//    coinUid: String,
+//    viewItem: ViewItem,
+//    tokenLiquidityViewItem: CoinDetailsModule.TokenLiquidityViewItem,
+//    borderTop: Boolean,
+//    navController: NavController,
+//    fragmentManager: FragmentManager,
+//    onBannerClick: () -> Unit
+//) {
+//    if (tokenLiquidityViewItem.liquidity == null && tokenLiquidityViewItem.volume == null) return
+//
+//    CellSingleLineClear(borderTop = borderTop) {
+//        Text(
+//            text = stringResource(R.string.CoinPage_TokenLiquidity),
+//            style = ComposeAppTheme.typography.body,
+//            color = ComposeAppTheme.colors.leah,
+//        )
+//        Spacer(Modifier.weight(1f))
+//        HsIconButton(
+//            modifier = Modifier.size(20.dp),
+//            onClick = {
+//                navController.slideFromBottom(R.id.tokenLiquidityInfoFragment)
+//            }) {
+//            Icon(
+//                painter = painterResource(id = R.drawable.ic_info_20),
+//                contentDescription = "info button",
+//                tint = ComposeAppTheme.colors.grey
+//            )
+//        }
+//    }
+//
+//    Spacer(modifier = Modifier.height(12.dp))
+//
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(start = 12.dp, end = 12.dp)
+//    ) {
+//        tokenLiquidityViewItem.volume?.let {
+//            MiniProChartCard(
+//                chartType = ProChartModule.ChartType.DexVolume,
+//                halfWidth = tokenLiquidityViewItem.liquidity != null,
+//                proChartsActivated = viewItem.proChartsActivated,
+//                chartViewItem = it,
+//                title = stringResource(id = R.string.CoinPage_DetailsDexVolume),
+//                description = stringResource(id = R.string.CoinPage_DetailsDexVolume_Description),
+//                fragmentManager = fragmentManager,
+//                coinUid = coinUid,
+//                onBannerClick = onBannerClick
+//            )
+//        }
+//
+//        tokenLiquidityViewItem.liquidity?.let {
+//            MiniProChartCard(
+//                chartType = ProChartModule.ChartType.DexLiquidity,
+//                halfWidth = false,
+//                proChartsActivated = viewItem.proChartsActivated,
+//                chartViewItem = it,
+//                title = stringResource(id = R.string.CoinPage_DetailsDexLiquidity),
+//                description = stringResource(id = R.string.CoinPage_DetailsDexLiquidity_Description),
+//                fragmentManager = fragmentManager,
+//                coinUid = coinUid,
+//                onBannerClick = onBannerClick
+//            )
+//        }
+//    }
+//
+//    Spacer(modifier = Modifier.height(24.dp))
+//}
+//
+//@Composable
+//private fun TokenDistribution(
+//    coinUid: String,
+//    viewItem: ViewItem,
+//    tokenDistributionViewItem: CoinDetailsModule.TokenDistributionViewItem,
+//    borderTop: Boolean,
+//    navController: NavController,
+//    fragmentManager: FragmentManager,
+//    onBannerClick: () -> Unit
+//) {
+//    if (!tokenDistributionViewItem.hasMajorHolders && tokenDistributionViewItem.txCount == null && tokenDistributionViewItem.txVolume == null && tokenDistributionViewItem.activeAddresses == null) return
+//
+//    CellSingleLineClear(borderTop = borderTop) {
+//        Text(
+//            text = stringResource(R.string.CoinPage_TokenDistribution),
+//            style = ComposeAppTheme.typography.body,
+//            color = ComposeAppTheme.colors.leah,
+//        )
+//        Spacer(Modifier.weight(1f))
+//        HsIconButton(
+//            modifier = Modifier.size(20.dp),
+//            onClick = {
+//                navController.slideFromBottom(R.id.tokenDistributionInfoFragment)
+//            }) {
+//            Icon(
+//                painter = painterResource(id = R.drawable.ic_info_20),
+//                contentDescription = "info button",
+//                tint = ComposeAppTheme.colors.grey
+//            )
+//        }
+//    }
+//
+//    if (tokenDistributionViewItem.txCount != null || tokenDistributionViewItem.txVolume != null) {
+//        Spacer(modifier = Modifier.height(12.dp))
+//
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(start = 12.dp, end = 12.dp)
+//        ) {
+//            tokenDistributionViewItem.txCount?.let {
+//                MiniProChartCard(
+//                    chartType = ProChartModule.ChartType.TxCount,
+//                    halfWidth = tokenDistributionViewItem.txVolume != null,
+//                    proChartsActivated = viewItem.proChartsActivated,
+//                    chartViewItem = it,
+//                    title = stringResource(id = R.string.CoinPage_DetailsTxCount),
+//                    description = stringResource(id = R.string.CoinPage_DetailsTxCount_Description),
+//                    fragmentManager = fragmentManager,
+//                    coinUid = coinUid,
+//                    onBannerClick = onBannerClick
+//                )
+//            }
+//
+//            tokenDistributionViewItem.txVolume?.let {
+//                MiniProChartCard(
+//                    ProChartModule.ChartType.TxVolume,
+//                    false,
+//                    viewItem.proChartsActivated,
+//                    it,
+//                    stringResource(id = R.string.CoinPage_DetailsTxVolume),
+//                    stringResource(id = R.string.CoinPage_DetailsTxVolume_Description),
+//                    fragmentManager = fragmentManager,
+//                    coinUid = coinUid,
+//                    onBannerClick = onBannerClick
+//                )
+//            }
+//        }
+//    }
+//
+//    tokenDistributionViewItem.activeAddresses?.let {
+//        Spacer(modifier = Modifier.height(8.dp))
+//
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(start = 12.dp, end = 12.dp)
+//        ) {
+//            MiniProChartCard(
+//                chartType = ProChartModule.ChartType.AddressesCount,
+//                halfWidth = false,
+//                proChartsActivated = viewItem.proChartsActivated,
+//                chartViewItem = it,
+//                title = stringResource(id = R.string.CoinPage_DetailsActiveAddresses),
+//                description = stringResource(id = R.string.CoinPage_DetailsActiveAddresses_Description),
+//                fragmentManager = fragmentManager,
+//                coinUid = coinUid,
+//                onBannerClick = onBannerClick
+//            )
+//        }
+//    }
+//
+//    if (tokenDistributionViewItem.hasMajorHolders) {
+//        Spacer(modifier = Modifier.height(12.dp))
+//
+//        CellSingleLineLawrenceSection {
+//            CoinDetailsCell(
+//                title = stringResource(R.string.CoinPage_MajorHolders),
+//                value = null,
+//                onClick = {
+//                    val arguments = CoinMajorHoldersFragment.prepareParams(coinUid)
+//                    navController.slideFromRight(R.id.coinMajorHoldersFragment, arguments)
+//                }
+//            )
+//        }
+//    }
+//
+//    Spacer(modifier = Modifier.height(24.dp))
+//}
 
 @Composable
 private fun InvestorData(
@@ -556,39 +552,39 @@ private fun SecurityParamsCell(viewItem: SecurityViewItem) {
     }
 }
 
-@Composable
-private fun MiniProChartCard(
-    chartType: ProChartModule.ChartType,
-    halfWidth: Boolean,
-    proChartsActivated: Boolean,
-    chartViewItem: CoinDetailsModule.ChartViewItem,
-    title: String,
-    description: String,
-    fragmentManager: FragmentManager,
-    coinUid: String,
-    onBannerClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth(if (halfWidth) 0.5F else 1F)
-    ) {
-        MiniChartCard(
-            title = title,
-            chartViewItem = chartViewItem,
-            paddingValues = PaddingValues(start = 4.dp, end = 4.dp),
-            onClick = {
-                if (proChartsActivated) {
-                    ProChartFragment.show(
-                        fragmentManager,
-                        coinUid,
-                        chartType,
-                        title,
-                        description
-                    )
-                } else {
-                    onBannerClick()
-                }
-            }
-        )
-    }
-}
+//@Composable
+//private fun MiniProChartCard(
+//    chartType: ProChartModule.ChartType,
+//    halfWidth: Boolean,
+//    proChartsActivated: Boolean,
+//    chartViewItem: CoinDetailsModule.ChartViewItem,
+//    title: String,
+//    description: String,
+//    fragmentManager: FragmentManager,
+//    coinUid: String,
+//    onBannerClick: () -> Unit
+//) {
+//    Box(
+//        modifier = Modifier
+//            .fillMaxWidth(if (halfWidth) 0.5F else 1F)
+//    ) {
+//        MiniChartCard(
+//            title = title,
+//            chartViewItem = chartViewItem,
+//            paddingValues = PaddingValues(start = 4.dp, end = 4.dp),
+//            onClick = {
+//                if (proChartsActivated) {
+//                    ProChartFragment.show(
+//                        fragmentManager,
+//                        coinUid,
+//                        chartType,
+//                        title,
+//                        description
+//                    )
+//                } else {
+//                    onBannerClick()
+//                }
+//            }
+//        )
+//    }
+//}
