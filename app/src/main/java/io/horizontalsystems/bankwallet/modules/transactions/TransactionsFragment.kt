@@ -8,11 +8,9 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -233,8 +231,20 @@ fun TransactionList(
                 DateHeader(dateHeader)
             }
 
-            items(transactions) { item ->
-                TransactionCell(item) { onClick.invoke(item) }
+            val itemsCount = transactions.size
+            val singleElement = itemsCount == 1
+
+            itemsIndexed(transactions) { index, item ->
+                val position: SectionItemPosition? = when {
+                    singleElement -> null
+                    index == 0 -> SectionItemPosition.First
+                    index == itemsCount - 1 -> SectionItemPosition.Last
+                    else -> SectionItemPosition.Middle
+                }
+
+                Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    TransactionCell(item, position) { onClick.invoke(item) }
+                }
 
                 willShow.invoke(item)
 
@@ -242,10 +252,14 @@ fun TransactionList(
                     onBottomReached.invoke()
                 }
             }
+
+            item {
+                Spacer(modifier = Modifier.height(12.dp))
+            }
         }
 
         item {
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
@@ -260,7 +274,7 @@ private fun getBottomReachedUid(transactionsMap: Map<String, List<TransactionVie
 
 @Composable
 fun DateHeader(dateHeader: String) {
-    HeaderSorting(borderTop = false, borderBottom = true) {
+    HeaderSorting {
         subhead1_grey(
             modifier = Modifier.padding(horizontal = 16.dp),
             text = dateHeader,
@@ -270,14 +284,23 @@ fun DateHeader(dateHeader: String) {
 }
 
 @Composable
-fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
+fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition?, onClick: () -> Unit) {
+    val divider = position == SectionItemPosition.Middle || position == SectionItemPosition.Last
     CellMultilineClear(
-        borderBottom = true,
+        borderTop = divider,
         height = 64.dp,
         onClick = onClick
     ) {
+        val borderModifier = if (position != null) {
+            Modifier.sectionItemBorder(1.dp, ComposeAppTheme.colors.steel20, 12.dp, position)
+        } else {
+            Modifier.border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+        }
+
         Row(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .then(borderModifier),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
