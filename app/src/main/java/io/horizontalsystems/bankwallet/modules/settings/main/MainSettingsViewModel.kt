@@ -16,7 +16,7 @@ class MainSettingsViewModel(
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
-    val manageWalletShowAlertLiveData = MutableLiveData(!service.allBackedUp)
+    val manageWalletShowAlertLiveData = MutableLiveData(shouldShowAlertForManageWallet(service.allBackedUp, service.hasNonStandardAccount))
     val securityCenterShowAlertLiveData = MutableLiveData(!service.isPinSet)
     val aboutAppShowAlertLiveData = MutableLiveData(!service.termsAccepted)
     val wcCounterLiveData = MutableLiveData<CounterType?>(null)
@@ -35,7 +35,7 @@ class MainSettingsViewModel(
         }
 
         service.backedUpObservable
-            .subscribeIO { manageWalletShowAlertLiveData.postValue(!it) }
+            .subscribeIO { manageWalletShowAlertLiveData.postValue(shouldShowAlertForManageWallet(it, service.hasNonStandardAccount)) }
             .let { disposables.add(it) }
 
         service.pinSetObservable
@@ -62,6 +62,10 @@ class MainSettingsViewModel(
         syncCounter()
         service.start()
     }
+    private fun shouldShowAlertForManageWallet(allBackedUp: Boolean, hasNonStandardAccount: Boolean): Boolean {
+        return !allBackedUp || hasNonStandardAccount
+    }
+    // ViewModel
 
     override fun onCleared() {
         service.stop()

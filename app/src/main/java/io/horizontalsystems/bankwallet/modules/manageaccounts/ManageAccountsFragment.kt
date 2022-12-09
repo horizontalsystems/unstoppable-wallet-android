@@ -183,6 +183,8 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                 body_leah(text = accountViewItem.title)
                 if (accountViewItem.backupRequired) {
                     subhead2_lucian(text = stringResource(id = R.string.ManageAccount_BackupRequired_Title))
+                } else if (accountViewItem.migrationRequired) {
+                    subhead2_lucian(text = stringResource(id = R.string.ManageAccount_MigrationRequired_Title))
                 } else {
                     subhead2_grey(
                         text = accountViewItem.subtitle,
@@ -201,7 +203,11 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
 
             val icon: Int
             val iconTint: Color
-            if (accountViewItem.backupRequired) {
+            if (
+                accountViewItem.backupRequired
+                || accountViewItem.migrationRequired
+                || accountViewItem.migrationRecommended
+            ) {
                 icon = R.drawable.icon_warning_2_20
                 iconTint = ComposeAppTheme.colors.lucian
             } else {

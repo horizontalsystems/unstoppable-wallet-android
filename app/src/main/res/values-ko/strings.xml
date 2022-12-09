@@ -42,6 +42,11 @@
     <string name="SyncError">동기화 오류입니다. 다시 시도하십시오</string>
     <string name="PercentTitle">퍼센트율</string>
     <string name="Keyboard">키보드</string>
+
+    <string name="AccountRecovery_Note">노트</string>
+    <string name="AccountRecovery_MigrationRecommended">이 지갑은 비밀 단어 목록 및/또는 암호 문구에 비표준 문자를 사용하는 것 같습니다. 잔액이나 거래 내역이 보이지 않으면 아래에서 자세한 내용을 읽어보세요.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
+    <string name="AccountRecovery_MigrationRequired">비표준 호환 지갑입니다. 자세한 내용은 아래를 참조하십시오.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
+
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">풀린 자산</string>
@@ -97,6 +102,8 @@
     <string name="Restore_PrivateKey">개인 암호</string>
     <string name="Restore_PrivateKeyHint">EVM 개인 키, BIP32 Root Key 또는 Account Extended Private Key 입력</string>
     <string name="Restore_PhraseHint">12, 15, 18, 21 또는 24단어 입력</string>
+    <string name="Restore_NonStandardRestore">비표준 복원</string>
+    <string name="Restore_NonStandard_Description">이 페이지는 비표준 지갑을 가지고 있는 Unstoppable 사용자를 위한 특별한 지갑 복원 메커니즘을 제공합니다. 일반적으로 이러한 지갑은 Unstoppable 버전 0.27 - 0.28에서 영어가 아닌 니모닉 단어 목록 및/또는 지갑 암호의 특수 문자(예: 분음 부호)를 사용하여 생성되었을 수 있습니다.\n영향을 받는 사용자인 경우 버전 0.29로 업데이트하면 지갑 잔액이 0으로 표시됩니다. 이 페이지에서는 비표준 지갑에 대한 액세스를 복원할 수 있습니다. 복원되면 새 지갑(표준 준수)을 만들고 그곳으로 자금을 옮기는 것이 좋습니다.</string>
     <string name="Restore_PrivateKey_InvalidKey">잘못된 암호입니다</string>
     <string name="Select_Coins">코인 선택하기</string>
     <string name="Restore_BirthdayHeight">생일 신장</string>
@@ -782,6 +789,7 @@
     <string name="ManageAccount_BackupRequired_Description">%2$s를 받기 전에 %1$s를 백업해야 합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">장치에서 이 지갑을 삭제합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">이 지갑의 개인 암호를 백업하지 않으면 귀하께서는 자금 접근을 하지 못합니다.</string>
+    <string name="ManageAccount_MigrationRequired_Title">마이그레이션 필요</string>
     <string name="ManageAccount_BirthdayHeight">생일 높이 %s</string>
     <string name="ManageAccount_NWords">%s 단어</string>
     <string name="ManageAccount_NWordsWithPassphrase">암호 문구로 이루어진 %s 단어</string>

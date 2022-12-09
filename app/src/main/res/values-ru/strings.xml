@@ -42,6 +42,11 @@
     <string name="SyncError">Ошибка синхронизации. Повторите попытку</string>
     <string name="PercentTitle">Процент</string>
     <string name="Keyboard">Клавиатура</string>
+
+    <string name="AccountRecovery_Note">Примечание</string>
+    <string name="AccountRecovery_MigrationRecommended">Похоже, этот кошелек использует нестандартный символ в списке мнемонических слов и/или парольной фразе. Если вы не видите баланс или транзакции, пожалуйста, прочтите подробности ниже.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
+    <string name="AccountRecovery_MigrationRequired">Это нестандартный кошелек. Пожалуйста, прочтите подробности ниже.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
+
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Продолжить</string>
     <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
@@ -97,6 +102,8 @@
     <string name="Restore_PrivateKey">Приватный Ключ</string>
     <string name="Restore_PrivateKeyHint">Введите приватный ключ EVM, BIP32 Root Key или Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Введите 12, 15, 18, 21 или 24 слова</string>
+    <string name="Restore_NonStandardRestore">Нестандартное Восстановление</string>
+    <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей Unstoppable с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях Unstoppable 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).\nЕсли вы являетесь затронутым пользователем, баланс вашего кошелька будет отображаться как 0 после обновления до версии 0.29. Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
     <string name="Restore_PrivateKey_InvalidKey">Неверный Ключ</string>
     <string name="Select_Coins">Выберите Токены</string>
     <string name="Restore_BirthdayHeight">Блок Создания</string>
@@ -779,6 +786,7 @@
     <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию %1$s перед получением %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Это действие удалит ваш кошелек с этого устройства.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Если вы не сделали резервную копию приватного ключа для этого кошелька, вы потеряете доступ к вашим средствам.</string>
+    <string name="ManageAccount_MigrationRequired_Title">Требуется Миграция</string>
     <string name="ManageAccount_BirthdayHeight">%s Блок Создания</string>
     <string name="ManageAccount_NWords">%s слов</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s слов с кодовой фразой</string>

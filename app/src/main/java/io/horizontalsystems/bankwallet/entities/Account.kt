@@ -2,14 +2,14 @@ package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
-import io.horizontalsystems.hdwalletkit.HDExtendedKey
-import io.horizontalsystems.hdwalletkit.HDWallet
-import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.hdwalletkit.*
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
+import java.text.Normalizer
 
 @Parcelize
 data class Account(
@@ -36,6 +36,40 @@ data class Account(
             is AccountType.SolanaAddress -> false
             else -> true
         }
+
+    @IgnoredOnParcel
+    val nonStandard: Boolean by lazy {
+        if (type is AccountType.Mnemonic) {
+            val words = type.words.joinToString(separator = " ")
+            val passphrase = type.passphrase
+            val normalizedWords = words.normalizeNFKD()
+            val normalizedPassphrase = passphrase.normalizeNFKD()
+
+            when {
+                words != normalizedWords -> true
+                passphrase != normalizedPassphrase -> true
+                else -> try {
+                    Mnemonic().validateStrict(type.words)
+                    false
+                } catch (exception: Exception) {
+                    true
+                }
+            }
+        } else {
+            false
+        }
+    }
+
+    @IgnoredOnParcel
+    val nonRecommended: Boolean by lazy {
+        if (type is AccountType.Mnemonic) {
+            val englishWords = WordList.wordList(Language.English).validWords(type.words)
+            val standardPassphrase = PassphraseValidator().validate(type.passphrase)
+            !englishWords || !standardPassphrase
+        } else {
+            false
+        }
+    }
 
     override fun equals(other: Any?): Boolean {
         if (other is Account) {
@@ -215,3 +249,5 @@ enum class AccountOrigin(val value: String) : Parcelable {
     Created("Created"),
     Restored("Restored");
 }
+
+fun String.normalizeNFKD(): String = Normalizer.normalize(this, Normalizer.Form.NFKD)

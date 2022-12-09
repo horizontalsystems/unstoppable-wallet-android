@@ -42,6 +42,11 @@
     <string name="SyncError">Erreur de synchronisation. Réessayez</string>
     <string name="PercentTitle">Pourcent</string>
     <string name="Keyboard">Clavier</string>
+
+    <string name="AccountRecovery_Note">Remarque</string>
+    <string name="AccountRecovery_MigrationRecommended">Ce portefeuille semble utiliser un caractère non-standard dans sa liste de mots secrets et/ou dans une phrase de passe. Si vous ne voyez pas de solde ou de transactions, veuillez vous reporter aux informations ci-dessous. \n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
+    <string name="AccountRecovery_MigrationRequired">Ce portefeuille n\'est pas conforme aux normes. Veuillez vous reporter aux informations ci-dessous pour plus de détails. \n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
+
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Soyez Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Désenchaînez les actifs</string>
@@ -97,6 +102,8 @@
     <string name="Restore_PrivateKey">Clé privée</string>
     <string name="Restore_PrivateKeyHint">Entrez clé privée EVM, BIP32 Root Key ou Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Entrez 12, 15, 18, 21 ou 24 mots</string>
+    <string name="Restore_NonStandardRestore">Restauration non-standard</string>
+    <string name="Restore_NonStandard_Description">Sur cette page, vous trouverez un mécanisme spécial de restauration de portefeuille pour les utilisateurs d\'Unstoppable dont le portefeuille n\'est pas standard. En général, de tels portefeuilles ont été créés dans la version 0.27 - 0.28 d\'Unstoppable en utilisant une liste de mots mnémoniques non-anglais et/ou un caractère spécial dans la phrase de passe du portefeuille (c\'est-à-dire un symbole diacritique).\nSi vous êtes un des utilisateurs concernés, le solde affiché de votre portefeuille indiquera 0 après la mise à jour 0.29. Grâce à cette page, vous pourrez restaurer l\'accès à votre portefeuille non-standard. Une fois la restauration effectuée, il est conseillé de créer un nouveau portefeuille (qui sera conforme aux normes) et d\'y transférer vos fonds.</string>
     <string name="Restore_PrivateKey_InvalidKey">Clé invalide</string>
     <string name="Select_Coins">Crypto Monnaie</string>
     <string name="Restore_BirthdayHeight">Hauteur de l\'anniversaire</string>
@@ -782,6 +789,7 @@
     <string name="ManageAccount_BackupRequired_Description">Vous devez sauvegarder %1$s avant de recevoir %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">L\'action va supprimer ce portefeuille de l\'appareil.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Si vous n\'avez pas sauvegardé la clé privée de ce portefeuille, vous perdrez l\'accès à vos fonds.</string>
+    <string name="ManageAccount_MigrationRequired_Title">Migration Requise</string>
     <string name="ManageAccount_BirthdayHeight">Hauteur de l\'anniversaire %s</string>
     <string name="ManageAccount_NWords">%s mots</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s mots avec phrase d\'authentification</string>

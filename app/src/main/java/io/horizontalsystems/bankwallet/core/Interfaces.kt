@@ -24,7 +24,6 @@ import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
@@ -92,6 +91,7 @@ interface ILocalStorage {
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
     var testnetEnabled: Boolean
+    var nonRecommendedAccountAlertDismissedAccounts: Set<String>
 
     fun getSwapProviderId(blockchainType: BlockchainType): String?
     fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)
@@ -115,6 +115,7 @@ interface IMarketStorage {
 }
 
 interface IAccountManager {
+    val hasNonStandardAccount: Boolean
     val activeAccount: Account?
     val activeAccountStateFlow: Flow<ActiveAccountState>
     val activeAccountObservable: Flowable<Optional<Account>>
@@ -183,9 +184,10 @@ interface IClipboardManager {
 
 interface IWordsManager {
     fun validateChecksum(words: List<String>)
+    fun validateChecksumStrict(words: List<String>)
     fun isWordValid(word: String): Boolean
     fun isWordPartiallyValid(word: String): Boolean
-    fun generateWords(count: Int = 12, language: Language): List<String>
+    fun generateWords(count: Int = 12): List<String>
 }
 
 sealed class AdapterState {

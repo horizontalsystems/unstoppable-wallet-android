@@ -13,7 +13,7 @@ import java.net.URL
 
 object FaqManager {
 
-    private val faqListUrl = App.appConfigProvider.faqUrl
+    val faqListUrl = App.appConfigProvider.faqUrl
 
     private val gson = GsonBuilder()
         .setDateFormat("yyyy-MM-dd")

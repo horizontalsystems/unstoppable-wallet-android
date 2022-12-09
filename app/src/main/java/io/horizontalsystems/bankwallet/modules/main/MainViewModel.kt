@@ -91,6 +91,7 @@ class MainViewModel(
 
         disposables.add(accountManager.accountsFlowable.subscribe {
             updateTransactionsTabEnabled()
+            updateSettingsBadge()
         })
 
         rateAppManager.showRateAppObservable
@@ -179,8 +180,7 @@ class MainViewModel(
     }
 
     private fun updateSettingsBadge() {
-        val showDotBadge =
-            !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet)
+        val showDotBadge = !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet) || accountManager.hasNonStandardAccount
 
         if (wc2PendingRequestsCount > 0) {
             settingsBadgeLiveData.postValue(MainModule.BadgeType.BadgeNumber(wc2PendingRequestsCount))

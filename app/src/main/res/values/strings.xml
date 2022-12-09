@@ -56,6 +56,10 @@
 
     <string name="Keyboard">Keyboard</string>
 
+    <string name="AccountRecovery_Note">Note</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its secret word list and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRequired">This is non-standard compliant wallet. Please read below for details.\n\nCLICK TO GET MORE INFO</string>
+
     <!--Intro-->
 
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -82,6 +86,7 @@
     <string name="CreateWallet_N_Words">%s words</string>
     <string name="CreateWallet_PassphraseConfirm">Confirm</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
     <string name="EnterPassphrase">Enter the passphrase</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases add an additional security layer to the wallets, enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase, but associated with different passwords. \n\nTo restore these wallets, a user will require a mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
@@ -122,6 +127,8 @@
     <string name="Restore_PrivateKey">Private Key</string>
     <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key or Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Enter 12, 15, 18, 21 or 24 words</string>
+    <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
+    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism for Unstoppable users who have a non-standard wallet. Generally, such wallets could have been created in Unstoppable version 0.27 - 0.28 using a non-English mnemonic word list and/or a special character in the wallet passphrase (i.e. diacritic symbol).\nIf you\'re an affected user then your wallet balance will be shown 0 after updating to version 0.29. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
 
     <string name="Restore_PrivateKey_InvalidKey">Invalid Key</string>
 
@@ -944,6 +951,7 @@
     <string name="ManageAccount_BackupRequired_Description">You need to backup %1$s before you may receive %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
+    <string name="ManageAccount_MigrationRequired_Title">Migration Required</string>
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <string name="ManageAccount_NWords">%s words</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>

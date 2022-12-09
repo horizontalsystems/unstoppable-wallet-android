@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic
+package io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,16 +9,15 @@ import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.normalizeNFKD
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.UiState
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.WordItem
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestoreMnemonicNonStandardModule.UiState
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.hdwalletkit.WordList
 
-class RestoreMnemonicViewModel(
+class RestoreMnemonicNonStandardViewModel(
     accountFactory: IAccountFactory,
     private val wordsManager: WordsManager,
     private val thirdKeyboardStorage: IThirdKeyboard,
@@ -29,8 +28,8 @@ class RestoreMnemonicViewModel(
     private var passphraseEnabled: Boolean = false
     private var passphrase: String = ""
     private var passphraseError: String? = null
-    private var wordItems: List<WordItem> = listOf()
-    private var invalidWordItems: List<WordItem> = listOf()
+    private var wordItems: List<RestoreMnemonicModule.WordItem> = listOf()
+    private var invalidWordItems: List<RestoreMnemonicModule.WordItem> = listOf()
     private var invalidWordRanges: List<IntRange> = listOf()
     private var error: String? = null
     private var accountType: AccountType? = null
@@ -38,8 +37,7 @@ class RestoreMnemonicViewModel(
     private var language = Language.English
     private var text = ""
     private var cursorPosition = 0
-    private var mnemonicWordList = WordList.wordListStrict(language)
-
+    private var mnemonicWordList = WordList.wordList(language)
 
     var uiState by mutableStateOf(
         UiState(
@@ -74,14 +72,14 @@ class RestoreMnemonicViewModel(
 
     private fun processText() {
         wordItems = wordItems(text)
-        invalidWordItems = wordItems.filter { !mnemonicWordList.validWord(it.word.normalizeNFKD(), false) }
+        invalidWordItems = wordItems.filter { !mnemonicWordList.validWord(it.word, false) }
 
         val wordItemWithCursor = wordItems.find {
             it.range.contains(cursorPosition - 1)
         }
 
         val invalidWordItemsExcludingCursoredPartiallyValid = when {
-            wordItemWithCursor != null && mnemonicWordList.validWord(wordItemWithCursor.word.normalizeNFKD(), true) -> {
+            wordItemWithCursor != null && mnemonicWordList.validWord(wordItemWithCursor.word, true) -> {
                 invalidWordItems.filter { it != wordItemWithCursor }
             }
             else -> invalidWordItems
@@ -89,7 +87,7 @@ class RestoreMnemonicViewModel(
 
         invalidWordRanges = invalidWordItemsExcludingCursoredPartiallyValid.map { it.range }
         wordSuggestions = wordItemWithCursor?.let {
-            RestoreMnemonicModule.WordSuggestions(it, mnemonicWordList.fetchSuggestions(it.word.normalizeNFKD()))
+            RestoreMnemonicModule.WordSuggestions(it, mnemonicWordList.fetchSuggestions(it.word))
         }
     }
 
@@ -119,7 +117,7 @@ class RestoreMnemonicViewModel(
 
     fun setMnemonicLanguage(language: Language) {
         this.language = language
-        mnemonicWordList = WordList.wordListStrict(language)
+        mnemonicWordList = WordList.wordList(language)
         processText()
 
         emitState()
@@ -138,10 +136,10 @@ class RestoreMnemonicViewModel(
             }
             else -> {
                 try {
-                    val words = wordItems.map { it.word.normalizeNFKD() }
-                    wordsManager.validateChecksumStrict(words)
+                    val words = wordItems.map { it.word }
+                    wordsManager.validateChecksum(words)
 
-                    accountType = AccountType.Mnemonic(words, passphrase.normalizeNFKD())
+                    accountType = AccountType.Mnemonic(words, passphrase)
                     error = null
                 } catch (checksumException: Exception) {
                     error = Translator.getString(R.string.Restore_InvalidChecksum)
@@ -162,9 +160,9 @@ class RestoreMnemonicViewModel(
         thirdKeyboardStorage.isThirdPartyKeyboardAllowed = true
     }
 
-    private fun wordItems(text: String): List<WordItem> {
+    private fun wordItems(text: String): List<RestoreMnemonicModule.WordItem> {
         return regex.findAll(text.lowercase())
-            .map { WordItem(it.value, it.range) }
+            .map { RestoreMnemonicModule.WordItem(it.value, it.range) }
             .toList()
     }
 }
