@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -36,6 +37,7 @@ import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInch
 import io.horizontalsystems.bankwallet.modules.swap.ui.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
@@ -207,6 +209,14 @@ private fun OneInchScreen(
                     if (infoItems.isNotEmpty()) {
                         Spacer(modifier = Modifier.height(12.dp))
                         SingleLineGroup(infoItems)
+                    }
+
+                    if (allowanceViewModel.uiState.revokeRequired) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        TextImportantWarning(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            text = stringResource(R.string.Approve_RevokeAndApproveInfo, allowanceViewModel.uiState.allowance ?: "")
+                        )
                     }
                 }
 
