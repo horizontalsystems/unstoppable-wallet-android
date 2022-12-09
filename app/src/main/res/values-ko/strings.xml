@@ -103,7 +103,7 @@
     <string name="Restore_PrivateKeyHint">EVM 개인 키, BIP32 Root Key 또는 Account Extended Private Key 입력</string>
     <string name="Restore_PhraseHint">12, 15, 18, 21 또는 24단어 입력</string>
     <string name="Restore_NonStandardRestore">비표준 복원</string>
-    <string name="Restore_NonStandard_Description">이 페이지는 비표준 지갑을 가지고 있는 Unstoppable 사용자를 위한 특별한 지갑 복원 메커니즘을 제공합니다. 일반적으로 이러한 지갑은 Unstoppable 버전 0.27 - 0.28에서 영어가 아닌 니모닉 단어 목록 및/또는 지갑 암호의 특수 문자(예: 분음 부호)를 사용하여 생성되었을 수 있습니다.\n영향을 받는 사용자인 경우 버전 0.29로 업데이트하면 지갑 잔액이 0으로 표시됩니다. 이 페이지에서는 비표준 지갑에 대한 액세스를 복원할 수 있습니다. 복원되면 새 지갑(표준 준수)을 만들고 그곳으로 자금을 옮기는 것이 좋습니다.</string>
+    <string name="Restore_NonStandard_Description">이 페이지는 비표준 지갑을 가지고 있는 Unstoppable 사용자를 위한 특별한 지갑 복원 메커니즘을 제공합니다. 일반적으로 이러한 지갑은 Unstoppable 버전 0.27 - 0.28에서 영어가 아닌 니모닉 단어 목록 및/또는 지갑 암호의 특수 문자(예: 분음 부호)를 사용하여 생성되었을 수 있습니다.\n\n영향을 받는 사용자인 경우 버전 0.29로 업데이트하면 지갑 잔액이 0으로 표시됩니다. 이 페이지에서는 비표준 지갑에 대한 액세스를 복원할 수 있습니다. 복원되면 새 지갑(표준 준수)을 만들고 그곳으로 자금을 옮기는 것이 좋습니다.</string>
     <string name="Restore_PrivateKey_InvalidKey">잘못된 암호입니다</string>
     <string name="Select_Coins">코인 선택하기</string>
     <string name="Restore_BirthdayHeight">생일 신장</string>
