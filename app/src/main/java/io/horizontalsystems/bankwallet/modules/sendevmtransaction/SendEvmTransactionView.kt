@@ -254,7 +254,7 @@ private fun NftAmount(item: ViewItem.NftAmount) {
 
 @Composable
 private fun Token(item: ViewItem.TokenItem) {
-    Row(
+    RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         CoinImage(
