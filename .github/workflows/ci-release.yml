@@ -16,6 +16,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.0.2
+          bundler-cache: true
 
       - name: Set Build Number
         env:
