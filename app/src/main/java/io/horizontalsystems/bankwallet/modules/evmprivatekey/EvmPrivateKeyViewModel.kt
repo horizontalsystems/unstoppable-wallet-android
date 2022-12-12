@@ -6,9 +6,8 @@ import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.ethereumkit.core.signer.Signer
-import io.horizontalsystems.ethereumkit.core.stripHexPrefix
-import io.horizontalsystems.ethereumkit.core.toHexString
 import io.horizontalsystems.marketkit.models.BlockchainType
+import java.math.BigInteger
 
 class EvmPrivateKeyViewModel(
     account: Account,
@@ -18,20 +17,21 @@ class EvmPrivateKeyViewModel(
     val ethereumPrivateKey by lazy {
         when (val accountType = account.type) {
             is AccountType.Mnemonic -> {
-                Signer.privateKey(
-                    accountType.words,
-                    accountType.passphrase,
-                    evmBlockchainManager.getChain(BlockchainType.Ethereum)
-                ).toByteArray().let {
-                    if (it.size > 32) {
-                        it.copyOfRange(1, it.size)
-                    } else {
-                        it
-                    }.toRawHexString()
-                }
+                val chain = evmBlockchainManager.getChain(BlockchainType.Ethereum)
+                toHexString(Signer.privateKey(accountType.words, accountType.passphrase, chain))
             }
-            is AccountType.EvmPrivateKey -> accountType.key.toHexString().stripHexPrefix()
+            is AccountType.EvmPrivateKey -> toHexString(accountType.key)
             else -> ""
+        }
+    }
+
+    private fun toHexString(key: BigInteger): String {
+        return key.toByteArray().let {
+            if (it.size > 32) {
+                it.copyOfRange(1, it.size)
+            } else {
+                it
+            }.toRawHexString()
         }
     }
 
