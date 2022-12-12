@@ -109,6 +109,7 @@ class BalanceService(
             val balanceItem = allBalanceItems[i]
 
             allBalanceItems[i] = balanceItem.copy(
+                mainNet = adapterRepository.isMainNet(balanceItem.wallet),
                 balanceData = adapterRepository.balanceData(balanceItem.wallet),
                 state = adapterRepository.state(balanceItem.wallet)
             )
