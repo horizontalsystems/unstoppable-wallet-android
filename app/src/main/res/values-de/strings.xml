@@ -42,6 +42,9 @@
     <string name="SyncError">Sync-Fehler. Versuchen Sie es erneut</string>
     <string name="PercentTitle">Prozent</string>
     <string name="Keyboard">Tastatur</string>
+    <string name="AccountRecovery_Note">Hinweis</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its secret word list and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRequired">This is non-standard compliant wallet. Please read below for details.\n\nCLICK TO GET MORE INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Sei unaufhaltsam</string>
     <string name="Intro_Wallet_Screen2Title">Assets lösen</string>
@@ -62,6 +65,7 @@
     <string name="CreateWallet_N_Words">%s Wörter</string>
     <string name="CreateWallet_PassphraseConfirm">Bestätigen</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase darf nicht leer sein</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase-Bestätigung stimmt nicht überein</string>
     <string name="EnterPassphrase">Geben Sie Ihre Passphrase ein</string>
     <string name="CreateWallet_PassphraseDescription">Passphrasen fügen den Wallets eine zusätzliche Sicherheitsebene hinzu, wodurch Benutzer mehrere unabhängige Multi-Coin-Wallets mit einer einzigen mnemonischen Wiederherstellungsphrase erstellen können, die jedoch mit unterschiedlichen Passwörtern verbunden sind. \n\nUm diese Wallets wiederherzustellen, benötigt der Benutzer eine mnemonische Wiederherstellungsphrase sowie ein Passwort für jedes wiederherzustellende Wallet.</string>
@@ -97,6 +101,8 @@
     <string name="Restore_PrivateKey">Privater Schlüssel</string>
     <string name="Restore_PrivateKeyHint">Geben Sie EVM privaten Schlüssel, BIP32 Root-Schlüssel oder  Account Extended Private Key ein</string>
     <string name="Restore_PhraseHint">12, 15, 18, 21 oder 24 Wörter eingeben</string>
+    <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
+    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism for Unstoppable users who have a non-standard wallet. Generally, such wallets could have been created in Unstoppable version 0.27 - 0.28 using a non-English mnemonic word list and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after updating to version 0.29. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
     <string name="Restore_PrivateKey_InvalidKey">Ungültiger Schlüssel</string>
     <string name="Select_Coins">Coins auswählen</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
@@ -788,6 +794,7 @@
     <string name="ManageAccount_BackupRequired_Description">Sie müssen %1$s sichern, bevor Sie %2$s empfangen können.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Damit wird das Wallet von diesem Gerät gelöscht.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Wenn Sie den Private Key für dieses Wallet nicht gesichert haben, verlieren Sie den Zugang zu Ihrem Guthaben.</string>
+    <string name="ManageAccount_MigrationRequired_Title">Migration Required</string>
     <string name="ManageAccount_BirthdayHeight">%s Geburtstagshöhe</string>
     <string name="ManageAccount_NWords">%s Wörter</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s Wörter mit Passphrase</string>
