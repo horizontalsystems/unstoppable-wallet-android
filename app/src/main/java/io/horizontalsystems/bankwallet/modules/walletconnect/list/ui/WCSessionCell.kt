@@ -86,7 +86,7 @@ fun WCSessionCell(
             Column(modifier = Modifier.weight(1f)) {
                 val title = when {
                     session.title.isNotBlank() -> session.title
-                    else -> stringResource(id = R.string.WalletConnect_DAppUnknown)
+                    else -> stringResource(id = R.string.WalletConnect_Unnamed)
                 }
 
                 body_leah(

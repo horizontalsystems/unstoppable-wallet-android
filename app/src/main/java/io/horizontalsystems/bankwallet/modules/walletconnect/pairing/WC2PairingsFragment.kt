@@ -141,7 +141,7 @@ fun Pairing(pairing: PairingViewItem, onDelete: () -> Unit) {
         Spacer(modifier = Modifier.width(16.dp))
         Column {
             val name = if (pairing.name.isNullOrBlank()) {
-                stringResource(id = R.string.WalletConnect_DAppUnknown)
+                stringResource(id = R.string.WalletConnect_Unnamed)
             } else {
                 pairing.name
             }

@@ -139,7 +139,7 @@ private fun ColumnScope.WCSessionListContent(
                     .clip(RoundedCornerShape(15.dp)),
                 painter = rememberAsyncImagePainter(
                     model = uiState.peerMeta?.icon,
-                    error = painterResource(R.drawable.coin_placeholder)
+                    error = painterResource(R.drawable.ic_platform_placeholder_24)
                 ),
                 contentDescription = null,
             )
