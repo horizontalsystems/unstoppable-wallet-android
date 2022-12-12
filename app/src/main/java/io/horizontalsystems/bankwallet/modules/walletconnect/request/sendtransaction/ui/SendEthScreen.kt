@@ -63,6 +63,7 @@ fun SendEthRequestScreen(
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
+                    .weight(1f)
                     .fillMaxWidth()
             ) {
                 Spacer(Modifier.height(12.dp))
