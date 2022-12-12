@@ -401,6 +401,7 @@
     <string name="WalletConnect_Note">참고</string>
     <string name="WalletConnect_LegacySignWarning">Signing this message can be dangerous. This signature could potentially perform any operation on behalf of your account, including giving full control of your account and all of its assets to the requesting site. Sign this message only if you know what you are doing or fully trust the requesting site.</string>
     <string name="WalletConnect_NotSupportedDescription">현재 지갑 유형 %s은(는) WalletConnect를 지원하지 않습니다.</string>
+    <string name="WalletConnect_Unnamed">Unnamed</string>
     <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
     <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
@@ -912,6 +913,7 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018년 이후 공통</string>
     <!-- Testnet Settings -->
     <string name="Testnet_Enable">Enable Testnet</string>
+    <string name="Testnet_Support">Mnemonic Phrase wallets only</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">연결로</string>
     <string name="Tor_Connection_Enable">토르 활성화</string>
