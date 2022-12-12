@@ -1109,6 +1109,7 @@
     <!-- Testnet Settings -->
 
     <string name="Testnet_Enable">Enable Testnet</string>
+    <string name="Testnet_Support">Mnemonic Phrase wallets only</string>
 
     <!-- Tor -->
 
