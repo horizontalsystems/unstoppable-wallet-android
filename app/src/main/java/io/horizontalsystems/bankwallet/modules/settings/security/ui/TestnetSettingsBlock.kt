@@ -24,7 +24,7 @@ fun TestnetSettingsBlock(viewModel: TestnetSettingsViewModel) {
                 Column(Modifier.padding(vertical = 12.dp)) {
                     body_leah(text = stringResource(R.string.Testnet_Enable))
                     Spacer(Modifier.height(1.dp))
-                    subhead2_grey(text = "Goerli")
+                    subhead2_grey(text = stringResource(R.string.Testnet_Support))
                 }
                 Spacer(Modifier.weight(1f))
                 HsSwitch(
