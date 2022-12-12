@@ -401,6 +401,7 @@
     <string name="WalletConnect_Note">Nota</string>
     <string name="WalletConnect_LegacySignWarning">Firmar este mensaje puede ser peligroso. Esta firma podría potencialmente realizar cualquier operación en nombre de tu cuenta, incluyendo dar el control total de su cuenta y todos sus activos al sitio solicitado. Firma este mensaje sólo si sabes lo que estás haciendo o confía plenamente en el sitio solicitante.</string>
     <string name="WalletConnect_NotSupportedDescription">El tipo de cartera actual %s no es compatible con WalletConnect</string>
+    <string name="WalletConnect_Unnamed">Unnamed</string>
     <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
     <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
@@ -912,6 +913,7 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Común después de 2018</string>
     <!-- Testnet Settings -->
     <string name="Testnet_Enable">Enable Testnet</string>
+    <string name="Testnet_Support">Mnemonic Phrase wallets only</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Conexión</string>
     <string name="Tor_Connection_Enable">Activar Tor</string>
