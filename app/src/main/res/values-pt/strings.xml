@@ -42,6 +42,9 @@
     <string name="SyncError">Erro de sincronização. Tente novamente</string>
     <string name="PercentTitle">Percentual</string>
     <string name="Keyboard">Teclado</string>
+    <string name="AccountRecovery_Note">Observação</string>
+    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its secret word list and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRequired">This is non-standard compliant wallet. Please read below for details.\n\nCLICK TO GET MORE INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Seja Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Libere Recursos</string>
@@ -62,6 +65,7 @@
     <string name="CreateWallet_N_Words">%s palavras</string>
     <string name="CreateWallet_PassphraseConfirm">Confirmar</string>
     <string name="CreateWallet_Error_EmptyPassphrase">A senha não pode estar vazia</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Confirmação da senha não coincide</string>
     <string name="EnterPassphrase">Passphrase</string>
     <string name="CreateWallet_PassphraseDescription">Senhas agregam uma camada de segurança adicional às carteiras, permitindo que os usuários criem várias carteiras multimoedas independentes, usando uma única frase mnemônica de recuperação, mas associada à senhas diferentes. \n\nPara restaurar estas carteiras, o usuário precisará de uma frase de recuperação mnemônica, bem como de uma senha para cada carteira a ser restaurada.</string>
@@ -97,6 +101,8 @@
     <string name="Restore_PrivateKey">Chave Privada</string>
     <string name="Restore_PrivateKeyHint">Insira a Chave Privada EVM, a Chave Raiz BIP32 ou a Chave Privada Estendida de Conta</string>
     <string name="Restore_PhraseHint">Insira 12, 15, 18, 21 ou 24 palavras</string>
+    <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
+    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism for Unstoppable users who have a non-standard wallet. Generally, such wallets could have been created in Unstoppable version 0.27 - 0.28 using a non-English mnemonic word list and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after updating to version 0.29. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
     <string name="Restore_PrivateKey_InvalidKey">Chave Inválida</string>
     <string name="Select_Coins">Escolher Moedas</string>
     <string name="Restore_BirthdayHeight">Altura de aniversário</string>
@@ -778,6 +784,7 @@
     <string name="ManageAccount_BackupRequired_Description">Você precisa fazer um backup de %1$s antes de poder receber %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Esta ação irá apagar do dispositivo a carteira selecionada.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Se você não fizer o backup da chave privada desta carteira, perderá o acesso aos seus fundos.</string>
+    <string name="ManageAccount_MigrationRequired_Title">Migration Required</string>
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <string name="ManageAccount_NWords">%s palavras</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s palavras com senha</string>
