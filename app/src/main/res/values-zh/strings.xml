@@ -43,8 +43,8 @@
     <string name="PercentTitle">百分比</string>
     <string name="Keyboard">键盘</string>
     <string name="AccountRecovery_Note">备注</string>
-    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its secret word list and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
-    <string name="AccountRecovery_MigrationRequired">This is non-standard compliant wallet. Please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRecommended">这个钱包似乎在其密码列表和/或密码短语中使用了非标准字符。 如果您没有看到余额或交易，请阅读下面的详细信息。\n\n点击获取更多信息</string>
+    <string name="AccountRecovery_MigrationRequired">这是一个不符合标准的钱包。 详情请阅读下文。\n\n点击获取更多信息</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">资产解绑</string>
@@ -101,8 +101,8 @@
     <string name="Restore_PrivateKey">私钥</string>
     <string name="Restore_PrivateKeyHint">輸入 EVM 私鑰、BIP32 Root Key 或  Account Extended Private Key</string>
     <string name="Restore_PhraseHint">输入12、15、18、21或24个单词</string>
-    <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
-    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism for Unstoppable users who have a non-standard wallet. Generally, such wallets could have been created in Unstoppable version 0.27 - 0.28 using a non-English mnemonic word list and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after updating to version 0.29. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
+    <string name="Restore_NonStandardRestore">非标准还原</string>
+    <string name="Restore_NonStandard_Description">此页面为拥有非标准钱包的 Unstoppable 用户提供了一种特殊的钱包恢复机制。 通常，此类钱包可以在 Unstoppable 版本 0.27 - 0.28 中使用非英语助记词列表和/或钱包密码短语中的特殊字符（即变音符号）创建。\n\n如果您是受影响的用户，那么在更新到 0.29 版本后，您的钱包余额将显示为 0。 此页面将使您能够恢复对非标准钱包的访问。 恢复后，建议您创建一个新钱包（符合标准）并将资金转移到那里。</string>
     <string name="Restore_PrivateKey_InvalidKey">错误密钥</string>
     <string name="Select_Coins">选择货币</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
@@ -402,15 +402,15 @@
     <string name="WalletConnect_LegacySignWarning">签名此消息可能是危险的。 此签名可能代表您的帐户执行任何操作。 包括让您的帐户及其所有资产完全控制到请求站点。 只有当您知道正在做什么或完全信任请求站点时，才能签署此消息。</string>
     <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
     <string name="WalletConnect_Unnamed">Unnamed</string>
-    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
+    <string name="WalletConnect_DAppUnknown">未知的 dApp</string>
     <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
-    <string name="WalletConnect_Pairings_Delete">Delete</string>
+    <string name="WalletConnect_Pairings_Delete">删除</string>
     <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
-    <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
+    <string name="WalletConnect_UnsupportedRequest_Title">不支持的请求</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningTitle">不支持</string>
     <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
@@ -431,7 +431,7 @@
     <string name="Swap_ToAmountTitle">您获得</string>
     <string name="Swap_Estimated">估计</string>
     <string name="Swap_TokenSelectorTitle">选择</string>
-    <string name="Swap_Balance">Available balance</string>
+    <string name="Swap_Balance">可用余额</string>
     <string name="Swap_Allowance">补贴</string>
     <string name="Swap_Price">价格</string>
     <string name="Swap_SellPrice">卖出价</string>
@@ -501,7 +501,7 @@
     <string name="SwapInfo_AllowanceTitle">补贴</string>
     <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">价格影响</string>
-    <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
+    <string name="SwapInfo_PriceImpactDescription">预期价格和显示价格的偏差通常会增加互兑金额。</string>
     <string name="SwapInfo_SwapFeeTitle">互兑交易费用</string>
     <string name="SwapInfo_SwapFeeDescription">以用户出售货币显示的 平台上互兑操作的服务费。对于大部分订单，这应为0.3%或0.6%。</string>
     <string name="SwapInfo_GuaranteedAmountTitle">保证金额</string>
@@ -779,7 +779,7 @@
     <string name="Watch_By">由</string>
     <string name="Watch_WatchBy">观看者</string>
     <string name="Watch_TypeEvmAddress">EVM 地址</string>
-    <string name="Watch_TypeSolanaAddress">Solana Address</string>
+    <string name="Watch_TypeSolanaAddress">Solana 地址</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
@@ -792,7 +792,7 @@
     <string name="ManageAccount_BackupRequired_Description">您必须备份%1$s才能收到%2$s。</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">该操作将从此设备删除本钱包。</string>
     <string name="ManageAccount_Delete_ConfirmationLose">如果您尚未对此钱包备份私钥，您将失去您的资金。</string>
-    <string name="ManageAccount_MigrationRequired_Title">Migration Required</string>
+    <string name="ManageAccount_MigrationRequired_Title">需要迁移</string>
     <string name="ManageAccount_BirthdayHeight">%s 生日高度</string>
     <string name="ManageAccount_NWords">%s 个单词</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s 个单词的密码</string>
@@ -926,7 +926,7 @@
     <string name="TorPage_Connected">已连接</string>
     <string name="TorPage_Failed">失败</string>
     <string name="TorPage_ConnectionClosed">已断开</string>
-    <string name="Tor_TorIsActive">Tor is active</string>
+    <string name="Tor_TorIsActive">Tor 已激活</string>
     <string name="Tor_PrerequisitesAlert_Content">如果激活了TOR，Ethereum区块链将重置为Infura</string>
     <!--Coin Option-->
     <string name="CoinOption_bip49_Title">较新（推荐)</string>
