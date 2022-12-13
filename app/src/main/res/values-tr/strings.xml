@@ -43,8 +43,8 @@
     <string name="PercentTitle">Yüzde</string>
     <string name="Keyboard">Klavye</string>
     <string name="AccountRecovery_Note">Not</string>
-    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its secret word list and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
-    <string name="AccountRecovery_MigrationRequired">This is non-standard compliant wallet. Please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRecommended">Bu cüzdan, gizli sözcükler listesinde ve/veya bir şifrede standart olmayan bir karakter kullanıyor gibi görünüyor. Bir bakiye veya işlem göremiyorsanız lütfen bilgi için aşağıya bakınız.\n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYINIZ</string>
+    <string name="AccountRecovery_MigrationRequired">Bu standart dışı uyumlu bir cüzdandır. Bilgi için lütfen aşağıyı okuyunuz.\n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYINIZ</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Varlıkları Serbest Bırak</string>
@@ -101,8 +101,8 @@
     <string name="Restore_PrivateKey">Gizli Anahtar</string>
     <string name="Restore_PrivateKeyHint">EVM Özel Anahtarını, BIP32 Root Key veya Account Extended Private Key girin</string>
     <string name="Restore_PhraseHint">12, 15, 18, 21 veya 24 kelime girin</string>
-    <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
-    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism for Unstoppable users who have a non-standard wallet. Generally, such wallets could have been created in Unstoppable version 0.27 - 0.28 using a non-English mnemonic word list and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after updating to version 0.29. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
+    <string name="Restore_NonStandardRestore">Standart Olmayan Geri Yükleme</string>
+    <string name="Restore_NonStandard_Description">Bu sayfa, standart olmayan bir cüzdanı olan Unstoppable kullanıcıları için özel bir cüzdan geri yükleme mekanizması sağlar. Genel olarak, bu tür cüzdanlar, İngilizce olmayan bir anımsatma kelimeleri listesi ve/veya cüzdan şifresinde özel bir karakter (yani aksan simgesi) kullanılarak Unstoppable 0.27 - 0.28 sürümünde oluşturulmuş olabilir.\n\nBu durumdan etkilenen bir kullanıcıysanız, 0.29 sürümüne güncelledikten sonra cüzdan bakiyeniz 0 olarak görüntülenir. Bu sayfa, standart olmayan cüzdanınıza erişimi geri yüklemenizi sağlayacaktır. Geri yüklendikten sonra, yeni bir cüzdan oluşturmanız (standartlarla uyumlu) ve paranızı oraya taşımanız önerilir.</string>
     <string name="Restore_PrivateKey_InvalidKey">Geçersiz Anahtar</string>
     <string name="Select_Coins">Kripto Parayı Seç</string>
     <string name="Restore_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
@@ -241,7 +241,7 @@
     <!--TVL Rank-->
     <string name="TvlRank_Title">TVL Rank</string>
     <string name="TvlRank_MultiChain">Multi-Chain</string>
-    <string name="TvlRank_Field_HighestTvl">Highest TVL</string>
+    <string name="TvlRank_Field_HighestTvl">HIghest TVL</string>
     <string name="TvlRank_Field_LowestTvl">Lowest TVL</string>
     <string name="TvlRank_Field_All">Hepsi</string>
     <string name="TvlRank_Field_Eth">Ethereum</string>
