@@ -99,6 +99,8 @@ object WC2Parser {
         if (chunks.size < 2) {
             return null
         }
+        val eip = chunks[0]
+        if (eip != "eip155") return null
 
         val chainId = chunks[1].toIntOrNull() ?: return null
         val chain = Chain.values().firstOrNull { it.id == chainId }
@@ -108,7 +110,7 @@ object WC2Parser {
         }
 
         return chain?.let {
-            WCAccountData(eip = chunks[0], chain = chain, address = address)
+            WCAccountData(eip = eip, chain = chain, address = address)
         }
     }
 
