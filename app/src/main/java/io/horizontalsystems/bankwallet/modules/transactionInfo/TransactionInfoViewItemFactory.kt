@@ -508,7 +508,7 @@ class TransactionInfoViewItemFactory(
             Status(status)
         )
 
-        if (transaction is EvmOutgoingTransactionRecord && status == TransactionStatus.Pending && resendEnabled) {
+        if (transaction is EvmTransactionRecord && status == TransactionStatus.Pending && resendEnabled) {
             items.add(SpeedUpCancel(transactionHash = transaction.transactionHash))
         }
 
