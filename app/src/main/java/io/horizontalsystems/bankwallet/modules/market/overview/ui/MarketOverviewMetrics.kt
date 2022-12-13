@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -50,6 +51,7 @@ private fun RowScope.ChartView(metricsData: MetricData, navController: NavContro
         modifier = Modifier
             .height(105.dp)
             .weight(1f)
+            .clip(RoundedCornerShape(12.dp))
             .clickable {
                 openMetricsPage(metricsData.type, navController)
             },
