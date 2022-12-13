@@ -43,8 +43,8 @@
     <string name="PercentTitle">Percent</string>
     <string name="Keyboard">Teclado</string>
     <string name="AccountRecovery_Note">Nota</string>
-    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its secret word list and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
-    <string name="AccountRecovery_MigrationRequired">This is non-standard compliant wallet. Please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRecommended">Este monedero parece usar un carácter no estándar en tu lista de palabras secretas y/o una frase de contraseña. Si no logras ver un saldo o transacciones, continua leyenda para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
+    <string name="AccountRecovery_MigrationRequired">Este es un monedero que no cumple con los estándares. A continuación, continúa leyendo para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Desencadenar Activos</string>
@@ -65,7 +65,7 @@
     <string name="CreateWallet_N_Words">%s palabras</string>
     <string name="CreateWallet_PassphraseConfirm">Confirmar</string>
     <string name="CreateWallet_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor, utiliza solo letras del alfabeto latino y números para la frase de contraseña</string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmación de la frase de contraseña no coincide</string>
     <string name="EnterPassphrase">Introduzca su frase de contraseña</string>
     <string name="CreateWallet_PassphraseDescription">La frase de contraseña añade una capa de seguridad adicional a los monederos permitiendo a los usuarios crear múltiples monederos multi-monedas independientes usando una sola frase de recuperación mnemotécnica pero asociada con diferentes contraseñas.\n\nPara restaurar estos monederos un usuario necesitará una frase de recuperación mnemotécnica, así como una contraseña para cada monedero restaurado.</string>
@@ -101,8 +101,8 @@
     <string name="Restore_PrivateKey">Clave privada</string>
     <string name="Restore_PrivateKeyHint">Introduzca la clave privada EVM, BIP32 Root Key o Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Introduzca 12, 15, 18, 21 o 24 palabras</string>
-    <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
-    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism for Unstoppable users who have a non-standard wallet. Generally, such wallets could have been created in Unstoppable version 0.27 - 0.28 using a non-English mnemonic word list and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after updating to version 0.29. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
+    <string name="Restore_NonStandardRestore">Restauración no estándar</string>
+    <string name="Restore_NonStandard_Description">Esta página proporciona un mecanismo especial de restauración de monedero para usuarios de Unstoppable que tienen un monedero no estándar. Por lo general, dichos monederos se podrían haber creado en la versión 0.27 - 0.28 de Unstoppable utilizando una lista de palabras mnemotécnicas que no están en inglés y/o un carácter especial en la frase de contraseña del monedero (es decir, un símbolo diacrítico).\n\nSi eres un usuario afectado, el saldo de tu monedero se mostrará en 0 después de actualizar a la versión 0.29. Esta página te permitirá restaurar el acceso a tu monedero no estándar. Una vez restaurado, se recomienda crear un nuevo monedero (que cumplirá con los estándares) y mover todos los fondos allí.</string>
     <string name="Restore_PrivateKey_InvalidKey">Clave no válida</string>
     <string name="Select_Coins">Elegir monedas</string>
     <string name="Restore_BirthdayHeight">Altura de Cumpleaños</string>
@@ -407,7 +407,7 @@
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
-    <string name="WalletConnect_Pairings_Delete">Delete</string>
+    <string name="WalletConnect_Pairings_Delete">Eliminar</string>
     <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
     <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
     <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
@@ -431,7 +431,7 @@
     <string name="Swap_ToAmountTitle">Obtienes</string>
     <string name="Swap_Estimated">ESTIMADO</string>
     <string name="Swap_TokenSelectorTitle">Seleccionar</string>
-    <string name="Swap_Balance">Available balance</string>
+    <string name="Swap_Balance">Saldo disponible</string>
     <string name="Swap_Allowance">Permiso de acceso</string>
     <string name="Swap_Price">Precio</string>
     <string name="Swap_SellPrice">Precio de venta</string>
@@ -778,7 +778,7 @@
     <string name="Watch_By">Por</string>
     <string name="Watch_WatchBy">Ver por</string>
     <string name="Watch_TypeEvmAddress">Dirección EVM</string>
-    <string name="Watch_TypeSolanaAddress">Solana Address</string>
+    <string name="Watch_TypeSolanaAddress">Dirección Solana</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nombre</string>
@@ -791,7 +791,7 @@
     <string name="ManageAccount_BackupRequired_Description">Necesita una Copia de seguridad %1$s antes de poder recibir %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Esta acción eliminará los monederos de este dispositivo.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Si usted no respaldó la clave privada para este monedero, perderá el acceso a sus fondos.</string>
-    <string name="ManageAccount_MigrationRequired_Title">Migration Required</string>
+    <string name="ManageAccount_MigrationRequired_Title">Migración Requerida</string>
     <string name="ManageAccount_BirthdayHeight">%s Altura de Cumpleaños</string>
     <string name="ManageAccount_NWords">%s palabras</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s palabras con frase de contraseña</string>
@@ -912,8 +912,8 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Común antes de 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Común después de 2018</string>
     <!-- Testnet Settings -->
-    <string name="Testnet_Enable">Enable Testnet</string>
-    <string name="Testnet_Support">Mnemonic Phrase wallets only</string>
+    <string name="Testnet_Enable">Activar Testnet</string>
+    <string name="Testnet_Support">Sólo carteras de Frases Mnemónicas</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Conexión</string>
     <string name="Tor_Connection_Enable">Activar Tor</string>
@@ -925,7 +925,7 @@
     <string name="TorPage_Connected">Conectado</string>
     <string name="TorPage_Failed">Falló</string>
     <string name="TorPage_ConnectionClosed">Desconectado</string>
-    <string name="Tor_TorIsActive">Tor is active</string>
+    <string name="Tor_TorIsActive">Tor está activo</string>
     <string name="Tor_PrerequisitesAlert_Content">Activar TOR restablecerá la conexión del Blockchain de Ethereum de vuelta a Infura.</string>
     <!--Coin Option-->
     <string name="CoinOption_bip49_Title">Más reciente (recomendado)</string>
