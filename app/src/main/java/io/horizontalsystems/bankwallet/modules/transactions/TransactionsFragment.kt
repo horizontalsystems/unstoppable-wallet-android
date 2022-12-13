@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
@@ -289,8 +286,17 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition?, o
     CellMultilineClear(
         borderTop = divider,
         height = 64.dp,
-        onClick = onClick
     ) {
+        val clipModifier = when (position) {
+            SectionItemPosition.First -> {
+                Modifier.clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+            }
+            SectionItemPosition.Last -> {
+                Modifier.clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
+            }
+            else -> Modifier
+        }
+
         val borderModifier = if (position != null) {
             Modifier.sectionItemBorder(1.dp, ComposeAppTheme.colors.steel20, 12.dp, position)
         } else {
@@ -300,7 +306,9 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition?, o
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .then(borderModifier),
+                .then(clipModifier)
+                .then(borderModifier)
+                .clickable(onClick = onClick),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
