@@ -43,8 +43,8 @@
     <string name="PercentTitle">Prozent</string>
     <string name="Keyboard">Tastatur</string>
     <string name="AccountRecovery_Note">Hinweis</string>
-    <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its secret word list and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
-    <string name="AccountRecovery_MigrationRequired">This is non-standard compliant wallet. Please read below for details.\n\nCLICK TO GET MORE INFO</string>
+    <string name="AccountRecovery_MigrationRecommended">Diese Brieftasche scheint ein nicht standardmäßiges Zeichen in ihrer geheimen Wortliste und/oder einer Passphrase zu verwenden. Wenn Sie kein Guthaben oder Transaktionen sehen, lesen Sie bitte unten für Details.\n\nKLICKEN, UM WEITERE INFORMATIONEN ZU ERHALTEN</string>
+    <string name="AccountRecovery_MigrationRequired">Dies ist eine nicht standardkonforme Brieftasche. Bitte lesen Sie unten für Details.\n\nKLICKEN, UM WEITERE INFORMATIONEN ZU ERHALTEN</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Sei unaufhaltsam</string>
     <string name="Intro_Wallet_Screen2Title">Assets lösen</string>
@@ -101,8 +101,9 @@
     <string name="Restore_PrivateKey">Privater Schlüssel</string>
     <string name="Restore_PrivateKeyHint">Geben Sie EVM privaten Schlüssel, BIP32 Root-Schlüssel oder  Account Extended Private Key ein</string>
     <string name="Restore_PhraseHint">12, 15, 18, 21 oder 24 Wörter eingeben</string>
-    <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
-    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism for Unstoppable users who have a non-standard wallet. Generally, such wallets could have been created in Unstoppable version 0.27 - 0.28 using a non-English mnemonic word list and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after updating to version 0.29. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
+    <string name="Restore_NonStandardRestore">Nicht standardmäßige Wiederherstellung</string>
+    <string name="Restore_NonStandard_Description">Diese Seite bietet einen speziellen Wallet-Wiederherstellungsmechanismus für Unstoppable-Benutzer, die ein nicht standardmäßiges Wallet haben. Im Allgemeinen könnten solche Wallets in der Unstoppable-Version 0.27–0.28 mit einer nicht-englischen mnemonischen Wortliste und/oder einem Sonderzeichen in der Wallet-Passphrase (d. h. einem diakritischen Symbol) erstellt worden sein.
+\n\nWenn Sie ein betroffener Benutzer sind, wird Ihr Wallet-Guthaben nach dem Update auf Version 0.29 mit 0 angezeigt. Auf dieser Seite können Sie den Zugriff auf Ihre nicht standardmäßige Brieftasche wiederherstellen. Nach der Wiederherstellung wird empfohlen, eine neue Brieftasche zu erstellen (die standardkonform ist) und Gelder dorthin zu verschieben.</string>
     <string name="Restore_PrivateKey_InvalidKey">Ungültiger Schlüssel</string>
     <string name="Select_Coins">Coins auswählen</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
@@ -401,16 +402,16 @@
     <string name="WalletConnect_Note">Hinweis</string>
     <string name="WalletConnect_LegacySignWarning">Die Unterschrift dieser Nachricht kann gefährlich sein. Diese Signatur könnte möglicherweise jede Operation im Namen Ihres Kontos ausführen einschließlich der vollen Kontrolle über Ihr Konto und alle seine Assets an die anfragende Website. Signieren Sie diese Nachricht nur, wenn Sie wissen, was Sie tun oder vertrauen Sie der anfragenden Website.</string>
     <string name="WalletConnect_NotSupportedDescription">Ihr aktueller Wallet-Typ %s unterstützt WalletConnect nicht</string>
-    <string name="WalletConnect_Unnamed">Unnamed</string>
-    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
+    <string name="WalletConnect_Unnamed">Unbenannt</string>
+    <string name="WalletConnect_DAppUnknown">Unbekannte dApp</string>
     <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
-    <string name="WalletConnect_Pairings_Delete">Delete</string>
+    <string name="WalletConnect_Pairings_Delete">Löschen</string>
     <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
-    <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
+    <string name="WalletConnect_UnsupportedRequest_Title">Nicht unterstützte Anfrage</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Nicht unterstützt</string>
     <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warnung</string>
@@ -431,7 +432,7 @@
     <string name="Swap_ToAmountTitle">Sie erhalten</string>
     <string name="Swap_Estimated">GESCHÄTZT</string>
     <string name="Swap_TokenSelectorTitle">Auswählen</string>
-    <string name="Swap_Balance">Available balance</string>
+    <string name="Swap_Balance">Verfügbares Guthaben</string>
     <string name="Swap_Allowance">Vergütung</string>
     <string name="Swap_Price">Preis</string>
     <string name="Swap_SellPrice">Verkaufspreis</string>
@@ -501,7 +502,7 @@
     <string name="SwapInfo_AllowanceTitle">Vergütung</string>
     <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">Preisauswirkungen</string>
-    <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
+    <string name="SwapInfo_PriceImpactDescription">Erwartete Preisabweichung von einem angezeigten Preis, steigt normalerweise mit dem Tauschbetrag.</string>
     <string name="SwapInfo_SwapFeeTitle">Tauschgebühr</string>
     <string name="SwapInfo_SwapFeeDescription">Eine Servicegebühr für die Tauschaktion auf der Plattform, angegeben in der Währung, die der Benutzer verkauft. Für die meisten Aufträge beträgt diese entweder 0,3 % oder 0,6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Garantierter Betrag</string>
@@ -651,7 +652,7 @@
     <string name="Privacy_BulletedText4">Es gibt keine Benutzerkonten oder Datenbanken, die Benutzerdaten woanders speichern.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN EINSTELLUNGEN</string>
-    <string name="SecurityCenter_TestnetSettings">TESTNET SETTINGS</string>
+    <string name="SecurityCenter_TestnetSettings">TESTNET EINSTELLUNGEN</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
     <string name="SecurityCenter_BlockchainSettingsFooterDescription">Datenquelle zum Wiederherstellen und Synchronisieren der Brieftasche auswählen</string>
     <!--Evm Network-->
@@ -782,7 +783,7 @@
     <string name="Watch_By">Von</string>
     <string name="Watch_WatchBy">Beobachten von</string>
     <string name="Watch_TypeEvmAddress">EVM-Adresse</string>
-    <string name="Watch_TypeSolanaAddress">Solana Address</string>
+    <string name="Watch_TypeSolanaAddress">Solana-Adresse</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
@@ -795,7 +796,7 @@
     <string name="ManageAccount_BackupRequired_Description">Sie müssen %1$s sichern, bevor Sie %2$s empfangen können.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Damit wird das Wallet von diesem Gerät gelöscht.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Wenn Sie den Private Key für dieses Wallet nicht gesichert haben, verlieren Sie den Zugang zu Ihrem Guthaben.</string>
-    <string name="ManageAccount_MigrationRequired_Title">Migration Required</string>
+    <string name="ManageAccount_MigrationRequired_Title">Migration erforderlich</string>
     <string name="ManageAccount_BirthdayHeight">%s Geburtstagshöhe</string>
     <string name="ManageAccount_NWords">%s Wörter</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s Wörter mit Passphrase</string>
@@ -916,7 +917,7 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Üblich vor 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Üblich nach 2018</string>
     <!-- Testnet Settings -->
-    <string name="Testnet_Enable">Enable Testnet</string>
+    <string name="Testnet_Enable">Testnet aktivieren</string>
     <string name="Testnet_Support">Mnemonic Phrase wallets only</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Verbinde</string>
@@ -929,7 +930,7 @@
     <string name="TorPage_Connected">Verbunden</string>
     <string name="TorPage_Failed">Fehlgeschlagen</string>
     <string name="TorPage_ConnectionClosed">Verbindung getrennt</string>
-    <string name="Tor_TorIsActive">Tor is active</string>
+    <string name="Tor_TorIsActive">Tor ist aktiv</string>
     <string name="Tor_PrerequisitesAlert_Content">Durch die Aktivierung von TOR wird die Ethereum-Blockchain-Verbindung wieder auf Infura zurückgesetzt.</string>
     <!--Coin Option-->
     <string name="CoinOption_bip49_Title">Neuere (empfohlen)</string>
@@ -992,7 +993,7 @@
     <string name="CoinPage_SecurityParams_ConfiscationResistance_No">NO:\nThe tokens can be confiscated or tampered with by an issuing entity.</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">YES:\nThe token holder can\'t be censored from transacting.</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance_No">NO:\nThe token holder can be censored from transacting.</string>
-    <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited from external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk free and not doesn\'t have any exploits risks.</string>
+    <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited by an external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk-free and not doesn\'t have any exploits risks.</string>
     <string name="CoinPage_SecurityParams_Audited_No">There are no publicly announced audits for the code powering the project behind the token. Unaudited projects are more likely to have security issues in the code.</string>
     <string name="CoinPage_SecurityParams_Info">Info</string>
     <string name="CoinPage_Range24">24h Range</string>
