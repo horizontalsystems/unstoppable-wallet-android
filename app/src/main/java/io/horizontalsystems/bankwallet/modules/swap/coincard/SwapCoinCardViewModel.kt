@@ -27,7 +27,6 @@ class SwapCoinCardViewModel(
     private val coinCardService: ISwapCoinCardService,
     private val fiatService: FiatService,
     private val switchService: AmountTypeSwitchService,
-    private val maxButtonSupported: Boolean,
     private val formatter: SwapViewItemHelper,
     private val resetAmountOnCoinSelect: Boolean,
     val dex: SwapMainModule.Dex

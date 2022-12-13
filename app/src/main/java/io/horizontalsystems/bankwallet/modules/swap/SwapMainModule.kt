@@ -229,13 +229,11 @@ object SwapMainModule {
                 SwapCoinCardViewModel::class.java -> {
                     val fiatService = FiatService(switchService, App.currencyManager, App.marketKit)
                     val coinCardService: ISwapCoinCardService
-                    var maxButtonEnabled = false
                     val resetAmountOnCoinSelect: Boolean
 
                     if (key == coinCardTypeFrom) {
                         coinCardService = fromCoinCardService
                         switchService.fromListener = fiatService
-                        maxButtonEnabled = true
                         resetAmountOnCoinSelect = true
                     } else {
                         coinCardService = toCoinCardService
@@ -247,7 +245,6 @@ object SwapMainModule {
                         coinCardService,
                         fiatService,
                         switchService,
-                        maxButtonEnabled,
                         formatter,
                         resetAmountOnCoinSelect,
                         dex
