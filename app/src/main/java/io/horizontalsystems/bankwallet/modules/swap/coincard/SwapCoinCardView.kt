@@ -127,6 +127,7 @@ fun SwapAmountInput(
 ) {
     val amountData by viewModel.amountLiveData().observeAsState()
     val secondaryInfo by viewModel.secondaryInfoLiveData().observeAsState()
+    var focused by remember { mutableStateOf(false) }
 
     var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(""))
@@ -143,8 +144,9 @@ fun SwapAmountInput(
     Column(modifier = modifier.height(46.dp), verticalArrangement = Arrangement.Center) {
         BasicTextField(
             modifier = Modifier
-                .onFocusChanged {
-                    onFocusChanged?.invoke(it.isFocused)
+                .onFocusChanged { focusState ->
+                    focused = focusState.isFocused
+                    onFocusChanged?.invoke(focusState.isFocused)
                 }
                 .focusRequester(focusRequester)
                 .fillMaxWidth(),
@@ -200,8 +202,27 @@ fun SwapAmountInput(
                             style = ComposeAppTheme.typography.headline1,
                             textAlign = TextAlign.End
                         )
+                        innerTextField()
+                    } else if (!focused) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "${viewModel.inputParams.primaryPrefix ?: ""}${textState.text}",
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            color = if (amountDimming) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
+                            style = ComposeAppTheme.typography.headline1,
+                            textAlign = TextAlign.End
+                        )
+                        Box(
+                            modifier = Modifier
+                                .height(0.dp)
+                                .fillMaxWidth()
+                        ) {
+                            innerTextField()
+                        }
+                    } else {
+                        innerTextField()
                     }
-                    innerTextField()
                 }
             }
         )
