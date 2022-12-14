@@ -481,6 +481,15 @@ class SendEvmTransactionViewModel(
 
     private fun additionalViewItems(oneInchSwapInfo: SendEvmData.OneInchSwapInfo, recipient: Address?): List<ViewItem> {
         val viewItems = mutableListOf<ViewItem>()
+        oneInchSwapInfo.price?.let {
+            viewItems.add(
+                ViewItem.Value(
+                    Translator.getString(R.string.Swap_Price),
+                    it,
+                    ValueType.Regular
+                )
+            )
+        }
         getFormattedSlippage(oneInchSwapInfo.slippage)?.let { formattedSlippage ->
             viewItems.add(
                 ViewItem.Value(

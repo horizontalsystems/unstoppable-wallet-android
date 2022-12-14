@@ -9,16 +9,19 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Transaction
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ISendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
+import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
 import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import java.math.RoundingMode
 
 class OneInchSendEvmTransactionService(
     private val evmKitWrapper: EvmKitWrapper,
-    private val feeService: OneInchFeeService
+    private val feeService: OneInchFeeService,
+    private val helper: SwapViewItemHelper
 ) : ISendEvmTransactionService, Clearable {
 
     private val evmKit = evmKitWrapper.evmKit
@@ -94,13 +97,17 @@ class OneInchSendEvmTransactionService(
 
     private fun getAdditionalInfo(parameters: OneInchSwapParameters): SendEvmData.AdditionalInfo {
         return parameters.let {
+            val sellPrice = it.amountTo.divide(it.amountFrom, it.tokenFrom.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
+            val buyPrice = it.amountFrom.divide(it.amountTo, it.tokenTo.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
+            val (primaryPrice, secondaryPrice) = helper.prices(sellPrice, buyPrice, it.tokenFrom, it.tokenTo)
             val swapInfo = SendEvmData.OneInchSwapInfo(
                 tokenFrom = it.tokenFrom,
                 tokenTo = it.tokenTo,
                 amountFrom = it.amountFrom,
                 estimatedAmountTo = it.amountTo,
                 slippage = it.slippage,
-                recipient = parameters.recipient
+                recipient = it.recipient,
+                price = primaryPrice
             )
             SendEvmData.AdditionalInfo.OneInchSwap(swapInfo)
         }

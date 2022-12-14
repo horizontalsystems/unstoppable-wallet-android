@@ -203,9 +203,9 @@ private fun UniswapScreen(
                     }
                 } else {
                     val infoItems = mutableListOf<@Composable () -> Unit>()
-                    tradeViewItem?.buyPrice?.let { buyPrice ->
-                        tradeViewItem?.sellPrice?.let { sellPrice ->
-                            infoItems.add { Price(buyPrice, sellPrice, tradeTimeoutProgress ?: 1f, tradeViewItem?.expired ?: false) }
+                    tradeViewItem?.primaryPrice?.let { primaryPrice ->
+                        tradeViewItem?.secondaryPrice?.let { secondaryPrice ->
+                            infoItems.add { Price(primaryPrice, secondaryPrice, tradeTimeoutProgress ?: 1f, tradeViewItem?.expired ?: false) }
                         }
                     }
                     if (allowanceViewModel.uiState.isVisible) {

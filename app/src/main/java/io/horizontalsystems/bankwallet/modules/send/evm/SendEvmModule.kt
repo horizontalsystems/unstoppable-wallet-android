@@ -88,7 +88,8 @@ data class SendEvmData(
         val amountFrom: BigDecimal,
         val estimatedAmountTo: BigDecimal,
         val slippage: BigDecimal,
-        val recipient: Address?
+        val recipient: Address?,
+        val price: String? = null
     ) : Parcelable
 }
 

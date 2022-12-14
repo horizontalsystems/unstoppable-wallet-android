@@ -18,10 +18,10 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowan
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.uniswapkit.TradeError
-import io.horizontalsystems.uniswapkit.models.Price
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class UniswapViewModel(
     val service: UniswapService,
@@ -62,17 +62,19 @@ class UniswapViewModel(
             val serviceState = service.state
             if (serviceState is UniswapService.State.Ready) {
                 val trade = (tradeService.state as? UniswapTradeService.State.Ready)?.trade
+                val (primaryPrice, secondaryPrice) = trade?.tradeData?.executionPrice?.let {
+                    val sellPrice = it
+                    val buyPrice = BigDecimal.ONE.divide(sellPrice, sellPrice.scale(), RoundingMode.HALF_EVEN)
+                    formatter.prices(sellPrice, buyPrice, tradeService.tokenFrom, tradeService.tokenTo)
+                } ?: Pair(null, null)
+
                 val swapInfo = SendEvmData.UniswapInfo(
                     estimatedIn = tradeService.amountFrom ?: BigDecimal.ZERO,
                     estimatedOut = tradeService.amountTo ?: BigDecimal.ZERO,
                     slippage = formatter.slippage(tradeService.tradeOptions.allowedSlippage),
                     deadline = formatter.deadline(tradeService.tradeOptions.ttl),
                     recipientDomain = tradeService.tradeOptions.recipient?.title,
-                    price = formatter.price(
-                        trade?.tradeData?.executionPrice,
-                        tradeService.tokenFrom,
-                        tradeService.tokenTo
-                    ),
+                    price = primaryPrice,
                     priceImpact = trade?.let { formatter.priceImpactViewItem(it) }
                 )
                 val warnings: List<Warning> = if (trade?.priceImpactLevel == UniswapTradeService.PriceImpactLevel.Forbidden)
@@ -270,20 +272,16 @@ class UniswapViewModel(
     }
 
     private fun tradeViewItem(trade: UniswapTradeService.Trade): TradeViewItem {
+
+        val (primaryPrice, secondaryPrice) = trade.tradeData.executionPrice?.let {
+            val sellPrice = it
+            val buyPrice = BigDecimal.ONE.divide(sellPrice, sellPrice.scale(), RoundingMode.HALF_EVEN)
+            formatter.prices(sellPrice, buyPrice, tradeService.tokenFrom, tradeService.tokenTo)
+        } ?: Pair(null, null)
+
         return TradeViewItem(
-            buyPrice = formatter.price(
-                trade.tradeData.executionPrice,
-                quoteToken = tradeService.tokenFrom,
-                baseToken = tradeService.tokenTo
-            ),
-            sellPrice = formatter.price(
-                Price(
-                    baseTokenAmount = trade.tradeData.trade.tokenAmountOut,
-                    quoteTokenAmount = trade.tradeData.trade.tokenAmountIn
-                ).decimalValue,
-                quoteToken = tradeService.tokenTo,
-                baseToken = tradeService.tokenFrom
-            ),
+            primaryPrice = primaryPrice,
+            secondaryPrice = secondaryPrice,
             priceImpact = formatter.priceImpactViewItem(trade, UniswapTradeService.PriceImpactLevel.Warning),
             guaranteedAmount = formatter.guaranteedAmountViewItem(
                 trade.tradeData,
@@ -295,8 +293,8 @@ class UniswapViewModel(
 
     //region models
     data class TradeViewItem(
-        val buyPrice: String? = null,
-        val sellPrice: String? = null,
+        val primaryPrice: String? = null,
+        val secondaryPrice: String? = null,
         val priceImpact: UniswapModule.PriceImpactViewItem? = null,
         val guaranteedAmount: UniswapModule.GuaranteedAmountViewItem? = null,
         val expired: Boolean = false

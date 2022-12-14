@@ -137,12 +137,12 @@ fun SingleLineGroup(
 
 @Composable
 fun Price(
-    buyPrice: String,
-    sellPrice: String,
+    primaryPrice: String,
+    secondaryPrice: String,
     timeoutProgress: Float,
     expired: Boolean = false
 ) {
-    var showBuyPrice by remember { mutableStateOf(false) }
+    var showPrimaryPrice by remember { mutableStateOf(true) }
 
     Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically)
     {
@@ -150,7 +150,7 @@ fun Price(
         Spacer(Modifier.weight(1f))
 
         ButtonSecondary(
-            onClick = { showBuyPrice = !showBuyPrice },
+            onClick = { showPrimaryPrice = !showPrimaryPrice },
             buttonColors = SecondaryButtonDefaults.buttonColors(
                 backgroundColor = ComposeAppTheme.colors.transparent,
                 contentColor = ComposeAppTheme.colors.leah,
@@ -160,7 +160,7 @@ fun Price(
             contentPadding = PaddingValues(start = 8.dp, end = 8.dp),
             content = {
                 Text(
-                    text = if (showBuyPrice) buyPrice else sellPrice,
+                    text = if (showPrimaryPrice) primaryPrice else secondaryPrice,
                     maxLines = 1,
                     style = ComposeAppTheme.typography.subhead2,
                     color = if (expired) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,

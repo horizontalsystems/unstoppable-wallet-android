@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapParameters
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
@@ -48,7 +49,8 @@ object OneInchConfirmationModule {
         private val sendService by lazy {
             OneInchSendEvmTransactionService(
                 evmKitWrapper,
-                feeService
+                feeService,
+                SwapViewItemHelper(App.numberFormatter)
             )
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
