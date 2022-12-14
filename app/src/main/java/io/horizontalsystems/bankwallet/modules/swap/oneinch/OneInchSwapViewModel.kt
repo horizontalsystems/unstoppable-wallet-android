@@ -145,18 +145,10 @@ class OneInchSwapViewModel(
     }
 
     private fun tradeViewItem(params: OneInchSwapParameters) = try {
-        TradeViewItem(
-            buyPrice = formatter.price(
-                params.amountTo.divide(params.amountFrom, params.tokenFrom.decimals, RoundingMode.HALF_UP).stripTrailingZeros(),
-                params.tokenFrom,
-                params.tokenTo
-            ),
-            sellPrice = formatter.price(
-                params.amountFrom.divide(params.amountTo, params.tokenTo.decimals, RoundingMode.HALF_UP).stripTrailingZeros(),
-                params.tokenTo,
-                params.tokenFrom
-            )
-        )
+        val sellPrice = params.amountTo.divide(params.amountFrom, params.tokenFrom.decimals, RoundingMode.HALF_UP).stripTrailingZeros()
+        val buyPrice = params.amountFrom.divide(params.amountTo, params.tokenTo.decimals, RoundingMode.HALF_UP).stripTrailingZeros()
+        val (primaryPrice, secondaryPrice) = formatter.prices(sellPrice, buyPrice, tradeService.tokenFrom, tradeService.tokenTo)
+        TradeViewItem(primaryPrice, secondaryPrice)
     } catch (exception: ArithmeticException) {
         null
     }
@@ -256,8 +248,8 @@ class OneInchSwapViewModel(
     }
 
     data class TradeViewItem(
-        val buyPrice: String? = null,
-        val sellPrice: String? = null,
+        val primaryPrice: String? = null,
+        val secondaryPrice: String? = null,
         val expired: Boolean = false
     )
 

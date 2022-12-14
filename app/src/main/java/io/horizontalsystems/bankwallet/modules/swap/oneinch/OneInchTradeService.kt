@@ -246,9 +246,7 @@ class OneInchTradeService(
     }
 
     private fun handle(quote: Quote, tokenFrom: Token, tokenTo: Token, amountFrom: BigDecimal) {
-        val amountToBigDecimal =
-            quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals)
-                .stripTrailingZeros()
+        val amountToBigDecimal = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
 
         amountTo = amountToBigDecimal
 
