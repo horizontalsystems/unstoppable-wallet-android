@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockViewModel
@@ -64,9 +65,15 @@ fun PinUnlock(
             title = {
                 val error = viewModel.uiState.error
                 if (error != null) {
-                    headline1_lucian(text = error)
+                    headline1_lucian(
+                        text = error,
+                        textAlign = TextAlign.Center
+                    )
                 } else {
-                    headline1_leah(text = viewModel.uiState.title)
+                    headline1_leah(
+                        text = viewModel.uiState.title,
+                        textAlign = TextAlign.Center
+                    )
                 }
             },
             enteredCount = viewModel.uiState.enteredCount,
