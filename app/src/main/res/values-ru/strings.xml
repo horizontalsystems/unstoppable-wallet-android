@@ -474,6 +474,7 @@
     <string name="SwapSettings_Apply">Применить</string>
     <string name="SwapSettings_DeadlineMinute">%s мин</string>
     <string name="SwapSettings_RecipientPlaceholder">Адрес или домен</string>
+    <string name="SwapSettings_FeeSettingsAlert">A service fee for the swap action on the platform typically either 0.3% or 0.6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Нулевой Срок</string>
     <string name="SwapSettings_Error_SlippageZero">Нулевое Отклонение</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ваша транзакция, скорее всего, не удастся.</string>
