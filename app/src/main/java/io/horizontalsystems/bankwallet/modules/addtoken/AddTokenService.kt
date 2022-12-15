@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenModule.IAddToken
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class AddTokenService(
     private val coinManager: ICoinManager,
@@ -30,7 +31,7 @@ class AddTokenService(
         validServices.forEach { service ->
             val token = coinManager.getToken(service.tokenQuery(reference))
 
-            if (token != null) {
+            if (token != null && token.type !is TokenType.Unsupported) {
                 val inWallet = activeWallets.any { it.token == token }
                 val supported = isSupported(token.blockchainType)
                 tokenInfos.add(TokenInfo.Local(token, inWallet, supported))
