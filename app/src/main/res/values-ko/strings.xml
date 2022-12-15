@@ -62,10 +62,11 @@
     <string name="CreateWallet_Mnemonic">연상 기호</string>
     <string name="CreateWallet_Wordlist">단어 목록</string>
     <string name="Passphrase">암호문구</string>
+    <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
     <string name="CreateWallet_N_Words">%s 단어</string>
     <string name="CreateWallet_PassphraseConfirm">확인</string>
     <string name="CreateWallet_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]> for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">암호 확인이 일치하지 않습니다</string>
     <string name="EnterPassphrase">암호 문구 입력</string>
     <string name="CreateWallet_PassphraseDescription">암호 문구는 사용자가 하나의 연상 기호 복구 문구를 사용하여 여러 개의 독립적인 멀티코인 지갑을 만들 수 있도록 지갑에 보안 계층을 추가합니다.\n\n이러한 지갑을 복원하려면 사용자가 복원하기 위해 각 지갑에 대한 비밀번호와 연상 기호 복구 문구가 필요합니다.</string>
