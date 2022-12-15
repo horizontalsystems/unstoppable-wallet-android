@@ -472,6 +472,7 @@
     <string name="SwapSettings_Apply">درخواست دادن</string>
     <string name="SwapSettings_DeadlineMinute">%s دقیقه</string>
     <string name="SwapSettings_RecipientPlaceholder">آدرس یا دامنه</string>
+    <string name="SwapSettings_FeeSettingsAlert">A service fee for the swap action on the platform typically either 0.3% or 0.6%</string>
     <string name="SwapSettings_Error_DeadlineZero">مهلت صفر</string>
     <string name="SwapSettings_Error_SlippageZero">لغزش صفر</string>
     <string name="SwapSettings_Error_SlippageTooLow">تراکنش شما احتمالاً ناموفق است.</string>
