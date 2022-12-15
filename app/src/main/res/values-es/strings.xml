@@ -44,7 +44,7 @@
     <string name="Keyboard">Teclado</string>
     <string name="AccountRecovery_Note">Nota</string>
     <string name="AccountRecovery_MigrationRecommended">Este monedero parece usar un carácter no estándar en tu lista de palabras secretas y/o una frase de contraseña. Si no logras ver un saldo o transacciones, continua leyenda para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
-    <string name="AccountRecovery_MigrationRequired">Este es un monedero que no cumple con los estándares. A continuación, continúa leyendo para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
+    <string name="AccountRecovery_MigrationRequired">Esta es una cartera no estándar. \n\nCLICK PARA CONTRAR MÁS INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Desencadenar Activos</string>
@@ -102,7 +102,7 @@
     <string name="Restore_PrivateKeyHint">Introduzca la clave privada EVM, BIP32 Root Key o Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Introduzca 12, 15, 18, 21 o 24 palabras</string>
     <string name="Restore_NonStandardRestore">Restauración no estándar</string>
-    <string name="Restore_NonStandard_Description">Esta página proporciona un mecanismo especial de restauración de monedero para usuarios de Unstoppable que tienen un monedero no estándar. Por lo general, dichos monederos se podrían haber creado en la versión 0.27 - 0.28 de Unstoppable utilizando una lista de palabras mnemotécnicas que no están en inglés y/o un carácter especial en la frase de contraseña del monedero (es decir, un símbolo diacrítico).\n\nSi eres un usuario afectado, el saldo de tu monedero se mostrará en 0 después de actualizar a la versión 0.29. Esta página te permitirá restaurar el acceso a tu monedero no estándar. Una vez restaurado, se recomienda crear un nuevo monedero (que cumplirá con los estándares) y mover todos los fondos allí.</string>
+    <string name="Restore_NonStandard_Description">Esta página proporciona un mecanismo especial de restauración de monedero para usuarios de Unstoppable que tienen un monedero no estándar. Por lo general, dichos monederos se podrían haber creado en la versión 0.27 - 0.28 de Unstoppable utilizando una lista de palabras mnemotécnicas que no están en inglés y/o un carácter especial en la frase de contraseña del monedero (es decir, un símbolo diacrítico).\n\nSi es un usuario afectado, el saldo de su billetera se mostrará en 0 después de restaurar dicha billetera en la versión 0.29 o superior. Esta página te permitirá restaurar el acceso a tu monedero no estándar. Una vez restaurado, se recomienda crear un nuevo monedero (que cumplirá con los estándares) y mover todos los fondos allí.</string>
     <string name="Restore_PrivateKey_InvalidKey">Clave no válida</string>
     <string name="Select_Coins">Elegir monedas</string>
     <string name="Restore_BirthdayHeight">Altura de Cumpleaños</string>
@@ -401,17 +401,17 @@
     <string name="WalletConnect_Note">Nota</string>
     <string name="WalletConnect_LegacySignWarning">Firmar este mensaje puede ser peligroso. Esta firma podría potencialmente realizar cualquier operación en nombre de tu cuenta, incluyendo dar el control total de su cuenta y todos sus activos al sitio solicitado. Firma este mensaje sólo si sabes lo que estás haciendo o confía plenamente en el sitio solicitante.</string>
     <string name="WalletConnect_NotSupportedDescription">El tipo de cartera actual %s no es compatible con WalletConnect</string>
-    <string name="WalletConnect_Unnamed">Unnamed</string>
-    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
+    <string name="WalletConnect_Unnamed">Sin nombre</string>
+    <string name="WalletConnect_DAppUnknown">dApp desconocida</string>
     <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
-    <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
-    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
+    <string name="WalletConnect_Pairings_DeleteAll">Borrar todo</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">¿Desea eliminar todos los dAps emparejados?</string>
     <string name="WalletConnect_Pairings_Delete">Eliminar</string>
-    <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
-    <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
+    <string name="WalletConnect_DeleteAllPairs">Borrar todos los pares</string>
+    <string name="WalletConnect_UnsupportedRequest_Title">Solicitud no soportada</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningTitle">No soportado</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningDescription">Este formato de solicitud no es compatible con el monedero</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
@@ -444,7 +444,7 @@
     <string name="Swap_Fee">Comisión</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorNoLiquidity">No se pueden permutar estos tokens</string>
-    <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">Este servicio no permite envolver/desenvolver. Usa 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Impacto de precio alto</string>
     <string name="Swap_Proceed">Siguiente</string>
     <string name="Swap_Revoke">Revocar</string>
@@ -499,9 +499,9 @@
     <string name="SwapInfo_Description">Este servicio de intercambio está impulsado por %s, un intercambio de token descentralizado construido en %s blockchain.\n\n%s está completamente automatizado y administrado por contratos inteligentes que facilitan los intercambios de token de una manera conflaible y sin ninguna intención para hacer estafas.</string>
     <string name="SwapInfo_DexRelated">Uniswap Relacionado</string>
     <string name="SwapInfo_AllowanceTitle">Permiso de acceso</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">La cantidad que un intercambio puede gastar en nombre del usuario al ejecutar swaps de token. Se requiere un permiso suficiente para establecer una transacción anterior antes de que pueda tener lugar una transacción de intercambio real.</string>
     <string name="SwapInfo_PriceImpactTitle">Impacto en el precio</string>
-    <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
+    <string name="SwapInfo_PriceImpactDescription">Desviación de precio esperada de un valor mostrado, normalmente aumenta con la cantidad de swap.</string>
     <string name="SwapInfo_SwapFeeTitle">Tarifa por permutar</string>
     <string name="SwapInfo_SwapFeeDescription">Una tarifa de servicio para la acción de intercambio en la plataforma, mostrada en la moneda que el usuario vende. Para la mayoría de las ordenes debería ser del 0.3% o del 0.6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Cantidad Garantizada</string>
@@ -651,7 +651,7 @@
     <string name="Privacy_BulletedText4">No hay cuentas de usuario o bases de datos que conserven los datos del usuario en otros lugares.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">SETINGOS DE BLOQUEÑA</string>
-    <string name="SecurityCenter_TestnetSettings">TESTNET SETTINGS</string>
+    <string name="SecurityCenter_TestnetSettings">SETINGOS DE TESTNET</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
     <string name="SecurityCenter_BlockchainSettingsFooterDescription">Seleccionar fuente de datos para restaurar y sincronizar cartera</string>
     <!--Evm Network-->
@@ -892,6 +892,7 @@
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">TIPOS DE COIN</string>
+    <string name="AddToken_AlreadyAdded">YA AGREGADO</string>
     <string name="AddToken_AddressOrSymbol">Dirección del contrato</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
     <string name="AddToken_InvalidAddressError">Dirección de contrato inválida o símbolo BEP2</string>
