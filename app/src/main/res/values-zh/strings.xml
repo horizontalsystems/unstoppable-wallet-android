@@ -472,6 +472,7 @@
     <string name="SwapSettings_Apply">应用</string>
     <string name="SwapSettings_DeadlineMinute">%s分钟。</string>
     <string name="SwapSettings_RecipientPlaceholder">地址或域名</string>
+    <string name="SwapSettings_FeeSettingsAlert">A service fee for the swap action on the platform typically either 0.3% or 0.6%</string>
     <string name="SwapSettings_Error_DeadlineZero">没有截止日期</string>
     <string name="SwapSettings_Error_SlippageZero">没有滑点</string>
     <string name="SwapSettings_Error_SlippageTooLow">滑点太小，您的交易可能失败。</string>
