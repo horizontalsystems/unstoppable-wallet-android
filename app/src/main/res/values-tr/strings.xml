@@ -66,7 +66,7 @@
     <string name="CreateWallet_N_Words">%s kelime</string>
     <string name="CreateWallet_PassphraseConfirm">Onayla</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Parola boş olamaz</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]> for the passphrase</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Lütfen parola için yalnızca <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]> kullanın</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Parola onayı eşleşmiyor</string>
     <string name="EnterPassphrase">Parolayı girin</string>
     <string name="CreateWallet_PassphraseDescription">Parolalar cüzdanlara ek güvenlik katmanı ekleyerek kullanıcıların tek bir anımsatıcı kurtarma ifadesi kullanarak ancak farklı parolalarla ilişkilendirilmiş birden çok bağımsız çoklu para cüzdanı oluşturmasına olanak tanır. \n\nBu cüzdanları geri yüklemek için bir kullanıcı mnemonic kurtarma ifadesinin yanı sıra bir parola gerektirecektir. her biri geri yüklenecek cüzdan.</string>
