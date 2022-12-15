@@ -113,7 +113,7 @@ private fun AddTokenScreen(
                         uiState.coinName ?: dots
                     )
                     TitleValueCell(
-                        R.string.AddToken_Symbol,
+                        R.string.AddToken_CoinCode,
                         uiState.coinCode ?: dots
                     )
                     TitleValueCell(
@@ -126,8 +126,8 @@ private fun AddTokenScreen(
                 val alreadyAddedToken = uiState.alreadyAddedTokens
 
                 AnimatedVisibility(alreadyAddedToken.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(24.dp))
                     Column {
+                        Spacer(modifier = Modifier.height(24.dp))
                         HeaderText(text = stringResource(id = R.string.AddToken_AlreadyAdded))
                         CellUniversalLawrenceSection(alreadyAddedToken) { addedToken ->
                             RowUniversal(
@@ -157,8 +157,8 @@ private fun AddTokenScreen(
                 }
 
                 AnimatedVisibility(tokens.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(24.dp))
                     Column {
+                        Spacer(modifier = Modifier.height(24.dp))
                         HeaderText(text = stringResource(id = R.string.AddToken_CoinTypes))
                         CellUniversalLawrenceSection(tokens) { tokenInfoUiState ->
                             RowUniversal(
