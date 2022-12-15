@@ -42,9 +42,9 @@
     <string name="SyncError">Ошибка синхронизации. Повторите попытку</string>
     <string name="PercentTitle">Процент</string>
     <string name="Keyboard">Клавиатура</string>
-
     <string name="AccountRecovery_Note">Примечание</string>
-    <string name="AccountRecovery_MigrationRecommended">Похоже, этот кошелек использует нестандартный символ в списке мнемонических слов и/или парольной фразе. Если вы не видите баланс или транзакции, пожалуйста, прочтите подробности ниже.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
+    <string name="AccountRecovery_MigrationRecommended">Похоже, этот кошелек использует нестандартный символ в списке мнемонических слов и/или парольной фразе. Если вы не видите баланс или транзакции, пожалуйста, прочтите подробности ниже.
+\n\nПОЖАЛУЙСТА НАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ.</string>
     <string name="AccountRecovery_MigrationRequired">Это нестандартный кошелек.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
 
     <!--Intro-->
@@ -64,9 +64,11 @@
     <string name="CreateWallet_Mnemonic">Мнемоническая Фраза</string>
     <string name="CreateWallet_Wordlist">Список Слов</string>
     <string name="Passphrase">Кодовая Фраза</string>
+    <string name="CreateWallet_N_WordsRecommended">%s слов (рекомендуется)</string>
     <string name="CreateWallet_N_Words">%s слов</string>
     <string name="CreateWallet_PassphraseConfirm">Подтвердить</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]> для ключевой фразы.</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
     <string name="EnterPassphrase">Введите кодовую фразу</string>
     <string name="CreateWallet_PassphraseDescription">Кодовые фразы обеспечивают дополнительную защиту для кошельков, позволяя пользователям создавать несколько независимых мультивалютных кошельков, использующих одну мнемоническую фразу для восстановления, но имеющих разные пароли.\n\nДля восстановления этих кошельков пользователю потребуются мнемоническая фраза для восстановления, а также пароль для каждого восстанавливаемого кошелька.</string>
@@ -103,7 +105,9 @@
     <string name="Restore_PrivateKeyHint">Введите приватный ключ EVM, BIP32 Root Key или Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Введите 12, 15, 18, 21 или 24 слова</string>
     <string name="Restore_NonStandardRestore">Нестандартное Восстановление</string>
-    <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей Unstoppable с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях Unstoppable 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).\n\nЕсли вы являетесь затронутым пользователем, то баланс вашего кошелька будет отображаться как 0 после восстановления такого кошелька в версии 0.29 или выше. Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
+    <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей Unstoppable с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях Unstoppable 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).
+\n\nЕсли вы являетесь затронутым пользователем, то баланс вашего кошелька будет отображаться как 0 после восстановления такого кошелька в версии 0.29 или выше.Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
+
     <string name="Restore_PrivateKey_InvalidKey">Неверный Ключ</string>
     <string name="Select_Coins">Выберите Токены</string>
     <string name="Restore_BirthdayHeight">Блок Создания</string>
@@ -402,16 +406,17 @@
     <string name="WalletConnect_Note">Примечание</string>
     <string name="WalletConnect_LegacySignWarning">Подписание этого сообщения может быть опасным. Эта подпись потенциально может выполнить любую операцию от имени вашей учетной записи, включая полное управление вашим счетом и всеми его активами на запрашиваемый сайт. Подпишите это сообщение только если вы знаете, что вы делаете или полностью доверяете запрашиваемому сайту.</string>
     <string name="WalletConnect_NotSupportedDescription">Ваш текущий тип кошелька %s не поддерживает WalletConnect</string>
-    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
-    <string name="WalletConnect_Pairings">Pairings</string>
-    <string name="WalletConnect_PairedDApps">Paired dApps</string>
-    <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
-    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
-    <string name="WalletConnect_Pairings_Delete">Delete</string>
-    <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
-    <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
+    <string name="WalletConnect_Unnamed">Без имени</string>
+    <string name="WalletConnect_DAppUnknown">Неизвестный dApp</string>
+    <string name="WalletConnect_Pairings">Соединения</string>
+    <string name="WalletConnect_PairedDApps">Соединеные dApp</string>
+    <string name="WalletConnect_Pairings_DeleteAll">Удалить Всё</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Вы хотите удалить все соединенные dApss?</string>
+    <string name="WalletConnect_Pairings_Delete">Удалить</string>
+    <string name="WalletConnect_DeleteAllPairs">Удалить все пары</string>
+    <string name="WalletConnect_UnsupportedRequest_Title">Неподдерживаемый Запрос</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Не поддерживается</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningDescription">Формат запроса не поддерживается кошельком</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Внимание</string>
     <string name="EthereumTransaction_Error_Title">Ошибка</string>
@@ -431,7 +436,7 @@
     <string name="Swap_ToAmountTitle">Вы получите</string>
     <string name="Swap_Estimated">ПРИБЛИЗИТЕЛЬНО</string>
     <string name="Swap_TokenSelectorTitle">Выбрать</string>
-    <string name="Swap_Balance">Available balance</string>
+    <string name="Swap_Balance">Доступный Баланс</string>
     <string name="Swap_Allowance">Разрешение</string>
     <string name="Swap_Price">Цена</string>
     <string name="Swap_SellPrice">Цена продажи</string>
@@ -444,6 +449,7 @@
     <string name="Swap_Fee">Комиссия</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
     <string name="Swap_ErrorNoLiquidity">Невозможно обменять эти токены</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">Эта служба не позволяет wrapping/unwrapping. Вместо этого используйте 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Высокое отклонение цены</string>
     <string name="Swap_Proceed">Далее</string>
     <string name="Swap_Revoke">Отменить</string>
@@ -500,7 +506,7 @@
     <string name="SwapInfo_AllowanceTitle">Разрешение</string>
     <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">Колебание Цен</string>
-    <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
+    <string name="SwapInfo_PriceImpactDescription">Ожидаемое отклонение цены от указанной цены, обычно увеличивается при увеличении суммы обмена.</string>
     <string name="SwapInfo_SwapFeeTitle">Комиссия за обмен</string>
     <string name="SwapInfo_SwapFeeDescription">Плата за услугу обмена на платформе, показана в валюте, в которой продает пользователь. Для большинства заказов составляет или 0,3% или 0,6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Гарантированная Сумма</string>
@@ -650,6 +656,7 @@
     <string name="Privacy_BulletedText4">Нет учетных записей или баз данных, хранящих данные пользователя в другом месте.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">НАСТРОЙКИ BLOCKCHAIN</string>
+    <string name="SecurityCenter_TestnetSettings">НАСТРОЙКИ ТЕСТНЕТА</string>
     <string name="SecurityCenter_Internet">ИНТЕРНЕТ</string>
     <string name="SecurityCenter_BlockchainSettingsFooterDescription">Выберите источник данных для восстановления и синхронизации кошелька</string>
     <!--Evm Network-->
@@ -773,7 +780,7 @@
     <string name="Watch_By">Из</string>
     <string name="Watch_WatchBy">Смотреть из</string>
     <string name="Watch_TypeEvmAddress">EVM адрес</string>
-    <string name="Watch_TypeSolanaAddress">Solana Address</string>
+    <string name="Watch_TypeSolanaAddress">Solana адрес</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Названию</string>
@@ -887,6 +894,7 @@
     <string name="AddToken_Decimals">Десятичные Знаки</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">ТИПЫ ТОКЕНОВ</string>
+    <string name="AddToken_AlreadyAdded">УЖЕ ДОБАВЛЕНО</string>
     <string name="AddToken_AddressOrSymbol">Адрес Контракта</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
     <string name="AddToken_InvalidAddressError">Неверный адрес контракта или символ BEP2</string>
@@ -906,6 +914,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (рекомендуется)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">до 2018 года</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">после 2018 года</string>
+    <!-- Testnet Settings -->
+    <string name="Testnet_Enable">Включить Testnet</string>
+    <string name="Testnet_Support">Только кошельки мнемонической фразы</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Соединение</string>
     <string name="Tor_Connection_Enable">Включить Tor</string>
@@ -917,7 +928,7 @@
     <string name="TorPage_Connected">Подключен</string>
     <string name="TorPage_Failed">Не удалось</string>
     <string name="TorPage_ConnectionClosed">Отсоединено</string>
-    <string name="Tor_TorIsActive">Tor is active</string>
+    <string name="Tor_TorIsActive">Tor активен</string>
     <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
     <!--Coin Option-->
     <string name="CoinOption_bip49_Title">Новые (рекомендуется)</string>

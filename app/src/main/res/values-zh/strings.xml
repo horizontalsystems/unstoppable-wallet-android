@@ -42,8 +42,7 @@
     <string name="SyncError">同步错误。请再试一次</string>
     <string name="PercentTitle">百分比</string>
     <string name="Keyboard">键盘</string>
-
-    <string name="AccountRecovery_Note">笔记</string>
+    <string name="AccountRecovery_Note">备注</string>
     <string name="AccountRecovery_MigrationRecommended">这个钱包似乎在其密码列表和/或密码短语中使用了非标准字符。 如果您没有看到余额或交易，请阅读下面的详细信息。\n\n点击获取更多信息</string>
     <string name="AccountRecovery_MigrationRequired">这是一个不符合标准的钱包。 详情请阅读下文。\n\n点击获取更多信息</string>
 
@@ -64,9 +63,11 @@
     <string name="CreateWallet_Mnemonic">助记词</string>
     <string name="CreateWallet_Wordlist">词表</string>
     <string name="Passphrase">密码</string>
+    <string name="CreateWallet_N_WordsRecommended">%s 个单词(推荐)</string>
     <string name="CreateWallet_N_Words">%s 个单词</string>
     <string name="CreateWallet_PassphraseConfirm">确认</string>
     <string name="CreateWallet_Error_EmptyPassphrase">助记词不能为空</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">请仅使用 <![CDATA[A-Z a-z 0-9 \'"&/?!:;.,~*$=+-[](){}<>\_#@|%]]> 获取密码</string>
     <string name="CreateWallet_Error_InvalidConfirmation">确认密码不匹配</string>
     <string name="EnterPassphrase">输入密码</string>
     <string name="CreateWallet_PassphraseDescription">密码为钱包增加了一个额外的保护层，同一组助记词使用不同的密码，就可以让用户创建许多个独立的多币钱包。\n\n要恢复这些钱包，用户必须有一组助记词和不同密码。</string>
@@ -103,7 +104,8 @@
     <string name="Restore_PrivateKeyHint">輸入 EVM 私鑰、BIP32 Root Key 或  Account Extended Private Key</string>
     <string name="Restore_PhraseHint">输入12、15、18、21或24个单词</string>
     <string name="Restore_NonStandardRestore">非标准还原</string>
-    <string name="Restore_NonStandard_Description">此页面为拥有非标准钱包的 Unstoppable 用户提供了一种特殊的钱包恢复机制。 通常，此类钱包可以在 Unstoppable 版本 0.27 - 0.28 中使用非英语助记词列表和/或钱包密码短语中的特殊字符（即变音符号）创建。\n\n如果您是受影响的用户，那么在更新到 0.29 版本后，您的钱包余额将显示为 0。 此页面将使您能够恢复对非标准钱包的访问。 恢复后，建议您创建一个新钱包（符合标准）并将资金转移到那里。</string>
+    <string name="Restore_NonStandard_Description">此页面为拥有非标准钱包的 Unstoppable 用户提供了一种特殊的钱包恢复机制。 通常，此类钱包可以在 Unstoppable 版本 0.27 - 0.28 中使用非英语助记词列表和/或钱包密码短语中的特殊字符（即变音符号）创建。\n\n如果您是受影响的用户，那么在 0.29 或更高版本中恢复此类钱包后，您的钱包余额将显示为 0。 此页面将使您能够恢复对非标准钱包的访问。 恢复后，建议您创建一个新钱包（符合标准）并将资金转移到那里。</string>
+
     <string name="Restore_PrivateKey_InvalidKey">错误密钥</string>
     <string name="Select_Coins">选择货币</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
@@ -402,16 +404,17 @@
     <string name="WalletConnect_Note">备注</string>
     <string name="WalletConnect_LegacySignWarning">签名此消息可能是危险的。 此签名可能代表您的帐户执行任何操作。 包括让您的帐户及其所有资产完全控制到请求站点。 只有当您知道正在做什么或完全信任请求站点时，才能签署此消息。</string>
     <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
-    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
+    <string name="WalletConnect_Unnamed">未命名</string>
+    <string name="WalletConnect_DAppUnknown">未知的 dApp</string>
     <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
-    <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
-    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
-    <string name="WalletConnect_Pairings_Delete">Delete</string>
-    <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
-    <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
+    <string name="WalletConnect_Pairings_DeleteAll">全部刪除</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">您想要删除所有配对的 dApps？</string>
+    <string name="WalletConnect_Pairings_Delete">删除</string>
+    <string name="WalletConnect_DeleteAllPairs">删除所有对</string>
+    <string name="WalletConnect_UnsupportedRequest_Title">不支持的请求</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningTitle">不支持</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningDescription">钱包不支持此请求格式</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
     <string name="EthereumTransaction_Error_Title">出错</string>
@@ -431,7 +434,7 @@
     <string name="Swap_ToAmountTitle">您获得</string>
     <string name="Swap_Estimated">估计</string>
     <string name="Swap_TokenSelectorTitle">选择</string>
-    <string name="Swap_Balance">Available balance</string>
+    <string name="Swap_Balance">可用余额</string>
     <string name="Swap_Allowance">补贴</string>
     <string name="Swap_Price">价格</string>
     <string name="Swap_SellPrice">卖出价</string>
@@ -444,6 +447,7 @@
     <string name="Swap_Fee">费用</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <string name="Swap_ErrorNoLiquidity">订单深度不足</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">此服务不允许包装/拆包。请使用1英寸代替。</string>
     <string name="Swap_ErrorHighPriceImpact">高价格影响</string>
     <string name="Swap_Proceed">继续</string>
     <string name="Swap_Revoke">撤回</string>
@@ -498,9 +502,9 @@
     <string name="SwapInfo_Description">此兑换服务由基于%s区块链的去中心化代币兑换协议%s提供。\n\n%s不存在任何欺诈手段、以可靠方式推动代币兑换的智能合约来实现完全自动化管理。</string>
     <string name="SwapInfo_DexRelated">%s相关</string>
     <string name="SwapInfo_AllowanceTitle">补贴</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">当执行令牌交换时，交易所可以代表用户花费的金额。 在进行实际互换交易之前，需要先确定足够的备抵。</string>
     <string name="SwapInfo_PriceImpactTitle">价格影响</string>
-    <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
+    <string name="SwapInfo_PriceImpactDescription">预期价格和显示价格的偏差通常会增加互兑金额。</string>
     <string name="SwapInfo_SwapFeeTitle">互兑交易费用</string>
     <string name="SwapInfo_SwapFeeDescription">以用户出售货币显示的 平台上互兑操作的服务费。对于大部分订单，这应为0.3%或0.6%。</string>
     <string name="SwapInfo_GuaranteedAmountTitle">保证金额</string>
@@ -650,6 +654,7 @@
     <string name="Privacy_BulletedText4">没有用户帐户或数据库存放其他地方的用户数据。</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">黑色设置</string>
+    <string name="SecurityCenter_TestnetSettings">测试网设置</string>
     <string name="SecurityCenter_Internet">网络</string>
     <string name="SecurityCenter_BlockchainSettingsFooterDescription">选择恢复和同步钱包的数据源</string>
     <!--Evm Network-->
@@ -777,7 +782,7 @@
     <string name="Watch_By">由</string>
     <string name="Watch_WatchBy">观看者</string>
     <string name="Watch_TypeEvmAddress">EVM 地址</string>
-    <string name="Watch_TypeSolanaAddress">Solana Address</string>
+    <string name="Watch_TypeSolanaAddress">Solana 地址</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
@@ -891,6 +896,7 @@
     <string name="AddToken_Decimals">小数</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">焦炭类型</string>
+    <string name="AddToken_AlreadyAdded">已经加入</string>
     <string name="AddToken_AddressOrSymbol">智能合约地址</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidAddressError">找不到符号</string>
@@ -910,6 +916,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">资金地址（推荐）</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018年之前常用</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018年之后常用</string>
+    <!-- Testnet Settings -->
+    <string name="Testnet_Enable">启用测试网</string>
+    <string name="Testnet_Support">仅限虚拟词钱包</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">连接</string>
     <string name="Tor_Connection_Enable">启用Tor</string>
@@ -921,7 +930,7 @@
     <string name="TorPage_Connected">已连接</string>
     <string name="TorPage_Failed">失败</string>
     <string name="TorPage_ConnectionClosed">已断开</string>
-    <string name="Tor_TorIsActive">Tor is active</string>
+    <string name="Tor_TorIsActive">Tor 已激活</string>
     <string name="Tor_PrerequisitesAlert_Content">如果激活了TOR，Ethereum区块链将重置为Infura</string>
     <!--Coin Option-->
     <string name="CoinOption_bip49_Title">较新（推荐)</string>

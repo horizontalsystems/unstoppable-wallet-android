@@ -42,8 +42,7 @@
     <string name="SyncError">동기화 오류입니다. 다시 시도하십시오</string>
     <string name="PercentTitle">퍼센트율</string>
     <string name="Keyboard">키보드</string>
-
-    <string name="AccountRecovery_Note">노트</string>
+    <string name="AccountRecovery_Note">참고</string>
     <string name="AccountRecovery_MigrationRecommended">이 지갑은 비밀 단어 목록 및/또는 암호 문구에 비표준 문자를 사용하는 것 같습니다. 잔액이나 거래 내역이 보이지 않으면 아래에서 자세한 내용을 읽어보세요.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
     <string name="AccountRecovery_MigrationRequired">비표준 호환 지갑입니다. 자세한 내용은 아래를 참조하십시오.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
 
@@ -64,9 +63,11 @@
     <string name="CreateWallet_Mnemonic">연상 기호</string>
     <string name="CreateWallet_Wordlist">단어 목록</string>
     <string name="Passphrase">암호문구</string>
+    <string name="CreateWallet_N_WordsRecommended">%s 단어 (권장)</string>
     <string name="CreateWallet_N_Words">%s 단어</string>
     <string name="CreateWallet_PassphraseConfirm">확인</string>
     <string name="CreateWallet_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">만 사용하십시오 <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]>암호를 위해</string>
     <string name="CreateWallet_Error_InvalidConfirmation">암호 확인이 일치하지 않습니다</string>
     <string name="EnterPassphrase">암호 문구 입력</string>
     <string name="CreateWallet_PassphraseDescription">암호 문구는 사용자가 하나의 연상 기호 복구 문구를 사용하여 여러 개의 독립적인 멀티코인 지갑을 만들 수 있도록 지갑에 보안 계층을 추가합니다.\n\n이러한 지갑을 복원하려면 사용자가 복원하기 위해 각 지갑에 대한 비밀번호와 연상 기호 복구 문구가 필요합니다.</string>
@@ -402,16 +403,17 @@
     <string name="WalletConnect_Note">참고</string>
     <string name="WalletConnect_LegacySignWarning">Signing this message can be dangerous. This signature could potentially perform any operation on behalf of your account, including giving full control of your account and all of its assets to the requesting site. Sign this message only if you know what you are doing or fully trust the requesting site.</string>
     <string name="WalletConnect_NotSupportedDescription">현재 지갑 유형 %s은(는) WalletConnect를 지원하지 않습니다.</string>
-    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
-    <string name="WalletConnect_Pairings">Pairings</string>
-    <string name="WalletConnect_PairedDApps">Paired dApps</string>
-    <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
-    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
-    <string name="WalletConnect_Pairings_Delete">Delete</string>
-    <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
-    <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
+    <string name="WalletConnect_Unnamed">이름없음</string>
+    <string name="WalletConnect_DAppUnknown">알 수 없는 dApp</string>
+    <string name="WalletConnect_Pairings">동기화</string>
+    <string name="WalletConnect_PairedDApps">페어링된 dApp</string>
+    <string name="WalletConnect_Pairings_DeleteAll">모두 삭제</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">페어링된 모든 dAps를 삭제하시겠습니까?</string>
+    <string name="WalletConnect_Pairings_Delete">삭제</string>
+    <string name="WalletConnect_DeleteAllPairs">모든 쌍 삭제</string>
+    <string name="WalletConnect_UnsupportedRequest_Title">지원되지 않는 요청</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningTitle">지원되지 않음</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningDescription">이 요청 형식은 지갑에서 지원되지 않습니다.</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">경고</string>
     <string name="EthereumTransaction_Error_Title">오류</string>
@@ -431,7 +433,7 @@
     <string name="Swap_ToAmountTitle">얻기</string>
     <string name="Swap_Estimated">예상</string>
     <string name="Swap_TokenSelectorTitle">선택</string>
-    <string name="Swap_Balance">Available balance</string>
+    <string name="Swap_Balance">사용 가능한 잔액</string>
     <string name="Swap_Allowance">허용량</string>
     <string name="Swap_Price">금액</string>
     <string name="Swap_SellPrice">매도 가격</string>
@@ -444,6 +446,7 @@
     <string name="Swap_Fee">수수료</string>
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
     <string name="Swap_ErrorNoLiquidity">이 토큰을 스왑할 수 없습니다</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">이 서비스는 래핑/언래핑을 허용하지 않습니다. 대신 1inch 를 사용하십시오.</string>
     <string name="Swap_ErrorHighPriceImpact">높은 가격 영향</string>
     <string name="Swap_Proceed">다음</string>
     <string name="Swap_Revoke">취소</string>
@@ -498,9 +501,9 @@
     <string name="SwapInfo_Description">이 거래소 서비스는 %s 블록체인에 구축된 분산형 토큰 교환 프로토콜인 %s에 의해 구동됩니다.\n\n%s는 스마트 계약에 의해 완전 자동화되고 관리되므로 부정 행위 없이 토큰 교환을 안정적으로 수행할 수 있습니다.</string>
     <string name="SwapInfo_DexRelated">Uniswap 관련됨</string>
     <string name="SwapInfo_AllowanceTitle">허용량</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">토큰 스왑을 실행할 때 거래소가 사용자를 대신하여 지출할 수 있는 금액. 실제 스왑 거래가 발생하기 전에 선행 거래 설정 충분한 여유가 필요합니다.</string>
     <string name="SwapInfo_PriceImpactTitle">가격 영향</string>
-    <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
+    <string name="SwapInfo_PriceImpactDescription">표시된 가격과의 예상 가격 편차는 일반적으로 스왑 금액에 따라 증가합니다.</string>
     <string name="SwapInfo_SwapFeeTitle">스왑 비용</string>
     <string name="SwapInfo_SwapFeeDescription">플랫폼에서의 스왑 작업에 대한 서비스 수수료이며, 사용자가 판매하는 통화에 표시됩니다. 대부분의 주문의 경우 0.3% 또는 0.6%여야 합니다.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">보증 금액</string>
@@ -649,8 +652,9 @@
     <string name="Privacy_BulletedText3">지갑은 사용자에 대한 데이터를 공유하지 않습니다.</string>
     <string name="Privacy_BulletedText4">사용자 데이터를 다른 곳에 보관하는 사용자 계정이나 데이터베이스가 없습니다.</string>
     <!-- Security Center -->
-    <string name="SecurityCenter_BlockchainSettings">BLOCKCHAIN SETTINGS</string>
-    <string name="SecurityCenter_Internet">INTERNET</string>
+    <string name="SecurityCenter_BlockchainSettings">블록체인 설정</string>
+    <string name="SecurityCenter_TestnetSettings">테스트넷 설정</string>
+    <string name="SecurityCenter_Internet">인터넷</string>
     <string name="SecurityCenter_BlockchainSettingsFooterDescription">지갑 복원 및 동기화를 위한 데이터 소스 선택</string>
     <!--Evm Network-->
     <string name="EvmNetwork_SyncMode">동기화 모드</string>
@@ -789,7 +793,8 @@
     <string name="ManageAccount_BackupRequired_Description">%2$s를 받기 전에 %1$s를 백업해야 합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">장치에서 이 지갑을 삭제합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">이 지갑의 개인 암호를 백업하지 않으면 귀하께서는 자금 접근을 하지 못합니다.</string>
-    <string name="ManageAccount_MigrationRequired_Title">마이그레이션 필요</string>
+    <string name="ManageAccount_MigrationRequired_Title">마이그레이션 필요함</string>
+
     <string name="ManageAccount_BirthdayHeight">생일 높이 %s</string>
     <string name="ManageAccount_NWords">%s 단어</string>
     <string name="ManageAccount_NWordsWithPassphrase">암호 문구로 이루어진 %s 단어</string>
@@ -890,6 +895,7 @@
     <string name="AddToken_Decimals">소수점</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">코인 유형</string>
+    <string name="AddToken_AlreadyAdded">이미 추가됨</string>
     <string name="AddToken_AddressOrSymbol">계약 주소</string>
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
     <string name="AddToken_InvalidAddressError">잘못된 계약 주소 또는 BEP2 기호</string>
@@ -909,6 +915,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">현금주소(권장)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018년 이전 공통</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018년 이후 공통</string>
+    <!-- Testnet Settings -->
+    <string name="Testnet_Enable">테스트넷 활성화</string>
+    <string name="Testnet_Support">Mnemonic Phrase 지갑 전용</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">연결로</string>
     <string name="Tor_Connection_Enable">토르 활성화</string>
@@ -920,7 +929,7 @@
     <string name="TorPage_Connected">연결됨</string>
     <string name="TorPage_Failed">실패</string>
     <string name="TorPage_ConnectionClosed">연결 해제</string>
-    <string name="Tor_TorIsActive">Tor is active</string>
+    <string name="Tor_TorIsActive">Tor 활성화</string>
     <string name="Tor_PrerequisitesAlert_Content">토르를 활성화하면 Infura의 이더리움 블록체인 연결이 초기화됩니다.</string>
     <!--Coin Option-->
     <string name="CoinOption_bip49_Title">최신(권장)</string>

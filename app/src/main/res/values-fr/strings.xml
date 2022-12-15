@@ -42,9 +42,8 @@
     <string name="SyncError">Erreur de synchronisation. Réessayez</string>
     <string name="PercentTitle">Pourcent</string>
     <string name="Keyboard">Clavier</string>
-
     <string name="AccountRecovery_Note">Remarque</string>
-    <string name="AccountRecovery_MigrationRecommended">Ce portefeuille semble utiliser un caractère non-standard dans sa liste de mots secrets et/ou dans une phrase de passe. Si vous ne voyez pas de solde ou de transactions, veuillez vous reporter aux informations ci-dessous.  \n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
+    <string name="AccountRecovery_MigrationRecommended">Ce portefeuille semble utiliser un caractère non-standard dans sa liste de mots secrets et/ou dans une phrase de passe. Si vous ne voyez pas de solde ou de transactions, veuillez vous reporter aux informations ci-dessous. \n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
     <string name="AccountRecovery_MigrationRequired">Ce portefeuille n\'est pas conforme aux normes.\n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
 
     <!--Intro-->
@@ -64,9 +63,11 @@
     <string name="CreateWallet_Mnemonic">Mnémonique</string>
     <string name="CreateWallet_Wordlist">Liste de mots</string>
     <string name="Passphrase">Phrase d\'authentification</string>
+    <string name="CreateWallet_N_WordsRecommended">%s mots (recommandé)</string>
     <string name="CreateWallet_N_Words">%s mots</string>
     <string name="CreateWallet_PassphraseConfirm">Confirmer</string>
     <string name="CreateWallet_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Veuillez utiliser seulement <![CDATA[A-Z a-z 0-9 \'"`&/?!:;,~*$=+-[](){}<>\_#@|%]]> pour la phrase de passe</string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmation de la phrase d\'authentification ne correspond pas</string>
     <string name="EnterPassphrase">Saisir la phrase d\'authentification</string>
     <string name="CreateWallet_PassphraseDescription">Les phrases d\'authentification ajoutent une strate de sécurité supplémentaire aux portefeuilles. Les utilisateurs peuvent ainsi créer plusieurs portefeuilles indépendants à pièces multiples à l\'aide d\'une seule phrase de réinitialisation mnémonique, mais associée à des mots de passe différents. \n\nPour restaurer ces portefeuilles, l\'utilisateur doit disposer d\'une phrase de réinitialisation mnémonique et d\'un mot de passe pour chaque portefeuille à restaurer.</string>
@@ -402,16 +403,17 @@
     <string name="WalletConnect_Note">Remarque</string>
     <string name="WalletConnect_LegacySignWarning">Signer ce message peut être dangereux. Cette signature peut potentiellement effectuer toute opération au nom de votre compte, y compris en donnant le contrôle total de votre compte et de tous ses actifs au site requérant. Ne signez ce message que si vous savez ce que vous faites ou si vous faites entièrement confiance au site requérant.</string>
     <string name="WalletConnect_NotSupportedDescription">Votre type de portefeuille actuel %s ne prend pas en charge WalletConnect</string>
-    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
+    <string name="WalletConnect_Unnamed">Inconnu</string>
+    <string name="WalletConnect_DAppUnknown">DApp inconnu</string>
     <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
-    <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
-    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
-    <string name="WalletConnect_Pairings_Delete">Delete</string>
-    <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
-    <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
+    <string name="WalletConnect_Pairings_DeleteAll">Tout Supprimer</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Voulez-vous supprimer tous les dApss appariés ?</string>
+    <string name="WalletConnect_Pairings_Delete">Supprimer</string>
+    <string name="WalletConnect_DeleteAllPairs">Supprimer toutes les paires</string>
+    <string name="WalletConnect_UnsupportedRequest_Title">Requête non prise en charge</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Non supporté</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningDescription">Ce format de requête n\'est pas pris en charge par le portefeuille</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Attention</string>
     <string name="EthereumTransaction_Error_Title">Erreur</string>
@@ -431,7 +433,7 @@
     <string name="Swap_ToAmountTitle">Vous recevez</string>
     <string name="Swap_Estimated">ESTIMÉ</string>
     <string name="Swap_TokenSelectorTitle">Sélectionner</string>
-    <string name="Swap_Balance">Available balance</string>
+    <string name="Swap_Balance">Solde disponible</string>
     <string name="Swap_Allowance">Allocation</string>
     <string name="Swap_Price">Prix</string>
     <string name="Swap_SellPrice">Prix de vente</string>
@@ -444,6 +446,7 @@
     <string name="Swap_Fee">Frais</string>
     <string name="Swap_ErrorInsufficientBalance">Solde insuffisant</string>
     <string name="Swap_ErrorNoLiquidity">Impossible d\'échanger ces tokens</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">Ce service n\'autorise pas l\'emballage/déballage. Utilisez 1inch à la place.</string>
     <string name="Swap_ErrorHighPriceImpact">Impact élevé sur les prix</string>
     <string name="Swap_Proceed">Suivant</string>
     <string name="Swap_Revoke">Révoquer</string>
@@ -498,9 +501,9 @@
     <string name="SwapInfo_Description">Ce service d\'échange est assuré par %s, un protocole d\'échange de tokens décentralisé construit sur la blockchain %s.\n\n%s est entièrement automatisé et géré par des contrats intelligents qui facilitent les échanges de tokens de manière fiable sans aucune possibilité de tricher.</string>
     <string name="SwapInfo_DexRelated">Relatif à %s</string>
     <string name="SwapInfo_AllowanceTitle">Allocation</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">Le montant qu\'un échange peut dépenser pour le compte de l\'utilisateur lors de l\'exécution de swaps de jetons. Une provision suffisante est requise avant de pouvoir effectuer une opération d\'échange réelle.</string>
     <string name="SwapInfo_PriceImpactTitle">Impact prix</string>
-    <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
+    <string name="SwapInfo_PriceImpactDescription">L\'écart de prix attendu par rapport à un prix affiché, augmente généralement avec le montant de l\'échange.</string>
     <string name="SwapInfo_SwapFeeTitle">Frais d\'échange</string>
     <string name="SwapInfo_SwapFeeDescription">Des frais de service pour l\'opération d\'échange sur la plateforme, indiqués dans la devise dans laquelle l\'utilisateur vend. Pour la plupart des ordres, ils devraient être de 0,3 % ou 0,6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Montant garanti</string>
@@ -650,6 +653,7 @@
     <string name="Privacy_BulletedText4">Aucun compte utilisateur ni aucune base de données ne conserve les données des utilisateurs à un autre endroit.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">PARAMÈTRES DE BLOCKCHAIN</string>
+    <string name="SecurityCenter_TestnetSettings">PARAMÈTRES DE TESTNET</string>
     <string name="SecurityCenter_Internet">INTERNET</string>
     <string name="SecurityCenter_BlockchainSettingsFooterDescription">Sélectionnez la source de données pour la restauration et la synchronisation du portefeuille</string>
     <!--Evm Network-->
@@ -703,7 +707,7 @@
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Soyez Unstoppable</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">Contact</string>
+    <string name="SettingsContact_Title">Contacter</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">Définissez des alertes de changement de prix pour les pièces que vous souhaitez surveiller.\n\nVous serez alerté lorsque le changement de prix des dernières 24 heures dépassera le seuil sélectionné.\n\nL\'alerte de tendance de prix vous avertit d\'un changement de tendance pour le court terme à 1 semaine, pour le long terme à 6 mois.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Les notifications pour l\'application Unstoppable Wallet sont désactivées. Vous devez les activer pour pouvoir recevoir des alertes de changement de prix.</string>
@@ -770,13 +774,13 @@
     <string name="ManageAccounts_Hint">Astuce ! La restauration d\'un portefeuille existant, mais avec une nouvelle phrase d\'authentification, génère un tout nouveau portefeuille. Pratique si vous souhaitez utiliser une seule phrase de réinitialisation mnémonique de 12 à 24 mots pour plusieurs portefeuilles.</string>
     <string name="Watch_Address_Title">Adresse à suivre</string>
     <string name="Watch_Address_Hint">Adresse ou domaine</string>
-    <string name="Watch_XPubKey_Hint">Enter Account Extended Public Key</string>
+    <string name="Watch_XPubKey_Hint">Entrez Account Extended Public Key</string>
     <string name="Watch_Address_Description">Disponible uniquement pour Ethereum et autres blockchains EVM prises en charge.</string>
     <string name="Watch_Address_Watch">Suivi</string>
     <string name="Watch_By">Par</string>
     <string name="Watch_WatchBy">Regarder par</string>
     <string name="Watch_TypeEvmAddress">Adresse EVM</string>
-    <string name="Watch_TypeSolanaAddress">Solana Address</string>
+    <string name="Watch_TypeSolanaAddress">Adresse Solana</string>
     <string name="Watch_TypeXPubKey">Account xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
@@ -890,6 +894,7 @@
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">TYPES DE COINS</string>
+    <string name="AddToken_AlreadyAdded">DÉJÀ AJOUTÉ</string>
     <string name="AddToken_AddressOrSymbol">Adresse du contrat</string>
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
     <string name="AddToken_InvalidAddressError">Adresse du contrat ou symbole BEP2 non valide</string>
@@ -909,6 +914,9 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommendé)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Commun avant 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Commun après 2018</string>
+    <!-- Testnet Settings -->
+    <string name="Testnet_Enable">Activer le Testnet</string>
+    <string name="Testnet_Support">Portefeuilles de phrase mnémonique uniquement</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Connexion</string>
     <string name="Tor_Connection_Enable">Activer Tor</string>
@@ -920,7 +928,7 @@
     <string name="TorPage_Connected">Connecté</string>
     <string name="TorPage_Failed">Échec</string>
     <string name="TorPage_ConnectionClosed">Déconnecté</string>
-    <string name="Tor_TorIsActive">Tor is active</string>
+    <string name="Tor_TorIsActive">Tor est actif</string>
     <string name="Tor_PrerequisitesAlert_Content">L\'activation de TOR réinitialisera la connexion de la blockchain Ethereum à Infura.</string>
     <!--Coin Option-->
     <string name="CoinOption_bip49_Title">Plus récent (recommandé)</string>
@@ -1033,7 +1041,7 @@
     <string name="CoinPage_Contract">%s Contrat</string>
     <string name="CoinPage_Bep2Symbol">Symbole BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Meilleurs portefeuilles</string>
-    <string name="CoinPage_MajorHolders_Description">The chart above shows the % of all tokens in circulation held by the top 10 wallets. The lower the % the more distributed the coin is.</string>
+    <string name="CoinPage_MajorHolders_Description">Le graphique ci-dessus indique le % de tous les tokens en circulation détenus dans les 10 meilleurs portefeuilles. Plus le % est faible, plus la pièce est distribuée.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">Dans le top 10 des portefeuilles Ethereum</string>
     <string name="CoinPage_CoinInvestments_Lead">En tête</string>
     <string name="CoinPage_DetailsDexVolume">Volume Dex</string>
