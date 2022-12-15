@@ -62,10 +62,11 @@
     <string name="CreateWallet_Mnemonic">Mnémonique</string>
     <string name="CreateWallet_Wordlist">Liste de mots</string>
     <string name="Passphrase">Phrase d\'authentification</string>
+    <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
     <string name="CreateWallet_N_Words">%s mots</string>
     <string name="CreateWallet_PassphraseConfirm">Confirmer</string>
     <string name="CreateWallet_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]> for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmation de la phrase d\'authentification ne correspond pas</string>
     <string name="EnterPassphrase">Saisir la phrase d\'authentification</string>
     <string name="CreateWallet_PassphraseDescription">Les phrases d\'authentification ajoutent une strate de sécurité supplémentaire aux portefeuilles. Les utilisateurs peuvent ainsi créer plusieurs portefeuilles indépendants à pièces multiples à l\'aide d\'une seule phrase de réinitialisation mnémonique, mais associée à des mots de passe différents. \n\nPour restaurer ces portefeuilles, l\'utilisateur doit disposer d\'une phrase de réinitialisation mnémonique et d\'un mot de passe pour chaque portefeuille à restaurer.</string>
