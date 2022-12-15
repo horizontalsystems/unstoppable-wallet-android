@@ -472,6 +472,7 @@
     <string name="SwapSettings_Apply">Aplicar</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Dominio o dirección</string>
+    <string name="SwapSettings_FeeSettingsAlert">A service fee for the swap action on the platform typically either 0.3% or 0.6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Cero límite</string>
     <string name="SwapSettings_Error_SlippageZero">Cero deslizamiento</string>
     <string name="SwapSettings_Error_SlippageTooLow">Es probable que su transacción falle.</string>
