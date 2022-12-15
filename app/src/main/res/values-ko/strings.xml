@@ -45,7 +45,6 @@
     <string name="AccountRecovery_Note">참고</string>
     <string name="AccountRecovery_MigrationRecommended">이 지갑은 비밀 단어 목록 및/또는 암호 문구에 비표준 문자를 사용하는 것 같습니다. 잔액이나 거래 내역이 보이지 않으면 아래에서 자세한 내용을 읽어보세요.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
     <string name="AccountRecovery_MigrationRequired">비표준 호환 지갑입니다. 자세한 내용은 아래를 참조하십시오.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
-
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">풀린 자산</string>
@@ -794,7 +793,6 @@
     <string name="ManageAccount_Delete_ConfirmationRemove">장치에서 이 지갑을 삭제합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">이 지갑의 개인 암호를 백업하지 않으면 귀하께서는 자금 접근을 하지 못합니다.</string>
     <string name="ManageAccount_MigrationRequired_Title">마이그레이션 필요함</string>
-
     <string name="ManageAccount_BirthdayHeight">생일 높이 %s</string>
     <string name="ManageAccount_NWords">%s 단어</string>
     <string name="ManageAccount_NWordsWithPassphrase">암호 문구로 이루어진 %s 단어</string>
