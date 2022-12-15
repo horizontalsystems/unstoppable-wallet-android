@@ -63,10 +63,11 @@
     <string name="CreateWallet_Mnemonic">Мнемоническая Фраза</string>
     <string name="CreateWallet_Wordlist">Список Слов</string>
     <string name="Passphrase">Кодовая Фраза</string>
+    <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
     <string name="CreateWallet_N_Words">%s слов</string>
     <string name="CreateWallet_PassphraseConfirm">Подтвердить</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]> for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
     <string name="EnterPassphrase">Введите кодовую фразу</string>
     <string name="CreateWallet_PassphraseDescription">Кодовые фразы обеспечивают дополнительную защиту для кошельков, позволяя пользователям создавать несколько независимых мультивалютных кошельков, использующих одну мнемоническую фразу для восстановления, но имеющих разные пароли.\n\nДля восстановления этих кошельков пользователю потребуются мнемоническая фраза для восстановления, а также пароль для каждого восстанавливаемого кошелька.</string>
