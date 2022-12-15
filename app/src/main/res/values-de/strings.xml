@@ -44,7 +44,7 @@
     <string name="Keyboard">Tastatur</string>
     <string name="AccountRecovery_Note">Hinweis</string>
     <string name="AccountRecovery_MigrationRecommended">Diese Brieftasche scheint ein nicht standardmäßiges Zeichen in ihrer geheimen Wortliste und/oder einer Passphrase zu verwenden. Wenn Sie kein Guthaben oder Transaktionen sehen, lesen Sie bitte unten für Details.\n\nKLICKEN, UM WEITERE INFORMATIONEN ZU ERHALTEN</string>
-    <string name="AccountRecovery_MigrationRequired">Dies ist eine nicht standardkonforme Brieftasche. Bitte lesen Sie unten für Details.\n\nKLICKEN, UM WEITERE INFORMATIONEN ZU ERHALTEN</string>
+    <string name="AccountRecovery_MigrationRequired">Dies ist eine nicht standardmäßige Wallet. \n\nKLICKEN SIE MEHR INFO</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Sei unaufhaltsam</string>
     <string name="Intro_Wallet_Screen2Title">Assets lösen</string>
@@ -103,7 +103,7 @@
     <string name="Restore_PhraseHint">12, 15, 18, 21 oder 24 Wörter eingeben</string>
     <string name="Restore_NonStandardRestore">Nicht standardmäßige Wiederherstellung</string>
     <string name="Restore_NonStandard_Description">Diese Seite bietet einen speziellen Wallet-Wiederherstellungsmechanismus für Unstoppable-Benutzer, die ein nicht standardmäßiges Wallet haben. Im Allgemeinen könnten solche Wallets in der Unstoppable-Version 0.27–0.28 mit einer nicht-englischen mnemonischen Wortliste und/oder einem Sonderzeichen in der Wallet-Passphrase (d. h. einem diakritischen Symbol) erstellt worden sein.
-\n\nWenn Sie ein betroffener Benutzer sind, wird Ihr Wallet-Guthaben nach dem Update auf Version 0.29 mit 0 angezeigt. Auf dieser Seite können Sie den Zugriff auf Ihre nicht standardmäßige Brieftasche wiederherstellen. Nach der Wiederherstellung wird empfohlen, eine neue Brieftasche zu erstellen (die standardkonform ist) und Gelder dorthin zu verschieben.</string>
+\n\nWenn Sie ein betroffener Benutzer sind, wird Ihr Wallet-Guthaben nach der Wiederherstellung eines solchen Wallets in Version 0.29 oder höher als 0 angezeigt.Auf dieser Seite können Sie den Zugriff auf Ihre nicht standardmäßige Brieftasche wiederherstellen. Nach der Wiederherstellung wird empfohlen, eine neue Brieftasche zu erstellen (die standardkonform ist) und Gelder dorthin zu verschieben.</string>
     <string name="Restore_PrivateKey_InvalidKey">Ungültiger Schlüssel</string>
     <string name="Select_Coins">Coins auswählen</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
@@ -406,13 +406,13 @@
     <string name="WalletConnect_DAppUnknown">Unbekannte dApp</string>
     <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
-    <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
-    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
+    <string name="WalletConnect_Pairings_DeleteAll">Alle löschen</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Möchten Sie alle gepaart dApss löschen?</string>
     <string name="WalletConnect_Pairings_Delete">Löschen</string>
-    <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
+    <string name="WalletConnect_DeleteAllPairs">Alle Paare löschen</string>
     <string name="WalletConnect_UnsupportedRequest_Title">Nicht unterstützte Anfrage</string>
     <string name="WalletConnect_UnsupportedRequest_WarningTitle">Nicht unterstützt</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
+    <string name="WalletConnect_UnsupportedRequest_WarningDescription">Dieses Anfrageformat wird von der Brieftasche nicht unterstützt</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warnung</string>
     <string name="EthereumTransaction_Error_Title">Fehler</string>
@@ -445,7 +445,7 @@
     <string name="Swap_Fee">Gebühr</string>
     <string name="Swap_ErrorInsufficientBalance">Ungenügendes Guthaben</string>
     <string name="Swap_ErrorNoLiquidity">Diese Token sind nicht tauschbar</string>
-    <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">Dieser Service erlaubt keine Verpackung/Auspackung. Verwenden Sie stattdessen 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Hohe Preisauswirkung</string>
     <string name="Swap_Proceed">Weiter</string>
     <string name="Swap_Revoke">Widerrufen</string>
@@ -500,7 +500,7 @@
     <string name="SwapInfo_Description">Dieser Tauschdienst wird von %s betrieben, einem dezentralen Token-Tauschprotokoll, das auf der %s Blockchain basiert.\n\n%s ist vollständig automatisiert und wird von intelligenten Verträgen verwaltet, die den Token-Tausch in einer zuverlässigen Art und Weise ermöglichen, ohne dass Betrug betrieben werden kann.</string>
     <string name="SwapInfo_DexRelated">Uniswap-bezogen</string>
     <string name="SwapInfo_AllowanceTitle">Vergütung</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on user\’s behalf when executing token swaps. A preceding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">Der Betrag, den ein Austausch im Namen des Benutzers ausgeben kann, wenn Token Swaps ausgeführt werden. Bevor eine tatsächliche Swap-Transaktion durchgeführt werden kann, ist eine vorherige Transaktion erforderlich, die ausreichende Zertifikate festlegt.</string>
     <string name="SwapInfo_PriceImpactTitle">Preisauswirkungen</string>
     <string name="SwapInfo_PriceImpactDescription">Erwartete Preisabweichung von einem angezeigten Preis, steigt normalerweise mit dem Tauschbetrag.</string>
     <string name="SwapInfo_SwapFeeTitle">Tauschgebühr</string>
@@ -626,7 +626,7 @@
     <string name="Settings_Language">Sprache</string>
     <string name="Settings_Theme">Design</string>
     <string name="Settings_Terms">Bedingungen</string>
-    <string name="Settings_Privacy">Privacy</string>
+    <string name="Settings_Privacy">Privatsphäre</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_AppStatus">App-Status</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
@@ -634,7 +634,7 @@
     <string name="Settings_LaunchScreen">Startbildschirm</string>
     <string name="Settings_Appearance">Darstellung</string>
     <string name="Appearance_Theme">THEMA</string>
-    <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
+    <string name="Appearance_LaunchScreen">STARTBILDSCHIRM</string>
     <string name="Appearance_AppIcon">APP ICON</string>
     <string name="Appearance_BalanceConversion">SALDOKONVERTIERUNG</string>
     <string name="Appearance_BalanceValue">SALDO WERT</string>
@@ -897,6 +897,7 @@
     <string name="AddToken_Decimals">Dezimalen</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Münztypen</string>
+    <string name="AddToken_AlreadyAdded">SCHON HINZUGEFÜGT</string>
     <string name="AddToken_AddressOrSymbol">Vertragsadresse</string>
     <string name="AddToken_CoinAlreadyInListWarning">Dieser Token befindet sich bereits in der Coin-Verwaltungsliste</string>
     <string name="AddToken_InvalidAddressError">Ungültige Vertragsadresse oder BEP2-Symbol</string>
@@ -918,7 +919,7 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Üblich nach 2018</string>
     <!-- Testnet Settings -->
     <string name="Testnet_Enable">Testnet aktivieren</string>
-    <string name="Testnet_Support">Mnemonic Phrase wallets only</string>
+    <string name="Testnet_Support">Nur Mnemonische Phrasen-Wallets</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Verbinde</string>
     <string name="Tor_Connection_Enable">Tor aktivieren</string>
