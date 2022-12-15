@@ -21,6 +21,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
     private var coinCode: String? = null
     private var decimals: Int? = null
     private var tokens: List<TokenInfoUiState> = listOf()
+    private var alreadyAddedTokens: List<AlreadyAddedToken> = listOf()
     private var caution: Caution? = null
 
     var uiState by mutableStateOf(
@@ -29,6 +30,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
             coinCode = coinCode,
             decimals = decimals,
             tokens = tokens,
+            alreadyAddedTokens = alreadyAddedTokens,
             addEnabled = false,
             loading = loading,
             finished = finished,
@@ -45,6 +47,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
             coinCode = coinCode,
             decimals = decimals,
             tokens = tokens,
+            alreadyAddedTokens = alreadyAddedTokens,
             addEnabled = tokens.any { it.enabled && it.checked },
             loading = loading,
             finished = finished,
@@ -68,15 +71,26 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
                 val filteredTokens = tokens.filter { it.supported }
 
-                this@AddTokenViewModel.tokens = filteredTokens.map {
-                    TokenInfoUiState(
-                        tokenInfo = it,
-                        title = it.tokenQuery.protocolType ?: "",
-                        image = it.tokenQuery.blockchainType.icon24,
-                        checked = it.inWallet,
-                        enabled = !it.inWallet
-                    )
-                }
+                this@AddTokenViewModel.tokens = filteredTokens
+                    .filter { !it.inWallet }
+                    .map {
+                        TokenInfoUiState(
+                            tokenInfo = it,
+                            title = it.tokenQuery.protocolType ?: "",
+                            image = it.tokenQuery.blockchainType.icon24,
+                            checked = it.inWallet,
+                            enabled = true
+                        )
+                    }
+
+                this@AddTokenViewModel.alreadyAddedTokens = filteredTokens
+                    .filter { it.inWallet }
+                    .map {
+                        AlreadyAddedToken(
+                            title = it.tokenQuery.protocolType ?: "",
+                            image = it.tokenQuery.blockchainType.icon24,
+                        )
+                    }
 
                 val tokenInfo = tokens.firstOrNull()
                 coinName = tokenInfo?.coinName
@@ -140,10 +154,16 @@ data class AddTokenUiState(
     val coinCode: String?,
     val decimals: Int?,
     val tokens: List<TokenInfoUiState>,
+    val alreadyAddedTokens: List<AlreadyAddedToken>,
     val addEnabled: Boolean,
     val loading: Boolean,
     val finished: Boolean,
     val caution: Caution?,
+)
+
+data class AlreadyAddedToken(
+    val title: String,
+    val image: Int,
 )
 
 data class TokenInfoUiState(
