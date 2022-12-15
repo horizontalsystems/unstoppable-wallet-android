@@ -84,6 +84,7 @@ private fun SectionView(viewItems: List<ViewItem>) {
         when (item) {
             is ViewItem.Subhead -> Subhead(item)
             is ViewItem.Value -> TitleValue(item)
+            is ViewItem.ValueMulti -> TitleValueMulti(item)
             is ViewItem.AmountMulti -> AmountMulti(item)
             is ViewItem.Amount -> Amount(item)
             is ViewItem.NftAmount -> NftAmount(item)
@@ -132,6 +133,32 @@ private fun TitleValue(item: ViewItem.Value) {
             style = ComposeAppTheme.typography.subhead1,
             color = setColorByType(item.type)
         )
+    }
+}
+
+@Composable
+private fun TitleValueMulti(item: ViewItem.ValueMulti) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        subhead2_grey(
+            text = item.title
+        )
+        Spacer(Modifier.weight(1f))
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                text = item.primaryValue,
+                maxLines = 1,
+                style = ComposeAppTheme.typography.subhead1,
+                color = setColorByType(item.type)
+            )
+            Text(
+                text = item.secondaryValue,
+                maxLines = 1,
+                style = ComposeAppTheme.typography.caption,
+                color = ComposeAppTheme.colors.grey
+            )
+        }
     }
 }
 
@@ -213,9 +240,7 @@ private fun NftAmount(item: ViewItem.NftAmount) {
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         NftIcon(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(24.dp),
+            modifier = Modifier.padding(end = 16.dp),
             iconUrl = item.iconUrl,
         )
         Text(
@@ -229,7 +254,7 @@ private fun NftAmount(item: ViewItem.NftAmount) {
 
 @Composable
 private fun Token(item: ViewItem.TokenItem) {
-    Row(
+    RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         CoinImage(

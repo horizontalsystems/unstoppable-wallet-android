@@ -330,7 +330,7 @@ private fun MarketCoin(
     label: String? = null,
 ) {
 
-    SectionItemRowUniversalClear(
+    SectionItemBorderedRowUniversalClear(
         borderBottom = true,
         onClick = onClick
     ) {

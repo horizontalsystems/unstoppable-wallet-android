@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.managewallets
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.EvmTestnetManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.Account
@@ -20,7 +21,8 @@ class ManageWalletsService(
     private val marketKit: MarketKitWrapper,
     private val walletManager: IWalletManager,
     accountManager: IAccountManager,
-    private val enableCoinService: EnableCoinService
+    private val enableCoinService: EnableCoinService,
+    private val evmTestnetManager: EvmTestnetManager,
 ) : Clearable {
 
     val itemsObservable = PublishSubject.create<List<Item>>()
@@ -81,9 +83,9 @@ class ManageWalletsService(
     private fun fetchFullCoins(): List<FullCoin> {
         return if (filter.isBlank()) {
             val account = this.account ?: return emptyList()
-            val featuredFullCoins =
-                marketKit.fullCoins("", 100).toMutableList()
-                    .filter { it.eligibleTokens(account.type).isNotEmpty() }
+            val testnetFullCoins = evmTestnetManager.nativeTokens(filter).map { it.fullCoin }
+            val featuredFullCoins = marketKit.fullCoins("", 100).toMutableList()
+                .filter { it.eligibleTokens(account.type).isNotEmpty() }
 
             val featuredCoins = featuredFullCoins.map { it.coin }
             val enabledFullCoins = marketKit.fullCoins(
@@ -91,14 +93,14 @@ class ManageWalletsService(
             )
             val customFullCoins = wallets.filter { it.token.isCustom }.map { it.token.fullCoin }
 
-            featuredFullCoins + enabledFullCoins + customFullCoins
+            featuredFullCoins + enabledFullCoins + customFullCoins + testnetFullCoins
         } else if (isContractAddress(filter)) {
-            val tokens = marketKit.tokens(filter)
+            val tokens = marketKit.tokens(filter) + evmTestnetManager.nativeTokens(filter)
             val coinUids = tokens.map { it.coin.uid }
 
             marketKit.fullCoins(coinUids).toMutableList()
         } else {
-            marketKit.fullCoins(filter, 20).toMutableList()
+            marketKit.fullCoins(filter, 20).toMutableList() + evmTestnetManager.nativeTokens(filter).map { it.fullCoin }
         }
     }
 

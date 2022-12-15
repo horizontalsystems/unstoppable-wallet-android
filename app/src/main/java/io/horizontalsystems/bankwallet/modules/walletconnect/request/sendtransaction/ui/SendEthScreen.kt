@@ -69,7 +69,7 @@ fun SendEthRequestScreen(
                 Spacer(Modifier.height(12.dp))
                 transactionInfoItems?.let { sections ->
                     sections.forEach { section ->
-                        CellSingleLineLawrenceSection(section.viewItems) { item ->
+                        CellUniversalLawrenceSection(section.viewItems) { item ->
                             when (item) {
                                 is ViewItem.Subhead -> SubheadCell(
                                     item.title,
@@ -103,7 +103,8 @@ fun SendEthRequestScreen(
                                     item.type,
                                     item.token
                                 )
-                                is ViewItem.NftAmount -> {}
+                                is ViewItem.NftAmount,
+                                is ViewItem.ValueMulti -> {}
                             }
                         }
                         Spacer(Modifier.height(12.dp))

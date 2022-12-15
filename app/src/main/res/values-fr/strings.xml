@@ -45,6 +45,7 @@
     <string name="AccountRecovery_Note">Remarque</string>
     <string name="AccountRecovery_MigrationRecommended">Ce portefeuille semble utiliser un caractère non-standard dans sa liste de mots secrets et/ou dans une phrase de passe. Si vous ne voyez pas de solde ou de transactions, veuillez vous reporter aux informations ci-dessous. \n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
     <string name="AccountRecovery_MigrationRequired">Ce portefeuille n\'est pas conforme aux normes.\n\nCLIQUEZ POUR OBTENIR PLUS D\'INFOS</string>
+
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Soyez Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Désenchaînez les actifs</string>

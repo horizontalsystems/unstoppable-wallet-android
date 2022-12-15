@@ -24,7 +24,7 @@ fun MarketCoinClear(
     label: String? = null,
     onClick: (() -> Unit)? = null
 ) {
-    SectionItemRowUniversalClear(
+    SectionItemBorderedRowUniversalClear(
         onClick = onClick,
         borderBottom = true
     ) {

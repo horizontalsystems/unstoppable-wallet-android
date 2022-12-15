@@ -3,10 +3,7 @@ package io.horizontalsystems.bankwallet.core
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
-import io.horizontalsystems.bankwallet.core.managers.RateUsType
-import io.horizontalsystems.bankwallet.core.managers.TokenInfoService
-import io.horizontalsystems.bankwallet.core.managers.TorManager
+import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -27,13 +24,11 @@ import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.solanakit.models.FullTransaction
-import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -43,6 +38,7 @@ import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
+import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 
 interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>>
@@ -94,6 +90,8 @@ interface ILocalStorage {
     var marketFavoritesSortingField: SortingField?
     var marketFavoritesMarketField: MarketField?
     var relaunchBySettingChange: Boolean
+    var testnetEnabled: Boolean
+    var nonRecommendedAccountAlertDismissedAccounts: Set<String>
 
     fun getSwapProviderId(blockchainType: BlockchainType): String?
     fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)
@@ -117,7 +115,9 @@ interface IMarketStorage {
 }
 
 interface IAccountManager {
+    val hasNonStandardAccount: Boolean
     val activeAccount: Account?
+    val activeAccountStateFlow: Flow<ActiveAccountState>
     val activeAccountObservable: Flowable<Optional<Account>>
     val isAccountsEmpty: Boolean
     val accounts: List<Account>
@@ -184,9 +184,10 @@ interface IClipboardManager {
 
 interface IWordsManager {
     fun validateChecksum(words: List<String>)
+    fun validateChecksumStrict(words: List<String>)
     fun isWordValid(word: String): Boolean
     fun isWordPartiallyValid(word: String): Boolean
-    fun generateWords(count: Int = 12, language: Language): List<String>
+    fun generateWords(count: Int = 12): List<String>
 }
 
 sealed class AdapterState {

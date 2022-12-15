@@ -37,7 +37,6 @@ fun WCSessionCell(
 ) {
     Box(
         modifier = Modifier
-            .height(60.dp)
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(shape)
@@ -70,13 +69,13 @@ fun WCSessionCell(
             )
         }
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 modifier = Modifier
-                    .size(24.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+                    .size(32.dp)
+                    .clip(RoundedCornerShape(8.dp)),
                 painter = rememberAsyncImagePainter(
                     model = session.imageUrl,
                     error = painterResource(R.drawable.ic_platform_placeholder_24)
@@ -87,7 +86,7 @@ fun WCSessionCell(
             Column(modifier = Modifier.weight(1f)) {
                 val title = when {
                     session.title.isNotBlank() -> session.title
-                    else -> stringResource(id = R.string.WalletConnect_DAppUnknown)
+                    else -> stringResource(id = R.string.WalletConnect_Unnamed)
                 }
 
                 body_leah(

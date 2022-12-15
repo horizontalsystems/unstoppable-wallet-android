@@ -62,25 +62,6 @@ fun <T> CellMultilineLawrenceSection(
 }
 
 @Composable
-fun <T> CellMultilineLawrenceSectionFramed(
-    items: Iterable<T>,
-    itemContent: @Composable (T) -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
-    ) {
-        items.forEachIndexed { index, marketDataLine ->
-            CellMultilineLawrence(borderTop = index != 0) {
-                itemContent(marketDataLine)
-            }
-        }
-    }
-}
-
-@Composable
 fun CellMultilineLawrence(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
@@ -121,26 +102,6 @@ fun <T> CellSingleLineLawrenceSection(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(12.dp))
-    ) {
-        items.forEachIndexed { index, marketDataLine ->
-            CellSingleLineLawrence(borderTop = index != 0) {
-                itemContent(marketDataLine)
-            }
-        }
-    }
-
-}
-
-@Composable
-fun <T> CellSingleLineLawrenceSectionFramed(
-    items: List<T>,
-    itemContent: @Composable (T) -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
     ) {
         items.forEachIndexed { index, marketDataLine ->
             CellSingleLineLawrence(borderTop = index != 0) {
@@ -206,20 +167,6 @@ fun CellSingleLineLawrence(
         borderTop = borderTop,
         borderBottom = borderBottom,
         color = ComposeAppTheme.colors.lawrence,
-        content = content
-    )
-}
-
-@Composable
-fun CellSingleLineTyler(
-    borderTop: Boolean = false,
-    borderBottom: Boolean = false,
-    content: @Composable () -> Unit,
-) {
-    CellSingleLine(
-        borderTop = borderTop,
-        borderBottom = borderBottom,
-        color = ComposeAppTheme.colors.tyler,
         content = content
     )
 }
@@ -411,48 +358,6 @@ fun CellFooterPreview() {
 }
 
 @Composable
-fun CellLawrence(
-    borderTop: Boolean = false,
-    borderBottom: Boolean = false,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
-    content: @Composable RowScope.() -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable(
-                enabled = enabled,
-                onClick = onClick
-            )
-    ) {
-        if (borderTop) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
-        }
-
-        if (borderBottom) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
-
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            content = content
-        )
-    }
-
-}
-
-@Composable
 fun RowUniversal(
     modifier: Modifier = Modifier,
     verticalPadding: Dp = 12.dp,
@@ -562,7 +467,7 @@ fun SectionUniversalItem(
 }
 
 @Composable
-fun SectionItemRowUniversalClear(
+fun SectionItemBorderedRowUniversalClear(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
     onClick: (() -> Unit)? = null,
@@ -586,5 +491,43 @@ fun SectionItemRowUniversalClear(
                 color = ComposeAppTheme.colors.steel10,
             )
         }
+    }
+}
+
+@Composable
+fun CellBorderedRowUniversal(
+    modifier: Modifier = Modifier,
+    borderTop: Boolean = false,
+    borderBottom: Boolean = false,
+    backgroundColor: Color = Color.Transparent,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(backgroundColor)
+    ) {
+        if (borderTop) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
+
+        if (borderBottom) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+
+        RowUniversal(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            content = content
+        )
     }
 }

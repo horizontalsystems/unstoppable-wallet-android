@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -78,9 +79,9 @@ fun CoinImage(
 
 @Composable
 fun NftIcon(
+    modifier: Modifier = Modifier,
     iconUrl: String?,
     placeholder: Int? = null,
-    modifier: Modifier,
     colorFilter: ColorFilter? = null
 ) {
     val fallback = placeholder ?: R.drawable.ic_platform_placeholder_24
@@ -91,14 +92,16 @@ fun NftIcon(
                 error = painterResource(fallback)
             ),
             contentDescription = null,
-            modifier = modifier.clip(RoundedCornerShape(4.dp)),
+            modifier = modifier
+                .clip(RoundedCornerShape(8.dp))
+                .size(32.dp),
             colorFilter = colorFilter,
             contentScale = ContentScale.Crop
         )
         else -> Image(
             painter = painterResource(fallback),
             contentDescription = null,
-            modifier = modifier,
+            modifier = modifier.size(32.dp),
             colorFilter = colorFilter
         )
     }

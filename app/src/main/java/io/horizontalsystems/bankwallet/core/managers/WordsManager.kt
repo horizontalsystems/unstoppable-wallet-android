@@ -13,6 +13,11 @@ class WordsManager(
         mnemonic.validate(words)
     }
 
+    @Throws
+    override fun validateChecksumStrict(words: List<String>) {
+        mnemonic.validateStrict(words)
+    }
+
     override fun isWordValid(word: String): Boolean {
         return mnemonic.isWordValid(word, false)
     }
@@ -21,8 +26,8 @@ class WordsManager(
         return mnemonic.isWordValid(word, true)
     }
 
-    override fun generateWords(count: Int, language: Language): List<String> {
+    override fun generateWords(count: Int): List<String> {
         val strength = Mnemonic.EntropyStrength.fromWordCount(count)
-        return mnemonic.generate(strength, language)
+        return mnemonic.generate(strength, Language.English)
     }
 }

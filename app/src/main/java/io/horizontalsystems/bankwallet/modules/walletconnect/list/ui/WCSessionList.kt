@@ -117,9 +117,7 @@ private fun LazyListScope.WCSection(
         val showDivider = showDivider(section.sessions.size, index)
         val shape = getShape(section.sessions.size, index)
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp),
+            modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
             ActionsRow(

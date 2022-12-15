@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.ui
+package io.horizontalsystems.bankwallet.modules.walletconnect.session.v2
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -13,23 +13,18 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2RequestViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 
 @Composable
 fun RequestCell(
     viewItem: WC2RequestViewItem,
     onRequestClick: (WC2RequestViewItem) -> Unit,
 ) {
-    Row(
+    RowUniversal(
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp)
-            .clickable(
-                onClick = {
-                    onRequestClick.invoke(viewItem)
-                },
-            )
             .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        onClick = { onRequestClick.invoke(viewItem) }
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(

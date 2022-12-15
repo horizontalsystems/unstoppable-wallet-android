@@ -6,16 +6,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -256,9 +253,14 @@ fun RestorePhrase(
 
                 Spacer(Modifier.height(24.dp))
 
-                BottomSection(viewModel, uiState, coroutineScope)
+                BottomSection(
+                    navController,
+                    viewModel,
+                    uiState,
+                    coroutineScope
+                )
 
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(44.dp))
             }
 
             if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
@@ -321,7 +323,8 @@ fun RestorePhrase(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun BottomSection(
+private fun ColumnScope.BottomSection(
+    navController: NavController,
     viewModel: RestoreMnemonicViewModel,
     uiState: RestoreMnemonicModule.UiState,
     coroutineScope: CoroutineScope,
@@ -402,10 +405,33 @@ private fun BottomSection(
         )
         InfoText(text = stringResource(R.string.Restore_PassphraseDescription))
     }
+
+    Spacer(Modifier.height(32.dp))
+
+    CellSingleLineLawrenceSection {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable {
+                    navController.slideFromRight(R.id.restoreMnemonicNonStandardFragment)
+                }
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            body_leah(text = stringResource(R.string.Restore_NonStandardRestore))
+            Spacer(modifier = Modifier.weight(1f))
+            Image(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(id = R.drawable.ic_arrow_right),
+                contentDescription = null,
+            )
+        }
+    }
+    Spacer(Modifier.height(32.dp))
 }
 
 @Composable
-private fun SuggestionsBar(
+fun SuggestionsBar(
     modifier: Modifier = Modifier,
     wordSuggestions: RestoreMnemonicModule.WordSuggestions?,
     onClick: (RestoreMnemonicModule.WordItem, String) -> Unit

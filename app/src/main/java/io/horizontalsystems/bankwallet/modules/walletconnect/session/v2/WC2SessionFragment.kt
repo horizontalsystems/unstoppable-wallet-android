@@ -28,7 +28,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WC2RequestFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.requestlist.ui.RequestCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.StatusCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
@@ -140,7 +139,7 @@ private fun ColumnScope.WCSessionListContent(
                     .clip(RoundedCornerShape(15.dp)),
                 painter = rememberAsyncImagePainter(
                     model = uiState.peerMeta?.icon,
-                    error = painterResource(R.drawable.coin_placeholder)
+                    error = painterResource(R.drawable.ic_platform_placeholder_24)
                 ),
                 contentDescription = null,
             )
@@ -171,7 +170,7 @@ private fun ColumnScope.WCSessionListContent(
         val pendingRequests = uiState.pendingRequests
         if (pendingRequests.isNotEmpty()) {
             HeaderText(text = stringResource(R.string.WalletConnect_PendingRequests))
-            CellMultilineLawrenceSection(pendingRequests) { request ->
+            CellUniversalLawrenceSection(pendingRequests) { request ->
                 RequestCell(viewItem = request) {
                     navController.slideFromBottom(
                         R.id.wc2RequestFragment,
@@ -182,7 +181,7 @@ private fun ColumnScope.WCSessionListContent(
             Spacer(Modifier.height(32.dp))
         }
 
-        CellSingleLineLawrenceSection(
+        CellUniversalLawrenceSection(
             composableItems
         )
         uiState.hint?.let {

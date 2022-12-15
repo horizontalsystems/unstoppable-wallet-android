@@ -50,34 +50,27 @@ fun SwapAllowance(
     val visible = uiState.isVisible
 
     if (visible) {
-        if (revokeRequired) {
-            TextImportantWarning(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(R.string.Approve_RevokeAndApproveInfo, allowanceAmount ?: "")
+        Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically) {
+            val infoTitle = stringResource(id = R.string.SwapInfo_AllowanceTitle)
+            val infoText = stringResource(id = R.string.SwapInfo_AllowanceDescription)
+            Image(
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .clickable {
+                        navController.slideFromBottom(
+                            R.id.feeSettingsInfoDialog,
+                            FeeSettingsInfoDialog.prepareParams(infoTitle, infoText)
+                        )
+                    },
+                painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
             )
-        } else {
-            Row(modifier = Modifier.height(40.dp), verticalAlignment = Alignment.CenterVertically) {
-                val infoTitle = stringResource(id = R.string.SwapInfo_AllowanceTitle)
-                val infoText = stringResource(id = R.string.SwapInfo_AllowanceDescription)
-                Image(
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .clickable {
-                            navController.slideFromBottom(
-                                R.id.feeSettingsInfoDialog,
-                                FeeSettingsInfoDialog.prepareParams(infoTitle, infoText)
-                            )
-                        },
-                    painter = painterResource(id = R.drawable.ic_info_20), contentDescription = ""
-                )
-                subhead2_grey(text = stringResource(R.string.Swap_Allowance))
-                Spacer(Modifier.weight(1f))
-                allowanceAmount?.let { amount ->
-                    if (isError) {
-                        subhead2_lucian(text = amount)
-                    } else {
-                        subhead2_grey(text = amount)
-                    }
+            subhead2_grey(text = stringResource(R.string.Swap_Allowance))
+            Spacer(Modifier.weight(1f))
+            allowanceAmount?.let { amount ->
+                if (isError) {
+                    subhead2_lucian(text = amount)
+                } else {
+                    subhead2_grey(text = amount)
                 }
             }
         }

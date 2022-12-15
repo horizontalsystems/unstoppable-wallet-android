@@ -41,6 +41,7 @@ import io.horizontalsystems.bankwallet.modules.swap.ui.*
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.core.findNavController
@@ -221,6 +222,14 @@ private fun UniswapScreen(
                     if (infoItems.isNotEmpty()) {
                         Spacer(modifier = Modifier.height(12.dp))
                         SingleLineGroup(infoItems)
+                    }
+
+                    if (allowanceViewModel.uiState.revokeRequired) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        TextImportantWarning(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            text = stringResource(R.string.Approve_RevokeAndApproveInfo, allowanceViewModel.uiState.allowance ?: "")
+                        )
                     }
                 }
 

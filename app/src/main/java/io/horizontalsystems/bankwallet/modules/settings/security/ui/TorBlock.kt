@@ -41,6 +41,7 @@ fun TorBlock(
                 } else {
                     connectionState.icon?.let{ icon ->
                         Icon(
+                            modifier = Modifier.size(24.dp),
                             painter = painterResource(icon),
                             tint = ComposeAppTheme.colors.jacob,
                             contentDescription = null,

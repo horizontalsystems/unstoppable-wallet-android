@@ -7,12 +7,14 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class WalletManager(
-        private val accountManager: IAccountManager,
-        private val storage: IWalletStorage
+    private val accountManager: IAccountManager,
+    private val storage: IWalletStorage,
+    testnetManager: EvmTestnetManager
 ) : IWalletManager {
 
     override val activeWallets get() = walletsSet.toList()
@@ -23,19 +25,26 @@ class WalletManager(
 
     init {
         accountManager.activeAccountObservable
-                .subscribeIO {
-                    handleUpdated(it.orElse(null))
-                }
-                .let {
-                    disposables.add(it)
-                }
+            .subscribeIO {
+                handleUpdated(it.orElse(null))
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        testnetManager.testnetUpdatedSignal
+            .subscribeIO {
+                handleTestnetUpdated(it)
+            }
+            .let {
+                disposables.add(it)
+            }
     }
 
     override fun loadWallets() {
         val activeWallets = accountManager.activeAccount?.let { storage.wallets(it) } ?: listOf()
 
-        walletsSet.clear()
-        walletsSet.addAll(activeWallets)
+        setWallets(activeWallets)
         notifyActiveWallets()
     }
 
@@ -77,9 +86,29 @@ class WalletManager(
     private fun handleUpdated(activeAccount: Account?) {
         val activeWallets = activeAccount?.let { storage.wallets(it) } ?: listOf()
 
+        setWallets(activeWallets)
+        notifyActiveWallets()
+    }
+
+    @Synchronized
+    private fun setWallets(activeWallets: List<Wallet>) {
         walletsSet.clear()
         walletsSet.addAll(activeWallets)
-        notifyActiveWallets()
+    }
+
+    @Synchronized
+    private fun handleTestnetUpdated(isEnabled: Boolean) {
+        if (isEnabled) {
+            return
+        }
+
+        val deletedWallets = accountManager.accounts.map { account ->
+            storage.wallets(account).filter {
+                it.token.blockchainType is BlockchainType.EthereumGoerli
+            }
+        }
+
+        handle(listOf(), deletedWallets.flatten())
     }
 
     override fun saveEnabledWallets(enabledWallets: List<EnabledWallet>) {

@@ -1,13 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -17,7 +15,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.marketkit.models.LinkType
 
@@ -62,24 +61,28 @@ fun Links(links: List<CoinLink>, onCoinLinkClick: (CoinLink) -> Unit) {
             body_leah(text = stringResource(id = R.string.CoinPage_Links))
         }
 
-        CellSingleLineLawrenceSection(links) { link ->
-            Row(
+        CellUniversalLawrenceSection(links) { link ->
+            RowUniversal(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .clickable {
-                        onCoinLinkClick(link)
-                    }
+                    .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                onClick = { onCoinLinkClick(link) }
             ) {
-                Image(painter = painterResource(id = link.icon), contentDescription = "link")
+                Image(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(id = link.icon),
+                    contentDescription = "link",
+                )
                 body_leah(
                     text = link.title,
                     modifier = Modifier
                         .weight(1f)
                         .padding(horizontal = 16.dp),
                 )
-                Image(painter = painterResource(id = R.drawable.ic_arrow_right), contentDescription = "")
+                Image(
+                    painter = painterResource(id = R.drawable.ic_arrow_right),
+                    contentDescription = ""
+                )
             }
         }
     }

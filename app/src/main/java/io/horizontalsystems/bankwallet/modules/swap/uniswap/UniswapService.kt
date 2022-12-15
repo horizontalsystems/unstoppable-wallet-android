@@ -210,7 +210,9 @@ class UniswapService(
             loading = true
         }
 
-        errors = allErrors
+        if (!loading) {
+            errors = allErrors
+        }
 
         state = when {
             loading -> State.Loading

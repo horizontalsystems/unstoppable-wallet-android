@@ -113,6 +113,7 @@ val TokenQuery.isSupported: Boolean
             tokenType is TokenType.Native
         }
         BlockchainType.Ethereum,
+        BlockchainType.EthereumGoerli,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
         BlockchainType.Optimism,
@@ -138,6 +139,7 @@ val Blockchain.description: String
         BlockchainType.Dash -> "DASH"
         BlockchainType.BinanceChain -> "BNB, BEP2 tokens"
         BlockchainType.Ethereum -> "ETH, ERC20 tokens"
+        BlockchainType.EthereumGoerli -> "ETH, ERC20 tokens"
         BlockchainType.BinanceSmartChain -> "BNB, BEP20 tokens"
         BlockchainType.Polygon -> "MATIC, ERC20 tokens"
         BlockchainType.Avalanche -> "AVAX, ERC20 tokens"
@@ -160,17 +162,17 @@ val BlockchainType.coinSettingType: CoinSettingType?
     }
 
 fun BlockchainType.defaultSettingsArray(accountType: AccountType): List<CoinSettings> = when (this) {
-        BlockchainType.Bitcoin,
-        BlockchainType.Litecoin -> {
-            when(accountType) {
-                is AccountType.Mnemonic -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to AccountType.Derivation.bip49.value)))
-                is AccountType.HdExtendedKey -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to accountType.hdExtendedKey.info.purpose.derivation.value)))
-                else -> listOf()
-            }
+    BlockchainType.Bitcoin,
+    BlockchainType.Litecoin -> {
+        when (accountType) {
+            is AccountType.Mnemonic -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to AccountType.Derivation.bip49.value)))
+            is AccountType.HdExtendedKey -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to accountType.hdExtendedKey.info.purpose.derivation.value)))
+            else -> listOf()
         }
-        BlockchainType.BitcoinCash -> listOf(CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to BitcoinCashCoinType.type145.value)))
-        else -> listOf()
     }
+    BlockchainType.BitcoinCash -> listOf(CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to BitcoinCashCoinType.type145.value)))
+    else -> listOf()
+}
 
 val BlockchainType.restoreSettingTypes: List<RestoreSettingType>
     get() = when (this) {
@@ -185,6 +187,7 @@ val BlockchainType.icon24: Int
         BlockchainType.Litecoin -> R.drawable.logo_litecoin_24
         BlockchainType.Dash -> R.drawable.logo_dash_24
         BlockchainType.Ethereum -> R.drawable.logo_ethereum_24
+        BlockchainType.EthereumGoerli -> R.drawable.logo_ethereum_24
         BlockchainType.BinanceSmartChain -> R.drawable.logo_binance_smart_chain_24
         BlockchainType.Polygon -> R.drawable.logo_polygon_24
         BlockchainType.Avalanche -> R.drawable.logo_avalanche_24
@@ -225,12 +228,14 @@ val BlockchainType.order: Int
         BlockchainType.ArbitrumOne -> 11
         BlockchainType.Optimism -> 12
         BlockchainType.Solana -> 13
+        BlockchainType.EthereumGoerli -> 14
         else -> Int.MAX_VALUE
     }
 
 val BlockchainType.tokenIconPlaceholder: Int
     get() = when (this) {
         BlockchainType.Ethereum -> R.drawable.erc20
+        BlockchainType.EthereumGoerli -> R.drawable.erc20
         BlockchainType.BinanceSmartChain -> R.drawable.bep20
         BlockchainType.BinanceChain -> R.drawable.bep2
         BlockchainType.Avalanche -> R.drawable.avalanche_erc20
@@ -272,6 +277,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
         }
         is AccountType.EvmAddress ->
             this == BlockchainType.Ethereum
+                    || this == BlockchainType.EthereumGoerli
                     || this == BlockchainType.BinanceSmartChain
                     || this == BlockchainType.Polygon
                     || this == BlockchainType.Avalanche
@@ -319,6 +325,6 @@ val FullCoin.iconPlaceholder: Int
         R.drawable.coin_placeholder
     }
 
-fun FullCoin.eligibleTokens(accountType: AccountType) : List<Token> {
+fun FullCoin.eligibleTokens(accountType: AccountType): List<Token> {
     return supportedTokens.filter { it.blockchainType.supports(accountType) }
 }

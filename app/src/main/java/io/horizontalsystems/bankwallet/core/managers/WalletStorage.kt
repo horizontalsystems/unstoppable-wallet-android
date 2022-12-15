@@ -9,17 +9,19 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 
 class WalletStorage(
     private val marketKit: MarketKitWrapper,
-    private val storage: IEnabledWalletStorage
+    private val storage: IEnabledWalletStorage,
+    private val evmTestnetManager: EvmTestnetManager
 ) : IWalletStorage {
 
     override fun wallets(account: Account): List<Wallet> {
         val enabledWallets = storage.enabledWallets(account.id)
 
         val queries = enabledWallets.mapNotNull { TokenQuery.fromId(it.tokenQueryId) }
-        val tokens = marketKit.tokens(queries)
+        val tokens = marketKit.tokens(queries) + evmTestnetManager.tokens(queries)
 
         val blockchainUids = queries.map { it.blockchainType.uid }
-        val blockchains = marketKit.blockchains(blockchainUids)
+        val testnetBlockchains = queries.map { it.blockchainType }.mapNotNull { evmTestnetManager.blockchain(it) }
+        val blockchains = marketKit.blockchains(blockchainUids) + testnetBlockchains
 
         return enabledWallets.mapNotNull { enabledWallet ->
             val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null

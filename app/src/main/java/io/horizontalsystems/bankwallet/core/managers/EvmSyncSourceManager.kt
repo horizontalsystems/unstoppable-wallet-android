@@ -8,6 +8,7 @@ import io.horizontalsystems.ethereumkit.models.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import java.net.URL
 
 class EvmSyncSourceManager(
     appConfigProvider: AppConfigProvider,
@@ -36,10 +37,18 @@ class EvmSyncSourceManager(
                 )
             ),
 
+            BlockchainType.EthereumGoerli to listOf(
+                getSyncSource(
+                    BlockchainType.EthereumGoerli,
+                    "Goerli Ankr",
+                    RpcSource.Http(listOf(URL("https://rpc.ankr.com/eth_goerli")), null),
+                    TransactionSource.goerliEtherscan(appConfigProvider.etherscanApiKey)
+                )
+            ),
+
             BlockchainType.BinanceSmartChain to listOf(
                 getSyncSource(BlockchainType.BinanceSmartChain, "Default HTTP", RpcSource.binanceSmartChainHttp(), TransactionSource.bscscan(appConfigProvider.bscscanApiKey)),
                 getSyncSource(BlockchainType.BinanceSmartChain, "BSC-RPC HTTP", RpcSource.bscRpcHttp(), TransactionSource.bscscan(appConfigProvider.bscscanApiKey)),
-                getSyncSource(BlockchainType.BinanceSmartChain, "Default WebSocket", RpcSource.binanceSmartChainWebSocket(), TransactionSource.bscscan(appConfigProvider.bscscanApiKey))
             ),
 
             BlockchainType.Polygon to listOf(

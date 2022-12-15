@@ -105,6 +105,7 @@ fun AppearanceScreen(navController: NavController) {
                             RowSelect(
                                 imageContent = {
                                     Image(
+                                        modifier = Modifier.size(24.dp),
                                         painter = painterResource(id = option.iconRes),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
@@ -123,6 +124,7 @@ fun AppearanceScreen(navController: NavController) {
                             RowSelect(
                                 imageContent = {
                                     Image(
+                                        modifier = Modifier.size(24.dp),
                                         painter = painterResource(id = option.iconRes),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
@@ -151,7 +153,7 @@ fun AppearanceScreen(navController: NavController) {
                                 imageContent = {
                                     CoinImage(
                                         iconUrl = option.coin.iconUrl,
-                                        modifier = Modifier.size(24.dp)
+                                        modifier = Modifier.size(32.dp)
                                     )
                                 },
                                 text = option.coin.code,

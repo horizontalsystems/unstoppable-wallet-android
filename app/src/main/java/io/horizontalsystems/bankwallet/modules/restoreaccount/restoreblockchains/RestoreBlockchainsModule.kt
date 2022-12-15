@@ -44,7 +44,8 @@ object RestoreBlockchainsModule {
                 App.walletManager,
                 App.marketKit,
                 enableCoinService,
-                App.evmBlockchainManager
+                App.evmBlockchainManager,
+                App.evmTestnetManager
             )
         }
 
@@ -67,7 +68,7 @@ object RestoreBlockchainsModule {
                     ) as T
                 }
                 CoinTokensViewModel::class.java -> {
-                    CoinTokensViewModel(coinTokensService) as T
+                    CoinTokensViewModel(coinTokensService, App.accountManager) as T
                 }
                 else -> throw IllegalArgumentException()
             }

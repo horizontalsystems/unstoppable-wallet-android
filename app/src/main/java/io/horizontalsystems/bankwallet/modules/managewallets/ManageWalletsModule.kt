@@ -32,7 +32,7 @@ object ManageWalletsModule {
         }
 
         private val manageWalletsService by lazy {
-            ManageWalletsService(App.marketKit, App.walletManager, App.accountManager, enableCoinService)
+            ManageWalletsService(App.marketKit, App.walletManager, App.accountManager, enableCoinService, App.evmTestnetManager)
         }
 
         @Suppress("UNCHECKED_CAST")
@@ -48,7 +48,7 @@ object ManageWalletsModule {
                     ManageWalletsViewModel(manageWalletsService, listOf(manageWalletsService)) as T
                 }
                 CoinTokensViewModel::class.java -> {
-                    CoinTokensViewModel(coinTokensService) as T
+                    CoinTokensViewModel(coinTokensService, App.accountManager) as T
                 }
                 else -> throw IllegalArgumentException()
             }
