@@ -62,11 +62,11 @@
     <string name="CreateWallet_Mnemonic">助记词</string>
     <string name="CreateWallet_Wordlist">词表</string>
     <string name="Passphrase">密码</string>
-    <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
+    <string name="CreateWallet_N_WordsRecommended">%s 个单词(推荐)</string>
     <string name="CreateWallet_N_Words">%s 个单词</string>
     <string name="CreateWallet_PassphraseConfirm">确认</string>
     <string name="CreateWallet_Error_EmptyPassphrase">助记词不能为空</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only <![CDATA[A-Z a-z 0-9 \'"`&/?!:;.,~*$=+-[](){}<>\_#@|%]]> for the passphrase</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">请仅使用 <![CDATA[A-Z a-z 0-9 \'"&/?!:;.,~*$=+-[](){}<>\_#@|%]]> 获取密码</string>
     <string name="CreateWallet_Error_InvalidConfirmation">确认密码不匹配</string>
     <string name="EnterPassphrase">输入密码</string>
     <string name="CreateWallet_PassphraseDescription">密码为钱包增加了一个额外的保护层，同一组助记词使用不同的密码，就可以让用户创建许多个独立的多币钱包。\n\n要恢复这些钱包，用户必须有一组助记词和不同密码。</string>
