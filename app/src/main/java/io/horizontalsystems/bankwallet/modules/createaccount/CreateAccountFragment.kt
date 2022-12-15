@@ -89,7 +89,7 @@ private fun CreateAccountScreen(
                 SelectorDialogCompose(
                     title = stringResource(R.string.CreateWallet_Mnemonic),
                     items = viewModel.mnemonicKinds.map {
-                        TabItem(it.title, it == viewModel.selectedKind, it)
+                        TabItem(it.titleLong, it == viewModel.selectedKind, it)
                     },
                     onDismissRequest = {
                         showMnemonicSizeSelectorDialog = false

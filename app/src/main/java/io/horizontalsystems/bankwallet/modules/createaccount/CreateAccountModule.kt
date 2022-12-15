@@ -35,5 +35,9 @@ object CreateAccountModule {
         Mnemonic24(24);
 
         val title = Translator.getString(R.string.CreateWallet_N_Words, wordsCount)
+
+        val titleLong: String
+            get() = if (this == Mnemonic12) Translator.getString(R.string.CreateWallet_N_WordsRecommended, wordsCount)
+            else title
     }
 }
