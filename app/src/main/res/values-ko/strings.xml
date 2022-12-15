@@ -472,6 +472,7 @@
     <string name="SwapSettings_Apply">적용</string>
     <string name="SwapSettings_DeadlineMinute">최소 %s</string>
     <string name="SwapSettings_RecipientPlaceholder">Memo</string>
+    <string name="SwapSettings_FeeSettingsAlert">A service fee for the swap action on the platform typically either 0.3% or 0.6%</string>
     <string name="SwapSettings_Error_DeadlineZero">올바르지 않은 마감 시간</string>
     <string name="SwapSettings_Error_SlippageZero">올바르지 않은 슬립</string>
     <string name="SwapSettings_Error_SlippageTooLow">귀하의 거래가 실패할 것 같습니다.</string>
