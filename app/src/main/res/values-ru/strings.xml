@@ -45,8 +45,7 @@
     <string name="AccountRecovery_Note">Примечание</string>
     <string name="AccountRecovery_MigrationRecommended">Похоже, этот кошелек использует нестандартный символ в списке мнемонических слов и/или парольной фразе. Если вы не видите баланс или транзакции, пожалуйста, прочтите подробности ниже.
 \n\nПОЖАЛУЙСТА НАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ.</string>
-    <string name="AccountRecovery_MigrationRequired">Это нестандартный кошелек. Пожалуйста, прочтите подробности ниже.
-\n\nПОЖАЛУЙСТА НАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ.</string>
+    <string name="AccountRecovery_MigrationRequired">Это нестандартный кошелек.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Продолжить</string>
     <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
@@ -105,7 +104,7 @@
     <string name="Restore_PhraseHint">Введите 12, 15, 18, 21 или 24 слова</string>
     <string name="Restore_NonStandardRestore">Нестандартное Восстановление</string>
     <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей Unstoppable с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях Unstoppable 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).
-\n\nЕсли вы являетесь затронутым пользователем, баланс вашего кошелька будет отображаться как 0 после обновления до версии 0.29. Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
+\n\nЕсли вы являетесь затронутым пользователем, то баланс вашего кошелька будет отображаться как 0 после восстановления такого кошелька в версии 0.29 или выше.Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
     <string name="Restore_PrivateKey_InvalidKey">Неверный Ключ</string>
     <string name="Select_Coins">Выберите Токены</string>
     <string name="Restore_BirthdayHeight">Блок Создания</string>
@@ -404,14 +403,14 @@
     <string name="WalletConnect_Note">Примечание</string>
     <string name="WalletConnect_LegacySignWarning">Подписание этого сообщения может быть опасным. Эта подпись потенциально может выполнить любую операцию от имени вашей учетной записи, включая полное управление вашим счетом и всеми его активами на запрашиваемый сайт. Подпишите это сообщение только если вы знаете, что вы делаете или полностью доверяете запрашиваемому сайту.</string>
     <string name="WalletConnect_NotSupportedDescription">Ваш текущий тип кошелька %s не поддерживает WalletConnect</string>
-    <string name="WalletConnect_Unnamed">Unnamed</string>
+    <string name="WalletConnect_Unnamed">Без имени</string>
     <string name="WalletConnect_DAppUnknown">Неизвестный dApp</string>
-    <string name="WalletConnect_Pairings">Pairings</string>
-    <string name="WalletConnect_PairedDApps">Paired dApps</string>
+    <string name="WalletConnect_Pairings">Соединения</string>
+    <string name="WalletConnect_PairedDApps">Соединеные dApp</string>
     <string name="WalletConnect_Pairings_DeleteAll">Удалить Всё</string>
-    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Вы хотите удалить все соединенные dApss?</string>
     <string name="WalletConnect_Pairings_Delete">Удалить</string>
-    <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
+    <string name="WalletConnect_DeleteAllPairs">Удалить все пары</string>
     <string name="WalletConnect_UnsupportedRequest_Title">Неподдерживаемый Запрос</string>
     <string name="WalletConnect_UnsupportedRequest_WarningTitle">Не поддерживается</string>
     <string name="WalletConnect_UnsupportedRequest_WarningDescription">Формат запроса не поддерживается кошельком</string>
@@ -447,7 +446,7 @@
     <string name="Swap_Fee">Комиссия</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
     <string name="Swap_ErrorNoLiquidity">Невозможно обменять эти токены</string>
-    <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
+    <string name="Swap_ErrorWrapUnwrapNotAllowed">Эта служба не позволяет wrapping/unwrapping. Вместо этого используйте 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Высокое отклонение цены</string>
     <string name="Swap_Proceed">Далее</string>
     <string name="Swap_Revoke">Отменить</string>
@@ -654,7 +653,7 @@
     <string name="Privacy_BulletedText4">Нет учетных записей или баз данных, хранящих данные пользователя в другом месте.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_BlockchainSettings">НАСТРОЙКИ BLOCKCHAIN</string>
-    <string name="SecurityCenter_TestnetSettings">TESTNET SETTINGS</string>
+    <string name="SecurityCenter_TestnetSettings">НАСТРОЙКИ ТЕСТНЕТА</string>
     <string name="SecurityCenter_Internet">ИНТЕРНЕТ</string>
     <string name="SecurityCenter_BlockchainSettingsFooterDescription">Выберите источник данных для восстановления и синхронизации кошелька</string>
     <!--Evm Network-->
@@ -892,6 +891,7 @@
     <string name="AddToken_Decimals">Десятичные Знаки</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">ТИПЫ ТОКЕНОВ</string>
+    <string name="AddToken_AlreadyAdded">УЖЕ ДОБАВЛЕНО</string>
     <string name="AddToken_AddressOrSymbol">Адрес Контракта</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
     <string name="AddToken_InvalidAddressError">Неверный адрес контракта или символ BEP2</string>
