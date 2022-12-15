@@ -62,7 +62,7 @@
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
     <string name="CreateWallet_Wordlist">Sözcük Listesi</string>
     <string name="Passphrase">Parola</string>
-    <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
+    <string name="CreateWallet_N_WordsRecommended">%s kelimeler (Tavsiye edilen)</string>
     <string name="CreateWallet_N_Words">%s kelime</string>
     <string name="CreateWallet_PassphraseConfirm">Onayla</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Parola boş olamaz</string>
