@@ -892,6 +892,7 @@
     <string name="AddToken_Title">اضافه کردن نشان</string>
     <string name="AddToken_CoinName">نام سکه</string>
     <string name="AddToken_Symbol">نماد</string>
+    <string name="AddToken_CoinCode">Coin Code</string>
     <string name="AddToken_Decimals">اعشارها</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">انواع سکه</string>
