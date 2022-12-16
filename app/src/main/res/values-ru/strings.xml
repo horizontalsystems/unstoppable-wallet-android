@@ -890,6 +890,7 @@
     <string name="AddToken_Title">Добавить Токен</string>
     <string name="AddToken_CoinName">Название Токена</string>
     <string name="AddToken_Symbol">Символ</string>
+    <string name="AddToken_CoinCode">Coin Code</string>
     <string name="AddToken_Decimals">Десятичные Знаки</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">ТИПЫ ТОКЕНОВ</string>
