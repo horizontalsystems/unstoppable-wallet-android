@@ -761,6 +761,8 @@
     <string name="ExperimentalFeatures_Title">Deneysel</string>
     <string name="ExperimentalFeatures_Description">Aşağıdaki özellikler deneyseldir ve dikkatli kullanılmalıdır. Bu özellikleri kendi kripto fonlarımızı kullanarak baştan sona test etmemize rağmen, olası tüm durumlarda beklendiği gibi çalışmalarını garanti edemeyiz.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
+    <string name="ExperimentalFeatures_Testnet_Enable">Enable Testnet</string>
+    <string name="ExperimentalFeatures_Testnet_Support">Mnemonic Phrase wallets only</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Belirtilen tarihe kadar harcanmamış Bitcoin\'leri göndermenize olanak verir.\n\nBu tür bir işlemin alıcısı Unstoppable cüzdan kullanmalıdır.\n\nSadece Unstoppable cüzdan, Bitcoin ağındaki bu tür işlemleri doğru bir şekilde tanımlayabilir ve kilitleme süresi dolduktan sonra da alıcının bu Bitcoin\'leri harcamasını sağlayabilir.\n\nEğer bir HODLer iseniz, kendinize böyle bir işlem göndererek, bu özelliği Bitcoin\'lerinizi zarar etmeden uzun süre elinizde tutmaya zorlamak için kullanabilirsiniz.\n\nDeneysel bir özellik olduğundan, işlem başına maksimum tutar 0.5 BTC ile sınırlandırılmıştır.</string>
     <!--Manage Accounts-->
@@ -912,9 +914,6 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (önerilen)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018 öncesinde yaygın</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018 sonrasında yaygın</string>
-    <!-- Testnet Settings -->
-    <string name="Testnet_Enable">Testnet\'i etkinleştir</string>
-    <string name="Testnet_Support">Yalnızca Mnemonic Phrase cüzdanları</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Bağlantı</string>
     <string name="Tor_Connection_Enable">Tor\'u etkinleştir</string>
