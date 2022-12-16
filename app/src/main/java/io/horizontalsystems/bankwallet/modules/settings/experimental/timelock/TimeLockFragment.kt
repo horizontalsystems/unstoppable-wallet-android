@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.experimental
+package io.horizontalsystems.bankwallet.modules.settings.experimental.timelock
 
 import android.os.Bundle
 import android.view.LayoutInflater

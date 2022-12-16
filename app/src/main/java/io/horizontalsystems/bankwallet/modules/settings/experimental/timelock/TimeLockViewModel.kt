@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.experimental
+package io.horizontalsystems.bankwallet.modules.settings.experimental.timelock
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.security.ui
+package io.horizontalsystems.bankwallet.modules.settings.experimental.testnet
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,12 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.settings.security.testnet.TestnetSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 
 @Composable
-fun TestnetSettingsBlock(viewModel: TestnetSettingsViewModel) {
-
+fun TestnetSettingsCell(viewModel: TestnetSettingsViewModel) {
     CellUniversalLawrenceSection(
         listOf {
             RowUniversal(
@@ -22,9 +20,9 @@ fun TestnetSettingsBlock(viewModel: TestnetSettingsViewModel) {
                 verticalPadding = 0.dp,
             ) {
                 Column(Modifier.padding(vertical = 12.dp)) {
-                    body_leah(text = stringResource(R.string.Testnet_Enable))
+                    body_leah(text = stringResource(R.string.ExperimentalFeatures_Testnet_Enable))
                     Spacer(Modifier.height(1.dp))
-                    subhead2_grey(text = stringResource(R.string.Testnet_Support))
+                    subhead2_grey(text = stringResource(R.string.ExperimentalFeatures_Testnet_Support))
                 }
                 Spacer(Modifier.weight(1f))
                 HsSwitch(

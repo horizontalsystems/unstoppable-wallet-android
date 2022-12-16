@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.security.testnet
+package io.horizontalsystems.bankwallet.modules.settings.experimental.testnet
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
