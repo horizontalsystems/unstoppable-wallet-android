@@ -764,6 +764,8 @@
     <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Las siguientes características son experimentales y deben utilizarse con precaución. Aunque hemos probado a fondo estas características usando nuestros propios fondos criptográficos, no podemos garantizar que funcionen como se espera en todos los casos posibles.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
+    <string name="ExperimentalFeatures_Testnet_Enable">Enable Testnet</string>
+    <string name="ExperimentalFeatures_Testnet_Support">Mnemonic Phrase wallets only</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Permite enviar Bitcoins que no se pueden gastar hasta la fecha establecida.\n\nEl receptor de dicha transacción debe utilizar el monedero Unstoppable.\n\nSólo el monedero Unstoppable puede identificar correctamente tales transacciones en la red Bitcoin, así como permitir que el receptor gaste esos Bitcoins después de que expire el período de bloqueo.\n\nSi eres un HODLer, puedes usar esta función para obligarte a retener tus Bitcoins enviándote dicha transacción a ti mismo.\n\nPor ser característica experimental, la cantidad máxima por transacción está limitada a 0.5 BTC.</string>
     <!--Manage Accounts-->
@@ -915,9 +917,6 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">Dirección de caja (recomendado)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Común antes de 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Común después de 2018</string>
-    <!-- Testnet Settings -->
-    <string name="Testnet_Enable">Activar Testnet</string>
-    <string name="Testnet_Support">Sólo carteras de Frases Mnemónicas</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Conexión</string>
     <string name="Tor_Connection_Enable">Activar Tor</string>
