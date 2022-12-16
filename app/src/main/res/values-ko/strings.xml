@@ -764,6 +764,8 @@
     <string name="ExperimentalFeatures_Title">실험적인</string>
     <string name="ExperimentalFeatures_Description">아래 기능은 실험용이므로 주의해서 사용해 주세요. 자체 암호화된 자금을 사용하여 이러한 기능을 철저히 실험하였지만 가능한 모든 경우에 예상대로 작독한다고 보장 드릴 수는 없습니다.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">시간 자물쇠</string>
+    <string name="ExperimentalFeatures_Testnet_Enable">Enable Testnet</string>
+    <string name="ExperimentalFeatures_Testnet_Support">Mnemonic Phrase wallets only</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">명시된 날짜까지 사용할수 없는 비트코인을 보낼 수 있습니다.\n\n이러한 거래의 수진자는 비트코인 사용에 대해 언스탑퍼플 지갑 앱 버젼 0.10 또는 더 새로운 BIP44 주소 형식을 사용해야 합니다.\n\n언스탑퍼블 지갑만이 비트코인 네트워크에서 이런 거래들을 올바르게 확인할 수 있고 또 수신자가 잠금 기간 만료 후에도 비트코인을 사용할 수 있게 할 수 있습니다.\n\n귀하께서 호들러 이시면, 이 기능을 사용하여 귀하에게 이러한 거래를 보냄으로써 호들링할 수 있습니다.\n\n실험적인 기능으로 거래당 최대 0.5 BTC로 제한이 되있습니다.</string>
     <!--Manage Accounts-->
@@ -915,9 +917,6 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">현금주소(권장)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018년 이전 공통</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018년 이후 공통</string>
-    <!-- Testnet Settings -->
-    <string name="Testnet_Enable">테스트넷 활성화</string>
-    <string name="Testnet_Support">Mnemonic Phrase 지갑 전용</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">연결로</string>
     <string name="Tor_Connection_Enable">토르 활성화</string>
