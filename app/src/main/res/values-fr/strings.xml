@@ -891,6 +891,7 @@
     <string name="AddToken_Title">Ajouter le token</string>
     <string name="AddToken_CoinName">Nom de la pièce</string>
     <string name="AddToken_Symbol">Symbole</string>
+    <string name="AddToken_CoinCode">Coin Code</string>
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">TYPES DE COINS</string>
