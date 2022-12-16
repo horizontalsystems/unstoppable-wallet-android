@@ -888,6 +888,7 @@
     <string name="AddToken_Title">Token Ekle</string>
     <string name="AddToken_CoinName">Kripto Para Adı</string>
     <string name="AddToken_Symbol">Sembol</string>
+    <string name="AddToken_CoinCode">Coin Code</string>
     <string name="AddToken_Decimals">Ondalıklar</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">COIN TYPES</string>
