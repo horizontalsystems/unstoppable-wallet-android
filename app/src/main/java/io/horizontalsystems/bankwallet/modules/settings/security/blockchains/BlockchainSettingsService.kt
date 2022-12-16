@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.blockchains
 
-import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
-import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
-import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
-import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
+import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsModule.BlockchainItem
 import io.reactivex.Observable
@@ -14,6 +11,7 @@ class BlockchainSettingsService(
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
+    private val evmTestnetManager: EvmTestnetManager,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
 ) {
 
@@ -46,6 +44,13 @@ class BlockchainSettingsService(
             }
 
         evmSyncSourceManager.syncSourceObservable
+            .subscribeIO {
+                syncBlockchainItems()
+            }.let {
+                disposables.add(it)
+            }
+
+        evmTestnetManager.testnetUpdatedSignal
             .subscribeIO {
                 syncBlockchainItems()
             }.let {

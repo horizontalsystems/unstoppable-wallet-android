@@ -20,6 +20,7 @@ object BlockchainSettingsModule {
                     App.btcBlockchainManager,
                     App.evmBlockchainManager,
                     App.evmSyncSourceManager,
+                    App.evmTestnetManager,
                     App.solanaRpcSourceManager
                 )
             return BlockchainSettingsViewModel(service) as T
