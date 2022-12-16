@@ -891,6 +891,7 @@
     <string name="AddToken_Title">Añadir Token</string>
     <string name="AddToken_CoinName">Nombre de moneda</string>
     <string name="AddToken_Symbol">Símbolo</string>
+    <string name="AddToken_CoinCode">Coin Code</string>
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">TIPOS DE COIN</string>
