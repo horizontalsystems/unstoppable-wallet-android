@@ -765,6 +765,8 @@
     <string name="ExperimentalFeatures_Title">实验功能</string>
     <string name="ExperimentalFeatures_Description">以下功能为实验性功能，应谨慎使用。虽然我们已使用自己的加密货币资金对这些功能进行了彻底测试，但是我们不保证它们在所有情况下都能如常工作。</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
+    <string name="ExperimentalFeatures_Testnet_Enable">Enable Testnet</string>
+    <string name="ExperimentalFeatures_Testnet_Support">Mnemonic Phrase wallets only</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">让您汇出在指定日期前无法消费的比特币。\n\n 此交易的收款人应使用本钱包。\n\n只有本钱包能够正确识别此类在比特币网络上的交易并让收款人在锁定期限结束后消费那些比特币。\n\n如果您是持有人，您可以使用此功能通过向自己发送此类交易的方式来强制自己持有比特币。\n\n作为实验性功能，每次交易的最大金额限制为0.5 BTC。</string>
     <!--Manage Accounts-->
@@ -916,9 +918,6 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">资金地址（推荐）</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018年之前常用</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018年之后常用</string>
-    <!-- Testnet Settings -->
-    <string name="Testnet_Enable">启用测试网</string>
-    <string name="Testnet_Support">仅限虚拟词钱包</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">连接</string>
     <string name="Tor_Connection_Enable">启用Tor</string>
