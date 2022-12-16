@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
@@ -16,17 +18,26 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.settings.experimental.testnet.TestnetSettingsCell
+import io.horizontalsystems.bankwallet.modules.settings.experimental.testnet.TestnetSettingsModule
+import io.horizontalsystems.bankwallet.modules.settings.experimental.testnet.TestnetSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.settings.experimental.timelock.TimeLockCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.core.findNavController
 
 class ExperimentalFeaturesFragment : BaseFragment() {
+    private val testnetSettingsViewModel by viewModels<TestnetSettingsViewModel> {
+        TestnetSettingsModule.Factory()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +51,8 @@ class ExperimentalFeaturesFragment : BaseFragment() {
             setContent {
                 ExperimentalScreen(
                     onCloseClick = { findNavController().popBackStack() },
-                    openTimeLock = { findNavController().slideFromRight(R.id.timeLockFragment) }
+                    openTimeLock = { findNavController().slideFromRight(R.id.timeLockFragment) },
+                    testnetSettingsViewModel = testnetSettingsViewModel
                 )
             }
         }
@@ -51,6 +63,7 @@ class ExperimentalFeaturesFragment : BaseFragment() {
 private fun ExperimentalScreen(
     onCloseClick: () -> Unit,
     openTimeLock: () -> Unit,
+    testnetSettingsViewModel: TestnetSettingsViewModel
 ) {
     ComposeAppTheme {
         Column(
@@ -75,40 +88,10 @@ private fun ExperimentalScreen(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                     text = stringResource(R.string.ExperimentalFeatures_Description)
                 )
-                TimeLockButtonCell(openTimeLock)
+                TimeLockCell(openTimeLock)
                 Spacer(Modifier.height(24.dp))
+                TestnetSettingsCell(testnetSettingsViewModel)
             }
         }
-    }
-}
-
-@Composable
-private fun TimeLockButtonCell(openTimeLock: () -> Unit) {
-    CellUniversalLawrenceSection(
-        listOf {
-            RowUniversal(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onClick = openTimeLock
-            ) {
-                B2(
-                    text = stringResource(R.string.ExperimentalFeatures_BitcoinHodling),
-                    maxLines = 1,
-                )
-                Spacer(Modifier.weight(1f))
-                Image(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_arrow_right),
-                    contentDescription = null,
-                )
-            }
-        }
-    )
-}
-
-@Preview
-@Composable
-private fun PreviewExperimentalScreen() {
-    ComposeAppTheme {
-        ExperimentalScreen({}, {})
     }
 }

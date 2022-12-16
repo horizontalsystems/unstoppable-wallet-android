@@ -26,13 +26,10 @@ import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.Blo
 import io.horizontalsystems.bankwallet.modules.settings.security.blockchains.BlockchainSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.settings.security.testnet.TestnetSettingsModule
-import io.horizontalsystems.bankwallet.modules.settings.security.testnet.TestnetSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTorSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTorSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.BlockchainSettingsBlock
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
-import io.horizontalsystems.bankwallet.modules.settings.security.ui.TestnetSettingsBlock
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.TorBlock
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -48,10 +45,6 @@ class SecuritySettingsFragment : BaseFragment() {
 
     private val blockchainSettingsViewModel by viewModels<BlockchainSettingsViewModel> {
         BlockchainSettingsModule.Factory()
-    }
-
-    private val testnetSettingsViewModel by viewModels<TestnetSettingsViewModel> {
-        TestnetSettingsModule.Factory()
     }
 
     private val torViewModel by viewModels<SecurityTorSettingsViewModel> {
@@ -78,7 +71,6 @@ class SecuritySettingsFragment : BaseFragment() {
                         passcodeViewModel = passcodeViewModel,
                         torViewModel = torViewModel,
                         blockchainSettingsViewModel = blockchainSettingsViewModel,
-                        testnetSettingsViewModel = testnetSettingsViewModel,
                         navController = findNavController(),
                         showAppRestartAlert = { showAppRestartAlert() },
                         restartApp = { restartApp() },
@@ -136,7 +128,6 @@ private fun SecurityCenterScreen(
     passcodeViewModel: SecurityPasscodeSettingsViewModel,
     torViewModel: SecurityTorSettingsViewModel,
     blockchainSettingsViewModel: BlockchainSettingsViewModel,
-    testnetSettingsViewModel: TestnetSettingsViewModel,
     navController: NavController,
     showAppRestartAlert: () -> Unit,
     restartApp: () -> Unit,
@@ -181,12 +172,6 @@ private fun SecurityCenterScreen(
                         torViewModel,
                         showAppRestartAlert,
                     )
-                }
-
-                item {
-                    Spacer(Modifier.height(24.dp))
-                    HeaderText(stringResource(R.string.SecurityCenter_TestnetSettings))
-                    TestnetSettingsBlock(testnetSettingsViewModel)
                 }
 
                 item {

@@ -131,7 +131,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesFragment"/>
     <fragment
         android:id="@+id/timeLockFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.TimeLockFragment"/>
+        android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.timelock.TimeLockFragment"/>
     <fragment
         android:id="@+id/metricsPageFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment" />
