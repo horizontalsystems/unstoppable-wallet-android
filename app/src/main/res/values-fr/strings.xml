@@ -764,6 +764,8 @@
     <string name="ExperimentalFeatures_Title">Expérimental</string>
     <string name="ExperimentalFeatures_Description">Les fonctionnalités ci-dessous sont expérimentales et doivent être utilisées avec prudence. Bien que nous ayons entièrement testé ces fonctionnalités en utilisant nos propres fonds crypto, nous ne pouvons pas garantir qu\'elles fonctionnent comme prévu dans tous les cas de figure possible.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
+    <string name="ExperimentalFeatures_Testnet_Enable">Enable Testnet</string>
+    <string name="ExperimentalFeatures_Testnet_Support">Mnemonic Phrase wallets only</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Permet d\'envoyer des Bitcoins qui ne peuvent pas être dépensées avant la date spécifiée.\n\nLe destinataire d\'une telle transaction devrait utiliser un portefeuille Unstoppable.\n\nSeul un portefeuille Unstoppable peut identifier correctement de telles transactions sur le réseau Bitcoin ainsi que permettre au destinataire de dépenser ces Bitcoins après l\'expiration de la période de verrouillage.\n\nSi vous êtes un HODLer, vous pouvez utiliser cette fonction pour vous obliger à garder vos Bitcoins en vous envoyant une telle transaction à vous-même.\n\nPuisqu\'il s\'agit d\'une fonctionnalité expérimentale, le montant maximum par transaction est limité à 0,5 BTC.</string>
     <!--Manage Accounts-->
@@ -915,9 +917,6 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommendé)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Commun avant 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Commun après 2018</string>
-    <!-- Testnet Settings -->
-    <string name="Testnet_Enable">Activer le Testnet</string>
-    <string name="Testnet_Support">Portefeuilles de phrase mnémonique uniquement</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Connexion</string>
     <string name="Tor_Connection_Enable">Activer Tor</string>
