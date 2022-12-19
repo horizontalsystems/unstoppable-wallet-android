@@ -17,18 +17,12 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
     private var loading = false
     private var finished = false
-    private var coinName: String? = null
-    private var coinCode: String? = null
-    private var decimals: Int? = null
     private var tokens: List<TokenInfoUiState> = listOf()
     private var alreadyAddedTokens: List<AlreadyAddedToken> = listOf()
     private var caution: Caution? = null
 
     var uiState by mutableStateOf(
         AddTokenUiState(
-            coinName = coinName,
-            coinCode = coinCode,
-            decimals = decimals,
             tokens = tokens,
             alreadyAddedTokens = alreadyAddedTokens,
             addEnabled = false,
@@ -43,9 +37,6 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
     private fun emitState() {
         uiState = AddTokenUiState(
-            coinName = coinName,
-            coinCode = coinCode,
-            decimals = decimals,
             tokens = tokens,
             alreadyAddedTokens = alreadyAddedTokens,
             addEnabled = tokens.any { it.enabled && it.checked },
@@ -59,9 +50,6 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
         fetchCustomCoinsJob?.cancel()
         fetchCustomCoinsJob = viewModelScope.launch {
             loading = true
-            coinName = null
-            coinCode = null
-            decimals = null
             caution = null
 
             emitState()
@@ -76,7 +64,9 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                     .map {
                         TokenInfoUiState(
                             tokenInfo = it,
-                            title = it.token.tokenQuery.protocolType ?: "",
+                            title = it.coinCode,
+                            subtitle = it.coinName,
+                            blockchain = it.tokenQuery.protocolType ?: "",
                             image = it.token.tokenQuery.blockchainType.imageUrl,
                             checked = it.inWallet,
                             enabled = true
@@ -87,22 +77,21 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                     .filter { it.inWallet }
                     .map {
                         AlreadyAddedToken(
-                            title = it.token.tokenQuery.protocolType ?: "",
+                            title = it.coinCode,
+                            subtitle = it.coinName,
+                            blockchain = it.tokenQuery.protocolType,
                             image = it.token.tokenQuery.blockchainType.imageUrl,
                         )
                     }
 
                 val tokenInfo = tokens.firstOrNull()
-                coinName = tokenInfo?.token?.coin?.name
-                coinCode = tokenInfo?.token?.coin?.code
-                decimals = tokenInfo?.token?.decimals
 
                 if (filteredTokens.isEmpty() && tokenInfo?.supported == false) {
                     caution = Caution(
                         Translator.getString(
                             R.string.ManageCoins_NotSupportedDescription,
                             addTokenService.accountType?.description ?: "",
-                            coinName ?: "",
+                            tokenInfo.coinName,
                         ), Caution.Type.Warning
                     )
                 }
@@ -150,9 +139,6 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 }
 
 data class AddTokenUiState(
-    val coinName: String?,
-    val coinCode: String?,
-    val decimals: Int?,
     val tokens: List<TokenInfoUiState>,
     val alreadyAddedTokens: List<AlreadyAddedToken>,
     val addEnabled: Boolean,
@@ -163,12 +149,16 @@ data class AddTokenUiState(
 
 data class AlreadyAddedToken(
     val title: String,
+    val subtitle: String,
+    val blockchain: String?,
     val image: String,
 )
 
 data class TokenInfoUiState(
     val tokenInfo: AddTokenService.TokenInfo,
     val title: String,
+    val subtitle: String,
+    val blockchain: String?,
     val image: String,
     val checked: Boolean,
     val enabled: Boolean
