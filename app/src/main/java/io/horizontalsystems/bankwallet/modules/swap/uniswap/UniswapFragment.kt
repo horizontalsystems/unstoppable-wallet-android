@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -148,6 +149,7 @@ private fun UniswapScreen(
 
     ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
+        val focusManager = LocalFocusManager.current
         var showSuggestions by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
@@ -280,6 +282,7 @@ private fun UniswapScreen(
 
             if (fromAmount?.second.isNullOrEmpty() && showSuggestions && keyboardState == Keyboard.Opened) {
                 SuggestionsBar(modifier = Modifier.align(Alignment.BottomCenter)) {
+                    focusManager.clearFocus()
                     fromCoinCardViewModel.onSetAmountInBalancePercent(it)
                 }
             }
