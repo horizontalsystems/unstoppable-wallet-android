@@ -187,7 +187,7 @@ val BlockchainType.icon24: Int
         BlockchainType.Litecoin -> R.drawable.logo_litecoin_24
         BlockchainType.Dash -> R.drawable.logo_dash_24
         BlockchainType.Ethereum -> R.drawable.logo_ethereum_24
-        BlockchainType.EthereumGoerli -> R.drawable.logo_ethereum_24
+        BlockchainType.EthereumGoerli -> R.drawable.logo_ethereum_goerli_32
         BlockchainType.BinanceSmartChain -> R.drawable.logo_binance_smart_chain_24
         BlockchainType.Polygon -> R.drawable.logo_polygon_24
         BlockchainType.Avalanche -> R.drawable.logo_avalanche_24
@@ -235,7 +235,7 @@ val BlockchainType.order: Int
 val BlockchainType.tokenIconPlaceholder: Int
     get() = when (this) {
         BlockchainType.Ethereum -> R.drawable.erc20
-        BlockchainType.EthereumGoerli -> R.drawable.erc20
+        BlockchainType.EthereumGoerli -> R.drawable.erc20_goerli
         BlockchainType.BinanceSmartChain -> R.drawable.bep20
         BlockchainType.BinanceChain -> R.drawable.bep2
         BlockchainType.Avalanche -> R.drawable.avalanche_erc20
