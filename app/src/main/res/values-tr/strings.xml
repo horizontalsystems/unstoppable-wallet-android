@@ -66,7 +66,7 @@
     <string name="CreateWallet_N_Words">%s kelime</string>
     <string name="CreateWallet_PassphraseConfirm">Onayla</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Parola boş olamaz</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Lütfen yalnızca desteklenen sembolleri kullanın:  <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Parola onayı eşleşmiyor</string>
     <string name="EnterPassphrase">Parolayı girin</string>
     <string name="CreateWallet_PassphraseDescription">Parolalar cüzdanlara ek güvenlik katmanı ekleyerek kullanıcıların tek bir anımsatıcı kurtarma ifadesi kullanarak ancak farklı parolalarla ilişkilendirilmiş birden çok bağımsız çoklu para cüzdanı oluşturmasına olanak tanır. \n\nBu cüzdanları geri yüklemek için bir kullanıcı mnemonic kurtarma ifadesinin yanı sıra bir parola gerektirecektir. her biri geri yüklenecek cüzdan.</string>
@@ -501,7 +501,7 @@
     <string name="SwapInfo_Description">Bu takas etme hizmeti, %s blok zinciri üzerine inşa edilmiş ve merkezi olmayan jeton takas etme protokolü olan %s tarafından desteklenmektedir.\n\n%s, tamamen otomatiktir ve hile yapmadan jeton takaslarını güvenilir bir şekilde kolaylaştıran akıllı sözleşmelerle yönetilir.</string>
     <string name="SwapInfo_DexRelated">Uniswap Bağlantılı</string>
     <string name="SwapInfo_AllowanceTitle">Ödenek</string>
-    <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A proceeding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
+    <string name="SwapInfo_AllowanceDescription">Bir borsanın, token takaslarını yürütürken kullanıcının adına harcayabileceği ödenek miktarı. Fiili bir takas işleminin gerçekleşmesinde yeterli ödenek gereklidir.</string>
     <string name="SwapInfo_PriceImpactTitle">Fiyat Etkisi</string>
     <string name="SwapInfo_PriceImpactDescription">Gösterilen bir fiyattan beklenen fiyat sapması, tipik olarak swap tutarı ile artar.</string>
     <string name="SwapInfo_SwapFeeTitle">Swap Ücreti</string>
@@ -896,7 +896,7 @@
     <string name="AddToken_CoinTypes">COIN TYPES</string>
     <string name="AddToken_AlreadyAdded">ÇOKTAN EKLENMİŞ GÖRÜNÜYOR</string>
     <string name="AddToken_AddressOrSymbol">Sözleşme Adresi</string>
-    <string name="AddToken_ChooseToken">Choose Token</string>
+    <string name="AddToken_ChooseToken">Tokenleri seç</string>
     <string name="AddToken_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
     <string name="AddToken_InvalidAddressError">Geçersiz sözleşme adresi veya BEP2 sembolü</string>
     <string name="AddToken_ApiLimitExceeded">Api limiti aşıldı. Daha sonra tekrar deneyin.</string>
